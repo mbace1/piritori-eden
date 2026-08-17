@@ -9,6 +9,7 @@ import { THEME } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=1';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, Cast, ending } from './narrative.js?v=1';
+import { Fight, MOVES, consequence } from './fight.js?v=1';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -16,6 +17,7 @@ const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
 const DAYS = 7;
 let flow, market, heat, cast, renderer, drawer;
 let sel = null, draft = null, over = null, drained = 0, pendingChoice = null;
+let fight = null, nextFightAt = 900;
 let msgs = [];
 
 function say(...lines) {
@@ -51,6 +53,7 @@ function boot(seed = 7) {
             if (r) say(...LINES.inspect(edgeName(p.edge)));
           }
         }
+        maybeFight(tick);
       },
       onDay: day => settle(day),
       onEvent: ev => {
@@ -66,6 +69,7 @@ function boot(seed = 7) {
   heat = new Heat(flow);
   cast = new Cast();
   drained = 0; msgs = []; over = null; sel = null; pendingChoice = null;
+  fight = null; nextFightAt = 900;
 
   // the canvas takes the diagram's own proportions, so there is no dead band
   // above and below it on a portrait phone
@@ -165,6 +169,88 @@ function finish() {
   $('overStats').textContent =
     `debt ${eur(market.debt)} · exit fund ${eur(market.exitFund)} · hottest line ${(h * 100) | 0}% · contacts kept ${cast.intact}/${CONTACTS.length}`;
   $('over').hidden = false;
+}
+
+// ── encounters ──────────────────────────────────────────────────────────
+// Who turns up is not a die roll on a timer: the debt brings Igor's man, a hot
+// line brings a rival, and carrying a lot brings the McCormicks. So an
+// encounter is always something the player did, and can always be read coming.
+function maybeFight(tick) {
+  if (fight || over || pendingChoice || tick < nextFightAt) return;
+  const carrying = Object.values(market.stock).reduce((a, b) => a + b, 0);
+  const hottest = heat.hottest().heat;
+  let kind = null;
+  if (market.debt > 2600) kind = 'collector';
+  else if (hottest >= THRESHOLD.warn) kind = 'rival';
+  else if (carrying >= 15) kind = 'mccormick';
+  if (!kind) { nextFightAt = tick + 180; return; }
+  startFight(kind, tick);
+}
+
+function startFight(kind, tick) {
+  fight = new Fight(kind, (flow.rng.seed ^ tick) >>> 0);
+  nextFightAt = tick + 700;
+  flow.clock.setPaused(true);
+  paintFight();
+  $('fight').hidden = false;
+}
+
+function paintFight() {
+  if (!fight) return;
+  $('fightWho').textContent = fight.foe.name.toUpperCase();
+  $('fightGrit').textContent = `you ${'▮'.repeat(Math.max(0, fight.grit))}${'▯'.repeat(Math.max(0, 6 - fight.grit))}`
+    + `   him ${'▮'.repeat(Math.max(0, fight.foeGrit))}`;
+  $('fightLog').innerHTML = '';
+  for (const l of fight.log.slice(0, 3)) {
+    const p = document.createElement('p'); p.textContent = l; $('fightLog').append(p);
+  }
+  const box = $('fightBtns'); box.innerHTML = '';
+  if (fight.over) {
+    $('fightTell').textContent = '';
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn prime wide'; b.textContent = 'CONTINUE';
+    b.onclick = endFight;
+    box.append(b);
+    return;
+  }
+  // the telegraph, always before the commit
+  $('fightTell').textContent = fight.tell();
+  for (const m of MOVES) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn wide'; b.textContent = m.label;
+    b.onclick = () => { fight.play(m.id); paintFight(); };
+    box.append(b);
+  }
+  const canPay = market.cash >= fight.foe.pay;
+  const pay = document.createElement('button');
+  pay.type = 'button'; pay.className = 'btn wide'; pay.disabled = !canPay;
+  pay.textContent = `PAY HIM (${eur(fight.foe.pay)})`;
+  pay.onclick = () => { fight.pay(); paintFight(); };
+  const run = document.createElement('button');
+  run.type = 'button'; run.className = 'btn wide';
+  run.textContent = 'GET OUT OF THERE';
+  run.onclick = () => { fight.flee(); paintFight(); };
+  box.append(pay, run);
+}
+
+function endFight() {
+  const c = consequence(fight.over, fight.kind);
+  market.cash = Math.max(0, market.cash + c.cash);
+  if (c.stockLoss) {
+    for (const k of Object.keys(market.stock)) {
+      market.stock[k] = Math.floor(market.stock[k] * (1 - c.stockLoss));
+    }
+  }
+  if (c.heat) {
+    const h = heat.hottest();
+    if (h.id) heat.edge.set(h.id, Math.min(1.2, heat.edge.get(h.id) + c.heat));
+  }
+  if (c.trust) cast.nudge(fight.kind === 'mccormick' ? 'sean' : 'igor', c.trust);
+  say(c.line);
+  fight = null;
+  $('fight').hidden = true;
+  flow.clock.setPaused(false);
+  renderHud(); renderSheet();
 }
 
 function offerChoice() {
@@ -291,5 +377,9 @@ window.__pt = {
   get market() { return market; },
   get heat() { return heat; },
   get cast() { return cast; },
-  debug: { boot, send, settle, finish, say, get over() { return over; } },
+  debug: {
+    boot, send, settle, finish, say, startFight,
+    get fight() { return fight; },
+    get over() { return over; },
+  },
 };

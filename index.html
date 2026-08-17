@@ -73,6 +73,8 @@
   .card p { margin-top: 10px; font-size: 13.5px; }
   .card p.dim { color: var(--dim); font-size: 12.5px; }
   .card .stats { color: var(--gold); font-size: 12.5px; margin-top: 12px; }
+  /* the telegraph: what he is about to do, always shown before you commit */
+  .card .tell { color: var(--warn); font-size: 13px; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -108,6 +110,16 @@
       <h2>KARHUPUISTO</h2>
       <p id="choiceText"></p>
       <div id="choiceBtns"></div>
+    </div>
+  </div>
+
+  <div class="veil" id="fight" hidden>
+    <div class="card">
+      <h2 id="fightWho"></h2>
+      <p class="stats" id="fightGrit"></p>
+      <div id="fightLog"></div>
+      <p class="tell" id="fightTell"></p>
+      <div id="fightBtns"></div>
     </div>
   </div>
 

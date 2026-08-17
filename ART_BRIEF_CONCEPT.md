@@ -22,6 +22,27 @@ map, where a second thing is moving that you have to learn to see.
 
 ---
 
+## 1b. Use a real map of Kallio
+
+**Owner direction: work from real Helsinki geography, not an invented layout.**
+
+Open an actual street map of Kallio and trace from it. The coastline at
+Hakaniemenranta, the bend of Hämeentie at Kurvi, the grid of the linjat, the
+hill the church stands on, the block Karhupuisto sits in, Vaasankatu running
+down to Hämeentie. Those relationships should survive into the diagram even
+after it is compressed and stylised for play.
+
+The in-game diagram is deliberately simplified — eight stops, straight runs —
+but **the concept art should read as this specific district to somebody who has
+walked it**, not as a generic transit poster. If a Helsinki player cannot point
+at the church, the bay and the Kurvi bend, the drawing has missed.
+
+Useful reference terms: *Kallio*, *Vaasanaukio / Piritori*, *Hämeentie Kurvi*,
+*Kallion kirkko*, *Karhupuisto*, *Hakaniemen halli*, *Sörnäinen*, *Vaasankatu*,
+*Kuudes linja*. Period reference for act one is early-2000s; act two present day.
+
+---
+
 ## 2. The house look — non-negotiable
 
 **A living printed civic map. Not a satellite view, not a game HUD, not a 3D
