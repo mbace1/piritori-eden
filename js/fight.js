@@ -1,121 +1,320 @@
-// Turn-based encounters.
+// Rank-based tactical fights. See FIGHT_BRIEF.md.
 //
-// OWNER OVERRIDE, 2026-08-17: BRIEF.md § "no combat layer" and CLAUDE_HANDOFF
-// § "Piritori has no combat layer" both forbid this; the owner has asked for
-// turn-based fights, so they are in. Recorded here rather than argued, but
-// recorded, because the brief still reads the other way.
+// OWNER OVERRIDE: BRIEF.md § "no combat layer" and CLAUDE_HANDOFF § "Piritori
+// has no combat layer" both forbid this. The owner has asked for it twice now,
+// with a full brief the second time. Recorded rather than argued, because the
+// brief still reads the other way and a later reader deserves to know which won.
 //
-// The brief's surrounding rules DO still hold and they shape this:
-//   · no random punishment without a readable warning — so the opponent
-//     TELEGRAPHS next turn's intent and you answer it;
-//   · rerouting, paying and walking away are real options, never worse than a
-//     losing brawl;
-//   · nobody is a faceless combat target and there are no guns as prizes.
-// It is a reading test on a three-beat clock, not a damage race: guard beats
-// swing, swing beats grab, grab beats guard. You lose by not looking.
+// The thesis in one line: WHERE YOU STAND DECIDES WHAT YOU MAY DO. A weapon
+// declares the rows it can be used FROM and the rows it can REACH, so a bat is
+// dead weight in the back and a pistol is dead weight in a scrum. Nothing else
+// is needed to make three rows mean three different things.
+//
+// No DOM in this file, no wall clock, no Math.random — the whole fight is a
+// pure function of (roster, seed, decisions), which is what lets the gate play
+// hundreds of them in bare node.
 
 import { Rng } from '../../flow-core/rng.js?v=1';
 
-export const INTENT = {
-  SWING: { id: 'swing', tell: 'shifts his weight onto his back foot' },
-  GRAB: { id: 'grab', tell: 'steps in close, hands open' },
-  HOLD: { id: 'hold', tell: 'plants himself and waits' },
+export const COLS = 3;
+export const ROWS = 3;            // 3×4 is this number and nothing else
+export const ROW_NAME = ['front', 'middle', 'back'];
+
+const ALL_ROWS = [0, 1, 2];
+
+// ── weapons ─────────────────────────────────────────────────────────────
+// `from` — rows the wielder may use it from.  `reach` — enemy rows it strikes.
+// `pierce: false` must resolve against the frontmost living enemy in that
+// column, which is what makes a body in front into cover.
+export const WEAPONS = {
+  fists: { id: 'fists', name: 'fists', dmg: [1, 3], from: [0], reach: [0], pierce: false, effect: null },
+  bottle: { id: 'bottle', name: 'bottle', dmg: [2, 4], from: [0, 1], reach: [0], pierce: false, effect: null },
+  bat: { id: 'bat', name: 'bat', dmg: [2, 5], from: [0], reach: [0], pierce: false, effect: 'shove' },
+  steel: { id: 'steel', name: 'steel', dmg: [4, 7], from: [0], reach: [0], pierce: false, effect: null },
+  // does no damage whatever and is one of the strongest pieces on the board,
+  // because fear moves people out of position and position is the game
+  blank: { id: 'blank', name: 'blank gun', dmg: [0, 0], from: [1, 2], reach: ALL_ROWS, pierce: true, effect: 'fear' },
+  pistol: { id: 'pistol', name: 'pistol', dmg: [4, 8], from: [1, 2], reach: ALL_ROWS, pierce: true, effect: null },
+  hook: { id: 'hook', name: 'hook', dmg: [1, 2], from: [0, 1], reach: [0, 1], pierce: true, effect: 'pull' },
 };
 
-// what you may do, and what it answers
-export const MOVES = [
-  { id: 'guard', label: 'GUARD', beats: 'swing', tell: 'you cover up' },
-  { id: 'swing', label: 'SWING', beats: 'grab', tell: 'you go first' },
-  { id: 'shove', label: 'SHOVE', beats: 'hold', tell: 'you drive him back' },
-];
+export class Unit {
+  constructor({ id, name, side, col, row, hp = 10, speed = 5, guard = 0, weapons = ['fists'] }) {
+    this.id = id; this.name = name; this.side = side;
+    this.col = col; this.row = row;
+    this.hp = hp; this.maxHp = hp;
+    this.speed = speed;
+    this.guard = guard;          // flat reduction
+    this.bracing = false;
+    this.weapons = weapons;
+    this.fled = false;
+  }
+  get alive() { return this.hp > 0 && !this.fled; }
+  get rowName() { return ROW_NAME[this.row] ?? `row ${this.row}`; }
+}
 
-export const OPPONENTS = {
-  mccormick: {
-    name: 'A McCormick', grit: 6, hit: 2,
-    open: 'One of the brothers is waiting where the line comes out. He is not in a hurry, which is the worrying part.',
-    win: 'He sits down on the kerb, more surprised than hurt. "Right," he says. "Right."',
-    lose: 'You wake up against a wall with your pockets lighter and the evening gone.',
-    pay: 400,
-    payLine: 'He takes it, counts it, and holds the door for you. Family rates.',
-  },
-  collector: {
-    name: 'Igor\'s man', grit: 8, hit: 3,
-    open: 'A man you have seen in the back booth is standing at the top of the stairs. He says your name like he is reading it off a list.',
-    win: 'He steps aside. It is not mercy — it is arithmetic. You are worth more walking.',
-    lose: 'He takes what you are carrying and tells you the number has gone up.',
-    pay: 700,
-    payLine: 'The money goes into a coat pocket. Nothing is written down, which is worse.',
-  },
-  rival: {
-    name: 'Somebody from the square', grit: 5, hit: 2,
-    open: 'Somebody who works the same square has decided there is one of you too many on it.',
-    win: 'He goes back down the steps without a word. The square is quiet again for a while.',
-    lose: 'You lose the argument and most of what you were carrying.',
-    pay: 200,
-    payLine: 'He takes the money and the corner. For tonight.',
-  },
-};
-
+// ── the board ───────────────────────────────────────────────────────────
 export class Fight {
-  constructor(kind, seed) {
-    const o = OPPONENTS[kind];
-    this.kind = kind;
-    this.foe = { ...o };
-    this.rng = new Rng(seed, `fight/${kind}`);
-    this.grit = 6;              // yours
-    this.foeGrit = o.grit;
+  constructor({ you, them, seed = 1, rows = ROWS }) {
+    this.rows = rows;
+    this.rng = new Rng(seed, 'fight');
+    this.units = [];
+    for (const u of you) this.units.push(new Unit({ ...u, side: 'you' }));
+    for (const u of them) this.units.push(new Unit({ ...u, side: 'them' }));
     this.round = 1;
-    this.log = [o.open];
-    this.over = null;           // 'win' | 'lose' | 'paid' | 'fled'
-    this.intent = this.roll();
+    this.log = [];
+    this.over = null;            // 'win' | 'lose' | 'fled' | 'paid'
+    this.order = [];
+    this.turn = 0;
+    this.auto = false;
+    this.rollOrder();
   }
 
-  roll() {
-    const k = this.rng.next();
-    return k < 0.42 ? INTENT.SWING : k < 0.76 ? INTENT.GRAB : INTENT.HOLD;
+  say(line) { this.log.unshift(line); this.log.length = Math.min(this.log.length, 40); }
+
+  living(side) { return this.units.filter(u => u.side === side && u.alive); }
+  at(side, col, row) { return this.units.find(u => u.side === side && u.col === col && u.row === row && u.alive); }
+  byId(id) { return this.units.find(u => u.id === id); }
+
+  // speed descending, ties by id — a seed always replays identically
+  rollOrder() {
+    this.order = this.units.filter(u => u.alive)
+      .sort((a, b) => b.speed - a.speed || (a.id < b.id ? -1 : 1))
+      .map(u => u.id);
+    this.turn = 0;
   }
 
-  // The telegraph. Shown BEFORE the player commits, always.
-  tell() { return `${this.foe.name} ${this.intent.tell}.`; }
-
-  play(moveId) {
-    if (this.over) return this.over;
-    const move = MOVES.find(m => m.id === moveId);
-    const answered = move.beats === this.intent.id;
-
-    if (answered) {
-      const d = 2 + (this.rng.chance(0.4) ? 1 : 0);
-      this.foeGrit -= d;
-      this.log.unshift(`You read it. ${move.tell} — he gives ground.`);
-    } else if (this.intent.id === 'hold') {
-      this.log.unshift('He does not take the bait. Nothing lands, either way.');
-    } else {
-      this.grit -= this.foe.hit;
-      this.log.unshift(`Wrong answer. ${this.foe.name} gets through.`);
+  get actor() {
+    for (let i = this.turn; i < this.order.length; i++) {
+      const u = this.byId(this.order[i]);
+      if (u?.alive) { this.turn = i; return u; }
     }
-
-    if (this.foeGrit <= 0) { this.over = 'win'; this.log.unshift(this.foe.win); return this.over; }
-    if (this.grit <= 0) { this.over = 'lose'; this.log.unshift(this.foe.lose); return this.over; }
-
-    this.round += 1;
-    this.intent = this.roll();
     return null;
   }
 
-  // Always available, always honest about the cost. Walking away is a real
-  // option, not a punishment — the brief's line about rerouting and sacrificing
-  // profit rather than fighting still applies even now that fighting exists.
-  flee() {
-    this.over = 'fled';
-    this.log.unshift('You go down the stairs two at a time and out through the yards. Whatever was in your hands stays behind.');
+  // ── legality: the whole positioning game lives in these two ───────────
+  canUse(unit, weaponId) {
+    const w = WEAPONS[weaponId];
+    return !!w && w.from.includes(unit.row);
+  }
+
+  // Every enemy this weapon may actually be aimed at from here. Cover is
+  // applied HERE rather than at resolve time, so the UI can only ever offer a
+  // legal target and the player can see the cover working.
+  targets(unit, weaponId) {
+    const w = WEAPONS[weaponId];
+    if (!w || !this.canUse(unit, weaponId)) return [];
+    const foe = unit.side === 'you' ? 'them' : 'you';
+    const out = [];
+    for (let c = 0; c < COLS; c++) {
+      const column = this.living(foe).filter(u => u.col === c).sort((a, b) => a.row - b.row);
+      if (!column.length) continue;
+      if (w.pierce) {
+        for (const u of column) if (w.reach.includes(u.row)) out.push(u);
+      } else {
+        // only the frontmost body in the column is reachable — that body IS
+        // the cover for everyone behind it
+        const front = column[0];
+        if (w.reach.includes(front.row)) out.push(front);
+      }
+    }
+    return out;
+  }
+
+  // Everything a unit could legally do right now.
+  options(unit) {
+    const acts = [];
+    for (const id of unit.weapons) {
+      const t = this.targets(unit, id);
+      if (this.canUse(unit, id) && t.length) acts.push({ kind: 'attack', weapon: id, targets: t.map(u => u.id) });
+    }
+    for (const d of [-1, 1]) {
+      const r = unit.row + d;
+      if (r >= 0 && r < this.rows && !this.at(unit.side, unit.col, r)) {
+        acts.push({ kind: 'move', row: r });
+      }
+    }
+    acts.push({ kind: 'guard' });
+    return acts;
+  }
+
+  // ── resolution ────────────────────────────────────────────────────────
+  act(action) {
+    const u = this.actor;
+    if (!u || this.over) return null;
+    u.bracing = false;
+
+    if (action.kind === 'attack') {
+      const w = WEAPONS[action.weapon];
+      const target = this.byId(action.target);
+      const legal = this.targets(u, action.weapon).some(t => t.id === target?.id);
+      if (!legal) return { error: 'not from there' };
+      const roll = this.rng.int(w.dmg[0], w.dmg[1]);
+      const dealt = Math.max(0, roll - target.guard - (target.bracing ? 2 : 0));
+      target.hp -= dealt;
+      this.say(dealt
+        ? `${u.name} — ${w.name} — ${target.name} takes ${dealt}.`
+        : `${u.name} swings the ${w.name} at ${target.name}. Nothing in it.`);
+      if (target.hp <= 0) this.say(`${target.name} goes down.`);
+      else if (w.effect) this.applyEffect(w.effect, u, target);
+    } else if (action.kind === 'move') {
+      u.row = action.row;
+      this.say(`${u.name} moves to the ${u.rowName}.`);
+    } else if (action.kind === 'guard') {
+      u.bracing = true;
+      this.say(`${u.name} braces.`);
+    }
+
+    this.advance();
     return this.over;
   }
 
-  pay() {
-    this.over = 'paid';
-    this.log.unshift(this.foe.payLine);
-    return this.over;
+  // Formation-breakers. These are the point: taking a shape away beats
+  // out-damaging, because a pistol stranded in the front row is a spectator.
+  applyEffect(effect, actor, target) {
+    if (effect === 'shove' || effect === 'fear') {
+      const r = target.row + 1;
+      if (r < this.rows && !this.at(target.side, target.col, r)) {
+        target.row = r;
+        this.say(effect === 'fear'
+          ? `${target.name} backs off the gun, into the ${target.rowName}.`
+          : `${target.name} is driven into the ${target.rowName}.`);
+      } else if (effect === 'fear' && target.row === this.rows - 1) {
+        // nowhere left to back into: a blank gun can empty the back row
+        target.fled = true;
+        this.say(`${target.name} has nowhere to back into and leaves.`);
+      }
+    } else if (effect === 'pull') {
+      const r = target.row - 1;
+      if (r >= 0 && !this.at(target.side, target.col, r)) {
+        target.row = r;
+        this.say(`${target.name} is dragged into the ${target.rowName}.`);
+      }
+    }
   }
+
+  advance() {
+    this.turn += 1;
+    if (!this.actor) { this.round += 1; this.rollOrder(); }
+    const you = this.living('you').length, them = this.living('them').length;
+    if (!them) { this.over = 'win'; this.say('That is the end of that.'); }
+    else if (!you) { this.over = 'lose'; this.say('You are done here.'); }
+    else if (this.round > 20) { this.over = this.living('you').length >= this.living('them').length ? 'win' : 'lose'; }
+  }
+
+  // ── the resolver both sides use ───────────────────────────────────────
+  // Auto-battler and the opposition run the SAME function, so auto can never
+  // be a secretly worse or better player than the enemy.
+  choose(unit) {
+    const opts = this.options(unit);
+    const attacks = opts.filter(o => o.kind === 'attack');
+    if (attacks.length) {
+      let best = null, bestScore = -Infinity;
+      for (const a of attacks) {
+        const w = WEAPONS[a.weapon];
+        for (const tid of a.targets) {
+          const t = this.byId(tid);
+          const avg = (w.dmg[0] + w.dmg[1]) / 2;
+          // finish what is nearly down; value a formation-breaker on anything
+          // standing where its own weapons work
+          let s = avg + (t.hp <= avg ? 6 : 0);
+          if (w.effect === 'fear' || w.effect === 'shove') s += t.row === 0 ? 1 : 4;
+          if (w.effect === 'pull') s += t.row >= 1 ? 4 : 0;
+          s -= t.guard * 0.5;
+          if (s > bestScore) { bestScore = s; best = { kind: 'attack', weapon: a.weapon, target: tid }; }
+        }
+      }
+      if (best) return best;
+    }
+    // nothing reaches from here: step toward a row where a weapon works
+    const wants = unit.weapons.map(id => WEAPONS[id]).flatMap(w => w.from);
+    const move = opts.filter(o => o.kind === 'move')
+      .sort((a, b) => (wants.includes(a.row) ? -1 : 1) - (wants.includes(b.row) ? -1 : 1))[0];
+    if (move && wants.includes(move.row)) return move;
+    return move || { kind: 'guard' };
+  }
+
+  autoTurn() { const u = this.actor; return u ? this.act(this.choose(u)) : this.over; }
+
+  // Always available, always honest about the cost — the brief's rule that
+  // walking away and paying are never worse than a losing brawl.
+  flee() { this.over = 'fled'; this.say('You go out through the yards. Whatever was in your hands stays behind.'); return this.over; }
+  pay() { this.over = 'paid'; this.say('Paid, and nothing happened. Which is what paying buys.'); return this.over; }
+
+  // What the next actor is about to do — the telegraph, in a rank fight, is
+  // the board plus this line.
+  intent() {
+    const u = this.actor;
+    if (!u || this.over) return '';
+    if (u.side === 'you') return `${u.name}, ${u.rowName}.`;
+    const a = this.choose(u);
+    if (a.kind === 'attack') {
+      const t = this.byId(a.target);
+      return `${u.name} is lining up the ${WEAPONS[a.weapon].name} on ${t.name}.`;
+    }
+    if (a.kind === 'move') return `${u.name} is shifting to the ${ROW_NAME[a.row]}.`;
+    return `${u.name} is bracing.`;
+  }
+}
+
+// ── rosters ─────────────────────────────────────────────────────────────
+// Kept small and hand-cut. Who the player's other fighters are is an open
+// question in FIGHT_BRIEF.md §10 — this fields a fixed pair until it is answered.
+export const OPPONENTS = {
+  mccormick: {
+    name: 'the McCormicks', size: 3, pay: 400,
+    open: 'Three of the brothers are waiting where the line comes out. They are not in a hurry, which is the worrying part.',
+    win: 'They sit down on the kerb, more surprised than hurt.',
+    lose: 'You wake up against a wall with your pockets lighter and the evening gone.',
+    payLine: 'He takes it, counts it, and holds the door for you. Family rates.',
+    roster: [
+      { id: 'm1', name: 'Sean', col: 1, row: 0, hp: 12, speed: 5, guard: 1, weapons: ['bat', 'fists'] },
+      { id: 'm2', name: 'Declan', col: 0, row: 0, hp: 10, speed: 6, weapons: ['fists'] },
+      { id: 'm3', name: 'Quiet', col: 1, row: 2, hp: 8, speed: 4, weapons: ['blank'] },
+    ],
+  },
+  collector: {
+    name: "Igor's men", size: 3, pay: 700,
+    open: 'Two men you have seen in the back booth are at the top of the stairs, and a third is already behind you.',
+    win: 'They step aside. It is not mercy, it is arithmetic — you are worth more walking.',
+    lose: 'They take what you are carrying and tell you the number has gone up.',
+    payLine: 'The money goes into a coat pocket. Nothing is written down, which is worse.',
+    roster: [
+      { id: 'c1', name: 'Big', col: 1, row: 0, hp: 14, speed: 3, guard: 2, weapons: ['steel', 'fists'] },
+      { id: 'c2', name: 'Driver', col: 0, row: 1, hp: 9, speed: 7, weapons: ['hook', 'bottle'] },
+      { id: 'c3', name: 'Coat', col: 2, row: 2, hp: 8, speed: 5, weapons: ['pistol'] },
+    ],
+  },
+  rival: {
+    name: 'the other crew', size: 2, pay: 200,
+    open: 'Two who work the same square have decided there is one of you too many on it.',
+    win: 'They go back down the steps without a word.',
+    lose: 'You lose the argument and most of what you were carrying.',
+    payLine: 'He takes the money and the corner. For tonight.',
+    roster: [
+      { id: 'r1', name: 'Loud', col: 1, row: 0, hp: 10, speed: 6, weapons: ['bottle', 'fists'] },
+      { id: 'r2', name: 'Mate', col: 2, row: 1, hp: 8, speed: 5, weapons: ['blank'] },
+    ],
+  },
+};
+
+export const YOUR_CREW = [
+  { id: 'y1', name: 'Aatami', col: 1, row: 0, hp: 14, speed: 6, weapons: ['fists', 'bat', 'steel'] },
+  { id: 'y2', name: 'Jaska', col: 0, row: 1, hp: 9, speed: 5, weapons: ['bottle', 'hook'] },
+  { id: 'y3', name: 'Reko', col: 2, row: 2, hp: 8, speed: 4, weapons: ['blank'] },
+];
+
+export function startFight(kind, seed, crewSize = 3) {
+  const o = OPPONENTS[kind];
+  const f = new Fight({
+    you: YOUR_CREW.slice(0, crewSize),
+    them: o.roster.slice(0, o.size),
+    seed,
+  });
+  f.kind = kind;
+  f.foe = o;
+  f.say(o.open);
+  return f;
 }
 
 // What an outcome costs, applied by main.js against the market.

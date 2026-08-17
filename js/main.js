@@ -9,7 +9,8 @@ import { THEME } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=1';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
-import { Fight, MOVES, consequence } from './fight.js?v=1';
+import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=1';
+import { FightView } from './fightview.js?v=1';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -17,7 +18,7 @@ const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
 const DAYS = 7;
 let flow, market, heat, cast, renderer, drawer;
 let sel = null, draft = null, over = null, drained = 0, pendingChoice = null;
-let fight = null, nextFightAt = 900;
+let fight = null, nextFightAt = 900, fightView = null, armed = null;
 let msgs = [], landed = 0;
 
 function say(...lines) {
@@ -317,22 +318,59 @@ function maybeFight(tick) {
 }
 
 function startFight(kind, tick) {
-  fight = new Fight(kind, (flow.rng.seed ^ tick) >>> 0);
+  fight = buildFight(kind, (flow.rng.seed ^ tick) >>> 0);
+  armed = null;
   nextFightAt = tick + 700;
   flow.clock.setPaused(true);
-  paintFight();
   $('fight').hidden = false;
+  if (!fightView) {
+    fightView = new FightView($('board'));
+    $('board').addEventListener('pointerup', onBoardTap);
+    $('board').addEventListener('touchend', onBoardTap, { passive: true });
+  }
+  fightView.resize();
+  paintFight();
+}
+
+// Tapping a ringed body commits the armed weapon at it. Nothing else on the
+// board is clickable, so a mis-tap costs nothing.
+function onBoardTap(e) {
+  if (!fight || fight.over || !armed) return;
+  const r = $('board').getBoundingClientRect();
+  const p = e.changedTouches?.[0] || e;
+  const u = fightView.hit(fight, p.clientX - r.left, p.clientY - r.top);
+  if (!u) return;
+  const legal = fight.targets(fight.actor, armed).some(t => t.id === u.id);
+  if (!legal) return;
+  fight.act({ kind: 'attack', weapon: armed, target: u.id });
+  armed = null; fightView.arm(null);
+  paintFight();
+  stepEnemies();
+}
+
+// Run every non-player turn (and every turn at all, on auto) until it is the
+// player's move again or the fight is done.
+function stepEnemies() {
+  let guard = 0;
+  while (fight && !fight.over && guard++ < 60) {
+    const u = fight.actor;
+    if (!u) break;
+    if (u.side === 'you' && !fight.auto) break;
+    fight.autoTurn();
+  }
+  paintFight();
 }
 
 function paintFight() {
   if (!fight) return;
+  fightView.draw(fight);
   $('fightWho').textContent = fight.foe.name.toUpperCase();
-  $('fightGrit').textContent = `you ${'▮'.repeat(Math.max(0, fight.grit))}${'▯'.repeat(Math.max(0, 6 - fight.grit))}`
-    + `   him ${'▮'.repeat(Math.max(0, fight.foeGrit))}`;
+  $('fightRound').textContent = `round ${fight.round}`;
   $('fightLog').innerHTML = '';
   for (const l of fight.log.slice(0, 3)) {
     const p = document.createElement('p'); p.textContent = l; $('fightLog').append(p);
   }
+
   const box = $('fightBtns'); box.innerHTML = '';
   if (fight.over) {
     $('fightTell').textContent = '';
@@ -342,24 +380,54 @@ function paintFight() {
     box.append(b);
     return;
   }
-  // the telegraph, always before the commit
-  $('fightTell').textContent = fight.tell();
-  for (const m of MOVES) {
+
+  const u = fight.actor;
+  $('fightTell').textContent = fight.intent();
+  if (!u || u.side !== 'you') return;
+
+  // one row of weapons — greyed where this row cannot use them, which is the
+  // positioning rule taught by the buttons themselves
+  for (const id of u.weapons) {
+    const w = WEAPONS[id];
+    const can = fight.canUse(u, id);
+    const t = can ? fight.targets(u, id) : [];
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'btn wide'; b.textContent = m.label;
-    b.onclick = () => { fight.play(m.id); paintFight(); };
+    b.type = 'button';
+    b.className = 'btn wide' + (armed === id ? ' prime' : '');
+    b.disabled = !t.length;
+    b.textContent = `${w.name.toUpperCase()} · ${w.dmg[1] ? `${w.dmg[0]}–${w.dmg[1]}` : 'no damage'}`
+      + (can ? (t.length ? '' : ' · nothing in reach') : ` · not from the ${u.rowName}`);
+    b.onclick = () => { armed = armed === id ? null : id; fightView.arm(armed); paintFight(); };
     box.append(b);
   }
-  const canPay = market.cash >= fight.foe.pay;
+  for (const o of fight.options(u).filter(o => o.kind === 'move')) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn wide';
+    b.textContent = `MOVE TO THE ${(o.row > u.row ? 'BACK' : 'FRONT')} — ${['front', 'middle', 'back'][o.row]}`;
+    b.onclick = () => { fight.act(o); armed = null; fightView.arm(null); paintFight(); stepEnemies(); };
+    box.append(b);
+  }
+  const g = document.createElement('button');
+  g.type = 'button'; g.className = 'btn wide'; g.textContent = 'BRACE';
+  g.onclick = () => { fight.act({ kind: 'guard' }); paintFight(); stepEnemies(); };
+
+  const auto = document.createElement('button');
+  auto.type = 'button'; auto.className = 'btn wide';
+  auto.textContent = fight.auto ? 'AUTO — ON' : 'LET THEM HANDLE IT (AUTO)';
+  auto.onclick = () => { fight.auto = !fight.auto; if (fight.auto) stepEnemies(); else paintFight(); };
+
   const pay = document.createElement('button');
-  pay.type = 'button'; pay.className = 'btn wide'; pay.disabled = !canPay;
-  pay.textContent = `PAY HIM (${eur(fight.foe.pay)})`;
+  pay.type = 'button'; pay.className = 'btn wide';
+  pay.disabled = market.cash < fight.foe.pay;
+  pay.textContent = `PAY THEM (${eur(fight.foe.pay)})`;
   pay.onclick = () => { fight.pay(); paintFight(); };
+
   const run = document.createElement('button');
   run.type = 'button'; run.className = 'btn wide';
   run.textContent = 'GET OUT OF THERE';
   run.onclick = () => { fight.flee(); paintFight(); };
-  box.append(pay, run);
+
+  box.append(g, auto, pay, run);
 }
 
 function endFight() {
@@ -376,7 +444,7 @@ function endFight() {
   }
   if (c.trust) cast.nudge(fight.kind === 'mccormick' ? 'sean' : 'igor', c.trust);
   say(c.line);
-  fight = null;
+  fight = null; armed = null;
   $('fight').hidden = true;
   flow.clock.setPaused(false);
   renderHud(); renderSheet();
@@ -510,7 +578,7 @@ window.__pt = {
   get cast() { return cast; },
   debug: {
     boot, send, settle, finish, say, startFight,
-    markers, showPop, hidePop,
+    markers, showPop, hidePop, paintFight,
     get fight() { return fight; },
     get over() { return over; },
   },
