@@ -123,7 +123,7 @@ Nothing is a full-screen takeover.
 |---|---|---|
 | Sörnäinen | **Clear the paper** | the debt reaches zero |
 | Vaasanaukio | **Feed the square** | one consignment has landed |
-| Hakaniemi | **The way out** | 3 000 € banked in the exit fund |
+| Hakaniemi | **Put something aside** | money banked where it cannot be spent |
 | Karhupuisto | **Keep your brother** | Jaska's trust ≥ 3 |
 
 ### Toko Move's own pins

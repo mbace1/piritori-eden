@@ -76,8 +76,12 @@ export const MISSIONS = [
     done: s => s.landed > 0,
   },
   {
-    id: 'exit', at: 'hakaniemi', title: 'The way out',
-    text: 'Three thousand, banked where you cannot spend it, buys the life this was supposed to be for. It is south of here, past the hall, off this map.',
+    // EDEN IS A MYSTERY (owner lock). This pin used to name the price and
+    // describe the life it bought, which explained the mystery away. It now
+    // says only what Aatami actually knows: money he cannot touch is the
+    // only thing that has ever got anybody out of here.
+    id: 'exit', at: 'hakaniemi', title: 'Put something aside',
+    text: 'Everybody who ever left had money they could not touch. Nobody who left ever said what for.',
     done: s => s.exitFund >= 3000,
   },
   {
@@ -104,12 +108,16 @@ export function ending({ debtCleared, exitReached, heat, intact }) {
       'Igor is patient the way weather is patient.',
     ],
   };
+  // The endings are where Eden is finally allowed to mean something, and even
+  // here it is not defined — Steinbeck's east of Eden is the exile, and the
+  // arrow in the title is the way back. Timshel: thou mayest. Never thou shalt.
   if (exitReached && intact >= 2) return {
-    id: 'eden', title: 'EAST OF THE SQUARE',
+    id: 'eden', title: 'WEST OF THE SQUARE',
     lines: [
       'You pay him in a bar-napkin fold and he nods like a border opening.',
-      'Pasila. A flat over the rail yard, and two boys asleep in the next room.',
-      'You are out. You tell yourself you are out.',
+      'A flat somewhere the trams do not go, and two boys asleep in the next room.',
+      'Jaska comes on Sundays with charcoal on his hands and does not ask what it cost.',
+      'Sinä saat, the book said. Thou mayest. It never said you would.',
     ],
   };
   if (exitReached) return {
@@ -117,7 +125,7 @@ export function ending({ debtCleared, exitReached, heat, intact }) {
     lines: [
       'The fund is full. The flat is real. Nobody comes to see it.',
       'Jaska\'s number rings out. You let it.',
-      'Sinä saat, the book said. It never said what it would cost.',
+      'You got out of the square. Whatever you were going back to is not there.',
     ],
   };
   return {

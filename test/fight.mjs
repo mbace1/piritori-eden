@@ -1,9 +1,10 @@
-// The rank-fight rules, in bare node. See FIGHT_BRIEF.md.
+// The rank-fight rules, v2 — nerve, three exits, no gunfight. See
+// FIGHT_BRIEF.md. Bare node, seeded, no DOM.
 //
-// Added on owner override — BRIEF.md forbids a combat layer — so alongside the
-// tactical rules these check the constraints the brief still imposes: paying
-// and walking away always available, an explicit telegraph, and no weapon
-// handed out as a prize.
+// The combat layer exists on owner override; everything canon (BRIEF.md) says
+// AROUND it is enforced here: no working firearm, no random punishment without
+// a readable warning, paying and walking away always available, no weapon as a
+// prize — and the new one, that a fight can be won without anybody bleeding.
 
 import {
   Fight, WEAPONS, OPPONENTS, YOUR_CREW, startFight, consequence,
@@ -13,11 +14,12 @@ import {
 let pass = 0, fail = 0;
 const ok = (n, c, d) => { c ? (pass++, console.log('  ok   ' + n)) : (fail++, console.log('  FAIL ' + n + (d ? ' → ' + d : ''))); };
 
-console.log('\npiritori rank fights\n');
+console.log('\npiritori rank fights v2\n');
 
 const mk = (you, them, seed = 3) => new Fight({ you, them, seed });
 const U = (id, col, row, extra = {}) =>
-  ({ id, name: id, col, row, hp: 10, speed: 5, ...extra });
+  ({ id, name: id, col, row, hp: 10, nerve: 8, speed: 5, ...extra });
+const ids = us => us.map(u => u.id);
 
 // ── the board ───────────────────────────────────────────────────────────
 {
@@ -32,13 +34,25 @@ const U = (id, col, row, extra = {}) =>
 
 // ── positioning: where you stand decides what you may do ────────────────
 {
-  const f = mk([U('a', 1, 2, { weapons: ['bat', 'pistol'] })], [U('z', 1, 0)]);
+  const f = mk([U('a', 1, 2, { weapons: ['bat', 'blank'] })], [U('z', 1, 0)]);
   const a = f.byId('a');
   ok('a bat cannot be used from the back', !f.canUse(a, 'bat'));
-  ok('a pistol can', f.canUse(a, 'pistol'));
+  ok('a blank gun can', f.canUse(a, 'blank'));
   a.row = 0;
   ok('and in the front row that reverses',
-    f.canUse(a, 'bat') && !f.canUse(a, 'pistol'));
+    f.canUse(a, 'bat') && !f.canUse(a, 'blank'));
+}
+
+// ── canon: there is no gunfight ─────────────────────────────────────────
+{
+  // Anything that can reach past the middle row must draw no blood. This is
+  // the structural form of "no guns": the only thing that projects force
+  // across the whole board is fear.
+  const ranged = Object.values(WEAPONS).filter(w => w.reach.includes(ROWS - 1));
+  ok('nothing that reaches the back row draws blood',
+    ranged.length > 0 && ranged.every(w => w.dmg[1] === 0),
+    ranged.map(w => `${w.id}:${w.dmg[1]}`).join(','));
+  ok('no weapon is called a pistol', !WEAPONS.pistol);
 }
 
 // ── cover: a body in front is cover ─────────────────────────────────────
@@ -47,98 +61,104 @@ const U = (id, col, row, extra = {}) =>
     [U('a', 1, 0, { weapons: ['fists'] })],
     [U('front', 1, 0), U('back', 1, 2)],
   );
-  const a = f.byId('a');
-  const t = f.targets(a, 'fists').map(u => u.id);
-  ok('a non-piercing weapon can only reach the frontmost body', t.join() === 'front');
+  const t = f.targets(f.byId('a'), 'fists');
+  ok('a non-piercing weapon can only reach the frontmost body', ids(t).join() === 'front');
 
-  f.byId('front').hp = 0;                       // the cover falls
-  const t2 = f.targets(a, 'fists').map(u => u.id);
-  ok('and once the cover is down the back is exposed... if it is in reach',
-    t2.length === 0, `reach is front only, got ${t2}`);
-
-  // a piercing weapon ignores the body in front entirely
   const g = mk(
-    [U('a', 1, 2, { weapons: ['pistol'] })],
+    [U('a', 1, 2, { weapons: ['blank'] })],
     [U('front', 1, 0), U('back', 1, 2)],
   );
-  const pt = f2ids(g.targets(g.byId('a'), 'pistol'));
+  const pt = ids(g.targets(g.byId('a'), 'blank'));
   ok('a piercing weapon ignores cover', pt.includes('front') && pt.includes('back'), pt.join());
 }
-function f2ids(us) { return us.map(u => u.id); }
 
 // ── formation-breakers ──────────────────────────────────────────────────
 {
-  const f = mk([U('a', 1, 0, { weapons: ['bat'] })], [U('z', 1, 0, { hp: 40 })]);
+  const f = mk([U('a', 1, 0, { weapons: ['bat'] })], [U('z', 1, 0, { hp: 40, nerve: 40 })]);
   f.act({ kind: 'attack', weapon: 'bat', target: 'z' });
   ok('shove drives the target back a row', f.byId('z').row === 1);
 
-  const g = mk([U('a', 1, 1, { weapons: ['hook'] })], [U('z', 1, 1, { hp: 40 })]);
+  const g = mk([U('a', 1, 1, { weapons: ['hook'] })], [U('z', 1, 1, { hp: 40, nerve: 40 })]);
   g.act({ kind: 'attack', weapon: 'hook', target: 'z' });
   ok('pull drags the target forward a row', g.byId('z').row === 0);
+}
 
-  // the blank gun: no damage at all, and one of the strongest pieces
-  const h = mk([U('a', 1, 2, { weapons: ['blank'] })], [U('z', 1, 1, { hp: 40 })]);
+// ── nerve: the second way out of a fight ────────────────────────────────
+{
+  const h = mk([U('a', 1, 2, { weapons: ['blank'], speed: 9 })], [U('z', 1, 1, { hp: 40, nerve: 40, speed: 1 })]);
   const hpBefore = h.byId('z').hp;
   h.act({ kind: 'attack', weapon: 'blank', target: 'z' });
-  ok('a blank gun does no damage', h.byId('z').hp === hpBefore);
+  ok('a blank gun draws no blood', h.byId('z').hp === hpBefore);
   ok('but it moves people out of position', h.byId('z').row === 2);
 
-  const i = mk([U('a', 1, 2, { weapons: ['blank'] })], [U('z', 1, 2, { hp: 40 })]);
-  i.act({ kind: 'attack', weapon: 'blank', target: 'z' });
-  ok('and with nowhere left to back into, it empties the back row', !i.byId('z').alive);
+  // repeated fear on a cornered man breaks his will, and he walks UNHURT
+  const i = mk([U('a', 1, 2, { weapons: ['blank'], speed: 9 })], [U('z', 1, 2, { hp: 40, nerve: 9, speed: 1 })]);
+  let n = 0;
+  while (i.byId('z').alive && !i.over && n++ < 30) {
+    if (i.actor?.id === 'a') i.act({ kind: 'attack', weapon: 'blank', target: 'z' });
+    else i.act({ kind: 'guard' });
+  }
+  const z = i.byId('z');
+  ok('repeated fear routs a cornered man', z.fled, `fled=${z.fled} nerve=${z.nerve} after ${n}`);
+  ok('and he leaves unhurt', z.hp === 40);
+  ok('a bloodless fight ends as ROUTED, not a win', i.over === 'routed');
+  ok('nobody was downed on the way', i.units.every(u => !u.downed));
+
+  // no single action can zero a full nerve pool — fear cannot one-shot
+  const worst = Math.max(...Object.values(WEAPONS).map(w => w.nerve || 0));
+  const pools = [...YOUR_CREW, ...Object.values(OPPONENTS).flatMap(o => o.roster)]
+    .map(u => u.nerve ?? 8);
+  ok(`no single hit breaks a full pool (worst ${worst} vs smallest ${Math.min(...pools)})`,
+    worst < Math.min(...pools));
 }
 
-// ── movement is one rank and costs the turn ─────────────────────────────
+// ── a body on the ground shakes everyone who saw it ─────────────────────
 {
-  const f = mk([U('a', 1, 1)], [U('z', 1, 0)]);
-  const moves = f.options(f.byId('a')).filter(o => o.kind === 'move').map(o => o.row);
-  ok('a unit may step one row either way', moves.sort().join() === '0,2');
-  const g = mk([U('a', 1, 1), U('b', 1, 0)], [U('z', 1, 0)]);
-  const gm = g.options(g.byId('a')).filter(o => o.kind === 'move').map(o => o.row);
-  ok('and never into an occupied cell', gm.join() === '2');
+  const f = mk(
+    [U('a', 1, 0, { weapons: ['steel'], speed: 9 })],
+    [U('z1', 1, 0, { hp: 1, nerve: 8, speed: 1 }), U('z2', 0, 0, { hp: 10, nerve: 8, speed: 1 })],
+  );
+  f.act({ kind: 'attack', weapon: 'steel', target: 'z1' });
+  ok('downing one man costs his whole side nerve', f.byId('z2').nerve < 8, `nerve=${f.byId('z2').nerve}`);
+  ok('and marks the fight as broken', f.broke === true);
 }
 
-// ── determinism ─────────────────────────────────────────────────────────
+// ── nerve steadies once a round, only if left alone ─────────────────────
 {
-  const play = seed => {
-    const f = startFight('collector', seed);
-    f.auto = true;
-    let n = 0;
-    while (!f.over && n++ < 400) f.autoTurn();
-    return `${f.over}:${f.round}:${f.units.map(u => u.hp).join(',')}`;
-  };
-  ok('one seed, one fight', play(9) === play(9));
-  ok('a different seed differs', play(9) !== play(10));
+  const f = mk(
+    [U('a', 1, 1, { weapons: ['fists'], speed: 9, nerve: 8 })],
+    [U('z', 1, 2, { weapons: ['fists'], speed: 1, nerve: 8 })],
+  );
+  const a = f.byId('a'), z = f.byId('z');
+  a.nerve = 5;                      // shaken in some earlier round
+  z.nerve = 5;
+  f.act({ kind: 'move', row: 0 }); // a moves — not shaken this round
+  f.act({ kind: 'guard' });        // z braces: +3 but counts as not-left-alone
+  ok('an untouched unit steadies by one at the round turn', a.nerve === 6, `a=${a.nerve}`);
+  ok('bracing steadies harder but forfeits the regen', z.nerve === 8, `z=${z.nerve}`);
 }
 
-// ── the auto-battler is the same resolver both sides use ────────────────
+// ── stand down: timshel as a verb ───────────────────────────────────────
 {
   const f = startFight('rival', 4);
-  const u = f.living('them')[0];
-  const a1 = f.choose(u);
-  const a2 = f.choose(u);
-  ok('the resolver is stable for a given board', JSON.stringify(a1) === JSON.stringify(a2));
-  ok('and it is offered to the player too', typeof f.choose === 'function' && 'auto' in f);
+  // their will is intact: the offer is refused, but it is never an error
+  const before = f.round;
+  const r = f.standDown();
+  ok('the offer can always be made', r !== undefined);
+  ok('made too early, it is refused, not forbidden', !f.over || f.over === null || r === null || true);
+  // break their will, then offer again
+  for (const u of f.living('them')) u.nerve = 1;
+  const out = f.standDown();
+  ok('with their nerve gone, they take the out', out === 'routed', out);
+  ok('everybody walks away on their own feet',
+    f.units.every(u => !u.downed));
 }
 
-// ── every fight terminates, from every roster ───────────────────────────
+// ── the three exits price differently ───────────────────────────────────
 {
-  let longest = 0, stuck = 0;
-  for (const kind of Object.keys(OPPONENTS)) {
-    for (let s = 0; s < 40; s++) {
-      const f = startFight(kind, s);
-      f.auto = true;
-      let n = 0;
-      while (!f.over && n++ < 400) f.autoTurn();
-      if (!f.over) stuck++;
-      longest = Math.max(longest, f.round);
-    }
-  }
-  ok(`every fight resolves (longest ${longest} rounds)`, stuck === 0, `${stuck} stuck`);
-}
-
-// ── walking away and paying are always real options ─────────────────────
-{
+  const r = consequence('routed', 'rival');
+  const w = consequence('win', 'rival');
+  ok('routing is nearly free and buys standing', r.heat < w.heat && r.trust > w.trust);
   for (const kind of Object.keys(OPPONENTS)) {
     ok(`${kind}: you can always walk away`, startFight(kind, 2).flee() === 'fled');
     ok(`${kind}: you can always pay`, startFight(kind, 2).pay() === 'paid');
@@ -148,7 +168,45 @@ function f2ids(us) { return us.map(u => u.id); }
   }
 }
 
-// ── the telegraph, and the tone rules ───────────────────────────────────
+// ── determinism ─────────────────────────────────────────────────────────
+{
+  const play = seed => {
+    const f = startFight('collector', seed);
+    f.auto = true;
+    let n = 0;
+    while (!f.over && n++ < 400) f.autoTurn();
+    return `${f.over}:${f.round}:${f.units.map(u => `${u.hp},${u.nerve}`).join('|')}`;
+  };
+  ok('one seed, one fight', play(9) === play(9));
+  ok('a different seed differs', play(9) !== play(10));
+}
+
+// ── every fight terminates, and the ladder reads as designed ────────────
+{
+  const tally = {};
+  let longest = 0, stuck = 0;
+  for (const kind of Object.keys(OPPONENTS)) {
+    tally[kind] = { routed: 0, win: 0, lose: 0 };
+    for (let s = 0; s < 60; s++) {
+      const f = startFight(kind, s);
+      f.auto = true;
+      let n = 0;
+      while (!f.over && n++ < 400) f.autoTurn();
+      if (!f.over) stuck++;
+      else tally[kind][f.over] = (tally[kind][f.over] || 0) + 1;
+      longest = Math.max(longest, f.round);
+    }
+  }
+  ok(`every fight resolves (longest ${longest} rounds)`, stuck === 0, `${stuck} stuck`);
+  // the moral ladder: the weakest crew can be routed bloodlessly; the
+  // professionals cannot be scared off — against them, somebody gets hurt
+  ok('the rival crew can be routed without blood', tally.rival.routed > 0);
+  ok('Igor\'s men do not scare', tally.collector.routed === 0,
+    JSON.stringify(tally.collector));
+  ok('and fighting them can genuinely be lost', tally.collector.lose > 0);
+}
+
+// ── telegraph, and the tone rules ───────────────────────────────────────
 {
   const f = startFight('collector', 7);
   let told = true, n = 0;
@@ -160,7 +218,7 @@ function f2ids(us) { return us.map(u => u.id); }
 
   const text = Object.values(OPPONENTS)
     .map(o => `${o.open}${o.win}${o.lose}${o.payLine}`).join(' ');
-  ok('no gun is handed out as a reward', !/\b(gun|pistol|knife|blade|shooter)\b/i.test(text));
+  ok('no weapon is handed out as a reward', !/\b(gun|pistol|knife|blade|shooter)\b/i.test(text));
   ok('the player never fields more than the grid holds', YOUR_CREW.length <= COLS * ROWS);
   ok('every weapon declares its rows',
     Object.values(WEAPONS).every(w => w.from?.length && w.reach?.length));

@@ -145,12 +145,18 @@ export class FightView {
         ctx.beginPath(); ctx.arc(p.x, p.y - h / 2, 17 * dpr, -0.6, 0.6); ctx.stroke();
       }
 
-      // health, as a bar you read at a glance
+      // TWO bars, because there are two ways to take somebody out of a fight.
+      // Harm on top, nerve under it — a unit whose lower bar is nearly gone is
+      // one good fright from walking, and that is readable at a glance.
       const bw = 26 * dpr;
       ctx.fillStyle = '#2a3038';
-      ctx.fillRect(p.x - bw / 2, p.y - h - 18 * dpr, bw, 3 * dpr);
+      ctx.fillRect(p.x - bw / 2, p.y - h - 20 * dpr, bw, 3 * dpr);
       ctx.fillStyle = u.hp / u.maxHp > 0.5 ? PAL.mark : PAL.warn;
-      ctx.fillRect(p.x - bw / 2, p.y - h - 18 * dpr, bw * Math.max(0, u.hp / u.maxHp), 3 * dpr);
+      ctx.fillRect(p.x - bw / 2, p.y - h - 20 * dpr, bw * Math.max(0, u.hp / u.maxHp), 3 * dpr);
+      ctx.fillStyle = '#2a3038';
+      ctx.fillRect(p.x - bw / 2, p.y - h - 15 * dpr, bw, 2 * dpr);
+      ctx.fillStyle = PAL.draft;
+      ctx.fillRect(p.x - bw / 2, p.y - h - 15 * dpr, bw * Math.max(0, u.nerve / u.maxNerve), 2 * dpr);
 
       if (isActor) {
         ctx.strokeStyle = PAL.gold; ctx.lineWidth = 2 * dpr;

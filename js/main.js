@@ -408,8 +408,15 @@ function paintFight() {
     box.append(b);
   }
   const g = document.createElement('button');
-  g.type = 'button'; g.className = 'btn wide'; g.textContent = 'BRACE';
+  g.type = 'button'; g.className = 'btn wide'; g.textContent = 'BRACE — get a grip';
   g.onclick = () => { fight.act({ kind: 'guard' }); paintFight(); stepEnemies(); };
+
+  // Never greyed out, every single round. Timshel: the choice stays open, and
+  // whether they take it is about their nerve, not about the button.
+  const down = document.createElement('button');
+  down.type = 'button'; down.className = 'btn wide';
+  down.textContent = 'OFFER THEM THE OUT';
+  down.onclick = () => { fight.standDown(); paintFight(); if (!fight.over) stepEnemies(); };
 
   const auto = document.createElement('button');
   auto.type = 'button'; auto.className = 'btn wide';
@@ -427,7 +434,7 @@ function paintFight() {
   run.textContent = 'GET OUT OF THERE';
   run.onclick = () => { fight.flee(); paintFight(); };
 
-  box.append(g, auto, pay, run);
+  box.append(g, down, auto, pay, run);
 }
 
 function endFight() {
