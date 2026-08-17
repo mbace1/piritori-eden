@@ -39,7 +39,16 @@ at the church, the bay and the Kurvi bend, the drawing has missed.
 
 Useful reference terms: *Kallio*, *Vaasanaukio / Piritori*, *Hämeentie Kurvi*,
 *Kallion kirkko*, *Karhupuisto*, *Hakaniemen halli*, *Sörnäinen*, *Vaasankatu*,
-*Kuudes linja*. Period reference for act one is early-2000s; act two present day.
+*Kuudes linja*, *Torkkelinmäki*, *Harju / Kallion urheilukenttä*. Period
+reference for act one is early-2000s; act two present day.
+
+The game's own board is already built from real WGS84 coordinates at true
+scale (one unit = 10 m) — `flow-core/city.js` carries the source positions and
+the projection, so the art and the game can be checked against the same
+ground truth. Anchor facts a drawing must not contradict: **Piritori is the
+plaza at Sörnäinen metro's west door**, Vaasanaukio–Kurvi–Sörnäinen are one
+tight cluster at the Hämeentie bend, and Hakaniemi is a full metro stop south
+by the water — the district is a tall ~550 × 980 m rectangle.
 
 ---
 
