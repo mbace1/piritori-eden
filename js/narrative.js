@@ -61,6 +61,32 @@ export class Cast {
   offers(id) { return (this.trust[id] ?? 0) >= 3; }
 }
 
+// Mission goals — pinned to the map, each one openable for its detail. A goal
+// names a place, what is wanted there, and how to read whether it is done;
+// main.js evaluates `done` against live state every paint.
+export const MISSIONS = [
+  {
+    id: 'debt', at: 'sornainen', title: 'Clear the paper',
+    text: 'Igor holds two thousand plus interest, and interest works nights. Clear it before the last settlement — the back booth takes payment any evening.',
+    done: s => s.debt <= 0,
+  },
+  {
+    id: 'network', at: 'vaasanaukio', title: 'Feed the square',
+    text: 'Nothing moves until a line calls at the square. Draw one, keep it quiet, and land a consignment while the price is still standing.',
+    done: s => s.landed > 0,
+  },
+  {
+    id: 'exit', at: 'hakaniemi', title: 'The way out',
+    text: 'Three thousand, banked where you cannot spend it, buys the life this was supposed to be for. It is south of here, past the hall, off this map.',
+    done: s => s.exitFund >= 3000,
+  },
+  {
+    id: 'jaska', at: 'karhupuisto', title: 'Keep your brother',
+    text: 'Jaska sits by the bear with charcoal on his hands. Endings where somebody still knows you require somebody still knowing you.',
+    done: s => s.jaskaTrust >= 3,
+  },
+];
+
 // The matrix, not a score: debt cleared, exit fund reached, heat, relationships.
 export function ending({ debtCleared, exitReached, heat, intact }) {
   if (!debtCleared && heat > 0.7) return {

@@ -18,6 +18,10 @@ export const PAL = {
   // Four lines, distinguishable by hue AND by the dash pattern render.js pairs
   // with them — colour is never the only identifier.
   routeColours: ['#e2dccd', '#57c8e8', '#7fc98a', '#c98ad8'],
+  // the city's own services, kept duller than anything the player draws — and
+  // the metro's amber deliberately a step down from warn's orange, which stays
+  // reserved for pressure
+  modeColours: { metro: '#b06a2a', tram: '#5d6b5e', car: '#46525e' },
   font: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
 };
 

@@ -8,7 +8,7 @@ import { RouteDrawer } from '../../flow-core/input.js?v=1';
 import { THEME } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=1';
 import { Heat, THRESHOLD } from './heat.js?v=1';
-import { CONTACTS, LINES, Cast, ending } from './narrative.js?v=1';
+import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { Fight, MOVES, consequence } from './fight.js?v=1';
 
 const $ = id => document.getElementById(id);
@@ -18,7 +18,7 @@ const DAYS = 7;
 let flow, market, heat, cast, renderer, drawer;
 let sel = null, draft = null, over = null, drained = 0, pendingChoice = null;
 let fight = null, nextFightAt = 900;
-let msgs = [];
+let msgs = [], landed = 0;
 
 function say(...lines) {
   for (const l of lines) msgs.unshift(l);
@@ -69,19 +69,23 @@ function boot(seed = 7) {
   heat = new Heat(flow);
   cast = new Cast();
   drained = 0; msgs = []; over = null; sel = null; pendingChoice = null;
-  fight = null; nextFightAt = 900;
+  fight = null; nextFightAt = 900; landed = 0;
 
   // the canvas takes the diagram's own proportions, so there is no dead band
   // above and below it on a portrait phone
   $('map').style.aspectRatio = `${flow.graph.bounds.w} / ${flow.graph.bounds.h}`;
   renderer = new FlowRenderer($('map'), THEME);
   drawer = new RouteDrawer($('map'), renderer, flow, {
+    markersProvider: () => markers(),
     onCommit: (mode, nodes) => {
       const r = flow.addRoute(mode, nodes);
       say(r.error ? `— ${r.error}` : `Line ${r.route.id.toUpperCase()} drawn: ${nodes.map(label).join(' → ')}.`);
       renderHud();
     },
-    onTap: id => { sel = id; renderSheet(); },
+    onTap: (hit, p) => {
+      if (hit.kind === 'node') { sel = hit.id; renderSheet(); hidePop(); }
+      else showPop(hit, p);
+    },
     onDraft: d => { draft = d; },
   });
 
@@ -118,6 +122,7 @@ function drainArrivals() {
     if (!t.payload) continue;
     const got = market.settleArrival(t.dest, t.payload.cls, t.payload.n);
     const clean = heat.pathClean(t.legsUsed || t.legs);
+    landed += 1;
     say(`${t.payload.n} ${t.payload.cls} landed at ${label(t.dest)} — ${eur(got)}${clean ? '' : ' (watched)'}.`);
   }
   // anything that gave up carrying product is money gone
@@ -169,6 +174,130 @@ function finish() {
   $('overStats').textContent =
     `debt ${eur(market.debt)} · exit fund ${eur(market.exitFund)} · hottest line ${(h * 100) | 0}% · contacts kept ${cast.intact}/${CONTACTS.length}`;
   $('over').hidden = false;
+}
+
+// ── the pin layer ───────────────────────────────────────────────────────
+// Everything on the night map you can ask about: who runs what, who is
+// watching, who is in your way, and what you are here to do. Built fresh
+// each frame off live state, so a pin is never stale; `slot` fans pins that
+// share a node so each stays tappable.
+const RIVAL_HAUNTS = ['kurvi', 'torkkelinmaki', 'vaasanaukio'];
+
+function missionState() {
+  return {
+    debt: market.debt, exitFund: market.exitFund, landed,
+    jaskaTrust: cast.trust.jaska ?? 0,
+  };
+}
+
+function markers() {
+  if (!flow || !market) return [];
+  const out = [];
+  const slots = {};
+  const slot = node => (slots[node] = (slots[node] ?? -1) + 1);
+
+  // the contacts — the people layer: gangs, the wholesale, the brother, the ear
+  for (const c of CONTACTS) {
+    out.push({
+      id: `contact:${c.id}`, node: c.at, slot: slot(c.at),
+      glyph: c.name[0], color: '#F0027F', data: c,
+    });
+  }
+
+  // the square's own sellers — the standing street market
+  out.push({
+    id: 'dealers', node: 'vaasanaukio', slot: slot('vaasanaukio'),
+    glyph: '€', color: '#e8c24a',
+  });
+
+  // a rival crew, moving between their haunts by day
+  const rivalAt = RIVAL_HAUNTS[flow.clock.day % RIVAL_HAUNTS.length];
+  out.push({ id: 'rival', node: rivalAt, slot: slot(rivalAt), glyph: 'R', color: '#e2dccd' });
+
+  // the patrol — appears where the hottest line runs once it is worth watching
+  const h = heat.hottest();
+  if (h.id && h.heat >= THRESHOLD.notice) {
+    out.push({ id: 'patrol', edge: h.id, glyph: '!', color: '#ff7a1a' });
+  }
+
+  // mission goals, dimmed once they are met
+  const s = missionState();
+  for (const m of MISSIONS) {
+    out.push({
+      id: `mission:${m.id}`, node: m.at, slot: slot(m.at),
+      glyph: '★', color: '#e8c24a', dim: m.done(s), data: m,
+    });
+  }
+  return out;
+}
+
+// ── the small window ────────────────────────────────────────────────────
+function showPop(hit, p) {
+  const box = $('pop');
+  const body = popBody(hit);
+  if (!body) { hidePop(); return; }
+  $('popBody').innerHTML = body;
+  box.hidden = false;
+  // hang it off the tap, clamped to the viewport
+  const r = $('map').getBoundingClientRect();
+  const w = Math.min(300, innerWidth - 20);
+  box.style.width = w + 'px';
+  box.style.left = Math.max(10, Math.min(innerWidth - w - 10, r.left + p.x - w / 2)) + 'px';
+  box.style.top = Math.max(10, Math.min(innerHeight - 170, r.top + p.y + 14)) + 'px';
+}
+function hidePop() { $('pop').hidden = true; }
+
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+function popBody(hit) {
+  if (hit.kind === 'carrier') {
+    const r = flow.routes.get(hit.routeId);
+    if (!r) return null;
+    const c = r.carriers.find(k => k.id === hit.carrierId);
+    const yours = c.load.filter(id => flow.trips.byId(id)?.payload).length;
+    const name = r.fixed
+      ? (r.mode === 'metro' ? 'The metro' : r.mode === 'car' ? `Traffic · ${r.label}` : `Tram ${r.label}`)
+      : `Your line ${r.id.toUpperCase()}`;
+    return `<h3>${esc(name)}</h3>`
+      + `<p>${c.load.length}/${r.carrierCapacity} aboard between ${esc(label(r.nodes[c.idx]))} and ${esc(label(r.nodes[Math.min(c.idx + Math.max(c.dir, 0), r.nodes.length - 1)]))}.</p>`
+      + (yours ? `<p class="warn">${yours} of them are carrying for you${c.load.length > yours * 3 ? ' — well buried in the crowd' : c.load.length === yours ? ' — and nothing else is aboard to hide them' : ''}.</p>` : '')
+      + (r.fixed ? '<p class="dim">The city runs this one. It was here before you and it will outlast you.</p>' : '');
+  }
+  if (hit.kind !== 'marker') return null;
+  const mk = hit.marker;
+
+  if (mk.id.startsWith('contact:')) {
+    const c = mk.data;
+    const t = cast.trust[c.id] ?? 0;
+    const standing = t >= 3 ? 'He picks up when you call.' : t >= 1 ? 'He knows your face.' : 'He knows your name, which is not the same thing.';
+    return `<h3>${esc(c.name)}</h3><p>${esc(c.role)}</p>`
+      + `<p class="dim">${esc(standing)}${cast.offers(c.id) ? ` What he offers: ${esc(c.gift)}.` : ''}</p>`;
+  }
+  if (mk.id === 'dealers') {
+    const rows = CLASSES.map(c => `${c.name} ${market.price('vaasanaukio', c.id)} €`).join(' · ');
+    return `<h3>The square's sellers</h3>`
+      + `<p>Always somebody working the doorway of the metro. Tonight's word on the street: ${rows}.</p>`
+      + `<p class="dim">They are not with you and not against you — until one of them is.</p>`;
+  }
+  if (mk.id === 'rival') {
+    return `<h3>The other crew</h3>`
+      + `<p>Working ${esc(label(RIVAL_HAUNTS[flow.clock.day % RIVAL_HAUNTS.length]))} tonight. They move their corner every day, same as you should.</p>`
+      + `<p class="warn">Carry a full bag past them and it becomes a conversation.</p>`;
+  }
+  if (mk.id === 'patrol') {
+    const h = heat.hottest();
+    const pct = Math.round(h.heat * 100);
+    const word = h.heat >= THRESHOLD.act ? 'They are moving in.' : h.heat >= THRESHOLD.warn ? 'They are writing things down.' : 'They are looking, that is all — so far.';
+    return `<h3>Patrol · ${esc(edgeName(h.id))}</h3>`
+      + `<p>${word} Attention on this stretch: ${pct}%.</p>`
+      + `<p class="dim">Past ${Math.round(THRESHOLD.warn * 100)}% they warn. Past ${Math.round(THRESHOLD.act * 100)}% they take the line for the night. Rest it, or bury the load deeper in the crowd.</p>`;
+  }
+  if (mk.id.startsWith('mission:')) {
+    const m = mk.data;
+    const done = m.done(missionState());
+    return `<h3>★ ${esc(m.title)}${done ? ' — done' : ''}</h3><p>${esc(m.text)}</p>`;
+  }
+  return null;
 }
 
 // ── encounters ──────────────────────────────────────────────────────────
@@ -346,7 +475,7 @@ function frame(now) {
   const dt = last ? Math.min(120, now - last) : 0; last = now;
   if (flow) {
     flow.update(dt);
-    renderer.draw(flow, { draft, selected: null, alpha: flow.clock.alpha() });
+    renderer.draw(flow, { draft, selected: null, alpha: flow.clock.alpha(), markers: markers() });
     if (flow.clock.tick % 10 === 0) renderHud();
   }
   requestAnimationFrame(frame);
@@ -368,6 +497,8 @@ $('speed').addEventListener('click', () => {
   $('speed').textContent = `×${s}`;
 });
 $('again').addEventListener('click', () => { $('over').hidden = true; boot(7); flow.clock.setPaused(false); });
+$('popClose').addEventListener('click', hidePop);
+addEventListener('keydown', e => { if (e.key === 'Escape') hidePop(); });
 
 boot(7);
 requestAnimationFrame(frame);
@@ -379,6 +510,7 @@ window.__pt = {
   get cast() { return cast; },
   debug: {
     boot, send, settle, finish, say, startFight,
+    markers, showPop, hidePop,
     get fight() { return fight; },
     get over() { return over; },
   },
