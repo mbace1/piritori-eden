@@ -10,7 +10,7 @@ import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=3';
-import { FightView } from './fightview.js?v=2';
+import { FightView } from './fightview.js?v=3';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -356,6 +356,7 @@ function startFight(kind, tick) {
     $('board').addEventListener('touchend', onBoardTap, { passive: true });
   }
   fightView.resize();
+  fightView.useArena(kind);      // the ground this one is happening on
   // Every roster has somebody faster than Aatami, so the first actor is
   // usually an enemy — and paintFight() draws no controls when the actor is
   // hostile. Without this the panel opened dead and stayed dead forever.

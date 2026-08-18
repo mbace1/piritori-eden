@@ -10,8 +10,9 @@
 // is how cover is taught — you watch the back row stay un-ringed while a body
 // stands in front of it, and nobody has to read a tooltip.
 
-import { COLS, WEAPONS } from './fight.js?v=3';
+import { COLS, WEAPONS, arenaFor } from './fight.js?v=3';
 import { PAL } from './palette.js?v=1';
+import { image } from '../../assets/load.js?v=1';
 
 const TW = 34, TH = 17;          // iso tile half-width / half-height
 
@@ -21,7 +22,22 @@ export class FightView {
     this.ctx = canvas.getContext('2d');
     this.sel = null;             // { weapon } once a weapon is picked
     this.hot = null;             // unit id under the pointer
+    this.arena = null;           // the generated backdrop, once it lands
+    this.arenaId = null;
     this.resize();
+  }
+
+  // The backdrop for whichever ground this fight is on. Asynchronous and
+  // ALLOWED TO FAIL: assets/load.js returns null when nothing has been
+  // generated, and draw() then paints the flat paper it always painted. A
+  // cabinet must never depend on a PNG — the arena is additive, and the game
+  // is playable on a fresh checkout with assets/out/ empty.
+  useArena(kind) {
+    const id = `piritori/arena-${arenaFor(kind)}`;
+    if (id === this.arenaId) return;
+    this.arenaId = id;
+    this.arena = null;
+    image(id).then(img => { if (this.arenaId === id) this.arena = img; });
   }
 
   resize() {
@@ -37,7 +53,12 @@ export class FightView {
   cell(side, col, row, rows) {
     const dpr = this.dpr;
     const cx = this.canvas.width / 2;
-    const cy = this.canvas.height / 2;
+    // The board sits BELOW the middle of the panel, because every arena puts
+    // its buildings in the upper half and its open ground in the lower — a
+    // formation centred on the canvas stands on the roofs. Kept as one number
+    // rather than per-arena: the framing block in the manifest is quoted
+    // identically into all four prompts precisely so this can be.
+    const cy = this.canvas.height * (this.arena ? 0.60 : 0.5);
     // rows run away from the middle on each side
     const r = side === 'you' ? row + 1 : -(row + 1);
     const c = col - (COLS - 1) / 2;
@@ -65,6 +86,18 @@ export class FightView {
     ctx.fillStyle = PAL.paper;
     ctx.fillRect(0, 0, W, H);
 
+    // 0. the ground this is happening on. Drawn COVER rather than stretched —
+    //    the arenas are 16:9 and the panel is not, and squashing a painting to
+    //    fit is worse than losing an edge of it. Darkened, because everything
+    //    above has to read against it and the fight is the subject.
+    if (this.arena) {
+      const s = Math.max(W / this.arena.width, H / this.arena.height);
+      const w = this.arena.width * s, h = this.arena.height * s;
+      ctx.drawImage(this.arena, (W - w) / 2, (H - h) / 2, w, h);
+      ctx.fillStyle = 'rgba(9,12,16,0.45)';
+      ctx.fillRect(0, 0, W, H);
+    }
+
     const legal = this.sel
       ? new Set(fight.targets(fight.actor, this.sel).map(u => u.id))
       : null;
@@ -88,7 +121,9 @@ export class FightView {
             ? `rgba(90,110,130,${0.05 + k * 0.07})`
             : `rgba(150,80,70,${0.05 + k * 0.07})`;
           ctx.fill();
-          ctx.strokeStyle = '#1b222b';
+          // the cell outline has to survive a lit courtyard as well as bare
+          // paper, so it lightens rather than darkens once there is art behind
+          ctx.strokeStyle = this.arena ? 'rgba(226,220,205,0.07)' : '#1b222b';
           ctx.lineWidth = 1 * dpr;
           ctx.stroke();
         }
@@ -192,11 +227,19 @@ export class FightView {
       // Only the ones that matter right now are labelled: your own side, the
       // unit acting, and anything currently ringed as a target.
       if (mine || isActor || targetable) {
-        ctx.fillStyle = isActor ? PAL.gold : PAL.dim;
         ctx.font = `${10 * dpr}px ${PAL.font}`;
         ctx.textAlign = 'center';
+        // over a lit courtyard, dim grey on ochre is unreadable — the name
+        // gets its own shadow rather than its own colour, so the palette
+        // stays the palette
+        if (this.arena) {
+          ctx.shadowColor = 'rgba(0,0,0,0.9)';
+          ctx.shadowBlur = 4 * dpr;
+        }
+        ctx.fillStyle = isActor ? PAL.gold : (this.arena ? PAL.mark : PAL.dim);
         const label = u.name.length > 12 ? u.name.slice(0, 11) + '…' : u.name;
         ctx.fillText(label, p.x, p.y + 15 * dpr);
+        ctx.shadowBlur = 0;
       }
       ctx.globalAlpha = 1;
     }
@@ -204,10 +247,12 @@ export class FightView {
     // 3. which half is whose, said once
     ctx.font = `${9 * dpr}px ${PAL.font}`;
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#4a5866';
+    if (this.arena) { ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 4 * dpr; }
+    ctx.fillStyle = this.arena ? 'rgba(180,101,90,0.9)' : '#4a5866';
     ctx.fillText('THEM', 6 * dpr, 14 * dpr);
-    ctx.fillStyle = '#5a6d80';
+    ctx.fillStyle = this.arena ? 'rgba(140,160,185,0.9)' : '#5a6d80';
     ctx.fillText('YOU', 6 * dpr, H - 8 * dpr);
+    ctx.shadowBlur = 0;
   }
 
   // Which weapon is armed, or null. Setting it re-dims the board.
