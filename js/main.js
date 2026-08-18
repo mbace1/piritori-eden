@@ -6,7 +6,7 @@ import { KALLIO } from '../../flow-core/city.js?v=1';
 import { FlowRenderer } from '../../flow-core/render.js?v=1';
 import { RouteDrawer } from '../../flow-core/input.js?v=1';
 import { THEME } from './palette.js?v=1';
-import { Market, CLASSES } from './market.js?v=1';
+import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=3';
@@ -20,6 +20,7 @@ let flow, market, heat, cast, renderer, drawer;
 let sel = null, draft = null, over = null, drained = 0, pendingChoice = null;
 let fight = null, nextFightAt = 900, fightView = null, armed = null;
 let msgs = [], landed = 0;
+let dealToday = null;            // one bargain a day, from one contact
 
 function say(...lines) {
   for (const l of lines) msgs.unshift(l);
@@ -60,6 +61,7 @@ function boot(seed = 7) {
       onEvent: ev => {
         if (ev.kind === 'close_edge') say(...LINES.close_edge(edgeName(ev.target)));
         if (ev.kind === 'slow_edge') say(...LINES.slow_edge(edgeName(ev.target)));
+        // a surge dries up the whole scarce END of the market, not one name
         if (ev.kind === 'surge') { say(...LINES.surge(label(ev.target))); market.shock('scarce', 1.8, 400, flow.clock.tick); }
         if (ev.kind === 'choice') offerChoice();
       },
@@ -71,6 +73,7 @@ function boot(seed = 7) {
   cast = new Cast();
   drained = 0; msgs = []; over = null; sel = null; pendingChoice = null;
   fight = null; nextFightAt = 900; landed = 0;
+  rollDeal(0);
 
   // the canvas takes the diagram's own proportions, so there is no dead band
   // above and below it on a portrait phone
@@ -107,9 +110,11 @@ const edgeName = id => {
 // whatever the price is WHEN IT LANDS.
 function send(cls, n, from, to) {
   if (n <= 0) return;
-  const held = market.hold(cls, n);
+  const { n: held, fake } = market.hold(cls, n);
   if (!held) return;
-  const t = flow.inject(from, to, { cls, n: held });
+  // the payload stays OPAQUE to the core — it is a tag the core copies and
+  // never reads, which is what lets flow-core carry groceries in Toko Move
+  const t = flow.inject(from, to, { cls, n: held, fake });
   if (!t.legs && !flow.routes.list.some(r => r.serves(from))) {
     say(`No line calls at ${label(from)}. It waits on the pavement.`);
   }
@@ -122,10 +127,16 @@ function drainArrivals() {
   for (; drained < done.length; drained++) {
     const t = done[drained];
     if (!t.payload) continue;
-    const got = market.settleArrival(t.dest, t.payload.cls, t.payload.n);
+    const r = market.settleArrival(t.dest, t.payload.cls, t.payload.n, t.payload.fake || 0);
     const clean = heat.pathClean(t.legsUsed || t.legs);
     landed += 1;
-    say(`${t.payload.n} ${t.payload.cls} landed at ${label(t.dest)} — ${eur(got)}${clean ? '' : ' (watched)'}.`);
+    say(`${t.payload.n} ${t.payload.cls} landed at ${label(t.dest)} — ${eur(r.got)}${clean ? '' : ' (watched)'}.`);
+    // where a cut bag is found out: by the money, at the far end, too late
+    if (r.fake) {
+      say(r.fake >= t.payload.n
+        ? `None of it was real. ${r.fake} bags of chalk and a name you will remember.`
+        : `${r.fake} of those bags were cut with something. The buyer noticed before you did.`);
+    }
   }
   // anything that gave up carrying product is money gone
   for (const t of flow.trips.abandoned) {
@@ -139,6 +150,20 @@ function drainArrivals() {
 // BRIEF § Settle: pay debt or interest, bank profit, answer one human event,
 // then the market advances. Interest advances HERE and never while a menu is
 // open, which is why the clock stops for it.
+// ── the bargain ─────────────────────────────────────────────────────────
+// One offer a day, from one contact, at their own node. Who offers rotates by
+// day so it is never the same face; whether it is worth anything is decided by
+// how you have treated them, and the player is told the discount before
+// committing. See market.js § the bargain for why that is the whole warning.
+function rollDeal(day) {
+  dealToday = null;
+  for (let i = 0; i < CONTACTS.length; i++) {
+    const c = CONTACTS[(day + i) % CONTACTS.length];
+    const d = market.dealFor(day, c.id, cast.trust[c.id] ?? 0);
+    if (d) { dealToday = { ...d, at: c.at, who: c.name }; return; }
+  }
+}
+
 function settle(day) {
   if (day === 0 || over) return;
   const owed = market.settleDay();
@@ -157,6 +182,7 @@ function settle(day) {
   $('sPay').onclick = () => { market.payDebt(market.cash); paint(); renderHud(); };
   $('sBank').onclick = () => { market.bank(Math.ceil(market.cash / 2)); paint(); renderHud(); };
   $('sGo').onclick = () => { $('settle').hidden = true; flow.clock.setPaused(false); };
+  rollDeal(day);                 // a new night, a new offer
   paint();
   $('settle').hidden = false;
 }
@@ -516,7 +542,27 @@ function renderSheet() {
       + `<button class="btn send" data-send="${c.id}">SEND 5</button></td></tr>`;
   }
   html += '</table>';
+
+  // the bargain, if tonight's is standing here
+  if (dealToday && dealToday.at === sel && !dealToday.taken) {
+    const p = market.dealPrice(sel, dealToday);
+    html += `<div class="deal"><p><strong>${esc(dealToday.who)}</strong> has ${dealToday.n}`
+      + ` ${esc(dealToday.good)} at ${p} €.</p>`
+      + `<p class="hint">${esc(market.dealTell(dealToday))}</p>`
+      + `<button class="btn" id="dealTake">TAKE IT — ${p * dealToday.n} €</button></div>`;
+  }
+
   box.innerHTML = html;
+  const take = $('dealTake');
+  if (take) {
+    take.onclick = () => {
+      const r = market.takeDeal(sel, dealToday);
+      if (!r.n) { say('You cannot cover it.'); return; }
+      dealToday.taken = true;
+      say(`${r.n} ${dealToday.good} off ${dealToday.who} for ${eur(r.spent)}. He does not count it twice.`);
+      renderHud(); renderSheet();
+    };
+  }
   for (const b of box.querySelectorAll('[data-buy]')) {
     b.onclick = () => { market.buy(sel, b.dataset.buy, 5); renderHud(); renderSheet(); };
   }
@@ -589,7 +635,13 @@ window.__pt = {
   get cast() { return cast; },
   debug: {
     boot, send, settle, finish, say, startFight,
-    markers, showPop, hidePop, paintFight,
+    markers, showPop, hidePop, paintFight, renderSheet,
+    // SETUP ONLY (AGENTS.md §4): force tonight's offer to a known shape so a
+    // gate can click it. The taking is still done by clicking the button.
+    forceDeal(d) { dealToday = { n: 5, discount: 0.4, fake: false, trust: 0, ...d }; renderSheet(); },
+    get deal() { return dealToday; },
+    get sel() { return sel; },
+    set sel(v) { sel = v; renderSheet(); },
     get fightView() { return fightView; },
     get fight() { return fight; },
     get over() { return over; },

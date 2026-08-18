@@ -54,6 +54,14 @@
   #sheet td.p { color: var(--gold); white-space: nowrap; }
   #sheet td.p .was { color: var(--dim); font-size: 11px; }
   #sheet td.own { color: var(--dim); text-align: right; }
+  /* the bargain. Ruled off rather than boxed — a card here would read as an
+     advertisement, and the whole point is that it is somebody talking to you. */
+  #sheet .deal { margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 8px; }
+  #sheet .deal p { font-size: 13px; margin-bottom: 2px; }
+  /* gold, not the product magenta: magenta is a MARK colour at 4.0:1 and this
+     is body copy the AA check in the gate would fail it on */
+  #sheet .deal strong { color: var(--gold); }
+  #sheet .deal .btn { margin: 6px 0 0; }
   .btn {
     min-height: 44px; min-width: 62px; margin-left: 4px; font: inherit; font-size: 12px;
     background: var(--paper); color: var(--ink); border: 1px solid var(--rule); cursor: pointer;

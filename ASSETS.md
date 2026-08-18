@@ -125,16 +125,24 @@ where I have one.
 
 **Narrative:**
 
-6. **Is the 2024 second act canon?** Kalle and Aaro, Pasila, Tripla and
-   Alpha-PVP came from conversation and appear in `ART_BRIEF_CONCEPT.md`, but
-   are in **no** canon document. Until they are, they should not drive art
-   spend. **Recommend: write them into `BRIEF.md`, or explicitly park them.**
+6. **Is the 2024 second act canon?** — **ANSWERED 2026-08-18: yes, and
+   phase-gated.** *"Pasila 2024 is canon but for development when we are feature
+   complete in 2000s Kallio."* So Kalle and Aaro, Pasila, Tripla and Peukku are
+   real and may be designed for, and **nothing about them is built or drawn
+   until Act I is feature complete** — no 2024 art, no second-act nodes, goods
+   or cast in code. `DECISIONS.md` §5 holds the gate. What "feature complete"
+   means is the next owner sentence worth having; until then treat it as #5, #7
+   and a loop that survives play end to end.
 7. **Campaign length.** `BRIEF.md` says 30 days and also lists it as open; the
    build runs 7. **Recommend: 7 for the slice, decide 30 when the loop is
    proven.**
-8. **How explicit do substance names get?** Canon defers this until the loop
-   works; the street register (`piri`, `peukku`) exists in conversation only.
-   Product classes in code are abstract and should stay that way regardless.
+8. **How explicit do substance names get?** — **ANSWERED 2026-08-18:
+   Dope Wars, nicknames, and fakes.** *"substance names are same as in Dope
+   Wars, all nicknames are ok. there can even be people that sell you fake
+   drugs, etc."* Six named goods in the 2003 Kallio register, each declaring a
+   tier that still owns every number the economy runs on; plus a bargain
+   mechanic where trust drives both the discount and the odds the bag is cut.
+   `DECISIONS.md` §6, `js/market.js` OWNER OVERRIDE 4, `test/market.mjs`.
 
 **Presentation:**
 
