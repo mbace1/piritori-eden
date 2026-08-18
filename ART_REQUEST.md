@@ -8,7 +8,34 @@ to work from alone.
 
 ---
 
-## 0. Deliver FILES, or nothing can be used
+## 0. There are two ways to fill this request
+
+**A — generate it here, which is now one command.** The repo has a working
+graphics pipeline (`assets/README.md`): Nano Banana draws the 2D, Meshy lifts
+it to 3D, prompts live in `assets/manifest.mjs` and the bytes land under
+`assets/out/`. **Every asset in this document is already written into that
+manifest** — fifteen entries, `piritori/*` and `tokomove/day-map`. It has
+already produced finished art for Neon Ronin and Toko Trip, so this is not a
+proposal.
+
+```bash
+node scripts/assets.mjs status                 # what exists, missing, drifted
+node scripts/assets.mjs gen --dry              # what a run would do, calls nothing
+node scripts/assets.mjs gen --only piritori    # generate them (costs money)
+```
+
+**The only thing missing is a key.** Checked 2026-08-18 from this session:
+`generativelanguage.googleapis.com` answers — the 403 it returns is *Google's
+own* "unregistered caller" reply, not the egress proxy refusing the host — so
+the route is open and nothing needs a network-policy change. Set
+`GEMINI_API_KEY` (aistudio.google.com/apikey) and fifteen images generate on
+the spot. `node scripts/assets.mjs doctor` re-checks key and route separately,
+because they fail identically from the outside and need different people to fix.
+
+**B — deliver files by hand.** Everything below still applies; a generated
+image and a drawn one land in the same place.
+
+## 0.1 Either way: deliver FILES, or nothing can be used
 
 This has already cost us the first two batches: **art delivered as pictures in
 a chat cannot be cut.** The sheets were good, they are catalogued in
@@ -29,13 +56,21 @@ slices, reads anchor dots and quality-checks automatically, but it eats PNGs.
 - A **swatch strip** of every colour used along the bottom edge, outside the
   subject (cropped off before cutting; read, not decoration).
 
-### 0.1 Re-delivery of the two existing batches
+### 0.2 Re-delivery of the two existing batches
 
 Everything already made is wanted **as files**, unchanged: the four fight
 backgrounds, the street props, the base bodies / body types / trousers, the
 action poses (with their joint markers — they are read mechanically and then
 erased), the weapon items (with their cyan/orange grip dots), the dogs, the
 trees. `art-src/SHEETS.md` lists all of them by letter.
+
+**Checked, so it can be said plainly: none of that art exists anywhere in the
+repository.** Every branch and every open pull request was searched for image
+files on 2026-08-18. The only Piritori-shaped image in any of them is
+`piritori/references/toko-move-2021-concept.jpg`, which is the owner's own 2021
+concept and was already on `main`. PR #269 carries art, but all of it is Eeri's.
+The sheets are real, they were good, and they are still only pictures in a chat
+window.
 
 ---
 
