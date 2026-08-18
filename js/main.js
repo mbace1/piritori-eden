@@ -75,6 +75,7 @@ function boot(seed = 7) {
   // the canvas takes the diagram's own proportions, so there is no dead band
   // above and below it on a portrait phone
   $('map').style.aspectRatio = `${flow.graph.bounds.w} / ${flow.graph.bounds.h}`;
+  drawer?.destroy();               // or a restart leaves the old one listening
   renderer = new FlowRenderer($('map'), THEME);
   drawer = new RouteDrawer($('map'), renderer, flow, {
     markersProvider: () => markers(),
@@ -329,7 +330,10 @@ function startFight(kind, tick) {
     $('board').addEventListener('touchend', onBoardTap, { passive: true });
   }
   fightView.resize();
-  paintFight();
+  // Every roster has somebody faster than Aatami, so the first actor is
+  // usually an enemy — and paintFight() draws no controls when the actor is
+  // hostile. Without this the panel opened dead and stayed dead forever.
+  stepEnemies();
 }
 
 // Tapping a ringed body commits the armed weapon at it. Nothing else on the
@@ -492,7 +496,7 @@ function renderHud() {
       : h.heat < THRESHOLD.act ? `watched · ${edgeName(h.id)}` : `moving in · ${edgeName(h.id)}`;
   $('heat').className = h.heat >= THRESHOLD.warn ? 'hot' : '';
   $('day').textContent = `day ${Math.min(flow.clock.day + 1, DAYS)}/${DAYS}`;
-  $('lines').textContent = `${flow.routes.list.length}/${flow.routes.maxRoutes} lines`;
+  $('lines').textContent = `${flow.routes.drawn.length}/${flow.routes.maxRoutes} lines`;
 }
 
 function renderSheet() {
@@ -586,6 +590,7 @@ window.__pt = {
   debug: {
     boot, send, settle, finish, say, startFight,
     markers, showPop, hidePop, paintFight,
+    get fightView() { return fightView; },
     get fight() { return fight; },
     get over() { return over; },
   },
