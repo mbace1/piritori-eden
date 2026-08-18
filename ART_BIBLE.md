@@ -237,18 +237,26 @@ piritori/art-src/
   SHEETS.md   one line per sheet: source prompt, cell size, contents
 ```
 
-Then, per `kindling/art-src/NANO_BANANA_PIPELINE.md`:
+**`art-src/NANO_BANANA.md` is the working document** — the prompts, the per-asset
+specs, the exact commands and what "done" means. What follows is the short form.
+
+Then, per `art-src/NANO_BANANA.md` §7:
 
 ```bash
 node kindling/tools/cut.mjs key   raw/poses.png work/poses.png
-node kindling/tools/cut.mjs fit   work/poses.png work/poses.fit.png 512x512
-node kindling/tools/cut.mjs slice work/poses.fit.png approved/poses 128
-node kindling/tools/cut.mjs check approved/poses/*.png
+node kindling/tools/cut.mjs fit   work/poses.png approved/cast/x.png 128x192 --no-quantise
+node kindling/tools/cut.mjs check approved/cast --illustration --colours 512
 ```
 
-**`check` is the gate, not an opinion.** Kindling's own report currently reads
+**`check` is the gate, not an opinion.** Kindling's own report reads
 `0/10 usable` on its approved folder — thumbnails and baked-in labels. Run it
 before committing anything here.
+
+Note the flags. The tool was written for Kindling, which is pixel art on a
+small palette; this game is ink-line illustration, so `fit --no-quantise` and
+`check --illustration` are what stop the pipeline from either destroying the
+art or asserting a gate that can never pass. Both were added on 2026-08-18 and
+Kindling's own defaults are unchanged.
 
 **One standing-rule note:** this repo ships no image assets, everywhere except
 generated PWA icons. Committing cut PNGs is a deliberate departure. Kindling is
