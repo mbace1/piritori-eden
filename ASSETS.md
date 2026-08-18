@@ -3,6 +3,11 @@
 For whoever is making art, and for the owner. Companion to
 `ART_BRIEF_CONCEPT.md` (the look) and `MAP.md` (the board).
 
+> **The current, consolidated request is `ART_REQUEST.md`** (2026-08-18) — one
+> hand-to-artist document covering everything below plus the authentic-Kallio
+> map spec. This file keeps the priority reasoning and the open design
+> questions; where the two disagree, the newer request wins.
+
 ---
 
 ## 0. Read this first: what "asset" means in this repository
