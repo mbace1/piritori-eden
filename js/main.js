@@ -9,7 +9,7 @@ import { THEME } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=1';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
-import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=2';
+import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=3';
 import { FightView } from './fightview.js?v=2';
 
 const $ = id => document.getElementById(id);

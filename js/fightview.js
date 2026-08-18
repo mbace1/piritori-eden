@@ -10,7 +10,7 @@
 // is how cover is taught — you watch the back row stay un-ringed while a body
 // stands in front of it, and nobody has to read a tooltip.
 
-import { COLS, WEAPONS } from './fight.js?v=2';
+import { COLS, WEAPONS } from './fight.js?v=3';
 import { PAL } from './palette.js?v=1';
 
 const TW = 34, TH = 17;          // iso tile half-width / half-height

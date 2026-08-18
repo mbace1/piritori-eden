@@ -11,7 +11,8 @@
 import {
   Fight, WEAPONS, OPPONENTS, YOUR_CREW, startFight, consequence,
   COLS, ROWS, ROW_NAME,
-} from '../js/fight.js?v=2';
+  ARENAS, DEFAULT_ARENA, arenaFor,
+} from '../js/fight.js?v=3';
 
 let pass = 0, fail = 0;
 const ok = (n, c, d) => { c ? (pass++, console.log('  ok   ' + n)) : (fail++, console.log('  FAIL ' + n + (d ? ' → ' + d : ''))); };
@@ -169,7 +170,7 @@ const ids = us => us.map(u => u.id);
       || fight.units.some(u => u.side === p.side && u.col === p.col && u.row === p.row));
     ok(`${kind}: its cover is on the board and clear of the bodies`, bad.length === 0,
       bad.map(p => `${p.side} ${p.col},${p.row}`).join(';'));
-    ok(`${kind}: names an arena`, typeof o.arena === 'string' && o.arena.length > 0);
+    ok(`${kind}: names an arena`, ARENAS.includes(o.arena), o.arena);
   }
 }
 
@@ -284,6 +285,16 @@ const ids = us => us.map(u => u.id);
     ok(`${kind}: paying costs money and no blood`, p.cash < 0 && p.stockLoss === 0);
     ok(`${kind}: fleeing costs the load, not a life`, fl.stockLoss > 0 && fl.cash === 0);
   }
+}
+
+// ── an encounter always has somewhere to be ─────────────────────────────
+{
+  ok('every arena is a place, not a blank', ARENAS.length === 4 && ARENAS.every(a => typeof a === 'string'));
+  ok('an opponent with no arena of its own still gets one',
+    arenaFor('nobody-has-added-this-yet') === DEFAULT_ARENA);
+  ok('the fallback is one of the four', ARENAS.includes(DEFAULT_ARENA));
+  ok('and the three live opponents do not use it',
+    Object.values(OPPONENTS).every(o => o.arena !== DEFAULT_ARENA));
 }
 
 // ── determinism ─────────────────────────────────────────────────────────

@@ -18,16 +18,19 @@ illustration** — flat fills inside a hard black line, printed. Quantising that
 to fourteen flats destroys it, and it is not supposed to survive a pixel-art
 round trip.
 
-So `kindling/tools/cut.mjs` now takes three flags, and Piritori uses all three:
+So `kindling/tools/cut.mjs` grew three flags and one command, and Piritori uses
+all of them:
 
 ```
 fit   --palette <file>    snap to another project's palette
 fit   --no-quantise       resize + binary alpha only          ← scenes, characters
 check --illustration      skip the pixel-art round trip
 check --colours N         raise the colour ceiling
+anchors <in> [out]        read the registration dots, then erase them   ← §5.2
 ```
 
-Kindling's own commands are unchanged and still mean what they did.
+Kindling's own commands and defaults are unchanged and still mean what they
+did.
 
 ---
 
@@ -145,10 +148,10 @@ target, always — a downscale is free, an upscale is a blur.
 
 | # | asset | cells | native size | magenta? | fit to | quantise | what it unblocks |
 |---|---|---|---|---|---|---|---|
-| 1 | **Fight arenas** | 4 | 1024×576 | **no**, full bleed | `1024x576` | no | `fightview.js` draws bare paper behind the grid. Arenas are named in `OPPONENTS`: `harbour` · `court` · `park` · one spare |
-| 2 | **Cover props** | 5 × 2 states | 1024² each | yes | `128x128` | no | `COVER` in `fight.js`. Whole **and broken**, because a prop that reaches 0 hp says *"comes apart"* and currently vanishes |
-| 3 | **Fighter states** | 5 × 2 facings | 1024² each | yes | `128x192` | no | the board draws a rounded rectangle with a circle on it. States: `stand · strike · hit · down · walk-away` |
-| 4 | **Weapons** | 11 | 1024² each | yes | `64x64` | no | `WEAPONS`, all eleven, each with the two anchor dots |
+| 1 | **Fight arenas** | 4 | 1024×576 | **no**, full bleed | `1024x576` | no | `fightview.js` draws bare paper behind the grid. `ARENAS` in `fight.js`: `harbour` · `court` · `park` · `yard`, and `yard` is the fallback any later opponent inherits |
+| 2 | **Cover props** | 5 × 2 states | 1024² each | yes | `128x96` | no | `COVER` in `fight.js`. Whole **and broken**, because a prop that reaches 0 hp says *"comes apart"* and currently vanishes |
+| 3 | **Fighter states** | 5 × 2 facings | 1024×1536 | yes | `96x144` | no | the board draws a rounded rectangle with a circle on it. States: `stand · strike · hit · down · walk-away` |
+| 4 | **Weapons** | 11 | 1024² each | yes | `144x96` | no | `WEAPONS`, all eleven, each with the two anchor dots |
 | 5 | **Pin glyphs** | 5 + 4 | 512² each | yes | `64x64` | **yes** — `--palette piritori/js/palette.js` | the map's pin layer, which draws letters in circles today |
 
 **P2 — needed before it reads as a game rather than a diagram.**
@@ -165,6 +168,36 @@ target, always — a downscale is free, an upscale is a blur.
 |---|---|---|---|---|
 | 9 | **Arcade marquee** | 1 | 512×288 | fit `128x72`, **quantised**. It must also be reproducible as ~60 lines of canvas — see `hub/art.js` |
 | 10 | **Key art** | 1 | 1600×1000 | `PIRITORI → EDEN`, municipal type, EDEN cropped by the sheet edge |
+
+### 5.0 Where those numbers come from
+
+Every fitted size in the table is **the largest the thing is ever drawn on
+screen, times a headroom factor**, rounded to a multiple of 16. Nothing is a
+round number for the sake of it, and nothing is generated at a size the board
+cannot use.
+
+| thing | on screen, CSS px | at DPR 2 | widest pose | fitted | headroom |
+|---|---|---|---|---|---|
+| body | 15 × 45 | 30 × 90 | ×1.6 wide mid-swing → 48 × 90 | **96 × 144** | 2.0 × 1.6 |
+| prop | 30 × 15–20 | 60 × 40 | — | **128 × 96** | 2.1 × 2.4 |
+| weapon | composited onto the body | — | a rifle ≈ 1.4 × body height | **144 × 96** | — |
+| pin | 18 × 18 | 36 × 36 | — | **64 × 64** | 1.8 |
+
+Three decisions inside that table:
+
+- **Figures are 96×144, not 128×192.** The bigger cell is 4× headroom on width
+  for a body that is 30 device px across, which is bytes bought for nothing. If
+  the board ever gets bigger the sheets are regenerated — the prompts are in
+  this file and regeneration is cheap, which is the whole reason `raw/` is
+  gitignored.
+- **Weapons ship landscape at 144×96, one size for all eleven**, because a
+  weapon must be drawn at the **same scale as the figure** or compositing needs
+  a per-item scale factor and every one of them becomes a number somebody has
+  to maintain. A rifle sets the cell; fists sit small in it, which is free.
+- **Arenas ship at 1024×576, which is the generator's ceiling and under a large
+  desktop board.** Accepted: this art is flat, grainy and printed, so it takes a
+  stretch far better than a clean render would. Upscaling in the pipeline is
+  still forbidden.
 
 ### 5.1 The board's own geometry — spec 1, 2 and 3 against this
 
@@ -184,26 +217,49 @@ so a cell is roughly **109 × 54 px** on screen at 1× DPR.
   whether a bullet gets through. Concrete and stone read as mass; a bin and a
   crate read as hollow.
 
-### 5.2 The two anchor contracts
+### 5.2 The anchor contract — DECIDED, and it is a command
 
-The delivered art already half-wrote these, and they only work as numbers.
+The delivered art half-wrote this: cyan and orange dots on the weapon sheet,
+dark circles at shoulders, elbows and knees on the poses. Two things were open.
 
-**Weapons — two dots.** The item sheet marks a **cyan dot at the grip** and an
-**orange dot at the fore-grip**. A held weapon is placed by matching grip to the
-primary hand and fore-grip to the second, which is what lets one pose hold a
-bat, a crowbar and a rifle. Record both as pixel coordinates in the fitted
-64×64 cell, in `SHEETS.md`, per weapon.
+**The markers are keyed out, not shipped.** They are registration, not art. A
+joint dot drawn at 96×144 and scaled down to a 30 px figure is noise on the
+silhouette — and in this style the silhouette is doing all the work, which is
+house canon and not a preference. So they come off, the same way the magenta
+background does.
 
-**Figures — joint markers.** The action poses carry dark circles at shoulders,
-elbows and knees. Read next to *"some characters will be tested in Meshy 3d"*,
-those are rig points. **Recommend they are a registration layer that gets keyed
-out**, like the magenta background — generate the pose twice, once with markers
-for measuring and once clean for shipping, or accept a marked master and record
-the coordinates before painting them out. Either way the numbers go in
-`SHEETS.md` and the shipped PNG has no dots on it.
+**And they are read mechanically rather than measured by hand**, because a
+coordinate typed off a screenshot is a coordinate that is wrong by three pixels
+in a way nobody notices until forty assets are cut. `cut.mjs` gained a command:
 
-Until §5.2 has numbers in it, nothing composites, and specs 3 and 4 are
-concept art rather than assets. It is the highest-value thing in this document.
+```bash
+node ../../kindling/tools/cut.mjs anchors work/rifle.png approved/weapons/rifle.png --as 144x96
+#   primary   112,44          ← the grip
+#   secondary  71,50          ← the fore-grip
+# → approved/weapons/rifle.png  dots erased
+```
+
+It finds every dot, groups them into connected components (so three same-colour
+joints come back as three points, not one centroid between them), reports each
+one **already scaled to the shipped cell size** via `--as`, and writes the file
+with the dots erased — each marked pixel taking its nearest unmarked neighbour's
+colour, so there is no hole and no halo where a dot used to be.
+
+**The two colours are exact and reserved:**
+
+| dot | hex | on a weapon | on a figure |
+|---|---|---|---|
+| primary | **`#00FFFF`** cyan | the grip, where the leading hand closes | shoulder · elbow · knee |
+| secondary | **`#FF6A00`** orange | the fore-grip, where the second hand goes | — |
+
+Neither is anywhere near a palette colour. `#FF6A00` is deliberately *not*
+warning orange `#ff7a1a`, which means immediate pressure and is applied in code.
+Raise `--tol` if a generator drifts off the exact value; the default of 90 is
+generous.
+
+Paste the coordinates into `SHEETS.md`. An asset without them is not finished —
+this is still the highest-value line in the pipeline, it just no longer costs an
+afternoon.
 
 ---
 
@@ -316,6 +372,10 @@ The hands are EMPTY and open — a weapon is composited in later and must not be
 drawn. Clothing is 2003 Helsinki: bomber jacket, tracksuit, work coat, jeans,
 trainers or boots. No face detail beyond the barest suggestion.
 
+Mark three joints with small solid PURE CYAN (#00FFFF) dots about 18 pixels
+across, flat and hard-edged: one at the leading SHOULDER, one at that arm's
+ELBOW, one at the forward KNEE. Nothing else is added.
+
 Copy only the body plan, proportions and clothing from the reference. Do not
 copy its pose, background or framing.
 
@@ -334,12 +394,16 @@ baseball bat · a length of steel pipe · a starting pistol with a blocked barre
 · a docker's cargo hook · a crowbar · a length of splintered plank · a small
 revolver · a sawn-off single-barrel shotgun · a bolt-action hunting rifle]
 
-Mark the grip with a small solid CYAN dot where the primary hand closes, and
-the fore-grip with a small solid ORANGE dot where a second hand would go. Both
-dots sit ON the object. Nothing else is added.
+Mark the grip with a small solid PURE CYAN (#00FFFF) dot, about 18 pixels
+across, exactly where the leading hand closes. Mark the fore-grip with a small
+solid ORANGE (#FF6A00) dot the same size where a second hand would go. Both
+dots are flat, hard-edged, sitting ON the object. A one-handed object gets the
+cyan dot only. Nothing else is added.
 
 Square, 1024 x 1024.
 ```
+
+The dots are read and erased by `cut.mjs anchors` — see §5.2. They never ship.
 
 The three firearms are canon as of 2026-08-18 (`FIGHT_BRIEF.md` §2.1). The
 starting pistol is the **blank gun** and is the most important object in the
@@ -399,6 +463,11 @@ node ../../kindling/tools/cut.mjs fit \
 node ../../kindling/tools/cut.mjs fit \
   work/pins.png approved/pins.png 192x192 --palette ../js/palette.js
 
+# 2b. anything with registration dots on it: read them, erase them, and paste
+#     the line it prints into SHEETS.md
+node ../../kindling/tools/cut.mjs anchors \
+  work/rifle.png approved/weapons/rifle.png --as 144x96
+
 # 3. only if the generator really gave you a grid (it usually will not)
 node ../../kindling/tools/cut.mjs slice approved/pins.png approved/pins 64 \
   contact,dealers,rival,patrol,mission,stop,transfer,shop,service
@@ -449,7 +518,10 @@ asset without them is not finished.
 3. No `#F0027F` and no `#ff7a1a` anywhere in the pixels. Both are applied in
    code and both mean something.
 4. The fitted size matches §5 exactly.
-5. Anchors recorded in `SHEETS.md` for anything in `weapons/` or `cast/`.
+5. Anchors recorded in `SHEETS.md` for anything in `weapons/` or `cast/`, and
+   **no dot left in the pixels** — `cut.mjs anchors <file>` on a finished asset
+   must report *none found*. That is the check; run it on the output, not the
+   input.
 6. **The code still runs with the file missing.** Nothing in this game may
    depend on a PNG loading. Every asset replaces a code-drawn element that
    stays in place as the fallback — which is also what keeps the smoke gates

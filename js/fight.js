@@ -73,6 +73,16 @@ export const WEAPONS = {
   rifle: { id: 'rifle', name: 'rifle', dmg: [4, 8], nerve: 2, from: [2], reach: ALL_ROWS, pierce: true, effect: null, live: true },
 };
 
+// ── arenas ──────────────────────────────────────────────────────────────
+// Where a fight happens, which is what the delivered backgrounds hang on. Four
+// exist; three are spoken for by the three ways an encounter can be caused, and
+// `yard` is the FALLBACK — any opponent added later without an arena of its own
+// gets it rather than getting bare paper, and it is the one a new encounter
+// inherits. A default that is a real place beats a default that is nothing.
+export const ARENAS = ['harbour', 'court', 'park', 'yard'];
+export const DEFAULT_ARENA = 'yard';
+export const arenaFor = kind => OPPONENTS[kind]?.arena || DEFAULT_ARENA;
+
 // ── cover ───────────────────────────────────────────────────────────────
 // Terrain, off the props sheet. A standing prop occupies a cell nobody may
 // move into and shields the lane behind it. `hard` means it stops a bullet as

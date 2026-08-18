@@ -123,19 +123,6 @@ where I have one.
    **Recommend: yes, but as its own slice** — it needs a queueing model, not a
    one-line fix.
 
-**Since the 2026-08-18 art ruling** — new, and blocking the next art batch:
-
-11. **Are the joint markers shipped art or a registration layer?** The action
-    poses carry dark circles at shoulders, elbows and knees. **Recommend: a
-    registration layer that gets keyed out**, like the magenta background — and
-    the same question for the cyan/orange grip dots on the weapon sheet.
-12. **What cell size does the paper-doll system compose at?** Nothing can be
-    anchored until this is a number. **Recommend 128 px**, which is what the
-    cut pipeline's example slices to.
-13. **Which of the four backgrounds is the tenement courtyard for?** The other
-    three now have arenas (harbour · court · park); that one is spare and wants
-    an encounter to belong to.
-
 **Narrative:**
 
 6. **Is the 2024 second act canon?** Kalle and Aaro, Pasila, Tripla and
@@ -158,6 +145,30 @@ where I have one.
 10. **Should either product be offline-first / installable?** That is the only
     thing that would create real PNG deliverables. **Recommend: not for the
     slice.**
+
+**Since the 2026-08-18 art ruling.** All three were put to the owner, who said
+*"you tell me"* — so they are **decided**, recorded here as mine rather than as
+canon, and reversible by a sentence.
+
+11. **Joint markers: a registration layer, keyed out.** They are rig points, not
+    art, and a joint dot on a 30 px figure is noise on the silhouette that this
+    style needs to carry everything. Same for the weapon grip dots. Decided with
+    teeth: `cut.mjs anchors` reads them, reports coordinates already scaled to
+    the shipped cell, and erases them — and *done* means running it on the
+    output and getting **none found**. `NANO_BANANA.md` §5.2.
+12. **Cell sizes: figures 96×144, props 128×96, weapons 144×96, pins 64×64.**
+    Each is the largest the thing is drawn on screen at DPR 2, times a headroom
+    factor, rounded to a multiple of 16 — the arithmetic is in `NANO_BANANA.md`
+    §5.0. Two of those are not the obvious number: figures are 96 wide rather
+    than 128 because 4× headroom on a 30 px body is bytes bought for nothing,
+    and weapons are one landscape size for all eleven because a weapon must be
+    at the **same scale as the figure** or every item needs its own scale factor
+    to maintain.
+13. **The tenement yard is the fallback arena.** `ARENAS` and `DEFAULT_ARENA` in
+    `fight.js`: the three live encounters keep harbour · court · park, and any
+    opponent added later without an arena of its own gets the yard rather than
+    bare paper. A default that is a real place beats a default that is nothing.
+
 
 ---
 
