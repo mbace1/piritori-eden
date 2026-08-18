@@ -3,8 +3,14 @@
 Self-contained prompt blocks. Each one repeats every constraint inline, because
 a pasted prompt arrives without this document attached.
 
-**Current art in the project: none.** Everything on screen is code-drawn
-placeholder.
+**Reissued 2026-08-18** after the owner's ruling — *"take all art pushed here
+as canon and target"* and *"sure, it's a hybrid"*. The house preamble in §1 is
+the hybrid; the pure-risograph version it replaces is kept at the bottom of §1
+so it is clear what changed.
+
+**Current art in the project: two delivered batches, catalogued in
+`ART_BIBLE.md`, not yet cut into the repo.** Everything on screen is still
+code-drawn placeholder.
 
 **Two uses, and they want different things.** Read §0 before generating.
 
@@ -33,6 +39,28 @@ power-of-two friendly so either path works.
 ## 1. The house preamble — prepend to every prompt below
 
 ```
+Style: a hybrid. Hard black ink-line illustration with flat, slightly muted
+fills — Darkest Dungeon rather than a comic — printed as a risograph: visible
+paper grain over everything, screen-print colour separations, slight
+registration drift between layers, municipal sans-serif labels. Limited
+palette, hard seams between colours, flat cut-paper shapes with the shape
+doing the work rather than the shading. No gradients, no glow, no lens
+effects, no photographic rendering. Include a small swatch strip of every
+colour used along the bottom edge.
+
+Do NOT include: coloured geometric station symbols of the Mini Metro kind,
+passenger-figure icons, map pins of the Google kind, coloured houses, cyberpunk
+neon, cash, drug paraphernalia, photographic realism.
+```
+
+Two things changed from the pre-2026-08-18 preamble, both from delivered art:
+**ink line and flat fills are now the subject**, with the print language as
+treatment on top; and **weapons and faces came off the do-not-include list**,
+because the pose and item sheets have both and they were accepted.
+
+<details><summary>The pure-risograph preamble this replaces</summary>
+
+```
 Style: risograph / photocopied civic map. Flat screen-print colour separations,
 visible paper grain, slight registration drift between colour layers, municipal
 sans-serif labels. No gradients, no 3D, no glow, no photographic detail, no
@@ -45,6 +73,8 @@ passenger-figure icons, map pins of the Google kind, coloured houses, cyberpunk
 neon, crime-movie imagery, cash, weapons, drug paraphernalia, people's faces,
 photographic realism.
 ```
+
+</details>
 
 ## 2. Palettes — paste with the relevant prompt
 
@@ -95,6 +125,12 @@ Hand annotations and a rubber stamp in one corner. Dark, quiet, used.
 
 Aspect ratio 3:5. 1200 x 2000.
 ```
+
+**The ten stops above are not a suggestion.** Owner ruling, 2026-08-18: *"only
+map style is canon, the places need to follow actual map."* Their names and
+their relative positions come from `flow-core/city.js`, which projects them
+from real WGS84 coordinates — a delivered map that renames them or moves them
+for composition gets regenerated. Everything about how it is *drawn* is open.
 
 ### 3.2 Day map, identical geometry
 

@@ -1,15 +1,17 @@
-// The rank-fight rules, v2 — nerve, three exits, no gunfight. See
-// FIGHT_BRIEF.md. Bare node, seeded, no DOM.
+// The rank-fight rules, v3 — nerve, three exits, guns, and cover you can take
+// apart. See FIGHT_BRIEF.md. Bare node, seeded, no DOM.
 //
 // The combat layer exists on owner override; everything canon (BRIEF.md) says
-// AROUND it is enforced here: no working firearm, no random punishment without
-// a readable warning, paying and walking away always available, no weapon as a
-// prize — and the new one, that a fight can be won without anybody bleeding.
+// AROUND it is enforced here: no random punishment without a readable warning,
+// paying and walking away always available, no weapon as a prize, a fight
+// winnable without anybody bleeding — and, since the owner's "there are guns"
+// of 2026-08-18, the four structural rules that keep "there is no gunfight"
+// true while live firearms exist. See the block at §canon.
 
 import {
   Fight, WEAPONS, OPPONENTS, YOUR_CREW, startFight, consequence,
   COLS, ROWS, ROW_NAME,
-} from '../js/fight.js?v=1';
+} from '../js/fight.js?v=2';
 
 let pass = 0, fail = 0;
 const ok = (n, c, d) => { c ? (pass++, console.log('  ok   ' + n)) : (fail++, console.log('  FAIL ' + n + (d ? ' → ' + d : ''))); };
@@ -43,16 +45,132 @@ const ids = us => us.map(u => u.id);
     f.canUse(a, 'bat') && !f.canUse(a, 'blank'));
 }
 
-// ── canon: there is no gunfight ─────────────────────────────────────────
+// ── canon: there are guns, and there is still no gunfight ───────────────
 {
-  // Anything that can reach past the middle row must draw no blood. This is
-  // the structural form of "no guns": the only thing that projects force
-  // across the whole board is fear.
-  const ranged = Object.values(WEAPONS).filter(w => w.reach.includes(ROWS - 1));
-  ok('nothing that reaches the back row draws blood',
-    ranged.length > 0 && ranged.every(w => w.dmg[1] === 0),
-    ranged.map(w => `${w.id}:${w.dmg[1]}`).join(','));
-  ok('no weapon is called a pistol', !WEAPONS.pistol);
+  // The owner's answer of 2026-08-18 was "there are guns", against a brief that
+  // says "there is no gunfight". The previous structural test — nothing that
+  // reaches the back row may draw blood — enforced the old reading and is gone.
+  // These four replace it, and they are what now makes the sentence true:
+  // guns work, nobody brings one to these fights, fear is still the only FREE
+  // way to reach the back row, and a shot costs more than any other exit.
+  const live = Object.values(WEAPONS).filter(w => w.live);
+  ok('live firearms exist and they work',
+    live.length >= 1 && live.every(w => w.dmg[1] > 0),
+    live.map(w => `${w.id}:${w.dmg[1]}`).join(','));
+
+  const free = Object.values(WEAPONS).filter(w => w.reach.includes(ROWS - 1) && !w.live);
+  ok('the only bloodless way to reach the back row is still fear',
+    free.length > 0 && free.every(w => w.dmg[1] === 0),
+    free.map(w => `${w.id}:${w.dmg[1]}`).join(','));
+
+  const rostered = [...YOUR_CREW, ...Object.values(OPPONENTS).flatMap(o => o.roster)]
+    .flatMap(u => u.weapons || []);
+  ok('no starting roster carries a live firearm',
+    !rostered.some(id => WEAPONS[id]?.live),
+    rostered.filter(id => WEAPONS[id]?.live).join(','));
+
+  // a shot is heard by the whole street, so by everyone on the board
+  const f = mk(
+    [U('a', 1, 2, { weapons: ['pistol'], speed: 9 })],
+    [U('z', 1, 0, { hp: 40, nerve: 40, speed: 1 }), U('m', 0, 0, { hp: 40, nerve: 40, speed: 1 })],
+  );
+  const bystander = f.byId('m').nerve;
+  f.act({ kind: 'attack', weapon: 'pistol', target: 'z' });
+  ok('a live round is counted', f.fired === 1);
+  ok('and shakes everyone who heard it', f.byId('m').nerve < bystander);
+  ok('and it draws blood', f.byId('z').hp < 40);
+
+  const quiet = ['routed', 'win', 'lose', 'paid', 'fled']
+    .map(o => consequence(o, 'rival'));
+  const loud = consequence('win', 'rival', { fired: 1 });
+  ok('a shot costs more heat than any silent way out',
+    loud.heat > Math.max(...quiet.map(c => c.heat)),
+    `${loud.heat} vs ${Math.max(...quiet.map(c => c.heat))}`);
+  ok('and costs trust with whoever was watching',
+    loud.trust < Math.min(...quiet.map(c => c.trust)));
+
+  // you cannot fire a gun and call it a bloodless win
+  const g = mk([U('a', 1, 2, { weapons: ['pistol'], speed: 9 })], [U('z', 1, 0, { hp: 3, nerve: 40, speed: 1 })]);
+  while (!g.over) g.autoTurn();
+  ok('a fight with a shot in it is never ROUTED', g.over !== 'routed', g.over);
+
+  // and AUTO does not reach for it while anything else is in range
+  const h = mk([U('a', 1, 1, { weapons: ['bottle', 'pistol'], speed: 9 })], [U('z', 1, 0, { hp: 40, nerve: 40, speed: 1 })]);
+  const pick = h.choose(h.byId('a'));
+  ok('the auto-battler prefers anything to a gun', pick.weapon === 'bottle', JSON.stringify(pick));
+}
+
+// ── cover is terrain, and also others ───────────────────────────────────
+{
+  const F = (you, them, cover) => new Fight({ you, them, cover, seed: 5 });
+
+  // soft cover: a thing in the lane is the thing you hit
+  const f = F(
+    [U('a', 1, 0, { weapons: ['fists'] })],
+    [U('z', 1, 1)],
+    [{ kind: 'crate', side: 'them', col: 1, row: 0 }],
+  );
+  const t = f.targets(f.byId('a'), 'fists');
+  ok('a crate in the lane is what a swing lands on', t.length === 1 && t[0].prop === true);
+  ok('and it is not one of the fighters', f.living('them').length === 1);
+
+  // soft cover does not stop a piercing weapon
+  const g = F(
+    [U('a', 1, 1, { weapons: ['hook'] })],
+    [U('z', 1, 1)],
+    [{ kind: 'crate', side: 'them', col: 1, row: 0 }],
+  );
+  ok('but a soft prop does not stop a piercing weapon',
+    g.targets(g.byId('a'), 'hook').some(x => x.id === 'z'));
+
+  // hard cover shuts the lane completely
+  const h = F(
+    [U('a', 1, 2, { weapons: ['blank'], speed: 9 })],
+    [U('z', 1, 2, { speed: 1 })],
+    [{ kind: 'barrier', side: 'them', col: 1, row: 0 }],
+  );
+  ok('concrete shuts the lane even to a piercing weapon',
+    h.targets(h.byId('a'), 'blank').length === 0);
+
+  // …until it comes down, and a crowbar is what comes down concrete
+  const i = F(
+    [U('a', 1, 0, { weapons: ['crowbar'], speed: 9 }), U('b', 1, 2, { weapons: ['blank'], speed: 8 })],
+    [U('z', 1, 2, { speed: 1 })],
+    [{ kind: 'barrier', side: 'them', col: 1, row: 0 }],
+  );
+  const bar = i.props[0];
+  ok('a fear weapon cannot even be aimed at a barrier',
+    i.targets(i.byId('b'), 'blank').length === 0);
+  let swings = 0;
+  while (bar.alive && swings++ < 10) {
+    if (i.actor?.id !== 'a') { i.act({ kind: 'guard' }); continue; }
+    i.act({ kind: 'attack', weapon: 'crowbar', target: bar.id });
+  }
+  ok(`a crowbar breaks concrete (${swings} swings)`, !bar.alive && swings <= 4);
+  ok('and the lane behind it opens',
+    i.targets(i.byId('b'), 'blank').some(x => x.id === 'z'));
+  ok('breaking cover shakes nobody', i.byId('z').nerve === i.byId('z').maxNerve);
+  ok('and it is not a fight anybody lost', i.over === null);
+
+  // cover stands in a cell, so nobody may walk into it
+  const j = F(
+    [U('a', 1, 1, { weapons: ['fists'] })],
+    [U('z', 0, 0)],
+    [{ kind: 'bin', side: 'you', col: 1, row: 0 }],
+  );
+  const rows = j.options(j.byId('a')).filter(o => o.kind === 'move').map(o => o.row);
+  ok('a cell with cover in it cannot be moved into', !rows.includes(0) && rows.includes(2), rows.join());
+
+  // every arena's cover is legal: on the board, and not under a fighter
+  for (const [kind, o] of Object.entries(OPPONENTS)) {
+    const fight = startFight(kind, 1);
+    const bad = fight.props.filter(p =>
+      p.col < 0 || p.col >= COLS || p.row < 0 || p.row >= ROWS
+      || fight.units.some(u => u.side === p.side && u.col === p.col && u.row === p.row));
+    ok(`${kind}: its cover is on the board and clear of the bodies`, bad.length === 0,
+      bad.map(p => `${p.side} ${p.col},${p.row}`).join(';'));
+    ok(`${kind}: names an arena`, typeof o.arena === 'string' && o.arena.length > 0);
+  }
 }
 
 // ── cover: a body in front is cover ─────────────────────────────────────

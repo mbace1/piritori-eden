@@ -4,17 +4,45 @@ Catalogue of delivered art, the conventions it establishes, and the places it
 disagrees with canon or with the code. Companion to `ART_BRIEF_CONCEPT.md`
 (the intended look) and `ASSETS.md` (what was requested).
 
-**Status: first delivery received 2026-08-18, files not yet in the repo.**
+**Status: two deliveries received 2026-08-18, files not yet in the repo.**
 See §5 for how to land them.
+
+**The owner's ruling on the same day: "take all art pushed here as canon and
+target."** So this document stops being a list of objections. §3 records the
+five answers and what each one changed in the code; anything the art and an
+older document disagree about, the art wins and the older document is the one
+that gets rewritten.
 
 ---
 
 ## 1. What arrived
 
-Thirteen images, in three groups. Every sheet follows the **magenta rule**
+Two batches. The first was thirteen images in three groups (§1.1–1.3); the
+second (§1.0) arrived with the ruling and changes the handling. Every sheet
+follows the **magenta rule**
 already established in `kindling/art-src/NANO_BANANA_PIPELINE.md` — flat
 `#FF00FF` background, subject clear of the edges — so `kindling/tools/cut.mjs`
 can key, fit, slice and check them without modification.
+
+### 1.0 The second batch
+
+A further set arrived with the ruling, and it shifts the house style rather
+than adding to it:
+
+- **Flatter, paper-cutout / construction-paper handling** on the figures, where
+  the first batch was ink-line over painted texture. §3.2's hybrid has to
+  absorb this too.
+- **Joint markers** — dark circles at shoulders, elbows and knees on the action
+  poses. Read alongside *"some characters will be also tested in Meshy 3d"*,
+  those are rig points, not decoration, and they are a real constraint on the
+  paper-doll layer contract (§4.3): the anchors have to sit where the markers
+  are.
+- **Anchor dots on the weapon sheet** — cyan and orange, one at the grip and
+  one at the fore-grip. That is a two-point contract: a held item is placed by
+  matching grip to hand and fore-grip to the second hand, which is what lets
+  one pose hold a bat, a crowbar and a rifle.
+- **New weapons that were not in the table**: crowbar, plank, shotgun, rifle.
+  All four are now in `WEAPONS` — see §3.1 and `FIGHT_BRIEF.md` §6.
 
 ### 1.1 Screens (mockups, not assets)
 
@@ -69,43 +97,61 @@ any document did:
 
 ---
 
-## 3. Conflicts — flagged, not resolved
+## 3. The five conflicts, and how they were answered
 
-Per `AGENTS.md`, canon-level conflicts need an owner decision rather than a
-unilateral fix. These are the five.
+Raised 2026-08-18, all five answered the same day. Each entry is the question,
+the owner's words, and what actually changed.
 
-### 3.1 Guns — CANON
+### 3.1 Guns — ANSWERED: **"there are guns"**
 
-Sheet N contains **a pistol and a shotgun**, both held as working firearms.
+Canon changed. `BRIEF.md`'s *"there is no gunfight"* is **not** deleted — it was
+never about whether firearms exist (the McCormicks have sold *"hard steel or
+blank guns"* since the first pitch), it is about what a fight in this game is.
+So the sentence is now kept true structurally instead of by absence.
 
-`BRIEF.md` puts *guns* and *combat* on the Dope Wars do-not-copy list, and
-§ Pressure/heat says flatly *"there is no gunfight."* The code removed the
-pistol for exactly this reason, and there is now a **structural test** enforcing
-it: *anything that can reach the back row must draw no blood.*
+**Changed in code** (`js/fight.js` OWNER OVERRIDE 2, `FIGHT_BRIEF.md` §2.1):
 
-Note the pistol pose is not necessarily a problem — the **blank gun** is a real
-gun that does not fire, so a pistol-aimed pose is perfectly canon and is
-probably the single most important pose in the game. **The shotgun is the
-question.**
+- `pistol`, `shotgun` and `rifle` added, flagged `live: true`, all drawing real
+  blood. The shotgun does not pierce — spread, so a body really does stop it.
+- **The structural test that enforced the old reading is gone.** It asserted
+  *"nothing that reaches the back row draws blood"*; four rules replace it —
+  guns work, no starting roster carries one, fear is still the only *free* way
+  to reach the back row, and a shot costs more heat and trust than any other
+  way out of any fight.
+- A shot is heard: everyone on the board is shaken, and a fight with a shot in
+  it can never be recorded as *routed*.
+- The auto-battler will not reach for a gun while anything else is in range, or
+  handing the fight to AUTO would quietly play a different game.
 
-> **Decision needed:** is the pistol pose the blank gun (canon intact), and is
-> the shotgun cut — or has canon changed?
+The **blank gun is untouched** and is still one of the strongest pieces on the
+board. The pistol-aimed pose serves both.
 
-### 3.2 Risograph → painted realism — CANON
+### 3.2 Risograph vs painted — ANSWERED: **"sure, it's a hybrid"**
 
-`BRIEF.md` § Visual direction specifies *"a living printed city diagram… a
-risograph / photocopied civic map: paper grain, screen-print flats, slight
-registration drift, municipal typography."*
+Not a replacement, a blend. The house look is now: **the risograph's flat
+screen-print separations, paper grain and municipal type, carried on the
+delivered ink-line-over-painted-texture illustration.** Where they pull against
+each other — and they do, on grain and on how much rendering a surface gets —
+the delivered art is the target and the print language is the treatment on top
+of it.
 
-The delivered map is a **dark, relief-shaded, near-photographic city model**.
-It is good, and it is not that.
+**Changed:** `ART_PROMPTS.md` §1 house preamble reissued as the hybrid, so
+every future generation inherits it. `ART_BRIEF_CONCEPT.md` still describes the
+pure risograph read and is the older document.
 
-> **Decision needed:** does the delivered direction replace `BRIEF.md`
-> § Visual direction? If yes, that section should be rewritten rather than left
-> to contradict the art. `ART_BRIEF_CONCEPT.md` and `ART_PROMPTS.md` both
-> describe the risograph look and would need reissuing.
+### 3.3 The map's places — ANSWERED: **"only map style is canon, the places need to follow actual map"**
 
-### 3.3 The map's places do not match the code — DRIFT
+Split decision, and the useful kind. The delivered map's **style** is the
+target; its **place list is not**. `flow-core/city.js` keeps the ten stops
+projected from real WGS84 coordinates, so Siltanen / Merihaka / Siltasaari /
+Alppiharju do not enter the graph, and Karhupuisto, Kuudes linja, Kallion
+kirkko, Torkkelinmäki and Kurvi have to appear in the art.
+
+**Changed:** nothing in code — this confirms what is there. `ART_PROMPTS.md`
+§3.1 already prompts the real ten and gains a line saying the geometry is
+non-negotiable while everything about the rendering is.
+
+#### The original table, kept for whoever regenerates the map
 
 | on the delivered map | in `flow-core/city.js` |
 |---|---|
@@ -114,30 +160,40 @@ It is good, and it is not that.
 | **Siltanen, Merihaka, Siltasaari, Alppiharju** | ❌ not in the graph |
 | — | ❌ missing from art: Kuudes linja, Kallion kirkko, **Karhupuisto**, Torkkelinmäki, Kurvi |
 
-The code's ten stops are projected from real WGS84 coordinates and a local is
-meant to be able to check them. Karhupuisto is missing from the map even though
-the bear statue is in the props sheet and Jaska's bench is a story beat there.
+Karhupuisto matters most of the five: the bear statue is already in the props
+sheet and Jaska's bench is a story beat there.
 
-> **Decision needed:** does the art's place list replace the code's, or is the
-> art a compressed view? If the art wins, `city.js`, `MAP.md` and every gate
-> that names a stop change together.
+### 3.4 Cover — ANSWERED: **"cover is terrain and also others"**
 
-### 3.4 Cover is now terrain — DESIGN
+Both, and terrain is now real. See `FIGHT_BRIEF.md` §4.1 for the full rule.
 
-Both fight mockups show **concrete barriers standing between the ranks**. The
-code's cover rule is *cover is a body*: a non-piercing weapon resolves against
-the frontmost living enemy in that column.
+**Changed in code** (`js/fight.js` OWNER OVERRIDE 3):
 
-Terrain cover is a real addition and a good one — it would let a fight's arena
-matter. It is also not in `FIGHT_BRIEF.md`.
+- Props stand on cells — barrier, boulder, bin, crate, bike rack — and occupy
+  them, so nobody may move into cover.
+- The old rule generalised rather than changed: a non-piercing weapon resolves
+  against the frontmost **thing** in the lane, body or barrier alike.
+- **Hard** cover stops a piercing weapon and shuts the lane; soft cover does
+  not. `breach` is what a weapon does to a thing rather than a person, which is
+  what the crowbar is for.
+- Props carry no nerve, breaking one shakes nobody, and they cannot win or lose
+  a fight.
+- `fightview.js` draws them as low slabs with their own condition bar, and each
+  opponent now names an **arena** — which is the hook the four delivered
+  backgrounds hang on.
 
-> **Decision needed:** are the barriers set dressing, or do they block?
+### 3.5 Props and obstacles — ANSWERED: **"sure, we can have rocks etc"**
 
-### 3.5 ITEM, and GUARD as a bar — DESIGN
+Confirmed, and implemented as part of §3.4: the boulder is in `COVER` and
+standing in Karhupuisto. The street props sheet (barrier, bollard, bin, bike
+rack, noticeboard, bench, pallet+crate, bear statue) is the source list, and
+everything on it that could plausibly stop a swing is a candidate.
 
-The fight UI has an **ITEM** button (no consumable system exists) and shows
-**GUARD as a five-segment bar**, where the code has guard as a flat damage
-reduction and BRACE as an action.
+### 3.6 Still open: ITEM, and GUARD as a bar — DESIGN
+
+Not among the five, and still unanswered. The fight UI mockup has an **ITEM**
+button (no consumable system exists) and shows **GUARD as a five-segment bar**,
+where the code has guard as flat damage reduction and BRACE as an action.
 
 > **Decision needed:** add consumables, or drop the button from the mockup?
 
@@ -147,12 +203,21 @@ reduction and BRACE as an action.
 
 Not requests yet — consequences of the delivery, for the next batch:
 
-1. **Arena inventory.** Four backgrounds exist; encounters are triggered by
-   debt, heat and carrying. Which arena goes with which trigger?
+1. ~~**Arena inventory.**~~ Answered in code now that §3.4 gave arenas a
+   purpose: debt brings Igor's men to the **courtyard**, a hot line brings the
+   rival crew to the **park** (Karhupuisto), and carrying a lot brings the
+   McCormicks to the **harbour**. The tenement courtyard is unassigned and is
+   the obvious home for whatever encounter comes next.
 2. **The named cast.** Sheets K–N are generic bodies. Aatami, Jaska, Toko
    Slomo, Sean McCormick and Igor need identifiable silhouettes.
 3. **A layer contract** for the paper-doll system — body / legs / torso / held
-   item, with anchor points, or the parts will not line up when composited.
+   item. The second batch has already half-written it: the **joint markers** on
+   the action poses are where the anchors go, and the **two dots on the weapon
+   sheet** (grip, fore-grip) say a held item is placed by two points rather than
+   one. What is still needed is the numbers — pixel positions per pose, at a
+   stated cell size — and a decision on whether the markers are visible in the
+   shipped art or a registration layer that gets keyed out. **Recommend: keyed
+   out**, the way the magenta background already is.
 4. **Node pin art** for the six pin types the map layer already draws.
 5. **Hit, down and rout states** for each pose — the fight has three exits and
    currently only standing art.

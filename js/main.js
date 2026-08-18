@@ -9,8 +9,8 @@ import { THEME } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=1';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
-import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=1';
-import { FightView } from './fightview.js?v=1';
+import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=2';
+import { FightView } from './fightview.js?v=2';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -442,7 +442,7 @@ function paintFight() {
 }
 
 function endFight() {
-  const c = consequence(fight.over, fight.kind);
+  const c = consequence(fight.over, fight.kind, fight);
   market.cash = Math.max(0, market.cash + c.cash);
   if (c.stockLoss) {
     for (const k of Object.keys(market.stock)) {

@@ -7,6 +7,17 @@ For whoever is making art, and for the owner. Companion to
 
 ## 0. Read this first: what "asset" means in this repository
 
+**Amended 2026-08-18.** The owner has delivered two batches of art and ruled
+*"take all art pushed here as canon and target"* — including cuttable sheets on
+magenta, which only make sense as shipped files. So the paragraphs below are
+now the *old* rule plus a live exception: Piritori will ship image assets,
+through `kindling/tools/cut.mjs` and the magenta pipeline, catalogued in
+`ART_BIBLE.md`. What has not changed is that **flat colour and hard seams beat
+rendering**, and that a code-drawn fallback has to survive a sheet failing to
+load. §2's "not needed" list is superseded where it conflicts with the
+delivered sheets — character bodies, poses, props, dogs and trees are all
+wanted now.
+
 **Nothing here ships an image file.** Every project in this repo draws its
 graphics in code — canvas primitives, procedural texture, no sprites, no
 tilesets, no PNGs. That is a standing rule in `CLAUDE.md`, not a phase we are
@@ -90,7 +101,8 @@ where I have one.
 
 1. **3×3 or 3×4 grid per side?** It is one constant. **Recommend 3×3** — three
    rows already give every weapon a distinct job, and a fourth row mostly adds
-   walking.
+   walking. *(Now weightier than it was: terrain cover eats cells, so a fourth
+   row would be the room a barrier takes up rather than more walking.)*
 2. **Where do Aatami's other two fighters come from?** A fixed trio is fielded
    now. **Recommend: contacts with enough trust turn up** — it makes the trust
    system pay out in a second currency, and it means burning people costs you
@@ -110,6 +122,19 @@ where I have one.
    the city's. This is the brief's central claim and the largest gap.
    **Recommend: yes, but as its own slice** — it needs a queueing model, not a
    one-line fix.
+
+**Since the 2026-08-18 art ruling** — new, and blocking the next art batch:
+
+11. **Are the joint markers shipped art or a registration layer?** The action
+    poses carry dark circles at shoulders, elbows and knees. **Recommend: a
+    registration layer that gets keyed out**, like the magenta background — and
+    the same question for the cyan/orange grip dots on the weapon sheet.
+12. **What cell size does the paper-doll system compose at?** Nothing can be
+    anchored until this is a number. **Recommend 128 px**, which is what the
+    cut pipeline's example slices to.
+13. **Which of the four backgrounds is the tenement courtyard for?** The other
+    three now have arenas (harbour · court · park); that one is spare and wants
+    an encounter to belong to.
 
 **Narrative:**
 

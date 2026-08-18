@@ -10,7 +10,7 @@
 // is how cover is taught — you watch the back row stay un-ringed while a body
 // stands in front of it, and nobody has to read a tooltip.
 
-import { COLS, WEAPONS } from './fight.js?v=1';
+import { COLS, WEAPONS } from './fight.js?v=2';
 import { PAL } from './palette.js?v=1';
 
 const TW = 34, TH = 17;          // iso tile half-width / half-height
@@ -50,7 +50,7 @@ export class FightView {
   hit(fight, px, py) {
     const x = px * this.dpr, y = py * this.dpr;
     let best = null, bd = 30 * this.dpr;
-    for (const u of fight.units) {
+    for (const u of [...fight.units, ...fight.props]) {
       if (!u.alive) continue;
       const p = this.cell(u.side, u.col, u.row, fight.rows);
       const d = Math.hypot(p.x - x, (p.y - 16 * this.dpr) - y);
@@ -104,9 +104,11 @@ export class FightView {
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(bq.x, bq.y); ctx.stroke();
     ctx.setLineDash([]);
 
-    // 2. bodies, painted back to front so the front row overlaps the back —
-    //    which is the cover rule, drawn
-    const order = [...fight.units].filter(u => u.alive).sort((a, b) => {
+    // 2. bodies AND cover, painted back to front so the front row overlaps the
+    //    back — which is the cover rule, drawn. A prop is in this list rather
+    //    than under it because a barrier standing in a lane is exactly as much
+    //    "the thing in the way" as a man is.
+    const order = [...fight.units, ...fight.props].filter(u => u.alive).sort((a, b) => {
       const pa = this.cell(a.side, a.col, a.row, fight.rows);
       const pb = this.cell(b.side, b.col, b.row, fight.rows);
       return pa.y - pb.y;
@@ -126,6 +128,25 @@ export class FightView {
       ctx.beginPath();
       ctx.ellipse(p.x, p.y, 15 * dpr, 7 * dpr, 0, 0, Math.PI * 2);
       ctx.fill();
+
+      // cover: a low slab, drawn short so it never hides the body behind it.
+      // Hard cover (concrete, stone) is drawn heavier than soft, because the
+      // difference decides whether a bullet gets through.
+      if (u.prop) {
+        const ph = (u.hard ? 20 : 15) * dpr, pw = 30 * dpr;
+        ctx.fillStyle = u.hard ? '#4b5560' : '#3d4650';
+        ctx.strokeStyle = targetable ? PAL.warn : PAL.paper;
+        ctx.lineWidth = 2 * dpr;
+        ctx.beginPath();
+        ctx.roundRect(p.x - pw / 2, p.y - ph, pw, ph, 2 * dpr);
+        ctx.fill(); ctx.stroke();
+        // how much of it is left, on the slab itself
+        const k = Math.max(0, u.hp / u.maxHp);
+        ctx.fillStyle = k > 0.5 ? '#7d8896' : PAL.warn;
+        ctx.fillRect(p.x - pw / 2, p.y - ph, pw * k, 3 * dpr);
+        ctx.globalAlpha = 1;
+        continue;
+      }
 
       // the body: a flat fill inside a hard line, silhouette doing the work
       const h = 40 * dpr, w = 15 * dpr;

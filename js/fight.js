@@ -18,8 +18,19 @@
 // MORALITY METER, which canon (BRIEF.md § Trust) explicitly forbids: nothing is
 // scored, it is simply that people are different with you tomorrow.
 //
-// Canon also forbids guns and gunfights, so there is no working firearm here.
-// The blank gun does zero harm and is one of the strongest pieces on the board.
+// OWNER OVERRIDE 2 (2026-08-18, answering ART_BIBLE §3.1): "there are guns."
+// BRIEF.md § Pressure/heat still reads "there is no gunfight", so the two are
+// reconciled structurally rather than by deleting the sentence:
+//   · live firearms exist, and they work (`live: true` below);
+//   · NOBODY starts a fight holding one — not your crew, not any roster — so
+//     the encounter ladder is still a scuffle you walked into;
+//   · a shot is PRICED, not scored: it is heard, it shakes the whole board, and
+//     consequence() charges heat and trust above every other way out.
+// So the gun is real and is never the cheap answer, which is the same argument
+// the routed/win split already makes, one rung further out.
+//
+// OWNER OVERRIDE 3 (same day, ART_BIBLE §3.4): "cover is terrain and also
+// others." Cover was a body; it is now a body OR a thing standing in the lane.
 //
 // No DOM in this file, no wall clock, no Math.random — the whole fight is a
 // pure function of (roster, seed, decisions), which is what lets the gate play
@@ -46,7 +57,47 @@ export const WEAPONS = {
   // and its opposite: all fear, no harm. The McCormicks already sold these.
   blank: { id: 'blank', name: 'blank gun', dmg: [0, 0], nerve: 4, from: [1, 2], reach: ALL_ROWS, pierce: true, effect: 'fear' },
   hook: { id: 'hook', name: 'hook', dmg: [1, 2], nerve: 1, from: [0, 1], reach: [0, 1], pierce: true, effect: 'pull' },
+  // yard tools, off the item sheet. `breach` is what a weapon does to a THING
+  // rather than a person — a crowbar is poor against a man and takes a hoarding
+  // apart in two swings.
+  crowbar: { id: 'crowbar', name: 'crowbar', dmg: [2, 5], nerve: 1, from: [0], reach: [0], pierce: false, effect: null, breach: 3 },
+  plank: { id: 'plank', name: 'plank', dmg: [1, 6], nerve: 2, from: [0, 1], reach: [0], pierce: false, effect: 'shove' },
+
+  // ── live firearms ────────────────────────────────────────────────────
+  // See OWNER OVERRIDE 2 at the top. `live: true` is the flag every rule about
+  // guns keys off — the gate asserts none of these is in a starting roster and
+  // that firing one is the most expensive thing that can happen in a fight.
+  pistol: { id: 'pistol', name: 'pistol', dmg: [3, 6], nerve: 3, from: [1, 2], reach: ALL_ROWS, pierce: true, effect: null, live: true },
+  // spread: a body really does stop it, so the cover rule holds for a shotgun
+  shotgun: { id: 'shotgun', name: 'shotgun', dmg: [5, 9], nerve: 3, from: [0, 1], reach: [0, 1], pierce: false, effect: 'shove', live: true, breach: 2 },
+  rifle: { id: 'rifle', name: 'rifle', dmg: [4, 8], nerve: 2, from: [2], reach: ALL_ROWS, pierce: true, effect: null, live: true },
 };
+
+// ── cover ───────────────────────────────────────────────────────────────
+// Terrain, off the props sheet. A standing prop occupies a cell nobody may
+// move into and shields the lane behind it. `hard` means it stops a bullet as
+// well as a fist — concrete and stone do, a wheelie bin does not.
+export const COVER = {
+  barrier: { id: 'barrier', name: 'concrete barrier', hp: 14, hard: true },
+  rock: { id: 'rock', name: 'boulder', hp: 16, hard: true },
+  bin: { id: 'bin', name: 'bin', hp: 7, hard: false },
+  crate: { id: 'crate', name: 'crate', hp: 6, hard: false },
+  rack: { id: 'rack', name: 'bike rack', hp: 5, hard: false },
+};
+
+export class Prop {
+  constructor({ id, kind, side, col, row }) {
+    const c = COVER[kind] || COVER.crate;
+    this.id = id; this.kind = c.id; this.name = c.name;
+    this.side = side; this.col = col; this.row = row;
+    this.hp = c.hp; this.maxHp = c.hp;
+    this.hard = c.hard;
+    this.prop = true;
+    this.guard = 0; this.bracing = false; this.downed = false;
+  }
+  get alive() { return this.hp > 0; }
+  get rowName() { return ROW_NAME[this.row] ?? `row ${this.row}`; }
+}
 export class Unit {
   constructor({ id, name, side, col, row, hp = 10, nerve = 8, speed = 5, guard = 0, weapons = ['fists'] }) {
     this.id = id; this.name = name; this.side = side;
@@ -69,12 +120,16 @@ export class Unit {
 
 // ── the board ───────────────────────────────────────────────────────────
 export class Fight {
-  constructor({ you, them, seed = 1, rows = ROWS }) {
+  constructor({ you, them, seed = 1, rows = ROWS, cover = [] }) {
     this.rows = rows;
     this.rng = new Rng(seed, 'fight');
     this.units = [];
     for (const u of you) this.units.push(new Unit({ ...u, side: 'you' }));
     for (const u of them) this.units.push(new Unit({ ...u, side: 'them' }));
+    // props live OUTSIDE this.units on purpose: they are not people, so they
+    // never take a turn, never carry nerve, and cannot win or lose the fight.
+    this.props = cover.map((c, i) => new Prop({ id: `p${i}`, ...c }));
+    this.fired = 0;               // live rounds discharged, by anyone
     this.round = 1;
     this.log = [];
     this.over = null;            // 'win' | 'lose' | 'fled' | 'paid'
@@ -88,8 +143,21 @@ export class Fight {
   say(line) { this.log.unshift(line); this.log.length = Math.min(this.log.length, 40); }
 
   living(side) { return this.units.filter(u => u.side === side && u.alive); }
-  at(side, col, row) { return this.units.find(u => u.side === side && u.col === col && u.row === row && u.alive); }
-  byId(id) { return this.units.find(u => u.id === id); }
+  standing(side) { return this.props.filter(p => p.side === side && p.alive); }
+  at(side, col, row) {
+    return this.units.find(u => u.side === side && u.col === col && u.row === row && u.alive)
+      || this.props.find(p => p.side === side && p.col === col && p.row === row && p.alive);
+  }
+  byId(id) { return this.units.find(u => u.id === id) || this.props.find(p => p.id === id); }
+
+  // Everything standing in one lane, nearest the middle first. A body and a
+  // barrier are the same kind of thing to a swing — that is the whole of
+  // "cover is terrain and also others".
+  blockersIn(side, col) {
+    return [...this.living(side), ...this.standing(side)]
+      .filter(t => t.col === col)
+      .sort((a, b) => a.row - b.row || (a.id < b.id ? -1 : 1));
+  }
 
   // speed descending, ties by id — a seed always replays identically
   rollOrder() {
@@ -122,15 +190,24 @@ export class Fight {
     const foe = unit.side === 'you' ? 'them' : 'you';
     const out = [];
     for (let c = 0; c < COLS; c++) {
-      const column = this.living(foe).filter(u => u.col === c).sort((a, b) => a.row - b.row);
+      const column = this.blockersIn(foe, c);
       if (!column.length) continue;
+      // a weapon that draws no blood has nothing to say to a bin: the blank gun
+      // still gets BLOCKED by cover, it just cannot be aimed at it
+      const aimable = t => w.reach.includes(t.row) && !(t.prop && w.dmg[1] === 0);
       if (w.pierce) {
-        for (const u of column) if (w.reach.includes(u.row)) out.push(u);
+        // a bullet goes through people and bins, and stops at concrete. So the
+        // first HARD thing in the lane is the last thing a piercing weapon can
+        // touch — everything behind it is out of the fight until it comes down.
+        for (const t of column) {
+          if (aimable(t)) out.push(t);
+          if (t.prop && t.hard) break;
+        }
       } else {
-        // only the frontmost body in the column is reachable — that body IS
-        // the cover for everyone behind it
+        // only the frontmost thing in the lane is reachable — it IS the cover
+        // for everything behind it, body or barrier alike
         const front = column[0];
-        if (w.reach.includes(front.row)) out.push(front);
+        if (aimable(front)) out.push(front);
       }
     }
     return out;
@@ -164,15 +241,22 @@ export class Fight {
       const target = this.byId(action.target);
       const legal = this.targets(u, action.weapon).some(t => t.id === target?.id);
       if (!legal) return { error: 'not from there' };
+      if (w.live) this.discharge(u, w);
       const roll = this.rng.int(w.dmg[0], w.dmg[1]);
-      const dealt = Math.max(0, roll - target.guard - (target.bracing ? 2 : 0));
+      const dealt = target.prop
+        // a thing has no guard and does not flinch; what matters is whether the
+        // weapon is any good at taking things apart
+        ? Math.max(0, roll * (w.breach || 1))
+        : Math.max(0, roll - target.guard - (target.bracing ? 2 : 0));
       target.hp -= dealt;
-      if (w.nerve) this.shake(target, w.nerve);
-      this.say(dealt
-        ? `${u.name} — ${w.name} — ${target.name} takes ${dealt}.`
-        : w.dmg[1] === 0
-          ? `${u.name} levels the ${w.name} at ${target.name}, who does not know it is empty.`
-          : `${u.name} swings the ${w.name} at ${target.name}. Nothing in it.`);
+      if (w.nerve && !target.prop) this.shake(target, w.nerve);
+      this.say(target.prop
+        ? `${u.name} puts the ${w.name} through the ${target.name}.`
+        : dealt
+          ? `${u.name} — ${w.name} — ${target.name} takes ${dealt}.`
+          : w.dmg[1] === 0
+            ? `${u.name} levels the ${w.name} at ${target.name}, who does not know it is empty.`
+            : `${u.name} swings the ${w.name} at ${target.name}. Nothing in it.`);
       if (target.hp <= 0) this.down(target);
       else if (w.effect) this.applyEffect(w.effect, u, target);
     } else if (action.kind === 'move') {
@@ -192,8 +276,20 @@ export class Fight {
   // A body on the ground is the loudest thing that can happen in a scuffle.
   // Everyone still on that side loses nerve for it — which is why breaking one
   // person often routs the rest, and why it is never free.
+  // A live round is the loudest thing that can happen anywhere in this game.
+  // It is counted, everyone on the board hears it, and consequence() charges
+  // for it afterwards — nothing here scores it, per canon's no-morality-meter.
+  discharge(actor, w) {
+    this.fired += 1;
+    this.say(`${actor.name} fires the ${w.name}. Half of Kallio just heard that.`);
+    for (const side of ['you', 'them']) {
+      for (const u of this.living(side)) if (u.id !== actor.id) this.shake(u, 1);
+    }
+  }
+
   down(target) {
     target.downed = true;
+    if (target.prop) { this.say(`The ${target.name} comes apart.`); return; }
     this.say(`${target.name} goes down.`);
     this.broke = true;                       // somebody was hurt in this fight
     for (const u of this.living(target.side)) this.shake(u, 3);
@@ -218,6 +314,10 @@ export class Fight {
     }
   }
 
+  // A win where a shot was fired is never "routed", whoever is still standing:
+  // the noise is the thing that gets remembered.
+  resolveWin() { return (this.broke || this.fired) ? 'win' : 'routed'; }
+
   // Their side's appetite for this, 0..1 — what STAND DOWN is offered against.
   resolveOf(side) {
     const us = this.living(side);
@@ -239,7 +339,7 @@ export class Fight {
       return this.over;
     }
     for (const u of this.living('them')) u.fled = true;
-    this.over = this.broke ? 'win' : 'routed';
+    this.over = this.resolveWin();
     this.say('You offer them the out, and they take it. Everybody walks away on their own feet.');
     return this.over;
   }
@@ -247,6 +347,7 @@ export class Fight {
   // Formation-breakers. These are the point: taking a shape away beats
   // out-damaging, because a pistol stranded in the front row is a spectator.
   applyEffect(effect, actor, target) {
+    if (target.prop) return;       // a barrier does not back off
     if (effect === 'shove' || effect === 'fear') {
       const r = target.row + 1;
       if (r < this.rows && !this.at(target.side, target.col, r)) {
@@ -287,12 +388,12 @@ export class Fight {
     const you = this.living('you').length, them = this.living('them').length;
     if (!them) {
       // WHICH win matters more than the win: routed means nobody was hurt
-      this.over = this.broke ? 'win' : 'routed';
+      this.over = this.resolveWin();
       this.say(this.broke
         ? 'That is the end of that. Somebody is going to need a doctor.'
         : 'They are gone, and everybody still has their teeth.');
     } else if (!you) { this.over = 'lose'; this.say('You are done here.'); }
-    else if (this.round > 20) { this.over = this.living('you').length >= this.living('them').length ? (this.broke ? 'win' : 'routed') : 'lose'; }
+    else if (this.round > 20) { this.over = this.living('you').length >= this.living('them').length ? this.resolveWin() : 'lose'; }
   }
 
   // ── the resolver both sides use ───────────────────────────────────────
@@ -311,6 +412,16 @@ export class Fight {
           // finish what is nearly down; value a formation-breaker on anything
           // standing where its own weapons work
           let s = avg + (t.hp <= avg ? 6 : 0);
+          if (t.prop) {
+            // cover is worth breaking, but only once nothing softer is on offer
+            s = (avg * (w.breach || 1)) / 2 - 4 + (t.hp <= avg * (w.breach || 1) ? 3 : 0);
+            if (s > bestScore) { bestScore = s; best = { kind: 'attack', weapon: a.weapon, target: tid }; }
+            continue;
+          }
+          // The auto-battler will not reach for a gun while anything else is in
+          // range. Restraint has to be the default of the resolver too, or
+          // handing the fight to AUTO quietly plays a different game.
+          if (w.live) s -= 12;
           // a target already close to walking out is worth frightening, not hitting
           if (w.nerve && t.nerve <= w.nerve) s += 7;
           else s += (w.nerve || 0) * 0.8;
@@ -357,7 +468,10 @@ export class Fight {
     const a = this.choose(u);
     if (a.kind === 'attack') {
       const t = this.byId(a.target);
-      return `${u.name} is lining up the ${WEAPONS[a.weapon].name} on ${t.name}.`;
+      const w = WEAPONS[a.weapon].name;
+      return t.prop
+        ? `${u.name} is going at the ${t.name} with the ${w}.`
+        : `${u.name} is lining up the ${w} on ${t.name}.`;
     }
     if (a.kind === 'move') return `${u.name} is shifting to the ${ROW_NAME[a.row]}.`;
     return `${u.name} is bracing.`;
@@ -367,9 +481,19 @@ export class Fight {
 // ── rosters ─────────────────────────────────────────────────────────────
 // Kept small and hand-cut. Who the player's other fighters are is an open
 // question in FIGHT_BRIEF.md §10 — this fields a fixed pair until it is answered.
+//
+// NOBODY in here carries a live firearm, and that is a rule the gate enforces
+// rather than a coincidence: guns exist in this city, but a gun in a fight is
+// something the player brought.
 export const OPPONENTS = {
   mccormick: {
     name: 'the McCormicks', size: 3, pay: 400,
+    arena: 'harbour',
+    // pallets and a crate at the wholesale end — soft cover, all of it
+    cover: [
+      { kind: 'crate', side: 'them', col: 2, row: 0 },
+      { kind: 'crate', side: 'you', col: 0, row: 0 },
+    ],
     open: 'Three of the brothers are waiting where the line comes out. They are not in a hurry, which is the worrying part.',
     win: 'They sit down on the kerb, more surprised than hurt.',
     lose: 'You wake up against a wall with your pockets lighter and the evening gone.',
@@ -382,6 +506,14 @@ export const OPPONENTS = {
   },
   collector: {
     name: "Igor's men", size: 3, pay: 700,
+    arena: 'court',
+    // the barrier is HARD, and it is standing in front of the man with the
+    // blank gun: that lane is shut until somebody takes it apart
+    cover: [
+      { kind: 'barrier', side: 'them', col: 2, row: 0 },
+      { kind: 'bin', side: 'them', col: 0, row: 0 },
+      { kind: 'bin', side: 'you', col: 2, row: 0 },
+    ],
     open: 'Two men you have seen in the back booth are at the top of the stairs, and a third is already behind you.',
     win: 'They step aside. It is not mercy, it is arithmetic — you are worth more walking.',
     lose: 'They take what you are carrying and tell you the number has gone up.',
@@ -394,6 +526,16 @@ export const OPPONENTS = {
   },
   rival: {
     name: 'the other crew', size: 2, pay: 200,
+    arena: 'park',
+    // Karhupuisto: a bike rack and the plinth. The HARD cover is on your side
+    // deliberately — a boulder in front of their blank gun shut that lane and
+    // took the bloodless rout off the table against the weakest crew, which is
+    // the one rung of the moral ladder that has to stay climbable. Igor's men
+    // are the ones who get to choose their ground.
+    cover: [
+      { kind: 'rack', side: 'them', col: 2, row: 0 },
+      { kind: 'rock', side: 'you', col: 0, row: 0 },
+    ],
     open: 'Two who work the same square have decided there is one of you too many on it.',
     win: 'They go back down the steps without a word.',
     lose: 'You lose the argument and most of what you were carrying.',
@@ -416,6 +558,7 @@ export function startFight(kind, seed, crewSize = 3) {
   const f = new Fight({
     you: YOUR_CREW.slice(0, crewSize),
     them: o.roster.slice(0, o.size),
+    cover: o.cover || [],
     seed,
   });
   f.kind = kind;
@@ -425,8 +568,26 @@ export function startFight(kind, seed, crewSize = 3) {
 }
 
 // What an outcome costs, applied by main.js against the market.
-export function consequence(outcome, foeKind) {
+//
+// `fight` is optional and carries the one thing an outcome word cannot: whether
+// a live round went off. A shot is the most expensive thing in the game and it
+// is charged on TOP of however the fight ended — including a win, and including
+// one you then paid your way out of.
+export function consequence(outcome, foeKind, fight = null) {
   const o = OPPONENTS[foeKind];
+  const shots = fight?.fired || 0;
+  const base = baseConsequence(outcome, o);
+  if (!shots) return base;
+  return {
+    ...base,
+    heat: Math.max(base.heat, 0.45) + 0.12 * (shots - 1),
+    trust: Math.min(base.trust, 0) - 3,
+    shots,
+    line: base.line + ' A gun went off on a Kallio street, and that is the only part anybody will repeat.',
+  };
+}
+
+function baseConsequence(outcome, o) {
   switch (outcome) {
     // Routed: you won and nobody is bleeding. Costs almost nothing, and the
     // people who saw it think BETTER of you. This is the design arguing for
