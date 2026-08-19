@@ -10,7 +10,7 @@
 // is how cover is taught — you watch the back row stay un-ringed while a body
 // stands in front of it, and nobody has to read a tooltip.
 
-import { COLS, ROW_NAME, WEAPONS, arenaFor } from './fight.js?v=3';
+import { COLS, ROW_NAME, WEAPONS, ITEMS, arenaFor } from './fight.js?v=4';
 import { PAL } from './palette.js?v=1';
 import { image } from '../../assets/load.js?v=1';
 
@@ -98,9 +98,7 @@ export class FightView {
       ctx.fillRect(0, 0, W, H);
     }
 
-    const legal = this.sel
-      ? new Set(fight.targets(fight.actor, this.sel).map(u => u.id))
-      : null;
+    const legal = this.sel ? new Set(this.reach(fight).map(u => u.id)) : null;
 
     // 1. the ground. Cells are shadow, never a drawn tile grid. The two sides
     //    are tinted apart so the halves read as two lines facing each other
@@ -171,7 +169,7 @@ export class FightView {
       ctx.strokeStyle = 'rgba(214,84,72,0.8)';
       ctx.lineWidth = 1.4 * dpr;
       ctx.setLineDash([5 * dpr, 4 * dpr]);
-      for (const t of fight.targets(fight.actor, this.sel)) {
+      for (const t of this.reach(fight)) {
         const b = this.cell(t.side, t.col, t.row, fight.rows);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y - 6 * dpr);
@@ -303,6 +301,19 @@ export class FightView {
     // for one fact is how a board gets cluttered.
   }
 
-  // Which weapon is armed, or null. Setting it re-dims the board.
-  arm(weaponId) { this.sel = weaponId && WEAPONS[weaponId] ? weaponId : null; }
+  // What the armed thing can reach — a weapon's rows, or an item's throw.
+  // One method, so the ringing, the dimming and the intent lines can never
+  // disagree about what is a legal target.
+  reach(fight) {
+    if (!this.sel || !fight.actor) return [];
+    return this.sel.startsWith('!')
+      ? fight.itemTargets(fight.actor)
+      : fight.targets(fight.actor, this.sel);
+  }
+
+  // Which weapon or item is armed, or null. Setting it re-dims the board.
+  // `!id` is an item; a bare id is a weapon.
+  arm(id) {
+    this.sel = id && (id.startsWith('!') ? ITEMS[id.slice(1)] : WEAPONS[id]) ? id : null;
+  }
 }

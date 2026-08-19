@@ -11,8 +11,8 @@
 import {
   Fight, WEAPONS, OPPONENTS, YOUR_CREW, startFight, consequence,
   COLS, ROWS, ROW_NAME,
-  ARENAS, DEFAULT_ARENA, arenaFor,
-} from '../js/fight.js?v=3';
+  ARENAS, DEFAULT_ARENA, arenaFor, ITEMS, ITEM_STOCK,
+} from '../js/fight.js?v=4';
 
 let pass = 0, fail = 0;
 const ok = (n, c, d) => { c ? (pass++, console.log('  ok   ' + n)) : (fail++, console.log('  FAIL ' + n + (d ? ' → ' + d : ''))); };
@@ -295,6 +295,72 @@ const ids = us => us.map(u => u.id);
   ok('the fallback is one of the four', ARENAS.includes(DEFAULT_ARENA));
   ok('and the three live opponents do not use it',
     Object.values(OPPONENTS).every(o => o.arena !== DEFAULT_ARENA));
+}
+
+// ── the ITEM button, which is now a bottle and a rock ───────────────────
+{
+  const F = (you, them, cover) => new Fight({ you, them, cover, seed: 5 });
+  ok('two items exist and both are thrown',
+    Object.keys(ITEMS).join() === 'bottle,rock');
+  ok('and the street starts you with some of each',
+    Object.keys(ITEMS).every(k => ITEM_STOCK[k] > 0));
+
+  // the whole point of them: reaching the back rank without a gun
+  const f = mk(
+    [U('a', 1, 0, { weapons: ['fists'], speed: 9 })],
+    [U('front', 1, 0, { speed: 1 }), U('back', 1, 2, { hp: 40, nerve: 40, speed: 1 })],
+  );
+  ok('fists cannot touch the back rank',
+    !f.targets(f.byId('a'), 'fists').some(t => t.id === 'back'));
+  ok('a thrown item can', f.itemTargets(f.byId('a')).some(t => t.id === 'back'));
+
+  const before = f.items.bottle;
+  f.act({ kind: 'throw', item: 'bottle', target: 'back' });
+  ok('throwing spends it', f.items.bottle === before - 1);
+  ok('and it hurts', f.byId('back').hp < 40);
+  ok('and it frightens', f.byId('back').nerve < 40);
+
+  // shared by the side, not carried per unit
+  const g = mk(
+    [U('a', 1, 0, { speed: 9 }), U('b', 0, 0, { speed: 8 })],
+    [U('z', 1, 0, { hp: 40, nerve: 40, speed: 1 })],
+  );
+  g.act({ kind: 'throw', item: 'rock', target: 'z' });
+  ok('the pile is the crew\'s, not one man\'s', g.items.rock === ITEM_STOCK.rock - 1);
+
+  // run it dry and the option goes away rather than greying out forever
+  const h = mk([U('a', 1, 0, { speed: 9 })], [U('z', 1, 0, { hp: 90, nerve: 90, speed: 1 })]);
+  let guard = 0;
+  while (h.items.rock > 0 && guard++ < 10) {
+    if (h.actor?.id === 'a') h.act({ kind: 'throw', item: 'rock', target: 'z' });
+    else h.act({ kind: 'guard' });
+  }
+  ok('an empty pocket offers nothing',
+    !h.options(h.byId('a')).some(o => o.kind === 'throw' && o.item === 'rock'));
+  ok('and throwing what you do not have is refused',
+    h.act({ kind: 'throw', item: 'rock', target: 'z' })?.error !== undefined);
+
+  // and hard cover stops a bottle exactly as it stops a bullet
+  const i = F(
+    [U('a', 1, 0, { speed: 9 })],
+    [U('z', 1, 2, { speed: 1 })],
+    [{ kind: 'barrier', side: 'them', col: 1, row: 0 }],
+  );
+  ok('concrete shuts the lane to a thrown thing too',
+    !i.itemTargets(i.byId('a')).some(t => t.id === 'z'));
+  // …but a bin does not
+  const j = F(
+    [U('a', 1, 0, { speed: 9 })],
+    [U('z', 1, 2, { speed: 1 })],
+    [{ kind: 'bin', side: 'them', col: 1, row: 0 }],
+  );
+  ok('a bin does not', j.itemTargets(j.byId('a')).some(t => t.id === 'z'));
+  ok('and cover is never itself a target for a throw',
+    j.itemTargets(j.byId('a')).every(t => !t.prop));
+
+  // items are THEIRS to lose, not a prize — nobody on the far side has any
+  ok('only your side throws', !mk([U('a', 1, 0)], [U('z', 1, 0, { speed: 9 })])
+    .canThrow(mk([U('a', 1, 0)], [U('z', 1, 0, { speed: 9 })]).byId('z'), 'rock'));
 }
 
 // ── determinism ─────────────────────────────────────────────────────────

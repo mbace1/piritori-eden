@@ -65,6 +65,43 @@ via `cut.mjs anchors`, and the tenement yard as the fallback arena.
 
 ---
 
+## 2026-08-19 — the two mockup contradictions, answered
+
+Both were raised in ART_BIBLE §1.-1 as places where the final targets show
+something the build does not have.
+
+### 7. GUARD stays what it is
+
+> "1 a"
+
+The mockup draws GUARD as a five-segment pool that depletes. The code has flat
+damage reduction plus BRACE as an action, and **the code wins** — the segments
+in the unit panel simply DISPLAY that reduction rather than becoming a resource
+you spend. Nothing changed; this closes the question.
+
+### 8. ITEM is real, and it is a bottle and a rock
+
+> "2 b add bottle and rock"
+
+`ITEMS` in `js/fight.js`. Both are **thrown**, which is the whole point of
+them: they are the only way anyone on your side reaches past the front rank
+without owning a gun or a blank one. One use, **shared by the crew** rather
+than carried per unit, and **picked up off the street** each fight rather than
+bought — a bottle and half a brick are what the ground gives you, and making
+them a purchase would turn a scuffle into a shopping trip.
+
+A rock is the quieter one (less harm, more fright); a bottle hurts more, which
+is the same trade the weapons table makes everywhere else. Hard cover stops a
+thrown thing exactly as it stops a bullet, because one rule for "what is in the
+way" is the reason cover generalised at all — and cover is never itself a
+target for a throw, since smashing a barrier by lobbing your last bottle at it
+is not a decision anybody wants to be offered.
+
+Only your side has any. That is deliberate and the gate asserts it: the item
+pile is a small advantage the player brings to a fight they did not choose.
+
+---
+
 ## 2026-08-18 — the second act, and what things are called
 
 ### 5. Pasila 2024 is canon — and phase-gated

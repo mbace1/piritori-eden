@@ -9,8 +9,8 @@ import { THEME, PAL } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
-import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=3';
-import { FightView } from './fightview.js?v=4';
+import { startFight as buildFight, WEAPONS, ITEMS, consequence } from './fight.js?v=4';
+import { FightView } from './fightview.js?v=5';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -371,9 +371,16 @@ function onBoardTap(e) {
   const p = e.changedTouches?.[0] || e;
   const u = fightView.hit(fight, p.clientX - r.left, p.clientY - r.top);
   if (!u) return;
-  const legal = fight.targets(fight.actor, armed).some(t => t.id === u.id);
+  // `!bottle` means the armed thing is an ITEM rather than a weapon. One
+  // variable rather than two, so there is no state where both are armed.
+  const item = armed.startsWith('!') ? armed.slice(1) : null;
+  const legal = item
+    ? fight.itemTargets(fight.actor).some(t => t.id === u.id)
+    : fight.targets(fight.actor, armed).some(t => t.id === u.id);
   if (!legal) return;
-  fight.act({ kind: 'attack', weapon: armed, target: u.id });
+  fight.act(item
+    ? { kind: 'throw', item, target: u.id }
+    : { kind: 'attack', weapon: armed, target: u.id });
   armed = null; fightView.arm(null);
   paintFight();
   stepEnemies();
@@ -475,6 +482,21 @@ function paintFight() {
     b.textContent = `${w.name.toUpperCase()} · ${w.dmg[1] ? `${w.dmg[0]}–${w.dmg[1]}` : 'no damage'}`
       + (can ? (t.length ? '' : ' · nothing in reach') : ` · not from the ${u.rowName}`);
     b.onclick = () => { armed = armed === id ? null : id; fightView.arm(armed); paintFight(); };
+    box.append(b);
+  }
+  // ITEM, from the mockups and now a real thing: what is lying about on this
+  // street. Shown only while there is any left, because a permanently greyed
+  // button is a promise the game keeps failing to keep.
+  for (const o of fight.options(u).filter(o => o.kind === 'throw')) {
+    const it = ITEMS[o.item];
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn wide' + (armed === `!${o.item}` ? ' prime' : '');
+    b.textContent = `THROW THE ${it.name.toUpperCase()} · ${it.dmg[0]}–${it.dmg[1]} · ${fight.items[o.item]} left`;
+    b.onclick = () => {
+      armed = armed === `!${o.item}` ? null : `!${o.item}`;
+      fightView.arm(armed); paintFight();
+    };
     box.append(b);
   }
   for (const o of fight.options(u).filter(o => o.kind === 'move')) {

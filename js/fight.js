@@ -73,6 +73,26 @@ export const WEAPONS = {
   rifle: { id: 'rifle', name: 'rifle', dmg: [4, 8], nerve: 2, from: [2], reach: ALL_ROWS, pierce: true, effect: null, live: true },
 };
 
+// ── items ───────────────────────────────────────────────────────────────
+// OWNER DECISION 2026-08-19: the mockups' ITEM button gets a real system, and
+// it is two things — a bottle and a rock.
+//
+// Both are THROWN, which is the point of them: they are the only way anybody
+// on your side reaches past the front rank without owning a gun or a blank one.
+// They are one-use, they are shared by the whole crew rather than carried per
+// unit, and they are picked up off the street each fight rather than bought —
+// a bottle and a half brick are what the ground gives you, and making them a
+// purchase would turn a scuffle into a shopping trip.
+//
+// A rock is the quieter one: less harm, more fright, and it can be thrown from
+// anywhere. A bottle hurts more and is louder, which is the same trade the
+// weapons table makes everywhere else.
+export const ITEMS = {
+  bottle: { id: 'bottle', name: 'bottle', dmg: [3, 6], nerve: 2, reach: ALL_ROWS, pierce: true },
+  rock: { id: 'rock', name: 'rock', dmg: [1, 3], nerve: 3, reach: ALL_ROWS, pierce: true },
+};
+export const ITEM_STOCK = { bottle: 2, rock: 2 };
+
 // ── arenas ──────────────────────────────────────────────────────────────
 // Where a fight happens, which is what the delivered backgrounds hang on. Four
 // exist; three are spoken for by the three ways an encounter can be caused, and
@@ -140,6 +160,8 @@ export class Fight {
     // never take a turn, never carry nerve, and cannot win or lose the fight.
     this.props = cover.map((c, i) => new Prop({ id: `p${i}`, ...c }));
     this.fired = 0;               // live rounds discharged, by anyone
+    // shared by your whole side: what is lying about on this particular street
+    this.items = { ...ITEM_STOCK };
     this.round = 1;
     this.log = [];
     this.over = null;            // 'win' | 'lose' | 'fled' | 'paid'
@@ -159,6 +181,26 @@ export class Fight {
       || this.props.find(p => p.side === side && p.col === col && p.row === row && p.alive);
   }
   byId(id) { return this.units.find(u => u.id === id) || this.props.find(p => p.id === id); }
+
+  // What a thrown item can reach. Piercing, so it goes over a bin — but HARD
+  // cover still shuts the lane, because a boulder stops a bottle exactly the
+  // way it stops a bullet, and one rule for "what is in the way" is the whole
+  // reason cover generalised in the first place.
+  itemTargets(unit) {
+    const foe = unit.side === 'you' ? 'them' : 'you';
+    const out = [];
+    for (let c = 0; c < COLS; c++) {
+      for (const t of this.blockersIn(foe, c)) {
+        if (!t.prop) out.push(t);
+        if (t.prop && t.hard) break;
+      }
+    }
+    return out;
+  }
+
+  canThrow(unit, id) {
+    return unit.side === 'you' && !!ITEMS[id] && (this.items[id] || 0) > 0;
+  }
 
   // Everything standing in one lane, nearest the middle first. A body and a
   // barrier are the same kind of thing to a swing — that is the whole of
@@ -236,6 +278,11 @@ export class Fight {
         acts.push({ kind: 'move', row: r });
       }
     }
+    for (const id of Object.keys(ITEMS)) {
+      if (!this.canThrow(unit, id)) continue;
+      const t = this.itemTargets(unit);
+      if (t.length) acts.push({ kind: 'throw', item: id, targets: t.map(u => u.id) });
+    }
     acts.push({ kind: 'guard' });
     return acts;
   }
@@ -245,6 +292,22 @@ export class Fight {
     const u = this.actor;
     if (!u || this.over) return null;
     u.bracing = false;
+
+    if (action.kind === 'throw') {
+      const it = ITEMS[action.item];
+      const target = this.byId(action.target);
+      if (!this.canThrow(u, action.item)) return { error: 'nothing to throw' };
+      if (!this.itemTargets(u).some(t => t.id === target?.id)) return { error: 'not from there' };
+      this.items[action.item] -= 1;
+      const roll = this.rng.int(it.dmg[0], it.dmg[1]);
+      const dealt = Math.max(0, roll - target.guard - (target.bracing ? 2 : 0));
+      target.hp -= dealt;
+      this.shake(target, it.nerve);
+      this.say(`${u.name} throws the ${it.name}. ${target.name} takes ${dealt}.`);
+      if (target.hp <= 0) this.down(target);
+      this.advance();
+      return { dealt };
+    }
 
     if (action.kind === 'attack') {
       const w = WEAPONS[action.weapon];
