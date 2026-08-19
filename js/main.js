@@ -10,7 +10,7 @@ import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, ITEMS, consequence } from './fight.js?v=4';
-import { FightView } from './fightview.js?v=5';
+import { FightView } from './fightview.js?v=6';
 import { image } from '../../assets/load.js?v=1';
 
 const $ = id => document.getElementById(id);

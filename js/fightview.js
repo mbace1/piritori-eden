@@ -16,6 +16,23 @@ import { image } from '../../assets/load.js?v=1';
 
 const TW = 34, TH = 17;          // iso tile half-width / half-height
 
+// ── the cover sprites ───────────────────────────────────────────────────
+// These are SHIPPED art, not pipeline output: generated once, keyed off the
+// magenta and trimmed to their own ink (`cut.mjs key` then `trim`), and
+// committed under piritori/art/. That is the difference between assets/out/
+// — which is a build directory a fresh checkout may not have — and a sprite
+// the game draws. Loaded once and shared by every fight; a miss is silent and
+// draw() falls back to the slab it has always drawn.
+const PROP_ART = new Map();
+function propArt(kind) {
+  if (PROP_ART.has(kind)) return PROP_ART.get(kind) || null;
+  PROP_ART.set(kind, null);
+  const img = new Image();
+  img.onload = () => PROP_ART.set(kind, img);
+  img.src = `art/props/${kind}.png?v=1`;
+  return null;
+}
+
 export class FightView {
   constructor(canvas) {
     this.canvas = canvas;
@@ -216,17 +233,42 @@ export class FightView {
       // Hard cover (concrete, stone) is drawn heavier than soft, because the
       // difference decides whether a bullet gets through.
       if (u.prop) {
-        const ph = (u.hard ? 20 : 15) * dpr, pw = 30 * dpr;
-        ctx.fillStyle = u.hard ? '#4b5560' : '#3d4650';
-        ctx.strokeStyle = targetable ? PAL.warn : PAL.paper;
-        ctx.lineWidth = 2 * dpr;
-        ctx.beginPath();
-        ctx.roundRect(p.x - pw / 2, p.y - ph, pw, ph, 2 * dpr);
-        ctx.fill(); ctx.stroke();
-        // how much of it is left, on the slab itself
+        const art = propArt(u.kind);
+        let ph = (u.hard ? 20 : 15) * dpr, pw = 30 * dpr;
+        if (art) {
+          // The FOOTPRINT is what stands in the lane, so the width is fixed and
+          // the height follows the picture — but capped, because "never tall
+          // enough to hide a standing person" is a rule of the game and not of
+          // the drawing, and the bin came back full height however the prompt
+          // asked. A prop that occludes the body behind it un-teaches the one
+          // thing this board exists to teach.
+          const s = Math.min(44 * dpr / art.width, 30 * dpr / art.height);
+          pw = art.width * s; ph = art.height * s;
+          ctx.drawImage(art, p.x - pw / 2, p.y - ph + 3 * dpr, pw, ph);
+        } else {
+          ctx.fillStyle = u.hard ? '#4b5560' : '#3d4650';
+          ctx.strokeStyle = targetable ? PAL.warn : PAL.paper;
+          ctx.lineWidth = 2 * dpr;
+          ctx.beginPath();
+          ctx.roundRect(p.x - pw / 2, p.y - ph, pw, ph, 2 * dpr);
+          ctx.fill(); ctx.stroke();
+        }
+        if (targetable) {
+          // a bitmap cannot be outlined the way a slab could, so the ring goes
+          // on the ground — the same ring a body gets, which is the point: a
+          // thing you may hit is marked the same way whatever it is made of
+          ctx.strokeStyle = PAL.warn; ctx.lineWidth = 2.5 * dpr;
+          ctx.beginPath(); ctx.ellipse(p.x, p.y, 21 * dpr, 10 * dpr, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        // how much of it is left, over the top of it
         const k = Math.max(0, u.hp / u.maxHp);
-        ctx.fillStyle = k > 0.5 ? '#7d8896' : PAL.warn;
-        ctx.fillRect(p.x - pw / 2, p.y - ph, pw * k, 3 * dpr);
+        if (k < 1) {
+          ctx.fillStyle = '#2a3038';
+          ctx.fillRect(p.x - 13 * dpr, p.y - ph - 4 * dpr, 26 * dpr, 3 * dpr);
+          ctx.fillStyle = k > 0.5 ? '#7d8896' : PAL.warn;
+          ctx.fillRect(p.x - 13 * dpr, p.y - ph - 4 * dpr, 26 * dpr * k, 3 * dpr);
+        }
         ctx.globalAlpha = 1;
         continue;
       }

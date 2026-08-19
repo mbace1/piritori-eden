@@ -11,26 +11,29 @@ export const CONTACTS = [
     id: 'jaska', name: 'Jaska', at: 'karhupuisto', start: 3,
     role: 'your brother. Paints. Does not ask what the jacket is for.',
     gift: 'cools the square', // lowers node failure pressure where he sits
-    face: [0.50, 0.42, 0.13],
+    face: [0.668, 0.432, 0.115],
   },
   {
     id: 'toko', name: 'Toko Slomo', at: 'vaasankatu', start: 2,
     role: 'noodle chef. Hears every kitchen on the street before you do.',
     gift: 'names tomorrow\'s shock',
-    // where his head sits in his own interior, in fractions of that picture
-    face: [0.375, 0.395, 0.115],
+    // where his head sits in his own interior, in fractions of that picture:
+    // [cx, cy] of the width and the height, and a radius in fractions of the
+    // SHORT side. Read off the image by eye and checked in a screenshot — the
+    // only way to check a crop is to look at it.
+    face: [0.459, 0.488, 0.10],
   },
   {
     id: 'sean', name: 'Sean McCormick', at: 'kuudeslinja', start: 1,
     role: 'the bar family. Sells muscle, steel and the benefit of the doubt.',
     gift: 'one line runs unwatched',
-    face: [0.50, 0.42, 0.13],
+    face: [0.562, 0.521, 0.12],
   },
   {
     id: 'igor', name: 'Igor', at: 'sornainen', start: 0,
     role: 'holds the paper on you. Never raises his voice.',
     gift: 'takes the money and the evening',
-    face: [0.50, 0.42, 0.13],
+    face: [0.696, 0.495, 0.11],
   },
 ];
 
