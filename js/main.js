@@ -23,6 +23,7 @@ let fight = null, nextFightAt = 900, fightView = null, armed = null;
 let msgs = [], landed = 0;
 let dealToday = null;            // one bargain a day, from one contact
 let roomWith = null;             // whose place you are standing in
+let roomImg = null;              // his interior, once it has loaded
 
 function say(...lines) {
   for (const l of lines) msgs.unshift(l);
@@ -184,7 +185,7 @@ function openRoom(id) {
   // the interior, if one has been generated. Additive, like the arenas: with
   // nothing in assets/out/ the card is just the person and the words.
   const art = $('roomArt');
-  art.hidden = true;
+  art.hidden = true; roomImg = null;
   image(`piritori/interior-${c.id}`).then(img => {
     if (!img || roomWith?.id !== c.id) return;
     art.hidden = false;
@@ -195,11 +196,17 @@ function openRoom(id) {
     const s = Math.max(w / img.width, h / img.height);
     g.drawImage(img, (w - img.width * s) / 2, (h - img.height * s) / 2,
       img.width * s, img.height * s);
+    // the portrait is CUT OUT OF THE SAME PICTURE, never drawn beside it. A
+    // silhouette placeholder next to finished art does not read as a
+    // placeholder, it reads as a broken image — and a crop cannot drift out of
+    // register with the room behind it, because it IS the room.
+    roomImg = img;
+    facePortrait($('roomFace'), img, c.face);
   });
 }
 
 function closeRoom() {
-  roomWith = null;
+  roomWith = null; roomImg = null;
   $('room').hidden = true;
   if (!over) flow.clock.setPaused(false);
   renderHud(); renderSheet();
@@ -216,11 +223,17 @@ function paintRoom() {
       : t >= 1 ? 'He nods, and keeps working.'
         : 'He looks up, and takes his time about it.');
 
+  if (roomImg) facePortrait($('roomFace'), roomImg, c.face);
+  else drawFace($('roomFace'), { side: 'you', name: c.name });
+
   const box = $('roomBtns');
   box.innerHTML = '';
-  const add = (text, fn, cls = 'btn wide') => {
+  // label on one line, what it costs on the next — the targets price every
+  // choice on its own face, so weighing two of them never needs a third screen
+  const add = (label, note, fn, cls = 'btn') => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = cls; b.textContent = text;
+    b.type = 'button'; b.className = cls;
+    b.innerHTML = `<b>${esc(label)}</b>${note ? `<i>${esc(note)}</i>` : ''}`;
     b.onclick = fn; box.append(b); return b;
   };
 
@@ -228,15 +241,15 @@ function paintRoom() {
   //    the price table and into the room where the man is standing.
   if (dealToday && dealToday.seller === c.id && !dealToday.taken) {
     const p = market.dealPrice(c.at, dealToday);
-    add(`TAKE THE ${dealToday.good.toUpperCase()} · ${p * dealToday.n} €`, () => {
+    add(`TAKE THE ${dealToday.good.toUpperCase()}`, `${dealToday.n} for ${eur(p * dealToday.n)}`, () => {
       const r = market.takeDeal(c.at, dealToday);
       if (!r.n) { say('You cannot cover it.'); return; }
       dealToday.taken = true;
       say(`${r.n} ${dealToday.good} off ${c.name} for ${eur(r.spent)}. He does not count it twice.`);
       paintRoom(); renderHud();
-    }, 'btn wide prime');
+    }, 'btn prime');
     const tell = document.createElement('p');
-    tell.className = 'dim';
+    tell.className = 'said';
     tell.textContent = market.dealTell(dealToday)
       + (dealToday.appraised ? ` — ${dealToday.appraised}` : '');
     box.append(tell);
@@ -247,7 +260,7 @@ function paintRoom() {
   //    knowing, and that is the point of having more than one.
   if (dealToday && dealToday.seller !== c.id && !dealToday.appraised) {
     const cost = market.appraisalCost(t);
-    add(`ASK ABOUT ${dealToday.who.toUpperCase()}'S OFFER · ${cost} €`, () => {  // eslint-disable-line
+    add(`ASK ABOUT ${dealToday.who.split(' ')[0].toUpperCase()}'S OFFER`, eur(cost), () => {
       const r = market.appraise(dealToday, t);
       if (!r.told && r.why === 'you cannot cover it') { say('You cannot cover it.'); return; }
       dealToday.appraised = r.told
@@ -262,12 +275,12 @@ function paintRoom() {
   // money left and nothing on screen changed, which reads as a broken button.
   if (dealToday?.appraised && dealToday.seller !== c.id) {
     const p = document.createElement('p');
-    p.className = 'dim';
+    p.className = 'said';
     p.textContent = dealToday.appraised;
     box.append(p);
   }
 
-  add('LEAVE', closeRoom);
+  add('LEAVE', '', closeRoom);
 }
 
 function settle(day) {
@@ -531,6 +544,19 @@ function paintUnit(u) {
   drawFace($('fightFace'), u);
 }
 
+// A head out of the interior: `face` is [cx, cy, r] in fractions of the
+// picture, so moving a character in a regenerated interior is one triple in
+// narrative.js and nothing else.
+function facePortrait(cv, img, face) {
+  const [cx, cy, r] = face || [0.5, 0.42, 0.14];
+  const side = Math.min(img.width, img.height) * r * 2;
+  const g = cv.getContext('2d');
+  g.clearRect(0, 0, cv.width, cv.height);
+  g.drawImage(img,
+    img.width * cx - side / 2, img.height * cy - side / 2, side, side,
+    0, 0, cv.width, cv.height);
+}
+
 // No character art yet, so the portrait is drawn: the same flat silhouette in
 // a hard line the board uses, tinted by side. It is a placeholder that obeys
 // the house rule rather than a grey box that admits nothing was made.
@@ -540,10 +566,14 @@ function drawFace(cv, u) {
   g.clearRect(0, 0, W, H);
   g.fillStyle = u.side === 'you' ? '#141b22' : '#1d1416';
   g.fillRect(0, 0, W, H);
+  // seeded off the name, so four contacts are four silhouettes rather than one
+  // drawn four times — a placeholder may be plain but it must not be anonymous
+  const seed = [...(u.name || '')].reduce((a, ch) => a + ch.charCodeAt(0), 0);
   g.fillStyle = u.side === 'you' ? PAL.ink : '#b4655a';
   g.strokeStyle = '#0b0e13';
   g.lineWidth = 3;
-  g.beginPath(); g.arc(W / 2, H * 0.42, W * 0.22, 0, Math.PI * 2); g.fill(); g.stroke();
+  g.beginPath(); g.arc(W / 2, H * 0.42, W * (0.19 + (seed % 4) * 0.015), 0, Math.PI * 2);
+  g.fill(); g.stroke();
   g.beginPath();
   g.moveTo(W * 0.18, H); g.lineTo(W * 0.28, H * 0.68);
   g.lineTo(W * 0.72, H * 0.68); g.lineTo(W * 0.82, H);
