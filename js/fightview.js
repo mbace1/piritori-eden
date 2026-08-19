@@ -10,7 +10,7 @@
 // is how cover is taught — you watch the back row stay un-ringed while a body
 // stands in front of it, and nobody has to read a tooltip.
 
-import { COLS, WEAPONS, arenaFor } from './fight.js?v=3';
+import { COLS, ROW_NAME, WEAPONS, arenaFor } from './fight.js?v=3';
 import { PAL } from './palette.js?v=1';
 import { image } from '../../assets/load.js?v=1';
 
@@ -105,30 +105,54 @@ export class FightView {
     // 1. the ground. Cells are shadow, never a drawn tile grid. The two sides
     //    are tinted apart so the halves read as two lines facing each other
     //    rather than one crowd.
+    // Per the final targets: an EMPTY cell is barely there, and an OCCUPIED
+    // one carries a bright diamond in its side's colour. That is what makes a
+    // formation read as a formation rather than as bodies on a picture, and it
+    // is the one thing in the mockups that costs nothing to build.
     for (const side of ['them', 'you']) {
+      const mine = side === 'you';
       for (let row = fight.rows - 1; row >= 0; row--) {
         for (let col = 0; col < COLS; col++) {
           const p = this.cell(side, col, row, fight.rows);
+          const held = fight.at(side, col, row);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y - TH * dpr);
           ctx.lineTo(p.x + TW * dpr, p.y);
           ctx.lineTo(p.x, p.y + TH * dpr);
           ctx.lineTo(p.x - TW * dpr, p.y);
           ctx.closePath();
-          // the front rows sit brightest: that is where the reach is
-          const k = 1 - row / Math.max(1, fight.rows);
-          ctx.fillStyle = side === 'you'
-            ? `rgba(90,110,130,${0.05 + k * 0.07})`
-            : `rgba(150,80,70,${0.05 + k * 0.07})`;
-          ctx.fill();
-          // the cell outline has to survive a lit courtyard as well as bare
-          // paper, so it lightens rather than darkens once there is art behind
-          ctx.strokeStyle = this.arena ? 'rgba(226,220,205,0.07)' : '#1b222b';
-          ctx.lineWidth = 1 * dpr;
+          if (held) {
+            ctx.fillStyle = mine ? 'rgba(87,200,232,0.10)' : 'rgba(200,70,60,0.12)';
+            ctx.fill();
+            ctx.strokeStyle = mine ? 'rgba(87,200,232,0.85)' : 'rgba(214,84,72,0.85)';
+            ctx.lineWidth = 1.6 * dpr;
+          } else {
+            ctx.strokeStyle = this.arena
+              ? (mine ? 'rgba(87,200,232,0.16)' : 'rgba(214,84,72,0.16)')
+              : '#1b222b';
+            ctx.lineWidth = 1 * dpr;
+          }
           ctx.stroke();
         }
       }
     }
+
+    // BACK / MIDDLE / FRONT down both edges, yours cyan and theirs red —
+    // straight off the targets, and it is the rank system finally saying its
+    // own name on screen instead of only in the button labels.
+    ctx.font = `${8 * dpr}px ${PAL.font}`;
+    ctx.textBaseline = 'middle';
+    for (const side of ['you', 'them']) {
+      const mine = side === 'you';
+      ctx.fillStyle = mine ? 'rgba(87,200,232,0.75)' : 'rgba(214,84,72,0.75)';
+      ctx.textAlign = mine ? 'left' : 'right';
+      for (let row = 0; row < fight.rows; row++) {
+        const p = this.cell(side, mine ? 0 : COLS - 1, row, fight.rows);
+        const x = mine ? 4 * dpr : W - 4 * dpr;
+        ctx.fillText(ROW_NAME[row].toUpperCase(), x, p.y);
+      }
+    }
+    ctx.textBaseline = 'alphabetic';
 
     // the line between the two front rows — the only thing separating them
     ctx.strokeStyle = '#2a3542';
@@ -138,6 +162,32 @@ export class FightView {
     const bq = this.cell('you', COLS - 0.5, -0.5, fight.rows);
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(bq.x, bq.y); ctx.stroke();
     ctx.setLineDash([]);
+
+    // The dashed red line of intent, from the mockups. Drawn UNDER the bodies
+    // so it reads as on the ground, and only while a weapon is armed — a board
+    // permanently strung with red string is noise, not information.
+    if (this.sel && legal?.size && fight.actor) {
+      const a = this.cell(fight.actor.side, fight.actor.col, fight.actor.row, fight.rows);
+      ctx.strokeStyle = 'rgba(214,84,72,0.8)';
+      ctx.lineWidth = 1.4 * dpr;
+      ctx.setLineDash([5 * dpr, 4 * dpr]);
+      for (const t of fight.targets(fight.actor, this.sel)) {
+        const b = this.cell(t.side, t.col, t.row, fight.rows);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y - 6 * dpr);
+        ctx.lineTo(b.x, b.y - 6 * dpr);
+        ctx.stroke();
+        // an arrowhead, so the line has a direction and not just two ends
+        const ang = Math.atan2(b.y - a.y, b.x - a.x);
+        ctx.beginPath();
+        ctx.moveTo(b.x, b.y - 6 * dpr);
+        ctx.lineTo(b.x - Math.cos(ang - 0.4) * 8 * dpr, b.y - 6 * dpr - Math.sin(ang - 0.4) * 8 * dpr);
+        ctx.moveTo(b.x, b.y - 6 * dpr);
+        ctx.lineTo(b.x - Math.cos(ang + 0.4) * 8 * dpr, b.y - 6 * dpr - Math.sin(ang + 0.4) * 8 * dpr);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
 
     // 2. bodies AND cover, painted back to front so the front row overlaps the
     //    back — which is the cover rule, drawn. A prop is in this list rather
@@ -226,7 +276,11 @@ export class FightView {
       // A name on every body turned the board into a wall of overlapping text.
       // Only the ones that matter right now are labelled: your own side, the
       // unit acting, and anything currently ringed as a target.
-      if (mine || isActor || targetable) {
+      // Only the actor and anything currently ringed. Naming your whole side
+      // overlapped three labels into "J…a" the moment two of them stood in
+      // neighbouring cells — and the unit panel under the board now says who is
+      // acting, so the board saying it too was two answers to one question.
+      if (isActor || targetable) {
         ctx.font = `${10 * dpr}px ${PAL.font}`;
         ctx.textAlign = 'center';
         // over a lit courtyard, dim grey on ochre is unreadable — the name
@@ -244,15 +298,9 @@ export class FightView {
       ctx.globalAlpha = 1;
     }
 
-    // 3. which half is whose, said once
-    ctx.font = `${9 * dpr}px ${PAL.font}`;
-    ctx.textAlign = 'left';
-    if (this.arena) { ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 4 * dpr; }
-    ctx.fillStyle = this.arena ? 'rgba(180,101,90,0.9)' : '#4a5866';
-    ctx.fillText('THEM', 6 * dpr, 14 * dpr);
-    ctx.fillStyle = this.arena ? 'rgba(140,160,185,0.9)' : '#5a6d80';
-    ctx.fillText('YOU', 6 * dpr, H - 8 * dpr);
-    ctx.shadowBlur = 0;
+    // The old THEM/YOU corner labels are gone: the rank columns down both
+    // edges are already coloured by side and say it better, and two labels
+    // for one fact is how a board gets cluttered.
   }
 
   // Which weapon is armed, or null. Setting it re-dims the board.

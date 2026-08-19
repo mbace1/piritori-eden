@@ -5,12 +5,12 @@ import { createFlow } from '../../flow-core/sim.js?v=1';
 import { KALLIO } from '../../flow-core/city.js?v=1';
 import { FlowRenderer } from '../../flow-core/render.js?v=1';
 import { RouteDrawer } from '../../flow-core/input.js?v=1';
-import { THEME } from './palette.js?v=1';
+import { THEME, PAL } from './palette.js?v=1';
 import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, consequence } from './fight.js?v=3';
-import { FightView } from './fightview.js?v=3';
+import { FightView } from './fightview.js?v=4';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -392,9 +392,55 @@ function stepEnemies() {
   paintFight();
 }
 
+// The acting unit's panel. Segments rather than a smooth bar, because the
+// question a player actually has is "how many more of those can he take", and
+// a bar you can count answers it while a percentage does not.
+function paintUnit(u) {
+  const box = $('fightUnit');
+  if (!u || u.prop) { box.hidden = true; return; }
+  box.hidden = false;
+  $('fuName').textContent = u.name.toUpperCase() + (u.side === 'you' ? '' : ' — THEIRS');
+  $('fuHp').textContent = `♥ ${Math.max(0, u.hp)} / ${u.maxHp}`;
+  const beads = (el, now, max, on, off) => {
+    el.innerHTML = '';
+    const n = Math.min(8, max);
+    const lit = Math.round((Math.max(0, now) / max) * n);
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('b');
+      b.style.background = i < lit ? on : off;
+      el.append(b);
+    }
+  };
+  // guard is a flat reduction rather than a pool, so it shows what it IS —
+  // how much is coming off each hit — instead of pretending to be a meter
+  beads($('fuGuard'), (u.guard || 0) + (u.bracing ? 2 : 0), 5, PAL.draft, '#1d2630');
+  beads($('fuNerve'), u.nerve, u.maxNerve, PAL.magenta, '#2a1d27');
+  drawFace($('fightFace'), u);
+}
+
+// No character art yet, so the portrait is drawn: the same flat silhouette in
+// a hard line the board uses, tinted by side. It is a placeholder that obeys
+// the house rule rather than a grey box that admits nothing was made.
+function drawFace(cv, u) {
+  const g = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  g.clearRect(0, 0, W, H);
+  g.fillStyle = u.side === 'you' ? '#141b22' : '#1d1416';
+  g.fillRect(0, 0, W, H);
+  g.fillStyle = u.side === 'you' ? PAL.ink : '#b4655a';
+  g.strokeStyle = '#0b0e13';
+  g.lineWidth = 3;
+  g.beginPath(); g.arc(W / 2, H * 0.42, W * 0.22, 0, Math.PI * 2); g.fill(); g.stroke();
+  g.beginPath();
+  g.moveTo(W * 0.18, H); g.lineTo(W * 0.28, H * 0.68);
+  g.lineTo(W * 0.72, H * 0.68); g.lineTo(W * 0.82, H);
+  g.closePath(); g.fill(); g.stroke();
+}
+
 function paintFight() {
   if (!fight) return;
   fightView.draw(fight);
+  paintUnit(fight.actor);
   $('fightWho').textContent = fight.foe.name.toUpperCase();
   $('fightRound').textContent = `round ${fight.round}`;
   $('fightLog').innerHTML = '';

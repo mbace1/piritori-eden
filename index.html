@@ -106,6 +106,27 @@
     display: block; width: 100%; aspect-ratio: 4 / 3; margin-top: 10px;
     background: var(--paper); border: 1px solid var(--rule); touch-action: none;
   }
+  /* the acting unit's panel — the mockups' bottom bar, stacked for a phone */
+  #fightUnit {
+    display: flex; gap: 10px; align-items: center;
+    margin-top: 8px; padding: 8px; border: 1px solid var(--rule);
+    background: rgba(10,13,18,0.72);
+  }
+  #fightUnit[hidden] { display: none; }
+  #fightFace {
+    width: 48px; height: 48px; flex: 0 0 auto;
+    border: 1px solid var(--rule); background: #0b0e13; image-rendering: pixelated;
+  }
+  #fightUnit .who { flex: 1 1 auto; min-width: 0; }
+  #fightUnit .nm { font-size: 14px; color: var(--ink); letter-spacing: 0.06em; }
+  #fightUnit .hp { font-size: 12px; color: var(--warn); margin-bottom: 3px; }
+  /* beads on a string rather than a smooth bar: a segment you can COUNT tells
+     you how many more hits there are, which a percentage never does */
+  #fightUnit .track { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  #fightUnit .track span { font-size: 9px; color: var(--dim); width: 40px; letter-spacing: 0.1em; }
+  #fightUnit .track i { display: flex; gap: 2px; }
+  #fightUnit .track b { width: 10px; height: 7px; display: block; }
+
   #fightLog { font-size: 12px; color: var(--dim); margin-top: 8px; min-height: 3.4em; }
   #fightLog p { margin-top: 2px; }
 </style>
@@ -155,6 +176,19 @@
       <h2 id="fightWho"></h2>
       <p class="stats" id="fightRound"></p>
       <canvas id="board" aria-label="The fight, seen from above and to one side. Three rows a side: front, middle, back. Arm a weapon, then tap a ringed body."></canvas>
+      <!-- Whoever is acting, from the final targets: a portrait, a name, the
+           heart, and the two tracks NAMED. Two bars is the whole design — a
+           unit whose lower bar is nearly gone is one fright from walking — and
+           until now they were 3px slivers over a body's head. -->
+      <div id="fightUnit" hidden>
+        <canvas id="fightFace" width="96" height="96" aria-hidden="true"></canvas>
+        <div class="who">
+          <p class="nm" id="fuName"></p>
+          <p class="hp" id="fuHp"></p>
+          <div class="track"><span>GUARD</span><i id="fuGuard"></i></div>
+          <div class="track"><span>NERVE</span><i id="fuNerve"></i></div>
+        </div>
+      </div>
       <div id="fightLog"></div>
       <p class="tell" id="fightTell"></p>
       <div id="fightBtns"></div>
@@ -181,7 +215,7 @@
     </div>
   </div>
 
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 <!-- the way home: HOME top-left + hold Start/Back on a pad -->
 <script type="module" src="../hub/shell.js?v=17"></script>
 </body>

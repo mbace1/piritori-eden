@@ -44,6 +44,47 @@ than adding to it:
 - **New weapons that were not in the table**: crowbar, plank, shotgun, rifle.
   All four are now in `WEAPONS` — see §3.1 and `FIGHT_BRIEF.md` §6.
 
+### 1.-1 THE FINAL TARGETS (2026-08-18, third delivery)
+
+> "these are what the final art should look like. as close as possible to this"
+
+Eight images, and they outrank everything below them. They settle the style
+question the earlier batches left half-open, and they do it by showing **two
+registers rather than one**:
+
+| register | used for | what it is |
+|---|---|---|
+| **PAPER** | the map, and every interior you stand in | a physical **cut-paper / torn-card relief diorama**. Slate paper ground, buildings as raised paper blocks with torn edges and real drop shadow, water as deep navy card, roads as grey strips, labels on little torn tags. Toko's shop is the same craft: paper lantern, paper shirt, paper bowls |
+| **INK** | the fights, backgrounds and figures alike | **Darkest Dungeon**. Hard black line, painted muted fills, deep warm chiaroscuro, one practical light. Exactly the register `kallioNight` was reaching for — the harbour and courtyard references are close to what the pipeline already produces |
+
+That split is not a compromise, it is the design: **the map is a thing you
+handle, the fight is a thing you are inside.** Nothing in the two mixes.
+
+**And half of what is in these images is UI, not art** — which means it is
+code, and it is buildable today without a single generated pixel:
+
+- **Map HUD** — one dark bar: title + `2003 · AATAMI`, `DAY 04`, then four
+  counters with icons (people · product · missions · money). Bottom nav of four
+  labelled buttons, each with an icon and its own colour: ROUTE cyan, CREW
+  pink, MISSIONS orange, END DAY cream.
+- **Map pins** — big circular badges carrying a glyph, on a stalk, with a torn
+  paper name tag under them. Locked areas carry a padlock badge. Routes are
+  **dashed lines with arrowheads** in the line's own colour.
+- **Fight board** — `KIERROS 2` centred with three skull diamonds for lives.
+  **BACK / MIDDLE / FRONT stacked down BOTH edges**, cyan on the left and red
+  on the right. Every occupied cell carries a **diamond outline** in its side's
+  colour. Attack intent is a **dashed red line** from the actor to each thing
+  it can reach. Cover sits between the ranks as real objects.
+- **Fight HUD** — a portrait box, the unit's name, a heart with `18/24`, then
+  **GUARD** as cyan segments and **NERVE** as magenta segments, then the
+  actions as big labelled icon buttons: ATTACK · GUARD · REPOSITION · ITEM,
+  with AUTO OFF and WITHDRAW set apart to one side.
+
+Two of those contradict what is in the build and are recorded rather than
+quietly adopted: the mockups show **GUARD as a segmented bar** where the code
+has flat damage reduction and a BRACE action, and they show an **ITEM** button
+with no consumable system behind it (§3.6, still open).
+
 ### 1.1 Screens (mockups, not assets)
 
 | | what |
