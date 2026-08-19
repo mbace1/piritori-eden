@@ -27,6 +27,11 @@ export const PAL = {
 
 export const THEME = {
   ...PAL,
+  // Piritori's map is a cut-paper relief (ART_BIBLE §1.-1), so it opts in to
+  // the renderer's shadow-and-tag treatment. Toko Move says nothing and stays
+  // flat, which is the seam doing its job: one renderer, two looks, and no
+  // product name anywhere inside flow-core.
+  relief: true,
   // Vaasanaukio is the node's real name in the shared city; Piritori is the
   // street nickname, and applying it HERE is the seam doing its job.
   labelFor: n => (n.id === 'vaasanaukio' ? 'Piritori' : n.name),
