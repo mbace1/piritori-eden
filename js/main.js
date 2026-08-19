@@ -10,7 +10,7 @@ import { Market, CLASSES } from './market.js?v=2';
 import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, ITEMS, consequence } from './fight.js?v=4';
-import { FightView } from './fightview.js?v=6';
+import { FightView } from './fightview.js?v=8';
 import { image } from '../../assets/load.js?v=1';
 
 const $ = id => document.getElementById(id);
@@ -224,7 +224,7 @@ function paintRoom() {
         : 'He looks up, and takes his time about it.');
 
   if (roomImg) facePortrait($('roomFace'), roomImg, c.face);
-  else drawFace($('roomFace'), { side: 'you', name: c.name });
+  else drawSilhouette($('roomFace'), { side: 'you', name: c.name });
 
   const box = $('roomBtns');
   box.innerHTML = '';
@@ -557,10 +557,43 @@ function facePortrait(cv, img, face) {
     0, 0, cv.width, cv.height);
 }
 
-// No character art yet, so the portrait is drawn: the same flat silhouette in
-// a hard line the board uses, tinted by side. It is a placeholder that obeys
-// the house rule rather than a grey box that admits nothing was made.
+// The unit panel shows THE MAN, full length — the same sprite standing on the
+// board, not a portrait of him. Your side is drawn from behind, so a
+// head-and-shoulders crop would be the back of a head; and a second picture of
+// a character is a second thing that can disagree with the first.
+const FIG = new Map();
+function figSprite(u) {
+  const path = `art/fig/${u.side === 'you' ? 'you' : 'them'}-${u.downed ? 'down' : 'stand'}.png?v=1`;
+  if (FIG.has(path)) return FIG.get(path);
+  FIG.set(path, null);
+  const img = new Image();
+  // and repaint when it lands. A sprite loaded after the panel was painted is
+  // a panel that keeps the placeholder until something else happens to redraw
+  // it — which on the first frame of a fight is nothing at all.
+  img.onload = () => { FIG.set(path, img); if (fight) paintUnit(fight.actor); };
+  img.src = path;
+  return null;
+}
+
 function drawFace(cv, u) {
+  const art = figSprite(u);
+  if (art) {
+    const g = cv.getContext('2d');
+    g.clearRect(0, 0, cv.width, cv.height);
+    g.fillStyle = u.side === 'you' ? '#141b22' : '#1d1416';
+    g.fillRect(0, 0, cv.width, cv.height);
+    const s = Math.min(cv.width / art.width, cv.height / art.height) * 0.92;
+    const w = art.width * s, h = art.height * s;
+    g.drawImage(art, (cv.width - w) / 2, cv.height - h, w, h);
+    return;
+  }
+  drawSilhouette(cv, u);
+}
+
+// No character art on disk, so the portrait is drawn: the same flat silhouette
+// in a hard line the board falls back to, tinted by side. It is a placeholder
+// that obeys the house rule rather than a grey box that admits nothing was made.
+function drawSilhouette(cv, u) {
   const g = cv.getContext('2d');
   const W = cv.width, H = cv.height;
   g.clearRect(0, 0, W, H);

@@ -16,22 +16,34 @@ import { image } from '../../assets/load.js?v=1';
 
 const TW = 34, TH = 17;          // iso tile half-width / half-height
 
-// ── the cover sprites ───────────────────────────────────────────────────
+// ── the sprites ─────────────────────────────────────────────────────────
 // These are SHIPPED art, not pipeline output: generated once, keyed off the
 // magenta and trimmed to their own ink (`cut.mjs key` then `trim`), and
 // committed under piritori/art/. That is the difference between assets/out/
 // — which is a build directory a fresh checkout may not have — and a sprite
 // the game draws. Loaded once and shared by every fight; a miss is silent and
-// draw() falls back to the slab it has always drawn.
-const PROP_ART = new Map();
-function propArt(kind) {
-  if (PROP_ART.has(kind)) return PROP_ART.get(kind) || null;
-  PROP_ART.set(kind, null);
+// draw() falls back to the shapes it has always drawn.
+const ART = new Map();
+// …and a repaint when one lands, or the first frame of a fight keeps whatever
+// it fell back to until something else happens to redraw the board — which,
+// between two turns of a turn-based game, is nothing at all.
+let onSpriteLoad = null;
+function sprite(path) {
+  if (ART.has(path)) return ART.get(path) || null;
+  ART.set(path, null);
   const img = new Image();
-  img.onload = () => PROP_ART.set(kind, img);
-  img.src = `art/props/${kind}.png?v=1`;
+  img.onload = () => { ART.set(path, img); onSpriteLoad?.(); };
+  img.src = `art/${path}.png?v=1`;
   return null;
 }
+const propArt = kind => sprite(`props/${kind}`);
+
+// A unit's picture is its SIDE and its STATE, and nothing else. Facing is a
+// property of the side rather than of the pose — your men stand up the board
+// and theirs stand down it, so there is no arrangement in which the board
+// shows a man of yours facing the camera. Generating both facings for both
+// sides would have doubled the sheet to draw four images it can never use.
+const figArt = u => sprite(`fig/${u.side === 'you' ? 'you' : 'them'}-${u.downed ? 'down' : 'stand'}`);
 
 export class FightView {
   constructor(canvas) {
@@ -41,6 +53,8 @@ export class FightView {
     this.hot = null;             // unit id under the pointer
     this.arena = null;           // the generated backdrop, once it lands
     this.arenaId = null;
+    this.last = null;            // the fight it drew, so a late sprite can land
+    onSpriteLoad = () => { if (this.last) this.draw(this.last); };
     this.resize();
   }
 
@@ -98,6 +112,7 @@ export class FightView {
   }
 
   draw(fight) {
+    this.last = fight;
     const { ctx } = this;
     const W = this.canvas.width, H = this.canvas.height, dpr = this.dpr;
     ctx.fillStyle = PAL.paper;
@@ -208,11 +223,27 @@ export class FightView {
     //    back — which is the cover rule, drawn. A prop is in this list rather
     //    than under it because a barrier standing in a lane is exactly as much
     //    "the thing in the way" as a man is.
+    // A man who has been put down is still ON THE FLOOR. He used to vanish the
+    // instant his health hit zero, which was defensible while a body was a
+    // rounded rectangle and is not now: there is a pose for it, and a fight you
+    // are winning should look like one. He is drawn first (he is lying under
+    // everybody), dimmed, with no bars, no rings and no name — he is scenery
+    // from the moment he goes down, and the model still does not list him.
+    const down = fight.units.filter(u => !u.alive && u.downed && !u.fled);
     const order = [...fight.units, ...fight.props].filter(u => u.alive).sort((a, b) => {
       const pa = this.cell(a.side, a.col, a.row, fight.rows);
       const pb = this.cell(b.side, b.col, b.row, fight.rows);
       return pa.y - pb.y;
     });
+    for (const u of down) {
+      const art = figArt(u);
+      if (!art) continue;
+      const p = this.cell(u.side, u.col, u.row, fight.rows);
+      const fh = 22 * dpr, fw = art.width * (fh / art.height);
+      ctx.globalAlpha = 0.7;
+      ctx.drawImage(art, p.x - fw / 2, p.y - fh + 3 * dpr, fw, fh);
+      ctx.globalAlpha = 1;
+    }
 
     for (const u of order) {
       const p = this.cell(u.side, u.col, u.row, fight.rows);
@@ -273,18 +304,34 @@ export class FightView {
         continue;
       }
 
-      // the body: a flat fill inside a hard line, silhouette doing the work
+      // the body. A standing man is 45 CSS px tall on the board and every
+      // distance in this view was drawn to that, so the sprite is scaled to a
+      // HEIGHT and the width follows — a figure that fitted a width box would
+      // change stature between poses, and stature is how you tell a man on his
+      // feet from one who is not.
       const h = 40 * dpr, w = 15 * dpr;
-      const col = mine ? PAL.ink : '#b4655a';
-      ctx.fillStyle = col;
-      ctx.strokeStyle = PAL.paper;
-      ctx.lineWidth = 2 * dpr;
-      ctx.beginPath();
-      ctx.roundRect(p.x - w / 2, p.y - h, w, h - 3 * dpr, 3 * dpr);
-      ctx.fill(); ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(p.x, p.y - h - 5 * dpr, 7 * dpr, 0, Math.PI * 2);
-      ctx.fill(); ctx.stroke();
+      const art = figArt(u);
+      // where the drawn body actually ENDS, so the bars sit above whatever was
+      // drawn rather than above a constant. They used to be pinned to the old
+      // rectangle's height and landed across the sprite's shoulders.
+      let top = p.y - h - 12 * dpr;
+      if (art) {
+        const fh = (u.downed ? 22 : 52) * dpr;
+        const fw = art.width * (fh / art.height);
+        ctx.drawImage(art, p.x - fw / 2, p.y - fh + 3 * dpr, fw, fh);
+        top = p.y - fh;
+      } else {
+        const col = mine ? PAL.ink : '#b4655a';
+        ctx.fillStyle = col;
+        ctx.strokeStyle = PAL.paper;
+        ctx.lineWidth = 2 * dpr;
+        ctx.beginPath();
+        ctx.roundRect(p.x - w / 2, p.y - h, w, h - 3 * dpr, 3 * dpr);
+        ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y - h - 5 * dpr, 7 * dpr, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+      }
 
       if (u.bracing) {
         ctx.strokeStyle = PAL.draft; ctx.lineWidth = 2 * dpr;
@@ -294,15 +341,15 @@ export class FightView {
       // TWO bars, because there are two ways to take somebody out of a fight.
       // Harm on top, nerve under it — a unit whose lower bar is nearly gone is
       // one good fright from walking, and that is readable at a glance.
-      const bw = 26 * dpr;
+      const bw = 26 * dpr, by = top - 8 * dpr;
       ctx.fillStyle = '#2a3038';
-      ctx.fillRect(p.x - bw / 2, p.y - h - 20 * dpr, bw, 3 * dpr);
+      ctx.fillRect(p.x - bw / 2, by, bw, 3 * dpr);
       ctx.fillStyle = u.hp / u.maxHp > 0.5 ? PAL.mark : PAL.warn;
-      ctx.fillRect(p.x - bw / 2, p.y - h - 20 * dpr, bw * Math.max(0, u.hp / u.maxHp), 3 * dpr);
+      ctx.fillRect(p.x - bw / 2, by, bw * Math.max(0, u.hp / u.maxHp), 3 * dpr);
       ctx.fillStyle = '#2a3038';
-      ctx.fillRect(p.x - bw / 2, p.y - h - 15 * dpr, bw, 2 * dpr);
+      ctx.fillRect(p.x - bw / 2, by + 5 * dpr, bw, 2 * dpr);
       ctx.fillStyle = PAL.draft;
-      ctx.fillRect(p.x - bw / 2, p.y - h - 15 * dpr, bw * Math.max(0, u.nerve / u.maxNerve), 2 * dpr);
+      ctx.fillRect(p.x - bw / 2, by + 5 * dpr, bw * Math.max(0, u.nerve / u.maxNerve), 2 * dpr);
 
       if (isActor) {
         ctx.strokeStyle = PAL.gold; ctx.lineWidth = 2 * dpr;

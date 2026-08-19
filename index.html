@@ -113,9 +113,12 @@
     background: rgba(10,13,18,0.72);
   }
   #fightUnit[hidden] { display: none; }
+  /* the man himself, standing, not a portrait: your side is drawn from behind
+     on the board, so a head-and-shoulders of him would be the back of a head.
+     Tall and narrow, the same sprite the board is using two inches above. */
   #fightFace {
-    width: 48px; height: 48px; flex: 0 0 auto;
-    border: 1px solid var(--rule); background: #0b0e13; image-rendering: pixelated;
+    width: 34px; height: 64px; flex: 0 0 auto;
+    border: 1px solid var(--rule); background: #0b0e13;
   }
   #fightUnit .who { flex: 1 1 auto; min-width: 0; }
   #fightUnit .nm { font-size: 14px; color: var(--ink); letter-spacing: 0.06em; }
@@ -216,7 +219,7 @@
            unit whose lower bar is nearly gone is one fright from walking — and
            until now they were 3px slivers over a body's head. -->
       <div id="fightUnit" hidden>
-        <canvas id="fightFace" width="96" height="96" aria-hidden="true"></canvas>
+        <canvas id="fightFace" width="96" height="180" aria-hidden="true"></canvas>
         <div class="who">
           <p class="nm" id="fuName"></p>
           <p class="hp" id="fuHp"></p>
