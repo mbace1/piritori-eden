@@ -11,6 +11,7 @@ import { Heat, THRESHOLD } from './heat.js?v=1';
 import { CONTACTS, LINES, MISSIONS, Cast, ending } from './narrative.js?v=1';
 import { startFight as buildFight, WEAPONS, ITEMS, consequence } from './fight.js?v=4';
 import { FightView } from './fightview.js?v=5';
+import { image } from '../../assets/load.js?v=1';
 
 const $ = id => document.getElementById(id);
 const eur = n => `${Math.round(n).toLocaleString('fi-FI')} €`;
@@ -21,6 +22,7 @@ let sel = null, draft = null, over = null, drained = 0, pendingChoice = null;
 let fight = null, nextFightAt = 900, fightView = null, armed = null;
 let msgs = [], landed = 0;
 let dealToday = null;            // one bargain a day, from one contact
+let roomWith = null;             // whose place you are standing in
 
 function say(...lines) {
   for (const l of lines) msgs.unshift(l);
@@ -162,6 +164,110 @@ function rollDeal(day) {
     const d = market.dealFor(day, c.id, cast.trust[c.id] ?? 0);
     if (d) { dealToday = { ...d, at: c.at, who: c.name }; return; }
   }
+}
+
+// ── the room ────────────────────────────────────────────────────────────
+// A place you stand in rather than a tooltip you read. Everything in here
+// already existed and was scattered: the bargain was a row at the bottom of a
+// price table, and a contact was two lines in a hover. The targets put the
+// person in a room and give you two or three things to do about it, which is
+// also where the ITEM-shaped question — what can you actually spend money on
+// besides stock — finally gets an answer.
+function openRoom(id) {
+  const c = CONTACTS.find(x => x.id === id);
+  if (!c || over) return;
+  roomWith = c;
+  flow.clock.setPaused(true);
+  hidePop();
+  $('room').hidden = false;
+  paintRoom();
+  // the interior, if one has been generated. Additive, like the arenas: with
+  // nothing in assets/out/ the card is just the person and the words.
+  const art = $('roomArt');
+  art.hidden = true;
+  image(`piritori/interior-${c.id}`).then(img => {
+    if (!img || roomWith?.id !== c.id) return;
+    art.hidden = false;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const w = art.clientWidth * dpr, h = w * 9 / 16;
+    art.width = w; art.height = h;
+    const g = art.getContext('2d');
+    const s = Math.max(w / img.width, h / img.height);
+    g.drawImage(img, (w - img.width * s) / 2, (h - img.height * s) / 2,
+      img.width * s, img.height * s);
+  });
+}
+
+function closeRoom() {
+  roomWith = null;
+  $('room').hidden = true;
+  if (!over) flow.clock.setPaused(false);
+  renderHud(); renderSheet();
+}
+
+function paintRoom() {
+  const c = roomWith;
+  if (!c) return;
+  const t = cast.trust[c.id] ?? 0;
+  $('roomWho').textContent = c.name.toUpperCase();
+  $('roomRole').textContent = c.role;
+  $('roomLine').textContent = c.said
+    || (t >= 3 ? 'He puts the cloth down when you come in.'
+      : t >= 1 ? 'He nods, and keeps working.'
+        : 'He looks up, and takes his time about it.');
+
+  const box = $('roomBtns');
+  box.innerHTML = '';
+  const add = (text, fn, cls = 'btn wide') => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = text;
+    b.onclick = fn; box.append(b); return b;
+  };
+
+  // 1. his own offer, if tonight's is his. This is the bargain, moved out of
+  //    the price table and into the room where the man is standing.
+  if (dealToday && dealToday.seller === c.id && !dealToday.taken) {
+    const p = market.dealPrice(c.at, dealToday);
+    add(`TAKE THE ${dealToday.good.toUpperCase()} · ${p * dealToday.n} €`, () => {
+      const r = market.takeDeal(c.at, dealToday);
+      if (!r.n) { say('You cannot cover it.'); return; }
+      dealToday.taken = true;
+      say(`${r.n} ${dealToday.good} off ${c.name} for ${eur(r.spent)}. He does not count it twice.`);
+      paintRoom(); renderHud();
+    }, 'btn wide prime');
+    const tell = document.createElement('p');
+    tell.className = 'dim';
+    tell.textContent = market.dealTell(dealToday)
+      + (dealToday.appraised ? ` — ${dealToday.appraised}` : '');
+    box.append(tell);
+  }
+
+  // 2. ask him about SOMEBODY ELSE'S offer. You cannot ask the man selling you
+  //    a bag whether the bag is real; a second relationship is the price of
+  //    knowing, and that is the point of having more than one.
+  if (dealToday && dealToday.seller !== c.id && !dealToday.appraised) {
+    const cost = market.appraisalCost(t);
+    add(`ASK ABOUT ${dealToday.who.toUpperCase()}'S OFFER · ${cost} €`, () => {  // eslint-disable-line
+      const r = market.appraise(dealToday, t);
+      if (!r.told && r.why === 'you cannot cover it') { say('You cannot cover it.'); return; }
+      dealToday.appraised = r.told
+        ? (r.cut ? `${c.name} says it is cut.` : `${c.name} says it is clean.`)
+        : `${c.name} took the money and changed the subject.`;
+      say(dealToday.appraised);
+      paintRoom(); renderHud();
+    });
+  }
+
+  // what you were told, said in the room you were told it in. Without this the
+  // money left and nothing on screen changed, which reads as a broken button.
+  if (dealToday?.appraised && dealToday.seller !== c.id) {
+    const p = document.createElement('p');
+    p.className = 'dim';
+    p.textContent = dealToday.appraised;
+    box.append(p);
+  }
+
+  add('LEAVE', closeRoom);
 }
 
 function settle(day) {
@@ -612,26 +718,18 @@ function renderSheet() {
   }
   html += '</table>';
 
-  // the bargain, if tonight's is standing here
-  if (dealToday && dealToday.at === sel && !dealToday.taken) {
-    const p = market.dealPrice(sel, dealToday);
-    html += `<div class="deal"><p><strong>${esc(dealToday.who)}</strong> has ${dealToday.n}`
-      + ` ${esc(dealToday.good)} at ${p} €.</p>`
-      + `<p class="hint">${esc(market.dealTell(dealToday))}</p>`
-      + `<button class="btn" id="dealTake">TAKE IT — ${p * dealToday.n} €</button></div>`;
+  // Anybody standing here is worth walking in on. The bargain used to be a row
+  // at the bottom of this table; it lives in the room now, because a man with
+  // an offer is a person and not a line item.
+  if (contact) {
+    html += `<div class="deal"><p><strong>${esc(contact.name)}</strong> is here.`
+      + `${dealToday && dealToday.seller === contact.id && !dealToday.taken ? ' He has something for you.' : ''}</p>`
+      + `<button class="btn" id="visit">GO IN AND SEE ${esc(contact.name.split(' ')[0].toUpperCase())}</button></div>`;
   }
 
   box.innerHTML = html;
-  const take = $('dealTake');
-  if (take) {
-    take.onclick = () => {
-      const r = market.takeDeal(sel, dealToday);
-      if (!r.n) { say('You cannot cover it.'); return; }
-      dealToday.taken = true;
-      say(`${r.n} ${dealToday.good} off ${dealToday.who} for ${eur(r.spent)}. He does not count it twice.`);
-      renderHud(); renderSheet();
-    };
-  }
+  const visit = $('visit');
+  if (visit) visit.onclick = () => openRoom(contact.id);
   for (const b of box.querySelectorAll('[data-buy]')) {
     b.onclick = () => { market.buy(sel, b.dataset.buy, 5); renderHud(); renderSheet(); };
   }
@@ -703,7 +801,8 @@ window.__pt = {
   get heat() { return heat; },
   get cast() { return cast; },
   debug: {
-    boot, send, settle, finish, say, startFight,
+    boot, send, settle, finish, say, startFight, openRoom, closeRoom, paintRoom,
+    get room() { return roomWith; },
     markers, showPop, hidePop, paintFight, renderSheet,
     // SETUP ONLY (AGENTS.md §4): force tonight's offer to a known shape so a
     // gate can click it. The taking is still done by clicking the button.

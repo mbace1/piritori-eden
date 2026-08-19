@@ -124,6 +124,39 @@ const NODE = 'vaasanaukio';
   } else ok('the worse the relationship, the better the price', false, 'no offer to compare');
 }
 
+// ── the appraisal: buying the one hidden fact ───────────────────────────
+{
+  const m = mk(12);
+  m.cash = 10000;
+  const cut = { good: 'piri', n: 5, discount: 0.4, fake: true };
+  const clean = { good: 'piri', n: 5, discount: 0.2, fake: false };
+
+  ok('a friend charges less to look',
+    m.appraisalCost(3) < m.appraisalCost(-2));
+
+  const a = m.appraise(cut, 3);
+  ok('somebody you kept tells you the truth', a.told === true && a.cut === true);
+  const b = m.appraise(clean, 2);
+  ok('and tells you when it is fine', b.told === true && b.cut === false);
+
+  // …and somebody you burned takes the money anyway. That is the point: the
+  // loss is the information.
+  const before = m.cash;
+  const c = m.appraise(cut, -1);
+  ok('somebody you burned tells you nothing', c.told === false && c.why === 'shrug');
+  ok('and still takes the money', m.cash === before - c.cost);
+
+  // you cannot buy what you cannot afford, and it costs nothing to be refused
+  m.cash = 5;
+  const poor = m.cash;
+  const d = m.appraise(cut, 3);
+  ok('an empty pocket buys nothing', d.told === false && d.why === 'you cannot cover it');
+  ok('and is not charged for trying', m.cash === poor);
+
+  ok('asking about nothing is free and honest',
+    m.appraise(null, 3).told === false);
+}
+
 // ── determinism ─────────────────────────────────────────────────────────
 {
   const a = mk(21), b = mk(21);

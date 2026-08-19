@@ -194,6 +194,30 @@ export class Market {
     return { n: can, spent: can * p };
   }
 
+  // ── the appraisal ─────────────────────────────────────────────────────
+  // You cannot ask the man selling you a bag whether the bag is real. You can
+  // ask SOMEBODY ELSE, and that is the whole shape of it: the one genuinely
+  // hidden fact in this game is bought with money and a SECOND relationship,
+  // never with the first.
+  //
+  // It does not break the rule the bargain obeys. Trust is still the warning —
+  // this only lets a player who has kept more than one person around convert
+  // money into certainty, and a contact you have burned takes the money and
+  // tells you nothing, which is its own information about them.
+  appraisalCost(trust) {
+    const t = Math.max(-2, Math.min(3, trust));
+    return Math.round(200 - t * 40);        // a friend charges less to look
+  }
+
+  appraise(deal, trust) {
+    if (!deal) return { told: false, why: 'nothing to look at' };
+    const cost = this.appraisalCost(trust);
+    if (this.cash < cost) return { told: false, why: 'you cannot cover it', cost };
+    this.cash -= cost;
+    if (trust < 1) return { told: false, why: 'shrug', cost };
+    return { told: true, cut: !!deal.fake, cost };
+  }
+
   // What share of what you are holding is cut. This is the number the player
   // never sees — the game's one genuinely hidden fact, and it is hidden because
   // the fiction says you cannot tell by looking.
