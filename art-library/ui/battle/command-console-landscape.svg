@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 250" role="img" aria-labelledby="title">
+  <title id="title">Landscape battle command console geometry</title>
+  <style>
+    .panel { fill: #090a0a; stroke: #b7a486; stroke-width: 4; }
+    .button { fill: #101111; stroke: #796b56; stroke-width: 3; }
+    .label { fill: #d5c09b; font: 700 24px sans-serif; letter-spacing: 2px; text-anchor: middle; }
+  </style>
+  <g id="selected-unit" data-module="selected-unit">
+    <rect class="panel" x="8" y="8" width="420" height="234"/>
+    <rect class="button" x="24" y="24" width="150" height="202"/>
+    <rect class="button" x="190" y="24" width="222" height="202"/>
+  </g>
+  <g id="core-actions" data-module="core-actions">
+    <rect class="panel" x="436" y="8" width="780" height="234"/>
+    <g id="action-attack"><rect class="button" x="452" y="24" width="180" height="202"/><text class="label" x="542" y="135">ATTACK</text></g>
+    <g id="action-guard"><rect class="button" x="642" y="24" width="180" height="202"/><text class="label" x="732" y="135">GUARD</text></g>
+    <g id="action-reposition"><rect class="button" x="832" y="24" width="180" height="202"/><text class="label" x="922" y="135">MOVE</text></g>
+    <g id="action-item"><rect class="button" x="1022" y="24" width="178" height="202"/><text class="label" x="1111" y="135">ITEM</text></g>
+  </g>
+  <g id="utilities" data-module="utilities">
+    <rect class="panel" x="1224" y="8" width="368" height="234"/>
+    <g id="utility-auto"><rect class="button" x="1240" y="24" width="336" height="92"/><text class="label" x="1408" y="80">AUTO OFF</text></g>
+    <g id="utility-withdraw"><rect class="button" x="1240" y="134" width="336" height="92"/><text class="label" x="1408" y="190">WITHDRAW</text></g>
+  </g>
+</svg>

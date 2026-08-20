@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "approval_status": "approved",
+  "production_ready": false,
+  "active_style": "cut-cardstock-hand-ink-v03",
+  "rig_contract": "../MODULAR_CHARACTER_SYSTEM.md",
+  "body_frames": {
+    "approval_status": "approved",
+    "sheet": "turnarounds/era1/base-body-frames-tpose-cut-v02.png",
+    "individuals": [
+      "turnarounds/era1/base-light-m-tpose-cut-v02.png",
+      "turnarounds/era1/base-medium-m-tpose-cut-v02.png",
+      "turnarounds/era1/base-heavy-m-tpose-cut-v02.png",
+      "turnarounds/era1/base-light-f-tpose-cut-v02.png",
+      "turnarounds/era1/base-medium-f-tpose-cut-v02.png",
+      "turnarounds/era1/base-heavy-f-tpose-cut-v02.png"
+    ],
+    "anchor": "root_ground",
+    "note": "Structural cut-paper frames; m/f describe production silhouettes, not role locks."
+  },
+  "optional_3d": {
+    "approval_status": "approved",
+    "turnaround_sheet": "turnarounds/era1/base-medium-mf-turnaround-cut-v02.png",
+    "views": ["front", "left", "back", "right"],
+    "pose": "t-pose",
+    "note": "Modelling reference for an optional low-detail 3D source rig; not the final render style."
+  },
+  "heads": {
+    "approval_status": "approved",
+    "socket": "neck",
+    "active_sheets": [
+      "modules/era1/head-personality-sheet-v03.png",
+      "modules/era1/head-kallio-diverse-sheet-v03.png"
+    ],
+    "personality_set": [
+      "modules/era1/head-caricature-01-v03.png",
+      "modules/era1/head-caricature-02-v03.png",
+      "modules/era1/head-caricature-03-v03.png",
+      "modules/era1/head-caricature-04-v03.png",
+      "modules/era1/head-caricature-05-v03.png",
+      "modules/era1/head-caricature-06-v03.png",
+      "modules/era1/head-caricature-07-v03.png",
+      "modules/era1/head-caricature-08-v03.png"
+    ],
+    "kallio_cast_set": [
+      "modules/era1/head-kallio-01-v03.png",
+      "modules/era1/head-kallio-02-v03.png",
+      "modules/era1/head-kallio-03-v03.png",
+      "modules/era1/head-kallio-04-v03.png",
+      "modules/era1/head-kallio-05-v03.png",
+      "modules/era1/head-kallio-06-v03.png",
+      "modules/era1/head-kallio-07-v03.png",
+      "modules/era1/head-kallio-08-v03.png",
+      "modules/era1/head-kallio-09-v03.png",
+      "modules/era1/head-kallio-10-v03.png",
+      "modules/era1/head-kallio-11-v03.png",
+      "modules/era1/head-kallio-12-v03.png"
+    ],
+    "note": "Review heads currently combine face and hair. Production exports should separate hair and hats while preserving the same crooked marker character."
+  },
+  "upper_modules": {
+    "approval_status": "approved",
+    "sheet": "modules/era1/upper-clothing-handink-sheet-v03.png",
+    "frame": "medium",
+    "assets": {
+      "runner": "modules/era1/torso-runner-medium-handink-v03.png",
+      "muscle": "modules/era1/torso-muscle-medium-handink-v03.png",
+      "watcher": "modules/era1/torso-watcher-medium-handink-v03.png",
+      "fixer": "modules/era1/torso-fixer-medium-handink-v03.png",
+      "driver": "modules/era1/torso-driver-medium-handink-v03.png",
+      "local": "modules/era1/torso-local-medium-handink-v03.png"
+    }
+  },
+  "lower_modules": {
+    "approval_status": "approved",
+    "sheet": "modules/era1/lower-clothing-handink-sheet-v03.png",
+    "frame": "medium",
+    "assets": {
+      "runner": "modules/era1/legs-runner-medium-handink-v03.png",
+      "muscle": "modules/era1/legs-muscle-medium-handink-v03.png",
+      "watcher": "modules/era1/legs-watcher-medium-handink-v03.png",
+      "fixer": "modules/era1/legs-fixer-medium-handink-v03.png",
+      "driver": "modules/era1/legs-driver-medium-handink-v03.png",
+      "local": "modules/era1/legs-local-medium-handink-v03.png"
+    }
+  },
+  "grips": {
+    "approval_status": "approved",
+    "sheet": "system/grip-hold-personality-sheet-v03.png",
+    "animation_path": "../animation/characters/era1/grips-personality-v03"
+  },
+  "role_tabs": {
+    "approval_status": "approved",
+    "sheet": "system/role-tabs-handink-v01.svg",
+    "manifest": "system/role-tabs.json"
+  },
+  "approved_clean_variant": "../variants/approved-clean-cut-v02"
+}

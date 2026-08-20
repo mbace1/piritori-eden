@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "toko-slomo-noodles-era1-v02",
+  "title": "Toko Slomo's Noodles",
+  "era": "2003",
+  "location": "Vaasankatu",
+  "image": "toko-slomo-noodles-v02.png",
+  "mime_type": "image/png",
+  "sha256": "afb3b0898a4ca83bcb0c7e7f4066ab232d898392e93b6f722171c277c59ea4be",
+  "canvas": {
+    "width": 1672,
+    "height": 941,
+    "aspect_ratio": "16:9"
+  },
+  "mask_direction": {
+    "hood": "full-face golden-yellow card hood",
+    "mark": "three broad white curved frames",
+    "eyes": "openings cut inside the upper white arches, leaving a visible white rim",
+    "age": "grey eyebrows and hair remain visible above the hood"
+  },
+  "usage": {
+    "role": "fullscreen-narrative-prototype",
+    "render_mode": "contain",
+    "baked_scene": true,
+    "baked_ui": true,
+    "baked_copy": true,
+    "implementation_ready": true,
+    "active_source": true
+  },
+  "interactive_regions": [
+    {
+      "id": "buy-info",
+      "event": "toko.buy_info",
+      "label": "BUY INFO",
+      "cost_eur": 120,
+      "rect_px": [292, 793, 435, 131],
+      "rect_normalized": [0.174641, 0.842721, 0.260167, 0.139214]
+    },
+    {
+      "id": "risk-sabotage",
+      "event": "toko.risk_sabotage",
+      "label": "RISK SABOTAGE",
+      "cost_eur": 300,
+      "success_chance": 0.45,
+      "rect_px": [737, 790, 481, 134],
+      "rect_normalized": [0.440789, 0.839532, 0.287679, 0.142402]
+    },
+    {
+      "id": "leave",
+      "event": "toko.leave",
+      "label": "LEAVE",
+      "rect_px": [1228, 788, 412, 136],
+      "rect_normalized": [0.73445, 0.837407, 0.246411, 0.144527]
+    }
+  ],
+  "implementation_notes": [
+    "This v02 supersedes v01 as the active Toko source because the eye openings now sit inside the white mask frames.",
+    "Resolve normalized regions against the displayed image rectangle, not the full viewport.",
+    "The v3 runtime crops above the baked controls and overlays live dialogue and choices.",
+    "Production still separates stage, Toko, hood, face mark, props, steam, window pass, copy and controls."
+  ]
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Puddle ripples</title>
+  <desc id="desc">Isometric ellipse groups used as pulsing rain impacts on wet ground.</desc>
+  <g id="puddle_ripples" fill="none" stroke="#a8c6cb" stroke-opacity=".32" stroke-width="3">
+    <g transform="translate(390 790)"><ellipse rx="42" ry="14"/><ellipse rx="22" ry="7" opacity=".56"/></g>
+    <g transform="translate(760 690)"><ellipse rx="34" ry="11"/><ellipse rx="16" ry="5" opacity=".56"/></g>
+    <g transform="translate(1120 850)"><ellipse rx="50" ry="16"/><ellipse rx="26" ry="8" opacity=".56"/></g>
+    <g transform="translate(1480 700)"><ellipse rx="38" ry="12"/><ellipse rx="18" ry="6" opacity=".56"/></g>
+    <g transform="translate(1670 900)"><ellipse rx="28" ry="9"/><ellipse rx="13" ry="4" opacity=".56"/></g>
+  </g>
+</svg>

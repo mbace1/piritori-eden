@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Far cloud band</title>
+  <desc id="desc">Transparent layered cardstock cloud silhouettes for slow horizontal parallax.</desc>
+  <g id="cloud_far" fill="#394047" fill-opacity=".18">
+    <path d="M-120 210 80 132 280 170 430 108 670 162 850 118 1110 174 1280 126 1510 168 1740 116 2040 210v190H-120Z"/>
+    <path d="M-80 330 140 264 360 302 570 246 810 300 1040 254 1260 314 1500 258 1730 310 2020 270v170H-80Z" fill="#20272d" fill-opacity=".46"/>
+  </g>
+</svg>

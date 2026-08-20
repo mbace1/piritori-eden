@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1390" viewBox="0 0 1120 1390" role="img" aria-labelledby="title desc">
+  <title id="title">Piritori to Eden five-mode portrait UX wireframes</title>
+  <desc id="desc">Structural mobile wireframes for City, Location, Ledger, Battle, and Communications.</desc>
+  <style>
+    .bg{fill:#121719}.frame{fill:#1b2022;stroke:#c7aa79;stroke-width:3}.panel{fill:#24282a;stroke:#676b6b;stroke-width:1.5}.paper{fill:#c7aa79}.cyan{fill:#38b8c8}.magenta{fill:#b84d83}.orange{fill:#c87539}.red{fill:#a94b43}.green{fill:#648f63}.grid{fill:none;stroke:#676b6b;stroke-width:1;stroke-dasharray:5 6}.route{fill:none;stroke:#38b8c8;stroke-width:4;stroke-dasharray:9 7}.goods{fill:none;stroke:#b84d83;stroke-width:4;stroke-dasharray:7 7}.intent{fill:none;stroke:#a94b43;stroke-width:3;stroke-dasharray:7 5}.t{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:13px}.s{font-family:ui-monospace,monospace;fill:#c7aa79;font-size:10px}.h{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:24px;font-weight:700;letter-spacing:2px}.mh{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:15px;font-weight:700}.label{font-family:ui-monospace,monospace;fill:#121719;font-size:10px;font-weight:700}.tag{font-family:ui-monospace,monospace;fill:#121719;font-size:8px;font-weight:700}.node{fill:#24282a;stroke:#38b8c8;stroke-width:2}.enemy{fill:#24282a;stroke:#a94b43;stroke-width:2}.ally{fill:#24282a;stroke:#38b8c8;stroke-width:2}
+  </style>
+  <rect class="bg" width="1120" height="1390"/>
+  <text class="h" x="45" y="48">PIRITORI → EDEN · PORTRAIT UX STRUCTURE</text>
+  <text class="s" x="45" y="72">390 × 844 REFERENCE · HIERARCHY ONLY · FINAL MATERIAL FROM ART BIBLE v1</text>
+
+  <!-- City mobile -->
+  <g transform="translate(45 105)">
+    <rect class="frame" width="300" height="610" rx="6"/>
+    <rect class="panel" x="8" y="8" width="284" height="55"/>
+    <text class="t" x="18" y="30">DAY 03 · NIGHT</text><text class="s" x="18" y="50">€420 · DEBT 2D · KALLIO</text>
+    <rect class="panel" x="8" y="71" width="284" height="352"/>
+    <path class="grid" d="M25 110 L275 360 M42 390 L225 90 M95 415 L275 175 M18 270 L280 270"/>
+    <path class="route" d="M48 380 L98 315 L168 250 L240 205"/>
+    <path class="goods" d="M48 380 L140 340 L215 285"/>
+    <circle class="node" cx="48" cy="380" r="13"/><circle class="node" cx="168" cy="250" r="13"/><circle class="enemy" cx="240" cy="205" r="13"/>
+    <rect class="paper" x="22" y="398" width="60" height="17"/><text class="tag" x="29" y="410">PIRITORI</text>
+    <rect class="orange" x="191" y="104" width="88" height="25"/><text class="label" x="204" y="120">MISSION 2H</text>
+    <g fill="#e2d8c2"><circle cx="70" cy="170" r="3"/><circle cx="125" cy="130" r="3"/><circle cx="215" cy="360" r="3"/><circle cx="256" cy="300" r="3"/></g>
+    <rect class="panel" x="14" y="335" width="272" height="82"/><text class="t" x="28" y="359">PIRITORI</text><text class="s" x="28" y="378">OPEN · GUARDED · QUOTE 1 BLOCK</text><rect class="cyan" x="193" y="348" width="78" height="45"/><text class="label" x="216" y="375">ENTER</text>
+    <rect class="panel" x="8" y="431" width="284" height="106"/><text class="mh" x="20" y="455">CHANGED NODES</text><text class="s" x="20" y="480">TOKO · NEW RUMOUR</text><text class="s" x="20" y="500">HARJU · FLOW BUSY</text><text class="s" x="20" y="520">FIT MAP · LAYERS · WAIT</text>
+    <rect class="panel" x="8" y="545" width="284" height="57"/><rect class="cyan" x="14" y="552" width="58" height="43"/><text class="label" x="29" y="577">CITY</text><text class="s" x="83" y="577">LEDGER</text><text class="s" x="145" y="577">MSG 1</text><text class="s" x="211" y="577">MENU</text>
+    <text class="mh" x="8" y="-12">01 · CITY</text>
+  </g>
+
+  <!-- Location mobile -->
+  <g transform="translate(410 105)">
+    <rect class="frame" width="300" height="610" rx="6"/>
+    <rect class="panel" x="8" y="8" width="284" height="42"/><text class="t" x="18" y="34">TOKO · VAASANKATU</text>
+    <rect class="panel" x="8" y="58" width="284" height="265"/>
+    <rect class="paper" x="23" y="78" width="65" height="150"/><text class="tag" x="35" y="155">SHELF</text>
+    <rect class="orange" x="93" y="95" width="120" height="150"/><text class="label" x="117" y="173">TOKO + COUNTER</text>
+    <rect class="green" x="218" y="78" width="58" height="150"/><text class="tag" x="232" y="155">TRAM</text>
+    <rect class="panel" x="14" y="250" width="272" height="66"/><text class="t" x="25" y="274">TOKO</text><text class="s" x="25" y="294">“Three vans. One is empty.”</text>
+    <rect class="panel" x="8" y="331" width="284" height="54"/><text class="s" x="17" y="363">LOOK · TALK · USE · LEAVE</text>
+    <rect class="magenta" x="8" y="393" width="284" height="52"/><text class="label" x="80" y="416">BUY INFO</text><text class="tag" x="205" y="416">€120</text><text class="tag" x="80" y="433">CHANGES QUOTE RANGE</text>
+    <rect class="orange" x="8" y="453" width="284" height="62"/><text class="label" x="58" y="478">RISK SABOTAGE</text><text class="tag" x="205" y="478">€300 · 45%</text><text class="tag" x="58" y="497">RISKS FAVOUR</text>
+    <rect class="panel" x="8" y="523" width="284" height="79"/><text class="t" x="118" y="554">LEAVE</text><text class="s" x="20" y="581">KNOWN COSTS SHOWN BEFORE COMMIT</text>
+    <text class="mh" x="8" y="-12">02 · LOCATION</text>
+  </g>
+
+  <!-- Ledger mobile -->
+  <g transform="translate(775 105)">
+    <rect class="frame" width="300" height="610" rx="6"/>
+    <rect class="panel" x="8" y="8" width="284" height="48"/><text class="t" x="18" y="31">AATAMI'S LEDGER</text><text class="s" x="195" y="31">€420 · 55mk</text>
+    <rect class="panel" x="8" y="64" width="284" height="52"/><rect class="cyan" x="14" y="71" width="62" height="38"/><text class="label" x="26" y="95">MARKET</text><text class="s" x="87" y="95">CREW</text><text class="s" x="140" y="95">LOADOUT</text><text class="s" x="220" y="95">DUE</text>
+    <rect class="paper" x="8" y="124" width="284" height="72"/><text class="label" x="20" y="148">PIRITORI · QUOTE · PIRI</text><text class="tag" x="20" y="167">BUY €— · SOURCE SELLER</text><text class="tag" x="20" y="184">1 BLOCK OLD</text>
+    <rect class="panel" x="8" y="204" width="284" height="72"/><text class="t" x="20" y="229">HARJU · RANGE €—–€—</text><text class="s" x="20" y="250">CAUSE: DRY NIGHT · OPEN</text>
+    <rect class="panel" x="8" y="284" width="284" height="72"/><text class="t" x="20" y="309">TOKO · RUMOUR: RISING</text><text class="s" x="20" y="330">SOURCE: TOKO · NEW</text>
+    <rect class="panel" x="8" y="364" width="284" height="70"/><text class="s" x="20" y="389">PIN 2 FOR COMPARE</text><text class="s" x="20" y="410">MARKKA UNUSABLE · GO TO BANK</text>
+    <rect class="panel" x="8" y="442" width="284" height="160"/><text class="mh" x="20" y="468">SELECTED DETAIL</text><text class="s" x="20" y="492">CASH · STOCK · CAPACITY</text><text class="s" x="20" y="512">TIME/PLACE REQUIRED</text><rect class="orange" x="20" y="535" width="260" height="50"/><text class="label" x="102" y="565">PLAN VISIT</text>
+    <text class="mh" x="8" y="-12">03 · LEDGER</text>
+  </g>
+
+  <!-- Battle mobile -->
+  <g transform="translate(227 760)">
+    <rect class="frame" width="300" height="610" rx="6"/>
+    <rect class="panel" x="8" y="8" width="284" height="42"/><text class="t" x="18" y="34">ROUND 2 · CREW PHASE</text>
+    <rect class="panel" x="8" y="58" width="284" height="315"/>
+    <g transform="translate(18 92)">
+      <path class="grid" d="M10 165 L100 95 L190 165 L100 235 Z M40 188 L130 118 M70 212 L160 142 M40 142 L130 212 M70 118 L160 188"/>
+      <circle class="ally" cx="58" cy="176" r="13"/><circle class="ally" cx="98" cy="145" r="13"/><circle class="ally" cx="138" cy="176" r="13"/>
+      <rect class="paper" x="150" y="143" width="38" height="14"/>
+      <circle class="enemy" cx="205" cy="145" r="13"/><circle class="enemy" cx="235" cy="176" r="13"/><circle class="enemy" cx="255" cy="135" r="13"/>
+      <path class="intent" d="M138 176 L205 145"/>
+    </g>
+    <text class="s" x="18" y="82">BACK · MID · FRONT</text><text class="s" x="167" y="82">FRONT · MID · BACK</text>
+    <rect class="panel" x="8" y="381" width="284" height="64"/><text class="t" x="18" y="404">RANE · 18/24</text><text class="s" x="18" y="424">GUARD ■■■□ · NERVE ■■□□</text>
+    <rect class="red" x="8" y="453" width="137" height="52"/><text class="label" x="51" y="483">ATTACK</text>
+    <rect class="cyan" x="155" y="453" width="137" height="52"/><text class="label" x="198" y="483">GUARD</text>
+    <rect class="paper" x="8" y="513" width="137" height="52"/><text class="label" x="37" y="543">REPOSITION</text>
+    <rect class="panel" x="155" y="513" width="137" height="52"/><text class="s" x="200" y="543">ITEM</text>
+    <rect class="panel" x="8" y="573" width="137" height="29"/><text class="s" x="48" y="592">AUTO OFF</text><rect class="panel" x="155" y="573" width="137" height="29"/><text class="s" x="191" y="592">WITHDRAW</text>
+    <text class="mh" x="8" y="-12">04 · BATTLE</text>
+  </g>
+
+  <!-- Communications mobile -->
+  <g transform="translate(592 760)">
+    <rect class="frame" width="300" height="610" rx="6"/>
+    <rect class="panel" x="8" y="8" width="284" height="46"/><text class="t" x="18" y="34">COMMUNICATIONS · TV</text>
+    <rect class="panel" x="8" y="62" width="284" height="235"/>
+    <rect class="paper" x="28" y="82" width="244" height="170"/><text class="label" x="92" y="169">CRT · ARVO</text>
+    <rect class="cyan" x="65" y="258" width="170" height="25"/><text class="tag" x="86" y="274">DOCUMENTED FACT</text>
+    <rect class="panel" x="8" y="305" width="284" height="85"/><text class="mh" x="20" y="330">HEADLINE · DATE</text><text class="s" x="20" y="354">ROUTE CLOSURE REPORTED.</text><text class="s" x="20" y="373">SOURCE STATUS WRITTEN.</text>
+    <rect class="panel" x="8" y="398" width="284" height="93"/><text class="t" x="20" y="423">TRANSCRIPT</text><text class="s" x="20" y="445">CALM PUBLIC REPORT...</text><text class="s" x="20" y="464">SCROLL REGION</text>
+    <rect class="orange" x="8" y="499" width="284" height="46"/><text class="label" x="79" y="527">KNOWN EFFECT: ROUTE</text>
+    <rect class="panel" x="8" y="553" width="284" height="49"/><text class="s" x="20" y="582">TV · PHONE 2 · ONLINE</text><rect class="cyan" x="191" y="561" width="91" height="33"/><text class="tag" x="202" y="581">RETURN CITY</text>
+    <text class="mh" x="8" y="-12">05 · COMMUNICATIONS</text>
+  </g>
+</svg>

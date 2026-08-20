@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Wind debris</title>
+  <desc id="desc">Sparse leaves and paper scraps for a front gust pass.</desc>
+  <g id="wind_debris" stroke="#171b1e" stroke-width="3" stroke-linejoin="round">
+    <path d="m160 760 28-12 20 18-28 20Z" fill="#a7582d"/>
+    <path d="m420 580 34 4-6 28-30-6Z" fill="#d7cfb5"/>
+    <path d="m710 700 22-18 25 16-18 24Z" fill="#7b733e"/>
+    <path d="m980 510 38 8-10 28-34-12Z" fill="#b88642"/>
+    <path d="m1280 650 28-22 22 20-20 28Z" fill="#5d6b3a"/>
+    <path d="m1570 470 40 6-12 30-36-10Z" fill="#cfbea2"/>
+    <path d="m1770 720 22-18 26 16-18 26Z" fill="#934b2d"/>
+  </g>
+</svg>

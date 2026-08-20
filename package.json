@@ -1,0 +1,12 @@
+{
+  "name": "piritori-to-eden-handoff",
+  "version": "3.1.0",
+  "private": true,
+  "type": "module",
+  "description": "No-build local runner and validation entry point for Piritori to Eden.",
+  "scripts": {
+    "check": "node tools/check-project.mjs",
+    "check:browser": "node tools/check-project.mjs --browser",
+    "serve": "node tools/serve.mjs"
+  }
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Far fog band</title>
+  <desc id="desc">Three transparent fog strips for shallow parallax.</desc>
+  <defs>
+    <linearGradient id="fog_fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6d2c4" stop-opacity="0"/>
+      <stop offset=".55" stop-color="#d6d2c4" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#d6d2c4" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="fog_far" fill="url(#fog_fade)">
+    <path d="M-180 420c250-78 430 42 680-28s430 34 690-20 470 44 910-18v250H-180Z"/>
+    <path d="M-220 560c300-54 510 50 760-10s440 42 720-12 490 52 880-4v220H-220Z" opacity=".72"/>
+    <path d="M-160 720c280-42 480 32 730-4s420 26 700-6 470 38 830 0v150H-160Z" opacity=".46"/>
+  </g>
+</svg>

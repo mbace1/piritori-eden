@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "toko-slomo-noodles-era1",
+  "title": "Toko Slomo's Noodles",
+  "era": "2003",
+  "location": "Vaasankatu",
+  "image": "toko-slomo-noodles-v01.png",
+  "mime_type": "image/png",
+  "sha256": "f7a14daddc6d7480df5d3be2078b51fb35d82a79759449653b3461c9101aa2ef",
+  "canvas": {
+    "width": 1536,
+    "height": 864,
+    "aspect_ratio": "16:9"
+  },
+  "usage": {
+    "role": "fullscreen-narrative-prototype",
+    "render_mode": "contain",
+    "baked_scene": true,
+    "baked_ui": true,
+    "baked_copy": true,
+    "implementation_ready": true
+  },
+  "interactive_regions": [
+    {
+      "id": "buy-info",
+      "event": "toko.buy_info",
+      "label": "BUY INFO",
+      "cost_eur": 120,
+      "rect_px": [270, 730, 397, 119],
+      "rect_normalized": [0.175781, 0.844907, 0.258464, 0.137731]
+    },
+    {
+      "id": "risk-sabotage",
+      "event": "toko.risk_sabotage",
+      "label": "RISK SABOTAGE",
+      "cost_eur": 300,
+      "success_chance": 0.45,
+      "rect_px": [681, 727, 438, 122],
+      "rect_normalized": [0.443359, 0.841435, 0.285156, 0.141204]
+    },
+    {
+      "id": "leave",
+      "event": "toko.leave",
+      "label": "LEAVE",
+      "rect_px": [1128, 727, 376, 122],
+      "rect_normalized": [0.734375, 0.841435, 0.244792, 0.141204]
+    }
+  ],
+  "implementation_notes": [
+    "Resolve normalized regions against the displayed image rectangle, not the full viewport.",
+    "Subtract any contain-mode letterbox offset before hit testing.",
+    "This flattened prototype is immediately usable; replace baked dialogue and controls with separated layers for dynamic production content."
+  ]
+}

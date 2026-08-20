@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" role="img" aria-labelledby="title">
+  <title id="title">Portrait mobile battle command console geometry</title>
+  <style>
+    .panel { fill: #090a0a; stroke: #b7a486; stroke-width: 4; }
+    .button { fill: #101111; stroke: #796b56; stroke-width: 3; }
+    .label { fill: #d5c09b; font: 700 26px sans-serif; letter-spacing: 2px; text-anchor: middle; }
+  </style>
+  <g id="selected-unit" data-module="selected-unit">
+    <rect class="panel" x="12" y="12" width="876" height="190"/>
+    <rect class="button" x="28" y="28" width="160" height="158"/>
+    <rect class="button" x="204" y="28" width="668" height="158"/>
+  </g>
+  <g id="core-actions" data-module="core-actions">
+    <rect class="panel" x="12" y="212" width="876" height="376"/>
+    <g id="action-attack"><rect class="button" x="28" y="228" width="414" height="166"/><text class="label" x="235" y="322">ATTACK</text></g>
+    <g id="action-guard"><rect class="button" x="458" y="228" width="414" height="166"/><text class="label" x="665" y="322">GUARD</text></g>
+    <g id="action-reposition"><rect class="button" x="28" y="406" width="414" height="166"/><text class="label" x="235" y="500">REPOSITION</text></g>
+    <g id="action-item"><rect class="button" x="458" y="406" width="414" height="166"/><text class="label" x="665" y="500">ITEM</text></g>
+  </g>
+  <g id="utilities" data-module="utilities">
+    <rect class="panel" x="12" y="598" width="876" height="110"/>
+    <g id="utility-auto"><rect class="button" x="28" y="614" width="414" height="78"/><text class="label" x="235" y="663">AUTO OFF</text></g>
+    <g id="utility-withdraw"><rect class="button" x="458" y="614" width="414" height="78"/><text class="label" x="665" y="663">WITHDRAW</text></g>
+  </g>
+</svg>

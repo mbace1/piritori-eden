@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Near rain</title>
+  <desc id="desc">Sparse large diagonal rain streaks for the camera-relative front pass.</desc>
+  <g id="rain_front" stroke="#b6d3d8" stroke-opacity=".42" stroke-linecap="round">
+    <path d="m130-50-42 162m310-92-40 154m360-230-48 184m298-54-38 146m354-250-50 194m330-84-44 170m300-234-48 184" stroke-width="5"/>
+    <path d="m250 460-34 130m380-82-44 166m330-94-38 146m360-110-46 176m350-122-38 148" stroke-width="4"/>
+    <path d="m80 850-38 144m450-96-42 160m420-132-34 132m420-106-38 144m390-142-32 122" stroke-width="6"/>
+  </g>
+</svg>

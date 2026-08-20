@@ -1,0 +1,121 @@
+{
+  "schema_version": 2,
+  "status": "concept-production-library",
+  "active_style": "cut-cardstock-hand-ink-v03",
+  "characters": {
+    "approval_status": "approved",
+    "production_ready": false,
+    "manifest": "characters/manifest.json",
+    "contract": "MODULAR_CHARACTER_SYSTEM.md"
+  },
+  "weapons": {
+    "approval_status": "approved",
+    "production_ready": false,
+    "manifest": "weapons/manifest.json"
+  },
+  "animation": {
+    "approval_status": "approved",
+    "production_ready": false,
+    "manifest": "animation/manifest.json",
+    "contract": "ANIMATION_LAYER_CONTRACT.md"
+  },
+  "locations": [
+    {
+      "id": "karhupuisto",
+      "file": "locations/era1/location-karhupuisto-v01.png",
+      "aspect": "16:9",
+      "approval_status": "approved",
+      "production_ready": false,
+      "active": true
+    },
+    {
+      "id": "sornainen-docks",
+      "file": "locations/era1/location-sornainen-docks-v01.png",
+      "aspect": "16:9",
+      "approval_status": "semi-approved",
+      "production_ready": false,
+      "active": true
+    },
+    {
+      "id": "kallio-courtyard-v02",
+      "file": "locations/era1/location-kallio-courtyard-v02.png",
+      "aspect": "16:9",
+      "approval_status": "semi-approved",
+      "production_ready": false,
+      "active": true,
+      "layer_map": "locations/era1/layer-map.json"
+    },
+    {
+      "id": "kallio-alley-v01",
+      "file": "archive/needs-rework/location-kallio-alley-v01.png",
+      "aspect": "16:9",
+      "approval_status": "needs-rework",
+      "production_ready": false,
+      "active": false
+    }
+  ],
+  "props": [
+    {"id": "cover-concrete-barrier", "file": "props/era1/cover-concrete-barrier-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "street-granite-bollard", "file": "props/era1/street-granite-bollard-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "street-green-rubbish-bin", "file": "props/era1/street-green-rubbish-bin-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "street-bicycle-rack", "file": "props/era1/street-bicycle-rack-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "street-tram-stop-panel", "file": "props/era1/street-tram-stop-panel-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "park-bench", "file": "props/era1/park-bench-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "dock-pallet-crate", "file": "props/era1/dock-pallet-crate-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]},
+    {"id": "park-red-granite-bear", "file": "props/era1/park-red-granite-bear-v01.png", "approval_status": "semi-approved", "production_ready": false, "anchor": [0.5, 0.96]}
+  ],
+  "screens": [
+    {
+      "id": "battle-landscape-alley",
+      "file": "screens/battle-landscape-alley-v01.png",
+      "aspect": "16:9",
+      "approval_status": "semi-approved",
+      "production_ready": false,
+      "depends_on_needs_rework": ["kallio-alley-v01"]
+    },
+    {
+      "id": "battle-portrait-alley",
+      "file": "screens/battle-portrait-alley-v01.png",
+      "aspect": "9:16",
+      "approval_status": "semi-approved",
+      "production_ready": false,
+      "depends_on_needs_rework": ["kallio-alley-v01"]
+    },
+    {
+      "id": "toko-slomo-noodles-era1-v02",
+      "file": "screens/instances/era1/toko-slomo-noodles-v02.png",
+      "metadata": "screens/instances/era1/toko-slomo-noodles-v02.json",
+      "aspect": "16:9",
+      "approval_status": "approved",
+      "production_ready": true,
+      "usage": "fullscreen-narrative-prototype",
+      "supersedes": "screens/instances/era1/toko-slomo-noodles-v01.png"
+    }
+  ],
+  "vectors": [
+    {"id": "formation-grid-3x3", "file": "ui/battle/formation-grid-3x3.svg", "approval_status": "approved", "production_ready": false},
+    {"id": "command-console-landscape", "file": "ui/battle/command-console-landscape.svg", "approval_status": "approved", "production_ready": false},
+    {"id": "command-console-portrait", "file": "ui/battle/command-console-portrait.svg", "approval_status": "approved", "production_ready": false},
+    {"id": "role-tabs-handink", "file": "characters/system/role-tabs-handink-v01.svg", "approval_status": "approved", "production_ready": false}
+  ],
+  "weather": {
+    "approval_status": "semi-approved",
+    "production_ready": false,
+    "manifest": "weather/manifest.json"
+  },
+  "approved_variants": [
+    {
+      "id": "clean-cut-v02",
+      "path": "variants/approved-clean-cut-v02",
+      "approval_status": "approved",
+      "active": false,
+      "usage": "simplification and structural fallback"
+    }
+  ],
+  "archive": {
+    "path": "archive/needs-rework",
+    "approval_status": "needs-rework",
+    "active": false,
+    "index": "archive/README.md"
+  }
+}

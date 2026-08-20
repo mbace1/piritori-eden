@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "locations": [
+    {
+      "id": "karhupuisto",
+      "source": "location-karhupuisto-v01.png",
+      "approval_status": "approved",
+      "composite_status": "concept-composite",
+      "production_layers": [
+        {"order": 0, "id": "backdrop", "contents": "sky and distant building silhouette"},
+        {"order": 10, "id": "facade", "contents": "coherent Kallio perimeter buildings"},
+        {"order": 20, "id": "ground", "contents": "paths, planting masks and park edge"},
+        {"order": 30, "id": "rear-vegetation", "contents": "rear crowns and beds"},
+        {"order": 40, "id": "landmark", "contents": "modular abstract bear and pedestal"},
+        {"order": 50, "id": "front-vegetation", "contents": "front crowns, grass and loose leaves"}
+      ]
+    },
+    {
+      "id": "sornainen-docks",
+      "source": "location-sornainen-docks-v01.png",
+      "approval_status": "semi-approved",
+      "composite_status": "concept-composite",
+      "production_layers": [
+        {"order": 0, "id": "backdrop", "contents": "dark water and far harbour silhouette"},
+        {"order": 10, "id": "warehouse", "contents": "warehouse mass and sodium windows"},
+        {"order": 20, "id": "quay-ground", "contents": "asphalt, rails and water edge"},
+        {"order": 30, "id": "crane", "contents": "separate crane silhouette"},
+        {"order": 40, "id": "industrial-cover", "contents": "pallets, crates and bollards"}
+      ]
+    },
+    {
+      "id": "kallio-courtyard-v02",
+      "source": "location-kallio-courtyard-v02.png",
+      "approval_status": "semi-approved",
+      "composite_status": "concept-composite",
+      "production_layers": [
+        {"order": 0, "id": "backdrop", "contents": "dark outer void and passage depth"},
+        {"order": 10, "id": "coherent-facade", "contents": "single U-shaped apartment block"},
+        {"order": 20, "id": "ground", "contents": "paved tactical court and drains"},
+        {"order": 30, "id": "window-light", "contents": "independent warm window cards"},
+        {"order": 40, "id": "door-light", "contents": "independent warm stairwell cone"},
+        {"order": 50, "id": "modular-cover", "contents": "empty in plate; place from prop library"}
+      ]
+    }
+  ],
+  "note": "Concept plates remain composites. Production extraction follows this layer map; animated vegetation, animals, weather, props, units, grids and UI are already separate libraries."
+}

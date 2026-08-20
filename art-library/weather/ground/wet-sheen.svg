@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Wet ground sheen</title>
+  <desc id="desc">Low-opacity isometric reflection shapes projected onto the ground plane.</desc>
+  <g id="wet_sheen" fill="#8eb6bd" fill-opacity=".10">
+    <path d="m180 730 460-170 250 82-474 180Z"/>
+    <path d="m780 780 310-114 180 58-322 122Z"/>
+    <path d="m1230 650 360-132 210 68-372 140Z"/>
+    <path d="m520 930 300-112 176 56-312 118Z"/>
+  </g>
+</svg>

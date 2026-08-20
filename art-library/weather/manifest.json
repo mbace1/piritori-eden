@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "view_box": [0, 0, 1920, 1080],
+  "approval_status": "semi-approved",
+  "production_ready": false,
+  "layers": [
+    {"id": "cloud-band", "pass": "back", "file": "back/cloud-band.svg", "motion": "slow-horizontal"},
+    {"id": "fog-band", "pass": "back", "file": "back/fog-band.svg", "motion": "slow-horizontal"},
+    {"id": "rain-fine", "pass": "mid", "file": "mid/rain-fine.svg", "motion": "diagonal-scroll"},
+    {"id": "snow-fine", "pass": "mid", "file": "mid/snow-fine.svg", "motion": "drift-scroll"},
+    {"id": "rain-near", "pass": "front", "file": "front/rain-near.svg", "motion": "fast-diagonal-scroll"},
+    {"id": "snow-near", "pass": "front", "file": "front/snow-near.svg", "motion": "slow-drift-scroll"},
+    {"id": "wind-debris", "pass": "front", "file": "front/wind-debris.svg", "motion": "gust-arc"},
+    {"id": "wet-sheen", "pass": "ground", "file": "ground/wet-sheen.svg", "motion": "static"},
+    {"id": "puddle-ripples", "pass": "ground", "file": "ground/puddle-ripples.svg", "motion": "pulse"}
+  ]
+}

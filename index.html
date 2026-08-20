@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111722">
+  <meta name="description" content="Piritori to Eden — an adult narrative strategy game set in a fictionalised Kallio, Helsinki, in 2003.">
+  <title>Piritori → Eden · Era I</title>
+  <link rel="stylesheet" href="v3.css?v=1">
+</head>
+<body>
+  <div id="game" class="game-shell" data-mode="route">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <p class="eyebrow" id="eraLabel">2003 · AATAMI · ERA I</p>
+        <h1>PIRITORI <span aria-hidden="true">→</span> EDEN</h1>
+      </div>
+      <div class="time-card" aria-live="polite">
+        <span id="blockLabel">DAY 1 · DAY</span>
+        <small>VERTICAL SLICE · v3.1</small>
+      </div>
+      <dl class="resource-strip" aria-label="Campaign resources">
+        <div><dt>€</dt><dd id="cashValue">160</dd></div>
+        <div><dt>mk</dt><dd id="markkaValue">300</dd></div>
+        <div><dt>DEBT</dt><dd id="debtValue">350</dd></div>
+        <div><dt>INTEL</dt><dd id="intelValue">0</dd></div>
+      </dl>
+      <div class="top-actions">
+        <button class="paper-button icon-button" id="localeButton" type="button" aria-label="Change language">EN</button>
+        <button class="paper-button icon-button" id="resetButton" type="button" aria-label="Reset campaign">↺</button>
+      </div>
+    </header>
+
+    <main id="modeRoot" class="mode-root" tabindex="-1"></main>
+
+    <nav class="mode-nav" id="modeNav" aria-label="Game modes">
+      <button type="button" data-mode-target="route"><span class="nav-icon">⌁</span><span>ROUTE</span></button>
+      <button type="button" data-mode-target="encounter"><span class="nav-icon">◉</span><span>ENCOUNTER</span></button>
+      <button type="button" data-mode-target="ledger"><span class="nav-icon">▤</span><span>LEDGER</span></button>
+      <button type="button" data-mode-target="battle"><span class="nav-icon">◆</span><span>BATTLE</span></button>
+      <button type="button" data-mode-target="news"><span class="nav-icon">▣</span><span>NEWS</span></button>
+    </nav>
+  </div>
+
+  <div class="splash" id="splash" role="dialog" aria-modal="true" aria-labelledby="splashTitle">
+    <div class="splash-map" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <section class="splash-card">
+      <p class="eyebrow">KALLIO · HELSINKI · 2003</p>
+      <h2 id="splashTitle">PIRITORI <span>→</span> EDEN</h2>
+      <p class="splash-lede">Seven days. One square, one debt, and a city already moving without you.</p>
+      <p>This is an adult fictional strategy story about the drug trade, violence, social harm and family consequence. Real public geography grounds the setting; criminal people and operations are composites.</p>
+      <div class="splash-actions">
+        <button class="paper-button primary" id="beginButton" type="button">BEGIN ERA I</button>
+        <button class="paper-button" id="resumeButton" type="button" hidden>RESUME DAY</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="js/v3/app.js?v=2"></script>
+  <script type="module" src="../hub/shell.js?v=17"></script>
+</body>
+</html>

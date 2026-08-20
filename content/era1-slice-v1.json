@@ -1,0 +1,737 @@
+{
+  "schema_version": 1,
+  "id": "piritori-era1-seven-day-slice-v1",
+  "title": "Piritori to Eden — Era I vertical slice",
+  "status": "implementation-baseline",
+  "authority": [
+    "../DESIGN_AUTHORITY.md",
+    "../DESIGN_LOCKS.md",
+    "../GAME_DESIGN_DOCUMENT.md",
+    "../ART_BIBLE.md",
+    "../UX_SPEC.md",
+    "../MAP.md"
+  ],
+  "fiction_boundary": "All criminal characters, organisations, exchanges and tactical situations are fictional composites. Public places and sourced public facts remain clearly separated from the fiction.",
+  "content_warning": [
+    "adult drug-market themes",
+    "threats and stylised violence",
+    "persistent injury and possible crew death",
+    "family conflict",
+    "debt and exploitation"
+  ],
+  "campaign": {
+    "era": "2003",
+    "location": "Kallio, Helsinki",
+    "days": 7,
+    "blocks_per_day": ["day", "night"],
+    "total_player_blocks": 14,
+    "start_anchor_id": "piritori",
+    "start_site_id": "piritori_first_buy",
+    "starting_state": {
+      "cash_eur": 160,
+      "markka_mk": 300,
+      "debt_eur": 350,
+      "stock": {"piri": 0},
+      "capacity": 2,
+      "intel": 0,
+      "exit_fund_eur": 0,
+      "city_harm": "low",
+      "local_pressure": {
+        "piritori": "watchful",
+        "karhupuisto": "low",
+        "linjat_yard": "low"
+      },
+      "relationships": {
+        "jaska": 0,
+        "toko": 1,
+        "mccormick_family": 0,
+        "jade_lantern_network": 0
+      }
+    },
+    "settlement": {
+      "nightly_interest_eur": 5,
+      "required_payments": [
+        {"day": 4, "amount_eur": 75},
+        {"day": 7, "amount_eur": 150}
+      ],
+      "crew_wages_settle_at_night": true,
+      "unpaid_result": "obligation-and-relationship-event",
+      "note": "Exact tuning is provisional. Debt creates choices; it does not cause an invisible instant failure."
+    }
+  },
+  "products": [
+    {
+      "id": "piri",
+      "display_name": "Piri",
+      "category": "amphetamine",
+      "unit": "abstract pack",
+      "era": "2003",
+      "mechanical_role": "single vertical-slice market good",
+      "presentation_rule": "Never display dosage, preparation, concealment or other operational detail."
+    }
+  ],
+  "market_offers": [
+    {
+      "id": "offer-piritori-buy",
+      "product_id": "piri",
+      "anchor_id": "piritori",
+      "side": "buy",
+      "quote": {"kind": "exact", "eur": 45},
+      "capacity": 2,
+      "confidence": "quote",
+      "revealed_by": "enc-first-purchase",
+      "dominant_cause": "small street supply"
+    },
+    {
+      "id": "offer-siltasaari-sell",
+      "product_id": "piri",
+      "anchor_id": "siltasaari",
+      "side": "sell",
+      "quote": {"kind": "exact", "eur": 68},
+      "capacity": 1,
+      "confidence": "quote",
+      "revealed_by": "mission-paper-bag",
+      "dominant_cause": "known local buyer"
+    },
+    {
+      "id": "offer-karhupuisto-sell",
+      "product_id": "piri",
+      "anchor_id": "karhupuisto",
+      "side": "sell",
+      "quote": {"kind": "range", "min_eur": 70, "max_eur": 78},
+      "capacity": 1,
+      "confidence": "range",
+      "revealed_by": "enc-karhupuisto-watch",
+      "dominant_cause": "weekend foot traffic"
+    },
+    {
+      "id": "offer-harju-sell",
+      "product_id": "piri",
+      "anchor_id": "harju",
+      "side": "sell",
+      "quote": {"kind": "range", "min_eur": 74, "max_eur": 82},
+      "capacity": 2,
+      "confidence": "range",
+      "revealed_by": "enc-toko-quiet-voice",
+      "dominant_cause": "dry local week"
+    },
+    {
+      "id": "offer-hakaniemi-sell",
+      "product_id": "piri",
+      "anchor_id": "hakaniemi",
+      "side": "sell",
+      "quote": {"kind": "range", "min_eur": 80, "max_eur": 90},
+      "capacity": 2,
+      "confidence": "rumour",
+      "revealed_by": "enc-jade-window",
+      "dominant_cause": "unconfirmed competing demand"
+    }
+  ],
+  "factions": [
+    {
+      "id": "aatami_network",
+      "display_name": "Aatami's network",
+      "fictional": true,
+      "slice_role": "player organisation"
+    },
+    {
+      "id": "piritori_independents",
+      "display_name": "Piritori independents",
+      "fictional": true,
+      "slice_role": "small stock, recruitment and contested street access"
+    },
+    {
+      "id": "mccormick_family",
+      "display_name": "McCormick family",
+      "fictional": true,
+      "slice_role": "family venue, muscle, equipment and obligations"
+    },
+    {
+      "id": "jade_lantern_network",
+      "display_name": "Jade Lantern Network",
+      "fictional": true,
+      "slice_role": "restaurant-front teaser and material access",
+      "representation_rule": "Write every member as an individual; ethnicity is never a combat class or shorthand for menace."
+    },
+    {
+      "id": "public_institutions",
+      "display_name": "Public institutions",
+      "fictional": false,
+      "slice_role": "ordinary services, legitimacy and local pressure",
+      "combat_role": "none"
+    }
+  ],
+  "crew": [
+    {
+      "id": "crew-mira-hamalainen",
+      "name": "Mira Hämäläinen",
+      "age": 24,
+      "origin_anchor_id": "harju",
+      "role": "runner",
+      "portrait_asset_id": "head-kallio-01-v03",
+      "torso_asset_id": "torso-runner-v03",
+      "legs_asset_id": "legs-runner-v03",
+      "condition": 8,
+      "nerve": 6,
+      "tempo": 8,
+      "competencies": ["delivery", "withdrawal"],
+      "strength": "remembers faces and missed promises",
+      "liability": "will not be left waiting without an explanation",
+      "wage_eur": 18,
+      "initial_equipment": ["feature-phone"],
+      "recruit_encounter_id": "enc-mira-at-tram-stop"
+    },
+    {
+      "id": "crew-rauno-lahti",
+      "name": "Rauno Lahti",
+      "age": 46,
+      "origin_anchor_id": "linjat_yard",
+      "role": "muscle",
+      "portrait_asset_id": "head-kallio-03-v03",
+      "torso_asset_id": "torso-muscle-v03",
+      "legs_asset_id": "legs-muscle-v03",
+      "condition": 10,
+      "nerve": 7,
+      "tempo": 4,
+      "competencies": ["cover", "control"],
+      "strength": "steadies a nervous team",
+      "liability": "old knee worsens after a hard withdrawal",
+      "wage_eur": 28,
+      "initial_equipment": ["baseball-bat"],
+      "recruit_encounter_id": "enc-mccormick-yard"
+    },
+    {
+      "id": "crew-samira-elmi",
+      "name": "Samira Elmi",
+      "age": 31,
+      "origin_anchor_id": "hakaniemi",
+      "role": "watcher",
+      "portrait_asset_id": "head-kallio-05-v03",
+      "torso_asset_id": "torso-watcher-v03",
+      "legs_asset_id": "legs-watcher-v03",
+      "condition": 7,
+      "nerve": 8,
+      "tempo": 7,
+      "competencies": ["marking", "intent-reading"],
+      "strength": "turns repeated public movement into reliable warning",
+      "liability": "refuses threats against bystanders",
+      "wage_eur": 24,
+      "initial_equipment": ["feature-phone"],
+      "recruit_encounter_id": "enc-karhupuisto-watch"
+    },
+    {
+      "id": "crew-duy-nguyen",
+      "name": "Duy Nguyen",
+      "age": 29,
+      "origin_anchor_id": "vaasankatu",
+      "role": "fixer",
+      "portrait_asset_id": "head-kallio-07-v03",
+      "torso_asset_id": "torso-fixer-v03",
+      "legs_asset_id": "legs-fixer-v03",
+      "condition": 7,
+      "nerve": 7,
+      "tempo": 6,
+      "competencies": ["negotiation", "improvised-support"],
+      "strength": "can turn a bad introduction into a neutral exit",
+      "liability": "keeps score when favours are treated as cash",
+      "wage_eur": 26,
+      "initial_equipment": ["feature-phone"],
+      "recruit_encounter_id": "enc-toko-quiet-voice"
+    },
+    {
+      "id": "crew-ilkka-koskinen",
+      "name": "Ilkka “Ile” Koskinen",
+      "age": 39,
+      "origin_anchor_id": "siltasaari",
+      "role": "driver",
+      "portrait_asset_id": "head-kallio-09-v03",
+      "torso_asset_id": "torso-driver-v03",
+      "legs_asset_id": "legs-driver-v03",
+      "condition": 8,
+      "nerve": 6,
+      "tempo": 5,
+      "competencies": ["route-reliability", "extraction"],
+      "strength": "keeps transport promises in poor weather",
+      "liability": "will not carry an armed stranger",
+      "wage_eur": 30,
+      "initial_equipment": ["feature-phone"],
+      "recruit_encounter_id": "enc-bank-counter"
+    },
+    {
+      "id": "crew-jelena-markovic",
+      "name": "Jelena Marković",
+      "age": 35,
+      "origin_anchor_id": "torkkelinmaki",
+      "role": "local",
+      "portrait_asset_id": "head-kallio-11-v03",
+      "torso_asset_id": "torso-local-v03",
+      "legs_asset_id": "legs-local-v03",
+      "condition": 8,
+      "nerve": 8,
+      "tempo": 6,
+      "competencies": ["local-access", "faction-memory"],
+      "strength": "knows which doors are homes before they are shortcuts",
+      "liability": "leaves if the courtyard becomes a battlefield by choice",
+      "wage_eur": 25,
+      "initial_equipment": ["baton"],
+      "recruit_encounter_id": "enc-courtyard-last-call"
+    }
+  ],
+  "equipment": [
+    {
+      "id": "feature-phone",
+      "kind": "support",
+      "asset_id": "feature-phone-v03",
+      "hold": "utility-one",
+      "unlock": "start",
+      "effect": "receive calls and SMS; never opens a market app"
+    },
+    {
+      "id": "baseball-bat",
+      "kind": "weapon",
+      "asset_id": "baseball-bat-v03",
+      "hold": "bat-two",
+      "reach_pattern": "front-same-or-adjacent-lane",
+      "unlock": "enc-mccormick-yard"
+    },
+    {
+      "id": "baton",
+      "kind": "weapon",
+      "asset_id": "baton-v03",
+      "hold": "blunt-one",
+      "reach_pattern": "front-same-lane",
+      "unlock": "enc-karhupuisto-watch"
+    },
+    {
+      "id": "pipe",
+      "kind": "weapon",
+      "asset_id": "pipe-v03",
+      "hold": "blunt-one",
+      "reach_pattern": "front-same-lane",
+      "unlock": "enc-mccormick-yard"
+    },
+    {
+      "id": "first-handgun",
+      "kind": "weapon",
+      "asset_id": "handgun-v03",
+      "hold": "firearm-one",
+      "reach_pattern": "clear-same-lane-through-front",
+      "unlock": "enc-first-firearm",
+      "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction."
+    }
+  ],
+  "missions": [
+    {
+      "id": "mission-paper-bag",
+      "family": "delivery-collection",
+      "signal_encounter_id": "enc-first-purchase",
+      "destination_anchor_id": "siltasaari",
+      "deadline": {"day": 2, "block": "day"},
+      "requirements": {"capacity": 1, "roles_any": ["runner", "local"]},
+      "intel_levels": ["rumour", "quote"],
+      "approaches": ["go-personally", "send-recruit"],
+      "battle_id": null,
+      "success_effects": ["reveal:offer-siltasaari-sell", "cash:+23", "market-history:siltasaari"],
+      "partial_effects": ["cash:+12", "pressure:siltasaari:+1"],
+      "failure_effects": ["stock:piri:-1", "debt-holder-memory:late"]
+    },
+    {
+      "id": "mission-three-vans",
+      "family": "information",
+      "signal_encounter_id": "enc-toko-quiet-voice",
+      "destination_anchor_id": "harju",
+      "deadline": {"day": 5, "block": "day"},
+      "requirements": {"roles_any": ["watcher", "fixer", "local"]},
+      "intel_levels": ["rumour", "range", "quote"],
+      "approaches": ["buy-information", "observe-public-flow", "accept-uncertainty"],
+      "battle_id": null,
+      "success_effects": ["flag:toko-van-pattern", "reveal:offer-harju-sell"],
+      "partial_effects": ["flag:van-pattern-incomplete", "pressure:harju:+1"],
+      "failure_effects": ["relationship:toko:-1", "mccormick-family:advantage"]
+    },
+    {
+      "id": "mission-bear-path",
+      "family": "protection",
+      "signal_encounter_id": "enc-karhupuisto-watch",
+      "destination_anchor_id": "karhupuisto",
+      "deadline": {"day": 5, "block": "day"},
+      "requirements": {"deployed": 2, "roles_any": ["watcher", "muscle", "fixer"]},
+      "intel_levels": ["rumour", "range"],
+      "approaches": ["quiet-handover", "hold-visible-path", "withdraw"],
+      "battle_id": "battle-karhupuisto-2v2",
+      "battle_avoidance": {"requires_any": ["flag:toko-van-pattern", "crew-role:fixer"], "choice": "name-the-empty-van"},
+      "success_effects": ["relationship:karhupuisto-contact:+1", "cash:+70"],
+      "partial_effects": ["cash:+35", "pressure:karhupuisto:+1"],
+      "failure_effects": ["crew-outcome:possible-wound", "service:park-contact:closed-one-day"]
+    },
+    {
+      "id": "mission-courtyard-receipts",
+      "family": "recovery",
+      "signal_encounter_id": "enc-jade-window",
+      "destination_anchor_id": "torkkelinmaki",
+      "deadline": {"day": 6, "block": "night"},
+      "requirements": {"deployed": 3, "roles_any": ["muscle", "runner", "watcher", "fixer", "local"], "battle_capable": true},
+      "intel_levels": ["rumour", "range"],
+      "approaches": ["ask-for-receipts", "trade-favour", "hold-the-porttikongi", "withdraw"],
+      "battle_id": "battle-courtyard-3v3",
+      "battle_avoidance": null,
+      "success_effects": ["exit-fund:+120", "flag:courtyard-account-settled"],
+      "partial_effects": ["exit-fund:+60", "relationship:jaska:-1"],
+      "failure_effects": ["crew-outcome:critical-wound-possible", "pressure:torkkelinmaki:+2", "relationship:jaska:-2"]
+    }
+  ],
+  "battles": [
+    {
+      "id": "battle-karhupuisto-2v2",
+      "format": "2v2",
+      "location_anchor_id": "karhupuisto",
+      "scene_asset_id": "scene-karhupuisto-v01",
+      "grid": {"rows": ["front", "middle", "back"], "lanes": 3, "cells_per_side": 9, "normally_visible": false},
+      "player_deployed": 2,
+      "opponents": [
+        {"id": "opp-mikko-rinne", "name": "Mikko “Mikki” Rinne", "role": "muscle", "cell": "front-2", "intent": "block-handover", "equipment": "pipe"},
+        {"id": "opp-pauli-leko", "name": "Pauli Leko", "role": "runner", "cell": "middle-1", "intent": "take-package-and-withdraw", "equipment": "baton"}
+      ],
+      "cover": [
+        {"id": "bear-plinth", "cells": ["middle-2"], "effect": "guard-from-same-lane"},
+        {"id": "park-bench", "cells": ["middle-1"], "effect": "blocks-diagonal-front-pressure"}
+      ],
+      "objective": "Complete or abandon the handover; defeating every opponent is unnecessary.",
+      "intent_logic": "Opponents warn, obstruct and attempt to leave with the package before escalating injury.",
+      "negotiation": {"available": true, "requires_any": ["flag:toko-van-pattern", "crew-role:fixer"]},
+      "withdrawal": {"available_from_round": 1, "known_cost": "lose the handover; protect the crew"},
+      "casualty_table": {
+        "zero_condition": ["shaken", "wounded", "missing"],
+        "death": "not-eligible-in-this-battle",
+        "telegraph": "A wounded unit is labelled before the final commitment."
+      },
+      "aftermath": ["local-pressure", "crew-condition", "contact-access"]
+    },
+    {
+      "id": "battle-courtyard-3v3",
+      "format": "3v3",
+      "location_anchor_id": "torkkelinmaki",
+      "scene_asset_id": "scene-courtyard-prototype-v02",
+      "grid": {"rows": ["front", "middle", "back"], "lanes": 3, "cells_per_side": 9, "normally_visible": false},
+      "player_deployed": 3,
+      "opponents": [
+        {"id": "opp-risto-kettunen", "name": "Risto Kettunen", "role": "muscle", "cell": "front-2", "intent": "pin-front", "equipment": "baseball-bat"},
+        {"id": "opp-niina-peltola", "name": "Niina Peltola", "role": "watcher", "cell": "back-1", "intent": "mark-exposed", "equipment": "feature-phone"},
+        {"id": "opp-omar-haddad", "name": "Omar Haddad", "role": "fixer", "cell": "middle-3", "intent": "secure-receipts", "equipment": "baton"}
+      ],
+      "cover": [
+        {"id": "stone-bin", "cells": ["front-1"], "effect": "guard-from-direct-line"},
+        {"id": "bicycle-rack", "cells": ["middle-2"], "effect": "cover-but-pinned-on-heavy-hit"},
+        {"id": "porttikongi-edge", "cells": ["back-3"], "effect": "withdrawal-lane"}
+      ],
+      "objective": "Recover the receipt envelope or negotiate a partial account before either team loses control.",
+      "intent_logic": "The opposing fixer protects the objective; muscle screens; watcher exposes a lane.",
+      "negotiation": {"available": true, "requires_any": ["round:2", "opponent-nerve:shaken", "crew-role:local"]},
+      "withdrawal": {"available_from_round": 1, "known_cost": "leave the receipts; critical wounds remain treatable before settlement"},
+      "casualty_table": {
+        "zero_condition": ["shaken", "wounded", "critical"],
+        "death": "Only an unresolved, clearly flagged critical wound at the final settlement can become death.",
+        "mitigation": ["withdraw-before-second-hit", "spend-treatment", "assign-fixer", "accept-partial-objective"],
+        "telegraph": "Critical risk and available mitigation appear before confirmation; there is no hidden death roll."
+      },
+      "aftermath": ["local-pressure", "crew-wound-or-death", "jaska-memory", "exit-fund"]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "enc-first-purchase",
+      "day": 1,
+      "block": "day",
+      "site_id": "piritori_first_buy",
+      "participants": ["aatami", "seller-esa"],
+      "source_status": "fiction",
+      "opening": "A seller keeps the small bag in his pocket. The tram unloads twice while Aatami watches who stays.",
+      "inspectables": ["seller's wet cuff", "same watcher after two trams", "price written on torn card"],
+      "choices": [
+        {"id": "buy", "label": "Buy one pack — €45", "requirements": ["cash>=45"], "forecast": "Gain stock and the €68 Siltasaari demand lead; become a known customer.", "effects": ["cash:-45", "stock:piri:+1", "reveal:mission-paper-bag", "reveal:enc-first-sale", "flag:first-purchase-made"]},
+        {"id": "ask-control", "label": "Ask who keeps watching", "requirements": [], "forecast": "Keep cash, gain a faction lead, spend the block.", "effects": ["intel:+1", "flag:asked-before-buying", "reveal:enc-jaska-receipt"]},
+        {"id": "walk", "label": "Walk away", "requirements": [], "forecast": "Preserve cash. The offer returns at night with a colder reception.", "effects": ["flag:first-purchase-deferred", "relationship:piritori_independents:-1"]}
+      ],
+      "fallback": "A deferred purchase reappears at the next safe Piritori visit; refusal reshapes the opening but cannot soft-lock the slice."
+    },
+    {
+      "id": "enc-jaska-receipt",
+      "day": 2,
+      "block": "day",
+      "site_id": "jaska_studio",
+      "participants": ["aatami", "jaska"],
+      "source_status": "fiction",
+      "opening": "Jaska cuts old receipts into a city that refuses to line up. A sealed envelope of markka props up one corner.",
+      "inspectables": ["unfinished cardboard map", "family photograph", "300 markka envelope"],
+      "choices": [
+        {"id": "ask-envelope", "label": "Ask before taking the envelope", "requirements": [], "forecast": "Gain dead money and preserve trust.", "effects": ["markka:+300", "relationship:jaska:+1", "flag:markka-explained"]},
+        {"id": "take-envelope", "label": "Call it family money", "requirements": [], "forecast": "Gain dead money; Jaska remembers the wording.", "effects": ["markka:+300", "relationship:jaska:-1", "flag:jaska-money-taken"]},
+        {"id": "leave-it", "label": "Leave the old money under the map", "requirements": [], "forecast": "Lose a bank opportunity; deepen trust.", "effects": ["relationship:jaska:+2", "flag:markka-left-with-jaska"]}
+      ]
+    },
+    {
+      "id": "enc-first-sale",
+      "day": 1,
+      "block": "night",
+      "site_id": "staffed_bank",
+      "anchor_override_id": "siltasaari",
+      "participants": ["aatami", "buyer-leena"],
+      "source_status": "fiction",
+      "opening": "The buyer waits outside the legitimate queue, annoyed that Aatami arrived before she invented a reason to be there.",
+      "inspectables": ["bank queue", "late SMS", "southbound crowd"],
+      "choices": [
+        {"id": "complete", "label": "Complete the first sale", "requirements": ["stock:piri>=1"], "forecast": "Gain €68 and price history; the route becomes visible.", "effects": ["cash:+68", "stock:piri:-1", "complete:mission-paper-bag", "reveal:offer-siltasaari-sell"]},
+        {"id": "ask-introduction", "label": "Trade margin for an introduction", "requirements": ["stock:piri>=1"], "forecast": "Gain €55 and the first runner lead.", "effects": ["cash:+55", "stock:piri:-1", "reveal:enc-mira-at-tram-stop", "flag:first-sale-introduction"]},
+        {"id": "abort", "label": "Keep walking with the queue", "requirements": [], "forecast": "Preserve stock; lose the current quote.", "effects": ["pressure:siltasaari:-1", "flag:first-sale-deferred"]}
+      ]
+    },
+    {
+      "id": "enc-mira-at-tram-stop",
+      "day": 2,
+      "block": "night",
+      "site_id": "harju_pitch",
+      "participants": ["aatami", "crew-mira-hamalainen"],
+      "source_status": "fiction",
+      "opening": "Mira has already read the timetable and Aatami. She asks which one is more reliable.",
+      "inspectables": ["creased paper timetable", "repair tape on messenger bag", "unanswered SMS"],
+      "choices": [
+        {"id": "hire-fair", "label": "Offer €18 per night and no waiting games", "requirements": ["cash>=18"], "forecast": "Recruit Mira with a clear wage and a promise she will remember.", "effects": ["recruit:crew-mira-hamalainen", "flag:promise-no-waiting"]},
+        {"id": "hire-cheap", "label": "Offer €10 and future work", "requirements": ["cash>=10"], "forecast": "Mira joins for one job; loyalty starts low.", "effects": ["recruit-temporary:crew-mira-hamalainen", "relationship:mira:-1"]},
+        {"id": "ask-route", "label": "Pay €8 for the route observation", "requirements": ["cash>=8"], "forecast": "Gain intel without recruiting.", "effects": ["cash:-8", "intel:+1", "flag:ordinary-flow-taught"]}
+      ]
+    },
+    {
+      "id": "enc-bank-counter",
+      "day": 3,
+      "block": "day",
+      "site_id": "staffed_bank",
+      "participants": ["aatami", "teller-anne"],
+      "source_status": "mixed",
+      "documented_fact": "Markka ceased to be legal tender after February 2002 and the fixed conversion rate is 5.94573 markka per euro.",
+      "fiction": "This particular staffed counter provides the slice's exchange service.",
+      "opening": "A paper clock marks the queue. The teller explains that nostalgia has no exchange-rate bonus.",
+      "inspectables": ["number ticket", "fixed conversion notice", "security mirror"],
+      "choices": [
+        {"id": "convert-all", "label": "Convert all carried markka", "requirements": ["markka>0"], "forecast": "Receive the fixed euro equivalent; the block and visible visit are the cost.", "effects": ["convert-markka:all", "flag:bank-visit-visible"]},
+        {"id": "convert-part", "label": "Convert 120 mk", "requirements": ["markka>=120"], "forecast": "Keep some dead money for a later family choice.", "effects": ["convert-markka:120", "flag:bank-visit-visible"]},
+        {"id": "leave-queue", "label": "Leave before your number", "requirements": [], "forecast": "Keep the old cash and preserve the block's legitimacy cover only in memory.", "effects": ["flag:bank-visit-aborted"]}
+      ]
+    },
+    {
+      "id": "enc-toko-quiet-voice",
+      "day": 3,
+      "block": "night",
+      "site_id": "toko_slomo_noodles",
+      "participants": ["aatami", "toko"],
+      "source_status": "fiction",
+      "scene_asset_id": "scene-toko-noodles-prototype-v02",
+      "opening": "Toko dries a bowl and lowers his voice. Three delivery vans. Thursday. One of them is empty.",
+      "inspectables": ["night tram through the window", "three tally marks", "Toko's repaired radio"],
+      "choices": [
+        {"id": "buy-info", "label": "Buy information — €120", "requirements": ["cash>=120"], "forecast": "Confirm a safe description and unlock the Harju range.", "effects": ["cash:-120", "intel:+2", "flag:toko-van-pattern", "reveal:offer-harju-sell"]},
+        {"id": "risk-sabotage", "label": "Risk sabotage — €300", "requirements": ["cash>=300", "relationship:toko>=1"], "forecast": "45% success is visible. Failure costs trust and may close a route.", "effects": ["cash:-300", "resolve:sabotage-wager-45", "flag:toko-sabotage-wagered"]},
+        {"id": "eat-and-listen", "label": "Eat, listen, owe a favour", "requirements": [], "forecast": "Gain a direction rather than a quote; Toko records the favour.", "effects": ["intel:+1", "obligation:toko:+1", "flag:van-pattern-incomplete"]},
+        {"id": "leave", "label": "Leave", "requirements": [], "forecast": "Keep cash; the uncertain mission remains available.", "effects": ["flag:toko-info-declined"]}
+      ]
+    },
+    {
+      "id": "enc-karhupuisto-watch",
+      "day": 4,
+      "block": "day",
+      "site_id": "karhupuisto_bench",
+      "participants": ["aatami", "crew-samira-elmi", "dog-owner"],
+      "source_status": "fiction",
+      "scene_asset_id": "scene-karhupuisto-v01",
+      "opening": "Wind turns the lime leaves. Samira points out the same man crossing the park without ever arriving.",
+      "inspectables": ["dog changing direction", "empty bench kept dry", "repeated crossing"],
+      "choices": [
+        {"id": "hire-watcher", "label": "Hire Samira — €24 per night", "requirements": ["cash>=24"], "forecast": "Recruit a watcher and reveal intent more clearly in the coming mission.", "effects": ["recruit:crew-samira-elmi", "reveal:offer-karhupuisto-sell"]},
+        {"id": "pay-observation", "label": "Pay €10 for the observation", "requirements": ["cash>=10"], "forecast": "Gain one-use intent clarity without a wage.", "effects": ["cash:-10", "intel:+1", "flag:park-intent-read"]},
+        {"id": "ignore-pattern", "label": "Watch the dog instead", "requirements": [], "forecast": "Lower immediate pressure; enter the mission with poorer information.", "effects": ["pressure:karhupuisto:-1", "flag:park-pattern-missed"]}
+      ]
+    },
+    {
+      "id": "enc-mccormick-yard",
+      "day": 4,
+      "block": "night",
+      "site_id": "mccormick_yard",
+      "participants": ["aatami", "sean-mccormick", "crew-rauno-lahti"],
+      "source_status": "fiction",
+      "opening": "The public room closes. In the yard, three relatives disagree about the same invoice at full volume.",
+      "inspectables": ["family photograph behind glass", "cracked bat handle", "restaurant deliveries"],
+      "choices": [
+        {"id": "hire-rauno", "label": "Hire Rauno — €28 per night", "requirements": ["cash>=28"], "forecast": "Recruit muscle; owe the family no extra favour.", "effects": ["recruit:crew-rauno-lahti", "relationship:mccormick_family:+1"]},
+        {"id": "buy-bat", "label": "Buy the repaired bat — €35", "requirements": ["cash>=35"], "forecast": "Unlock two-handed close pressure.", "effects": ["cash:-35", "equipment:+baseball-bat"]},
+        {"id": "accept-favour", "label": "Take gear against a future favour", "requirements": [], "forecast": "Gain a bat and pipe; the family chooses a later obligation.", "effects": ["equipment:+baseball-bat", "equipment:+pipe", "obligation:mccormick_family:+1"]},
+        {"id": "leave-public", "label": "Keep the relationship in the public room", "requirements": [], "forecast": "No equipment; lower faction entanglement.", "effects": ["relationship:mccormick_family:0", "flag:mccormick-distance"]}
+      ]
+    },
+    {
+      "id": "enc-bear-path",
+      "day": 5,
+      "block": "day",
+      "site_id": "karhupuisto_bench",
+      "participants": ["aatami-network-team", "piritori-rival-team"],
+      "source_status": "fiction",
+      "mission_id": "mission-bear-path",
+      "opening": "Two men wait on the wrong side of the granite bear. One keeps glancing toward a van that is not coming.",
+      "inspectables": ["open withdrawal path", "bear plinth cover", "opponent intent if known"],
+      "choices": [
+        {"id": "name-empty-van", "label": "Name the empty van", "requirements": ["flag:toko-van-pattern"], "forecast": "Avoid battle and complete a controlled handover.", "effects": ["complete:mission-bear-path", "battle:avoided", "relationship:toko:+1"]},
+        {"id": "send-fixer", "label": "Let the fixer speak", "requirements": ["crew-role:fixer"], "forecast": "A readable negotiation check; failure starts the 2v2 with neutral formation.", "effects": ["resolve:fixer-negotiation", "battle-on-failure:battle-karhupuisto-2v2"]},
+        {"id": "hold-path", "label": "Hold the path", "requirements": ["deployed-crew>=2"], "forecast": "Begin the 2v2. No death outcome; wounds and missing status are possible.", "effects": ["start-battle:battle-karhupuisto-2v2"]},
+        {"id": "withdraw", "label": "Leave with the package", "requirements": [], "forecast": "Fail safely; lose the contact for one day.", "effects": ["partial:mission-bear-path", "service:park-contact:closed-one-day"]}
+      ]
+    },
+    {
+      "id": "enc-first-firearm",
+      "day": 5,
+      "block": "night",
+      "site_id": "piritori_first_buy",
+      "participants": ["aatami", "seller-esa"],
+      "source_status": "fiction",
+      "opening": "The seller has remembered Aatami's questions. This time the object under the coat changes every answer in the square.",
+      "inspectables": ["seller's exit glance", "wrapped weight", "crew reaction"],
+      "choices": [
+        {"id": "buy-handgun", "label": "Buy the first handgun — €180", "requirements": ["cash>=180", "flag:first-purchase-made"], "forecast": "Unlock armed loadouts and raise Piritori pressure. It is not required to finish the slice.", "effects": ["cash:-180", "equipment:+first-handgun", "flag:battle-capable", "pressure:piritori:+2"]},
+        {"id": "trade-favour", "label": "Trade a McCormick favour", "requirements": ["obligation:mccormick_family>=1"], "forecast": "Gain the weapon; transfer the obligation into family leverage.", "effects": ["equipment:+first-handgun", "flag:battle-capable", "obligation:mccormick_family:+1"]},
+        {"id": "refuse", "label": "Refuse the weapon", "requirements": [], "forecast": "Keep the money. Battle-capable means crew and preparation, not mandatory gun ownership.", "effects": ["flag:first-firearm-refused", "relationship:jaska:+1"]}
+      ]
+    },
+    {
+      "id": "enc-jade-window",
+      "day": 6,
+      "block": "day",
+      "site_id": "jade_lantern_front",
+      "participants": ["aatami", "mei-lan", "lunch-crowd"],
+      "source_status": "fiction",
+      "opening": "Mei Lan serves the lunch queue before acknowledging Aatami. The restaurant is a workplace first and a faction door only if she opens it.",
+      "inspectables": ["ordinary lunch rush", "delivery invoice", "closed back-room door"],
+      "choices": [
+        {"id": "ask-invoice", "label": "Ask about the duplicate invoice", "requirements": ["intel>=2"], "forecast": "Reveal the courtyard recovery mission without accusing the staff.", "effects": ["reveal:mission-courtyard-receipts", "relationship:jade_lantern_network:+1", "reveal:offer-hakaniemi-sell"]},
+        {"id": "buy-lunch", "label": "Buy lunch and wait", "requirements": ["cash>=12"], "forecast": "Spend €12; gain a rumour and preserve the relationship.", "effects": ["cash:-12", "intel:+1", "flag:jade-patient-introduction"]},
+        {"id": "push-door", "label": "Push for the back room", "requirements": [], "forecast": "Open the mission faster; begin with faction distrust.", "effects": ["reveal:mission-courtyard-receipts", "relationship:jade_lantern_network:-2", "pressure:linjat_yard:+1"]},
+        {"id": "leave", "label": "Leave with the lunch crowd", "requirements": [], "forecast": "Keep the teaser unresolved; the courtyard signal arrives by SMS.", "effects": ["flag:jade-front-respected"]}
+      ]
+    },
+    {
+      "id": "enc-courtyard-last-call",
+      "day": 6,
+      "block": "night",
+      "site_id": "jaska_studio",
+      "anchor_override_id": "torkkelinmaki",
+      "participants": ["aatami-network-team", "courtyard-rival-team", "jaska-offscreen"],
+      "source_status": "fiction",
+      "mission_id": "mission-courtyard-receipts",
+      "opening": "The receipt envelope lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+      "inspectables": ["porttikongi withdrawal lane", "lit residential windows", "receipt envelope"],
+      "choices": [
+        {"id": "trade-favour", "label": "Trade the Jade introduction", "requirements": ["relationship:jade_lantern_network>=1"], "forecast": "Start negotiation before the 3v3; a partial account is possible.", "effects": ["start-negotiation:battle-courtyard-3v3", "opponent-nerve:-1"]},
+        {"id": "take-positions", "label": "Take positions", "requirements": ["deployed-crew>=3"], "forecast": "Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.", "effects": ["start-battle:battle-courtyard-3v3"]},
+        {"id": "leave-receipts", "label": "Leave the receipts", "requirements": [], "forecast": "Fail the recovery without combat; protect Jaska's home and reduce pressure.", "effects": ["fail:mission-courtyard-receipts", "relationship:jaska:+1", "pressure:torkkelinmaki:-1"]}
+      ]
+    },
+    {
+      "id": "enc-pasila-ledger",
+      "day": 7,
+      "block": "day",
+      "site_id": "staffed_bank",
+      "participants": ["aatami", "bank-clerk", "optional-surviving-crew"],
+      "source_status": "fiction",
+      "opening": "A brochure shows a clean Pasila flat with no routes drawn on it. The ledger beside it refuses the same fantasy.",
+      "inspectables": ["exit-fund total", "debt demand", "crew treatment needs", "Pasila brochure"],
+      "choices": [
+        {"id": "pay-debt", "label": "Pay debt before the exit fund", "requirements": ["cash>=150"], "forecast": "Reduce immediate threat; Pasila remains farther away in cash.", "effects": ["cash:-150", "debt:-150", "flag:debt-prioritised"]},
+        {"id": "fund-exit", "label": "Ring-fence the exit fund", "requirements": ["cash>=120"], "forecast": "Move €120 toward Pasila; debt pressure persists.", "effects": ["cash:-120", "exit-fund:+120", "flag:exit-prioritised"]},
+        {"id": "treat-crew", "label": "Treat critical wounds first", "requirements": ["crew-critical>=1", "cash>=80"], "forecast": "Prevent a known death risk; accept a weaker financial ending.", "effects": ["cash:-80", "resolve-critical-wound:one", "flag:crew-prioritised"]},
+        {"id": "ask-jaska", "label": "Ask Jaska what Eden costs", "requirements": ["relationship:jaska>=1"], "forecast": "Gain no money; unlock the honest final conversation.", "effects": ["flag:honest-ending-open"]}
+      ]
+    },
+    {
+      "id": "enc-jaska-last-light",
+      "day": 7,
+      "block": "night",
+      "site_id": "jaska_studio",
+      "participants": ["aatami", "jaska"],
+      "source_status": "fiction",
+      "opening": "Jaska has pasted every route receipt into the cardboard city. Pasila is a blank shape cut from the edge.",
+      "inspectables": ["names of surviving crew", "empty portrait space if someone died", "unmarked Pasila cutout"],
+      "choices": [
+        {"id": "call-it-eden", "label": "Call the move Eden", "requirements": [], "forecast": "Close the slice with Aatami defending the plan.", "effects": ["resolve-ending:best-match", "memory:aatami-called-it-eden"]},
+        {"id": "name-the-cost", "label": "Name what the routes cost", "requirements": ["flag:honest-ending-open"], "forecast": "Close with a harder family truth; no morality score is awarded.", "effects": ["resolve-ending:best-match", "relationship:jaska:+1", "memory:aatami-named-cost"]},
+        {"id": "take-the-map", "label": "Take Jaska's cardboard map", "requirements": ["relationship:jaska>=0"], "forecast": "Carry the Kallio network into the future literally and mechanically.", "effects": ["resolve-ending:best-match", "flag:network-inherited-as-map"]},
+        {"id": "leave-map", "label": "Leave the map unfinished", "requirements": [], "forecast": "Pasila remains a possibility rather than a victory screen.", "effects": ["resolve-ending:best-match", "flag:map-left-with-jaska"]}
+      ]
+    }
+  ],
+  "schedule": [
+    {"day": 1, "block": "day", "encounter_id": "enc-first-purchase", "anchor_id": "piritori"},
+    {"day": 1, "block": "night", "encounter_id": "enc-first-sale", "anchor_id": "siltasaari"},
+    {"day": 2, "block": "day", "encounter_id": "enc-jaska-receipt", "anchor_id": "torkkelinmaki"},
+    {"day": 2, "block": "night", "encounter_id": "enc-mira-at-tram-stop", "anchor_id": "harju"},
+    {"day": 3, "block": "day", "encounter_id": "enc-bank-counter", "anchor_id": "siltasaari", "news_before": "news-markka-afterlife"},
+    {"day": 3, "block": "night", "encounter_id": "enc-toko-quiet-voice", "anchor_id": "vaasankatu"},
+    {"day": 4, "block": "day", "encounter_id": "enc-karhupuisto-watch", "anchor_id": "karhupuisto"},
+    {"day": 4, "block": "night", "encounter_id": "enc-mccormick-yard", "anchor_id": "linjat_yard"},
+    {"day": 5, "block": "day", "encounter_id": "enc-bear-path", "anchor_id": "karhupuisto"},
+    {"day": 5, "block": "night", "encounter_id": "enc-first-firearm", "anchor_id": "piritori"},
+    {"day": 6, "block": "day", "encounter_id": "enc-jade-window", "anchor_id": "linjat_yard"},
+    {"day": 6, "block": "night", "encounter_id": "enc-courtyard-last-call", "anchor_id": "torkkelinmaki"},
+    {"day": 7, "block": "day", "encounter_id": "enc-pasila-ledger", "anchor_id": "siltasaari"},
+    {"day": 7, "block": "night", "encounter_id": "enc-jaska-last-light", "anchor_id": "torkkelinmaki"}
+  ],
+  "news": [
+    {
+      "id": "news-markka-afterlife",
+      "day": 3,
+      "channel": "scheduled-tv",
+      "presenter": "Arvo Linde",
+      "documented": "Markka notes and coins ceased to be legal tender after February 2002. The irrevocable conversion rate is 5.94573 markka per euro, and redemption remained available through the Bank of Finland until 29 February 2012.",
+      "inference": "Old cash can still appear in homes and informal payments even though ordinary shops cannot treat it as current money.",
+      "accusation": null,
+      "fiction": "The slice's staffed Siltasaari counter and its visibility consequences are fictional gameplay services.",
+      "arvo_copy": "The markka is no longer money at the till. Its value is fixed; recovering that value still requires a journey.",
+      "sources": [
+        "https://www.suomenpankki.fi/en/bank-of-finland/art-and-history/the-markka/",
+        "https://www.ecb.europa.eu/press/pr/date/1998/html/pr981231_2.en.html"
+      ],
+      "effects": ["reveal:staffed_bank", "label:markka-dead-money"]
+    }
+  ],
+  "endings": [
+    {
+      "id": "pasila-nearer",
+      "label": "A door, not Eden",
+      "requirements": ["exit-fund>=180", "debt<=250", "surviving-crew>=2"],
+      "summary": "Pasila becomes financially plausible, but the route map travels with Aatami."
+    },
+    {
+      "id": "pasila-deferred",
+      "label": "One more winter",
+      "requirements": ["exit-fund<180", "surviving-crew>=2"],
+      "summary": "The family plan survives; the calendar does not. Aatami stays in Kallio longer."
+    },
+    {
+      "id": "pasila-expensive",
+      "label": "A clean address, an unpaid city",
+      "requirements": ["exit-fund>=180", "debt>250"],
+      "summary": "The move is possible only by carrying debt and faction obligations forward."
+    },
+    {
+      "id": "pasila-haunted",
+      "label": "The empty portrait",
+      "requirements": ["crew-deaths>=1"],
+      "summary": "Pasila may be nearer or farther, but one absence becomes part of what the family inherits."
+    }
+  ],
+  "asset_refs": [
+    "scene-toko-noodles-prototype-v02",
+    "scene-karhupuisto-v01",
+    "scene-courtyard-prototype-v02",
+    "formation-grid-3x3-v01",
+    "weather-rain-fine-v01",
+    "weather-wet-sheen-v01",
+    "foliage-lime-tree-v01",
+    "animal-spitz-v03"
+  ]
+}

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1460" viewBox="0 0 1600 1460" role="img" aria-labelledby="title desc">
+  <title id="title">Piritori to Eden five-mode landscape UX wireframes</title>
+  <desc id="desc">Structural wireframes for City, Location, Ledger, Battle, and Communications in landscape layouts.</desc>
+  <style>
+    .bg{fill:#121719}.frame{fill:#1b2022;stroke:#c7aa79;stroke-width:3}.panel{fill:#24282a;stroke:#676b6b;stroke-width:2}.paper{fill:#c7aa79}.cream{fill:#e2d8c2}.cyan{fill:#38b8c8}.magenta{fill:#b84d83}.orange{fill:#c87539}.red{fill:#a94b43}.green{fill:#648f63}.outline{fill:none;stroke:#c7aa79;stroke-width:2}.grid{fill:none;stroke:#676b6b;stroke-width:1;stroke-dasharray:6 7}.route{fill:none;stroke:#38b8c8;stroke-width:5;stroke-dasharray:12 8}.goods{fill:none;stroke:#b84d83;stroke-width:5;stroke-dasharray:8 8}.intent{fill:none;stroke:#a94b43;stroke-width:3;stroke-dasharray:8 6}.t{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:16px}.s{font-family:ui-monospace,monospace;fill:#c7aa79;font-size:12px}.h{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:25px;font-weight:700;letter-spacing:2px}.label{font-family:ui-monospace,monospace;fill:#121719;font-size:12px;font-weight:700}.tag{font-family:ui-monospace,monospace;fill:#121719;font-size:10px;font-weight:700}.num{font-family:ui-monospace,monospace;fill:#e2d8c2;font-size:11px}.dot{fill:#e2d8c2}.node{fill:#24282a;stroke:#38b8c8;stroke-width:3}.enemy{fill:#24282a;stroke:#a94b43;stroke-width:3}.ally{fill:#24282a;stroke:#38b8c8;stroke-width:3}
+  </style>
+  <rect class="bg" width="1600" height="1460"/>
+  <text class="h" x="55" y="52">PIRITORI → EDEN · LANDSCAPE UX STRUCTURE</text>
+  <text class="s" x="55" y="78">HIERARCHY ONLY · ART BIBLE v1 OWNS FINAL MATERIAL, TYPE AND ASSETS</text>
+
+  <!-- City -->
+  <g transform="translate(55 110)">
+    <rect class="frame" width="720" height="405" rx="5"/>
+    <rect class="panel" x="10" y="10" width="700" height="42"/>
+    <text class="t" x="26" y="37">DAY 03 · NIGHT</text><text class="s" x="250" y="36">KALLIO</text><text class="s" x="460" y="36">€ 420 · DEBT DUE 2D</text>
+    <rect class="panel" x="10" y="62" width="500" height="285"/>
+    <path class="goods" d="M100 280 L220 210 L355 245 L450 130"/>
+    <path class="route" d="M82 305 L180 255 L310 180 L430 205"/>
+    <path class="grid" d="M40 105 L480 300 M70 320 L310 80 M150 340 L470 110 M45 200 L480 200"/>
+    <circle class="node" cx="82" cy="305" r="17"/><circle class="node" cx="310" cy="180" r="17"/><circle class="enemy" cx="450" cy="130" r="17"/>
+    <rect class="paper" x="48" y="326" width="80" height="22"/><text class="tag" x="58" y="341">PIRITORI</text>
+    <rect class="orange" x="397" y="78" width="96" height="28"/><text class="label" x="410" y="97">MISSION 2H</text>
+    <g fill="#e2d8c2"><circle cx="140" cy="150" r="4"/><circle cx="190" cy="125" r="4"/><circle cx="260" cy="300" r="4"/><circle cx="390" cy="275" r="4"/><circle cx="345" cy="115" r="4"/></g>
+    <rect class="panel" x="520" y="62" width="190" height="285"/>
+    <text class="t" x="538" y="90">PIRITORI</text><text class="s" x="538" y="112">OPEN · GUARDED</text>
+    <rect class="paper" x="535" y="130" width="160" height="56"/><text class="label" x="548" y="152">FIRST SELLER</text><text class="tag" x="548" y="170">QUOTE 1 BLOCK OLD</text>
+    <rect class="panel" x="535" y="198" width="160" height="48"/><text class="s" x="548" y="219">CREW: NONE</text><text class="s" x="548" y="236">FLOW: BUSY</text>
+    <rect class="cyan" x="535" y="262" width="160" height="44"/><text class="label" x="590" y="289">ENTER</text>
+    <rect class="panel" x="10" y="357" width="700" height="38"/>
+    <rect class="cyan" x="18" y="365" width="126" height="22"/><text class="tag" x="66" y="380">CITY</text>
+    <text class="s" x="184" y="381">LEDGER</text><text class="s" x="335" y="381">MESSAGES 1</text><text class="s" x="520" y="381">WAIT</text><text class="s" x="640" y="381">MENU</text>
+    <text class="h" x="12" y="-12">01 · CITY</text>
+  </g>
+
+  <!-- Location -->
+  <g transform="translate(825 110)">
+    <rect class="frame" width="720" height="405" rx="5"/>
+    <rect class="panel" x="10" y="10" width="700" height="44"/><text class="t" x="26" y="38">TOKO SLOMO'S NOODLES · VAASANKATU</text>
+    <rect class="panel" x="10" y="64" width="700" height="210"/>
+    <rect class="paper" x="35" y="92" width="160" height="120"/><text class="label" x="85" y="158">SHELVES</text>
+    <rect class="orange" x="230" y="112" width="250" height="118"/><text class="label" x="310" y="170">TOKO + COUNTER</text>
+    <rect class="green" x="515" y="84" width="165" height="155"/><text class="label" x="558" y="165">NIGHT TRAM</text>
+    <rect class="panel" x="20" y="220" width="680" height="44"/><text class="t" x="35" y="247">“Three vans. Thursday. One is empty.”</text>
+    <rect class="panel" x="10" y="284" width="190" height="54"/><text class="s" x="25" y="306">LOOK · TALK · USE</text><text class="s" x="25" y="326">LEAVE</text>
+    <rect class="magenta" x="210" y="284" width="150" height="54"/><text class="label" x="247" y="308">BUY INFO</text><text class="tag" x="268" y="326">€120</text>
+    <rect class="orange" x="370" y="284" width="190" height="54"/><text class="label" x="401" y="308">RISK SABOTAGE</text><text class="tag" x="430" y="326">€300 · 45%</text>
+    <rect class="panel" x="570" y="284" width="140" height="54"/><text class="t" x="614" y="317">LEAVE</text>
+    <rect class="panel" x="10" y="348" width="700" height="47"/><text class="s" x="24" y="376">KNOWN: INFO CHANGES QUOTE RANGE · SABOTAGE RISKS FAVOUR</text>
+    <text class="h" x="12" y="-12">02 · LOCATION</text>
+  </g>
+
+  <!-- Ledger -->
+  <g transform="translate(55 575)">
+    <rect class="frame" width="720" height="405" rx="5"/>
+    <rect class="panel" x="10" y="10" width="700" height="42"/><text class="t" x="26" y="37">AATAMI'S LEDGER · HOME</text><text class="s" x="510" y="36">€ 420 · 55 mk</text>
+    <rect class="panel" x="10" y="62" width="140" height="288"/>
+    <rect class="cyan" x="20" y="78" width="120" height="38"/><text class="label" x="57" y="102">MARKET</text>
+    <text class="s" x="28" y="148">CREW</text><text class="s" x="28" y="190">LOADOUT</text><text class="s" x="28" y="232">OBLIGATIONS</text>
+    <rect class="panel" x="160" y="62" width="340" height="288"/>
+    <text class="t" x="178" y="88">KNOWN OFFERS · PIRI</text>
+    <rect class="paper" x="175" y="104" width="310" height="55"/><text class="label" x="188" y="126">PIRITORI · QUOTE</text><text class="tag" x="188" y="146">BUY €— · 1 BLOCK OLD</text>
+    <rect class="panel" x="175" y="168" width="310" height="55"/><text class="s" x="188" y="192">HARJU · RANGE €—–€—</text><text class="s" x="188" y="210">CAUSE: DRY NIGHT</text>
+    <rect class="panel" x="175" y="232" width="310" height="55"/><text class="s" x="188" y="256">TOKO · RUMOUR: RISING</text><text class="s" x="188" y="274">SOURCE: TOKO</text>
+    <rect class="panel" x="510" y="62" width="200" height="288"/>
+    <text class="t" x="528" y="90">DETAIL</text><text class="s" x="528" y="118">SOURCE · AGE</text><text class="s" x="528" y="142">CASH · STOCK</text><text class="s" x="528" y="166">CAPACITY · TIME</text>
+    <rect class="orange" x="525" y="242" width="170" height="46"/><text class="label" x="558" y="270">PLAN VISIT</text>
+    <rect class="panel" x="525" y="298" width="170" height="36"/><text class="s" x="548" y="321">PIN COMPARE</text>
+    <rect class="panel" x="10" y="360" width="700" height="35"/><text class="s" x="24" y="382">MARKKA IS UNUSABLE · GO TO BANK</text>
+    <text class="h" x="12" y="-12">03 · LEDGER</text>
+  </g>
+
+  <!-- Battle -->
+  <g transform="translate(825 575)">
+    <rect class="frame" width="720" height="405" rx="5"/>
+    <rect class="panel" x="10" y="10" width="700" height="38"/><text class="t" x="26" y="35">ROUND 2 · CREW PHASE</text><text class="s" x="510" y="34">OBJECTIVE: EXIT</text>
+    <rect class="panel" x="10" y="58" width="700" height="235"/>
+    <g transform="translate(55 85)">
+      <path class="grid" d="M0 130 L180 25 L360 130 L180 235 Z M60 165 L240 60 M120 200 L300 95 M60 95 L240 200 M120 60 L300 165"/>
+      <circle class="ally" cx="90" cy="147" r="18"/><circle class="ally" cx="150" cy="112" r="18"/><circle class="ally" cx="210" cy="147" r="18"/>
+      <rect class="paper" x="250" y="112" width="55" height="20"/>
+      <circle class="enemy" cx="390" cy="112" r="18"/><circle class="enemy" cx="450" cy="147" r="18"/><circle class="enemy" cx="510" cy="112" r="18"/>
+      <path class="intent" d="M210 147 L390 112"/>
+    </g>
+    <text class="s" x="28" y="80">BACK · MIDDLE · FRONT</text><text class="s" x="545" y="80">FRONT · MIDDLE · BACK</text>
+    <rect class="panel" x="10" y="303" width="185" height="92"/><text class="t" x="25" y="328">RANE · 18/24</text><text class="s" x="25" y="350">GUARD ■■■□</text><text class="s" x="25" y="370">NERVE ■■□□</text>
+    <rect class="red" x="205" y="303" width="105" height="52"/><text class="label" x="230" y="334">ATTACK</text>
+    <rect class="cyan" x="318" y="303" width="105" height="52"/><text class="label" x="345" y="334">GUARD</text>
+    <rect class="paper" x="431" y="303" width="120" height="52"/><text class="label" x="447" y="334">REPOSITION</text>
+    <rect class="panel" x="559" y="303" width="151" height="39"/><text class="s" x="598" y="327">AUTO OFF</text>
+    <rect class="panel" x="205" y="363" width="346" height="32"/><text class="s" x="220" y="384">PREVIEW: COVER BLOCKS · NO LETHAL RISK</text>
+    <rect class="panel" x="559" y="350" width="151" height="45"/><text class="t" x="584" y="379">WITHDRAW</text>
+    <text class="h" x="12" y="-12">04 · BATTLE</text>
+  </g>
+
+  <!-- Communications -->
+  <g transform="translate(55 1040)">
+    <rect class="frame" width="1490" height="360" rx="5"/>
+    <rect class="panel" x="10" y="10" width="1470" height="42"/><text class="t" x="26" y="37">COMMUNICATIONS</text><text class="s" x="1120" y="36">TV · PHONE 2 · ONLINE LOCKED</text>
+    <rect class="panel" x="10" y="62" width="860" height="225"/>
+    <rect class="paper" x="35" y="82" width="530" height="175"/><text class="label" x="235" y="174">CRT · ARVO BULLETIN</text>
+    <rect class="panel" x="585" y="82" width="260" height="175"/><text class="t" x="605" y="112">HEADLINE</text><text class="s" x="605" y="140">DATE · PLACE</text><rect class="cyan" x="605" y="160" width="190" height="26"/><text class="tag" x="628" y="178">DOCUMENTED FACT</text><text class="s" x="605" y="216">TRANSCRIPT / CAPTION</text>
+    <rect class="panel" x="880" y="62" width="600" height="225"/>
+    <text class="t" x="900" y="92">KNOWN EFFECTS</text>
+    <rect class="orange" x="900" y="112" width="250" height="52"/><text class="label" x="922" y="143">ROUTE CLOSURE</text>
+    <rect class="panel" x="1165" y="112" width="280" height="52"/><text class="s" x="1185" y="143">MARKET RUMOUR UPDATED</text>
+    <rect class="panel" x="900" y="180" width="545" height="72"/><text class="s" x="920" y="208">ARVO REPORTS FACT.</text><text class="s" x="920" y="231">KALLE'S ACCUSATION STAYS ATTRIBUTED.</text>
+    <rect class="panel" x="10" y="297" width="1470" height="53"/><text class="s" x="30" y="330">TV</text><text class="s" x="150" y="330">PHONE 2</text><text class="s" x="300" y="330">ONLINE</text><rect class="cyan" x="1210" y="306" width="250" height="35"/><text class="label" x="1258" y="329">RETURN TO CITY</text>
+    <text class="h" x="12" y="-12">05 · COMMUNICATIONS</text>
+  </g>
+</svg>

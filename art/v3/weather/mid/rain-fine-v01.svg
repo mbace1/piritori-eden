@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Fine mid rain</title>
+  <desc id="desc">Sparse diagonal rain strokes intended to tile while scrolling.</desc>
+  <defs>
+    <pattern id="rain_pattern" width="160" height="150" patternUnits="userSpaceOnUse" patternTransform="rotate(-9)">
+      <g stroke="#8db5c0" stroke-opacity=".34" stroke-linecap="round">
+        <path d="M22-20v48M76 46v36M132 96v50" stroke-width="2"/>
+        <path d="M108-10v26M42 104v24" stroke-width="1.5"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect id="rain_mid" width="1920" height="1080" fill="url(#rain_pattern)"/>
+</svg>

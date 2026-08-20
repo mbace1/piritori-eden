@@ -1,0 +1,265 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Piritori to Eden Era I Kallio map blueprint</title>
+  <desc id="desc">A north-up, geographically grounded cut-card relief blueprint of Kallio in 2003 with eight active slice anchors, public routes, locked expansion areas, and fictional sites attached to public anchors.</desc>
+  <defs>
+    <pattern id="paperNoise" width="31" height="31" patternUnits="userSpaceOnUse">
+      <rect width="31" height="31" fill="#171d20"/>
+      <path d="M2 7h7M17 3h10M8 21h11M23 26h5" stroke="#273034" stroke-width="1" opacity=".55"/>
+      <circle cx="6" cy="27" r="1" fill="#384145" opacity=".35"/>
+      <circle cx="25" cy="14" r="1" fill="#0a0e10" opacity=".6"/>
+    </pattern>
+    <pattern id="waterNoise" width="52" height="34" patternUnits="userSpaceOnUse">
+      <rect width="52" height="34" fill="#102530"/>
+      <path d="M2 9q11-6 22 0t22 0M-8 25q11-6 22 0t22 0t22 0" fill="none" stroke="#19404e" stroke-width="2" opacity=".65"/>
+    </pattern>
+    <filter id="lift" x="-20%" y="-20%" width="140%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="4" result="offset"/>
+      <feComponentTransfer in="offset" result="shadow"><feFuncA type="linear" slope=".75"/></feComponentTransfer>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softLift" x="-20%" y="-20%" width="140%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur"/>
+      <feOffset in="blur" dx="0" dy="2" result="offset"/>
+      <feComponentTransfer in="offset" result="shadow"><feFuncA type="linear" slope=".6"/></feComponentTransfer>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="worldClip"><rect x="22" y="92" width="1110" height="786" rx="4"/></clipPath>
+    <style>
+      .frame{fill:#0d1215;stroke:#927b5f;stroke-width:3}
+      .paper{fill:#b79b70;stroke:#2b2620;stroke-width:2}
+      .land{fill:url(#paperNoise);stroke:#9b7e59;stroke-width:7;stroke-linejoin:bevel}
+      .block{fill:#252c2f;stroke:#111719;stroke-width:3;stroke-linejoin:bevel}
+      .block2{fill:#20272a;stroke:#101416;stroke-width:3;stroke-linejoin:bevel}
+      .road{fill:none;stroke:#555b5b;stroke-width:18;stroke-linecap:square;stroke-linejoin:bevel}
+      .roadInner{fill:none;stroke:#2e3538;stroke-width:11;stroke-linecap:square;stroke-linejoin:bevel}
+      .street{fill:none;stroke:#42494b;stroke-width:7;stroke-linecap:square}
+      .rail{fill:none;stroke:#090c0e;stroke-width:18}
+      .railTie{fill:none;stroke:#8a8272;stroke-width:3;stroke-dasharray:4 12}
+      .tram{fill:none;stroke:#71885b;stroke-width:8;stroke-linecap:square;stroke-linejoin:bevel}
+      .metro{fill:none;stroke:#c1783b;stroke-width:7;stroke-dasharray:13 9}
+      .route{fill:none;stroke:#43b8c4;stroke-width:8;stroke-linecap:square;stroke-linejoin:bevel}
+      .goods{fill:none;stroke:#bd568c;stroke-width:7;stroke-dasharray:11 10}
+      .nodeOuter{fill:#111719;stroke:#b89a6d;stroke-width:7}
+      .nodeInner{fill:#1d2528;stroke:#0a0d0f;stroke-width:3}
+      .active{fill:#43b8c4}
+      .service{fill:#bd568c}
+      .warm{fill:#cc7a3e}
+      .park{fill:#81965c}
+      .locked{fill:#303638;stroke:#77736b;stroke-width:5}
+      .teaser{fill:#22282b;stroke:#cc7a3e;stroke-width:5;stroke-dasharray:8 6}
+      .landmark{fill:#b79b70;stroke:#191d1f;stroke-width:4}
+      .labelTab{fill:#b79b70;stroke:#16191b;stroke-width:3}
+      .darkTab{fill:#151b1e;stroke:#8a7355;stroke-width:3}
+      .title{font-family:"Arial Narrow",Arial,sans-serif;font-size:39px;font-weight:900;letter-spacing:3px;fill:#e6d8bd}
+      .sub{font-family:ui-monospace,monospace;font-size:15px;font-weight:700;letter-spacing:1.3px;fill:#83cbd2}
+      .label{font-family:"Arial Narrow",Arial,sans-serif;font-size:19px;font-weight:900;letter-spacing:1.3px;fill:#16191b}
+      .darkLabel{font-family:"Arial Narrow",Arial,sans-serif;font-size:18px;font-weight:900;letter-spacing:1.1px;fill:#e6d8bd}
+      .small{font-family:ui-monospace,monospace;font-size:13px;fill:#c4b28f}
+      .tiny{font-family:ui-monospace,monospace;font-size:11px;fill:#9ea3a0}
+      .panelH{font-family:"Arial Narrow",Arial,sans-serif;font-size:24px;font-weight:900;letter-spacing:2px;fill:#e6d8bd}
+      .panelT{font-family:ui-monospace,monospace;font-size:15px;fill:#cbb996}
+      .panelTiny{font-family:ui-monospace,monospace;font-size:12px;fill:#8f9896}
+      .flow{fill:#d6c5a5;stroke:#181b1c;stroke-width:1}
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#090d0f"/>
+  <rect x="18" y="16" width="1564" height="66" class="frame"/>
+  <text id="title" x="42" y="58" class="title">PIRITORI → EDEN</text>
+  <text x="455" y="46" class="sub">ERA I · KALLIO · 2003</text>
+  <text x="455" y="67" class="tiny">PUBLIC GEOGRAPHY / FICTIONAL SITE ANCHORS / NORTH UP</text>
+  <text x="1342" y="56" class="sub">MAP v1.0</text>
+
+  <rect x="18" y="88" width="1118" height="792" rx="5" class="frame"/>
+  <g id="world" clip-path="url(#worldClip)">
+    <rect id="backing" x="22" y="92" width="1110" height="786" fill="url(#waterNoise)"/>
+
+    <g id="map-geometry" transform="translate(112 80) scale(.78)">
+      <g id="land-relief">
+        <path class="land" filter="url(#lift)" d="M145 30 L955 20 L990 105 L982 260 L1010 390 L980 520 L905 555 L884 670 L820 730 L715 748 L676 835 L392 840 L351 795 L262 770 L203 710 L178 610 L138 530 L155 410 L122 310 L143 200 Z"/>
+        <path d="M760 730 L820 700 L874 632 L892 560 L972 525 L1010 548 L1005 850 L675 850 Z" fill="#0f2934" opacity=".8"/>
+        <path d="M120 755 L260 768 L350 800 L390 846 L110 850 Z" fill="#0f2934" opacity=".8"/>
+      </g>
+
+      <g id="minor-blocks" opacity=".98">
+        <path class="block" d="M260 110l90-38 64 45-30 76-98 16-42-43z"/>
+        <path class="block2" d="M420 65l116-20 52 54-18 86-112 8-36-46z"/>
+        <path class="block" d="M603 58l122-17 56 56-23 84-112 20-53-54z"/>
+        <path class="block2" d="M790 76l100-27 63 52-8 101-103 11-53-51z"/>
+        <path class="block2" d="M250 232l112-17 44 45-19 80-106 12-47-46z"/>
+        <path class="block" d="M421 220l111-18 60 47-18 88-109 10-55-52z"/>
+        <path class="block2" d="M610 220l110-20 55 46-12 92-113 15-53-55z"/>
+        <path class="block" d="M806 230l119-16 38 56-18 92-106 12-47-58z"/>
+        <path class="block" d="M222 378l104-20 57 48-16 87-104 12-52-56z"/>
+        <path class="block2" d="M400 370l116-20 58 51-16 87-117 14-50-55z"/>
+        <path class="block" d="M595 374l119-24 52 58-22 92-114 10-44-56z"/>
+        <path class="block2" d="M798 390l128-22 37 59-28 90-119 7-32-57z"/>
+        <path class="block2" d="M235 530l108-18 52 52-16 89-108 8-48-49z"/>
+        <path class="block" d="M418 525l116-20 56 60-22 88-109 8-53-57z"/>
+        <path class="block2" d="M610 536l115-20 56 51-20 94-115 9-45-58z"/>
+        <path class="block" d="M780 550l92-17 42 50-25 83-92 15-35-54z"/>
+        <path class="block" d="M292 683l95-15 46 48-18 74-91 3-43-43z"/>
+        <path class="block2" d="M463 685l105-16 45 48-16 77-104 4-42-49z"/>
+        <path class="block" d="M630 686l102-14 40 48-25 73-99 10-33-51z"/>
+      </g>
+
+      <g id="rail-and-roads">
+        <path class="rail" d="M166 25 C183 172 170 310 200 450 S232 706 218 842"/>
+        <path class="railTie" d="M166 25 C183 172 170 310 200 450 S232 706 218 842"/>
+        <path class="road" d="M440 850 L461 784 L481 665 L500 548 L429 375 L357 280"/>
+        <path class="roadInner" d="M440 850 L461 784 L481 665 L500 548 L429 375 L357 280"/>
+        <path class="road" d="M462 783 L525 685 L612 596 L661 551 L649 382 L760 277"/>
+        <path class="roadInner" d="M462 783 L525 685 L612 596 L661 551 L649 382 L760 277"/>
+        <path class="road" d="M205 206 L429 374 L559 347 L649 382 L920 370"/>
+        <path class="roadInner" d="M205 206 L429 374 L559 347 L649 382 L920 370"/>
+        <path class="road" d="M205 205 L390 135 L606 129 L850 162"/>
+        <path class="roadInner" d="M205 205 L390 135 L606 129 L850 162"/>
+        <path class="road" d="M463 783 C620 760 760 690 943 588"/>
+        <path class="roadInner" d="M463 783 C620 760 760 690 943 588"/>
+        <path class="street" d="M422 528 L489 546 L583 461 L661 551"/>
+        <path class="street" d="M489 546 L429 374 L559 347"/>
+        <path class="street" d="M583 461 L559 347 L649 382"/>
+        <path class="street" d="M429 374 L206 205"/>
+        <path class="street" d="M559 347 L606 129"/>
+        <path class="street" d="M649 382 L943 588"/>
+      </g>
+
+      <g id="public-transit">
+        <path class="tram" d="M463 783 L422 528 L489 546 L429 374 L206 205"/>
+        <path class="tram" d="M463 783 L661 551 L649 382"/>
+        <path class="metro" d="M463 783 L649 382"/>
+        <g transform="translate(517 690)" filter="url(#softLift)">
+          <rect x="-18" y="-11" width="36" height="22" rx="2" fill="#778d5f" stroke="#111" stroke-width="3"/>
+          <text x="-5" y="5" class="label" font-size="13">6</text>
+        </g>
+        <g transform="translate(426 468)" filter="url(#softLift)">
+          <rect x="-22" y="-11" width="44" height="22" rx="2" fill="#778d5f" stroke="#111" stroke-width="3"/>
+          <text x="-13" y="5" class="label" font-size="13">3B</text>
+        </g>
+        <g transform="translate(565 575)" filter="url(#softLift)">
+          <circle r="16" fill="#c1783b" stroke="#111" stroke-width="4"/>
+          <text x="-7" y="6" class="label" font-size="14">M</text>
+        </g>
+      </g>
+
+      <g id="ordinary-flow">
+        <g class="flow">
+          <circle cx="470" cy="744" r="5"/><path d="M470 749v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="496" cy="621" r="5"/><path d="M496 626v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="452" cy="476" r="5"/><path d="M452 481v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="521" cy="424" r="5"/><path d="M521 429v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="590" cy="356" r="5"/><path d="M590 361v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="665" cy="431" r="5"/><path d="M665 436v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="708" cy="531" r="5"/><path d="M708 536v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="823" cy="621" r="5"/><path d="M823 626v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="344" cy="316" r="5"/><path d="M344 321v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+          <circle cx="298" cy="183" r="5"/><path d="M298 188v14m-8 10 8-10 8 10" fill="none" stroke="#d6c5a5" stroke-width="4"/>
+        </g>
+      </g>
+
+      <g id="crew-and-goods">
+        <path class="route" d="M649 382 L559 347 L429 374 L489 546"/>
+        <path class="goods" d="M649 382 L661 551 L463 783"/>
+      </g>
+
+      <g id="anchors">
+        <g id="node-siltasaari" transform="translate(439 835)">
+          <circle r="25" class="nodeOuter"/><circle r="15" class="nodeInner"/><path d="M-8 5h16M-6 0h12M-3-5h6" stroke="#cc7a3e" stroke-width="4"/>
+          <g transform="translate(-54 34)"><rect x="-8" y="-15" width="140" height="31" class="labelTab"/><text x="5" y="7" class="label">SILTASAARI</text></g>
+        </g>
+        <g id="node-hakaniemi" transform="translate(463 783)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><rect x="-8" y="-8" width="16" height="16" class="warm"/>
+          <g transform="translate(-64 34)"><rect x="-8" y="-15" width="140" height="31" class="labelTab"/><text x="5" y="7" class="label">HAKANIEMI</text></g>
+        </g>
+        <g id="node-linjat" transform="translate(661 551)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><rect x="-9" y="-9" width="18" height="18" class="warm"/>
+          <g transform="translate(22 -14)"><rect x="-5" y="-18" width="205" height="34" class="darkTab"/><text x="8" y="6" class="darkLabel">LINJAT / HÄMEENTIE</text></g>
+        </g>
+        <g id="node-church" transform="translate(422 528)">
+          <path d="M0-24 22 0 0 24-22 0Z" class="landmark"/><path d="M0-13v25M-8-4h16" stroke="#171b1d" stroke-width="4"/>
+          <g transform="translate(-150 -30)"><rect x="-7" y="-16" width="180" height="31" class="labelTab"/><text x="4" y="6" class="label">KALLION KIRKKO</text></g>
+        </g>
+        <g id="node-karhupuisto" transform="translate(489 546)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><path d="M0-10 11 9H-11Z" class="park"/>
+          <g transform="translate(-20 42)"><rect x="-8" y="-16" width="142" height="31" class="labelTab"/><text x="4" y="6" class="label">KARHUPUISTO</text></g>
+        </g>
+        <g id="node-torkkeli" transform="translate(583 461)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><path d="M-9 9V-4L0-11 9-4V9Z" class="service"/>
+          <g transform="translate(20 -18)"><rect x="-5" y="-17" width="166" height="32" class="darkTab"/><text x="8" y="6" class="darkLabel">TORKKELINMÄKI</text></g>
+        </g>
+        <g id="node-harju" transform="translate(429 374)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><path d="M-10 7q10-20 20 0" fill="none" stroke="#43b8c4" stroke-width="5"/>
+          <g transform="translate(-142 -18)"><rect x="-8" y="-17" width="204" height="32" class="darkTab"/><text x="5" y="6" class="darkLabel">HARJU / BRAHENKENTTÄ</text></g>
+        </g>
+        <g id="node-vaasankatu" transform="translate(559 347)">
+          <circle r="27" class="nodeOuter"/><circle r="16" class="nodeInner"/><path d="M-9 4h18M-6-4h12" stroke="#bd568c" stroke-width="5"/>
+          <g transform="translate(-54 -42)"><rect x="-8" y="-17" width="148" height="32" class="labelTab"/><text x="4" y="6" class="label">VAASANKATU</text></g>
+        </g>
+        <g id="node-piritori" transform="translate(649 382)">
+          <circle r="38" class="nodeOuter"/><circle r="25" class="nodeInner"/><circle r="13" class="active"/>
+          <path d="M-7 0h14M0-7v14" stroke="#102026" stroke-width="4"/>
+          <g transform="translate(50 0)"><rect x="-5" y="-19" width="170" height="39" class="darkTab"/><text x="8" y="7" class="darkLabel">PIRITORI / KURVI</text></g>
+        </g>
+        <g id="node-alppiharju" transform="translate(206 205)">
+          <circle r="27" class="locked"/><rect x="-7" y="-2" width="14" height="13" fill="#111"/><path d="M-5-2v-6q5-9 10 0v6" fill="none" stroke="#111" stroke-width="4"/>
+          <g transform="translate(-40 -32)"><rect x="-7" y="-16" width="120" height="31" class="darkTab"/><text x="5" y="6" class="darkLabel">ALPPIHARJU</text></g>
+        </g>
+        <g id="node-vallila" transform="translate(606 129)">
+          <circle r="27" class="locked"/><rect x="-7" y="-2" width="14" height="13" fill="#111"/><path d="M-5-2v-6q5-9 10 0v6" fill="none" stroke="#111" stroke-width="4"/>
+          <g transform="translate(-42 -34)"><rect x="-7" y="-16" width="94" height="31" class="darkTab"/><text x="5" y="6" class="darkLabel">VALLILA</text></g>
+        </g>
+        <g id="node-harbour" transform="translate(943 588)">
+          <circle r="30" class="teaser"/><path d="M-12 8h24M-8 2h16M-3-11v13" stroke="#cc7a3e" stroke-width="4"/>
+          <g transform="translate(-152 38)"><rect x="-7" y="-16" width="193" height="31" class="darkTab"/><text x="5" y="6" class="darkLabel">SÖRNÄINEN HARBOUR</text></g>
+        </g>
+      </g>
+    </g>
+
+    <g id="north-arrow" transform="translate(58 128)">
+      <path d="M0 42 14 10 28 42 14 34Z" fill="#b79b70" stroke="#111" stroke-width="3"/>
+      <text x="7" y="4" class="small">N</text>
+    </g>
+    <text x="50" y="850" class="tiny">STRUCTURAL RELIEF BLUEPRINT · ROUTE AND GOODS LINES ARE DYNAMIC LAYERS</text>
+  </g>
+
+  <g id="legend-and-notes">
+    <rect x="1150" y="88" width="432" height="792" rx="5" class="frame"/>
+    <text x="1176" y="128" class="panelH">ONE PUBLIC MAP</text>
+    <text x="1176" y="154" class="panelTiny">12 ANCHORS · 8 ACTIVE · 10 SITES</text>
+    <line x1="1176" y1="172" x2="1555" y2="172" stroke="#66543e" stroke-width="2"/>
+
+    <text x="1176" y="207" class="panelH">SLICE</text>
+    <g transform="translate(1190 238)"><circle r="16" class="nodeOuter"/><circle r="8" class="active"/></g>
+    <text x="1220" y="244" class="panelT">ACTIVE ANCHOR</text>
+    <g transform="translate(1190 276)"><circle r="16" class="locked"/></g>
+    <text x="1220" y="282" class="panelT">VISIBLE / LOCKED</text>
+    <g transform="translate(1190 314)"><circle r="16" class="teaser"/></g>
+    <text x="1220" y="320" class="panelT">DISTANT TEASER</text>
+    <g transform="translate(1190 352)"><path d="M0-16 15 0 0 16-15 0Z" class="landmark"/></g>
+    <text x="1220" y="358" class="panelT">LANDMARK ONLY</text>
+
+    <text x="1176" y="410" class="panelH">PUBLIC FLOW</text>
+    <line x1="1180" y1="438" x2="1248" y2="438" class="tram"/>
+    <text x="1266" y="444" class="panelT">TRAM · 3B / 6</text>
+    <line x1="1180" y1="478" x2="1248" y2="478" class="metro"/>
+    <text x="1266" y="484" class="panelT">METRO · M</text>
+    <line x1="1180" y1="518" x2="1248" y2="518" class="route"/>
+    <text x="1266" y="524" class="panelT">CREW ROUTE</text>
+    <line x1="1180" y1="558" x2="1248" y2="558" class="goods"/>
+    <text x="1266" y="564" class="panelT">GOODS RETURN</text>
+
+    <text x="1176" y="622" class="panelH">FICTION SEAM</text>
+    <text x="1176" y="650" class="panelTiny">PUBLIC ANCHORS KEEP REAL</text>
+    <text x="1176" y="670" class="panelTiny">RELATIONSHIPS. FICTIONAL DOORS</text>
+    <text x="1176" y="690" class="panelTiny">INHERIT THE ANCHOR ONLY.</text>
+    <rect x="1175" y="710" width="380" height="66" fill="#171d20" stroke="#8a7355" stroke-width="2"/>
+    <text x="1192" y="736" class="panelTiny">2003 LABEL:</text>
+    <text x="1296" y="736" class="panelT">LINJAT / HÄMEENTIE</text>
+    <text x="1192" y="758" class="panelTiny">KUUDES LINJA VENUE OPENS 2005</text>
+
+    <text x="1176" y="820" class="panelTiny">SOURCE GEOMETRY: WGS84</text>
+    <text x="1176" y="842" class="panelTiny">CAMERA: FIT ALL · NORTH UP</text>
+    <text x="1176" y="864" class="panelTiny">RUNTIME TARGET: v3</text>
+  </g>
+</svg>

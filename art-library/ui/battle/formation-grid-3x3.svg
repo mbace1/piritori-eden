@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Three by three isometric formation overlay</title>
+  <desc id="desc">Nine addressable diamond cells arranged in back, middle and front rows.</desc>
+  <style>
+    .cell { fill: none; stroke: currentColor; stroke-width: 4; vector-effect: non-scaling-stroke; }
+    .cell[data-state="hidden"] { opacity: 0; }
+    .cell[data-state="valid"] { opacity: .65; stroke-dasharray: 10 8; }
+    .cell[data-state="occupied"], .cell[data-state="selected"] { opacity: 1; }
+  </style>
+  <g id="row-back" data-row="back">
+    <polygon id="cell-back-0" class="cell" data-lane="0" data-state="hidden" points="130,35 200,70 130,105 60,70"/>
+    <polygon id="cell-back-1" class="cell" data-lane="1" data-state="hidden" points="280,35 350,70 280,105 210,70"/>
+    <polygon id="cell-back-2" class="cell" data-lane="2" data-state="hidden" points="430,35 500,70 430,105 360,70"/>
+  </g>
+  <g id="row-middle" data-row="middle">
+    <polygon id="cell-middle-0" class="cell" data-lane="0" data-state="hidden" points="205,115 275,150 205,185 135,150"/>
+    <polygon id="cell-middle-1" class="cell" data-lane="1" data-state="hidden" points="355,115 425,150 355,185 285,150"/>
+    <polygon id="cell-middle-2" class="cell" data-lane="2" data-state="hidden" points="505,115 575,150 505,185 435,150"/>
+  </g>
+  <g id="row-front" data-row="front">
+    <polygon id="cell-front-0" class="cell" data-lane="0" data-state="hidden" points="280,195 350,230 280,265 210,230"/>
+    <polygon id="cell-front-1" class="cell" data-lane="1" data-state="hidden" points="430,195 500,230 430,265 360,230"/>
+    <polygon id="cell-front-2" class="cell" data-lane="2" data-state="hidden" points="580,195 650,230 580,265 510,230"/>
+  </g>
+</svg>

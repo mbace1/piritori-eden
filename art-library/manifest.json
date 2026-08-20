@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "status": "concept-production-library",
+  "active_style": "cut-cardstock-hand-ink-v03",
+  "style_target": {
+    "summary": "broad layered cut-cardstock shapes, sparse crooked hand-marker detail and dark early-2000s Helsinki contrast",
+    "detail_reference": "references/battle-detail-ceiling-v01.png",
+    "simplification_floor": "references/battle-simplification-floor-v01.png"
+  },
+  "catalog": "catalog.json",
+  "reference_notes": "REFERENCE_NOTES.md",
+  "approval_register": "APPROVALS.md",
+  "character_system": "MODULAR_CHARACTER_SYSTEM.md",
+  "animation_layers": "ANIMATION_LAYER_CONTRACT.md",
+  "asset_groups": [
+    {
+      "id": "characters-active",
+      "path": "characters",
+      "format": "png-alpha+svg",
+      "anchor": "shared-character-rig",
+      "approval_status": "approved"
+    },
+    {
+      "id": "weapons-era1",
+      "path": "weapons/era1",
+      "format": "png-alpha",
+      "anchor": "grip-primary",
+      "approval_status": "approved"
+    },
+    {
+      "id": "character-animation-era1",
+      "path": "animation/characters/era1",
+      "format": "png-alpha",
+      "anchor": "root-ground",
+      "approval_status": "approved"
+    },
+    {
+      "id": "animal-animation-era1",
+      "path": "animation/animals/era1",
+      "format": "png-alpha",
+      "anchor": "ground-center",
+      "approval_status": "approved"
+    },
+    {
+      "id": "vegetation-animation-era1",
+      "path": "animation/vegetation/era1",
+      "format": "png-alpha",
+      "anchor": "root-center",
+      "approval_status": "approved"
+    },
+    {
+      "id": "locations-era1",
+      "path": "locations/era1",
+      "format": "png",
+      "approval_status": "mixed"
+    },
+    {
+      "id": "props-kallio-era1",
+      "path": "props/era1",
+      "format": "png-alpha",
+      "anchor": "ground-center",
+      "approval_status": "semi-approved"
+    },
+    {
+      "id": "weather",
+      "path": "weather",
+      "format": "svg-alpha",
+      "approval_status": "semi-approved"
+    },
+    {
+      "id": "battle-ui",
+      "path": "ui/battle",
+      "format": "svg",
+      "approval_status": "approved"
+    },
+    {
+      "id": "screen-concepts",
+      "path": "screens",
+      "format": "png",
+      "approval_status": "semi-approved"
+    },
+    {
+      "id": "approved-clean-cut-v02",
+      "path": "variants/approved-clean-cut-v02",
+      "format": "png",
+      "approval_status": "approved",
+      "active": false
+    },
+    {
+      "id": "needs-rework-archive",
+      "path": "archive/needs-rework",
+      "format": "mixed",
+      "approval_status": "needs-rework",
+      "active": false
+    }
+  ],
+  "art_bible": "../ART_BIBLE.md"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "approval_status": "approved",
+  "production_ready": false,
+  "active_style": "cut-cardstock-hand-ink-v03",
+  "sheet": "era1/handheld-handink-sheet-v03.png",
+  "grip_markers": {
+    "primary": "cyan",
+    "secondary": "orange"
+  },
+  "assets": [
+    {"id": "feature-phone", "file": "era1/prop-feature-phone-handink-v03.png", "hold": "utility-one"},
+    {"id": "baton", "file": "era1/weapon-baton-handink-v03.png", "hold": "blunt-one"},
+    {"id": "pipe", "file": "era1/weapon-pipe-handink-v03.png", "hold": "blunt-one"},
+    {"id": "handgun", "file": "era1/weapon-handgun-handink-v03.png", "hold": "firearm-one"},
+    {"id": "baseball-bat", "file": "era1/weapon-baseball-bat-handink-v03.png", "hold": "bat-two"},
+    {"id": "timber-board", "file": "era1/weapon-timber-board-handink-v03.png", "hold": "improvised-two"},
+    {"id": "short-longgun", "file": "era1/weapon-short-longgun-handink-v03.png", "hold": "long-firearm-two"},
+    {"id": "hunting-rifle", "file": "era1/weapon-hunting-rifle-handink-v03.png", "hold": "long-firearm-two"}
+  ],
+  "approved_clean_variant": "../variants/approved-clean-cut-v02/handheld-sheet-v02.png",
+  "note": "Readable Era I silhouettes and hand sockets only; not technical weapon diagrams."
+}

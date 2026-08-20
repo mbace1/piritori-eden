@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 128" role="img" aria-labelledby="title desc">
+  <title id="title">Era I hand-ink role tabs</title>
+  <desc id="desc">Eight irregular cut-cardstock role markers for runner, muscle, watcher, fixer, driver, local, hired and enforcer.</desc>
+  <g stroke="#17191c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#38b8c8" d="M9 18 L111 11 L120 105 L17 116 Z"/><path fill="none" d="M34 79 L62 42 L92 77"/>
+    <path fill="#c87539" d="M139 12 L247 19 L241 113 L132 106 Z"/><path fill="none" d="M164 38 L218 34 L224 88 L169 93 Z"/>
+    <path fill="#b84d83" d="M267 17 L371 10 L376 108 L273 116 Z"/><path fill="none" d="M290 66 Q321 28 353 64 Q321 101 290 66 Z"/><path fill="#17191c" d="M313 55 Q325 48 333 59 Q338 72 324 78 Q311 78 313 55 Z" stroke="none"/>
+    <path fill="#c5a044" d="M394 13 L503 20 L495 114 L389 107 Z"/><path fill="none" d="M417 65 L443 37 L474 63 L446 93 Z M424 61 L469 69"/>
+    <path fill="#648f63" d="M523 19 L627 10 L632 107 L529 116 Z"/><circle fill="none" cx="578" cy="64" r="30"/><path fill="none" d="M579 36 L578 92 M549 63 L606 66 M558 45 L598 84"/>
+    <path fill="#4f7fa0" d="M651 11 L757 18 L749 114 L643 106 Z"/><path fill="none" d="M667 43 Q698 30 733 43 L729 87 Q697 98 670 84 Z M681 59 L719 57"/>
+    <path fill="#a97842" d="M779 18 L884 12 L889 108 L785 116 Z"/><path fill="none" d="M808 38 L804 90 M835 35 L838 91 M862 41 L859 88"/>
+    <path fill="#a94b43" d="M907 11 L1013 20 L1006 113 L899 106 Z"/><path fill="#17191c" d="M929 88 L967 34 L988 90 Z" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Near snow</title>
+  <desc id="desc">Sparse large torn-paper snow shapes for the front pass.</desc>
+  <g id="snow_front" fill="#f0ede3" fill-opacity=".66">
+    <path d="m164 112 9-6 8 8-5 10-12-2Z"/><path d="m494 238 8-8 12 5-1 12-13 4Z"/>
+    <path d="m838 94 10-3 6 9-6 9-11-4Z"/><path d="m1190 302 7-10 13 3 2 12-11 7Z"/>
+    <path d="m1538 126 11-6 9 8-4 12-13 1Z"/><path d="m1772 420 8-8 10 5-1 11-11 3Z"/>
+    <path d="m280 660 10-4 8 10-6 10-12-3Z"/><path d="m698 782 8-9 12 4v12l-12 4Z"/>
+    <path d="m1084 628 9-6 10 7-4 12-12 1Z"/><path d="m1434 854 8-8 12 5-2 12-12 2Z"/>
+  </g>
+</svg>

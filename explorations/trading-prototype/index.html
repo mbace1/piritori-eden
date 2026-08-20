@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<meta name="description" content="Piritori to Eden — a fictional two-generation crime narrative set in Kallio, Helsinki. East of Eden told through a trading game on a metro map. Chapter one: 2003.">
+<title>Piritori to Eden</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --void: #07090d;
+    --panel: #0d1218;
+    --rule: #1d2733;
+    --ink: #ddd6c8;
+    --dim: #93917f;
+    --metro: #ff7a1a;
+    --cold: #57c8e8;
+    --warn: #e85454;
+    --gold: #e8c24a;
+    --col: 620px;
+    --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, 'Courier New', monospace;
+  }
+
+  html, body { min-height: 100%; background: var(--void); }
+  body {
+    font-family: var(--mono);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  #app { max-width: var(--col); margin: 0 auto; padding: 8px 10px 24px; }
+
+  /* ── hud ── */
+  #hud {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 8px; padding: 44px 2px 6px;   /* clears the hub HOME button */
+    border-bottom: 1px solid var(--rule);
+  }
+  #loc { color: var(--metro); font-size: 17px; }
+  #sub { color: var(--dim); margin-left: 8px; font-size: 12px; }
+  #date { color: var(--dim); font-size: 12px; text-align: right; }
+
+  #stats {
+    display: flex; flex-wrap: wrap; gap: 4px 16px;
+    padding: 6px 2px; font-size: 13px; color: var(--dim);
+    border-bottom: 1px solid var(--rule);
+  }
+  #stats b { color: var(--ink); font-weight: normal; }
+  #stats .cash b { color: var(--gold); }
+  #stats .debt b { color: var(--warn); }
+  #stats .heat b { color: var(--cold); }
+
+  /* ── map ── */
+  #mapwrap { position: relative; margin: 10px 0 0; }
+  #map { display: block; width: 100%; aspect-ratio: 16 / 10; }
+  #maphint {
+    position: absolute; right: 6px; bottom: 4px;
+    font-size: 11px; color: var(--dim); pointer-events: none;
+  }
+
+  /* ── the wire ── */
+  #ticker {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    margin: 6px 0 0; padding: 10px 8px; min-height: 44px;
+    background: var(--panel); border: 1px solid var(--rule);
+    font: inherit; font-size: 12.5px; color: var(--cold);
+    text-align: left; cursor: pointer;
+  }
+  #ticker .k { color: var(--dim); flex: none; }
+  #ticker .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ── the counter ── */
+  #counter { margin-top: 10px; }
+  #blurb { color: var(--dim); font-size: 12.5px; min-height: 2.6em; padding: 2px 2px 6px; }
+
+  #qtyrow { display: flex; gap: 6px; align-items: center; padding: 4px 0 8px; }
+  #qtyrow .lbl { color: var(--dim); font-size: 12px; margin-right: 4px; }
+  .qty {
+    min-width: 58px; min-height: 44px; font: inherit; font-size: 13px;
+    background: var(--panel); color: var(--dim);
+    border: 1px solid var(--rule); cursor: pointer;
+  }
+  .qty[aria-pressed="true"] { color: var(--void); background: var(--metro); border-color: var(--metro); }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 4px 4px; border-bottom: 1px solid var(--rule); font-size: 14px; }
+  td.good { color: var(--ink); }
+  td.good .unit { color: var(--dim); font-size: 11px; }
+  td.price { text-align: right; color: var(--gold); white-space: nowrap; }
+  td.own { text-align: right; color: var(--dim); font-size: 12px; white-space: nowrap; }
+  td.deal { text-align: right; white-space: nowrap; width: 1%; }
+  .btn {
+    min-width: 64px; min-height: 44px; margin-left: 6px;
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--panel); color: var(--ink); border: 1px solid var(--rule);
+  }
+  .btn.buy { color: var(--metro); }
+  .btn.sell { color: var(--gold); }
+  .btn:disabled { opacity: 0.38; cursor: default; }
+  .btn.wide { width: 100%; margin: 8px 0 0; }
+  .btn.prime { background: var(--metro); color: var(--void); border-color: var(--metro); }
+
+  #ledger { display: flex; gap: 8px; margin-top: 10px; }
+  #ledger .btn { flex: 1; margin: 0; }
+
+  #log { margin-top: 14px; color: var(--dim); font-size: 12px; }
+  #log div { padding: 2px 2px; border-top: 1px dashed var(--rule); }
+
+  /* ── overlays ── */
+  .veil {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(4, 6, 9, 0.9);
+    display: flex; align-items: center; justify-content: center;
+    padding: 18px;
+  }
+  .card {
+    max-width: 520px; width: 100%; max-height: 86vh; overflow-y: auto;
+    background: var(--panel); border: 1px solid var(--rule);
+    padding: 22px 20px calc(18px + env(safe-area-inset-bottom));
+  }
+  .card h1 { font-size: 20px; color: var(--metro); letter-spacing: 0.06em; }
+  .card h2 { font-size: 15px; color: var(--metro); letter-spacing: 0.08em; }
+  .card .kicker { color: var(--dim); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .card p { margin: 12px 0 0; font-size: 14px; color: var(--ink); white-space: pre-line; }
+  .card p.dim { color: var(--dim); font-size: 12.5px; }
+  .card .worth { color: var(--gold); font-size: 17px; margin-top: 14px; }
+
+  #anchorwrap { display: flex; gap: 12px; align-items: flex-start; margin-top: 12px; }
+  #anchorface { width: 64px; height: 64px; flex: none; image-rendering: pixelated; border: 1px solid var(--rule); }
+
+  #title .card { text-align: left; }
+  #title .name { font-size: 26px; line-height: 1.15; color: var(--ink); margin-top: 10px; }
+  #title .name b { color: var(--metro); font-weight: normal; }
+
+  @media (min-width: 720px) {
+    body { font-size: 16px; }
+    #map { aspect-ratio: 16 / 9; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div><b id="loc"></b><span id="sub"></span></div>
+    <div id="date"></div>
+  </header>
+  <div id="stats" aria-live="polite">
+    <span class="cash">cash <b id="cash"></b></span>
+    <span class="debt">debt <b id="debt"></b></span>
+    <span>stash <b id="stash"></b></span>
+    <span class="heat">heat <b id="heat"></b></span>
+  </div>
+
+  <div id="mapwrap">
+    <canvas id="map" aria-label="Map of Kallio as a metro diagram. Tap a station to travel; travelling ends the evening."></canvas>
+    <div id="maphint">tap a station · travel ends the evening</div>
+  </div>
+
+  <button id="ticker" type="button" aria-label="Tonight's news bulletin — open">
+    <span class="k">» ARVI:</span><span class="txt" id="tickertext"></span>
+  </button>
+
+  <section id="counter">
+    <div id="blurb"></div>
+    <div id="qtyrow" role="group" aria-label="Deal size">
+      <span class="lbl">deal size</span>
+      <button class="qty" data-q="1" aria-pressed="true" type="button">×1</button>
+      <button class="qty" data-q="10" aria-pressed="false" type="button">×10</button>
+      <button class="qty" data-q="max" aria-pressed="false" type="button">×MAX</button>
+    </div>
+    <table aria-label="The counter — street prices here tonight"><tbody id="market"></tbody></table>
+    <div id="ledger">
+      <button class="btn" id="specialbtn" type="button"></button>
+      <button class="btn" id="paybtn" type="button"></button>
+    </div>
+    <div id="log" aria-live="polite"></div>
+  </section>
+</div>
+
+<!-- overlays -->
+<div class="veil" id="title">
+  <div class="card">
+    <div class="kicker">a fiction · kallio, helsinki</div>
+    <div class="name">PIRITORI<br>to <b>EDEN</b></div>
+    <p class="dim">Chapter one — the square, 2003. Thirty evenings.</p>
+    <p>Igor fronted you two thousand. The square takes everyone eventually; the book your mother left says you may choose otherwise. Sinä saat.</p>
+    <p class="dim">Tap a station to travel — every journey costs the evening. Buy low where the lines are quiet, sell dear where they cross, and watch the nine o'clock news: what Arvi reads tonight moves the street tomorrow.</p>
+    <p class="dim">Every person and every bulletin in this story is invented. The harm the trade does is not — this is a story about that too.</p>
+    <button class="btn prime wide" id="startbtn" type="button">BEGIN THE SEASON</button>
+  </div>
+</div>
+
+<div class="veil" id="story" hidden>
+  <div class="card">
+    <div class="kicker" id="storykicker"></div>
+    <h1 id="storytitle"></h1>
+    <div id="storylines"></div>
+    <p class="worth" id="storyworth" hidden></p>
+    <button class="btn wide" id="storybtn" type="button">CONTINUE</button>
+  </div>
+</div>
+
+<div class="veil" id="bulletin" hidden>
+  <div class="card">
+    <div class="kicker" id="channel"></div>
+    <div id="anchorwrap">
+      <canvas id="anchorface" width="32" height="32" aria-hidden="true"></canvas>
+      <div>
+        <h2 id="anchorname"></h2>
+        <p id="bulletintext"></p>
+      </div>
+    </div>
+    <button class="btn wide" id="bulletinbtn" type="button">CLOSE</button>
+  </div>
+</div>
+
+<div class="veil" id="modal" hidden>
+  <div class="card">
+    <h2 id="modaltitle"></h2>
+    <p id="modaltext"></p>
+    <div id="modalbtns"></div>
+  </div>
+</div>
+
+<!-- No hub shell import: this exploration is deliberately not wired to the
+     arcade. See README.md — it is parked, not shipped. -->
+<script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>

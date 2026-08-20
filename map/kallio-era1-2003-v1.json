@@ -1,0 +1,373 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "kallio-era1-2003-v1",
+  "title": "Piritori to Eden — Era I Kallio",
+  "era": 2003,
+  "status": "design-authority",
+  "northUp": true,
+  "sourceDocument": "../MAP.md",
+  "coordinateSystem": {
+    "source": "WGS84",
+    "origin": {
+      "lat": 60.176,
+      "lon": 24.934
+    },
+    "bounds": {
+      "south": 60.176,
+      "north": 60.194,
+      "west": 24.934,
+      "east": 24.974
+    },
+    "metresPerDegree": {
+      "lat": 111320,
+      "lon": 55340
+    },
+    "board": {
+      "width": 1000,
+      "height": 1000,
+      "offsetX": 60,
+      "offsetY": 920,
+      "metresPerUnit": 2.35,
+      "maxDecorativeDisplacementRatio": 0.12
+    }
+  },
+  "fictionBoundary": {
+    "publicGeometry": "recognisable-and-topologically-ordered",
+    "fictionalSites": "anchor-only",
+    "privateAddresses": false,
+    "operationalCriminalRouting": false
+  },
+  "anchors": [
+    {
+      "id": "siltasaari",
+      "label": "SILTASAARI",
+      "wgs84": [60.1778, 24.9501],
+      "board": {"x": 439.14, "y": 834.73},
+      "coordinateStatus": "representative-public-area",
+      "sliceState": "active",
+      "roles": ["threshold", "service", "home"],
+      "labelOffset": [-54, 34]
+    },
+    {
+      "id": "hakaniemi",
+      "label": "HAKANIEMI",
+      "wgs84": [60.1789, 24.9511],
+      "board": {"x": 462.69, "y": 782.63},
+      "coordinateStatus": "public-landmark",
+      "sliceState": "active",
+      "roles": ["market", "transfer", "crowd-source"],
+      "labelOffset": [-64, 34]
+    },
+    {
+      "id": "linjat_yard",
+      "label": "LINJAT / HÄMEENTIE",
+      "wgs84": [60.1838, 24.9595],
+      "board": {"x": 660.5, "y": 550.51},
+      "coordinateStatus": "public-vicinity-services-fictional",
+      "sliceState": "active",
+      "roles": ["nightlife", "service", "faction"],
+      "labelOffset": [22, -14]
+    },
+    {
+      "id": "kallio_church",
+      "label": "KALLION KIRKKO",
+      "wgs84": [60.18427, 24.94936],
+      "board": {"x": 421.71, "y": 528.25},
+      "coordinateStatus": "documented-public-landmark",
+      "sliceState": "landmark",
+      "roles": ["landmark", "orientation"],
+      "labelOffset": [-122, -18]
+    },
+    {
+      "id": "karhupuisto",
+      "label": "KARHUPUISTO",
+      "wgs84": [60.183889, 24.952222],
+      "board": {"x": 489.11, "y": 546.3},
+      "coordinateStatus": "documented-public-landmark",
+      "sliceState": "active",
+      "roles": ["park", "social", "weather"],
+      "labelOffset": [-58, 38]
+    },
+    {
+      "id": "torkkelinmaki",
+      "label": "TORKKELINMÄKI",
+      "wgs84": [60.1857, 24.9562],
+      "board": {"x": 582.79, "y": 460.51},
+      "coordinateStatus": "representative-district",
+      "sliceState": "active",
+      "roles": ["home", "family", "residential"],
+      "labelOffset": [20, -18]
+    },
+    {
+      "id": "harju",
+      "label": "HARJU / BRAHENKENTTÄ",
+      "wgs84": [60.18752, 24.94965],
+      "board": {"x": 428.54, "y": 374.3},
+      "coordinateStatus": "documented-public-landmark",
+      "sliceState": "active",
+      "roles": ["mission", "recruitment", "sport"],
+      "labelOffset": [-142, -18]
+    },
+    {
+      "id": "vaasankatu",
+      "label": "VAASANKATU",
+      "wgs84": [60.1881, 24.9552],
+      "board": {"x": 559.24, "y": 346.82},
+      "coordinateStatus": "representative-street-midpoint",
+      "sliceState": "active",
+      "roles": ["service", "information", "shops"],
+      "labelOffset": [-54, -42]
+    },
+    {
+      "id": "piritori",
+      "label": "PIRITORI / KURVI",
+      "publicLabel": "VAASANPUISTIKKO / SÖRNÄINEN",
+      "wgs84": [60.18735, 24.959],
+      "board": {"x": 648.72, "y": 382.35},
+      "coordinateStatus": "representative-plaza-cluster",
+      "sliceState": "active",
+      "roles": ["opening", "transfer", "recruitment", "market"],
+      "labelOffset": [50, 0]
+    },
+    {
+      "id": "alppiharju",
+      "label": "ALPPIHARJU",
+      "wgs84": [60.1911, 24.9402],
+      "board": {"x": 206, "y": 204.71},
+      "coordinateStatus": "representative-district",
+      "sliceState": "locked",
+      "roles": ["rail-edge", "expansion"],
+      "labelOffset": [-40, -32]
+    },
+    {
+      "id": "vallila",
+      "label": "VALLILA",
+      "wgs84": [60.1927, 24.9572],
+      "board": {"x": 606.34, "y": 128.92},
+      "coordinateStatus": "representative-district",
+      "sliceState": "locked",
+      "roles": ["industrial", "residential", "expansion"],
+      "labelOffset": [-42, -34]
+    },
+    {
+      "id": "sornainen_harbour",
+      "label": "SÖRNÄINEN HARBOUR",
+      "wgs84": [60.183, 24.9715],
+      "board": {"x": 943.09, "y": 588.41},
+      "coordinateStatus": "representative-historic-harbour-edge",
+      "sliceState": "teaser",
+      "roles": ["docks", "industrial", "expansion"],
+      "labelOffset": [-152, 38]
+    }
+  ],
+  "sites": [
+    {
+      "id": "piritori_first_buy",
+      "anchorId": "piritori",
+      "label": "First purchase",
+      "kind": "narrative-encounter",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "opening"
+    },
+    {
+      "id": "sornainen_metro",
+      "anchorId": "piritori",
+      "label": "Sörnäinen metro",
+      "kind": "public-transfer",
+      "fictional": false,
+      "addressPrecision": "public-anchor",
+      "sliceState": "open"
+    },
+    {
+      "id": "toko_slomo_noodles",
+      "anchorId": "vaasankatu",
+      "label": "Toko Slomo's Noodles",
+      "kind": "narrative-service",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "mission-unlock"
+    },
+    {
+      "id": "jaska_studio",
+      "anchorId": "torkkelinmaki",
+      "label": "Jaska's studio",
+      "kind": "narrative-home",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "invitation"
+    },
+    {
+      "id": "mccormick_yard",
+      "anchorId": "linjat_yard",
+      "label": "McCormick yard",
+      "kind": "narrative-service",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "relationship-unlock"
+    },
+    {
+      "id": "staffed_bank",
+      "anchorId": "siltasaari",
+      "label": "Staffed bank counter",
+      "kind": "narrative-service",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "opening-hours-event"
+    },
+    {
+      "id": "hakaniemi_market",
+      "anchorId": "hakaniemi",
+      "label": "Hakaniemi market",
+      "kind": "public-market",
+      "fictional": false,
+      "addressPrecision": "public-anchor",
+      "sliceState": "route-unlock"
+    },
+    {
+      "id": "karhupuisto_bench",
+      "anchorId": "karhupuisto",
+      "label": "Karhupuisto bench",
+      "kind": "narrative-public",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "open"
+    },
+    {
+      "id": "harju_pitch",
+      "anchorId": "harju",
+      "label": "Brahenkenttä",
+      "kind": "public-mission",
+      "fictional": false,
+      "addressPrecision": "public-anchor",
+      "sliceState": "first-purchase"
+    },
+    {
+      "id": "jade_lantern_front",
+      "anchorId": "linjat_yard",
+      "label": "Restaurant front",
+      "kind": "faction-teaser",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "teaser"
+    }
+  ],
+  "edges": [
+    {"id": "e01", "from": "siltasaari", "to": "hakaniemi", "corridor": "siltasaarenkatu", "modes": ["walk", "tram", "car"], "lengthBand": "short"},
+    {"id": "e02", "from": "hakaniemi", "to": "kallio_church", "corridor": "union-axis", "modes": ["walk", "tram"], "lengthBand": "medium"},
+    {"id": "e03", "from": "hakaniemi", "to": "karhupuisto", "corridor": "linjat-mesh", "modes": ["walk"], "lengthBand": "medium"},
+    {"id": "e04", "from": "hakaniemi", "to": "linjat_yard", "corridor": "hameentie", "modes": ["walk", "tram", "car"], "lengthBand": "medium"},
+    {"id": "e05", "from": "kallio_church", "to": "karhupuisto", "corridor": "fifth-line", "modes": ["walk", "tram"], "lengthBand": "short"},
+    {"id": "e06", "from": "karhupuisto", "to": "harju", "corridor": "fleminginkatu", "modes": ["walk", "tram"], "lengthBand": "medium"},
+    {"id": "e07", "from": "kallio_church", "to": "harju", "corridor": "kaarlenkatu", "modes": ["walk"], "lengthBand": "medium"},
+    {"id": "e08", "from": "karhupuisto", "to": "torkkelinmaki", "corridor": "franzeninkatu", "modes": ["walk"], "lengthBand": "short"},
+    {"id": "e09", "from": "torkkelinmaki", "to": "linjat_yard", "corridor": "pengerkatu-hameentie", "modes": ["walk"], "lengthBand": "short"},
+    {"id": "e10", "from": "torkkelinmaki", "to": "vaasankatu", "corridor": "harjukatu", "modes": ["walk"], "lengthBand": "short"},
+    {"id": "e11", "from": "harju", "to": "vaasankatu", "corridor": "porvoonkatu", "modes": ["walk"], "lengthBand": "short"},
+    {"id": "e12", "from": "vaasankatu", "to": "piritori", "corridor": "vaasankatu", "modes": ["walk"], "lengthBand": "short"},
+    {"id": "e13", "from": "linjat_yard", "to": "piritori", "corridor": "hameentie", "modes": ["walk", "tram", "car"], "lengthBand": "medium"},
+    {"id": "e14", "from": "hakaniemi", "to": "piritori", "corridor": "metro-tunnel", "modes": ["metro"], "lengthBand": "medium"},
+    {"id": "e15", "from": "harju", "to": "alppiharju", "corridor": "rail-edge-streets", "modes": ["walk", "tram"], "lengthBand": "medium"},
+    {"id": "e16", "from": "alppiharju", "to": "vallila", "corridor": "teollisuuskatu", "modes": ["walk", "car"], "lengthBand": "long"},
+    {"id": "e17", "from": "vaasankatu", "to": "vallila", "corridor": "makelankatu-band", "modes": ["walk", "car"], "lengthBand": "medium"},
+    {"id": "e18", "from": "piritori", "to": "vallila", "corridor": "sturenkatu-band", "modes": ["walk", "car"], "lengthBand": "medium"},
+    {"id": "e19", "from": "linjat_yard", "to": "sornainen_harbour", "corridor": "industrial-east", "modes": ["walk", "car"], "lengthBand": "medium"},
+    {"id": "e20", "from": "piritori", "to": "sornainen_harbour", "corridor": "sornainen-east", "modes": ["walk", "car"], "lengthBand": "medium"},
+    {"id": "e21", "from": "hakaniemi", "to": "sornainen_harbour", "corridor": "waterfront", "modes": ["walk", "car"], "lengthBand": "long"},
+    {"id": "e22", "from": "vallila", "to": "sornainen_harbour", "corridor": "industrial-boundary", "modes": ["car"], "lengthBand": "long"}
+  ],
+  "periodServices": [
+    {
+      "id": "metro_m_2003",
+      "label": "M",
+      "mode": "metro",
+      "anchorSequence": ["hakaniemi", "piritori"],
+      "continuesOffboard": ["centre", "east"],
+      "sourceClass": "documented"
+    },
+    {
+      "id": "tram_3b_2003",
+      "label": "3B",
+      "mode": "tram",
+      "anchorSequence": ["hakaniemi", "kallio_church", "karhupuisto", "harju", "alppiharju"],
+      "continuesOffboard": ["south", "northwest"],
+      "sourceClass": "documented-service-inferred-anchor-sequence"
+    },
+    {
+      "id": "tram_6_2003",
+      "label": "6",
+      "mode": "tram",
+      "anchorSequence": ["hakaniemi", "linjat_yard", "piritori"],
+      "continuesOffboard": ["southwest", "arabia"],
+      "sourceClass": "documented-service-inferred-anchor-sequence"
+    },
+    {
+      "id": "hameentie_traffic",
+      "label": "HÄMEENTIE",
+      "mode": "car",
+      "anchorSequence": ["hakaniemi", "linjat_yard", "piritori"],
+      "continuesOffboard": ["centre", "northeast"],
+      "sourceClass": "public-geography"
+    }
+  ],
+  "portals": [
+    {"id": "centre", "label": "KESKUSTA", "board": {"x": 430, "y": 975}},
+    {"id": "northwest", "label": "PASILA", "board": {"x": 125, "y": 70}},
+    {"id": "arabia", "label": "ARABIA", "board": {"x": 1010, "y": 255}},
+    {"id": "east", "label": "ITÄ", "board": {"x": 1025, "y": 665}}
+  ],
+  "responsive": {
+    "defaultCamera": "fit-all",
+    "maxFocusScale": 1.35,
+    "portraitUsesSameGeometry": true,
+    "northUpLocked": true
+  },
+  "artLayers": [
+    "backing",
+    "water",
+    "land-relief",
+    "rail",
+    "major-roads",
+    "minor-blocks",
+    "public-transit",
+    "ordinary-flow",
+    "crew-and-goods",
+    "pressure-and-weather",
+    "anchors-and-missions",
+    "selection-and-route-preview",
+    "labels",
+    "ux-chrome"
+  ],
+  "sources": [
+    {
+      "id": "helsinki-map-service",
+      "class": "documented",
+      "url": "https://www.hel.fi/en/decision-making/information-on-helsinki/maps-and-geospatial-data/helsinki-map-service"
+    },
+    {
+      "id": "helsinki-guide-map-2002",
+      "class": "documented",
+      "url": "https://www.finna.fi/Record/hka.139878320783000_168684056500700"
+    },
+    {
+      "id": "hkl-route-map-2003",
+      "class": "documented",
+      "url": "https://www.finna.fi/Record/fikka.3983187"
+    },
+    {
+      "id": "city-history-torkkelinmaki",
+      "class": "documented",
+      "url": "https://historia.hel.fi/fi/alueet/keskinen/torkkelinmaki"
+    },
+    {
+      "id": "city-history-sornainen-harbour",
+      "class": "documented",
+      "url": "https://historia.hel.fi/fi/alueet/keskinen/sornainen-entinen-satama-ja-teollisuusalue"
+    },
+    {
+      "id": "kuudes-linja-opening",
+      "class": "documented",
+      "url": "https://www.myhelsinki.fi/visit/eat-and-drink/clubbing-scene-in-helsinki/"
+    }
+  ]
+}
