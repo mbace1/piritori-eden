@@ -12,7 +12,10 @@ extends RefCounted
 ## three lanes, mirrored per side, "the grid is a rule beneath the scene rather
 ## than a permanent checkerboard".
 
-const ROWS := ["front", "middle", "back"]
+## Depth rows, shallowest first. The first three are canon and every authored
+## cell id uses them; `rear` is a placeholder for the fourth row the board grew
+## on 2026-08-21 and wants an owner's word — see FightBoard.
+const ROWS := ["front", "middle", "back", "rear"]
 
 ## Opponent records in the slice carry role, intent and equipment but no combat
 ## values, so the port supplies them by role. Canon leaves these open
@@ -38,13 +41,34 @@ static func parse_cell(cell: String) -> Vector2i:
 	if row < 0:
 		push_error("BattleBuilder: unknown row in cell '%s'" % cell)
 		row = 0
-	var lane := int(parts[1]) - 1
+	var lane := int(parts[1]) - 1 + _authored_lane_offset()
 	return Vector2i(FightBoard.clamp_lane(lane), FightBoard.clamp_row(row))
 
 
+## Authored cell ids are ABSOLUTE lane numbers written against a three-lane
+## board: "front-2" is the middle of three. When the board is wider, those
+## formations must be CENTRED on it rather than pinned to the left — otherwise
+## the opposition sits off to one side, the player deploys around the real
+## centre, and the two formations no longer face each other. On a five-lane
+## board that alone made every unarmed attack report "no reachable target".
+##
+## This keeps the authored Era I content correct on any board width. Content
+## written FOR a wider board should use its real lanes; this only shifts ids
+## that were written for three.
+const AUTHORED_LANES := 3
+
+static func _authored_lane_offset() -> int:
+	if FightBoard.lanes <= AUTHORED_LANES:
+		return 0
+	return int(floor((float(FightBoard.lanes) - float(AUTHORED_LANES)) * 0.5))
+
+
 static func cell_name(lane: int, row: int) -> String:
+	# The inverse of parse_cell, offset included, so a round trip is a round
+	# trip on any board width. Without the subtraction, cell_name(centre) named
+	# a lane one to the right of the one it was given.
 	return "%s-%d" % [ROWS[clampi(row, 0, ROWS.size() - 1)],
-		FightBoard.clamp_lane(lane) + 1]
+		FightBoard.clamp_lane(lane) - _authored_lane_offset() + 1]
 
 
 ## Build the definition the FightManager consumes.

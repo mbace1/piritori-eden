@@ -915,7 +915,14 @@ func _get_attack_targets(f: Fighter, weapon: Dictionary) -> Array:
 	)
 	var lane_spread: int = weapon.get("lane_spread", 0)
 	var piercing: bool   = weapon.get("piercing", false)
-	var allowed_rows: Array = weapon.get("allowed_rows", [0, 1, 2])
+	# Default to every row the board HAS. This was `[0, 1, 2]` — a sixth copy of
+	# the three-row assumption, hiding as a default argument. On a four-row board
+	# it silently gave anyone in the rear rank no attacks at all, which reads in
+	# play as a unit that simply does nothing.
+	var default_rows: Array = []
+	for r in range(FightBoard.rows):
+		default_rows.append(r)
+	var allowed_rows: Array = weapon.get("allowed_rows", default_rows)
 
 	if not allowed_rows.has(f.slot.y):
 		return targets  # weapon cannot fire from this row
@@ -974,13 +981,19 @@ func _ai_preferred_target_lane(f: Fighter) -> int:
 		Fighter.Side.PLAYER if f.side == Fighter.Side.OPPOSITION
 		else Fighter.Side.OPPOSITION
 	)
-	var counts := [0, 0, 0]
+	# Sized from the board, not written out. This was `[0, 0, 0]` and `for i in
+	# [1, 2]` — a fifth copy of the number three, invisible to a grep for "3",
+	# which indexed out of bounds the moment the board grew a fourth lane.
+	var counts: Array[int] = []
+	counts.resize(FightBoard.lanes)
+	counts.fill(0)
 	for id in _fighters:
 		var other: Fighter = _fighters[id]
 		if other.side == opp_side and other.is_active():
-			counts[other.slot.x] += 1
+			if other.slot.x >= 0 and other.slot.x < counts.size():
+				counts[other.slot.x] += 1
 	var best := 0
-	for i in [1, 2]:
+	for i in range(1, counts.size()):
 		if counts[i] > counts[best]:
 			best = i
 	return best

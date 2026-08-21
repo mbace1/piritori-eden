@@ -20,16 +20,28 @@ extends RefCounted
 ## they are used, or the override silently does nothing — the same trap
 ## PAL.CYAN_LUX has in the arcade's Game of Life.
 
-## Depth rows per side: front, middle, back, ... Canon default 3.
-static var rows: int = 3
+## Depth rows per side: front, middle, back, rear.
+static var rows: int = 4
 
-## Lateral lanes across the board. Canon default 3; §13.3 allows 4 as a
-## deliberate mission or arena modifier for wide streets, yards and docks.
-static var lanes: int = 3
+## Lateral lanes across the board.
+static var lanes: int = 5
 
-## The canon shape, for resetting after a comparison.
-const CANON_ROWS := 3
-const CANON_LANES := 3
+## Owner ruling, 2026-08-21: the board grows. `GDD` §13.3 locked 3x3 per side
+## with 3x4 as an arena modifier, sized for a game where combat was rare
+## punctuation. `PHASING.md` §0 made the grid fighter the base game, and a
+## board that reads as a chessboard corner is not enough stage for it.
+##
+## 4 rows x 5 lanes is 20 cells a side, 40 in play — up from 18. Deliberately
+## short of Into the Breach's 8x8, which survives that size only because units
+## walk freely; §13.3's "no free walking, no movement-point economy" would not.
+##
+## The fourth row is named `rear` in BattleBuilder.ROWS. That name is a
+## PLACEHOLDER pending an owner word: front/middle/back are semantic in §13.5
+## (close pressure / flexible / long-range safety) and "rear" does not obviously
+## earn a fourth meaning. Authored content only uses the first three, so nothing
+## depends on it yet. DESIGN_LOCKS §13 forbids hardening it silently.
+const CANON_ROWS := 4
+const CANON_LANES := 5
 
 
 static func reset() -> void:

@@ -33,6 +33,17 @@ pick up, and half of it will turn out to be wrong.
   repo would reclaim it, and that breaks every existing clone. Recorded as a
   decision not to.
 
+## The bigger board (see COMBAT.md 3.0)
+
+- **Deployment is still capped at 4 a side** (`DESIGN_LOCKS.md` §4.1) on a
+  20-cell board. Three units looks sparse and the formations sit far apart.
+  Owner call, not tuning.
+- **The fourth row is named `rear`** as a placeholder. Needs a word, or a
+  reason the depth vocabulary should stay three deep with five lanes.
+- **Weapon reach was tuned for three lanes.** `lane_spread` 0 or 1 covers most
+  of a 3-lane board and much less of a 5-lane one. Nothing is broken, but the
+  balance behind those numbers no longer holds.
+
 ## The stage (see COMBAT.md 3.1)
 
 - **The projections do not match.** Location art is face-on; the board's axes

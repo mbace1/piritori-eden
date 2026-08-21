@@ -74,12 +74,13 @@ func _test_board_shape() -> void:
 	print("
 board shape (one number, not four)")
 
-	check("canon is 3x3 per side by default", FightBoard.is_canon(),
+	check("canon is 5 lanes x 4 rows per side", FightBoard.is_canon(),
 		"%dx%d" % [FightBoard.lanes, FightBoard.rows])
-	check("nine cells a side", FightBoard.cell_count() == 9)
-	check("three lanes centre on lane 1", is_equal_approx(FightBoard.lane_centre(), 1.0))
-	check("a corner is on the board", FightBoard.has_slot(2, 2))
-	check("one past the corner is not", not FightBoard.has_slot(3, 2))
+	check("twenty cells a side", FightBoard.cell_count() == 20)
+	check("five lanes centre on lane 2", is_equal_approx(FightBoard.lane_centre(), 2.0))
+	check("the far corner is on the board", FightBoard.has_slot(4, 3))
+	check("one past it is not", not FightBoard.has_slot(5, 3))
+	check("and neither is a fifth row", not FightBoard.has_slot(0, 4))
 
 	# An even lane count must straddle the centre line rather than sit off to
 	# one side — that is what lane_centre() is for.
@@ -88,8 +89,8 @@ board shape (one number, not four)")
 	check("sixteen cells a side", FightBoard.cell_count() == 16)
 	check("four lanes straddle the centre",
 		is_equal_approx(FightBoard.lane_centre(), 1.5))
-	check("the wider board admits lane 3", FightBoard.has_slot(3, 3))
-	check("and still refuses lane 4", not FightBoard.has_slot(4, 0))
+	check("the narrower board still admits lane 3", FightBoard.has_slot(3, 3))
+	check("and now refuses lane 4", not FightBoard.has_slot(4, 0))
 
 	# Deployment is generated, not a table of three fixed cells: on a wider
 	# board the old table put everyone down the left and left the centre empty.
@@ -114,10 +115,25 @@ board shape (one number, not four)")
 
 func _test_cells() -> void:
 	print("\ncell grammar (front-2 etc.)")
-	eq("front-2 -> lane 1 row 0", BattleBuilder.parse_cell("front-2"), Vector2i(1, 0))
-	eq("middle-1 -> lane 0 row 1", BattleBuilder.parse_cell("middle-1"), Vector2i(0, 1))
-	eq("back-3 -> lane 2 row 2", BattleBuilder.parse_cell("back-3"), Vector2i(2, 2))
-	eq("round trip", BattleBuilder.cell_name(2, 2), "back-3")
+	# Authored ids are absolute lanes written for a three-lane board. On a wider
+	# board they are CENTRED, so "front-2" — the middle of three — lands on the
+	# middle of five. Pinning them left instead put the two formations out of
+	# line and made every unarmed attack report no reachable target.
+	var off := BattleBuilder._authored_lane_offset()
+	eq("front-2 is the centre lane", BattleBuilder.parse_cell("front-2"), Vector2i(1 + off, 0))
+	eq("middle-1 is one to its left", BattleBuilder.parse_cell("middle-1"), Vector2i(0 + off, 1))
+	eq("back-3 is one to its right", BattleBuilder.parse_cell("back-3"), Vector2i(2 + off, 2))
+	eq("round trip", BattleBuilder.cell_name(2 + off, 2), "back-3")
+
+	var l := BattleBuilder.parse_cell("front-1").x
+	var m := BattleBuilder.parse_cell("front-2").x
+	var r := BattleBuilder.parse_cell("front-3").x
+	check("an authored formation stays symmetrical", m - l == r - m,
+		"%d %d %d" % [l, m, r])
+
+	FightBoard.apply_override(3, 3)
+	eq("a three-lane board is unshifted", BattleBuilder.parse_cell("front-2"), Vector2i(1, 0))
+	FightBoard.reset()
 
 
 func _test_equipment_from_canon() -> void:
@@ -153,7 +169,9 @@ func _test_build_2v2() -> void:
 	var matches: Array = def["opposition_units"].filter(
 		func(u): return u["fighter_id"] == "opp-mikko-rinne")
 	var mikko: Dictionary = matches[0]
-	eq("Mikko sits at front-2", Vector2i(mikko["slot_lane"], mikko["slot_row"]), Vector2i(1, 0))
+	eq("Mikko sits at the centre of the front rank",
+		Vector2i(mikko["slot_lane"], mikko["slot_row"]),
+		Vector2i(1 + BattleBuilder._authored_lane_offset(), 0))
 	eq("Mikko carries the authored pipe", String(mikko["held_weapon_id"]), "pipe")
 
 	# Cover is mirrored across both half-boards.

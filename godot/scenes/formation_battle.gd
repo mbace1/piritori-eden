@@ -45,11 +45,20 @@ const CENTRE_GAP := 1.15                   ## tiles from the centre line to a fr
 ## This belongs in art/v3/manifest.json beside `portrait_safe_bounds`, as a
 ## `play_area` on each scene asset. It lives here until the owner approves that
 ## addition — a port-side estimate, not canon.
+## Widened 2026-08-21. These were 64% x 32% and 66% x 30%, and COMBAT.md §3.1
+## found that the play area — not the cell count — is what makes the board read
+## as too small: a bigger grid inside the old rect only shrank the tiles, and
+## 5x4 rendered SMALLER on screen than 3x3.
+##
+## They are still bounded by where the floor actually is in each painting. The
+## approved courtyard's ground is a wedge that runs out near 40% of the frame,
+## which is why this cannot simply be the whole plate — push it further and the
+## far rank stands on the building.
 const PLAY_AREA := {
-	"scene-courtyard-prototype-v02": Rect2(0.18, 0.50, 0.64, 0.32),
-	"scene-karhupuisto-v01": Rect2(0.16, 0.46, 0.66, 0.30),
+	"scene-courtyard-prototype-v02": Rect2(0.10, 0.42, 0.80, 0.40),
+	"scene-karhupuisto-v01": Rect2(0.09, 0.39, 0.82, 0.38),
 }
-const PLAY_AREA_DEFAULT := Rect2(0.16, 0.52, 0.66, 0.32)
+const PLAY_AREA_DEFAULT := Rect2(0.10, 0.44, 0.80, 0.38)
 
 ## The play area constrains where FEET may land, not where art may reach. A
 ## standing figure overlapping the wall behind it is correct isometric

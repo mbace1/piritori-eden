@@ -79,6 +79,27 @@ action; there is no free walking and no movement-point economy.
 This was already closer to Metal Slug Tactics than to what is built. It does not
 need replacing — it needs using.
 
+### 3.0 The board, as of 2026-08-21: 5 lanes x 4 rows per side
+
+**Owner ruling.** `GDD` §13.3 locked 3x3 with 3x4 as an arena modifier, sized
+for a game where combat was rare punctuation. The grid fighter is the base game
+now, and a board that reads as the corner of a chessboard is not enough stage.
+
+Twenty cells a side, forty in play, up from eighteen. Deliberately short of Into
+the Breach's 8x8, which survives that size only because units walk freely —
+§13.3's "no free walking, no movement-point economy" would not.
+
+Two consequences, both recorded rather than assumed:
+
+- **The fourth row is called `rear` and that name is a placeholder.**
+  front/middle/back are semantic in §13.5 (close pressure / flexible /
+  long-range safety) and a fourth does not obviously earn a meaning. No authored
+  content uses it. `DESIGN_LOCKS.md` §13 forbids hardening it silently.
+- **Three deployed units on twenty cells reads as sparse**, and the two
+  formations now sit far apart. `DESIGN_LOCKS.md` §4.1 caps deployment at four
+  a side, a number chosen for the small board. It needs revisiting, and that is
+  an owner call rather than a tuning knob.
+
 ### 3.1 Is 3x3 enough? Findings, 2026-08-21
 
 The owner asked whether 3x3 per side can carry the visuals the reference games
