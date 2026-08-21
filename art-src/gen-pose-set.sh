@@ -65,7 +65,19 @@ if [ ${#POSES[@]} -eq 0 ]; then
   POSES=(idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass)
 fi
 
-STYLE_REFS=("$ART/animation/runner/guard-frame00.webp" "$ART/animation/runner/idle-smile-frame00.webp")
+# Style anchor. NANO_BANANA.md §1: "generate the anchor image of a group first,
+# then feed it back as a reference for everything else in that group" — the
+# model drifts on palette between runs otherwise.
+#
+# The approved runner art seeded the first set, but the five sets generated from
+# it settled into a slightly cleaner register than the approved original. Once a
+# cast exists, IT becomes the anchor so the whole cast agrees with itself.
+ANCHOR_ROLE="${STYLE_ANCHOR:-muscle}"
+if [ -f "$HERE/approved/cast/$ANCHOR_ROLE-guard.webp" ] && [ "$ROLE" != "$ANCHOR_ROLE" ]; then
+  STYLE_REFS=("$HERE/approved/cast/$ANCHOR_ROLE-guard.webp" "$HERE/approved/cast/$ANCHOR_ROLE-idle-smile.webp")
+else
+  STYLE_REFS=("$ART/animation/runner/guard-frame00.webp" "$ART/animation/runner/idle-smile-frame00.webp")
+fi
 CLOTH_REFS=()
 [ -f "$ART/characters/torsos/torso-$ROLE-v03.webp" ] && CLOTH_REFS+=("$ART/characters/torsos/torso-$ROLE-v03.webp")
 [ -f "$ART/characters/legs/legs-$ROLE-v03.webp" ] && CLOTH_REFS+=("$ART/characters/legs/legs-$ROLE-v03.webp")
@@ -103,8 +115,12 @@ No text, no letters, no numbers, no labels, no captions, no watermark, no logo, 
   done
 
   if [ ! -f "$RAW" ]; then echo "GENERATE FAILED (3 tries)"; fail=$((fail+1)); continue; fi
-  node "$CUT" key "$RAW" "$HERE/work/poses/$ROLE-$POSE-keyed.png" >/dev/null 2>&1 \
-    && node "$CUT" trim "$HERE/work/poses/$ROLE-$POSE-keyed.png" "$OUT" --pad 4 >/dev/null 2>&1
+  # key -> trim -> FIT -> web. Skipping fit writes a ~780x1250 plate straight
+  # into approved/, which is how the first batch reached 32MB for 48 poses.
+  K="$HERE/work/poses/$ROLE-$POSE-keyed.png"
+  T="$HERE/work/poses/$ROLE-$POSE-trim.png"
+  F="$HERE/work/poses/$ROLE-$POSE-fit.png"
+  node "$CUT" key "$RAW" "$K" >/dev/null 2>&1     && node "$CUT" trim "$K" "$T" --pad 4 >/dev/null 2>&1     && node "$CUT" fit "$T" "$F" 362x543 --no-quantise >/dev/null 2>&1     && node "$CUT" web "$F" "$OUT" --width 362 --q 86 >/dev/null 2>&1
   if [ -f "$OUT" ]; then echo "ok"; ok=$((ok+1)); else echo "CUT FAILED"; fail=$((fail+1)); fi
 done
 
