@@ -32,6 +32,15 @@ command -v "$GODOT" >/dev/null 2>&1 || {
 echo "== canon seams =="
 ( cd "$PROJECT" && node tools/sync-data.mjs && node tools/build-map-geometry.mjs )
 
+# The browser has no system fonts. If the bundled subset has fallen behind the
+# strings, the export is tofu and every gate is still green - so this runs
+# BEFORE the export rather than after it.
+echo "== font coverage =="
+( cd "$PROJECT" && python3 tools/build-font-subset.py --check ) || {
+  echo "  FAIL: rebuild it with tools/build-font-subset.py" >&2
+  exit 1
+}
+
 echo "== export =="
 mkdir -p "$OUT"
 ( cd "$PROJECT" && "$GODOT" --headless --path . --export-release "Web" "$OUT/index.html" )

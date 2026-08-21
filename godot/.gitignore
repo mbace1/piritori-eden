@@ -16,3 +16,10 @@
 #     node tools/sync-data.mjs
 #
 data/
+
+# The 9.6MB upstream Noto Sans JP that tools/build-font-subset.py subsets from.
+# The SUBSET (ui/fonts/, ~150KB a weight) is committed because the web build
+# cannot render Japanese without it; the source it was cut from is a download,
+# and a download does not belong in a repository.
+tools/.fontcache/
+tools/__pycache__/

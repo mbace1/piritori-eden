@@ -512,7 +512,7 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location)
 		_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
 		for item in enc.get("inspectables", []):
-			var lb := _make_button("👁 " + String(item), PiritoriPalette.INTEL_MUSTARD)
+			var lb := _make_button("◉ " + String(item), PiritoriPalette.INTEL_MUSTARD)
 			var txt := String(item)
 			lb.pressed.connect(func(): stage.show_inspect(txt))
 			_rail_box.add_child(lb)
