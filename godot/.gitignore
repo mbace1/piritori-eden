@@ -1,0 +1,14 @@
+# Godot editor caches and imported artefacts (GODOT_HANDOFF.md §10)
+.godot/
+*.translation
+export_presets.cfg
+.import/
+
+# Synced canon. data/ is a byte-identical COPY of the canonical JSON and the
+# registered art above this folder — see tools/sync-data.mjs. Committing it
+# would put two copies of canon in one repository, which is the drift this
+# project has paid for elsewhere. Regenerate it with:
+#
+#     node tools/sync-data.mjs
+#
+data/

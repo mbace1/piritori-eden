@@ -1,0 +1,38 @@
+; Piritori -> Eden — Godot port
+; Structure follows piritori/GODOT_HANDOFF.md §4.
+; Canon: DESIGN_AUTHORITY.md > DESIGN_LOCKS.md > GAME_DESIGN_DOCUMENT.md > ART_BIBLE.md > UX_SPEC.md > MAP.md
+
+config_version=5
+
+[application]
+
+config/name="Piritori to Eden"
+config/description="Era I vertical slice — Kallio, 2003. Ported from the validated seven-day slice."
+run/main_scene="res://scenes/app_shell.tscn"
+config/features=PackedStringArray("4.3")
+
+[autoload]
+
+ContentRegistry="*res://autoload/content_registry.gd"
+GameState="*res://autoload/game_state.gd"
+SaveService="*res://autoload/save_service.gd"
+
+[display]
+
+; Mobile-first responsive: UX_SPEC owns reflow. canvas_items + expand keeps one
+; world camera across phone portrait, phone landscape and desktop.
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation="sensor"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=1
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
