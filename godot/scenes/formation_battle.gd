@@ -20,8 +20,8 @@ extends Control
 
 signal battle_finished(result: int)
 
-const CELL_X := 86.0      ## depth step, away from the centre line
-const CELL_Y := 64.0      ## lane step, down the screen
+const CELL_X := 96.0      ## depth step, away from the centre line
+const CELL_Y := 88.0      ## lane step, down the screen — figures need the room
 const SKEW := 30.0        ## isometric shear
 const CENTRE_GAP := 64.0
 
@@ -43,17 +43,42 @@ var _pending: FightManager.Command = null
 var _forecast: Dictionary = {}
 var _font: Font
 var _t := 0.0
+var _roles: Dictionary = {}      ## role id -> {color, symbol}
+var _stage: Texture2D = null
 
 
 func _ready() -> void:
 	_font = PiritoriFonts.ui()
+	_load_role_tabs()
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build()
+
+
+## Role tab colours are canon: art-library/characters/system/role-tabs.json.
+## "Small engine-tinted subclass marker behind or beneath the unit silhouette;
+## never the sole class indicator." So the tab is a colour AND the unit keeps
+## its name and status words.
+func _load_role_tabs() -> void:
+	var path := "res://data/role-tabs.json"
+	if not FileAccess.file_exists(path):
+		return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return
+	for r in (parsed as Dictionary).get("roles", []):
+		_roles[String(r.get("id", ""))] = r
+
+
+func _role_color(role: String) -> Color:
+	var r: Dictionary = _roles.get(role, {})
+	var hex := String(r.get("color", ""))
+	return Color(hex) if hex != "" else MapStyle.LOCKED
 
 
 func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	battle_id = id
 	fight = FightManager.new()
+	_load_stage(id)
 	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
 	if errors.is_empty():
 		fight.state_changed.connect(_refresh)
@@ -61,6 +86,22 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 		_select_first_actionable()
 		_refresh()
 	return errors
+
+
+## The battle's own location art. Each battle names a scene_asset_id, and the
+## slice ships approved art for both — Karhupuisto and the courtyard.
+func _load_stage(id: String) -> void:
+	_stage = null
+	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
+	if asset_id == "":
+		return
+	for asset in ContentRegistry.art.get("assets", []):
+		if String(asset.get("id", "")) != asset_id:
+			continue
+		var path := "res://data/art/" + String(asset.get("file", ""))
+		if ResourceLoader.exists(path):
+			_stage = load(path)
+		return
 
 
 # ── layout ────────────────────────────────────────────────────────────────
@@ -165,8 +206,18 @@ func _draw_board() -> void:
 	if fight == null:
 		return
 
-	# Ground: the location's own tone, not a checkerboard.
-	_board.draw_rect(Rect2(Vector2.ZERO, _board.size), MapStyle.LAND)
+	# Ground: the battle's own approved location art, graded for night.
+	# DESIGN_AUTHORITY: battles are darker, same cut-paper construction.
+	if _stage != null:
+		var ts := _stage.get_size()
+		var sc: float = maxf(_board.size.x / ts.x, _board.size.y / ts.y)
+		var drawn := ts * sc
+		_board.draw_texture_rect(_stage,
+			Rect2((_board.size - drawn) * 0.5, drawn), false,
+			PoseArt.night_modulate().darkened(0.28))
+		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), Color(0.02, 0.03, 0.05, 0.40))
+	else:
+		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), MapStyle.LAND)
 
 	var reveal := _cells_to_reveal()
 
@@ -193,7 +244,12 @@ func _draw_board() -> void:
 	_draw_cover()
 	_draw_target_path()
 
-	for f in _all_fighters():
+	# Painter's order: anything lower on the screen is nearer the camera, so it
+	# is drawn last. Without this the back row punched through the front one.
+	var ordered := _all_fighters()
+	ordered.sort_custom(func(a, b):
+		return _cell_pos(a.slot.x, a.slot.y, int(a.side)).y 			< _cell_pos(b.slot.x, b.slot.y, int(b.side)).y)
+	for f in ordered:
 		_draw_unit(f)
 
 
@@ -251,34 +307,63 @@ func _draw_unit(f: Fighter) -> void:
 	var pos := _cell_pos(f.slot.x, f.slot.y, int(f.side))
 	var is_player := f.side == Fighter.Side.PLAYER
 	var accent := MapStyle.ROUTE if is_player else MapStyle.GOODS
-	var card := Rect2(pos + Vector2(-31, -46), Vector2(62, 50))
+	var role := String(f.behaviour_package)
 
-	_board.draw_rect(Rect2(card.position + Vector2(0, 3), card.size), Color(0, 0, 0, 0.45))
-	_board.draw_rect(card, MapStyle.NODE_OUTER)
-	var edge := accent
+	# Depth: rows further from the centre line are further from the camera.
+	var depth := 1.0 - float(f.slot.y) * 0.10
+	var fig_h := 108.0 * depth
+	var fig_w := 72.0 * depth
+
+	var acting := _pending != null and _pending.source_id == f.fighter_id 		and _pending.type == FightManager.Command.Type.ATTACK
+	var pose := PoseArt.pose_for(f, acting)
+
+	var tint := PoseArt.night_modulate()
+	if f.status == Fighter.Status.DOWNED or f.status == Fighter.Status.ROUTED:
+		tint = tint.darkened(0.35)
+
+	# 1. the coloured base tab this unit stands on — role vocabulary, canon
+	var tab := _role_color(role)
+	tab.a = 0.85
+	_board.draw_colored_polygon(_diamond(pos + Vector2(0, 3), 52.0 * depth, 19.0 * depth), tab)
+	_board.draw_colored_polygon(
+		_diamond(pos + Vector2(0, 6), 52.0 * depth, 19.0 * depth), Color(0, 0, 0, 0.30))
+
+	# 2. the standee, with its cream torn edge
+	var figure_box := Rect2(pos + Vector2(-fig_w * 0.5, -fig_h), Vector2(fig_w, fig_h))
+	var drew := PoseArt.draw_into(_board, role, pose, figure_box, not is_player,
+		tint, 0.0)
+	if not drew:
+		var card := Rect2(pos + Vector2(-28, -46), Vector2(56, 46))
+		_board.draw_rect(card, MapStyle.NODE_OUTER)
+		_board.draw_rect(card, accent, false, 2.0)
+		_board.draw_string(_font, card.position + Vector2(6, 20), _initials(f.display_name),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, 15, MapStyle.TITLE_TEXT)
+
+	# 3. selection and target rings ride the base tab, never the figure
 	if f.fighter_id == _selected_unit:
-		edge = MapStyle.TAB
+		var d := _diamond(pos, 58.0 * depth, 22.0 * depth)
+		_board.draw_polyline(d + PackedVector2Array([d[0]]), MapStyle.TAB, 2.0, true)
 	elif f.fighter_id == _hovered_target:
-		edge = MapStyle.TITLE_TEXT
-	_board.draw_rect(card, edge, false, 2.0)
+		var d2 := _diamond(pos, 58.0 * depth, 22.0 * depth)
+		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), MapStyle.GOODS, 2.0, true)
 
-	# condition bar — the one number that must always be legible
+	# 4. the standee's white stand marks, doubling as the condition read
 	var frac := 0.0 if f.condition_max <= 0 else float(f.condition) / float(f.condition_max)
-	var bar := Rect2(card.position + Vector2(5, card.size.y - 11), Vector2(card.size.x - 10, 5))
-	_board.draw_rect(bar, MapStyle.BLOCK_EDGE)
-	_board.draw_rect(Rect2(bar.position, Vector2(bar.size.x * frac, bar.size.y)), accent)
+	var bw := 46.0 * depth
+	var bar := Rect2(pos + Vector2(-bw * 0.5, 12.0), Vector2(bw, 4.0))
+	_board.draw_rect(bar, Color(0, 0, 0, 0.55))
+	_board.draw_rect(Rect2(bar.position, Vector2(bar.size.x * frac, bar.size.y)),
+		MapStyle.TAB if is_player else accent)
 
-	var initials := _initials(f.display_name)
-	_board.draw_string(_font, card.position + Vector2(7, 20), initials,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 16, MapStyle.TITLE_TEXT)
-
-	# guard and status are words, never colour alone (ART_BIBLE §4.2)
+	var name_y := pos.y + 30.0
+	_board.draw_string(_font, Vector2(pos.x - bw * 0.5, name_y), _initials(f.display_name),
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 12, MapStyle.TITLE_TEXT)
 	if f.guard > 0:
-		_board.draw_string(_font, card.position + Vector2(7, 34), "G%d" % f.guard,
+		_board.draw_string(_font, Vector2(pos.x + 8, name_y), "G%d" % f.guard,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.PARK)
 	var st := _status_word(f)
 	if st != "":
-		_board.draw_string(_font, pos + Vector2(-30, 20), st,
+		_board.draw_string(_font, Vector2(pos.x - bw * 0.5, name_y + 13), st,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.METRO)
 
 
@@ -518,7 +603,7 @@ func _board_input(event: InputEvent) -> void:
 func _unit_at(p: Vector2) -> String:
 	for f in _all_fighters():
 		var c := _cell_pos(f.slot.x, f.slot.y, int(f.side))
-		if Rect2(c + Vector2(-31, -46), Vector2(62, 50)).has_point(p):
+		if Rect2(c + Vector2(-36, -110), Vector2(72, 128)).has_point(p):
 			return f.fighter_id
 	return ""
 

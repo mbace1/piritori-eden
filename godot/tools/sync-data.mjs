@@ -29,6 +29,9 @@ const FILES = [
   ['map/kallio-era1-2003-v1.json', 'kallio-era1-2003-v1.json'],
   ['content/era1-slice-v1.json', 'era1-slice-v1.json'],
   ['art/v3/manifest.json', 'art-v3-manifest.json'],
+  // GODOT_HANDOFF.md §3 lists this as a canonical input: the role/UI vocabulary
+  // that gives each unit its coloured base tab and symbol.
+  ['art-library/characters/system/role-tabs.json', 'role-tabs.json'],
 ];
 
 const check = process.argv.includes('--check');
