@@ -1,177 +1,236 @@
 # PIRITORI → EDEN — phasing
 
 Status: **ACTIVE**
-Owner direction: 2026-08-21
+Owner direction: 2026-08-21 (supersedes the earlier entry of the same date)
+
 Supersedes older roadmap material where they disagree. It does **not**
-supersede `DESIGN_AUTHORITY.md` or the canon stack beneath it — this file says
-what happens next and in what order, not what the game is.
+supersede `DESIGN_AUTHORITY.md` or the canon stack beneath it on questions of
+story, place and character — but on **what kind of game this is**, this file is
+the newest owner direction and wins.
 
 ---
 
-## 0. Owner direction, 2026-08-21
+## 0. Owner direction — the pivot
 
-> *"currently it's a skeleton where nothing really works. it should be a robust
-> seedy underworld story with animations and multiple interesting mini games"*
+> *"the base game should be more around the grid fighter mechanic. this should
+> take cues from tactics games (FF: Tactics, Metal Slug Tactics) card battlers
+> (Slay the Spire) and other turn based fighting games. the characters weapons
+> and everything will be the inventory and item pools that make the game
+> interesting. the loot involved will make things meaningful."*
+>
+> *"the dope wars is the motivation and the meta-game. it's a market game and
+> resource management layer that is then executed by the fights and other
+> narrative games."*
 
-And the standing quality bar, from the same session:
+### 0.1 Why this is more coherent than what it replaces
 
-> *"ask me numbered questions when needed and show me art with intention to
-> approve if needed"*
+The old design had a market layer and a battle layer that barely touched. You
+could play the economy and almost never fight. That is exactly the
+fragmentation `GAME_DESIGN_DOCUMENT.md` §24 warns about, and it is why 215
+passing checks still felt like a skeleton.
 
-### 0.1 The honest diagnosis
+This closes it into one loop:
 
-The Godot build passes 215 checks and plays the seven-day slice end to end. It
-is still a skeleton, and the gates cannot see why, because **a gate that
-certifies *works* cannot see *plays*.**
+**market funds the loadout → fights produce loot → loot buys capability →
+capability opens territory → territory opens market.**
 
-`GAME_DESIGN_DOCUMENT.md` §11.2 names eight mission families and gives each one
-a distinct core decision. Here is what each of them actually resolves as today:
+One game, rather than two prototypes sharing a save file.
 
-| Family | Canon's core decision | Today |
+### 0.2 The five decisions
+
+Answered by the owner, 2026-08-21, in this order.
+
+**1 — Campaign with run-shaped chapters.** Each era or act is a self-contained
+arc with its own roster and loot pool. What carries between chapters is money,
+reputation and a few named survivors. Keeps the fixed narrative beats that canon
+will not give up, while letting each chapter have the fresh-build energy that
+makes loot mean anything.
+
+**2 — Two tiers of person.**
+- **Named characters** are FFT story units: rare, deployed deliberately, and
+  never lost to a random alley. They die only in authored beats.
+- **Everyone else is disposable**, Mewgenics-style. Hired crew are generated,
+  genuinely expendable, and replacing them *is* a loop rather than a penalty.
+
+This promotes a line already in `NARRATIVE.md` to a core mechanic: *"Piritori
+starts as the cheapest small-quantity market and cheapest source of hired
+operatives."* The recruitment pipeline stops being flavour.
+
+**3 — The loadout is the deck.** No draw randomness in your own actions. Your
+weapons, gear and role define a fixed, known action set; the deckbuilding
+happens between fights, when you equip. Loot *is* deck construction.
+
+**Randomness lives in the world, not in your hands.** What varies is the board
+and who walks onto it: cover and hazards the location supplies, and third
+parties — police, a rival crew — entering mid-fight. This is Into the Breach's
+model and it is why that game is readable. It also keeps canon's promises
+intact: §18.1 forecast before commitment, §13.4 telegraphed intent, §18.3 no
+hidden dead ends. A third party arriving is local pressure (§6.6) cashing out
+tactically, and it is **forecast before you commit**, never rolled behind the
+screen.
+
+**4 — The loot economy is asymmetric.** Loot converts *down* into money freely.
+The best gear cannot be bought at any price — only taken off someone carrying
+it. Money buys volume; loot buys capability.
+
+This is what gives territory teeth. Pushing into Jade Lantern ground is not
+just "new revenue, new threats" — it is **the only place a class of weapon
+exists**. It also gives robbery and vengeance (§11.5, already canon) a reason
+beyond cash.
+
+**5 — Chapter clock, day/block inside it.** A chapter is a handful of days; a
+day is Day and Night blocks; travel and actions spend block time. You are free
+inside the budget — you can do anything, but not everything. Debt accrues
+nightly. The engine already works this way (`block_index`, nightly settlement,
+scheduled reveals), so it is the cheapest option and the one with the most
+pressure.
+
+*Owner note: adjustable if chapters feel confining.*
+
+### 0.3 What this overrides
+
+Recorded rather than silently averaged, per `DESIGN_AUTHORITY.md`.
+
+| Canon | Said | Now |
 |---|---|---|
-| Delivery / collection | route, timing, capacity, trust | a dialogue choice |
-| Information | pay, investigate, trade a secret | a dialogue choice |
-| Recruitment | price, role, loyalty | a dialogue choice |
-| Negotiation | offer, threat, favour | a dialogue choice → **formation battle** |
-| Protection | which target gets limited crew | a dialogue choice |
-| Recovery | retrieve under time pressure | a dialogue choice |
-| Sabotage | invest in an uncertain outcome | a dialogue choice |
-| Family / personal | time and truth rather than profit | a dialogue choice |
+| `GDD` pillar 2.4 + §24 kill condition | *"If combat becomes the default profitable solution, lower its rewards"* | Combat **is** the base game. Rewards are the point. |
+| `GDD` §24 gate 8 | *"Are battles rare and consequential enough to support roster attachment?"* | Battles are frequent. Attachment comes from named units and from survivors, not from scarcity. |
+| `GDD` §13.2 | *"Every crew member remains individually important"* | True of named characters. **Not** true of hired crew, and should not be — their interest comes from generated traits, not authorship. |
+| `GDD` §23.2 | Two battles in the slice, one avoidable | Many battles. |
+| `GDD` §9.1 | One product in the slice | A product economy **and** an item/loot economy, with §0.2(4)'s asymmetry between them. |
+| `DESIGN_LOCKS` §1.1 | Fixed 14-block schedule, one authored encounter per block | Blocks remain the clock. The **schedule** loosens: authored beats sit at fixed points, and free roam fills the rest. |
 
-**One mechanic exists.** Seven of the eight families are a menu of text wearing
-a location-scene costume, and the eighth is only interactive when it breaks
-down. That is the whole of "nothing really works": there is no *play* in seven
-eighths of the game, so no amount of authored content makes it feel like one.
-
-### 0.2 What this does NOT license
-
-`GAME_DESIGN_DOCUMENT.md` §24 carries a kill-or-redesign condition that points
-the opposite way from "add more modes":
-
-> *"If the five interaction modes feel fragmented, reduce their number or create
-> stronger state continuity before adding content."*
-
-That is not in tension with the owner direction, and reading it as permission to
-bolt five loose mini-games onto the side would be a misreading of both. The
-resolution:
-
-**A mini-game here is a mission family's core decision made playable. It is not
-a new mode, it does not get its own tab, and it shares the campaign state,
-the cast and the stakes with everything around it.**
-
-A mechanic that could be lifted out and shipped standalone has failed this test,
-however fun it is.
+**Not overridden, and not negotiable by a mechanic:** everything in
+`NARRATIVE.md`. Aaro's death stays fixed and never becomes a mission. Arvo is a
+fictional homage, not a portrait. People are never scenery — a fight in a stairwell
+answers to that before it answers to whether it is fun.
 
 ---
 
-## 1. Tool reality — plan against this, not against hope
+## 1. Reference calibration
+
+| Reference | Take | Do not take |
+|---|---|---|
+| **Into the Breach** | The goal for readability. Perfect information, small board, deterministic player actions, telegraphed everything. | Its tiny item count — this game wants more. |
+| **Final Fantasy Tactics** | Story units used rarely and deliberately. A world map with nodes, travel, and encounters en route. | Its sprawl, its job grind, its free-walking grid. |
+| **Metal Slug Tactics** | Compact encounters, momentum, the feel of a fight that resolves fast. | — |
+| **Mewgenics** | The item and buff *flavour* — generated units with traits worth reading. | **Its depth.** Owner: "likely even too deep for this game." |
+| **Slay the Spire** | Build-crafting: a run is defined by what you assembled. | Literal cards, draw, energy, discard. |
+| **Dope Wars** | The market pressure and the clock. | Being the whole game. |
+| **Darkest Dungeon** | Roster weight, consequence, presentation. | — |
+
+### 1.1 The item rule
+
+**An item changes what you can do. It does not add a modifier you have to
+compute.**
+
+"+15% accuracy at range 2" is the wrong kind of item. "Lets you hit the back row
+through cover" is the right kind. This is what "Mewgenics but shallower" means
+concretely, and it is the rule that keeps Into the Breach readability while
+having a real item pool.
+
+---
+
+## 2. Tool reality
 
 | Need | Tool | Reality |
 |---|---|---|
-| 2D concepts, poses, UI, scene art | **Nano Banana** | Strong, free. Style-anchor with `--images` against the cast's own approved art, not against a generic reference. |
-| Character pose sets | **Nano Banana** + `art-src/gen-pose-set.sh` | Nine poses per role is the established set. Whole-figure composites, **not** modular parts — the modular T-pose set cannot do hands or contact poses. |
-| A 3D presenter (Arvo only) | **Meshy** image-to-3D + rig | Done, registered, `ART_BIBLE.md` §13.2 permits exactly one. **Do not extend 3D to anything else** without an owner ruling. |
-| Frame-by-frame character animation | **Code, over the pose set** | Godot tweens and `_draw()` over existing poses. Cut-paper does not want interpolated skeletal motion; it wants held frames and hard cuts. |
-| Squash, sway, torn-edge wobble, paper lift | **Code** | Always. `ART_BIBLE.md`'s "visibly wobble, skip, overshoot" is a motion instruction as much as a line one. |
+| 2D concepts, poses, UI, scene art | **Nano Banana** | Strong, free. Style-anchor with `--images` against the cast's own approved art. |
+| Character pose sets | **Nano Banana** + `art-src/gen-pose-set.sh` | Nine poses per role. Whole-figure composites, not modular parts. |
+| A 3D presenter (Arvo only) | **Meshy** | Done and registered. `ART_BIBLE.md` §13.2 permits exactly one. Do not widen without an owner ruling. |
+| Animation | **Code, over the pose set** | Held frames and hard cuts, not interpolated skeletal motion. Cut-paper does not want tweening. |
 
-**Meshy credits are real money.** Check the balance before any batch, and
-confirm with the owner before spending a large share.
+**Meshy credits are real money.** Check the balance before a batch; confirm
+before spending a large share.
 
-### 1.1 The art rule that has already cost a session
-
-**Anything headed for rigging is concepted in a T-pose with a volumetric body.**
-Auto-rigging fails on a stick figure. This applies to Arvo and to nothing else
-until the 3D exception is widened.
+**Anything headed for rigging is concepted in a T-pose** with a volumetric body.
+Auto-rigging fails on a stick figure.
 
 ---
 
-## 2. Phases
+## 3. Phases
 
-### Phase A — one family becomes playable, end to end *(now)*
+### Phase 0 — make it testable from a phone *(prerequisite)*
 
-Pick **one** mission family and take it from design through art through a real
-loop the player can lose. Not a prototype in a lab scene: reachable from the
-map, resolving into campaign state, drawn in the game's own material.
+`CLAUDE.md` rules 3 and 6 are currently unsatisfiable: nothing reads a URL
+parameter, so reaching a battle means playing a dozen blocks from cold. Every
+phase below is iterated by **feel**, and feel cannot be reviewed through a
+twelve-block click path.
 
-Phase A is done when:
+Done when `?day=5&battle=courtyard-3v3` drops you straight into a fight on a
+phone, and a debug HUD shows block, cash and load errors.
 
-1. the family's core decision is made by **playing**, not by picking a line;
-2. it can be **failed**, and failing moves the campaign forward rather than
-   asking for a reload (`GDD` §11.4);
-3. its outcome is visible somewhere that is not a number — a changed service, a
-   wounded person, a closed front (`GDD` §11.3 beat 6, "Memory");
-4. it reads in **portrait and landscape** (`UX_SPEC.md`);
-5. it works in **en / fi / ja**;
-6. the six gates stay green and it has gained gates of its own;
-7. **the owner has played it and said what is wrong with it.**
+This is small and it pays for itself the first afternoon.
 
-Item 7 is the real gate. The other six are what make it worth the owner's time.
+### Phase A — the fight is worth repeating
 
-**The family is the owner's pick, not an engineering convenience.** Asked which
-one mattered most to the story, the answer was to be chosen deliberately —
-that question is open and Phase A does not start without it.
+The tactics core, built with the gear that already exists. Not new content:
+better verbs.
 
-### Phase B — the families that share its bones
+- Deterministic player actions drawn from loadout (§0.2 3)
+- Telegraphs that make Into the Breach readability real
+- Board hazards and cover the location supplies
+- Third-party entry, forecast before commitment
+- The 3×3 / 3×4 formation from `GDD` §13.3 — that survives intact
 
-Two or three more families, chosen because they **reuse** Phase A's mechanic
-rather than inventing beside it. Recovery is Delivery with a clock and a
-casualty. Protection is Delivery where the cargo is a person and the route is
-someone else's. If Phase A is built well, these are content.
+**Gate: you would voluntarily fight ten of these.** If the answer is no, nothing
+downstream saves it, and that judgement is the owner's, made on a phone.
 
-Phase B is done when a run touches at least four families and no two of them
-feel like the same button.
+### Phase B — loot makes it varied
 
-### Phase C — the city moves, and the cast has faces
+The item pool and the asymmetric economy. Gear that changes what you can do, per
+§1.1. Enough breadth that two crews with different kit play differently against
+the same opposition.
 
-- **Animation pass.** The pose sets exist; they are being swapped, not played.
-  Held frames, hard cuts, weight, torn-edge sway. `ART_BIBLE.md` already
-  licenses this and it is currently unused.
-- **The map as a character** (`NARRATIVE.md`): routes that repeat, meanings that
-  change, ordinary traffic that a player learns to read.
-- **Scene memory** (`GDD` §9.5): a place that remembers what happened in it.
+**Gate: the same fight, fought twice with different loadouts, is two fights.**
 
-### Phase D — Era I feature-complete
+### Phase C — the map is a game
 
-Exactly the seven criteria in `DESIGN_LOCKS.md` §12.1. Not a new list — that one.
-Era II opens only when they are all met, and Aaro's death never becomes a
-mission.
+Travel as a mini-game rather than a menu: random encounters en route, evading
+police and rivals, transport choices that help and limit. Territory unlocks that
+open services, enemies and gear pools together.
+
+**Gate: choosing a route is a real decision, not a confirmation dialog.**
+
+### Phase D — the meta closes the loop
+
+The market layer wired to the fights: chapters, crew churn, the recruitment
+pipeline at Piritori, debt pressure, and the narrative sections that sit in each
+city area on the way through a mission.
+
+**Gate: a full chapter arc plays, and the loop in §0.1 is legible to a player
+who was told nothing.**
+
+### Phase E — Era I feature-complete
+
+Exactly the seven criteria in `DESIGN_LOCKS.md` §12.1. Not a new list — that
+one. Era II opens only when they are all met.
 
 ---
 
-## 3. Standing rules
+## 4. Standing rules
 
 1. **Canon outranks code.** `DESIGN_AUTHORITY.md` resolves contradictions. When
-   two sources at the same level disagree, stop and record a decision; do not
-   average them.
-2. **A gate that cannot fail is a finding.** Gates drive the real interface —
-   press the button, do not call the model.
-3. **`data/` is generated.** Never hand-edit it. `sync-data.mjs` verifies by
-   sha256 and refuses on drift.
-4. **An art change ends in a picture**, not in a green suite. The suite cannot
-   see the thing being changed.
-5. **Show art with intent to approve.** Owner direction. A render nobody was
-   asked about is a render that ships wrong.
+   two sources at the same level disagree, stop and record a decision.
+2. **A gate that cannot fail is a finding.** Gates press the button; they do not
+   call the model.
+3. **`data/` is generated.** Never hand-edit it.
+4. **An art change ends in a picture**, not a green suite. The suite certifies
+   *works* and cannot see *looks* — or *plays*.
+5. **Show art with intent to approve.**
 6. **Never silently promote a placeholder to canon** (`DESIGN_LOCKS.md` §13).
-7. **People remain people** (`NARRATIVE.md`). Suffering is not scenery. The
-   portrayal is bleak without reducing vulnerable people to atmosphere, and a
-   mini-game about a person's worst day answers to that before it answers to
-   whether it is fun.
+7. **People remain people** (`NARRATIVE.md`).
 
 ---
 
-## 4. Open questions for the owner
+## 5. Open questions
 
-Numbered so they can be answered by number.
-
-1. **Which mission family should Phase A build?** Delivery is the engineering
-   path of least resistance (the flow simulation and the map already exist).
-   The question is which one carries the most story.
-2. **What does failure feel like?** `GDD` §11.4 lists what failure costs, but
-   not how the player should feel about it. Is a botched job a bruise, a debt,
-   or a person you have to look at afterwards?
-3. **How long is a mini-game?** Pillar 2.4 says combat is "short, legible and
-   costly". Do the other families sit at the same length — a minute, two — or
-   is one of them meant to be the long one?
-4. **Does the player character act?** `DESIGN_LOCKS.md` §3 fixes Aatami's
-   physical role. If a delivery is played, is Aatami carrying it, or is he
-   choosing who carries it and watching?
+1. **How big is a chapter?** §0.2(5) says "a handful of days". Three? Seven? The
+   current slice is seven and that is the only number that has been playtested.
+2. **What does a hired crew member have?** Mewgenics-lite means generated traits
+   worth reading. Two or three per person, or a longer tail?
+3. **Where does free roam get its fights?** Wandering into trouble, a posted
+   job board, provoking a rival — or all three?
+4. **Does the player character stand on the board?** `DESIGN_LOCKS.md` §3 fixes
+   Aatami's physical role, and §0.2(2) now makes named units rare and precious.
+   Is Aatami himself ever deployed?
