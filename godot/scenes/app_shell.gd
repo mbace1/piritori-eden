@@ -9,7 +9,7 @@ extends Control
 ## The same world and data serve both (handoff §2). Nothing is a scaled-down
 ## copy of a desktop canvas (§7).
 
-enum Mode { CITY, LOCATION, MARKET }
+enum Mode { CITY, LOCATION, MARKET, BATTLE }
 
 const RAIL_RATIO := 0.26
 const MIN_TARGET := 48.0   ## UX_SPEC: 44 is the floor, 48 preferred
@@ -403,6 +403,8 @@ func _clear_rail() -> void:
 func _show_city() -> void:
 	mode = Mode.CITY
 	_open_encounter = ""
+	if _rail:
+		_rail.visible = true
 	_clear_world()
 	_world_host.add_child(_city_map)
 	_city_map.call_deferred("_rebuild_layout")
@@ -643,6 +645,15 @@ func _show_missions() -> void:
 		_rail_box.add_child(_make_label("   " + tr("ui.mission_to") % [
 			dest.get("label", m.get("destination_anchor_id", "?")),
 			int(dl.get("day", 0)), dl.get("block", "")], 13, PiritoriPalette.TEXT))
+		# §13.12: a battle is one mission in four to six, and it is entered from
+		# the mission that signals it — never spawned at random.
+		var bid := String(m.get("battle_id", ""))
+		if bid != "" and not ContentRegistry.battle(bid).is_empty():
+			var fb := _make_button(tr("battle.enter") % _battle_format(bid),
+				PiritoriPalette.DANGER_RED)
+			fb.pressed.connect(func(): _show_battle(bid))
+			_rail_box.add_child(fb)
+
 		var req: Dictionary = m.get("requirements", {})
 		_rail_box.add_child(_make_label("   " + tr("ui.mission_needs") % [
 			req.get("capacity", "?"), " · ".join(req.get("roles_any", []))],
@@ -652,6 +663,38 @@ func _show_missions() -> void:
 
 
 ## END DAY — spend the remaining block. A decision boundary, so it saves.
+func _battle_format(battle_id: String) -> String:
+	return String(ContentRegistry.battle(battle_id).get("format", ""))
+
+
+## Enter a formation battle. The campaign model is untouched until it resolves.
+func _show_battle(battle_id: String) -> void:
+	mode = Mode.BATTLE
+	_clear_world()
+	_clear_rail()
+	var crew: Array = []
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if GameState.is_revealed(cid) or GameState.is_revealed(String(c.get("recruit_encounter_id", ""))):
+			crew.append(cid)
+	# The slice's first battles are reachable before anyone is recruited, so
+	# fall back to the authored roster rather than fielding an empty formation.
+	if crew.is_empty():
+		for c in ContentRegistry.slice.get("crew", []):
+			crew.append(String(c.get("id", "")))
+
+	var scene := preload("res://scenes/formation_battle.gd").new()
+	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scene.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_world_host.add_child(scene)
+	var errs: Array = scene.begin(battle_id, crew, GameState.seed_value + GameState.block_index)
+	if not errs.is_empty():
+		_rail_box.add_child(_make_label(str(errs), 13, PiritoriPalette.DANGER_RED))
+		return
+	scene.battle_finished.connect(func(_result): _show_city())
+	_rail.visible = false
+
+
 func _end_block() -> void:
 	if GameState.is_slice_complete():
 		return

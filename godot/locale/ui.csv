@@ -46,3 +46,34 @@ state.closed,closed,suljettu,閉じている
 ui.prototype_relief,structural relief — prototype treatment,rakennekartta — prototyyppi,構造図 — 試作段階
 ui.no_stage_art,no registered stage art for '%s' — placeholder,ei rekisteröityä lavastetaidetta kohteelle '%s' — paikanpitäjä,'%s' に登録された舞台美術なし — 仮
 ui.content_en_only,Story text is authored in English only.,Tarinateksti on kirjoitettu vain englanniksi.,物語のテキストは英語のみ。
+battle.round,ROUND,KIERROS,ラウンド
+battle.phase.read,read intent,lue aikeet,意図を読む
+battle.phase.command,your orders,komennot,命令
+battle.phase.player,your team acts,porukkasi toimii,味方の行動
+battle.phase.opponent,they act,he toimivat,相手の行動
+battle.phase.fallout,fallout,seuraukset,結果
+battle.phase.done,over,ohi,終了
+battle.select_unit,Select one of your crew.,Valitse joku porukastasi.,仲間を選べ。
+battle.condition,condition,kunto,体調
+battle.nerve,nerve,hermo,胆力
+battle.guard,guard,suoja,防御
+battle.tempo,tempo,vauhti,速さ
+battle.attack,Attack,Hyökkää,攻撃
+battle.brace,Brace,Suojaudu,身構える
+battle.reposition,Reposition,Siirry,移動
+battle.confirm,Confirm,Vahvista,確定
+battle.withdraw,Withdraw,Vetäydy,撤退
+battle.negotiate,Negotiate,Neuvottele,交渉
+battle.automation,AUTOMATION,AUTOMAATIO,自動
+battle.auto_round,Auto round,Automaattikierros,自動ラウンド
+battle.harm,harm,vahinko,被害
+battle.chance,chance,mahdollisuus,確率
+battle.risk,risk,riski,危険
+battle.lethal_risk,LETHAL RISK,HENGENVAARA,致命的な危険
+battle.no_target,No reachable target from here.,Ei kohdetta tästä.,ここから届く相手がいない。
+battle.status.shaken,shaken,järkyttynyt,動揺
+battle.status.wounded,wounded,haavoittunut,負傷
+battle.status.critical,critical,kriittinen,重体
+battle.status.downed,downed,kaatunut,戦闘不能
+battle.status.routed,routed,paennut,敗走
+battle.enter,Enter the %s,Mene %s-kohtaamiseen,%s の対決に入る

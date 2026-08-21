@@ -32,6 +32,9 @@ godot --path .                                  # play
 godot --headless --path . res://tests/test_spine.tscn   # data spine, 64 checks
 godot --headless --path . res://tests/test_shell.tscn   # interface,   34 checks
 godot --headless --path . res://tests/test_locale.tscn  # en/fi/ja,     6 checks
+godot --headless --path . res://tests/test_battle.tscn  # combat model, 43 checks
+godot --headless --path . res://tests/test_battle_ui.tscn # battle screen, 20 checks
+godot --path . res://tools/capture_battle.tscn          # battle screenshot
 godot --path . res://tools/capture.tscn         # write screenshots (needs a GPU)
 ```
 
@@ -52,9 +55,9 @@ line, and a board squeezed until its labels collided.
 |---|---|
 | 1. opens on the full Kallio map with Piritori highlighted | **done** — all twelve anchors, north up, routes on graph edges |
 | 2. buy the first pack, reveal the profitable sale | **done** — €45 buy, €68 Siltasaari sale, both authored |
-| 3. same campaign state across all five modes | **partial** — City, Location, Market, Crew and Missions share `GameState`; News not built |
+| 3. same campaign state across all five modes | **partial** — City, Location, Market, Crew, Missions and Battle share `GameState`; News not built |
 | 4. complete the seven-day slice | **partial** — the 14-block clock and schedule run; later encounters are reachable but not authored into scenes |
-| 5. resolve a 2v2 and a 3v3 | **not started** |
+| 5. resolve a 2v2 and a 3v3 | **done** — both build from canon and resolve; entered from the mission that signals them |
 | 6. save, quit, reload, resume | **done** — autosaves at every decision boundary |
 | 7. reflow at phone portrait / landscape / desktop | **done** — gated at 390×844, 844×390, 1920×1080 |
 | 8. resolve every referenced ID without fallback | **done** — `ContentRegistry` errors rather than substituting |
@@ -155,6 +158,37 @@ corridors are untouched and the subdivision is seeded to be identical every run.
 
 Routes are drawn from the graph, never straight: `_corridor()` walks the 22 public
 edges breadth-first, so a line never crosses water or a block.
+
+## Formation battle
+
+GAME_DESIGN_DOCUMENT §13. The combat core is salvaged from the standalone
+starter kit — it was genuinely good: seeded RNG, telegraphed intent, forecast
+before commitment, morale, cover, and pure logic with no scene references
+(`FightManager extends RefCounted`).
+
+What was replaced is everything that duplicated canon. The kit shipped its own
+hardcoded weapon catalogue and a `from_enemy_data(EnemyData)` constructor for
+hand-authored enemies; both are gone. `EquipmentRules` reads the slice's
+`equipment` array — reach patterns and all — and `BattleBuilder` turns a
+canonical battle record into the manager's `battle_def`. Two authoring paths for
+one thing is two sources of truth.
+
+Canon does not specify combat NUMBERS (§13.8 calls the values a "PROPOSED
+minimal set"), so harm/nerve tuning and opponent role profiles are the port's,
+kept in one visible table each rather than scattered.
+
+**These battles have no elimination path, deliberately.** In the 2v2, Pauli
+stands behind park-bench cover in the middle row and no non-piercing weapon can
+reach him. The authored objective agrees — "defeating every opponent is
+unnecessary" — and §13.10 says killing everyone "should rarely be the optimal
+requirement". Withdrawal and negotiation are the real exits, and `test_battle.gd`
+asserts that attrition alone does NOT end the fight.
+
+The screen follows §13.3's LOCKED composition: isometric encounter above a
+substantial console, narrow top strip for round state and intent, console
+grouped crew-left / actions-centre / automation-and-withdrawal-right. Only
+occupied, selected, targeted and reachable cells are drawn — the grid is a rule
+beneath the scene, not a checkerboard.
 
 ## Placeholders, labelled as such
 
