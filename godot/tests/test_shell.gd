@@ -104,8 +104,13 @@ func _test_opens_on_map() -> void:
 	check("city map is mounted", maps.size() == 1)
 
 	var status := _labels_text()
-	check("status strip shows day 1", "Day 1" in status, status.substr(0, 80))
-	check("status strip shows starting cash", "160" in status)
+	# The header is the redesigned chrome: title, era/character line and the
+	# icon+number chips. Assert the FACTS are on screen, not their casing.
+	check("header names the game", "PIRITORI" in status.to_upper())
+	check("header shows the era and character", "2003" in status and "AATAMI" in status.to_upper())
+	check("header shows day 1", "DAY 01" in status.to_upper(), status.substr(0, 120))
+	check("header shows the current block", "DAY" in status.to_upper())
+	check("header shows starting cash", "160" in status)
 
 	# Selecting Piritori must be possible from the map itself.
 	if maps.size() == 1:

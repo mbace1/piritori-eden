@@ -18,8 +18,12 @@ var mode: Mode = Mode.CITY
 
 var _root: VBoxContainer
 var _status: PanelContainer
-var _status_line1: Label
 var _status_line2: Label
+var _stats: HBoxContainer
+var _head_row: HBoxContainer
+var _head_row2: HBoxContainer
+var _command_bar: PanelContainer
+var _commands: Array[Button] = []
 var _body: BoxContainer
 var _world_host: PanelContainer
 var _rail: PanelContainer
@@ -75,22 +79,46 @@ func _build() -> void:
 	_root.add_theme_constant_override("separation", 0)
 	add_child(_root)
 
-	# ── status strip ──
+	# ── titled header (MAP.md §6 layer 12: labels and UX chrome) ──
 	_status = PanelContainer.new()
-	_status.add_theme_stylebox_override("panel", _panel_style(PiritoriPalette.PANEL))
-	var sv := VBoxContainer.new()
-	sv.add_theme_constant_override("separation", 2)
-	_status_line1 = _make_label("", 15)
-	_status_line2 = _make_label("", 13, PiritoriPalette.TEXT_DIM)
-	sv.add_child(_status_line1)
-	sv.add_child(_status_line2)
-	var pad := MarginContainer.new()
-	for side in ["left", "right"]:
-		pad.add_theme_constant_override("margin_" + side, 14)
-	for side in ["top", "bottom"]:
-		pad.add_theme_constant_override("margin_" + side, 8)
-	pad.add_child(sv)
-	_status.add_child(pad)
+	var head_sb := StyleBoxFlat.new()
+	head_sb.bg_color = MapStyle.FRAME
+	head_sb.border_color = MapStyle.FRAME_EDGE
+	head_sb.border_width_bottom = 3
+	head_sb.content_margin_left = 18
+	head_sb.content_margin_right = 18
+	head_sb.content_margin_top = 9
+	head_sb.content_margin_bottom = 9
+	_status.add_theme_stylebox_override("panel", head_sb)
+
+	var head := VBoxContainer.new()
+	head.add_theme_constant_override("separation", 4)
+	_head_row = HBoxContainer.new()
+	_head_row.add_theme_constant_override("separation", 18)
+	head.add_child(_head_row)
+	_head_row2 = HBoxContainer.new()
+	_head_row2.add_theme_constant_override("separation", 14)
+	head.add_child(_head_row2)
+
+	var titles := VBoxContainer.new()
+	titles.add_theme_constant_override("separation", 0)
+	var title := _make_label("PIRITORI → EDEN", 27, MapStyle.TITLE_TEXT)
+	title.add_theme_constant_override("outline_size", 0)
+	titles.add_child(title)
+	_status_line2 = _make_label("", 12, MapStyle.SUB_TEXT)
+	titles.add_child(_status_line2)
+	_head_row.add_child(titles)
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_head_row.add_child(spacer)
+
+	_stats = HBoxContainer.new()
+	_stats.add_theme_constant_override("separation", 16)
+	_stats.alignment = BoxContainer.ALIGNMENT_END
+	_head_row.add_child(_stats)
+
+	_status.add_child(head)
 	_root.add_child(_status)
 
 	# ── body: world + rail/sheet ──
@@ -125,6 +153,34 @@ func _build() -> void:
 	_rail.add_child(scroll)
 	_body.add_child(_rail)
 
+	# ── command bar (UX chrome, layer 12) ──
+	_command_bar = PanelContainer.new()
+	var bar_sb := StyleBoxFlat.new()
+	bar_sb.bg_color = MapStyle.FRAME
+	bar_sb.border_color = MapStyle.FRAME_EDGE
+	bar_sb.border_width_top = 3
+	bar_sb.content_margin_left = 10
+	bar_sb.content_margin_right = 10
+	bar_sb.content_margin_top = 8
+	bar_sb.content_margin_bottom = 8
+	_command_bar.add_theme_stylebox_override("panel", bar_sb)
+
+	var bar := HBoxContainer.new()
+	bar.add_theme_constant_override("separation", 10)
+	bar.alignment = BoxContainer.ALIGNMENT_CENTER
+	_command_bar.add_child(bar)
+
+	for spec in [
+		["ROUTE", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
+		["CREW", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
+		["MISSIONS", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
+		["END DAY", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
+	]:
+		var btn := _command(spec[0], spec[1], spec[2], spec[3])
+		_commands.append(btn)
+		bar.add_child(btn)
+	_root.add_child(_command_bar)
+
 	_city_map = preload("res://scenes/city_map.gd").new()
 	_city_map.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_city_map.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -137,6 +193,7 @@ func _reflow() -> void:
 	var portrait := vp.y > vp.x
 	if portrait == _is_portrait and _body != null and _body.get_child_count() > 0:
 		_apply_rail_size(vp, portrait)
+		_apply_chrome(vp)
 		return
 	_is_portrait = portrait
 
@@ -153,8 +210,13 @@ func _reflow() -> void:
 	_root.add_child(_body)
 	_body.add_child(_world_host)
 	_body.add_child(_rail)
+	# The command bar is chrome and always sits at the foot of the shell. The
+	# rebuild above re-adds _body at the end, which put the bar above the map.
+	if _command_bar:
+		_root.move_child(_command_bar, _root.get_child_count() - 1)
 
 	_apply_rail_size(vp, portrait)
+	_apply_chrome(vp)
 
 
 func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
@@ -168,28 +230,98 @@ func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
 		_rail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 
+## UX_SPEC §6.3: portrait keeps a COMPACT TWO-ROW status strip. Narrow screens
+## move the chips onto their own row and drop the command words to icons, which
+## keeps every target at 48px instead of letting four labels overflow.
+func _apply_chrome(vp: Vector2) -> void:
+	if _stats == null or _head_row2 == null:
+		return
+	var narrow := vp.x < 620.0
+
+	var want: Node = _head_row2 if narrow else _head_row
+	if _stats.get_parent() != want:
+		_stats.get_parent().remove_child(_stats)
+		want.add_child(_stats)
+	_head_row2.visible = narrow
+	_stats.alignment = BoxContainer.ALIGNMENT_BEGIN if narrow else BoxContainer.ALIGNMENT_END
+
+	for b in _commands:
+		b.custom_minimum_size.x = 56.0 if narrow else 96.0
+		for row in b.get_children():
+			for child in row.get_children():
+				if child is Label:
+					child.visible = not narrow
+	_refresh_status()
+
+
 # ── status ─────────────────────────────────────────────────────────────────
 
 func _refresh_status() -> void:
-	if _status_line1 == null:
+	if _status_line2 == null:
 		return
-	var stock_bits: PackedStringArray = []
-	for pid in GameState.stock:
-		var p := ContentRegistry.product(pid)
-		var name: String = p.get("display_name", pid) if not p.is_empty() else pid
-		stock_bits.append("%s ×%d" % [name, int(GameState.stock[pid])])
+	_status_line2.text = "2003 · AATAMI"
 
-	_status_line1.text = "Day %d · %s   €%d   %s   capacity %d" % [
-		GameState.day,
-		GameState.current_block().capitalize(),
-		GameState.cash_eur,
-		", ".join(stock_bits) if stock_bits.size() > 0 else "no stock",
-		GameState.capacity,
-	]
-	_status_line2.text = "debt €%d · %d mk · intel %d · block %d of %d" % [
-		GameState.debt_eur, GameState.markka_mk, GameState.intel,
-		mini(GameState.block_index + 1, GameState.total_blocks), GameState.total_blocks,
-	]
+	for c in _stats.get_children():
+		c.queue_free()
+
+	# Each chip is icon + number, and every icon means one thing only.
+	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
+		"DAY %02d · %s" % [GameState.day, GameState.current_block().to_upper()])
+	_add_stat(PiritoriIcon.Kind.CREW, MapStyle.FLOW, "%d" % _crew_known())
+	var packs := 0
+	for v in GameState.stock.values():
+		packs += int(v)
+	_add_stat(PiritoriIcon.Kind.STOCK, MapStyle.GOODS, "%d" % packs)
+	_add_stat(PiritoriIcon.Kind.MISSION, MapStyle.METRO, "%d" % _live_leads())
+	_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, "€ %s" % _thousands(GameState.cash_eur))
+
+
+func _crew_known() -> int:
+	var n := 0
+	for c in ContentRegistry.slice.get("crew", []):
+		if GameState.is_revealed(String(c.get("id", ""))) 				or GameState.is_revealed(String(c.get("recruit_encounter_id", ""))):
+			n += 1
+	return n
+
+
+func _block_of_total() -> int:
+	return mini(GameState.block_index + 1, GameState.total_blocks)
+
+
+func _live_leads() -> int:
+	var n := 0
+	for a in ContentRegistry.anchors():
+		n += GameState.available_encounters_at(String(a["id"])).size()
+	return n
+
+
+func _anchor_label(anchor_id: String) -> String:
+	if anchor_id == "":
+		return ""
+	var a := ContentRegistry.anchor(anchor_id)
+	return String(a.get("label", anchor_id)).to_upper()
+
+
+## 6420 -> "6 420", the period-correct grouping.
+func _thousands(n: int) -> String:
+	var s := str(absi(n))
+	var out := ""
+	var c := 0
+	for i in range(s.length() - 1, -1, -1):
+		out = s[i] + out
+		c += 1
+		if c % 3 == 0 and i > 0:
+			out = " " + out
+	return ("-" if n < 0 else "") + out
+
+
+func _add_stat(kind: int, col: Color, text: String) -> void:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	row.add_child(PiritoriIcon.new(kind, col, 17.0))
+	var l := _make_label(text, 16, MapStyle.TITLE_TEXT)
+	row.add_child(l)
+	_stats.add_child(row)
 
 
 # ── modes ──────────────────────────────────────────────────────────────────
@@ -365,6 +497,95 @@ func _on_slice_completed() -> void:
 	_rail_box.add_child(_make_label(
 		"€%d cash · €%d debt · intel %d" % [GameState.cash_eur, GameState.debt_eur, GameState.intel],
 		14))
+
+
+## A command tab: dark paper with a tan edge, icon plus word, 48px minimum.
+func _command(text: String, kind: int, accent: Color, handler: Callable) -> Control:
+	var b := Button.new()
+	b.custom_minimum_size = Vector2(96, MIN_TARGET)
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	b.focus_mode = Control.FOCUS_ALL
+	b.tooltip_text = text
+
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = MapStyle.DARK_TAB
+	sb.border_color = MapStyle.DARK_TAB_EDGE
+	sb.set_border_width_all(2)
+	sb.content_margin_left = 12
+	sb.content_margin_right = 12
+	var hover := sb.duplicate()
+	hover.bg_color = MapStyle.STREET_BED
+	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("hover", hover)
+	b.add_theme_stylebox_override("pressed", hover)
+	b.add_theme_stylebox_override("focus", hover)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 9)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.set_anchors_preset(Control.PRESET_FULL_RECT)
+	row.add_child(PiritoriIcon.new(kind, accent, 22.0))
+	var l := _make_label(text, 15, accent)
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(l)
+	b.add_child(row)
+
+	b.pressed.connect(handler)
+	return b
+
+
+## CREW — the six authored recruits, revealed as they are earned.
+func _show_crew() -> void:
+	_clear_rail()
+	_rail_box.add_child(_make_label("CREW", 19, MapStyle.TITLE_TEXT))
+	var any := false
+	for c in ContentRegistry.slice.get("crew", []):
+		var known := GameState.is_revealed(String(c.get("id", ""))) 			or GameState.is_revealed(String(c.get("recruit_encounter_id", "")))
+		if not known:
+			continue
+		any = true
+		_rail_box.add_child(_make_label("%s — %s" % [
+			c.get("name", "?"), c.get("role", "")], 15, PiritoriPalette.PLAYER_CYAN))
+		_rail_box.add_child(_make_label("   condition %s · nerve %s · tempo %s · €%s/day" % [
+			c.get("condition", "?"), c.get("nerve", "?"), c.get("tempo", "?"),
+			c.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
+	if not any:
+		_rail_box.add_child(_make_label(
+			"Nobody yet. Crew are met through encounters, not hired from a list.",
+			14, PiritoriPalette.TEXT_DIM))
+
+
+## MISSIONS — commitment shown before acceptance (handoff §5).
+func _show_missions() -> void:
+	_clear_rail()
+	_rail_box.add_child(_make_label("MISSIONS", 19, MapStyle.TITLE_TEXT))
+	var any := false
+	for m in ContentRegistry.slice.get("missions", []):
+		if not GameState.is_revealed(String(m.get("id", ""))):
+			continue
+		any = true
+		var dest := ContentRegistry.anchor(String(m.get("destination_anchor_id", "")))
+		_rail_box.add_child(_make_label(String(m.get("family", m.get("id", ""))).to_upper(),
+			15, MapStyle.METRO))
+		var dl: Dictionary = m.get("deadline", {})
+		_rail_box.add_child(_make_label("   to %s · by day %s %s" % [
+			dest.get("label", m.get("destination_anchor_id", "?")),
+			int(dl.get("day", 0)), dl.get("block", "")], 13, PiritoriPalette.TEXT))
+		var req: Dictionary = m.get("requirements", {})
+		_rail_box.add_child(_make_label("   needs capacity %s · %s" % [
+			req.get("capacity", "?"), " or ".join(req.get("roles_any", []))],
+			12, PiritoriPalette.TEXT_DIM))
+	if not any:
+		_rail_box.add_child(_make_label("No missions signalled yet.", 14, PiritoriPalette.TEXT_DIM))
+
+
+## END DAY — spend the remaining block. A decision boundary, so it saves.
+func _end_block() -> void:
+	if GameState.is_slice_complete():
+		return
+	GameState.advance_block()
+	_show_city()
 
 
 # ── small builders ─────────────────────────────────────────────────────────
