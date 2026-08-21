@@ -1,0 +1,105 @@
+name: gates
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  godot:
+    name: the Godot build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Godot ships a single self-contained binary and the headless flag needs
+      # no display, GPU or audio device — so the whole game is testable on a
+      # bare runner. Pinned to the exact version the build was made against;
+      # GDScript's parser is strict enough that a minor bump can break a tree
+      # that was green.
+      - name: install godot 4.7.2
+        run: |
+          curl -sSL -o godot.zip \
+            https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          mv Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      # The canon seams come first: they are the reason data/ is git-ignored,
+      # and a stale copy would make every later gate lie.
+      - name: sync canon into the project
+        working-directory: godot
+        run: |
+          node tools/sync-data.mjs
+          node tools/build-map-geometry.mjs
+
+      - name: the canon seams have not drifted
+        working-directory: godot
+        run: |
+          node tools/sync-data.mjs --check
+          node tools/build-map-geometry.mjs --check
+
+      # Fails on a missing translation, on a fi/ja string identical to its
+      # English source, on mismatched format specifiers, and on a stale key.
+      - name: en / fi / ja are complete
+        working-directory: godot
+        run: node tools/check-locale.mjs
+
+      # One import pass builds .godot/ and compiles every script. A parse error
+      # surfaces here rather than as a mystery inside a test scene.
+      #
+      # Every scene below ends in get_tree().quit(0) or quit(1), and that was
+      # verified rather than assumed: a gate that cannot fail is a finding.
+      # Twice, deliberately. A cold .godot/ is built from nothing on the first
+      # pass and that pass has been seen to segfault after doing most of the
+      # work — including on a freshly cloned tree locally. The second pass is
+      # cheap when the first one succeeded, and is the one whose exit code is
+      # allowed to fail the job.
+      - name: import the project
+        working-directory: godot
+        run: |
+          godot --headless --path . --import || echo "first import pass failed; retrying on a warm cache"
+          godot --headless --path . --import
+
+      - name: the Era I data spine
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_spine.tscn
+
+      # The web export has no operating system to ask for a Japanese face, so
+      # the glyphs ship with the game. This asserts the committed subset still
+      # covers every string in the locale CSVs and every symbol drawn from code
+      # — it downloads nothing, it only reads the fonts already in the tree.
+      - name: the bundled font subset covers every string
+        working-directory: godot
+        run: |
+          python3 -m pip install --quiet fonttools
+          python3 tools/build-font-subset.py --check
+
+      - name: en / fi / ja resolve at runtime, with CJK glyphs
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_locale.tscn
+
+      # Drives real Button nodes found by the words they display, never the
+      # model directly.
+      - name: the shell, driven through its own interface
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_shell.tscn
+
+      - name: the formation battle, built from canon
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_battle.tscn
+
+      - name: the battle screen's locked composition
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_battle_ui.tscn
+
+      # The prover proves geometry; the playthrough proves the thing is
+      # finishable. Walks all fourteen blocks to an authored ending.
+      - name: the seven-day slice plays to an ending
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_playthrough.tscn

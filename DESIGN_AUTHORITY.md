@@ -2,13 +2,33 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-20
+Latest owner rulings: 2026-08-21
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
 because the playable prototype, several older briefs, an earlier Art Bible and
 the newer approved design library currently disagree. Future implementation
 must follow this hierarchy rather than selecting whichever file is convenient.
+
+## Owner rulings, 2026-08-21
+
+Three decisions, recorded here rather than applied silently.
+
+**1. Godot is the implementation.** The browser prototype is superseded and
+parked at `legacy/`. It is kept as evidence, not as code to extend; it does not
+run in this repository by construction (its page loads the arcade's
+`../hub/shell.js`, which lived in the old monorepo). The canon it read —
+`content/`, `map/`, `art/` and the documents — did not move and is shared with
+the Godot build through `godot/tools/sync-data.mjs`.
+
+**2. This project is its own repository.** Split out of Suds-Jack with history
+intact. It carries real art, a real engine and a documents-first process, which
+is a different kind of project from the arcade cabinets and was taxing every
+unrelated clone of that repo. The deployed build still ships as a folder on the
+Suds-Jack `gh-pages` site, so the arcade links to it exactly as before.
+
+**3. Shipping art is normal here.** See § Assets — the “exception” framing is
+withdrawn.
 
 ## Authority order
 
@@ -148,13 +168,28 @@ These files are retained only as production history and reference:
 Their still-useful facts have been migrated where appropriate. Their visual
 rules do not override the active Art Bible, library or hierarchy above.
 
-## Asset exception
+## Assets
 
-Piritori is an explicit exception to the repository's old global “no image
-assets” convention. Approved raster and vector assets are source material under
-`piritori/art-library/`; optimized runtime derivatives may ship under
-`piritori/art/`. Generated review sheets and archived comparisons are not
-automatically deployed.
+Owner ruling, 2026-08-21: **this project ships real art, and that is a normal
+decision rather than an exception granted to it.**
+
+Earlier wording here called Piritori “an explicit exception to the repository's
+old global 'no image assets' convention”. That framing was wrong twice over.
+There was no repository-wide rule to be excepted from — the Suds-Jack arcade
+draws its hub marquees in code, and several cabinets there are deliberately
+image-free, but those are choices about those projects. And describing a settled
+design decision as an exception makes it sound like a debt some later cleanup
+should pay off, which invites exactly the wrong edit.
+
+What remains true, and is about pipeline hygiene rather than permission:
+
+- Approved raster and vector assets are source material under `art-library/`.
+- Optimized runtime derivatives ship under `art/v3/` and are registered in
+  `art/v3/manifest.json`. Runtime code resolves stable ids from that manifest;
+  it does not guess filenames or load review sheets directly.
+- Generated review sheets and archived comparisons are not automatically
+  deployed. `art-library/archive/needs-rework/` is provenance only and may never
+  become a runtime dependency.
 
 ## Direct publishing workflow
 

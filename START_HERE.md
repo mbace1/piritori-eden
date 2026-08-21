@@ -1,165 +1,123 @@
 # Piritori → Eden — start here
 
-This folder is the complete working handoff for the game. It contains the
-playable browser implementation, authored Era I slice, approved source art,
-optimized runtime art, map data, tests and the current design authority.
+A narrative strategy game set in Kallio, Helsinki, 2003: a visible city-flow
+simulation, location-based market management, authored encounters and rare
+isometric formation battles.
+
+This repository holds the design canon, the source and runtime art, the authored
+content slice, the map data and the Godot implementation.
 
 ## First five minutes
 
-From the repository root:
+The game is a Godot 4.7.2 project under `godot/`.
 
 ```bash
-npm --prefix piritori run check
-npm --prefix piritori run serve
+GODOT="/c/Users/Mikael/Documents/Codex/2026-08-20/can-you-connect-to-godot/tools/godot/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"
+
+cd godot
+node tools/sync-data.mjs          # copy canon into res://data/ (git-ignored)
+node tools/build-map-geometry.mjs # SVG -> board-space polylines
+"$GODOT" --path .                 # open the editor
 ```
 
-Open `http://localhost:8080/piritori/`.
-
-There is no build step and no generated dependency folder. The game is vanilla
-HTML, CSS and ES modules, so it must be opened through the included file server
-rather than by double-clicking `index.html`.
-
-For the browser playthrough gate, install Playwright globally or in your normal
-tool environment, then run:
-
-```bash
-npm --prefix piritori run check:browser
-```
+`godot/data/` is generated and never committed. If the project complains about
+missing content, run `sync-data.mjs` first.
 
 ## Read in this order
 
-1. `DESIGN_AUTHORITY.md` — resolves contradictions.
+1. `DESIGN_AUTHORITY.md` — resolves contradictions. Read this before changing
+   anything.
 2. `DESIGN_LOCKS.md` — owner-approved system and content locks.
 3. `GAME_DESIGN_DOCUMENT.md` — active game design.
 4. `ART_BIBLE.md` — visual and production rules.
-5. `UX_SPEC.md` — five modes and responsive behaviour.
-6. `MAP.md` — Kallio geography and compressed graph.
-7. `content/era1-slice-v1.json` — finite seven-day authored slice.
-8. `art/v3/manifest.json` — only valid runtime-art ids.
+5. `UX_SPEC.md` — the five interaction modes and responsive behaviour.
+6. `MAP.md` — Kallio geography and the compressed graph.
+7. `content/era1-slice-v1.json` — the finite seven-day authored slice.
+8. `art/v3/manifest.json` — the only valid runtime-art ids.
 
-`GODOT_HANDOFF.md` is the engine-port guide after the canon stack. Older brief,
-prompt and exploration files are historical evidence, not authority.
+`GODOT_HANDOFF.md` is the engine-port guide and sits after the canon stack.
+`CLAUDE.md` is the working guide: gates, seams, traps.
+
+Older brief, prompt and exploration files (`ART_BRIEF_CONCEPT.md`,
+`ART_PROMPTS.md`, `ART_REQUEST.md`, `ASSETS.md`, `CLAUDE_HANDOFF.md`,
+`CONTENT_HANDOVER.md`) are historical evidence, not authority.
 
 ## Folder map
 
 | Path | Purpose |
 |---|---|
-| `index.html`, `v3.css`, `js/v3/` | current playable v3.1 browser slice |
+| `godot/` | the game — Godot 4.7.2 project, six test gates |
 | `content/` | encounters, crew, missions, market, battles, news and validator |
 | `map/` | twelve-anchor Era I graph, structural SVG and validator |
-| `art-library/` | approved/semi-approved source assets and production contracts |
-| `art/v3/` | optimized registered runtime derivatives |
-| `test/` | state, battle, contract and browser playthrough gates |
-| `../flow-core/` | neutral city graph, routes, time and movement shared with Toko Move |
-| `tools/` | local project check and static server |
+| `art-library/` | approved source assets and production contracts |
+| `art/v3/` | optimized registered runtime derivatives + manifest |
+| `art-src/` | generation scripts for the Nano Banana pose pipeline |
+| `ux/` | the five-modes layout studies |
+| `legacy/` | the superseded browser prototype — parked, does not run |
 
-## Art rules that prevent pipeline failure
+## The gates
 
-- Runtime code resolves stable ids from `art/v3/manifest.json`; it does not
-  guess filenames or load review sheets directly.
-- Source PNG/SVG files stay in `art-library/`; web-ready derivatives stay in
-  `art/v3/`.
-- `art-library/archive/needs-rework/` is provenance only and may never become a
-  runtime dependency.
-- Approved does not mean fully separated. Toko v02 is an explicit flattened
-  prototype exception with live text and controls overlaid by the runtime.
-- Courtyard and weather art remain visibly semi-approved.
+All six must be green before a playable milestone.
+
+```bash
+cd godot
+node tools/sync-data.mjs --check     # canon is byte-identical in res://data/
+node tools/check-locale.mjs          # no missing or stale translation keys
+"$GODOT" --headless --path . --import
+
+for t in spine shell locale battle battle_ui playthrough; do
+  "$GODOT" --headless --path . tests/test_$t.tscn
+done
+```
+
+215 checks at the time of writing. They drive the real interface — a gate
+presses the button rather than calling the model — so a gate that cannot fail is
+a finding rather than a pass.
 
 ## Current playable scope
 
-- seven days, Day and Night blocks;
-- full compressed Kallio map with eight active anchors;
-- fourteen authored encounters;
-- Piritori purchase-to-first-profit opening;
+- seven in-game days, Day and Night blocks;
+- the full compressed Kallio map with eight active anchors;
+- fourteen authored encounters on a fixed schedule;
+- the Piritori purchase-to-first-profit opening;
 - Toko, Jaska, McCormicks, staffed bank and restaurant-front scenes;
 - one product, five offers, debt and old-markka conversion;
-- six recruitable adults and modular art;
+- six recruitable adults with a nine-pose art set each;
 - one information-avoidable 2v2 and one consequential 3v3;
-- scheduled sourced Arvo bulletin;
-- four Pasila-reachability outcomes.
+- a scheduled sourced Arvo bulletin with a live 3D presenter;
+- four Pasila-reachability outcomes;
+- English, Finnish and Japanese.
 
 Era II is phase-gated. Do not start 2024–2025 content until Era I is feature
 complete and the owner opens that phase.
 
-## Before committing
+## Art rules
 
-Run `npm --prefix piritori run check`. If a runtime module changes, bump its one
-and only `?v=` token. Do not add a bundler or copy adult Piritori data into the
-neutral `flow-core/` or Toko Move adapter.
+- Runtime code resolves stable ids from `art/v3/manifest.json`. It does not
+  guess filenames and does not load review sheets directly.
+- Source assets stay in `art-library/`; web-ready derivatives stay in `art/v3/`.
+- `art-library/archive/needs-rework/` is provenance only and may never become a
+  runtime dependency.
+- Approved means the direction is settled, not that every sheet is split,
+  compressed and animation-ready. Courtyard and weather art remain visibly
+  semi-approved.
 
-## Publishing to GitHub
+Shipping real art is a normal decision here, not an exception to anything — see
+`DESIGN_AUTHORITY.md` § Assets.
 
-Development happens on a PC and **the GitHub side is part of the job, not a
-separate step.** `DESIGN_AUTHORITY.md` § Direct publishing workflow gives the
-policy — one owner, one active agent, no waiting on a PR merge. This is the
-procedure.
+## Deploying
 
-**Source work.** Commit to `main` and push it. Every milestone, document-only
-or not, belongs on the remote the same day it is made — an agent's machine is
-not a backup and a milestone nobody else can see is a milestone that has to be
-described instead of read.
-
-```bash
-git pull --rebase origin main && git push origin main
-```
-
-**A playable milestone** additionally goes to `gh-pages`, which is the live
-arcade at `/Suds-Jack/piritori/`. It is a copy in one direction; deploys never
-merge.
+The build lands as a folder on the Suds-Jack `gh-pages` site, which is the
+arcade that links to it. Source lives here; the deployed artefact does not.
 
 ```bash
-git worktree add /tmp/ghp origin/gh-pages --detach
-
-# 1. replace the folder outright — do NOT ship test/, art-src/ or explorations/,
-#    and never the repo-root assets/ build directory
-rm -rf /tmp/ghp/piritori && mkdir -p /tmp/ghp/piritori
-tar -cf - --exclude=test --exclude=art-src --exclude=explorations -C piritori . \
-  | tar -xf - -C /tmp/ghp/piritori
-
-# 2. flow-core too, if it changed — it is shared with Toko Move
-tar -cf - --exclude=test --exclude=tools -C flow-core . | tar -xf - -C /tmp/ghp/flow-core
-
-# 3. the HOME button token is the SITE'S, not this branch's
-grep -o 'hub/shell.js?v=[0-9]*' /tmp/ghp/flashprince/index.html
-sed -i 's|hub/shell.js?v=NN|hub/shell.js?v=<what that printed>|' /tmp/ghp/piritori/index.html
-
-# 4. verify against THAT tree, then push
-node test/deploy-check.cjs --root /tmp/ghp piritori/
-cd /tmp/ghp && git add -A && git commit && git push origin HEAD:gh-pages
+cd godot && ./tools/export-web.sh
 ```
 
-`test/deploy-check.cjs` is the deploy's own gate and takes about three seconds
-per cabinet: the page is there, nothing on the site 404s, no console or page
-errors, the HOME button is present (and it prints which `shell.js` token got
-deployed), and something was actually painted. Run it with no arguments to
-sweep the whole floor. It mounts the tree at `/Suds-Jack/` the way the real site
-is served, and it does not fail a game for a blocked CDN — it says so instead.
+Threads are off deliberately: Godot's web export wants `SharedArrayBuffer`,
+which needs COOP/COEP headers that GitHub Pages cannot set. The script verifies
+the built wasm rather than trusting the setting.
 
-Four rules that have each cost a session:
-
-1. **`hub/versions.json` is edited by hand, for this game only.** Do not run
-   `scripts/versions.mjs` over the site: it currently disagrees with the
-   committed file about eight cabinets, wants to move most of them *down*
-   (hyperdagger 31→25, dropcabal 3→2) and wants to delete `kindling` outright.
-2. **`hub/games.js` belongs to the site.** Edit the `piritori` entry's `note`
-   and `controls` in place. The file lists cabinets that exist only on
-   `gh-pages`; overwriting it deletes them.
-3. **One `?v=` token per FILE, bumped when that file's bytes change.** A blanket
-   `sed` on `palette.js?v=1` hits nine files across this repo, because half the
-   games have a module by that name. Same token with different bytes is a
-   browser serving the old file out of cache forever.
-4. **Verify against the deployed tree, not against `main`.** Serve the worktree
-   and load the cabinet: zero console errors, zero 404s, the HOME button
-   present, and the game actually reaching its first screen.
-
-`github.io` is blocked outbound from the sandboxed agent environments, so the
-live URL cannot be curled from there. Serving the `gh-pages` worktree locally is
-the check; confirming the real URL is the owner's.
-
-**Leaving the tree clean.** When a version replaces the runtime rather than
-extending it, the superseded files go too. `main` still carries the v2 runtime
-(`js/fight.js`, `js/fightview.js`, `js/heat.js`, `js/main.js`, `js/market.js`,
-`js/narrative.js`, `js/palette.js`, and `art/arenas|fig|props|rooms/`) which the
-site no longer serves — the v3 deploy correctly dropped them. Delete them or
-park them explicitly the way `sudsjack/` is parked; an orphan that still parses
-is the one somebody edits by mistake.
+The export is roughly 58MB on disk and about 28MB gzipped, most of it the engine
+binary itself. That is the cost of Godot on the web and no amount of asset
+cleanup moves it much.
