@@ -9,7 +9,7 @@ extends Control
 ## The same world and data serve both (handoff §2). Nothing is a scaled-down
 ## copy of a desktop canvas (§7).
 
-enum Mode { CITY, LOCATION, MARKET, BATTLE }
+enum Mode { CITY, LOCATION, MARKET, BATTLE, NEWS }
 
 const RAIL_RATIO := 0.26
 const MIN_TARGET := 48.0   ## UX_SPEC: 44 is the floor, 48 preferred
@@ -206,6 +206,7 @@ func _build() -> void:
 		["cmd.route", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
 		["cmd.crew", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
 		["cmd.missions", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
+		["cmd.news", PiritoriIcon.Kind.PRESSURE, MapStyle.SUB_TEXT, _show_news_list],
 		["cmd.end_day", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
 	]:
 		var btn := _command(tr(spec[0]), spec[1], spec[2], spec[3])
@@ -407,6 +408,9 @@ func _show_city() -> void:
 	_open_encounter = ""
 	if _rail:
 		_rail.visible = true
+	# Era I news is a SCHEDULED broadcast: it arrives, it is not browsed to.
+	if _play_scheduled_news_if_due():
+		return
 	_clear_world()
 	_world_host.add_child(_city_map)
 	_city_map.call_deferred("_rebuild_layout")
@@ -709,6 +713,60 @@ func _show_battle(battle_id: String) -> void:
 		return
 	scene.battle_finished.connect(func(_result): _show_city())
 	_rail.visible = false
+
+
+## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its
+## scheduled day and can be re-watched from here afterwards.
+func _show_news_list() -> void:
+	mode = Mode.NEWS
+	_clear_rail()
+	_rail.visible = true
+	_rail_box.add_child(_make_label(tr("cmd.news"), 19, MapStyle.TITLE_TEXT))
+
+	var any := false
+	for n in ContentRegistry.slice.get("news", []):
+		var nid := String(n.get("id", ""))
+		# A bulletin exists once its day has arrived.
+		if int(n.get("day", 99)) > GameState.day:
+			continue
+		any = true
+		var seen := bool(GameState.flags.get("news-seen:" + nid, false))
+		var b := _make_button(("✓ " if seen else "▶ ") + String(n.get("presenter", nid)),
+			PiritoriPalette.PUBLIC_BLUE)
+		b.pressed.connect(func(): _play_news(nid))
+		_rail_box.add_child(b)
+		_rail_box.add_child(_make_label("   " + tr("ui.day_n") % int(n.get("day", 0)),
+			12, PiritoriPalette.TEXT_DIM))
+	if not any:
+		_rail_box.add_child(_make_label(tr("news.none"), 14, PiritoriPalette.TEXT_DIM))
+
+	_rail_box.add_child(_separator())
+	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
+	back.pressed.connect(_show_city)
+	_rail_box.add_child(back)
+
+
+## Play a bulletin full-screen. The television owns the world window; the rail
+## is hidden so nothing competes with it.
+func _play_news(nid: String) -> void:
+	mode = Mode.NEWS
+	_clear_world()
+	var scene := preload("res://scenes/news_event.gd").new()
+	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scene.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_world_host.add_child(scene)
+	scene.setup(nid)
+	scene.dismissed.connect(func(_id): _show_city())
+	_rail.visible = false
+
+
+## A bulletin scheduled before this block plays before the block does.
+func _play_scheduled_news_if_due() -> bool:
+	var nid := ContentRegistry.news_before(GameState.day, GameState.current_block())
+	if nid == "" or bool(GameState.flags.get("news-seen:" + nid, false)):
+		return false
+	_play_news(nid)
+	return true
 
 
 func _end_block() -> void:

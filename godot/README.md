@@ -56,7 +56,7 @@ line, and a board squeezed until its labels collided.
 |---|---|
 | 1. opens on the full Kallio map with Piritori highlighted | **done** — all twelve anchors, north up, routes on graph edges |
 | 2. buy the first pack, reveal the profitable sale | **done** — €45 buy, €68 Siltasaari sale, both authored |
-| 3. same campaign state across all five modes | **partial** — City, Location, Market, Crew, Missions and Battle share `GameState`; News not built |
+| 3. same campaign state across all five modes | **done** — City, Location, Market, Mission/Battle and News/Events all read and write one `GameState` |
 | 4. complete the seven-day slice | **done** — all 14 blocks play, every authored effect lands, the run ends on an authored ending |
 | 5. resolve a 2v2 and a 3v3 | **done** — both build from canon and resolve; entered from the mission that signals them |
 | 6. save, quit, reload, resume | **done** — autosaves at every decision boundary |
@@ -75,6 +75,7 @@ scenes/
   city_map.gd           twelve anchors, north up, routes on graph edges
   location_stage.gd     stage art + LOOK/ACT/LEAVE, copy as live UI
   market_ledger.gd      only earned offers, commitment shown first
+scenes/news_event.gd    the TV bulletin: CRT shell, lower third, source tiers
 ui/
   palette.gd            ART_BIBLE §4.2 accents, each paired with a glyph
   map_style.gd          the map's authored treatment, from the SVG <style>
@@ -208,6 +209,26 @@ wound at the final settlement can become death", with stated mitigations and
 "no hidden death roll". So `crew-outcome:critical-wound-possible` arms it,
 `resolve-critical-wound` clears it, and `_apply_final_settlement()` is the only
 place a death is ever recorded. `pasila-haunted` is the ending that needs one.
+
+## News and events
+
+Era I is television-led, so a bulletin ARRIVES on its scheduled day rather than
+being browsed to: `_play_scheduled_news_if_due()` fires when the city opens and
+the schedule's `news_before` names one. It can be re-watched from the NEWS
+command afterwards.
+
+ART_BIBLE §13.1 gives the channel its material — CRT shell, studio frame, lower
+third, dated source tag, scanline roll — and forbids "a modern app grid or
+smartphone shell". §13.3 requires that documented fact, inference, accusation
+and fiction "each receive a distinct written status, not only a colour", so the
+tier names are spelled out and the colour is only a second channel.
+
+The presenter is the §13.2 3D exception and is not built. The screen says
+"presenter model not yet approved" rather than drawing a stand-in that could be
+mistaken for the real thing.
+
+`accusation` is null in the one authored bulletin — the slice makes no contested
+claim there — and empty tiers are omitted rather than shown blank.
 
 ## Placeholders, labelled as such
 

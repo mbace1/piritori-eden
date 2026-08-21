@@ -398,6 +398,10 @@ func apply_effect(effect: String) -> void:
 		"resolve":
 			if parts.size() >= 2:
 				flags["resolved:" + parts[1]] = true
+		"label":
+			# News applies a lasting label to a thing — "markka-dead-money".
+			if parts.size() >= 2:
+				flags["label:" + ":".join(_tail(parts, 1))] = true
 		"resolve-ending":
 			resolve_ending()
 		"mccormick-family":

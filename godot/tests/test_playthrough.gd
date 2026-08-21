@@ -71,6 +71,11 @@ func _test_every_effect_is_understood() -> void:
 		for key in ["success_effects", "partial_effects", "failure_effects"]:
 			for e in m.get(key, []):
 				verbs[String(e).split(":")[0]] = true
+	# News carries effects too. Scanning only encounters and missions is how
+	# `label:` sat unimplemented while every gate stayed green.
+	for n in ContentRegistry.slice.get("news", []):
+		for e in n.get("effects", []):
+			verbs[String(e).split(":")[0]] = true
 
 	var known := [
 		"cash", "markka", "debt", "intel", "capacity", "exit_fund", "exit-fund",
@@ -80,7 +85,7 @@ func _test_every_effect_is_understood() -> void:
 		"obligation", "memory", "service", "crew-outcome",
 		"resolve-critical-wound", "start-battle", "start-negotiation",
 		"battle-on-failure", "battle", "opponent-nerve", "resolve",
-		"resolve-ending", "mccormick-family",
+		"resolve-ending", "mccormick-family", "label",
 	]
 	var unknown: Array = []
 	for v in verbs:

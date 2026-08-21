@@ -97,6 +97,7 @@ function gdFiles(dir, out = []) {
   return out;
 }
 
+const namespaces = new Set([...keys].map((k) => k.split('.')[0]));
 const used = new Map();
 for (const file of gdFiles(root)) {
   const src = readFileSync(file, 'utf8');
@@ -106,8 +107,13 @@ for (const file of gdFiles(root)) {
   // Keys also reach tr() indirectly: returned from a helper
   // (PiritoriPalette.state_key) or carried in a spec array and translated at
   // the point of use (the command bar). Count any key-shaped literal.
-  for (const m of src.matchAll(/"((?:ui|cmd|verb|state|battle)\.[a-z_0-9.]+)"/g)) {
-    if (!used.has(m[1])) used.set(m[1], relative(root, file));
+  // Match any key-shaped literal whose namespace the CSV actually declares.
+  // A hardcoded prefix list has now twice reported live keys as stale — first
+  // `battle.`, then `news.` — because they reach tr() through an array.
+  for (const m of src.matchAll(/"([a-z][a-z_0-9]*\.[a-z_0-9.]+)"/g)) {
+    if (namespaces.has(m[1].split('.')[0]) && !used.has(m[1])) {
+      used.set(m[1], relative(root, file));
+    }
   }
 }
 

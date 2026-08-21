@@ -81,3 +81,12 @@ battle.row.front,FRONT,ETU,前
 battle.row.middle,MIDDLE,KESKI,中
 battle.row.back,BACK,TAKA,後
 ui.crew_lost,%d crew did not come back,%d ei palannut,%d 人が戻らなかった
+news.documented,DOCUMENTED,DOKUMENTOITU,記録済み
+news.inference,INFERENCE,PÄÄTELMÄ,推論
+news.accusation,ACCUSATION,SYYTÖS,告発
+news.fiction,FICTION,FIKTIO,創作
+news.sources,Sources,Lähteet,出典
+news.continue,Turn it off,Sammuta,消す
+news.presenter_placeholder,presenter model not yet approved,esiintyjämallia ei ole hyväksytty,presenter モデル未承認
+cmd.news,NEWS,UUTISET,ニュース
+news.none,Nothing has been broadcast yet.,Mitään ei ole vielä lähetetty.,まだ何も放送されていない。

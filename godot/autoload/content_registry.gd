@@ -202,6 +202,20 @@ func scheduled_for(d: int, b: String) -> Dictionary:
 	return {}
 
 
+## A news bulletin by id.
+func news(id: String) -> Dictionary:
+	for n in slice.get("news", []):
+		if String(n.get("id", "")) == id:
+			return n
+	return {}
+
+
+## The bulletin scheduled to play BEFORE this block, if any.
+func news_before(d: int, b: String) -> String:
+	var entry := scheduled_for(d, b)
+	return String(entry.get("news_before", ""))
+
+
 ## The schedule entry that introduces this encounter, if any.
 func schedule_of_encounter(encounter_id: String) -> Dictionary:
 	for entry in schedule():
