@@ -49,3 +49,29 @@ cast/aatami-stand-near.png 128x192  joints sh 41,58 / el 33,78 / kn 47,132  ·  
 | file | fit | anchors / notes | check |
 |---|---|---|---|
 | — | | | |
+
+## Cast — whole-figure pose sets (2026-08-21)
+
+Generated with `gen-pose-set.sh <role>`: approved runner poses as style anchor,
+the role's own approved torso and legs as clothing reference, NANO_BANANA.md
+§2 magenta rule and §3 block C, then cut.mjs key -> trim -> fit -> web.
+
+No anchor coordinates: §6.6's cyan joint dots are deliberately not requested.
+The model draws them as glowing orbs rather than flat dots, cut.mjs then erases
+only their cores, and widening the key eats teal clothing. Whole-figure 2D
+sprites are composited at the feet, not rigged, so they need no joints.
+
+NOT REGISTERED in art/v3/manifest.json — that is the owner's approval step.
+
+cast/runner-*.webp  3 poses  362x543  77 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    strike downed shaken
+cast/muscle-*.webp  9 poses  362x543  249 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
+cast/watcher-*.webp  9 poses  362x543  181 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
+cast/fixer-*.webp  9 poses  362x543  229 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
+cast/driver-*.webp  9 poses  362x543  209 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
+cast/local-*.webp  9 poses  362x543  241 KB total  ·  gen 2026-08-21 flash  ·  §6.6
+    idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass

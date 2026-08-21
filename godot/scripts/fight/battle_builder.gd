@@ -138,6 +138,7 @@ static func _crew_to_unit(crew: Dictionary, slot: Vector2i) -> Dictionary:
 		"item_ids": crew.get("initial_equipment", []).filter(
 			func(e): return String(e) == "feature-phone"),
 		"behaviour_package": String(crew.get("role", "")),
+		"role": String(crew.get("role", "")),
 		"persistent_injuries": [],
 	}
 
@@ -183,6 +184,7 @@ static func _opponent_to_unit(opp: Dictionary) -> Dictionary:
 		"weapon_ids": [weapon],
 		"held_weapon_id": weapon,
 		"behaviour_package": String(opp.get("intent", "")),
+		"role": String(opp.get("role", "")),
 		"nerve_bias": prof["nerve_bias"],
 		"surrender_threshold": prof["surrender"],
 	}

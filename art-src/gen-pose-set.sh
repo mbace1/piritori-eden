@@ -13,7 +13,12 @@
 #   ./gen-pose-set.sh muscle
 #   ./gen-pose-set.sh muscle guard strike      # just these poses
 #
-# Writes work/poses/<role>-<pose>-raw.png and approved/poses/<role>-<pose>.png
+# Writes work/poses/<role>-<pose>-raw.png and approved/cast/<role>-<pose>.webp
+#
+# The full path is key -> trim -> fit -> web, per NANO_BANANA.md §8: raw and
+# work are regenerable and gitignored, approved/ is committed at the SHIPPING
+# cell size. Skipping fit left 780x1050 PNGs — 32MB for 48 poses. Fitted to
+# 362x543 webp, matching the approved runner set, the same 48 are 1.3MB.
 set -uo pipefail
 
 ROLE="${1:?usage: gen-pose-set.sh <role> [pose...]}"
@@ -26,7 +31,7 @@ CUT="$REPO/kindling/tools/cut.mjs"
 ART="$REPO/piritori/godot/data/art"
 export NODE_PATH="$(npm root -g)"
 
-mkdir -p "$HERE/work/poses" "$HERE/approved/poses"
+mkdir -p "$HERE/work/poses" "$HERE/approved/cast"
 
 # ── who each role is, taken from the APPROVED modular torso and legs art ──
 case "$ROLE" in
@@ -70,9 +75,13 @@ for POSE in "${POSES[@]}"; do
   DESC="$(pose_desc "$POSE")"
   if [ -z "$DESC" ]; then echo "unknown pose: $POSE" >&2; fail=$((fail+1)); continue; fi
   RAW="$HERE/work/poses/$ROLE-$POSE-raw.png"
-  OUT="$HERE/approved/poses/$ROLE-$POSE.png"
+  OUT="$HERE/approved/cast/$ROLE-$POSE.webp"
 
   printf '  %-14s ' "$POSE"
+  # The API drops requests intermittently; the same prompt succeeds on retry.
+  attempt=0
+  while [ $attempt -lt 3 ] && [ ! -f "$RAW" ]; do
+    attempt=$((attempt+1))
   "$NB" --images "${STYLE_REFS[@]}" ${CLOTH_REFS[@]+"${CLOTH_REFS[@]}"} --prompt \
 "One single figure, full body, three-quarter view facing slightly left, drawn in EXACTLY the art style of the first two reference images.
 
@@ -90,8 +99,10 @@ The background is a completely flat, solid, uniform magenta (#FF00FF) with nothi
 
 No text, no letters, no numbers, no labels, no captions, no watermark, no logo, no UI chrome, no panel, no card, no drop shadow. Do not present this as a sheet, a poster, a turnaround or a reference board. Just the subject." \
     --aspect-ratio 2:3 --output "$RAW" >/dev/null 2>&1
+    [ -f "$RAW" ] || sleep 4
+  done
 
-  if [ ! -f "$RAW" ]; then echo "GENERATE FAILED"; fail=$((fail+1)); continue; fi
+  if [ ! -f "$RAW" ]; then echo "GENERATE FAILED (3 tries)"; fail=$((fail+1)); continue; fi
   node "$CUT" key "$RAW" "$HERE/work/poses/$ROLE-$POSE-keyed.png" >/dev/null 2>&1 \
     && node "$CUT" trim "$HERE/work/poses/$ROLE-$POSE-keyed.png" "$OUT" --pad 4 >/dev/null 2>&1
   if [ -f "$OUT" ]; then echo "ok"; ok=$((ok+1)); else echo "CUT FAILED"; fail=$((fail+1)); fi

@@ -436,7 +436,7 @@ func _draw_unit(f: Fighter) -> void:
 	var pos := _cell_pos(f.slot.x, f.slot.y, int(f.side))
 	var is_player := f.side == Fighter.Side.PLAYER
 	var accent := MapStyle.ROUTE if is_player else MapStyle.GOODS
-	var role := String(f.behaviour_package)
+	var role := String(f.role)
 
 	# Depth follows SCREEN position, not row index: the player's back rank is
 	# nearer the camera and must be larger, while the opposition's is further
