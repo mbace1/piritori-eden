@@ -123,9 +123,17 @@ tar -cf - --exclude=test --exclude=tools -C flow-core . | tar -xf - -C /tmp/ghp/
 grep -o 'hub/shell.js?v=[0-9]*' /tmp/ghp/flashprince/index.html
 sed -i 's|hub/shell.js?v=NN|hub/shell.js?v=<what that printed>|' /tmp/ghp/piritori/index.html
 
-# 4. verify against THAT tree — serve /tmp/ghp and open the cabinet — then push
+# 4. verify against THAT tree, then push
+node test/deploy-check.cjs --root /tmp/ghp piritori/
 cd /tmp/ghp && git add -A && git commit && git push origin HEAD:gh-pages
 ```
+
+`test/deploy-check.cjs` is the deploy's own gate and takes about three seconds
+per cabinet: the page is there, nothing on the site 404s, no console or page
+errors, the HOME button is present (and it prints which `shell.js` token got
+deployed), and something was actually painted. Run it with no arguments to
+sweep the whole floor. It mounts the tree at `/Suds-Jack/` the way the real site
+is served, and it does not fail a game for a blocked CDN — it says so instead.
 
 Four rules that have each cost a session:
 
