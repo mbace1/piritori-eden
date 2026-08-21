@@ -51,6 +51,87 @@ for f in index.html index.js index.wasm index.pck; do
 done
 du -sh "$OUT" | sed 's/^/  on disk: /'
 
+echo "== offline worker =="
+# Its OWN worker, scoped to this folder. The arcade's sw.js deliberately does
+# not touch a game's directory — "a narrower scope wins the page, so those keep
+# controlling themselves" — and putting 33MB of wasm into the hub's shell
+# precache would make the front door pay for a game nobody opened.
+#
+# Cache-first, like gameoflife's: none of these files change between deploys,
+# and the VERSION below is derived from the build itself, so a new build is a
+# new cache and the old one is simply dropped.
+VERSION="$(cd "$OUT" && cat index.wasm index.pck 2>/dev/null | sha1sum | cut -c1-12)"
+cat > "$OUT/sw.js" <<SWEOF
+// Piritori -> Eden (Godot port), offline.
+//
+// Cache-first. Every file here is immutable for a given build, and VERSION is a
+// hash OF that build — so a new deploy is a new cache name and there is nothing
+// to go stale. The engine is ~38MB of wasm; fetching it twice would be rude.
+//
+// Registered from index.html on https only (or ?sw=1), so local dev and any
+// smoke gate are never handed a stale shell — the same rule gameoflife follows.
+
+const VERSION = '${VERSION}';
+const CACHE = \`piritori-godot-\${VERSION}\`;
+
+const SHELL = [
+  './',
+  './index.html',
+  './index.js',
+  './index.wasm',
+  './index.pck',
+  './index.audio.worklet.js',
+  './index.audio.position.worklet.js',
+  './index.icon.png',
+  './index.apple-touch-icon.png',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
+    for (const key of await caches.keys()) {
+      if (key !== CACHE && key.startsWith('piritori-godot-')) await caches.delete(key);
+    }
+    await self.clients.claim();
+  })());
+});
+
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  if (url.origin !== location.origin) return;
+  event.respondWith(
+    caches.match(event.request).then((hit) => hit || fetch(event.request))
+  );
+});
+SWEOF
+echo "  wrote sw.js (build $VERSION)"
+
+# Godot writes index.html itself, so the registration is injected rather than
+# living in the preset — head_include would need the whole script escaped into
+# a cfg string.
+if ! grep -q "serviceWorker" "$OUT/index.html"; then
+  python - "$OUT/index.html" <<'PYEOF2'
+import io, sys
+p = sys.argv[1]
+s = io.open(p, encoding='utf-8').read()
+reg = """<script>
+// https only (or ?sw=1) so local dev and the gates are never served a stale
+// shell — the rule every worker in this repo follows.
+if ('serviceWorker' in navigator
+    && (location.protocol === 'https:' || location.search.includes('sw=1'))) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>"""
+s = s.replace('</body>', reg, 1)
+io.open(p, 'w', encoding='utf-8', newline='').write(s)
+print("  registered sw.js from index.html")
+PYEOF2
+fi
+
 if [ "${1:-}" = "--serve" ]; then
   echo "== serving http://127.0.0.1:8765 =="
   cd "$OUT" && python -m http.server 8765 --bind 127.0.0.1
