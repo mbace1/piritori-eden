@@ -245,6 +245,37 @@ reference that errors the moment `_process` touches it.
 `accusation` is null in the one authored bulletin — the slice makes no contested
 claim there — and empty tiers are omitted rather than shown blank.
 
+## The browser build
+
+```sh
+./tools/export-web.sh            # build into ../../piritori-godot/
+./tools/export-web.sh --serve    # and serve it on :8765
+```
+
+Needs the Godot WEB export templates for the matching version; the script says
+how to fetch them. They are ~40MB of a 1.2GB all-platform archive.
+
+**Threads are off, and that is not a preference.** Godot's web export wants
+SharedArrayBuffer, which requires the COOP and COEP response headers. GitHub
+Pages serves static files and cannot set headers, so a threaded build loads to a
+black screen there with nothing but a console error. `export_presets.cfg` sets
+`variant/thread_support=false`, and the script greps the built wasm for
+`pthread` rather than trusting the setting — the flag can be right and the
+template still wrong.
+
+Size, measured rather than guessed: 63MB on disk, **~33MB over the wire** once
+gzip is applied. The wasm compresses well (37.7 -> 9.6MB); the pack barely moves
+because it is already-compressed art.
+
+The single biggest lever was one import setting. Arvo's model arrived with a
+2048-square texture — 6.3MB — for a man rendered inside a television at roughly
+584x326 and posterised to ten colours. Capping it at 512 in the texture's
+`.import` took 6MB off the download and changed nothing visible. The registered
+`.glb` is untouched and keeps its manifest sha256.
+
+The build output is git-ignored. It is a derived artefact and belongs on the
+deployed site, not in the source tree.
+
 ## Placeholders, labelled as such
 
 The map relief and the Piritori stage are code-drawn placeholders and say so on

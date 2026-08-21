@@ -1,8 +1,12 @@
 # Godot editor caches and imported artefacts (GODOT_HANDOFF.md §10)
 .godot/
 *.translation
-export_presets.cfg
 .import/
+
+# export_presets.cfg IS committed. It is normally ignored because it can carry
+# keystore passwords; this one carries none, and the web build's settings —
+# thread_support off above all — are the kind of thing that must not live only
+# on one machine.
 
 # Synced canon. data/ is a byte-identical COPY of the canonical JSON and the
 # registered art above this folder — see tools/sync-data.mjs. Committing it
