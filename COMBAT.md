@@ -79,6 +79,61 @@ action; there is no free walking and no movement-point economy.
 This was already closer to Metal Slug Tactics than to what is built. It does not
 need replacing — it needs using.
 
+### 3.1 Is 3x3 enough? Findings, 2026-08-21
+
+The owner asked whether 3x3 per side can carry the visuals the reference games
+have. The board's shape is a variable now (`FightBoard`, `?rows=4&lanes=5`) so
+the alternatives could be rendered rather than argued about. Four things came
+out of looking, and only the first was expected.
+
+**1. A bigger grid ALONE makes the picture worse.** The board is fitted into a
+fixed play area — 64% of the width and 32% of the height on the courtyard — so
+extra cells only divide the same floor into smaller tiles, and the figures
+shrink with them. A 5x4 board renders *smaller on screen* than 3x3. Cell count
+is not the lever.
+
+**2. The play area is the lever, and it is far too small.** Enlarged to roughly
+70% x 40%, the canon 3x3 already looks like a different game: figures read at a
+glance, the board occupies the frame, the composition stops being bottom-heavy.
+Most of what reads as "not enough board" is not enough *floor*.
+
+**3. The background art is the binding constraint, exactly as the owner
+guessed.** Enlarge the play area on the approved courtyard and the far rank
+stands on the building: that painting's floor is a wedge that runs out around
+40% of the frame height. A generated replacement with a broad rectangular floor
+across the lower 60% fixes it immediately and holds a 4x4 comfortably.
+
+**4. The unexpected one — the projections do not match.** The location art is
+drawn **face-on**: the far wall is parallel to the screen and the floor is a
+rectangle. The board's axes run **diagonally** (`FORWARD` is up-and-right,
+`LANE_AXIS` down-and-right), so the formation lies at roughly 45 degrees across
+a floor that is not oriented that way. It reads as a grid dropped onto a
+photograph rather than a stage the fight belongs to.
+
+This is the real reason the battle looks unfinished, and it is invisible in any
+gate.
+
+**Two attempts to solve it by prompting failed.** Asking Nano Banana for a
+"true 2:1 isometric, rotated 45 degrees, floor as a diamond, no vanishing
+point" returned a face-on courtyard both times; the model does not reliably
+honour a specified projection. Per `CLAUDE.md` rule 8, that is where it stopped
+rather than trying a third phrasing.
+
+**What is actually wrong is a fork, and it is the owner's to pick:**
+
+- **(a) Turn the board to suit the art.** Point `FORWARD` up-screen and
+  `LANE_AXIS` across it, so the near team is at the bottom and the far team at
+  the top of a rectangular floor. Cells become parallelograms rather than
+  diamonds. Cheap, keeps every existing background, and matches how location
+  art naturally wants to be drawn — but it is less classically isometric.
+- **(b) Turn the art to suit the board.** Build stages corner-on, floor as a
+  diamond, aligned to the two 2:1 diagonals. Classic tactics look, and the more
+  ambitious one. Prompting will not get there on its own; it likely needs the
+  floor constructed rather than generated, with the art placed around it.
+
+Both keep §13.3's rules intact. This is a question about the camera, not about
+the formation grammar.
+
 ---
 
 ## 4. Initiative — interleaved

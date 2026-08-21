@@ -33,6 +33,21 @@ pick up, and half of it will turn out to be wrong.
   repo would reclaim it, and that breaks every existing clone. Recorded as a
   decision not to.
 
+## The stage (see COMBAT.md 3.1)
+
+- **The projections do not match.** Location art is face-on; the board's axes
+  are diagonal. Owner fork: turn the board, or build the stages corner-on.
+  Nothing else about the battle's look matters as much.
+- **`PLAY_AREA` is a port-side estimate living in `formation_battle.gd`.** It
+  belongs in `art/v3/manifest.json` beside `portrait_safe_bounds`, as a
+  `play_area` on each scene asset. The file says so itself.
+- **Every crew member wears the same art.** Six identical figures in a 3v3 is
+  the single loudest visual problem in the battle, louder than the grid. The
+  pose sets exist per role; the battle is not picking distinct ones.
+- **The approved courtyard cannot hold a bigger board.** Its floor is a wedge
+  ending near 40% of frame height. A replacement needs a broad floor across the
+  lower ~60%.
+
 ## Art
 
 - **The pose sets are swapped, not played.** Nine poses per role exist and the

@@ -49,6 +49,18 @@ func _ready() -> void:
 		if crew.size() >= 3: break
 
 	_s.begin("battle-courtyard-3v3", crew, 4242)
+
+	# A candidate background, dropped in behind the board so the composition can
+	# be judged before anything is registered as art.
+	var bg: String = OS.get_environment("PIRITORI_SHOT_BG")
+	if bg != "":
+		var img := Image.load_from_file(bg)
+		if img != null:
+			_s._stage = ImageTexture.create_from_image(img)
+			_s.queue_redraw()
+			print("bg: ", bg)
+		else:
+			print("bg FAILED to load: ", bg)
 	for i in range(14): await get_tree().process_frame
 
 	# open an attack so the forecast and target path are visible
