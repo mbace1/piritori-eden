@@ -86,3 +86,72 @@ complete and the owner opens that phase.
 Run `npm --prefix piritori run check`. If a runtime module changes, bump its one
 and only `?v=` token. Do not add a bundler or copy adult Piritori data into the
 neutral `flow-core/` or Toko Move adapter.
+
+## Publishing to GitHub
+
+Development happens on a PC and **the GitHub side is part of the job, not a
+separate step.** `DESIGN_AUTHORITY.md` § Direct publishing workflow gives the
+policy — one owner, one active agent, no waiting on a PR merge. This is the
+procedure.
+
+**Source work.** Commit to `main` and push it. Every milestone, document-only
+or not, belongs on the remote the same day it is made — an agent's machine is
+not a backup and a milestone nobody else can see is a milestone that has to be
+described instead of read.
+
+```bash
+git pull --rebase origin main && git push origin main
+```
+
+**A playable milestone** additionally goes to `gh-pages`, which is the live
+arcade at `/Suds-Jack/piritori/`. It is a copy in one direction; deploys never
+merge.
+
+```bash
+git worktree add /tmp/ghp origin/gh-pages --detach
+
+# 1. replace the folder outright — do NOT ship test/, art-src/ or explorations/,
+#    and never the repo-root assets/ build directory
+rm -rf /tmp/ghp/piritori && mkdir -p /tmp/ghp/piritori
+tar -cf - --exclude=test --exclude=art-src --exclude=explorations -C piritori . \
+  | tar -xf - -C /tmp/ghp/piritori
+
+# 2. flow-core too, if it changed — it is shared with Toko Move
+tar -cf - --exclude=test --exclude=tools -C flow-core . | tar -xf - -C /tmp/ghp/flow-core
+
+# 3. the HOME button token is the SITE'S, not this branch's
+grep -o 'hub/shell.js?v=[0-9]*' /tmp/ghp/flashprince/index.html
+sed -i 's|hub/shell.js?v=NN|hub/shell.js?v=<what that printed>|' /tmp/ghp/piritori/index.html
+
+# 4. verify against THAT tree — serve /tmp/ghp and open the cabinet — then push
+cd /tmp/ghp && git add -A && git commit && git push origin HEAD:gh-pages
+```
+
+Four rules that have each cost a session:
+
+1. **`hub/versions.json` is edited by hand, for this game only.** Do not run
+   `scripts/versions.mjs` over the site: it currently disagrees with the
+   committed file about eight cabinets, wants to move most of them *down*
+   (hyperdagger 31→25, dropcabal 3→2) and wants to delete `kindling` outright.
+2. **`hub/games.js` belongs to the site.** Edit the `piritori` entry's `note`
+   and `controls` in place. The file lists cabinets that exist only on
+   `gh-pages`; overwriting it deletes them.
+3. **One `?v=` token per FILE, bumped when that file's bytes change.** A blanket
+   `sed` on `palette.js?v=1` hits nine files across this repo, because half the
+   games have a module by that name. Same token with different bytes is a
+   browser serving the old file out of cache forever.
+4. **Verify against the deployed tree, not against `main`.** Serve the worktree
+   and load the cabinet: zero console errors, zero 404s, the HOME button
+   present, and the game actually reaching its first screen.
+
+`github.io` is blocked outbound from the sandboxed agent environments, so the
+live URL cannot be curled from there. Serving the `gh-pages` worktree locally is
+the check; confirming the real URL is the owner's.
+
+**Leaving the tree clean.** When a version replaces the runtime rather than
+extending it, the superseded files go too. `main` still carries the v2 runtime
+(`js/fight.js`, `js/fightview.js`, `js/heat.js`, `js/main.js`, `js/market.js`,
+`js/narrative.js`, `js/palette.js`, and `art/arenas|fig|props|rooms/`) which the
+site no longer serves — the v3 deploy correctly dropped them. Delete them or
+park them explicitly the way `sudsjack/` is parked; an orphan that still parses
+is the one somebody edits by mistake.
