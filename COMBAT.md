@@ -8,6 +8,17 @@ be discovered.
 
 `PHASING.md` §0 made the grid fighter the base game. This is that system.
 
+**Owner ruling, 2026-08-21:** this design supersedes the previous systems
+generally, not only where §2 lists a specific clash. The earlier documents
+describe a narrative strategy game in which combat is a rare punctuation; this
+is a tactics game with a market and a story wrapped around it. Where an older
+document assumes the former shape — in its pacing, its scope, its acceptance
+gates or its sense of what the player spends an evening doing — **this document
+and `PHASING.md` win.** We are building a larger product than the slice those
+documents were sized for.
+
+`NARRATIVE.md` is the exception and remains untouchable (§1.1).
+
 ---
 
 ## 1. The promise
