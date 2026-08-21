@@ -46,6 +46,7 @@ func _ready() -> void:
 	await _test_first_purchase_through_ui()
 	await _test_market_through_ui()
 	await _test_language_switch()
+	_test_debug_entry_parsing()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -54,6 +55,38 @@ func _ready() -> void:
 	else:
 		print("SHELL OK: opens on the map, reflows, and the authored purchase and sale are reachable by button.")
 		get_tree().quit(0)
+
+
+## CLAUDE.md rule 6 — the deep link is what makes every later phase reviewable
+## on a phone, so it gets a gate like anything else.
+##
+## The PARSING is what is tested here, because it is pure and can be driven
+## honestly. Actually launching the shell with a query string needs a browser,
+## and a gate that fakes one would be proving its own fake — AGENTS.md §4.
+func _test_debug_entry_parsing() -> void:
+	print("
+debug entry (CLAUDE.md rule 6)")
+
+	var q := DebugEntry._parse("?battle=battle-courtyard-3v3&day=5&hud=1")
+	check("query string splits into keys",
+		q.get("battle", "") == "battle-courtyard-3v3", str(q))
+	check("a numeric value survives as text", q.get("day", "") == "5", str(q))
+	check("a bare flag reads as on", q.get("hud", "") == "1", str(q))
+
+	var bare := DebugEntry._parse("--reveal")
+	check("a desktop flag with no value is on", bare.get("reveal", "") == "1", str(bare))
+
+	var esc := DebugEntry._parse("?encounter=piritori%2Dfirst%2Dbuy")
+	check("percent-escapes decode",
+		esc.get("encounter", "") == "piritori-first-buy", str(esc))
+
+	check("an empty query yields nothing", DebugEntry._parse("").is_empty())
+	check("a normal launch is not in debug mode", not DebugEntry.active)
+
+	# Every id the deep link accepts must resolve, or the affordance sends a
+	# tester somewhere that does not exist.
+	check("the documented battle id is real",
+		not ContentRegistry.battle("battle-courtyard-3v3").is_empty())
 
 
 func check(label: String, condition: bool, detail: String = "") -> void:

@@ -53,7 +53,60 @@ func _ready() -> void:
 	GameState.battle_requested.connect(func(bid, _negotiation): _show_battle(bid))
 	_reflow()
 	_refresh_status()
+	_open_first_screen()
+
+
+## Normally the City. With a debug parameter (CLAUDE.md rule 6), wherever the
+## URL asked for — so a change can be reviewed on a phone in seconds instead of
+## a dozen blocks of clicking.
+func _open_first_screen() -> void:
+	if not DebugEntry.active:
+		_show_city()
+		return
+
+	var log := DebugEntry.apply_to_campaign()
+
+	if DebugEntry.has("battle"):
+		var bid := DebugEntry.get_str("battle")
+		if ContentRegistry.battle(bid).is_empty():
+			_show_debug_fault("no such battle: " + bid)
+			return
+		_show_battle(bid)
+	elif DebugEntry.has("news"):
+		var nid := DebugEntry.get_str("news")
+		if ContentRegistry.news(nid).is_empty():
+			_show_debug_fault("no such bulletin: " + nid)
+			return
+		_play_news(nid)
+	elif DebugEntry.has("encounter"):
+		var eid := DebugEntry.get_str("encounter")
+		if ContentRegistry.encounter(eid).is_empty():
+			_show_debug_fault("no such encounter: " + eid)
+			return
+		GameState.revealed[eid] = true
+		_show_location(eid)
+	else:
+		match DebugEntry.get_str("mode", "city"):
+			"market": _show_market()
+			"crew": _show_crew()
+			"missions": _show_missions()
+			"news": _show_news_list()
+			_: _show_city()
+
+	if not log.is_empty():
+		print("DebugEntry applied: ", ", ".join(log))
+
+
+## A mistyped id must fail where the tester can see it — on the screen, on the
+## phone — not in a console nobody has open.
+func _show_debug_fault(message: String) -> void:
 	_show_city()
+	_clear_rail()
+	_rail.visible = true
+	_rail_box.add_child(_make_label("DEBUG", 19, PiritoriPalette.DANGER_RED))
+	var l := _make_label(message, 14, PiritoriPalette.DANGER_RED)
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(l)
 
 
 ## ContentRegistry reports missing references as errors rather than silently

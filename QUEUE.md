@@ -10,12 +10,11 @@ pick up, and half of it will turn out to be wrong.
 
 ## Debug affordances (blocks rule 3 and rule 6)
 
-- **No URL parameters.** Nothing in the build reads `?day=5` or
-  `?battle=courtyard-3v3`. Every test brief currently has to describe a click
-  path from a cold start, and a battle is a dozen blocks in. Godot can read
-  these on web through `JavaScriptBridge`; nothing does yet.
+- ~~**No URL parameters.**~~ Done — `autoload/debug_entry.gd`. See `CLAUDE.md`
+  rule 6 for the vocabulary.
 - **No on-screen debug HUD.** Current block, cash, active flags and load errors
-  are invisible on a phone.
+  are invisible on a phone. `?hud=1` is accepted by the parser and does nothing
+  yet.
 
 ## Known gaps
 

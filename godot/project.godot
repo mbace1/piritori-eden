@@ -17,6 +17,7 @@ ContentRegistry="*res://autoload/content_registry.gd"
 GameState="*res://autoload/game_state.gd"
 SaveService="*res://autoload/save_service.gd"
 Loc="*res://autoload/loc.gd"
+DebugEntry="*res://autoload/debug_entry.gd"
 
 [internationalization]
 
