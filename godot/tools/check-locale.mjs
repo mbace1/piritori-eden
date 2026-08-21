@@ -106,7 +106,7 @@ for (const file of gdFiles(root)) {
   // Keys also reach tr() indirectly: returned from a helper
   // (PiritoriPalette.state_key) or carried in a spec array and translated at
   // the point of use (the command bar). Count any key-shaped literal.
-  for (const m of src.matchAll(/"((?:ui|cmd|verb|state)\.[a-z_0-9.]+)"/g)) {
+  for (const m of src.matchAll(/"((?:ui|cmd|verb|state|battle)\.[a-z_0-9.]+)"/g)) {
     if (!used.has(m[1])) used.set(m[1], relative(root, file));
   }
 }

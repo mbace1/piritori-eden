@@ -20,10 +20,18 @@ extends Control
 
 signal battle_finished(result: int)
 
-const CELL_X := 96.0      ## depth step, away from the centre line
-const CELL_Y := 88.0      ## lane step, down the screen — figures need the room
-const SKEW := 30.0        ## isometric shear
-const CENTRE_GAP := 64.0
+## A TRUE isometric grid laid on the ground plane, not a left-right split.
+## Two axes at the standard 2:1 isometric ratio: one step "into" the board
+## (row, front->back) and one step "across" it (lane). Rows recede diagonally,
+## which is what makes the cells sit on the cobbles instead of floating.
+## The courtyard backdrop is painted from a STEEP isometric camera, nearer 35
+## degrees than the textbook 2:1. A 2:1 tile laid on it gave three rows only
+## 86px of vertical spread while the figures are 130px tall, so the board
+## collapsed into a band. Taller tile, steeper board, matches the plate.
+const TILE := Vector2(74.0, 60.0)
+const ROW_AXIS := Vector2(-1.0, -0.5)      ## front -> back, away from the centre
+const LANE_AXIS := Vector2(-1.0, 0.5)      ## lane 0 -> 2, across the board
+const CENTRE_GAP := 2.1                    ## tiles between the two front rows
 
 var fight: FightManager
 var battle_id: String = ""
@@ -43,6 +51,10 @@ var _pending: FightManager.Command = null
 var _forecast: Dictionary = {}
 var _font: Font
 var _t := 0.0
+## The two sides read cyan and red, as in the owner's target renders.
+const SIDE_CYAN := Color("#57c8e8")
+const SIDE_RED := Color("#c8443c")
+
 var _roles: Dictionary = {}      ## role id -> {color, symbol}
 var _stage: Texture2D = null
 
@@ -186,11 +198,17 @@ func _process(dt: float) -> void:
 ## Cell centre for (lane, row) on one side. Player is the left half-board,
 ## opposition the right; both are mirrors of one location (§13.3).
 func _cell_pos(lane: int, row: int, side: int) -> Vector2:
-	var c := _board.size * 0.5
-	var dir := -1.0 if side == int(Fighter.Side.PLAYER) else 1.0
-	var x := c.x + dir * (CENTRE_GAP + row * CELL_X) + dir * lane * SKEW * 0.35
-	var y := c.y + (lane - 1) * CELL_Y + row * SKEW * 0.22
-	return Vector2(x, y)
+	# Sit the board on the courtyard's floor, which is low in the plate.
+	var c := Vector2(_board.size.x * 0.5, _board.size.y * 0.70)
+	var dir := 1.0 if side == int(Fighter.Side.PLAYER) else -1.0
+
+	# Both half-boards are the same grid mirrored about the centre line, so the
+	# opposition's rows recede the other way and its lanes still read top-down.
+	var row_v := Vector2(ROW_AXIS.x * dir, ROW_AXIS.y) * TILE
+	var lane_v := Vector2(LANE_AXIS.x * dir, LANE_AXIS.y) * TILE
+	var gap := Vector2(ROW_AXIS.x * dir, ROW_AXIS.y) * TILE * CENTRE_GAP
+
+	return c + gap + row_v * float(row) + lane_v * (float(lane) - 1.0)
 
 
 func _diamond(centre: Vector2, w: float, h: float) -> PackedVector2Array:
@@ -212,10 +230,11 @@ func _draw_board() -> void:
 		var ts := _stage.get_size()
 		var sc: float = maxf(_board.size.x / ts.x, _board.size.y / ts.y)
 		var drawn := ts * sc
+		# The approved courtyard is ALREADY painted for night. Grading it again
+		# crushed it to near-black, so this only takes a little warmth out.
 		_board.draw_texture_rect(_stage,
-			Rect2((_board.size - drawn) * 0.5, drawn), false,
-			PoseArt.night_modulate().darkened(0.28))
-		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), Color(0.02, 0.03, 0.05, 0.40))
+			Rect2((_board.size - drawn) * 0.5, drawn), false, Color(0.94, 0.95, 1.0))
+		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), Color(0.03, 0.04, 0.07, 0.12))
 	else:
 		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), MapStyle.LAND)
 
@@ -229,18 +248,30 @@ func _draw_board() -> void:
 					continue
 				var pos := _cell_pos(lane, row, side)
 				var kind: String = reveal[key]
-				var col := MapStyle.ROUTE
+				var mine: bool = side == int(Fighter.Side.PLAYER)
+				var col := SIDE_CYAN if mine else SIDE_RED
+				var fill_a := 0.16
 				match kind:
-					"occupied": col = MapStyle.NODE_RIM
-					"selected": col = MapStyle.TAB
-					"target": col = MapStyle.GOODS
-					"reachable": col = MapStyle.ROUTE
-					"cover": col = MapStyle.PARK
-				col.a = 0.5 if kind == "occupied" else 0.85
-				_board.draw_polyline(_diamond(pos, CELL_X * 0.92, CELL_Y * 0.78) + \
-					PackedVector2Array([_diamond(pos, CELL_X * 0.92, CELL_Y * 0.78)[0]]),
-					col, 2.0, true)
+					"selected":
+						col = MapStyle.TAB
+						fill_a = 0.22
+					"target":
+						col = SIDE_RED
+						fill_a = 0.26
+					"reachable":
+						fill_a = 0.07
+					_:
+						fill_a = 0.16
+				# The tile spanned by the two axes: horizontal diagonal 2*TILE.x,
+				# vertical diagonal TILE.y. Passing the STEP as the vertical
+				# diagonal drew tall narrow rhombi standing on end.
+				var d := _diamond(pos, TILE.x * 1.86, TILE.y * 0.92)
+				var fill := col
+				fill.a = fill_a
+				_board.draw_colored_polygon(d, fill)
+				_board.draw_polyline(d + PackedVector2Array([d[0]]), col, 2.0, true)
 
+	_draw_row_labels()
 	_draw_cover()
 	_draw_target_path()
 
@@ -275,6 +306,26 @@ func _reachable_slots(f: Fighter) -> Array:
 	return fight.free_slots_for(f.fighter_id)
 
 
+## BACK / MIDDLE / FRONT down both edges, in each side's colour — the rows are
+## the whole tactical vocabulary (§13.5) and must be nameable at a glance.
+func _draw_row_labels() -> void:
+	var keys := ["battle.row.front", "battle.row.middle", "battle.row.back"]
+	for side in [int(Fighter.Side.PLAYER), int(Fighter.Side.OPPOSITION)]:
+		var mine: bool = side == int(Fighter.Side.PLAYER)
+		var col := SIDE_CYAN if mine else SIDE_RED
+		for row in range(3):
+			# Anchor on the row's OUTERMOST lane so the tag clears the figures,
+			# then pin it to the screen edge.
+			var anchor := _cell_pos(0 if mine else 2, row, side)
+			var text := tr(keys[row])
+			var w := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+			var pos := Vector2(14.0 if mine else _board.size.x - w - 14.0, anchor.y + 4.0)
+			var box := Rect2(pos - Vector2(8, 13), Vector2(w + 16, 20))
+			_board.draw_rect(box, Color(0, 0, 0, 0.62))
+			_board.draw_rect(box, col, false, 1.0)
+			_board.draw_string(_font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, col)
+
+
 func _draw_cover() -> void:
 	var props: Array = fight.cover_props()
 	for p in props:
@@ -294,13 +345,29 @@ func _draw_target_path() -> void:
 		return
 	var a := _cell_pos(src.slot.x, src.slot.y, int(src.side))
 	var b := _cell_pos(dst.slot.x, dst.slot.y, int(dst.side))
-	var lethal := bool(_forecast.get("lethal_exposure", false))
-	var col := MapStyle.GOODS if not lethal else Color("#A94B43")
-	_board.draw_line(a, b, col, 3.0, true)
-	var dir := (b - a).normalized()
-	var back := b - dir * 16.0
-	var side := dir.orthogonal() * 8.0
-	_board.draw_colored_polygon(PackedVector2Array([b, back + side, back - side]), col)
+	# Red dashed, arrowhead on the target — the target renders' language.
+	var col := SIDE_RED
+	var from := a + Vector2(0, -46)
+	var to := b + Vector2(0, -46)
+	var dir := (to - from).normalized()
+	to -= dir * 26.0
+	_draw_dashed_line(from, to, col, 2.5, 12.0, 9.0)
+	var back := to - dir * 15.0
+	var wing := dir.orthogonal() * 8.0
+	_board.draw_colored_polygon(PackedVector2Array([to, back + wing, back - wing]), col)
+
+
+func _draw_dashed_line(a: Vector2, b: Vector2, col: Color, w: float,
+		on: float, off: float) -> void:
+	var total := a.distance_to(b)
+	if total <= 0.01:
+		return
+	var dir := (b - a) / total
+	var t := 0.0
+	while t < total:
+		var e: float = minf(t + on, total)
+		_board.draw_line(a + dir * t, a + dir * e, col, w, true)
+		t = e + off
 
 
 func _draw_unit(f: Fighter) -> void:
@@ -310,9 +377,9 @@ func _draw_unit(f: Fighter) -> void:
 	var role := String(f.behaviour_package)
 
 	# Depth: rows further from the centre line are further from the camera.
-	var depth := 1.0 - float(f.slot.y) * 0.10
-	var fig_h := 108.0 * depth
-	var fig_w := 72.0 * depth
+	var depth := 1.0 - float(f.slot.y) * 0.08
+	var fig_h := 112.0 * depth
+	var fig_w := 76.0 * depth
 
 	var acting := _pending != null and _pending.source_id == f.fighter_id 		and _pending.type == FightManager.Command.Type.ATTACK
 	var pose := PoseArt.pose_for(f, acting)
@@ -324,9 +391,7 @@ func _draw_unit(f: Fighter) -> void:
 	# 1. the coloured base tab this unit stands on — role vocabulary, canon
 	var tab := _role_color(role)
 	tab.a = 0.85
-	_board.draw_colored_polygon(_diamond(pos + Vector2(0, 3), 52.0 * depth, 19.0 * depth), tab)
-	_board.draw_colored_polygon(
-		_diamond(pos + Vector2(0, 6), 52.0 * depth, 19.0 * depth), Color(0, 0, 0, 0.30))
+	_board.draw_colored_polygon(_diamond(pos + Vector2(0, 2), 74.0 * depth, 34.0 * depth), tab)
 
 	# 2. the standee, with its cream torn edge
 	var figure_box := Rect2(pos + Vector2(-fig_w * 0.5, -fig_h), Vector2(fig_w, fig_h))
@@ -341,11 +406,11 @@ func _draw_unit(f: Fighter) -> void:
 
 	# 3. selection and target rings ride the base tab, never the figure
 	if f.fighter_id == _selected_unit:
-		var d := _diamond(pos, 58.0 * depth, 22.0 * depth)
+		var d := _diamond(pos, 82.0 * depth, 38.0 * depth)
 		_board.draw_polyline(d + PackedVector2Array([d[0]]), MapStyle.TAB, 2.0, true)
 	elif f.fighter_id == _hovered_target:
-		var d2 := _diamond(pos, 58.0 * depth, 22.0 * depth)
-		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), MapStyle.GOODS, 2.0, true)
+		var d2 := _diamond(pos, 82.0 * depth, 38.0 * depth)
+		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), SIDE_RED, 2.0, true)
 
 	# 4. the standee's white stand marks, doubling as the condition read
 	var frac := 0.0 if f.condition_max <= 0 else float(f.condition) / float(f.condition_max)
@@ -603,7 +668,7 @@ func _board_input(event: InputEvent) -> void:
 func _unit_at(p: Vector2) -> String:
 	for f in _all_fighters():
 		var c := _cell_pos(f.slot.x, f.slot.y, int(f.side))
-		if Rect2(c + Vector2(-36, -110), Vector2(72, 128)).has_point(p):
+		if Rect2(c + Vector2(-38, -112), Vector2(76, 130)).has_point(p):
 			return f.fighter_id
 	return ""
 

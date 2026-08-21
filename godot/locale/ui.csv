@@ -77,3 +77,6 @@ battle.status.critical,critical,kriittinen,重体
 battle.status.downed,downed,kaatunut,戦闘不能
 battle.status.routed,routed,paennut,敗走
 battle.enter,Enter the %s,Mene %s-kohtaamiseen,%s の対決に入る
+battle.row.front,FRONT,ETU,前
+battle.row.middle,MIDDLE,KESKI,中
+battle.row.back,BACK,TAKA,後
