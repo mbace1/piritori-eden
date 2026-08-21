@@ -37,7 +37,7 @@ var _t := 0.0
 
 
 func _ready() -> void:
-	_font = ThemeDB.fallback_font
+	_font = PiritoriFonts.ui()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
 	_load_geometry()
@@ -563,8 +563,7 @@ func _draw_labels() -> void:
 
 
 func _draw_placeholder_note() -> void:
-	draw_string(_font, Vector2(10, size.y - 8),
-		"structural relief from map/kallio-era1-2003-v1.svg — prototype treatment",
+	draw_string(_font, Vector2(10, size.y - 8), tr("ui.prototype_relief"),
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.TINY_TEXT)
 
 

@@ -44,8 +44,7 @@ func _rebuild() -> void:
 
 	var offers := GameState.visible_offers()
 	if offers.is_empty():
-		_list.add_child(_label("No contacts yet. Offers appear as you earn them.",
-			15, PiritoriPalette.TEXT_DIM))
+		_list.add_child(_label(tr("ui.no_contacts"), 15, PiritoriPalette.TEXT_DIM))
 		return
 
 	for o in offers:
@@ -74,7 +73,7 @@ func _offer_row(o: Dictionary) -> Control:
 	col.add_theme_constant_override("separation", 4)
 
 	# side is spelled out, never colour alone (ART_BIBLE §4.2)
-	var verb := "SELL" if side == "sell" else "BUY"
+	var verb := tr("ui.sell") if side == "sell" else tr("ui.buy")
 	col.add_child(_label("%s  %s  at  %s" % [
 		verb,
 		product.get("display_name", o.get("product_id", "")),
@@ -82,7 +81,7 @@ func _offer_row(o: Dictionary) -> Control:
 	], 16, PiritoriPalette.offer_color(side)))
 
 	# Commitment first: price, confidence, cause.
-	col.add_child(_label("€%d per %s · %s · %s" % [
+	col.add_child(_label(tr("ui.per_unit") % [
 		price,
 		product.get("unit", "pack"),
 		PiritoriPalette.confidence_label(confidence),
@@ -94,7 +93,8 @@ func _offer_row(o: Dictionary) -> Control:
 	btn.custom_minimum_size = Vector2(0, ROW_H * 0.7)
 	btn.add_theme_font_size_override("font_size", 15)
 	btn.disabled = not can
-	btn.text = "%s for €%d — costs one block" % [verb.capitalize(), price]
+	var verb_word := tr("ui.sell_verb") if side == "sell" else tr("ui.buy_verb")
+	btn.text = tr("ui.costs_block") % [verb_word, price]
 	if not can:
 		btn.text += "  (" + _why_not(o, side) + ")"
 	var oid: String = o["id"]
@@ -110,11 +110,11 @@ func _offer_row(o: Dictionary) -> Control:
 func _why_not(o: Dictionary, side: String) -> String:
 	var pid := String(o.get("product_id", ""))
 	if side == "sell":
-		return "nothing in stock"
+		return tr("ui.nothing_in_stock")
 	var price := int(o.get("quote", {}).get("eur", 0))
 	if GameState.cash_eur < price:
-		return "short €%d" % (price - GameState.cash_eur)
-	return "no capacity"
+		return tr("ui.short_by") % (price - GameState.cash_eur)
+	return tr("ui.no_capacity")
 
 
 func _label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) -> Label:

@@ -24,6 +24,8 @@ var _head_row: HBoxContainer
 var _head_row2: HBoxContainer
 var _command_bar: PanelContainer
 var _commands: Array[Button] = []
+var _langs: HBoxContainer
+var _open_encounter: String = ""
 var _body: BoxContainer
 var _world_host: PanelContainer
 var _rail: PanelContainer
@@ -39,8 +41,12 @@ func _ready() -> void:
 		_show_fatal(ContentRegistry.errors)
 		return
 
+	# One theme with CJK coverage for the whole tree, or Japanese is tofu.
+	theme = PiritoriFonts.theme()
+
 	_build()
 	get_tree().root.size_changed.connect(_reflow)
+	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
 	GameState.slice_completed.connect(_on_slice_completed)
 	_reflow()
@@ -51,12 +57,31 @@ func _ready() -> void:
 ## ContentRegistry reports missing references as errors rather than silently
 ## substituting placeholders (handoff §4) — so the shell must not open on a
 ## half-loaded campaign.
+## UX_SPEC §13: language changes at a decision boundary without restarting the
+## run, so the campaign model is untouched and only presentation is rebuilt.
+func _on_language_changed(_code: String) -> void:
+	_refresh_status()
+	_rebuild_language_buttons()
+	for b in _commands:
+		b.tooltip_text = tr(b.get_meta("key", ""))
+		for row in b.get_children():
+			for child in row.get_children():
+				if child is Label:
+					child.text = tr(b.get_meta("key", ""))
+	if mode == Mode.LOCATION and _open_encounter != "":
+		_show_location(_open_encounter)
+	elif mode == Mode.MARKET:
+		_show_market()
+	else:
+		_show_city()
+
+
 func _show_fatal(errors: PackedStringArray) -> void:
 	var box := VBoxContainer.new()
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
 	box.add_theme_constant_override("separation", 8)
 	var title := Label.new()
-	title.text = "Content failed to load"
+	title.text = tr("ui.content_failed")
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", PiritoriPalette.DANGER_RED)
 	box.add_child(title)
@@ -118,6 +143,11 @@ func _build() -> void:
 	_stats.alignment = BoxContainer.ALIGNMENT_END
 	_head_row.add_child(_stats)
 
+	_langs = HBoxContainer.new()
+	_langs.add_theme_constant_override("separation", 4)
+	_head_row.add_child(_langs)
+	_rebuild_language_buttons()
+
 	_status.add_child(head)
 	_root.add_child(_status)
 
@@ -171,12 +201,13 @@ func _build() -> void:
 	_command_bar.add_child(bar)
 
 	for spec in [
-		["ROUTE", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
-		["CREW", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
-		["MISSIONS", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
-		["END DAY", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
+		["cmd.route", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
+		["cmd.crew", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
+		["cmd.missions", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
+		["cmd.end_day", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
 	]:
-		var btn := _command(spec[0], spec[1], spec[2], spec[3])
+		var btn := _command(tr(spec[0]), spec[1], spec[2], spec[3])
+		btn.set_meta("key", spec[0])
 		_commands.append(btn)
 		bar.add_child(btn)
 	_root.add_child(_command_bar)
@@ -256,17 +287,46 @@ func _apply_chrome(vp: Vector2) -> void:
 
 # ── status ─────────────────────────────────────────────────────────────────
 
+## Languages by CODE, with the full name as the accessible name — the same
+## treatment the arcade status line uses.
+func _rebuild_language_buttons() -> void:
+	if _langs == null:
+		return
+	for c in _langs.get_children():
+		c.queue_free()
+	for lang in Loc.SUPPORTED:
+		var b := Button.new()
+		b.text = String(lang).to_upper()
+		b.custom_minimum_size = Vector2(MIN_TARGET, MIN_TARGET)
+		b.tooltip_text = Loc.language_name(lang)
+		b.focus_mode = Control.FOCUS_ALL
+		b.add_theme_font_size_override("font_size", 13)
+		var active: bool = lang == Loc.code
+		b.add_theme_color_override("font_color",
+			MapStyle.TITLE_TEXT if active else MapStyle.TINY_TEXT)
+		var sb := StyleBoxFlat.new()
+		sb.bg_color = MapStyle.STREET_BED if active else MapStyle.DARK_TAB
+		sb.border_color = MapStyle.DARK_TAB_EDGE
+		sb.set_border_width_all(2 if active else 1)
+		b.add_theme_stylebox_override("normal", sb)
+		b.add_theme_stylebox_override("hover", sb)
+		b.add_theme_stylebox_override("pressed", sb)
+		var code_of := String(lang)
+		b.pressed.connect(func(): Loc.set_language(code_of))
+		_langs.add_child(b)
+
+
 func _refresh_status() -> void:
 	if _status_line2 == null:
 		return
-	_status_line2.text = "2003 · AATAMI"
+	_status_line2.text = tr("ui.era_line")
 
 	for c in _stats.get_children():
 		c.queue_free()
 
 	# Each chip is icon + number, and every icon means one thing only.
 	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
-		"DAY %02d · %s" % [GameState.day, GameState.current_block().to_upper()])
+		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()])
 	_add_stat(PiritoriIcon.Kind.CREW, MapStyle.FLOW, "%d" % _crew_known())
 	var packs := 0
 	for v in GameState.stock.values():
@@ -274,6 +334,10 @@ func _refresh_status() -> void:
 	_add_stat(PiritoriIcon.Kind.STOCK, MapStyle.GOODS, "%d" % packs)
 	_add_stat(PiritoriIcon.Kind.MISSION, MapStyle.METRO, "%d" % _live_leads())
 	_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, "€ %s" % _thousands(GameState.cash_eur))
+
+
+func _block_word() -> String:
+	return tr("ui.block.night") if GameState.current_block() == "night" else tr("ui.block.day")
 
 
 func _crew_known() -> int:
@@ -338,6 +402,7 @@ func _clear_rail() -> void:
 
 func _show_city() -> void:
 	mode = Mode.CITY
+	_open_encounter = ""
 	_clear_world()
 	_world_host.add_child(_city_map)
 	_city_map.call_deferred("_rebuild_layout")
@@ -351,7 +416,7 @@ func _on_anchor_selected(anchor_id: String) -> void:
 func _build_city_rail(anchor_id: String) -> void:
 	_clear_rail()
 	if anchor_id == "":
-		_rail_box.add_child(_make_label("Select a place on the map.", 15, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("ui.select_place"), 15, PiritoriPalette.TEXT_DIM))
 		return
 
 	var a := ContentRegistry.anchor(anchor_id)
@@ -361,7 +426,7 @@ func _build_city_rail(anchor_id: String) -> void:
 
 	_rail_box.add_child(_make_label(String(a.get("label", anchor_id)), 19))
 	_rail_box.add_child(_make_label("%s  %s" % [
-		PiritoriPalette.state_glyph(state), PiritoriPalette.state_label(state)],
+		PiritoriPalette.state_glyph(state), tr(PiritoriPalette.state_key(state))],
 		13, PiritoriPalette.anchor_color(state)))
 
 	var roles: Array = a.get("roles", [])
@@ -369,6 +434,14 @@ func _build_city_rail(anchor_id: String) -> void:
 		_rail_box.add_child(_make_label(" · ".join(roles), 13, PiritoriPalette.TEXT_DIM))
 
 	_rail_box.add_child(_separator())
+
+	# The authored slice is owner-written narrative and exists in one language.
+	# Say so plainly rather than letting English prose under a Finnish or
+	# Japanese interface read as a bug.
+	if not Loc.content_is_translated():
+		var note := _make_label(tr("ui.content_en_only"), 11, PiritoriPalette.TEXT_DIM)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(note)
 
 	# Encounters playable in THIS block. The slice schedules one per block, so
 	# a site hosting several (piritori_first_buy hosts day 1 and day 5) offers
@@ -381,9 +454,10 @@ func _build_city_rail(anchor_id: String) -> void:
 		# JSON numbers arrive as floats — int() or the rail reads "Day 1.0".
 		var when := ""
 		if not entry.is_empty():
-			when = "  ·  Day %d %s" % [
-				int(entry.get("day", 0)),
-				String(entry.get("block", "")).capitalize(),
+			var blk := String(entry.get("block", ""))
+			when = "  ·  %s %s" % [
+				tr("ui.day_n") % int(entry.get("day", 0)),
+				tr("ui.block.night") if blk == "night" else tr("ui.block.day"),
 			]
 		var b := _make_button("▶ " + String(site.get("label", enc["id"])) + when,
 			PiritoriPalette.PLAYER_CYAN)
@@ -396,18 +470,19 @@ func _build_city_rail(anchor_id: String) -> void:
 		func(o): return o.get("anchor_id", "") == anchor_id)
 	if offers.size() > 0:
 		any = true
-		var mb := _make_button("Market ledger (%d)" % offers.size(), PiritoriPalette.GOODS_MAGENTA)
+		var mb := _make_button(tr("ui.market_ledger_n") % offers.size(), PiritoriPalette.GOODS_MAGENTA)
 		mb.pressed.connect(_show_market)
 		_rail_box.add_child(mb)
 
 	if not any:
 		_rail_box.add_child(_make_label(
-			"Nothing here yet." if state != "locked" else "Closed in this era.",
+			tr("ui.nothing_here") if state != "locked" else tr("ui.closed_era"),
 			14, PiritoriPalette.TEXT_DIM))
 
 
 func _show_location(encounter_id: String) -> void:
 	mode = Mode.LOCATION
+	_open_encounter = encounter_id
 	_clear_world()
 	var stage := preload("res://scenes/location_stage.gd").new()
 	stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -424,10 +499,10 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 		return
 
 	if GameState.is_resolved(encounter_id):
-		_rail_box.add_child(_make_label("Already resolved.", 15, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("ui.already_resolved"), 15, PiritoriPalette.TEXT_DIM))
 	else:
 		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location)
-		_rail_box.add_child(_make_label("LOOK", 13, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
 		for item in enc.get("inspectables", []):
 			var lb := _make_button("👁 " + String(item), PiritoriPalette.INTEL_MUSTARD)
 			var txt := String(item)
@@ -435,7 +510,7 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 			_rail_box.add_child(lb)
 
 		_rail_box.add_child(_separator())
-		_rail_box.add_child(_make_label("ACT", 13, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("verb.act"), 13, PiritoriPalette.TEXT_DIM))
 
 		for choice in enc.get("choices", []):
 			var can := GameState.meets_all(choice.get("requirements", []))
@@ -454,12 +529,12 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 			fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(fl)
 			if not can:
-				var req := _make_label("   requires: " + " · ".join(choice.get("requirements", [])),
+				var req := _make_label("   " + tr("ui.requires") % " · ".join(choice.get("requirements", [])),
 					12, PiritoriPalette.DANGER_RED)
 				_rail_box.add_child(req)
 
 	_rail_box.add_child(_separator())
-	var back := _make_button("LEAVE — back to the map", PiritoriPalette.TEXT_DIM)
+	var back := _make_button(tr("ui.leave_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
 
@@ -482,21 +557,19 @@ func _show_market() -> void:
 
 func _refresh_market_rail() -> void:
 	_clear_rail()
-	_rail_box.add_child(_make_label("Ledger", 19))
-	_rail_box.add_child(_make_label(
-		"Only contacts you have earned appear here.", 13, PiritoriPalette.TEXT_DIM))
+	_rail_box.add_child(_make_label(tr("ui.ledger"), 19))
+	_rail_box.add_child(_make_label(tr("ui.ledger_earned"), 13, PiritoriPalette.TEXT_DIM))
 	_rail_box.add_child(_separator())
-	var back := _make_button("Back to the map", PiritoriPalette.TEXT_DIM)
+	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
 
 
 func _on_slice_completed() -> void:
 	_clear_rail()
-	_rail_box.add_child(_make_label("Seven days done.", 19, PiritoriPalette.PLAYER_CYAN))
-	_rail_box.add_child(_make_label(
-		"€%d cash · €%d debt · intel %d" % [GameState.cash_eur, GameState.debt_eur, GameState.intel],
-		14))
+	_rail_box.add_child(_make_label(tr("ui.seven_days_done"), 19, PiritoriPalette.PLAYER_CYAN))
+	_rail_box.add_child(_make_label(tr("ui.run_summary") % [
+		GameState.cash_eur, GameState.debt_eur, GameState.intel], 14))
 
 
 ## A command tab: dark paper with a tan edge, icon plus word, 48px minimum.
@@ -538,7 +611,7 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 ## CREW — the six authored recruits, revealed as they are earned.
 func _show_crew() -> void:
 	_clear_rail()
-	_rail_box.add_child(_make_label("CREW", 19, MapStyle.TITLE_TEXT))
+	_rail_box.add_child(_make_label(tr("cmd.crew"), 19, MapStyle.TITLE_TEXT))
 	var any := false
 	for c in ContentRegistry.slice.get("crew", []):
 		var known := GameState.is_revealed(String(c.get("id", ""))) 			or GameState.is_revealed(String(c.get("recruit_encounter_id", "")))
@@ -547,19 +620,17 @@ func _show_crew() -> void:
 		any = true
 		_rail_box.add_child(_make_label("%s — %s" % [
 			c.get("name", "?"), c.get("role", "")], 15, PiritoriPalette.PLAYER_CYAN))
-		_rail_box.add_child(_make_label("   condition %s · nerve %s · tempo %s · €%s/day" % [
+		_rail_box.add_child(_make_label("   " + tr("ui.crew_stats") % [
 			c.get("condition", "?"), c.get("nerve", "?"), c.get("tempo", "?"),
 			c.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
 	if not any:
-		_rail_box.add_child(_make_label(
-			"Nobody yet. Crew are met through encounters, not hired from a list.",
-			14, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("ui.crew_none"), 14, PiritoriPalette.TEXT_DIM))
 
 
 ## MISSIONS — commitment shown before acceptance (handoff §5).
 func _show_missions() -> void:
 	_clear_rail()
-	_rail_box.add_child(_make_label("MISSIONS", 19, MapStyle.TITLE_TEXT))
+	_rail_box.add_child(_make_label(tr("cmd.missions"), 19, MapStyle.TITLE_TEXT))
 	var any := false
 	for m in ContentRegistry.slice.get("missions", []):
 		if not GameState.is_revealed(String(m.get("id", ""))):
@@ -569,15 +640,15 @@ func _show_missions() -> void:
 		_rail_box.add_child(_make_label(String(m.get("family", m.get("id", ""))).to_upper(),
 			15, MapStyle.METRO))
 		var dl: Dictionary = m.get("deadline", {})
-		_rail_box.add_child(_make_label("   to %s · by day %s %s" % [
+		_rail_box.add_child(_make_label("   " + tr("ui.mission_to") % [
 			dest.get("label", m.get("destination_anchor_id", "?")),
 			int(dl.get("day", 0)), dl.get("block", "")], 13, PiritoriPalette.TEXT))
 		var req: Dictionary = m.get("requirements", {})
-		_rail_box.add_child(_make_label("   needs capacity %s · %s" % [
-			req.get("capacity", "?"), " or ".join(req.get("roles_any", []))],
+		_rail_box.add_child(_make_label("   " + tr("ui.mission_needs") % [
+			req.get("capacity", "?"), " · ".join(req.get("roles_any", []))],
 			12, PiritoriPalette.TEXT_DIM))
 	if not any:
-		_rail_box.add_child(_make_label("No missions signalled yet.", 14, PiritoriPalette.TEXT_DIM))
+		_rail_box.add_child(_make_label(tr("ui.no_missions"), 14, PiritoriPalette.TEXT_DIM))
 
 
 ## END DAY — spend the remaining block. A decision boundary, so it saves.

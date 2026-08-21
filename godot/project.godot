@@ -16,6 +16,12 @@ config/features=PackedStringArray("4.3")
 ContentRegistry="*res://autoload/content_registry.gd"
 GameState="*res://autoload/game_state.gd"
 SaveService="*res://autoload/save_service.gd"
+Loc="*res://autoload/loc.gd"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locale/ui.en.translation", "res://locale/ui.fi.translation", "res://locale/ui.ja.translation")
+locale/fallback="en"
 
 [display]
 

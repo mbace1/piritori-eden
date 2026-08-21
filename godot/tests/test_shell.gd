@@ -29,6 +29,10 @@ func _ready() -> void:
 	bail.start()
 
 	print("── Piritori shell (interface-driven) ──")
+	# Pin the language. Loc persists the player's choice, so a gate that reads
+	# whatever was saved last is not a gate — this run went Japanese purely
+	# because a screenshot pass had selected it earlier.
+	Loc.set_language("en")
 	GameState.new_campaign()
 	SaveService.clear_save()
 
@@ -41,6 +45,7 @@ func _ready() -> void:
 	await _test_reflow()
 	await _test_first_purchase_through_ui()
 	await _test_market_through_ui()
+	await _test_language_switch()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -73,9 +78,19 @@ func _buttons() -> Array:
 	return _all_nodes(_shell).filter(func(n): return n is Button)
 
 
+## Find a button by what it DISPLAYS. The command bar keeps its word in a child
+## Label beside an icon, so button.text alone is empty there.
+func _button_text(b: Button) -> String:
+	var parts: PackedStringArray = [b.text]
+	for n in _all_nodes(b):
+		if n is Label:
+			parts.append(n.text)
+	return " ".join(parts)
+
+
 func _find_button(fragment: String) -> Button:
 	for b in _buttons():
-		if fragment.to_lower() in String(b.text).to_lower():
+		if fragment.to_lower() in _button_text(b).to_lower():
 			return b
 	return null
 
@@ -119,7 +134,7 @@ func _test_opens_on_map() -> void:
 		check("selecting Piritori reaches the rail", "PIRITORI" in _labels_text().to_upper())
 		check("the opening lead is offered as a button",
 			_find_button("first purchase") != null,
-			"buttons: " + str(_buttons().map(func(b): return b.text)))
+			"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
 
 
 func _test_reflow() -> void:
@@ -163,7 +178,7 @@ func _test_first_purchase_through_ui() -> void:
 
 	var buy := _find_button("Buy one pack")
 	check("the authored buy choice is a live button", buy != null,
-		"buttons: " + str(_buttons().map(func(b): return b.text)))
+		"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
 	if buy == null:
 		return
 	check("buy is enabled at €160", not buy.disabled)
@@ -176,6 +191,41 @@ func _test_first_purchase_through_ui() -> void:
 	check("a pack is in stock", int(GameState.stock.get("piri", 0)) == 1)
 	check("returned to the map after committing",
 		_find_button("Back to the map") == null)
+
+
+## UX_SPEC §13: "Language changes at a decision boundary without restarting the
+## run." So the campaign model must survive the switch untouched.
+func _test_language_switch() -> void:
+	print("
+language switch keeps the run (§13)")
+	var cash := GameState.cash_eur
+	var block := GameState.block_index
+	var flags := GameState.flags.size()
+
+	for lang in ["fi", "ja", "en"]:
+		Loc.set_language(lang)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check("%s: run state untouched" % lang,
+			GameState.cash_eur == cash and GameState.block_index == block 				and GameState.flags.size() == flags,
+			"(cash %d block %d)" % [GameState.cash_eur, GameState.block_index])
+		var live := _buttons().filter(func(b): return b.visible)
+		check("  %s: controls still reachable" % lang, live.size() > 0)
+
+	Loc.set_language("fi")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check("Finnish actually reaches the command bar",
+		_find_button("REITTI") != null,
+		str(_buttons().map(func(b): return _button_text(b))))
+	Loc.set_language("ja")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check("Japanese actually reaches the command bar",
+		_find_button("ルート") != null,
+		str(_buttons().map(func(b): return _button_text(b))))
+	Loc.set_language("en")
+	await get_tree().process_frame
 
 
 func _test_market_through_ui() -> void:
@@ -193,14 +243,14 @@ func _test_market_through_ui() -> void:
 
 	var ledger_btn := _find_button("Market ledger")
 	check("earned ledger is offered at Siltasaari", ledger_btn != null,
-		"buttons: " + str(_buttons().map(func(b): return b.text)))
+		"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
 	if ledger_btn == null:
 		return
 	await _press(ledger_btn)
 
 	var sell := _find_button("Sell for")
 	check("sale row rendered with its price", sell != null,
-		"buttons: " + str(_buttons().map(func(b): return b.text)))
+		"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
 	if sell == null:
 		return
 	check("sale is enabled with stock in hand", not sell.disabled)

@@ -57,14 +57,15 @@ static func state_glyph(slice_state: String) -> String:
 		_: return "·"
 
 
-static func state_label(slice_state: String) -> String:
+## Translation key for a slice state; the word itself lives in locale/ui.csv.
+static func state_key(slice_state: String) -> String:
 	match slice_state:
-		"active": return "open"
-		"opening": return "lead"
-		"landmark": return "landmark"
-		"teaser": return "rumoured"
-		"locked": return "closed"
-		_: return "unknown"
+		"active": return "state.open"
+		"opening": return "state.lead"
+		"landmark": return "state.landmark"
+		"teaser": return "state.rumoured"
+		"locked": return "state.closed"
+		_: return "state.closed"
 
 
 static func offer_color(side: String) -> Color:

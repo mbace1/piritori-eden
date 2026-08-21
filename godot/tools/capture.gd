@@ -9,9 +9,16 @@ const SHOTS := [
 	["portrait", Vector2i(390, 844)],
 ]
 
+## PIRITORI_SHOT_LANG picks the interface language for the capture.
+
 var _shell: Control
 
 func _ready() -> void:
+	var want_lang: String = OS.get_environment("PIRITORI_SHOT_LANG")
+	if want_lang != "":
+		Loc.set_language(want_lang)
+		await get_tree().process_frame
+
 	var out_dir: String = OS.get_environment("PIRITORI_SHOT_DIR")
 	if out_dir == "":
 		out_dir = "user://"
@@ -39,7 +46,7 @@ func _ready() -> void:
 
 		await RenderingServer.frame_post_draw
 		var img := get_viewport().get_texture().get_image()
-		var path := out_dir.path_join("piritori-city-%s.png" % label)
+		var path := out_dir.path_join("piritori-city-%s-%s.png" % [label, Loc.code])
 		img.save_png(path)
 		print("wrote ", path, "  ", img.get_width(), "x", img.get_height())
 
@@ -51,7 +58,7 @@ func _ready() -> void:
 				await get_tree().process_frame
 			await RenderingServer.frame_post_draw
 			var img2 := get_viewport().get_texture().get_image()
-			var p2 := out_dir.path_join("piritori-location-%s.png" % label)
+			var p2 := out_dir.path_join("piritori-location-%s-%s.png" % [label, Loc.code])
 			img2.save_png(p2)
 			print("wrote ", p2)
 

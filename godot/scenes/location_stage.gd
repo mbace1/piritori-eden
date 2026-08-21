@@ -98,11 +98,11 @@ func _load_stage_art(anchor_id: String) -> void:
 			_stage_note = "%s — %s (prototype art)" % [
 				asset.get("id", ""), asset.get("production_status", "")]
 			return
-	_stage_note = "no registered stage art for '%s' — code-drawn placeholder" % anchor_id
+	_stage_note = tr("ui.no_stage_art") % anchor_id
 
 
 func show_inspect(text: String) -> void:
-	_inspect.text = "You look closer: " + text
+	_inspect.text = tr("ui.you_look") % text
 	_inspect.visible = true
 
 

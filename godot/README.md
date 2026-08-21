@@ -14,6 +14,7 @@ node tools/sync-data.mjs               # copy canon -> data/
 node tools/sync-data.mjs --check       # gate: fail if data/ has drifted
 node tools/build-map-geometry.mjs      # structural SVG -> data/map-geometry.json
 node tools/build-map-geometry.mjs --check
+node tools/check-locale.mjs            # gate: locale coverage and drift
 ```
 
 `data/` is git-ignored on purpose. Two committed copies of canon is how a
@@ -29,7 +30,8 @@ IDs stay the authored strings.
 ```sh
 godot --path .                                  # play
 godot --headless --path . res://tests/test_spine.tscn   # data spine, 64 checks
-godot --headless --path . res://tests/test_shell.tscn   # interface,   26 checks
+godot --headless --path . res://tests/test_shell.tscn   # interface,   34 checks
+godot --headless --path . res://tests/test_locale.tscn  # en/fi/ja,     6 checks
 godot --path . res://tools/capture.tscn         # write screenshots (needs a GPU)
 ```
 
@@ -94,6 +96,42 @@ tools/                  sync-data.mjs, build-map-geometry.mjs, capture.tscn
   reads "Day 1.0".
 - Era II (Pasila, 2024–2025) is canon but **production-gated**. Do not build it
   until `DESIGN_LOCKS.md` §12.1 is satisfied.
+
+## Languages — en / fi / ja
+
+**Owner extension, 2026-08-20.** UX_SPEC §13 says "Finnish and English are
+complete slice languages"; Japanese was added on direct owner instruction. That
+is recorded here and in `autoload/loc.gd` rather than left as a silent
+contradiction (AGENTS.md §1), and UX_SPEC should list three languages when it is
+next revised.
+
+Strings live in `locale/ui.csv` (Godot's CSV translation format, one column per
+language). English is the per-key fallback, which is the house rule — but that
+fallback is *silent*, which is precisely how this repo once shipped English-only
+entries in two packs with every gate green. So `tools/check-locale.mjs` fails on
+a missing cell, on a fi/ja cell identical to its English one, on mismatched
+format specifiers, on a `tr()` key with no row, and on a row nothing uses.
+
+Language changes at a decision boundary and does not restart the run (§13); the
+shell rebuilds presentation only and `test_shell.gd` asserts cash, block and
+flags survive the switch.
+
+**What is NOT translated, deliberately.** The authored slice — encounter prose,
+choice labels, forecasts, crew names — is owner-written narrative in
+`content/era1-slice-v1.json` and exists in English. Machine-translating it and
+presenting the result as canon would be fabrication, so the UI states
+`Loc.CONTENT_LANGUAGE` plainly instead ("Story text is authored in English
+only."). When the owner supplies translated content packages, point
+`CONTENT_LANGUAGE` at them.
+
+**Both packs need a native read.** They were written to fit the game's register
+by someone who is not a native speaker of either language — the same caveat
+`toko/` records about its own fi/ja packs. Treat them as drafts.
+
+Japanese needs glyphs the bundled Godot font does not carry, so `ui/fonts.gd`
+asks the system for a face and lets Godot fall back per glyph, rather than
+committing a multi-megabyte Noto binary. `test_locale.gd` measures a CJK string
+and fails if it comes back tofu-width.
 
 ## The city map
 

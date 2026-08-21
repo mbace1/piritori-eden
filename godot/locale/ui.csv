@@ -1,0 +1,48 @@
+keys,en,fi,ja
+ui.block.day,DAY,PÄIVÄ,昼
+ui.block.night,NIGHT,YÖ,夜
+ui.day_n,DAY %02d,PÄIVÄ %02d,%02d日目
+ui.era_line,2003 · AATAMI,2003 · AATAMI,2003 · アアタミ
+cmd.route,ROUTE,REITTI,ルート
+cmd.crew,CREW,PORUKKA,仲間
+cmd.missions,MISSIONS,KEIKAT,依頼
+cmd.end_day,END DAY,LOPETA PÄIVÄ,一日を終える
+verb.look,LOOK,KATSO,見る
+verb.act,ACT,TOIMI,行動
+ui.leave_to_map,LEAVE — back to the map,POISTU — takaisin kartalle,去る — 地図に戻る
+ui.back_to_map,Back to the map,Takaisin kartalle,地図に戻る
+ui.select_place,Select a place on the map.,Valitse paikka kartalta.,地図から場所を選べ。
+ui.nothing_here,Nothing here yet.,Täällä ei ole vielä mitään.,ここにはまだ何もない。
+ui.closed_era,Closed in this era.,Suljettu tänä aikakautena.,この時代には閉じている。
+ui.already_resolved,Already resolved.,Jo hoidettu.,もう済んだ。
+ui.you_look,You look closer: %s,Katsot tarkemmin: %s,よく見ると: %s
+ui.requires,requires: %s,vaatii: %s,必要: %s
+ui.ledger,Ledger,Kirjanpito,帳簿
+ui.ledger_earned,Only contacts you have earned appear here.,Vain ansaitut kontaktit näkyvät tässä.,得た伝手だけがここに載る。
+ui.no_contacts,No contacts yet. Offers appear as you earn them.,Ei vielä kontakteja. Tarjoukset ilmestyvät kun ansaitset ne.,まだ伝手がない。得るごとに取引が現れる。
+ui.market_ledger_n,Market ledger (%d),Kirjanpito (%d),帳簿 (%d)
+ui.buy,BUY,OSTA,買う
+ui.sell,SELL,MYY,売る
+ui.buy_verb,Buy,Osta,買う
+ui.sell_verb,Sell,Myy,売る
+ui.costs_block,%s for €%d — costs one block,%s hintaan %d € — vie yhden jakson,%s €%d — 1ブロック消費
+ui.short_by,short €%d,puuttuu %d €,€%d 足りない
+ui.nothing_in_stock,nothing in stock,ei varastoa,在庫なし
+ui.no_capacity,no capacity,ei tilaa,容量なし
+ui.per_unit,€%d per %s · %s · %s,%d € / %s · %s · %s,€%d / %s · %s · %s
+ui.crew_none,"Nobody yet. Crew are met through encounters, not hired from a list.","Ei vielä ketään. Porukka löytyy kohtaamisista, ei listalta palkkaamalla.",まだ誰もいない。仲間は出会いで得るもので、名簿から雇うものではない。
+ui.crew_stats,condition %s · nerve %s · tempo %s · €%s/day,kunto %s · hermo %s · tempo %s · %s €/pv,体調 %s · 胆力 %s · 速さ %s · €%s/日
+ui.no_missions,No missions signalled yet.,Ei vielä keikkoja.,まだ依頼はない。
+ui.mission_to,to %s · by day %s %s,kohteeseen %s · päivään %s %s mennessä,%s へ · %s日 %s まで
+ui.mission_needs,needs capacity %s · %s,vaatii kapasiteettia %s · %s,容量 %s が必要 · %s
+ui.seven_days_done,Seven days done.,Seitsemän päivää takana.,七日が終わった。
+ui.run_summary,€%d cash · €%d debt · intel %d,%d € käteistä · %d € velkaa · tietoa %d,現金 €%d · 借金 €%d · 情報 %d
+ui.content_failed,Content failed to load,Sisällön lataus epäonnistui,コンテンツの読み込みに失敗
+state.open,open,auki,開いている
+state.lead,lead,johtolanka,手がかり
+state.landmark,landmark,maamerkki,目印
+state.rumoured,rumoured,huhuttu,噂
+state.closed,closed,suljettu,閉じている
+ui.prototype_relief,structural relief — prototype treatment,rakennekartta — prototyyppi,構造図 — 試作段階
+ui.no_stage_art,no registered stage art for '%s' — placeholder,ei rekisteröityä lavastetaidetta kohteelle '%s' — paikanpitäjä,'%s' に登録された舞台美術なし — 仮
+ui.content_en_only,Story text is authored in English only.,Tarinateksti on kirjoitettu vain englanniksi.,物語のテキストは英語のみ。
