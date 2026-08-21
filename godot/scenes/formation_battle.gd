@@ -29,9 +29,14 @@ signal battle_finished(result: int)
 ## 86px of vertical spread while the figures are 130px tall, so the board
 ## collapsed into a band. Taller tile, steeper board, matches the plate.
 const TILE := Vector2(74.0, 60.0)
-const ROW_AXIS := Vector2(-1.0, -0.5)      ## front -> back, away from the centre
-const LANE_AXIS := Vector2(-1.0, 0.5)      ## lane 0 -> 2, across the board
-const CENTRE_GAP := 2.1                    ## tiles between the two front rows
+
+## The two sides are separated along an isometric DEPTH axis, not mirrored about
+## a vertical line — mirroring on x alone left both teams in the same horizontal
+## band. FORWARD points away from the camera, so the player's board sits nearer
+## (lower-left) and the opposition's further (upper-right), as in the targets.
+const FORWARD := Vector2(1.0, -0.5)        ## toward the opposition, away from camera
+const LANE_AXIS := Vector2(1.0, 0.5)       ## across the board, perpendicular in iso
+const CENTRE_GAP := 1.15                   ## tiles from the centre line to a front row
 
 var fight: FightManager
 var battle_id: String = ""
@@ -198,17 +203,15 @@ func _process(dt: float) -> void:
 ## Cell centre for (lane, row) on one side. Player is the left half-board,
 ## opposition the right; both are mirrors of one location (§13.3).
 func _cell_pos(lane: int, row: int, side: int) -> Vector2:
-	# Sit the board on the courtyard's floor, which is low in the plate.
-	var c := Vector2(_board.size.x * 0.5, _board.size.y * 0.70)
-	var dir := 1.0 if side == int(Fighter.Side.PLAYER) else -1.0
+	var c := Vector2(_board.size.x * 0.5, _board.size.y * 0.56)
+	# The player holds the near half of the board; the opposition the far half.
+	var dir := -1.0 if side == int(Fighter.Side.PLAYER) else 1.0
 
-	# Both half-boards are the same grid mirrored about the centre line, so the
-	# opposition's rows recede the other way and its lanes still read top-down.
-	var row_v := Vector2(ROW_AXIS.x * dir, ROW_AXIS.y) * TILE
-	var lane_v := Vector2(LANE_AXIS.x * dir, LANE_AXIS.y) * TILE
-	var gap := Vector2(ROW_AXIS.x * dir, ROW_AXIS.y) * TILE * CENTRE_GAP
+	var fwd := Vector2(FORWARD.x * TILE.x, FORWARD.y * TILE.y) * dir
+	var lane_v := Vector2(LANE_AXIS.x * TILE.x, LANE_AXIS.y * TILE.y) * dir
 
-	return c + gap + row_v * float(row) + lane_v * (float(lane) - 1.0)
+	# row 0 is the FRONT rank, nearest the centre line; higher rows fall back.
+	return c + fwd * (CENTRE_GAP + float(row)) + lane_v * (float(lane) - 1.0)
 
 
 func _diamond(centre: Vector2, w: float, h: float) -> PackedVector2Array:
@@ -376,8 +379,10 @@ func _draw_unit(f: Fighter) -> void:
 	var accent := MapStyle.ROUTE if is_player else MapStyle.GOODS
 	var role := String(f.behaviour_package)
 
-	# Depth: rows further from the centre line are further from the camera.
-	var depth := 1.0 - float(f.slot.y) * 0.08
+	# Depth follows SCREEN position, not row index: the player's back rank is
+	# nearer the camera and must be larger, while the opposition's is further
+	# and smaller. Row index alone shrank both.
+	var depth: float = clampf(0.80 + 0.34 * (pos.y / maxf(_board.size.y, 1.0)), 0.72, 1.10)
 	var fig_h := 112.0 * depth
 	var fig_w := 76.0 * depth
 
