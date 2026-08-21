@@ -80,3 +80,4 @@ battle.enter,Enter the %s,Mene %s-kohtaamiseen,%s の対決に入る
 battle.row.front,FRONT,ETU,前
 battle.row.middle,MIDDLE,KESKI,中
 battle.row.back,BACK,TAKA,後
+ui.crew_lost,%d crew did not come back,%d ei palannut,%d 人が戻らなかった

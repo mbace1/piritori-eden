@@ -49,6 +49,8 @@ func _ready() -> void:
 	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
 	GameState.slice_completed.connect(_on_slice_completed)
+	# An encounter can ask for a battle mid-scene (start-battle / start-negotiation).
+	GameState.battle_requested.connect(func(bid, _negotiation): _show_battle(bid))
 	_reflow()
 	_refresh_status()
 	_show_city()
@@ -570,8 +572,22 @@ func _refresh_market_rail() -> void:
 func _on_slice_completed() -> void:
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("ui.seven_days_done"), 19, PiritoriPalette.PLAYER_CYAN))
+
+	# The authored ending, in its own words — never a generated summary.
+	if GameState.ending_id == "":
+		GameState.resolve_ending()
+	var e := GameState.ending()
+	if not e.is_empty():
+		_rail_box.add_child(_make_label(String(e.get("label", "")), 17, MapStyle.TITLE_TEXT))
+		var sum := _make_label(String(e.get("summary", "")), 13, PiritoriPalette.TEXT)
+		sum.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(sum)
+	_rail_box.add_child(_separator())
 	_rail_box.add_child(_make_label(tr("ui.run_summary") % [
 		GameState.cash_eur, GameState.debt_eur, GameState.intel], 14))
+	if GameState.crew_deaths > 0:
+		_rail_box.add_child(_make_label(
+			tr("ui.crew_lost") % GameState.crew_deaths, 13, PiritoriPalette.DANGER_RED))
 
 
 ## A command tab: dark paper with a tan edge, icon plus word, 48px minimum.

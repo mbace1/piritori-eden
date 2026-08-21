@@ -15,8 +15,14 @@ signal state_changed
 signal block_advanced(day: int, block: String)
 signal encounter_resolved(encounter_id: String, choice_id: String)
 signal slice_completed
+## A scene asked for a battle. The shell opens it; the model never draws.
+signal battle_requested(battle_id: String, negotiation_open: bool)
+signal ending_resolved(ending_id: String)
 
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
+
+## Era I interface lock (SCREEN_AND_COMBAT_BASELINE): the fixed historical rate.
+const MARKKA_PER_EURO := 5.94573
 
 # ── campaign clock: integer blocks, day/night ─────────────────────────────
 var day: int = 1
@@ -42,6 +48,25 @@ var debt_holder_memory: PackedStringArray = []
 
 # ── progression ────────────────────────────────────────────────────────────
 var flags: Dictionary = {}          ## flag name -> true
+var roster: PackedStringArray = []          ## recruited crew ids
+var temporary_crew: PackedStringArray = []  ## crew on loan for one job
+var equipment_owned: PackedStringArray = [] ## equipment granted by play
+var mission_state: Dictionary = {}          ## mission id -> complete|partial|failed
+var obligations: Dictionary = {}            ## faction -> owed favours
+var memories: PackedStringArray = []        ## authored remembered moments
+var services: Dictionary = {}               ## service id -> disruption
+var crew_outcomes: PackedStringArray = []   ## wound risks carried out of a scene
+var battle_modifiers: Dictionary = {}       ## battle id -> {opponent_nerve}
+var ending_id: String = ""                  ## authored ending, once resolved
+## Crew lost permanently. GDD §13.10: downed is not death; death needs a lethal
+## condition AND follow-through, set in Aftermath only.
+##
+## The slice has exactly one path to it, in battle-courtyard-3v3: "Only an
+## unresolved, clearly flagged critical wound at the final settlement can become
+## death", with stated mitigations and "no hidden death roll". So a critical
+## wound left unresolved when the slice settles kills; anything resolved does
+## not; and nothing else in Era I can raise this.
+var crew_deaths: int = 0
 var revealed: Dictionary = {}       ## content id -> true
 var resolved_encounters: Dictionary = {}  ## encounter id -> choice id
 var current_anchor_id: String = ""
@@ -82,6 +107,17 @@ func new_campaign(with_seed: int = 0) -> void:
 	debt_holder_memory = PackedStringArray()
 
 	flags = {}
+	roster = PackedStringArray()
+	temporary_crew = PackedStringArray()
+	equipment_owned = PackedStringArray()
+	mission_state = {}
+	obligations = {}
+	memories = PackedStringArray()
+	services = {}
+	crew_outcomes = PackedStringArray()
+	battle_modifiers = {}
+	ending_id = ""
+	crew_deaths = 0
 	revealed = {}
 	resolved_encounters = {}
 	current_anchor_id = String(campaign.get("start_anchor_id", ""))
@@ -125,8 +161,30 @@ func advance_block() -> void:
 		_reveal_scheduled_block(day, current_block())
 		block_advanced.emit(day, current_block())
 	else:
+		_apply_final_settlement()
 		slice_completed.emit()
 	state_changed.emit()
+
+
+## The final settlement, per battle-courtyard-3v3's casualty table: an
+## unresolved critical wound becomes a death here and only here. Telegraphed,
+## never rolled.
+func _apply_final_settlement() -> void:
+	var unresolved := 0
+	for o in crew_outcomes:
+		if String(o) == "critical-wound-possible":
+			unresolved += 1
+	crew_deaths += unresolved
+
+
+## Critical wounds still open. The UI must show this before the last block, so
+## "spend-treatment" and "assign-fixer" remain real choices.
+func open_critical_wounds() -> int:
+	var n := 0
+	for o in crew_outcomes:
+		if String(o) == "critical-wound-possible":
+			n += 1
+	return n
 
 
 func _apply_nightly_settlement() -> void:
@@ -211,7 +269,9 @@ func _read_value(token: String) -> int:
 		"debt": return debt_eur
 		"intel": return intel
 		"capacity": return capacity
-		"exit_fund": return exit_fund_eur
+		"exit_fund", "exit-fund": return exit_fund_eur
+		"surviving-crew": return surviving_crew()
+		"crew-deaths": return crew_deaths
 		"day": return day
 		_:
 			if token.begins_with("stock:"):
@@ -272,6 +332,79 @@ func apply_effect(effect: String) -> void:
 		"city-harm":
 			if parts.size() >= 2:
 				city_harm = parts[1]
+		"equipment":
+			if parts.size() >= 2:
+				var eq := parts[1].lstrip("+")
+				if not equipment_owned.has(eq):
+					equipment_owned.append(eq)
+		"recruit":
+			if parts.size() >= 2 and not roster.has(parts[1]):
+				roster.append(parts[1])
+				revealed[parts[1]] = true
+		"recruit-temporary":
+			if parts.size() >= 2 and not temporary_crew.has(parts[1]):
+				temporary_crew.append(parts[1])
+				revealed[parts[1]] = true
+		"complete", "partial", "fail":
+			if parts.size() >= 2:
+				var outcome := "complete"
+				if head == "partial":
+					outcome = "partial"
+				elif head == "fail":
+					outcome = "failed"
+				mission_state[parts[1]] = outcome
+		"convert-markka":
+			# Era I lock: the fixed historical rate, 5.94573 markka to one euro.
+			if parts.size() >= 2:
+				var amount := markka_mk
+				if parts[1] != "all":
+					amount = mini(int(parts[1]), markka_mk)
+				if amount > 0:
+					markka_mk -= amount
+					cash_eur += int(floor(float(amount) / MARKKA_PER_EURO))
+		"obligation":
+			if parts.size() >= 3:
+				obligations[parts[1]] = int(obligations.get(parts[1], 0)) + _delta(parts, 2)
+		"memory":
+			if parts.size() >= 2 and not memories.has(parts[1]):
+				memories.append(parts[1])
+		"service":
+			if parts.size() >= 3:
+				services[parts[1]] = parts[2]
+		"crew-outcome":
+			if parts.size() >= 2:
+				crew_outcomes.append(parts[1])
+		"resolve-critical-wound":
+			var idx := crew_outcomes.find("critical-wound-possible")
+			if idx >= 0:
+				crew_outcomes.remove_at(idx)
+		"start-battle", "start-negotiation":
+			if parts.size() >= 2:
+				flags["pending-battle"] = parts[1]
+				battle_requested.emit(parts[1], head == "start-negotiation")
+		"battle-on-failure":
+			# Armed, not fired: the mission's failure path asks for it.
+			if parts.size() >= 2:
+				flags["battle-on-failure:" + parts[1]] = true
+		"battle":
+			if parts.size() >= 2:
+				flags["battle-" + parts[1]] = true
+		"opponent-nerve":
+			if parts.size() >= 2:
+				var pending := String(flags.get("pending-battle", ""))
+				var mods: Dictionary = battle_modifiers.get(pending, {})
+				mods["opponent_nerve"] = int(mods.get("opponent_nerve", 0)) + _delta(parts, 1)
+				battle_modifiers[pending] = mods
+		"resolve":
+			if parts.size() >= 2:
+				flags["resolved:" + parts[1]] = true
+		"resolve-ending":
+			resolve_ending()
+		"mccormick-family":
+			if parts.size() >= 2:
+				relationships["mccormick_family"] = int(
+					relationships.get("mccormick_family", 0)) + 1
+				flags["mccormick-" + parts[1]] = true
 		_:
 			push_warning("GameState: unrecognised effect '%s'" % effect)
 
@@ -331,6 +464,36 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 		advance_block()
 		return true
 	return false
+
+
+## Crew on the roster and not lost. Everyone recruited counts; the slice has
+## no removal path yet, and inventing one would be inventing consequence.
+func surviving_crew() -> int:
+	return maxi(roster.size() - crew_deaths, 0)
+
+
+## Pick the authored ending whose requirements the run actually meets.
+##
+## "resolve-ending:best-match" is the slice's own instruction. The endings are
+## authored in order of specificity, so the FIRST full match wins and nothing is
+## invented. If none match that is a finding, not a silent pass.
+func resolve_ending() -> String:
+	for e in ContentRegistry.slice.get("endings", []):
+		if meets_all(e.get("requirements", [])):
+			ending_id = String(e.get("id", ""))
+			ending_resolved.emit(ending_id)
+			return ending_id
+	push_warning("GameState: no authored ending matched this run")
+	return ""
+
+
+func ending() -> Dictionary:
+	if ending_id == "":
+		return {}
+	for e in ContentRegistry.slice.get("endings", []):
+		if String(e.get("id", "")) == ending_id:
+			return e
+	return {}
 
 
 # ── market ─────────────────────────────────────────────────────────────────
@@ -415,6 +578,17 @@ func to_dict() -> Dictionary:
 		"revealed": revealed,
 		"resolved_encounters": resolved_encounters,
 		"current_anchor_id": current_anchor_id,
+		"roster": Array(roster),
+		"temporary_crew": Array(temporary_crew),
+		"equipment_owned": Array(equipment_owned),
+		"mission_state": mission_state,
+		"obligations": obligations,
+		"memories": Array(memories),
+		"services": services,
+		"crew_outcomes": Array(crew_outcomes),
+		"battle_modifiers": battle_modifiers,
+		"ending_id": ending_id,
+		"crew_deaths": crew_deaths,
 	}
 
 
@@ -445,6 +619,17 @@ func from_dict(d: Dictionary) -> bool:
 	revealed = (d.get("revealed", {}) as Dictionary).duplicate(true)
 	resolved_encounters = (d.get("resolved_encounters", {}) as Dictionary).duplicate(true)
 	current_anchor_id = String(d.get("current_anchor_id", ""))
+	roster = PackedStringArray(d.get("roster", []))
+	temporary_crew = PackedStringArray(d.get("temporary_crew", []))
+	equipment_owned = PackedStringArray(d.get("equipment_owned", []))
+	mission_state = (d.get("mission_state", {}) as Dictionary).duplicate(true)
+	obligations = (d.get("obligations", {}) as Dictionary).duplicate(true)
+	memories = PackedStringArray(d.get("memories", []))
+	services = (d.get("services", {}) as Dictionary).duplicate(true)
+	crew_outcomes = PackedStringArray(d.get("crew_outcomes", []))
+	battle_modifiers = (d.get("battle_modifiers", {}) as Dictionary).duplicate(true)
+	ending_id = String(d.get("ending_id", ""))
+	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
 	return true

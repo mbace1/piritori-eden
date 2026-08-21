@@ -34,6 +34,7 @@ godot --headless --path . res://tests/test_shell.tscn   # interface,   34 checks
 godot --headless --path . res://tests/test_locale.tscn  # en/fi/ja,     6 checks
 godot --headless --path . res://tests/test_battle.tscn  # combat model, 43 checks
 godot --headless --path . res://tests/test_battle_ui.tscn # battle screen, 20 checks
+godot --headless --path . res://tests/test_playthrough.tscn # 7-day slice, 31 checks
 godot --path . res://tools/capture_battle.tscn          # battle screenshot
 godot --path . res://tools/capture.tscn         # write screenshots (needs a GPU)
 ```
@@ -56,7 +57,7 @@ line, and a board squeezed until its labels collided.
 | 1. opens on the full Kallio map with Piritori highlighted | **done** — all twelve anchors, north up, routes on graph edges |
 | 2. buy the first pack, reveal the profitable sale | **done** — €45 buy, €68 Siltasaari sale, both authored |
 | 3. same campaign state across all five modes | **partial** — City, Location, Market, Crew, Missions and Battle share `GameState`; News not built |
-| 4. complete the seven-day slice | **partial** — the 14-block clock and schedule run; later encounters are reachable but not authored into scenes |
+| 4. complete the seven-day slice | **done** — all 14 blocks play, every authored effect lands, the run ends on an authored ending |
 | 5. resolve a 2v2 and a 3v3 | **done** — both build from canon and resolve; entered from the mission that signals them |
 | 6. save, quit, reload, resume | **done** — autosaves at every decision boundary |
 | 7. reflow at phone portrait / landscape / desktop | **done** — gated at 390×844, 844×390, 1920×1080 |
@@ -189,6 +190,24 @@ substantial console, narrow top strip for round state and intent, console
 grouped crew-left / actions-centre / automation-and-withdrawal-right. Only
 occupied, selected, targeted and reachable cells are drawn — the grid is a rule
 beneath the scene, not a checkerboard.
+
+## The seven-day slice
+
+`test_playthrough.gd` walks all fourteen blocks through the real model, taking
+the first affordable choice at each, and asserts the run reaches one of the
+authored endings. It is the eeri lesson applied: the prover proves geometry, the
+playthrough proves the thing is finishable.
+
+The slice speaks 35 effect verbs. Implementing only the obvious ones left twenty
+unhandled, and an unknown verb merely warns — invisible at runtime. The gate now
+fails if the slice uses a verb the model does not implement.
+
+Death has exactly one authored path, and it is worth knowing before touching
+combat: `battle-courtyard-3v3` says "Only an unresolved, clearly flagged critical
+wound at the final settlement can become death", with stated mitigations and
+"no hidden death roll". So `crew-outcome:critical-wound-possible` arms it,
+`resolve-critical-wound` clears it, and `_apply_final_settlement()` is the only
+place a death is ever recorded. `pasila-haunted` is the ending that needs one.
 
 ## Placeholders, labelled as such
 
