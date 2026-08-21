@@ -38,6 +38,25 @@ const FORWARD := Vector2(1.0, -0.5)        ## toward the opposition, away from c
 const LANE_AXIS := Vector2(1.0, 0.5)       ## across the board, perpendicular in iso
 const CENTRE_GAP := 1.15                   ## tiles from the centre line to a front row
 
+## Where the PLAYABLE FLOOR sits on each backdrop plate, normalised to the
+## plate. The board is fitted into this instead of into the whole screen, which
+## is what put the far rank on top of a building.
+##
+## This belongs in art/v3/manifest.json beside `portrait_safe_bounds`, as a
+## `play_area` on each scene asset. It lives here until the owner approves that
+## addition — a port-side estimate, not canon.
+const PLAY_AREA := {
+	"scene-courtyard-prototype-v02": Rect2(0.18, 0.50, 0.64, 0.32),
+	"scene-karhupuisto-v01": Rect2(0.16, 0.46, 0.66, 0.30),
+}
+const PLAY_AREA_DEFAULT := Rect2(0.16, 0.52, 0.66, 0.32)
+
+## The play area constrains where FEET may land, not where art may reach. A
+## standing figure overlapping the wall behind it is correct isometric
+## occlusion; the bug was units standing ON the building. Reserving headroom
+## here instead pushed the whole board down into the console.
+const FIGURE_HEADROOM := 0.0
+
 var fight: FightManager
 var battle_id: String = ""
 
@@ -62,6 +81,7 @@ const SIDE_RED := Color("#c8443c")
 
 var _roles: Dictionary = {}      ## role id -> {color, symbol}
 var _stage: Texture2D = null
+var _stage_id: String = ""
 
 
 func _ready() -> void:
@@ -110,6 +130,7 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 func _load_stage(id: String) -> void:
 	_stage = null
 	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
+	_stage_id = asset_id
 	if asset_id == "":
 		return
 	for asset in ContentRegistry.art.get("assets", []):
@@ -202,15 +223,52 @@ func _process(dt: float) -> void:
 
 ## Cell centre for (lane, row) on one side. Player is the left half-board,
 ## opposition the right; both are mirrors of one location (§13.3).
+## The plate is drawn cover-fitted, so the play area has to be mapped through
+## exactly the same transform to land on the floor it was measured against.
+func _plate_rect() -> Rect2:
+	if _stage == null:
+		return Rect2(Vector2.ZERO, _board.size)
+	var ts := _stage.get_size()
+	if ts.x <= 0.0 or ts.y <= 0.0:
+		return Rect2(Vector2.ZERO, _board.size)
+	var sc: float = maxf(_board.size.x / ts.x, _board.size.y / ts.y)
+	var drawn := ts * sc
+	return Rect2((_board.size - drawn) * 0.5, drawn)
+
+
+func _play_rect() -> Rect2:
+	var norm: Rect2 = PLAY_AREA.get(_stage_id, PLAY_AREA_DEFAULT)
+	var plate := _plate_rect()
+	var r := Rect2(
+		plate.position + Vector2(norm.position.x * plate.size.x, norm.position.y * plate.size.y),
+		Vector2(norm.size.x * plate.size.x, norm.size.y * plate.size.y))
+	# Reserve headroom at the FAR edge for the standing figures.
+	var head := r.size.y * FIGURE_HEADROOM
+	r.position.y += head
+	r.size.y -= head
+	return r
+
+
+## Tile size derived from the floor, so the board always fits the location.
+## Board extent is (CENTRE_GAP + 2 rows + 1 lane) tiles from the centre, both
+## ways, along each isometric axis.
+func _tile() -> Vector2:
+	var r := _play_rect()
+	var reach := (CENTRE_GAP + 2.0) + 1.0
+	var tx: float = r.size.x / (2.0 * reach)
+	var ty: float = r.size.y / (reach)
+	return Vector2(maxf(tx, 18.0), maxf(ty, 16.0))
+
+
 func _cell_pos(lane: int, row: int, side: int) -> Vector2:
-	var c := Vector2(_board.size.x * 0.5, _board.size.y * 0.56)
-	# The player holds the near half of the board; the opposition the far half.
+	var r := _play_rect()
+	var c := r.get_center()
+	var tile := _tile()
 	var dir := -1.0 if side == int(Fighter.Side.PLAYER) else 1.0
 
-	var fwd := Vector2(FORWARD.x * TILE.x, FORWARD.y * TILE.y) * dir
-	var lane_v := Vector2(LANE_AXIS.x * TILE.x, LANE_AXIS.y * TILE.y) * dir
+	var fwd := Vector2(FORWARD.x * tile.x, FORWARD.y * tile.y) * dir
+	var lane_v := Vector2(LANE_AXIS.x * tile.x, LANE_AXIS.y * tile.y) * dir
 
-	# row 0 is the FRONT rank, nearest the centre line; higher rows fall back.
 	return c + fwd * (CENTRE_GAP + float(row)) + lane_v * (float(lane) - 1.0)
 
 
@@ -268,7 +326,8 @@ func _draw_board() -> void:
 				# The tile spanned by the two axes: horizontal diagonal 2*TILE.x,
 				# vertical diagonal TILE.y. Passing the STEP as the vertical
 				# diagonal drew tall narrow rhombi standing on end.
-				var d := _diamond(pos, TILE.x * 1.86, TILE.y * 0.92)
+				var t := _tile()
+				var d := _diamond(pos, t.x * 1.86, t.y * 0.92)
 				var fill := col
 				fill.a = fill_a
 				_board.draw_colored_polygon(d, fill)
@@ -383,8 +442,11 @@ func _draw_unit(f: Fighter) -> void:
 	# nearer the camera and must be larger, while the opposition's is further
 	# and smaller. Row index alone shrank both.
 	var depth: float = clampf(0.80 + 0.34 * (pos.y / maxf(_board.size.y, 1.0)), 0.72, 1.10)
-	var fig_h := 112.0 * depth
-	var fig_w := 76.0 * depth
+	# Figures are sized off the TILE, so a smaller floor gives smaller people
+	# and the ratio between them holds on any plate.
+	var tile := _tile()
+	var fig_h := tile.y * 2.15 * depth
+	var fig_w := tile.x * 1.15 * depth
 
 	var acting := _pending != null and _pending.source_id == f.fighter_id 		and _pending.type == FightManager.Command.Type.ATTACK
 	var pose := PoseArt.pose_for(f, acting)
@@ -396,7 +458,7 @@ func _draw_unit(f: Fighter) -> void:
 	# 1. the coloured base tab this unit stands on — role vocabulary, canon
 	var tab := _role_color(role)
 	tab.a = 0.85
-	_board.draw_colored_polygon(_diamond(pos + Vector2(0, 2), 74.0 * depth, 34.0 * depth), tab)
+	_board.draw_colored_polygon(_diamond(pos + Vector2(0, 2), tile.x * 1.0 * depth, tile.y * 0.5 * depth), tab)
 
 	# 2. the standee, with its cream torn edge
 	var figure_box := Rect2(pos + Vector2(-fig_w * 0.5, -fig_h), Vector2(fig_w, fig_h))
@@ -411,10 +473,10 @@ func _draw_unit(f: Fighter) -> void:
 
 	# 3. selection and target rings ride the base tab, never the figure
 	if f.fighter_id == _selected_unit:
-		var d := _diamond(pos, 82.0 * depth, 38.0 * depth)
+		var d := _diamond(pos, tile.x * 1.2 * depth, tile.y * 0.58 * depth)
 		_board.draw_polyline(d + PackedVector2Array([d[0]]), MapStyle.TAB, 2.0, true)
 	elif f.fighter_id == _hovered_target:
-		var d2 := _diamond(pos, 82.0 * depth, 38.0 * depth)
+		var d2 := _diamond(pos, tile.x * 1.2 * depth, tile.y * 0.58 * depth)
 		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), SIDE_RED, 2.0, true)
 
 	# 4. the standee's white stand marks, doubling as the condition read
@@ -673,7 +735,7 @@ func _board_input(event: InputEvent) -> void:
 func _unit_at(p: Vector2) -> String:
 	for f in _all_fighters():
 		var c := _cell_pos(f.slot.x, f.slot.y, int(f.side))
-		if Rect2(c + Vector2(-38, -112), Vector2(76, 130)).has_point(p):
+		if Rect2(c + Vector2(-_tile().x * 0.6, -_tile().y * 2.15), Vector2(_tile().x * 1.2, _tile().y * 2.5)).has_point(p):
 			return f.fighter_id
 	return ""
 
