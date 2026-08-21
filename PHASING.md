@@ -87,6 +87,15 @@ pressure.
 
 *Owner note: adjustable if chapters feel confining.*
 
+### 0.25 The system doc
+
+The combat and progression system these decisions describe is written up in
+**`COMBAT.md`**, which sits beneath `GAME_DESIGN_DOCUMENT.md` in the canon order
+and supersedes its §13 where they differ. Every such difference is listed in
+`COMBAT.md` §2 rather than left to be found.
+
+Phase A builds against that document.
+
 ### 0.3 What this overrides
 
 Recorded rather than silently averaged, per `DESIGN_AUTHORITY.md`.

@@ -92,11 +92,14 @@ reach across.
 3. `DESIGN_AUTHORITY.md` — resolves contradictions between the rest
 4. `DESIGN_LOCKS.md` — owner-approved system and content locks
 5. `GAME_DESIGN_DOCUMENT.md` — what the game does
-6. `ART_BIBLE.md` — how it looks
-7. `UX_SPEC.md` — interaction, navigation, responsive reflow
-8. `MAP.md` + `map/kallio-era1-2003-v1.json` — Era I geography
-9. `content/era1-slice-v1.json` — the authored seven-day slice
-10. `art/v3/manifest.json` — the only valid runtime-art ids
+6. `COMBAT.md` — the base game: board, initiative, loot, roster churn.
+   Supersedes `GAME_DESIGN_DOCUMENT.md` §13 where they differ; §2 of it lists
+   every difference
+7. `ART_BIBLE.md` — how it looks
+8. `UX_SPEC.md` — interaction, navigation, responsive reflow
+9. `MAP.md` + `map/kallio-era1-2003-v1.json` — Era I geography
+10. `content/era1-slice-v1.json` — the authored seven-day slice
+11. `art/v3/manifest.json` — the only valid runtime-art ids
 
 Newer owner direction beats older docs. If two canon docs disagree, say so
 and ask — do not pick one silently.
