@@ -49,6 +49,11 @@ func _ready() -> void:
 	check("the selected crew member is named",
 		"Mira" in labels or "Hämäl" in labels, labels.substr(0, 200))
 	check("condition is shown", "condition" in labels.to_lower())
+	# §12.5: "text/numerals plus shapes; do not rely on tiny segments alone."
+	check("tracks show numerals, not only pips",
+		"8/8" in labels or "/" in labels, labels.substr(0, 200))
+	check("guard and nerve are named too",
+		"guard" in labels.to_lower() and "nerve" in labels.to_lower())
 
 	# GEOMETRY. The label checks above all passed while the scene was sized
 	# 4012x2816 with the console off-screen — a gate that reads text cannot see
@@ -72,9 +77,11 @@ func _ready() -> void:
 		"h=%.0f" % (board.size.y if board else -1.0))
 
 	# core actions in the centre, automation and withdrawal on the right
-	for word in ["Attack", "Brace", "Reposition", "Auto round", "Withdraw"]:
+	# §12.5 requires the console to group: crew block, large labelled icon cards,
+	# and AUTO/WITHDRAW held visually separate.
+	for word in ["ATTACK", "BRACE", "REPOSITION", "ITEM", "AUTO", "WITHDRAW"]:
 		check("%s is offered" % word, _find(word) != null,
-			str(_buttons().map(func(b): return b.text)))
+			str(_buttons().map(func(b): return _button_text(b))))
 
 	# every control clears the 44px floor
 	var small := _buttons().filter(func(b): return b.custom_minimum_size.y > 0 \
@@ -112,12 +119,23 @@ func _ready() -> void:
 	if _fail > 0: print("BATTLE UI FAIL"); get_tree().quit(1)
 	else: print("BATTLE UI OK: locked composition, forecast before commitment, withdrawal reachable."); get_tree().quit(0)
 
-## The console is the last PanelContainer in the shell's column.
+## The console is the LOWEST full-width PanelContainer. Two earlier attempts got
+## this wrong in instructive ways: taking the last one found picked up the crew
+## block nested inside it (99px), and taking the widest picked up the top strip,
+## which spans the shell too (56px). It is the bottom band that matters.
 func _console_panel() -> Control:
 	var found: Control = null
+	var best := -1.0
 	for n in _all(_scene):
-		if n is PanelContainer:
-			found = n
+		if not (n is PanelContainer):
+			continue
+		var c := n as Control
+		if c.size.x < _scene.size.x * 0.8:
+			continue                       # not a full-width band
+		var bottom := c.global_position.y + c.size.y
+		if bottom > best:
+			best = bottom
+			found = c
 	return found
 
 
@@ -136,9 +154,18 @@ func _all(n: Node, o: Array = []) -> Array:
 func _buttons() -> Array:
 	return _all(_scene).filter(func(n): return n is Button)
 
+## Find a button by what it DISPLAYS. The action cards are icon-above-word, so
+## the word lives in a child Label and button.text is empty — the same trap the
+## shell gate hit.
+func _button_text(b: Button) -> String:
+	var parts: PackedStringArray = [b.text]
+	for n in _all(b):
+		if n is Label: parts.append(n.text)
+	return " ".join(parts)
+
 func _find(frag: String) -> Button:
 	for b in _buttons():
-		if frag.to_lower() in String(b.text).to_lower(): return b
+		if frag.to_lower() in _button_text(b).to_lower(): return b
 	return null
 
 func _text() -> String:

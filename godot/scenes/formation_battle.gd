@@ -70,6 +70,7 @@ var _action_col: VBoxContainer
 var _auto_col: VBoxContainer
 
 var _selected_unit: String = ""
+var _auto_mode := false
 var _hovered_target: String = ""
 var _pending: FightManager.Command = null
 var _forecast: Dictionary = {}
@@ -547,6 +548,10 @@ func _phase_word() -> String:
 		_: return ""
 
 
+## ART_BIBLE §12.5: "Portrait, name and condition form one block", on "broad
+## dark carton panels with cream edges and one role-colour tab", and
+## "Condition, guard, nerve and lethal exposure use text/numerals plus shapes;
+## do not rely on tiny segments alone" — so every track shows a number AND pips.
 func _build_crew_column() -> void:
 	for c in _crew_col.get_children():
 		c.queue_free()
@@ -554,20 +559,92 @@ func _build_crew_column() -> void:
 	if f == null:
 		_crew_col.add_child(_label(tr("battle.select_unit"), 13, MapStyle.TINY_TEXT))
 		return
-	_crew_col.add_child(_label(f.display_name, 17, MapStyle.TITLE_TEXT))
-	_crew_col.add_child(_label("%s %d/%d · %s %d/%d" % [
-		tr("battle.condition"), f.condition, f.condition_max,
-		tr("battle.nerve"), f.nerve, f.nerve_max], 13, MapStyle.SMALL_TEXT))
-	_crew_col.add_child(_label("%s %d · %s %d · %s" % [
-		tr("battle.guard"), f.guard, tr("battle.tempo"), f.tempo,
-		BattleBuilder.cell_name(f.slot.x, f.slot.y)], 12, MapStyle.TINY_TEXT))
+
+	var panel := PanelContainer.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#15191c")
+	sb.border_color = MapStyle.FRAME_EDGE       # cream edge
+	sb.set_border_width_all(2)
+	sb.border_width_left = 5                     # the role-colour tab
+	sb.content_margin_left = 10
+	sb.content_margin_right = 10
+	sb.content_margin_top = 8
+	sb.content_margin_bottom = 8
+	panel.add_theme_stylebox_override("panel", sb)
+	_crew_col.add_child(panel)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	panel.add_child(row)
+
+	# portrait, cut from the unit's own idle pose
+	var pic := Control.new()
+	pic.custom_minimum_size = Vector2(64, 64)
+	var role := String(f.role)
+	pic.draw.connect(func():
+		var box := Rect2(Vector2.ZERO, pic.size)
+		pic.draw_rect(box, Color("#0d1215"))
+		if not PoseArt.draw_portrait(pic, role, box):
+			pic.draw_string(_font, Vector2(6, 38), _initials(f.display_name),
+				HORIZONTAL_ALIGNMENT_LEFT, -1, 22, MapStyle.TITLE_TEXT)
+		pic.draw_rect(box, _role_color(role), false, 2.0))
+	row.add_child(pic)
+
+	var info := VBoxContainer.new()
+	info.add_theme_constant_override("separation", 3)
+	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(info)
+
+	info.add_child(_label(f.display_name, 16, MapStyle.TITLE_TEXT))
+	info.add_child(_track_row(tr("battle.condition"), f.condition, f.condition_max,
+		Color("#c8443c")))
+	info.add_child(_track_row(tr("battle.guard"), f.guard, maxi(f.condition_max, 5),
+		SIDE_CYAN))
+	info.add_child(_track_row(tr("battle.nerve"), f.nerve, f.nerve_max,
+		MapStyle.GOODS))
+
 	var w: Dictionary = EquipmentRules.weapons().get(f.held_weapon_id, {})
-	if not w.is_empty():
-		_crew_col.add_child(_label("%s · %s" % [
-			String(w.get("name", "")), String(w.get("reach_pattern", "")).replace("-", " ")],
-			12, MapStyle.ROUTE))
+	var reach := String(w.get("reach_pattern", "")).replace("-", " ")
+	# Unarmed has no reach pattern, and joining an empty field left "· ·".
+	var bits: PackedStringArray = [String(w.get("name", ""))]
+	if reach != "":
+		bits.append(reach)
+	bits.append("%s %d" % [tr("battle.tempo"), f.tempo])
+	bits.append(BattleBuilder.cell_name(f.slot.x, f.slot.y))
+	_crew_col.add_child(_label(" · ".join(bits), 11, MapStyle.TINY_TEXT))
+
+	# Lethal exposure is a WORD, never a colour alone.
+	if bool(w.get("lethal", false)):
+		_crew_col.add_child(_label(tr("battle.lethal_risk"), 11, Color("#c8443c")))
 
 
+## One track: name, numerals, and pips. Both channels, per §12.5.
+func _track_row(name: String, value: int, maximum: int, col: Color) -> Control:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	var l := _label(name, 11, MapStyle.TINY_TEXT)
+	l.custom_minimum_size = Vector2(64, 0)
+	row.add_child(l)
+	var n := _label("%d/%d" % [value, maximum], 12, MapStyle.TITLE_TEXT)
+	n.custom_minimum_size = Vector2(38, 0)
+	row.add_child(n)
+
+	var pips := Control.new()
+	pips.custom_minimum_size = Vector2(84, 12)
+	pips.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	pips.draw.connect(func():
+		var count: int = clampi(maximum, 1, 10)
+		var w := (pips.size.x - float(count - 1) * 2.0) / float(count)
+		for i in range(count):
+			var r := Rect2(float(i) * (w + 2.0), 1.0, w, pips.size.y - 2.0)
+			var filled := i < int(round(float(value) / float(maximum) * float(count)))
+			pips.draw_rect(r, col if filled else Color(1, 1, 1, 0.08))
+			pips.draw_rect(r, col.darkened(0.4), false, 1.0))
+	row.add_child(pips)
+	return row
+
+
+## ART_BIBLE §12.5: "Commands use large labelled icon cards."
 func _build_action_column() -> void:
 	for c in _action_col.get_children():
 		c.queue_free()
@@ -583,55 +660,138 @@ func _build_action_column() -> void:
 	grid.add_theme_constant_override("separation", 8)
 	_action_col.add_child(grid)
 
-	grid.add_child(_action_btn(tr("battle.attack"), MapStyle.GOODS,
-		func(): _begin_attack(f)))
-	grid.add_child(_action_btn(tr("battle.brace"), MapStyle.PARK,
-		func(): _issue_simple(FightManager.Command.Type.GUARD, f)))
-	grid.add_child(_action_btn(tr("battle.reposition"), MapStyle.ROUTE,
-		func(): _begin_reposition(f)))
+	grid.add_child(_action_card(tr("battle.attack"), PiritoriIcon.Kind.STRIKE,
+		Color("#c8443c"), func(): _begin_attack(f)))
+	grid.add_child(_action_card(tr("battle.brace"), PiritoriIcon.Kind.SHIELD,
+		SIDE_CYAN, func(): _issue_simple(FightManager.Command.Type.GUARD, f)))
+	grid.add_child(_action_card(tr("battle.reposition"), PiritoriIcon.Kind.SWAP,
+		MapStyle.METRO, func(): _begin_reposition(f)))
+	grid.add_child(_action_card(tr("battle.item"), PiritoriIcon.Kind.STOCK,
+		MapStyle.PARK, func(): _use_item(f)))
 
-	# The forecast is shown BEFORE commitment (handoff §5, GDD §13.5).
+	# The forecast, before commitment (handoff §5, GDD §13.5).
 	if _pending != null:
 		var fc: Dictionary = _forecast
-		var lines: PackedStringArray = []
+		var lines_out: PackedStringArray = []
 		if fc.has("harm_min"):
-			lines.append("%s %d-%d" % [tr("battle.harm"), int(fc["harm_min"]), int(fc["harm_max"])])
+			lines_out.append("%s %d-%d" % [tr("battle.harm"), int(fc["harm_min"]), int(fc["harm_max"])])
 		if fc.has("hit_chance"):
-			lines.append("%s %d%%" % [tr("battle.chance"), int(round(float(fc["hit_chance"]) * 100.0))])
-		if bool(fc.get("lethal_exposure", false)):
-			lines.append(tr("battle.lethal_risk"))
+			lines_out.append("%s %d%%" % [tr("battle.chance"), int(round(float(fc["hit_chance"]) * 100.0))])
 		if fc.has("risk_band"):
-			lines.append("%s %s" % [tr("battle.risk"), String(fc["risk_band"])])
-		var fl := _label(" · ".join(lines), 13,
-			Color("#A94B43") if bool(fc.get("lethal_exposure", false)) else MapStyle.SMALL_TEXT)
+			lines_out.append("%s %s" % [tr("battle.risk"), String(fc["risk_band"])])
+		var lethal := bool(fc.get("lethal_exposure", false))
+		if lethal:
+			lines_out.append(tr("battle.lethal_risk"))
+		var fl := _label(" · ".join(lines_out), 13,
+			Color("#c8443c") if lethal else MapStyle.SMALL_TEXT)
 		fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_action_col.add_child(fl)
+		_action_col.add_child(_action_card(tr("battle.confirm"),
+			PiritoriIcon.Kind.MISSION, MapStyle.TITLE_TEXT, _confirm_pending, true))
 
-		var confirm := _action_btn(tr("battle.confirm"), MapStyle.TITLE_TEXT, _confirm_pending)
-		_action_col.add_child(confirm)
+
+## A large labelled icon card: the icon above its word, both in the accent, on
+## the dark carton panel with a cream edge.
+func _action_card(text: String, kind: int, accent: Color, handler: Callable,
+		wide: bool = false) -> Button:
+	var b := Button.new()
+	b.custom_minimum_size = Vector2(0 if wide else 92, 62)
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	b.tooltip_text = text
+	b.focus_mode = Control.FOCUS_ALL
+
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#15191c")
+	sb.border_color = MapStyle.FRAME_EDGE
+	sb.set_border_width_all(2)
+	var hover := sb.duplicate()
+	hover.bg_color = MapStyle.STREET_BED
+	hover.border_color = accent
+	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("disabled", sb)
+	for st in ["hover", "pressed", "focus"]:
+		b.add_theme_stylebox_override(st, hover)
+
+	var col := VBoxContainer.new()
+	col.set_anchors_preset(Control.PRESET_FULL_RECT)
+	col.alignment = BoxContainer.ALIGNMENT_CENTER
+	col.add_theme_constant_override("separation", 2)
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var icon := PiritoriIcon.new(kind, accent, 24.0)
+	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col.add_child(icon)
+	var l := _label(text, 12, accent)
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(l)
+	b.add_child(col)
+
+	b.pressed.connect(handler)
+	return b
 
 
+## §13.6 lists "Use item" among the common actions.
+func _use_item(f: Fighter) -> void:
+	if f.item_ids.is_empty():
+		_forecast = {"note": tr("battle.no_item")}
+		_refresh()
+		return
+	var cmd := FightManager.Command.new(FightManager.Command.Type.ITEM, f.fighter_id)
+	cmd.item_id = String(f.item_ids[0])
+	_pending = cmd
+	_forecast = fight.get_command_forecast(cmd)
+	_refresh()
+
+
+## §12.5: "AUTO and WITHDRAW remain visually separate from immediate actions."
+## Their own column, in muted chrome rather than action accents.
 func _build_auto_column() -> void:
 	for c in _auto_col.get_children():
 		c.queue_free()
-	_auto_col.add_child(_label(tr("battle.automation"), 12, MapStyle.TINY_TEXT))
+	_auto_col.add_child(_label(tr("battle.automation"), 11, MapStyle.TINY_TEXT))
 
-	# §13.7: Auto uses the same actions and rules; it is not a statistical
-	# auto-resolve, so it simply fills any unset command and resolves the round.
-	var auto := _action_btn(tr("battle.auto_round"), MapStyle.ROUTE, func():
-		fight.confirm_commands()
-		_pending = null
-		_select_first_actionable())
+	# §13.7: Auto uses the same actions, targets and telegraphed intent — it is
+	# NOT a statistical auto-resolve. The toggle states which mode is in force.
+	var auto := _chrome_button(
+		tr("battle.auto_on") if _auto_mode else tr("battle.auto_off"),
+		SIDE_CYAN if _auto_mode else MapStyle.TINY_TEXT,
+		func():
+			_auto_mode = not _auto_mode
+			if _auto_mode:
+				fight.confirm_commands()
+				_pending = null
+				_select_first_actionable()
+			_refresh())
 	_auto_col.add_child(auto)
 
-	var wd := _action_btn(tr("battle.withdraw"), MapStyle.METRO, _withdraw)
+	var wd := _chrome_button(tr("battle.withdraw"), MapStyle.METRO, _withdraw)
 	wd.tooltip_text = String(ContentRegistry.battle(battle_id)
 		.get("withdrawal", {}).get("known_cost", ""))
 	_auto_col.add_child(wd)
-	_auto_col.add_child(_label(wd.tooltip_text, 11, MapStyle.TINY_TEXT))
+	var cost := _label(wd.tooltip_text, 10, MapStyle.TINY_TEXT)
+	cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_auto_col.add_child(cost)
 
 	if fight.stand_down_available():
-		_auto_col.add_child(_action_btn(tr("battle.negotiate"), MapStyle.PARK, _negotiate))
+		_auto_col.add_child(_chrome_button(tr("battle.negotiate"), MapStyle.PARK,
+			_negotiate))
+
+
+## Chrome, not an action: no icon card, flatter, deliberately quieter.
+func _chrome_button(text: String, accent: Color, handler: Callable) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.add_theme_font_size_override("font_size", 13)
+	b.add_theme_color_override("font_color", accent)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#101417")
+	sb.border_color = Color("#3a4143")
+	sb.set_border_width_all(1)
+	b.add_theme_stylebox_override("normal", sb)
+	b.pressed.connect(handler)
+	return b
 
 
 # ── commands ──────────────────────────────────────────────────────────────

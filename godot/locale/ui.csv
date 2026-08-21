@@ -58,14 +58,13 @@ battle.condition,condition,kunto,体調
 battle.nerve,nerve,hermo,胆力
 battle.guard,guard,suoja,防御
 battle.tempo,tempo,vauhti,速さ
-battle.attack,Attack,Hyökkää,攻撃
-battle.brace,Brace,Suojaudu,身構える
-battle.reposition,Reposition,Siirry,移動
-battle.confirm,Confirm,Vahvista,確定
-battle.withdraw,Withdraw,Vetäydy,撤退
-battle.negotiate,Negotiate,Neuvottele,交渉
+battle.attack,ATTACK,HYÖKKÄÄ,攻撃
+battle.brace,BRACE,SUOJAUDU,身構える
+battle.reposition,REPOSITION,SIIRRY,移動
+battle.confirm,CONFIRM,VAHVISTA,確定
+battle.withdraw,WITHDRAW,VETÄYDY,撤退
+battle.negotiate,NEGOTIATE,NEUVOTTELE,交渉
 battle.automation,AUTOMATION,AUTOMAATIO,自動
-battle.auto_round,Auto round,Automaattikierros,自動ラウンド
 battle.harm,harm,vahinko,被害
 battle.chance,chance,mahdollisuus,確率
 battle.risk,risk,riski,危険
@@ -90,3 +89,7 @@ news.continue,Turn it off,Sammuta,消す
 news.presenter_placeholder,presenter model not yet approved,esiintyjämallia ei ole hyväksytty,presenter モデル未承認
 cmd.news,NEWS,UUTISET,ニュース
 news.none,Nothing has been broadcast yet.,Mitään ei ole vielä lähetetty.,まだ何も放送されていない。
+battle.item,ITEM,TAVARA,道具
+battle.no_item,Nothing to use.,Ei mitään käytettävää.,使える物がない。
+battle.auto_off,AUTO OFF,AUTO POIS,自動 オフ
+battle.auto_on,AUTO ON,AUTO PÄÄLLÄ,自動 オン

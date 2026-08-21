@@ -17,7 +17,12 @@ extends RefCounted
 ## So there is ONE set of pose art, and the battle darkens it at draw time via
 ## night_modulate() rather than a second art style existing.
 
+## Registered, approved animation sets — canon, synced from art/v3.
 const DIR := "res://data/art/animation/"
+## Candidate cast, staged by art-src/install-poses.sh and NOT yet registered.
+## Preferred when present so the port shows the current work, while canon stays
+## untouched and sync-data.mjs --check keeps meaning something.
+const CAST_DIR := "res://data/art/cast/"
 
 ## Pose names, mapped to what the fight model can actually be in.
 const IDLE := "idle-smile"
@@ -40,10 +45,13 @@ static func texture(role: String, pose: String) -> Texture2D:
 	if _cache.has(key):
 		return _cache[key]
 	var tex: Texture2D = null
-	for ext in [".webp", ".png"]:
-		var path: String = DIR + role + "/" + pose + "-frame00" + String(ext)
-		if ResourceLoader.exists(path):
-			tex = load(path)
+	for dir in [CAST_DIR, DIR]:
+		for ext in [".webp", ".png"]:
+			var path: String = String(dir) + role + "/" + pose + "-frame00" + String(ext)
+			if ResourceLoader.exists(path):
+				tex = load(path)
+				break
+		if tex != null:
 			break
 	if tex == null and role != FALLBACK_ROLE:
 		tex = texture(FALLBACK_ROLE, pose)
@@ -71,6 +79,37 @@ static func pose_for(f: Fighter, acting: bool = false) -> String:
 
 
 ## Battles are "darker and more dramatic" — the same art, graded down.
+## A head crop for the console portrait, taken from the role's idle pose so a
+## portrait never needs its own asset. ART_BIBLE §12.5: "Portrait, name and
+## condition form one block."
+##
+## The region is normalised on the pose plate. Every standing pose in the cast
+## is framed the same way, so one rectangle serves them all; `downed` is
+## excluded because it is horizontal.
+const PORTRAIT_REGION := Rect2(0.30, 0.005, 0.40, 0.26)
+
+
+static func portrait(role: String) -> Texture2D:
+	return texture(role, IDLE)
+
+
+static func draw_portrait(ci: CanvasItem, role: String, box: Rect2,
+		tint: Color = Color.WHITE) -> bool:
+	var tex := portrait(role)
+	if tex == null:
+		return false
+	var ts := tex.get_size()
+	var region := Rect2(
+		PORTRAIT_REGION.position.x * ts.x, PORTRAIT_REGION.position.y * ts.y,
+		PORTRAIT_REGION.size.x * ts.x, PORTRAIT_REGION.size.y * ts.y)
+	# Fill the box without distorting the crop.
+	var s: float = maxf(box.size.x / region.size.x, box.size.y / region.size.y)
+	var drawn := region.size * s
+	var at := box.position + (box.size - drawn) * 0.5
+	ci.draw_texture_rect_region(tex, Rect2(at, drawn), region, tint)
+	return true
+
+
 static func night_modulate() -> Color:
 	return Color(0.72, 0.76, 0.86, 1.0)
 

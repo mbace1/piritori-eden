@@ -5,7 +5,7 @@ class_name PiritoriIcon
 ## ART_BIBLE §4.2: colour never carries a rule alone. These are the glyph half
 ## of every coloured control, so a command is identifiable without its tint.
 
-enum Kind { ROUTE, CREW, MISSION, END_DAY, CASH, STOCK, PRESSURE, PEOPLE, LOCK }
+enum Kind { ROUTE, CREW, MISSION, END_DAY, CASH, STOCK, PRESSURE, PEOPLE, LOCK, SHIELD, SWAP, STRIKE }
 
 var kind: Kind = Kind.ROUTE
 var tint: Color = Color.WHITE
@@ -69,6 +69,40 @@ func _draw() -> void:
 		Kind.PEOPLE:
 			draw_circle(c + Vector2(0, -s * 0.16), s * 0.13, tint)
 			draw_arc(c + Vector2(0, s * 0.22), s * 0.21, PI, TAU, 16, tint, w, true)
+		Kind.SHIELD:
+			# Brace: a shield, cracked once so it reads as taking a hit.
+			var top := c + Vector2(0, -s * 0.34)
+			var pts := PackedVector2Array([
+				top,
+				c + Vector2(s * 0.30, -s * 0.20),
+				c + Vector2(s * 0.24, s * 0.16),
+				c + Vector2(0, s * 0.38),
+				c + Vector2(-s * 0.24, s * 0.16),
+				c + Vector2(-s * 0.30, -s * 0.20),
+			])
+			draw_polyline(pts + PackedVector2Array([pts[0]]), tint, w, true)
+			draw_line(top, c + Vector2(0, s * 0.10), tint, w * 0.7, true)
+		Kind.SWAP:
+			# Reposition: two arrows trading places.
+			var dirs: Array[float] = [1.0, -1.0]
+			for dir in dirs:
+				var y := c.y + dir * s * 0.16
+				var x0 := c.x - dir * s * 0.30
+				var x1 := c.x + dir * s * 0.30
+				draw_line(Vector2(x0, y), Vector2(x1, y), tint, w, true)
+				var head := Vector2(x1, y)
+				var back := head - Vector2(dir * s * 0.14, 0)
+				draw_line(head, back + Vector2(0, -s * 0.09), tint, w, true)
+				draw_line(head, back + Vector2(0, s * 0.09), tint, w, true)
+		Kind.STRIKE:
+			# Attack: a fist driving forward.
+			draw_rect(Rect2(c + Vector2(-s * 0.06, -s * 0.20),
+				Vector2(s * 0.30, s * 0.40)), tint, false, w)
+			draw_line(c + Vector2(-s * 0.34, 0), c + Vector2(-s * 0.06, 0), tint, w, true)
+			for i in range(3):
+				var yy := c.y - s * 0.13 + float(i) * s * 0.13
+				draw_line(Vector2(c.x + s * 0.06, yy), Vector2(c.x + s * 0.20, yy),
+					tint, w * 0.7, true)
 		Kind.LOCK:
 			draw_rect(Rect2(c - Vector2(s * 0.22, -s * 0.02), Vector2(s * 0.44, s * 0.30)),
 				tint, true)
