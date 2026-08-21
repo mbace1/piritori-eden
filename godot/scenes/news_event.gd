@@ -28,11 +28,34 @@ var _news: Dictionary = {}
 var _font: Font
 var _t := 0.0
 var _screen_rect := Rect2()
+var _presenter: Control = null
+var _copy_layer: Control = null
+var _chrome: Control = null
 
 
 func _ready() -> void:
 	_font = PiritoriFonts.ui()
 	clip_contents = true
+	_mount_presenter()
+
+
+## ART_BIBLE §13.2: only the moving presenter inside the TV is 3D. He is mounted
+## as a child so he sits INSIDE the tube; the shell, lower third and everything
+## around him stay cut-cardstock and are drawn below.
+func _mount_presenter() -> void:
+	var scene := preload("res://scenes/presenter_3d.gd").new()
+	if not scene.available():
+		return
+	_presenter = scene
+	_presenter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_presenter)
+
+	# A child Control draws OVER its parent's _draw(), so the lower third has to
+	# be its own node stacked after the presenter or the 3D render buries it.
+	_chrome = Control.new()
+	_chrome.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_chrome.draw.connect(_draw_chrome)
+	add_child(_chrome)
 
 
 func setup(id: String) -> void:
@@ -47,6 +70,12 @@ func setup(id: String) -> void:
 func _process(dt: float) -> void:
 	_t += dt
 	queue_redraw()
+	if is_instance_valid(_presenter) and _screen_rect.size.x > 1.0:
+		_presenter.position = _screen_rect.position
+		_presenter.size = _screen_rect.size
+	if is_instance_valid(_chrome):
+		_chrome.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_chrome.queue_redraw()
 
 
 # ── the room, and the set inside it ────────────────────────────────────────
@@ -71,18 +100,20 @@ func _draw() -> void:
 	# studio field: low-saturation blue, per §4.3 "low-saturation studio blue"
 	draw_rect(inset, Color("#1b2a36"))
 
-	_draw_presenter(inset)
-	_draw_lower_third(inset)
-	_draw_scanlines(inset)
-
-	# a soft analogue bloom at the screen edge, not a glow effect
+	if not is_instance_valid(_presenter):
+		_draw_presenter_placeholder(inset)
+		_draw_lower_third(self, inset)
+	# The 3D presenter carries his own scanlines and posterisation, so the
+	# canvas pass only adds them when he is absent.
+	if not is_instance_valid(_presenter):
+		_draw_scanlines(inset)
 	draw_rect(inset, Color("#7fb3c8"), false, 2.0)
 
 
 ## §13.2 makes Arvo a 3D presenter inside the TV — the one 3D exception in the
 ## game. Until that model is approved, the set says what is missing instead of
 ## drawing a stand-in and letting it pass for the real thing.
-func _draw_presenter(screen: Rect2) -> void:
+func _draw_presenter_placeholder(screen: Rect2) -> void:
 	var desk_y := screen.position.y + screen.size.y * 0.66
 	# desk
 	draw_rect(Rect2(screen.position.x, desk_y, screen.size.x, screen.end.y - desk_y),
@@ -107,21 +138,28 @@ func _draw_presenter(screen: Rect2) -> void:
 
 
 ## The lower third: presenter, channel and a dated source tag (§13.1).
-func _draw_lower_third(screen: Rect2) -> void:
+## Drawn on the chrome layer when a 3D presenter is present, so it reads over
+## him exactly as a broadcast lower third does.
+func _draw_chrome() -> void:
+	if _screen_rect.size.x > 1.0:
+		_draw_lower_third(_chrome, _screen_rect)
+
+
+func _draw_lower_third(ci: CanvasItem, screen: Rect2) -> void:
 	var band_h: float = maxf(screen.size.y * 0.20, 44.0)
 	var band := Rect2(screen.position.x, screen.end.y - band_h, screen.size.x, band_h)
-	draw_rect(band, Color(0.04, 0.06, 0.08, 0.86))
-	draw_line(band.position, Vector2(band.end.x, band.position.y),
+	ci.draw_rect(band, Color(0.04, 0.06, 0.08, 0.86))
+	ci.draw_line(band.position, Vector2(band.end.x, band.position.y),
 		Color("#c8a24a"), 2.0)
 
 	var name := String(_news.get("presenter", ""))
-	draw_string(_font, band.position + Vector2(14, 21), name.to_upper(),
+	ci.draw_string(_font, band.position + Vector2(14, 21), name.to_upper(),
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 15, MapStyle.TITLE_TEXT)
 
 	var tag := "%s · %s %d" % [
 		String(_news.get("channel", "")).replace("-", " ").to_upper(),
 		tr("ui.block.day"), int(_news.get("day", 0))]
-	draw_string(_font, band.position + Vector2(14, 38), tag,
+	ci.draw_string(_font, band.position + Vector2(14, 38), tag,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#c8a24a"))
 
 
@@ -141,10 +179,14 @@ func _draw_scanlines(screen: Rect2) -> void:
 # ── the copy, below the set ────────────────────────────────────────────────
 
 func _build() -> void:
-	for c in get_children():
-		c.queue_free()
+	# Free only the copy layer. Clearing every child also freed the mounted
+	# presenter, and a queue_free'd node is NOT null — it is a dangling
+	# reference that errors the moment _process touches it.
+	if _copy_layer and is_instance_valid(_copy_layer):
+		_copy_layer.queue_free()
 
 	var scroll := ScrollContainer.new()
+	_copy_layer = scroll
 	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)

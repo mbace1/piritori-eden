@@ -223,9 +223,24 @@ smartphone shell". §13.3 requires that documented fact, inference, accusation
 and fiction "each receive a distinct written status, not only a colour", so the
 tier names are spelled out and the colour is only a second channel.
 
-The presenter is the §13.2 3D exception and is not built. The screen says
-"presenter model not yet approved" rather than drawing a stand-in that could be
-mistaken for the real thing.
+The presenter IS the §13.2 3D exception, and he is built: `presenter_3d.gd`
+renders the rigged Arvo model in a SubViewport inside the tube, with a shader
+doing the posterisation, scanlines, analogue softness and restrained bloom that
+§13.2 requires. Idle motion is breathing and a periodic glance at the script;
+a blink needs blendshapes the mesh does not carry. Everything around him — CRT
+shell, lower third, the room — stays cut-cardstock.
+
+The model lives in `art-src/work/arvo/` and is git-ignored, like every other
+generated intermediate. Approving it means registering it in
+`art/v3/manifest.json`, after which sync-data.mjs carries it like any other
+asset. Until then `install`-style staging into `data/art/presenter/` is what
+makes it appear.
+
+Two traps in that scene: a child Control draws OVER its parent's `_draw()`, so
+the lower third has to be its own node stacked after the presenter or the 3D
+render buries it. And `_build()` originally freed every child, including the
+mounted presenter — a `queue_free`'d node is not null, it is a dangling
+reference that errors the moment `_process` touches it.
 
 `accusation` is null in the one authored bulletin — the slice makes no contested
 claim there — and empty tiers are omitted rather than shown blank.

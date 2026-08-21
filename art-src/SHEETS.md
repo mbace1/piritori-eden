@@ -75,3 +75,31 @@ cast/driver-*.webp  9 poses  362x543  209 KB total  ·  gen 2026-08-21 flash  ·
     idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
 cast/local-*.webp  9 poses  362x543  241 KB total  ·  gen 2026-08-21 flash  ·  §6.6
     idle-smile talk guard strike hit-light downed shaken walk-contact walk-pass
+
+## Arvo Linde — the §13.2 3D exception (2026-08-21)
+
+The one 3D asset in the game. ART_BIBLE §13.2 permits a Meshy workflow for the
+presenter alone, because recurring speech needs lip sync and small gestures.
+
+Concept lineage, work/arvo/:
+  v1  arvo-concept-onair.png   first pass — silver, severe, navy suit
+  v2  arvo-concept-v2.png      pushed to the era signature; too austere
+  v3  arvo-concept-v3.png      warm and genial, camel jacket, gold frames
+  v4  arvo-concept-v4.png      brows and frames made pronounced
+  v5  arvo-concept-v5.png      APPROVED — flat skin tones, hard edges
+      arvo-tpose-v5.png        rigging pose, volumetric build
+      arvo-rigged.glb          Meshy image-to-3D + auto-rig, 24 bones
+
+The v4 -> v5 step is the one worth remembering. v4 read well at full size but
+BLOTCHED when posterised, and it was not dithering — it persisted with dither
+off. Soft tonal gradation in the source is what breaks under quantisation.
+v5 has MORE facial definition than v3 and posterises cleanly, because its
+surfaces are flat areas with hard edges and its features are lines and solid
+shapes rather than shading. Tested down to eight colours; it holds.
+
+LIKENESS: a fictional composite. §13.2 requires 'a fictional homage, not a
+photoreal likeness of Arvi Lind'. Wardrobe, colouring and demeanour follow the
+owner's reference; the face does not.
+
+NOT REGISTERED in art/v3/manifest.json — the owner's approval step.
+
