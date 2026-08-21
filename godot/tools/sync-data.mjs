@@ -84,8 +84,19 @@ if (existsSync(artManifestPath)) {
   let artCopied = 0;
   let hashBad = 0;
 
+  // An asset carries EITHER a single `file`, or `members[]` (modular character
+  // parts, equipment) or `frames[]` (animation poses). Only reading `file`
+  // silently skipped every head, torso, leg, weapon and animation frame in the
+  // pack — 11 of 19 assets synced and the modular system never arrived.
+  const files = [];
   for (const asset of manifest.assets ?? []) {
-    if (!asset.file) continue;
+    if (asset.file) files.push([asset.id, asset.file]);
+    for (const m of asset.members ?? []) if (m.file) files.push([m.id ?? asset.id, m.file]);
+    for (const f of asset.frames ?? []) if (f.file) files.push([`${asset.id}:${f.pose}`, f.file]);
+  }
+
+  for (const [assetId, relFile] of files) {
+    const asset = { id: assetId, file: relFile };
     const srcPath = resolve(piritori, 'art/v3', asset.file);
     const destPath = resolve(artDest, asset.file);
 
@@ -122,8 +133,8 @@ if (existsSync(artManifestPath)) {
     }
   }
 
-  if (!check && artCopied) console.log(`synced  data/art/  (${artCopied} registered assets)`);
-  if (!hashBad && !check) console.log(`art hashes verified against manifest (${(manifest.assets ?? []).length} entries)`);
+  if (!check && artCopied) console.log(`synced  data/art/  (${artCopied} of ${files.length} registered files)`);
+  if (!hashBad && !check) console.log(`art manifest: ${(manifest.assets ?? []).length} assets, ${files.length} files`);
 }
 
 if (check) {
