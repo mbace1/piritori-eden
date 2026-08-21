@@ -12,9 +12,12 @@ pick up, and half of it will turn out to be wrong.
 
 - ~~**No URL parameters.**~~ Done — `autoload/debug_entry.gd`. See `CLAUDE.md`
   rule 6 for the vocabulary.
-- **No on-screen debug HUD.** Current block, cash, active flags and load errors
-  are invisible on a phone. `?hud=1` is accepted by the parser and does nothing
-  yet.
+- ~~**No on-screen debug HUD.**~~ Done — `ui/debug_hud.gd`. `?hud=1`, the DEV
+  button, or F3. Shows fps / frame time / draw calls / memory (rule 9) and the
+  campaign block, purse, stock and roster.
+
+  Still thin: it reports frames but cannot **profile** them. If something is
+  slow the HUD says so and not why.
 
 ## Known gaps
 

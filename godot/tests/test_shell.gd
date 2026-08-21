@@ -47,6 +47,7 @@ func _ready() -> void:
 	await _test_market_through_ui()
 	await _test_language_switch()
 	_test_debug_entry_parsing()
+	await _test_debug_hud()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -87,6 +88,55 @@ debug entry (CLAUDE.md rule 6)")
 	# tester somewhere that does not exist.
 	check("the documented battle id is real",
 		not ContentRegistry.battle("battle-courtyard-3v3").is_empty())
+
+
+## The HUD is the instrument for rule 9, so it is driven the way a thumb drives
+## it: find the DEV button by its face and emit its pressed signal.
+func _test_debug_hud() -> void:
+	print("
+debug HUD (CLAUDE.md rules 6 and 9)")
+
+	var hud: CanvasLayer = null
+	for n in _all_nodes(_shell):
+		if n is CanvasLayer and n.has_method("toggle"):
+			hud = n
+			break
+	check("the HUD is mounted", hud != null)
+	if hud == null:
+		return
+
+	check("it floats above the shell and the battle", hud.layer >= 100,
+		"layer %d" % hud.layer)
+
+	# The overlay remembers whether it was left on, which is right for a phone
+	# and wrong for a gate: this assertion would pass or fail depending on what
+	# the last person to run the game had chosen. Clear the preference and ask
+	# the HUD to re-read it, so the check means the same thing on every machine.
+	DirAccess.remove_absolute(hud.SAVE_PATH)
+	hud.visible = hud._load_pref()
+	check("it is off unless asked for", not hud.visible)
+
+	var dev := _find_button("DEV")
+	check("a DEV toggle exists without a keyboard or a URL", dev != null,
+		"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
+	if dev == null:
+		return
+	check("the toggle meets the 48px target floor",
+		dev.custom_minimum_size.x >= 48.0 and dev.custom_minimum_size.y >= 48.0,
+		str(dev.custom_minimum_size))
+
+	await _press(dev)
+	check("pressing DEV shows the overlay", hud.visible)
+	await _press(dev)
+	check("pressing it again hides it", not hud.visible)
+
+	# The readout must survive being asked for before a frame has been drawn;
+	# an overlay that crashes the first time you open it is worse than none.
+	var lines: PackedStringArray = hud._lines(0.016)
+	check("the readout names fps", String(lines[0]).contains("fps"), str(lines))
+	check("the readout carries the campaign block",
+		"
+".join(lines).contains("day"), str(lines))
 
 
 func check(label: String, condition: bool, detail: String = "") -> void:

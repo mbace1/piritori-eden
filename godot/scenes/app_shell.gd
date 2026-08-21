@@ -32,6 +32,7 @@ var _rail: PanelContainer
 var _rail_box: VBoxContainer
 var _city_map: Control
 var _is_portrait := false
+var _hud: CanvasLayer
 
 
 func _ready() -> void:
@@ -51,6 +52,12 @@ func _ready() -> void:
 	GameState.slice_completed.connect(_on_slice_completed)
 	# An encounter can ask for a battle mid-scene (start-battle / start-negotiation).
 	GameState.battle_requested.connect(func(bid, _negotiation): _show_battle(bid))
+	# The HUD is chrome for the developer, not for the game — a CanvasLayer so it
+	# survives every mode switch and floats over the battle (CLAUDE.md rule 9).
+	_hud = preload("res://ui/debug_hud.gd").new()
+	_hud.shell = self
+	add_child(_hud)
+
 	_reflow()
 	_refresh_status()
 	_open_first_screen()
@@ -370,6 +377,27 @@ func _rebuild_language_buttons() -> void:
 		var code_of := String(lang)
 		b.pressed.connect(func(): Loc.set_language(code_of))
 		_langs.add_child(b)
+
+	# CLAUDE.md rule 6: reachable without a keyboard or a URL, because the
+	# device it matters on has neither.
+	var dev := Button.new()
+	dev.text = "DEV"
+	dev.custom_minimum_size = Vector2(MIN_TARGET, MIN_TARGET)
+	dev.tooltip_text = "Developer overlay (F3)"
+	dev.focus_mode = Control.FOCUS_ALL
+	dev.add_theme_font_size_override("font_size", 11)
+	dev.add_theme_color_override("font_color", MapStyle.TINY_TEXT)
+	var dsb := StyleBoxFlat.new()
+	dsb.bg_color = MapStyle.DARK_TAB
+	dsb.border_color = MapStyle.DARK_TAB_EDGE
+	dsb.set_border_width_all(1)
+	dev.add_theme_stylebox_override("normal", dsb)
+	dev.add_theme_stylebox_override("hover", dsb)
+	dev.add_theme_stylebox_override("pressed", dsb)
+	dev.pressed.connect(func():
+		if _hud:
+			_hud.toggle())
+	_langs.add_child(dev)
 
 
 func _refresh_status() -> void:
