@@ -8,6 +8,12 @@ kind of project from the arcade cabinets: it carries real art, a real engine and
 a documents-first design process, and it was making every unrelated `git clone`
 in that repo pay for it.
 
+## Where to start
+
+**`PHASING.md` is the newest owner direction and says what happens next.** It
+supersedes older roadmap material where they disagree — but not the canon stack
+below, which says what the game *is*.
+
 ## Canon outranks code
 
 **Read `DESIGN_AUTHORITY.md` before changing anything.** It defines the
@@ -25,6 +31,9 @@ Short form, highest first:
 7. `MAP.md` + `map/kallio-era1-2003-v1.json` (Era I geography)
 8. `content/era1-slice-v1.json` (the authored seven-day slice)
 9. `art/v3/manifest.json` (registered runtime art ids)
+
+`PHASING.md` sits beside this stack rather than inside it: canon decides what is
+true, phasing decides what is next.
 
 **When two sources at the same level disagree, stop and record a decision.** Do
 not silently average them together. A contradiction resolved in code and not in
