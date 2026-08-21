@@ -875,7 +875,7 @@ func _get_legal_commands(f: Fighter) -> Array:
 	if not f.prohibited_commands.has("reposition"):
 		for delta in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
 			var dest: Vector2i = f.slot + delta
-			if dest.x >= 0 and dest.x <= 2 and dest.y >= 0 and dest.y <= 2:
+			if FightBoard.has_slot(dest.x, dest.y):
 				if _is_slot_free(dest, f.side):
 					var cmd := Command.new(Command.Type.REPOSITION, f.fighter_id)
 					cmd.target_slot = dest
@@ -921,10 +921,10 @@ func _get_attack_targets(f: Fighter, weapon: Dictionary) -> Array:
 		return targets  # weapon cannot fire from this row
 
 	var lane_min: int = maxi(0, f.slot.x - lane_spread)
-	var lane_max: int = mini(2, f.slot.x + lane_spread)
+	var lane_max: int = mini(FightBoard.lanes - 1, f.slot.x + lane_spread)
 
 	for lane in range(lane_min, lane_max + 1):
-		for row in range(3):
+		for row in range(FightBoard.rows):
 			var cover := _cover_at(lane, row, opp_side)
 			if cover.hard_block:
 				break  # hard cover stops everything including piercing
@@ -1117,7 +1117,7 @@ func free_slots_for(fighter_id: String) -> Array:
 		return []
 	var f: Fighter = _fighters[fighter_id]
 	var out: Array = []
-	for lane in range(3):
+	for lane in range(FightBoard.lanes):
 		for row in range(3):
 			var slot := Vector2i(lane, row)
 			if slot != f.slot and _is_slot_free(slot, f.side):

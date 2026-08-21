@@ -57,6 +57,12 @@ const PLAY_AREA_DEFAULT := Rect2(0.16, 0.52, 0.66, 0.32)
 ## here instead pushed the whole board down into the console.
 const FIGURE_HEADROOM := 0.0
 
+## Set to a non-empty Rect2 to override the play area for a comparison render.
+## The owner asked (2026-08-21) whether the board is big enough to carry the
+## visuals the reference games have; this is how the alternatives are LOOKED at
+## rather than argued about. Empty in normal play.
+static var play_area_override := Rect2()
+
 var fight: FightManager
 var battle_id: String = ""
 
@@ -239,6 +245,8 @@ func _plate_rect() -> Rect2:
 
 func _play_rect() -> Rect2:
 	var norm: Rect2 = PLAY_AREA.get(_stage_id, PLAY_AREA_DEFAULT)
+	if play_area_override.size.x > 0.0:
+		norm = play_area_override
 	var plate := _plate_rect()
 	var r := Rect2(
 		plate.position + Vector2(norm.position.x * plate.size.x, norm.position.y * plate.size.y),
@@ -255,7 +263,7 @@ func _play_rect() -> Rect2:
 ## ways, along each isometric axis.
 func _tile() -> Vector2:
 	var r := _play_rect()
-	var reach := (CENTRE_GAP + 2.0) + 1.0
+	var reach := FightBoard.reach(CENTRE_GAP)
 	var tx: float = r.size.x / (2.0 * reach)
 	var ty: float = r.size.y / (reach)
 	return Vector2(maxf(tx, 18.0), maxf(ty, 16.0))
@@ -270,7 +278,7 @@ func _cell_pos(lane: int, row: int, side: int) -> Vector2:
 	var fwd := Vector2(FORWARD.x * tile.x, FORWARD.y * tile.y) * dir
 	var lane_v := Vector2(LANE_AXIS.x * tile.x, LANE_AXIS.y * tile.y) * dir
 
-	return c + fwd * (CENTRE_GAP + float(row)) + lane_v * (float(lane) - 1.0)
+	return c + fwd * (CENTRE_GAP + float(row)) 		+ lane_v * (float(lane) - FightBoard.lane_centre())
 
 
 func _diamond(centre: Vector2, w: float, h: float) -> PackedVector2Array:

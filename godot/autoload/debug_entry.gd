@@ -12,6 +12,7 @@ extends Node
 ##     ?news=<id>                       play a bulletin
 ##     ?mode=market                     open a mode
 ##     ?cash=9000                       afford something
+##     ?rows=4&lanes=4                  try a bigger board (canon is 3x3)
 ##     ?hud=1                           show the debug HUD
 ##     ?lang=ja                         start in a language
 ##
@@ -134,6 +135,15 @@ func apply_to_campaign() -> PackedStringArray:
 		for s in ContentRegistry.map.get("sites", []):
 			GameState.revealed[String(s.get("id", ""))] = true
 		log.append("revealed all")
+
+	# The board's shape, for the comparison the owner asked for (2026-08-21):
+	# is 3x3 per side enough to carry the visuals the reference games have?
+	# Canon default stands unless a URL says otherwise.
+	if has("rows") or has("lanes"):
+		var note := FightBoard.apply_override(
+			get_int("rows", FightBoard.rows), get_int("lanes", FightBoard.lanes))
+		if note != "":
+			log.append(note)
 
 	if has("lang"):
 		Loc.set_language(get_str("lang"))

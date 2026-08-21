@@ -39,11 +39,12 @@ static func parse_cell(cell: String) -> Vector2i:
 		push_error("BattleBuilder: unknown row in cell '%s'" % cell)
 		row = 0
 	var lane := int(parts[1]) - 1
-	return Vector2i(clampi(lane, 0, 2), row)
+	return Vector2i(FightBoard.clamp_lane(lane), FightBoard.clamp_row(row))
 
 
 static func cell_name(lane: int, row: int) -> String:
-	return "%s-%d" % [ROWS[clampi(row, 0, 2)], clampi(lane, 0, 2) + 1]
+	return "%s-%d" % [ROWS[clampi(row, 0, ROWS.size() - 1)],
+		FightBoard.clamp_lane(lane) + 1]
 
 
 ## Build the definition the FightManager consumes.
@@ -111,11 +112,36 @@ static func _negotiation_unlocked(battle: Dictionary) -> bool:
 	return false
 
 
-## Player deployment: front rank first, then middle, centre lane outward.
+## Player deployment: front rank first, then back through the rows, and inside
+## each row from the centre lane outward.
+##
+## This was a hand-written table of three fixed cells, which described a 3x3
+## board and nothing else — on a wider board it deployed everyone down the left
+## and left the centre empty. It is generated now, from the same intent.
 static func _default_player_slot(index: int, total: int) -> Vector2i:
+	var order := _deploy_order()
+	if order.is_empty():
+		return Vector2i.ZERO
+	# Two fighters hold the centre lane in depth rather than spreading wide.
 	if total <= 2:
-		return [Vector2i(1, 0), Vector2i(1, 1)][index % 2]
-	return [Vector2i(1, 0), Vector2i(0, 1), Vector2i(2, 1)][index % 3]
+		var mid := FightBoard.clamp_lane(int(round(FightBoard.lane_centre())))
+		return Vector2i(mid, mini(index, FightBoard.rows - 1))
+	return order[index % order.size()]
+
+
+## Every cell, front row first, each row read from the centre outward.
+static func _deploy_order() -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	var centre := FightBoard.lane_centre()
+	for row in range(FightBoard.rows):
+		var lanes_by_centre: Array[int] = []
+		for lane in range(FightBoard.lanes):
+			lanes_by_centre.append(lane)
+		lanes_by_centre.sort_custom(func(a, b):
+			return absf(float(a) - centre) < absf(float(b) - centre))
+		for lane in lanes_by_centre:
+			out.append(Vector2i(lane, row))
+	return out
 
 
 static func _crew_to_unit(crew: Dictionary, slot: Vector2i) -> Dictionary:

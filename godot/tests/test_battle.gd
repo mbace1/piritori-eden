@@ -45,6 +45,7 @@ func _ready() -> void:
 	_test_withdraw_ends_it()
 	_test_determinism()
 	_test_withdrawal()
+	_test_board_shape()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -65,6 +66,51 @@ func _crew_ids(n: int) -> Array:
 
 
 # ── tests ─────────────────────────────────────────────────────────────────
+
+## The board's shape used to be four copies of the number 3, in the view, the
+## reposition rule, the intent scan and the builder. Trying a bigger grid found
+## three of them by breaking. This holds them together.
+func _test_board_shape() -> void:
+	print("
+board shape (one number, not four)")
+
+	check("canon is 3x3 per side by default", FightBoard.is_canon(),
+		"%dx%d" % [FightBoard.lanes, FightBoard.rows])
+	check("nine cells a side", FightBoard.cell_count() == 9)
+	check("three lanes centre on lane 1", is_equal_approx(FightBoard.lane_centre(), 1.0))
+	check("a corner is on the board", FightBoard.has_slot(2, 2))
+	check("one past the corner is not", not FightBoard.has_slot(3, 2))
+
+	# An even lane count must straddle the centre line rather than sit off to
+	# one side — that is what lane_centre() is for.
+	FightBoard.apply_override(4, 4)
+	check("an override takes", FightBoard.lanes == 4 and FightBoard.rows == 4)
+	check("sixteen cells a side", FightBoard.cell_count() == 16)
+	check("four lanes straddle the centre",
+		is_equal_approx(FightBoard.lane_centre(), 1.5))
+	check("the wider board admits lane 3", FightBoard.has_slot(3, 3))
+	check("and still refuses lane 4", not FightBoard.has_slot(4, 0))
+
+	# Deployment is generated, not a table of three fixed cells: on a wider
+	# board the old table put everyone down the left and left the centre empty.
+	var seen := {}
+	for i in range(6):
+		var slot := BattleBuilder._default_player_slot(i, 6)
+		check("deploy %d is on the board" % i,
+			FightBoard.has_slot(slot.x, slot.y), str(slot))
+		seen[slot] = true
+	check("six deployed take six distinct cells", seen.size() == 6, str(seen.keys()))
+
+	# Bounded on purpose: a 1x1 board is not a battle, and an 8x8 one is a
+	# different game that §13.3's "no free walking" would not survive.
+	FightBoard.apply_override(99, 99)
+	check("an absurd board is clamped, not accepted",
+		FightBoard.rows <= 6 and FightBoard.lanes <= 6,
+		"%dx%d" % [FightBoard.lanes, FightBoard.rows])
+
+	FightBoard.reset()
+	check("reset returns to canon", FightBoard.is_canon())
+
 
 func _test_cells() -> void:
 	print("\ncell grammar (front-2 etc.)")

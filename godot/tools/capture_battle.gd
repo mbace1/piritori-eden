@@ -10,6 +10,29 @@ func _ready() -> void:
 
 	await get_tree().process_frame
 	get_window().size = Vector2i(1366, 768)
+
+	# The board's shape, so several can be rendered and compared side by side.
+	# PIRITORI_SHOT_BOARD is "lanes x rows", e.g. "4x4". Unset means canon.
+	var board: String = OS.get_environment("PIRITORI_SHOT_BOARD")
+	var tag := "canon"
+	if board != "":
+		var bits := board.split("x")
+		if bits.size() == 2:
+			FightBoard.apply_override(int(bits[1]), int(bits[0]))
+			tag = board
+	print("board: %d lanes x %d rows" % [FightBoard.lanes, FightBoard.rows])
+
+	# PIRITORI_SHOT_PLAY is "x,y,w,h" in normalised plate coordinates.
+	var play: String = OS.get_environment("PIRITORI_SHOT_PLAY")
+	if play != "":
+		var n := play.split(",")
+		if n.size() == 4:
+			var fb = preload("res://scenes/formation_battle.gd")
+			fb.play_area_override = Rect2(
+				float(n[0]), float(n[1]), float(n[2]), float(n[3]))
+			tag += "-play"
+			print("play area: ", fb.play_area_override)
+
 	GameState.new_campaign()
 	# Anchors resolve against a parent that HAS a rect. A Control under a plain
 	# Node has none, and assigning .size on a FULL_RECT control is ignored — the
@@ -36,7 +59,7 @@ func _ready() -> void:
 
 	await RenderingServer.frame_post_draw
 	var img := get_viewport().get_texture().get_image()
-	var path := out.path_join("piritori-battle-%s.png" % Loc.code)
+	var path := out.path_join("piritori-board-%s.png" % tag)
 	img.save_png(path)
 	print("wrote ", path)
 	get_tree().quit(0)
