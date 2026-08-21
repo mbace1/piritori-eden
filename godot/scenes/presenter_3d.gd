@@ -13,7 +13,10 @@ extends SubViewportContainer
 ## through the posterise shader first. The CRT shell, lower third and the whole
 ## surrounding world stay cut-cardstock and are drawn by news_event.gd.
 
-const MODEL := "res://data/art/presenter/arvo-linde.glb"
+## Registered as `presenter-arvo-linde-v05` in art/v3/manifest.json, so
+## sync-data.mjs carries it like any other approved asset — it is no longer
+## hand-staged.
+const MODEL := "res://data/art/presenter/arvo-linde-v05.glb"
 
 ## Levels per channel. §13.2 asks for "limited colour"; the concept was tested
 ## down to eight and held.
