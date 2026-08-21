@@ -30,7 +30,16 @@ jobs:
           chmod +x /usr/local/bin/godot
           godot --version
 
-      # The canon seams come first: they are the reason data/ is git-ignored,
+      # Canon validates before anything reads it. These two came across from
+      # the monorepo's own gate and are the reason a dangling encounter id or
+      # an unregistered art file cannot reach the engine.
+      - name: the Era I public map
+        run: node map/validate-map.mjs
+
+      - name: the authored seven-day slice and registered art
+        run: node content/validate-slice.mjs
+
+      # The canon seams come next: they are the reason data/ is git-ignored,
       # and a stale copy would make every later gate lie.
       - name: sync canon into the project
         working-directory: godot
