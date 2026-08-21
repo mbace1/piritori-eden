@@ -18,6 +18,7 @@ additional frames or true layer extraction before shipping.
 | Karhupuisto location plate | Location baseline | Separate trees, vegetation and landmark before animation. |
 | Mirrored 3x3 formation geometry | System baseline | Keep the permanent grid invisible; reveal only actionable cells. |
 | Landscape and portrait command geometry | UX baseline | Final typography and icon language remain open. |
+| Arvo Linde presenter model v05 | Broadcast baseline | The ART_BIBLE 13.2 3D exception. Rigged, 24-bone humanoid, no blendshapes — lip sync needs them before recurring speech. Fictional composite, not a likeness. |
 | Battle detail ceiling | Detail target | Reduce environmental texture about 25 percent for production. |
 | Battle simplification floor | Lower bound | Final assets should retain more character detail. |
 | Toko Slomo's Noodles fullscreen screen v02 | Narrative-instance baseline | Corrected eye openings sit inside the white arches. True PNG and normalized hit regions are implementation-ready; separate copy and controls for later dynamic content. |
