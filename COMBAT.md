@@ -540,6 +540,42 @@ early loot is dead weight with no explanation.
 
 ---
 
+## 9.8 What a retired crew member becomes — owner ruling, 2026-08-22
+
+§7.2 already retires people alive and writes a memory. This is what the memory
+is for.
+
+**Mostly: a name in the city.** They turn up in Arvo's broadcasts, in market
+gossip, in the flavour of an encounter. This is the free layer and it runs under
+everything else — the memory is already being recorded, so the city having one
+costs almost nothing.
+
+**Sometimes: a person you can find, in a bar.** Specifically the McCormick bars
+around the Siltanen / Kuudes Linja complex, or another bar. `NARRATIVE.md`
+already gives the McCormicks the bars and restaurants, so this needs no new
+fiction and it gives those places a reason to be visited that is not buying a
+weapon.
+
+They can also **turn up mid-mission as a saving grace**: a tip that opens an
+option, or an extra body on the board. That is what makes retirement pay out
+rather than merely stop costing — and it is the strongest argument the game can
+make for retiring somebody *before* they are used up, since a veteran who leaves
+in one piece is a veteran who can walk back in.
+
+**Rarely: across the board.** Some end up working for the other side, and they
+know how you fight. Rare and authored, never systemic: if every retiree could
+turn up hostile it becomes noise, and `NARRATIVE.md`'s rule that people are never
+scenery cuts in both directions.
+
+### 9.8.1 What this makes true elsewhere
+
+- Bars become a destination, not a shopfront.
+- The career ceiling (§7.1) stops being purely a loss.
+- `retired:<id>` memories, which are written today and read by nothing, get
+  their first consumer.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
