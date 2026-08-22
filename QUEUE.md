@@ -98,6 +98,16 @@ pick up, and half of it will turn out to be wrong.
   ending near 40% of frame height. A replacement needs a broad floor across the
   lower ~60%.
 
+## THE 2D -> 3D MOVE (see PHASING 1.055)
+
+- **`ART_BIBLE.md` describes a different game now.** It is the visual authority
+  and it says cut cardstock. It needs rewriting, and until it is, it and
+  PHASING openly disagree.
+- **The battle renderer draws standees.** 3D units are a renderer change.
+- **No isometric Camera3D exists.** The arena assumes a 2:1 projection that the
+  2D code fakes; in 3D it wants an orthographic camera actually set to it.
+- **Six arenas and six cast sets become reference art**, not runtime art.
+
 ## 3D units (see PHASING 1.06)
 
 - **`art/v3/cast3d/` is staged but NOT registered.** Two rigged glbs sit there

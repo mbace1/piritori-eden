@@ -150,6 +150,53 @@ character that moves is not, and nothing in the local tooling closes that.
 None of this widens `ART_BIBLE.md` §13.2. It is evidence for a decision the
 owner has not made.
 
+### 1.055 THE GAME IS 3D — owner ruling, 2026-08-22
+
+> *"change the goal from 2d to 3d"*
+
+This is the largest ruling in this file and it is not a §13.2 amendment. It
+replaces the premise `ART_BIBLE.md` is built on.
+
+**What it overturns.** The Art Bible describes a handmade cut-cardstock world:
+broad flat paper shapes, torn fibres, sparse marker and ink, "characters,
+animals, weapons, foliage, locations and UI belong to the same handmade material
+family". §13.2's single 3D exception for the presenter exists *because* of that
+premise. With the premise changed, the exception is meaningless — and so is a
+good deal of the document around it.
+
+**What survives, and it is more than it looks.** None of this was ever about
+being 2D:
+
+- the palette, the Kallio night, the muted practical Finnish register;
+- the readability rules — silhouette first, cover as discrete objects,
+  telegraphed intent, colour never carrying meaning alone;
+- the board: 6×3 a side with a neutral band, true 2:1 isometric, the canonical
+  arena, `STAGE_SPEC.md`;
+- everything in `COMBAT.md`, which describes rules rather than pixels;
+- `NARRATIVE.md`, entirely and permanently.
+
+**What it costs.** Every 2D asset registered so far — six nine-pose cast sets,
+six arenas, the equipment sheets — becomes reference rather than runtime art.
+They are not wasted: the 3D pipeline is *fed* by them, and the muscle model
+exists because its 2D sheet did. But the battle renderer draws standees today
+and would have to draw scenes instead.
+
+**What has to happen before this is real, none of it done:**
+
+1. `ART_BIBLE.md` rewritten. It is currently the authority and it currently
+   describes a different game. Until then it and this file openly disagree, and
+   `DESIGN_AUTHORITY.md` says to record that rather than average it.
+2. The battle renderer moved from `_draw()` standees to a 3D scene.
+3. The isometric camera made real — an orthographic `Camera3D` at the 2:1 angle
+   the arena already assumes.
+4. Texture weight solved before six roles land (PHASING §1.06).
+
+**The honest risk.** The reason the Art Bible chose cut paper is that it is
+cheap to make consistent and hard to make ugly. 3D is neither. The thing that
+made every stage sit right — one canonical arena and art produced to it — has to
+survive the change, or the project spends its next weeks the way it spent
+tonight: fitting the game to whatever the tool returned.
+
 ### 1.06 Rig, animation and roster variety, 2026-08-22
 
 **Owner ruling: rig and animate.** This widens `ART_BIBLE.md` §13.2, which until
