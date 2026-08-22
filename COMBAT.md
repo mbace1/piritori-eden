@@ -576,6 +576,51 @@ scenery cuts in both directions.
 
 ---
 
+## 9.9 The shot-caller — owner ruling, 2026-08-22
+
+### 9.9.1 Aatami fights early, then stops
+
+He fights the first battles because he cannot afford crew, and then he stops.
+The withdrawal **is** the arc: `NARRATIVE.md` says he ends up calling the shots
+while his crew performs the work, suffers wounds and may die, and the moment he
+stops going himself is the moment he becomes the thing the story is about. The
+game says it without a line of dialogue.
+
+It also answers an ordinary early-game problem honestly. On day one there is
+almost no money and the roster is thin, so *who fights the first battle* has one
+sensible answer: he does.
+
+### 9.9.2 Narrative characters are usually a bonus, not a body
+
+Named people (§7.1) generally act **from the shot-caller side**, supplying an
+advantage rather than standing in a lane. They **can** still fight — the option
+is never removed — but their normal contribution is what they give the crew.
+
+This keeps the two-tier roster honest. A named character who fought every battle
+would make the disposable tier decorative, which is the failure §7 exists to
+avoid.
+
+### 9.9.3 A veteran can be promoted into the chair
+
+**High-level crew may be designated shot-caller, and their buffs double** (or an
+equivalent advantage).
+
+This is the important one, because it gives §7 a **third thing to do with a
+veteran**. Today there are two exits — reach the ceiling, or retire early — and
+both remove the person. Promotion keeps them, changes what they are for, and
+makes the career ladder point somewhere other than the door.
+
+It also gives the stance system (§6.2) a source: stances are the shot-caller's
+instrument, so *who is calling* should change what calling is worth.
+
+### 9.9.4 Open, and deliberately not decided here
+
+- Does promotion end their fighting career, or merely change their default?
+- Is there one chair or several?
+- Does the doubled buff apply to stance weighting, to competencies, or both?
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
