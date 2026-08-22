@@ -100,6 +100,28 @@ Two consequences, both recorded rather than assumed:
   a side, a number chosen for the small board. It needs revisiting, and that is
   an owner call rather than a tuning knob.
 
+### 3.05 One grid, with no man's land — owner ruling 2026-08-21
+
+The two half-boards are JOINED. They used to be mirrored boards floating apart
+across a gap measured in tiles, which read as two grids rather than one
+battlefield.
+
+The board is now a single depth axis, banded:
+
+> **3 rows blue · 2 rows grey · 3 rows red**
+
+`GDD` §13.3's front / middle / back survive and gain a clearer meaning: FRONT is
+the row nearest the middle for **both** sides, so the two crews face each other
+across the neutral band.
+
+The grey rows are **real cells**. Nothing deploys there, but they are ground a
+unit can be repositioned or pushed into, and they are what a charge crosses.
+
+**A quiet inconsistency died with the mirroring.** Under the old scheme lane 0
+for the player sat physically OPPOSITE lane 0 for the opposition, so "the same
+lane" in the targeting rules was not the same column on screen. A lane is a
+column now, for both sides, and the picture agrees with the rules.
+
 ### 3.1 Is 3x3 enough? Findings, 2026-08-21
 
 The owner asked whether 3x3 per side can carry the visuals the reference games

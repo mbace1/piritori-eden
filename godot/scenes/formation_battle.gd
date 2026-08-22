@@ -36,7 +36,10 @@ const TILE := Vector2(74.0, 60.0)
 ## (lower-left) and the opposition's further (upper-right), as in the targets.
 const FORWARD := Vector2(1.0, -0.5)        ## toward the opposition, away from camera
 const LANE_AXIS := Vector2(1.0, 0.5)       ## across the board, perpendicular in iso
-const CENTRE_GAP := 1.15                   ## tiles from the centre line to a front row
+## Superseded 2026-08-21: the halves are joined, and the space between them is
+## FightBoard.NEUTRAL_ROWS of real grey cells rather than a gap measured in
+## tiles. Kept only so the arena template's arithmetic still reads.
+const CENTRE_GAP := 0.0
 
 ## Where the PLAYABLE FLOOR sits on each backdrop plate, normalised to the
 ## plate. The board is fitted into this instead of into the whole screen, which
@@ -74,7 +77,7 @@ const CENTRE_GAP := 1.15                   ## tiles from the centre line to a fr
 ## Both extents are HORIZONTAL fractions of the plate width, because one tile
 ## along either axis moves exactly one tile horizontally. That makes the two
 ## numbers directly comparable and the shape a true 2:1 diamond by construction.
-const ARENA := {"c": Vector2(0.500, 0.520), "fwd": 0.175, "lane": 0.145}
+const ARENA := {"c": Vector2(0.500, 0.600), "fwd": 0.175, "lane": 0.145}
 
 ## Escape hatch, deliberately empty. A stage may override the arena ONLY when
 ## its geometry genuinely cannot host the canonical one — and the right answer
@@ -117,6 +120,8 @@ var _t := 0.0
 ## The two sides read cyan and red, as in the owner's target renders.
 const SIDE_CYAN := Color("#57c8e8")
 const SIDE_RED := Color("#c8443c")
+## No man's land: ground that belongs to neither side.
+const NEUTRAL_GREY := Color("#8d9199")
 
 var _roles: Dictionary = {}      ## role id -> {color, symbol}
 var _stage: Texture2D = null
@@ -306,7 +311,11 @@ func _play_diamond() -> Dictionary:
 	# what it looked like — one grid tight against the bottom edge, the other
 	# with space to spare.
 	var plate := _plate_rect()
-	var visible := Vector2(plate.size.x, maxf(plate.size.y - CONSOLE_H, 1.0))
+	# With the chrome hidden there is no console to clear, so the whole frame is
+	# visible and the arena should use it. Reserving the band anyway made every
+	# chrome-off capture sit higher than the game does.
+	var reserved := 0.0 if debug_chrome_off else CONSOLE_H
+	var visible := Vector2(plate.size.x, maxf(plate.size.y - reserved, 1.0))
 	var c: Vector2 = d.get("c", Vector2(0.5, 0.7))
 	return {
 		"c": plate.position + Vector2(c.x * plate.size.x, c.y * visible.y),
@@ -327,7 +336,7 @@ func _arena_quad() -> PackedVector2Array:
 
 
 ## Tile size derived from the floor, so the board always fits the location.
-## Board extent is (CENTRE_GAP + 2 rows + 1 lane) tiles from the centre, both
+## Board extent comes from FightBoard.depth_reach(), both
 ## ways, along each isometric axis.
 ## The tile is SQUARE, and that is not a style choice: FORWARD is (1, -0.5) and
 ## LANE_AXIS is (1, 0.5), so a screen step has slope 0.5 * tile.y / tile.x, which
@@ -339,21 +348,32 @@ func _arena_quad() -> PackedVector2Array:
 func _tile() -> Vector2:
 	var d := _play_diamond()
 	var t: float = minf(
-		float(d["fwd"]) / (CENTRE_GAP + float(FightBoard.rows - 1) + 0.5),
+		float(d["fwd"]) / FightBoard.depth_reach(),
 		float(d["lane"]) / (FightBoard.lane_centre() + 0.5))
 	return Vector2(maxf(t, 14.0), maxf(t, 14.0))
 
 
 
+## ONE grid. The two sides no longer live on mirrored boards separated by a gap
+## — they occupy bands of a single depth axis with two neutral rows between them.
+##
+## Nothing is mirrored now, which also fixes a quiet inconsistency: with the old
+## mirroring, lane 0 for the player sat physically OPPOSITE lane 0 for the
+## opposition, so "the same lane" in the targeting rules was not the same column
+## on screen. Now a lane is a column, for both sides, and the picture agrees with
+## the rules.
 func _cell_pos(lane: int, row: int, side: int) -> Vector2:
+	return _cell_pos_depth(lane, FightBoard.depth_of(
+		row, side == int(Fighter.Side.PLAYER)))
+
+
+func _cell_pos_depth(lane: int, depth: int) -> Vector2:
 	var c: Vector2 = _play_diamond()["c"]
 	var tile := _tile()
-	var dir := -1.0 if side == int(Fighter.Side.PLAYER) else 1.0
-
-	var fwd := Vector2(FORWARD.x * tile.x, FORWARD.y * tile.y) * dir
-	var lane_v := Vector2(LANE_AXIS.x * tile.x, LANE_AXIS.y * tile.y) * dir
-
-	return c + fwd * (CENTRE_GAP + float(row)) 		+ lane_v * (float(lane) - FightBoard.lane_centre())
+	var fwd := Vector2(FORWARD.x * tile.x, FORWARD.y * tile.y)
+	var lane_v := Vector2(LANE_AXIS.x * tile.x, LANE_AXIS.y * tile.y)
+	var mid := (float(FightBoard.total_rows()) - 1.0) * 0.5
+	return c + fwd * (float(depth) - mid) 		+ lane_v * (float(lane) - FightBoard.lane_centre())
 
 
 
@@ -387,20 +407,24 @@ func _draw_extent() -> void:
 	ring.append(arena[0])
 	_board.draw_polyline(ring, Color(1, 1, 1, 0.55), 2.0, true)
 
+	# One grid, banded: the player's rows, the neutral rows, the opposition's.
 	var tl := _tile()
-	for side in [int(Fighter.Side.PLAYER), int(Fighter.Side.OPPOSITION)]:
-		var col := SIDE_CYAN if side == int(Fighter.Side.PLAYER) else SIDE_RED
+	for depth in range(FightBoard.total_rows()):
+		var col := NEUTRAL_GREY
+		if depth < FightBoard.rows:
+			col = SIDE_CYAN
+		elif not FightBoard.is_neutral_depth(depth):
+			col = SIDE_RED
 		for lane in range(FightBoard.lanes):
-			for row in range(FightBoard.rows):
-				var d := _diamond(_cell_pos(lane, row, side), tl.x * 1.86, tl.y * 0.92)
-				var f := col
-				f.a = 0.10
-				_board.draw_colored_polygon(d, f)
-				var line := PackedVector2Array(d)
-				line.append(d[0])
-				var e := col
-				e.a = 0.55
-				_board.draw_polyline(line, e, 1.5, true)
+			var d := _diamond(_cell_pos_depth(lane, depth), tl.x * 1.86, tl.y * 0.92)
+			var f := col
+			f.a = 0.10
+			_board.draw_colored_polygon(d, f)
+			var line := PackedVector2Array(d)
+			line.append(d[0])
+			var e := col
+			e.a = 0.55
+			_board.draw_polyline(line, e, 1.5, true)
 
 	var t := _tile()
 	var pts: PackedVector2Array = []

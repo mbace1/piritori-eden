@@ -93,7 +93,46 @@ static func lane_centre() -> float:
 	return (float(lanes) - 1.0) * 0.5
 
 
-## How far the board reaches from the centre line, in tiles, along each
-## isometric axis. The view divides the floor by this to size a tile.
-static func reach(centre_gap: float) -> float:
-	return centre_gap + float(rows - 1) + lane_centre() + 0.5
+## Rows of NO MAN'S LAND between the two sides.
+##
+## Owner direction, 2026-08-21: the halves are joined. They used to be two
+## mirrored boards floating apart across a CENTRE_GAP measured in tiles, which
+## read as two grids rather than one battlefield. Now it is a single grid with a
+## neutral band down the middle — from the side, three blue, two grey, three red.
+##
+## The grey rows are real cells. Nothing deploys there, but they are ground a
+## unit can be pushed or repositioned into, and they are what a charge crosses.
+const NEUTRAL_ROWS := 2
+
+
+## Total depth of the unified grid: both sides plus the neutral band.
+static func total_rows() -> int:
+	return rows * 2 + NEUTRAL_ROWS
+
+
+## A side's row index mapped onto the one shared depth axis.
+##
+## FRONT is the row nearest the middle for BOTH sides, which is what makes the
+## grid read as two crews facing each other rather than two grids side by side.
+## So the player's rows count backwards from the neutral band, and the
+## opposition's count forwards from it.
+static func depth_of(row: int, is_player: bool) -> int:
+	if is_player:
+		return rows - 1 - clamp_row(row)
+	return rows + NEUTRAL_ROWS + clamp_row(row)
+
+
+## True for the grey band in the middle — no side's ground.
+static func is_neutral_depth(depth: int) -> bool:
+	return depth >= rows and depth < rows + NEUTRAL_ROWS
+
+
+## Half the grid's depth, in tiles, measured from the middle.
+static func depth_reach() -> float:
+	return (float(total_rows()) - 1.0) * 0.5 + 0.5
+
+
+## How far the board reaches from its centre along each isometric axis. The view
+## divides the floor by this to size a tile.
+static func reach() -> float:
+	return maxf(depth_reach(), lane_centre() + 0.5)
