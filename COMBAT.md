@@ -519,6 +519,27 @@ slice cover is soft; the day a hard prop is authored it fails and points at
 
 ---
 
+## 9.7 Where loot becomes money — owner ruling, 2026-08-22
+
+**Decision: a fence at Piritori now, an earned contact later.**
+
+`sell_loot()` has been built and tested since §8 and no screen has ever called
+it, so loot could not actually convert down in play. It converts at **Piritori**,
+which costs no new fiction: `NARRATIVE.md` already makes Piritori the cheapest
+small-quantity market and the cheapest source of hired operatives.
+
+The travel requirement is the whole point. Selling from the crew screen would
+make loot weightless — a number you clear whenever you like — and would take the
+map out of an economy that is supposed to run through it. Having to carry a
+sawn-off to Piritori puts you where the hiring pool and the pressure both are.
+
+**Later: a better fence you have to earn.** An encounter introduces a contact
+who pays properly, so the Piritori rate becomes the floor rather than the only
+price. Deliberately second: the first fence should exist from the start, or
+early loot is dead weight with no explanation.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
