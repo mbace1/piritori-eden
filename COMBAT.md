@@ -621,6 +621,68 @@ instrument, so *who is calling* should change what calling is worth.
 
 ---
 
+## 9.10 Death — owner ruling, 2026-08-22
+
+**People die.** Not authored per battle, not gated behind a flag on a fight.
+Death is a standing possibility and the fight decides it.
+
+That supersedes the current `death_eligible` handling, where the slice's early
+battles simply say no. A flag that decides whether death exists makes death an
+event the content grants; the ruling is that it is a risk the player runs.
+
+### 9.10.1 Lethality is a rate, not a switch
+
+**Guns kill faster than knives, and fists can kill too.** Every weapon can end
+somebody; they differ in how quickly.
+
+This matters more than a lethal / non-lethal tag, which is what the code has
+today (`_weapon_is_lethal`, a boolean on a tag). A rate means an unarmed brawl
+that goes long is genuinely dangerous, which is the thing that makes a quick
+resolution valuable on its own terms — and it lines up with §9.5, where long
+loud fights are also what brings the police.
+
+It also sharpens §8. The unbuyable weapons are precisely the ones that kill
+fastest, so taking a sawn-off off a body raises the stakes for **both** sides.
+Arming yourself is a decision with a cost, not an upgrade.
+
+### 9.10.2 The disposable are disposable; veterans are not
+
+**Early-tier people are disposable. Higher-tier people are much less so.**
+
+Two things at once, and both are wanted:
+
+- **Economically** a rookie is cheap and replaceable — that is the churn §7 is
+  built on, and the hiring pool exists to feed it.
+- **Mechanically** a veteran is harder to kill. Experience buys survivability,
+  not only effectiveness.
+
+The consequence is the point: investing in somebody is rational because they
+become likelier to come back, and the **career ceiling stays the main thing that
+removes a veteran** rather than a stray hit. Losing one is supposed to be a
+disaster, not a die roll — while losing a rookie is Tuesday.
+
+### 9.10.3 Three ways to lose somebody, now
+
+1. **The ceiling** (§7) — they age out, alive, and become part of the city (§9.8).
+2. **The police** (§9.5) — downed on the board when they arrive, and taken.
+3. **Death** — anywhere, by any weapon, fastest by firearm and least likely to a
+   veteran.
+
+Only the first is chosen. That is the right balance: the game should let a player
+retire somebody deliberately, and never let them feel safe.
+
+### 9.10.4 What this obliges
+
+- Weapons need a **kill rate**, replacing the lethal boolean.
+- Fighters need survivability that scales with fights survived, distinct from
+  condition.
+- `death_eligible` needs re-purposing or removing; a gate asserts today's
+  authored value and will have to be revisited.
+- `NARRATIVE.md` is untouched: Aaro's death remains fixed canon and is never a
+  battle outcome.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
