@@ -214,15 +214,20 @@ Also noted: `small-local.glb` survives in `.godot/imported/` with its source gon
 
 ## Hiring and the roster (COMBAT.md §7) — what is placeholder
 
-- **"Jelena Marković" renders as a tofu box on the web build, today.** Not caused
-  by the generator; found by it. Noto Sans JP carries the entire web build's text
-  (the named system faces resolve to nothing in a browser) and it has **no**
-  c-acute, c-caron, s-caron or z-caron — only Latin-1, so Finnish ä/ö are fine.
-  The font subset gate only scans locale CSVs and code strings, so a name living
-  in `content/era1-slice-v1.json` was never checked. Two fixes are possible and
-  both are Art/Content calls: bundle a Latin face that covers Latin Extended-A,
-  or extend the gate to scan authored content and accept renaming. Generated
-  Balkan surnames dodge it for now by using diacritic-free real names.
+- **CORRECTION: the tofu bug I reported did not exist.** I claimed "Jelena
+  Marković" rendered as boxes on the web build. It does not. Godot's own
+  built-in font carries Latin Extended-A, and that face is what the web build
+  falls through to when SystemFont finds no operating system to ask — which is
+  exactly how the original Japanese tofu bug was diagnosed. I proved the
+  bundled subset lacked c-acute, then asserted a rendering failure I never
+  observed, and renamed six generated surnames to satisfy it.
+  The real defect was in the GATE: `build-font-subset.py` demanded the
+  Japanese subset cover every codepoint the project can emit, including ones
+  the engine already draws. It now subtracts Godot's own coverage, generated
+  by `tools/dump-builtin-font-coverage.gd` into a committed list.
+  Two consequences, both good: the subset fell from 171.7 KB to 96.5 KB per
+  face, and the surnames are spelled properly again. Regenerate that list
+  after a Godot version bump — it is engine-version-specific.
 - **Placeholder names, flat pools.** No weighting by era, age or district; a
   1950s-born Finn is as likely as a 1980s one. Fine for churn, wrong for texture.
 - **Six portraits for unlimited people.** Generated crew recycle the six drawn

@@ -42,13 +42,13 @@ const FAMILY := {
 		"Nieminen", "Peltola", "Rantanen", "Saarinen", "Toivonen", "Virtanen"],
 	"so": ["Ahmed", "Dirie", "Hassan", "Jama", "Osman", "Warsame"],
 	"vi": ["Bui", "Dang", "Ho", "Le", "Pham", "Tran", "Vu"],
-	# Diacritic-free on purpose. Noto Sans JP carries the whole web build's
-	# text and has no c-acute, c-caron, s-caron or z-caron, so the obvious
-	# -ic and -ac endings would render as tofu boxes on a phone. These are
-	# real South Slavic surnames that need no glyph the font lacks.
-	# The authored cast's own "Jelena Marković" has the same problem today
-	# and is filed in QUEUE.md; it needs a font decision, not a rename.
-	"yu": ["Bogdanov", "Horvat", "Jovanov", "Novak", "Petrov", "Vukov"],
+	# Spelled properly, with the diacritics. Godot's own built-in font carries
+	# Latin Extended-A and is what the web build falls through to, so these
+	# draw correctly; the bundled Japanese subset never needed to cover them.
+	# These names were briefly written without their accents because the font
+	# gate demanded the JP subset cover c-acute and I believed it rather than
+	# checking whether the glyph could be drawn. It could. See QUEUE.md.
+	"yu": ["Babić", "Ilić", "Jovanović", "Kovač", "Popović", "Savić"],
 	"ee": ["Kask", "Lepik", "Mägi", "Saar", "Tamm"],
 	"ru": ["Ivanov", "Morozov", "Petrov", "Smirnov", "Volkov"],
 }
