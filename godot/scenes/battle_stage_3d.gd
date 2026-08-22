@@ -20,7 +20,37 @@ extends SubViewportContainer
 ## inside a Control and the console can float over it exactly as before. That is
 ## the pattern `presenter_3d.gd` already uses for Arvo.
 
-const STAGE := "res://data/art/stage3d/kallio-backyard-3d-v01.glb"
+## The places a fight can happen, keyed by the battle's `scene_asset_id`.
+##
+## There used to be exactly one stage, hardcoded. A second arriving is what
+## turned that constant into a lookup — the same shape as UNIT_BY_ROLE, and for
+## the same reason: content names a place, code resolves it to a file, and
+## nothing in between gets to guess.
+const STAGE_BY_SCENE := {
+	"scene-kallio-backyard-v01": "res://data/art/stage3d/kallio-backyard-3d-v01.glb",
+	"scene-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
+}
+
+## Used when a battle names a scene nothing has been built for. Unlike the unit
+## fallback this one is quiet on purpose: a fight in the wrong yard is still a
+## fight, where a fighter with no body is a bug you need to see.
+const STAGE_FALLBACK := "res://data/art/stage3d/kallio-backyard-3d-v01.glb"
+
+## Set by DebugEntry from ?stage=, so a new arena can be walked onto without
+## content having placed it anywhere yet. CLAUDE.md rule 6: a mode you cannot
+## reach from a phone in under thirty seconds is not finished.
+static var stage_override: String = ""
+
+
+## Which place this is, handed over by formation_battle at mount. Empty means
+## nobody said, and the fallback yard is used.
+var scene_asset_id: String = ""
+
+
+static func stage_path(scene_asset_id: String) -> String:
+	if stage_override != "":
+		return String(STAGE_BY_SCENE.get(stage_override, STAGE_FALLBACK))
+	return String(STAGE_BY_SCENE.get(scene_asset_id, STAGE_FALLBACK))
 ## A model PER ROLE. Every unit used to be the muscle recoloured, which made a
 ## 3v3 six copies of one person — the same failure the 2D board had before the
 ## cast sets were registered, arrived at from the opposite direction.
@@ -219,9 +249,10 @@ func _build_night() -> void:
 
 
 func _build_stage() -> void:
-	if not ResourceLoader.exists(STAGE):
+	var stage := stage_path(scene_asset_id)
+	if not ResourceLoader.exists(stage):
 		return
-	var a := (load(STAGE) as PackedScene).instantiate()
+	var a := (load(stage) as PackedScene).instantiate()
 	a.scale = Vector3(5.4, 5.4, 5.4)
 	_world.add_child(a)
 	# Global transforms are only real once the node is in the tree, and both the

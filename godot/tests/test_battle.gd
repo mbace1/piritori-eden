@@ -45,6 +45,7 @@ func _ready() -> void:
 	_test_hired_crew_can_fight()
 	_test_aftermath()
 	_test_every_role_has_a_body()
+	_test_every_stage_exists()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -393,6 +394,36 @@ func _test_equipment_from_canon() -> void:
 	# Locked equipment must not reach the field before it is earned.
 	check("the firearm is locked on day 1", not EquipmentRules.is_unlocked("first-handgun"))
 	check("the feature phone starts unlocked", EquipmentRules.is_unlocked("feature-phone"))
+
+
+## Every arena the board can name must be on disk.
+##
+## The stage fallback is deliberately QUIET — a fight in the wrong yard is still
+## a fight — which is exactly why it needs a test. A silent fallback with nothing
+## watching it is how a new arena ships as the old one and nobody notices for a
+## month.
+func _test_every_stage_exists() -> void:
+	print("\nevery arena exists")
+	var missing: PackedStringArray = []
+	for scene_id in BattleStage3D.STAGE_BY_SCENE:
+		var path := String(BattleStage3D.STAGE_BY_SCENE[scene_id])
+		if not ResourceLoader.exists(path):
+			missing.append("%s -> %s" % [scene_id, path])
+	check("every mapped arena is a file that exists", missing.is_empty(),
+		" ".join(missing))
+	check("the fallback yard exists too",
+		ResourceLoader.exists(BattleStage3D.STAGE_FALLBACK))
+
+	# The override is what makes a new arena reachable before content places it,
+	# so it has to actually override.
+	BattleStage3D.stage_override = "scene-hermanni-skatepark-v01"
+	var forced := BattleStage3D.stage_path("scene-kallio-backyard-v01")
+	BattleStage3D.stage_override = ""
+	check("?stage= wins over what the battle asked for",
+		forced == String(BattleStage3D.STAGE_BY_SCENE["scene-hermanni-skatepark-v01"]))
+	check("and clearing it gives the battle its own yard back",
+		BattleStage3D.stage_path("scene-kallio-backyard-v01")
+			== String(BattleStage3D.STAGE_BY_SCENE["scene-kallio-backyard-v01"]))
 
 
 ## Every role the game can produce must have a model on disk.

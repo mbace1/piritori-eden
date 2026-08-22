@@ -14,6 +14,7 @@ extends Node
 ##     ?cash=9000                       afford something
 ##     ?rows=4&lanes=4                  try a bigger board (canon is 3x3)
 ##     ?hud=1                           show the debug HUD
+##     ?stage=scene-hermanni-skatepark-v01  fight in a named arena
 ##     ?lang=ja                         start in a language
 ##
 ## On the web these are query parameters. On desktop the same keys are command
@@ -144,6 +145,12 @@ func apply_to_campaign() -> PackedStringArray:
 			get_int("rows", FightBoard.rows), get_int("lanes", FightBoard.lanes))
 		if note != "":
 			log.append(note)
+
+	# A new arena arrives as art long before content decides where it sits.
+	# Without this it could only be seen by editing a constant.
+	if has("stage"):
+		BattleStage3D.stage_override = get_str("stage")
+		log.append("stage " + get_str("stage"))
 
 	if has("lang"):
 		Loc.set_language(get_str("lang"))

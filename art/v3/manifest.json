@@ -1326,6 +1326,22 @@
       "baked_ui": false,
       "note": "Six clips on the hired rig: Walking, Running, falling_down, Block6, Draw_and_Shoot_Left, bicep_curl. NOT yet wired - the board loads four named states (idle, attack, hit, dead) from cast3d/clips/ and these carry neither those names nor an idle. Kept because the file is cheap once stripped and the mapping is a small job. Meshy ships each clip set as a complete character carrying the texture twice; both copies removed, 12.3MB to 0.7MB, and the character already has its own.",
       "sha256": "daecd2ccd677b15f6db70f6b11a7b9184ec4a7714c7b041effc494210b5f9cf6"
+    },
+    {
+      "id": "stage3d-hermanni-skatepark-v01",
+      "file": "stage3d/hermanni-skatepark-v01.glb",
+      "kind": "mesh-3d",
+      "source": "Meshy text-to-3D, supplied as a textured glb",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "stage-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "2f1441a4095e4af6c624f7d101b408b5bb1cf33501a3d731e22f1226425c7f85",
+      "note": "Concrete skate park: graffitied ramps and a bowl, weeds through the cracks, a road along one edge. 15882 triangles, one material. CANON NOTE: Hermanni is OUTSIDE the locked Era I production boundary (MAP.md 4.1 puts Vallila at the northern and eastern edge), so this is registered as art and is NOT placed at any anchor. Reachable through ?stage= until someone rules on where it belongs. Base colour was 2048 and the ORM map 4096; both to 1024 by art-src/tools/strip_glb_texture.py, 16.4MB to 2.8MB."
     }
   ]
 }

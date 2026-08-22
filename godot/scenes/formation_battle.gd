@@ -244,6 +244,9 @@ func _build() -> void:
 	# strength of one prototype.
 	if use_3d:
 		_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
+		# Told WHERE it is before it is in the tree, because the stage picks its
+		# model in _ready and cannot ask afterwards.
+		_stage3d.scene_asset_id = _stage_id
 		_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
 		_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_board.add_child(_stage3d)

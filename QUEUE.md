@@ -317,3 +317,34 @@ failure says what it is.
   starts loading them must handle the empty case.
 - **Its stats are a guess** (DESIGN_LOCKS §13): condition 9, nerve 5, tempo 5,
   wage 14 — cheap, sturdy and easily rattled. Never playtested.
+
+## The skate park arena — a canon decision nobody has made
+
+`stage3d-hermanni-skatepark-v01` is registered art and is **placed nowhere**.
+
+**Hermanni is outside the locked Era I production boundary.** `MAP.md` §4.1 puts
+Vallila at the northern and eastern edge; Hermanni is the district beyond it.
+The twelve anchors do not include it. Three ways forward, and this is a Design
+call, not an Engine one:
+
+1. **Extend the boundary** to take in Hermanni. Real cost: `MAP.md` calls the
+   boundary locked, and the map geometry, edges and travel times all assume it.
+2. **Re-site the arena** at an anchor already in bounds. Alppiharju (Brahen
+   kenttä, sports ground) and Vallila (industrial edge) both plausibly hold a
+   concrete skate park in 2003. The model itself is generic — graffitied ramps,
+   a bowl, a road along one edge — and only the asset id says Hermanni.
+3. **Leave it as a proving ground** reachable by `?stage=` and never placed.
+
+Until someone rules, it is reachable and unplaced, which is honest but means it
+is in the download without being in the game.
+
+Also open on it:
+
+- **Scale is inherited, not measured.** `_build_stage()` scales every arena by a
+  hardcoded 5.4, chosen for the backyard. The skate park is a different size in
+  its own units, and `_measure_ground()` will find a floor either way — but
+  whether the board sits sensibly inside the bowl has been reasoned about, not
+  watched. `STAGE_SPEC.md` §1.1 wants the floor 1.22x the arena.
+- **The ORM map may not be wanted.** It came at 4096 and is now 1024, but the
+  stage is lit stylistically. If the shader ignores it, that is another 0.7MB
+  doing nothing.
