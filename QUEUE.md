@@ -392,3 +392,25 @@ between this arena and the Hermanni one, which is still unplaced.
   claim or acts on it.
 - **The street cast is three men and the enforcer a fourth.** The generator
   rolls women into `hired`; they will wear one of three male bodies.
+
+## Telegraphs are live — what Phase A still lacks
+
+`PHASING.md` Phase A wants "telegraphs that make Into the Breach readability
+real". The live read is now on screen. The rest of Phase A is not:
+
+- **Board hazards and cover.** Content authors `cover` per battle (stone bin,
+  bicycle rack, porttikongi edge) and the builder mirrors props onto both
+  half-boards, but nothing in the telegraph or the command bar tells the player
+  what standing behind one does. Cover that is invisible to the decision is
+  scenery.
+- **Third-party entry.** Decision 3c — cops arriving mid-fight, a rival crew
+  turning up. Nothing exists.
+- **Forecast before commitment.** Encounters have `forecast` strings and show
+  them; the FIGHT has no equivalent. You commit a crew to a battle without a
+  read on what it will cost.
+- **The telegraph does not say how hard.** Risk band drives colour only. "Will
+  swing at your lane 2" in orange is better than nothing and still not Into the
+  Breach, where you see the number.
+- **Intel is never explained.** `target_lane == -1` renders as "aim unclear",
+  which is honest, but nothing tells the player what raises intel or that a
+  watcher's `intent-reading` is what buys the read.

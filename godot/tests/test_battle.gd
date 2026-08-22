@@ -48,6 +48,7 @@ func _ready() -> void:
 	_test_every_stage_exists()
 	_test_unit_variants()
 	_test_ground_fill()
+	_test_telegraphs()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -458,6 +459,64 @@ func _test_ground_fill() -> void:
 		BattleStage3D.GROUND_DROP > 0.0)
 	check("but not so far down it shows a step",
 		BattleStage3D.GROUND_DROP < 0.1)
+
+
+## Telegraphs — PHASING.md Phase A, "readability made real".
+##
+## The bug being fixed is a panel that told the player the same thing every
+## round: it printed the AUTHORED intent string out of content, which is fixed
+## for the whole battle. So the thing to assert is that the live read actually
+## MOVES — a telegraph that never changes is decoration, and the player cannot
+## tell it apart from one that does until they have lost a fight to it.
+func _test_telegraphs() -> void:
+	print("\nthe opposition telegraphs its round")
+	var f := FightManager.new()
+	var errs: Array = f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	check("a fight opens", errs.is_empty(), str(errs))
+
+	var first: Array = f.get_opposition_intents()
+	check("the opposition declares before acting", not first.is_empty())
+
+	var complete := true
+	for rec in first:
+		if String(rec.fighter_id) == "":
+			complete = false
+		if not ["low", "medium", "high", "lethal"].has(String(rec.risk_band)):
+			complete = false
+	check("every read names a person and a risk band", complete)
+
+	# -1 means intel is too low to read the aim. It is a real state and must be
+	# preserved rather than clamped to lane 0, which would show the player a
+	# confident lie.
+	var lanes_sane := true
+	for rec in first:
+		var lane := int(rec.target_lane)
+		if lane < -1 or lane >= FightBoard.lanes:
+			lanes_sane = false
+	check("a declared lane is either real or honestly unknown", lanes_sane)
+
+	# The one that matters: does it change?
+	var fingerprint := func(rows: Array) -> String:
+		var out := ""
+		for r in rows:
+			out += "%s:%d:%d;" % [r.fighter_id, int(r.likely_type), int(r.target_lane)]
+		return out
+	var before: String = fingerprint.call(first)
+	var moved := false
+	for _i in 12:
+		if f.result != FightManager.BattleResult.PENDING:
+			break
+		# Advance one round the way resolve_to_end does: confirm what is on the
+		# table, or move into the phase where commands are taken.
+		if f.phase == FightManager.Phase.COMMAND:
+			f.confirm_commands()
+		else:
+			f._transition_phase(FightManager.Phase.COMMAND)
+		var now: String = fingerprint.call(f.get_opposition_intents())
+		if now != before:
+			moved = true
+			break
+	check("and the read changes as the fight does", moved)
 
 
 ## Every arena the board can name must be on disk.

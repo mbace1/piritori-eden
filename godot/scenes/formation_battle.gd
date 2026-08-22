@@ -748,13 +748,89 @@ func _refresh() -> void:
 
 	for c in _intent_box.get_children():
 		c.queue_free()
-	for intent in BattleBuilder.opponent_intents(battle_id):
-		var l := _label("%s: %s" % [intent["name"], intent["intent"]], 12, MapStyle.METRO)
-		_intent_box.add_child(l)
+	_build_telegraphs()
 
 	_build_crew_column()
 	_build_action_column()
 	_build_auto_column()
+
+
+## TELEGRAPHS — what the opposition is about to do, this round.
+##
+## PHASING.md Phase A asks for "telegraphs that make Into the Breach readability
+## real", and the gate on that phase is whether you would voluntarily fight ten
+## of these. You would not, if committing is guesswork.
+##
+## The panel used to print BattleBuilder.opponent_intents(), which reads the
+## AUTHORED intent string out of content — "secure receipts", "pin front". That
+## is flavour, it is fixed for the whole battle, and it says nothing about what
+## happens if you stand where you are standing. Meanwhile the fight was already
+## computing a live IntentRecord every round — likely action, target lane, risk
+## band — and throwing it away. This spends it.
+##
+## Both are shown: the authored line gives the person a motive, the live line
+## gives the round a threat.
+func _build_telegraphs() -> void:
+	var authored: Dictionary = {}
+	for a in BattleBuilder.opponent_intents(battle_id):
+		authored[String(a["id"])] = String(a["intent"])
+
+	var live: Array = fight.get_opposition_intents()
+	if live.is_empty():
+		# Before the first intent phase there is genuinely nothing to report.
+		# Saying so beats an empty panel that reads as a broken one.
+		_intent_box.add_child(_label(tr("battle.no_read_yet"), 12, PiritoriPalette.TEXT_DIM))
+		return
+
+	for rec in live:
+		var f := _fighter(String(rec.fighter_id))
+		if f == null:
+			continue
+		var name := f.display_name
+		_intent_box.add_child(_label(name, 12, MapStyle.METRO))
+
+		var motive := String(authored.get(String(rec.fighter_id), ""))
+		if motive != "":
+			_intent_box.add_child(_label("   " + motive, 11, PiritoriPalette.TEXT_DIM))
+
+		_intent_box.add_child(_label("   " + _telegraph_line(rec), 12,
+			_risk_colour(String(rec.risk_band))))
+
+
+## One line: what they will do, and where. Lane is 1-based for the player, who
+## is not counting from zero.
+func _telegraph_line(rec) -> String:
+	var verb := tr(_intent_verb(int(rec.likely_type)))
+	if int(rec.likely_type) != FightManager.Command.Type.ATTACK:
+		return verb
+	# target_lane is -1 when intel is too low to read the aim. That is a real
+	# state, not a missing value: not knowing IS the information, and printing
+	# lane -1 would be a lie dressed as data.
+	if int(rec.target_lane) < 0:
+		return "%s · %s" % [verb, tr("battle.aim_unknown")]
+	return "%s · %s" % [verb, tr("battle.aim_lane") % (int(rec.target_lane) + 1)]
+
+
+func _intent_verb(t: int) -> String:
+	match t:
+		FightManager.Command.Type.ATTACK: return "battle.intent_attack"
+		FightManager.Command.Type.GUARD: return "battle.intent_guard"
+		FightManager.Command.Type.REPOSITION: return "battle.intent_move"
+		FightManager.Command.Type.ITEM: return "battle.intent_item"
+		FightManager.Command.Type.STAND_DOWN: return "battle.intent_stand_down"
+		FightManager.Command.Type.WITHDRAW: return "battle.intent_withdraw"
+	return "battle.intent_attack"
+
+
+## Risk is the whole point of a telegraph, so it is carried by colour as well as
+## by the word — a player scanning the panel should feel the lethal one before
+## reading it.
+func _risk_colour(band: String) -> Color:
+	match band:
+		"lethal": return PiritoriPalette.DANGER_RED
+		"high": return PiritoriPalette.MISSION_ORANGE
+		"medium": return PiritoriPalette.INTEL_MUSTARD
+	return PiritoriPalette.TEXT_DIM
 
 
 func _phase_word() -> String:

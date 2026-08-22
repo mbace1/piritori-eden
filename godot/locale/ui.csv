@@ -140,3 +140,12 @@ aftermath.status_shaken,shaken,järkyttynyt,動揺している
 aftermath.status_routed,ran,juoksi,逃げた
 aftermath.status_missing,did not come back,ei tullut takaisin,戻らなかった
 aftermath.status_dead,dead,kuollut,死亡
+battle.no_read_yet,No read on them yet.,Ei vielä lukemaa heistä.,まだ読めない。
+battle.intent_attack,will swing,lyö,殴りかかる
+battle.intent_guard,is bracing,suojautuu,身構える
+battle.intent_move,is moving,siirtyy,動く
+battle.intent_item,will use something,käyttää jotain,何かを使う
+battle.intent_stand_down,is backing off,perääntyy,引き下がる
+battle.intent_withdraw,is leaving,lähtee,立ち去る
+battle.aim_lane,at your lane %d,kaistallesi %d,第%dレーンを狙う
+battle.aim_unknown,aim unclear,tähtäys epäselvä,狙いは不明
