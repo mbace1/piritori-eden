@@ -1,3 +1,4 @@
+class_name BattleStage3D
 extends SubViewportContainer
 ## The battle board, in 3D.
 ##
@@ -20,7 +21,29 @@ extends SubViewportContainer
 ## the pattern `presenter_3d.gd` already uses for Arvo.
 
 const STAGE := "res://data/art/stage3d/kallio-backyard-3d-v01.glb"
-const UNIT  := "res://data/art/cast3d/muscle-walk-v01.glb"
+## A model PER ROLE. Every unit used to be the muscle recoloured, which made a
+## 3v3 six copies of one person — the same failure the 2D board had before the
+## cast sets were registered, arrived at from the opposite direction.
+##
+## Chosen on SILHOUETTE: a slab, a round one, a long coat, a thin vertical, a
+## hood and a medium build. On a 3D board a role is identified by its shape.
+const UNIT_BY_ROLE := {
+	"driver":  "res://data/art/cast3d/driver-v01.glb",
+	"fixer":   "res://data/art/cast3d/fixer-v01.glb",
+	"local":   "res://data/art/cast3d/local-v01.glb",
+	"muscle":  "res://data/art/cast3d/muscle-v01.glb",
+	"runner":  "res://data/art/cast3d/runner-v01.glb",
+	"watcher": "res://data/art/cast3d/watcher-v01.glb",
+}
+
+## Used when a fighter carries a role nothing has been modelled for. Loud rather
+## than silent: a missing role should look like the wrong person, not like a
+## person who happens to be the muscle.
+const UNIT_FALLBACK := "res://data/art/cast3d/muscle-v01.glb"
+
+
+static func unit_path(role: String) -> String:
+	return String(UNIT_BY_ROLE.get(role, UNIT_FALLBACK))
 
 ## Fight clips, keyed by what a fighter is DOING. They arrive as separate glbs
 ## because that is how Meshy delivers them; their animations are lifted onto the
@@ -343,8 +366,6 @@ func refresh(acting_id: String = "") -> void:
 	for c in _units.get_children():
 		c.queue_free()
 	_unit_nodes.clear()
-	if not ResourceLoader.exists(UNIT):
-		return
 	var sh := Shader.new()
 	sh.code = RECOLOUR
 	var i := 0
@@ -352,7 +373,10 @@ func refresh(acting_id: String = "") -> void:
 		for f in fight.get_fighters(side):
 			if f == null:
 				continue
-			var n := (load(UNIT) as PackedScene).instantiate()
+			var path := unit_path(String(f.role))
+			if not ResourceLoader.exists(path):
+				continue
+			var n := (load(path) as PackedScene).instantiate()
 			n.position = cell_world(f.slot.x, f.slot.y)
 			n.scale = Vector3(0.60, 0.60, 0.60)
 			# Face the other side across the board.
@@ -375,12 +399,16 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 	var m0 := mi.mesh.surface_get_material(0)
 	if m0 is BaseMaterial3D:
 		tex = (m0 as BaseMaterial3D).albedo_texture
+	# Each role now has its own model, so the recolour's job changed: it no
+	# longer has to invent six different people out of one mesh, only to tell
+	# apart two hirelings of the SAME role. A gentle shift keeps the role's own
+	# colours recognisable — a driver who is bright purple is not a driver.
 	var seed_v := float(abs(hash(f.fighter_id)) % 1000) / 1000.0
 	var mat := ShaderMaterial.new()
 	mat.shader = sh
 	mat.set_shader_parameter("base", tex)
-	mat.set_shader_parameter("jacket_shift", seed_v)
-	mat.set_shader_parameter("trouser_shift", fmod(seed_v * 2.7, 1.0))
+	mat.set_shader_parameter("jacket_shift", seed_v * 0.16 - 0.08)
+	mat.set_shader_parameter("trouser_shift", seed_v * 0.20 - 0.10)
 	# Downed and routed units read as darker rather than absent.
 	mat.set_shader_parameter("dim",
 		0.45 if not f.is_active() else 1.0)

@@ -55,7 +55,15 @@ def pad4(b: bytes, fill: bytes) -> bytes:
     return b + fill * ((4 - len(b) % 4) % 4)
 
 
-def strip(src: str, dst: str) -> None:
+def strip(src: str, dst: str, resize: int = 0) -> None:
+    """resize > 0 keeps the texture but shrinks it to that many pixels square.
+
+    Removing the image is right for an ANIMATION clip, which only needs to bring
+    its motion — the character already has a texture. It is wrong for a
+    CHARACTER, where the texture is the difference between six people. Meshy
+    returns those at 2048 square, which is far more than a figure a hundred
+    pixels tall on screen can show.
+    """
     js, binary = read_glb(src)
     images = js.get("images", [])
     if not images:
@@ -65,6 +73,22 @@ def strip(src: str, dst: str) -> None:
 
     drop = {im["bufferView"] for im in images if "bufferView" in im}
 
+    # In resize mode nothing is dropped; the image bytes are replaced in place
+    # and the views after it shift by the difference.
+    replace = {}
+    if resize > 0:
+        from PIL import Image
+        import io as _io
+        for im in images:
+            bv = js["bufferViews"][im["bufferView"]]
+            raw = binary[bv.get("byteOffset", 0): bv.get("byteOffset", 0) + bv["byteLength"]]
+            pic = Image.open(_io.BytesIO(raw)).convert("RGB")
+            pic = pic.resize((resize, resize), Image.LANCZOS)
+            buf = _io.BytesIO()
+            pic.save(buf, "PNG", optimize=True)
+            replace[im["bufferView"]] = buf.getvalue()
+        drop = set()
+
     # Rebuild the BIN chunk without the dropped views, remembering where each
     # surviving view moved to.
     views = js.get("bufferViews", [])
@@ -73,9 +97,10 @@ def strip(src: str, dst: str) -> None:
         if i in drop:
             continue
         start = v.get("byteOffset", 0)
-        chunk = binary[start:start + v["byteLength"]]
-        moved[i] = len(keep)
+        chunk = replace.get(i) or binary[start:start + v["byteLength"]]
         v = dict(v)
+        v["byteLength"] = len(chunk)
+        moved[i] = len(keep)
         v["byteOffset"] = len(out)
         keep.append(v)
         out += chunk
@@ -92,16 +117,22 @@ def strip(src: str, dst: str) -> None:
 
     js["bufferViews"] = keep
     js["buffers"] = [{"byteLength": len(out)}]
-    js.pop("images", None)
-    js.pop("samplers", None)
-    js.pop("textures", None)
-    for m in js.get("materials", []):
-        pbr = m.get("pbrMetallicRoughness", {})
-        pbr.pop("baseColorTexture", None)
-        pbr.pop("metallicRoughnessTexture", None)
-        m.pop("normalTexture", None)
-        m.pop("emissiveTexture", None)
-        m.pop("occlusionTexture", None)
+    if resize <= 0:
+        js.pop("images", None)
+        js.pop("samplers", None)
+        js.pop("textures", None)
+        for m in js.get("materials", []):
+            pbr = m.get("pbrMetallicRoughness", {})
+            pbr.pop("baseColorTexture", None)
+            pbr.pop("metallicRoughnessTexture", None)
+            m.pop("normalTexture", None)
+            m.pop("emissiveTexture", None)
+            m.pop("occlusionTexture", None)
+    else:
+        for im in js.get("images", []):
+            if "bufferView" in im:
+                im["bufferView"] = moved[im["bufferView"]]
+                im["mimeType"] = "image/png"
 
     js_bytes = pad4(json.dumps(js, separators=(",", ":")).encode("utf-8"), b" ")
     bin_bytes = pad4(bytes(out), b"\x00")
@@ -112,11 +143,13 @@ def strip(src: str, dst: str) -> None:
         f.write(struct.pack("<II", len(bin_bytes), BIN_CHUNK) + bin_bytes)
 
     a, b = len(open(src, "rb").read()), total
-    print("%s -> %s  %.1f MB -> %.1f MB  (%d image(s) removed)"
-          % (src.split("/")[-1], dst.split("/")[-1], a / 1048576, b / 1048576, len(images)))
+    what = ("%d image(s) resized to %d" % (len(images), resize)) if resize > 0         else ("%d image(s) removed" % len(images))
+    print("%s -> %s  %.1f MB -> %.1f MB  (%s)"
+          % (src.split("/")[-1], dst.split("/")[-1], a / 1048576, b / 1048576, what))
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4):
         raise SystemExit(__doc__)
-    strip(sys.argv[1], sys.argv[2])
+    strip(sys.argv[1], sys.argv[2],
+          int(sys.argv[3]) if len(sys.argv) == 4 else 0)

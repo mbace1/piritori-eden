@@ -108,6 +108,21 @@ pick up, and half of it will turn out to be wrong.
   2D code fakes; in 3D it wants an orthographic camera actually set to it.
 - **Six arenas and six cast sets become reference art**, not runtime art.
 
+## The 3D cast, now that it exists
+
+- **The night grade eats them.** Six models are on the board and four wear dark
+  clothes; at battle scale under the current lighting they read as six dark
+  shapes rather than six people. The silhouettes differ, which was the point of
+  choosing them that way — but the fixer's coat, the local's maroon and the
+  driver's hi-vis should be legible and are not. A rim light, or lifting the
+  ambient on units only, is the likely fix.
+- **Only the muscle has fight clips.** idle / attack / hit / dead are lifted
+  onto any rig, so the other five play them — but they were authored against the
+  muscle's proportions and may read oddly on the round local or the lanky
+  watcher.
+- **The 2D cast sets are now reference art.** They still ship and PoseArt still
+  resolves them; nothing draws them while `use_3d` is on.
+
 ## 3D units (see PHASING 1.06)
 
 - **`art/v3/cast3d/` is staged but NOT registered.** Two rigged glbs sit there

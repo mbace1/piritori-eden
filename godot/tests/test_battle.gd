@@ -142,6 +142,16 @@ board shape (one number, not four)")
 		var t := PoseArt.texture(r, "idle-smile")
 		if t != null:
 			art_paths[t.resource_path] = true
+	# The 3D board must not repeat the 2D board's mistake from the other side:
+	# every unit drawn as one recoloured model is six copies of one person.
+	var seen3d := {}
+	for r in roles:
+		var q := BattleStage3D.unit_path(r)
+		check("%s has its own 3D model" % r, ResourceLoader.exists(q), q)
+		seen3d[q] = true
+	check("the six roles are six different models",
+		seen3d.size() == roles.size(), "distinct models: %d" % seen3d.size())
+
 	check("the six roles are six different figures",
 		art_paths.size() == roles.size(),
 		"distinct textures: %d" % art_paths.size())
