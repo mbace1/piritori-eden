@@ -27,6 +27,7 @@ func _ready() -> void:
 	_test_profitable_first_sale()
 	_test_block_clock()
 	_test_save_round_trip()
+	_test_careers()
 	_test_every_reference_resolves()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -197,6 +198,84 @@ func _test_save_round_trip() -> void:
 	check("resolved encounter restored", GameState.is_resolved("enc-first-purchase"))
 	eq("schema version stored", int(expected["schema_version"]), GameState.SCHEMA_VERSION)
 	check("content package id stored", String(expected["content_package_id"]) != "")
+
+
+## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a
+## permanent super-squad and the roster stops being a conveyor belt.
+func _test_careers() -> void:
+	print("
+careers (COMBAT.md 7)")
+	GameState.new_campaign()
+
+	var hired := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if not GameState.is_named(cid):
+			hired = cid
+			break
+	check("the slice has a hired crew member to age", hired != "", hired)
+	if hired == "":
+		return
+
+	check("a new hire has no fights behind them", GameState.fights_of(hired) == 0)
+	check("and a full career ahead",
+		GameState.career_left(hired) == GameState.CAREER_FIGHTS)
+	check("their counter is hidden while they are new",
+		not GameState.career_is_visible(hired))
+
+	var deployed := PackedStringArray([hired])
+	for i in range(GameState.CAREER_WARN_AT):
+		GameState.age_crew(deployed)
+	check("the counter appears once they are close",
+		GameState.career_is_visible(hired),
+		"%d fights" % GameState.fights_of(hired))
+
+	# Run them to the ceiling. They must LEAVE, and leave ALIVE — two exits, and
+	# one of them being "they got out" is the point.
+	var left := PackedStringArray()
+	for i in range(GameState.CAREER_FIGHTS):
+		var out := GameState.age_crew(deployed)
+		if not out.is_empty():
+			left = out
+			break
+	check("reaching the ceiling ends the career", left.has(hired), str(left))
+	check("they retired rather than died", GameState.retired_crew.has(hired))
+	check("and the death count did not move", GameState.crew_deaths == 0)
+	check("they are out of the roster", not GameState.roster.has(hired))
+	check("but the city remembers them",
+		Array(GameState.memories).has("retired:" + hired))
+
+	# Ageing them again must not double-retire or resurrect the career.
+	var again := GameState.age_crew(deployed)
+	check("a retired veteran cannot be spent again", again.is_empty())
+
+	# A retired veteran trains the next one (§7.4, 7b).
+	var rookie := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if cid != hired and not GameState.is_named(cid):
+			rookie = cid
+			break
+	if rookie != "":
+		check("a veteran starts the next one ahead", GameState.train(rookie))
+		check("and the rookie has a shorter career for it",
+			GameState.career_left(rookie) < GameState.CAREER_FIGHTS)
+		check("but only once", not GameState.train(rookie))
+
+	# A named character has no ceiling: they leave in authored beats, never by
+	# attrition, and NARRATIVE.md decides when.
+	var named := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		if bool(c.get("named", false)):
+			named = String(c.get("id", ""))
+			break
+	if named != "":
+		check("a named character has no career ceiling",
+			GameState.career_left(named) == -1)
+		GameState.age_crew(PackedStringArray([named]))
+		check("and cannot be aged out", not GameState.retired_crew.has(named))
+
+	GameState.new_campaign()
 
 
 func _test_every_reference_resolves() -> void:

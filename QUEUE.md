@@ -54,6 +54,20 @@ pick up, and half of it will turn out to be wrong.
   ("front rank first, then middle") literally, and on a wide board that rule
   produces a flat line. Worth revisiting.
 
+## Careers, now that they exist (COMBAT.md 7)
+
+- **No crew member is marked `named` in the slice.** `is_named()` reads a
+  `named` flag on the crew record and nothing sets it, so every hire currently
+  ages out — including anyone the story needs later. The two-tier casting is
+  built and the content has not caught up.
+- **Ten is a playtest gate, not canon.** `CAREER_FIGHTS` is the owner's figure
+  from conversation. `DESIGN_LOCKS` §13 forbids hardening a placeholder.
+- **Nothing recruits.** Retirement removes people from the roster and there is
+  no pipeline putting them back, so a long campaign runs the crew down to
+  nothing. `NARRATIVE.md` already says Piritori is the cheapest source of hired
+  operatives — that is where the loop closes.
+- **Training is a flat two fights.** It should probably depend on who taught it.
+
 ## Open question for the owner
 
 - **Should the full grid be permanently visible?** `GDD` §13.3 says only

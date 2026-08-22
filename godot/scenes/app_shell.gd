@@ -792,8 +792,39 @@ func _show_battle(battle_id: String) -> void:
 	if not errs.is_empty():
 		_rail_box.add_child(_make_label(str(errs), 13, PiritoriPalette.DANGER_RED))
 		return
-	scene.battle_finished.connect(func(_result): _show_city())
+	# A fight is where a career is spent (COMBAT.md §7.2). Everyone who was
+	# deployed comes out one fight older, and whoever reached the ceiling leaves
+	# — alive. Done HERE, once, when the battle settles: doing it inside the
+	# fight would age a crew every time a round resolved.
+	var deployed := PackedStringArray(crew)
+	scene.battle_finished.connect(func(_result):
+		var left := GameState.age_crew(deployed)
+		if not left.is_empty():
+			_report_retirements(left)
+		else:
+			_show_city())
 	_rail.visible = false
+
+
+## Somebody got out. §7.2: most tactics games have one exit, and two — with one
+## of them being "they got out" — is what makes benching a veteran a decision
+## rather than hoarding. It deserves to be said rather than logged.
+func _report_retirements(left: PackedStringArray) -> void:
+	_show_city()
+	_clear_rail()
+	_rail.visible = true
+	_rail_box.add_child(_make_label(tr("crew.retired"), 19, MapStyle.TITLE_TEXT))
+	for id in left:
+		var c := ContentRegistry.crew_member(String(id))
+		var nm := String(c.get("display_name", id))
+		_rail_box.add_child(_make_label(nm, 15, PiritoriPalette.PUBLIC_BLUE))
+		var l := _make_label(tr("crew.retired_note"), 12, PiritoriPalette.TEXT_DIM)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(l)
+	_rail_box.add_child(_separator())
+	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
+	back.pressed.connect(_show_city)
+	_rail_box.add_child(back)
 
 
 ## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its

@@ -19,7 +19,7 @@ signal slice_completed
 signal battle_requested(battle_id: String, negotiation_open: bool)
 signal ending_resolved(ending_id: String)
 
-const SCHEMA_VERSION := 2
+const SCHEMA_VERSION := 3
 
 ## Era I interface lock (SCREEN_AND_COMBAT_BASELINE): the fixed historical rate.
 const MARKKA_PER_EURO := 5.94573
@@ -67,6 +67,33 @@ var ending_id: String = ""                  ## authored ending, once resolved
 ## wound left unresolved when the slice settles kills; anything resolved does
 ## not; and nothing else in Era I can raise this.
 var crew_deaths: int = 0
+
+# ── careers (COMBAT.md §7) ─────────────────────────────────────────────────
+## Fights each crew member has come through, by id. A career is bounded: a
+## hireling grows for a few fights and then leaves, one way or the other.
+var crew_fights: Dictionary = {}
+
+## Who has left the crew alive, and is now somebody in the city who knows what
+## you did (§7.4). They train a rookie and they remember.
+var retired_crew: PackedStringArray = []
+
+## Rookies who started ahead because a veteran trained them (§7.4, 7b).
+var trained_crew: PackedStringArray = []
+
+## CAREER CEILING — the owner's figure, and a PLAYTEST GATE rather than canon
+## (`DESIGN_LOCKS.md` §13 forbids hardening a placeholder silently). Ten fights,
+## then retire or die.
+##
+## The ceiling is the point, not the number. Without it XP builds a permanent
+## super-squad and the roster stops being a conveyor belt — which is what the
+## churn in §7.1 depends on. Investment stays real but bounded, and cannot be
+## re-bought: money replaces a body, nothing replaces six fights.
+const CAREER_FIGHTS := 10
+
+## When the counter becomes visible (§7.3, decision 6c). Nothing is shown until
+## someone is close, then the game starts telling you — so the last fight is a
+## deliberate choice rather than a guess, which §18.1 requires.
+const CAREER_WARN_AT := 7
 var revealed: Dictionary = {}       ## content id -> true
 var resolved_encounters: Dictionary = {}  ## encounter id -> choice id
 var current_anchor_id: String = ""
@@ -118,6 +145,9 @@ func new_campaign(with_seed: int = 0) -> void:
 	battle_modifiers = {}
 	ending_id = ""
 	crew_deaths = 0
+	crew_fights = {}
+	retired_crew = PackedStringArray()
+	trained_crew = PackedStringArray()
 	revealed = {}
 	resolved_encounters = {}
 	current_anchor_id = String(campaign.get("start_anchor_id", ""))
@@ -472,6 +502,88 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 
 ## Crew on the roster and not lost. Everyone recruited counts; the slice has
 ## no removal path yet, and inventing one would be inventing consequence.
+# ── careers (COMBAT.md §7) ─────────────────────────────────────────────────
+
+## Is this person one of the story's own? Named characters are FFT story units:
+## rare, deployed deliberately, and never lost to a random alley (§7.1). They
+## have no career ceiling because they do not leave by attrition — they leave in
+## authored beats, and `NARRATIVE.md` decides when.
+##
+## Everyone else is hired, and hired crew are Mewgenics-disposable: generated,
+## genuinely expendable, and replacing them IS a loop rather than a penalty.
+func is_named(crew_id: String) -> bool:
+	return bool(ContentRegistry.crew_member(crew_id).get("named", false))
+
+
+func fights_of(crew_id: String) -> int:
+	return int(crew_fights.get(crew_id, 0))
+
+
+## Fights left before the ceiling. -1 for a named character, who has no ceiling.
+func career_left(crew_id: String) -> int:
+	if is_named(crew_id):
+		return -1
+	return maxi(CAREER_FIGHTS - fights_of(crew_id), 0)
+
+
+## §7.3, decision 6c: nothing until they are close, then the game tells you.
+## A hidden counter would turn the exact spend-or-save decision that is the
+## whole game into a guess.
+func career_is_visible(crew_id: String) -> bool:
+	if is_named(crew_id):
+		return false
+	return fights_of(crew_id) >= CAREER_WARN_AT
+
+
+## Everyone who came through a fight is one fight older. Called once when a
+## battle settles, never per round.
+##
+## Returns the ids who reached the ceiling and left — RETIRED, not dead. Two
+## exits, and one of them being "they got out" is what makes benching a veteran
+## a real decision rather than hoarding (§7.2).
+func age_crew(deployed: PackedStringArray) -> PackedStringArray:
+	var left: PackedStringArray = []
+	for id in deployed:
+		var cid := String(id)
+		if is_named(cid) or retired_crew.has(cid):
+			continue
+		crew_fights[cid] = fights_of(cid) + 1
+		if fights_of(cid) >= CAREER_FIGHTS:
+			retire(cid)
+			left.append(cid)
+	if not left.is_empty():
+		state_changed.emit()
+	return left
+
+
+## They leave the crew and stay in the city (§7.4, decisions 7b + 7c): a name in
+## a bar, someone who knows what you did — and someone who will start the next
+## rookie ahead. Training is a service the CONTACT offers, so this is one
+## mechanic rather than two.
+func retire(crew_id: String) -> void:
+	if retired_crew.has(crew_id):
+		return
+	retired_crew.append(crew_id)
+	var i := roster.find(crew_id)
+	if i >= 0:
+		roster.remove_at(i)
+	# A veteran in the city is a relationship, not a deleted row.
+	memories.append("retired:" + crew_id)
+	state_changed.emit()
+
+
+## A rookie starts ahead if there is anyone left to teach them (§7.4, 7b).
+## Bounded to one head start per rookie, and only while a veteran exists — the
+## web of people you know is the reward, so it has to be spendable.
+func train(crew_id: String) -> bool:
+	if retired_crew.is_empty() or trained_crew.has(crew_id) or is_named(crew_id):
+		return false
+	trained_crew.append(crew_id)
+	crew_fights[crew_id] = fights_of(crew_id) + 2
+	state_changed.emit()
+	return true
+
+
 func surviving_crew() -> int:
 	return maxi(roster.size() - crew_deaths, 0)
 
@@ -583,6 +695,9 @@ func to_dict() -> Dictionary:
 		"resolved_encounters": resolved_encounters,
 		"current_anchor_id": current_anchor_id,
 		"roster": Array(roster),
+		"crew_fights": crew_fights,
+		"retired_crew": Array(retired_crew),
+		"trained_crew": Array(trained_crew),
 		"temporary_crew": Array(temporary_crew),
 		"equipment_owned": Array(equipment_owned),
 		"mission_state": mission_state,
@@ -624,6 +739,9 @@ func from_dict(d: Dictionary) -> bool:
 	resolved_encounters = (d.get("resolved_encounters", {}) as Dictionary).duplicate(true)
 	current_anchor_id = String(d.get("current_anchor_id", ""))
 	roster = PackedStringArray(d.get("roster", []))
+	crew_fights = (d.get("crew_fights", {}) as Dictionary).duplicate(true)
+	retired_crew = PackedStringArray(d.get("retired_crew", []))
+	trained_crew = PackedStringArray(d.get("trained_crew", []))
 	temporary_crew = PackedStringArray(d.get("temporary_crew", []))
 	equipment_owned = PackedStringArray(d.get("equipment_owned", []))
 	mission_state = (d.get("mission_state", {}) as Dictionary).duplicate(true)

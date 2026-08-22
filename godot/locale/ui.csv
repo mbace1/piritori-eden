@@ -103,3 +103,5 @@ battle.faceoff_yours,YOUR CREW,SINUN VÄKESI,あなたの一味
 battle.faceoff_theirs,AGAINST,VASTASSA,相手
 battle.faceoff_go,LET IT HAPPEN,ANNA TAPAHTUA,始めさせる
 battle.faceoff_back,ACTUALLY FIGHT IT,TAISTELE ITSE,自分で戦う
+crew.retired,THAT WAS THE LAST ONE,SE OLI VIIMEINEN,これで最後だ
+crew.retired_note,They are out of the crew and still in the city. They will start the next one off better than you could — and they remember what you asked of them.,He ovat pois väestä mutta yhä kaupungissa. He opettavat seuraavan paremmin kuin sinä — ja muistavat mitä pyysit.,一味からは抜けたが街にはいる。次の者をあなたより上手く仕込むだろう。そして頼んだことを覚えている。
