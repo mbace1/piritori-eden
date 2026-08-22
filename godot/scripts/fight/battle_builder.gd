@@ -12,10 +12,10 @@ extends RefCounted
 ## three lanes, mirrored per side, "the grid is a rule beneath the scene rather
 ## than a permanent checkerboard".
 
-## Depth rows, shallowest first. The first three are canon and every authored
-## cell id uses them; `rear` is a placeholder for the fourth row the board grew
-## on 2026-08-21 and wants an owner's word — see FightBoard.
-const ROWS := ["front", "middle", "back", "rear"]
+## Depth rows, shallowest first, and semantic per §13.5: close pressure,
+## flexible support, long-range safety. The board grew in LANES rather than
+## rows, so this vocabulary stands and no fourth name had to be invented.
+const ROWS := ["front", "middle", "back"]
 
 ## Opponent records in the slice carry role, intent and equipment but no combat
 ## values, so the port supplies them by role. Canon leaves these open

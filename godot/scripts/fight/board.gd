@@ -20,11 +20,11 @@ extends RefCounted
 ## they are used, or the override silently does nothing — the same trap
 ## PAL.CYAN_LUX has in the arcade's Game of Life.
 
-## Depth rows per side: front, middle, back, rear.
-static var rows: int = 4
+## Depth rows per side: front, middle, back.
+static var rows: int = 3
 
 ## Lateral lanes across the board.
-static var lanes: int = 5
+static var lanes: int = 6
 
 ## Owner ruling, 2026-08-21: the board grows. `GDD` §13.3 locked 3x3 per side
 ## with 3x4 as an arena modifier, sized for a game where combat was rare
@@ -40,8 +40,8 @@ static var lanes: int = 5
 ## (close pressure / flexible / long-range safety) and "rear" does not obviously
 ## earn a fourth meaning. Authored content only uses the first three, so nothing
 ## depends on it yet. DESIGN_LOCKS §13 forbids hardening it silently.
-const CANON_ROWS := 4
-const CANON_LANES := 5
+const CANON_ROWS := 3
+const CANON_LANES := 6
 
 
 static func reset() -> void:

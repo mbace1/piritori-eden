@@ -48,6 +48,9 @@ func _ready() -> void:
 		crew.append(String(c.get("id", "")))
 		if crew.size() >= 3: break
 
+	if OS.get_environment("PIRITORI_SHOT_EXTENT") != "":
+		preload("res://scenes/formation_battle.gd").debug_extent = true
+
 	_s.begin("battle-courtyard-3v3", crew, 4242)
 
 	# A candidate background, dropped in behind the board so the composition can

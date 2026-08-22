@@ -74,13 +74,13 @@ func _test_board_shape() -> void:
 	print("
 board shape (one number, not four)")
 
-	check("canon is 5 lanes x 4 rows per side", FightBoard.is_canon(),
+	check("canon is 6 lanes x 3 rows per side", FightBoard.is_canon(),
 		"%dx%d" % [FightBoard.lanes, FightBoard.rows])
-	check("twenty cells a side", FightBoard.cell_count() == 20)
-	check("five lanes centre on lane 2", is_equal_approx(FightBoard.lane_centre(), 2.0))
-	check("the far corner is on the board", FightBoard.has_slot(4, 3))
-	check("one past it is not", not FightBoard.has_slot(5, 3))
-	check("and neither is a fifth row", not FightBoard.has_slot(0, 4))
+	check("eighteen cells a side", FightBoard.cell_count() == 18)
+	check("six lanes straddle the centre", is_equal_approx(FightBoard.lane_centre(), 2.5))
+	check("the far corner is on the board", FightBoard.has_slot(5, 2))
+	check("one past it is not", not FightBoard.has_slot(6, 2))
+	check("and neither is a fourth row", not FightBoard.has_slot(0, 3))
 
 	# An even lane count must straddle the centre line rather than sit off to
 	# one side — that is what lane_centre() is for.

@@ -95,9 +95,17 @@ func _ready() -> void:
 		atk.pressed.emit()
 		await get_tree().process_frame
 		var t := _text()
-		check("a forecast appears before confirming",
-			"harm" in t.to_lower() or "no reachable" in t.to_lower(), t.substr(0, 200))
-		check("and a Confirm step exists", _find("Confirm") != null)
+		var has_target := "harm" in t.to_lower()
+		var empty_state := "no reachable" in t.to_lower()
+		check("Attack answers, with a forecast or an honest refusal",
+			has_target or empty_state, t.substr(0, 200))
+		# Confirm belongs to a forecast. Requiring it unconditionally asserted
+		# something false: with nothing in reach there is correctly nothing to
+		# confirm, and the right behaviour is the refusal, not a dead button.
+		if has_target:
+			check("a forecast offers a Confirm step", _find("Confirm") != null)
+		else:
+			check("a refusal offers no Confirm to press", _find("Confirm") == null)
 
 	# withdrawal ends it, at a stated cost
 	var wd := _find("Withdraw")
