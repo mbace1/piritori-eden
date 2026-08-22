@@ -348,3 +348,19 @@ Also open on it:
 - **The ORM map may not be wanted.** It came at 4096 and is now 1024, but the
   stage is lit stylistically. If the shader ignores it, that is another 0.7MB
   doing nothing.
+
+## The second hired body
+
+`cast3d-hired-b-v01` — denim jacket, khaki trousers, dreadlocks, red-gold-green
+accents. Registered, wired as a `hired` variant, picked by fighter id.
+
+- **Only two clips came with it** (Walking, Running) against the first body's
+  six, and neither set is wired. Both play the muscle's idle/attack/hit/dead.
+- **It is 10390 triangles against the other hired body's 6533.** Not a problem
+  at this scale, but if a crowd of them ever shares a board it is the one to
+  look at first.
+- **Both hired bodies are men.** The generator rolls women into the role and
+  they will wear one of these two. The six specialists have the same problem in
+  reverse — one body each, so a role has one apparent gender. Neither is a bug
+  in the code; both are a gap in the cast, and `NARRATIVE.md` asks for a crew
+  that includes women and older people.

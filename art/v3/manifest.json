@@ -1342,6 +1342,40 @@
       "baked_ui": false,
       "sha256": "2f1441a4095e4af6c624f7d101b408b5bb1cf33501a3d731e22f1226425c7f85",
       "note": "Concrete skate park: graffitied ramps and a bowl, weeds through the cracks, a road along one edge. 15882 triangles, one material. CANON NOTE: Hermanni is OUTSIDE the locked Era I production boundary (MAP.md 4.1 puts Vallila at the northern and eastern edge), so this is registered as art and is NOT placed at any anchor. Reachable through ?stage= until someone rules on where it belongs. Base colour was 2048 and the ORM map 4096; both to 1024 by art-src/tools/strip_glb_texture.py, 16.4MB to 2.8MB."
+    },
+    {
+      "id": "cast3d-hired-b-v01",
+      "file": "cast3d/hired-b-v01.glb",
+      "kind": "mesh-3d",
+      "source": "Meshy 'Rasta Street Guardian' biped, supplied rigged",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "hired",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "A second HIRED body: denim jacket, khaki trousers, white striped shirt, dreadlocks, red-gold-green accents, tan boots. Identified from its UV atlas, not its filename. 10390 triangles, 24 bones - the same rig as hired-v01, which is what makes the clip library shareable. Deliberately a VARIANT rather than a new role: SPEC.md 5 keeps one mesh per specialist because the silhouette IS the role, but 'hired' means somebody off the street, so two ordinary bodies make it more itself. Texture 2048 to 512: 6.1MB becomes 0.9MB.",
+      "sha256": "cc2cf36d31a75327f2179f93a089e49b04257effcd3ffd341a48ec10f0eeb694"
+    },
+    {
+      "id": "cast3d-hired-b-clips-v01",
+      "file": "cast3d/clips/hired-b-clips-v01.glb",
+      "kind": "animation-3d",
+      "source": "Meshy 'Rasta Street Guardian' biped, supplied rigged",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "hired",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "Walking and Running on the hired-b rig. NOT wired: the board loads idle, attack, hit and dead, and these are neither. Kept because it is 0.5MB stripped and the rig matches the other hired body. Texture removed; the character carries its own.",
+      "sha256": "a6de0c4c3fae0116ce2ceeee86965ee297ba9ff28bb2e66feb62e046a8b6cba7"
     }
   ]
 }

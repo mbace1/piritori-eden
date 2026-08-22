@@ -76,7 +76,36 @@ const UNIT_BY_ROLE := {
 const UNIT_FALLBACK := "res://data/art/cast3d/muscle-v01.glb"
 
 
-static func unit_path(role: String) -> String:
+## Extra bodies a role may wear, beyond the one in UNIT_BY_ROLE.
+##
+## SPEC.md §5 says a role needs ONE mesh and that crew variety comes from the
+## free hue-band recolour. That still holds for the six specialists, where the
+## silhouette IS the role: a watcher must read as a watcher at a glance, so a
+## second watcher shape would cost more than it gave.
+##
+## `hired` is the exception, and on purpose. Its identity is "somebody off the
+## street" rather than a tactical read, so two different ordinary bodies make it
+## MORE itself, not less. Variants are free once the mesh exists — no credits, no
+## rig work — but they are only worth taking where they do not blur a role.
+const UNIT_VARIANTS := {
+	"hired": [
+		"res://data/art/cast3d/hired-v01.glb",
+		"res://data/art/cast3d/hired-b-v01.glb",
+	],
+}
+
+
+## Which body this particular person wears.
+##
+## `fighter_id` picks deterministically, so the same crew member is the same
+## person every time the board is drawn — a figure that changed shape between
+## rounds would be worse than one that repeats.
+static func unit_path(role: String, fighter_id: String = "") -> String:
+	if UNIT_VARIANTS.has(role):
+		var options: Array = UNIT_VARIANTS[role]
+		if fighter_id == "":
+			return String(options[0])
+		return String(options[absi(fighter_id.hash()) % options.size()])
 	return String(UNIT_BY_ROLE.get(role, UNIT_FALLBACK))
 
 ## Fight clips, keyed by what a fighter is DOING. They arrive as separate glbs
@@ -433,7 +462,7 @@ func refresh(acting_id: String = "") -> void:
 		for f in fight.get_fighters(side):
 			if f == null:
 				continue
-			var path := unit_path(String(f.role))
+			var path := unit_path(String(f.role), String(f.fighter_id))
 			if not ResourceLoader.exists(path):
 				continue
 			var n := (load(path) as PackedScene).instantiate()

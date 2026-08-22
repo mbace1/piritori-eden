@@ -153,6 +153,22 @@ protects skin and boots from being tinted.
 
 Do not generate a mesh per crew member. Six roles is six models.
 
+### The one exception: `hired`
+
+For the six specialists the **silhouette IS the role**. A watcher has to read as
+a watcher at a glance on a 3D board, so a second watcher shape would cost more
+than it gave — that is the whole reason the six were chosen on distinctness.
+
+`hired` is different. Its identity is *somebody off the street*, not a tactical
+read, so two different ordinary bodies make it **more** itself rather than
+blurring it. `UNIT_VARIANTS` in `battle_stage_3d.gd` holds the extras, and the
+body is picked from the fighter's id so the same person is the same shape every
+time the board redraws.
+
+Variants are free once a mesh exists — no credits, no rig work — but take them
+**only where they do not blur a role**. If a spare body turns up that does not
+fit any specialist, `hired` is where it belongs.
+
 ---
 
 ## 6. The Meshy pipeline, and what it costs

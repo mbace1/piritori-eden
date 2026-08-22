@@ -46,6 +46,7 @@ func _ready() -> void:
 	_test_aftermath()
 	_test_every_role_has_a_body()
 	_test_every_stage_exists()
+	_test_unit_variants()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -394,6 +395,45 @@ func _test_equipment_from_canon() -> void:
 	# Locked equipment must not reach the field before it is earned.
 	check("the firearm is locked on day 1", not EquipmentRules.is_unlocked("first-handgun"))
 	check("the feature phone starts unlocked", EquipmentRules.is_unlocked("feature-phone"))
+
+
+## A role may wear more than one body, and must wear the SAME one every time.
+##
+## The figure is rebuilt whenever the board redraws. If the pick were random, a
+## crew member would change shape between rounds — worse than every hire looking
+## identical, which is the problem variants exist to solve.
+func _test_unit_variants() -> void:
+	print("\nhired bodies vary, and stay put")
+	var options: Array = BattleStage3D.UNIT_VARIANTS["hired"]
+	check("there is more than one hired body", options.size() >= 2)
+
+	var all_there := true
+	for p in options:
+		if not ResourceLoader.exists(String(p)):
+			all_there = false
+	check("every variant is a file that exists", all_there)
+
+	# Same person, same body. Checked repeatedly because a hash that varies per
+	# run would pass a single comparison by luck.
+	var first := BattleStage3D.unit_path("hired", "hire-4242")
+	var stable := true
+	for _i in 20:
+		if BattleStage3D.unit_path("hired", "hire-4242") != first:
+			stable = false
+	check("the same person always wears the same body", stable)
+
+	# And the variants are actually reached — a picker that always returns the
+	# first entry would pass everything above.
+	var seen: Dictionary = {}
+	for i in 200:
+		seen[BattleStage3D.unit_path("hired", "hire-%d" % i)] = true
+	check("both bodies actually turn up across a roster",
+		seen.size() == options.size(), str(seen.size()))
+
+	# A role with no variants is untouched by any of this.
+	check("a specialist still has exactly one body",
+		BattleStage3D.unit_path("watcher", "anyone")
+			== String(BattleStage3D.UNIT_BY_ROLE["watcher"]))
 
 
 ## Every arena the board can name must be on disk.
