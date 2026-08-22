@@ -120,8 +120,34 @@ for (const file of gdFiles(root)) {
 for (const [key, file] of used) {
   if (!keys.has(key)) fail(`${file}: tr("${key}") has no row in locale/ui.csv`);
 }
+// A key can also be BUILT rather than written: tr(`equipment.${id}`) names one
+// row per content id and no literal for any of them. Collect the interpolated
+// prefixes and treat a key under one as used — the id half is checked by the
+// content gate, which is the only thing that knows the real set.
+const builtPrefixes = new Set();
+for (const file of gdFiles(root)) {
+  const src = readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/tr\("([a-z][a-z_0-9]*\.)%s"/g)) {
+    builtPrefixes.add(m[1]);
+  }
+}
+// Exempting a whole prefix would let the row for a DELETED weapon rot forever,
+// which is the same drift this check exists to catch. So a built key is only
+// accepted when the content actually declares that id — the gate keeps its
+// teeth, it just gets the real set from the slice instead of from a literal.
+const slice = JSON.parse(
+  readFileSync(join(root, '..', 'content', 'era1-slice-v1.json'), 'utf8'));
+const builtIds = {
+  'equipment.': new Set((slice.equipment ?? []).map((e) => e.id)),
+};
+const isBuilt = (key) => [...builtPrefixes].some((p) => {
+  if (!key.startsWith(p)) return false;
+  const known = builtIds[p];
+  return known ? known.has(key.slice(p.length)) : true;
+});
+
 for (const key of keys) {
-  if (!used.has(key)) fail(`locale/ui.csv: '${key}' is never used — stale key`);
+  if (!used.has(key) && !isBuilt(key)) fail(`locale/ui.csv: '${key}' is never used — stale key`);
 }
 
 if (problems) {

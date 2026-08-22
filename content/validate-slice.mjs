@@ -214,6 +214,40 @@ for (const { absolute, item, context } of artFiles) {
   }
 }
 
+// COMBAT.md §8 — the one-way door, checked where it can actually be broken.
+//
+// The rule is about MONEY, not about narrative: a story beat may hand you
+// anything, but nothing you PAY for may be taken-only gear. Without this, one
+// authored `cash:-N` choice granting a sawn-off quietly turns the capability
+// tier back into a purchase and the asymmetry is gone with no test failing.
+//
+// This is what the handgun taught: `enc-first-firearm` sells it for EUR 180, so
+// it is market gear by canon, and the gate says so rather than a comment.
+{
+  const takenOnly = new Set(
+    (content.equipment ?? [])
+      .filter((e) => (e.acquisition ?? "market") === "taken")
+      .map((e) => e.id));
+  check(takenOnly.size > 0,
+    "COMBAT.md §8 requires gear that cannot be bought; none is marked taken");
+  for (const enc of content.encounters ?? []) {
+    for (const choice of enc.choices ?? []) {
+      const effects = choice.effects ?? [];
+      const spendsCash = effects.some(
+        (e) => typeof e === "string" && /^cash:-/.test(e));
+      if (!spendsCash) continue;
+      for (const e of effects) {
+        const m = typeof e === "string" && e.match(/^equipment:\+(.+)$/);
+        if (m && takenOnly.has(m[1])) {
+          errors.push(
+            `${enc.id}/${choice.id}: pays cash for '${m[1]}', which COMBAT.md ` +
+            `§8 says cannot be bought at any price`);
+        }
+      }
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`SLICE INVALID (${errors.length} errors)`);
   for (const error of errors) console.error(`- ${error}`);

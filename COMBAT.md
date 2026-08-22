@@ -397,6 +397,38 @@ reason beyond cash.
 Gear is carried by people, so **losing a hireling loses their kit** — the
 tactical half of the brake in §7.2.
 
+### 8.1 What the rule actually constrains — money, not narrative
+
+Building this surfaced a conflict with canon and canon won. `enc-first-firearm`
+**sells** the first handgun for €180, in the authored slice, which outranks any
+mechanic invented later. So the handgun is market gear, the dearest weapon in
+the game is buyable, and the tier is **not** a price ordering.
+
+The rule is therefore stated on the *channel*, not the price:
+
+- **No cash may reach the taken-only tier.** Nothing that spends money may grant
+  it — enforced on authored content by `content/validate-slice.mjs`, which is
+  where it can really be broken, and on state by `GameState.is_purchasable`.
+- **A story beat may still hand you anything.** The story is not a shop, and
+  `NARRATIVE.md` is not negotiable by this section.
+
+Currently taken-only: `chain`, `sawn-off`. Both are faction gear.
+
+### 8.2 Loot comes off the fallen, not off the field
+
+`FightManager.dropped_kit()` collects from **downed** fighters only. Somebody who
+broke and ran took their weapon with them, so a rout yields less than a break.
+
+That is a deliberate tension against §1's *triage, not a damage race*: the clean,
+merciful win should **cost** you capability rather than being free in every
+currency at once. It is a live balance question, not a settled one — if it turns
+out to push every fight toward maximum violence it is the first thing to change.
+
+### 8.3 Settlement order
+
+What your side dropped is removed **before** anything is picked up, so a win that
+cost you a body is never quietly refunded by that body's own weapon.
+
 ---
 
 ## 9. Why you would spend a hireling, and why you would not

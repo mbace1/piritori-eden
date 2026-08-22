@@ -654,6 +654,50 @@ func _refresh_market_rail() -> void:
 	_rail_box.add_child(back)
 
 
+## COMBAT.md §8. Two movements, and the order matters: what YOUR side dropped is
+## gone before anything is picked up, so a win that cost you a body is not
+## quietly refunded by the body's own weapon.
+func _settle_loot(f, result: int) -> PackedStringArray:
+	if f == null:
+		return PackedStringArray()
+	GameState.lose_kit_of(f.dropped_kit(true))
+	var won := result in [
+		FightManager.BattleResult.VICTORY_ROUT,
+		FightManager.BattleResult.VICTORY_BREAK,
+	]
+	if not won:
+		return PackedStringArray()
+	return GameState.take_loot(f.dropped_kit(false))
+
+
+## Taken gear is the ONLY source of the best weapons (§8), so the moment it is
+## picked up is worth a screen. Anything unbuyable is named as such — otherwise
+## the player has no way to learn the asymmetry exists except by missing it.
+func _report_spoils(spoils: PackedStringArray) -> void:
+	_show_city()
+	_clear_rail()
+	_rail.visible = true
+	_rail_box.add_child(_make_label(tr("loot.taken"), 19, MapStyle.TITLE_TEXT))
+	_add_spoils_lines(spoils)
+	_rail_box.add_child(_separator())
+	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
+	back.pressed.connect(_show_city)
+	_rail_box.add_child(back)
+
+
+func _add_spoils_lines(spoils: PackedStringArray) -> void:
+	for id in spoils:
+		var eid := String(id)
+		var nm := tr("equipment.%s" % eid)
+		if nm == "equipment.%s" % eid:
+			nm = eid
+		_rail_box.add_child(_make_label(nm, 15, PiritoriPalette.PUBLIC_BLUE))
+		if not GameState.is_purchasable(eid):
+			var l := _make_label(tr("loot.unbuyable"), 12, PiritoriPalette.INTEL_MUSTARD)
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(l)
+
+
 func _on_slice_completed() -> void:
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("ui.seven_days_done"), 19, PiritoriPalette.PLAYER_CYAN))
@@ -797,10 +841,13 @@ func _show_battle(battle_id: String) -> void:
 	# — alive. Done HERE, once, when the battle settles: doing it inside the
 	# fight would age a crew every time a round resolved.
 	var deployed := PackedStringArray(crew)
-	scene.battle_finished.connect(func(_result):
+	scene.battle_finished.connect(func(result):
+		var spoils := _settle_loot(scene.fight, int(result))
 		var left := GameState.age_crew(deployed)
 		if not left.is_empty():
-			_report_retirements(left)
+			_report_retirements(left, spoils)
+		elif not spoils.is_empty():
+			_report_spoils(spoils)
 		else:
 			_show_city())
 	_rail.visible = false
@@ -809,7 +856,7 @@ func _show_battle(battle_id: String) -> void:
 ## Somebody got out. §7.2: most tactics games have one exit, and two — with one
 ## of them being "they got out" — is what makes benching a veteran a decision
 ## rather than hoarding. It deserves to be said rather than logged.
-func _report_retirements(left: PackedStringArray) -> void:
+func _report_retirements(left: PackedStringArray, spoils: PackedStringArray = PackedStringArray()) -> void:
 	_show_city()
 	_clear_rail()
 	_rail.visible = true
@@ -821,6 +868,10 @@ func _report_retirements(left: PackedStringArray) -> void:
 		var l := _make_label(tr("crew.retired_note"), 12, PiritoriPalette.TEXT_DIM)
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(l)
+	if not spoils.is_empty():
+		_rail_box.add_child(_separator())
+		_rail_box.add_child(_make_label(tr("loot.taken"), 15, MapStyle.TITLE_TEXT))
+		_add_spoils_lines(spoils)
 	_rail_box.add_child(_separator())
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)

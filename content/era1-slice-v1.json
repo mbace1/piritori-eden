@@ -343,7 +343,9 @@
       "asset_id": "feature-phone-v03",
       "hold": "utility-one",
       "unlock": "start",
-      "effect": "receive calls and SMS; never opens a market app"
+      "effect": "receive calls and SMS; never opens a market app",
+      "acquisition": "market",
+      "resale_eur": 20
     },
     {
       "id": "baseball-bat",
@@ -351,7 +353,9 @@
       "asset_id": "baseball-bat-v03",
       "hold": "bat-two",
       "reach_pattern": "front-same-or-adjacent-lane",
-      "unlock": "enc-mccormick-yard"
+      "unlock": "enc-mccormick-yard",
+      "acquisition": "market",
+      "resale_eur": 25
     },
     {
       "id": "baton",
@@ -359,7 +363,9 @@
       "asset_id": "baton-v03",
       "hold": "blunt-one",
       "reach_pattern": "front-same-lane",
-      "unlock": "enc-karhupuisto-watch"
+      "unlock": "enc-karhupuisto-watch",
+      "acquisition": "market",
+      "resale_eur": 15
     },
     {
       "id": "pipe",
@@ -367,7 +373,9 @@
       "asset_id": "pipe-v03",
       "hold": "blunt-one",
       "reach_pattern": "front-same-lane",
-      "unlock": "enc-mccormick-yard"
+      "unlock": "enc-mccormick-yard",
+      "acquisition": "market",
+      "resale_eur": 10
     },
     {
       "id": "first-handgun",
@@ -376,7 +384,9 @@
       "hold": "firearm-one",
       "reach_pattern": "clear-same-lane-through-front",
       "unlock": "enc-first-firearm",
-      "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction."
+      "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction.",
+      "acquisition": "market",
+      "resale_eur": 120
     },
     {
       "id": "chain",
@@ -385,7 +395,9 @@
       "hold": "chain-two",
       "reach_pattern": "front-same-lane-through",
       "unlock": "enc-mccormick-yard",
-      "note": "Long enough to reach the second body in a lane. Its point is not damage; it is that a front rank stops being a wall."
+      "note": "Long enough to reach the second body in a lane. Its point is not damage; it is that a front rank stops being a wall.",
+      "acquisition": "taken",
+      "resale_eur": 30
     },
     {
       "id": "sawn-off",
@@ -395,7 +407,9 @@
       "reach_pattern": "front-wide-short",
       "unlock": "enc-jade-window",
       "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction.",
-      "note": "Covers two lanes either side from the front rank and nothing beyond it. Answers a spread-out formation, not a deep one."
+      "note": "Covers two lanes either side from the front rank and nothing beyond it. Answers a spread-out formation, not a deep one.",
+      "acquisition": "taken",
+      "resale_eur": 90
     },
     {
       "id": "folding-knife",
@@ -404,7 +418,9 @@
       "hold": "blade-one",
       "reach_pattern": "front-same-lane",
       "unlock": "start",
-      "note": "A working tool anyone already owns. Close, quiet and lethal, which is what makes carrying it a decision."
+      "note": "A working tool anyone already owns. Close, quiet and lethal, which is what makes carrying it a decision.",
+      "acquisition": "market",
+      "resale_eur": 12
     },
     {
       "id": "signal-flare",
@@ -413,7 +429,9 @@
       "hold": "utility-one",
       "reach_pattern": "clear-same-lane-through-front",
       "unlock": "enc-bear-path",
-      "note": "Does no harm at all and costs nerve from any row. A way to break a formation without hurting anyone."
+      "note": "Does no harm at all and costs nerve from any row. A way to break a formation without hurting anyone.",
+      "acquisition": "market",
+      "resale_eur": 8
     }
   ],
   "missions": [

@@ -161,3 +161,20 @@ pick up, and half of it will turn out to be wrong.
   torn-edge sway — `ART_BIBLE.md` licenses all of it and none is used.
 - **Courtyard and weather art remain visibly semi-approved** per
   `DESIGN_AUTHORITY.md`. They are in the build.
+
+## Loot (COMBAT.md §8) — what is honestly missing
+
+- **There is no equipment shop.** The unbuyable rule is currently enforced by the
+  *absence* of a buy screen plus a content gate on authored choices. When a shop
+  is built it MUST consult `GameState.is_purchasable`, or §8 is over.
+- **Nothing sells loot in the UI.** `GameState.sell_loot()` exists and is tested;
+  no screen calls it, so loot cannot actually be converted down into money in
+  play yet. The economy is half-wired.
+- **Two taken-only weapons is a thin tier.** `chain` and `sawn-off` are the whole
+  capability ladder. That is enough to prove the rule and not enough to make
+  pushing into faction ground feel like a reason.
+- **Resale numbers are invented placeholders** (`DESIGN_LOCKS.md` §13: do not
+  silently harden these). They were set to be deliberately poor so selling a
+  taken weapon feels wasteful, but no playtest has confirmed that.
+- **Rout-vs-break loot asymmetry is unbalanced.** §8.2 makes the merciful win
+  yield less. Watch whether it pushes every fight toward maximum violence.

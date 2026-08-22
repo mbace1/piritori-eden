@@ -333,6 +333,29 @@ func confirm_commands() -> void:
 ## It is NOT a different fight. It runs the SAME rounds, the same commands, the
 ## same rules — it simply does not stop to show them. A separate, faster,
 ## friendlier resolution would be a second combat system that could disagree
+## What is lying on the ground when the fight ends, for one side.
+##
+## COMBAT.md §8: gear is carried by a PERSON, so it comes off the fallen, not off
+## the field. Somebody who broke and ran took their weapon with them. That makes
+## a merciful win (VICTORY_ROUT) yield less capability than a brutal one, which
+## is a deliberate tension against §1's "triage, not a damage race" — the clean
+## win should cost you something rather than being free.
+##
+## Returns weapon ids, not fighters: two people carrying pipes drop two pipes.
+func dropped_kit(player_side: bool) -> PackedStringArray:
+	var out: PackedStringArray = []
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.is_player_controlled != player_side:
+			continue
+		if f.status != Fighter.Status.DOWNED:
+			continue
+		for w in f.weapon_ids:
+			if String(w) != "":
+				out.append(String(w))
+	return out
+
+
 ## with the first, and the first is the one the game is about.
 ##
 ## The stance still applies, so skipping is not free of the player's judgement:

@@ -502,6 +502,73 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 
 ## Crew on the roster and not lost. Everyone recruited counts; the slice has
 ## no removal path yet, and inventing one would be inventing consequence.
+# ── loot (COMBAT.md §8) ────────────────────────────────────────────────────
+
+## Can this be bought at all, or only taken off somebody carrying it?
+##
+## §8 is asymmetric on purpose: loot converts DOWN into money freely, but the
+## best gear cannot be bought at any price. Money buys volume; loot buys
+## capability. That is what gives territory teeth — pushing into Jade Lantern
+## ground is not just new revenue and new threats, it is the only place a class
+## of weapon exists — and it is what gives robbery and vengeance (`GDD` §11.5) a
+## reason beyond cash.
+func is_purchasable(equipment_id: String) -> bool:
+	var e := _equipment(equipment_id)
+	return String(e.get("acquisition", "market")) != "taken"
+
+
+func resale_of(equipment_id: String) -> int:
+	return int(_equipment(equipment_id).get("resale_eur", 0))
+
+
+func _equipment(equipment_id: String) -> Dictionary:
+	for e in ContentRegistry.slice.get("equipment", []):
+		if String(e.get("id", "")) == equipment_id:
+			return e
+	return {}
+
+
+## Take what the losing side was carrying. This is the ONLY way taken-only gear
+## enters the game, so it is the moment §8 exists at all.
+func take_loot(equipment_ids: PackedStringArray) -> PackedStringArray:
+	var got: PackedStringArray = []
+	for id in equipment_ids:
+		var eid := String(id)
+		if eid == "" or _equipment(eid).is_empty():
+			continue
+		if equipment_owned.has(eid):
+			continue
+		equipment_owned.append(eid)
+		got.append(eid)
+	if not got.is_empty():
+		state_changed.emit()
+	return got
+
+
+## Loot converts DOWN into money. Deliberately one-way and deliberately poor:
+## selling a thing you can only get by taking it should feel like a waste, which
+## is what stops the asymmetry collapsing into "everything is money eventually".
+func sell_loot(equipment_id: String) -> int:
+	var i := equipment_owned.find(equipment_id)
+	if i < 0:
+		return 0
+	var paid := resale_of(equipment_id)
+	equipment_owned.remove_at(i)
+	cash_eur += paid
+	state_changed.emit()
+	return paid
+
+
+## What a crew member carried is lost with them (§8): gear is on a person, not
+## in a warehouse, which is the tactical half of the brake on spending people.
+func lose_kit_of(equipment_ids: PackedStringArray) -> void:
+	for id in equipment_ids:
+		var i := equipment_owned.find(String(id))
+		if i >= 0:
+			equipment_owned.remove_at(i)
+	state_changed.emit()
+
+
 # ── careers (COMBAT.md §7) ─────────────────────────────────────────────────
 
 ## Is this person one of the story's own? Named characters are FFT story units:

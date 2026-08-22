@@ -28,6 +28,7 @@ func _ready() -> void:
 	_test_block_clock()
 	_test_save_round_trip()
 	_test_careers()
+	_test_loot()
 	_test_every_reference_resolves()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -198,6 +199,55 @@ func _test_save_round_trip() -> void:
 	check("resolved encounter restored", GameState.is_resolved("enc-first-purchase"))
 	eq("schema version stored", int(expected["schema_version"]), GameState.SCHEMA_VERSION)
 	check("content package id stored", String(expected["content_package_id"]) != "")
+
+
+## Loot (COMBAT.md §8). Money buys volume; loot buys capability. The check that
+## matters is the ONE-WAY door: if cash could ever reach the taken-only tier the
+## asymmetry collapses into "everything is money eventually".
+func _test_loot() -> void:
+	print("
+loot (COMBAT.md §8)")
+	GameState.new_campaign()
+
+	var buyable := 0
+	var taken_only := 0
+	for e in ContentRegistry.slice.get("equipment", []):
+		if GameState.is_purchasable(String(e.get("id", ""))):
+			buyable += 1
+		else:
+			taken_only += 1
+	check("some gear can be bought", buyable > 0)
+	check("and some gear cannot be bought at any price", taken_only > 0)
+
+	# NOT a price comparison. Resale is money and the tier is about capability,
+	# and the two came apart the moment canon was consulted: enc-first-firearm
+	# SELLS the handgun for EUR 180, so the dearest weapon in the game is market
+	# gear and always will be. What §8 actually promises is a one-way door, so
+	# that is what is checked — no cash may reach the taken-only tier. The
+	# content gate in validate-slice.mjs enforces the same rule on authored
+	# choices, which is where it can really be broken.
+
+	var loot := GameState.take_loot(PackedStringArray(["sawn-off"]))
+	check("what they dropped is yours now", loot.has("sawn-off"))
+	check("and it is in the armoury", GameState.equipment_owned.has("sawn-off"))
+	check("the same weapon is not taken twice",
+		GameState.take_loot(PackedStringArray(["sawn-off"])).is_empty())
+	check("junk that does not exist is not taken",
+		GameState.take_loot(PackedStringArray(["halberd"])).is_empty())
+
+	var before := GameState.cash_eur
+	var paid := GameState.sell_loot("sawn-off")
+	check("loot converts down into money", paid > 0)
+	check("and the money arrives", GameState.cash_eur == before + paid)
+	check("the weapon is gone with it", not GameState.equipment_owned.has("sawn-off"))
+	check("selling what you do not have pays nothing", GameState.sell_loot("sawn-off") == 0)
+	check("and money cannot buy it back", not GameState.is_purchasable("sawn-off"))
+
+	# Gear is carried by a person, not stored in a warehouse.
+	GameState.take_loot(PackedStringArray(["baseball-bat"]))
+	GameState.lose_kit_of(PackedStringArray(["baseball-bat"]))
+	check("what a fallen crew carried is lost with them",
+		not GameState.equipment_owned.has("baseball-bat"))
 
 
 ## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a
