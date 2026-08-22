@@ -52,6 +52,15 @@ pick up, and half of it will turn out to be wrong.
   ("front rank first, then middle") literally, and on a wide board that rule
   produces a flat line. Worth revisiting.
 
+## Open question for the owner
+
+- **Should the full grid be permanently visible?** `GDD` §13.3 says only
+  occupied, selected, targeted and reachable cells are revealed — "the grid is a
+  rule beneath the scene rather than a permanent checkerboard". The owner has
+  twice asked to see both grids drawn, which the debug overlay does. Whether
+  that should be true in PLAY is a canon change and needs a word, not a quiet
+  flip.
+
 ## Stages (see STAGE_SPEC.md)
 
 - **The docks art is off-spec.** Supplied 2026-08-21 and registered as

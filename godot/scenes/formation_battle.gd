@@ -74,7 +74,7 @@ const CENTRE_GAP := 1.15                   ## tiles from the centre line to a fr
 ## Both extents are HORIZONTAL fractions of the plate width, because one tile
 ## along either axis moves exactly one tile horizontally. That makes the two
 ## numbers directly comparable and the shape a true 2:1 diamond by construction.
-const ARENA := {"c": Vector2(0.500, 0.620), "fwd": 0.175, "lane": 0.145}
+const ARENA := {"c": Vector2(0.500, 0.520), "fwd": 0.175, "lane": 0.145}
 
 ## Escape hatch, deliberately empty. A stage may override the arena ONLY when
 ## its geometry genuinely cannot host the canonical one — and the right answer
@@ -298,10 +298,18 @@ func _play_diamond() -> Dictionary:
 	var d: Dictionary = ARENA_OVERRIDE.get(_stage_id, ARENA)
 	if not play_diamond_override.is_empty():
 		d = play_diamond_override
+	# The ART fills the whole frame, but the ARENA is placed inside what the
+	# player can actually see. The console overlays the bottom, and centring the
+	# board on the full height pushed the near half under it: the two halves are
+	# symmetric about the centre, so a centre in the wrong place crops the
+	# player's side while the opposition's side keeps its room. That is exactly
+	# what it looked like — one grid tight against the bottom edge, the other
+	# with space to spare.
 	var plate := _plate_rect()
+	var visible := Vector2(plate.size.x, maxf(plate.size.y - CONSOLE_H, 1.0))
 	var c: Vector2 = d.get("c", Vector2(0.5, 0.7))
 	return {
-		"c": plate.position + Vector2(c.x * plate.size.x, c.y * plate.size.y),
+		"c": plate.position + Vector2(c.x * plate.size.x, c.y * visible.y),
 		"fwd": float(d.get("fwd", 0.30)) * plate.size.x,
 		"lane": float(d.get("lane", 0.23)) * plate.size.x,
 	}
