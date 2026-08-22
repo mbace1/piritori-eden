@@ -44,6 +44,7 @@ func _ready() -> void:
 	_test_build_2v2()
 	_test_hired_crew_can_fight()
 	_test_aftermath()
+	_test_every_role_has_a_body()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -392,6 +393,33 @@ func _test_equipment_from_canon() -> void:
 	# Locked equipment must not reach the field before it is earned.
 	check("the firearm is locked on day 1", not EquipmentRules.is_unlocked("first-handgun"))
 	check("the feature phone starts unlocked", EquipmentRules.is_unlocked("feature-phone"))
+
+
+## Every role the game can produce must have a model on disk.
+##
+## A role with no body falls back to the muscle, which is deliberately loud —
+## but only if somebody looks. The generator can now roll seven roles and the
+## board maps seven; nothing but this check keeps those two lists equal, and a
+## missing .glb is a file that exists in a constant and not on disk.
+func _test_every_role_has_a_body() -> void:
+	print("\nevery role has a body")
+	var missing: PackedStringArray = []
+	for role in CrewGenerator.ROLES:
+		var path := BattleStage3D.unit_path(String(role))
+		if not ResourceLoader.exists(path):
+			missing.append("%s -> %s" % [role, path])
+	check("every generated role maps to a model that exists",
+		missing.is_empty(), " ".join(missing))
+
+	# The mapping must not quietly send a real role to the fallback either: that
+	# is how a role ships looking like somebody else for a month.
+	var fell_back: PackedStringArray = []
+	for role in CrewGenerator.ROLES:
+		if BattleStage3D.unit_path(String(role)) == BattleStage3D.UNIT_FALLBACK \
+				and String(role) != "muscle":
+			fell_back.append(String(role))
+	check("and no role is silently wearing the fallback",
+		fell_back.is_empty(), " ".join(fell_back))
 
 
 ## The fight has to be able to SAY what happened. Every result was computed and

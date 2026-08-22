@@ -1292,6 +1292,40 @@
       "baked_ui": false,
       "sha256": "d6199ad41973a6f2dc51d6fd9906e00a6140c452722c21e1765323c57cc6a456",
       "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+    },
+    {
+      "id": "cast3d-hired-v01",
+      "file": "cast3d/hired-v01.glb",
+      "kind": "mesh-3d",
+      "source": "Meshy 'Worn Out Wanderer' biped, supplied rigged",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "hired",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "Hired street muscle: dark red tracksuit bottoms with side stripes, grey hooded sweatshirt, black quilted gilet, trainers. This is the 'Hired' subclass in MODULAR_CHARACTER_SYSTEM.md - planted stance, cheap gear - which was in the design and had no model. 6533 triangles, 24 bones. Arrived rigged rather than through the concept-to-Meshy route in art-library/characters/concepts-3d/SPEC.md, so it costs no credits and skips the T-pose step. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py: 6.2MB becomes 0.8MB.",
+      "sha256": "34445aad503d3076dd76b927a59431e15ab9efbc810a2509e03487ee1aa71519"
+    },
+    {
+      "id": "cast3d-hired-clips-v01",
+      "file": "cast3d/clips/hired-clips-v01.glb",
+      "kind": "animation-3d",
+      "source": "Meshy merged animation export for the same rig",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "hired",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "Six clips on the hired rig: Walking, Running, falling_down, Block6, Draw_and_Shoot_Left, bicep_curl. NOT yet wired - the board loads four named states (idle, attack, hit, dead) from cast3d/clips/ and these carry neither those names nor an idle. Kept because the file is cheap once stripped and the mapping is a small job. Meshy ships each clip set as a complete character carrying the texture twice; both copies removed, 12.3MB to 0.7MB, and the character already has its own.",
+      "sha256": "daecd2ccd677b15f6db70f6b11a7b9184ec4a7714c7b041effc494210b5f9cf6"
     }
   ]
 }

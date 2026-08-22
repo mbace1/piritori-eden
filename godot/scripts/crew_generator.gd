@@ -55,7 +55,8 @@ const FAMILY := {
 
 ## The six the art has bodies for. Not a design ceiling — expanding it means
 ## expanding UNIT_BY_ROLE and the torso/legs sets in the same step.
-const ROLES := ["driver", "fixer", "local", "muscle", "runner", "watcher"]
+const ROLES := ["driver", "fixer", "local", "muscle", "runner", "watcher",
+	"hired"]
 
 ## Each role's stat signature, read off the authored six rather than invented,
 ## so a generated muscle reads like the hand-written muscle. The spread is
@@ -67,6 +68,9 @@ const ROLE_BASE := {
 	"muscle":  {"condition": 10, "nerve": 7, "tempo": 4, "wage": 30},
 	"runner":  {"condition": 8, "nerve": 6, "tempo": 8, "wage": 18},
 	"watcher": {"condition": 7, "nerve": 8, "tempo": 7, "wage": 20},
+	# Cheap and blunt: the worst nerve in the cast and the lowest wage, because
+	# what you are buying is a body in a lane and both of you know it.
+	"hired":   {"condition": 9, "nerve": 5, "tempo": 5, "wage": 14},
 }
 
 const ROLE_COMPETENCIES := {
@@ -76,6 +80,7 @@ const ROLE_COMPETENCIES := {
 	"muscle":  ["cover", "improvised-support"],
 	"runner":  ["delivery", "withdrawal"],
 	"watcher": ["marking", "intent-reading"],
+	"hired":   ["cover", "control"],
 }
 
 ## Only six heads have been drawn. A seventh generated person wears a face
@@ -127,8 +132,11 @@ static func generate(seed_value: int) -> Dictionary:
 		"wage_eur": maxi(1, int(base["wage"]) + rng.randi_range(-4, 4)),
 		"competencies": (ROLE_COMPETENCIES[role] as Array).duplicate(),
 		"portrait_asset_id": PORTRAITS[rng.randi_range(0, PORTRAITS.size() - 1)],
-		"torso_asset_id": "torso-%s-v03" % role,
-		"legs_asset_id": "legs-%s-v03" % role,
+		# The 2D cast has no "hired" torso or legs. These ids are carried on the
+		# fighter and never resolved to art, so an empty string is honest where a
+		# made-up filename would be a dangling reference.
+		"torso_asset_id": "" if role == "hired" else "torso-%s-v03" % role,
+		"legs_asset_id": "" if role == "hired" else "legs-%s-v03" % role,
 		"initial_equipment": [],
 		# Never true. See the class comment: named is a fact about authored
 		# content, and no content can refer to somebody invented at runtime.

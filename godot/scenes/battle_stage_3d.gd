@@ -34,6 +34,10 @@ const UNIT_BY_ROLE := {
 	"muscle":  "res://data/art/cast3d/muscle-v01.glb",
 	"runner":  "res://data/art/cast3d/runner-v01.glb",
 	"watcher": "res://data/art/cast3d/watcher-v01.glb",
+	# The MODULAR_CHARACTER_SYSTEM "Hired" subclass, which was in the design
+	# with no model until one arrived rigged. Cheap gear, planted stance: the
+	# people the roster churns through.
+	"hired":   "res://data/art/cast3d/hired-v01.glb",
 }
 
 ## Used when a fighter carries a role nothing has been modelled for. Loud rather

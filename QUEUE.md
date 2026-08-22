@@ -297,3 +297,23 @@ until it was killed at 6m40s rather than reporting anything.
 CI would have caught it as a timeout, eventually, with no useful message. Worth
 a `--timeout` on the gate invocations, or a watchdog in the scene, so the
 failure says what it is.
+
+## The hired character — what is wired and what is not
+
+- **The six animation clips are NOT wired.** `cast3d-hired-clips-v01` holds
+  Walking, Running, falling_down, Block6, Draw_and_Shoot_Left and bicep_curl.
+  The board loads four named states — idle, attack, hit, dead — from
+  `cast3d/clips/`, and these carry neither those names nor an idle at all. The
+  file is registered and cheap (0.7MB) but nothing plays it. Mapping is small:
+  falling_down→dead, Block6→hit, Draw_and_Shoot_Left→attack, and idle has to
+  come from somewhere. `bicep_curl` is gym filler and should be dropped.
+- **The hired figure plays the muscle's clips today.** They lift onto any Meshy
+  biped rig, and both are 24 bones, so it should retarget — but that has only
+  been reasoned about, never watched. If it looks wrong on the board, this is
+  why.
+- **`hired` has no 2D art.** No torso, legs or portrait sheet, so its
+  `torso_asset_id` and `legs_asset_id` are deliberately empty strings rather
+  than names of files that do not exist. Nothing loads them today; anything that
+  starts loading them must handle the empty case.
+- **Its stats are a guess** (DESIGN_LOCKS §13): condition 9, nerve 5, tempo 5,
+  wage 14 — cheap, sturdy and easily rattled. Never playtested.
