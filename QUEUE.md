@@ -178,3 +178,36 @@ pick up, and half of it will turn out to be wrong.
   taken weapon feels wasteful, but no playtest has confirmed that.
 - **Rout-vs-break loot asymmetry is unbalanced.** §8.2 makes the merciful win
   yield less. Watch whether it pushes every fight toward maximum violence.
+
+## Download weight — measured, not estimated (CLAUDE.md rule 9)
+
+The first real web export since the 3D pivot. `CLAUDE.md` records "~58MB on disk
+and ~28MB gzipped". Measured on 2026-08-22:
+
+    index.wasm   37.7 MB raw    9.7 MB gzipped   (the engine; fixed cost)
+    index.pck    49.7 MB raw   47.4 MB gzipped   (our content)
+
+**~57MB gzipped, roughly double the recorded figure.** The pck barely compresses
+because it is already-compressed art. Update rule 9's numbers when this settles.
+
+Fixed in the deploy commit: `muscle-walk-v01` and `muscle-run-v01` were never run
+through `strip_glb_texture.py` — they carried a 6.8MB texture each, and Godot
+extracted a second copy alongside. 7.1MB -> 0.7MB each. This barely moved the
+pck (Godot ships imported artifacts, not source glbs) but removed 26MB from the
+tree and the import cache.
+
+Still recoverable, NOT done — each is an Art/Content lane call, not Engine:
+
+- **`arvo-linde-v05_texture_0.png` imports to a 6.3MB `.ctex`**, the single
+  largest thing in the build. The presenter is one figure; this is a 2048 map.
+  Downscaling it the way the cast was handled is the biggest single win.
+- **Superseded courtyard prototypes ship to every player.** `courtyard-prototype`
+  v02, v03 and v04 are registered in `art/v3/manifest.json` and referenced by
+  nothing — only v05 is used by `battle-courtyard-3v3`. ~3.6MB of `.ctex` for
+  iterations nobody sees. This is `export_filter="all_resources"` doing exactly
+  what rule 11 warns about; the fix is to unregister them.
+- The remaining ~35MB is many ~1MB webp arenas and 2D cast art. Death by a
+  thousand cuts, and it needs a policy rather than a cleanup.
+
+Also noted: `small-local.glb` survives in `.godot/imported/` with its source gone
+— stale local cache only, it does not ship. Same shape as the `_3dtest` stray.

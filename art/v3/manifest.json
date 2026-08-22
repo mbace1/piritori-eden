@@ -1245,7 +1245,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "0876b10785d0f04e818f429032b7d63d39cb1a89e0cd6ef9e72e82c4b4ea0ad5",
+      "sha256": "acd0d9b305735344184c7a73515321d32e1e586dae0e95b56c15569e6e8d79de",
       "note": "The muscle, rigged and carrying a walking clip: 24 bones, 1.07s, 29 tracks. Built from the role's own 2D sheet through a T-pose, so the 3D and the 2D are the same person. Crew variety comes from a hue-band recolour of this one mesh, not from a model per person."
     },
     {
@@ -1261,7 +1261,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "4674840d8af83cdc90bb0cd2063e7ca8328853d5646275184213971a3929894b",
+      "sha256": "c0ecfb3f8f599d283441ccff0c0321dff05a0fcec823e7d0bcdda494a30ca1c2",
       "note": "The same rig carrying the running clip. Walk and run came free with the rig."
     },
     {

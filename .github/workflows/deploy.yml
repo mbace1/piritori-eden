@@ -1,0 +1,133 @@
+name: deploy
+
+# The repo split brought the tests across and left the deploy behind, so for a
+# while everything built here was verified by several hundred headless checks
+# and zero human seconds. CLAUDE.md rule 3 says testing happens on a phone at
+# the deployed URL; this is the workflow that makes that rule satisfiable.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:      # runs on whichever branch you pick, so a claude/*
+                          # branch can be put on a phone before it is merged
+
+# Deploys through the Pages artifact API rather than by pushing a gh-pages
+# branch. The branch route was tried first and blocked, and the artifact route
+# needs no write access to the tree at all.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A half-finished deploy is worse than a late one: let a run finish rather than
+# cancelling it midway and leaving the site on a partial upload.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: the web export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: install godot 4.7.2
+        run: |
+          curl -sSL -o godot.zip \
+            https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          mv Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      # The templates archive is ~1.2GB and the web export needs about 40MB of
+      # it, so the extracted result is cached on the version string. Only the
+      # first run after a Godot bump pays for the download.
+      - name: cache the web export template
+        id: templates
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates/4.7.2.stable
+          key: godot-export-templates-web-4.7.2-stable
+
+      - name: install the web export template
+        if: steps.templates.outputs.cache-hit != 'true'
+        run: |
+          curl -sSL -o templates.tpz \
+            https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/export_templates/4.7.2.stable
+          # Only the web entries are extracted; unpacking all of it would cost a
+          # gigabyte of runner disk to throw away.
+          unzip -q -j templates.tpz 'templates/web*' \
+            -d ~/.local/share/godot/export_templates/4.7.2.stable
+          ls -la ~/.local/share/godot/export_templates/4.7.2.stable
+
+      # Canon is generated, not committed (CLAUDE.md rule 7), so it has to be
+      # built before the project can be imported.
+      - name: build the canon seams
+        working-directory: godot
+        run: |
+          node tools/sync-data.mjs
+          node tools/build-map-geometry.mjs
+
+      # See gates.yml for why this runs twice: a cold .godot/ has been seen to
+      # segfault on the first pass after doing most of the work.
+      - name: import the project
+        working-directory: godot
+        run: |
+          godot --headless --path . --import || echo "first import pass failed; retrying on a warm cache"
+          godot --headless --path . --import
+
+      # A deploy that can ship a broken build is worse than no deploy. gates.yml
+      # covers this on every branch, but nothing guarantees it ran on THIS
+      # commit, so the two that would make the site useless are re-run here:
+      # the spine must hold and the slice must still reach an ending.
+      - name: it still plays to an ending
+        working-directory: godot
+        run: |
+          godot --headless --path . res://tests/test_spine.tscn
+          godot --headless --path . res://tests/test_playthrough.tscn
+
+      # thread_support=false in export_presets.cfg is load-bearing: GitHub Pages
+      # cannot send the COOP/COEP headers a threaded build needs, and a threaded
+      # build served without them is a black screen. Asserted rather than
+      # trusted, because the failure looks like a broken game and not like a
+      # broken setting.
+      - name: threads are off, or Pages will serve a black screen
+        working-directory: godot
+        run: grep -q '^variant/thread_support=false' export_presets.cfg
+
+      - name: export
+        working-directory: godot
+        run: |
+          mkdir -p ../build/web
+          godot --headless --path . --export-release "Web" ../build/web/index.html
+          test -f ../build/web/index.html
+
+      - name: the payload, and what it will cost on a phone
+        run: |
+          touch build/web/.nojekyll
+          ls -la build/web
+          echo "--- transfer size, which is what the player actually waits for:"
+          du -sh build/web
+          gzip -c build/web/*.wasm | wc -c | awk '{printf "wasm gzipped: %.1f MB\n", $1/1048576}'
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    name: publish
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
