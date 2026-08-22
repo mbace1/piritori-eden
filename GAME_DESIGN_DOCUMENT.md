@@ -2052,11 +2052,26 @@ is not the hardest available content.
 - It gives the harm curve somewhere to sit: abstract in chapter one, personal by
   chapter four.
 
-### The open question, named rather than answered
+### What persists across a re-run — confirmed, 2026-08-22
 
-**What persists across a chapter re-run, and what resets?** Money, roster, gear,
-retired contacts, territory, and story flags are all separate decisions, and a
-roguelike lives or dies on that list. Nothing here decides it.
+**People and gear carry. Money resets.** The owner confirms this was already the
+design, following the FFT half of decision 2 in `PHASING.md` §0.2: named
+characters are FFT story units, and a party you keep and build across chapters is
+what that reference brings with it.
+
+Re-churning an early chapter therefore yields **bodies and weapons, never a
+bankroll**. Two things follow, and both protect systems already built:
+
+- **Careers stay meaningful.** A crew member can live across runs, so the ceiling
+  in `COMBAT.md` §7 is a real loss and retiring somebody early is a real
+  decision. If people reset per chapter nobody would live long enough to have a
+  career at all.
+- **The economy stays tight.** Cash resetting means farming cannot buy the next
+  chapter's difficulty away, which is the usual failure of a persistent-currency
+  roguelike. Gear still accumulates, and §8 already makes the best gear
+  unbuyable — so farming produces capability, not purchasing power.
+
+Still undecided and smaller: retired contacts (§9.8), territory, and story flags.
 
 ### What this obliges
 
