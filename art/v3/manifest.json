@@ -1263,6 +1263,46 @@
       "baked_ui": false,
       "sha256": "4674840d8af83cdc90bb0cd2063e7ca8328853d5646275184213971a3929894b",
       "note": "The same rig carrying the running clip. Walk and run came free with the rig."
+    },
+    {
+      "id": "cast3d-muscle-clips-v01",
+      "kind": "animation-set-3d",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "muscle",
+      "frames": [
+        {
+          "pose": "idle",
+          "file": "cast3d/clips/muscle-idle-v01.glb",
+          "source": "meshy action library",
+          "meshy_action": "Idle",
+          "note": "standing, breathing, waiting to be told"
+        },
+        {
+          "pose": "attack",
+          "file": "cast3d/clips/muscle-attack-v01.glb",
+          "source": "meshy action library",
+          "meshy_action": "Attack",
+          "note": "the swing itself"
+        },
+        {
+          "pose": "behit",
+          "file": "cast3d/clips/muscle-behit-v01.glb",
+          "source": "meshy action library",
+          "meshy_action": "BeHit_FlyUp",
+          "note": "taking one"
+        },
+        {
+          "pose": "dead",
+          "file": "cast3d/clips/muscle-dead-v01.glb",
+          "source": "meshy action library",
+          "meshy_action": "Dead",
+          "note": "going down and staying down"
+        }
+      ],
+      "note": "Fight clips for the rigged muscle, from Meshy's canned action library: idle 4.03s, attack 2.83s, hit 1.53s, dead 3.00s, all 24 bones. TEXTURES ARE STRIPPED — Meshy returns each clip as a complete character carrying its own copy of the same 6.5MB PNG, so four clips were 28MB of which 26MB was one texture repeated. The base character supplies it; art-src/tools/strip_glb_texture.py removes the rest. 7.2MB each becomes 0.7MB."
     }
   ]
 }

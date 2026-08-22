@@ -268,6 +268,51 @@ texture). Uncapped, six roles would add 42MB to a build that is already 58.
 2D T-pose rather than introduced by Meshy. It is fixed by redrawing the source,
 not by touching the mesh.
 
+### 1.07 What the Meshy API actually does — verified 2026-08-22
+
+A capability summary was supplied. Rather than plan against it, each claim was
+probed against the key we hold, because a vendor page can describe a web app, a
+newer tier, or a feature that is not in the API at all.
+
+**Real and callable:**
+
+| Endpoint | Use |
+|---|---|
+| `POST /openapi/v1/image-to-3d` | the one already in `m3d.sh` |
+| `POST /openapi/v1/multi-image-to-3d` | orthographic reference sheets — front/side/rear driving one mesh |
+| `POST /openapi/v1/rigging` | skeleton, and walk + run come free with it |
+| `POST /openapi/v1/animations` | canned clips onto a rig, 3 credits each |
+| `POST /openapi/v1/retexture` | new texture on existing geometry — get the SHAPE right first |
+| `POST /openapi/v1/remesh` | topology and polycount |
+| `POST /openapi/v2/text-to-3d` | exploration |
+
+**NOT available on this key: text-to-motion.** All of `/v1/text-to-motion`,
+`/v2/text-to-motion` and `/v1/motions` return NoMatchingRoute. Bespoke described
+motion is not something we can plan around; clips come from the canned library.
+
+**The animation library, enumerated.** `action_id` is an INT, not a string, and
+there is no list endpoint — but the clip's name is in the returned URL, so the
+library can be read without downloading anything:
+
+| id | clip | | id | clip |
+|---|---|---|---|---|
+| 0 | Idle | | 5 | BackLeft_run |
+| 1 | Walking_Woman | | 6 | BackRight_Run |
+| 2 | Alert | | 7 | BeHit_FlyUp |
+| 3 | Arise | | 8 | Dead |
+| 4 | Attack | | 9 | ForwardLeft_Run_Fight |
+
+0, 4, 7 and 8 are exactly the four a fight needs. Enumerating cost 30 credits
+and is done once for all time.
+
+**The production rules worth keeping from the summary**, all consistent with
+what was observed: image-to-3D beats text-to-3D for final assets; give it boring
+references — one object, plain background, even light, nothing crossing the
+silhouette; separate geometry from texture and fix the shape first; keep small
+detail in the texture rather than the mesh; generate character, weapon and hat
+as separate assets rather than one figure holding things; and put T-POSE in the
+prompt for anything to be rigged, which this project learned the hard way twice.
+
 ### 1.1 The item rule
 
 **An item changes what you can do. It does not add a modifier you have to

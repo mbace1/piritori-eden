@@ -731,7 +731,12 @@ func _refresh() -> void:
 	# same beat as the console rather than on a timer of its own.
 	if _stage3d != null:
 		_stage3d.fight = fight
-		_stage3d.refresh()
+		# Tell the stage who is mid-command, so the figure swings rather than
+		# standing there while the console says ATTACK.
+		var acting := ""
+		if _pending != null and _pending.type == FightManager.Command.Type.ATTACK:
+			acting = _pending.source_id
+		_stage3d.refresh(acting)
 	# round_number is 0 until the first resolve; the player is in round 1.
 	_top_label.text = "%s %d · %s" % [
 		tr("battle.round"), maxi(fight.round_number, 1), _phase_word()]
