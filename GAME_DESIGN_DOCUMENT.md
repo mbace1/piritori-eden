@@ -1967,3 +1967,47 @@ news, from the street and from the price — heard, then confirmed, then spent.
   the news schedule.
 - The presentation rule on products still holds: a price is a number and a
   place, never dosage, preparation or concealment.
+
+---
+
+## How visible the harm is — owner ruling, 2026-08-22
+
+**It starts abstract and becomes personal.** Not a setting, a curve.
+
+### Early: arm's length
+
+Goods are abstract packs. Harm arrives as pressure values and news items — the
+district gets worse in the aggregate, and the player is trading numbers. Nothing
+is in anyone's face, and the game does not lecture.
+
+### Later: it has a face
+
+Specific people deteriorate, and they are **people the player has already met**.
+A local from an earlier encounter turns up worse. The harm stops being a
+statistic about a district and becomes somebody recognisable, which is the point
+at which the player's own earlier choices are visible to them.
+
+### Why the curve rather than either end
+
+Held at arm's length forever, harm becomes an abstraction to optimise, and the
+game is accidentally about efficient dealing. Personal from the first hour, it is
+a morality lesson delivered before the player has done anything to deserve one —
+and `NARRATIVE.md` is explicit that Jaska does not exist merely to deliver
+lectures.
+
+The curve is the East of Eden correspondence doing actual work. Aatami retires to
+Pasila, calls it Eden, and carries the network with him; that only lands if the
+cost accumulated somewhere the player was looking. Complicity should creep up
+rather than announce itself.
+
+### What this obliges
+
+- **Encounter people must persist.** Someone met on day two has to be reachable
+  again on day six, in a worse state, by id. Without that the curve cannot exist
+  and the ending has nothing to point at.
+- Deterioration needs a **cause the player can trace** to their own trade, or it
+  is weather rather than consequence.
+- The standing presentation rule is unchanged and unaffected: never dosage,
+  preparation or concealment. This is about who is visible, never about how.
+- `NARRATIVE.md` remains the authority on the people themselves. This section
+  governs when the game turns the lens on them, not who they are.
