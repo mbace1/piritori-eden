@@ -1355,6 +1355,37 @@ func free_slots_for(fighter_id: String) -> Array:
 	return out
 
 
+## What cover, if any, a slot carries.
+##
+## `_cover_at` already existed and was private, consulted only while resolving
+## an attack. So the mechanic worked perfectly and the player could not see it:
+## a fully implemented tactical system, invisible to the decision that it
+## governs. PHASING.md Phase A calls that scenery.
+##
+## Same shape as _cover_at so the screen and the resolver cannot disagree.
+func cover_under(lane: int, row: int, side: int) -> Dictionary:
+	return _cover_at(lane, row, side)
+
+
+## Does an attack on this fighter have to get through something first?
+##
+## The question the player is actually asking when they pick a target, phrased
+## once here rather than reconstructed in the UI.
+func attack_would_be_stopped(target_id: String, weapon_id: String) -> String:
+	var t := get_fighter(target_id)
+	if t == null:
+		return ""
+	var c := _cover_at(t.slot.x, t.slot.y, t.side)
+	if not c.get("is_cover", false):
+		return ""
+	if c.get("hard_block", false):
+		return "hard"
+	var weapon: Dictionary = _get_weapon_data(weapon_id)
+	if c.get("soft_block", false) and not weapon.get("piercing", false):
+		return "soft"
+	return "pierced"
+
+
 ## Cover props as plain data, for drawing.
 func cover_props() -> Array:
 	var out: Array = []

@@ -49,6 +49,7 @@ func _ready() -> void:
 	_test_unit_variants()
 	_test_ground_fill()
 	_test_telegraphs()
+	_test_cover_is_visible()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -517,6 +518,58 @@ func _test_telegraphs() -> void:
 			moved = true
 			break
 	check("and the read changes as the fight does", moved)
+
+
+## Cover has to be answerable, not just enforced.
+##
+## It was already fully implemented: the resolver blocks on hard cover and
+## intercepts on soft, and the board drew an unlabelled green rectangle. So it
+## changed fights without ever telling anyone, which PHASING.md Phase A counts
+## as scenery. These check the QUESTION the screen now asks, not the drawing.
+func _test_cover_is_visible() -> void:
+	print("\ncover can be asked about, not just suffered")
+	var f := FightManager.new()
+	var errs: Array = f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	check("a fight opens", errs.is_empty(), str(errs))
+
+	var props: Array = f.cover_props()
+	check("the yard supplies cover", not props.is_empty())
+
+	# Every prop the resolver knows about must be answerable through the public
+	# query, or the screen and the resolver are reading different boards.
+	var agrees := true
+	for p in props:
+		var c := f.cover_under(int(p["lane"]), int(p["row"]), int(p["side"]))
+		if not c.get("is_cover", false):
+			agrees = false
+	check("every prop answers when asked", agrees)
+
+	# Empty ground must say so rather than returning a half-filled dictionary.
+	var nowhere := f.cover_under(99, 99, 0)
+	check("bare ground reports no cover", not nowhere.get("is_cover", false))
+
+	# The attack question the player is really asking.
+	var verdicts: Dictionary = {}
+	for t in f.get_fighters(Fighter.Side.OPPOSITION):
+		verdicts[f.attack_would_be_stopped(t.fighter_id, "pipe")] = true
+	check("attacking reports a verdict for every target",
+		not verdicts.is_empty())
+	var known := true
+	for v in verdicts:
+		if not ["", "hard", "soft", "pierced"].has(String(v)):
+			known = false
+	check("and every verdict is one the screen can render", known)
+
+	# A FINDING, asserted so it cannot drift quietly: BattleBuilder marks every
+	# authored effect "soft" because nothing in the slice asks for hard cover
+	# yet. So the resolver's hard-block branch is live code on a dead path. If
+	# this ever fails it means hard cover arrived, and the copy for it —
+	# battle.cover_blocks — is finally reachable.
+	var any_hard := false
+	for p in props:
+		if String(p.get("cover_class", "soft")) == "hard":
+			any_hard = true
+	check("all cover in the slice is still soft (see QUEUE)", not any_hard)
 
 
 ## Every arena the board can name must be on disk.

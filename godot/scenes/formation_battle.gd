@@ -608,6 +608,38 @@ func _draw_cover() -> void:
 		_board.draw_rect(r, MapStyle.BLOCK_EDGE, false, 2.0)
 
 
+## The prop's own name, so the player learns the yard rather than a rule.
+## "Behind the bicycle rack" is a place; "in soft cover" is a manual.
+func _prop_words(cover: Dictionary) -> String:
+	var id := String(cover.get("prop_id", ""))
+	if id == "":
+		return tr("battle.cover_generic")
+	return id.replace("-", " ")
+
+
+## What this attack runs into, before it is committed.
+##
+## Into the Breach's readability is not that you see the enemy's plan, it is
+## that you see the CONSEQUENCE of yours. An attack silently intercepted by a
+## bin is the same screen as an attack that missed, and the player learns
+## nothing from either.
+func _cover_warning_for(target_id: String) -> Control:
+	var f := _fighter(_selected_unit)
+	if f == null or target_id == "":
+		return null
+	var verdict := fight.attack_would_be_stopped(target_id, f.held_weapon_id)
+	match verdict:
+		"hard":
+			return _label(tr("battle.cover_blocks"), 12, PiritoriPalette.DANGER_RED)
+		"soft":
+			return _label(tr("battle.cover_intercepts"), 12, PiritoriPalette.INTEL_MUSTARD)
+		"pierced":
+			# Worth saying: it is the weapon doing this, and that is exactly the
+			# kind of thing that should make a loadout feel like a choice.
+			return _label(tr("battle.cover_pierced"), 12, PiritoriPalette.ROUTE_GREEN)
+	return null
+
+
 ## Target paths stay visible while a command is being chosen (§13.3).
 func _draw_target_path() -> void:
 	if _pending == null or _pending.target_id == "":
@@ -892,6 +924,14 @@ func _build_crew_column() -> void:
 	row.add_child(info)
 
 	info.add_child(_label(f.display_name, 16, MapStyle.TITLE_TEXT))
+
+	# Cover was fully implemented in the resolver and drawn on the board as an
+	# unlabelled green rectangle, so it changed fights without ever telling
+	# anyone. Say it where the decision is made.
+	var standing := fight.cover_under(f.slot.x, f.slot.y, f.side)
+	if standing.get("is_cover", false):
+		info.add_child(_label(tr("battle.in_cover") % _prop_words(standing),
+			12, PiritoriPalette.ROUTE_GREEN))
 	info.add_child(_track_row(tr("battle.condition"), f.condition, f.condition_max,
 		Color("#c8443c")))
 	info.add_child(_track_row(tr("battle.guard"), f.guard, maxi(f.condition_max, 5),
@@ -951,6 +991,13 @@ func _build_action_column() -> void:
 	if f == null or not f.can_act():
 		_action_col.add_child(_label(tr("battle.select_unit"), 13, MapStyle.TINY_TEXT))
 		return
+
+	# What the pending attack will actually run into, shown BEFORE the button
+	# that commits it — a warning underneath the result is a post-mortem.
+	if _pending != null and _pending.target_id != "":
+		var warn := _cover_warning_for(_pending.target_id)
+		if warn != null:
+			_action_col.add_child(warn)
 
 	var grid := HBoxContainer.new()
 	grid.add_theme_constant_override("separation", 8)

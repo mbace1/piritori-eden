@@ -414,3 +414,23 @@ real". The live read is now on screen. The rest of Phase A is not:
 - **Intel is never explained.** `target_lane == -1` renders as "aim unclear",
   which is honest, but nothing tells the player what raises intel or that a
   watcher's `intent-reading` is what buys the read.
+
+## Cover is visible now — and all of it is soft
+
+Cover was fully implemented in the resolver (hard blocks, soft intercepts unless
+the weapon is piercing) and drawn on the 2D board as an unlabelled green
+rectangle. So it changed fights without ever telling anyone. It now names itself
+on the selected crew member and warns before an attack is committed.
+
+Two things that follow:
+
+- **Nothing in the slice is hard cover.** `BattleBuilder._cover_props()` marks
+  every authored effect `"soft"` with the comment that nothing asks for hard
+  yet. So the resolver's hard-block branch and the `battle.cover_blocks` copy
+  are live code on a dead path. A gate now asserts this is still true, so the
+  day hard cover arrives it fails and points at the copy that becomes reachable.
+- **The 3D board does not draw cover at all.** `_draw_cover()` is in the 2D
+  renderer, and the game is 3D. So the *words* are now right and the *picture*
+  still is not: a player is told "behind the bicycle rack" with no rack visible
+  on the board they are looking at. This is the next honest step for cover, and
+  it needs a prop model or a marker, not more text.

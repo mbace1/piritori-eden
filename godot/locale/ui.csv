@@ -149,3 +149,8 @@ battle.intent_stand_down,is backing off,perääntyy,引き下がる
 battle.intent_withdraw,is leaving,lähtee,立ち去る
 battle.aim_lane,at your lane %d,kaistallesi %d,第%dレーンを狙う
 battle.aim_unknown,aim unclear,tähtäys epäselvä,狙いは不明
+battle.in_cover,behind the %s,%s takana,%sの陰
+battle.cover_generic,cover,suoja,遮蔽
+battle.cover_blocks,Blocked — nothing gets through that.,Estetty — mikään ei mene läpi.,阻まれる — 何も通らない。
+battle.cover_intercepts,Something is in the way. The swing will be caught.,Jotain on tiellä. Isku jää kiinni.,間に何かある。一撃は止められる。
+battle.cover_pierced,This weapon goes through it.,Tämä ase menee siitä läpi.,この武器なら貫ける。
