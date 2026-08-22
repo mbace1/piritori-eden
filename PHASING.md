@@ -150,6 +150,44 @@ character that moves is not, and nothing in the local tooling closes that.
 None of this widens `ART_BIBLE.md` §13.2. It is evidence for a decision the
 owner has not made.
 
+### 1.06 Rig, animation and roster variety, 2026-08-22
+
+**Owner ruling: rig and animate.** This widens `ART_BIBLE.md` §13.2, which until
+now made 3D a single tightly-contained exception for the presenter inside the
+TV. Recorded here rather than applied quietly; §13.2 needs amending if 3D units
+reach the board.
+
+**The whole chain works.** 2D art → T-pose → mesh → rig → clip → Godot, proved
+end to end: a 24-bone skeleton with `Hips / LeftUpLeg / …`, a 1.07s walking clip
+of 29 tracks, deforming correctly in the engine. 35 credits total (743 → 708),
+of which the rig itself was 5 and **walking and running came free with it**.
+
+`~/.meshy/rig.py` is the tool that made it possible. `m3d.sh` stops at
+image-to-3d, so a character could be modelled and never move. The two endpoints
+it was missing are `POST /openapi/v1/rigging` (input_task_id + model_url) and
+`POST /openapi/v1/animations` (rig_task_id + action_id).
+
+**A roster does NOT need a model per person.** One rigged mesh recoloured by a
+hue-band shader gives believable separate people at zero credits and zero extra
+download — tested with four at once, differing in jacket and trousers while
+keeping skin and boots. So the economics are: **one model per ROLE** (the
+silhouette and build are what a role is), and its crew are recolours.
+
+The trap that took one pass to find: pale skin and a cream jacket are both
+low-saturation and bright, so a band wide enough to catch the jacket caught
+faces and hands and turned the crew green. Skin is a narrow warm hue with real
+saturation; protect it explicitly before shifting anything.
+
+**Two things not yet solved.**
+
+*Weight.* A rigged glb is 7.1MB and **6.5MB of that is one PNG texture** — the
+same problem Arvo had, with the same fix (`process/size_limit` on the imported
+texture). Uncapped, six roles would add 42MB to a build that is already 58.
+
+*The boots.* They read as too large on the model, and that is inherited from the
+2D T-pose rather than introduced by Meshy. It is fixed by redrawing the source,
+not by touching the mesh.
+
 ### 1.1 The item rule
 
 **An item changes what you can do. It does not add a modifier you have to

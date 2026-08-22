@@ -98,6 +98,18 @@ pick up, and half of it will turn out to be wrong.
   ending near 40% of frame height. A replacement needs a broad floor across the
   lower ~60%.
 
+## 3D units (see PHASING 1.06)
+
+- **`art/v3/cast3d/` is staged but NOT registered.** Two rigged glbs sit there
+  outside the manifest, which is exactly the antipattern that made every unit
+  look identical for weeks. Register them or delete them; do not leave them.
+- **Textures are uncapped.** 6.5MB of PNG per character. `process/size_limit`
+  on the imported texture is the known fix.
+- **`ART_BIBLE.md` §13.2 still says 3D is one exception.** The owner has ruled
+  otherwise; the document has not caught up.
+- **Nothing draws 3D units in battle.** The board renders 2D standees. Adopting
+  3D is a renderer change, not an asset swap.
+
 ## Art
 
 - **Faces wash out at battle scale.** The cast sheets are 362x543 with real
