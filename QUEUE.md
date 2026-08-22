@@ -40,12 +40,14 @@ pick up, and half of it will turn out to be wrong.
   Owner call, not tuning.
 - **The fourth row is named `rear`** as a placeholder. Needs a word, or a
   reason the depth vocabulary should stay three deep with five lanes.
-- **Weapon reach was tuned for three lanes, and on six it bites.** `lane_spread`
-  0 means same-lane only; an unarmed crew member on a six-lane board frequently
-  has nothing in reach at all and correctly refuses to attack. The refusal is
-  now VISIBLE rather than silent, which is an improvement, but a fight where
-  most units cannot act is not a fight. Reach values need rebalancing for the
-  wider board.
+- ~~**Units could not attack.**~~ Not reach after all — `allowed_rows` was being
+  compared against a unified depth, so a front-only weapon refused to fire from
+  the front rank. Fixed with `FightBoard.row_of()`.
+- **Weapon reach is still tuned for three lanes.** `lane_spread`
+  `lane_spread` 0 covers one column of six rather than one of three, so a
+  swung weapon reaches proportionally less of the board than it did. Nothing is
+  broken and units can act, but the numbers were chosen against a narrower
+  board and have not been re-judged against this one. Owner question below.
 - **Deployment now fills the front rank.** With six lanes, three crew all fit in
   row 0, so nobody stands in middle or back. The old hand-written table put one
   in front and two in middle. `_deploy_order()` follows canon's stated rule

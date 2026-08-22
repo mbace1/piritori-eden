@@ -101,6 +101,20 @@ static func home_band(is_player: bool) -> Array[int]:
 	return out
 
 
+## A depth taken back to the row index within a side's own formation, inverse of
+## depth_of(). Returns -1 when the fighter is not standing in its own band at
+## all — which the owner's movement rule makes perfectly legal.
+static func row_of(depth: int, is_player: bool) -> int:
+	if is_player:
+		if depth < 0 or depth >= rows:
+			return -1
+		return rows - 1 - depth
+	var r := depth - rows - NEUTRAL_ROWS
+	if r < 0 or r >= rows:
+		return -1
+	return r
+
+
 ## Which band a depth belongs to: -1 player, 0 neutral, 1 opposition.
 static func band_of(depth: int) -> int:
 	if depth < rows:

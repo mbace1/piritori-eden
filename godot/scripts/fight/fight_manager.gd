@@ -924,7 +924,20 @@ func _get_attack_targets(f: Fighter, weapon: Dictionary) -> Array:
 		default_rows.append(r)
 	var allowed_rows: Array = weapon.get("allowed_rows", default_rows)
 
-	if not allowed_rows.has(f.slot.y):
+	# allowed_rows names rows within the ATTACKER'S OWN FORMATION — front,
+	# middle, back — while a slot carries a unified depth across the whole
+	# board. Comparing them directly was comparing two different coordinate
+	# spaces: depth 0 is the player's BACK row and is not the opposition's
+	# ground at all, so a front-only weapon refused to fire from the front rank
+	# and most of a crew simply could not attack.
+	#
+	# A unit that has advanced out of its own band is at the front by
+	# definition, so it counts as ROW_FRONT. (Owner ruling: crews may cross the
+	# whole board, so this is a normal position, not an edge case.)
+	var own_row := FightBoard.row_of(f.slot.y, f.side == Fighter.Side.PLAYER)
+	if own_row < 0:
+		own_row = EquipmentRules.ROW_FRONT
+	if not allowed_rows.has(own_row):
 		return targets  # weapon cannot fire from this row
 
 	var lane_min: int = maxi(0, f.slot.x - lane_spread)

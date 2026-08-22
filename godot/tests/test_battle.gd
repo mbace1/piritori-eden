@@ -145,6 +145,22 @@ board shape (one number, not four)")
 		art_paths.size() == roles.size(),
 		"distinct textures: %d" % art_paths.size())
 
+	# allowed_rows names rows in a side's OWN formation; a slot carries a
+	# unified depth. Comparing them directly meant a front-only weapon refused
+	# to fire from the front rank, because the player's front is depth 2 and
+	# the rule was reading depth 0 — their BACK row.
+	check("the player's front rank reads as front",
+		FightBoard.row_of(FightBoard.depth_of(0, true), true) == 0)
+	check("the player's back rank reads as back",
+		FightBoard.row_of(FightBoard.depth_of(2, true), true) == 2)
+	check("the opposition's front rank reads as front",
+		FightBoard.row_of(FightBoard.depth_of(0, false), false) == 0)
+	check("a player depth is not an opposition row",
+		FightBoard.row_of(FightBoard.depth_of(0, true), false) == -1)
+	check("neutral ground belongs to no formation",
+		FightBoard.row_of(FightBoard.rows, true) == -1
+		and FightBoard.row_of(FightBoard.rows, false) == -1)
+
 
 func _test_cells() -> void:
 	print("\ncell grammar (front-2 etc.)")
