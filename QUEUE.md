@@ -46,9 +46,19 @@ pick up, and half of it will turn out to be wrong.
 
 ## The stage (see COMBAT.md 3.1)
 
-- **The projections do not match.** Location art is face-on; the board's axes
-  are diagonal. Owner fork: turn the board, or build the stages corner-on.
-  Nothing else about the battle's look matters as much.
+- ~~**The projections do not match.**~~ Fixed by construction — the floor is
+  built from `FORWARD`/`LANE_AXIS` in `_floor_quad()` and a flat top-down
+  paving texture is stretched over it, so it aligns on every board size and
+  every stage.
+- **The paving is not registered art.** It is staged at
+  `data/art/surfaces/paving-courtyard-topdown-v01.png` and loaded by path,
+  which is exactly what the art rules forbid — runtime code should resolve a
+  stable id from `art/v3/manifest.json`. It needs a manifest entry and an
+  approval before it is anything but a prototype.
+- **The backdrop still paints its own floor.** Now that the engine draws the
+  ground, the approved courtyard's painted cobbles sit underneath it and only
+  the buildings are wanted. Stage art should become architecture-and-sky with
+  the floor left out.
 - **`PLAY_AREA` is a port-side estimate living in `formation_battle.gd`.** It
   belongs in `art/v3/manifest.json` beside `portrait_safe_bounds`, as a
   `play_area` on each scene asset. The file says so itself.

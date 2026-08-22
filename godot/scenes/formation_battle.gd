@@ -97,6 +97,8 @@ const SIDE_RED := Color("#c8443c")
 
 var _roles: Dictionary = {}      ## role id -> {color, symbol}
 var _stage: Texture2D = null
+## Flat top-down paving, projected onto the board's own axes by _draw_floor().
+var _paving: Texture2D = null
 var _stage_id: String = ""
 
 
@@ -143,7 +145,24 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 
 ## The battle's own location art. Each battle names a scene_asset_id, and the
 ## slice ships approved art for both — Karhupuisto and the courtyard.
+## The paving is a SURFACE, not a scene: one flat texture reused by every stage,
+## projected onto whatever board is in play. It is staged under data/art like
+## any other runtime art and is not yet registered in art/v3/manifest.json —
+## see QUEUE.md.
+const PAVING_PATH := "res://data/art/surfaces/paving-courtyard-topdown-v01.png"
+
+## Warm night grade applied to the flat paving so it belongs to the stage it is
+## drawn inside rather than sitting on top of it.
+const FLOOR_GRADE := Color(0.60, 0.52, 0.44)
+
+
+func _load_paving() -> void:
+	if _paving == null and ResourceLoader.exists(PAVING_PATH):
+		_paving = load(PAVING_PATH)
+
+
 func _load_stage(id: String) -> void:
+	_load_paving()
 	_stage = null
 	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
 	_stage_id = asset_id
@@ -192,6 +211,10 @@ func _build() -> void:
 
 	# ── the encounter, above the console ──
 	_board = Control.new()
+	# UVs beyond 0..1 only tile when the CANVAS ITEM says they may. Without
+	# this the paving stretched into stripes across the whole floor instead of
+	# repeating — the geometry was already right and only the sampling was not.
+	_board.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_board.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -290,6 +313,69 @@ func _cell_pos(lane: int, row: int, side: int) -> Vector2:
 	return c + fwd * (CENTRE_GAP + float(row)) 		+ lane_v * (float(lane) - FightBoard.lane_centre())
 
 
+## The whole playing surface as one parallelogram, built from the SAME two axes
+## the cells are placed on. That is the point: COMBAT.md §3.1 found the battle
+## looked wrong because the painted floor ran face-on while the formation ran
+## diagonally, so the grid sat at 45 degrees across ground that was not oriented
+## that way.
+##
+## Two attempts to fix it by asking Nano Banana for a rotated isometric
+## projection failed — the model does not reliably honour one. So the floor is
+## not asked for at all: it is CONSTRUCTED here from FORWARD and LANE_AXIS, and
+## a flat top-down paving texture is stretched over it. Alignment is then exact
+## by construction rather than by luck, on every board size and every stage.
+##
+## `margin` is in tiles beyond the outermost cell, so the ground reads as a
+## place the fight happens in rather than a mat exactly the size of the rules.
+func _floor_quad(margin: float = 0.9) -> PackedVector2Array:
+	var r := _play_rect()
+	var c := r.get_center()
+	var t := _tile()
+	var fwd := Vector2(FORWARD.x * t.x, FORWARD.y * t.y)
+	var lane := Vector2(LANE_AXIS.x * t.x, LANE_AXIS.y * t.y)
+
+	var f_ext := CENTRE_GAP + float(FightBoard.rows - 1) + 0.5 + margin
+	var l_ext := FightBoard.lane_centre() + 0.5 + margin
+
+	return PackedVector2Array([
+		c - fwd * f_ext - lane * l_ext,   # near-left
+		c + fwd * f_ext - lane * l_ext,   # far-left
+		c + fwd * f_ext + lane * l_ext,   # far-right
+		c - fwd * f_ext + lane * l_ext,   # near-right
+	])
+
+
+## Paving stretched over the quad. The texture is FLAT top-down art — no
+## projection baked in — so the tiling factor is the only thing deciding how
+## big a stone reads, and it scales with the board rather than the screen.
+func _draw_floor() -> void:
+	var quad := _floor_quad()
+	if _paving == null:
+		_board.draw_colored_polygon(quad, MapStyle.LAND)
+		return
+	var tile_u: float = maxf(float(FightBoard.lanes), 1.0) * 0.55
+	var tile_v: float = maxf(float(FightBoard.rows), 1.0) * 0.75
+	var uvs := PackedVector2Array([
+		Vector2(0.0, 0.0),
+		Vector2(0.0, tile_v),
+		Vector2(tile_u, tile_v),
+		Vector2(tile_u, 0.0),
+	])
+	# Graded to the stage it sits in. The paving is painted cool and the approved
+	# courtyard is a warm ochre night, so an ungraded floor read as a cold slab
+	# dropped onto a warm photograph. This warms and darkens it toward the art.
+	_board.draw_colored_polygon(quad, FLOOR_GRADE, uvs, _paving)
+
+
+## Edge of the constructed floor: a thin torn-paper lip, because a hard
+## geometric boundary is the one thing the cut-paper register does not do.
+func _draw_floor_edge() -> void:
+	var quad := _floor_quad()
+	var edge := PackedVector2Array(quad)
+	edge.append(quad[0])
+	_board.draw_polyline(edge, Color(0.10, 0.09, 0.08, 0.55), 3.0, true)
+
+
 func _diamond(centre: Vector2, w: float, h: float) -> PackedVector2Array:
 	return PackedVector2Array([
 		centre + Vector2(0, -h * 0.5),
@@ -317,11 +403,14 @@ func _draw_board() -> void:
 	else:
 		_board.draw_rect(Rect2(Vector2.ZERO, _board.size), MapStyle.LAND)
 
+	_draw_floor()
+	_draw_floor_edge()
+
 	var reveal := _cells_to_reveal()
 
 	for side in [int(Fighter.Side.PLAYER), int(Fighter.Side.OPPOSITION)]:
-		for lane in range(3):
-			for row in range(3):
+		for lane in range(FightBoard.lanes):
+			for row in range(FightBoard.rows):
 				var key := Vector3i(lane, row, side)
 				if not reveal.has(key):
 					continue
