@@ -107,6 +107,10 @@ uniform sampler2D base : source_color, hint_default_white;
 uniform float jacket_shift = 0.0;
 uniform float trouser_shift = 0.0;
 uniform float dim = 1.0;
+uniform vec3 rim_tint = vec3(0.62, 0.78, 1.0);
+uniform float rim_power = 2.6;
+uniform float rim_gain = 0.85;
+uniform float lift = 0.10;
 vec3 rgb2hsv(vec3 c){
 	vec4 K = vec4(0.0,-1.0/3.0,2.0/3.0,-1.0);
 	vec4 p = mix(vec4(c.bg,K.wz), vec4(c.gb,K.xy), step(c.b,c.g));
@@ -128,8 +132,24 @@ void fragment(){
 		if (h.y < 0.30 && h.z > 0.45) h.x = fract(h.x + jacket_shift);
 		else if (h.x > 0.45 && h.x < 0.62) h.x = fract(h.x + trouser_shift);
 	}
-	ALBEDO = hsv2rgb(h) * dim;
+	// LIFT, then RIM.
+	//
+	// Four of the six wear dark clothes and the stage is a night yard, so at
+	// battle scale the crew read as six dark shapes — the silhouettes differ,
+	// which was the point of choosing them, but the difference was invisible.
+	//
+	// The lift is a floor under the albedo so black cloth is not pure black.
+	// The rim is what actually separates a figure from the ground: a cool edge
+	// where the surface turns away from the viewer, which is how a person is
+	// picked out against a dark street in real life.
+	vec3 col = hsv2rgb(h);
+	col = mix(col, col + vec3(lift), 1.0 - h.z);
+	ALBEDO = col * dim;
 	ROUGHNESS = 0.9;
+
+	float f = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0),
+		rim_power);
+	EMISSION = rim_tint * f * rim_gain * dim;
 }
 """
 
@@ -352,9 +372,14 @@ func _build_camera() -> void:
 	# size the arena turned out to be.
 	var board_span := maxf(float(FightBoard.lanes), float(FightBoard.total_rows())) * CELL
 	_cam.size = board_span * 1.5
-	_cam.rotation_degrees = Vector3(-26.565, 45.0, 0.0)
+	_cam.rotation_degrees = Vector3(-26.565, -135.0, 0.0)
+	# FROM THE PLAYER'S SIDE. The player's rows are the low depths, which sit at
+	# negative Z, so a camera parked at +X/+Z was standing behind the OPPOSITION
+	# and looking at the player's crew across the board. Your own people belong
+	# in the foreground — the rim light made it obvious, because the near team
+	# was rimmed in the opposition's red.
 	var back := board_span * 1.6
-	_cam.position = Vector3(back, back * 0.62 + _ground, back)
+	_cam.position = Vector3(-back, back * 0.62 + _ground, -back)
 	_world.add_child(_cam)
 
 
@@ -412,6 +437,14 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 	# Downed and routed units read as darker rather than absent.
 	mat.set_shader_parameter("dim",
 		0.45 if not f.is_active() else 1.0)
+	# The side's own colour in the rim, so which team a figure belongs to is
+	# readable from its edge before any label is read. §12.2 asks for team and
+	# intent to be readable, and colour alone never carries meaning — the
+	# silhouette carries the role, the rim carries the side.
+	var side_tint := SIDE_CYAN if f.side == Fighter.Side.PLAYER else SIDE_RED
+	mat.set_shader_parameter("rim_tint",
+		Vector3(side_tint.r, side_tint.g, side_tint.b))
+	mat.set_shader_parameter("rim_gain", 0.35 if not f.is_active() else 0.85)
 	mi.set_surface_override_material(0, mat)
 
 
