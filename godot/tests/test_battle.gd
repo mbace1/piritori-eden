@@ -42,6 +42,7 @@ func _ready() -> void:
 	_test_new_weapons()
 	_test_equipment_from_canon()
 	_test_build_2v2()
+	_test_hired_crew_can_fight()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -390,6 +391,33 @@ func _test_equipment_from_canon() -> void:
 	# Locked equipment must not reach the field before it is earned.
 	check("the firearm is locked on day 1", not EquipmentRules.is_unlocked("first-handgun"))
 	check("the feature phone starts unlocked", EquipmentRules.is_unlocked("feature-phone"))
+
+
+## A hire is only real if they can be sent into a fight. Everything else about
+## hiring lives in the shell, so this is the one check that proves the registry
+## overlay reaches the thing that actually matters.
+func _test_hired_crew_can_fight() -> void:
+	print("
+somebody hired off the street can be fielded")
+	GameState.new_campaign()
+	var candidate := GameState.hiring_pool()[0]
+	GameState.cash_eur = int(candidate["wage_eur"])
+	check("hired", GameState.hire(candidate))
+
+	var ids := _crew_ids(1)
+	ids.append(String(candidate["id"]))
+	var def := BattleBuilder.build("battle-karhupuisto-2v2", ids)
+	check("the battle still builds", not def.is_empty())
+	eq("both fighters are on the board", def["player_units"].size(), 2)
+
+	var mine: Array = def["player_units"].filter(
+		func(u): return u["fighter_id"] == String(candidate["id"]))
+	check("the hire is one of them", mine.size() == 1)
+	var unit: Dictionary = mine[0]
+	eq("they fight under their own name",
+		String(unit["display_name"]), String(candidate["name"]))
+	check("with the stats they were rolled with",
+		int(unit["condition_max"]) == int(candidate["condition"]))
 
 
 func _test_build_2v2() -> void:

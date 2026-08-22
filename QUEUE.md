@@ -211,3 +211,29 @@ Still recoverable, NOT done — each is an Art/Content lane call, not Engine:
 
 Also noted: `small-local.glb` survives in `.godot/imported/` with its source gone
 — stale local cache only, it does not ship. Same shape as the `_3dtest` stray.
+
+## Hiring and the roster (COMBAT.md §7) — what is placeholder
+
+- **"Jelena Marković" renders as a tofu box on the web build, today.** Not caused
+  by the generator; found by it. Noto Sans JP carries the entire web build's text
+  (the named system faces resolve to nothing in a browser) and it has **no**
+  c-acute, c-caron, s-caron or z-caron — only Latin-1, so Finnish ä/ö are fine.
+  The font subset gate only scans locale CSVs and code strings, so a name living
+  in `content/era1-slice-v1.json` was never checked. Two fixes are possible and
+  both are Art/Content calls: bundle a Latin face that covers Latin Extended-A,
+  or extend the gate to scan authored content and accept renaming. Generated
+  Balkan surnames dodge it for now by using diacritic-free real names.
+- **Placeholder names, flat pools.** No weighting by era, age or district; a
+  1950s-born Finn is as likely as a 1980s one. Fine for churn, wrong for texture.
+- **Six portraits for unlimited people.** Generated crew recycle the six drawn
+  heads, so hires visibly repeat. The 3D hue-band recolour helps on the board and
+  does nothing for the rail portrait.
+- **The signing fee is the wage, and that is a guess** (DESIGN_LOCKS §13). Wages
+  were displayed and never charged; using the wage as an upfront cost at least
+  makes the number mean something, but nothing has playtested whether hiring is
+  too cheap. Recurring wages still do not exist — a crew member costs money once.
+- **Stat spread is ±1 around the role base.** Deliberately narrow so churn does
+  not become a lottery, but it also means hires are nearly identical within a
+  role. Competencies are fixed per role, so there is no variety there at all.
+- **The pool is three people per day and never runs dry.** No scarcity, no
+  reputation gate, no faction refusing to work for you.

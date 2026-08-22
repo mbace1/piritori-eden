@@ -132,8 +132,34 @@ func offer(id: String) -> Dictionary:
 func mission(id: String) -> Dictionary:
 	return _require(_missions, id, "mission")
 
+## Crew hired off the street (COMBAT.md §7) are not in the authored slice, so
+## they are kept in an overlay rather than written into canon. Canon stays
+## immutable and loaded-from-disk; the overlay is runtime state that GameState
+## owns and re-registers after a load.
+var _generated: Dictionary = {}
+
+
 func crew_member(id: String) -> Dictionary:
+	if _generated.has(id):
+		return _generated[id]
 	return _require(_crew, id, "crew")
+
+
+func register_generated_crew(record: Dictionary) -> void:
+	var id := String(record.get("id", ""))
+	if id == "":
+		push_error("ContentRegistry: generated crew with no id")
+		return
+	if _crew.has(id):
+		# A generated id colliding with an authored one would silently shadow a
+		# story character, which is the worst failure this file can have.
+		push_error("ContentRegistry: generated crew '%s' collides with canon" % id)
+		return
+	_generated[id] = record
+
+
+func forget_generated_crew() -> void:
+	_generated.clear()
 
 func product(id: String) -> Dictionary:
 	return _require(_products, id, "product")

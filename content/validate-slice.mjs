@@ -248,6 +248,31 @@ for (const { absolute, item, context } of artFiles) {
   }
 }
 
+// COMBAT.md §7 — who is exempt from the career ceiling, derived rather than
+// declared. If an encounter calls a crew member by id, the slice DEPENDS on
+// them being alive to be called; letting careers retire them would break that
+// content silently, on a long campaign, far from the change that caused it.
+//
+// So `named` is not a taste judgement, it is a fact about the content, and this
+// gate keeps the flag honest in both directions.
+{
+  const others = JSON.stringify(
+    Object.fromEntries(Object.entries(content).filter(([k]) => k !== "crew")));
+  for (const c of content.crew ?? []) {
+    const dependedOn = others.includes(c.id);
+    if (dependedOn && c.named !== true) {
+      errors.push(
+        `crew ${c.id}: an encounter refers to them, so they must be named — ` +
+        `COMBAT.md §7 would otherwise retire them and break that encounter`);
+    }
+    if (!dependedOn && c.named === true) {
+      errors.push(
+        `crew ${c.id}: marked named, but nothing in the slice refers to them. ` +
+        `Named is for people the content depends on, not a promotion`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`SLICE INVALID (${errors.length} errors)`);
   for (const error of errors) console.error(`- ${error}`);

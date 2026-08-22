@@ -116,3 +116,7 @@ equipment.folding-knife,Folding knife,Linkkuveitsi,折りたたみナイフ
 equipment.signal-flare,Signal flare,Merkkisoihtu,信号炎管
 equipment.feature-phone,Feature phone,Peruspuhelin,携帯電話
 equipment.first-handgun,Handgun,Käsiase,拳銃
+ui.hiring,TAKING ON,PALKKAAMASSA,雇い入れ
+ui.hiring_note,Whoever is around today. Come back tomorrow and it will be somebody else.,Ketä sattuu olemaan tänään. Huomenna on joku muu.,今日その辺にいる者たち。明日になれば別の顔ぶれになる。
+ui.hire,Take them on — €%d,Palkkaa — %d €,雇う — €%d
+crew.career_left,%d fights left in them,%d ottelua jäljellä,あと%d戦

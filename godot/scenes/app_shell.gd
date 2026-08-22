@@ -755,7 +755,8 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 	return b
 
 
-## CREW — the six authored recruits, revealed as they are earned.
+## CREW — the authored recruits, everyone hired off the street, and who is
+## available to hire today.
 func _show_crew() -> void:
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("cmd.crew"), 19, MapStyle.TITLE_TEXT))
@@ -770,8 +771,65 @@ func _show_crew() -> void:
 		_rail_box.add_child(_make_label("   " + tr("ui.crew_stats") % [
 			c.get("condition", "?"), c.get("nerve", "?"), c.get("tempo", "?"),
 			c.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
+		_add_career_line(String(c.get("id", "")))
+
+	# Everyone hired off the street. They are in the roster and nowhere in the
+	# slice, so the loop above cannot see them.
+	for id in GameState.roster:
+		var cid := String(id)
+		if not GameState.generated_crew.has(cid):
+			continue
+		any = true
+		var g: Dictionary = GameState.generated_crew[cid]
+		_rail_box.add_child(_make_label("%s — %s" % [
+			g.get("name", "?"), g.get("role", "")], 15, PiritoriPalette.PLAYER_CYAN))
+		_rail_box.add_child(_make_label("   " + tr("ui.crew_stats") % [
+			g.get("condition", "?"), g.get("nerve", "?"), g.get("tempo", "?"),
+			g.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
+		_add_career_line(cid)
+
 	if not any:
 		_rail_box.add_child(_make_label(tr("ui.crew_none"), 14, PiritoriPalette.TEXT_DIM))
+
+	_add_hiring_section()
+
+
+## The career counter, and only when §7's warning threshold says to show it —
+## hidden entirely, the spend-or-save decision becomes a guess; shown always, it
+## turns every hire into a countdown.
+func _add_career_line(crew_id: String) -> void:
+	if not GameState.career_is_visible(crew_id):
+		return
+	var left := GameState.career_left(crew_id)
+	_rail_box.add_child(_make_label("   " + tr("crew.career_left") % left,
+		12, PiritoriPalette.INTEL_MUSTARD))
+
+
+## Careers empty the roster and nothing used to fill it, so a long campaign ran
+## out of people with no explanation. The city always has somebody.
+func _add_hiring_section() -> void:
+	var pool := GameState.hiring_pool()
+	if pool.is_empty():
+		return
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("ui.hiring"), 15, MapStyle.TITLE_TEXT))
+	_rail_box.add_child(_make_label(tr("ui.hiring_note"), 12, PiritoriPalette.TEXT_DIM))
+	for candidate in pool:
+		var c: Dictionary = candidate
+		_rail_box.add_child(_make_label("%s — %s" % [
+			c.get("name", "?"), c.get("role", "")], 14, PiritoriPalette.TEXT))
+		_rail_box.add_child(_make_label("   " + tr("ui.crew_stats") % [
+			c.get("condition", "?"), c.get("nerve", "?"), c.get("tempo", "?"),
+			c.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
+		var fee := int(c.get("wage_eur", 0))
+		var afford := GameState.cash_eur >= fee
+		var b := _make_button(tr("ui.hire") % fee,
+			PiritoriPalette.PLAYER_CYAN if afford else PiritoriPalette.LOCKED_GREY)
+		b.disabled = not afford
+		b.pressed.connect(func():
+			if GameState.hire(c):
+				_show_crew())
+		_rail_box.add_child(b)
 
 
 ## MISSIONS — commitment shown before acceptance (handoff §5).

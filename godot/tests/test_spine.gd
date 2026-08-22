@@ -29,6 +29,7 @@ func _ready() -> void:
 	_test_save_round_trip()
 	_test_careers()
 	_test_loot()
+	_test_hiring()
 	_test_every_reference_resolves()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -248,6 +249,79 @@ loot (COMBAT.md §8)")
 	GameState.lose_kit_of(PackedStringArray(["baseball-bat"]))
 	check("what a fallen crew carried is lost with them",
 		not GameState.equipment_owned.has("baseball-bat"))
+
+
+## Hiring (COMBAT.md §7). Careers gave everyone a ceiling and nothing put anyone
+## back, so a long campaign drained to an empty roster with no message.
+func _test_hiring() -> void:
+	print("
+hiring (COMBAT.md §7)")
+	GameState.new_campaign()
+
+	# Determinism is what lets the pool be regenerated instead of stored, and
+	# what stops walking away from a bad offer being a free reroll.
+	var a := CrewGenerator.generate(4242)
+	var b := CrewGenerator.generate(4242)
+	check("the same seed is the same person", a["name"] == b["name"] and a["role"] == b["role"])
+	check("a different seed is somebody else",
+		CrewGenerator.generate(4243)["id"] != a["id"])
+	check("today's offer does not change while you look at it",
+		GameState.hiring_pool()[0]["id"] == GameState.hiring_pool()[0]["id"])
+
+	# The rule that protects the story: no runtime person can be named, because
+	# named means authored content calls them by id and no content can refer to
+	# somebody invented after it was written.
+	var all_disposable := true
+	var roles_seen: Dictionary = {}
+	for i in 200:
+		var g := CrewGenerator.generate(i)
+		if bool(g.get("named", false)):
+			all_disposable = false
+		roles_seen[g["role"]] = true
+		if not CrewGenerator.ROLES.has(g["role"]):
+			all_disposable = false
+	check("nobody hired off the street is ever named", all_disposable)
+	check("and every one of the six roles turns up", roles_seen.size() == CrewGenerator.ROLES.size())
+
+	# Stats must sit in the authored band, not out-class hand-written crew.
+	var in_band := true
+	for i in 200:
+		var g := CrewGenerator.generate(i * 7 + 1)
+		var base: Dictionary = CrewGenerator.ROLE_BASE[g["role"]]
+		for stat in ["condition", "nerve", "tempo"]:
+			if absi(int(g[stat]) - int(base[stat])) > CrewGenerator.SPREAD:
+				in_band = false
+	check("rolled stats stay inside the role's band", in_band)
+
+	# Hiring costs money and puts a real person in the roster.
+	var candidate := GameState.hiring_pool()[0]
+	var fee := int(candidate["wage_eur"])
+	GameState.cash_eur = fee + 10
+	check("a hire you can afford goes through", GameState.hire(candidate))
+	check("and the fee was taken", GameState.cash_eur == 10)
+	check("they are in the roster", GameState.roster.has(String(candidate["id"])))
+	check("the same person is not hired twice", not GameState.hire(candidate))
+
+	# The registry must know them, or the battle builder cannot field them.
+	var back := ContentRegistry.crew_member(String(candidate["id"]))
+	check("the registry can find them", String(back.get("name", "")) == String(candidate["name"]))
+	check("and they have a career like anyone else",
+		GameState.career_left(String(candidate["id"])) == GameState.CAREER_FIGHTS)
+
+	GameState.cash_eur = 0
+	var broke := GameState.hiring_pool()
+	if not broke.is_empty():
+		check("no money means no hire", not GameState.hire(broke[0]))
+
+	# A hire exists nowhere but the save file.
+	var saved := GameState.to_dict()
+	var hired_id := String(candidate["id"])
+	GameState.new_campaign()
+	check("a new campaign starts with nobody hired", not GameState.roster.has(hired_id))
+	check("the save reloads", GameState.from_dict(saved))
+	check("and the hire survived it", GameState.roster.has(hired_id))
+	check("the registry knows them again after a load",
+		String(ContentRegistry.crew_member(hired_id).get("name", "")) == String(candidate["name"]))
 
 
 ## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a

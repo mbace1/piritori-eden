@@ -19,7 +19,7 @@ signal slice_completed
 signal battle_requested(battle_id: String, negotiation_open: bool)
 signal ending_resolved(ending_id: String)
 
-const SCHEMA_VERSION := 3
+const SCHEMA_VERSION := 4
 
 ## Era I interface lock (SCREEN_AND_COMBAT_BASELINE): the fixed historical rate.
 const MARKKA_PER_EURO := 5.94573
@@ -169,6 +169,9 @@ func new_campaign(with_seed: int = 0) -> void:
 
 
 # ── the clock ──────────────────────────────────────────────────────────────
+	generated_crew = {}
+	_restore_generated_crew()
+
 
 func current_block() -> String:
 	return blocks_per_day[block_index % blocks_per_day.size()]
@@ -502,6 +505,56 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 
 ## Crew on the roster and not lost. Everyone recruited counts; the slice has
 ## no removal path yet, and inventing one would be inventing consequence.
+# ── hiring (COMBAT.md §7) ──────────────────────────────────────────────────
+
+## Everyone hired off the street, by id. Persisted, because a generated person
+## exists nowhere else — lose this and a saved campaign loads with crew the
+## registry has never heard of.
+var generated_crew: Dictionary = {}
+
+
+## Today's candidates. Regenerated on demand rather than stored, so the offer
+## cannot drift out of sync with the day, and identical every time you look at
+## the same day so that walking away is a real decision rather than a reroll.
+func hiring_pool(count: int = 3) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for c in CrewGenerator.pool(seed_value, day, count):
+		if not roster.has(String(c.get("id", ""))):
+			out.append(c)
+	return out
+
+
+## The signing fee is the crew member's own wage.
+##
+## PLACEHOLDER (DESIGN_LOCKS.md §13). Wages were displayed and never charged, so
+## hiring was free and the churn careers created cost nothing — which removes
+## the whole point of a bounded career. Using the wage makes the number already
+## on screen mean something and is derived from authored data rather than
+## invented, but it has never been playtested.
+func hire(record: Dictionary) -> bool:
+	var id := String(record.get("id", ""))
+	if id == "" or roster.has(id):
+		return false
+	var fee := int(record.get("wage_eur", 0))
+	if cash_eur < fee:
+		return false
+	cash_eur -= fee
+	generated_crew[id] = record
+	ContentRegistry.register_generated_crew(record)
+	roster.append(id)
+	revealed[id] = true
+	state_changed.emit()
+	return true
+
+
+## Put every hire back in front of the registry. Called after a load, and after
+## a new campaign clears the overlay, because the registry holds canon only.
+func _restore_generated_crew() -> void:
+	ContentRegistry.forget_generated_crew()
+	for id in generated_crew:
+		ContentRegistry.register_generated_crew(generated_crew[id])
+
+
 # ── loot (COMBAT.md §8) ────────────────────────────────────────────────────
 
 ## Can this be bought at all, or only taken off somebody carrying it?
@@ -741,6 +794,7 @@ func execute_offer(offer_id: String) -> bool:
 func to_dict() -> Dictionary:
 	return {
 		"schema_version": SCHEMA_VERSION,
+		"generated_crew": generated_crew,
 		"content_package_id": content_package_id,
 		"seed": seed_value,
 		"day": day,
@@ -821,4 +875,6 @@ func from_dict(d: Dictionary) -> bool:
 	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
+	generated_crew = d.get("generated_crew", {})
+	_restore_generated_crew()
 	return true

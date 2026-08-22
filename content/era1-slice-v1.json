@@ -213,7 +213,8 @@
       "initial_equipment": [
         "feature-phone"
       ],
-      "recruit_encounter_id": "enc-mira-at-tram-stop"
+      "recruit_encounter_id": "enc-mira-at-tram-stop",
+      "named": true
     },
     {
       "id": "crew-rauno-lahti",
@@ -237,7 +238,8 @@
       "initial_equipment": [
         "baseball-bat"
       ],
-      "recruit_encounter_id": "enc-mccormick-yard"
+      "recruit_encounter_id": "enc-mccormick-yard",
+      "named": true
     },
     {
       "id": "crew-samira-elmi",
@@ -261,7 +263,8 @@
       "initial_equipment": [
         "feature-phone"
       ],
-      "recruit_encounter_id": "enc-karhupuisto-watch"
+      "recruit_encounter_id": "enc-karhupuisto-watch",
+      "named": true
     },
     {
       "id": "crew-duy-nguyen",
@@ -285,7 +288,8 @@
       "initial_equipment": [
         "feature-phone"
       ],
-      "recruit_encounter_id": "enc-toko-quiet-voice"
+      "recruit_encounter_id": "enc-toko-quiet-voice",
+      "named": false
     },
     {
       "id": "crew-ilkka-koskinen",
@@ -309,7 +313,8 @@
       "initial_equipment": [
         "feature-phone"
       ],
-      "recruit_encounter_id": "enc-bank-counter"
+      "recruit_encounter_id": "enc-bank-counter",
+      "named": false
     },
     {
       "id": "crew-jelena-markovic",
@@ -333,7 +338,8 @@
       "initial_equipment": [
         "baton"
       ],
-      "recruit_encounter_id": "enc-courtyard-last-call"
+      "recruit_encounter_id": "enc-courtyard-last-call",
+      "named": false
     }
   ],
   "equipment": [
