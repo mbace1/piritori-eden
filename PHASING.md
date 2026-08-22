@@ -197,6 +197,39 @@ made every stage sit right — one canonical arena and art produced to it — ha
 survive the change, or the project spends its next weeks the way it spent
 tonight: fitting the game to whatever the tool returned.
 
+### 1.056 The grid gets easier in 3D — tested 2026-08-22
+
+The owner's read on seeing the first 3D arena: *"this proves that it may be
+easier to do grid structure here as well."* It is, and by more than it looks.
+
+**Everything the 2D board computes by hand becomes a camera property.** The 2D
+renderer carries a square-tile rule, `FORWARD (1, -0.5)`, `LANE_AXIS (1, 0.5)`,
+a depth sort, an arena diamond in normalised plate coordinates, and a
+`STAGE_SPEC` whose job is to make painted art agree with that arithmetic. All of
+it exists to fake a projection.
+
+In 3D a cell is a **square on the ground** and an orthographic `Camera3D` at
+yaw 45°, pitch −26.565° (`atan(0.5)`, the same 2:1) does the projection. The
+prototype's grid block contains no projection maths at all. Change the camera
+angle and the board follows correctly for free — which is precisely what could
+not happen in 2D, where a wrong tile aspect silently made the board
+non-isometric and no gate could see it.
+
+**`STAGE_SPEC.md` mostly dissolves with it.** Its whole purpose is making a
+painting's floor sit where the arena is. A 3D arena has a real floor; the board
+is placed on it by measurement, not by agreement.
+
+**Two things the prototype showed that would have cost time later.**
+
+*The ground is not at y=0.* A Meshy diorama has a base with real thickness, so
+the walkable surface sits well up inside its bounding box — the first render
+had the crew standing in mid-air above a wall. Measure it from the AABB.
+
+*Lighting is what unifies the styles*, exactly as the owner guessed. A photoreal
+arena and a stylised character stop arguing when they share a light source and
+the character casts a real shadow onto the ground. The shadow does more work
+than any amount of palette matching.
+
 ### 1.06 Rig, animation and roster variety, 2026-08-22
 
 **Owner ruling: rig and animate.** This widens `ART_BIBLE.md` §13.2, which until
