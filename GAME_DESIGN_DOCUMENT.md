@@ -2052,26 +2052,57 @@ is not the hardest available content.
 - It gives the harm curve somewhere to sit: abstract in chapter one, personal by
   chapter four.
 
-### What persists across a re-run — confirmed, 2026-08-22
+### What persists across a re-run — confirmed and refined, 2026-08-22
 
-**People and gear carry. Money resets.** The owner confirms this was already the
-design, following the FFT half of decision 2 in `PHASING.md` §0.2: named
-characters are FFT story units, and a party you keep and build across chapters is
-what that reference brings with it.
+Following the FFT half of decision 2 in `PHASING.md` §0.2. **Three states, not
+two**: things that carry, things that carry but degrade, and things that reset.
 
-Re-churning an early chapter therefore yields **bodies and weapons, never a
-bankroll**. Two things follow, and both protect systems already built:
+| | Carries | Notes |
+|---|---|---|
+| **People** | mostly | May leave rather than stay. They decay. |
+| **Gear** | yes | Decays with use, Mewgenics-style. |
+| **Contacts and unlocks** | yes | Who you know does not un-happen. |
+| **Built upgrades** | yes | A stash house improvement stays improved. |
+| **Some assets** | some | Undecided which. |
+| **Money** | no | Resets every chapter. |
+| **Mission unlocks** | no | Access is re-earned. |
 
-- **Careers stay meaningful.** A crew member can live across runs, so the ceiling
-  in `COMBAT.md` §7 is a real loss and retiring somebody early is a real
-  decision. If people reset per chapter nobody would live long enough to have a
-  career at all.
-- **The economy stays tight.** Cash resetting means farming cannot buy the next
-  chapter's difficulty away, which is the usual failure of a persistent-currency
-  roguelike. Gear still accumulates, and §8 already makes the best gear
-  unbuyable — so farming produces capability, not purchasing power.
+### The principle underneath it
 
-Still undecided and smaller: retired contacts (§9.8), territory, and story flags.
+**What you built persists. What you were granted does not.**
+
+A stash house upgrade carries because the player made it; a mission unlock
+resets because it was permission handed over. That line is worth holding to when
+a new thing needs classifying, because it decides consistently and it is
+explicable to a player — infrastructure is yours, access is lent.
+
+### Decay is what keeps the ledger honest
+
+Gear and people both degrade rather than accumulating cleanly, which is the load
+this design is really carrying. Without it, persistence plus re-runnable early
+chapters is a farming exploit: enough repetitions and the fourth chapter is
+trivial. Decay means a farmed advantage **leaks**, so re-running an early chapter
+is a way to stay level rather than a way to get ahead.
+
+It also lands well on `COMBAT.md` §7 and §9.10. People already have a career
+ceiling and already die more easily when inexperienced; decay is the same idea
+applied to the kit, and it gives §8's unbuyable weapons a reason to be sought
+repeatedly rather than once.
+
+### Consequences for systems already built
+
+- **Careers stay meaningful.** A crew member living across runs is what makes the
+  ceiling a real loss. If people reset per chapter nobody has a career.
+- **The economy stays tight.** Cash resetting means farming cannot buy away the
+  next chapter's difficulty, the usual failure of a persistent-currency
+  roguelike.
+- **`retired:<id>` memories become persistent state**, not per-run — contacts
+  carry, so §9.8's bar veterans have to survive a chapter boundary.
+
+### Still undecided
+
+Which **assets** carry, and whether territory does. Both are smaller than the
+above and neither blocks the schema.
 
 ### What this obliges
 
