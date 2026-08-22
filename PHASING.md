@@ -334,6 +334,28 @@ watching the balance drop 663 → 483 across six meshes.
 (global `CLAUDE.md`), and an estimate that is half the true cost is worse than
 no estimate because it gets used to authorise a batch.
 
+### 1.09 The two Meshy traps that cost real money, 2026-08-22
+
+**`target_polycount` does nothing without `should_remesh: true`.** A batch of six
+characters was submitted with `target_polycount: 18000` and came back at roughly
+TWO MILLION faces each. The parameter is not rejected and no warning is given;
+it is simply ignored. The rigging endpoint then refused all six, because its
+limit is 320,000 faces.
+
+`~/.meshy/m3d.sh` has always sent `should_remesh=True` — the single muscle
+rigged earlier went through it. The batch script was written fresh against the
+API and did not, which is the whole difference between a riggable character and
+an unriggable one. **Use the wrapper, or copy its body exactly.**
+
+**The recovery is cheap, and the error message points the wrong way.** Meshy's
+own rejection says to use `POST /openapi/v2/remesh`; that route returns 404 and
+the real one is `v1`. Remesh costs **5 credits** and produces a riggable model
+from an existing one, so six recoverable characters cost 30 rather than the 180
+that regenerating them would.
+
+Neither of these is discoverable from the outside. Both are recorded because the
+next batch will be written by someone who did not watch this one fail.
+
 ### 1.1 The item rule
 
 **An item changes what you can do. It does not add a modifier you have to
