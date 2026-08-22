@@ -288,6 +288,30 @@
           "file": "equipment/handgun-v03.webp",
           "source": "weapons/era1/weapon-handgun-handink-v03.png",
           "hold": "firearm-one"
+        },
+        {
+          "id": "chain-v03",
+          "file": "equipment/chain-v03.webp",
+          "source": "weapons/era1/weapon-chain-handink-v03.png",
+          "hold": "chain-two"
+        },
+        {
+          "id": "sawn-off-v03",
+          "file": "equipment/sawn-off-v03.webp",
+          "source": "weapons/era1/weapon-sawn-off-handink-v03.png",
+          "hold": "firearm-two"
+        },
+        {
+          "id": "folding-knife-v03",
+          "file": "equipment/folding-knife-v03.webp",
+          "source": "weapons/era1/weapon-folding-knife-handink-v03.png",
+          "hold": "blade-one"
+        },
+        {
+          "id": "signal-flare-v03",
+          "file": "equipment/signal-flare-v03.webp",
+          "source": "weapons/era1/prop-signal-flare-handink-v03.png",
+          "hold": "utility-one"
         }
       ],
       "note": "Gameplay uses abstract reach patterns; art and UI do not teach real handling."

@@ -47,6 +47,17 @@ static func reach(pattern: String) -> Dictionary:
 			# piercing would make one pistol beat a whole formation.
 			return {"allowed_rows": [ROW_FRONT, ROW_MIDDLE, ROW_BACK],
 				"lane_spread": 0, "piercing": false}
+		"front-same-lane-through":
+			# A chain reaches past the body in front of it. The point is not
+			# damage — it is that a front rank stops being a wall, which is the
+			# one thing a formation game needs an answer to. COMBAT.md §5.2: an
+			# item changes what you can DO.
+			return {"allowed_rows": [ROW_FRONT], "lane_spread": 0, "piercing": true}
+		"front-wide-short":
+			# Two lanes either side, from the front rank, and nothing behind the
+			# first body. It answers a formation that has spread OUT; against a
+			# deep one it is worse than a bat.
+			return {"allowed_rows": [ROW_FRONT], "lane_spread": 2, "piercing": false}
 		_:
 			return {"allowed_rows": [ROW_FRONT], "lane_spread": 0, "piercing": false}
 
@@ -58,6 +69,12 @@ const HOLD_TUNING := {
 	"bat-two":     {"harm_min": 2, "harm_max": 3, "nerve_min": 1, "nerve_max": 2},
 	"firearm-one": {"harm_min": 2, "harm_max": 4, "nerve_min": 2, "nerve_max": 3},
 	"utility-one": {"harm_min": 0, "harm_max": 0, "nerve_min": 0, "nerve_max": 1},
+	# A blade does little damage on this scale and a great deal of nerve, which
+	# is what "close, quiet and lethal" means here — the lethality is carried by
+	# the lethal flag and the casualty table, not by a bigger number.
+	"blade-one":   {"harm_min": 1, "harm_max": 2, "nerve_min": 2, "nerve_max": 4},
+	"chain-two":   {"harm_min": 1, "harm_max": 3, "nerve_min": 1, "nerve_max": 2},
+	"firearm-two": {"harm_min": 2, "harm_max": 5, "nerve_min": 2, "nerve_max": 4},
 }
 
 ## Unarmed is not in the slice's equipment list, because it is not equipment.
@@ -96,13 +113,21 @@ static func weapons() -> Dictionary:
 			"lane_spread": r["lane_spread"],
 			"piercing": r["piercing"],
 			"tags": [hold],
-			# Firearms carry lethal exposure so it can be FORECAST before
-			# commitment (handoff §5: "lethal risk must be forecast").
-			"lethal": hold == "firearm-one",
+			# Lethal exposure exists so it can be FORECAST before commitment
+			# (handoff §5). It is a property of the HOLD, not of a damage
+			# number: a folding knife does less harm than a bat and is the more
+			# dangerous thing to carry, which is the whole point of listing
+			# these by hand rather than deriving them from harm_max.
+			"lethal": hold in LETHAL_HOLDS,
 			"unlock": e.get("unlock", ""),
 			"reach_pattern": e.get("reach_pattern", ""),
 		}
 	return out
+
+
+## Holds that carry lethal exposure. A signal flare does no harm and is not
+## here; a folding knife does very little and is.
+const LETHAL_HOLDS := ["firearm-one", "firearm-two", "blade-one"]
 
 
 ## Items the slice defines as support rather than weapons.

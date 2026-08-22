@@ -37,6 +37,7 @@ func _ready() -> void:
 	GameState.new_campaign()
 
 	_test_cells()
+	_test_new_weapons()
 	_test_equipment_from_canon()
 	_test_build_2v2()
 	_test_build_3v3()
@@ -160,6 +161,50 @@ board shape (one number, not four)")
 	check("neutral ground belongs to no formation",
 		FightBoard.row_of(FightBoard.rows, true) == -1
 		and FightBoard.row_of(FightBoard.rows, false) == -1)
+
+
+## The four weapons added 2026-08-22. Each exists to change what a unit CAN DO
+## (COMBAT.md §5.2), so each is checked for that rather than for its numbers.
+func _test_new_weapons() -> void:
+	print("
+weapons (COMBAT.md 5.2: an item changes what you can do)")
+
+	var w := EquipmentRules.weapons()
+	for id in ["chain", "sawn-off", "folding-knife", "signal-flare"]:
+		check("%s is built from canon" % id, w.has(id), str(w.keys()))
+	if not w.has("chain"):
+		return
+
+	# The chain's whole point: it reaches past the body in front of it, which is
+	# the answer to a front rank used as a wall. Nothing else in the slice does.
+	check("the chain reaches through the front body", bool(w["chain"]["piercing"]))
+	check("and nothing else does",
+		not bool(w["baseball-bat"]["piercing"])
+		and not bool(w["first-handgun"]["piercing"]))
+
+	# The sawn-off answers a formation that has spread out, and is worse than a
+	# bat against a deep one.
+	check("the sawn-off is the widest thing on the board",
+		int(w["sawn-off"]["lane_spread"]) > int(w["baseball-bat"]["lane_spread"]))
+	check("but it stops at the first body",
+		not bool(w["sawn-off"]["piercing"]))
+
+	# Lethality is a property of the hold, not of a damage number: the knife
+	# does LESS harm than the bat and is the more dangerous thing to carry.
+	check("the knife is lethal", bool(w["folding-knife"]["lethal"]))
+	check("the bat is not", not bool(w["baseball-bat"]["lethal"]))
+	check("and the knife hits softer than the bat",
+		int(w["folding-knife"]["harm_max"]) < int(w["baseball-bat"]["harm_max"]),
+		"knife %d vs bat %d" % [int(w["folding-knife"]["harm_max"]),
+			int(w["baseball-bat"]["harm_max"])])
+
+	# The flare breaks a formation without hurting anyone.
+	check("the flare does no harm at all", int(w["signal-flare"]["harm_max"]) == 0)
+	check("but it costs nerve", int(w["signal-flare"]["nerve_max"]) > 0)
+	check("and it is not lethal", not bool(w["signal-flare"]["lethal"]))
+	check("it can be used from any row",
+		w["signal-flare"]["allowed_rows"].size() >= 3,
+		str(w["signal-flare"]["allowed_rows"]))
 
 
 func _test_cells() -> void:
