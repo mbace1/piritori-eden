@@ -447,6 +447,54 @@ The brakes, in the order they bite:
 
 ---
 
+## 9.5 Third parties — owner ruling, 2026-08-22
+
+**Decision (Q3): 3c, and the trigger is noise and lethality.** Heat rises with
+firearms, long fights and bodies on the ground until somebody turns up. That is
+what makes the quick, merciful win mechanically valuable rather than just
+morally nicer — and it is the counterweight to §8.2, where the merciful win
+yields less loot.
+
+### 9.5.1 They enter along the depth axis
+
+A third party arrives at the **top or the bottom of the grid** — behind one
+side's back rank, never in the middle. The board is already a corridor of six
+lanes by eight depth (§3.05); an arrival at either end is the one entrance that
+threatens a formation rather than appearing inside it.
+
+Which end matters: whoever they come in behind is suddenly the side with a
+problem at their back.
+
+### 9.5.2 Both crews choose, and the choice is the branch
+
+When they arrive, **each side gets a posture**, not a scripted outcome:
+
+- **back off** — withdraw toward the back of the grid and let it happen
+- **help friends** — reach the downed before the third party does
+- **engage** — treat them as an enemy
+
+This is deliberately the same shape as the stance system in §6.2: the player is
+asked a question, and the fight answers it.
+
+### 9.5.3 Police subdue until attacked
+
+Their default posture is **subdue**, and its bite is on the fallen: anyone
+**downed on the board when they arrive is taken**, and is gone from the roster.
+That makes leaving a body behind the real cost of a loud fight, and it lands
+directly on the career system (§7) — a downed crew member is not merely hurt,
+they are lost, and no money replaces the fights they had learned.
+
+**If they are attacked, they become a third hostile side** and fight everyone.
+So the escalation is the player's to cause. A crew that stands still loses its
+casualties; a crew that opens fire on police has a genuinely worse night.
+
+### 9.5.4 What this is not
+
+Not authored per battle. Content does not list which fights have police; the
+fight earns them. Anything authored would make the trigger decorative.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
