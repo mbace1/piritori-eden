@@ -128,6 +128,28 @@ answers to that before it answers to whether it is fun.
 | **Dope Wars** | The market pressure and the clock. | Being the whole game. |
 | **Darkest Dungeon** | Roster weight, consequence, presentation. | — |
 
+### 1.05 What the 3D test actually showed, 2026-08-22
+
+The owner asked whether a 3D character and weapon work. They do — the mesh half
+of the pipeline is not the obstacle. Three things it turned up that would
+otherwise have been found late:
+
+**Meshy normalises scale.** Both assets came back exactly 2.0 units tall, so the
+bat is as tall as the man. Real scale is set at import and is not carried by the
+file. A pipeline that trusted the mesh's own size would put a bat in someone's
+hand at their full height.
+
+**2D markers survive into 3D.** The equipment sheets carry a cyan grip dot,
+which is an anchor for the 2D compositor. Meshy baked it into the bat's texture
+as a cyan blob on the pommel. Anything headed for 3D needs its 2D furniture
+removed first.
+
+**Rigging is the actual gap**, not modelling. A static prop is ready today; a
+character that moves is not, and nothing in the local tooling closes that.
+
+None of this widens `ART_BIBLE.md` §13.2. It is evidence for a decision the
+owner has not made.
+
 ### 1.1 The item rule
 
 **An item changes what you can do. It does not add a modifier you have to
@@ -147,6 +169,9 @@ having a real item pool.
 | 2D concepts, poses, UI, scene art | **Nano Banana** | Strong, free. Style-anchor with `--images` against the cast's own approved art. |
 | Character pose sets | **Nano Banana** + `art-src/gen-pose-set.sh` | Nine poses per role. Whole-figure composites, not modular parts. |
 | A 3D presenter (Arvo only) | **Meshy** | Done and registered. `ART_BIBLE.md` §13.2 permits exactly one. Do not widen without an owner ruling. |
+| A 3D **prop** | **Meshy** image-to-3D | **Tested 2026-08-22 and it works.** The baseball bat went from its own 2D asset to a clean textured mesh in 90s for 15 credits, and imports and renders in Godot untouched. |
+| A 3D **character** | **Meshy** image-to-3D | **Tested and it works, with one caveat.** A T-posed muscle came back faithful — build, jacket patches, teal trousers, boots. The caveat is the T-pose itself: Nano Banana ignored the instruction on the first attempt and drew arms-down, which is the pose that cannot be rigged. Say "the figure forms the capital letter T" and name the horizontal line through both shoulders. |
+| **Rigging** a character | — | **Not available here.** `~/.meshy/m3d.sh` has no rig command; whatever rigged Arvo was not this wrapper. Needs building or doing by hand before any character can animate in 3D. |
 | Animation | **Code, over the pose set** | Held frames and hard cuts, not interpolated skeletal motion. Cut-paper does not want tweening. |
 
 **Meshy credits are real money.** Check the balance before a batch; confirm
