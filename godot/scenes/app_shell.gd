@@ -47,6 +47,8 @@ func _ready() -> void:
 
 	_build()
 	get_tree().root.size_changed.connect(_reflow)
+	get_tree().root.size_changed.connect(_apply_ui_scale)
+	_apply_ui_scale()
 	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
 	GameState.slice_completed.connect(_on_slice_completed)
@@ -473,6 +475,45 @@ func _add_stat(kind: int, col: Color, text: String) -> void:
 
 
 # ── modes ──────────────────────────────────────────────────────────────────
+
+## HOW BIG THE INTERFACE IS, which on a phone is not a detail.
+##
+## Reported from play: "menu is small" and "not all touch controls work". Those
+## are almost certainly ONE bug. The project renders at a base viewport of
+## 1280x720 with stretch aspect "expand", so the content scale is
+## min(win.x/1280, win.y/720). On a phone about 412 CSS pixels wide that is
+## 0.32 — a 19px label draws at 6px, and a 48px button becomes a 15px touch
+## target, which is below the size a thumb can reliably hit.
+##
+## So the fix for "too small to read" is the same as the fix for "will not
+## respond": make it bigger. content_scale_factor multiplies on top of the
+## stretch, which is exactly the right lever — it leaves the 1280x720 design
+## space that every drawing routine is tuned against completely alone.
+##
+## The number below is a starting point chosen by arithmetic, NOT by looking at
+## a phone, which is why ?scale= exists. Dial it on the device and tell me.
+const UI_SCALE_REFERENCE := 900.0   ## width below which the interface grows
+const UI_SCALE_MAX := 2.8
+
+func _apply_ui_scale() -> void:
+	var win := get_window()
+	if win == null:
+		return
+	if DebugEntry.has("scale"):
+		win.content_scale_factor = maxf(float(DebugEntry.get_str("scale")), 0.25)
+		return
+	var w := float(win.size.x)
+	if w <= 0.0:
+		return
+	# Desktop is left alone at 1.0. Narrow screens grow, in proportion to how
+	# narrow they are, up to a cap — past the cap the interface would start
+	# pushing its own content off the edge, which trades one unusable screen
+	# for another.
+	var f := 1.0
+	if w < UI_SCALE_REFERENCE:
+		f = clampf(UI_SCALE_REFERENCE / maxf(w, 320.0), 1.0, UI_SCALE_MAX)
+	win.content_scale_factor = f
+
 
 func _clear_world() -> void:
 	for c in _world_host.get_children():

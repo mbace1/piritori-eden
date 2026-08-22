@@ -434,3 +434,36 @@ Two things that follow:
   still is not: a player is told "behind the bicycle rack" with no rack visible
   on the board they are looking at. This is the next honest step for cover, and
   it needs a prop model or a marker, not more text.
+
+## Three reports from play, 2026-08-22
+
+**"No Arvo in news, only map shows" — not a bug in the code.** The presenter
+mounts correctly; it was probed headlessly and `presenter_3d` reports available
+with the model imported. The cause is content: **there is exactly one bulletin in
+the entire slice and it does not exist until day 3**, so opening NEWS earlier
+correctly shows "Nothing has been broadcast yet" over the map.
+
+Arvo is already reachable at `?news=news-markka-afterlife`.
+
+The real gap is editorial and cannot be closed by inventing copy. A news record
+carries `documented` (with real source URLs), `inference`, `accusation` and
+`fiction` as separate fields — the schema exists precisely to keep verified fact
+apart from invention. Writing more bulletins needs sourced 2003 research and the
+owner's approval, and the recent ruling that Arvo is the market's narrator and
+the authoritative public clock makes **one bulletin per era nowhere near enough**.
+
+**"Menu is small" and "not all touch controls work" are probably ONE bug.** The
+project renders at a 1280x720 base with stretch aspect `expand`, so content scale
+is `min(win.x/1280, win.y/720)`. On a phone around 412 CSS pixels wide that is
+**0.32**: a 19px label draws at 6px, and a 48px button becomes a 15px touch
+target, which is below what a thumb can reliably hit.
+
+Fixed by setting `content_scale_factor` from window width, which multiplies on
+top of the stretch and leaves the 1280x720 design space every drawing routine is
+tuned against untouched. **The default was chosen by arithmetic, not by looking
+at a phone** — `?scale=` overrides it so it can be dialled on the device.
+
+Still open on input, and not yet reproduced: whether anything is unreachable for
+a reason other than size. `city_map` uses `InputEventMouseMotion` for hover
+highlighting, which has no touch equivalent — cosmetic, but it means a tap gives
+no preview where a mouse would.

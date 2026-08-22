@@ -14,6 +14,7 @@ extends Node
 ##     ?cash=9000                       afford something
 ##     ?rows=4&lanes=4                  try a bigger board (canon is 3x3)
 ##     ?hud=1                           show the debug HUD
+##     ?scale=2.2                       interface size, for judging on a phone
 ##     ?stage=scene-hermanni-skatepark-v01  fight in a named arena
 ##     ?lang=ja                         start in a language
 ##
