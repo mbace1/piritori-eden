@@ -371,3 +371,76 @@ and reliable information unlock through play.
 This section defines scope, not coordinates, nodes or mission routes. It does
 not authorise Era II runtime data or art before the feature-complete gate in
 `DESIGN_LOCKS.md` §12.1.
+
+---
+
+## 12. Travel is the game between fights — owner ruling, 2026-08-22
+
+`PHASING.md` Phase C gates on *"choosing a route is a real decision, not a
+confirmation dialog"*. Today travel is instant and free. This is what makes it a
+decision.
+
+### 12.1 Exposure on top, time underneath
+
+**Exposure is the primary cost.** A route carries a risk of being seen — police,
+rivals, somebody who is owed. What you are carrying changes which way you would
+go, so the transport layer is a **smuggling** problem rather than a logistics
+one, which is what the dope-wars motivation actually asks for.
+
+**Time is the floor beneath it.** Routes cost blocks. The tram is slow and safe;
+crossing Piritori at night is fast and exposed. The seven-day slice already makes
+the clock scarce, so even the safe route costs something.
+
+Money is deliberately the smallest lever. Fares and favours exist, but the market
+already applies financial pressure and duplicating it would flatten both.
+
+### 12.2 Predictable stops, unpredictable events
+
+**The stops are known; what happens at them is not.** That asymmetry is the whole
+tactic: a player can learn that the central interchanges are busy, and then
+choose not to stop there while carrying, or while hot from a loud fight (§9.5 of
+`COMBAT.md`). Avoiding crowds becomes a skill rather than a die roll.
+
+### 12.3 Narrative happens in transit
+
+Beats belong on the journey, not only at the destination:
+
+- police with dogs, who smell what you are carrying
+- rivals, who are simply also on this tram
+- an old teacher, who gives you a guilt trip
+
+The last one matters as much as the first two. `NARRATIVE.md` holds that people
+are never scenery, and a city that only ever produces threats is a threat
+generator, not a place someone grew up in.
+
+### 12.4 The run is opportunistic — Slay the Spire, not a commute
+
+Route choice should tempt. Nodes offer things worth detouring for:
+
+- items and gear
+- a friend who owes you money — a **draw-a-card** location in the Monopoly sense
+- a market where something is oversupplied and you want to be the one selling
+
+So the player is not only avoiding risk, they are **chasing upside**, and the
+tension between those two is the mini-game. A route with nothing on it is a
+confirmation dialog by another name.
+
+### 12.5 Travel gates progression
+
+**Missions can be long, and access can be bought.** A higher tier of work is not
+merely unlocked by a flag: you may have to travel, move product and sell it in
+order to afford **entry** to the meeting that gives you the better mission — the
+bikers who deal in a different class of job.
+
+This is the piece that stops the map being a risk surface bolted onto a fight
+game. Economic activity on the map **funds access to content**, which means the
+transport layer, the market and the mission ladder are one loop rather than
+three systems sharing a screen.
+
+### 12.6 What this obliges
+
+- Anchors need a **node character**, not just coordinates: busy or quiet, what it
+  offers, what it risks.
+- Routes need a cost in blocks and an exposure value.
+- Encounters need a **transit** context, distinct from a site.
+- Missions need an **entry price**, distinct from a requirement flag.
