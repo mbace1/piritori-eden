@@ -69,14 +69,38 @@ func _ready() -> void:
 ## now carries a bundled subset as a fallback so the answer stops depending on
 ## the host, and tools/build-font-subset.py --check keeps that subset in step
 ## with these same strings.
+## Can this codepoint be drawn on a machine with no system fonts at all?
+##
+## Either the bundled subset carries it, or Godot's built-in face does. The
+## built-in face is compiled into the binary, so this answer is the same on
+## the web as it is here.
+func _drawable(cp: int, regular: Font, bold: Font) -> bool:
+	if regular.has_char(cp) and bold.has_char(cp):
+		return true
+	var builtin := ThemeDB.fallback_font
+	return builtin != null and builtin.has_char(cp)
+
+
 func _check_glyph_coverage() -> void:
-	# Test the BUNDLED subset on its own, not the composite the shell installs.
+	# Test what can be drawn WITHOUT a system font, which is the web build's
+	# situation and the only one that ever shipped tofu.
 	#
-	# The composite starts with SystemFont, so on any developer machine or CI
-	# runner that happens to have a Japanese face installed it passes whatever
-	# the bundle contains - which is precisely how the browser build shipped
-	# tofu with this gate green. The web export has no system font, so the
-	# honest question is: does the bundle ALONE carry every glyph.
+	# Not the composite the shell installs: that starts with SystemFont, so on
+	# any developer machine or CI runner with a Japanese face installed it
+	# passes whatever the bundle contains - precisely how the browser build
+	# shipped tofu with this gate green.
+	#
+	# But not the bundled subset ALONE either, which is what this used to ask.
+	# When SystemFont finds nothing, rendering falls through to the engine's own
+	# built-in face, and that face carries Latin, Latin-1, Latin Extended-A and
+	# a good deal of punctuation. Demanding the JAPANESE subset also carry all
+	# of that made this gate fail over c-acute in a surname - a failure that was
+	# not real, and that I acted on before checking. The original bug is the
+	# proof: only the JAPANESE locale went tofu on the web, so Latin was already
+	# coming from somewhere, and that somewhere is ThemeDB.fallback_font.
+	#
+	# Asked of the engine directly rather than of a committed snapshot, so it
+	# cannot drift from the binary actually in use.
 	var regular := PiritoriFonts.cjk(false)
 	var bold := PiritoriFonts.cjk(true)
 	check("the bundled subset is present (run tools/build-font-subset.py)",
@@ -113,7 +137,7 @@ func _check_glyph_coverage() -> void:
 				if cp <= 0x20:
 					continue
 				seen += 1
-				if not regular.has_char(cp) or not bold.has_char(cp):
+				if not _drawable(cp, regular, bold):
 					missing[cp] = String(row[0])
 		var report := ""
 		for cp in missing:
@@ -130,7 +154,7 @@ func _check_glyph_coverage() -> void:
 			["×", "a stat readout"], ["€", "the euro"]]:
 		var cp: int = String(pair[0]).unicode_at(0)
 		check("U+%04X %s is drawable (%s)" % [cp, pair[0], pair[1]],
-			regular.has_char(cp) and bold.has_char(cp))
+			_drawable(cp, regular, bold))
 
 
 const LOCALE_CSV := "res://locale/ui.csv"
