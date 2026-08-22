@@ -333,6 +333,65 @@ func confirm_commands() -> void:
 ## It is NOT a different fight. It runs the SAME rounds, the same commands, the
 ## same rules — it simply does not stop to show them. A separate, faster,
 ## friendlier resolution would be a second combat system that could disagree
+## What happened, in the shape the aftermath screen needs.
+##
+## The fight reports this rather than the UI reconstructing it. A screen that
+## recounts a battle by inspecting the model is a second, quieter implementation
+## of the rules, and the two drift.
+##
+## COMBAT.md §1 promises triage rather than a damage race, and until now the
+## player was never told the outcome at all: win, negotiated exit, withdrawal
+## and defeat all returned to the map identically, which read as a bug rather
+## than as a result.
+func aftermath() -> Dictionary:
+	var ours: Array[Dictionary] = []
+	var theirs: Array[Dictionary] = []
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		var row := {
+			"id": f.fighter_id,
+			"name": f.display_name,
+			"status": f.status,
+			"condition": f.condition,
+			"condition_max": f.condition_max,
+		}
+		if f.is_player_controlled:
+			ours.append(row)
+		else:
+			theirs.append(row)
+	return {
+		"result": result,
+		"rounds": round_number,
+		"ours": ours,
+		"theirs": theirs,
+		# Named separately because these are the two the player is answerable
+		# for. Everything else is detail.
+		"our_downed": _count(ours, Fighter.Status.DOWNED),
+		"our_standing": _standing(ours),
+		"their_downed": _count(theirs, Fighter.Status.DOWNED),
+		"their_routed": _count(theirs, Fighter.Status.ROUTED),
+	}
+
+
+static func _count(rows: Array[Dictionary], status: int) -> int:
+	var n := 0
+	for r in rows:
+		if int(r["status"]) == status:
+			n += 1
+	return n
+
+
+## Still on their feet: not downed, not routed, not lost in the aftermath.
+static func _standing(rows: Array[Dictionary]) -> int:
+	var n := 0
+	for r in rows:
+		var st := int(r["status"])
+		if st != Fighter.Status.DOWNED and st != Fighter.Status.ROUTED \
+				and st != Fighter.Status.MISSING and st != Fighter.Status.DEAD:
+			n += 1
+	return n
+
+
 ## What is lying on the ground when the fight ends, for one side.
 ##
 ## COMBAT.md §8: gear is carried by a PERSON, so it comes off the fallen, not off

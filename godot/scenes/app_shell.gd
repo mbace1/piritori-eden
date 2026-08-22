@@ -670,21 +670,6 @@ func _settle_loot(f, result: int) -> PackedStringArray:
 	return GameState.take_loot(f.dropped_kit(false))
 
 
-## Taken gear is the ONLY source of the best weapons (§8), so the moment it is
-## picked up is worth a screen. Anything unbuyable is named as such — otherwise
-## the player has no way to learn the asymmetry exists except by missing it.
-func _report_spoils(spoils: PackedStringArray) -> void:
-	_show_city()
-	_clear_rail()
-	_rail.visible = true
-	_rail_box.add_child(_make_label(tr("loot.taken"), 19, MapStyle.TITLE_TEXT))
-	_add_spoils_lines(spoils)
-	_rail_box.add_child(_separator())
-	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
-	back.pressed.connect(_show_city)
-	_rail_box.add_child(back)
-
-
 func _add_spoils_lines(spoils: PackedStringArray) -> void:
 	for id in spoils:
 		var eid := String(id)
@@ -900,40 +885,113 @@ func _show_battle(battle_id: String) -> void:
 	# fight would age a crew every time a round resolved.
 	var deployed := PackedStringArray(crew)
 	scene.battle_finished.connect(func(result):
+		# Ask the fight what happened BEFORE settling, while the fighters still
+		# carry their end state.
+		var summary: Dictionary = scene.fight.aftermath()
 		var spoils := _settle_loot(scene.fight, int(result))
 		var left := GameState.age_crew(deployed)
-		if not left.is_empty():
-			_report_retirements(left, spoils)
-		elif not spoils.is_empty():
-			_report_spoils(spoils)
-		else:
-			_show_city())
+		_show_aftermath(summary, spoils, left))
 	_rail.visible = false
 
 
-## Somebody got out. §7.2: most tactics games have one exit, and two — with one
-## of them being "they got out" — is what makes benching a veteran a decision
-## rather than hoarding. It deserves to be said rather than logged.
-func _report_retirements(left: PackedStringArray, spoils: PackedStringArray = PackedStringArray()) -> void:
+## What the fight cost, said once and in one place.
+##
+## Until now the result was computed and never mentioned: a rout, a negotiated
+## exit, a withdrawal and an outright defeat all returned to the map in exactly
+## the same way, so losing read as a bug rather than as an outcome. Three
+## partial paths — retirements, spoils, or silence — have become this one.
+##
+## Order follows what the player is answerable for: what happened, what it cost
+## YOU, what you took, and who is running out of career.
+func _show_aftermath(summary: Dictionary, spoils: PackedStringArray,
+		left: PackedStringArray) -> void:
 	_show_city()
 	_clear_rail()
 	_rail.visible = true
-	_rail_box.add_child(_make_label(tr("crew.retired"), 19, MapStyle.TITLE_TEXT))
-	for id in left:
-		var c := ContentRegistry.crew_member(String(id))
-		var nm := String(c.get("display_name", id))
-		_rail_box.add_child(_make_label(nm, 15, PiritoriPalette.PUBLIC_BLUE))
-		var l := _make_label(tr("crew.retired_note"), 12, PiritoriPalette.TEXT_DIM)
-		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_rail_box.add_child(l)
+
+	var result := int(summary.get("result", 0))
+	_rail_box.add_child(_make_label(tr(_outcome_title(result)), 19, MapStyle.TITLE_TEXT))
+	var line := _make_label(tr(_outcome_line(result)), 13, PiritoriPalette.TEXT)
+	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(line)
+
+	# COMBAT.md §1: the promise is triage, not a damage race, so what leads is
+	# who is still standing — never damage dealt.
+	_rail_box.add_child(_separator())
+	var ours: Array = summary.get("ours", [])
+	_rail_box.add_child(_make_label(tr("aftermath.your_crew") % [
+		int(summary.get("our_standing", 0)), ours.size()],
+		14, PiritoriPalette.PLAYER_CYAN))
+	for row in ours:
+		var r: Dictionary = row
+		var state := _status_key(int(r.get("status", 0)))
+		if state == "":
+			continue
+		_rail_box.add_child(_make_label("   %s — %s" % [
+			r.get("name", "?"), tr(state)], 12, PiritoriPalette.TEXT_DIM))
+
 	if not spoils.is_empty():
 		_rail_box.add_child(_separator())
 		_rail_box.add_child(_make_label(tr("loot.taken"), 15, MapStyle.TITLE_TEXT))
 		_add_spoils_lines(spoils)
+
+	# §7.2: two exits, and the one that is not death is what makes benching a
+	# veteran a decision rather than hoarding. It deserves to be said.
+	if not left.is_empty():
+		_rail_box.add_child(_separator())
+		_rail_box.add_child(_make_label(tr("crew.retired"), 15, MapStyle.TITLE_TEXT))
+		for id in left:
+			var c := ContentRegistry.crew_member(String(id))
+			_rail_box.add_child(_make_label(
+				String(c.get("name", c.get("display_name", id))),
+				15, PiritoriPalette.PUBLIC_BLUE))
+			var l := _make_label(tr("crew.retired_note"), 12, PiritoriPalette.TEXT_DIM)
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(l)
+
 	_rail_box.add_child(_separator())
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
+
+
+## The outcome in the game's own register. Six results, six headlines: a
+## negotiated exit is not a win with different wording, and a withdrawal is not
+## a defeat.
+func _outcome_title(result: int) -> String:
+	match result:
+		FightManager.BattleResult.VICTORY_ROUT: return "aftermath.rout_title"
+		FightManager.BattleResult.VICTORY_BREAK: return "aftermath.break_title"
+		FightManager.BattleResult.STAND_DOWN: return "aftermath.stand_down_title"
+		FightManager.BattleResult.WITHDRAWAL: return "aftermath.withdrawal_title"
+		FightManager.BattleResult.PARTIAL: return "aftermath.partial_title"
+		FightManager.BattleResult.DEFEAT: return "aftermath.defeat_title"
+	return "aftermath.partial_title"
+
+
+func _outcome_line(result: int) -> String:
+	match result:
+		FightManager.BattleResult.VICTORY_ROUT: return "aftermath.rout_line"
+		FightManager.BattleResult.VICTORY_BREAK: return "aftermath.break_line"
+		FightManager.BattleResult.STAND_DOWN: return "aftermath.stand_down_line"
+		FightManager.BattleResult.WITHDRAWAL: return "aftermath.withdrawal_line"
+		FightManager.BattleResult.PARTIAL: return "aftermath.partial_line"
+		FightManager.BattleResult.DEFEAT: return "aftermath.defeat_line"
+	return "aftermath.partial_line"
+
+
+## Only the states worth a line. Somebody who walked out unhurt does not need
+## naming, and listing everyone would bury the two who did not.
+func _status_key(status: int) -> String:
+	match status:
+		Fighter.Status.DOWNED: return "aftermath.status_downed"
+		Fighter.Status.CRITICAL: return "aftermath.status_critical"
+		Fighter.Status.WOUNDED: return "aftermath.status_wounded"
+		Fighter.Status.SHAKEN: return "aftermath.status_shaken"
+		Fighter.Status.ROUTED: return "aftermath.status_routed"
+		Fighter.Status.MISSING: return "aftermath.status_missing"
+		Fighter.Status.DEAD: return "aftermath.status_dead"
+	return ""
 
 
 ## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its

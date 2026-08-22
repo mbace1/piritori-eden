@@ -286,3 +286,14 @@ Still open, deliberately not touched:
 - **CI's pack measured 56.2MB where the same commit built 49.7MB locally.**
   Unexplained. Probably a stale local import cache, but it has not been proven,
   and it means local size numbers are a lower bound rather than the truth.
+
+## A test scene with a parse error HANGS, it does not fail
+
+Found while adding the aftermath gate: `test_shell.gd` has `check()` but no
+`eq()`, and calling the missing helper was a parse error. Every scene ends in
+`get_tree().quit()`, so a scene that never loads never quits — the run sat there
+until it was killed at 6m40s rather than reporting anything.
+
+CI would have caught it as a timeout, eventually, with no useful message. Worth
+a `--timeout` on the gate invocations, or a watchdog in the scene, so the
+failure says what it is.

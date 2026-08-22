@@ -120,3 +120,23 @@ ui.hiring,TAKING ON,PALKKAAMASSA,雇い入れ
 ui.hiring_note,Whoever is around today. Come back tomorrow and it will be somebody else.,Ketä sattuu olemaan tänään. Huomenna on joku muu.,今日その辺にいる者たち。明日になれば別の顔ぶれになる。
 ui.hire,Take them on — €%d,Palkkaa — %d €,雇う — €%d
 crew.career_left,%d fights left in them,%d ottelua jäljellä,あと%d戦
+aftermath.your_crew,YOUR CREW — %d of %d still standing,VÄKESI — %d/%d vielä pystyssä,こちらの一味 — %d/%d 名が無事
+aftermath.rout_title,THEY BROKE,HE MURTUIVAT,相手が崩れた
+aftermath.rout_line,"Nobody had to be carried out. They ran, and they will remember that you let them.","Ketään ei tarvinnut kantaa pois. He juoksivat, ja muistavat että annoit heidän juosta.",運び出される者はいなかった。彼らは逃げ、逃がされたことを覚えているだろう。
+aftermath.break_title,THE FIELD IS YOURS,KENTTÄ ON SINUN,その場を制した
+aftermath.break_line,You held the ground and they did not. Somebody will be counting the cost of that tonight.,"Sinä pidit paikan, he eivät. Joku laskee sen hinnan tänä yönä.",こちらが場所を守り、向こうは守れなかった。今夜、誰かがその代償を数える。
+aftermath.stand_down_title,IT DID NOT HAPPEN,SITÄ EI TAPAHTUNUT,何も起きなかった
+aftermath.stand_down_line,"Both sides walked. Nothing taken, nothing owed — which is its own kind of result.","Molemmat kävelivät pois. Ei otettu mitään, ei jääty velkaa — sekin on tulos.",双方が引いた。奪いも借りもしない。それもまた一つの結果だ。
+aftermath.withdrawal_title,YOU LEFT,LÄHDIT,退いた
+aftermath.withdrawal_line,"You took the exit while there still was one. It cost you the ground, not the crew.","Otit uloskäynnin kun se vielä oli. Se maksoi paikan, ei väkeä.",出口があるうちに出た。失ったのは場所であって、人ではない。
+aftermath.partial_title,NEITHER WAY,EI KUMPAANKAAN,決着はつかず
+aftermath.partial_line,It ended without a decision. Everyone goes home with something to explain.,Se päättyi ilman ratkaisua. Jokainen menee kotiin selittämään jotain.,決着のないまま終わった。誰もが説明すべきことを抱えて帰る。
+aftermath.defeat_title,YOU LOST IT,HÄVISIT SEN,奪われた
+aftermath.defeat_line,They held and you did not. What your people were carrying is theirs now.,"He pitivät, sinä et. Se mitä väkesi kantoi on nyt heidän.",向こうが守り、こちらは守れなかった。持たせていた物は今や相手のものだ。
+aftermath.status_downed,carried out,kannettu pois,担ぎ出された
+aftermath.status_critical,one more hit from going down,yhden osuman päässä,あと一撃で倒れる
+aftermath.status_wounded,"hurt, still working","loukkaantunut, yhä töissä",負傷、まだ動ける
+aftermath.status_shaken,shaken,järkyttynyt,動揺している
+aftermath.status_routed,ran,juoksi,逃げた
+aftermath.status_missing,did not come back,ei tullut takaisin,戻らなかった
+aftermath.status_dead,dead,kuollut,死亡

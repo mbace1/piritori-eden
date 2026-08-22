@@ -43,6 +43,7 @@ func _ready() -> void:
 	_test_equipment_from_canon()
 	_test_build_2v2()
 	_test_hired_crew_can_fight()
+	_test_aftermath()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -391,6 +392,38 @@ func _test_equipment_from_canon() -> void:
 	# Locked equipment must not reach the field before it is earned.
 	check("the firearm is locked on day 1", not EquipmentRules.is_unlocked("first-handgun"))
 	check("the feature phone starts unlocked", EquipmentRules.is_unlocked("feature-phone"))
+
+
+## The fight has to be able to SAY what happened. Every result was computed and
+## none was ever shown: a rout, a negotiated exit, a withdrawal and a defeat all
+## returned to the map identically, so losing read as a bug.
+func _test_aftermath() -> void:
+	print("\nthe fight can say what happened")
+	var f := FightManager.new()
+	var errs: Array = f.begin_canonical("battle-karhupuisto-2v2", _crew_ids(2), 4242)
+	check("a fight opens", errs.is_empty(), str(errs))
+	var outcome := f.resolve_to_end()
+
+	var a := f.aftermath()
+	check("there is a summary", not a.is_empty())
+	eq("it agrees with the result", int(a["result"]), int(outcome))
+	check("it counted rounds", int(a["rounds"]) > 0)
+	eq("both sides are accounted for",
+		(a["ours"] as Array).size() + (a["theirs"] as Array).size(), 4)
+
+	# Standing can never exceed the number of people who were there.
+	check("nobody is standing who was not deployed",
+		int(a["our_standing"]) <= (a["ours"] as Array).size())
+	check("the downed are not also standing",
+		int(a["our_standing"]) + int(a["our_downed"]) <= (a["ours"] as Array).size())
+
+	# Everyone reported carries a name, or the screen prints a question mark at
+	# the player in the one moment it is supposed to be talking about people.
+	var named := true
+	for row in a["ours"]:
+		if String((row as Dictionary).get("name", "")) == "":
+			named = false
+	check("everyone reported has a name", named)
 
 
 ## A hire is only real if they can be sent into a fight. Everything else about

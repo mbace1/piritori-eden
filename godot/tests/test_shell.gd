@@ -47,6 +47,7 @@ func _ready() -> void:
 	await _test_market_through_ui()
 	await _test_language_switch()
 	_test_debug_entry_parsing()
+	_test_every_outcome_has_words()
 	await _test_debug_hud()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -149,6 +150,37 @@ func check(label: String, condition: bool, detail: String = "") -> void:
 
 
 # ── helpers that walk the real tree ───────────────────────────────────────
+
+## Every way a fight can end must have words.
+##
+## This is the bug the aftermath screen exists to fix, so it is the bug the gate
+## has to be able to catch: a result the shell has no copy for would put the
+## player back on the map with no idea what just happened, exactly as a defeat
+## used to. Asks the shell's own mapping rather than restating it here, because a
+## second copy of the table would agree with itself and not with the game.
+func _test_every_outcome_has_words() -> void:
+	print("\nevery outcome has words")
+	var titles: Dictionary = {}
+	var lines: Dictionary = {}
+	# PENDING is the only result with no screen: the fight has not ended.
+	for r in [FightManager.BattleResult.VICTORY_ROUT,
+			FightManager.BattleResult.VICTORY_BREAK,
+			FightManager.BattleResult.STAND_DOWN,
+			FightManager.BattleResult.WITHDRAWAL,
+			FightManager.BattleResult.PARTIAL,
+			FightManager.BattleResult.DEFEAT]:
+		var tk: String = _shell._outcome_title(r)
+		var lk: String = _shell._outcome_line(r)
+		check("result %d has a title that is translated" % r, tr(tk) != tk)
+		check("result %d has a line that is translated" % r, tr(lk) != lk)
+		titles[tk] = true
+		lines[lk] = true
+	# Distinct, or two different endings are being told the same story — which
+	# is how "you withdrew" and "you were beaten" become the same screen.
+	check("six endings, six headlines", titles.size() == 6, str(titles.size()))
+	check("six endings, six explanations", lines.size() == 6, str(lines.size()))
+
+
 
 func _all_nodes(root: Node, out: Array = []) -> Array:
 	out.append(root)
