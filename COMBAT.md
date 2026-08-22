@@ -122,6 +122,21 @@ for the player sat physically OPPOSITE lane 0 for the opposition, so "the same
 lane" in the targeting rules was not the same column on screen. A lane is a
 column now, for both sides, and the picture agrees with the rules.
 
+#### Movement across the bands
+
+**Owner ruling:** *"crews start in their colour areas and can move to all
+coloured areas."*
+
+Side decides where a crew BEGINS and which team it is on. It does not fence
+where anyone may go — a unit can reposition into the neutral rows and on into
+the opposition's ground.
+
+For that to be true rather than decorative, a slot's second component is a
+**unified depth** across the whole board, not a row inside a private grid. That
+also collapsed two grids into one: the occupancy key used to carry the side, so
+two fighters could stand in "the same" cell because it was two different cells.
+A cell is a cell now and one body fits in it.
+
 ### 3.1 Is 3x3 enough? Findings, 2026-08-21
 
 The owner asked whether 3x3 per side can carry the visuals the reference games

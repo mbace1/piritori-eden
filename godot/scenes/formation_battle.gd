@@ -362,9 +362,10 @@ func _tile() -> Vector2:
 ## opposition, so "the same lane" in the targeting rules was not the same column
 ## on screen. Now a lane is a column, for both sides, and the picture agrees with
 ## the rules.
-func _cell_pos(lane: int, row: int, side: int) -> Vector2:
-	return _cell_pos_depth(lane, FightBoard.depth_of(
-		row, side == int(Fighter.Side.PLAYER)))
+## A fighter's slot already carries a unified depth, so side is only kept in the
+## signature for the callers that pass it.
+func _cell_pos(lane: int, depth: int, _side: int = 0) -> Vector2:
+	return _cell_pos_depth(lane, depth)
 
 
 func _cell_pos_depth(lane: int, depth: int) -> Vector2:

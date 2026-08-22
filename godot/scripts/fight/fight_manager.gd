@@ -930,18 +930,26 @@ func _get_attack_targets(f: Fighter, weapon: Dictionary) -> Array:
 	var lane_min: int = maxi(0, f.slot.x - lane_spread)
 	var lane_max: int = mini(FightBoard.lanes - 1, f.slot.x + lane_spread)
 
+	# Walk outward from the attacker along the shared depth axis, toward the
+	# opposition's end. Sides no longer own private rows, so "who is in front of
+	# whom" is a question about depth rather than about which grid a cell is in.
+	var toward := 1 if f.side == Fighter.Side.PLAYER else -1
 	for lane in range(lane_min, lane_max + 1):
-		for row in range(FightBoard.rows):
-			var cover := _cover_at(lane, row, opp_side)
+		var d: int = f.slot.y + toward
+		while d >= 0 and d < FightBoard.total_rows():
+			var cover := _cover_at(lane, d, opp_side)
 			if cover.hard_block:
 				break  # hard cover stops everything including piercing
 			if cover.soft_block and not piercing:
 				break  # soft cover stops non-piercing attacks
-			var fid: String = _grid.get(_grid_key(lane, row, opp_side), "")
-			if fid != "" and _fighters.has(fid) and (_fighters[fid] as Fighter).is_active():
-				targets.append(fid)
+			var fid: String = _grid.get(_grid_key(lane, d), "")
+			if fid != "" and _fighters.has(fid):
+				var other: Fighter = _fighters[fid]
+				if other.side == opp_side and other.is_active():
+					targets.append(fid)
 				if not piercing:
-					break  # non-piercing stops at first unit
+					break  # non-piercing stops at the first body in the lane
+			d += toward
 
 	return targets
 
@@ -965,11 +973,15 @@ func _cover_at(lane: int, row: int, side: Fighter.Side) -> Dictionary:
 # Formation grid helpers
 # ================================================================== #
 
-func _grid_key(lane: int, row: int, side: Fighter.Side) -> Vector3i:
-	return Vector3i(lane, row, int(side))
+## ONE grid. The key used to carry the side, which made two grids that happened
+## to be drawn next to each other — two fighters could stand in "the same" cell
+## because it was two different cells. Owner ruling 2026-08-21 made the board
+## shared, so a cell is a cell and only one body fits in it.
+func _grid_key(lane: int, depth: int, _side: Fighter.Side = Fighter.Side.PLAYER) -> Vector3i:
+	return Vector3i(lane, depth, 0)
 
 func _is_slot_free(slot: Vector2i, side: Fighter.Side) -> bool:
-	var fid: String = _grid.get(_grid_key(slot.x, slot.y, side), "")
+	var fid: String = _grid.get(_grid_key(slot.x, slot.y), "")
 	return fid == ""
 
 # ================================================================== #

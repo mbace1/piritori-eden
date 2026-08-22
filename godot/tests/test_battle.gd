@@ -80,7 +80,21 @@ board shape (one number, not four)")
 	check("six lanes straddle the centre", is_equal_approx(FightBoard.lane_centre(), 2.5))
 	check("the far corner is on the board", FightBoard.has_slot(5, 2))
 	check("one past it is not", not FightBoard.has_slot(6, 2))
-	check("and neither is a fourth row", not FightBoard.has_slot(0, 3))
+	# Depth runs across the WHOLE board now: both bands plus the neutral rows.
+	check("the neutral band is real ground", FightBoard.has_slot(0, FightBoard.rows))
+	check("the far end of the board exists",
+		FightBoard.has_slot(0, FightBoard.total_rows() - 1))
+	check("one past the far end does not",
+		not FightBoard.has_slot(0, FightBoard.total_rows()))
+	check("three blue, two grey, three red",
+		FightBoard.band_of(0) == -1 and FightBoard.band_of(FightBoard.rows) == 0
+		and FightBoard.band_of(FightBoard.total_rows() - 1) == 1)
+
+	# The owner's rule: crews START in their colours and may move to all of them.
+	var home := FightBoard.home_band(true)
+	check("the player's home band is their own rows", home.size() == FightBoard.rows)
+	for d in home:
+		check("home depth %d is player ground" % d, FightBoard.band_of(d) == -1)
 
 	# An even lane count must straddle the centre line rather than sit off to
 	# one side — that is what lane_centre() is for.
@@ -120,10 +134,21 @@ func _test_cells() -> void:
 	# middle of five. Pinning them left instead put the two formations out of
 	# line and made every unarmed attack report no reachable target.
 	var off := BattleBuilder._authored_lane_offset()
-	eq("front-2 is the centre lane", BattleBuilder.parse_cell("front-2"), Vector2i(1 + off, 0))
-	eq("middle-1 is one to its left", BattleBuilder.parse_cell("middle-1"), Vector2i(0 + off, 1))
-	eq("back-3 is one to its right", BattleBuilder.parse_cell("back-3"), Vector2i(2 + off, 2))
-	eq("round trip", BattleBuilder.cell_name(2 + off, 2), "back-3")
+	# A slot's second component is a UNIFIED DEPTH now, not a per-side row.
+	# Authored cells belong to the opposition, whose band starts after the
+	# neutral rows — so front is the depth NEAREST the middle, not zero.
+	var opp_front := FightBoard.depth_of(0, false)
+	var opp_mid := FightBoard.depth_of(1, false)
+	var opp_back := FightBoard.depth_of(2, false)
+	eq("front-2 is the centre lane, opposition front",
+		BattleBuilder.parse_cell("front-2"), Vector2i(1 + off, opp_front))
+	eq("middle-1 is one to its left", BattleBuilder.parse_cell("middle-1"),
+		Vector2i(0 + off, opp_mid))
+	eq("back-3 is one to its right", BattleBuilder.parse_cell("back-3"),
+		Vector2i(2 + off, opp_back))
+	eq("round trip", BattleBuilder.cell_name(2 + off, opp_back), "back-3")
+	check("opposition front is nearer the middle than its back",
+		opp_front < opp_back, "%d %d" % [opp_front, opp_back])
 
 	var l := BattleBuilder.parse_cell("front-1").x
 	var m := BattleBuilder.parse_cell("front-2").x
@@ -132,7 +157,8 @@ func _test_cells() -> void:
 		"%d %d %d" % [l, m, r])
 
 	FightBoard.apply_override(3, 3)
-	eq("a three-lane board is unshifted", BattleBuilder.parse_cell("front-2"), Vector2i(1, 0))
+	eq("a three-lane board is unshifted", BattleBuilder.parse_cell("front-2"),
+		Vector2i(1, FightBoard.depth_of(0, false)))
 	FightBoard.reset()
 
 
@@ -169,9 +195,10 @@ func _test_build_2v2() -> void:
 	var matches: Array = def["opposition_units"].filter(
 		func(u): return u["fighter_id"] == "opp-mikko-rinne")
 	var mikko: Dictionary = matches[0]
-	eq("Mikko sits at the centre of the front rank",
+	eq("Mikko sits at the centre of the opposition front rank",
 		Vector2i(mikko["slot_lane"], mikko["slot_row"]),
-		Vector2i(1 + BattleBuilder._authored_lane_offset(), 0))
+		Vector2i(1 + BattleBuilder._authored_lane_offset(),
+			FightBoard.depth_of(0, false)))
 	eq("Mikko carries the authored pipe", String(mikko["held_weapon_id"]), "pipe")
 
 	# Cover is mirrored across both half-boards.

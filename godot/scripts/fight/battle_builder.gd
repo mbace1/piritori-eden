@@ -42,7 +42,23 @@ static func parse_cell(cell: String) -> Vector2i:
 		push_error("BattleBuilder: unknown row in cell '%s'" % cell)
 		row = 0
 	var lane := int(parts[1]) - 1 + _authored_lane_offset()
-	return Vector2i(FightBoard.clamp_lane(lane), FightBoard.clamp_row(row))
+	# An authored cell names a row within ONE SIDE's band. A slot is a unified
+	# depth on the shared board, so which side is asking decides where that band
+	# is. parse_cell answers for the OPPOSITION, whose cells the slice authors;
+	# parse_cell_for() is the general form.
+	return Vector2i(FightBoard.clamp_lane(lane),
+		FightBoard.depth_of(FightBoard.clamp_row(row), false))
+
+
+## The same, for a named side.
+static func parse_cell_for(cell: String, is_player: bool) -> Vector2i:
+	var v := parse_cell(cell)
+	var row := 0
+	for r in range(FightBoard.rows):
+		if FightBoard.depth_of(r, false) == v.y:
+			row = r
+			break
+	return Vector2i(v.x, FightBoard.depth_of(row, is_player))
 
 
 ## Authored cell ids are ABSOLUTE lane numbers written against a three-lane
@@ -67,7 +83,11 @@ static func cell_name(lane: int, row: int) -> String:
 	# The inverse of parse_cell, offset included, so a round trip is a round
 	# trip on any board width. Without the subtraction, cell_name(centre) named
 	# a lane one to the right of the one it was given.
-	return "%s-%d" % [ROWS[clampi(row, 0, ROWS.size() - 1)],
+	# Inverse of parse_cell: takes a unified DEPTH back to the authored id.
+	var band := row - FightBoard.rows - FightBoard.NEUTRAL_ROWS
+	if band < 0:
+		band = FightBoard.rows - 1 - row
+	return "%s-%d" % [ROWS[clampi(band, 0, ROWS.size() - 1)],
 		FightBoard.clamp_lane(lane) - _authored_lane_offset() + 1]
 
 
@@ -149,7 +169,7 @@ static func _default_player_slot(index: int, total: int) -> Vector2i:
 	# Two fighters hold the centre lane in depth rather than spreading wide.
 	if total <= 2:
 		var mid := FightBoard.clamp_lane(int(round(FightBoard.lane_centre())))
-		return Vector2i(mid, mini(index, FightBoard.rows - 1))
+		return Vector2i(mid, FightBoard.depth_of(mini(index, FightBoard.rows - 1), true))
 	return order[index % order.size()]
 
 
@@ -157,6 +177,8 @@ static func _default_player_slot(index: int, total: int) -> Vector2i:
 static func _deploy_order() -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
 	var centre := FightBoard.lane_centre()
+	# Front rank first — which on the shared board is the depth NEAREST the
+	# neutral band, not row 0 of a private grid.
 	for row in range(FightBoard.rows):
 		var lanes_by_centre: Array[int] = []
 		for lane in range(FightBoard.lanes):
@@ -164,7 +186,7 @@ static func _deploy_order() -> Array[Vector2i]:
 		lanes_by_centre.sort_custom(func(a, b):
 			return absf(float(a) - centre) < absf(float(b) - centre))
 		for lane in lanes_by_centre:
-			out.append(Vector2i(lane, row))
+			out.append(Vector2i(lane, FightBoard.depth_of(row, true)))
 	return out
 
 

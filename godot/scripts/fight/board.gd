@@ -67,18 +67,47 @@ static func is_canon() -> bool:
 	return rows == CANON_ROWS and lanes == CANON_LANES
 
 
-## True when the slot exists on the board. The one place that answers this, so
-## reposition, deployment and the intent scan cannot disagree about the edge.
-static func has_slot(lane: int, row: int) -> bool:
-	return lane >= 0 and lane < lanes and row >= 0 and row < rows
+## True when the slot exists on the board. A slot's second component is a
+## UNIFIED DEPTH, 0 .. total_rows()-1, not a per-side row.
+##
+## Owner ruling, 2026-08-21: "crews start in their colour areas and can move to
+## all coloured areas." So the board is one grid that everyone shares — a
+## fighter's depth ranges over the whole thing, and side decides only where they
+## BEGIN and which team they are on.
+static func has_slot(lane: int, depth: int) -> bool:
+	return lane >= 0 and lane < lanes and depth >= 0 and depth < total_rows()
 
 
 static func clamp_lane(lane: int) -> int:
 	return clampi(lane, 0, lanes - 1)
 
 
+## Clamp within ONE SIDE's band, for reading authored cell ids.
 static func clamp_row(row: int) -> int:
 	return clampi(row, 0, rows - 1)
+
+
+## Clamp anywhere on the shared board.
+static func clamp_depth(depth: int) -> int:
+	return clampi(depth, 0, total_rows() - 1)
+
+
+## The depths a side starts on. Movement is not limited to these.
+static func home_band(is_player: bool) -> Array[int]:
+	var out: Array[int] = []
+	for r in range(rows):
+		out.append(depth_of(r, is_player))
+	out.sort()
+	return out
+
+
+## Which band a depth belongs to: -1 player, 0 neutral, 1 opposition.
+static func band_of(depth: int) -> int:
+	if depth < rows:
+		return -1
+	if is_neutral_depth(depth):
+		return 0
+	return 1
 
 
 ## Cells per side. Used by the deployment fallback and by the gates.
