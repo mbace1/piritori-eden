@@ -54,31 +54,40 @@ const CENTRE_GAP := 1.15                   ## tiles from the centre line to a fr
 ## approved courtyard's ground is a wedge that runs out near 40% of the frame,
 ## which is why this cannot simply be the whole plate — push it further and the
 ## far rank stands on the building.
-## THE ARENA IS A DIAMOND, not a rectangle.
+## THE GRID IS CANONICAL. ARENAS ARE BUILT TO FIT IT.
 ##
-## This was an axis-aligned Rect2 per stage, and a rectangle cannot describe an
-## isometric floor: its sides run horizontal and vertical while every edge of
-## the ground runs on one of the two 2:1 diagonals. Fitting a board inside a box
-## that does not share a single edge with the courtyard meant the fit was always
-## approximate, and the debug outline drew a white rectangle that told you
-## nothing about whether the board sat on the paving.
+## Owner ruling, 2026-08-21, and it corrects the direction this was going: the
+## board was being fitted to each painting, with a hand-tuned diamond per stage
+## and a round-trip with the owner for every new location. That is backwards for
+## a grid-based game. The grid is the fixed thing; a stage is art PRODUCED to
+## sit under it.
 ##
-## A diamond is authored the way the ground actually reads: a centre, and how
-## far the floor reaches along each of the board's own axes. Both extents are
-## HORIZONTAL fractions of the plate, because a step of one tile along either
-## axis moves exactly one tile horizontally — so the two numbers are directly
-## comparable and the shape is a true 2:1 diamond by construction.
+## So there is ONE arena, in plate-normalised coordinates, and every stage
+## inherits it. `tools/stage-template.mjs` renders this exact diamond onto a
+## 16:9 frame, and that template is what art is drawn against — see
+## STAGE_SPEC.md.
 ##
-##   c    centre of the floor, normalised to the plate
-##   fwd  half-extent along FORWARD  (toward the far building)
-##   lane half-extent along LANE_AXIS (across the courtyard)
-const PLAY_DIAMOND := {
-	"scene-courtyard-prototype-v03": {"c": Vector2(0.513, 0.635), "fwd": 0.163, "lane": 0.135},
-	"scene-karhupuisto-v01": {"c": Vector2(0.51, 0.63), "fwd": 0.158, "lane": 0.130},
-}
-const PLAY_DIAMOND_DEFAULT := {"c": Vector2(0.51, 0.64), "fwd": 0.158, "lane": 0.130}
+##   c    centre of the playable floor, normalised to the plate
+##   fwd  half-extent along FORWARD  (toward the opposition)
+##   lane half-extent along LANE_AXIS (across the board)
+##
+## Both extents are HORIZONTAL fractions of the plate width, because one tile
+## along either axis moves exactly one tile horizontally. That makes the two
+## numbers directly comparable and the shape a true 2:1 diamond by construction.
+const ARENA := {"c": Vector2(0.500, 0.620), "fwd": 0.175, "lane": 0.145}
+
+## Escape hatch, deliberately empty. A stage may override the arena ONLY when
+## its geometry genuinely cannot host the canonical one — and the right answer
+## is almost always to fix the art instead, because an override is a stage that
+## plays differently from every other stage for reasons the player cannot see.
+const ARENA_OVERRIDE := {}
 
 const FIGURE_HEADROOM := 0.0
+
+## Height of the overlaid command console. It was 188 and took a quarter of the
+## frame OUT of the layout; overlaid and trimmed it costs the board nothing and
+## covers only the near corner of the arena, where the least happens.
+const CONSOLE_H := 168.0
 
 ## Set to a non-empty Rect2 to override the play area for a comparison render.
 ## The owner asked (2026-08-21) whether the board is big enough to carry the
@@ -204,7 +213,10 @@ func _build() -> void:
 	_top_strip.add_child(tpad)
 	col.add_child(_top_strip)
 
-	# ── the encounter, above the console ──
+	# ── the encounter. It fills the WHOLE frame and the chrome floats over it.
+	# The console used to take 188 of 768 units out of the layout — a quarter of
+	# the picture — so the arena was squeezed into what was left and the board
+	# shrank to suit. A tactics game should spend its screen on the board.
 	_board = Control.new()
 	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -213,10 +225,15 @@ func _build() -> void:
 	_board.gui_input.connect(_board_input)
 	col.add_child(_board)
 
-	# ── substantial bottom console ──
+	# ── the command console, OVERLAID rather than stacked ──
+	# Anchored to the bottom of the frame instead of sitting in the column, so it
+	# costs the board nothing. Slightly translucent, because the ground it covers
+	# is the near corner of the arena and seeing it continue underneath is what
+	# keeps the stage reading as one place.
 	_console = PanelContainer.new()
 	_console.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 0))
-	_console.custom_minimum_size = Vector2(0, 188)
+	_console.custom_minimum_size = Vector2(0, CONSOLE_H)
+	_console.modulate = Color(1, 1, 1, 0.94)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
 
@@ -240,10 +257,19 @@ func _build() -> void:
 		cpad.add_theme_constant_override("margin_" + s, 14)
 	cpad.add_child(row)
 	_console.add_child(cpad)
-	col.add_child(_console)
+	# NOT col.add_child: it is an overlay on the root, pinned to the bottom.
+	add_child(_console)
+	_console.anchor_left = 0.0
+	_console.anchor_right = 1.0
+	_console.anchor_top = 1.0
+	_console.anchor_bottom = 1.0
+	_console.offset_left = 0.0
+	_console.offset_right = 0.0
+	_console.offset_bottom = 0.0
+	_console.offset_top = -CONSOLE_H
 	if debug_chrome_off:
 		_console.visible = false
-		top.visible = false
+		_top_strip.visible = false
 
 
 func _process(dt: float) -> void:
@@ -258,20 +284,18 @@ func _process(dt: float) -> void:
 ## opposition the right; both are mirrors of one location (§13.3).
 ## The plate is drawn cover-fitted, so the play area has to be mapped through
 ## exactly the same transform to land on the floor it was measured against.
+## The board's own rect. It is the whole frame now: the console floats over the
+## bottom of it rather than taking a slice out of the layout, so the arena is
+## placed against the full picture and the near corner simply sits under the
+## chrome — which is where the least happens anyway.
 func _plate_rect() -> Rect2:
-	if _stage == null:
-		return Rect2(Vector2.ZERO, _board.size)
-	var ts := _stage.get_size()
-	if ts.x <= 0.0 or ts.y <= 0.0:
-		return Rect2(Vector2.ZERO, _board.size)
-	var sc: float = maxf(_board.size.x / ts.x, _board.size.y / ts.y)
-	var drawn := ts * sc
-	return Rect2((_board.size - drawn) * 0.5, drawn)
+	return Rect2(Vector2.ZERO, _board.size)
+
 
 
 ## Centre, and the two half-extents in PIXELS along the board's own axes.
 func _play_diamond() -> Dictionary:
-	var d: Dictionary = PLAY_DIAMOND.get(_stage_id, PLAY_DIAMOND_DEFAULT)
+	var d: Dictionary = ARENA_OVERRIDE.get(_stage_id, ARENA)
 	if not play_diamond_override.is_empty():
 		d = play_diamond_override
 	var plate := _plate_rect()

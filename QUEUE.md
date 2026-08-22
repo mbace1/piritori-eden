@@ -52,6 +52,16 @@ pick up, and half of it will turn out to be wrong.
   ("front rank first, then middle") literally, and on a wide board that rule
   produces a flat line. Worth revisiting.
 
+## Stages (see STAGE_SPEC.md)
+
+- **The docks art is off-spec.** Supplied 2026-08-21 and registered as
+  `scene-sornainen-docks-v02`, but its ground is not drawn at 2:1 and the
+  canonical arena does not lie flat on it. Per STAGE_SPEC 5 the fix is the art,
+  not the arena. It is registered so it can be worked on, not because it passes.
+- **The courtyard v03 fits and is the reference** for what a stage should give.
+- **`art-library/archive/needs-rework/`** should probably gain the off-spec
+  stages rather than leaving them registered and unusable.
+
 ## The stage (see COMBAT.md 3.1)
 
 - ~~**The projections do not match.**~~ Fixed by construction — the floor is

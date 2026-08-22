@@ -633,6 +633,33 @@
       "baked_ui": false,
       "sha256": "9907ab988fdc818ce384ba30ca707cca914a1626e4203a509b2937813de33146",
       "note": "Owner-supplied 2026-08-21, replacing v02 as the battle stage. Drawn clean with no chrome and a broad open courtyard floor, which is what the formation board needs: v02 painted a wedge of ground that ran out near 40 percent of the frame. Semi-approved because the owner supplied it as a working background, not as a final approval. The board is fitted to its floor by PLAY_DIAMOND in formation_battle.gd."
+    },
+    {
+      "id": "scene-sornainen-docks-v02",
+      "kind": "scene",
+      "file": "scenes/sornainen-docks-v02.webp",
+      "source": "locations/era1/location-sornainen-docks-v02.png",
+      "source_version": "v02",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "sornainen-docks",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "9ae47de05fcfd5d66789e0814ae19f22695431d824015fb5143cc00acf76c9e0",
+      "note": "Owner-supplied 2026-08-21. A quay rather than a courtyard: open on two sides to water, framed by a warehouse on one edge only. Supplied with the playable area marked, which is what PLAY_DIAMOND was measured from. Semi-approved: a working background, not a sign-off."
     }
   ]
 }
