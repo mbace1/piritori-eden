@@ -1925,3 +1925,45 @@ This GDD is the active design baseline beneath `DESIGN_AUTHORITY.md` and
 language, combat staging, motion and production rules from the approved library.
 The Art Bible, UX and map specifications now gate implementation and asset
 counts, not the rejected legacy documents.
+
+---
+
+## Market behaviour — owner ruling, 2026-08-22
+
+**Dope Wars underneath, narrative on top.** Both a moving baseline and shocks,
+but the baseline is deliberately NOT a supply simulation.
+
+### The baseline is a roll, not a model
+
+Each district carries its own price for a good, **rolled per day within bounds**
+— the Dope Wars shape. It is not a persistent simulated stock that the player
+and rivals deplete.
+
+That is a real choice against the more elegant option. A full supply model is
+more defensible on paper and its story is **invisible**: nobody can hear on
+television that district stock quietly drifted. A daily roll produces the same
+felt experience — somewhere is cheap today, somewhere is dear — and stays
+legible enough that a player can plan around it after two days of paying
+attention.
+
+Occasional dramatic swings sit inside the same roll: a good that has bottomed
+out, or spiked, further than its usual band.
+
+### Events are where the narrative attaches
+
+On top of the roll, **authored events move prices and say why**. A bust in
+Sörnäinen, a shipment landing, a factory closing, pressure arriving somewhere.
+
+This is what makes Arvo load-bearing. `NARRATIVE.md` calls television the
+authoritative public clock, and a broadcast that tells you a market has moved is
+a clock you act on rather than watch. The same event should be readable from the
+news, from the street and from the price — heard, then confirmed, then spent.
+
+### What this obliges
+
+- Prices need a per-district, per-day derivation from the campaign seed, so the
+  same run is reproducible and a player who returns sees the same market.
+- Events need to name a good, a place and a direction, and be able to fire from
+  the news schedule.
+- The presentation rule on products still holds: a price is a number and a
+  place, never dosage, preparation or concealment.
