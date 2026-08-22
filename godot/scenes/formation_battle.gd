@@ -311,11 +311,17 @@ func _play_diamond() -> Dictionary:
 	# what it looked like — one grid tight against the bottom edge, the other
 	# with space to spare.
 	var plate := _plate_rect()
-	# With the chrome hidden there is no console to clear, so the whole frame is
-	# visible and the arena should use it. Reserving the band anyway made every
-	# chrome-off capture sit higher than the game does.
-	var reserved := 0.0 if debug_chrome_off else CONSOLE_H
-	var visible := Vector2(plate.size.x, maxf(plate.size.y - reserved, 1.0))
+	# The console band is ALWAYS reserved, whether or not the console is drawn.
+	#
+	# It was skipped when the chrome was hidden, on the reasoning that there is
+	# nothing to clear — but stage art is drawn against tools/stage-template.mjs,
+	# which places the arena against exactly this reduced height. Using the full
+	# frame instead dropped the board below the ground it was painted for: the
+	# player's band crowded the near edge while the opposition's kept its room.
+	#
+	# Hiding the chrome hides the PANEL. It must not move the layout, or a
+	# capture stops being a picture of the game.
+	var visible := Vector2(plate.size.x, maxf(plate.size.y - CONSOLE_H, 1.0))
 	var c: Vector2 = d.get("c", Vector2(0.5, 0.7))
 	return {
 		"c": plate.position + Vector2(c.x * plate.size.x, c.y * visible.y),
