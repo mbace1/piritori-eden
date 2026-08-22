@@ -68,33 +68,6 @@
       "note": "Approved location plate; animated foliage and animals remain separate runtime layers."
     },
     {
-      "id": "scene-courtyard-prototype-v02",
-      "kind": "scene",
-      "file": "scenes/courtyard-prototype-v02.webp",
-      "source": "locations/era1/location-kallio-courtyard-v02.png",
-      "source_version": "v02",
-      "approval_status": "semi-approved",
-      "production_status": "prototype-only",
-      "dimensions": [
-        1600,
-        900
-      ],
-      "format": "webp-opaque",
-      "layer": "location-stage",
-      "era": "2003",
-      "location": "torkkelinmaki-composite",
-      "portrait_safe_bounds": [
-        0.22,
-        0.0,
-        0.78,
-        1.0
-      ],
-      "baked_text": false,
-      "baked_ui": false,
-      "sha256": "90ae8539db6edd44e009ba4c04f55adf40e34fe666dd702ef9b20109b6385dc4",
-      "note": "Permitted only as an explicitly labelled vertical-slice placeholder; building consistency still requires another pass."
-    },
-    {
       "id": "crew-heads-era1-v03",
       "kind": "modular-character-collection",
       "approval_status": "approved",
@@ -628,35 +601,8 @@
       "skeleton_bones": 24,
       "triangles": 20826,
       "presentation_rule": "Only the moving presenter inside the television is 3D. Output receives limited colour, analogue softness, slight scanlines and CRT bloom. The CRT shell, lower third, newsroom props and all surrounding UI remain cut-cardstock layers.",
-      "sha256": "7517a3fcead90a9578f19f08df42f12a6f9d7a8d79aea6d04e93b0fa460cfe6c",
+      "sha256": "613a6b5ebc010e0cf4acdb46d98db12b5163bba2c512e8417a4e8c46853ee8a2",
       "note": "ART_BIBLE 13.2 exception. Fictional composite, not a likeness of any living person: wardrobe, colouring and demeanour follow the owner's reference, the face does not. Rigged by Meshy auto-rigging, 24-bone humanoid; head bone 'headfront'. Idle motion is breathing and a scripted paper glance - lip sync needs blendshapes this mesh does not carry."
-    },
-    {
-      "id": "scene-courtyard-prototype-v03",
-      "kind": "scene",
-      "file": "scenes/courtyard-prototype-v03.webp",
-      "source": "locations/era1/location-kallio-courtyard-v03.png",
-      "source_version": "v03",
-      "approval_status": "semi-approved",
-      "production_status": "prototype-only",
-      "dimensions": [
-        1600,
-        900
-      ],
-      "format": "webp-opaque",
-      "layer": "location-stage",
-      "era": "2003",
-      "location": "torkkelinmaki-composite",
-      "portrait_safe_bounds": [
-        0.22,
-        0.0,
-        0.78,
-        1.0
-      ],
-      "baked_text": false,
-      "baked_ui": false,
-      "sha256": "9907ab988fdc818ce384ba30ca707cca914a1626e4203a509b2937813de33146",
-      "note": "Owner-supplied 2026-08-21, replacing v02 as the battle stage. Drawn clean with no chrome and a broad open courtyard floor, which is what the formation board needs: v02 painted a wedge of ground that ran out near 40 percent of the frame. Semi-approved because the owner supplied it as a working background, not as a final approval. The board is fitted to its floor by PLAY_DIAMOND in formation_battle.gd."
     },
     {
       "id": "scene-sornainen-docks-v02",
@@ -684,33 +630,6 @@
       "baked_ui": false,
       "sha256": "9ae47de05fcfd5d66789e0814ae19f22695431d824015fb5143cc00acf76c9e0",
       "note": "Owner-supplied 2026-08-21. A quay rather than a courtyard: open on two sides to water, framed by a warehouse on one edge only. Supplied with the playable area marked, which is what PLAY_DIAMOND was measured from. Semi-approved: a working background, not a sign-off."
-    },
-    {
-      "id": "scene-courtyard-prototype-v04",
-      "kind": "scene",
-      "file": "scenes/courtyard-prototype-v04.webp",
-      "source": "locations/era1/location-kallio-courtyard-v04.png",
-      "source_version": "v04",
-      "approval_status": "semi-approved",
-      "production_status": "prototype-only",
-      "dimensions": [
-        1600,
-        900
-      ],
-      "format": "webp-opaque",
-      "layer": "location-stage",
-      "era": "2003",
-      "location": "torkkelinmaki-composite",
-      "portrait_safe_bounds": [
-        0.22,
-        0.0,
-        0.78,
-        1.0
-      ],
-      "baked_text": false,
-      "baked_ui": false,
-      "sha256": "3ae44ee7b1a6ebe569e55fb7c3d925a0abe9e20da01be280f7d68b3e6c555f6d",
-      "note": "Built TO the grid, 2026-08-21 — the first stage produced from tools/stage-template.mjs rather than measured after the fact. Same courtyard and same night as v03, restaged so the open floor is a diamond in the middle of the frame where the canonical ARENA sits. v03 put its floor in the lower half, which left only 258px clear above the console for an arena needing 436. Semi-approved: proves the pipeline, not signed off as final art."
     },
     {
       "id": "scene-courtyard-prototype-v05",
@@ -1231,38 +1150,6 @@
       "baked_ui": false,
       "sha256": "b09620f3a598015339620977bd0a8cef918df7c36bb177570e243893a8b715b5",
       "note": "A Kallio back yard as one diorama mesh: open ground with a brick outbuilding, chain-link and gate, a leaning lamp, pallets, a skip and bare birches. Generated as a single centred object because that is what image-to-3D is good at — a scene asked for as a scene comes back as soup. Its walkable surface is NOT at y=0; the base has real thickness and the ground must be measured from the AABB."
-    },
-    {
-      "id": "cast3d-muscle-walk-v01",
-      "kind": "mesh-3d",
-      "file": "cast3d/muscle-walk-v01.glb",
-      "source": "cast3d/muscle-rigged-source-v01.glb",
-      "source_version": "v01",
-      "approval_status": "semi-approved",
-      "production_status": "prototype-only",
-      "layer": "unit-3d",
-      "era": "2003",
-      "format": "glb",
-      "baked_text": false,
-      "baked_ui": false,
-      "sha256": "acd0d9b305735344184c7a73515321d32e1e586dae0e95b56c15569e6e8d79de",
-      "note": "The muscle, rigged and carrying a walking clip: 24 bones, 1.07s, 29 tracks. Built from the role's own 2D sheet through a T-pose, so the 3D and the 2D are the same person. Crew variety comes from a hue-band recolour of this one mesh, not from a model per person."
-    },
-    {
-      "id": "cast3d-muscle-run-v01",
-      "kind": "mesh-3d",
-      "file": "cast3d/muscle-run-v01.glb",
-      "source": "cast3d/muscle-rigged-source-v01.glb",
-      "source_version": "v01",
-      "approval_status": "semi-approved",
-      "production_status": "prototype-only",
-      "layer": "unit-3d",
-      "era": "2003",
-      "format": "glb",
-      "baked_text": false,
-      "baked_ui": false,
-      "sha256": "c0ecfb3f8f599d283441ccff0c0321dff05a0fcec823e7d0bcdda494a30ca1c2",
-      "note": "The same rig carrying the running clip. Walk and run came free with the rig."
     },
     {
       "id": "cast3d-muscle-clips-v01",

@@ -242,3 +242,47 @@ Also noted: `small-local.glb` survives in `.godot/imported/` with its source gon
   role. Competencies are fixed per role, so there is no variety there at all.
 - **The pool is three people per day and never runs dry.** No scarcity, no
   reputation gate, no faction refusing to work for you.
+
+## Download weight, second pass — measured again
+
+Local export, same machine, before and after:
+
+    index.pck   49.7 MB raw / 47.4 MB gzipped   ->   39.9 MB / 37.7 MB
+    index.wasm  unchanged at 37.7 MB / 9.7 MB   (the engine; not ours)
+
+So roughly 57MB gzipped down to 47MB. Three changes did it:
+
+- **The presenter texture was 2048 square.** Arvo is drawn in a panel at most
+  ~620 logical pixels wide, so it was oversampled about eleven times over.
+  Downscaled to 1024, which is still generous: 6.5MB -> 2.0MB, and the imported
+  `.ctex` was the single largest object in the build at 6.3MB.
+- **Three superseded courtyard prototypes were still registered.** v02, v03 and
+  v04, where only v05 is used by `battle-courtyard-3v3`. Each imported to a
+  ~1.2MB `.ctex` and shipped to every player.
+- **Two animation clips were dead.** `cast3d/muscle-walk-v01` and
+  `muscle-run-v01` were the first two rigged clips; `battle_stage_3d.gd` loads
+  only the four in `cast3d/clips/`. I had spent effort texture-stripping these
+  earlier in the same session without noticing nothing loaded them.
+
+`tools/find-orphan-art.py` is committed and reports what nothing references.
+It found 34 orphans on its first run, most of them false: code names the MEMBER
+ids (`torso-runner-v03`), never the group id (`crew-torsos-era1-v03`), which is
+the second half of CLAUDE.md rule 11.
+
+Still open, deliberately not touched:
+
+- **19 registered assets, 2.87 MB of source, are referenced by nothing.** Mostly
+  arena backgrounds (`scene-karhupuisto-clearing-v01`, `scene-kallio-service-
+  yard-v01`, `scene-hakaniemi-square-v01`, `scene-sornainen-quay-v01`) and the
+  whole 2D cast (`cast-muscle-v01` and friends, nine files each). These are NOT
+  provably superseded — they may be arenas nobody has wired up yet, and the 2D
+  cast may still be wanted. Deleting art on a guess destroys work, so only
+  supersession was actioned. Someone who knows the intent should rule on these.
+- **`export_filter="all_resources"` is still on**, and is why unreferenced art
+  ships at all. It cannot simply be narrowed: art is loaded from `data/` by path
+  at runtime, so dependency-following would drop nearly everything. The real fix
+  is to keep unused art out of `data/`, which means a `runtime` flag in the
+  manifest that `sync-data.mjs` honours.
+- **CI's pack measured 56.2MB where the same commit built 49.7MB locally.**
+  Unexplained. Probably a stale local import cache, but it has not been proven,
+  and it means local size numbers are a lower bound rather than the truth.
