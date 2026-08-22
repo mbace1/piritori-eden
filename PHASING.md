@@ -313,6 +313,27 @@ detail in the texture rather than the mesh; generate character, weapon and hat
 as separate assets rather than one figure holding things; and put T-POSE in the
 prompt for anything to be rigged, which this project learned the hard way twice.
 
+### 1.08 What Meshy actually costs — measured 2026-08-22
+
+Estimates in this file were wrong and are corrected from the balance, not from
+the price list.
+
+| step | estimated | ACTUAL |
+|---|---|---|
+| image-to-3d, textured, 18k polycount | 15 | **30** |
+| image-to-3d, 12k, prop | 15 | 15 |
+| rigging (walk + run included) | 5 | 5 |
+| one canned animation clip | — | 3 |
+
+The 15 figure came from a 12k untextured prop. A textured character at 18k is
+**30**, so a role is **35 credits** from concept to rigged, not 20 — and six
+roles is **210, not 120**. That difference was noticed as it happened by
+watching the balance drop 663 → 483 across six meshes.
+
+**Watch the balance, do not trust the estimate.** Credits are real money
+(global `CLAUDE.md`), and an estimate that is half the true cost is worse than
+no estimate because it gets used to authorise a batch.
+
 ### 1.1 The item rule
 
 **An item changes what you can do. It does not add a modifier you have to
