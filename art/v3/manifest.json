@@ -714,6 +714,33 @@
       "baked_ui": false,
       "sha256": "dcaaa4308b1050a9e3599a521069085a5eca4b9d763e2d71e94e470e5faa6211",
       "note": "Built to the grid with the floor MARGIN, 2026-08-21. v04 put its ground exactly on the arena, so the back rank clipped off the floor onto the building — units stand ON the outer cells and a figure draws upward from its feet, so the ground must run past the board on every side. The template now marks a dashed floor edge 1.22x the arena and this is drawn to it. The console band was flattened after generation: the model reproduced the template furniture, text included."
+    },
+    {
+      "id": "scene-kallio-backyard-v01",
+      "kind": "scene",
+      "file": "scenes/kallio-backyard-v01.webp",
+      "source": "locations/era1/location-kallio-backyard-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "kallio-backyard",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "1a9f46a12e279b2adcb88aac4fc1db59fe4152aee4305f1c836a906415b40654",
+      "note": "Made to the grid, 2026-08-21 — the first stage authored FROM the template rather than an existing render restaged to it. Open ground fills the arena and its margin; every prop that gives the yard its character (bin store, chain-link, lamp, pallets, skip, birches) sits outside the playing surface, which is what STAGE_SPEC 3 asks for. The grid landed on it with no per-stage tuning."
     }
   ]
 }
