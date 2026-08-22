@@ -126,6 +126,25 @@ board shape (one number, not four)")
 	FightBoard.reset()
 	check("reset returns to canon", FightBoard.is_canon())
 
+	# Every role a battle can field must have its own art. The cast sets existed
+	# for weeks but were never in the manifest, so sync-data did not carry them
+	# and every unit fell back to one figure — six identical people in a 3v3,
+	# which no gate could see because the fight resolved perfectly.
+	# Typed: an untyped array yields Variant elements and PoseArt.texture wants a
+	# String, which is a parse error rather than a runtime one.
+	var roles: Array[String] = ["driver", "fixer", "local", "muscle", "runner", "watcher"]
+	for r in roles:
+		var tex := PoseArt.texture(r, "idle-smile")
+		check("%s has its own idle art" % r, tex != null)
+	var art_paths := {}
+	for r in roles:
+		var t := PoseArt.texture(r, "idle-smile")
+		if t != null:
+			art_paths[t.resource_path] = true
+	check("the six roles are six different figures",
+		art_paths.size() == roles.size(),
+		"distinct textures: %d" % art_paths.size())
+
 
 func _test_cells() -> void:
 	print("\ncell grammar (front-2 etc.)")

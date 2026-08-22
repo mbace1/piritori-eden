@@ -849,6 +849,348 @@
       "baked_ui": false,
       "sha256": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
       "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
+    },
+    {
+      "id": "cast-driver-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "driver",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/driver/idle-smile-frame00.webp",
+          "source": "approved/cast/driver-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/driver/talk-frame00.webp",
+          "source": "approved/cast/driver-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/driver/walk-contact-frame00.webp",
+          "source": "approved/cast/driver-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/driver/walk-pass-frame00.webp",
+          "source": "approved/cast/driver-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/driver/guard-frame00.webp",
+          "source": "approved/cast/driver-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/driver/strike-frame00.webp",
+          "source": "approved/cast/driver-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/driver/hit-light-frame00.webp",
+          "source": "approved/cast/driver-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/driver/downed-frame00.webp",
+          "source": "approved/cast/driver-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/driver/shaken-frame00.webp",
+          "source": "approved/cast/driver-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the driver, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "cast-fixer-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "fixer",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/fixer/idle-smile-frame00.webp",
+          "source": "approved/cast/fixer-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/fixer/talk-frame00.webp",
+          "source": "approved/cast/fixer-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/fixer/walk-contact-frame00.webp",
+          "source": "approved/cast/fixer-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/fixer/walk-pass-frame00.webp",
+          "source": "approved/cast/fixer-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/fixer/guard-frame00.webp",
+          "source": "approved/cast/fixer-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/fixer/strike-frame00.webp",
+          "source": "approved/cast/fixer-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/fixer/hit-light-frame00.webp",
+          "source": "approved/cast/fixer-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/fixer/downed-frame00.webp",
+          "source": "approved/cast/fixer-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/fixer/shaken-frame00.webp",
+          "source": "approved/cast/fixer-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the fixer, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "cast-local-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "local",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/local/idle-smile-frame00.webp",
+          "source": "approved/cast/local-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/local/talk-frame00.webp",
+          "source": "approved/cast/local-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/local/walk-contact-frame00.webp",
+          "source": "approved/cast/local-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/local/walk-pass-frame00.webp",
+          "source": "approved/cast/local-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/local/guard-frame00.webp",
+          "source": "approved/cast/local-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/local/strike-frame00.webp",
+          "source": "approved/cast/local-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/local/hit-light-frame00.webp",
+          "source": "approved/cast/local-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/local/downed-frame00.webp",
+          "source": "approved/cast/local-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/local/shaken-frame00.webp",
+          "source": "approved/cast/local-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the local, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "cast-muscle-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "muscle",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/muscle/idle-smile-frame00.webp",
+          "source": "approved/cast/muscle-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/muscle/talk-frame00.webp",
+          "source": "approved/cast/muscle-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/muscle/walk-contact-frame00.webp",
+          "source": "approved/cast/muscle-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/muscle/walk-pass-frame00.webp",
+          "source": "approved/cast/muscle-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/muscle/guard-frame00.webp",
+          "source": "approved/cast/muscle-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/muscle/strike-frame00.webp",
+          "source": "approved/cast/muscle-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/muscle/hit-light-frame00.webp",
+          "source": "approved/cast/muscle-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/muscle/downed-frame00.webp",
+          "source": "approved/cast/muscle-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/muscle/shaken-frame00.webp",
+          "source": "approved/cast/muscle-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the muscle, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "cast-runner-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "runner",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/runner/idle-smile-frame00.webp",
+          "source": "approved/cast/runner-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/runner/talk-frame00.webp",
+          "source": "approved/cast/runner-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/runner/walk-contact-frame00.webp",
+          "source": "approved/cast/runner-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/runner/walk-pass-frame00.webp",
+          "source": "approved/cast/runner-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/runner/guard-frame00.webp",
+          "source": "approved/cast/runner-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/runner/strike-frame00.webp",
+          "source": "approved/cast/runner-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/runner/hit-light-frame00.webp",
+          "source": "approved/cast/runner-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/runner/downed-frame00.webp",
+          "source": "approved/cast/runner-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/runner/shaken-frame00.webp",
+          "source": "approved/cast/runner-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the runner, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "cast-watcher-v01",
+      "kind": "animation-set",
+      "approval_status": "approved",
+      "production_status": "prototype-only",
+      "layer": "unit-composite",
+      "era": "2003",
+      "role": "watcher",
+      "frames": [
+        {
+          "pose": "idle-smile",
+          "file": "cast/watcher/idle-smile-frame00.webp",
+          "source": "approved/cast/watcher-idle-smile.webp"
+        },
+        {
+          "pose": "talk",
+          "file": "cast/watcher/talk-frame00.webp",
+          "source": "approved/cast/watcher-talk.webp"
+        },
+        {
+          "pose": "walk-contact",
+          "file": "cast/watcher/walk-contact-frame00.webp",
+          "source": "approved/cast/watcher-walk-contact.webp"
+        },
+        {
+          "pose": "walk-pass",
+          "file": "cast/watcher/walk-pass-frame00.webp",
+          "source": "approved/cast/watcher-walk-pass.webp"
+        },
+        {
+          "pose": "guard",
+          "file": "cast/watcher/guard-frame00.webp",
+          "source": "approved/cast/watcher-guard.webp"
+        },
+        {
+          "pose": "strike",
+          "file": "cast/watcher/strike-frame00.webp",
+          "source": "approved/cast/watcher-strike.webp"
+        },
+        {
+          "pose": "hit-light",
+          "file": "cast/watcher/hit-light-frame00.webp",
+          "source": "approved/cast/watcher-hit-light.webp"
+        },
+        {
+          "pose": "downed",
+          "file": "cast/watcher/downed-frame00.webp",
+          "source": "approved/cast/watcher-downed.webp"
+        },
+        {
+          "pose": "shaken",
+          "file": "cast/watcher/shaken-frame00.webp",
+          "source": "approved/cast/watcher-shaken.webp"
+        }
+      ],
+      "note": "Nine-pose whole-figure set for the watcher, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     }
   ]
 }

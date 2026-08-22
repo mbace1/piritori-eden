@@ -98,6 +98,11 @@ pick up, and half of it will turn out to be wrong.
 
 ## Art
 
+- **Faces wash out at battle scale.** The cast sheets are 362x543 with real
+  faces; drawn at roughly 120px tall a head is ~15px and the night grade
+  flattens what is left, so they read as pale ovals. Clothing colour and
+  silhouette carry the identification, which is what `ART_BIBLE` asks for — but
+  a portrait-scale face may want a simplified battle variant.
 - **The pose sets are swapped, not played.** Nine poses per role exist and the
   battle picks one per state. There is no held-frame timing, no weight, no
   torn-edge sway — `ART_BIBLE.md` licenses all of it and none is used.
