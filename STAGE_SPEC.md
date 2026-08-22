@@ -100,6 +100,33 @@ What works instead:
   carry guide marks. `PIRITORI_SHOT_EXTENT=1` draws the arena over the stage so the
   two can be compared directly.
 
+## 4.5 Cover on the board — owner ruling, 2026-08-22
+
+**Decision: a flat marker now, real props later.**
+
+Cover is fully implemented in the resolver and the crew panel now names it —
+"behind the bicycle rack" — but `_draw_cover()` lives in the old 2D renderer, so
+the 3D board draws nothing. The words are right and the picture is not.
+
+**Now: a low slab or outline on the covered cell**, in the cover colour, no
+model. The tactical question is *which cell is protected*, and a marker answers
+it completely at zero cost. It is also honest: a game piece that looks like a
+game piece, on a board that is already a grid.
+
+**Later: a model per prop type** — bin, rack, plinth, skip. The better picture,
+and it makes the arena art and the mechanics agree instead of merely coexisting.
+Deliberately second, because it costs Meshy credits per prop and nobody has yet
+judged whether cover reads on the board at all.
+
+**Rejected: snapping cover cells to whatever the diorama already has nearby.**
+Tempting — the arenas are full of bins and railings — but the alignment would be
+approximate, and approximate alignment on a grid game is the same class of bug
+as the isometric mismatch in `PHASING.md` §1.056, which cost a day of tuning a
+board against art it could never match. A marker that is obviously a marker
+never lies about which cell it means.
+
+---
+
 ## 5. Checking a stage before registering it
 
 ```bash
