@@ -364,3 +364,31 @@ accents. Registered, wired as a `hired` variant, picked by fighter id.
   reverse — one body each, so a role has one apparent gender. Neither is a bug
   in the code; both are a gap in the cast, and `NARRATIVE.md` asks for a crew
   that includes women and older people.
+
+## Kattilahalli, the street cast, and what is still open
+
+**Kattilahalli is in bounds.** Unlike the skate park: Suvilahti sits at
+Sörnäinen and `sornainen_harbour` is already an anchor, roles `docks,
+industrial, expansion`. Its `sliceState` is **teaser**, so putting a battle
+there is a content decision but NOT a boundary change. That is the difference
+between this arena and the Hermanni one, which is still unplaced.
+
+- **Mirrored textures.** Some faces repeat across opposite sides. The owner's
+  read is that colour and lighting hide it. Not attempted.
+- **Nothing fields either new arena.** Both are reachable only through `?stage=`.
+  Kattilahalli has a home anchor waiting; the skate park still does not.
+- **The concrete slab is untested against a real hole.** `_build_ground_fill()`
+  lays a slab under every arena at 1.22x the footprint. Its constants are gated
+  but the *effect* has never been looked at — whether Kattilahalli's open sides
+  actually read as hardstanding, or whether the slab is visible as a flat grey
+  disc past the hall walls, is a picture question the suite cannot answer.
+- **The white suit sits in the `enforcer` slot on sufferance.**
+  `MODULAR_CHARACTER_SYSTEM.md` gives Enforcer a rain shell, a dark cap and a
+  long silhouette. A white suit is none of those. Either the brief updates or
+  the model is re-designated.
+- **`baked_text` is declared on every asset and read by nothing.** No gate, no
+  documentation. `street-raver-v01` is the first entry to set it true — the
+  garment carries "RAVE" and an acid-house smiley — and nothing verifies that
+  claim or acts on it.
+- **The street cast is three men and the enforcer a fourth.** The generator
+  rolls women into `hired`; they will wear one of three male bodies.

@@ -29,6 +29,7 @@ extends SubViewportContainer
 const STAGE_BY_SCENE := {
 	"scene-kallio-backyard-v01": "res://data/art/stage3d/kallio-backyard-3d-v01.glb",
 	"scene-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
+	"scene-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
 }
 
 ## Used when a battle names a scene nothing has been built for. Unlike the unit
@@ -68,6 +69,10 @@ const UNIT_BY_ROLE := {
 	# with no model until one arrived rigged. Cheap gear, planted stance: the
 	# people the roster churns through.
 	"hired":   "res://data/art/cast3d/hired-v01.glb",
+	# Opposition only. Deliberately absent from CrewGenerator.ROLES: `hired`
+	# is what you buy, `enforcer` is what faces you, and the split is the
+	# reason an enemy should not look like somebody on your own payroll.
+	"enforcer": "res://data/art/cast3d/enforcer-v01.glb",
 }
 
 ## Used when a fighter carries a role nothing has been modelled for. Loud rather
@@ -91,6 +96,7 @@ const UNIT_VARIANTS := {
 	"hired": [
 		"res://data/art/cast3d/hired-v01.glb",
 		"res://data/art/cast3d/hired-b-v01.glb",
+		"res://data/art/cast3d/street-raver-v01.glb",
 	],
 }
 
@@ -297,7 +303,53 @@ func _build_stage() -> void:
 	var c := box.get_center()
 	a.position -= Vector3(c.x, 0.0, c.z)
 	_arena_half = Vector2(box.size.x, box.size.z) * 0.5
+	_build_ground_fill()
 	_fit_board()
+
+
+## CONCRETE UNDER THE HOLES.
+##
+## A generated diorama models what it was asked for and nothing else, so the
+## ground is whatever the generator happened to build — Kattilahalli is a hall
+## with open sides and simply has no floor beyond its own footprint. Figures at
+## the edge of the board would stand on nothing and the camera would see through
+## to the skybox.
+##
+## So a plain slab is laid under the whole arena. It is not scenery and does not
+## try to be: it reads as the hardstanding that a Helsinki industrial yard
+## actually is, and it only shows where the diorama left a gap.
+##
+## Placed slightly BELOW the measured ground rather than exactly on it. Two
+## coplanar surfaces z-fight, which flickers as the camera moves and looks far
+## worse than a hole; a couple of centimetres down is invisible through a gap
+## and never fights.
+##
+## Sized from STAGE_SPEC.md §1.1 — the floor must be larger than the arena, not
+## equal to it, or the board runs to the exact edge of the world.
+const GROUND_MARGIN := 1.22
+const GROUND_DROP := 0.02
+
+func _build_ground_fill() -> void:
+	var slab := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	var span := maxf(_arena_half.x, _arena_half.y) * 2.0 * GROUND_MARGIN
+	plane.size = Vector2(span, span)
+	slab.mesh = plane
+
+	var mat := StandardMaterial3D.new()
+	# Wet night concrete: desaturated, dark, and rough enough that the one warm
+	# lamp does not turn the whole floor into a mirror.
+	mat.albedo_color = Color("#3A3D3F")
+	mat.roughness = 0.92
+	mat.metallic = 0.0
+	mat.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
+	slab.material_override = mat
+
+	slab.position = Vector3(0.0, _ground - GROUND_DROP, 0.0)
+	# Cast nothing: it is a gap filler, and a slab shadowing the arena from
+	# underneath would darken the very holes it exists to hide.
+	slab.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_world.add_child(slab)
 
 
 ## One cell size, from the arena. The 2D board had this backwards — a fixed

@@ -47,6 +47,7 @@ func _ready() -> void:
 	_test_every_role_has_a_body()
 	_test_every_stage_exists()
 	_test_unit_variants()
+	_test_ground_fill()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
@@ -436,6 +437,29 @@ func _test_unit_variants() -> void:
 			== String(BattleStage3D.UNIT_BY_ROLE["watcher"]))
 
 
+## The concrete slab under every arena.
+##
+## Its whole job is to be invisible when it works, which is exactly why it needs
+## a test: a diorama with no floor beyond its own footprint (Kattilahalli is a
+## hall with open sides) would otherwise show the skybox through the gaps and
+## nobody would know until they looked.
+func _test_ground_fill() -> void:
+	print("\nthere is concrete under the holes")
+	check("the slab is larger than the arena, not equal to it",
+		BattleStage3D.GROUND_MARGIN > 1.0)
+	# STAGE_SPEC.md §1.1 asks for 1.22. Named here so that changing one without
+	# the other fails rather than drifting quietly.
+	check("and it matches STAGE_SPEC 1.1",
+		is_equal_approx(BattleStage3D.GROUND_MARGIN, 1.22))
+
+	# Coplanar surfaces z-fight, which flickers as the camera moves and looks
+	# worse than the hole it was meant to hide.
+	check("it sits below the measured ground, not on it",
+		BattleStage3D.GROUND_DROP > 0.0)
+	check("but not so far down it shows a step",
+		BattleStage3D.GROUND_DROP < 0.1)
+
+
 ## Every arena the board can name must be on disk.
 ##
 ## The stage fallback is deliberately QUIET — a fight in the wrong yard is still
@@ -481,6 +505,18 @@ func _test_every_role_has_a_body() -> void:
 			missing.append("%s -> %s" % [role, path])
 	check("every generated role maps to a model that exists",
 		missing.is_empty(), " ".join(missing))
+
+	# Not every role is one the player can hire. `enforcer` is opposition-only
+	# and the generator never rolls it, so checking only the generator's list
+	# left it unwatched — which is how a role nobody hires ships broken.
+	var mapped: PackedStringArray = []
+	for role in BattleStage3D.UNIT_BY_ROLE:
+		if not ResourceLoader.exists(String(BattleStage3D.UNIT_BY_ROLE[role])):
+			mapped.append(String(role))
+	check("every mapped role has a model, hireable or not",
+		mapped.is_empty(), " ".join(mapped))
+	check("the enforcer is opposition-only",
+		not CrewGenerator.ROLES.has("enforcer"))
 
 	# The mapping must not quietly send a real role to the fallback either: that
 	# is how a role ships looking like somebody else for a month.
