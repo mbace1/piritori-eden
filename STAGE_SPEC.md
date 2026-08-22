@@ -90,6 +90,10 @@ What works instead:
   around the marked floor.
 - **Accept that a supplied render may need its floor checked** before it is
   registered.
+- **The template carries no outlines and no text.** Both get copied. Outlined
+  diamonds came back scored into the paving as painted lines on four stages in
+  one batch; a captioned console band came back with the caption legible. The
+  generator emits soft fills only, and that is why.
 - **Strip the template furniture afterwards.** Given the template as an input,
   the model reproduces parts of it — the console band came back baked in, with
   its caption legible. That band is covered in play, but registered art must not

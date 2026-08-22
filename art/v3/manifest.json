@@ -741,6 +741,114 @@
       "baked_ui": false,
       "sha256": "1a9f46a12e279b2adcb88aac4fc1db59fe4152aee4305f1c836a906415b40654",
       "note": "Made to the grid, 2026-08-21 — the first stage authored FROM the template rather than an existing render restaged to it. Open ground fills the arena and its margin; every prop that gives the yard its character (bin store, chain-link, lamp, pallets, skip, birches) sits outside the playing surface, which is what STAGE_SPEC 3 asks for. The grid landed on it with no per-stage tuning."
+    },
+    {
+      "id": "scene-karhupuisto-clearing-v01",
+      "kind": "scene",
+      "file": "scenes/karhupuisto-clearing-v01.webp",
+      "source": "locations/era1/location-karhupuisto-clearing-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "karhupuisto",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "4264a39e78845be9aaf77cb51dcb82a33b1f09945b494676255858593e89fd17",
+      "note": "A bare clearing in Karhupuisto: frozen gravel ringed by benches, railings, lindens and a lit path. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
+    },
+    {
+      "id": "scene-sornainen-quay-v01",
+      "kind": "scene",
+      "file": "scenes/sornainen-quay-v01.webp",
+      "source": "locations/era1/location-sornainen-quay-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "sornainen-docks",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "3655f71a41d6616f356b2b629c9c1c0637b2adeda3d7bd2c3a5949796b8d978f",
+      "note": "Concrete quay with flush rail tracks; black water, a moored coaster, warehouse and gantry beyond. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
+    },
+    {
+      "id": "scene-kallio-service-yard-v01",
+      "kind": "scene",
+      "file": "scenes/kallio-service-yard-v01.webp",
+      "source": "locations/era1/location-kallio-service-yard-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "kallio-service-yard",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b",
+      "note": "Wet asphalt service yard, brick close on two sides, kegs and crates stacked outside the ground. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
+    },
+    {
+      "id": "scene-hakaniemi-square-v01",
+      "kind": "scene",
+      "file": "scenes/hakaniemi-square-v01.webp",
+      "source": "locations/era1/location-hakaniemi-square-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "hakaniemi",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
+      "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     }
   ]
 }

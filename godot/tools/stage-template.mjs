@@ -83,17 +83,19 @@ process.stdout.write(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" heigh
     COMMAND CONSOLE — covered in play, do not compose anything here
   </text>
 
-  <!-- THE FLOOR. Ground must be flat and clear out to at least here. -->
-  <polygon points="${floorQuad}" fill="#1d4a90" fill-opacity="0.16"
-           stroke="#4f86d8" stroke-width="3" stroke-dasharray="18 12"/>
+  <!-- THE FLOOR. Ground must be flat and clear out to at least here.
+       FILL ONLY, NO STROKE: given a template with outlines, the image model
+       traces them onto the ground as painted lines — four stages came back with
+       a faint diamond scored into the paving. A soft filled region says "put
+       ground here" without giving it an edge to copy. -->
+  <polygon points="${floorQuad}" fill="#1d4a90" fill-opacity="0.20"/>
   <text x="${c.x}" y="${(c.y - f.y * MARGIN - 22).toFixed(1)}" text-anchor="middle"
         font-family="monospace" font-size="22" fill="#4f86d8">
     GROUND MUST REACH THIS DASHED EDGE — buildings begin beyond it, never on it
   </text>
 
   <!-- THE ARENA. Units stand on the outer cells of this shape. -->
-  <polygon points="${quad}" fill="#2a68d0" fill-opacity="0.22"
-           stroke="#7fb2ff" stroke-width="4"/>
+  <polygon points="${quad}" fill="#2a68d0" fill-opacity="0.26"/>
   <text x="${c.x}" y="${c.y}" text-anchor="middle" font-family="monospace"
         font-size="30" fill="#bcd8ff">PLAYABLE FLOOR</text>
   <text x="${c.x}" y="${c.y + 38}" text-anchor="middle" font-family="monospace"
