@@ -990,6 +990,27 @@ func _build_auto_column() -> void:
 			_refresh())
 	_auto_col.add_child(auto)
 
+	# STANCE — how the auto-battler is instructed (COMBAT.md §6.2). It belongs
+	# to auto and appears with it: a stance while playing manually would be a
+	# control that does nothing, which is worse than an absent one.
+	#
+	# §6.3: a stance is never gated on having a named character. Nothing here
+	# checks the roster, because gating a convenience feature behind a rare
+	# resource punishes exactly the players it exists for.
+	if _auto_mode:
+		_auto_col.add_child(_label(tr("battle.stance"), 11, MapStyle.TINY_TEXT))
+		for st in [FightManager.Stance.AGGRESSIVE,
+				FightManager.Stance.DEFENSIVE,
+				FightManager.Stance.HOLD_THE_LINE]:
+			var on: bool = fight.player_stance == st
+			var b := _chrome_button(
+				tr(FightManager.stance_name(st)),
+				SIDE_CYAN if on else MapStyle.TINY_TEXT,
+				func():
+					fight.player_stance = st
+					_refresh())
+			_auto_col.add_child(b)
+
 	var wd := _chrome_button(tr("battle.withdraw"), MapStyle.METRO, _withdraw)
 	wd.tooltip_text = String(ContentRegistry.battle(battle_id)
 		.get("withdrawal", {}).get("known_cost", ""))

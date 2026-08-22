@@ -774,6 +774,63 @@ static func persistent_injuries_count(f: Fighter) -> int:
 
 ## Select the best command for a fighter.
 ## preview=true → deterministic (no RNG); used for intent telegraphing.
+## STANCES — how you instruct the auto-battler (COMBAT.md §6.2).
+##
+## They are not a layer over manual play. They exist only when auto is running,
+## they are TEAM-WIDE, and they may be changed mid-fight.
+##
+## §6.1 is the constraint that keeps auto honest: it plays competently but NOT
+## optimally, because it will not make the triage call — deciding which of your
+## people matters tonight is a judgement about your campaign, not about the
+## board. A stance therefore changes what the crew PREFER, never what they can
+## see. Nothing below reads a fighter's value to the player.
+enum Stance { AGGRESSIVE, DEFENSIVE, HOLD_THE_LINE }
+
+## Team-wide, player side. The opposition has its own behaviour packages and is
+## not commanded.
+var player_stance: Stance = Stance.HOLD_THE_LINE
+
+
+## What a stance does to a command's appeal. Multiplicative on the existing
+## score, so a behaviour package still shows through — a fixer told to be
+## aggressive is an aggressive fixer, not a different person.
+static func stance_weight(stance: Stance, type: int) -> float:
+	match stance:
+		Stance.AGGRESSIVE:
+			# Take the best attack and accept exposure.
+			match type:
+				Command.Type.ATTACK:     return 1.75
+				Command.Type.GUARD:      return 0.45
+				Command.Type.REPOSITION: return 0.70
+				Command.Type.WITHDRAW:   return 0.25
+				_: return 1.0
+		Stance.DEFENSIVE:
+			# Hold, brace, and attack when it is free.
+			match type:
+				Command.Type.ATTACK:     return 0.65
+				Command.Type.GUARD:      return 1.85
+				Command.Type.REPOSITION: return 1.15
+				Command.Type.WITHDRAW:   return 1.30
+				_: return 1.0
+		Stance.HOLD_THE_LINE:
+			# Keep formation and screen the back rows. Repositioning is what
+			# breaks a line, so it is what this stance suppresses.
+			match type:
+				Command.Type.ATTACK:     return 1.0
+				Command.Type.GUARD:      return 1.35
+				Command.Type.REPOSITION: return 0.35
+				Command.Type.WITHDRAW:   return 0.60
+				_: return 1.0
+	return 1.0
+
+
+static func stance_name(stance: Stance) -> String:
+	match stance:
+		Stance.AGGRESSIVE:   return "battle.stance_aggressive"
+		Stance.DEFENSIVE:    return "battle.stance_defensive"
+		_:                   return "battle.stance_hold"
+
+
 func _ai_select_command(f: Fighter, preview: bool) -> Command:
 	var legal := _get_legal_commands(f)
 	if legal.is_empty():
@@ -806,6 +863,15 @@ func _ai_select_command(f: Fighter, preview: bool) -> Command:
 	return top[0].cmd
 
 func _score_command(f: Fighter, cmd: Command) -> float:
+	var score: float = _score_base(f, cmd)
+	# The stance is the player's instruction and applies only to the player's
+	# crew. The opposition follows its own authored behaviour.
+	if f.side == Fighter.Side.PLAYER:
+		score *= stance_weight(player_stance, cmd.type)
+	return score
+
+
+func _score_base(f: Fighter, cmd: Command) -> float:
 	var score: float = 0.0
 	match cmd.type:
 		Command.Type.ATTACK:

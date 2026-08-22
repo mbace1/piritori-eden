@@ -37,6 +37,7 @@ func _ready() -> void:
 	GameState.new_campaign()
 
 	_test_cells()
+	_test_stances()
 	_test_new_weapons()
 	_test_equipment_from_canon()
 	_test_build_2v2()
@@ -215,6 +216,62 @@ weapons (COMBAT.md 5.2: an item changes what you can do)")
 	check("it can be used from any row",
 		w["signal-flare"]["allowed_rows"].size() >= 3,
 		str(w["signal-flare"]["allowed_rows"]))
+
+
+## Stances (COMBAT.md §6.2). Checked for what they DO, not that they exist:
+## a stance that does not change the crew's preferences is a menu, not a policy.
+func _test_stances() -> void:
+	print("
+stances (COMBAT.md 6.2)")
+
+	var A := FightManager.Stance.AGGRESSIVE
+	var D := FightManager.Stance.DEFENSIVE
+	var H := FightManager.Stance.HOLD_THE_LINE
+	var ATK := FightManager.Command.Type.ATTACK
+	var GRD := FightManager.Command.Type.GUARD
+	var REP := FightManager.Command.Type.REPOSITION
+
+	check("aggressive prefers attacking to bracing",
+		FightManager.stance_weight(A, ATK) > FightManager.stance_weight(A, GRD))
+	check("defensive prefers bracing to attacking",
+		FightManager.stance_weight(D, GRD) > FightManager.stance_weight(D, ATK))
+	check("holding the line suppresses repositioning",
+		FightManager.stance_weight(H, REP) < FightManager.stance_weight(A, REP)
+		and FightManager.stance_weight(H, REP) < 1.0)
+	check("and it braces more than it would unprompted",
+		FightManager.stance_weight(H, GRD) > 1.0)
+
+	# The three must actually differ from each other, or two of them are one
+	# stance wearing two names.
+	var sig := {}
+	for st in [A, D, H]:
+		sig["%.2f/%.2f/%.2f" % [
+			FightManager.stance_weight(st, ATK),
+			FightManager.stance_weight(st, GRD),
+			FightManager.stance_weight(st, REP)]] = true
+	check("the three stances are three different policies", sig.size() == 3)
+
+	# Every stance has a name that survives translation.
+	for st in [A, D, H]:
+		var key := FightManager.stance_name(st)
+		check("%s is a real locale key" % key, tr(key) != key, tr(key))
+
+	# §6.1: auto plays competently but does NOT make the triage call. Nothing in
+	# the weighting may consult a fighter's worth to the player.
+	var src := FileAccess.get_file_as_string("res://scripts/fight/fight_manager.gd")
+	var w := src.find("static func stance_weight")
+	# Bound the function at the NEXT declaration. A fixed character count ran
+	# past the end into _ai_select_command and failed on that function's word.
+	var after := src.find("
+static func ", w + 10)
+	var alt := src.find("
+func ", w + 10)
+	if alt >= 0 and (after < 0 or alt < after):
+		after = alt
+	var body := src.substr(w, (after - w) if after > w else 1200)
+	check("stance weighting never reads a fighter at all",
+		not body.contains("Fighter") and not body.contains("roster"),
+		"the stance decides preferences, not who is expendable")
 
 
 func _test_cells() -> void:

@@ -93,3 +93,7 @@ battle.item,ITEM,TAVARA,道具
 battle.no_item,Nothing to use.,Ei mitään käytettävää.,使える物がない。
 battle.auto_off,AUTO OFF,AUTO POIS,自動 オフ
 battle.auto_on,AUTO ON,AUTO PÄÄLLÄ,自動 オン
+battle.stance,STANCE,ASENTO,構え
+battle.stance_aggressive,AGGRESSIVE,HYÖKKÄÄVÄ,攻勢
+battle.stance_defensive,DEFENSIVE,PUOLUSTAVA,守勢
+battle.stance_hold,HOLD THE LINE,PIDÄ LINJA,戦線維持
