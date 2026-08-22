@@ -495,6 +495,30 @@ fight earns them. Anything authored would make the trigger decorative.
 
 ---
 
+## 9.6 Cover has two grades — owner ruling, 2026-08-22
+
+**Decision: rare hard cover.** One or two props in a yard genuinely stop a
+firearm; everything else stays soft and buys a single intercepted swing.
+
+The resolver has always had both branches — `hard_block` stops anything,
+`soft_block` is beaten by a piercing weapon — and `BattleBuilder._cover_props()`
+marked every authored effect soft, so the hard branch was live code nobody could
+reach. Content now decides.
+
+Why rare rather than none: three arenas have arrived whose whole character is
+concrete and steel, and cover that never stops anything makes them scenery. Why
+rare rather than common: cover that reliably stops firearms turns every fight
+into two crews behind bins.
+
+It also earns the sawn-off. A weapon that ignores most cover is worth taking off
+somebody (§8), rather than merely being called unbuyable.
+
+**A gate asserts the current state either way.** `test_battle.gd` checks that all
+slice cover is soft; the day a hard prop is authored it fails and points at
+`battle.cover_blocks`, the copy that finally becomes reachable.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
