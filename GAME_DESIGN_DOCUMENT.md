@@ -2011,3 +2011,57 @@ rather than announce itself.
   preparation or concealment. This is about who is visible, never about how.
 - `NARRATIVE.md` remains the authority on the people themselves. This section
   governs when the game turns the lens on them, not who they are.
+
+---
+
+## Run structure — owner ruling, 2026-08-22
+
+**An era is roughly 40 days in 4 chapters, and each chapter is a roguelike run.**
+
+### What this supersedes
+
+The authored seven-day slice is **a chapter's worth, not an era's**. Everything
+built against it stands — it is the vertical slice — but "seven days and an
+ending" is no longer the shape of Era I. Era I is four of these, and the ending
+sits after the fourth.
+
+### A chapter is a run, in the Mewgenics sense
+
+Each chapter has a beginning, an escalation and a clear. Inside it the player
+chooses between **mission and goal options**, so two plays of the same chapter
+are not the same sequence. That branching is where variety lives, and it is the
+same instinct as §12.4 of `MAP.md` — a route with nothing to choose is a
+confirmation dialog.
+
+### Earlier chapters can be re-run
+
+Clearing a chapter **unlocks the next**, and the player may go back and re-churn
+an earlier one to gain assets and items. **Some things persist across runs.**
+
+This is the load-bearing part, and it is what makes the structure a roguelike
+rather than four campaigns in a row: an early chapter stays useful after it has
+been beaten, so a player who is short of gear or people has somewhere to go that
+is not the hardest available content.
+
+### Why this is a better fit than a single long campaign
+
+- It gives the career ceiling (§7 of `COMBAT.md`) a natural frame. Ten fights is
+  close to a chapter, so a crew member can plausibly live one chapter and leave.
+- It gives the loot economy (§8) a reason to have a floor and a ceiling per
+  chapter rather than one curve across forty days.
+- It gives the harm curve somewhere to sit: abstract in chapter one, personal by
+  chapter four.
+
+### The open question, named rather than answered
+
+**What persists across a chapter re-run, and what resets?** Money, roster, gear,
+retired contacts, territory, and story flags are all separate decisions, and a
+roguelike lives or dies on that list. Nothing here decides it.
+
+### What this obliges
+
+- `GameState` currently models one campaign of a fixed number of days. It needs
+  a chapter above the day.
+- Content needs to declare a chapter, its goal options, and its clear condition.
+- Save data needs a persistent layer distinct from the per-run layer, which is
+  schema work and should not be improvised.
