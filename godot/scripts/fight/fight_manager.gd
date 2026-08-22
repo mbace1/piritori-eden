@@ -322,6 +322,50 @@ func confirm_commands() -> void:
 	_fill_auto_commands()
 	_transition_phase(Phase.PLAYER_RESOLVE)
 
+## SKIP TO RESULT — the third tier of engagement (COMBAT.md §6.4).
+##
+## Runs the fight to its end with nobody watching. This is deliberately the one
+## place `GDD` §13.7's "auto is NOT a separate statistical auto-resolve" is
+## broken, and it is broken for an audience that rule did not consider: players
+## who are here for the story and for whom a four-minute tactical fight is a
+## toll on the way to the next scene.
+##
+## It is NOT a different fight. It runs the SAME rounds, the same commands, the
+## same rules — it simply does not stop to show them. A separate, faster,
+## friendlier resolution would be a second combat system that could disagree
+## with the first, and the first is the one the game is about.
+##
+## The stance still applies, so skipping is not free of the player's judgement:
+## a crew told to be aggressive dies differently from one told to hold.
+##
+## `guard` bounds the loop rather than trusting the fight to end. A resolve that
+## cannot terminate would hang the game with no way back, which is worse than a
+## fight that stops early and says so.
+func resolve_to_end(max_rounds: int = 40) -> BattleResult:
+	var guard := 0
+	while result == BattleResult.PENDING and guard < max_rounds:
+		guard += 1
+		if phase == Phase.COMMAND:
+			confirm_commands()
+		else:
+			_transition_phase(Phase.COMMAND)
+	if result == BattleResult.PENDING:
+		# A STALEMATE IS A REAL OUTCOME, not a failure to compute one.
+		#
+		# Found by the gate: a crew held on DEFENSIVE never resolves. Bracing
+		# outscores attacking almost every round, so nobody does enough harm to
+		# finish it and the opposition cannot get through the guard either. Two
+		# crews braced against each other in a yard until someone walks away is
+		# exactly what that looks like from outside, so it ends as a stand-down
+		# rather than as PENDING.
+		#
+		# Returning PENDING would have been worse than wrong: the caller would
+		# show a fight that is neither running nor over.
+		result = BattleResult.STAND_DOWN
+		battle_ended.emit(result)
+	return result
+
+
 func _fill_auto_commands() -> void:
 	var already: Dictionary = {}
 	for c in _player_commands:

@@ -97,3 +97,9 @@ battle.stance,STANCE,ASENTO,構え
 battle.stance_aggressive,AGGRESSIVE,HYÖKKÄÄVÄ,攻勢
 battle.stance_defensive,DEFENSIVE,PUOLUSTAVA,守勢
 battle.stance_hold,HOLD THE LINE,PIDÄ LINJA,戦線維持
+battle.skip,SKIP TO RESULT,OHITA,結果へ
+battle.faceoff,BEFORE IT STARTS,ENNEN ALKUA,始まる前に
+battle.faceoff_yours,YOUR CREW,SINUN VÄKESI,あなたの一味
+battle.faceoff_theirs,AGAINST,VASTASSA,相手
+battle.faceoff_go,LET IT HAPPEN,ANNA TAPAHTUA,始めさせる
+battle.faceoff_back,ACTUALLY FIGHT IT,TAISTELE ITSE,自分で戦う

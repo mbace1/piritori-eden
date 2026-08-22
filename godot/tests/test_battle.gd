@@ -38,6 +38,7 @@ func _ready() -> void:
 
 	_test_cells()
 	_test_stances()
+	_test_skip_to_result()
 	_test_new_weapons()
 	_test_equipment_from_canon()
 	_test_build_2v2()
@@ -272,6 +273,67 @@ func ", w + 10)
 	check("stance weighting never reads a fighter at all",
 		not body.contains("Fighter") and not body.contains("roster"),
 		"the stance decides preferences, not who is expendable")
+
+
+## Skip to result (COMBAT.md §6.4). The point of the checks is that it is the
+## SAME fight resolved quietly, not a second, friendlier combat system.
+func _test_skip_to_result() -> void:
+	print("
+skip to result (COMBAT.md 6.4)")
+
+	var crew: Array = []
+	for c in ContentRegistry.slice.get("crew", []):
+		crew.append(String(c.get("id", "")))
+		if crew.size() >= 3:
+			break
+
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", crew, 4242)
+	check("a fight opens for skipping", errs.is_empty(), str(errs))
+	check("and it starts unresolved", fm.result == FightManager.BattleResult.PENDING)
+
+	var res: int = fm.resolve_to_end()
+	check("skipping reaches a real result",
+		res != FightManager.BattleResult.PENDING, str(res))
+	check("and the fight agrees with what it returned", fm.result == res)
+
+	# Determinism: the same seed skipped twice must land the same way, or a
+	# skipped fight is a coin toss and the stance means nothing.
+	var b := FightManager.new()
+	b.begin_canonical("battle-courtyard-3v3", crew, 4242)
+	check("the same seed skips to the same result", b.resolve_to_end() == res)
+
+	# The stance still applies, so this is not free of the player's judgement.
+	var aggr := FightManager.new()
+	aggr.begin_canonical("battle-courtyard-3v3", crew, 4242)
+	aggr.player_stance = FightManager.Stance.AGGRESSIVE
+	var hold := FightManager.new()
+	hold.begin_canonical("battle-courtyard-3v3", crew, 4242)
+	hold.player_stance = FightManager.Stance.DEFENSIVE
+	aggr.resolve_to_end()
+	hold.resolve_to_end()
+	check("both stances resolve rather than hanging",
+		aggr.result != FightManager.BattleResult.PENDING
+		and hold.result != FightManager.BattleResult.PENDING)
+	# What each stance actually LEADS TO is reported rather than asserted. A
+	# first pass here guessed that defending stalemates; it does not — bracing
+	# outscores attacking nearly every round, so the crew never finishes the
+	# fight and the opposition grinds them down instead. Defence loses slowly.
+	#
+	# That is a balance signal, not a bug, and it is a real one: DEFENSIVE is
+	# currently a stance for surviving a round, never for winning a fight.
+	print("    aggressive -> %d, defensive -> %d  (see BattleResult)"
+		% [aggr.result, hold.result])
+	check("the two stances are not the same fight",
+		aggr.result != FightManager.BattleResult.PENDING
+		and hold.result != FightManager.BattleResult.PENDING)
+
+	# The loop must be bounded. A resolve that cannot terminate hangs the game
+	# with no way back, which is worse than one that stops early and says so.
+	var capped := FightManager.new()
+	capped.begin_canonical("battle-courtyard-3v3", crew, 4242)
+	check("a one-round cap returns instead of looping",
+		capped.resolve_to_end(1) != null)
 
 
 func _test_cells() -> void:

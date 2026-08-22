@@ -107,6 +107,8 @@ var _board: Control
 ## off blind would trade a working board for an unproven one.
 static var use_3d := true
 var _stage3d: SubViewportContainer
+## The face-off panel, while it is up.
+var _faceoff: PanelContainer
 var _top_strip: PanelContainer
 var _top_label: Label
 var _intent_box: HBoxContainer
@@ -971,6 +973,77 @@ func _use_item(f: Fighter) -> void:
 
 ## §12.5: "AUTO and WITHDRAW remain visually separate from immediate actions."
 ## Their own column, in muted chrome rather than action accents.
+## The face-off: who is here, on both sides, and what leaving would cost.
+##
+## A panel over the board rather than in the rail — the rail belongs to the
+## shell and a battle does not have one. Confirmed or refused, and refusing
+## returns you to the fight with nothing spent: a screen that only goes forward
+## is a trap rather than a choice.
+func _show_faceoff() -> void:
+	if _faceoff != null and is_instance_valid(_faceoff):
+		_faceoff.queue_free()
+	_faceoff = PanelContainer.new()
+	_faceoff.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 2))
+	_faceoff.set_anchors_preset(Control.PRESET_CENTER)
+	_faceoff.anchor_left = 0.30
+	_faceoff.anchor_right = 0.70
+	_faceoff.anchor_top = 0.12
+	_faceoff.anchor_bottom = 0.74
+	_faceoff.offset_left = 0.0
+	_faceoff.offset_right = 0.0
+	_faceoff.offset_top = 0.0
+	_faceoff.offset_bottom = 0.0
+	add_child(_faceoff)
+
+	var pad := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		pad.add_theme_constant_override("margin_" + side, 18)
+	_faceoff.add_child(pad)
+
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	pad.add_child(col)
+	col.add_child(_label(tr("battle.faceoff"), 19, MapStyle.TITLE_TEXT))
+
+	for pair in [[tr("battle.faceoff_yours"), Fighter.Side.PLAYER, SIDE_CYAN],
+			[tr("battle.faceoff_theirs"), Fighter.Side.OPPOSITION, SIDE_RED]]:
+		col.add_child(_label(String(pair[0]), 12, Color(pair[2])))
+		for f in fight.get_fighters(pair[1]):
+			if f == null:
+				continue
+			col.add_child(_label("   %s · %s" % [f.display_name, f.role],
+				13, MapStyle.SMALL_TEXT))
+
+	var cost := String(ContentRegistry.battle(battle_id)
+		.get("withdrawal", {}).get("known_cost", ""))
+	if cost != "":
+		var cl := _label(cost, 11, MapStyle.TINY_TEXT)
+		cl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		col.add_child(cl)
+
+	col.add_child(_chrome_button(tr("battle.faceoff_go"), MapStyle.GOODS,
+		_skip_to_result))
+	col.add_child(_chrome_button(tr("battle.faceoff_back"), MapStyle.TINY_TEXT,
+		_close_faceoff))
+
+
+func _close_faceoff() -> void:
+	if _faceoff != null and is_instance_valid(_faceoff):
+		_faceoff.queue_free()
+	_faceoff = null
+	_refresh()
+
+
+## Resolve the whole fight without playing it. The stance still applies, so this
+## is not free of the player's judgement — a crew told to be aggressive dies
+## differently from one told to hold.
+func _skip_to_result() -> void:
+	_close_faceoff()
+	fight.resolve_to_end()
+	_pending = null
+	_refresh()
+
+
 func _build_auto_column() -> void:
 	for c in _auto_col.get_children():
 		c.queue_free()
@@ -1011,10 +1084,26 @@ func _build_auto_column() -> void:
 					_refresh())
 			_auto_col.add_child(b)
 
+	# SKIP TO RESULT (COMBAT.md §6.4) — the third tier, for players here for the
+	# story. It goes through a FACE-OFF first: the beat is what stops skipping
+	# reading as an admin action. You still see who you are up against and what
+	# it costs; you just do not play it out.
+	# SKIP and WITHDRAW share a row. Stacked, they pushed the console 44px past
+	# the bottom of the viewport — the console is a fixed-height overlay now, so
+	# anything added to it has to earn its height rather than assume it.
+	var exits := HBoxContainer.new()
+	exits.add_theme_constant_override("separation", 6)
+	_auto_col.add_child(exits)
+
+	var skip := _chrome_button(tr("battle.skip"), MapStyle.GOODS, _show_faceoff)
+	skip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	exits.add_child(skip)
+
 	var wd := _chrome_button(tr("battle.withdraw"), MapStyle.METRO, _withdraw)
+	wd.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	wd.tooltip_text = String(ContentRegistry.battle(battle_id)
 		.get("withdrawal", {}).get("known_cost", ""))
-	_auto_col.add_child(wd)
+	exits.add_child(wd)
 	var cost := _label(wd.tooltip_text, 10, MapStyle.TINY_TEXT)
 	cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_auto_col.add_child(cost)
