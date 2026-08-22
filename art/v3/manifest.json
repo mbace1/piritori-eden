@@ -1215,6 +1215,54 @@
         }
       ],
       "note": "Nine-pose whole-figure set for the watcher, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
+    },
+    {
+      "id": "stage3d-kallio-backyard-v01",
+      "kind": "mesh-3d",
+      "file": "stage3d/kallio-backyard-3d-v01.glb",
+      "source": "stage3d/source-kallio-backyard-diorama-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "stage-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "b09620f3a598015339620977bd0a8cef918df7c36bb177570e243893a8b715b5",
+      "note": "A Kallio back yard as one diorama mesh: open ground with a brick outbuilding, chain-link and gate, a leaning lamp, pallets, a skip and bare birches. Generated as a single centred object because that is what image-to-3D is good at — a scene asked for as a scene comes back as soup. Its walkable surface is NOT at y=0; the base has real thickness and the ground must be measured from the AABB."
+    },
+    {
+      "id": "cast3d-muscle-walk-v01",
+      "kind": "mesh-3d",
+      "file": "cast3d/muscle-walk-v01.glb",
+      "source": "cast3d/muscle-rigged-source-v01.glb",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "0876b10785d0f04e818f429032b7d63d39cb1a89e0cd6ef9e72e82c4b4ea0ad5",
+      "note": "The muscle, rigged and carrying a walking clip: 24 bones, 1.07s, 29 tracks. Built from the role's own 2D sheet through a T-pose, so the 3D and the 2D are the same person. Crew variety comes from a hue-band recolour of this one mesh, not from a model per person."
+    },
+    {
+      "id": "cast3d-muscle-run-v01",
+      "kind": "mesh-3d",
+      "file": "cast3d/muscle-run-v01.glb",
+      "source": "cast3d/muscle-rigged-source-v01.glb",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "4674840d8af83cdc90bb0cd2063e7ca8328853d5646275184213971a3929894b",
+      "note": "The same rig carrying the running clip. Walk and run came free with the rig."
     }
   ]
 }

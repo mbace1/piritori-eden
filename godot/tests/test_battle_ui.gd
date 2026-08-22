@@ -89,6 +89,35 @@ func _ready() -> void:
 	check("every control meets the 44px floor", small.is_empty(),
 		str(small.map(func(b): return b.text)))
 
+	# The 3D stage is mounted and renders from the fight's own state. It is
+	# checked for EXISTENCE and WIRING only: whether a night yard looks right is
+	# not something a gate can see, and pretending otherwise is the kind of
+	# check that passes while the picture is wrong.
+	var stage: Node = null
+	for n in _all(_scene):
+		if n is SubViewportContainer and n.has_method("refresh"):
+			stage = n
+			break
+	check("the 3D stage is mounted", stage != null)
+	if stage != null:
+		check("it is wired to the same fight the console drives",
+			stage.fight == _scene.fight)
+		var sub := stage.get_child(0) if stage.get_child_count() > 0 else null
+		check("it owns a SubViewport", sub is SubViewport)
+		if sub is SubViewport:
+			var cams := 0
+			var units := 0
+			for n in _all(sub):
+				if n is Camera3D: cams += 1
+				if n is AnimationPlayer: units += 1
+			check("with exactly one camera", cams == 1, "cameras: %d" % cams)
+			# One AnimationPlayer per unit on the board: the crew are animated,
+			# not posed.
+			check("and an animated figure for every fighter",
+				units == _scene.fight.get_fighters(Fighter.Side.PLAYER).size()
+					+ _scene.fight.get_fighters(Fighter.Side.OPPOSITION).size(),
+				"players: %d" % units)
+
 	# forecast BEFORE commitment (handoff §5)
 	var atk := _find("Attack")
 	if atk:

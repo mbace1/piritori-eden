@@ -102,6 +102,11 @@ var fight: FightManager
 var battle_id: String = ""
 
 var _board: Control
+## Owner ruling 2026-08-22: the game is 3D. Kept as a switch rather than a
+## deletion — the 2D renderer is what every existing gate drives, and turning it
+## off blind would trade a working board for an unproven one.
+static var use_3d := true
+var _stage3d: SubViewportContainer
 var _top_strip: PanelContainer
 var _top_label: Label
 var _intent_box: HBoxContainer
@@ -229,6 +234,17 @@ func _build() -> void:
 	_board.draw.connect(_draw_board)
 	_board.gui_input.connect(_board_input)
 	col.add_child(_board)
+
+	# The 3D stage sits INSIDE the board control and covers it. Everything the
+	# console does — selection, forecast, confirm, withdraw — is untouched:
+	# only what the board draws has changed. `use_3d` decides which, so the 2D
+	# renderer stays reachable and testable rather than being deleted on the
+	# strength of one prototype.
+	if use_3d:
+		_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
+		_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_board.add_child(_stage3d)
 
 	# ── the command console, OVERLAID rather than stacked ──
 	# Anchored to the bottom of the frame instead of sitting in the column, so it
@@ -468,6 +484,8 @@ func _diamond(centre: Vector2, w: float, h: float) -> PackedVector2Array:
 func _draw_board() -> void:
 	if fight == null:
 		return
+	if use_3d and _stage3d != null:
+		return   # the 3D stage owns the picture
 
 	# Ground: the battle's own approved location art, graded for night.
 	# DESIGN_AUTHORITY: battles are darker, same cut-paper construction.
@@ -709,6 +727,11 @@ func _status_word(f: Fighter) -> String:
 func _refresh() -> void:
 	if fight == null or _top_label == null:
 		return
+	# The 3D stage renders from the fight's own state, so it is rebuilt on the
+	# same beat as the console rather than on a timer of its own.
+	if _stage3d != null:
+		_stage3d.fight = fight
+		_stage3d.refresh()
 	# round_number is 0 until the first resolve; the player is in round 1.
 	_top_label.text = "%s %d · %s" % [
 		tr("battle.round"), maxi(fight.round_number, 1), _phase_word()]
