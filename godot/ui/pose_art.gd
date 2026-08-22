@@ -143,9 +143,23 @@ static func draw_into(ci: CanvasItem, role: String, pose: String, box: Rect2,
 	# Mirroring is a NEGATIVE WIDTH rect. draw_texture_rect's fifth argument is
 	# `transpose`, which rotates 90 degrees — passing the flip there laid every
 	# opposition figure on its side.
+	# MIRRORING IS A TRANSFORM, NOT A NEGATIVE WIDTH.
+	#
+	# This used to flip by passing a Rect2 with a negative width. It does mirror
+	# the image, but it does NOT mirror it in place — the figure lands a full
+	# width to the side, so every opposition unit stood off its own cell by about
+	# a tile. It was invisible for a long time because both sides were drawn the
+	# same way and nothing marked where the feet were supposed to be.
+	#
+	# (The fifth argument of draw_texture_rect is `transpose`, which rotates 90
+	# degrees. An earlier attempt to flip there laid the whole crew on its side.)
+	#
+	# Scaling the canvas by -1 about the rect's right edge mirrors it exactly
+	# where it stands.
 	var rect := Rect2(origin, drawn)
 	if face_left:
-		rect = Rect2(origin.x + drawn.x, origin.y, -drawn.x, drawn.y)
+		ci.draw_set_transform(Vector2(origin.x + drawn.x, origin.y), 0.0, Vector2(-1.0, 1.0))
+		rect = Rect2(Vector2.ZERO, drawn)
 
 	if border > 0.0:
 		for i in range(BORDER_STEPS):
@@ -155,4 +169,6 @@ static func draw_into(ci: CanvasItem, role: String, pose: String, box: Rect2,
 				Rect2(rect.position + o, rect.size), false, BORDER_COLOR)
 
 	ci.draw_texture_rect(tex, rect, false, tint)
+	if face_left:
+		ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	return true

@@ -208,5 +208,12 @@ of the work. Run it twice; CI does.
 - Godot **regenerates `.import` files** with a full default `[params]`
   block on reimport, discarding appended keys. Edit the existing key.
 - `String(null)` crashes. Authored JSON fields are genuinely null.
+- **A negative-width `Rect2` mirrors a texture but does NOT mirror it in
+  place** — it lands a full width to the side. Every opposition figure stood
+  about a tile off its own cell for a long time because of this, invisible
+  because both sides were drawn the same way and nothing marked where the feet
+  belonged. Mirror with `draw_set_transform(..., Vector2(-1, 1))` about the
+  rect's right edge. (And `draw_texture_rect`'s fifth argument is `transpose`,
+  which rotates 90 degrees; flipping there lays the crew on its side.)
 - **An art change ends in a picture, not a green suite.** The suite
   certifies *works* and cannot see *looks*.
