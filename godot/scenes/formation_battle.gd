@@ -54,23 +54,37 @@ const CENTRE_GAP := 1.15                   ## tiles from the centre line to a fr
 ## approved courtyard's ground is a wedge that runs out near 40% of the frame,
 ## which is why this cannot simply be the whole plate — push it further and the
 ## far rank stands on the building.
-const PLAY_AREA := {
-	"scene-courtyard-prototype-v02": Rect2(0.23, 0.36, 0.58, 0.52),
-	"scene-karhupuisto-v01": Rect2(0.22, 0.34, 0.60, 0.52),
+## THE ARENA IS A DIAMOND, not a rectangle.
+##
+## This was an axis-aligned Rect2 per stage, and a rectangle cannot describe an
+## isometric floor: its sides run horizontal and vertical while every edge of
+## the ground runs on one of the two 2:1 diagonals. Fitting a board inside a box
+## that does not share a single edge with the courtyard meant the fit was always
+## approximate, and the debug outline drew a white rectangle that told you
+## nothing about whether the board sat on the paving.
+##
+## A diamond is authored the way the ground actually reads: a centre, and how
+## far the floor reaches along each of the board's own axes. Both extents are
+## HORIZONTAL fractions of the plate, because a step of one tile along either
+## axis moves exactly one tile horizontally — so the two numbers are directly
+## comparable and the shape is a true 2:1 diamond by construction.
+##
+##   c    centre of the floor, normalised to the plate
+##   fwd  half-extent along FORWARD  (toward the far building)
+##   lane half-extent along LANE_AXIS (across the courtyard)
+const PLAY_DIAMOND := {
+	"scene-courtyard-prototype-v03": {"c": Vector2(0.513, 0.635), "fwd": 0.163, "lane": 0.135},
+	"scene-karhupuisto-v01": {"c": Vector2(0.51, 0.63), "fwd": 0.158, "lane": 0.130},
 }
-const PLAY_AREA_DEFAULT := Rect2(0.23, 0.36, 0.58, 0.52)
+const PLAY_DIAMOND_DEFAULT := {"c": Vector2(0.51, 0.64), "fwd": 0.158, "lane": 0.130}
 
-## The play area constrains where FEET may land, not where art may reach. A
-## standing figure overlapping the wall behind it is correct isometric
-## occlusion; the bug was units standing ON the building. Reserving headroom
-## here instead pushed the whole board down into the console.
 const FIGURE_HEADROOM := 0.0
 
 ## Set to a non-empty Rect2 to override the play area for a comparison render.
 ## The owner asked (2026-08-21) whether the board is big enough to carry the
 ## visuals the reference games have; this is how the alternatives are LOOKED at
 ## rather than argued about. Empty in normal play.
-static var play_area_override := Rect2()
+static var play_diamond_override: Dictionary = {}
 
 var fight: FightManager
 var battle_id: String = ""
@@ -227,6 +241,9 @@ func _build() -> void:
 	cpad.add_child(row)
 	_console.add_child(cpad)
 	col.add_child(_console)
+	if debug_chrome_off:
+		_console.visible = false
+		top.visible = false
 
 
 func _process(dt: float) -> void:
@@ -252,53 +269,52 @@ func _plate_rect() -> Rect2:
 	return Rect2((_board.size - drawn) * 0.5, drawn)
 
 
-func _play_rect() -> Rect2:
-	var norm: Rect2 = PLAY_AREA.get(_stage_id, PLAY_AREA_DEFAULT)
-	if play_area_override.size.x > 0.0:
-		norm = play_area_override
+## Centre, and the two half-extents in PIXELS along the board's own axes.
+func _play_diamond() -> Dictionary:
+	var d: Dictionary = PLAY_DIAMOND.get(_stage_id, PLAY_DIAMOND_DEFAULT)
+	if not play_diamond_override.is_empty():
+		d = play_diamond_override
 	var plate := _plate_rect()
-	var r := Rect2(
-		plate.position + Vector2(norm.position.x * plate.size.x, norm.position.y * plate.size.y),
-		Vector2(norm.size.x * plate.size.x, norm.size.y * plate.size.y))
-	# Reserve headroom at the FAR edge for the standing figures.
-	var head := r.size.y * FIGURE_HEADROOM
-	r.position.y += head
-	r.size.y -= head
-	return r
+	var c: Vector2 = d.get("c", Vector2(0.5, 0.7))
+	return {
+		"c": plate.position + Vector2(c.x * plate.size.x, c.y * plate.size.y),
+		"fwd": float(d.get("fwd", 0.30)) * plate.size.x,
+		"lane": float(d.get("lane", 0.23)) * plate.size.x,
+	}
+
+
+## The four corners of the arena, on the board's own axes — so the outline can
+## be laid against the courtyard's paving edges and judged.
+func _arena_quad() -> PackedVector2Array:
+	var d := _play_diamond()
+	var c: Vector2 = d["c"]
+	var f := Vector2(FORWARD.x, FORWARD.y) * float(d["fwd"])
+	var l := Vector2(LANE_AXIS.x, LANE_AXIS.y) * float(d["lane"])
+	return PackedVector2Array([c - f - l, c + f - l, c + f + l, c - f + l])
+
 
 
 ## Tile size derived from the floor, so the board always fits the location.
 ## Board extent is (CENTRE_GAP + 2 rows + 1 lane) tiles from the centre, both
 ## ways, along each isometric axis.
+## The tile is SQUARE, and that is not a style choice: FORWARD is (1, -0.5) and
+## LANE_AXIS is (1, 0.5), so a screen step has slope 0.5 * tile.y / tile.x, which
+## is the 2:1 the art is drawn in only when the two are equal. Sizing them
+## independently made the projection an accident of whatever rectangle a stage
+## declared, and the grid ran at 0.19 against building bases at 0.51.
+##
+## Fitted to the arena diamond along BOTH of the board's axes, whichever binds.
 func _tile() -> Vector2:
-	var r := _play_rect()
+	var d := _play_diamond()
+	var t: float = minf(
+		float(d["fwd"]) / (CENTRE_GAP + float(FightBoard.rows - 1) + 0.5),
+		float(d["lane"]) / (FightBoard.lane_centre() + 0.5))
+	return Vector2(maxf(t, 14.0), maxf(t, 14.0))
 
-	# THE TILE IS SQUARE, and that is not a style choice.
-	#
-	# FORWARD is (1, -0.5) and LANE_AXIS is (1, 0.5): the 2:1 isometric slope is
-	# already carried in those vectors. A screen step is
-	# (FORWARD.x * tile.x, FORWARD.y * tile.y), so its slope is
-	# 0.5 * tile.y / tile.x — which is 0.5 only when tile.x == tile.y.
-	#
-	# This used to size the two axes independently from the play rect, tx from
-	# its width and ty from its height, so the PROJECTION ANGLE was an accident
-	# of whatever rectangle the stage happened to declare. With the courtyard's
-	# rect the grid ran at slope 0.19 against building bases at 0.51, and no
-	# amount of moving or scaling the play area could ever have aligned them:
-	# the board was not isometric at all, it was squashed to fit a box.
-	#
-	# Now one number sizes both axes, and the board is fitted INSIDE the rect —
-	# by width or by height, whichever binds first, since the bounding box of a
-	# 2:1 board is always twice as wide as it is tall.
-	var span := FightBoard.reach(CENTRE_GAP) * 2.0
-	var t: float = minf(r.size.x / span, (r.size.y * 2.0) / span)
-	t = maxf(t, 16.0)
-	return Vector2(t, t)
 
 
 func _cell_pos(lane: int, row: int, side: int) -> Vector2:
-	var r := _play_rect()
-	var c := r.get_center()
+	var c: Vector2 = _play_diamond()["c"]
 	var tile := _tile()
 	var dir := -1.0 if side == int(Fighter.Side.PLAYER) else 1.0
 
@@ -316,6 +332,12 @@ func _cell_pos(lane: int, row: int, side: int) -> Vector2:
 ## play; the capture tool turns it on.
 static var debug_extent := false
 
+## Hide the round strip and the command console, so a capture shows only the
+## stage and the board. The console is 188px of a 768px frame and the top strip
+## another slice; judging how the play area sits on the ground while a quarter
+## of the picture is chrome is judging the wrong picture.
+static var debug_chrome_off := false
+
 
 ## The play rect in white, EVERY cell of both half-boards outlined in their side
 ## colour, and the outer ring in yellow.
@@ -325,8 +347,13 @@ static var debug_extent := false
 ## playing surface is invisible, so there is nothing to align to the courtyard.
 ## Under this flag the whole board is drawn.
 func _draw_extent() -> void:
-	var r := _play_rect()
-	_board.draw_rect(r, Color(1, 1, 1, 0.35), false, 2.0)
+	# The arena, as a diamond on the board's own axes. A white rectangle told you
+	# nothing about whether the board sat on the paving; this can be laid
+	# directly against the courtyard's edges.
+	var arena := _arena_quad()
+	var ring := PackedVector2Array(arena)
+	ring.append(arena[0])
+	_board.draw_polyline(ring, Color(1, 1, 1, 0.55), 2.0, true)
 
 	var tl := _tile()
 	for side in [int(Fighter.Side.PLAYER), int(Fighter.Side.OPPOSITION)]:

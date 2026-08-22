@@ -411,7 +411,7 @@
       "id": "battle-courtyard-3v3",
       "format": "3v3",
       "location_anchor_id": "torkkelinmaki",
-      "scene_asset_id": "scene-courtyard-prototype-v02",
+      "scene_asset_id": "scene-courtyard-prototype-v03",
       "grid": {"rows": ["front", "middle", "back"], "lanes": 3, "cells_per_side": 9, "normally_visible": false},
       "player_deployed": 3,
       "opponents": [
@@ -727,7 +727,7 @@
   "asset_refs": [
     "scene-toko-noodles-prototype-v02",
     "scene-karhupuisto-v01",
-    "scene-courtyard-prototype-v02",
+    "scene-courtyard-prototype-v03",
     "formation-grid-3x3-v01",
     "weather-rain-fine-v01",
     "weather-wet-sheen-v01",

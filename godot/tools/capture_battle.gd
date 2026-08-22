@@ -8,6 +8,12 @@ func _ready() -> void:
 	var lang: String = OS.get_environment("PIRITORI_SHOT_LANG")
 	if lang != "": Loc.set_language(lang)
 
+	# Before anything is instantiated: _ready() builds the console, so a flag set
+	# after add_child() arrives too late and the chrome stays up.
+	var fb := preload("res://scenes/formation_battle.gd")
+	fb.debug_extent = OS.get_environment("PIRITORI_SHOT_EXTENT") != ""
+	fb.debug_chrome_off = OS.get_environment("PIRITORI_SHOT_NOCHROME") != ""
+
 	await get_tree().process_frame
 	get_window().size = Vector2i(1366, 768)
 
@@ -22,16 +28,17 @@ func _ready() -> void:
 			tag = board
 	print("board: %d lanes x %d rows" % [FightBoard.lanes, FightBoard.rows])
 
-	# PIRITORI_SHOT_PLAY is "x,y,w,h" in normalised plate coordinates.
+	# PIRITORI_SHOT_PLAY is "cx,cy,fwd,lane" — the arena diamond's centre and its
+	# half-extents along the board's two axes, all normalised to the plate.
 	var play: String = OS.get_environment("PIRITORI_SHOT_PLAY")
 	if play != "":
 		var n := play.split(",")
 		if n.size() == 4:
-			var fb = preload("res://scenes/formation_battle.gd")
-			fb.play_area_override = Rect2(
-				float(n[0]), float(n[1]), float(n[2]), float(n[3]))
+			fb.play_diamond_override = {
+				"c": Vector2(float(n[0]), float(n[1])),
+				"fwd": float(n[2]), "lane": float(n[3])}
 			tag += "-play"
-			print("play area: ", fb.play_area_override)
+			print("arena: ", fb.play_diamond_override)
 
 	GameState.new_campaign()
 	# Anchors resolve against a parent that HAS a rect. A Control under a plain
@@ -47,9 +54,6 @@ func _ready() -> void:
 	for c in ContentRegistry.slice.get("crew", []):
 		crew.append(String(c.get("id", "")))
 		if crew.size() >= 3: break
-
-	if OS.get_environment("PIRITORI_SHOT_EXTENT") != "":
-		preload("res://scenes/formation_battle.gd").debug_extent = true
 
 	_s.begin("battle-courtyard-3v3", crew, 4242)
 
