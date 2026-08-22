@@ -51,8 +51,20 @@ const c = { x: cx * W, y: cy * PLATE_H };
 const f = { x: FWD * fwd * W, y: FWDY * fwd * W };
 const l = { x: LANX * lane * W, y: LANY * lane * W };
 
-const pt = (sf, sl) => `${(c.x + sf * f.x + sl * l.x).toFixed(1)},${(c.y + sf * f.y + sl * l.y).toFixed(1)}`;
+const pt = (sf, sl, k = 1) =>
+  `${(c.x + k * sf * f.x + k * sl * l.x).toFixed(1)},${(c.y + k * sf * f.y + k * sl * l.y).toFixed(1)}`;
 const quad = [pt(-1, -1), pt(1, -1), pt(1, 1), pt(-1, 1)].join(' ');
+
+// THE FLOOR MUST BE BIGGER THAN THE ARENA.
+//
+// The first stage built from this template put its ground exactly on the arena,
+// and the far corner then clipped onto the building: a unit standing in the back
+// rank had its feet past the edge of the floor. Units stand ON the outer cells,
+// and a figure is drawn from its feet upward, so the ground has to run past the
+// board on every side.
+const MARGIN = 1.22;
+const floorQuad = [pt(-1, -1, MARGIN), pt(1, -1, MARGIN),
+                   pt(1, 1, MARGIN), pt(-1, 1, MARGIN)].join(' ');
 
 if (process.argv.includes('--check')) {
   console.log(`TEMPLATE OK: arena centre ${cx},${cy} fwd ${fwd} lane ${lane}`);
@@ -71,7 +83,15 @@ process.stdout.write(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" heigh
     COMMAND CONSOLE — covered in play, do not compose anything here
   </text>
 
-  <!-- THE ARENA. The playable floor must lie flat under this shape. -->
+  <!-- THE FLOOR. Ground must be flat and clear out to at least here. -->
+  <polygon points="${floorQuad}" fill="#1d4a90" fill-opacity="0.16"
+           stroke="#4f86d8" stroke-width="3" stroke-dasharray="18 12"/>
+  <text x="${c.x}" y="${(c.y - f.y * MARGIN - 22).toFixed(1)}" text-anchor="middle"
+        font-family="monospace" font-size="22" fill="#4f86d8">
+    GROUND MUST REACH THIS DASHED EDGE — buildings begin beyond it, never on it
+  </text>
+
+  <!-- THE ARENA. Units stand on the outer cells of this shape. -->
   <polygon points="${quad}" fill="#2a68d0" fill-opacity="0.22"
            stroke="#7fb2ff" stroke-width="4"/>
   <text x="${c.x}" y="${c.y}" text-anchor="middle" font-family="monospace"

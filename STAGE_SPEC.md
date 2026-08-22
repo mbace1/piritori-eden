@@ -34,6 +34,19 @@ repeating them, so the template cannot drift from the game.
 
 **Draw the location against that template.**
 
+## 1.1 The floor is bigger than the arena
+
+The template draws two diamonds. The solid inner one is the **arena** — where
+units stand. The dashed outer one, **1.22x** its size, is where **ground must
+still be**.
+
+This is not padding. Units stand ON the outer cells, and a figure is drawn
+upward from its feet, so a back-rank unit whose cell sits on the very edge of
+the floor has its feet past the ground and its head in a wall. The first stage
+built from this template did exactly that.
+
+**Buildings begin beyond the dashed edge, never on it.**
+
 ## 2. What the art must do
 
 1. **A flat, unobstructed floor under the blue diamond.** Its edges run on the
@@ -76,7 +89,11 @@ What works instead:
 - **Give it the template as an input image** and ask it to build the scene
   around the marked floor.
 - **Accept that a supplied render may need its floor checked** before it is
-  registered. `PIRITORI_SHOT_EXTENT=1` draws the arena over the stage so the
+  registered.
+- **Strip the template furniture afterwards.** Given the template as an input,
+  the model reproduces parts of it — the console band came back baked in, with
+  its caption legible. That band is covered in play, but registered art must not
+  carry guide marks. `PIRITORI_SHOT_EXTENT=1` draws the arena over the stage so the
   two can be compared directly.
 
 ## 5. Checking a stage before registering it
