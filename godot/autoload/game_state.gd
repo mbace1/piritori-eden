@@ -140,8 +140,13 @@ func skills_of(crew_id: String) -> PackedStringArray:
 ## Called when a crew member crosses a level boundary, which is a function of
 ## fights survived — so growth is bought with the same currency the career
 ## ceiling spends.
+signal crew_levelled(crew_id: String, level: int)
+
 func grant_level(crew_id: String) -> void:
 	crew_perk_points[crew_id] = unspent_perk_points(crew_id) + 1
+	# UX_SPEC §19: felt in the moment, decided later. The board hears this and
+	# says so; nothing waits for an answer.
+	crew_levelled.emit(crew_id, level_of(crew_id))
 	state_changed.emit()
 
 
@@ -217,6 +222,15 @@ func skill_pool_size(crew_id: String) -> int:
 			if String((sk as Dictionary).get("aptitude", "")) == String(a):
 				n += 1
 	return n
+
+
+## Learning costs the level's point, so a level buys a skill OR a perk and not
+## both. Separate from spend_perk() because a skill is not a perk axis.
+func spend_perk_point_on_skill(crew_id: String) -> void:
+	if unspent_perk_points(crew_id) <= 0:
+		return
+	crew_perk_points[crew_id] = unspent_perk_points(crew_id) - 1
+	state_changed.emit()
 
 
 func learn_skill(crew_id: String, skill_id: String) -> bool:

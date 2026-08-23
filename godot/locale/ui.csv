@@ -192,3 +192,13 @@ battle.mark,Read them,Lue heidät,読む
 battle.mark_note,Spend the round watching one of them. You will see everything about them for %d round(s).,Käytä vuoro yhden tarkkailuun. Näet heistä kaiken %d kierroksen ajan.,この手番を使って一人を観察する。%dラウンドの間、その者の全てが見える。
 battle.glory_double,TWO,KAKSI,二人
 battle.glory_near_death,STILL UP,YHÄ PYSTYSSÄ,まだ立っている
+crew.level_n,Level %d,Taso %d,レベル%d
+crew.pick_skill,Something new:,Jotain uutta:,新しく覚える:
+crew.pick_perk,Or put %d point into:,Tai laita %d piste:,または%dポイントを:
+perk.strength,Strength,Voima,力
+perk.speed,Speed,Nopeus,速さ
+perk.wits,Wits,Äly,知恵
+perk.nerve,Nerve,Hermo,胆力
+perk.toughness,Toughness,Sitkeys,頑丈さ
+chapter.level_ups,Somebody has %d to spend,Jollakulla on %d käytettävänä,%d ポイント未使用
+battle.levelled,LEVEL %d,TASO %d,レベル%d

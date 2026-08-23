@@ -1166,3 +1166,34 @@ unfinished.
 - **Perks read nowhere except Wits**, which feeds the read ladder. Strength,
   Speed, Nerve and Toughness are counters no rule consults.
 - **Eight verbs remain strings.**
+
+## Levelling is reachable — felt in the fight, spent on the crew screen
+
+`UX_SPEC.md` §19, built.
+
+- **In the fight**: a level puts a mark over the person and nothing waits for an
+  answer. `GameState.crew_levelled` is a new signal the board listens to. A modal
+  mid-round would break the one thing the fight protects — that committing is
+  decided with the whole board visible.
+- **At the summary**: a button when anything is waiting, counted across the
+  **whole roster** rather than only who fought, because a point earned two
+  battles ago is still unspent. Skipping is always available.
+- **On the crew screen**: the skill offer and the perk buttons, beside who the
+  person is. One screen per PERSON rather than one per SYSTEM.
+
+**A level buys a skill OR a perk, not both** — learning spends the point. That is
+a balance decision made in passing and it should be checked in play.
+
+The gate asserts the ROUTE rather than the model: the crew screen must actually
+grow buttons when something is waiting, and quiet down when it is spent.
+
+### Still not reachable
+
+- **Perks read nowhere but Wits.** Strength, Speed, Nerve and Toughness are
+  counters no rule consults, so spending a point on them changes nothing yet.
+  This is now the sharpest gap: the screen offers a choice the fight ignores.
+- **Eight verbs remain strings.**
+- **No sound.** §19 says a level is seen AND heard; there is no audio in the
+  project at all.
+- **The map does not show mission steps or blink new missions**, which §19 needs
+  for the way back from the summary to mean anything.

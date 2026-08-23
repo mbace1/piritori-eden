@@ -169,6 +169,10 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	# The board finally listens. event_resolved has always been emitted and
 	# never consumed, so nothing on screen acknowledged anything that happened.
 	fight.event_resolved.connect(_on_battle_event)
+	# UX_SPEC 19: a level is felt where it happens. Non-blocking on purpose —
+	# a modal mid-round would break the one thing the fight protects, which is
+	# that committing is decided with the whole board visible.
+	GameState.crew_levelled.connect(_on_crew_levelled)
 	_load_stage(id)
 	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
 	if errors.is_empty():
@@ -758,6 +762,23 @@ func _age_flashes(delta: float) -> void:
 			alive.append(fl)
 	_flashes = alive
 	_board.queue_redraw()
+
+
+## Somebody grew, mid-fight. Shown over them and then left alone: the choice
+## waits for the summary screen, where there is time for it.
+func _on_crew_levelled(crew_id: String, level: int) -> void:
+	for f in fight.get_fighters(Fighter.Side.PLAYER):
+		var who: Fighter = f
+		if who == null or who.character_id != crew_id:
+			continue
+		var fl := Flash.new()
+		fl.fighter_id = who.fighter_id
+		fl.text = tr("battle.levelled") % level
+		fl.colour = PiritoriPalette.PLAYER_CYAN
+		fl.life = FLASH_LIFE
+		fl.max_life = FLASH_LIFE
+		_flashes.append(fl)
+		return
 
 
 func _on_battle_event(ev) -> void:

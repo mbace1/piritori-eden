@@ -1136,6 +1136,7 @@ func _show_crew() -> void:
 			c.get("condition", "?"), c.get("nerve", "?"), c.get("tempo", "?"),
 			c.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
 		_add_career_line(String(c.get("id", "")))
+		_add_level_lines(String(c.get("id", "")))
 
 	# Everyone hired off the street. They are in the roster and nowhere in the
 	# slice, so the loop above cannot see them.
@@ -1151,11 +1152,80 @@ func _show_crew() -> void:
 			g.get("condition", "?"), g.get("nerve", "?"), g.get("tempo", "?"),
 			g.get("wage_eur", "?")], 12, PiritoriPalette.TEXT_DIM))
 		_add_career_line(cid)
+		_add_level_lines(cid)
 
 	if not any:
 		_rail_box.add_child(_make_label(tr("ui.crew_none"), 14, PiritoriPalette.TEXT_DIM))
 
 	_add_hiring_section()
+
+
+## WHAT IS WAITING FOR THIS PERSON (UX_SPEC §19).
+##
+## Spending lives on the crew screen rather than on a levelling screen of its
+## own, beside who they are and what they carry: one screen per PERSON rather
+## than one per SYSTEM, because somebody thinking about Mira is thinking about
+## all of her at once.
+##
+## Silent when nothing is pending, so the screen does not grow a permanent
+## scoreboard for a thing that happens occasionally.
+func _add_level_lines(crew_id: String) -> void:
+	var points := GameState.unspent_perk_points(crew_id)
+	var offer: Array = GameState.skill_offer(crew_id)
+	if points <= 0 and offer.is_empty():
+		return
+
+	_rail_box.add_child(_make_label("   " + tr("crew.level_n") % GameState.level_of(crew_id),
+		12, PiritoriPalette.TEXT_DIM))
+
+	# ── a skill, chosen from what their aptitudes offer ──
+	if not offer.is_empty() and points > 0:
+		_rail_box.add_child(_make_label("   " + tr("crew.pick_skill"), 12,
+			PiritoriPalette.INTEL_MUSTARD))
+		for sk in offer:
+			var s2: Dictionary = sk
+			var b := _make_button("%s — %s" % [s2.get("label", ""), s2.get("note", "")],
+				PiritoriPalette.PLAYER_CYAN)
+			var sid := String(s2.get("id", ""))
+			b.pressed.connect(func():
+				if GameState.learn_skill(crew_id, sid):
+					# A skill costs the level's point, so a level is one thing or
+					# the other rather than both.
+					GameState.spend_perk_point_on_skill(crew_id)
+				_show_crew())
+			_rail_box.add_child(b)
+
+	# ── or a perk ──
+	if points > 0:
+		_rail_box.add_child(_make_label("   " + tr("crew.pick_perk") % points, 12,
+			PiritoriPalette.INTEL_MUSTARD))
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+		for perk in ContentRegistry.slice.get("perks", []):
+			var pid := String(perk)
+			var pb := _make_button("%s %d" % [tr("perk.%s" % pid),
+				GameState.perk_value(crew_id, pid)], PiritoriPalette.GOODS_MAGENTA)
+			pb.pressed.connect(func():
+				GameState.spend_perk(crew_id, pid)
+				_show_crew())
+			row.add_child(pb)
+		_rail_box.add_child(row)
+
+	# What they already know, so a choice is made against a history.
+	var known := GameState.skills_of(crew_id)
+	if not known.is_empty():
+		var names: PackedStringArray = []
+		for k in known:
+			names.append(_skill_label(String(k)))
+		_rail_box.add_child(_make_label("   " + ", ".join(names), 11,
+			PiritoriPalette.TEXT_DIM))
+
+
+func _skill_label(skill_id: String) -> String:
+	for sk in ContentRegistry.slice.get("skills", []):
+		if String((sk as Dictionary).get("id", "")) == skill_id:
+			return String((sk as Dictionary).get("label", skill_id))
+	return skill_id
 
 
 ## The career counter, and only when §7's warning threshold says to show it —
@@ -1368,10 +1438,31 @@ func _show_aftermath(summary: Dictionary, spoils: PackedStringArray,
 			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(l)
 
+	# UX_SPEC §19: the summary is the junction. A way into the level-ups when
+	# anything is waiting, and a way past them — nothing is forced, and points
+	# can be spent three days later.
 	_rail_box.add_child(_separator())
+	if _anyone_waiting():
+		var lv := _make_button(tr("chapter.level_ups") % _waiting_count(),
+			PiritoriPalette.PLAYER_CYAN)
+		lv.pressed.connect(_show_crew)
+		_rail_box.add_child(lv)
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
+
+
+## Anybody with something to spend. Counted across the whole roster rather than
+## only the people who fought: a point earned two battles ago is still waiting.
+func _anyone_waiting() -> bool:
+	return _waiting_count() > 0
+
+
+func _waiting_count() -> int:
+	var n := 0
+	for id in GameState.roster:
+		n += GameState.unspent_perk_points(String(id))
+	return n
 
 
 ## The outcome in the game's own register. Six results, six headlines: a

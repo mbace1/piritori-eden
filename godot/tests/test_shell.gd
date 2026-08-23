@@ -51,6 +51,7 @@ func _ready() -> void:
 	_test_interface_is_thumb_sized()
 	await _test_settings_menu()
 	_test_map_reads_on_a_phone()
+	await _test_levelling_is_reachable()
 	_test_speaking_character()
 	_test_location_speaker()
 	await _test_debug_hud()
@@ -417,6 +418,55 @@ the map reads on a phone")
 
 	# And it is bounded, or a very narrow screen would show four giant pins.
 	check("the multiplier is capped", clampf(1280.0 / 200.0, 1.0, 3.5) <= 3.5)
+
+
+## A level you cannot spend is not a level (UX_SPEC §19, CLAUDE.md rule 6).
+##
+## The point of this pass was reachability: skill_offer() and spend_perk() were
+## both gated and neither had a screen. These assert the ROUTE, not the model —
+## the crew screen must actually grow buttons when something is waiting.
+func _test_levelling_is_reachable() -> void:
+	print("
+a level can be spent")
+	var who := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if not GameState.is_named(cid):
+			who = cid
+			break
+	if not GameState.roster.has(who):
+		GameState.roster.append(who)
+	GameState.revealed[who] = true
+
+	# Nothing waiting: the screen must not grow a permanent scoreboard.
+	GameState.crew_perk_points[who] = 0
+	_shell._show_crew()
+	await get_tree().process_frame
+	var quiet := _shell_button_count()
+
+	# Something waiting: buttons appear.
+	GameState.grant_level(who)
+	_shell._show_crew()
+	await get_tree().process_frame
+	var loud := _shell_button_count()
+	check("a pending level puts choices on the crew screen", loud > quiet,
+		"%d -> %d" % [quiet, loud])
+
+	# And the summary offers the way in.
+	check("the summary counts what is waiting", _shell._waiting_count() > 0)
+	check("and knows somebody is", _shell._anyone_waiting())
+
+	# Spending it removes the offer again, so the screen settles.
+	GameState.spend_perk(who, "speed")
+	_shell._show_crew()
+	await get_tree().process_frame
+	check("spending it quiets the screen again",
+		_shell_button_count() <= quiet + 1)
+	check("and the perk landed", GameState.perk_value(who, "speed") >= 1)
+
+
+func _shell_button_count() -> int:
+	return _all_nodes(_shell).filter(func(n): return n is Button and n.visible).size()
 
 
 func _all_nodes(root: Node, out: Array = []) -> Array:
