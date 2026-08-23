@@ -139,45 +139,107 @@ object. Nothing else in this repository can do that.
 
 ---
 
-## 5. The data, and the one thing that blocks it
+## 5. The data — what is settled, and what the feed still costs
 
-To verify before implementation — this environment blocks `api.digitransit.fi`,
-so none of the following was checked against live docs today.
+The owner supplied a working Node-RED flow against the HSL feed
+(`references/transit/hsl-hfp-node-red-flow.json`), which settles the question §5
+used to lead with.
 
-| need | source | key? |
-|---|---|---|
-| stops, routes, timetable | HSL GTFS static extract, committed as a snapshot | no |
-| next departures, routing | Digitransit routing API (GraphQL) | **yes — subscription key** |
-| live vehicle positions | HSL high-frequency positioning (MQTT) | believed keyless |
-| disruptions | GTFS-RT service alerts | via the above |
+### 5.1 Settled: the vehicle feed is keyless
 
-**The blocker: a cabinet has no server.** `DEPLOY_SPEC.md` is unambiguous — no
-SSR, no API routes, no environment variables, static files only. A subscription
-key shipped in a static page is a published key. That leaves three honest
-options and the choice is the owner's:
+The flow connects to **`mqtt.hsl.fi:1883`, `usetls: false`, no username, no
+password, no subscription key**, subscribes to the high-frequency positioning
+firehose and reads `VP` payloads carrying everything the map layer needs:
 
-1. **Snapshot only.** Commit a GTFS extract. Real stops, real routes, real
-   timetable, no live positions. No key, works offline, and is *most* of what
-   the ask describes — the map is real and the next tram is genuinely when the
-   next tram is. **Recommended first step.**
-2. **Keyless live positions.** Add MQTT vehicle positions on top of the
-   snapshot. Trams move on the map for real. Needs no key if the feed is
-   genuinely open; needs verifying.
-3. **A proxy.** Full routing and alerts, and it ends the no-server rule for this
-   cabinet. A real cost, not a technicality.
+| field | is |
+|---|---|
+| `veh` | vehicle number — the identity that makes a tram *the same tram* between messages |
+| `lat` / `long` | where it is |
+| `hdg` | bearing, so the icon can point |
+| `spd` | speed |
+| `desi` | the designation a passenger reads — "3", "6" |
+| `tst` | timestamp |
+
+So **L3 needs no key and no account.** That removes the blocker this section was
+written around: option (2) in the old draft — real trams moving on the real map
+— is available, and only *routing and alerts* still want the Digitransit
+subscription key. A cabinet with no server can have live vehicles.
+
+### 5.2 Not settled: a browser cannot open that socket
+
+Node-RED is not a browser. **Port 1883 is raw MQTT over TCP, and a web page
+cannot open a TCP socket** — a static cabinet can only speak **MQTT over
+WebSockets**. HSL is understood to publish one (`wss://mqtt.hsl.fi:443/`,
+believed to be the same broker over a WebSocket listener), but that endpoint is
+**unverified** — `mqtt.hsl.fi` is unreachable from the environment this was
+written in, like every other outbound host.
+
+**This is the one thing to check before anything is built**, because it decides
+the shape of everything above it:
+
+- if a WSS listener exists, L3 is a client-side library and ~50 lines, and the
+  no-server rule survives intact;
+- if it does not, live vehicles need a bridge, and that is the same architectural
+  cost as the routing proxy — a real decision, not a technicality.
+
+The flow proves the data is open. It does not prove it is reachable from a page.
+
+### 5.3 Not settled: the topic in the flow is the old one
+
+The flow subscribes to `/hfp/journey/#`, which is **HFP v1**. The current
+structure is v2 and is far more useful here:
+
+```
+/hfp/v2/journey/ongoing/vp/<mode>/<operator>/<vehicle>/<route>/<direction>/
+        <headsign>/<start_time>/<next_stop>/<geohash_level>/<geohash>/#
+```
+
+Two consequences, and they are both good news:
+
+**The mode is in the topic.** The flow has to guess mode from `source` strings
+(`hsl helmi` → bus, `hsl live` → "Train/tram") and its own comments show that
+guess is lossy — trains and trams share a bucket, and it calls `node.error` on
+anything it does not recognise. In v2 you subscribe to `.../vp/tram/#` and the
+question does not arise.
+
+**The topic carries a geohash, so the filter is server-side.** This matters more
+than it sounds. `/hfp/journey/#` unfiltered is *the entire HSL fleet* — every
+bus, tram, train and ferry in the region, roughly one message per vehicle per
+second. That is thousands of messages a second arriving in a browser tab whose
+job is to draw about a dozen trams in Kallio. Subscribing by geohash prefix
+turns the firehose into a trickle before it reaches the page, which is the
+difference between a layer that works on a phone and one that melts it.
+
+**Both the v2 topic layout and the geohash levels need verifying** against
+current HSL documentation. The flow is old enough that v1 may no longer be
+served at all, so it is evidence about openness and payload shape rather than a
+copyable subscription.
+
+### 5.4 Still needs a key: routing and alerts
+
+Unchanged from the first draft. Next-departure prediction and service alerts go
+through the Digitransit routing API, which wants a subscription key that a static
+page cannot hold. The three options stand, and with 5.1 settled the middle one is
+now clearly the right first move:
+
+1. **Snapshot only** — a committed GTFS extract. Real stops, routes, timetable.
+2. **Snapshot + live positions** — add the keyless MQTT feed on top. Real
+   timetable, real trams moving. **Recommended, conditional on 5.2.**
+3. **A proxy** — full routing and alerts, and the end of the no-server rule.
 
 Two obligations either way: HSL open data is **CC BY 4.0**, so attribution goes
-on screen in the transit panel, not buried in a readme; and the arcade's
-offline-first promise means the live layer **must** degrade to the snapshot
-without an error — which the §2 source model gives for free.
+on screen in the transit panel; and the offline promise means live degrades to
+the snapshot without an error, which the §2 source model gives for free.
 
 ---
 
 ## 6. Decisions that are the owner's
 
-1. **Which of the three data options** in §5. My recommendation is (1) now, (2)
-   when it is verified keyless, (3) only if live routing turns out to be the
-   point rather than a nice-to-have.
+1. **Which of the three data options** in §5.4. The feed is now known to be
+   keyless (§5.1), so my recommendation is (2) — snapshot plus live positions —
+   **conditional on the WebSocket endpoint in §5.2 existing.** If it does not,
+   (2) and (3) cost the same architecturally and the choice becomes whether live
+   routing is worth a server at all.
 2. **Does Live mode want location?** A player physically in Helsinki is the case
    this shines for, and geolocation would let the game know which stop you are
    standing at. It also collects a real person's position, only helps people in
@@ -215,6 +277,11 @@ live feed makes the city real in a new way, so the line moves with it:
 
 Small enough to prove the idea and refuse to build the rest until it holds:
 
+0. **Answer §5.2 first, and it is ten minutes of work on a machine with an open
+   network**: point any browser MQTT client at the WebSocket endpoint and
+   subscribe to `/hfp/v2/journey/ongoing/vp/tram/#`. If trams arrive, everything
+   below is worth doing and L3 is cheap. If they do not, stop and decide about a
+   bridge before writing anything else.
 1. `services.json` — 2003 Kallio: 3B/3T, tram 6, the metro tunnel. Stop order,
    direction, per-daypart headway. Filed against `MAP.md` §10's three columns.
 2. The service model of §2 with the `period` source only. Bare node, seeded,
