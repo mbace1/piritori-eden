@@ -467,3 +467,17 @@ Still open on input, and not yet reproduced: whether anything is unreachable for
 a reason other than size. `city_map` uses `InputEventMouseMotion` for hover
 highlighting, which has no touch equivalent — cosmetic, but it means a tap gives
 no preview where a mouse would.
+
+## The fence exists — what it still lacks
+
+- **The rate is flat and invented.** `resale_eur` per weapon, same everywhere,
+  every day. `GDD` now rules that prices roll per district per day and move on
+  events; the fence should eventually be subject to that rather than a constant.
+- **The earned fence is not built** (`COMBAT.md` §9.7): no contact who pays
+  better, so the Piritori rate is the only price rather than the floor.
+- **You cannot buy anything.** The fence sells only. There is still no equipment
+  shop, which means `is_purchasable` is enforced by the absence of a shop rather
+  than by a check at the point of sale.
+- **Nothing warns you before a fight** that the weapon you are about to lose with
+  a fallen crew member is unbuyable. The fence says it at the moment of selling;
+  §8 takes kit off the downed silently.

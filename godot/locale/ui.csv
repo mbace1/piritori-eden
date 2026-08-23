@@ -154,3 +154,8 @@ battle.cover_generic,cover,suoja,遮蔽
 battle.cover_blocks,Blocked — nothing gets through that.,Estetty — mikään ei mene läpi.,阻まれる — 何も通らない。
 battle.cover_intercepts,Something is in the way. The swing will be caught.,Jotain on tiellä. Isku jää kiinni.,間に何かある。一撃は止められる。
 battle.cover_pierced,This weapon goes through it.,Tämä ase menee siitä läpi.,この武器なら貫ける。
+ui.fence,THE FENCE,KAUPPIAS,故買屋
+ui.fence_elsewhere,Not here. Someone at Piritori will take it off you.,Ei täällä. Piritorilla joku ottaa sen käsiinsä.,ここでは無理だ。ピリトリなら引き取る者がいる。
+ui.fence_nothing,You are carrying nothing worth selling.,Sinulla ei ole mitään myytävää.,売れる物は何も持っていない。
+ui.fence_sell,Sell the %s — €%d,Myy %s — %d €,%sを売る — €%d
+ui.fence_unbuyable,You will not be able to buy another one. Not at any price.,Toista et saa ostettua. Et millään hinnalla.,二度と買うことはできない。いくら積んでも無理だ。

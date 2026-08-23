@@ -689,10 +689,56 @@ func _refresh_market_rail() -> void:
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("ui.ledger"), 19))
 	_rail_box.add_child(_make_label(tr("ui.ledger_earned"), 13, PiritoriPalette.TEXT_DIM))
+	_add_fence()
 	_rail_box.add_child(_separator())
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
+
+
+## THE FENCE — where loot finally becomes money (COMBAT.md §9.7).
+##
+## sell_loot() has existed and been tested since §8 and nothing ever called it,
+## so loot could be taken and never converted. This is the screen that spends it.
+##
+## Piritori only. The travel requirement is the mechanic, not friction: selling
+## from anywhere would make loot weightless and take the map out of an economy
+## meant to run through it.
+func _add_fence() -> void:
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("ui.fence"), 15, MapStyle.TITLE_TEXT))
+
+	if not GameState.can_fence_here():
+		# Say WHERE, not just no. A refusal that does not name the place it wants
+		# is a wall; naming Piritori turns it into a destination.
+		var l := _make_label(tr("ui.fence_elsewhere"), 12, PiritoriPalette.TEXT_DIM)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(l)
+		return
+
+	if GameState.equipment_owned.is_empty():
+		_rail_box.add_child(_make_label(tr("ui.fence_nothing"), 12, PiritoriPalette.TEXT_DIM))
+		return
+
+	for id in GameState.equipment_owned:
+		var eid := String(id)
+		var paid := GameState.resale_of(eid)
+		var nm := tr("equipment.%s" % eid)
+		if nm == "equipment.%s" % eid:
+			nm = eid
+		var b := _make_button(tr("ui.fence_sell") % [nm, paid], PiritoriPalette.GOODS_MAGENTA)
+		b.pressed.connect(func():
+			GameState.sell_loot(eid)
+			_refresh_market_rail())
+		_rail_box.add_child(b)
+
+		# §8's asymmetry, said at the moment it costs something. Selling a
+		# taken-only weapon is not a trade, it is a thing you cannot undo — the
+		# money can be earned again and the weapon cannot be bought at any price.
+		if not GameState.is_purchasable(eid):
+			var w := _make_label(tr("ui.fence_unbuyable"), 11, PiritoriPalette.INTEL_MUSTARD)
+			w.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(w)
 
 
 ## COMBAT.md §8. Two movements, and the order matters: what YOUR side dropped is

@@ -29,6 +29,7 @@ func _ready() -> void:
 	_test_save_round_trip()
 	_test_careers()
 	_test_loot()
+	_test_fence()
 	_test_hiring()
 	_test_every_reference_resolves()
 
@@ -200,6 +201,37 @@ func _test_save_round_trip() -> void:
 	check("resolved encounter restored", GameState.is_resolved("enc-first-purchase"))
 	eq("schema version stored", int(expected["schema_version"]), GameState.SCHEMA_VERSION)
 	check("content package id stored", String(expected["content_package_id"]) != "")
+
+
+## The fence (COMBAT.md §9.7). Loot becomes money at Piritori and nowhere else.
+##
+## The travel requirement is the mechanic rather than friction: selling from
+## anywhere makes loot weightless and takes the map out of an economy meant to
+## run through it. So the thing worth asserting is the REFUSAL.
+func _test_fence() -> void:
+	print("\nthe fence (COMBAT.md §9.7)")
+	GameState.new_campaign()
+
+	check("Piritori will take it", GameState.FENCE_ANCHORS.has("piritori"))
+
+	# Somewhere that is definitely not Piritori.
+	GameState.current_anchor_id = "hakaniemi"
+	check("nowhere else will", not GameState.can_fence_here())
+
+	GameState.current_anchor_id = "piritori"
+	check("and standing there, it will", GameState.can_fence_here())
+
+	# The conversion itself still works from here, which is what the screen calls.
+	GameState.take_loot(PackedStringArray(["sawn-off"]))
+	var before := GameState.cash_eur
+	var paid := GameState.sell_loot("sawn-off")
+	check("selling pays", paid > 0)
+	check("the money arrives", GameState.cash_eur == before + paid)
+	check("and the weapon is gone", not GameState.equipment_owned.has("sawn-off"))
+
+	# §8 is unchanged by having a shop: the door is still one-way.
+	check("selling it does not make it buyable",
+		not GameState.is_purchasable("sawn-off"))
 
 
 ## Loot (COMBAT.md §8). Money buys volume; loot buys capability. The check that

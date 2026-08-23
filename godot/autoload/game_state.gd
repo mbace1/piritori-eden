@@ -598,6 +598,24 @@ func take_loot(equipment_ids: PackedStringArray) -> PackedStringArray:
 	return got
 
 
+## Where loot turns into money (COMBAT.md §9.7).
+##
+## Piritori, and only Piritori for now. The travel requirement IS the mechanic:
+## selling from anywhere would make loot weightless — a number you clear whenever
+## you like — and would take the map out of an economy that is supposed to run
+## through it. Carrying a sawn-off across the city to sell it puts you where the
+## hiring pool and the pressure both are.
+##
+## §9.7 also promises a better fence you have to earn, later. When that arrives
+## this becomes a list and the Piritori rate becomes the floor rather than the
+## only price.
+const FENCE_ANCHORS := ["piritori"]
+
+
+func can_fence_here() -> bool:
+	return FENCE_ANCHORS.has(current_anchor_id)
+
+
 ## Loot converts DOWN into money. Deliberately one-way and deliberately poor:
 ## selling a thing you can only get by taking it should feel like a waste, which
 ## is what stops the asymmetry collapsing into "everything is money eventually".
