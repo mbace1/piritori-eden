@@ -752,6 +752,80 @@ retire somebody deliberately, and never let them feel safe.
 
 ---
 
+## 9.11 Classes are combat roles — owner ruling, 2026-08-23
+
+**Redone from combat outward**, against FFT, Mewgenics and Into the Breach. The
+previous six — runner, muscle, watcher, fixer, driver, local — were narrative and
+logistical roles that happened to fight. These are fighting roles.
+
+### What this supersedes
+
+- `MODULAR_CHARACTER_SYSTEM.md`'s subclass table, as a description of what a unit
+  DOES. Its silhouette and diegetic-cue guidance still stands as art direction.
+- `art-library/characters/concepts-3d/SPEC.md` §5, "a role needs one mesh".
+
+### The six
+
+Each class is a **verb**, not a stat block — Into the Breach's discipline, where
+a unit is the one thing it does to the board.
+
+| Class | Weapons | Board role | Signature verb |
+|---|---|---|---|
+| **Bruiser** | fists, blunt | front | **PIN** — the target cannot reposition next round |
+| **Anchor** | blunt | front | **COVER** — an adjacent ally takes reduced harm |
+| **Blade** | hand weapons | flank | **OPEN** — ignores soft cover; hits the exposed |
+| **Shooter** | firearms | back | **LINE** — clear-lane damage at range |
+| **Spotter** | light ranged | back | **MARK** — grants the exact read on a target |
+| **Courier** | fists, light | anywhere | **SHOVE** — moves a body one cell |
+
+Two of these have homes already waiting. **MARK** is precisely the intel that
+gates `target_lane` in the telegraph — that gate exists and nothing supplies it.
+**COVER** is the cover system in §9.6, which is fully implemented.
+
+### Perks are the stats
+
+**Strength** (harm) · **Speed** (tempo and initiative) · **Wits** (accuracy and
+intel) · **Nerve** (morale) · **Toughness** (condition).
+
+### Progression is per PERSON, both halves
+
+Each level: **choose one skill from two or three offered**, and **spend one perk
+point**. A **glory bonus** — surviving at near-death, or a double kill — pays
+**two perk points**.
+
+Per person rather than per class, for both. That is the harder version to build
+and the one that agrees with everything else: §7 makes a crew member a bounded
+investment, §9.8 makes a retiree a contact worth having, and §9.10 makes a
+veteran harder to kill. A class that learned centrally would make all of that
+decoration.
+
+It also gives the career ceiling its meaning back. Ten fights is a handful of
+levels, so a crew member arrives, becomes genuinely good, and leaves — and the
+levels are the reason losing one hurts.
+
+### Appearance is a family, not a fixed body
+
+A class does **not** own one mesh. It owns a **look**: thin, hooded, heavy,
+and so on — with **multiple colours and variants** inside it.
+
+This softens `SPEC.md` §5 rather than discarding it. The reason a role had to be
+readable at a glance still holds; what changes is that the read comes from a
+family resemblance plus the free hue-band recolour, not from one silhouette per
+class. It is also the only version that survives a roster of generated people.
+
+### What this obliges
+
+- A class table in content, with verb, weapon family and look family.
+- Per-crew-member level, chosen skills and spent perks — none of which exist.
+- Skill offers: two or three per level, drawn from somewhere.
+- The verbs themselves. None of the six is implemented; MARK and COVER have the
+  most support already built.
+- A migration for the six existing roles, which are wired into
+  `CrewGenerator.ROLES`, `UNIT_BY_ROLE`, authored crew, authored opponents and
+  the 3D bodies.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
