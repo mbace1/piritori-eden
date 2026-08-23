@@ -31,6 +31,7 @@ func _ready() -> void:
 	_test_loot()
 	_test_fence()
 	_test_arrest()
+	_test_chapters()
 	_test_hiring()
 	_test_every_reference_resolves()
 
@@ -252,6 +253,74 @@ arrest (COMBAT.md §9.5.3)")
 	check("a new campaign has nobody arrested", GameState.arrested_crew.is_empty())
 	check("the save reloads", GameState.from_dict(saved))
 	check("and they are still gone", GameState.arrested_crew.has(who))
+
+
+## Chapters, and the ledger of what survives one.
+##
+## A roguelike lives or dies on that ledger, so the assertions are about what
+## CARRIES and what does NOT — the rule being: what you built persists, what you
+## were granted does not.
+func _test_chapters() -> void:
+	print("
+chapters (GDD: run structure)")
+	GameState.new_campaign()
+	check("a campaign starts in chapter one", GameState.chapter == 1)
+	check("on the first day of it", GameState.day_of_chapter() == 1)
+	check("with no progress", GameState.chapter_progress() == 0)
+	check("and the goal unmet", not GameState.chapter_goal_met())
+
+	# Progress is counted centrally so a new way of earning cannot fail to count.
+	GameState.chapter_goal = GameState.ChapterGoal.MONEY
+	GameState.chapter_threshold = 100
+	GameState.record_chapter_income(60)
+	check("income counts toward a money chapter", GameState.chapter_progress() == 60)
+	check("and 60 is not yet 100", not GameState.chapter_goal_met())
+	GameState.record_chapter_income(40)
+	check("meeting the threshold opens the ending", GameState.chapter_goal_met())
+
+	# The type is what varies between chapters, so the counters must not bleed.
+	GameState.chapter_goal = GameState.ChapterGoal.FIGHTS
+	GameState.chapter_threshold = 2
+	check("a fights chapter does not count the money",
+		GameState.chapter_progress() == 0)
+	GameState.record_chapter_win()
+	GameState.record_chapter_win()
+	check("but does count the fights", GameState.chapter_goal_met())
+
+	# ── the ledger ──
+	GameState.new_campaign()
+	GameState.cash_eur = 500
+	GameState.take_loot(PackedStringArray(["sawn-off"]))
+	GameState.add_upgrade("stash-house-1")
+	GameState.memories.append("retired:somebody")
+	GameState.flags["mission-unlocked"] = true
+	var roster_before := GameState.roster.size()
+
+	GameState.begin_next_chapter()
+
+	check("the chapter advanced", GameState.chapter == 2)
+	check("and the day follows it",
+		GameState.day == GameState.CHAPTER_DAYS + 1, str(GameState.day))
+
+	# What you BUILT.
+	check("gear carries", GameState.equipment_owned.has("sawn-off"))
+	check("built upgrades carry", GameState.has_upgrade("stash-house-1"))
+	check("contacts carry", GameState.memories.has("retired:somebody"))
+	check("people carry", GameState.roster.size() == roster_before)
+
+	# What you were GRANTED.
+	check("money does not carry", GameState.cash_eur == 0)
+	check("mission unlocks do not carry", GameState.flags.is_empty())
+	check("and chapter progress starts again", GameState.chapter_progress() == 0)
+
+	# It has to survive a save, or the ledger is only true until you close the
+	# tab.
+	var saved := GameState.to_dict()
+	GameState.new_campaign()
+	check("a new campaign is back to chapter one", GameState.chapter == 1)
+	check("the save reloads", GameState.from_dict(saved))
+	check("the chapter came back", GameState.chapter == 2)
+	check("and so did the upgrade", GameState.has_upgrade("stash-house-1"))
 
 
 ## The fence (COMBAT.md §9.7). Loot becomes money at Piritori and nowhere else.

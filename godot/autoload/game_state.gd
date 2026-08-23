@@ -19,7 +19,7 @@ signal slice_completed
 signal battle_requested(battle_id: String, negotiation_open: bool)
 signal ending_resolved(ending_id: String)
 
-const SCHEMA_VERSION := 5
+const SCHEMA_VERSION := 6
 
 ## Era I interface lock (SCREEN_AND_COMBAT_BASELINE): the fixed historical rate.
 const MARKKA_PER_EURO := 5.94573
@@ -171,6 +171,11 @@ func new_campaign(with_seed: int = 0) -> void:
 # ── the clock ──────────────────────────────────────────────────────────────
 	generated_crew = {}
 	arrested_crew = PackedStringArray()
+	upgrades = PackedStringArray()
+	chapter = 1
+	chapter_earned = 0
+	chapter_loot_taken = 0
+	chapter_fights_won = 0
 	_restore_generated_crew()
 
 
@@ -183,11 +188,159 @@ func is_slice_complete() -> bool:
 
 
 ## Spend one Day/Night block. Nightly settlement is applied on entering night.
+# ── what survives a chapter (GAME_DESIGN_DOCUMENT: the persistence ledger) ──
+
+## WHAT YOU BUILT PERSISTS. WHAT YOU WERE GRANTED DOES NOT.
+##
+## That single line decides every case consistently and is explicable to a
+## player: infrastructure is yours, access is lent. A stash-house upgrade carries
+## because you made it; a mission unlock resets because it was permission handed
+## over.
+##
+## Three states, not two — carries, carries-but-degrades, and resets:
+##
+##   people      mostly     they may leave, and they decay
+##   gear        yes        decays with use
+##   contacts    yes        who you know does not un-happen
+##   upgrades    yes        a stash house stays improved
+##   money       NO         resets every chapter
+##   unlocks     NO         access is re-earned
+##
+## Decay is what keeps this honest. Persistence plus re-runnable early chapters
+## is otherwise a farming exploit: enough repetitions and the fourth chapter is
+## trivial. Decay makes a farmed advantage leak.
+const RESETS_EACH_CHAPTER := [
+	"cash_eur",
+	"stock",
+	"market_history",
+	"revealed",
+	"flags",
+]
+
+## Things bought or built, which carry. Distinct from `flags`, which are
+## permission and do not.
+var upgrades: PackedStringArray = []
+
+
+func has_upgrade(id: String) -> bool:
+	return upgrades.has(id)
+
+
+func add_upgrade(id: String) -> void:
+	if id == "" or upgrades.has(id):
+		return
+	upgrades.append(id)
+	state_changed.emit()
+
+
+## Start the next chapter without starting a new campaign.
+##
+## The roster, the gear, the contacts and the upgrades come with you. The money
+## does not — that is what stops farming an early chapter buying away the next
+## chapter's difficulty, which is the usual failure of a persistent-currency
+## roguelike.
+func begin_next_chapter() -> void:
+	chapter += 1
+	day = ((chapter - 1) * CHAPTER_DAYS) + 1
+	block_index = (day - 1) * blocks_per_day.size()
+
+	# The run layer.
+	cash_eur = 0
+	stock.clear()
+	market_history.clear()
+	flags.clear()
+
+	# Chapter progress starts again; what it is FOR may differ next time.
+	chapter_earned = 0
+	chapter_loot_taken = 0
+	chapter_fights_won = 0
+
+	# `revealed`, `roster`, `equipment_owned`, `memories`, `crew_fights`,
+	# `retired_crew`, `arrested_crew`, `trained_crew`, `generated_crew` and
+	# `upgrades` are all deliberately untouched.
+	state_changed.emit()
+
+
+# ── chapters (GAME_DESIGN_DOCUMENT: run structure) ─────────────────────────
+
+## An era is roughly forty days in four chapters, and a chapter is a run.
+##
+## The authored slice is a CHAPTER's worth, not an era's — everything built
+## against it stands, but "seven days and an ending" is no longer the shape.
+##
+## PLACEHOLDER (DESIGN_LOCKS §13): ten days is the owner's figure and the slice
+## currently authors seven, so the first chapter ends early on purpose rather
+## than pretending the content is longer than it is.
+const CHAPTER_DAYS := 10
+const ERA_CHAPTERS := 4
+
+## Which chapter, 1-based.
+var chapter: int = 1
+
+## What clears it. The TYPE varies per chapter, and that variation is where
+## top-level variety comes from: a chapter cleared by earning is not the same
+## chapter cleared by winning fights, even on the same map with the same crew.
+enum ChapterGoal { MONEY, LOOT, FIGHTS }
+
+var chapter_goal: ChapterGoal = ChapterGoal.MONEY
+## PLAYTEST GATE, not canon. Nobody has played ten days to find out.
+var chapter_threshold: int = 600
+
+## Progress, counted live — a player who cannot see how close they are cannot
+## decide whether to push or bank.
+var chapter_earned: int = 0
+var chapter_loot_taken: int = 0
+var chapter_fights_won: int = 0
+
+
+## Where the day sits inside its chapter, 1-based.
+func day_of_chapter() -> int:
+	return ((day - 1) % CHAPTER_DAYS) + 1
+
+
+func chapter_progress() -> int:
+	match chapter_goal:
+		ChapterGoal.LOOT: return chapter_loot_taken
+		ChapterGoal.FIGHTS: return chapter_fights_won
+	return chapter_earned
+
+
+## Has the player earned their way into the ending mission?
+##
+## The threshold buys ENTRY to the climax; it is not the climax. `MAP.md` §12.5
+## is the same idea one magnification down, where travelling and selling buys
+## entry to a better meeting.
+func chapter_goal_met() -> bool:
+	return chapter_progress() >= chapter_threshold
+
+
+## Counted here rather than at each call site, so a new way of earning cannot
+## quietly fail to count toward the chapter.
+func record_chapter_income(amount: int) -> void:
+	if amount > 0:
+		chapter_earned += amount
+		state_changed.emit()
+
+
+func record_chapter_loot(n: int) -> void:
+	if n > 0:
+		chapter_loot_taken += n
+		state_changed.emit()
+
+
+func record_chapter_win() -> void:
+	chapter_fights_won += 1
+	state_changed.emit()
+
+
 func advance_block() -> void:
 	if is_slice_complete():
 		return
 	block_index += 1
 	day = (block_index / blocks_per_day.size()) + 1
+	# A chapter is a span of days, so it follows from the day rather than being
+	# advanced separately — two counters for one fact would drift.
+	chapter = ((day - 1) / CHAPTER_DAYS) + 1
 
 	if not is_slice_complete():
 		if current_block() == "night":
@@ -594,6 +747,7 @@ func take_loot(equipment_ids: PackedStringArray) -> PackedStringArray:
 			continue
 		equipment_owned.append(eid)
 		got.append(eid)
+		record_chapter_loot(1)
 	if not got.is_empty():
 		state_changed.emit()
 	return got
@@ -627,6 +781,9 @@ func sell_loot(equipment_id: String) -> int:
 	var paid := resale_of(equipment_id)
 	equipment_owned.remove_at(i)
 	cash_eur += paid
+	# Counted centrally (GDD run structure): a chapter cleared by earning has to
+	# see every way of earning, and the fence is one of them.
+	record_chapter_income(paid)
 	state_changed.emit()
 	return paid
 
@@ -842,6 +999,13 @@ func to_dict() -> Dictionary:
 		"schema_version": SCHEMA_VERSION,
 		"generated_crew": generated_crew,
 		"arrested_crew": arrested_crew,
+		"upgrades": upgrades,
+		"chapter": chapter,
+		"chapter_goal": int(chapter_goal),
+		"chapter_threshold": chapter_threshold,
+		"chapter_earned": chapter_earned,
+		"chapter_loot_taken": chapter_loot_taken,
+		"chapter_fights_won": chapter_fights_won,
 		"content_package_id": content_package_id,
 		"seed": seed_value,
 		"day": day,
@@ -922,6 +1086,13 @@ func from_dict(d: Dictionary) -> bool:
 	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
+	upgrades = d.get("upgrades", PackedStringArray())
+	chapter = int(d.get("chapter", 1))
+	chapter_goal = d.get("chapter_goal", int(ChapterGoal.MONEY)) as ChapterGoal
+	chapter_threshold = int(d.get("chapter_threshold", 600))
+	chapter_earned = int(d.get("chapter_earned", 0))
+	chapter_loot_taken = int(d.get("chapter_loot_taken", 0))
+	chapter_fights_won = int(d.get("chapter_fights_won", 0))
 	arrested_crew = d.get("arrested_crew", PackedStringArray())
 	generated_crew = d.get("generated_crew", {})
 	_restore_generated_crew()

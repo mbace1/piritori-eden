@@ -1178,6 +1178,11 @@ func _show_battle(battle_id: String) -> void:
 		# Ask the fight what happened BEFORE settling, while the fighters still
 		# carry their end state.
 		var summary: Dictionary = scene.fight.aftermath()
+		# A won fight counts toward a chapter cleared by fighting (GDD run
+		# structure). Counted at settlement, where the result is known.
+		if int(result) in [FightManager.BattleResult.VICTORY_ROUT,
+				FightManager.BattleResult.VICTORY_BREAK]:
+			GameState.record_chapter_win()
 		var spoils := _settle_loot(scene.fight, int(result))
 		# The police take the fallen BEFORE careers are aged: somebody carried
 		# off a yard does not also come out of it one fight older.

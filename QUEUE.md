@@ -805,3 +805,37 @@ than the plain dot it replaced.
 
 This needs a designed icon set — art, not code — and it is the last piece of the
 reference map that is genuinely outstanding.
+
+## Chapters exist, and the persistence ledger is real
+
+`GameState` has a chapter above the day, a goal with a type and a threshold, live
+progress counters, and `begin_next_chapter()`.
+
+**The ledger is implemented as the rule, not as a list:** what you BUILT
+persists, what you were GRANTED does not. Gear, upgrades, contacts and people
+carry a chapter boundary; money and mission unlocks do not. Gated in both
+directions, and across a save.
+
+Counters are fed centrally so a new way of earning cannot fail to count: the
+fence feeds income, taking loot feeds the loot count, and settling a won battle
+feeds the fight count.
+
+### What is NOT built, and matters
+
+- **Nothing ends a chapter.** `begin_next_chapter()` exists and nothing calls it.
+  There is no ending mission, no clear condition wired to the schedule, and no
+  screen that says a chapter is over. Today the slice simply finishes.
+- **The goal is set in code, not content.** `chapter_goal` and
+  `chapter_threshold` are variables with placeholder defaults (MONEY, 600). A
+  chapter needs a goal type, a threshold and an ending mission id **in the
+  authored content**, and the variety the design wants comes from that varying.
+- **Ten days against a seven-day slice.** `CHAPTER_DAYS` is the owner's figure
+  and the authored content is shorter, so chapter one currently ends before its
+  tenth day exists. Deliberate: better a visible mismatch than pretending the
+  content is longer.
+- **Gear condition is still not per-instance.** `equipment_owned` is a flat list
+  of ids and cannot express two pipes in different states, so new/used/faulty/
+  broken (`COMBAT.md` §8.4) is still blocked on the same change.
+- **Nothing decays.** Without decay, persistence plus re-runnable chapters is a
+  farming exploit — that is the load the ledger is carrying and it is not
+  carried yet.
