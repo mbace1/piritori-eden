@@ -357,10 +357,12 @@ func aftermath() -> Dictionary:
 			"condition": f.condition,
 			"condition_max": f.condition_max,
 		}
-		if f.is_player_controlled:
+		if f.side == Fighter.Side.PLAYER:
 			ours.append(row)
-		else:
+		elif f.side == Fighter.Side.OPPOSITION:
 			theirs.append(row)
+		# A third party is neither, and is counted in neither. They are not a
+		# score.
 	return {
 		"result": result,
 		"rounds": round_number,
@@ -596,7 +598,11 @@ func dropped_kit(player_side: bool) -> PackedStringArray:
 	var out: PackedStringArray = []
 	for id in _fighters:
 		var f: Fighter = _fighters[id]
-		if f.is_player_controlled != player_side:
+		# §9.5.36: `is_player_controlled` says who gives the orders, not who the
+		# enemy is. Asking it here would have the player looting the police, who
+		# are also not player-controlled.
+		var want := Fighter.Side.PLAYER if player_side else Fighter.Side.OPPOSITION
+		if f.side != want:
 			continue
 		if f.status != Fighter.Status.DOWNED:
 			continue

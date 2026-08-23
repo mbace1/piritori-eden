@@ -530,6 +530,33 @@ they are lost, and no money replaces the fights they had learned.
 So the escalation is the player's to cause. A crew that stands still loses its
 casualties; a crew that opens fire on police has a genuinely worse night.
 
+### 9.5.35 A third party is a disposition, not a faction — owner ruling
+
+Third parties differ by **how they behave**, not by who they are:
+
+- **Police react.** They prefer a non-lethal approach and do not start anything.
+  Subdue is the default and violence is a response.
+- **Rivals do not.** Another crew arriving may simply attack on sight.
+
+So the board needs a third side that carries a **disposition**, and "police" and
+"rival crew" are two values of it rather than two systems.
+
+**Targeting is logical, not scripted.** Whoever is nearest, whoever is the
+threat, whoever just hit them. Not a rule that says police always go for the
+player, which would make them a punishment rather than a participant.
+
+### 9.5.36 The trap this creates, found before it shipped
+
+Everything in the fight currently reads `is_player_controlled == false` as
+**"the enemy"**. A third side is not player-controlled either, so without care it
+inherits every assumption about the opposition. The proof is `dropped_kit(false)`,
+which collects the kit of everyone who is not the player's — meaning **the player
+would loot the police**.
+
+So `side` becomes the authority on who somebody is, and
+`is_player_controlled` goes back to meaning only *who gives them orders*. Any
+question of the form "are they my enemy" must ask `side`.
+
 ### 9.5.4 What this is not
 
 Not authored per battle. Content does not list which fights have police; the

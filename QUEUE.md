@@ -652,3 +652,29 @@ the rescue branch is unreachable at the end of a fight.
 It only means something MID-fight, which is exactly when the police arrive in
 play. Worth remembering when the opposition's posture is built: the same
 constraint applies to them.
+
+## The third side exists, and nobody is standing on it yet
+
+`Fighter.Side` has a third value and a **disposition** — REACTIVE for police who
+prefer non-lethal and do not start anything, HOSTILE for a rival crew that
+attacks on sight (`COMBAT.md` §9.5.35). `is_enemy_of()` is now the only correct
+way to ask whether somebody is your enemy.
+
+**The trap this closed, before it shipped.** Everything read
+`is_player_controlled == false` as "the enemy". A third party is not
+player-controlled either, so it inherited every assumption about the opposition —
+and `dropped_kit(false)` collected from all of them, which means **the player
+would have looted the police**. Fixed at the two places that mattered, and gated.
+
+**Still to build, in order:**
+
+1. **Nobody spawns.** No third-party fighter is ever put on the board. The police
+   arrival is still bookkeeping — heat, a posture question and a settlement
+   consequence — with no bodies in the yard.
+2. **They do not act.** A spawned third party needs a turn, and REACTIVE needs to
+   mean something: subdue rather than strike, and only respond once provoked.
+3. **Targeting is unwritten.** The ruling is "target logically" — nearest,
+   the threat, whoever just hit them — and none of that exists.
+4. **Attacking them does not provoke.** `provoked` is a field nothing sets.
+5. **The board does not draw them.** `battle_stage_3d` maps two sides to two
+   colours; a third needs its own read, and no model is cast for police.

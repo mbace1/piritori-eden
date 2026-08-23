@@ -20,7 +20,43 @@ enum Status {
 	DEAD,       ## Requires lethal condition + follow-through; set in Aftermath only
 }
 
-enum Side { PLAYER, OPPOSITION }
+## COMBAT.md §9.5.35. THIRD_PARTY is anyone who is neither yours nor theirs —
+## police, a rival crew turning up, whoever the yard supplies.
+enum Side { PLAYER, OPPOSITION, THIRD_PARTY }
+
+## How a third party behaves, which is the thing that differs — "police" and
+## "rival crew" are two values of this rather than two systems.
+enum Disposition {
+	NONE,        ## not a third party
+	REACTIVE,    ## police: prefers non-lethal, does not start anything
+	HOSTILE,     ## a rival crew: attacks on sight
+}
+
+var disposition: Disposition = Disposition.NONE
+
+## Set when somebody attacks a REACTIVE third party. §9.5.3: the escalation is
+## the player's to cause.
+var provoked: bool = false
+
+
+## Are they somebody's enemy right now?
+##
+## Deliberately a question about SIDE and intent, never about
+## `is_player_controlled`, which only says who gives the orders. §9.5.36 records
+## why: everything in the fight used to read "not player-controlled" as "enemy",
+## and a third side inherits that silently — the proof being that the player
+## would have looted the police.
+# Typed int, not Side: an inner enum used as a parameter type does not accept
+# Fighter.Side from outside the class, which is a GDScript scoping quirk rather
+# than a design choice.
+func is_enemy_of(other_side: int) -> bool:
+	if side == other_side:
+		return false
+	if side == Side.THIRD_PARTY:
+		return disposition == Disposition.HOSTILE or provoked
+	if other_side == Side.THIRD_PARTY:
+		return false
+	return true
 
 # ================================================================== #
 # Identity

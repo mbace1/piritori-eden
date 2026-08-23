@@ -51,6 +51,7 @@ func _ready() -> void:
 	_test_telegraphs()
 	_test_police()
 	_test_police_posture()
+	_test_third_side()
 	_test_cover_is_visible()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
@@ -652,6 +653,71 @@ what do we do about them")
 	# is no decision at all.
 	check("pulling somebody out near the police costs the helper",
 		FightManager.RESCUE_DANGER_DEPTH >= 1)
+
+
+## A third side, and the trap it would have sprung (COMBAT.md §9.5.36).
+##
+## Everything in the fight read `is_player_controlled == false` as "the enemy".
+## A third party is not player-controlled either, so it inherits every one of
+## those assumptions silently. The proof is loot: dropped_kit(false) collected
+## from everyone who was not the player's, which means the player would have
+## LOOTED THE POLICE.
+func _test_third_side() -> void:
+	print("
+a third side is not the enemy by default")
+	var f := FightManager.new()
+	f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+
+	# Turn one of theirs into a bystander with a weapon, and make sure the
+	# player cannot take it off them.
+	var theirs: Array = f.get_fighters(Fighter.Side.OPPOSITION)
+	check("the opposition has somebody to convert", theirs.size() > 0)
+	var bystander: Fighter = theirs[0]
+	var weapon := bystander.held_weapon_id
+	check("and they are carrying something", weapon != "")
+
+	var loot_before := f.dropped_kit(false)
+	bystander.side = Fighter.Side.THIRD_PARTY
+	bystander.disposition = Fighter.Disposition.REACTIVE
+	bystander.status = Fighter.Status.DOWNED
+	var loot_after := f.dropped_kit(false)
+	check("a downed third party is not lootable",
+		loot_after.size() <= loot_before.size(), "%s -> %s" % [loot_before, loot_after])
+
+	# They are also not a score. Counting them as opposition would make the
+	# aftermath claim the player beat people they never fought.
+	var a := f.aftermath()
+	var ids: Array = []
+	for row in a["theirs"]:
+		ids.append(String((row as Dictionary)["id"]))
+	check("and is not counted among the opposition",
+		not ids.has(bystander.fighter_id))
+
+	# The disposition is what decides hostility, per §9.5.35.
+	var police := Fighter.new()
+	police.side = Fighter.Side.THIRD_PARTY
+	police.disposition = Fighter.Disposition.REACTIVE
+	check("police are nobody's enemy to begin with",
+		not police.is_enemy_of(Fighter.Side.PLAYER))
+	police.provoked = true
+	check("but become one once attacked",
+		police.is_enemy_of(Fighter.Side.PLAYER))
+	check("and are then everyone's problem",
+		police.is_enemy_of(Fighter.Side.OPPOSITION))
+
+	var rival := Fighter.new()
+	rival.side = Fighter.Side.THIRD_PARTY
+	rival.disposition = Fighter.Disposition.HOSTILE
+	check("a rival crew does not wait to be provoked",
+		rival.is_enemy_of(Fighter.Side.PLAYER))
+
+	# And the ordinary case is untouched.
+	var enemy := Fighter.new()
+	enemy.side = Fighter.Side.OPPOSITION
+	check("the opposition is still the enemy",
+		enemy.is_enemy_of(Fighter.Side.PLAYER))
+	check("and is not its own enemy",
+		not enemy.is_enemy_of(Fighter.Side.OPPOSITION))
 
 
 ## Cover has to be answerable, not just enforced.
