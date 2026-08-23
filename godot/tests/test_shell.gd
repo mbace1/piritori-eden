@@ -48,6 +48,7 @@ func _ready() -> void:
 	await _test_language_switch()
 	_test_debug_entry_parsing()
 	_test_every_outcome_has_words()
+	_test_interface_is_thumb_sized()
 	await _test_debug_hud()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -180,6 +181,38 @@ func _test_every_outcome_has_words() -> void:
 	check("six endings, six headlines", titles.size() == 6, str(titles.size()))
 	check("six endings, six explanations", lines.size() == 6, str(lines.size()))
 
+
+
+## The interface has to be big enough to hit.
+##
+## Reported from play as two separate bugs — "menu is small" and "not all touch
+## controls work" — which were one bug: the project renders at a 1280x720 base
+## with stretch "expand", so a phone about 412px wide showed everything at 0.32
+## and a 48px button became a 15px touch target.
+##
+## Apple and Google both put the minimum touch target at 44 points. That is a
+## published number, so it can be asserted rather than eyeballed.
+func _test_interface_is_thumb_sized() -> void:
+	print("
+the interface is big enough to hit")
+	const BUTTON_PX := 48.0        # _make_button's height in design space
+	const GUIDELINE_PX := 44.0     # Apple HIG and Material both
+
+	var rendered: float = BUTTON_PX * _shell.UI_TARGET_SCALE
+	check("a button clears the 44px touch guideline on a phone",
+		rendered >= GUIDELINE_PX, "%.1f px" % rendered)
+
+	# The first attempt at this landed at 0.70, which renders 34px and reads as
+	# "touch does not work". Named so a future tweak cannot quietly go back.
+	check("and the target is not the value that failed once",
+		_shell.UI_TARGET_SCALE > 0.8)
+
+	# Desktop must be left exactly alone: it already shows the design at 1:1 or
+	# better, and scaling it up would crop the layout for no gain.
+	var desktop_natural: float = minf(1920.0 / 1280.0, 1080.0 / 720.0)
+	var desktop_factor: float = clampf(_shell.UI_TARGET_SCALE / desktop_natural,
+		1.0, _shell.UI_SCALE_MAX)
+	check("a desktop is not scaled", is_equal_approx(desktop_factor, 1.0))
 
 
 func _all_nodes(root: Node, out: Array = []) -> Array:

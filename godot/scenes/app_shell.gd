@@ -492,8 +492,23 @@ func _add_stat(kind: int, col: Color, text: String) -> void:
 ##
 ## The number below is a starting point chosen by arithmetic, NOT by looking at
 ## a phone, which is why ?scale= exists. Dial it on the device and tell me.
-const UI_SCALE_REFERENCE := 900.0   ## width below which the interface grows
-const UI_SCALE_MAX := 2.8
+## The size the 1280x720 design space should RENDER at, on a device too small to
+## show it at 1:1. Expressed as the thing actually wanted rather than as a magic
+## reference width, because the first version of this was tuned by a formula
+## nobody could check against a guideline.
+##
+## 0.95 is derived, not chosen: the interface's buttons are 48px in design space,
+## Apple and Google both want a touch target of at least 44, and 48 x 0.95 is 46.
+## The first attempt landed at 0.70 and produced 34px buttons — still under the
+## guideline, which is why "not all touch controls work" survived it.
+##
+## The cost is real and worth stating: a bigger interface fits less. At 0.95 a
+## 412px phone has about 434 x 963 design units to lay out in, against 586 x 1301
+## before. The rail scrolls, so the failure mode is more scrolling rather than
+## clipped content — but if something important ends up below the fold, this
+## number is the reason.
+const UI_TARGET_SCALE := 0.95
+const UI_SCALE_MAX := 4.0
 
 func _apply_ui_scale() -> void:
 	var win := get_window()
@@ -503,16 +518,18 @@ func _apply_ui_scale() -> void:
 		win.content_scale_factor = maxf(float(DebugEntry.get_str("scale")), 0.25)
 		return
 	var w := float(win.size.x)
-	if w <= 0.0:
+	var h := float(win.size.y)
+	if w <= 0.0 or h <= 0.0:
 		return
-	# Desktop is left alone at 1.0. Narrow screens grow, in proportion to how
-	# narrow they are, up to a cap — past the cap the interface would start
-	# pushing its own content off the edge, which trades one unusable screen
-	# for another.
-	var f := 1.0
-	if w < UI_SCALE_REFERENCE:
-		f = clampf(UI_SCALE_REFERENCE / maxf(w, 320.0), 1.0, UI_SCALE_MAX)
-	win.content_scale_factor = f
+	# What the stretch already gives us: the project renders at a 1280x720 base
+	# with aspect "expand", so content scale is min(w/1280, h/720).
+	var natural := minf(w / 1280.0, h / 720.0)
+	if natural <= 0.0:
+		return
+	# Scale UP to the target, never down — a desktop already showing the design
+	# at 1:1 or better is left exactly alone.
+	win.content_scale_factor = clampf(UI_TARGET_SCALE / natural, 1.0, UI_SCALE_MAX)
+
 
 
 func _clear_world() -> void:
