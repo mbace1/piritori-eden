@@ -2055,7 +2055,7 @@ is not the hardest available content.
 ### What persists across a re-run — confirmed and refined, 2026-08-22
 
 Following the FFT half of decision 2 in `PHASING.md` §0.2. **Three states, not
-two**: things that carry, things that carry but degrade, and things that reset.
+two**: carries, carries-but-degrades, and resets.
 
 | | Carries | Notes |
 |---|---|---|
@@ -2063,40 +2063,40 @@ two**: things that carry, things that carry but degrade, and things that reset.
 | **Gear** | yes | Decays with use, Mewgenics-style. |
 | **Contacts and unlocks** | yes | Who you know does not un-happen. |
 | **Built upgrades** | yes | A stash house improvement stays improved. |
-| **Some assets** | some | Undecided which. |
+| **Some assets** | some | Which ones is undecided. |
 | **Money** | no | Resets every chapter. |
 | **Mission unlocks** | no | Access is re-earned. |
 
-### The principle underneath it
+### The principle underneath
 
 **What you built persists. What you were granted does not.**
 
-A stash house upgrade carries because the player made it; a mission unlock
-resets because it was permission handed over. That line is worth holding to when
-a new thing needs classifying, because it decides consistently and it is
-explicable to a player — infrastructure is yours, access is lent.
+A stash house upgrade carries because the player made it; a mission unlock resets
+because it was permission handed over. That line is worth holding to when a new
+thing needs classifying: it decides consistently, and it is explicable to a
+player — infrastructure is yours, access is lent.
 
 ### Decay is what keeps the ledger honest
 
-Gear and people both degrade rather than accumulating cleanly, which is the load
-this design is really carrying. Without it, persistence plus re-runnable early
-chapters is a farming exploit: enough repetitions and the fourth chapter is
-trivial. Decay means a farmed advantage **leaks**, so re-running an early chapter
+Gear and people both degrade rather than accumulating cleanly, and that is the
+load this design is really carrying. Without it, persistence plus re-runnable
+early chapters is a farming exploit: enough repetitions and chapter four is
+trivial. Decay makes a farmed advantage **leak**, so re-running an early chapter
 is a way to stay level rather than a way to get ahead.
 
-It also lands well on `COMBAT.md` §7 and §9.10. People already have a career
-ceiling and already die more easily when inexperienced; decay is the same idea
-applied to the kit, and it gives §8's unbuyable weapons a reason to be sought
+It also lands on `COMBAT.md` §7 and §9.10, where people already have a career
+ceiling and already die more easily when inexperienced. Decay is the same idea
+applied to kit, and it gives §8's unbuyable weapons a reason to be sought
 repeatedly rather than once.
 
 ### Consequences for systems already built
 
 - **Careers stay meaningful.** A crew member living across runs is what makes the
-  ceiling a real loss. If people reset per chapter nobody has a career.
+  ceiling a real loss. If people reset per chapter, nobody has a career.
 - **The economy stays tight.** Cash resetting means farming cannot buy away the
-  next chapter's difficulty, the usual failure of a persistent-currency
+  next chapter's difficulty — the usual failure of a persistent-currency
   roguelike.
-- **`retired:<id>` memories become persistent state**, not per-run — contacts
+- **`retired:<id>` memories become persistent state**, not per-run: contacts
   carry, so §9.8's bar veterans have to survive a chapter boundary.
 
 ### Still undecided
