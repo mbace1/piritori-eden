@@ -112,6 +112,12 @@ func _process(dt: float) -> void:
 	_label.text = "\n".join(_lines(avg))
 
 
+## Changed by hand whenever something worth confirming ships. A cached build
+## shows an old stamp, which is the difference between "it did not work" and
+## "you are not running it".
+const BUILD_STAMP := "2026-08-23 scale+police"
+
+
 func _lines(avg: float) -> PackedStringArray:
 	var out: PackedStringArray = []
 
@@ -125,6 +131,22 @@ func _lines(avg: float) -> PackedStringArray:
 	out.append("mem %.1f MB   video %.1f MB" % [
 		Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0,
 		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0])
+
+	# ── the interface's own size, which cannot be judged from a screenshot ──
+	#
+	# Reported because a scale fix shipped and appeared to do nothing, and there
+	# was no way to tell a stale cache from a broken calculation. These three
+	# numbers separate them: if the factor is 1.0 on a phone the code did not
+	# run, and if it is right while buttons are small the build is old.
+	var win := get_window()
+	if win != null:
+		var natural: float = minf(float(win.size.x) / 1280.0, float(win.size.y) / 720.0)
+		out.append("")
+		out.append("window %dx%d   stretch %.3f" % [win.size.x, win.size.y, natural])
+		out.append("scale factor %.2f   effective %.3f   button %.0fpx" % [
+			win.content_scale_factor, natural * win.content_scale_factor,
+			48.0 * natural * win.content_scale_factor])
+		out.append("build %s" % BUILD_STAMP)
 
 	# ── where the campaign is ──
 	out.append("")

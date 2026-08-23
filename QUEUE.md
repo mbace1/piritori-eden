@@ -680,3 +680,37 @@ would have looted the police**. Fixed at the two places that mattered, and gated
 4. **Attacking them does not provoke.** `provoked` is a field nothing sets.
 5. **The board does not draw them.** `battle_stage_3d` maps two sides to two
    colours; a third needs its own read, and no model is cast for police.
+
+## The scale fix did not work, and the gate did not catch it
+
+Reported from a phone: buttons unchanged. They were about 15 CSS pixels, exactly
+as before.
+
+**The cause was in my test, not only my code.** The gate asserted a CONSTANT —
+`48 * UI_TARGET_SCALE >= 44` — and never the control. It could not fail, because
+the command bar never read that constant: its height comes from `MIN_TARGET`,
+which the scale never touches.
+
+**The fix is not scale at all.** The bar is now a FRACTION of the viewport, and
+`get_viewport_rect()` is already in design units, so it compensates for whatever
+the stretch is doing — correct whether or not `content_scale_factor` applies. On
+a 412px phone that is a **78 CSS px bar with a 33px icon and a 20px label**,
+against 15px before. The gate now sizes the bar against a phone-shaped viewport
+and measures the button.
+
+`content_scale_factor` is left in place but is no longer load-bearing, and
+whether it works on the web is still unproven — the debug HUD now prints window
+size, stretch, factor, effective scale, resulting button size **and a build
+stamp**, so a stale cache announces itself instead of looking like a broken fix.
+
+### The owner's target implies more than sizing
+
+The reference layout is portrait-native, not this layout enlarged:
+
+- **five commands become four** — END DAY is separate in the target
+- **language and DEV move behind a hamburger** rather than sitting in the header
+- **a stat row with icons** — people, product, pressure, cash — not a text line
+- **the title is roughly half the screen wide**
+- map pins carry an **icon and a label plate**, and there is a **legend**
+
+Only the command bar is done. The rest is a UI pass, not a constant.

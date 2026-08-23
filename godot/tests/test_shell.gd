@@ -204,6 +204,36 @@ the interface is big enough to hit")
 	check("a button clears the 44px touch guideline on a phone",
 		rendered >= GUIDELINE_PX, "%.1f px" % rendered)
 
+	# The previous version of this test stopped here, and that was the mistake:
+	# it asserted a CONSTANT and never the thing on screen. The interface shipped
+	# with 15px buttons anyway, because the command bar takes its height from
+	# MIN_TARGET and not from the scale at all.
+	#
+	# So this measures the bar the way a phone sees it. get_viewport_rect() is in
+	# design units, so a portrait phone reports a very tall viewport — and a bar
+	# sized as a FRACTION of that is correct however the stretch behaves.
+	var phone := Vector2(1280.0, 2840.0)      # 412x915 at the 0.32 stretch
+	_shell._size_commands(phone)
+	var tallest := 0.0
+	for b in _shell._commands:
+		if b != null:
+			tallest = maxf(tallest, b.custom_minimum_size.y)
+	check("on a phone the command bar is far taller than the 48 minimum",
+		tallest > BUTTON_PX * 2.0, "%.0f design units" % tallest)
+
+	# In CSS pixels, which is the number a thumb actually meets.
+	var css := tallest * (412.0 / phone.x)
+	check("which is a real touch target in CSS pixels",
+		css >= GUIDELINE_PX, "%.0f px" % css)
+
+	# And a desktop must not get a cliff across the bottom of the screen.
+	_shell._size_commands(Vector2(1280.0, 720.0))
+	var desk := 0.0
+	for b in _shell._commands:
+		if b != null:
+			desk = maxf(desk, b.custom_minimum_size.y)
+	check("and a desktop bar stays a bar", desk < 120.0, "%.0f" % desk)
+
 	# The first attempt at this landed at 0.70, which renders 34px and reads as
 	# "touch does not work". Named so a future tweak cannot quietly go back.
 	check("and the target is not the value that failed once",

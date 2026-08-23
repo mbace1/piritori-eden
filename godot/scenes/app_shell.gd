@@ -283,6 +283,40 @@ func _build() -> void:
 	_city_map.anchor_selected.connect(_on_anchor_selected)
 
 
+## THE COMMAND BAR IS A FRACTION OF THE SCREEN, not a pixel count.
+##
+## `MIN_TARGET` is 48 design units, which on a phone rendered at 0.32 is a 15px
+## button — the size that was reported as "not all touch controls work". Fixing
+## it by scaling the whole interface turned out to be fragile; this is the
+## robust version, because `get_viewport_rect()` is already in DESIGN units and
+## therefore already compensates for whatever the stretch is doing. It is correct
+## whether or not `content_scale_factor` applies.
+##
+## The fraction comes from the owner's target: a command bar occupying roughly a
+## twelfth of the screen, with an icon and a word in it rather than a word alone.
+const COMMAND_BAR_FRACTION := 0.085
+const COMMAND_ICON_FRACTION := 0.42
+const COMMAND_LABEL_FRACTION := 0.26
+
+func _size_commands(vp: Vector2) -> void:
+	# Portrait is the case that was broken. Landscape has height to spare and a
+	# bar taking a twelfth of it would be a cliff, so it keeps a modest share.
+	var share := COMMAND_BAR_FRACTION if vp.y > vp.x else COMMAND_BAR_FRACTION * 0.75
+	var h := clampf(vp.y * share, MIN_TARGET, 320.0)
+	for b in _commands:
+		if b == null:
+			continue
+		b.custom_minimum_size = Vector2(maxf(h * 1.6, 96.0), h)
+		var icon = b.get_meta("icon", null)
+		if icon != null:
+			icon.custom_minimum_size = Vector2(h * COMMAND_ICON_FRACTION,
+				h * COMMAND_ICON_FRACTION)
+		var label = b.get_meta("label", null)
+		if label != null:
+			label.add_theme_font_size_override("font_size",
+				int(maxf(h * COMMAND_LABEL_FRACTION, 13.0)))
+
+
 ## Landscape: world beside a rail. Portrait: world above a lower sheet.
 func _reflow() -> void:
 	var vp := get_viewport_rect().size
@@ -290,6 +324,7 @@ func _reflow() -> void:
 	if portrait == _is_portrait and _body != null and _body.get_child_count() > 0:
 		_apply_rail_size(vp, portrait)
 		_apply_chrome(vp)
+		_size_commands(vp)
 		return
 	_is_portrait = portrait
 
@@ -313,6 +348,7 @@ func _reflow() -> void:
 
 	_apply_rail_size(vp, portrait)
 	_apply_chrome(vp)
+	_size_commands(vp)
 
 
 func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
@@ -891,11 +927,18 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
-	row.add_child(PiritoriIcon.new(kind, accent, 22.0))
+	var icon := PiritoriIcon.new(kind, accent, 22.0)
+	row.add_child(icon)
 	var l := _make_label(text, 15, accent)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(l)
 	b.add_child(row)
+
+	# Held so _size_commands can grow them with the screen. A button whose icon
+	# and text stay small while the box gets taller is a bigger hitbox, not a
+	# bigger control.
+	b.set_meta("icon", icon)
+	b.set_meta("label", l)
 
 	b.pressed.connect(handler)
 	return b
