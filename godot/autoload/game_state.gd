@@ -258,6 +258,10 @@ var crew_aptitudes: Dictionary = {}    ## crew_id -> PackedStringArray
 func aptitudes_of(crew_id: String) -> PackedStringArray:
 	if crew_aptitudes.has(crew_id):
 		return crew_aptitudes[crew_id]
+	# Opponents and third parties carry a character_id that is not a crew id.
+	# Asking about them is normal, so it must not go through the strict lookup.
+	if not ContentRegistry.has_crew(crew_id):
+		return PackedStringArray()
 	var rec := ContentRegistry.crew_member(crew_id)
 	var role := String(rec.get("role", ""))
 	return PackedStringArray([role]) if role != "" else PackedStringArray()

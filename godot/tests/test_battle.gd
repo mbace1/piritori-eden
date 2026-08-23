@@ -50,6 +50,7 @@ func _ready() -> void:
 	_test_ground_fill()
 	_test_telegraphs()
 	_test_reading()
+	_test_mark_and_anchor()
 	_test_police()
 	_test_police_posture()
 	_test_third_side()
@@ -859,6 +860,93 @@ reading is a ladder with a floor")
 			if int(rec.target_lane) >= 0:
 				honest = false
 	check("the aim is shown exactly when it is known", honest)
+
+
+## MARK and COVER — the first two verbs to actually do something (§9.11).
+func _test_mark_and_anchor() -> void:
+	print("
+the spotter marks and the anchor shields")
+	GameState.new_campaign()
+	var f := FightManager.new()
+	f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+
+	var mine: Array = f.get_fighters(Fighter.Side.PLAYER)
+	var theirs: Array = f.get_fighters(Fighter.Side.OPPOSITION)
+	var spotter: Fighter = mine[0]
+	var target: Fighter = theirs[0]
+	var cid := spotter.character_id
+
+	# ── MARK ──
+	GameState.set_aptitudes(cid, PackedStringArray(["runner"]))
+	check("somebody who is not a spotter cannot mark",
+		not f.mark_target(spotter.fighter_id, target.fighter_id))
+
+	GameState.set_aptitudes(cid, PackedStringArray(["spotter"]))
+	check("a spotter can", f.mark_target(spotter.fighter_id, target.fighter_id))
+	check("and the mark took", f.is_marked(target.fighter_id))
+	check("a marked target is read completely",
+		int(f.read_level_of(target)) == int(FightManager.Read.AHEAD))
+	check("which means a dossier", not f.dossier_on(target).is_empty())
+
+	# Marking your own crew would read as a bug the first time it happened.
+	check("you cannot mark your own",
+		not f.mark_target(spotter.fighter_id, (mine[1] as Fighter).fighter_id))
+
+	# DURATION FOLLOWS THE SKILL.
+	check("a bare spotter's mark is brief",
+		f.mark_duration(cid) == FightManager.MARK_ROUNDS_BASE)
+	GameState.learn_skill(cid, "call-it")
+	check("call-it makes it last longer",
+		f.mark_duration(cid) > FightManager.MARK_ROUNDS_BASE)
+	# watch-the-hands is tier 3, and LEVEL comes from fights survived — not from
+	# grant_level(), which only hands out perk points. Age them into it.
+	if not GameState.roster.has(cid):
+		GameState.roster.append(cid)
+	while GameState.level_of(cid) < 3:
+		GameState.crew_fights[cid] = GameState.fights_of(cid) + 1
+	check("they are experienced enough to have learned it",
+		GameState.level_of(cid) >= 3)
+	GameState.learn_skill(cid, "watch-the-hands")
+	check("and watch-the-hands lasts the whole fight",
+		f.mark_duration(cid) == FightManager.MARK_WHOLE_FIGHT)
+
+	# A brief mark lapses.
+	GameState.set_aptitudes(cid, PackedStringArray(["spotter"]))
+	GameState.crew_skills[cid] = PackedStringArray()
+	var short_target: Fighter = theirs[1]
+	f.mark_target(spotter.fighter_id, short_target.fighter_id)
+	check("the brief mark is on", f.is_marked(short_target.fighter_id))
+	f.round_number += FightManager.MARK_ROUNDS_BASE + 1
+	check("and lapses when it should", not f.is_marked(short_target.fighter_id))
+
+	# ── COVER, in layers ──
+	var anchor_unit: Fighter = mine[1]
+	var acid := anchor_unit.character_id
+	GameState.set_aptitudes(acid, PackedStringArray(["runner"]))
+	check("somebody who is not an anchor shields nobody",
+		f.anchor_cover_cells(anchor_unit).is_empty())
+
+	GameState.set_aptitudes(acid, PackedStringArray(["anchor"]))
+	GameState.crew_skills[acid] = PackedStringArray()
+	var narrow := f.anchor_cover_cells(anchor_unit)
+	check("an anchor starts by covering one cell", narrow.size() == 1, str(narrow.size()))
+
+	GameState.crew_skills[acid] = PackedStringArray(["take-it"])
+	var wide := f.anchor_cover_cells(anchor_unit)
+	check("and upgrades to three", wide.size() == 3, str(wide.size()))
+	check("which is a layer on the same idea", wide.size() > narrow.size())
+
+	# It has to be cover the RESOLVER sees, not a second private notion of it.
+	var c: Vector2i = narrow[0]
+	var seen := f.cover_under(c.x, c.y, anchor_unit.side)
+	check("a person counts as cover to the resolver",
+		seen.get("is_cover", false))
+
+	# Hard only with the skill that says so.
+	check("and is soft until wall is learned", not seen.get("hard_block", false))
+	GameState.crew_skills[acid] = PackedStringArray(["wall"])
+	check("wall makes them hard cover",
+		f.cover_under(c.x, c.y, anchor_unit.side).get("hard_block", false))
 
 
 ## Cover has to be answerable, not just enforced.

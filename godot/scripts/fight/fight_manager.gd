@@ -727,6 +727,165 @@ func _crew_read_bonus() -> int:
 var read_penalty: int = 0
 
 
+# ── MARK (COMBAT.md §9.11: the Spotter's verb) ─────────────────────────────
+
+## Who has been marked, and until when.
+##
+## Presence already buys the crew a better read — that is what makes a Spotter
+## worth deploying. MARK is what they SPEND A TURN on, and it buys the top of the
+## ladder on one person: everything about them.
+##
+## Value is the round the mark lapses. `WHOLE_FIGHT` never lapses.
+var _marks: Dictionary = {}
+const MARK_WHOLE_FIGHT := 1 << 30
+
+## HOW LONG IT LASTS DEPENDS ON THE SKILL (owner ruling). The aptitude alone is a
+## glance; the skills are what make it stick.
+const MARK_ROUNDS_BASE := 1
+const MARK_ROUNDS_CALL_IT := 3
+
+
+func mark_duration(spotter_id: String) -> int:
+	var skills := GameState.skills_of(spotter_id)
+	if skills.has("watch-the-hands"):
+		return MARK_WHOLE_FIGHT
+	if skills.has("call-it"):
+		return MARK_ROUNDS_CALL_IT
+	return MARK_ROUNDS_BASE
+
+
+## Spend a Spotter's turn to read somebody properly.
+##
+## Refuses rather than failing quietly: only a spotter can mark, only somebody
+## who can act, and only an opponent — marking your own crew reads as a bug the
+## first time it happens.
+func mark_target(spotter_fighter_id: String, target_fighter_id: String) -> bool:
+	var spotter := get_fighter(spotter_fighter_id)
+	var target := get_fighter(target_fighter_id)
+	if spotter == null or target == null:
+		return false
+	if not spotter.is_active() or not target.is_active():
+		return false
+	if spotter.side == target.side:
+		return false
+	var cid := spotter.character_id
+	if cid == "" or not GameState.has_aptitude(cid, "spotter"):
+		return false
+
+	var span := mark_duration(cid)
+	_marks[target_fighter_id] = MARK_WHOLE_FIGHT if span == MARK_WHOLE_FIGHT \
+		else round_number + span
+	return true
+
+
+func is_marked(fighter_id: String) -> bool:
+	if not _marks.has(fighter_id):
+		return false
+	var until := int(_marks[fighter_id])
+	if until == MARK_WHOLE_FIGHT:
+		return true
+	if round_number > until:
+		_marks.erase(fighter_id)
+		return false
+	return true
+
+
+# ── a person as cover (COMBAT.md §9.11: the Anchor's verb) ─────────────────
+
+## Cover has always been something the ARENA supplies and something that happens
+## TO a unit. The Anchor's verb makes a person into it.
+##
+## It comes in layers, per owner ruling: **one cell to begin with, three when
+## upgraded**. That makes the first version about facing — you cover the person
+## directly behind you and nobody else — and the upgrade about holding a line.
+const ANCHOR_COVER_WIDE_SKILL := "take-it"
+const ANCHOR_COVER_HARD_SKILL := "wall"
+
+
+## Which cells this person is covering, if any.
+##
+## "Behind" means further from the enemy, which on this board is toward your own
+## end — so an Anchor covers the people they are standing in front of, which is
+## the only reading that makes physical sense.
+func anchor_cover_cells(f: Fighter) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	if f == null or not f.is_active():
+		return out
+	var cid := f.character_id
+	if cid == "" or not GameState.has_aptitude(cid, "anchor"):
+		return out
+
+	# Toward this side's own back rank.
+	var behind := f.slot.y + (1 if f.side == Fighter.Side.PLAYER else -1)
+	if behind < 0 or behind >= FightBoard.total_rows():
+		return out
+
+	out.append(Vector2i(f.slot.x, behind))
+	# The upgrade: a line rather than a shadow.
+	if GameState.skills_of(cid).has(ANCHOR_COVER_WIDE_SKILL):
+		for dx: int in [-1, 1]:
+			var lane: int = f.slot.x + dx
+			if lane >= 0 and lane < FightBoard.lanes:
+				out.append(Vector2i(lane, behind))
+	return out
+
+
+## Cover supplied by PEOPLE, in the same shape the arena's props use — so the
+## resolver asks one question and does not care where the answer came from.
+func anchor_cover_at(lane: int, row: int, side: int) -> Dictionary:
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.side != side:
+			continue
+		for c in anchor_cover_cells(f):
+			if c.x == lane and c.y == row:
+				var hard := GameState.skills_of(f.character_id).has(ANCHOR_COVER_HARD_SKILL)
+				return {
+					"is_cover": true,
+					"hard_block": hard,
+					"soft_block": not hard,
+					"prop_id": f.fighter_id,
+				}
+	return {}
+
+
+## Everything about somebody, once you can read them that well.
+##
+## AHEAD is not a forecast of their next move — it is knowing WHAT THEY ARE.
+## Stats, what they carry, what they can do, what they have learned. That is the
+## more useful thing and the more honest one: a predicted round would be a claim
+## the fight cannot keep, where a dossier is only ever a fact about now.
+##
+## Returns an empty dictionary below AHEAD, so a caller cannot show half of it
+## by accident.
+func dossier_on(target: Fighter) -> Dictionary:
+	if target == null or read_level_of(target) < Read.AHEAD:
+		return {}
+	var cid := target.character_id
+	var out := {
+		"name": target.display_name,
+		"condition": target.condition,
+		"condition_max": target.condition_max,
+		"guard": target.guard,
+		"nerve": target.nerve,
+		"nerve_max": target.nerve_max,
+		"tempo": target.tempo,
+		"weapons": target.weapon_ids.duplicate(),
+		"held": target.held_weapon_id,
+		"aptitudes": PackedStringArray(),
+		"skills": PackedStringArray(),
+		"perks": {},
+	}
+	# Opponents are not campaign crew, so most will have nothing on record —
+	# which is correct rather than missing. A named opponent who HAS grown shows
+	# what they have grown into.
+	if cid != "":
+		out["aptitudes"] = GameState.aptitudes_of(cid)
+		out["skills"] = GameState.skills_of(cid)
+		out["perks"] = GameState.perks_of(cid)
+	return out
+
+
 ## How well the player's side can read this opponent.
 func read_level_of(target: Fighter) -> Read:
 	if target == null:
@@ -742,6 +901,12 @@ func read_level_of(target: Fighter) -> Read:
 	# inventing a second notion of "hard to see".
 	if _cover_at(target.slot.x, target.slot.y, target.side).get("is_cover", false):
 		level -= 1
+
+	# A mark is the Spotter's turn spent, and it buys the top of the ladder on
+	# this one person — outranking cover, distance and any debuff, because it is
+	# somebody standing there watching them specifically.
+	if is_marked(target.fighter_id):
+		return Read.AHEAD
 
 	level += _crew_read_bonus()
 	# Clamped at INTENT, not at zero: cover and distance cost you PRECISION and
@@ -1527,6 +1692,13 @@ func _get_attack_targets(f: Fighter, weapon: Dictionary) -> Array:
 
 func _cover_at(lane: int, row: int, side: Fighter.Side) -> Dictionary:
 	var key := Vector3i(lane, row, int(side))
+	# A person standing in front of you is cover too (§9.11, the Anchor). Asked
+	# FIRST so a living body outranks a bin on the same cell — somebody chose to
+	# stand there.
+	var by_person := anchor_cover_at(lane, row, side)
+	if not by_person.is_empty():
+		return by_person
+
 	if _cover.has(key):
 		var prop: Dictionary = _cover[key]
 		var is_hard: bool = prop.get("cover_class", "soft") == "hard"

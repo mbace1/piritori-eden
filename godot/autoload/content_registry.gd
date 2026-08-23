@@ -139,6 +139,15 @@ func mission(id: String) -> Dictionary:
 var _generated: Dictionary = {}
 
 
+## Is this id somebody's crew record at all?
+##
+## Opponents and third parties are fighters with a `character_id` that is not a
+## crew id, so asking about them is ordinary rather than exceptional — and
+## `crew_member()` pushes an error, which turned a normal question into log spam.
+func has_crew(id: String) -> bool:
+	return _generated.has(id) or _crew.has(id)
+
+
 func crew_member(id: String) -> Dictionary:
 	if _generated.has(id):
 		return _generated[id]

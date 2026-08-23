@@ -1088,3 +1088,46 @@ Three channels move you along the ladder:
   event pushes it — the flare and `one-in-the-air` are the obvious first users.
 - **AHEAD shows a string, not a forecast.** At the top of the ladder the
   telegraph says "and the one after" without actually computing the next round.
+
+## Two verbs actually do something now
+
+**MARK** (Spotter). Presence already improved the crew's read; MARK is what they
+**spend a turn** on, and it buys the top of the ladder on one person — a full
+dossier, outranking cover, distance and any debuff, because somebody is standing
+there watching them specifically.
+
+**Duration follows the skill**, per owner ruling: a bare Spotter gets a glance,
+`call-it` makes it stick for a few rounds, `watch-the-hands` lasts the whole
+fight. Refused rather than silently ignored for a non-Spotter, an inactive unit,
+or your own crew.
+
+**COVER** (Anchor). Cover had always been something the arena supplied and
+something that happened TO a unit. It is now something a person DOES.
+
+**In layers**, per owner ruling: one cell to begin with — the person directly
+behind you, so the first version is about facing — widening to three with
+`take-it`, and turning from soft to hard with `wall`. The resolver asks one
+question and does not care whether the answer is a bin or a body; a body is asked
+FIRST, because somebody chose to stand there.
+
+**AHEAD is a dossier, not a forecast** (owner ruling). Stats, guard, nerve,
+tempo, what they carry, and — for anyone with a record — their aptitudes, skills
+and perks. That removes the problem flagged earlier: a predicted round would be a
+claim the fight cannot keep, where a dossier is only ever a fact about now.
+
+### A real bug the gate found
+
+`aptitudes_of()` fell through to `ContentRegistry.crew_member()`, which pushes an
+error for an unknown id. Opponents and third parties carry a `character_id` that
+is not a crew id, so asking about them — which the cover check now does every
+frame — spammed the log. `has_crew()` makes the question askable.
+
+### Still open
+
+- **Four verbs of twelve exist in some form.** PIN, OPEN, LINE, SHOVE and the
+  older six are still strings.
+- **Nothing in the interface offers MARK.** It is callable and gated; no button
+  spends a Spotter's turn on it.
+- **`take-it` and `wall` now do two things each** — their authored text describes
+  absorbing harm and being hard cover, and they are also the width and hardness
+  switches. That is convenient and not obviously right.
