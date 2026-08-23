@@ -605,3 +605,34 @@ certainly why earlier attempts "didn't work".
 
 So the workflow is: rig it on meshy.ai, then send the share link of the **rigged**
 result. No zip, no upload.
+
+## Police are in — and what is deliberately NOT built yet
+
+`COMBAT.md` §9.5 has three parts. One is built.
+
+**Built: heat, arrival, and the bite.** Heat rises per round, per body on the
+ground and once for a firearm; past a threshold the police arrive at an END of
+the board (§9.5.1, never the middle), and anyone of yours DOWNED when they walk
+in is **taken** — off the roster, permanently, with an `arrested:<id>` memory.
+
+Arrest is deliberately a separate ending from retirement. A veteran who got out
+is a contact the city remembers and who trains the next one (§9.8); somebody
+carried off a yard is a different fact about a different night, and every later
+system reads memories.
+
+**Not built: the posture choice** (§9.5.2). Both crews are supposed to get back
+off / help friends / engage. Today the police simply arrive and take. That is
+the half that makes it a decision rather than a timer, and it is the next piece.
+
+**Not built: hostile police** (§9.5.3). Attacking them should turn them into a
+third side that fights everyone. There is no third `Side` — the enum is PLAYER
+and OPPOSITION — so this needs a real change to targeting and turn order, not a
+flag.
+
+**The numbers are a playtest gate, not canon** (`DESIGN_LOCKS` §13): 1 per round,
+2.5 per body, 4 for a firearm, threshold 12. Chosen so a clean two-round rout
+stays quiet and a long fight with bodies does not. Never played.
+
+**Entry side is a guess.** They come in behind whichever side still has more
+people standing, on the reasoning that whoever looks like they are winning looks
+like they started it. Defensible, untested, and possibly backwards.

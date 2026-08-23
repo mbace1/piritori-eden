@@ -30,6 +30,7 @@ func _ready() -> void:
 	_test_careers()
 	_test_loot()
 	_test_fence()
+	_test_arrest()
 	_test_hiring()
 	_test_every_reference_resolves()
 
@@ -201,6 +202,53 @@ func _test_save_round_trip() -> void:
 	check("resolved encounter restored", GameState.is_resolved("enc-first-purchase"))
 	eq("schema version stored", int(expected["schema_version"]), GameState.SCHEMA_VERSION)
 	check("content package id stored", String(expected["content_package_id"]) != "")
+
+
+## Arrest (COMBAT.md §9.5.3): the police take the fallen.
+##
+## Deliberately a DIFFERENT ending from retirement. A veteran who got out is a
+## contact the city remembers and who trains the next one (§9.8); somebody
+## carried off a yard is a different fact about a different night. Every later
+## system reads memories, so collapsing the two would make them indistinguishable
+## forever.
+func _test_arrest() -> void:
+	print("
+arrest (COMBAT.md §9.5.3)")
+	GameState.new_campaign()
+	var who := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if not GameState.is_named(cid):
+			who = cid
+			break
+	if who == "":
+		check("a spendable crew member exists", false)
+		return
+	if not GameState.roster.has(who):
+		GameState.roster.append(who)
+
+	GameState.arrest(who)
+	check("they are off the roster", not GameState.roster.has(who))
+	check("and recorded as arrested", GameState.arrested_crew.has(who))
+	check("the city remembers it happened",
+		GameState.memories.has("arrested:" + who))
+
+	# The distinction that matters.
+	check("arrest is not retirement", not GameState.retired_crew.has(who))
+	check("and does not leave a retirement memory",
+		not GameState.memories.has("retired:" + who))
+
+	var before := GameState.arrested_crew.size()
+	GameState.arrest(who)
+	check("arresting twice changes nothing",
+		GameState.arrested_crew.size() == before)
+
+	# It has to survive a save, or a reloaded campaign quietly gets them back.
+	var saved := GameState.to_dict()
+	GameState.new_campaign()
+	check("a new campaign has nobody arrested", GameState.arrested_crew.is_empty())
+	check("the save reloads", GameState.from_dict(saved))
+	check("and they are still gone", GameState.arrested_crew.has(who))
 
 
 ## The fence (COMBAT.md §9.7). Loot becomes money at Piritori and nowhere else.

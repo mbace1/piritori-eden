@@ -1050,6 +1050,10 @@ func _show_battle(battle_id: String) -> void:
 		# carry their end state.
 		var summary: Dictionary = scene.fight.aftermath()
 		var spoils := _settle_loot(scene.fight, int(result))
+		# The police take the fallen BEFORE careers are aged: somebody carried
+		# off a yard does not also come out of it one fight older.
+		for id in summary.get("taken", PackedStringArray()):
+			GameState.arrest(String(id))
 		var left := GameState.age_crew(deployed)
 		_show_aftermath(summary, spoils, left))
 	_rail.visible = false
@@ -1090,6 +1094,25 @@ func _show_aftermath(summary: Dictionary, spoils: PackedStringArray,
 			continue
 		_rail_box.add_child(_make_label("   %s — %s" % [
 			r.get("name", "?"), tr(state)], 12, PiritoriPalette.TEXT_DIM))
+
+	# COMBAT.md §9.5.3. Said before the loot, because it is the more important
+	# thing that happened and burying it under a shopping list would be a lie
+	# about what the night cost.
+	var taken: PackedStringArray = summary.get("taken", PackedStringArray())
+	if bool(summary.get("police_arrived", false)):
+		_rail_box.add_child(_separator())
+		_rail_box.add_child(_make_label(tr("police.arrived"), 15, PiritoriPalette.DANGER_RED))
+		var pl := _make_label(tr("police.note"), 12, PiritoriPalette.TEXT_DIM)
+		pl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(pl)
+		for id in taken:
+			var c := ContentRegistry.crew_member(String(id))
+			_rail_box.add_child(_make_label(
+				String(c.get("name", c.get("display_name", id))),
+				15, PiritoriPalette.DANGER_RED))
+			var tl := _make_label(tr("police.taken_note"), 12, PiritoriPalette.TEXT_DIM)
+			tl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(tl)
 
 	if not spoils.is_empty():
 		_rail_box.add_child(_separator())

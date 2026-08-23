@@ -159,3 +159,6 @@ ui.fence_elsewhere,Not here. Someone at Piritori will take it off you.,Ei tääl
 ui.fence_nothing,You are carrying nothing worth selling.,Sinulla ei ole mitään myytävää.,売れる物は何も持っていない。
 ui.fence_sell,Sell the %s — €%d,Myy %s — %d €,%sを売る — €%d
 ui.fence_unbuyable,You will not be able to buy another one. Not at any price.,Toista et saa ostettua. Et millään hinnalla.,二度と買うことはできない。いくら積んでも無理だ。
+police.arrived,SOMEBODY CALLED IT IN,JOKU SOITTI POLIISIT,誰かが通報した
+police.note,"Too loud, too long. They came in behind one of you and started picking people up off the ground.","Liian äänekästä, liian pitkään. He tulivat toisen selustaan ja alkoivat kerätä väkeä maasta.",うるさすぎた、長すぎた。片方の背後から入り、倒れた者から拾い上げていった。
+police.taken_note,"Taken. Not hurt, not dead — gone, along with everything they had learned.","Vietiin. Ei loukkaantunut, ei kuollut — poissa, ja kaikki oppimansa mukana.",連れて行かれた。負傷でも死でもない。学んだ全てごと消えた。

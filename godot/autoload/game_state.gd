@@ -19,7 +19,7 @@ signal slice_completed
 signal battle_requested(battle_id: String, negotiation_open: bool)
 signal ending_resolved(ending_id: String)
 
-const SCHEMA_VERSION := 4
+const SCHEMA_VERSION := 5
 
 ## Era I interface lock (SCREEN_AND_COMBAT_BASELINE): the fixed historical rate.
 const MARKKA_PER_EURO := 5.94573
@@ -170,6 +170,7 @@ func new_campaign(with_seed: int = 0) -> void:
 
 # ── the clock ──────────────────────────────────────────────────────────────
 	generated_crew = {}
+	arrested_crew = PackedStringArray()
 	_restore_generated_crew()
 
 
@@ -694,6 +695,33 @@ func age_crew(deployed: PackedStringArray) -> PackedStringArray:
 	return left
 
 
+## Everyone the police took (COMBAT.md §9.5.3).
+##
+## Deliberately NOT the same list as `retired_crew`. A veteran who got out is a
+## contact the city remembers and who trains the next one (§9.8); somebody
+## carried off a yard is a different fact about a different night, and the memory
+## records which. Collapsing them would make the two exits read the same to every
+## later system that reads memories.
+var arrested_crew: PackedStringArray = []
+
+
+## They were downed when the police walked in, and they are gone.
+##
+## This is where a loud fight actually costs something. The career system (§7)
+## makes a crew member an investment; this is the one outcome that removes them
+## without warning and without the fights they had learned.
+func arrest(crew_id: String) -> void:
+	if arrested_crew.has(crew_id):
+		return
+	arrested_crew.append(crew_id)
+	var k := roster.find(crew_id)
+	if k >= 0:
+		roster.remove_at(k)
+	memories.append("arrested:" + crew_id)
+	state_changed.emit()
+
+
+
 ## They leave the crew and stay in the city (§7.4, decisions 7b + 7c): a name in
 ## a bar, someone who knows what you did — and someone who will start the next
 ## rookie ahead. Training is a service the CONTACT offers, so this is one
@@ -813,6 +841,7 @@ func to_dict() -> Dictionary:
 	return {
 		"schema_version": SCHEMA_VERSION,
 		"generated_crew": generated_crew,
+		"arrested_crew": arrested_crew,
 		"content_package_id": content_package_id,
 		"seed": seed_value,
 		"day": day,
@@ -893,6 +922,7 @@ func from_dict(d: Dictionary) -> bool:
 	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
+	arrested_crew = d.get("arrested_crew", PackedStringArray())
 	generated_crew = d.get("generated_crew", {})
 	_restore_generated_crew()
 	return true

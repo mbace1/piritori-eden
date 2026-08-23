@@ -49,6 +49,7 @@ func _ready() -> void:
 	_test_unit_variants()
 	_test_ground_fill()
 	_test_telegraphs()
+	_test_police()
 	_test_cover_is_visible()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
@@ -518,6 +519,52 @@ func _test_telegraphs() -> void:
 			moved = true
 			break
 	check("and the read changes as the fight does", moved)
+
+
+## Heat, and who it brings (COMBAT.md §9.5).
+##
+## The promise is that a loud fight costs something. So the checks are that heat
+## actually accumulates, that a quiet fight does NOT summon anyone, and that when
+## they do arrive the bite lands on the fallen.
+func _test_police() -> void:
+	print("
+somebody called it in")
+	var f := FightManager.new()
+	var errs: Array = f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	check("a fight opens", errs.is_empty(), str(errs))
+	check("it starts quiet", f.heat == 0.0)
+	check("and nobody is here yet", not f.police_arrived)
+
+	f.resolve_to_end()
+	check("noise accumulated", f.heat > 0.0)
+
+	# The threshold has to be reachable but not automatic, or it is either
+	# decoration or a tax on playing at all.
+	check("the threshold is above a two-round rout",
+		FightManager.HEAT_THRESHOLD > 2.0 * FightManager.HEAT_PER_ROUND)
+	check("and a body counts for more than a round",
+		FightManager.HEAT_PER_DOWNED > FightManager.HEAT_PER_ROUND)
+	check("a firearm is the loudest single thing",
+		FightManager.HEAT_FIREARM > FightManager.HEAT_PER_DOWNED)
+
+	# Whoever they take must be OURS and must be down. Taking somebody who is
+	# standing, or one of theirs, would be a different mechanic entirely.
+	var taken := f.taken_by_police()
+	if f.police_arrived:
+		var sane := true
+		for id in taken:
+			var who := f.get_fighter(String(id))
+			if who == null or not who.is_player_controlled 					or who.status != Fighter.Status.DOWNED:
+				sane = false
+		check("only our own fallen are taken", sane)
+	else:
+		check("nobody is taken when nobody came", taken.is_empty())
+
+	# They enter behind a back rank, never in the middle (§9.5.1).
+	if f.police_arrived:
+		var d := f.police_entry_depth
+		check("they came in at an end of the board",
+			d == 0 or d == FightBoard.total_rows() - 1, str(d))
 
 
 ## Cover has to be answerable, not just enforced.

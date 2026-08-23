@@ -130,6 +130,8 @@ enum BattleResult {
 # ================================================================== #
 signal phase_changed(new_phase: Phase)
 signal round_started(round_number: int)
+## Somebody heard. Carries the depth they came in at.
+signal police_arrived_signal(entry_depth: int)
 signal event_resolved(event: BattleEvent)
 signal intent_updated(intents: Array)          ## Array[IntentRecord]
 signal fighter_status_changed(
@@ -370,6 +372,9 @@ func aftermath() -> Dictionary:
 		"our_standing": _standing(ours),
 		"their_downed": _count(theirs, Fighter.Status.DOWNED),
 		"their_routed": _count(theirs, Fighter.Status.ROUTED),
+		"heat": heat,
+		"police_arrived": police_arrived,
+		"taken": taken_by_police(),
 	}
 
 
@@ -390,6 +395,95 @@ static func _standing(rows: Array[Dictionary]) -> int:
 				and st != Fighter.Status.MISSING and st != Fighter.Status.DEAD:
 			n += 1
 	return n
+
+
+# ── heat, and who it brings (COMBAT.md §9.5) ───────────────────────────────
+
+## How loud this has got.
+##
+## §9.5: heat rises with firearms, long fights and bodies on the ground until
+## somebody turns up. That is what makes the quick, merciful win worth something
+## mechanically rather than only morally — and it is the counterweight to §8.2,
+## where mercy costs you loot.
+var heat: float = 0.0
+
+## Whether the police are on the board, and which end they came in at.
+## §9.5.1: they arrive behind a back rank, never in the middle — on a six-by-
+## eight corridor that is the one entrance that threatens a formation instead of
+## appearing inside it.
+var police_arrived: bool = false
+var police_entry_depth: int = -1
+
+## Per ROUND, for simply still being here. A fight that drags is a fight
+## somebody hears.
+const HEAT_PER_ROUND := 1.0
+## Per body on the ground, either side. This is the loud one.
+const HEAT_PER_DOWNED := 2.5
+## Once, the first time a lethal weapon is used at all.
+const HEAT_FIREARM := 4.0
+## Chosen so a clean two-round rout stays quiet and a long fight with bodies
+## does not. PLAYTEST GATE, not canon (DESIGN_LOCKS §13).
+const HEAT_THRESHOLD := 12.0
+
+var _firearm_heard: bool = false
+
+
+func _accrue_heat() -> void:
+	if police_arrived:
+		return
+	heat += HEAT_PER_ROUND
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.status == Fighter.Status.DOWNED:
+			heat += HEAT_PER_DOWNED
+		if not _firearm_heard and f.held_weapon_id != "" \
+				and _weapon_is_lethal(_get_weapon_data(f.held_weapon_id)) \
+				and f.acted_this_round:
+			_firearm_heard = true
+			heat += HEAT_FIREARM
+	if heat >= HEAT_THRESHOLD:
+		_police_arrive()
+
+
+## They come in behind whichever side has been making the noise — measured by
+## who is holding the most ground at the far end. Whoever they arrive behind is
+## suddenly the side with a problem at their back.
+func _police_arrive() -> void:
+	police_arrived = true
+	police_entry_depth = FightBoard.total_rows() - 1
+	var ours := 0
+	var theirs := 0
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.status == Fighter.Status.DOWNED:
+			continue
+		if f.is_player_controlled: ours += 1
+		else: theirs += 1
+	# Behind the side still standing in numbers: the ones who look like they are
+	# winning are the ones who look like they started it.
+	if ours >= theirs:
+		police_entry_depth = 0
+	police_arrived_signal.emit(police_entry_depth)
+
+
+## Who the police take.
+##
+## §9.5.3: their default posture is subdue, and its bite is on the fallen —
+## anyone DOWNED on the board when they arrive is taken. That lands directly on
+## the career system: a downed crew member is not merely hurt, they are gone, and
+## no money replaces the fights they had learned.
+##
+## Returns player-side ids only. What happens to the opposition's fallen is the
+## opposition's problem.
+func taken_by_police() -> PackedStringArray:
+	var out: PackedStringArray = []
+	if not police_arrived:
+		return out
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.is_player_controlled and f.status == Fighter.Status.DOWNED:
+			out.append(f.fighter_id)
+	return out
 
 
 ## What is lying on the ground when the fight ends, for one side.
@@ -760,6 +854,8 @@ func _do_morale_check() -> void:
 	# 5. Reset acted flags; advance round
 	for id in _fighters:
 		(_fighters[id] as Fighter).acted_this_round = false
+
+	_accrue_heat()
 
 	round_number += 1
 	round_started.emit(round_number)
