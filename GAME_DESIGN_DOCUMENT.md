@@ -2199,3 +2199,66 @@ districts; chapter four hears about people it knows.
   or no broadcast.
 - Both classes need to be distinguishable in data, so the sourcing rule is
   enforceable rather than remembered.
+
+---
+
+## Missions are doors — owner ruling, 2026-08-23
+
+**A chapter is a chain of small missions, and each one is a choice between two.**
+Sometimes three, when the situation offers it. Hades doors: you see what is on
+offer and you pick.
+
+The **day** is not the unit of a chapter. The **door** is.
+
+### A mission has steps
+
+A mission is a short sequence, not a single button. The owner's two examples:
+
+- **Lean on a man in Karhupuisto.** Buy brass knuckles → find him → make it
+  clear he is paying.
+- **Move 100g today for a bonus.** Visit five locations → deal with whoever is
+  in the way.
+
+So a door commits you to a small chain of actions, and the two doors differ in
+what they ask of you as much as in what they pay. One wants a weapon and a
+willingness; the other wants a route and patience — which is `MAP.md` §12 doing
+work inside a mission rather than only between them.
+
+### The last missions of a chapter are setups
+
+Two to three days, and about **alliances**: building one, or breaking it. They
+carry their own choices — **back-stab the new partner, or give them a 50-50 cut**
+— and those choices are not flavour.
+
+**A good setup converts into the fight.** Better odds, more men, better
+equipment. That conversion is the spine of a chapter's ending: the days before
+the climax are how you buy your position in it, not merely how you reach it.
+
+This is the same shape as the chapter threshold and as `MAP.md` §12.5 — earn your
+way in, then spend what you earned — at a third magnification.
+
+### Most chapters end in a fight
+
+**Around 80%.** A large purchase or trade is the exception rather than the rule,
+and when a chapter does end that way it **usually demands a sacrifice of some
+kind**.
+
+**This corrects an emphasis of mine.** Chapter one was authored as a trade
+ending, with a note arguing that ending every chapter in a battle would make the
+market a supply line to the real game. The ruling is the other way round: the
+fight is the default, the trade is the exception, and what keeps the market from
+being a supply line is that the setup days feed the fight — not that the fight is
+replaced.
+
+The sacrifice requirement is already how the shipment behaves: it spends gear or
+people, because money cannot survive a chapter boundary and so cannot be a cost.
+
+### What this obliges
+
+- Missions need **two (sometimes three) offers**, generated or authored per slot,
+  and a chain of **steps** rather than a single resolution.
+- The setup missions need to write something the final fight READS: odds, extra
+  crew, equipment. That handoff is the mechanic and does not exist.
+- Alliance state needs to exist at all — partners, and whether you kept faith.
+- The ending needs both shapes, with the fight as the common one.
+
