@@ -216,7 +216,12 @@ func _build() -> void:
 	# things that are read constantly: the title and the numbers. Behind a menu
 	# they cost one control instead of four.
 	_menu_button = Button.new()
-	_menu_button.text = "☰"
+	# U+2261, not U+2630. The obvious hamburger glyph exists in neither Noto
+	# Sans JP nor Godot's built-in face, so it would have shipped as a tofu
+	# box in the header. CI caught it; the local run did not, because the
+	# runtime locale test checks a hardcoded symbol list and this character
+	# lives in a GDScript string.
+	_menu_button.text = "≡"
 	_menu_button.tooltip_text = tr("ui.menu")
 	_menu_button.focus_mode = Control.FOCUS_ALL
 	_menu_button.pressed.connect(func(): _toggle_menu())

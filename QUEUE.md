@@ -727,3 +727,23 @@ about 1280 and **the narrow path never fired on the device it was written for**.
 It now asks the window. The same mistake is the reason the earlier scale gate
 passed while the interface shipped unusable: design units and real pixels are
 different things, and reading one as the other is silent.
+
+## The hamburger shipped as a tofu box, and my local run said it was fine
+
+`☰` U+2630 exists in neither Noto Sans JP nor Godot's built-in face, so the one
+new control in the header would have been an empty rectangle. Now `≡` U+2261,
+which the source font has.
+
+**CI caught it and my local check did not**, because after rebuilding the subset
+I ran `test_locale` rather than `build-font-subset.py --check`. Those are not the
+same gate:
+
+- `build-font-subset.py --check` **scans every string in the code** and is the
+  authority. It knew.
+- `test_locale` checks the locale CSVs plus a **hardcoded list of symbols**. The
+  glyph lived in a GDScript string, so the runtime test passed by not looking.
+
+The symbol list now includes it, with a comment saying plainly that the list is
+a fast warning and not the authority. The real lesson is about the order of
+operations: **rebuilding a font and then running a different gate is not
+verification**.

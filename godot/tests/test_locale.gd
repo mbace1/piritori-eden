@@ -151,7 +151,11 @@ func _check_glyph_coverage() -> void:
 			["✓", "a seen bulletin"], ["◉", "a LOOK inspectable"],
 			["•", "an effect bullet"], ["◆", "an open site pin"],
 			["▲", "a landmark pin"], ["◇", "a teaser pin"],
-			["×", "a stat readout"], ["€", "the euro"]]:
+			["×", "a stat readout"], ["€", "the euro"],
+			# Added after U+2630 shipped past this list. It is not exhaustive and
+			# cannot be: the authority is build-font-subset.py --check, which
+			# scans every string in the code. This list is the fast warning.
+			["≡", "the settings menu"]]:
 		var cp: int = String(pair[0]).unicode_at(0)
 		check("U+%04X %s is drawable (%s)" % [cp, pair[0], pair[1]],
 			_drawable(cp, regular, bold))
