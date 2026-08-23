@@ -5,7 +5,20 @@ class_name PiritoriIcon
 ## ART_BIBLE §4.2: colour never carries a rule alone. These are the glyph half
 ## of every coloured control, so a command is identifiable without its tint.
 
-enum Kind { ROUTE, CREW, MISSION, END_DAY, CASH, STOCK, PRESSURE, PEOPLE, LOCK, SHIELD, SWAP, STRIKE }
+## The interface set, then the PLACE set.
+##
+## The second group are pictograms for map pins. They are per-SITE, not per-role
+## — which is the whole reason they can exist: twenty-five anchor roles onto
+## twelve generic icons would have been arbitrary symbolism, but a noodle bar, a
+## dock and a bar are specific things that draw themselves.
+##
+## Vectors rather than art: no credits, any pin size, and they take the tint.
+enum Kind {
+	ROUTE, CREW, MISSION, END_DAY, CASH, STOCK, PRESSURE, PEOPLE, LOCK, SHIELD,
+	SWAP, STRIKE,
+	## places
+	NOODLES, DOCKS, BAR, MARKET, YARD, CHURCH, TRANSIT, HOME,
+}
 
 var kind: Kind = Kind.ROUTE
 var tint: Color = Color.WHITE
@@ -107,3 +120,79 @@ func _draw() -> void:
 			draw_rect(Rect2(c - Vector2(s * 0.22, -s * 0.02), Vector2(s * 0.44, s * 0.30)),
 				tint, true)
 			draw_arc(c + Vector2(0, s * 0.02), s * 0.16, PI, TAU, 16, tint, w, true)
+		# ── places ──────────────────────────────────────────────────────────
+		Kind.NOODLES:
+			# a bowl with steam: Toko's, and any food front
+			draw_arc(c + Vector2(0, -s * 0.02), s * 0.30, 0, PI, 24, tint, w, true)
+			draw_line(c + Vector2(-s * 0.30, -s * 0.02), c + Vector2(s * 0.30, -s * 0.02),
+				tint, w, true)
+			for dx: float in [-s * 0.12, 0.0, s * 0.12]:
+				draw_line(c + Vector2(dx, -s * 0.16), c + Vector2(dx, -s * 0.34),
+					tint, w * 0.7, true)
+		Kind.DOCKS:
+			# stacked crates above a quay line
+			draw_rect(Rect2(c + Vector2(-s * 0.30, -s * 0.04), Vector2(s * 0.26, s * 0.26)),
+				tint, false, w)
+			draw_rect(Rect2(c + Vector2(0.0, -s * 0.04), Vector2(s * 0.26, s * 0.26)),
+				tint, false, w)
+			draw_rect(Rect2(c + Vector2(-s * 0.16, -s * 0.30), Vector2(s * 0.26, s * 0.26)),
+				tint, false, w)
+			draw_line(c + Vector2(-s * 0.36, s * 0.28), c + Vector2(s * 0.36, s * 0.28),
+				tint, w, true)
+		Kind.BAR:
+			# a glass: the McCormick places, and where a retiree is found (§9.8)
+			draw_line(c + Vector2(-s * 0.24, -s * 0.28), c + Vector2(s * 0.24, -s * 0.28),
+				tint, w, true)
+			draw_line(c + Vector2(-s * 0.24, -s * 0.28), c + Vector2(0, s * 0.10), tint, w, true)
+			draw_line(c + Vector2(s * 0.24, -s * 0.28), c + Vector2(0, s * 0.10), tint, w, true)
+			draw_line(c + Vector2(0, s * 0.10), c + Vector2(0, s * 0.28), tint, w, true)
+			draw_line(c + Vector2(-s * 0.16, s * 0.30), c + Vector2(s * 0.16, s * 0.30),
+				tint, w, true)
+		Kind.MARKET:
+			# an awning over a counter
+			for k: int in range(4):
+				var x0: float = -s * 0.32 + k * s * 0.16
+				draw_arc(c + Vector2(x0 + s * 0.08, -s * 0.10), s * 0.08, PI, TAU, 10,
+					tint, w, true)
+			draw_line(c + Vector2(-s * 0.34, -s * 0.10), c + Vector2(s * 0.34, -s * 0.10),
+				tint, w, true)
+			draw_line(c + Vector2(-s * 0.26, -s * 0.10), c + Vector2(-s * 0.26, s * 0.30),
+				tint, w, true)
+			draw_line(c + Vector2(s * 0.26, -s * 0.10), c + Vector2(s * 0.26, s * 0.30),
+				tint, w, true)
+		Kind.YARD:
+			# a courtyard, open at one side — where fights happen
+			draw_line(c + Vector2(-s * 0.30, -s * 0.28), c + Vector2(s * 0.30, -s * 0.28),
+				tint, w, true)
+			draw_line(c + Vector2(-s * 0.30, -s * 0.28), c + Vector2(-s * 0.30, s * 0.28),
+				tint, w, true)
+			draw_line(c + Vector2(s * 0.30, -s * 0.28), c + Vector2(s * 0.30, s * 0.28),
+				tint, w, true)
+			draw_line(c + Vector2(-s * 0.30, s * 0.28), c + Vector2(-s * 0.06, s * 0.28),
+				tint, w, true)
+			draw_line(c + Vector2(s * 0.30, s * 0.28), c + Vector2(s * 0.06, s * 0.28),
+				tint, w, true)
+		Kind.CHURCH:
+			# Kallion kirkko: the orientation landmark
+			draw_line(c + Vector2(0, -s * 0.34), c + Vector2(0, s * 0.30), tint, w, true)
+			draw_line(c + Vector2(-s * 0.12, -s * 0.20), c + Vector2(s * 0.12, -s * 0.20),
+				tint, w, true)
+			draw_line(c + Vector2(-s * 0.24, s * 0.30), c + Vector2(0, s * 0.02), tint, w, true)
+			draw_line(c + Vector2(s * 0.24, s * 0.30), c + Vector2(0, s * 0.02), tint, w, true)
+		Kind.TRANSIT:
+			# a tram: the public way, and the slow safe route (MAP.md §12)
+			draw_rect(Rect2(c + Vector2(-s * 0.24, -s * 0.30), Vector2(s * 0.48, s * 0.46)),
+				tint, false, w)
+			draw_line(c + Vector2(-s * 0.24, -s * 0.06), c + Vector2(s * 0.24, -s * 0.06),
+				tint, w * 0.7, true)
+			draw_circle(c + Vector2(-s * 0.13, s * 0.24), s * 0.06, tint)
+			draw_circle(c + Vector2(s * 0.13, s * 0.24), s * 0.06, tint)
+			draw_line(c + Vector2(0, -s * 0.30), c + Vector2(0, -s * 0.40), tint, w * 0.7, true)
+		Kind.HOME:
+			# a door under a roof: Torkkelinmäki, and anywhere somebody lives
+			draw_line(c + Vector2(-s * 0.32, -s * 0.02), c + Vector2(0, -s * 0.32), tint, w, true)
+			draw_line(c + Vector2(s * 0.32, -s * 0.02), c + Vector2(0, -s * 0.32), tint, w, true)
+			draw_rect(Rect2(c + Vector2(-s * 0.22, -s * 0.02), Vector2(s * 0.44, s * 0.32)),
+				tint, false, w)
+			draw_line(c + Vector2(s * 0.06, s * 0.14), c + Vector2(s * 0.12, s * 0.14),
+				tint, w * 0.8, true)
