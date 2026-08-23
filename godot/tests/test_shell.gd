@@ -49,6 +49,7 @@ func _ready() -> void:
 	_test_debug_entry_parsing()
 	_test_every_outcome_has_words()
 	_test_interface_is_thumb_sized()
+	await _test_settings_menu()
 	_test_speaking_character()
 	_test_location_speaker()
 	await _test_debug_hud()
@@ -342,6 +343,44 @@ the person you came to see")
 	check("and most do not, which is correct for now",
 		with_speaker < total, "%d of %d" % [with_speaker, total])
 	p.free()
+
+
+## Language and DEV moved behind a hamburger, so they must still be REACHABLE.
+##
+## Pressed rather than inspected. A hidden Button still answers `pressed` in a
+## test, so checking the model would pass while a player could not get to it —
+## which is exactly the failure this whole session has been finding.
+func _test_settings_menu() -> void:
+	print("
+settings live behind the menu")
+	var langs = _shell._langs
+	var menu = _shell._menu_button
+	check("there is a menu control", menu != null)
+	check("and it is a real touch target",
+		menu != null and menu.custom_minimum_size.y >= _shell.MIN_TARGET,
+		"%.0f" % (menu.custom_minimum_size.y if menu != null else 0.0))
+
+	check("the header does not start cluttered with settings",
+		langs != null and not langs.visible)
+
+	menu.emit_signal("pressed")
+	await get_tree().process_frame
+	check("pressing it reveals them", langs.visible)
+
+	# Every language has to be there, or one becomes unreachable on a phone.
+	var codes: Array = []
+	for c in langs.get_children():
+		if c is Button and String(c.text) != "DEV":
+			codes.append(String(c.text).to_lower())
+	var all_there := true
+	for lang in Loc.SUPPORTED:
+		if not codes.has(String(lang).to_lower()):
+			all_there = false
+	check("with every language on it", all_there, str(codes))
+
+	menu.emit_signal("pressed")
+	await get_tree().process_frame
+	check("and pressing again puts them away", not langs.visible)
 
 
 func _all_nodes(root: Node, out: Array = []) -> Array:

@@ -707,10 +707,23 @@ stamp**, so a stale cache announces itself instead of looking like a broken fix.
 
 The reference layout is portrait-native, not this layout enlarged:
 
-- **five commands become four** — END DAY is separate in the target
-- **language and DEV move behind a hamburger** rather than sitting in the header
-- **a stat row with icons** — people, product, pressure, cash — not a text line
-- **the title is roughly half the screen wide**
-- map pins carry an **icon and a label plate**, and there is a **legend**
+- ~~language and DEV move behind a hamburger~~ **done** — one control instead of
+  four, and a gate presses it rather than inspecting it
+- ~~a stat row with icons~~ **done** — sized from the screen, 17px icons on a
+  phone against about 5 before
+- ~~the title is roughly half the screen wide~~ **done** — 27 CSS px against
+  about 9
+- **five commands become four** — END DAY is separate in the target. Not done:
+  it changes where ending a day lives, which is a design question rather than
+  layout.
+- map pins carry an **icon and a label plate**, and there is a **legend**. Not
+  done, and the largest remaining piece — `city_map.gd` draws its own pins.
 
-Only the command bar is done. The rest is a UI pass, not a constant.
+### A latent bug found while doing it
+
+`_apply_chrome` decided "narrow" from `vp.x < 620`, but `vp` is in DESIGN units
+and the stretch keeps the base width as a floor — so on a phone `vp.x` stays
+about 1280 and **the narrow path never fired on the device it was written for**.
+It now asks the window. The same mistake is the reason the earlier scale gate
+passed while the interface shipped unusable: design units and real pixels are
+different things, and reading one as the other is silent.

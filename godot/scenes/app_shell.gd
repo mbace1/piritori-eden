@@ -21,6 +21,8 @@ var _status: PanelContainer
 var _status_line2: Label
 var _stats: HBoxContainer
 var _head_row: HBoxContainer
+var _title: Label
+var _menu_button: Button
 var _head_row2: HBoxContainer
 var _command_bar: PanelContainer
 var _commands: Array[Button] = []
@@ -191,9 +193,9 @@ func _build() -> void:
 
 	var titles := VBoxContainer.new()
 	titles.add_theme_constant_override("separation", 0)
-	var title := _make_label("PIRITORI → EDEN", 27, MapStyle.TITLE_TEXT)
-	title.add_theme_constant_override("outline_size", 0)
-	titles.add_child(title)
+	_title = _make_label("PIRITORI → EDEN", 27, MapStyle.TITLE_TEXT)
+	_title.add_theme_constant_override("outline_size", 0)
+	titles.add_child(_title)
 	_status_line2 = _make_label("", 12, MapStyle.SUB_TEXT)
 	titles.add_child(_status_line2)
 	_head_row.add_child(titles)
@@ -207,9 +209,25 @@ func _build() -> void:
 	_stats.alignment = BoxContainer.ALIGNMENT_END
 	_head_row.add_child(_stats)
 
+	# THE HAMBURGER (owner's reference layout).
+	#
+	# Language and DEV were four permanent buttons in the header of a phone. They
+	# are settings, consulted rarely, and they were taking width from the two
+	# things that are read constantly: the title and the numbers. Behind a menu
+	# they cost one control instead of four.
+	_menu_button = Button.new()
+	_menu_button.text = "☰"
+	_menu_button.tooltip_text = tr("ui.menu")
+	_menu_button.focus_mode = Control.FOCUS_ALL
+	_menu_button.pressed.connect(func(): _toggle_menu())
+	_head_row.add_child(_menu_button)
+
 	_langs = HBoxContainer.new()
-	_langs.add_theme_constant_override("separation", 4)
-	_head_row.add_child(_langs)
+	_langs.add_theme_constant_override("separation", 6)
+	_langs.alignment = BoxContainer.ALIGNMENT_END
+	# Starts closed. The header is for what the player is looking at.
+	_langs.visible = false
+	_head_row2.add_child(_langs)
 	_rebuild_language_buttons()
 
 	_status.add_child(head)
@@ -298,6 +316,46 @@ const COMMAND_BAR_FRACTION := 0.085
 const COMMAND_ICON_FRACTION := 0.42
 const COMMAND_LABEL_FRACTION := 0.26
 
+## The header grows too, for the same reason and by the same means.
+##
+## The owner's reference has the title taking roughly half the width of a phone
+## screen. A fixed 27px in a 1280-unit design space is about 9 CSS pixels there,
+## which is why it read as a caption rather than a masthead.
+const TITLE_FRACTION := 0.030
+const STAT_ICON_FRACTION := 0.019
+const STAT_TEXT_FRACTION := 0.018
+const SUBTITLE_FRACTION := 0.014
+
+func _toggle_menu() -> void:
+	if _langs == null:
+		return
+	_langs.visible = not _langs.visible
+	if _head_row2 != null and _langs.visible:
+		_head_row2.visible = true
+	elif _head_row2 != null:
+		# Only hide the row if the stats are not living there too, which they do
+		# on a genuinely narrow screen.
+		_head_row2.visible = _stats != null and _stats.get_parent() == _head_row2
+
+
+func _size_header(vp: Vector2) -> void:
+	if _title == null:
+		return
+	var portrait := vp.y > vp.x
+	# Portrait has height to spend and little width; landscape is the reverse,
+	# so each takes its cue from the axis it actually has.
+	var basis := vp.y if portrait else vp.x
+	_title.add_theme_font_size_override("font_size",
+		int(clampf(basis * TITLE_FRACTION, 22.0, 96.0)))
+	if _status_line2 != null:
+		_status_line2.add_theme_font_size_override("font_size",
+			int(clampf(basis * SUBTITLE_FRACTION, 12.0, 44.0)))
+	if _menu_button != null:
+		var m := clampf(basis * 0.026, MIN_TARGET, 110.0)
+		_menu_button.custom_minimum_size = Vector2(m, m)
+		_menu_button.add_theme_font_size_override("font_size", int(m * 0.52))
+
+
 func _size_commands(vp: Vector2) -> void:
 	# Portrait is the case that was broken. Landscape has height to spare and a
 	# bar taking a twelfth of it would be a cliff, so it keeps a modest share.
@@ -325,6 +383,7 @@ func _reflow() -> void:
 		_apply_rail_size(vp, portrait)
 		_apply_chrome(vp)
 		_size_commands(vp)
+		_size_header(vp)
 		return
 	_is_portrait = portrait
 
@@ -349,6 +408,7 @@ func _reflow() -> void:
 	_apply_rail_size(vp, portrait)
 	_apply_chrome(vp)
 	_size_commands(vp)
+	_size_header(vp)
 
 
 func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
@@ -368,21 +428,31 @@ func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
 func _apply_chrome(vp: Vector2) -> void:
 	if _stats == null or _head_row2 == null:
 		return
-	var narrow := vp.x < 620.0
+	# `vp` is in DESIGN units, and the stretch keeps the base width as a floor —
+	# so on a phone vp.x stays about 1280 and this test never fired on the device
+	# it was written for. The real question is how wide the screen IS, which is
+	# the window, not the viewport.
+	var win := get_window()
+	var real_w := float(win.size.x) if win != null else vp.x
+	var narrow := real_w < 620.0
 
 	var want: Node = _head_row2 if narrow else _head_row
 	if _stats.get_parent() != want:
 		_stats.get_parent().remove_child(_stats)
 		want.add_child(_stats)
-	_head_row2.visible = narrow
+	# ...or when the menu is open, which is the other thing that lives there.
+	_head_row2.visible = narrow or (_langs != null and _langs.visible)
 	_stats.alignment = BoxContainer.ALIGNMENT_BEGIN if narrow else BoxContainer.ALIGNMENT_END
 
+	# Labels stay. The owner's reference layout puts an icon AND a word on every
+	# command, and dropping the word was a compromise made when the buttons were
+	# too small to hold both — which is the thing that has now been fixed.
+	# Width is left to _size_commands, which owns the whole bar.
 	for b in _commands:
-		b.custom_minimum_size.x = 56.0 if narrow else 96.0
 		for row in b.get_children():
 			for child in row.get_children():
 				if child is Label:
-					child.visible = not narrow
+					child.visible = true
 	_refresh_status()
 
 
@@ -501,11 +571,22 @@ func _thousands(n: int) -> String:
 	return ("-" if n < 0 else "") + out
 
 
+## A stat chip: one icon, one number, and the icon means one thing only.
+##
+## Sized from the screen like everything else in the chrome. At a fixed 17px
+## icon and 16px text these were about 5 CSS pixels on a phone — present, and
+## unreadable, which is worse than absent because it occupies the space where a
+## readable version would go.
 func _add_stat(kind: int, col: Color, text: String) -> void:
+	var vp := get_viewport_rect().size
+	var basis: float = vp.y if vp.y > vp.x else vp.x
+	var icon_px := clampf(basis * STAT_ICON_FRACTION, 17.0, 64.0)
+	var text_px := int(clampf(basis * STAT_TEXT_FRACTION, 16.0, 60.0))
+
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	row.add_child(PiritoriIcon.new(kind, col, 17.0))
-	var l := _make_label(text, 16, MapStyle.TITLE_TEXT)
+	row.add_theme_constant_override("separation", int(maxf(icon_px * 0.35, 6.0)))
+	row.add_child(PiritoriIcon.new(kind, col, icon_px))
+	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT)
 	row.add_child(l)
 	_stats.add_child(row)
 
