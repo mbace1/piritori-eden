@@ -912,6 +912,8 @@ func _build_telegraphs() -> void:
 ## One line: what they will do, and where. Lane is 1-based for the player, who
 ## is not counting from zero.
 func _telegraph_line(rec) -> String:
+	# The verb is ALWAYS shown. Cover and distance take away precision, never the
+	# warning — see FightManager.Read.
 	var verb := tr(_intent_verb(int(rec.likely_type)))
 	if int(rec.likely_type) != FightManager.Command.Type.ATTACK:
 		return verb
@@ -920,7 +922,11 @@ func _telegraph_line(rec) -> String:
 	# lane -1 would be a lie dressed as data.
 	if int(rec.target_lane) < 0:
 		return "%s · %s" % [verb, tr("battle.aim_unknown")]
-	return "%s · %s" % [verb, tr("battle.aim_lane") % (int(rec.target_lane) + 1)]
+	var line := "%s · %s" % [verb, tr("battle.aim_lane") % (int(rec.target_lane) + 1)]
+	# The top of the ladder: you are reading them a round ahead.
+	if int(rec.read_level) >= FightManager.Read.AHEAD:
+		line += " · " + tr("battle.read_ahead")
+	return line
 
 
 func _intent_verb(t: int) -> String:

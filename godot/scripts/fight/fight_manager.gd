@@ -90,6 +90,8 @@ class IntentRecord:
 	var likely_type: Command.Type = Command.Type.ATTACK
 	var target_lane: int       = -1   ## -1 = unknown (intel too low)
 	var risk_band: String      = "medium"  ## "low" | "medium" | "high" | "lethal"
+	## How much of this the crew can actually see. See FightManager.Read.
+	var read_level: int        = 2
 	var lethal_exposure: bool  = false
 
 	func to_dict() -> Dictionary:
@@ -289,7 +291,12 @@ func _do_intent_phase() -> void:
 		# Preview=true: deterministic, no RNG used for the intent reveal
 		var cmd: Command = _ai_select_command(f, true)
 		intent.likely_type = cmd.type if cmd != null else Command.Type.ATTACK
-		intent.target_lane = _ai_preferred_target_lane(f)
+		# The aim is only known if the crew can read that far. This is the line
+		# that finally produces the -1 the telegraph has always claimed to
+		# handle.
+		var read := read_level_of(f)
+		intent.read_level = int(read)
+		intent.target_lane = _ai_preferred_target_lane(f) if read >= Read.AIM else -1
 		intent.risk_band   = _weapon_risk_band(_get_weapon_data(f.held_weapon_id))
 		intent.lethal_exposure = _weapon_is_lethal(_get_weapon_data(f.held_weapon_id))
 		_opposition_intents.append(intent)
@@ -647,6 +654,99 @@ func saved_from_police() -> PackedStringArray:
 ## Still waiting on an answer.
 func police_awaiting_posture() -> bool:
 	return police_arrived and not _police_resolved
+
+
+# ── how much you can read (COMBAT.md §9.11) ────────────────────────────────
+
+## What you know about somebody, in stages.
+##
+## The telegraph already had `target_lane = -1` meaning "intel too low", a
+## translated string saying "aim unclear", and NOTHING that ever produced either:
+## `_ai_preferred_target_lane` always returned a real lane. So the fog the design
+## wanted was written, translated, and unreachable.
+##
+## Owner ruling: stages rather than a switch. Start in the middle and let buffs
+## add or take away.
+## THE FLOOR IS NEVER NOTHING.
+##
+## Into the Breach telegraphs everything, always; Mewgenics always shows intent.
+## A fight that sometimes tells you nothing is not readable-with-uncertainty, it
+## is a fight you cannot plan in — and the whole promise of the telegraph is that
+## committing is a decision rather than a guess.
+##
+## So what varies is PRECISION, not whether you are told. You always see that
+## somebody is about to act and roughly what they mean to do.
+enum Read {
+	INTENT,    ## what they mean to do — always known
+	AIM,       ## and where
+	AHEAD,     ## and what comes after that
+}
+
+## The middle. Everything else is a modifier on this.
+const READ_BASE := Read.AIM
+
+## Reading somebody far down the board is harder, and so is reading somebody
+## behind something. Both are facts the board already knows.
+const READ_FAR_DEPTH := 4
+
+
+## The best reader you have, which is what makes a Spotter worth deploying
+## rather than worth spending a turn on. Presence pays; §9.11's MARK will pay
+## more on top.
+##
+## Wits is the perk that carries it (§9.11), read off the crew record so a
+## veteran genuinely sees more than a rookie.
+func _crew_read_bonus() -> int:
+	var best := 0
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if not f.is_player_controlled or not f.is_active():
+			continue
+		var cid := f.character_id
+		if cid == "":
+			continue
+		var bonus := GameState.perk_value(cid, "wits") / 2
+		# An aptitude that exists to look at people is worth a step by itself.
+		if GameState.has_aptitude(cid, "spotter") or GameState.has_aptitude(cid, "watcher"):
+			bonus += 1
+		# A DEBUFF CAN TAKE THE READER AWAY. Somebody who is rattled is not
+		# watching anybody's hands, so the crew loses what that person was
+		# contributing rather than only what they were doing.
+		if f.status == Fighter.Status.SHAKEN:
+			bonus -= 1
+		best = maxi(best, bonus)
+	return maxi(best, 0) - read_penalty
+
+
+## Pushed up by anything that blinds the crew — smoke, a flare, a spotter taken
+## out, a skill spent against you. Buffs raise comprehension by the route above;
+## this is the channel that lowers it.
+##
+## It can drive the read down to the floor and no further: §9.11's promise is
+## that precision varies and the WARNING does not.
+var read_penalty: int = 0
+
+
+## How well the player's side can read this opponent.
+func read_level_of(target: Fighter) -> Read:
+	if target == null:
+		return Read.INTENT
+	var level := int(READ_BASE)
+
+	# Distance down the board. The far rank of a six-by-eight corridor is a long
+	# way to read a pair of hands.
+	if absi(target.slot.y - FightBoard.depth_of(0, true)) >= READ_FAR_DEPTH:
+		level -= 1
+
+	# Behind something. Reuses the cover the arena already supplies rather than
+	# inventing a second notion of "hard to see".
+	if _cover_at(target.slot.x, target.slot.y, target.side).get("is_cover", false):
+		level -= 1
+
+	level += _crew_read_bonus()
+	# Clamped at INTENT, not at zero: cover and distance cost you PRECISION and
+	# can never cost you the warning.
+	return clampi(level, int(Read.INTENT), int(Read.AHEAD)) as Read
 
 
 ## What is lying on the ground when the fight ends, for one side.

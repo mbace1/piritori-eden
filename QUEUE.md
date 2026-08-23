@@ -1053,3 +1053,38 @@ A few that reach further than expected, on purpose:
 - **Tiers are unbalanced by inspection, not by play.** Tier 3 skills are the
   showy ones and nobody has checked that a level-3 crew member is not simply
   better than two level-1s.
+
+## Reading is a ladder that starts in the middle
+
+`FightManager.Read` — INTENT, AIM, AHEAD. Base is **AIM**, the middle, and
+everything else moves you along it.
+
+**The floor is a promise.** Into the Breach telegraphs everything and Mewgenics
+always shows intent, so what varies here is **precision, never whether you are
+told**. Cover and distance cost you the lane; they can never cost you the
+warning. A gate asserts that under a debuff of 99.
+
+**A finding that made this necessary.** `_ai_preferred_target_lane` always
+returned a real lane, so `target_lane = -1`, its comment, and the translated
+string "aim unclear" were **written, translated and unreachable**. The fog the
+design asked for had never existed.
+
+Three channels move you along the ladder:
+
+- **Down, by the board** — distance from your own front, and standing behind
+  something the yard supplied. Both reuse facts the fight already knows.
+- **Up, by the crew** — Wits, and holding `spotter` or `watcher`. The best reader
+  you have sets it, which is what makes a Spotter worth **deploying** rather than
+  worth spending a turn on.
+- **Down, by debuff** — `read_penalty`, plus a SHAKEN reader contributing less.
+  A debuff can take the reader away rather than only the sense.
+
+### Still open
+
+- **MARK itself is not built.** Presence pays; spending a turn to mark one target
+  for an exact read does not exist yet. That was the plan: presence gives the
+  partial read, the action gives the precise one.
+- **Nothing sets `read_penalty`.** The channel exists and no skill, weapon or
+  event pushes it — the flare and `one-in-the-air` are the obvious first users.
+- **AHEAD shows a string, not a forecast.** At the top of the ladder the
+  telegraph says "and the one after" without actually computing the next round.

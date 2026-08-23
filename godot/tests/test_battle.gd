@@ -49,6 +49,7 @@ func _ready() -> void:
 	_test_unit_variants()
 	_test_ground_fill()
 	_test_telegraphs()
+	_test_reading()
 	_test_police()
 	_test_police_posture()
 	_test_third_side()
@@ -777,6 +778,87 @@ police arrive in numbers")
 	var a := f.aftermath()
 	check("they are not counted as opposition",
 		(a["theirs"] as Array).size() + (a["ours"] as Array).size() < 3 + 3 + police.size())
+
+
+## Reading is a ladder, and its floor is a promise (COMBAT.md §9.11).
+##
+## Into the Breach telegraphs everything and Mewgenics always shows intent. What
+## varies here is PRECISION, never whether you are told — a fight that sometimes
+## tells you nothing is not readable-with-uncertainty, it is one you cannot plan
+## in.
+##
+## This also finally produces the -1 the telegraph has always claimed to handle:
+## before today `_ai_preferred_target_lane` returned a real lane every time, so
+## "aim unclear" was written, translated and unreachable.
+func _test_reading() -> void:
+	print("
+reading is a ladder with a floor")
+	var f := FightManager.new()
+	var errs: Array = f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	check("a fight opens", errs.is_empty(), str(errs))
+
+	# THE PROMISE. Nothing on the board may ever fall below INTENT.
+	var floor_held := true
+	for o in f.get_fighters(Fighter.Side.OPPOSITION):
+		if int(f.read_level_of(o)) < int(FightManager.Read.INTENT):
+			floor_held = false
+	check("the warning is never taken away", floor_held)
+
+	# And the ceiling is real, so the ladder has somewhere to climb.
+	check("there is room above the middle",
+		int(FightManager.Read.AHEAD) > int(FightManager.READ_BASE))
+
+	# Cover costs precision. Same board, same person, one of them behind
+	# something the yard supplied.
+	var target: Fighter = f.get_fighters(Fighter.Side.OPPOSITION)[0]
+	var open_ground := Vector2i(target.slot.x, target.slot.y)
+	var covered := Vector2i(-1, -1)
+	for p in f.cover_props():
+		if int(p["side"]) == target.side:
+			covered = Vector2i(int(p["lane"]), int(p["row"]))
+	if covered.x >= 0:
+		target.slot = open_ground
+		var clear_read := int(f.read_level_of(target))
+		target.slot = covered
+		var hidden_read := int(f.read_level_of(target))
+		check("standing behind something costs precision",
+			hidden_read <= clear_read, "%d -> %d" % [clear_read, hidden_read])
+		check("but never the warning itself",
+			hidden_read >= int(FightManager.Read.INTENT))
+
+	# BUFFS UP, DEBUFFS DOWN, and the floor holds under both.
+	var subject: Fighter = f.get_fighters(Fighter.Side.OPPOSITION)[0]
+	var middle := int(f.read_level_of(subject))
+	check("the middle is where it starts",
+		middle == int(FightManager.READ_BASE)
+			or middle == int(FightManager.READ_BASE) - 1, str(middle))
+
+	f.read_penalty = 99
+	var blinded := int(f.read_level_of(subject))
+	check("a debuff takes precision away", blinded < middle or middle == int(FightManager.Read.INTENT))
+	check("and cannot take the warning",
+		blinded >= int(FightManager.Read.INTENT), str(blinded))
+	f.read_penalty = 0
+
+	# A rattled reader stops reading — the debuff can arrive by taking the
+	# PERSON rather than the sense.
+	var reader: Fighter = f.get_fighters(Fighter.Side.PLAYER)[0]
+	var steady := int(f.read_level_of(subject))
+	reader.status = Fighter.Status.SHAKEN
+	check("a shaken crew reads no better than a steady one",
+		int(f.read_level_of(subject)) <= steady)
+	reader.status = Fighter.Status.AVAILABLE
+
+	# The intent phase must honour it: no aim below AIM, an aim at or above.
+	var honest := true
+	for rec in f.get_opposition_intents():
+		if int(rec.read_level) >= int(FightManager.Read.AIM):
+			if int(rec.target_lane) < 0:
+				honest = false
+		else:
+			if int(rec.target_lane) >= 0:
+				honest = false
+	check("the aim is shown exactly when it is known", honest)
 
 
 ## Cover has to be answerable, not just enforced.
