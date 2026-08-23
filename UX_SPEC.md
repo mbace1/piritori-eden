@@ -902,3 +902,52 @@ Additional release gates:
 The UX milestone is complete when the five modes and core journeys can be
 tested with structural placeholders. Visual polish cannot compensate for a
 missing transition, inaccessible action or hidden cost.
+
+---
+
+## 18. The speaking character — owner ruling, 2026-08-22
+
+**One component, three framings.** A 3D character, in a place, animated, saying
+something to the player.
+
+`scenes/presenter_3d.gd` already does this for Arvo and should be generalised
+rather than copied. It is the prototype for all of it.
+
+### The three uses
+
+| Where | Framing | Who |
+|---|---|---|
+| **News** | full screen, the television owns the window | Arvo |
+| **A map location** | the place, seen | Toko in the noodle bar |
+| **Entering a battle** | a small inset over the board | the opposing shot-caller |
+
+Talking to Toko should **show Toko, in the noodle bar, animated**, rather than
+printing his lines over a map. Entering a fight should put the enemy's shot-caller
+in a corner **yelling at you** — which is also how §9.9 of `COMBAT.md` makes the
+opposing shot-caller a presence rather than an invisible stat.
+
+### The news is the showcase, and that is deliberate
+
+The daily broadcast is where this gets built and judged, because it is the
+largest framing and the most forgiving: one character, one camera, no board
+underneath. **What is learned there defines how narrative animation works at map
+locations**, so the news is not a side feature — it is the prototype the rest
+inherits.
+
+### What this obliges
+
+- `presenter_3d` needs to take **who**, not assume Arvo.
+- Characters that speak need **speaking animations**, distinct from the four
+  fight clips. Nothing in `cast3d/clips/` covers talking, and the eight clips
+  that shipped with the street bodies are walk, run, block and a bicep curl.
+- A framing needs to be a parameter: full screen, location, inset.
+- Non-crew characters — Toko, Arvo, faction shot-callers — need models. Only Arvo
+  has one.
+
+### Why this ordering is right
+
+The board already renders characters, so the engine work is small. The gap is
+**content**: models for people who are not fighters, and animations for a thing
+other than fighting. Building the frame first and discovering there is nobody to
+put in it would be the wrong way round, which is why the news — where the one
+existing model lives — is the place to start.

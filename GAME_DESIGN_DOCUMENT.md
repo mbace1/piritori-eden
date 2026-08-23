@@ -2157,3 +2157,45 @@ above and neither blocks the schema.
 - Content needs to declare a chapter, its goal options, and its clear condition.
 - Save data needs a persistent layer distinct from the per-run layer, which is
   schema work and should not be improvised.
+
+---
+
+## The news is daily, and mostly about you — owner ruling, 2026-08-22
+
+### Two classes of bulletin
+
+**In-world bulletins are openly fictional.** A bust in Sörnäinen, a shipment
+landing, a factory closing. These are fiction about a fictional city and never
+claim to be documented, so they need no real-world sourcing. Forcing them through
+a schema built for verifiable history was a category error.
+
+**Documented bulletins keep the existing standard**, with `documented`,
+`inference`, `fiction` and real source URLs — for the markka conversion sort of
+item, where the real world genuinely matters. Real facts are also **thrown in to
+spice up** in-world broadcasts, so the two classes mix inside one bulletin rather
+than living on separate screens.
+
+### It runs every day
+
+There is a broadcast **every day**, and it covers **yesterday** — if yesterday had
+anything worth covering.
+
+That is a bigger change than it sounds. The news stops being a set of authored
+set-pieces and becomes **assembled from the run**: a loud fight, a police
+arrival, a market crash, somebody retiring, a body on the ground. The player's own
+week is reported back to them, which is what "authoritative public clock" in
+`NARRATIVE.md` has to mean if it means anything.
+
+It also gives the harm curve its delivery mechanism. Chapter one hears about
+districts; chapter four hears about people it knows.
+
+### What this obliges
+
+- Bulletins must be **composable from events**, not only authored whole. A
+  template plus what happened, rather than a hand-written page per day.
+- The run needs an **event log worth reporting** — what the news would consider
+  newsworthy is a filter over things the game already records.
+- A day with nothing notable needs a graceful answer: filler, a documented item,
+  or no broadcast.
+- Both classes need to be distinguishable in data, so the sourcing rule is
+  enforceable rather than remembered.
