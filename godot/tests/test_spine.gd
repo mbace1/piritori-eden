@@ -32,6 +32,7 @@ func _ready() -> void:
 	_test_fence()
 	_test_arrest()
 	_test_chapters()
+	_test_gear_wears_out()
 	_test_hiring()
 	_test_every_reference_resolves()
 
@@ -323,6 +324,88 @@ chapters (GDD: run structure)")
 	check("and so did the upgrade", GameState.has_upgrade("stash-house-1"))
 
 
+## Gear wears out (COMBAT.md §8.4), and each piece wears on its own.
+func _test_gear_wears_out() -> void:
+	print("
+gear wears out")
+	GameState.new_campaign()
+
+	# Two of the same thing, which is the case that forced instances.
+	GameState.add_equipment("pipe", GameState.Condition.NEW)
+	GameState.add_equipment("pipe", GameState.Condition.FAULTY)
+	check("you can own many pipes", GameState.count_of("pipe") == 2)
+	check("and they are in different states",
+		GameState.condition_at(0) != GameState.condition_at(1))
+
+	# Price follows the particular one, not the kind.
+	var new_price := GameState.resale_at(0)
+	var worn_price := GameState.resale_at(1)
+	check("the worn one is worth less", worn_price < new_price,
+		"%d vs %d" % [worn_price, new_price])
+
+	# Losing one takes the WORST: the wrecked one is the one being used.
+	GameState.lose_kit_of(PackedStringArray(["pipe"]))
+	check("losing one leaves the better one",
+		GameState.count_of("pipe") == 1
+			and GameState.condition_at(0) == GameState.Condition.NEW)
+
+	# Selling takes the BEST, because that is what somebody selling would do.
+	GameState.add_equipment("pipe", GameState.Condition.FAULTY)
+	GameState.sell_loot("pipe")
+	check("selling leaves the worn one",
+		GameState.condition_at(0) == GameState.Condition.FAULTY)
+
+	# Decay: a chapter boundary is a step worse, and it is one-way.
+	GameState.new_campaign()
+	for i in 12:
+		GameState.add_equipment("pipe", GameState.Condition.NEW)
+	GameState.decay_equipment()
+	var stepped := 0
+	var broke := 0
+	for i in GameState.equipment.size():
+		var c := GameState.condition_at(i)
+		if c == GameState.Condition.USED: stepped += 1
+		elif c == GameState.Condition.BROKEN: broke += 1
+	check("everything got worse", stepped + broke == 12, "%d+%d" % [stepped, broke])
+	check("most of it stepped rather than broke", stepped > broke)
+	check("and something can break outright", broke >= 0)
+
+	# Broken is the floor.
+	GameState.new_campaign()
+	GameState.add_equipment("pipe", GameState.Condition.BROKEN)
+	GameState.decay_equipment()
+	check("broken does not get worse than broken",
+		GameState.condition_at(0) == GameState.Condition.BROKEN)
+
+	# Deterministic, or the same run rots differently each time.
+	GameState.new_campaign()
+	GameState.seed_value = 99
+	for i in 6:
+		GameState.add_equipment("pipe")
+	GameState.decay_equipment()
+	var first: Array = []
+	for i in GameState.equipment.size():
+		first.append(int(GameState.condition_at(i)))
+	GameState.new_campaign()
+	GameState.seed_value = 99
+	for i in 6:
+		GameState.add_equipment("pipe")
+	GameState.decay_equipment()
+	var second: Array = []
+	for i in GameState.equipment.size():
+		second.append(int(GameState.condition_at(i)))
+	check("the same run wears the same way", first == second, "%s vs %s" % [first, second])
+
+	# And it survives a save, with the conditions intact.
+	var saved := GameState.to_dict()
+	GameState.new_campaign()
+	check("the save reloads", GameState.from_dict(saved))
+	var back: Array = []
+	for i in GameState.equipment.size():
+		back.append(int(GameState.condition_at(i)))
+	check("every condition came back", back == second, str(back))
+
+
 ## The fence (COMBAT.md §9.7). Loot becomes money at Piritori and nowhere else.
 ##
 ## The travel requirement is the mechanic rather than friction: selling from
@@ -383,8 +466,12 @@ loot (COMBAT.md §8)")
 	var loot := GameState.take_loot(PackedStringArray(["sawn-off"]))
 	check("what they dropped is yours now", loot.has("sawn-off"))
 	check("and it is in the armoury", GameState.equipment_owned.has("sawn-off"))
-	check("the same weapon is not taken twice",
-		GameState.take_loot(PackedStringArray(["sawn-off"])).is_empty())
+	# CORRECTED. This used to assert that the same weapon could not be taken
+	# twice, which was my assumption and not the design: you should own many
+	# pipes, and a crew of four with one each is ordinary. That wrong assumption
+	# is also what made condition look like a property of the TYPE.
+	GameState.take_loot(PackedStringArray(["sawn-off"]))
+	check("taking a second one gives you two", GameState.count_of("sawn-off") == 2)
 	check("junk that does not exist is not taken",
 		GameState.take_loot(PackedStringArray(["halberd"])).is_empty())
 
@@ -392,7 +479,11 @@ loot (COMBAT.md §8)")
 	var paid := GameState.sell_loot("sawn-off")
 	check("loot converts down into money", paid > 0)
 	check("and the money arrives", GameState.cash_eur == before + paid)
-	check("the weapon is gone with it", not GameState.equipment_owned.has("sawn-off"))
+	# Selling removes ONE, not the type. You took two off two people and sold
+	# one; the other is still in the bag.
+	check("one of them is gone", GameState.count_of("sawn-off") == 1)
+	GameState.sell_loot("sawn-off")
+	check("and selling the last one empties it", GameState.count_of("sawn-off") == 0)
 	check("selling what you do not have pays nothing", GameState.sell_loot("sawn-off") == 0)
 	check("and money cannot buy it back", not GameState.is_purchasable("sawn-off"))
 

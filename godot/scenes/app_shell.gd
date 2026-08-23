@@ -912,17 +912,25 @@ func _add_fence() -> void:
 		_rail_box.add_child(l)
 		return
 
-	if GameState.equipment_owned.is_empty():
+	if GameState.equipment.is_empty():
 		_rail_box.add_child(_make_label(tr("ui.fence_nothing"), 12, PiritoriPalette.TEXT_DIM))
 		return
 
-	for id in GameState.equipment_owned:
-		var eid := String(id)
-		var paid := GameState.resale_of(eid)
+	# One row per INSTANCE, not per type. Two pipes in different states are two
+	# different things to sell at two different prices, and a list keyed on type
+	# would hide exactly the decision §8.4 is trying to create.
+	for idx in GameState.equipment.size():
+		var eid := String(GameState.equipment[idx].get("id", ""))
+		var paid := GameState.resale_at(idx)
 		var nm := tr("equipment.%s" % eid)
 		if nm == "equipment.%s" % eid:
 			nm = eid
-		var b := _make_button(tr("ui.fence_sell") % [nm, paid], PiritoriPalette.GOODS_MAGENTA)
+		# Condition is on the button, because it is the reason the price differs.
+		var cond := GameState.condition_at(idx)
+		var shown := nm if cond == GameState.Condition.NEW else "%s (%s)" % [
+			nm, tr(GameState.condition_word(cond))]
+		var b := _make_button(tr("ui.fence_sell") % [shown, paid],
+			PiritoriPalette.GOODS_MAGENTA)
 		b.pressed.connect(func():
 			GameState.sell_loot(eid)
 			_refresh_market_rail())

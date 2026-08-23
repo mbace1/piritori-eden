@@ -175,3 +175,7 @@ map.legend_open,Open,Auki,開放
 map.legend_teaser,"Seen, not yet reachable","Nähty, ei vielä auki",見えるが行けない
 map.legend_locked,Closed to you,Suljettu sinulta,閉ざされている
 map.legend_lead,Something waiting,Jotain odottaa,何かが待っている
+equipment.cond_new,new,uusi,新品
+equipment.cond_used,used,käytetty,中古
+equipment.cond_faulty,faulty,viallinen,不良
+equipment.cond_broken,broken,rikki,故障

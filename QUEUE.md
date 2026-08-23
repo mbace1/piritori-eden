@@ -839,3 +839,39 @@ feeds the fight count.
 - **Nothing decays.** Without decay, persistence plus re-runnable chapters is a
   farming exploit — that is the load the ledger is carrying and it is not
   carried yet.
+
+## Gear wears out — and "you should own many pipes" corrected a design error
+
+Owner correction, and it mattered. I was about to store condition per **type**,
+justified by `take_loot` refusing a weapon you already owned. That refusal was
+itself my invention, and it was wrong: a crew of four with a pipe each is the
+ordinary case. Equipment is now **instances** — `{"id", "cond"}` — and the
+duplicate refusal is gone.
+
+- new → used → faulty → broken, one way only, stepping at a **chapter**
+  boundary. One in eight breaks outright instead, because a break is felt as an
+  event where a slide is not.
+- **Resale follows the particular one**, not the kind. The fence lists one row
+  per instance with its condition on the button, because two pipes in different
+  states are two different things to sell.
+- Losing kit takes the **worst** one; selling takes the **best** one. Both are
+  what the person in that situation would actually do.
+- Deterministic from seed and chapter, so the same run wears the same way.
+
+### A real bug the decay test found
+
+`to_dict()` returned the live collections rather than copies, so a save held for
+a moment and then mutated — which `new_campaign()` does — **took the mutation
+with it**. It now deep-copies. That was not specific to equipment; every
+collection in the save had it.
+
+### Still open
+
+- **Nothing repairs.** Gear only ever gets worse, so a long campaign trends to
+  broken with no counter-pressure. §8.4 does not say there is repair; if there
+  is not, the pressure to keep taking things off people is the whole point and
+  should be checked in play.
+- **`faulty` has no mechanical meaning** beyond a lower price. §8.4 lists that as
+  undecided: a chance to fail, reduced effect, or something weapon-specific.
+- **`broken` is still usable.** Nothing stops a broken weapon being carried into
+  a fight and working normally.

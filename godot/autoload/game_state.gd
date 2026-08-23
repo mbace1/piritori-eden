@@ -50,7 +50,29 @@ var debt_holder_memory: PackedStringArray = []
 var flags: Dictionary = {}          ## flag name -> true
 var roster: PackedStringArray = []          ## recruited crew ids
 var temporary_crew: PackedStringArray = []  ## crew on loan for one job
-var equipment_owned: PackedStringArray = [] ## equipment granted by play
+## Everything carried, as INSTANCES rather than type ids.
+##
+## You can own many pipes, and they wear separately — so condition belongs to the
+## thing, not to its kind (COMBAT.md §8.4). An earlier version of this stored
+## condition per TYPE and justified it by the fact that `take_loot` refused a
+## weapon you already owned. That refusal was the bug: a crew of four with a pipe
+## each is the ordinary case.
+##
+## Each entry: {"id": String, "cond": Condition}. Nothing outside this file
+## should index it directly — the helpers below are the interface.
+var equipment: Array[Dictionary] = []
+
+
+## The type ids carried, one per instance, duplicates included.
+##
+## Kept because plenty of code only wants to know WHAT is carried, and because
+## everything that used to read `equipment_owned` means this.
+var equipment_owned: PackedStringArray:
+	get:
+		var out: PackedStringArray = []
+		for e in equipment:
+			out.append(String(e.get("id", "")))
+		return out
 var mission_state: Dictionary = {}          ## mission id -> complete|partial|failed
 var obligations: Dictionary = {}            ## faction -> owed favours
 var memories: PackedStringArray = []        ## authored remembered moments
@@ -136,7 +158,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	flags = {}
 	roster = PackedStringArray()
 	temporary_crew = PackedStringArray()
-	equipment_owned = PackedStringArray()
+	equipment.clear()
 	mission_state = {}
 	obligations = {}
 	memories = PackedStringArray()
@@ -188,6 +210,100 @@ func is_slice_complete() -> bool:
 
 
 ## Spend one Day/Night block. Nightly settlement is applied on entering night.
+# ── gear wears out (COMBAT.md §8.4) ────────────────────────────────────────
+
+## new -> used -> faulty -> broken, and it only goes one way.
+enum Condition { NEW, USED, FAULTY, BROKEN }
+
+## What worn gear fetches. This is the decision the flat model could not
+## produce: sell it while it is still worth something, or keep using it and
+## watch the price fall.
+const CONDITION_RESALE := {
+	Condition.NEW: 1.0,
+	Condition.USED: 0.7,
+	Condition.FAULTY: 0.4,
+	Condition.BROKEN: 0.15,
+}
+
+## One piece in this many breaks outright instead of stepping down. A break is
+## felt as an event where a slide is not, and it lands hardest on a §8 weapon
+## that cannot be bought at any price — replacing it means taking another one off
+## somebody.
+const BREAK_ONE_IN := 8
+
+
+func add_equipment(type_id: String, cond: Condition = Condition.NEW) -> void:
+	if type_id == "":
+		return
+	equipment.append({"id": type_id, "cond": int(cond)})
+	state_changed.emit()
+
+
+func owns(type_id: String) -> bool:
+	return count_of(type_id) > 0
+
+
+func count_of(type_id: String) -> int:
+	var n := 0
+	for e in equipment:
+		if String(e.get("id", "")) == type_id:
+			n += 1
+	return n
+
+
+func condition_at(index: int) -> Condition:
+	if index < 0 or index >= equipment.size():
+		return Condition.NEW
+	return int(equipment[index].get("cond", 0)) as Condition
+
+
+func condition_word(c: Condition) -> String:
+	match c:
+		Condition.USED: return "equipment.cond_used"
+		Condition.FAULTY: return "equipment.cond_faulty"
+		Condition.BROKEN: return "equipment.cond_broken"
+	return "equipment.cond_new"
+
+
+## Lose one of a type. Takes the WORST first: what a fallen crew member was
+## carrying is gone, and if you had a good one and a wrecked one in the same
+## hands the wrecked one is the one that was being used.
+func remove_one(type_id: String) -> bool:
+	var worst := -1
+	for i in equipment.size():
+		if String(equipment[i].get("id", "")) != type_id:
+			continue
+		if worst < 0 or int(equipment[i].get("cond", 0)) > int(equipment[worst].get("cond", 0)):
+			worst = i
+	if worst < 0:
+		return false
+	equipment.remove_at(worst)
+	state_changed.emit()
+	return true
+
+
+## A step of wear across everything carried, at a chapter boundary.
+##
+## Per CHAPTER, not per fight: that taxes hoarding, which is the actual target —
+## a farmed stockpile carried into chapter four — where a per-fight slide would
+## punish the player for playing.
+##
+## Deterministic from the campaign seed and the chapter, because a roguelike
+## where the same decisions produce different rot is not one a player can learn.
+func decay_equipment() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value * 31 + chapter
+	for e in equipment:
+		var c := int(e.get("cond", 0))
+		if c >= int(Condition.BROKEN):
+			continue
+		if rng.randi_range(1, BREAK_ONE_IN) == 1:
+			e["cond"] = int(Condition.BROKEN)
+		else:
+			e["cond"] = c + 1
+	state_changed.emit()
+
+
 # ── what survives a chapter (GAME_DESIGN_DOCUMENT: the persistence ledger) ──
 
 ## WHAT YOU BUILT PERSISTS. WHAT YOU WERE GRANTED DOES NOT.
@@ -249,6 +365,11 @@ func begin_next_chapter() -> void:
 	stock.clear()
 	market_history.clear()
 	flags.clear()
+
+	# Gear crosses the boundary and is a step worse for it (§8.4). This is the
+	# load the whole ledger carries: without decay, persistence plus re-runnable
+	# chapters is a farming exploit.
+	decay_equipment()
 
 	# Chapter progress starts again; what it is FOR may differ next time.
 	chapter_earned = 0
@@ -522,8 +643,8 @@ func apply_effect(effect: String) -> void:
 		"equipment":
 			if parts.size() >= 2:
 				var eq := parts[1].lstrip("+")
-				if not equipment_owned.has(eq):
-					equipment_owned.append(eq)
+				# Authored grants may repeat: a second pipe is a second pipe.
+				add_equipment(eq)
 		"recruit":
 			if parts.size() >= 2 and not roster.has(parts[1]):
 				roster.append(parts[1])
@@ -724,8 +845,18 @@ func is_purchasable(equipment_id: String) -> bool:
 	return String(e.get("acquisition", "market")) != "taken"
 
 
+## What a type fetches when new. The price of a PARTICULAR one is resale_at().
 func resale_of(equipment_id: String) -> int:
 	return int(_equipment(equipment_id).get("resale_eur", 0))
+
+
+## What the one at this index fetches now, worn as it is (§8.4).
+func resale_at(index: int) -> int:
+	if index < 0 or index >= equipment.size():
+		return 0
+	var base := float(resale_of(String(equipment[index].get("id", ""))))
+	var mult: float = CONDITION_RESALE.get(condition_at(index), 1.0)
+	return int(round(base * mult))
 
 
 func _equipment(equipment_id: String) -> Dictionary:
@@ -743,9 +874,10 @@ func take_loot(equipment_ids: PackedStringArray) -> PackedStringArray:
 		var eid := String(id)
 		if eid == "" or _equipment(eid).is_empty():
 			continue
-		if equipment_owned.has(eid):
-			continue
-		equipment_owned.append(eid)
+		# No duplicate check. A crew of four with a pipe each is ordinary, and
+		# refusing the second one was the bug that made condition look like a
+		# property of the TYPE.
+		add_equipment(eid, Condition.NEW)
 		got.append(eid)
 		record_chapter_loot(1)
 	if not got.is_empty():
@@ -775,11 +907,18 @@ func can_fence_here() -> bool:
 ## selling a thing you can only get by taking it should feel like a waste, which
 ## is what stops the asymmetry collapsing into "everything is money eventually".
 func sell_loot(equipment_id: String) -> int:
-	var i := equipment_owned.find(equipment_id)
+	# Sells the BEST one you have, because that is what somebody selling would
+	# do, and it leaves the worn one to keep using or to lose.
+	var i := -1
+	for k in equipment.size():
+		if String(equipment[k].get("id", "")) != equipment_id:
+			continue
+		if i < 0 or int(equipment[k].get("cond", 0)) < int(equipment[i].get("cond", 0)):
+			i = k
 	if i < 0:
 		return 0
-	var paid := resale_of(equipment_id)
-	equipment_owned.remove_at(i)
+	var paid := resale_at(i)
+	equipment.remove_at(i)
 	cash_eur += paid
 	# Counted centrally (GDD run structure): a chapter cleared by earning has to
 	# see every way of earning, and the fence is one of them.
@@ -792,9 +931,7 @@ func sell_loot(equipment_id: String) -> int:
 ## in a warehouse, which is the tactical half of the brake on spending people.
 func lose_kit_of(equipment_ids: PackedStringArray) -> void:
 	for id in equipment_ids:
-		var i := equipment_owned.find(String(id))
-		if i >= 0:
-			equipment_owned.remove_at(i)
+		remove_one(String(id))
 	state_changed.emit()
 
 
@@ -995,7 +1132,13 @@ func execute_offer(offer_id: String) -> bool:
 # ── serialisation (§8: schema version + content package + flags) ──────────
 
 func to_dict() -> Dictionary:
-	return {
+	# DEEP COPY, not the live state.
+	#
+	# Every collection here is a reference type, so returning them bare made
+	# to_dict() a live VIEW rather than a snapshot: a save held for a moment and
+	# then mutated — which new_campaign() does — took the mutation with it. Found
+	# by a decay test whose reloaded conditions came back empty.
+	var out := {
 		"schema_version": SCHEMA_VERSION,
 		"generated_crew": generated_crew,
 		"arrested_crew": arrested_crew,
@@ -1031,7 +1174,7 @@ func to_dict() -> Dictionary:
 		"retired_crew": Array(retired_crew),
 		"trained_crew": Array(trained_crew),
 		"temporary_crew": Array(temporary_crew),
-		"equipment_owned": Array(equipment_owned),
+		"equipment": equipment,
 		"mission_state": mission_state,
 		"obligations": obligations,
 		"memories": Array(memories),
@@ -1041,6 +1184,7 @@ func to_dict() -> Dictionary:
 		"ending_id": ending_id,
 		"crew_deaths": crew_deaths,
 	}
+	return out.duplicate(true)
 
 
 func from_dict(d: Dictionary) -> bool:
@@ -1075,7 +1219,10 @@ func from_dict(d: Dictionary) -> bool:
 	retired_crew = PackedStringArray(d.get("retired_crew", []))
 	trained_crew = PackedStringArray(d.get("trained_crew", []))
 	temporary_crew = PackedStringArray(d.get("temporary_crew", []))
-	equipment_owned = PackedStringArray(d.get("equipment_owned", []))
+	equipment.clear()
+	for e in d.get("equipment", []):
+		equipment.append({"id": String((e as Dictionary).get("id", "")),
+			"cond": int((e as Dictionary).get("cond", 0))})
 	mission_state = (d.get("mission_state", {}) as Dictionary).duplicate(true)
 	obligations = (d.get("obligations", {}) as Dictionary).duplicate(true)
 	memories = PackedStringArray(d.get("memories", []))
