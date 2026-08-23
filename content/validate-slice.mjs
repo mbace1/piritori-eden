@@ -45,7 +45,10 @@ check(content.products.length === 1 && products.has("piri"), "slice must use one
 check(content.market_offers.length === 5, "slice must expose five market offers");
 check(content.crew.length === 6, "slice must define six recruitable crew");
 check(content.missions.length === 4, "slice must define four mission families");
-check(content.battles.length === 2, "slice must define exactly two authored battles");
+// A pinned count so a battle cannot appear by accident. 2 -> 3 on 2026-08-23:
+// Sörnäinen opened by owner ruling and the Kattilahalli arena finally has a
+// fight in it. Changing this line is meant to be part of authoring a battle.
+check(content.battles.length === 3, "slice must define exactly three authored battles");
 check(content.encounters.length >= 10 && content.encounters.length <= 14, "slice must define ten to fourteen meaningful encounters");
 check(content.encounters.length === 14, "implementation baseline expects fourteen encounters");
 check(content.schedule.length === 14, "schedule must contain fourteen entries");

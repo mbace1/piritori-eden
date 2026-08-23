@@ -64,7 +64,10 @@ func _test_content_loads() -> void:
 		str(ContentRegistry.errors))
 	eq("twelve anchors", ContentRegistry.anchors().size(), 12)
 	eq("twenty-two edges", ContentRegistry.edges().size(), 22)
-	eq("ten sites", ContentRegistry.map.get("sites", []).size(), 10)
+	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
+	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
+	# without somebody deciding it should.
+	eq("twelve sites", ContentRegistry.map.get("sites", []).size(), 12)
 	eq("fourteen encounters", ContentRegistry.slice.get("encounters", []).size(), 14)
 	eq("six crew", ContentRegistry.slice.get("crew", []).size(), 6)
 

@@ -29,6 +29,10 @@ extends SubViewportContainer
 const STAGE_BY_SCENE := {
 	"scene-kallio-backyard-v01": "res://data/art/stage3d/kallio-backyard-3d-v01.glb",
 	"scene-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
+	# Named by the battle as a 3D stage rather than a 2D scene id. The game is 3D
+	# (PHASING 1.055), so a battle authored today points at the art that exists
+	# instead of at a painting that never will.
+	"stage3d-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
 	"scene-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
 }
 

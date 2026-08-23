@@ -747,3 +747,37 @@ The symbol list now includes it, with a comment saying plainly that the list is
 a fast warning and not the authority. The real lesson is about the order of
 operations: **rebuilding a font and then running a different gate is not
 verification**.
+
+## Sörnäinen is open
+
+Owner ruling: Kattilahalli, Suvilahti and Sörnäinen are all places where fights
+and other dealings happen. The anchor existed as a `teaser` and the boiler-hall
+arena had been registered art with nowhere to be.
+
+- `sornainen_harbour` is **active**, and gains `market` and `faction` roles — it
+  is a place with dealings now, not only docks and expansion.
+- Two sites: **Suvilahti yard** and **Kattilahalli**.
+- **`battle-kattilahalli-3v3`**, a Jade Lantern crew rather than more
+  McCormicks. `NARRATIVE.md` puts that network's growth in restaurant fronts and
+  firearms and the harbour is where it arrives — and `COMBAT.md` §8 needs a
+  second faction, because the unbuyable tier has to come off somebody specific.
+  One of them carries the chain.
+- **First authored battle where death is eligible** (§9.10). A harbour hall at
+  night is where it stops being a scuffle. Gated, so switching it off later is a
+  decision rather than drift.
+
+### Three pinned counts fired, and all three were right
+
+Active anchors (8), authored battles (2) and map sites (10) are all asserted
+exactly. Every one failed and every one had to be edited by hand with a reason.
+
+That is the design working: **a place cannot become playable through a typo.**
+Worth keeping in mind when the chapter schema lands, which will move far more of
+these numbers at once.
+
+### Still open here
+
+- **Nothing routes you to Sörnäinen yet.** The anchor is active and the battle
+  exists, but no encounter, mission or day in the schedule sends you there — so
+  it is reachable only by `?battle=battle-kattilahalli-3v3`.
+- The Suvilahti yard site has **no encounter**, so it is a name on a map.

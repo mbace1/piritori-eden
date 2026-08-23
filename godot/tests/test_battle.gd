@@ -55,6 +55,7 @@ func _ready() -> void:
 	_test_police_spawn()
 	_test_cover_is_visible()
 	_test_build_3v3()
+	_test_kattilahalli()
 	_test_forecast_before_commitment()
 	_test_attrition_is_not_the_exit()
 	_test_withdraw_ends_it()
@@ -979,6 +980,44 @@ func _test_build_2v2() -> void:
 	# Cover is mirrored across both half-boards.
 	var plinth: Array = def["cover_props"].filter(func(c): return c["prop_id"] == "bear-plinth")
 	eq("bear plinth exists on both sides", plinth.size(), 2)
+
+
+## Sörnäinen opened, and the boiler hall finally has a fight in it.
+##
+## The arena was registered art with nowhere to be for a day. The check that
+## matters is that the battle reaches THAT stage rather than falling through to
+## the default yard — the stage fallback is deliberately quiet, so a battle
+## pointing at nothing would look like a battle in the wrong place.
+func _test_kattilahalli() -> void:
+	print("
+the boiler hall has a fight in it")
+	var def := BattleBuilder.build("battle-kattilahalli-3v3", _crew_ids(3))
+	check("it builds from canon", not def.is_empty())
+	eq("three opponents", def["opposition_units"].size(), 3)
+	eq("three of ours", def["player_units"].size(), 3)
+
+	var stage := String(def["stage_id"])
+	var path := BattleStage3D.stage_path(stage)
+	check("and it reaches the boiler hall, not the default yard",
+		path != BattleStage3D.STAGE_FALLBACK, "%s -> %s" % [stage, path])
+	check("which is a file that exists", ResourceLoader.exists(path))
+
+	# COMBAT.md §9.10: this is the first authored battle whose fiction admits
+	# death. Asserted so that turning it off later is a decision, not a drift.
+	var battle := ContentRegistry.battle("battle-kattilahalli-3v3")
+	check("death is eligible in the hall",
+		String((battle.get("casualty_table", {}) as Dictionary).get("death", "")) == "eligible")
+
+	# The hall supplies its own cover, per STAGE_SPEC.
+	check("the hall supplies cover", (def["cover_props"] as Array).size() > 0)
+
+	# A second faction to take things from — §8's unbuyable tier has to come off
+	# somebody specific, and the chain is one of only two taken-only weapons.
+	var carried: Array = []
+	for o in battle.get("opponents", []):
+		carried.append(String((o as Dictionary).get("equipment", "")))
+	check("somebody here carries gear you cannot buy",
+		carried.has("chain") or carried.has("sawn-off"), str(carried))
 
 
 func _test_build_3v3() -> void:

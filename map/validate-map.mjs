@@ -63,9 +63,17 @@ for (const service of map.periodServices) {
   }
 }
 
+// A pinned count, not a rule about geography. It exists so an anchor cannot
+// quietly become playable through a typo — opening one is a design decision and
+// should require editing this line.
+//
+// 8 -> 9 on 2026-08-23: Sörnäinen opened by owner ruling. Kattilahalli, Suvilahti
+// and Sörnäinen are places where fights and other dealings happen, and the arena
+// for the boiler hall was already registered art with nowhere to be.
+const EXPECTED_ACTIVE_ANCHORS = 9;
 const active = map.anchors.filter((anchor) => anchor.sliceState === 'active');
-if (active.length !== 8) {
-  fail(`expected 8 active slice anchors, found ${active.length}`);
+if (active.length !== EXPECTED_ACTIVE_ANCHORS) {
+  fail(`expected ${EXPECTED_ACTIVE_ANCHORS} active slice anchors, found ${active.length}`);
 }
 
 const easternClusterSites = map.sites
