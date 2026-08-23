@@ -503,7 +503,7 @@ commissioning any new person.
 | Speaker | Model | Needed for |
 |---|---|---|
 | Arvo Linde | yes | the daily news |
-| Toko Slomo | **borrowed** — the parka man | the noodle bar |
+| Toko Slomo | **yes** — his own, apron and all | the noodle bar |
 | Sean McCormick | **cast** — the suited man | encounters; the family runs the bars |
 | Faction shot-caller | **borrowed** — the white suit | the battle inset, `COMBAT.md` §9.9 |
 | Jaska | no | moral counterweight, all through `NARRATIVE.md` |
@@ -580,3 +580,28 @@ were made on the website, and the API only lists tasks created through the API �
 proven by timestamps: the newest task the API can see predates the uploaded
 Kattilahalli glb by hours. If a web task id can be fetched individually that
 would change; untested for want of an id.
+
+## Web-made Meshy assets CAN be fetched by id
+
+Settled by experiment. The list endpoints return only tasks created through the
+API — a full listing at `page_size=100` never shows a web-made model. But a
+**direct GET on a task id resolves fine**, and the ids are embedded in the HTML
+of a `meshy.ai/s/XXXXXX` share page.
+
+`~/.meshy/fetch.py` wraps it: `info`, `get`, `remesh`, `rig`.
+
+**Take the RIGGED task, never the raw one.** The same character exists twice on
+the account:
+
+| | triangles | size | usable |
+|---|---|---|---|
+| raw sculpt | 3,084,844 | 127 MB | no |
+| rigged export | 28,765 | 20.8 MB | yes |
+
+The raw sculpt is over the 320,000 rigging limit AND too large for the remesh
+endpoint, which rejects it with `model file too large`. There is no API route
+from one to the other — rigging has to happen on the website. That is almost
+certainly why earlier attempts "didn't work".
+
+So the workflow is: rig it on meshy.ai, then send the share link of the **rigged**
+result. No zip, no upload.

@@ -256,9 +256,14 @@ the speaking character")
 	# Borrowed bodies must stay DECLARED. A placeholder nothing distinguishes
 	# from finished art is how the wrong face ships: it looks deliberate, so
 	# nobody questions it.
-	check("Toko is a borrowed body", p.is_placeholder("toko"))
-	check("the shot-caller is a borrowed body", p.is_placeholder("shot-caller"))
+	check("the shot-caller is still a borrowed body", p.is_placeholder("shot-caller"))
 	check("Arvo is not", not p.is_placeholder("arvo"))
+	# Toko stopped borrowing when his own model arrived. Asserted rather than
+	# just deleted, so a regression that quietly puts him back in someone else's
+	# clothes fails here.
+	check("Toko is himself now", not p.is_placeholder("toko"))
+	check("and wears his own model",
+		String(p.SPEAKERS["toko"]).ends_with("toko-v01.glb"))
 
 	# Every placeholder has to be a real speaker, or the list rots into names
 	# nobody uses.

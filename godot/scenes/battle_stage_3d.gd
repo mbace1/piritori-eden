@@ -97,6 +97,10 @@ const UNIT_VARIANTS := {
 		"res://data/art/cast3d/hired-v01.glb",
 		"res://data/art/cast3d/hired-b-v01.glb",
 		"res://data/art/cast3d/street-raver-v01.glb",
+		# Freed when Toko got his own model. A heavy man in a work parka is an
+		# ordinary person off the street, which is exactly what `hired` means —
+		# better than leaving a paid-for asset registered and unreferenced.
+		"res://data/art/cast3d/parka-man-v01.glb",
 	],
 }
 

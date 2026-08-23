@@ -1494,6 +1494,23 @@
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
       "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Also found unused on the account and rigged for 5 credits. Stands in for Toko Slomo, replacing the driver's body: a proprietor in outdoor clothes reads closer to somebody who runs a small place than a courier in a hi-vis armband does. STILL A PLACEHOLDER — Toko is a Japanese noodle chef and this is not him, so it stays listed in presenter_3d.PLACEHOLDER_SPEAKERS. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
       "sha256": "57885c077f8120b91631b0920c12cb55cf33c655d5ba61f9da4ce2679afc07a9"
+    },
+    {
+      "id": "cast3d-toko-v01",
+      "file": "cast3d/toko-v01.glb",
+      "kind": "mesh-3d",
+      "source": "Meshy 'Smiling Noodle Chef', web-made, rig task 01a02d3f",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "speaker",
+      "format": "glb",
+      "baked_text": true,
+      "baked_ui": false,
+      "note": "Toko Slomo, the noodle chef on Vaasankatu — a named NARRATIVE.md character and the first to get a model of his own rather than a borrowed body. White shirt with rolled sleeves, black apron, black trousers, grey hair. baked_text is TRUE and it is his: the apron reads TOKO SLOMO'S NOODLES over a ramen bowl, with a red katakana patch. Diegetic signage on his own shop apron rather than UI, so it is not a localisation problem, but it cannot be translated and is declared. KNOWN: he wears a gold smiling mask. Distinctive if intended and baked in permanently either way. FETCHED BY ID, not uploaded — the first asset taken straight off the account. The API's list endpoints hide web-made tasks, but a direct GET on a task id resolves; ids are embedded in a meshy.ai /s/ share page. The RIGGED task is the one to take: the raw sculpt behind the same character is 3,084,844 triangles and 127MB, over the 320k rigging limit and too large for the remesh endpoint to accept. This one is 28765 triangles on the usual 24-bone skeleton. Texture 4096 to 512: 20.8MB to 1.9MB.",
+      "sha256": "57b40b0e01552cbf30af236f3ca32d7f34dceaadf86fff55f4141234d8c37d2f"
     }
   ]
 }

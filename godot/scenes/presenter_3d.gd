@@ -25,10 +25,9 @@ const SPEAKERS := {
 	# BORROWED BODIES, so the LOCATION and INSET framings can be judged on a
 	# screen before anybody is commissioned. Owner's call, 2026-08-22: "use any
 	# character in these places for now."
-	# Toko wears the parka man rather than the driver: a proprietor in outdoor
-	# clothes reads closer to somebody who runs a small place than a courier in a
-	# hi-vis armband does. Still not a Japanese noodle chef, so still borrowed.
-	"toko": "res://data/art/cast3d/parka-man-v01.glb",
+	# Toko has his own model now, apron and all — fetched off the Meshy account
+	# by task id rather than uploaded. First named character to stop borrowing.
+	"toko": "res://data/art/cast3d/toko-v01.glb",
 	"shot-caller": "res://data/art/cast3d/enforcer-v01.glb",
 	# Sean McCormick is a participant in authored encounters and had no model.
 	# A suited older man fits a family that runs bars and restaurants, so this
@@ -45,7 +44,7 @@ const SPEAKERS := {
 ## The enforcer standing in for a faction shot-caller is nearly right by accident
 ## — a white suit reads as somebody senior — and is still listed, because "nearly
 ## right" is exactly the kind of thing that quietly becomes permanent.
-const PLACEHOLDER_SPEAKERS := ["toko", "shot-caller"]
+const PLACEHOLDER_SPEAKERS := ["shot-caller"]
 
 
 static func is_placeholder(id: String) -> bool:
