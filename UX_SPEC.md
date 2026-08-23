@@ -951,3 +951,58 @@ The board already renders characters, so the engine work is small. The gap is
 other than fighting. Building the frame first and discovering there is nobody to
 put in it would be the wrong way round, which is why the news — where the one
 existing model lives — is the place to start.
+
+---
+
+## 19. Levelling, the summary, and the way back to the map — owner ruling, 2026-08-23
+
+### A level is FELT in the moment and DECIDED later
+
+When somebody levels mid-fight you **see and hear it around them** — but the
+fight does not stop. It **waits for the action in progress to finish**, then puts
+it up as **side text** while control moves on to the next character's turn.
+
+This is the right shape for two reasons. A modal choice mid-round would break the
+one thing the fight is built to protect — that committing is a decision made with
+the whole board visible — and a level-up read cold, three rounds later, would
+have no moment attached to it. So the moment is where it happened and the choice
+is where there is time.
+
+### The summary is the junction
+
+A battle clears into a **summary screen**. From there, two ways out:
+
+- **Level ups** — a button, present when anything is waiting.
+- **Skip** — back to the map.
+
+Nothing is forced. Somebody who wants to keep moving can spend the points three
+days later.
+
+### The crew screen is where everything about a person lives
+
+Not a separate levelling screen. The crew screen already holds who you have; it
+becomes the one place that also holds **gear equipping**, **every pending level
+upgrade**, and **spending perk points**.
+
+One screen per PERSON rather than one screen per SYSTEM. A player thinking about
+Mira is thinking about all of her at once.
+
+### The map is the other way out
+
+Skipping returns to the map, which has to be doing two jobs by then:
+
+- **Steps for open missions**, so an accepted job is visible as a sequence rather
+  than remembered.
+- **New missions blinking at their locations**, so the next door is on the map
+  rather than in a menu.
+
+### 19.1 The map's real transport layer — aspiration, not yet scheduled
+
+The map should eventually show **public transport as real layers on a grid** —
+the metro and the subway lines visible as themselves — with **live transfer
+times from one station to the next**.
+
+That is the version where `MAP.md` §12 stops being a rule about exposure and
+becomes a thing you read off the board: you can see that the fast way is the
+watched way. Recorded as the target rather than as work in progress.
+
