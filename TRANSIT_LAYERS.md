@@ -67,6 +67,44 @@ system.
 
 ---
 
+## 2b. Era scope — and the metro that did not move
+
+**Era II is all of Helsinki, live.** The larger board (`DESIGN_LOCKS.md` §1:
+Pasila north, Kalasatama east, Downtown south, Töölö west) takes the whole feed
+— metro, tram, train, bus, ferry. There is no reason to crop a feed that arrives
+free.
+
+**Era I is Kallio, with its own routes** — and one of them is not a
+reconstruction at all.
+
+> "Metro hasn't even changed since then for that area." — owner, 2026-08-23
+
+That is the useful half of this. In the Kallio band the metro is **era-
+invariant**: Hakaniemi and Sörnäinen have been open since the line did, the
+tunnel between them runs where it ran, and the station names are the names.
+`MAP.md` §4.2 already treats that tunnel as one public transfer edge in 2003.
+
+So the two eras split by mode rather than by map:
+
+| mode | Kallio 2003 vs today | where the geometry comes from |
+|---|---|---|
+| **metro** | unchanged | **real modern data, used directly for both eras** |
+| **tram** | changed — 3B/3T became 2/3 in 2013, and routes moved with it | real modern geometry where the corridor survives; period service IDs on top |
+| **bus** | changed heavily | Era II only |
+| **train, ferry** | outside the Kallio band | Era II only |
+
+**Consequence: the Era I metro needs no invention and no research ledger
+entry.** It can be lifted straight from the same GTFS snapshot Era II uses, and
+it will be right. That is one whole mode moved out of `MAP.md` §10's "design
+inference" column and into "documented public fact", for free.
+
+The trams are where the authoring is, and the split is narrower than it looks —
+the *corridor* is mostly unchanged even where the *service* is not. Hämeentie is
+Hämeentie. So the period tables carry service IDs, headways and stop sets, and
+inherit corridor geometry from the same source the metro uses.
+
+---
+
 ## 3. The layer stack
 
 The map is drawn as a stack, and every layer above L1 is independently
@@ -293,3 +331,121 @@ Small enough to prove the idea and refuse to build the rest until it holds:
 
 **Gate: a player who knows Kallio recognises the line before reading its
 number** — and a wait at Hakaniemi produces a beat rather than a progress bar.
+
+---
+
+## 9. The visuals
+
+Plate: **`ux/transit-layers-plate.svg`** — every element below drawn at size, in
+the board's own palette, on the board's own card, and *looked at* rather than
+described (`PHASING.md` standing rule 4: an art change ends in a picture). Authored SVG, because this layer
+is **ink on the paper and never generated art**: it moves, it carries live data,
+and `ART_BIBLE.md`'s paper register belongs to what is underneath it.
+
+### 9.1 The service colours are the one loud thing on the board
+
+The board is muted card — `#d6c5a5` paper, `#0f2934` water, ochre and umber. The
+transit lines are **the only saturated colour allowed on it**, and that is not a
+concession, it is how the real thing works: HSL's colours are a wayfinding
+system printed on a grey city, and the board being quiet is what lets a player
+find their line without reading a number.
+
+| mode | HSL | on the board |
+|---|---|---|
+| metro | orange | **see 9.2 — collides with a reserved colour** |
+| tram | green | the Kallio workhorse; both eras |
+| train | purple | Era II only |
+| bus | blue | Era II only, and drawn thinner than rail — there are hundreds |
+| ferry | light blue | Era II only |
+
+Weight carries hierarchy before colour does: **metro heaviest, tram medium, bus
+thinnest.** A colour-blind player reads the network off stroke width and the
+line chips alone, which is the accessibility floor this repo already holds
+elsewhere.
+
+### 9.2 One collision, and it needs a ruling
+
+**HSL metro orange is `#FF6319`. This project reserves `#ff7a1a` as warning
+orange** — applied in code, never in art, because it means something.
+
+They are four points apart in hue and indistinguishable on a phone. Shipping
+both means the colour that says *you are about to be caught* and the colour that
+says *this is the metro* are the same colour on the same screen. Three ways out,
+and it is §6's kind of decision:
+
+1. **Move the warning colour.** Cleanest read, touches the most code.
+2. **Print the metro rather than match it.** Era I is a 2003 paper map anyway —
+   a printed metro line in the board's own umber-orange `#cc7a3e` is period-
+   correct and clears the warning hue by a mile. Era II live keeps true HSL
+   orange, and the era difference does part of the work. **Recommended.**
+3. Keep both and separate by weight and glow alone. Cheapest, and it is the one
+   that fails on a bright day outdoors.
+
+### 9.3 Era reads at a glance: printed vs live
+
+Same geometry, two treatments, and nobody has to be told which era they are in.
+
+**Era I — printed.** The line is flat matte colour with a hard black keyline,
+laid on the card with a 1px registration drift, exactly like everything else the
+riso press touched. Line numbers are paper chips — the existing SVG already
+draws one for tram 6 and it is the right object. No glow. It is a map somebody
+folded into a pocket in 2003.
+
+**Era II — live.** The same path gains a thin bright core and a soft bloom, and
+vehicles run on it. The bloom is the only lit thing on a night board, so the eye
+goes to the network the moment the layer is on.
+
+### 9.4 A live vehicle, and the honesty of it
+
+A **chip**: a small rounded rectangle in the line's colour with a hard black
+keyline, a notch at the leading edge pointing along `hdg`, and the `desi` set in
+the chip when there is room.
+
+Three rules, and the third is the one that matters:
+
+- **Interpolate between fixes.** HFP is roughly 1 Hz; a chip that jumps once a
+  second reads as broken rather than as data.
+- **Never extrapolate past the last fix.** Interpolation between two known
+  points is drawing what happened; continuing past the last one is inventing a
+  tram.
+- **Decay to a ghost.** After ~15 s with no message the chip goes hollow and
+  loses its colour, and the arrival it feeds drops to `live: false`. A tram that
+  has stopped reporting must *look* like a tram that has stopped reporting.
+
+### 9.5 The stop, and the one-glance truth about time
+
+Every arrival carries the §2 flag as a mark rather than a word:
+
+- **filled dot** — live. A vehicle is reporting and this is where it actually is.
+- **hollow ring** — timetable. This is when it is *supposed* to come.
+
+Same shape, same place, one fill. The player learns it in a day and never has to
+read "scheduled" anywhere. It is also what keeps Era I honest: Era I is *all*
+hollow rings, because there is no such thing as a live 2003 tram, and the map
+says so without apologising for it.
+
+### 9.6 Congestion is a band, never a number
+
+L4 thickens and warms along the corridor it describes: a soft ochre swell at the
+edge of the road, deeper and warmer where it is worse. No percentage, no
+gradient legend, no colour scale.
+
+`MAP.md` §6's separation requirements exist to stop the board becoming a
+dashboard, and a congestion figure is exactly how that starts. If a player
+cannot tell Hämeentie is bad tonight by looking at it, the band is drawn wrong —
+adding a number does not fix it, it just moves the failure somewhere it can be
+argued about.
+
+### 9.7 The wait screen is a place, not a progress bar
+
+§4.2 makes the wait the content, so it gets composed like a location rather than
+a loading state: the platform in the paper register, the line chip, the
+countdown, the exposure meter filling, and whoever else is standing there.
+
+The countdown is **the only element on the board that ticks in real seconds**
+regardless of the rate mode, because a countdown that lies about time is worse
+than no countdown at all. In Story mode it counts down fast and honestly; in
+Live mode it counts down in real minutes; in both it is describing the same
+timetable.
+
+---
