@@ -503,7 +503,8 @@ commissioning any new person.
 | Speaker | Model | Needed for |
 |---|---|---|
 | Arvo Linde | yes | the daily news |
-| Toko Slomo | **borrowed** — the driver's body | the noodle bar |
+| Toko Slomo | **borrowed** — the parka man | the noodle bar |
+| Sean McCormick | **cast** — the suited man | encounters; the family runs the bars |
 | Faction shot-caller | **borrowed** — the white suit | the battle inset, `COMBAT.md` §9.9 |
 | Jaska | no | moral counterweight, all through `NARRATIVE.md` |
 | McCormick family | no | bars, and where retired crew are found (§9.8) |
@@ -556,3 +557,26 @@ one.
 strings content does (`toko`), which works and is not designed. When a second
 character gets a model this needs to be a declared mapping rather than a
 coincidence.
+
+### Two models were already paid for and idle
+
+Asked to look deeply at the Meshy account and choose, I found twelve tasks: a
+banana, a baseball bat, a diorama, the six role characters, Arvo, and **two
+finished character meshes nobody had used**. Both were rigged for 5 credits each
+rather than remade, which is 10 against a balance of 388.
+
+- **The suited man** is an earlier Arvo attempt — 20794 triangles against the
+  20826 that shipped, which is how it was identified. Cast as **Sean McCormick**,
+  a participant in authored encounters who had no model.
+- **The parka man** replaces the driver as Toko's stand-in. A proprietor in
+  outdoor clothes reads closer to somebody who runs a small place than a courier
+  in a hi-vis armband. Still not a Japanese noodle chef, so still a placeholder.
+
+Both are named for what they ARE rather than who they play, so recasting either
+costs nothing.
+
+**Neither is Toko, and no Toko exists on the account.** The owner's Toko attempts
+were made on the website, and the API only lists tasks created through the API —
+proven by timestamps: the newest task the API can see predates the uploaded
+Kattilahalli glb by hours. If a web task id can be fetched individually that
+would change; untested for want of an id.

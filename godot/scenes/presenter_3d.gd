@@ -25,8 +25,15 @@ const SPEAKERS := {
 	# BORROWED BODIES, so the LOCATION and INSET framings can be judged on a
 	# screen before anybody is commissioned. Owner's call, 2026-08-22: "use any
 	# character in these places for now."
-	"toko": "res://data/art/cast3d/driver-v01.glb",
+	# Toko wears the parka man rather than the driver: a proprietor in outdoor
+	# clothes reads closer to somebody who runs a small place than a courier in a
+	# hi-vis armband does. Still not a Japanese noodle chef, so still borrowed.
+	"toko": "res://data/art/cast3d/parka-man-v01.glb",
 	"shot-caller": "res://data/art/cast3d/enforcer-v01.glb",
+	# Sean McCormick is a participant in authored encounters and had no model.
+	# A suited older man fits a family that runs bars and restaurants, so this
+	# one is cast rather than borrowed.
+	"sean-mccormick": "res://data/art/cast3d/suited-man-v01.glb",
 }
 
 ## Which of the above is standing in for somebody who does not exist yet.

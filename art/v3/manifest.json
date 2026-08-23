@@ -1460,6 +1460,40 @@
       "baked_ui": false,
       "sha256": "43ea179438bed67699403aba616f939f002001ff90acca8b385d6d4379859391",
       "note": "Kattilahalli, the boiler hall at Suvilahti. 23272 triangles. IN BOUNDS, unlike the skate park: Suvilahti sits at Sornainen, and the map already carries a `sornainen_harbour` anchor whose roles are docks, industrial and expansion. Its sliceState is 'teaser', so placing a battle here is a content decision but not a boundary change. The hall has open sides and no floor beyond its own footprint, which is why BattleStage3D lays a concrete slab under every arena - see _build_ground_fill(). KNOWN: some textures are mirrored across opposite sides. Owner's read is that colour and lighting hide it; not attempted here. Textures were 2048 and 4096, both to 1024: 17.8MB to 3.2MB."
+    },
+    {
+      "id": "cast3d-suited-man-v01",
+      "file": "cast3d/suited-man-v01.glb",
+      "kind": "mesh-3d",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "role": "speaker",
+      "source": "Meshy image-to-3d task 01a022e2, rigged 2026-08-23",
+      "note": "Older man, silver hair, glasses, moustache, navy suit, red tie. FOUND, not commissioned: it was already on the Meshy account, paid for and unused — an earlier Arvo attempt at 20794 triangles against the 20826 that shipped. Rigged for 5 credits rather than remade. Cast as Sean McCormick, who is a participant in authored encounters and had no model; an established suited man fits a family that runs bars and restaurants. Named for what it IS, not who it plays, so recasting costs nothing. 24 bones, the same skeleton as the rest of the cast. Texture 2048 to 512: 6.3MB to 1.1MB.",
+      "sha256": "9d2f7cce35c88ccf79747eb45e0ee18bf1b37a83ce47796ded22696953c0d74c"
+    },
+    {
+      "id": "cast3d-parka-man-v01",
+      "file": "cast3d/parka-man-v01.glb",
+      "kind": "mesh-3d",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "role": "speaker",
+      "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
+      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Also found unused on the account and rigged for 5 credits. Stands in for Toko Slomo, replacing the driver's body: a proprietor in outdoor clothes reads closer to somebody who runs a small place than a courier in a hi-vis armband does. STILL A PLACEHOLDER — Toko is a Japanese noodle chef and this is not him, so it stays listed in presenter_3d.PLACEHOLDER_SPEAKERS. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
+      "sha256": "57885c077f8120b91631b0920c12cb55cf33c655d5ba61f9da4ce2679afc07a9"
     }
   ]
 }
