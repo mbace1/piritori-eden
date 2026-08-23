@@ -668,9 +668,11 @@ would have looted the police**. Fixed at the two places that mattered, and gated
 
 **Still to build, in order:**
 
-1. **Nobody spawns.** No third-party fighter is ever put on the board. The police
-   arrival is still bookkeeping — heat, a posture question and a settlement
-   consequence — with no bodies in the yard.
+1. ~~Nobody spawns.~~ **Done.** Two to five arrive, scaled to how loud it got,
+   placed from the middle lanes outwards at the end they came in at. They wear
+   the white suit as a PLACEHOLDER — uniformed police get their own model later —
+   and read in a cold institutional white rather than the opposition's red,
+   because a two-way colour choice would have painted them as somebody to fight.
 2. **They do not act.** A spawned third party needs a turn, and REACTIVE needs to
    mean something: subdue rather than strike, and only respond once provoked.
 3. **Targeting is unwritten.** The ruling is "target logically" — nearest,

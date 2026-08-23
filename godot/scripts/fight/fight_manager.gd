@@ -452,6 +452,69 @@ func _accrue_heat() -> void:
 ## They come in behind whichever side has been making the noise — measured by
 ## who is holding the most ground at the far end. Whoever they arrive behind is
 ## suddenly the side with a problem at their back.
+## How many turn up, scaled to how loud it got (owner ruling).
+##
+## A base pair, plus one for every step of noise past the threshold. Capped,
+## because a yard is a yard: past a certain number they stop being a
+## complication and start being a wall.
+const POLICE_BASE := 2
+const POLICE_PER_STEP := 8.0
+const POLICE_MAX := 5
+
+
+func police_count() -> int:
+	var extra := int((heat - HEAT_THRESHOLD) / POLICE_PER_STEP)
+	return clampi(POLICE_BASE + maxi(extra, 0), POLICE_BASE, POLICE_MAX)
+
+
+## Put them in the yard.
+##
+## They are THIRD_PARTY and REACTIVE (§9.5.35): on the board, not yet anybody's
+## enemy, and they do not start anything. Nothing gives them a turn yet — that is
+## the next piece — so today they stand at the end they came in at and are seen.
+##
+## Lanes are filled from the middle outwards, so a small number reads as a group
+## arriving rather than two figures at opposite edges.
+func _spawn_police() -> void:
+	var n := police_count()
+	var mid := FightBoard.lanes / 2
+	var order: Array[int] = []
+	for step in FightBoard.lanes:
+		var lane := mid + (step + 1) / 2 * (1 if step % 2 == 0 else -1)
+		if lane >= 0 and lane < FightBoard.lanes:
+			order.append(lane)
+
+	var placed := 0
+	for lane in order:
+		if placed >= n:
+			break
+		if _fighter_at(lane, police_entry_depth) != null:
+			continue
+		var f := Fighter.new()
+		f.fighter_id = "police-%d" % placed
+		f.display_name = tr("police.unit")
+		f.side = Fighter.Side.THIRD_PARTY
+		f.disposition = Fighter.Disposition.REACTIVE
+		f.is_player_controlled = false
+		f.role = "police"
+		f.slot = Vector2i(lane, police_entry_depth)
+		f.condition = 8
+		f.condition_max = 8
+		f.nerve = 10
+		f.nerve_max = 10
+		f.tempo = 5
+		_fighters[f.fighter_id] = f
+		placed += 1
+
+
+func _fighter_at(lane: int, depth: int) -> Fighter:
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if f.slot.x == lane and f.slot.y == depth and f.is_active():
+			return f
+	return null
+
+
 func _police_arrive() -> void:
 	police_arrived = true
 	police_entry_depth = FightBoard.total_rows() - 1
@@ -467,6 +530,7 @@ func _police_arrive() -> void:
 	# winning are the ones who look like they started it.
 	if ours >= theirs:
 		police_entry_depth = 0
+	_spawn_police()
 	police_arrived_signal.emit(police_entry_depth)
 
 

@@ -169,3 +169,4 @@ police.help,Go back for them,Hakekaa heidät,連れ戻す
 police.on_the_ground,%d of yours on the ground.,%d omaa maassa.,味方%d名が倒れている。
 police.saved,Pulled out,Saatiin pois,救出
 police.saved_note,Somebody went back for them. It cost what it cost.,Joku palasi hakemaan. Se maksoi mitä maksoi.,誰かが戻って連れ出した。相応の代償を払って。
+police.unit,Police,Poliisi,警察

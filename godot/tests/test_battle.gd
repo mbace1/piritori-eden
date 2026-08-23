@@ -52,6 +52,7 @@ func _ready() -> void:
 	_test_police()
 	_test_police_posture()
 	_test_third_side()
+	_test_police_spawn()
 	_test_cover_is_visible()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
@@ -718,6 +719,63 @@ a third side is not the enemy by default")
 		enemy.is_enemy_of(Fighter.Side.PLAYER))
 	check("and is not its own enemy",
 		not enemy.is_enemy_of(Fighter.Side.OPPOSITION))
+
+
+## Police in the yard, scaled to the noise (owner ruling).
+func _test_police_spawn() -> void:
+	print("
+police arrive in numbers")
+	var f := FightManager.new()
+	f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	var before := f.get_fighters(Fighter.Side.THIRD_PARTY).size()
+	check("nobody is there to begin with", before == 0)
+
+	# Just over the threshold: the smallest turnout.
+	f.heat = FightManager.HEAT_THRESHOLD
+	check("a quiet arrival is the base number",
+		f.police_count() == FightManager.POLICE_BASE)
+
+	# Very loud: more of them, but not without limit — past a point they stop
+	# being a complication and start being a wall.
+	f.heat = FightManager.HEAT_THRESHOLD + FightManager.POLICE_PER_STEP * 20.0
+	check("a loud one brings more", f.police_count() > FightManager.POLICE_BASE)
+	check("and never more than the yard holds",
+		f.police_count() == FightManager.POLICE_MAX)
+
+	# Now actually put them on the board.
+	f.heat = FightManager.HEAT_THRESHOLD
+	f._police_arrive()
+	var police: Array = f.get_fighters(Fighter.Side.THIRD_PARTY)
+	check("they are on the board", police.size() == f.police_count())
+
+	var ok := true
+	for p in police:
+		var u: Fighter = p
+		if u.side != Fighter.Side.THIRD_PARTY: ok = false
+		if u.disposition != Fighter.Disposition.REACTIVE: ok = false
+		if u.is_player_controlled: ok = false
+		if u.slot.y != f.police_entry_depth: ok = false
+		if u.is_enemy_of(Fighter.Side.PLAYER): ok = false
+	check("reactive, at the end they came in at, and nobody's enemy yet", ok)
+
+	# Two of them must not be standing in the same cell.
+	var cells: Dictionary = {}
+	for p in police:
+		cells[str((p as Fighter).slot)] = true
+	check("no two of them share a cell", cells.size() == police.size())
+
+	# And they do not land on somebody who is already there.
+	var clash := false
+	for p in police:
+		for other in f.get_fighters(Fighter.Side.OPPOSITION):
+			if other != null and (other as Fighter).slot == (p as Fighter).slot:
+				clash = true
+	check("and not on top of anyone", not clash)
+
+	# The aftermath must still not count them.
+	var a := f.aftermath()
+	check("they are not counted as opposition",
+		(a["theirs"] as Array).size() + (a["ours"] as Array).size() < 3 + 3 + police.size())
 
 
 ## Cover has to be answerable, not just enforced.

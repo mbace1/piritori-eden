@@ -69,6 +69,10 @@ const UNIT_BY_ROLE := {
 	# with no model until one arrived rigged. Cheap gear, planted stance: the
 	# people the roster churns through.
 	"hired":   "res://data/art/cast3d/hired-v01.glb",
+	# Police, standing in the yard. The white suit is a PLACEHOLDER by owner's
+	# call — uniformed police get their own model later — and it is listed as one
+	# so it cannot quietly become the answer.
+	"police":  "res://data/art/cast3d/enforcer-v01.glb",
 	# Opposition only. Deliberately absent from CrewGenerator.ROLES: `hired`
 	# is what you buy, `enforcer` is what faces you, and the split is the
 	# reason an enemy should not look like somebody on your own payroll.
@@ -157,6 +161,9 @@ var _arena_half := Vector2(6.0, 6.0)
 
 const SIDE_CYAN := Color("#57c8e8")
 const SIDE_RED := Color("#c8443c")
+## A third side reads as neither. Cold white-blue: institutional, and
+## deliberately not a warm colour that would suggest an ally.
+const SIDE_THIRD := Color("#dfe6ef")
 const NEUTRAL_GREY := Color("#8d9199")
 
 var fight: FightManager = null
@@ -561,7 +568,14 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 	# readable from its edge before any label is read. §12.2 asks for team and
 	# intent to be readable, and colour alone never carries meaning — the
 	# silhouette carries the role, the rim carries the side.
-	var side_tint := SIDE_CYAN if f.side == Fighter.Side.PLAYER else SIDE_RED
+	# Three sides now, so a two-way choice would have painted the police as the
+	# opposition — the same class of mistake as the loot bug in COMBAT.md
+	# §9.5.36, but visual: they would LOOK like somebody to fight.
+	var side_tint := SIDE_THIRD
+	if f.side == Fighter.Side.PLAYER:
+		side_tint = SIDE_CYAN
+	elif f.side == Fighter.Side.OPPOSITION:
+		side_tint = SIDE_RED
 	mat.set_shader_parameter("rim_tint",
 		Vector3(side_tint.r, side_tint.g, side_tint.b))
 	mat.set_shader_parameter("rim_gain", 0.35 if not f.is_active() else 0.85)
