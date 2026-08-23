@@ -196,6 +196,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	upgrades = PackedStringArray()
 	chapter = 1
 	chapter_cleared = false
+	last_ending_outcome = ""
 	_sync_chapter_from_content()
 	chapter_earned = 0
 	chapter_loot_taken = 0
@@ -465,6 +466,57 @@ func chapter_ending_available() -> bool:
 var chapter_cleared: bool = false
 
 
+## How the last operation went. "clean", "messy" or "lost".
+var last_ending_outcome: String = ""
+
+## How many hands it takes for a container to move quietly.
+const OPERATION_IDEAL_CREW := 3
+
+
+## Did the shipment get away?
+##
+## THE PENALTY CANNOT BE MONEY. Cash resets at a chapter boundary, so a fine
+## levied at the end of a chapter costs nothing at all — that is the persistence
+## ledger deciding the design rather than the other way round. What can be lost
+## is what CARRIES: gear and people.
+##
+## Likewise the reward. A payout would evaporate, so a clean run buys a **built
+## upgrade**, which is the one kind of thing the ledger says you keep.
+##
+## Resolved from the seed and the chapter so the same run resolves the same way,
+## matching how gear decays. A player who reloads to reroll a shipment is playing
+## a different game from the one being built.
+func _resolve_operation(ending: Dictionary) -> String:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value * 17 + chapter * 7
+
+	# Hands on the job. A thin crew is the thing most likely to lose a container.
+	var hands := roster.size()
+	var margin := float(hands) / float(OPERATION_IDEAL_CREW)
+	# Heat carried into the night makes it worse, which is what connects §9.5 to
+	# the meta rather than leaving it a battle-only idea.
+	var seen := float(arrested_crew.size()) * 0.15
+	var score := margin - seen + rng.randf_range(-0.35, 0.35)
+
+	if score >= 1.0:
+		var up := String(ending.get("grants_upgrade", ""))
+		if up != "":
+			add_upgrade(up)
+		return "clean"
+	if score >= 0.5:
+		# Something had to be left behind.
+		if not equipment.is_empty():
+			equipment.remove_at(equipment.size() - 1)
+		return "messy"
+	# Somebody did not come back. Costs a person, which is the only currency
+	# that still means anything at a chapter boundary.
+	for id in roster:
+		if not is_named(String(id)):
+			arrest(String(id))
+			break
+	return "lost"
+
+
 ## Run the ending, and turn the chapter over.
 ##
 ## An OPERATION rather than a battle: buying a shipment and moving it. If every
@@ -485,9 +537,10 @@ func attempt_chapter_ending() -> String:
 
 	cash_eur -= stake
 	chapter_cleared = true
+	last_ending_outcome = _resolve_operation(ending)
 	# A chapter you finished is a thing the city remembers, and §9.8 makes
 	# memories the seam every later system reads.
-	memories.append("chapter-cleared:%d" % chapter)
+	memories.append("chapter-cleared:%d:%s" % [chapter, last_ending_outcome])
 	state_changed.emit()
 	return ""
 
@@ -1223,6 +1276,7 @@ func to_dict() -> Dictionary:
 		"upgrades": upgrades,
 		"chapter": chapter,
 		"chapter_cleared": chapter_cleared,
+		"last_ending_outcome": last_ending_outcome,
 		"chapter_goal": int(chapter_goal),
 		"chapter_threshold": chapter_threshold,
 		"chapter_earned": chapter_earned,
@@ -1313,6 +1367,7 @@ func from_dict(d: Dictionary) -> bool:
 
 	state_changed.emit()
 	upgrades = d.get("upgrades", PackedStringArray())
+	last_ending_outcome = String(d.get("last_ending_outcome", ""))
 	chapter_cleared = bool(d.get("chapter_cleared", false))
 	chapter = int(d.get("chapter", 1))
 	chapter_goal = d.get("chapter_goal", int(ChapterGoal.MONEY)) as ChapterGoal

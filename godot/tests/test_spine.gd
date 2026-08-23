@@ -459,8 +459,17 @@ the chapter ends at the docks")
 		GameState.attempt_chapter_ending() == "")
 	check("the stake was spent", GameState.cash_eur == 25)
 	check("the chapter is cleared", GameState.chapter_cleared)
-	check("and the city remembers it",
-		GameState.memories.has("chapter-cleared:1"))
+	# The memory carries the OUTCOME, not just the fact. Every later system reads
+	# memories (§9.8), and "you finished chapter one badly" is a different thing
+	# for the city to know than "you finished chapter one".
+	var remembered := false
+	for m in GameState.memories:
+		if String(m).begins_with("chapter-cleared:1:"):
+			remembered = true
+	check("and the city remembers how it went", remembered, str(GameState.memories))
+	check("the outcome is one the screen can render",
+		["clean", "messy", "lost"].has(GameState.last_ending_outcome),
+		GameState.last_ending_outcome)
 	check("it cannot be cleared twice",
 		GameState.attempt_chapter_ending() == "not-available")
 

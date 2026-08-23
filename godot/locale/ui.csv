@@ -179,3 +179,11 @@ equipment.cond_new,new,uusi,新品
 equipment.cond_used,used,käytetty,中古
 equipment.cond_faulty,faulty,viallinen,不良
 equipment.cond_broken,broken,rikki,故障
+chapter.progress,Toward the end of this one: %d of %d,Tämän loppuun: %d/%d,この章の目標: %d/%d
+chapter.elsewhere,Not from here. It happens at the harbour.,Ei täältä. Se tapahtuu satamassa.,ここでは無理だ。港で起きる。
+chapter.commit,Pay for the container — €%d,Maksa kontista — %d €,コンテナの代金を払う — €%d
+chapter.cleared,THAT IS THE END OF IT,SE OLI SIINÄ,これで終わりだ
+chapter.next,Whatever comes next,Mitä seuraavaksi tuleekaan,次に来るものへ
+chapter.out_clean,"It went quietly. The container is gone and so are you, and you have somewhere to put things now.","Meni hiljaa. Kontti on poissa ja niin olet sinäkin, ja nyt on paikka mihin panna tavaraa.",静かに済んだ。コンテナも消え、あなたも消えた。物を置く場所ができた。
+chapter.out_messy,"It moved, but not cleanly. Something had to be left on the quay.","Se liikkui, muttei siististi. Jotain jäi laiturille.",動きはした。だが綺麗にではない。何かを岸に残した。
+chapter.out_lost,It went wrong on the quay. Somebody did not come back.,Laiturilla meni pieleen. Joku ei tullut takaisin.,岸で失敗した。戻らなかった者がいる。

@@ -127,7 +127,11 @@ for (const [key, file] of used) {
 const builtPrefixes = new Set();
 for (const file of gdFiles(root)) {
   const src = readFileSync(file, 'utf8');
-  for (const m of src.matchAll(/tr\("([a-z][a-z_0-9]*\.)%s"/g)) {
+  // Any prefix that ends where the interpolation begins, not only one that
+  // ends at the dot. `tr("chapter.out_%s")` is as much a built key as
+  // `tr("equipment.%s")`, and the narrower pattern reported three live strings
+  // as stale.
+  for (const m of src.matchAll(/tr\("([a-z][a-z_0-9.]*?)%s"/g)) {
     builtPrefixes.add(m[1]);
   }
 }

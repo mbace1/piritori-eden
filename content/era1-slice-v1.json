@@ -1907,7 +1907,8 @@
         "anchor_id": "sornainen_harbour",
         "label": "The shipment",
         "brief": "A container comes off a ship at Sörnäinen. Pay for it, move it, and be somewhere else by morning.",
-        "stake_eur": 400
+        "stake_eur": 400,
+        "grants_upgrade": "stash-house-sornainen"
       }
     }
   ]

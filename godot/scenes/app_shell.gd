@@ -886,10 +886,91 @@ func _refresh_market_rail() -> void:
 	_rail_box.add_child(_make_label(tr("ui.ledger"), 19))
 	_rail_box.add_child(_make_label(tr("ui.ledger_earned"), 13, PiritoriPalette.TEXT_DIM))
 	_add_fence()
+	_add_chapter_ending()
 	_rail_box.add_child(_separator())
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
+
+
+## THE END OF A CHAPTER (GDD run structure).
+##
+## The threshold buys entry and the operation spends it, so this only appears
+## when both are true — and when it does it is the most important thing on the
+## screen, because it ends the run.
+##
+## It lives in the market rail rather than on a screen of its own: a shipment is
+## a purchase, and putting it beside the ledger and the fence says that plainly.
+func _add_chapter_ending() -> void:
+	var ending := GameState.chapter_ending()
+	if ending.is_empty():
+		return
+	if GameState.chapter_cleared:
+		_rail_box.add_child(_separator())
+		_rail_box.add_child(_make_label(tr("chapter.cleared"), 15, MapStyle.TITLE_TEXT))
+		var b := _make_button(tr("chapter.next"), PiritoriPalette.PLAYER_CYAN)
+		b.pressed.connect(func():
+			GameState.begin_next_chapter()
+			_show_city())
+		_rail_box.add_child(b)
+		return
+
+	if not GameState.chapter_goal_met():
+		# Show the distance. A goal you cannot see the edge of is not a goal, it
+		# is a surprise.
+		_rail_box.add_child(_separator())
+		_rail_box.add_child(_make_label(tr("chapter.progress") % [
+			GameState.chapter_progress(), GameState.chapter_threshold],
+			12, PiritoriPalette.TEXT_DIM))
+		return
+
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(String(ending.get("label", "")).to_upper(),
+		15, MapStyle.TITLE_TEXT))
+	var brief := _make_label(String(ending.get("brief", "")), 12, PiritoriPalette.TEXT)
+	brief.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(brief)
+
+	var stake := int(ending.get("stake_eur", 0))
+	var here := String(ending.get("anchor_id", "")) == GameState.current_anchor_id
+	if not here:
+		var l := _make_label(tr("chapter.elsewhere"), 12, PiritoriPalette.INTEL_MUSTARD)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(l)
+		return
+
+	var afford := GameState.cash_eur >= stake
+	var go := _make_button(tr("chapter.commit") % stake,
+		PiritoriPalette.GOODS_MAGENTA if afford else PiritoriPalette.LOCKED_GREY)
+	go.disabled = not afford
+	go.pressed.connect(func():
+		if GameState.attempt_chapter_ending() == "":
+			_show_chapter_result())
+	_rail_box.add_child(go)
+
+
+## What the night cost. Named outcomes rather than a number, because the number
+## — money — is the one thing that does not survive the chapter anyway.
+func _show_chapter_result() -> void:
+	_show_city()
+	_clear_rail()
+	_rail.visible = true
+	var out := GameState.last_ending_outcome
+	_rail_box.add_child(_make_label(tr("chapter.cleared"), 19, MapStyle.TITLE_TEXT))
+	# Written inline rather than through a variable. The locale gate scans the
+	# SOURCE for interpolated translation keys, so one assembled into a local is
+	# invisible to it and its rows get reported as stale. Three were.
+	# (And a comment quoting the pattern literally gets scanned too, which is how
+	# this comment came to be worded around it.)
+	var l := _make_label(tr("chapter.out_%s" % out), 13, PiritoriPalette.TEXT)
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(l)
+	_rail_box.add_child(_separator())
+	var b := _make_button(tr("chapter.next"), PiritoriPalette.PLAYER_CYAN)
+	b.pressed.connect(func():
+		GameState.begin_next_chapter()
+		_show_city())
+	_rail_box.add_child(b)
 
 
 ## THE FENCE — where loot finally becomes money (COMBAT.md §9.7).

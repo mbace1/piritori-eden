@@ -916,3 +916,41 @@ magnification up.
   authored goal, ending or content.
 - **Three more pinned counts fired** — anchors, edges, active anchors — and all
   three were right.
+
+## A chapter can be finished in play, and the shipment can go wrong
+
+The ending is on screen, in the market rail beside the ledger and the fence —
+because a shipment is a purchase, and putting it there says so. It appears only
+when the threshold is met, shows the distance while it is not, and refuses from
+the wrong place by naming the right one.
+
+### The penalty could not be money, and that decided the design
+
+Cash **resets** at a chapter boundary, so a fine levied at the end of a chapter
+costs nothing at all. The persistence ledger therefore decides what failure can
+take: only what carries. So the outcomes spend **gear and people**, and a clean
+run buys a **built upgrade** — a stash house — because a payout would evaporate
+the same way.
+
+    clean   the container is gone and so are you; you gain the stash house
+    messy   something was left on the quay; you lose a piece of gear
+    lost    somebody did not come back; you lose a crew member
+
+Resolved from crew size, from how many people you have already lost, and from a
+seeded roll — deterministic, matching how gear decays, because a player who
+reloads to reroll a shipment is playing a different game.
+
+### Two gate lessons
+
+The locale gate reported three live strings as stale because the key was
+assembled into a local variable: it scans the SOURCE for interpolated keys, and
+`var key := "..." ; tr(key)` is invisible to it. Then the fixed comment quoted
+the pattern literally and got scanned as a key itself. Both are now handled, and
+the scanner understands prefixes with a suffix after the dot.
+
+### Still open
+
+- **The operation is one roll.** No crew choice, no route, no equipment brought
+  to bear. It reads as a dice throw with a nice sentence attached.
+- **Only chapter one exists**, so `begin_next_chapter()` moves into a chapter
+  with no authored goal or ending.
