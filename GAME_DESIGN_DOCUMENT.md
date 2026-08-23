@@ -2052,6 +2052,52 @@ is not the hardest available content.
 - It gives the harm curve somewhere to sit: abstract in chapter one, personal by
   chapter four.
 
+### What ends a chapter — owner ruling, 2026-08-22
+
+**A threshold met over ten days, then an ending mission that spends it.**
+
+#### The goal is a threshold, and its type varies
+
+Each chapter sets an end goal for its ten-day period. **Most likely money**, but
+it can equally be an amount of loot or a number of fights won.
+
+Varying the type is where chapter-to-chapter variety comes from at the top level,
+the same way mission and goal options supply it within a chapter. A chapter you
+clear by earning is not the same chapter you clear by winning fights, even on the
+same map with the same crew.
+
+#### The climax is a mission, and it is not always a fight
+
+Clearing is an **ending mission**: either a boss-fight sort of confrontation, or
+a **large commercial operation** — buy a big shipment and get it distributed.
+
+That second option matters more than it looks. If every chapter ended in a
+battle, the market would be a supply line to the real game. Letting a chapter end
+on a distribution run makes commerce a climax in its own right, which is what
+"narrative strategy / market management / squad tactics" in §2 actually promises.
+
+#### The threshold buys entry to the climax
+
+The ten days are how you earn your way in; the ending mission is where it is
+spent. This is `MAP.md` §12.5 at chapter scale — there, travelling and selling
+buys entry to a better meeting; here, ten days of trade buy entry to the finale.
+One idea at two magnifications rather than two systems.
+
+#### Big purchases are goals too
+
+**A bigger stash house** is an example of what a chapter can be *for*. It is also
+the persistence case from the ledger below: a built upgrade carries across runs
+because the player made it, where a mission unlock does not.
+
+#### What this obliges
+
+- A chapter needs a **goal type**, a **threshold**, and an **ending mission id**.
+- Progress toward the goal has to be countable live, or the player cannot tell
+  how close they are — money, loot volume and fights won are three different
+  counters and all three need to exist.
+- The ending mission needs to accept both shapes: a battle, and an operation
+  that is not a battle.
+
 ### What persists across a re-run — confirmed and refined, 2026-08-22
 
 Following the FFT half of decision 2 in `PHASING.md` §0.2. **Three states, not
