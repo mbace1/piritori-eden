@@ -875,3 +875,44 @@ collection in the save had it.
   undecided: a chance to fail, reduced effect, or something weapon-specific.
 - **`broken` is still usable.** Nothing stops a broken weapon being carried into
   a fight and working normally.
+
+## Suvilahti is not the harbour — a geography error, corrected
+
+Owner correction. Kattilahalli is in **Suvilahti**, the old gasworks; the
+**docks** are the waterfront. I had filed both sites and the battle under
+`sornainen_harbour`, merging two places into one.
+
+`suvilahti` is now its own anchor with its own edges, and the Kattilahalli battle
+moved to it. The harbour lost the `faction` role it should never have had.
+
+**The real gasworks sit just EAST of the locked production boundary** (lon
+24.9757 against an east bound of 24.974), so the anchor is placed at the frame
+edge and marked `representative-inside-production-boundary` — exactly the
+treatment `sornainen_harbour` already carries.
+
+## A chapter can now be finished
+
+Chapter one is authored content, not constants: a goal type, a threshold, and an
+ending. `GameState` reads it, so varying the goal between chapters — which is
+where top-level variety comes from — is content's to decide.
+
+**The ending is an OPERATION at the docks, not a fight.** The GDD ruling doing
+real work: if every chapter ended in a battle the market would be a supply line
+to the real game. Buying a shipment and moving it is a climax in its own right.
+
+The threshold buys **entry**; the operation **spends** it. You have to be at the
+harbour and you have to have the stake — the same idea as `MAP.md` §12.5 one
+magnification up.
+
+### Still open
+
+- **Nothing in the interface offers it.** `attempt_chapter_ending()` works and
+  is gated, and no screen calls it — so a chapter still cannot be finished in
+  play, only in a test.
+- **The operation always succeeds.** There is no risk, no failure, and nothing
+  the crew or the market can do to change the outcome. It is a transaction, not
+  yet an operation.
+- **Only chapter one exists.** Four are planned; chapters two to four have no
+  authored goal, ending or content.
+- **Three more pinned counts fired** — anchors, edges, active anchors — and all
+  three were right.

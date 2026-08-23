@@ -70,7 +70,12 @@ for (const service of map.periodServices) {
 // 8 -> 9 on 2026-08-23: Sörnäinen opened by owner ruling. Kattilahalli, Suvilahti
 // and Sörnäinen are places where fights and other dealings happen, and the arena
 // for the boiler hall was already registered art with nowhere to be.
-const EXPECTED_ACTIVE_ANCHORS = 9;
+// 9 -> 10 on 2026-08-23: Suvilahti separated from the harbour. Kattilahalli is
+// in the old gasworks and the docks are the waterfront — filing both under one
+// anchor had merged two places. The real gasworks sit just EAST of the locked
+// production boundary, so the anchor is placed at the frame edge and marked
+// representative, exactly as the harbour already is.
+const EXPECTED_ACTIVE_ANCHORS = 10;
 const active = map.anchors.filter((anchor) => anchor.sliceState === 'active');
 if (active.length !== EXPECTED_ACTIVE_ANCHORS) {
   fail(`expected ${EXPECTED_ACTIVE_ANCHORS} active slice anchors, found ${active.length}`);

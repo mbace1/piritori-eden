@@ -32,6 +32,7 @@ func _ready() -> void:
 	_test_fence()
 	_test_arrest()
 	_test_chapters()
+	_test_chapter_ending()
 	_test_gear_wears_out()
 	_test_hiring()
 	_test_every_reference_resolves()
@@ -64,8 +65,12 @@ func _test_content_loads() -> void:
 	print("\ncontent registry")
 	check("canonical JSON loads with no errors", ContentRegistry.errors.is_empty(),
 		str(ContentRegistry.errors))
-	eq("twelve anchors", ContentRegistry.anchors().size(), 12)
-	eq("twenty-two edges", ContentRegistry.edges().size(), 22)
+	# 12 -> 13 anchors and 22 -> 24 edges on 2026-08-23: Suvilahti separated from
+	# the harbour, with the two edges that make it reachable. Kattilahalli is in
+	# the old gasworks and the docks are the waterfront; filing both under one
+	# anchor had merged two places into one.
+	eq("thirteen anchors", ContentRegistry.anchors().size(), 13)
+	eq("twenty-four edges", ContentRegistry.edges().size(), 24)
 	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
 	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
 	# without somebody deciding it should.
@@ -404,6 +409,64 @@ gear wears out")
 	for i in GameState.equipment.size():
 		back.append(int(GameState.condition_at(i)))
 	check("every condition came back", back == second, str(back))
+
+
+## The ending mission (GDD run structure): a threshold buys ENTRY to a climax.
+##
+## Chapter one ends at the DOCKS with an operation rather than a fight, which is
+## the ruling doing real work — if every chapter ended in a battle the market
+## would be a supply line to the real game.
+func _test_chapter_ending() -> void:
+	print("
+the chapter ends at the docks")
+	GameState.new_campaign()
+
+	var c := GameState.chapter_def()
+	check("chapter one is authored", not c.is_empty())
+	check("and its goal came from content, not code",
+		GameState.chapter_threshold == int((c.get("goal", {}) as Dictionary).get("threshold", -1)))
+
+	var ending := GameState.chapter_ending()
+	check("it has an ending", not ending.is_empty())
+	check("which is an operation, not a battle",
+		String(ending.get("kind", "")) == "operation")
+	check("at the harbour, which is not the boiler hall",
+		String(ending.get("anchor_id", "")) == "sornainen_harbour")
+
+	# Not before it is earned.
+	check("the ending is shut until the goal is met",
+		not GameState.chapter_ending_available())
+	check("and attempting it is refused",
+		GameState.attempt_chapter_ending() == "not-available")
+
+	GameState.record_chapter_income(GameState.chapter_threshold)
+	check("meeting the goal opens it", GameState.chapter_ending_available())
+
+	# Place and stake both matter: the threshold buys entry, the operation
+	# spends it, and you have to be there.
+	GameState.cash_eur = int(ending.get("stake_eur", 0))
+	GameState.current_anchor_id = "piritori"
+	check("it cannot be run from the wrong place",
+		GameState.attempt_chapter_ending() == "wrong-place")
+
+	GameState.current_anchor_id = "sornainen_harbour"
+	GameState.cash_eur = 0
+	check("nor without the stake",
+		GameState.attempt_chapter_ending() == "cannot-afford")
+
+	GameState.cash_eur = int(ending.get("stake_eur", 0)) + 25
+	check("but it runs when both are true",
+		GameState.attempt_chapter_ending() == "")
+	check("the stake was spent", GameState.cash_eur == 25)
+	check("the chapter is cleared", GameState.chapter_cleared)
+	check("and the city remembers it",
+		GameState.memories.has("chapter-cleared:1"))
+	check("it cannot be cleared twice",
+		GameState.attempt_chapter_ending() == "not-available")
+
+	# And the turnover reopens the next one.
+	GameState.begin_next_chapter()
+	check("the next chapter is not already cleared", not GameState.chapter_cleared)
 
 
 ## The fence (COMBAT.md §9.7). Loot becomes money at Piritori and nowhere else.

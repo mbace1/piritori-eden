@@ -195,6 +195,8 @@ func new_campaign(with_seed: int = 0) -> void:
 	arrested_crew = PackedStringArray()
 	upgrades = PackedStringArray()
 	chapter = 1
+	chapter_cleared = false
+	_sync_chapter_from_content()
 	chapter_earned = 0
 	chapter_loot_taken = 0
 	chapter_fights_won = 0
@@ -357,6 +359,7 @@ func add_upgrade(id: String) -> void:
 ## roguelike.
 func begin_next_chapter() -> void:
 	chapter += 1
+	chapter_cleared = false
 	day = ((chapter - 1) * CHAPTER_DAYS) + 1
 	block_index = (day - 1) * blocks_per_day.size()
 
@@ -370,6 +373,10 @@ func begin_next_chapter() -> void:
 	# load the whole ledger carries: without decay, persistence plus re-runnable
 	# chapters is a farming exploit.
 	decay_equipment()
+
+	# ...and what it is FOR may differ next time, so read it from content
+	# rather than carrying the last chapter's goal forward.
+	_sync_chapter_from_content()
 
 	# Chapter progress starts again; what it is FOR may differ next time.
 	chapter_earned = 0
@@ -412,6 +419,77 @@ var chapter_threshold: int = 600
 var chapter_earned: int = 0
 var chapter_loot_taken: int = 0
 var chapter_fights_won: int = 0
+
+
+## The authored chapter, or an empty dictionary if content has none.
+##
+## The goal and the threshold used to be variables with defaults in code. They
+## belong here: varying the goal TYPE between chapters is where top-level variety
+## comes from, and that variation is content's to author.
+func chapter_def() -> Dictionary:
+	for c in ContentRegistry.slice.get("chapters", []):
+		if int((c as Dictionary).get("index", 0)) == chapter:
+			return c
+	return {}
+
+
+## Pull goal and threshold out of content, falling back to whatever is set.
+func _sync_chapter_from_content() -> void:
+	var c := chapter_def()
+	if c.is_empty():
+		return
+	var goal: Dictionary = c.get("goal", {})
+	match String(goal.get("type", "")):
+		"loot": chapter_goal = ChapterGoal.LOOT
+		"fights": chapter_goal = ChapterGoal.FIGHTS
+		"money": chapter_goal = ChapterGoal.MONEY
+	if goal.has("threshold"):
+		chapter_threshold = int(goal["threshold"])
+
+
+## The climax, once it has been earned.
+##
+## The threshold buys ENTRY; it is not the ending. `MAP.md` §12.5 is the same
+## idea one magnification down, where travelling and selling buys entry to a
+## better meeting.
+func chapter_ending() -> Dictionary:
+	return chapter_def().get("ending", {})
+
+
+func chapter_ending_available() -> bool:
+	return chapter_goal_met() and not chapter_def().is_empty() \
+		and not chapter_cleared
+
+
+## Set when the ending has been run, so a chapter cannot be cleared twice.
+var chapter_cleared: bool = false
+
+
+## Run the ending, and turn the chapter over.
+##
+## An OPERATION rather than a battle: buying a shipment and moving it. If every
+## chapter ended in a fight the market would be a supply line to the real game,
+## and the GDD ruling is explicit that commerce should be able to be the climax.
+##
+## Returns "" on success, or a reason it could not be attempted.
+func attempt_chapter_ending() -> String:
+	if not chapter_ending_available():
+		return "not-available"
+	var ending := chapter_ending()
+	var stake := int(ending.get("stake_eur", 0))
+	if cash_eur < stake:
+		return "cannot-afford"
+	if String(ending.get("anchor_id", "")) != "" \
+			and current_anchor_id != String(ending["anchor_id"]):
+		return "wrong-place"
+
+	cash_eur -= stake
+	chapter_cleared = true
+	# A chapter you finished is a thing the city remembers, and §9.8 makes
+	# memories the seam every later system reads.
+	memories.append("chapter-cleared:%d" % chapter)
+	state_changed.emit()
+	return ""
 
 
 ## Where the day sits inside its chapter, 1-based.
@@ -1144,6 +1222,7 @@ func to_dict() -> Dictionary:
 		"arrested_crew": arrested_crew,
 		"upgrades": upgrades,
 		"chapter": chapter,
+		"chapter_cleared": chapter_cleared,
 		"chapter_goal": int(chapter_goal),
 		"chapter_threshold": chapter_threshold,
 		"chapter_earned": chapter_earned,
@@ -1234,6 +1313,7 @@ func from_dict(d: Dictionary) -> bool:
 
 	state_changed.emit()
 	upgrades = d.get("upgrades", PackedStringArray())
+	chapter_cleared = bool(d.get("chapter_cleared", false))
 	chapter = int(d.get("chapter", 1))
 	chapter_goal = d.get("chapter_goal", int(ChapterGoal.MONEY)) as ChapterGoal
 	chapter_threshold = int(d.get("chapter_threshold", 600))

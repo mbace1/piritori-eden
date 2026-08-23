@@ -308,12 +308,34 @@
         "docks",
         "industrial",
         "expansion",
-        "market",
-        "faction"
+        "market"
       ],
       "labelOffset": [
         -152,
         38
+      ]
+    },
+    {
+      "id": "suvilahti",
+      "label": "SUVILAHTI",
+      "wgs84": [
+        60.1868,
+        24.9722
+      ],
+      "board": {
+        "x": 959.57,
+        "y": 408.4
+      },
+      "coordinateStatus": "representative-inside-production-boundary",
+      "sliceState": "active",
+      "roles": [
+        "industrial",
+        "faction",
+        "expansion"
+      ],
+      "labelOffset": [
+        -96,
+        -34
       ]
     }
   ],
@@ -410,7 +432,7 @@
     },
     {
       "id": "suvilahti_yard",
-      "anchorId": "sornainen_harbour",
+      "anchorId": "suvilahti",
       "label": "Suvilahti yard",
       "kind": "narrative-encounter",
       "fictional": true,
@@ -419,7 +441,7 @@
     },
     {
       "id": "kattilahalli",
-      "anchorId": "sornainen_harbour",
+      "anchorId": "suvilahti",
       "label": "Kattilahalli",
       "kind": "narrative-encounter",
       "fictional": true,
@@ -663,6 +685,28 @@
         "car"
       ],
       "lengthBand": "long"
+    },
+    {
+      "id": "e23",
+      "from": "sornainen_harbour",
+      "to": "suvilahti",
+      "corridor": "sornaisten-rantatie",
+      "modes": [
+        "walk",
+        "car"
+      ],
+      "lengthBand": "short"
+    },
+    {
+      "id": "e24",
+      "from": "suvilahti",
+      "to": "piritori",
+      "corridor": "sornaisten-rantatie",
+      "modes": [
+        "walk",
+        "car"
+      ],
+      "lengthBand": "short"
     }
   ],
   "periodServices": [
