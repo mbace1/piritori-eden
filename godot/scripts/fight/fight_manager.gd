@@ -375,6 +375,8 @@ func aftermath() -> Dictionary:
 		"heat": heat,
 		"police_arrived": police_arrived,
 		"taken": taken_by_police(),
+		"saved": saved_from_police(),
+		"posture": int(police_posture),
 	}
 
 
@@ -466,6 +468,88 @@ func _police_arrive() -> void:
 	police_arrived_signal.emit(police_entry_depth)
 
 
+## What the crew does about it (COMBAT.md §9.5.2).
+##
+## Both sides are supposed to get this choice. The player's is what turns the
+## arrival from a timer into a decision.
+enum PolicePosture {
+	UNDECIDED,
+	BACK_OFF,      ## let it happen, get clear
+	HELP_FRIENDS,  ## reach the fallen first, and risk the people still standing
+	ENGAGE,        ## not available: see QUEUE — needs a third Side
+}
+
+var police_posture: PolicePosture = PolicePosture.UNDECIDED
+
+## Resolved once a posture is chosen. Before that, `taken_by_police()` reports
+## the provisional list — everyone who is currently on the ground.
+var _police_resolved: bool = false
+var _police_taken: PackedStringArray = []
+var _police_saved: PackedStringArray = []
+
+## How close to the police a fallen crew member has to be before pulling them out
+## costs you the person doing the pulling.
+const RESCUE_DANGER_DEPTH := 1
+
+
+## Answer them. Returns false for a posture that is not available.
+func choose_police_posture(p: PolicePosture) -> bool:
+	if not police_arrived or _police_resolved:
+		return false
+	if p == PolicePosture.ENGAGE:
+		# Deliberately refused rather than faked. Fighting them means a third
+		# side on the board, and `Side` has two values.
+		return false
+	police_posture = p
+	_resolve_police_outcome()
+	return true
+
+
+## BACK_OFF loses everyone on the ground. HELP_FRIENDS spends the people still
+## standing to pull them out, and the ones nearest the police cost the most.
+##
+## This is what makes §9.5.1's entry end matter: whichever end they came in at
+## decides who is reachable and who is a trade. Without it the entry side is
+## flavour.
+func _resolve_police_outcome() -> void:
+	_police_resolved = true
+	_police_taken = PackedStringArray()
+	_police_saved = PackedStringArray()
+
+	var fallen: Array[Fighter] = []
+	var standing: Array[Fighter] = []
+	for id in _fighters:
+		var f: Fighter = _fighters[id]
+		if not f.is_player_controlled:
+			continue
+		if f.status == Fighter.Status.DOWNED:
+			fallen.append(f)
+		elif f.is_active():
+			standing.append(f)
+
+	if police_posture != PolicePosture.HELP_FRIENDS:
+		for f in fallen:
+			_police_taken.append(f.fighter_id)
+		return
+
+	# Nearest the police first: they are the ones actually in danger, and
+	# leaving them to save an easier body would be the wrong way round.
+	fallen.sort_custom(func(a, b):
+		return absi(a.slot.y - police_entry_depth) < absi(b.slot.y - police_entry_depth))
+
+	for f in fallen:
+		if standing.is_empty():
+			_police_taken.append(f.fighter_id)
+			continue
+		var helper: Fighter = standing.pop_back()
+		_police_saved.append(f.fighter_id)
+		if absi(f.slot.y - police_entry_depth) <= RESCUE_DANGER_DEPTH:
+			# Close enough that the helper walks into it. A straight swap: a
+			# body on its feet for a body on the ground, which is usually a bad
+			# trade and is meant to be.
+			_police_taken.append(helper.fighter_id)
+
+
 ## Who the police take.
 ##
 ## §9.5.3: their default posture is subdue, and its bite is on the fallen —
@@ -479,11 +563,24 @@ func taken_by_police() -> PackedStringArray:
 	var out: PackedStringArray = []
 	if not police_arrived:
 		return out
+	if _police_resolved:
+		return _police_taken
+	# Nobody has answered yet, so this is the provisional cost of doing nothing.
 	for id in _fighters:
 		var f: Fighter = _fighters[id]
 		if f.is_player_controlled and f.status == Fighter.Status.DOWNED:
 			out.append(f.fighter_id)
 	return out
+
+
+## Who was pulled out. Empty unless somebody went back for them.
+func saved_from_police() -> PackedStringArray:
+	return _police_saved
+
+
+## Still waiting on an answer.
+func police_awaiting_posture() -> bool:
+	return police_arrived and not _police_resolved
 
 
 ## What is lying on the ground when the fight ends, for one side.

@@ -162,3 +162,10 @@ ui.fence_unbuyable,You will not be able to buy another one. Not at any price.,To
 police.arrived,SOMEBODY CALLED IT IN,JOKU SOITTI POLIISIT,誰かが通報した
 police.note,"Too loud, too long. They came in behind one of you and started picking people up off the ground.","Liian äänekästä, liian pitkään. He tulivat toisen selustaan ja alkoivat kerätä väkeä maasta.",うるさすぎた、長すぎた。片方の背後から入り、倒れた者から拾い上げていった。
 police.taken_note,"Taken. Not hurt, not dead — gone, along with everything they had learned.","Vietiin. Ei loukkaantunut, ei kuollut — poissa, ja kaikki oppimansa mukana.",連れて行かれた。負傷でも死でもない。学んだ全てごと消えた。
+police.here,THEY ARE IN THE YARD,HE OVAT PIHALLA,奴らが庭にいる
+police.choose,Decide now. Whoever is still on the ground when this is over goes with them.,"Päätä nyt. Ken on maassa kun tämä loppuu, lähtee heidän mukanaan.",今決めろ。これが終わったとき倒れている者は連れて行かれる。
+police.back_off,Back off,Perääntykää,引く
+police.help,Go back for them,Hakekaa heidät,連れ戻す
+police.on_the_ground,%d of yours on the ground.,%d omaa maassa.,味方%d名が倒れている。
+police.saved,Pulled out,Saatiin pois,救出
+police.saved_note,Somebody went back for them. It cost what it cost.,Joku palasi hakemaan. Se maksoi mitä maksoi.,誰かが戻って連れ出した。相応の代償を払って。

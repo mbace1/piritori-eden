@@ -641,6 +641,46 @@ func _cover_warning_for(target_id: String) -> Control:
 	return null
 
 
+## WHAT DO WE DO ABOUT THEM (COMBAT.md §9.5.2).
+##
+## Two options, not three. ENGAGE is in the design and is not built — fighting
+## the police means a third side on the board and `Side` has two values — so it
+## is left out rather than shown greyed forever. A disabled button that never
+## enables is noise pretending to be a roadmap.
+##
+## The cost of each is stated on the button, because this is the one decision in
+## a fight where the player is choosing between people rather than between moves.
+func _build_police_choice() -> void:
+	_action_col.add_child(_label(tr("police.here"), 15, PiritoriPalette.DANGER_RED))
+	var note := _label(tr("police.choose"), 12, PiritoriPalette.TEXT_DIM)
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_action_col.add_child(note)
+
+	var down := 0
+	for f in fight.get_fighters(Fighter.Side.PLAYER):
+		if f != null and f.status == Fighter.Status.DOWNED:
+			down += 1
+
+	var grid := HBoxContainer.new()
+	grid.add_theme_constant_override("separation", 8)
+	_action_col.add_child(grid)
+
+	grid.add_child(_action_card(tr("police.back_off"), PiritoriIcon.Kind.SWAP,
+		PiritoriPalette.TEXT_DIM,
+		func():
+			fight.choose_police_posture(FightManager.PolicePosture.BACK_OFF)
+			_refresh()))
+
+	grid.add_child(_action_card(tr("police.help"), PiritoriIcon.Kind.PEOPLE,
+		PiritoriPalette.PLAYER_CYAN,
+		func():
+			fight.choose_police_posture(FightManager.PolicePosture.HELP_FRIENDS)
+			_refresh()))
+
+	_action_col.add_child(_label(tr("police.on_the_ground") % down, 12,
+		PiritoriPalette.INTEL_MUSTARD))
+
+
 ## THE OTHER SIDE'S SHOT-CALLER, in the corner of the board.
 ##
 ## `UX_SPEC.md` §18: one speaking-character component, three framings. This is
@@ -1030,6 +1070,14 @@ func _build_action_column() -> void:
 	var f := _fighter(_selected_unit)
 	if f == null or not f.can_act():
 		_action_col.add_child(_label(tr("battle.select_unit"), 13, MapStyle.TINY_TEXT))
+		return
+
+	# The police are here and nobody has answered them. That question outranks
+	# everything else on the console: COMBAT.md §9.5.2 makes the posture the
+	# thing that turns an arrival into a decision, so it takes the whole column
+	# rather than sitting under the ordinary actions.
+	if fight.police_awaiting_posture():
+		_build_police_choice()
 		return
 
 	# What the pending attack will actually run into, shown BEFORE the button

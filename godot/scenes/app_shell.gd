@@ -1105,6 +1105,18 @@ func _show_aftermath(summary: Dictionary, spoils: PackedStringArray,
 		var pl := _make_label(tr("police.note"), 12, PiritoriPalette.TEXT_DIM)
 		pl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(pl)
+		# Said before the losses: somebody went back, and that is the part of the
+		# night worth leading with.
+		for id in summary.get("saved", PackedStringArray()):
+			var sc := ContentRegistry.crew_member(String(id))
+			_rail_box.add_child(_make_label("%s — %s" % [
+				String(sc.get("name", sc.get("display_name", id))),
+				tr("police.saved")], 14, PiritoriPalette.ROUTE_GREEN))
+		if not (summary.get("saved", PackedStringArray()) as PackedStringArray).is_empty():
+			var sl := _make_label(tr("police.saved_note"), 12, PiritoriPalette.TEXT_DIM)
+			sl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(sl)
+
 		for id in taken:
 			var c := ContentRegistry.crew_member(String(id))
 			_rail_box.add_child(_make_label(

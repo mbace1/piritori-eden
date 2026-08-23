@@ -620,9 +620,14 @@ is a contact the city remembers and who trains the next one (§9.8); somebody
 carried off a yard is a different fact about a different night, and every later
 system reads memories.
 
-**Not built: the posture choice** (§9.5.2). Both crews are supposed to get back
-off / help friends / engage. Today the police simply arrive and take. That is
-the half that makes it a decision rather than a timer, and it is the next piece.
+**Built: the player's posture** (§9.5.2). Back off, or go back for them. The
+entry end is now load-bearing rather than flavour: a fallen crew member far from
+the police is pulled out free, and one under their feet is pulled out at the cost
+of whoever went in — a body on its feet traded for a body on the ground, which is
+usually a bad trade and is meant to be.
+
+**Not built: the OPPOSITION's posture.** §9.5.2 gives both crews the choice. Only
+the player is asked; the other side neither retreats, rescues nor engages.
 
 **Not built: hostile police** (§9.5.3). Attacking them should turn them into a
 third side that fights everyone. There is no third `Side` — the enum is PLAYER
@@ -636,3 +641,14 @@ stays quiet and a long fight with bodies does not. Never played.
 **Entry side is a guess.** They come in behind whichever side still has more
 people standing, on the reasoning that whoever looks like they are winning looks
 like they started it. Defensible, untested, and possibly backwards.
+
+### A finding from writing the posture test
+
+Driving a fight to its end and then asking the question does not work, and it is
+not a test problem. By the time a battle resolves, the player side is usually
+wiped or victorious, so **there is nobody left standing to go back for anyone** —
+the rescue branch is unreachable at the end of a fight.
+
+It only means something MID-fight, which is exactly when the police arrive in
+play. Worth remembering when the opposition's posture is built: the same
+constraint applies to them.

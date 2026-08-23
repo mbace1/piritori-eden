@@ -50,6 +50,7 @@ func _ready() -> void:
 	_test_ground_fill()
 	_test_telegraphs()
 	_test_police()
+	_test_police_posture()
 	_test_cover_is_visible()
 	_test_build_3v3()
 	_test_forecast_before_commitment()
@@ -565,6 +566,92 @@ somebody called it in")
 		var d := f.police_entry_depth
 		check("they came in at an end of the board",
 			d == 0 or d == FightBoard.total_rows() - 1, str(d))
+
+
+## The posture (COMBAT.md §9.5.2) — what turns an arrival into a decision.
+##
+## The interesting assertion is not that the buttons exist, it is that the two
+## answers give DIFFERENT outcomes. A choice where both branches cost the same is
+## a prompt, not a decision.
+func _test_police_posture() -> void:
+	print("
+what do we do about them")
+
+	# ENGAGE is in the design and not built. Refused rather than faked, and
+	# asserted so that building it has to come here and delete this line.
+	var f := FightManager.new()
+	f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	f.police_arrived = true
+	f.police_entry_depth = 0
+	check("engaging them is refused, not faked",
+		not f.choose_police_posture(FightManager.PolicePosture.ENGAGE))
+	check("and nothing was resolved by asking",
+		f.police_awaiting_posture())
+
+	# Nobody can be taken before the question is answered... but the provisional
+	# list has to be honest about what doing nothing would cost.
+	check("backing off is accepted",
+		f.choose_police_posture(FightManager.PolicePosture.BACK_OFF))
+	check("and the question is closed", not f.police_awaiting_posture())
+	check("answering twice is refused",
+		not f.choose_police_posture(FightManager.PolicePosture.HELP_FRIENDS))
+
+	# The rule itself, on a board built for it.
+	#
+	# Driving a fight to its end first does NOT work, and that is a finding
+	# rather than a test problem: by the time a battle resolves the player side
+	# is usually wiped or victorious, so there is nobody left standing to go back
+	# for anyone. In play the police arrive MID-fight, which is the only moment
+	# the choice means anything — so the state is built here directly.
+	var mid := FightManager.new()
+	mid.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 7)
+	var ours: Array = mid.get_fighters(Fighter.Side.PLAYER)
+	check("three of ours are on the board", ours.size() == 3)
+
+	var casualty: Fighter = ours[0]
+	casualty.status = Fighter.Status.DOWNED
+	mid.police_arrived = true
+	# Far end from the casualty, so the rescue is the cheap kind.
+	mid.police_entry_depth = FightBoard.total_rows() - 1
+	casualty.slot = Vector2i(casualty.slot.x, 0)
+
+	check("going back for them saves somebody",
+		mid.choose_police_posture(FightManager.PolicePosture.HELP_FRIENDS)
+			and mid.saved_from_police().has(casualty.fighter_id))
+	check("and far from the police it costs nobody",
+		mid.taken_by_police().is_empty(), str(mid.taken_by_police()))
+
+	# The same rescue, with the police standing over them.
+	var near := FightManager.new()
+	near.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 7)
+	var theirs: Array = near.get_fighters(Fighter.Side.PLAYER)
+	var hurt: Fighter = theirs[0]
+	hurt.status = Fighter.Status.DOWNED
+	near.police_arrived = true
+	near.police_entry_depth = hurt.slot.y
+	near.choose_police_posture(FightManager.PolicePosture.HELP_FRIENDS)
+	check("pulled out from under them, but somebody is taken instead",
+		near.saved_from_police().has(hurt.fighter_id)
+			and near.taken_by_police().size() == 1)
+	check("and the one taken was standing, not the one on the ground",
+		not near.taken_by_police().has(hurt.fighter_id))
+
+	# Backing off on the same board loses them outright.
+	var off := FightManager.new()
+	off.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 7)
+	var mine: Array = off.get_fighters(Fighter.Side.PLAYER)
+	(mine[0] as Fighter).status = Fighter.Status.DOWNED
+	off.police_arrived = true
+	off.police_entry_depth = 0
+	off.choose_police_posture(FightManager.PolicePosture.BACK_OFF)
+	check("backing off loses the one on the ground",
+		off.taken_by_police().size() == 1)
+	check("and saves nobody", off.saved_from_police().is_empty())
+
+	# The rescue rule has to have teeth, or "go back for them" is free and there
+	# is no decision at all.
+	check("pulling somebody out near the police costs the helper",
+		FightManager.RESCUE_DANGER_DEPTH >= 1)
 
 
 ## Cover has to be answerable, not just enforced.
