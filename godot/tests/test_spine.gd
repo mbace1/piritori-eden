@@ -28,6 +28,7 @@ func _ready() -> void:
 	_test_block_clock()
 	_test_save_round_trip()
 	_test_careers()
+	_test_growing()
 	_test_loot()
 	_test_fence()
 	_test_arrest()
@@ -637,6 +638,84 @@ hiring (COMBAT.md §7)")
 	check("and the hire survived it", GameState.roster.has(hired_id))
 	check("the registry knows them again after a load",
 		String(ContentRegistry.crew_member(hired_id).get("name", "")) == String(candidate["name"]))
+
+
+## Levels, skills and perks (COMBAT.md §9.11) — all per PERSON.
+func _test_growing() -> void:
+	print("
+growing (COMBAT.md §9.11)")
+	GameState.new_campaign()
+
+	# The classes are content, not constants.
+	var cls := GameState.combat_class("spotter")
+	check("the classes are authored", not cls.is_empty())
+	check("and a class is a verb", String(cls.get("verb", "")) == "mark")
+	check("the perk axes are authored",
+		(ContentRegistry.slice.get("perks", []) as Array).size() == 5)
+
+	var who := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if not GameState.is_named(cid):
+			who = cid
+			break
+	if not GameState.roster.has(who):
+		GameState.roster.append(who)
+
+	check("everyone starts at level one", GameState.level_of(who) == 1)
+	check("with nothing to spend", GameState.unspent_perk_points(who) == 0)
+
+	# Levels are bought with fights, which is the same clock the career ceiling
+	# runs down — that is the point, not a coincidence.
+	for i in GameState.FIGHTS_PER_LEVEL:
+		GameState.age_crew(PackedStringArray([who]))
+	check("fights buy a level", GameState.level_of(who) == 2)
+	check("and a level gives a point to spend",
+		GameState.unspent_perk_points(who) >= 1)
+
+	# Spending.
+	check("a point buys a perk", GameState.spend_perk(who, "speed"))
+	check("and the perk stuck", GameState.perk_value(who, "speed") == 1)
+	check("spending a point costs it", GameState.unspent_perk_points(who) == 0)
+	check("you cannot spend what you do not have",
+		not GameState.spend_perk(who, "speed"))
+
+	# A typo must not invent a stat.
+	GameState.grant_level(who)
+	check("an unknown perk is refused", not GameState.spend_perk(who, "charisma"))
+	check("and the point was not eaten", GameState.unspent_perk_points(who) == 1)
+
+	# Skills are per person too, and not learned twice.
+	check("a skill is learned", GameState.learn_skill(who, "second-wind"))
+	check("and not learned twice", not GameState.learn_skill(who, "second-wind"))
+	check("it is on the person", GameState.skills_of(who).has("second-wind"))
+
+	# Glory pays double, per §9.11.
+	var before := GameState.unspent_perk_points(who)
+	GameState.grant_glory(who)
+	check("glory pays two points",
+		GameState.unspent_perk_points(who) == before + GameState.GLORY_PERK_POINTS)
+	check("and the city hears about it", GameState.memories.has("glory:" + who))
+
+	# PER PERSON: a second crew member of the same class knows none of it.
+	var other := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if cid != who and not GameState.is_named(cid):
+			other = cid
+			break
+	if other != "":
+		check("somebody else has not learned it",
+			not GameState.skills_of(other).has("second-wind"))
+		check("nor gained the perk", GameState.perk_value(other, "speed") == 0)
+
+	# And it survives a save, or a veteran resets every time the tab closes.
+	var saved := GameState.to_dict()
+	GameState.new_campaign()
+	check("a new campaign forgets", GameState.perk_value(who, "speed") == 0)
+	check("the save reloads", GameState.from_dict(saved))
+	check("the perk came back", GameState.perk_value(who, "speed") == 1)
+	check("and so did the skill", GameState.skills_of(who).has("second-wind"))
 
 
 ## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a

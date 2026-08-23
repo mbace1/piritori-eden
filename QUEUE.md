@@ -954,3 +954,40 @@ the scanner understands prefixes with a suffix after the dot.
   to bear. It reads as a dice throw with a nice sentence attached.
 - **Only chapter one exists**, so `begin_next_chapter()` moves into a chapter
   with no authored goal or ending.
+
+## Classes and progression — the data exists, the verbs do not
+
+`COMBAT.md` §9.11 is authored as content: six combat classes with a verb, a
+weapon family and a look family, plus the five perk axes. Per-person levels,
+skills and perk points are in `GameState` and gated, including that a second
+crew member of the same class knows none of it.
+
+**Levels come from fights**, which is the same clock the career ceiling runs
+down. That is deliberate: somebody becomes good on exactly the clock that is
+running out for them.
+
+### Two silent failures worth recording
+
+- A `new_campaign()` reset was written against a line that no longer existed, so
+  it **did nothing** and growth leaked between campaigns. The patch had no
+  assertion on that particular replacement; the ones that did have assertions
+  failed loudly and got fixed immediately. **Every edit needs its own assert.**
+- `skills_of()` shipped with a nonsense boolean expression that happened to
+  compile. The test caught it at runtime, not the parser.
+
+### What is NOT built
+
+- **None of the six verbs exist.** PIN, COVER, OPEN, LINE, MARK and SHOVE are
+  strings in a table. MARK and COVER have the most support already: MARK is the
+  intel the telegraph waits for, and cover mechanics are complete.
+- **Nothing offers a skill choice.** `learn_skill()` works and nothing calls it;
+  there is no list of skills to choose FROM, and §9.11 wants two or three offered
+  per level.
+- **Nothing awards glory.** `grant_glory()` exists; near-death survival and
+  double kills are not detected.
+- **Perks do nothing.** Strength, Speed, Wits, Nerve and Toughness are counters
+  that no rule reads.
+- **The migration has not started.** The old six roles are still wired into
+  `CrewGenerator.ROLES`, `UNIT_BY_ROLE`, authored crew, authored opponents and
+  the 3D bodies. Two parallel vocabularies now exist, which is the main risk in
+  the tree today.

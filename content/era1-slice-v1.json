@@ -1911,5 +1911,124 @@
         "grants_upgrade": "stash-house-sornainen"
       }
     }
+  ],
+  "classes": [
+    {
+      "id": "bruiser",
+      "label": "Bruiser",
+      "weapons": [
+        "fists",
+        "blunt"
+      ],
+      "station": "front",
+      "verb": "pin",
+      "verb_note": "The target cannot reposition next round.",
+      "look": "heavy",
+      "base": {
+        "strength": 3,
+        "speed": 1,
+        "wits": 1,
+        "nerve": 2,
+        "toughness": 3
+      }
+    },
+    {
+      "id": "anchor",
+      "label": "Anchor",
+      "weapons": [
+        "blunt"
+      ],
+      "station": "front",
+      "verb": "cover",
+      "verb_note": "An adjacent ally takes reduced harm.",
+      "look": "heavy",
+      "base": {
+        "strength": 2,
+        "speed": 1,
+        "wits": 1,
+        "nerve": 3,
+        "toughness": 4
+      }
+    },
+    {
+      "id": "blade",
+      "label": "Blade",
+      "weapons": [
+        "hand"
+      ],
+      "station": "flank",
+      "verb": "open",
+      "verb_note": "Ignores soft cover; hits the exposed.",
+      "look": "thin",
+      "base": {
+        "strength": 2,
+        "speed": 3,
+        "wits": 2,
+        "nerve": 1,
+        "toughness": 1
+      }
+    },
+    {
+      "id": "shooter",
+      "label": "Shooter",
+      "weapons": [
+        "firearm"
+      ],
+      "station": "back",
+      "verb": "line",
+      "verb_note": "Clear-lane damage at range.",
+      "look": "thin",
+      "base": {
+        "strength": 1,
+        "speed": 2,
+        "wits": 3,
+        "nerve": 1,
+        "toughness": 1
+      }
+    },
+    {
+      "id": "spotter",
+      "label": "Spotter",
+      "weapons": [
+        "light-ranged"
+      ],
+      "station": "back",
+      "verb": "mark",
+      "verb_note": "Grants the exact read on a target — the intel the telegraph waits for.",
+      "look": "hooded",
+      "base": {
+        "strength": 1,
+        "speed": 2,
+        "wits": 4,
+        "nerve": 2,
+        "toughness": 1
+      }
+    },
+    {
+      "id": "courier",
+      "label": "Courier",
+      "weapons": [
+        "fists",
+        "light"
+      ],
+      "station": "any",
+      "verb": "shove",
+      "verb_note": "Moves a body one cell.",
+      "look": "thin",
+      "base": {
+        "strength": 1,
+        "speed": 4,
+        "wits": 2,
+        "nerve": 1,
+        "toughness": 1
+      }
+    }
+  ],
+  "perks": [
+    "strength",
+    "speed",
+    "wits",
+    "nerve",
+    "toughness"
   ]
 }

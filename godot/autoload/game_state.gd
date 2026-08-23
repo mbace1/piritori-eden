@@ -90,6 +90,101 @@ var ending_id: String = ""                  ## authored ending, once resolved
 ## not; and nothing else in Era I can raise this.
 var crew_deaths: int = 0
 
+# ── growing (COMBAT.md §9.11) ──────────────────────────────────────────────
+
+## Levels, skills and perks, all PER PERSON.
+##
+## Per class would have been easier and would have made §7, §9.8 and §9.10
+## decoration: a bounded career, a retiree worth knowing and a veteran who is
+## harder to kill all assume the individual is the investment.
+##
+## It also gives the career ceiling its meaning back. Ten fights is a handful of
+## levels, so somebody arrives, becomes genuinely good, and leaves — and the
+## levels are the reason losing them hurts.
+var crew_perks: Dictionary = {}      ## crew_id -> {perk: points}
+var crew_skills: Dictionary = {}     ## crew_id -> PackedStringArray
+var crew_perk_points: Dictionary = {}  ## crew_id -> unspent points
+
+## Fights per level. Against a ten-fight ceiling this is four levels in a full
+## career, which is enough to feel and short enough to lose.
+##
+## PLAYTEST GATE, not canon (DESIGN_LOCKS §13).
+const FIGHTS_PER_LEVEL := 3
+
+## What a near-death survival or a double kill is worth (§9.11).
+const GLORY_PERK_POINTS := 2
+
+
+func level_of(crew_id: String) -> int:
+	return (fights_of(crew_id) / FIGHTS_PER_LEVEL) + 1
+
+
+func perks_of(crew_id: String) -> Dictionary:
+	return crew_perks.get(crew_id, {})
+
+
+func perk_value(crew_id: String, perk: String) -> int:
+	return int(perks_of(crew_id).get(perk, 0))
+
+
+func unspent_perk_points(crew_id: String) -> int:
+	return int(crew_perk_points.get(crew_id, 0))
+
+
+func skills_of(crew_id: String) -> PackedStringArray:
+	return crew_skills.get(crew_id, PackedStringArray())
+
+
+## Award a level's worth: one perk point to spend, and a skill choice pending.
+##
+## Called when a crew member crosses a level boundary, which is a function of
+## fights survived — so growth is bought with the same currency the career
+## ceiling spends.
+func grant_level(crew_id: String) -> void:
+	crew_perk_points[crew_id] = unspent_perk_points(crew_id) + 1
+	state_changed.emit()
+
+
+## Glory: survived at near-death, or two in one round (§9.11).
+func grant_glory(crew_id: String) -> void:
+	crew_perk_points[crew_id] = unspent_perk_points(crew_id) + GLORY_PERK_POINTS
+	memories.append("glory:" + crew_id)
+	state_changed.emit()
+
+
+## Spend one point. Refuses rather than going negative, and refuses a perk the
+## content does not define — a typo should not invent a stat.
+func spend_perk(crew_id: String, perk: String) -> bool:
+	if unspent_perk_points(crew_id) <= 0:
+		return false
+	if not ContentRegistry.slice.get("perks", []).has(perk):
+		return false
+	var p: Dictionary = crew_perks.get(crew_id, {})
+	p[perk] = int(p.get(perk, 0)) + 1
+	crew_perks[crew_id] = p
+	crew_perk_points[crew_id] = unspent_perk_points(crew_id) - 1
+	state_changed.emit()
+	return true
+
+
+func learn_skill(crew_id: String, skill_id: String) -> bool:
+	var have: PackedStringArray = crew_skills.get(crew_id, PackedStringArray())
+	if have.has(skill_id):
+		return false
+	have.append(skill_id)
+	crew_skills[crew_id] = have
+	state_changed.emit()
+	return true
+
+
+## The class table, from content.
+func combat_class(class_id: String) -> Dictionary:
+	for c in ContentRegistry.slice.get("classes", []):
+		if String((c as Dictionary).get("id", "")) == class_id:
+			return c
+	return {}
+
+
 # ── careers (COMBAT.md §7) ─────────────────────────────────────────────────
 ## Fights each crew member has come through, by id. A career is bounded: a
 ## hireling grows for a few fights and then leaves, one way or the other.
@@ -194,6 +289,10 @@ func new_campaign(with_seed: int = 0) -> void:
 	generated_crew = {}
 	arrested_crew = PackedStringArray()
 	upgrades = PackedStringArray()
+	# A veteran's levels belong to the campaign they were earned in.
+	crew_perks = {}
+	crew_skills = {}
+	crew_perk_points = {}
 	chapter = 1
 	chapter_cleared = false
 	last_ending_outcome = ""
@@ -1111,7 +1210,13 @@ func age_crew(deployed: PackedStringArray) -> PackedStringArray:
 		var cid := String(id)
 		if is_named(cid) or retired_crew.has(cid):
 			continue
+		var before_level := level_of(cid)
 		crew_fights[cid] = fights_of(cid) + 1
+		# Growth is bought with the same currency the ceiling spends: fights.
+		# So a crew member becomes good on exactly the clock that is running out
+		# for them, which is §9.11 and §7 being the same idea from two ends.
+		if level_of(cid) > before_level:
+			grant_level(cid)
 		if fights_of(cid) >= CAREER_FIGHTS:
 			retire(cid)
 			left.append(cid)
@@ -1274,6 +1379,9 @@ func to_dict() -> Dictionary:
 		"generated_crew": generated_crew,
 		"arrested_crew": arrested_crew,
 		"upgrades": upgrades,
+		"crew_perks": crew_perks,
+		"crew_skills": crew_skills,
+		"crew_perk_points": crew_perk_points,
 		"chapter": chapter,
 		"chapter_cleared": chapter_cleared,
 		"last_ending_outcome": last_ending_outcome,
@@ -1366,6 +1474,9 @@ func from_dict(d: Dictionary) -> bool:
 	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
+	crew_perks = d.get("crew_perks", {})
+	crew_skills = d.get("crew_skills", {})
+	crew_perk_points = d.get("crew_perk_points", {})
 	upgrades = d.get("upgrades", PackedStringArray())
 	last_ending_outcome = String(d.get("last_ending_outcome", ""))
 	chapter_cleared = bool(d.get("chapter_cleared", false))
