@@ -987,7 +987,30 @@ running out for them.
   double kills are not detected.
 - **Perks do nothing.** Strength, Speed, Wits, Nerve and Toughness are counters
   that no rule reads.
-- **The migration has not started.** The old six roles are still wired into
-  `CrewGenerator.ROLES`, `UNIT_BY_ROLE`, authored crew, authored opponents and
-  the 3D bodies. Two parallel vocabularies now exist, which is the main risk in
-  the tree today.
+- ~~The migration has not started.~~ **There is no migration.** Owner ruling
+  §9.12: the two vocabularies were never competing — the old six describe what
+  somebody is FOR and the new six what they DO in a fight — so they are now one
+  pool of **twelve aptitudes**, and a person holds two or three of them. Nothing
+  had to be moved, which made the better answer the cheaper one as well.
+
+## Aptitudes replaced the migration
+
+A person is not labelled. Twelve aptitudes, each with its own verb; a hire rolls
+two, sometimes three. Appearance follows the FIRST one so the look family still
+reads, and `verbs_of()` is the point — more than one aptitude means more than one
+thing you can do to the board.
+
+Authored crew fall back to their `role`, so nothing broke by adding this.
+
+### Still not built
+
+- **The verbs still do nothing.** Twelve of them now instead of six: pin, cover,
+  open, line, mark, shove, steady, deliver, read, talk, extract, know. Not one is
+  implemented.
+- **Skills are not keyed to aptitudes yet.** §9.12 wants the offer drawn from the
+  pools a person holds, and a third aptitude to widen and shallow it — the trade
+  that stops three being strictly better. `learn_skill()` takes any string.
+- **No skill list exists at all**, so there is nothing to offer.
+- **Authored crew hold exactly one aptitude**, their old role. The interesting
+  people are combinations, and the six hand-written ones are the least
+  interesting crew in the game as a result.

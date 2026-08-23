@@ -29,6 +29,7 @@ func _ready() -> void:
 	_test_save_round_trip()
 	_test_careers()
 	_test_growing()
+	_test_aptitudes()
 	_test_loot()
 	_test_fence()
 	_test_arrest()
@@ -716,6 +717,74 @@ growing (COMBAT.md §9.11)")
 	check("the save reloads", GameState.from_dict(saved))
 	check("the perk came back", GameState.perk_value(who, "speed") == 1)
 	check("and so did the skill", GameState.skills_of(who).has("second-wind"))
+
+
+## Aptitudes (COMBAT.md §9.12): a person is not labelled.
+##
+## The interesting assertion is that the two vocabularies COEXIST. The old six
+## and the new six are one pool of twelve, and nothing had to be migrated away —
+## which is why this ruling was cheaper as well as better than the migration it
+## replaced.
+func _test_aptitudes() -> void:
+	print("
+aptitudes (COMBAT.md §9.12)")
+	GameState.new_campaign()
+
+	var pool: Array = ContentRegistry.slice.get("classes", [])
+	check("twelve aptitudes in one pool", pool.size() == 12, str(pool.size()))
+
+	var ids: Array = []
+	for c in pool:
+		ids.append(String((c as Dictionary).get("id", "")))
+	check("the combat six are there",
+		ids.has("bruiser") and ids.has("spotter") and ids.has("courier"))
+	check("and the older six were not thrown away",
+		ids.has("muscle") and ids.has("driver") and ids.has("local"))
+
+	var verbs: Dictionary = {}
+	for c in pool:
+		verbs[String((c as Dictionary).get("verb", ""))] = true
+	check("every aptitude carries its own verb", verbs.size() == pool.size(),
+		"%d verbs for %d aptitudes" % [verbs.size(), pool.size()])
+
+	# Authored crew fall back to their role, so nothing broke by adding this.
+	var authored := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		authored = String(c.get("id", ""))
+		break
+	check("an authored crew member still answers",
+		GameState.aptitudes_of(authored).size() >= 1)
+
+	# A hire holds two or three.
+	var candidate := GameState.hiring_pool()[0]
+	GameState.cash_eur = int(candidate["wage_eur"])
+	check("hired", GameState.hire(candidate))
+	var cid := String(candidate["id"])
+	var apt := GameState.aptitudes_of(cid)
+	check("a hire holds two or three", apt.size() >= 2 and apt.size() <= 3, str(apt))
+	check("with no repeats", apt.size() == _unique(apt).size(), str(apt))
+	check("appearance follows the first",
+		GameState.primary_aptitude(cid) == String(candidate["role"]))
+
+	# More than one aptitude means more than one verb — the whole point.
+	var vs := GameState.verbs_of(cid)
+	check("and they bring more than one verb", vs.size() >= 2, str(vs))
+
+	# It has to survive a save, or a hybrid reverts to a label.
+	var saved := GameState.to_dict()
+	GameState.new_campaign()
+	check("the save reloads", GameState.from_dict(saved))
+	check("the set came back", GameState.aptitudes_of(cid).size() == apt.size())
+
+
+func _unique(a: PackedStringArray) -> PackedStringArray:
+	var seen: Dictionary = {}
+	var out: PackedStringArray = []
+	for x in a:
+		if not seen.has(String(x)):
+			seen[String(x)] = true
+			out.append(String(x))
+	return out
 
 
 ## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a

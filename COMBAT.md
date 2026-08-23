@@ -826,6 +826,55 @@ class. It is also the only version that survives a roster of generated people.
 
 ---
 
+## 9.12 A person is not labelled — owner ruling, 2026-08-23
+
+**Nobody has "a class". People hold aptitudes, and most hold more than one.**
+
+This supersedes §9.11's framing, not its content. The six combat classes stand;
+what changes is that they are **not exclusive** and they do not replace the six
+older roles. Runner, muscle, watcher, fixer, driver and local join bruiser,
+anchor, blade, shooter, spotter and courier as **twelve aptitudes in one pool**.
+
+### Why this is better than the migration it replaces
+
+The tree had two vocabularies and I was about to spend a day making one of them
+win. They were never competing — the old six describe what somebody is FOR and
+the new six describe what they DO in a fight, and a person can obviously be both.
+A driver who can shoot is not a contradiction; it is the ordinary case.
+
+**Potential, not framework.** The point is what a person could become, not which
+box they were put in.
+
+### Two or three, and hybrids are the interesting ones
+
+Most people hold **two**, some **three**. The combinations are the design:
+
+- muscle + spotter — a heavy who reads the room
+- courier + blade — gets there first and opens somebody up
+- local + fixer — the person who can end a fight before it starts
+
+None of that needs a name. A crew member is the sum of what they can do, and
+naming the hybrid would put the box back.
+
+### Skills follow the aptitudes
+
+A skill is offered because of an aptitude the person holds. Somebody with two
+draws from two pools; somebody with three has a wider and shallower choice. That
+makes the third aptitude a real trade rather than a strict gain — breadth against
+depth — which is what stops "three is simply better".
+
+### What this obliges
+
+- The class table becomes an **aptitude** table, with the old six added and
+  their own verbs written.
+- A crew member holds a **set**, and the generator rolls two or three.
+- Appearance follows the **first** aptitude, so the look family still reads.
+- Skills are keyed by aptitude rather than by a single class.
+- Nothing needs migrating away. Both vocabularies stay, which is why this is
+  cheaper as well as better.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off

@@ -125,6 +125,10 @@ static func generate(seed_value: int) -> Dictionary:
 		"id": id,
 		"name": display,
 		"role": role,
+		# COMBAT.md §9.12: a person is not labelled. `role` stays as the FIRST
+		# aptitude, which is what appearance and the 3D body follow; the set is
+		# what they can actually do.
+		"aptitudes": _roll_aptitudes(role, rng),
 		"age": rng.randi_range(19, 48),
 		"condition": maxi(1, int(base["condition"]) + rng.randi_range(-SPREAD, SPREAD)),
 		"nerve": maxi(1, int(base["nerve"]) + rng.randi_range(-SPREAD, SPREAD)),
@@ -143,6 +147,34 @@ static func generate(seed_value: int) -> Dictionary:
 		"named": false,
 		"generated": true,
 	}
+
+
+## Two aptitudes, sometimes three (§9.12).
+##
+## The first is the role that decided the body, so appearance and ability agree
+## on at least one thing. The rest are drawn from the whole pool, because the
+## interesting people are the combinations — a heavy who reads the room, a
+## courier who opens somebody up.
+##
+## A third is deliberately uncommon. It widens the skill pool and shallows it,
+## so breadth is a trade against depth rather than a strict gain.
+const THIRD_APTITUDE_ONE_IN := 4
+
+static func _roll_aptitudes(first: String, rng: RandomNumberGenerator) -> Array:
+	var pool: Array = []
+	for c in ContentRegistry.slice.get("classes", []):
+		var id := String((c as Dictionary).get("id", ""))
+		if id != "" and id != first:
+			pool.append(id)
+	var out: Array = [first]
+	if pool.is_empty():
+		return out
+	out.append(pool[rng.randi_range(0, pool.size() - 1)])
+	if rng.randi_range(1, THIRD_APTITUDE_ONE_IN) == 1:
+		var third: String = pool[rng.randi_range(0, pool.size() - 1)]
+		if not out.has(third):
+			out.append(third)
+	return out
 
 
 ## A hiring pool. Derived from the campaign seed and the day, so the same day

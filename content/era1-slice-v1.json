@@ -2022,6 +2022,119 @@
         "nerve": 1,
         "toughness": 1
       }
+    },
+    {
+      "id": "muscle",
+      "label": "Muscle",
+      "weapons": [
+        "fists",
+        "blunt"
+      ],
+      "station": "front",
+      "verb": "steady",
+      "verb_note": "Adjacent allies resist nerve loss.",
+      "look": "heavy",
+      "base": {
+        "strength": 3,
+        "speed": 1,
+        "wits": 1,
+        "nerve": 3,
+        "toughness": 3
+      }
+    },
+    {
+      "id": "runner",
+      "label": "Runner",
+      "weapons": [
+        "fists",
+        "light"
+      ],
+      "station": "any",
+      "verb": "deliver",
+      "verb_note": "Carries an item to an ally anywhere on the board.",
+      "look": "thin",
+      "base": {
+        "strength": 1,
+        "speed": 4,
+        "wits": 2,
+        "nerve": 1,
+        "toughness": 1
+      }
+    },
+    {
+      "id": "watcher",
+      "label": "Watcher",
+      "weapons": [
+        "light-ranged"
+      ],
+      "station": "back",
+      "verb": "read",
+      "verb_note": "Reveals the opposition's intent a round early.",
+      "look": "hooded",
+      "base": {
+        "strength": 1,
+        "speed": 2,
+        "wits": 4,
+        "nerve": 3,
+        "toughness": 1
+      }
+    },
+    {
+      "id": "fixer",
+      "label": "Fixer",
+      "weapons": [
+        "hand",
+        "light"
+      ],
+      "station": "any",
+      "verb": "talk",
+      "verb_note": "Opens a bloodless exit that would not otherwise be there.",
+      "look": "long-coat",
+      "base": {
+        "strength": 1,
+        "speed": 2,
+        "wits": 3,
+        "nerve": 3,
+        "toughness": 2
+      }
+    },
+    {
+      "id": "driver",
+      "label": "Driver",
+      "weapons": [
+        "blunt",
+        "light"
+      ],
+      "station": "any",
+      "verb": "extract",
+      "verb_note": "Withdraws an ally without the usual cost.",
+      "look": "work-jacket",
+      "base": {
+        "strength": 2,
+        "speed": 3,
+        "wits": 2,
+        "nerve": 2,
+        "toughness": 2
+      }
+    },
+    {
+      "id": "local",
+      "label": "Local",
+      "weapons": [
+        "fists",
+        "light"
+      ],
+      "station": "any",
+      "verb": "know",
+      "verb_note": "Turns a piece of the yard into cover the others can use.",
+      "look": "rounded",
+      "base": {
+        "strength": 1,
+        "speed": 2,
+        "wits": 3,
+        "nerve": 4,
+        "toughness": 2
+      }
     }
   ],
   "perks": [
@@ -2030,5 +2143,10 @@
     "wits",
     "nerve",
     "toughness"
-  ]
+  ],
+  "aptitude_rules": {
+    "min_per_person": 2,
+    "max_per_person": 3,
+    "note": "A person is not labelled. Appearance follows the FIRST aptitude; a third widens the skill pool and shallows it, so breadth is a trade against depth rather than a strict gain."
+  }
 }

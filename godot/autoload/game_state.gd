@@ -177,6 +177,52 @@ func learn_skill(crew_id: String, skill_id: String) -> bool:
 	return true
 
 
+## What somebody can do, as a SET (COMBAT.md §9.12).
+##
+## Nobody has "a class". Most people hold two aptitudes and some hold three, and
+## the combinations are the design — a driver who can shoot is not a
+## contradiction, it is the ordinary case.
+##
+## Falls back to the crew record's `role`, so the authored six and everyone
+## generated before this existed still answer sensibly.
+var crew_aptitudes: Dictionary = {}    ## crew_id -> PackedStringArray
+
+
+func aptitudes_of(crew_id: String) -> PackedStringArray:
+	if crew_aptitudes.has(crew_id):
+		return crew_aptitudes[crew_id]
+	var rec := ContentRegistry.crew_member(crew_id)
+	var role := String(rec.get("role", ""))
+	return PackedStringArray([role]) if role != "" else PackedStringArray()
+
+
+func set_aptitudes(crew_id: String, ids: PackedStringArray) -> void:
+	crew_aptitudes[crew_id] = ids
+	state_changed.emit()
+
+
+func has_aptitude(crew_id: String, aptitude_id: String) -> bool:
+	return aptitudes_of(crew_id).has(aptitude_id)
+
+
+## Appearance follows the FIRST aptitude, so the look family still reads even
+## though the person is not labelled by it.
+func primary_aptitude(crew_id: String) -> String:
+	var a := aptitudes_of(crew_id)
+	return String(a[0]) if a.size() > 0 else ""
+
+
+## Every verb this person brings to a board. The point of holding more than one.
+func verbs_of(crew_id: String) -> PackedStringArray:
+	var out: PackedStringArray = []
+	for a in aptitudes_of(crew_id):
+		var c := combat_class(String(a))
+		var v := String(c.get("verb", ""))
+		if v != "" and not out.has(v):
+			out.append(v)
+	return out
+
+
 ## The class table, from content.
 func combat_class(class_id: String) -> Dictionary:
 	for c in ContentRegistry.slice.get("classes", []):
@@ -290,6 +336,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	arrested_crew = PackedStringArray()
 	upgrades = PackedStringArray()
 	# A veteran's levels belong to the campaign they were earned in.
+	crew_aptitudes = {}
 	crew_perks = {}
 	crew_skills = {}
 	crew_perk_points = {}
@@ -1046,6 +1093,9 @@ func hire(record: Dictionary) -> bool:
 	cash_eur -= fee
 	generated_crew[id] = record
 	ContentRegistry.register_generated_crew(record)
+	# What they can do, not what they are called (COMBAT.md 9.12).
+	if record.has("aptitudes"):
+		set_aptitudes(id, PackedStringArray(record["aptitudes"]))
 	roster.append(id)
 	revealed[id] = true
 	state_changed.emit()
@@ -1379,6 +1429,7 @@ func to_dict() -> Dictionary:
 		"generated_crew": generated_crew,
 		"arrested_crew": arrested_crew,
 		"upgrades": upgrades,
+		"crew_aptitudes": crew_aptitudes,
 		"crew_perks": crew_perks,
 		"crew_skills": crew_skills,
 		"crew_perk_points": crew_perk_points,
@@ -1474,6 +1525,7 @@ func from_dict(d: Dictionary) -> bool:
 	crew_deaths = int(d.get("crew_deaths", 0))
 
 	state_changed.emit()
+	crew_aptitudes = d.get("crew_aptitudes", {})
 	crew_perks = d.get("crew_perks", {})
 	crew_skills = d.get("crew_skills", {})
 	crew_perk_points = d.get("crew_perk_points", {})
