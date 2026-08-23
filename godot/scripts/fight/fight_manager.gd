@@ -20,6 +20,10 @@ class Command:
 		STAND_DOWN,
 		AUTO,
 		WITHDRAW,
+		## The Spotter's verb (COMBAT.md §9.11). A command rather than a side
+		## effect, because it costs the round — a free mark would make the
+		## aptitude strictly better than not having it.
+		MARK,
 	}
 	var type: Type
 	var source_id: String    ## fighter_id of the acting unit
@@ -57,6 +61,7 @@ class BattleEvent:
 		UNIT_DOWNED,
 		UNIT_CRITICAL,
 		MORALE_WITNESS,       ## Ally downed → nerve loss on witnesses
+		GLORY,                ## A near-death survival or a double kill (§9.11)
 		STAND_DOWN_OFFERED,
 		STAND_DOWN_ACCEPTED,
 		STAND_DOWN_REFUSED,
@@ -1129,6 +1134,11 @@ func _resolve_command(cmd: Command) -> void:
 		Command.Type.ITEM:       _resolve_item(cmd)
 		Command.Type.STAND_DOWN: _resolve_stand_down(cmd)
 		Command.Type.WITHDRAW:   _resolve_withdraw(cmd)
+		Command.Type.MARK:       _resolve_mark(cmd)
+
+func _resolve_mark(cmd: Command) -> void:
+	mark_target(cmd.source_id, cmd.target_id)
+
 
 func _resolve_attack(cmd: Command) -> void:
 	var src: Fighter = _fighters.get(cmd.source_id)
@@ -1170,6 +1180,51 @@ func _resolve_attack(cmd: Command) -> void:
 	_emit_event(ev)
 
 	_update_fighter_status(tgt)
+	_check_glory(src, tgt)
+
+## GLORY (COMBAT.md §9.11) — worth two perk points, and worth seeing.
+##
+## Two ways to earn it, both moments a player is already leaning forward: putting
+## a second one down in the same round, or being left standing on almost nothing.
+##
+## Detected at the hit rather than counted at settlement, so the board can say so
+## while it is still happening. The owner asked for a nicer effect on these, and
+## an award nobody notices is not a reward.
+const GLORY_NEAR_DEATH_CONDITION := 1
+
+## Downs credited to each fighter this round, for the double.
+var _downs_this_round: Dictionary = {}
+
+
+func _check_glory(attacker: Fighter, target: Fighter) -> void:
+	if attacker == null or not attacker.is_player_controlled:
+		return
+	var cid := attacker.character_id
+	if cid == "" or not ContentRegistry.has_crew(cid):
+		return
+
+	var earned := ""
+	if target != null and target.status == Fighter.Status.DOWNED:
+		var n := int(_downs_this_round.get(attacker.fighter_id, 0)) + 1
+		_downs_this_round[attacker.fighter_id] = n
+		if n >= 2:
+			earned = "double"
+
+	# Still up on almost nothing. Checked on the ATTACKER, because the glory is
+	# in having swung at all.
+	if earned == "" and attacker.is_active() 			and attacker.condition <= GLORY_NEAR_DEATH_CONDITION:
+		earned = "near-death"
+
+	if earned == "":
+		return
+
+	GameState.grant_glory(cid)
+	var ev := BattleEvent.new()
+	ev.kind = BattleEvent.Kind.GLORY
+	ev.source_id = attacker.fighter_id
+	ev.detail = earned
+	_emit_event(ev)
+
 
 func _resolve_guard(cmd: Command) -> void:
 	var src: Fighter = _fighters.get(cmd.source_id)
@@ -1288,6 +1343,9 @@ func _do_morale_check() -> void:
 		(_fighters[id] as Fighter).acted_this_round = false
 
 	_accrue_heat()
+	# A double is two in ONE round. Cleared here, or a second kill three
+	# rounds later would quietly count.
+	_downs_this_round.clear()
 
 	round_number += 1
 	round_started.emit(round_number)
@@ -1607,6 +1665,17 @@ func _get_legal_commands(f: Fighter) -> Array:
 			var cmd := Command.new(Command.Type.ITEM, f.fighter_id)
 			cmd.item_id = iid
 			legal.append(cmd)
+
+	# MARK — a Spotter spending the round to read one person properly.
+	if f.is_player_controlled and f.character_id != "" \
+			and GameState.has_aptitude(f.character_id, "spotter"):
+		for other_id in _fighters:
+			var other: Fighter = _fighters[other_id]
+			if other.side == f.side or not other.is_active():
+				continue
+			var m := Command.new(Command.Type.MARK, f.fighter_id)
+			m.target_id = other.fighter_id
+			legal.append(m)
 
 	# STAND DOWN — always visible (gate §6); AI only offers when below threshold
 	if _stand_down_available and not f.prohibited_commands.has("stand_down"):

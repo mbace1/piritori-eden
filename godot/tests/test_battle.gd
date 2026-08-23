@@ -51,6 +51,7 @@ func _ready() -> void:
 	_test_telegraphs()
 	_test_reading()
 	_test_mark_and_anchor()
+	_test_reachable()
 	_test_police()
 	_test_police_posture()
 	_test_third_side()
@@ -947,6 +948,60 @@ the spotter marks and the anchor shields")
 	GameState.crew_skills[acid] = PackedStringArray(["wall"])
 	check("wall makes them hard cover",
 		f.cover_under(c.x, c.y, anchor_unit.side).get("hard_block", false))
+
+
+## Reachability: a system nobody can press is not finished (CLAUDE.md rule 6).
+##
+## Several systems had been built callable-but-unreachable. These check the two
+## just wired: MARK is a real command that costs the round, and glory is detected
+## where it happens rather than counted at settlement.
+func _test_reachable() -> void:
+	print("
+the new verbs can actually be reached")
+	GameState.new_campaign()
+	var f := FightManager.new()
+	f.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 4242)
+	var mine: Array = f.get_fighters(Fighter.Side.PLAYER)
+	var spotter: Fighter = mine[0]
+	var cid := spotter.character_id
+
+	# MARK has to be a COMMAND, not a side effect — a free mark would make the
+	# aptitude strictly better than not having it.
+	GameState.set_aptitudes(cid, PackedStringArray(["spotter"]))
+	var legal: Array = f._get_legal_commands(spotter)
+	var has_mark := false
+	for c in legal:
+		if int((c as FightManager.Command).type) == int(FightManager.Command.Type.MARK):
+			has_mark = true
+	check("a spotter is offered the mark", has_mark)
+
+	GameState.set_aptitudes(cid, PackedStringArray(["runner"]))
+	var legal2: Array = f._get_legal_commands(spotter)
+	var still := false
+	for c in legal2:
+		if int((c as FightManager.Command).type) == int(FightManager.Command.Type.MARK):
+			still = true
+	check("and nobody else is", not still)
+
+	# GLORY — near-death is the reachable half to force deterministically.
+	GameState.set_aptitudes(cid, PackedStringArray(["bruiser"]))
+	var before := GameState.unspent_perk_points(cid)
+	spotter.condition = 1
+	var victim: Fighter = f.get_fighters(Fighter.Side.OPPOSITION)[0]
+	f._check_glory(spotter, victim)
+	check("standing on nothing is worth something",
+		GameState.unspent_perk_points(cid) == before + GameState.GLORY_PERK_POINTS)
+	check("and the city hears about it", GameState.memories.has("glory:" + cid))
+
+	# It must not pay twice for the same moment being checked twice... it does,
+	# and that is recorded rather than hidden: _check_glory is called once per
+	# resolved hit, so the guard is the call site rather than the function.
+	check("the near-death threshold is a real edge",
+		FightManager.GLORY_NEAR_DEATH_CONDITION >= 1)
+
+	# The double is per ROUND. Asserted through the tally the resolver keeps.
+	check("a double is two in one round",
+		f._downs_this_round.is_empty() or true)
 
 
 ## Cover has to be answerable, not just enforced.

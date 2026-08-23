@@ -1131,3 +1131,38 @@ frame — spammed the log. `has_crew()` makes the question askable.
 - **`take-it` and `wall` now do two things each** — their authored text describes
   absorbing harm and being hard cover, and they are also the width and hardness
   switches. That is convenient and not obviously right.
+
+## Reachability pass — MARK, glory, and a board that answers back
+
+Owner direction: make what exists reachable before building more. Several
+systems had been callable and unpressable, which by CLAUDE.md rule 6 means
+unfinished.
+
+- **MARK is a real command**, not a side effect, because it costs the round — a
+  free mark would make the aptitude strictly better than not having it. Offered
+  beside the ordinary actions since it competes with them, and the forecast says
+  how many rounds the read will last before the round is spent.
+- **Glory is detected at the hit** (owner: level and glory should register in the
+  moment). Two in one round, or still standing on almost nothing. The double
+  tally clears with the round, or a kill three rounds later would count.
+- **The board has a feedback layer at last.** `event_resolved` had always been
+  emitted and never listened to — things happened and nothing on screen
+  acknowledged them. Glory is its first user: a rising, fading mark with a
+  widening ring, since motion is found before text.
+
+### Two mistakes worth recording
+
+- I connected `event_resolved` before `fight` existed, which took the battle UI
+  suite from 28 passing to 8. Caught immediately, and only because that suite
+  drives the real screen rather than the model.
+- I added a second `_process` to a file that already had one. The parser caught
+  that one instantly.
+
+### Still not reachable
+
+- **The level-up choice.** Owner ruling: it should interrupt at the moment of
+  levelling. `skill_offer()` is gated and no screen shows it, so a level still
+  passes silently.
+- **Perks read nowhere except Wits**, which feeds the read ladder. Strength,
+  Speed, Nerve and Toughness are counters no rule consults.
+- **Eight verbs remain strings.**

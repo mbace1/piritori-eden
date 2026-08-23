@@ -188,3 +188,7 @@ chapter.out_clean,"It went quietly. The container is gone and so are you, and yo
 chapter.out_messy,"It moved, but not cleanly. Something had to be left on the quay.","Se liikkui, muttei siististi. Jotain jäi laiturille.",動きはした。だが綺麗にではない。何かを岸に残した。
 chapter.out_lost,It went wrong on the quay. Somebody did not come back.,Laiturilla meni pieleen. Joku ei tullut takaisin.,岸で失敗した。戻らなかった者がいる。
 battle.read_ahead,and the one after,ja seuraavakin,次の手まで見える
+battle.mark,Read them,Lue heidät,読む
+battle.mark_note,Spend the round watching one of them. You will see everything about them for %d round(s).,Käytä vuoro yhden tarkkailuun. Näet heistä kaiken %d kierroksen ajan.,この手番を使って一人を観察する。%dラウンドの間、その者の全てが見える。
+battle.glory_double,TWO,KAKSI,二人
+battle.glory_near_death,STILL UP,YHÄ PYSTYSSÄ,まだ立っている

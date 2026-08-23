@@ -166,6 +166,9 @@ func _role_color(role: String) -> Color:
 func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	battle_id = id
 	fight = FightManager.new()
+	# The board finally listens. event_resolved has always been emitted and
+	# never consumed, so nothing on screen acknowledged anything that happened.
+	fight.event_resolved.connect(_on_battle_event)
 	_load_stage(id)
 	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
 	if errors.is_empty():
@@ -300,6 +303,7 @@ func _build() -> void:
 
 
 func _process(dt: float) -> void:
+	_age_flashes(dt)
 	_t += dt
 	if _board:
 		_board.queue_redraw()
@@ -548,6 +552,7 @@ func _draw_board() -> void:
 	_draw_row_labels()
 	_draw_cover()
 	_draw_target_path()
+	_draw_flashes()
 
 	# Painter's order: anything lower on the screen is nearer the camera, so it
 	# is drawn last. Without this the back row punched through the front one.
@@ -718,6 +723,80 @@ func _mount_shot_caller() -> void:
 	speaker.offset_right = -INSET_MARGIN
 	speaker.offset_bottom = INSET_SIZE.y + INSET_MARGIN
 	_board.add_child(speaker)
+
+
+# ── the board says something back ──────────────────────────────────────────
+
+## `FightManager.event_resolved` has always been emitted and never listened to,
+## so the board had no feedback layer at all: things happened and nothing on
+## screen acknowledged them.
+##
+## This is the smallest honest version — a mark over the person it happened to,
+## which fades. Glory is the first user because the owner asked for it to be
+## seen, and an award nobody notices is not a reward.
+class Flash:
+	var fighter_id: String = ""
+	var text: String = ""
+	var colour: Color = Color.WHITE
+	var life: float = 0.0
+	var max_life: float = 1.0
+
+var _flashes: Array[Flash] = []
+
+const FLASH_LIFE := 1.6
+
+
+## Folded into the existing _process rather than adding a second one, which is
+## what the parser caught immediately.
+func _age_flashes(delta: float) -> void:
+	if _flashes.is_empty():
+		return
+	var alive: Array[Flash] = []
+	for fl in _flashes:
+		fl.life -= delta
+		if fl.life > 0.0:
+			alive.append(fl)
+	_flashes = alive
+	_board.queue_redraw()
+
+
+func _on_battle_event(ev) -> void:
+	if ev == null:
+		return
+	if int(ev.kind) != int(FightManager.BattleEvent.Kind.GLORY):
+		return
+	var f := Flash.new()
+	f.fighter_id = String(ev.source_id)
+	f.text = tr("battle.glory_double") if String(ev.detail) == "double" \
+		else tr("battle.glory_near_death")
+	f.colour = PiritoriPalette.INTEL_MUSTARD
+	f.life = FLASH_LIFE
+	f.max_life = FLASH_LIFE
+	_flashes.append(f)
+
+
+## Drawn over everything, because it is the one thing that should interrupt.
+func _draw_flashes() -> void:
+	for fl in _flashes:
+		var who := _fighter(fl.fighter_id)
+		if who == null:
+			continue
+		var at := _cell_pos(who.slot.x, who.slot.y, who.side)
+		var t: float = fl.life / fl.max_life
+		# Rises and fades, so it reads as a moment rather than a label.
+		var pos := at + Vector2(0, -34.0 - (1.0 - t) * 22.0)
+		var col := fl.colour
+		col.a = clampf(t * 1.4, 0.0, 1.0)
+
+		var ring := col
+		ring.a = col.a * 0.55
+		# A widening ring under the words: the eye finds motion before text.
+		_board.draw_arc(at, 20.0 + (1.0 - t) * 26.0, 0, TAU, 32, ring, 3.0, true)
+
+		var size := _board.get_theme_default_font_size() + 4
+		var w := _font.get_string_size(fl.text, HORIZONTAL_ALIGNMENT_CENTER, -1, size).x
+		_board.draw_string(_font, pos - Vector2(w * 0.5, 0), fl.text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, size, col)
 
 
 ## Target paths stay visible while a command is being chosen (§13.3).
@@ -1103,6 +1182,13 @@ func _build_action_column() -> void:
 		SIDE_CYAN, func(): _issue_simple(FightManager.Command.Type.GUARD, f)))
 	grid.add_child(_action_card(tr("battle.reposition"), PiritoriIcon.Kind.SWAP,
 		MapStyle.METRO, func(): _begin_reposition(f)))
+	# MARK — only for a Spotter, and only when there is somebody to look at.
+	# Offered beside the ordinary actions rather than on a screen of its own,
+	# because it competes with them: it costs the same round.
+	if f.character_id != "" and GameState.has_aptitude(f.character_id, "spotter"):
+		grid.add_child(_action_card(tr("battle.mark"), PiritoriIcon.Kind.PRESSURE,
+			PiritoriPalette.INTEL_MUSTARD, func(): _begin_mark(f)))
+
 	grid.add_child(_action_card(tr("battle.item"), PiritoriIcon.Kind.STOCK,
 		MapStyle.PARK, func(): _use_item(f)))
 
@@ -1363,6 +1449,30 @@ func _begin_attack(f: Fighter) -> void:
 	_pending = cmd
 	_hovered_target = cmd.target_id
 	_forecast = fight.get_command_forecast(cmd)
+	_refresh()
+
+
+## Spend this Spotter's round reading somebody properly.
+##
+## Targets the same way an attack does, so the player learns one targeting idiom
+## rather than two.
+func _begin_mark(f: Fighter) -> void:
+	var targets: Array = []
+	for other in fight.get_fighters(Fighter.Side.OPPOSITION):
+		if other != null and (other as Fighter).is_active():
+			targets.append((other as Fighter).fighter_id)
+	if targets.is_empty():
+		_pending = null
+		_forecast = {"note": tr("battle.no_target")}
+		_refresh()
+		return
+	var cmd := FightManager.Command.new(FightManager.Command.Type.MARK, f.fighter_id)
+	cmd.target_id = String(targets[0])
+	_pending = cmd
+	_hovered_target = cmd.target_id
+	# What it buys, said before it is spent: a round is a lot to give up for
+	# information, and the player should know how long the information lasts.
+	_forecast = {"note": tr("battle.mark_note") % fight.mark_duration(f.character_id)}
 	_refresh()
 
 
