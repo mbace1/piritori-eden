@@ -481,3 +481,40 @@ no preview where a mouse would.
 - **Nothing warns you before a fight** that the weapon you are about to lose with
   a fallen crew member is unbuyable. The fence says it at the moment of selling;
   §8 takes kit off the downed silently.
+
+## Character backlog — who needs a model, and who needs to talk
+
+`UX_SPEC.md` §18 makes one component serve the news, a map location and a battle
+inset. The frame is generalised and gated. What is missing is people and motion.
+
+### Nobody can talk yet
+
+**No talking animation exists.** `cast3d/clips/` holds idle, attack, behit and
+dead; the street bodies shipped with walk, run, block, draw-and-shoot,
+falling-down and a bicep curl. Nothing covers speaking.
+
+This is the highest-leverage single asset in the project. All four rigs are
+24-bone Meshy bipeds and clips already lift between them, so **one talking clip
+makes every one of the ten existing bodies a speaking character**. Do this before
+commissioning any new person.
+
+### Who has a model
+
+| Speaker | Model | Needed for |
+|---|---|---|
+| Arvo Linde | yes | the daily news |
+| Toko Slomo | **no** | the noodle bar — the named example of location-talk |
+| Faction shot-callers | **no** | the battle inset, `COMBAT.md` §9.9 |
+| Jaska | **no** | moral counterweight, appears throughout `NARRATIVE.md` |
+| McCormick family | **no** | bars, and where retired crew are found (§9.8) |
+
+`presenter_3d.SPEAKERS` holds the list, and a speaker with no model fails by name
+rather than rendering nobody. A gate asserts the size of that dictionary, so
+adding Toko will fail the suite and point straight back here.
+
+### The two framings nobody has looked at
+
+`LOCATION` and `INSET` camera positions are **starting points chosen by
+arithmetic, not measurements**. BROADCAST is unchanged and pinned by a test. The
+other two need judging on a screen the first time a real character stands in
+them.

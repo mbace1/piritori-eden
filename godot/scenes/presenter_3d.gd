@@ -16,7 +16,30 @@ extends SubViewportContainer
 ## Registered as `presenter-arvo-linde-v05` in art/v3/manifest.json, so
 ## sync-data.mjs carries it like any other approved asset — it is no longer
 ## hand-staged.
+## Everyone who can appear and speak (`UX_SPEC.md` §18).
+##
+## Only Arvo has a model. The others are listed as the backlog they are, so a
+## missing speaker fails by name here instead of silently rendering nobody.
+const SPEAKERS := {
+	"arvo": "res://data/art/presenter/arvo-linde-v05.glb",
+}
+
+## Kept so existing callers and tests do not break while the news is still the
+## only screen using this.
 const MODEL := "res://data/art/presenter/arvo-linde-v05.glb"
+
+## How much of them the camera takes in. One component, three framings
+## (`UX_SPEC.md` §18): the television owns the whole window, a location shows the
+## place, and a battle puts a shot-caller in the corner of the board.
+enum Framing {
+	BROADCAST,   ## full screen, head and shoulders — the news
+	LOCATION,    ## the person in their place — Toko in the noodle bar
+	INSET,       ## small, over something else — the opposing shot-caller
+}
+
+## Set before the node enters the tree. Defaults keep the news exactly as it was.
+var speaker_id: String = "arvo"
+var framing: Framing = Framing.BROADCAST
 
 ## Levels per channel. §13.2 asks for "limited colour"; the concept was tested
 ## down to eight and held.
@@ -33,8 +56,16 @@ var _rest_chest := Transform3D()
 var _rest_head := Transform3D()
 
 
+func model_path() -> String:
+	return String(SPEAKERS.get(speaker_id, ""))
+
+
 func available() -> bool:
-	return ResourceLoader.exists(MODEL)
+	var p := model_path()
+	if p == "":
+		push_warning("presenter_3d: no model for speaker '%s' — see UX_SPEC 18" % speaker_id)
+		return false
+	return ResourceLoader.exists(p)
 
 
 func _ready() -> void:
@@ -73,7 +104,7 @@ func _ready() -> void:
 	_viewport.add_child(_camera)
 
 	if available():
-		_rig = (load(MODEL) as PackedScene).instantiate()
+		_rig = (load(model_path()) as PackedScene).instantiate()
 		_viewport.add_child(_rig)
 		_find_skeleton(_rig)
 		_frame_presenter()
@@ -104,9 +135,26 @@ func _find_skeleton(n: Node) -> void:
 func _frame_presenter() -> void:
 	if _rig == null:
 		return
-	_rig.position = Vector3(0, -1.32, 0)
-	_camera.position = Vector3(0, 0.10, 1.05)
-	_camera.fov = 42.0
+	# BROADCAST is the shot the news was built around and stays exactly as it
+	# was; the other two are starting points to be judged on a screen, not
+	# measurements. Named constants rather than numbers inline, so tuning one
+	# framing cannot quietly move another.
+	match framing:
+		Framing.LOCATION:
+			# Further back and lower: a person standing in a room, not a bust.
+			_rig.position = Vector3(0, -1.05, 0)
+			_camera.position = Vector3(0, 0.25, 2.20)
+			_camera.fov = 46.0
+		Framing.INSET:
+			# Tighter than broadcast. The inset is small on screen, so the face
+			# has to fill it or it reads as a smudge over the board.
+			_rig.position = Vector3(0, -1.42, 0)
+			_camera.position = Vector3(0, 0.06, 0.82)
+			_camera.fov = 38.0
+		_:
+			_rig.position = Vector3(0, -1.32, 0)
+			_camera.position = Vector3(0, 0.10, 1.05)
+			_camera.fov = 42.0
 	_lower_arms()
 
 

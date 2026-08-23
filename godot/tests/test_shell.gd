@@ -49,6 +49,7 @@ func _ready() -> void:
 	_test_debug_entry_parsing()
 	_test_every_outcome_has_words()
 	_test_interface_is_thumb_sized()
+	_test_speaking_character()
 	await _test_debug_hud()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -213,6 +214,35 @@ the interface is big enough to hit")
 	var desktop_factor: float = clampf(_shell.UI_TARGET_SCALE / desktop_natural,
 		1.0, _shell.UI_SCALE_MAX)
 	check("a desktop is not scaled", is_equal_approx(desktop_factor, 1.0))
+
+
+## The speaking character (UX_SPEC 18): one component, three framings.
+##
+## Generalised from the news presenter so Toko in the noodle bar and an enemy
+## shot-caller over the board are the same component with a different shot. The
+## risk in a change like this is that the screen it was extracted FROM quietly
+## breaks, so the news framing is what gets pinned.
+func _test_speaking_character() -> void:
+	print("
+the speaking character")
+	var p = preload("res://scenes/presenter_3d.gd").new()
+
+	check("it defaults to Arvo, so the news is unchanged", p.speaker_id == "arvo")
+	check("and to the broadcast framing",
+		p.framing == p.Framing.BROADCAST)
+	check("Arvo has a model", p.available())
+	check("which is the one the news always used", p.model_path() == p.MODEL)
+
+	# A speaker with no model must fail by NAME. Silently rendering nobody is how
+	# "no Arvo in news" took a headless probe to diagnose.
+	p.speaker_id = "toko"
+	check("somebody with no model is not available", not p.available())
+	check("and is not silently swapped for Arvo", p.model_path() == "")
+
+	# The backlog, asserted. When Toko gets a model this fails and points here.
+	check("only one speaker has a model so far (see QUEUE)",
+		p.SPEAKERS.size() == 1)
+	p.free()
 
 
 func _all_nodes(root: Node, out: Array = []) -> Array:
