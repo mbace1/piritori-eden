@@ -50,6 +50,7 @@ func _ready() -> void:
 	_test_every_outcome_has_words()
 	_test_interface_is_thumb_sized()
 	_test_speaking_character()
+	_test_location_speaker()
 	await _test_debug_hud()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -267,6 +268,44 @@ the speaking character")
 			orphan.append(String(id))
 	check("no placeholder names somebody who is not a speaker",
 		orphan.is_empty(), " ".join(orphan))
+	p.free()
+
+
+## The LOCATION framing, driven off content rather than configuration.
+##
+## UX_SPEC 18's named example: talking to Toko should show Toko in the noodle
+## bar. Content already says who is in the room, so the check is that the scene
+## reads it — and, just as importantly, that it stays quiet in the rooms where
+## nobody has a model.
+func _test_location_speaker() -> void:
+	print("
+the person you came to see")
+	var p = preload("res://scenes/presenter_3d.gd").new()
+
+	var toko := ContentRegistry.encounter("enc-toko-quiet-voice")
+	check("the noodle bar encounter exists", not toko.is_empty())
+	check("and content says Toko is in it",
+		(toko.get("participants", []) as Array).has("toko"))
+	check("Toko is somebody the game can show", p.SPEAKERS.has("toko"))
+
+	# Aatami is in every scene and is not somebody you look at. If he were
+	# matched first, every encounter would show the player staring at himself.
+	check("the player is never the one on screen", not p.SPEAKERS.has("aatami"))
+
+	# Most participants never get a model — a bank clerk, a lunch crowd, a dog
+	# owner. An empty frame in those rooms would be worse than the text that
+	# already works, so silence has to be the default rather than the exception.
+	var with_speaker := 0
+	var total := 0
+	for e in ContentRegistry.slice.get("encounters", []):
+		total += 1
+		for who in (e.get("participants", []) as Array):
+			if String(who) != "aatami" and p.SPEAKERS.has(String(who)):
+				with_speaker += 1
+				break
+	check("some encounter puts a person on screen", with_speaker > 0)
+	check("and most do not, which is correct for now",
+		with_speaker < total, "%d of %d" % [with_speaker, total])
 	p.free()
 
 

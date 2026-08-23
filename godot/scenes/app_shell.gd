@@ -636,7 +636,64 @@ func _show_location(encounter_id: String) -> void:
 	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stage.setup(encounter_id)
 	_world_host.add_child(stage)
+	_mount_location_speaker(encounter_id, stage)
 	_build_location_rail(encounter_id, stage)
+
+
+## THE PERSON YOU CAME TO SEE.
+##
+## `UX_SPEC.md` §18, the LOCATION framing: talking to Toko should show Toko, in
+## the noodle bar, rather than printing his lines over a map. This is the third
+## and last of the three framings to get a screen.
+##
+## Driven off the encounter's own `participants`, not a per-encounter setting.
+## Content already names who is in the room — `enc-toko-quiet-voice` lists
+## "toko" — so the scene does not need telling twice, and any future encounter
+## with a modelled participant gets this for free.
+##
+## Deliberately silent when nobody in the room has a model. Most participants —
+## a bank clerk, a lunch crowd, a dog owner — never will, and an empty frame
+## would be worse than the text that already works.
+const LOCATION_SPEAKER_SIZE := Vector2(240.0, 300.0)
+const LOCATION_SPEAKER_MARGIN := 12.0
+
+func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
+	var enc := ContentRegistry.encounter(encounter_id)
+	if enc.is_empty():
+		return
+
+	var speaker = preload("res://scenes/presenter_3d.gd").new()
+
+	var who := ""
+	for p in enc.get("participants", []):
+		var pid := String(p)
+		# The player is in every scene and is not somebody you look at.
+		if pid == "aatami":
+			continue
+		if speaker.SPEAKERS.has(pid):
+			who = pid
+			break
+	if who == "":
+		speaker.free()
+		return
+
+	speaker.speaker_id = who
+	speaker.framing = speaker.Framing.LOCATION
+	if not speaker.available():
+		speaker.free()
+		return
+	speaker.custom_minimum_size = LOCATION_SPEAKER_SIZE
+	speaker.size = LOCATION_SPEAKER_SIZE
+	speaker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Bottom left, standing on the floor of the scene rather than floating in the
+	# middle of it — the location art behind is the room, and a person belongs at
+	# its near edge.
+	speaker.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	speaker.offset_left = LOCATION_SPEAKER_MARGIN
+	speaker.offset_top = -(LOCATION_SPEAKER_SIZE.y + LOCATION_SPEAKER_MARGIN)
+	speaker.offset_right = LOCATION_SPEAKER_SIZE.x + LOCATION_SPEAKER_MARGIN
+	speaker.offset_bottom = -LOCATION_SPEAKER_MARGIN
+	stage.add_child(speaker)
 
 
 func _build_location_rail(encounter_id: String, stage: Control) -> void:

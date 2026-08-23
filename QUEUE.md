@@ -529,3 +529,30 @@ adding Toko will fail the suite and point straight back here.
 arithmetic, not measurements**. BROADCAST is unchanged and pinned by a test. The
 other two need judging on a screen the first time a real character stands in
 them.
+
+## All three framings now have a screen
+
+`UX_SPEC.md` §18 is wired end to end: BROADCAST in the news, INSET over the
+battle board, LOCATION at an encounter. One component, three shots.
+
+The LOCATION mount reads the encounter's own `participants`, so no per-encounter
+configuration exists and any future scene with a modelled participant gets a
+character for free. Today exactly one encounter qualifies —
+`enc-toko-quiet-voice` at the noodle bar — and that is correct: most
+participants are a bank clerk, a lunch crowd, a dog owner, and never will have
+one.
+
+**Still unjudged, and only a screen can settle it:**
+
+- Nobody has looked at LOCATION or INSET. Both camera positions and both frame
+  sizes are arithmetic.
+- **Nobody talks.** All three framings show a character standing still. Until a
+  talking clip exists the showcase is a portrait, not a performance — and that
+  one clip lifts onto all four rigs, so it remains the highest-leverage asset in
+  the project.
+- Toko is wearing a driver's work jacket.
+
+**A participant is not yet a speaker id.** `SPEAKERS` happens to use the same
+strings content does (`toko`), which works and is not designed. When a second
+character gets a model this needs to be a declared mapping rather than a
+coincidence.
