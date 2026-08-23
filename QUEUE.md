@@ -1197,3 +1197,42 @@ grow buttons when something is waiting, and quiet down when it is spent.
   project at all.
 - **The map does not show mission steps or blink new missions**, which §19 needs
   for the way back from the summary to mean anything.
+
+## Fifty-two skills, and perks the fight reads
+
+Sixteen more skills, spread across all twelve aptitudes (4–5 each). This pass
+leans on twists rather than straight bonuses: **No mercy** finishes somebody
+already down and is loud with it; **Last one standing** halves everything while
+you are the only one upright; **Two quick** strikes twice at half force and lets
+cover eat the first; **Grab them** shoves an ally; **Everyone knows** slows heat
+on your own street; **Owe me** turns a stand-down into a debt.
+
+**And the four dead perks now do something**, which closes the sharpest gap in
+the tree: the crew screen had begun offering Strength, Speed, Nerve and
+Toughness while the fight consulted none of them. Worse than not offering it,
+because it is a promise the combat does not keep.
+
+- **Strength** is read at the swing rather than folded into the weapon, so the
+  person and the tool stay two visible contributions.
+- **Toughness** and **Nerve** raise the maxima, applied once at build so they do
+  not drift mid-battle as points are spent.
+- **Speed** moves you up the order.
+- **Wits** already fed the read ladder.
+
+**Deliberately one point at a time.** Bought across a ten-fight career, a large
+step would make a veteran a different unit rather than a better one — and §9.10
+already says a veteran should be harder to kill, not unkillable. Gated at both
+ends: a real step, and a small one.
+
+### UI look — an honest status
+
+Sizing is fixed; the LOOK has not moved. The reference gets its character from
+art direction: pins are icon medallions on coloured discs with a label plate,
+routes are thick coloured dashed lines with arrowheads, and the map reads as
+textured collage. Ours are rings with a dot on flat drawn shapes.
+
+The blocker is a decision recorded earlier — pin icons were declined because 25
+anchor ROLES onto 12 generic icons is arbitrary. That still holds, but the
+reference's icons are **per-site** (noodle bowl, package, temple) and there are
+about six. `PiritoriIcon` draws vector icons in code, so this needs no credits.
+**Highest-impact visual change remaining.**

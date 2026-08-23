@@ -2437,6 +2437,134 @@
       "note": "Third parties do not turn on you, even provoked.",
       "hooks": "third-party",
       "tier": 3
+    },
+    {
+      "id": "shoulder",
+      "aptitude": "bruiser",
+      "label": "Shoulder",
+      "note": "Your pin also moves them one cell. Where they end up is your problem.",
+      "hooks": "shove",
+      "tier": 2
+    },
+    {
+      "id": "no-mercy",
+      "aptitude": "bruiser",
+      "label": "No mercy",
+      "note": "Hitting somebody already down finishes it. It is loud, and it is seen.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "last-one-standing",
+      "aptitude": "anchor",
+      "label": "Last one standing",
+      "note": "While you are the only one of yours upright, you take half of everything.",
+      "hooks": "condition",
+      "tier": 3
+    },
+    {
+      "id": "dig-in",
+      "aptitude": "anchor",
+      "label": "Dig in",
+      "note": "Stay put a whole round and your cover counts as hard until you move.",
+      "hooks": "cover",
+      "tier": 2
+    },
+    {
+      "id": "two-quick",
+      "aptitude": "blade",
+      "label": "Two quick",
+      "note": "Strike twice at half force. Cover eats the first one.",
+      "hooks": "cover",
+      "tier": 3
+    },
+    {
+      "id": "shiv",
+      "aptitude": "blade",
+      "label": "Shiv",
+      "note": "You are never unarmed. There is always something.",
+      "hooks": "equipment",
+      "tier": 1
+    },
+    {
+      "id": "suppress",
+      "aptitude": "shooter",
+      "label": "Suppress",
+      "note": "Nobody in the lane repositions next round, including yours.",
+      "hooks": "pin",
+      "tier": 3
+    },
+    {
+      "id": "hold-fire",
+      "aptitude": "shooter",
+      "label": "Hold fire",
+      "note": "Skip the round and the next shot cannot be intercepted by anything soft.",
+      "hooks": "cover",
+      "tier": 2
+    },
+    {
+      "id": "second-pair-of-eyes",
+      "aptitude": "spotter",
+      "label": "Second pair of eyes",
+      "note": "Your mark survives your own downing. Somebody else took over watching.",
+      "hooks": "intel",
+      "tier": 3
+    },
+    {
+      "id": "grab-them",
+      "aptitude": "courier",
+      "label": "Grab them",
+      "note": "Shove an ally instead of an enemy. They will not thank you.",
+      "hooks": "shove",
+      "tier": 2
+    },
+    {
+      "id": "hold-the-line",
+      "aptitude": "muscle",
+      "label": "Hold the line",
+      "note": "Allies adjacent to you cannot be shoved.",
+      "hooks": "shove",
+      "tier": 2
+    },
+    {
+      "id": "pockets",
+      "aptitude": "runner",
+      "label": "Pockets",
+      "note": "You can carry one more thing than anybody else.",
+      "hooks": "equipment",
+      "tier": 2
+    },
+    {
+      "id": "bad-feeling",
+      "aptitude": "watcher",
+      "label": "Bad feeling",
+      "note": "You know one round early when it is about to get loud enough to bring somebody.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "owe-me",
+      "aptitude": "fixer",
+      "label": "Owe me",
+      "note": "Somebody who stands down is remembered as owing you.",
+      "hooks": "third-party",
+      "tier": 3
+    },
+    {
+      "id": "side-street",
+      "aptitude": "driver",
+      "label": "Side street",
+      "note": "Withdrawing takes an adjacent ally with you.",
+      "hooks": "withdrawal",
+      "tier": 2
+    },
+    {
+      "id": "everyone-knows",
+      "aptitude": "local",
+      "label": "Everyone knows",
+      "note": "Heat rises more slowly here. It is your street.",
+      "hooks": "heat",
+      "tier": 2
     }
   ]
 }

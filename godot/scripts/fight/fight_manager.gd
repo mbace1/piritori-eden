@@ -216,6 +216,7 @@ func initialise(battle_def: Dictionary, seed: int = 0) -> Array:
 		var f := Fighter.from_dict(unit_dict)
 		f.side = Fighter.Side.PLAYER
 		f.is_player_controlled = true
+		_apply_perks_to(f)
 		var errs := _register_fighter(f)
 		errors.append_array(errs)
 
@@ -659,6 +660,47 @@ func saved_from_police() -> PackedStringArray:
 ## Still waiting on an answer.
 func police_awaiting_posture() -> bool:
 	return police_arrived and not _police_resolved
+
+
+# ── perks that the fight actually reads (COMBAT.md §9.11) ──────────────────
+
+## The crew screen had begun offering a choice between Strength, Speed, Nerve and
+## Toughness while the fight consulted none of them — worse than not offering it,
+## because it is a promise the combat does not keep. Wits was the only one wired,
+## through the read ladder.
+##
+## Deliberately SMALL per point. These are bought a point at a time across a
+## ten-fight career, so a large step would make a veteran a different unit rather
+## than a better one — and §9.10 already says a veteran should be harder to kill,
+## not unkillable.
+const PERK_HARM_PER_POINT := 1        ## strength
+const PERK_TEMPO_PER_POINT := 1       ## speed
+const PERK_CONDITION_PER_POINT := 1   ## toughness
+const PERK_NERVE_PER_POINT := 1       ## nerve
+
+
+## A fighter's perk, or zero for anybody without a campaign record — opponents
+## and third parties mostly have none, which is correct rather than missing.
+func _perk(f: Fighter, perk: String) -> int:
+	if f == null or f.character_id == "":
+		return 0
+	if not ContentRegistry.has_crew(f.character_id):
+		return 0
+	return GameState.perk_value(f.character_id, perk)
+
+
+## Applied once, when the fight is built, so condition and nerve maxima are true
+## for the whole battle rather than drifting as points are spent mid-run.
+func _apply_perks_to(f: Fighter) -> void:
+	var tough := _perk(f, "toughness") * PERK_CONDITION_PER_POINT
+	if tough > 0:
+		f.condition_max += tough
+		f.condition += tough
+	var steady := _perk(f, "nerve") * PERK_NERVE_PER_POINT
+	if steady > 0:
+		f.nerve_max += steady
+		f.nerve += steady
+	f.tempo += _perk(f, "speed") * PERK_TEMPO_PER_POINT
 
 
 # ── how much you can read (COMBAT.md §9.11) ────────────────────────────────
@@ -1166,6 +1208,9 @@ func _resolve_attack(cmd: Command) -> void:
 		return
 
 	var harm      := _roll_range(weapon.get("harm_min", 1), weapon.get("harm_max", 2))
+	# Strength is read here rather than folded into the weapon, so it is visible
+	# that the person and the tool are two different contributions.
+	harm += _perk(src, "strength") * PERK_HARM_PER_POINT
 	var nerve_dmg := _roll_range(weapon.get("nerve_min", 0), weapon.get("nerve_max", 1))
 
 	var guard_before := tgt.guard

@@ -52,6 +52,7 @@ func _ready() -> void:
 	_test_reading()
 	_test_mark_and_anchor()
 	_test_reachable()
+	_test_perks_do_something()
 	_test_police()
 	_test_police_posture()
 	_test_third_side()
@@ -1002,6 +1003,58 @@ the new verbs can actually be reached")
 	# The double is per ROUND. Asserted through the tally the resolver keeps.
 	check("a double is two in one round",
 		f._downs_this_round.is_empty() or true)
+
+
+## Perks the fight actually reads (COMBAT.md §9.11).
+##
+## The crew screen had started offering a choice between four stats that no rule
+## consulted — worse than not offering it, because it is a promise the combat
+## does not keep. These assert the promise is kept.
+func _test_perks_do_something() -> void:
+	print("
+perks change the fight")
+	GameState.new_campaign()
+
+	var ids := _crew_ids(3)
+	var who := String(ids[0])
+	if not GameState.roster.has(who):
+		GameState.roster.append(who)
+
+	# A plain fighter, for comparison.
+	var plain := FightManager.new()
+	plain.begin_canonical("battle-courtyard-3v3", ids, 4242)
+	var before: Fighter = plain.get_fighters(Fighter.Side.PLAYER)[0]
+	var base_cond := before.condition_max
+	var base_nerve := before.nerve_max
+	var base_tempo := before.tempo
+
+	# The same person, three points heavier.
+	GameState.crew_perks[who] = {"toughness": 3, "nerve": 2, "speed": 2}
+	var tough := FightManager.new()
+	tough.begin_canonical("battle-courtyard-3v3", ids, 4242)
+	var after: Fighter = tough.get_fighters(Fighter.Side.PLAYER)[0]
+
+	check("toughness raises what they can take",
+		after.condition_max > base_cond, "%d -> %d" % [base_cond, after.condition_max])
+	check("and they start at the new maximum", after.condition == after.condition_max)
+	check("nerve raises what they can stand",
+		after.nerve_max > base_nerve, "%d -> %d" % [base_nerve, after.nerve_max])
+	check("speed moves them up the order",
+		after.tempo > base_tempo, "%d -> %d" % [base_tempo, after.tempo])
+
+	# Strength is read at the swing, so it belongs to the person and not the
+	# weapon — the two contributions stay visible as two.
+	check("strength is a real step", FightManager.PERK_HARM_PER_POINT >= 1)
+
+	# Small per point, on purpose: bought across a ten-fight career, a large step
+	# would make a veteran a different unit rather than a better one.
+	check("but a small one", FightManager.PERK_HARM_PER_POINT <= 2)
+
+	# Somebody with no campaign record must not break it — opponents and third
+	# parties mostly have none, which is correct rather than missing.
+	var stranger: Fighter = tough.get_fighters(Fighter.Side.OPPOSITION)[0]
+	check("an opponent with no record has no perks",
+		tough._perk(stranger, "strength") == 0)
 
 
 ## Cover has to be answerable, not just enforced.
