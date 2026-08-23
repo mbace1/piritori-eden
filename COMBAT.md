@@ -431,6 +431,48 @@ cost you a body is never quietly refunded by that body's own weapon.
 
 ---
 
+## 8.4 Gear has a condition, and it only goes one way
+
+**Owner ruling, 2026-08-22.** Gear carries between chapters (see the persistence
+ledger in `GAME_DESIGN_DOCUMENT.md`) and degrades as it does.
+
+### Four stages
+
+    new  ->  used  ->  faulty  ->  broken
+
+**It steps down at a chapter boundary**, not per fight. That taxes *hoarding*
+rather than use, which is the right target: the thing being prevented is a
+farmed stockpile carried into chapter four, and a per-fight slide would instead
+punish the player for playing.
+
+**Rarely, it breaks outright** rather than stepping. A break is felt as an event
+where a slide is not, and it is the version that teaches the lesson in one go —
+particularly when what breaks is a §8 weapon that cannot be bought at any price,
+because replacing it means going and taking another one off somebody.
+
+### Resale falls with condition
+
+The fence pays less for worn gear. That produces a decision the flat model could
+not: **sell it while it is still worth something, or keep using it and watch the
+price fall.** Holding a weapon has a carrying cost, so a stockpile is not free
+even before it degrades into uselessness.
+
+It also gives freshly-taken loot a premium. Gear off a body is likelier to be new,
+which quietly makes winning fights a better source of value than hoarding.
+
+### What this obliges
+
+- Equipment needs a **condition** on the instance, not on the type. Two pipes
+  must be able to be in different states, which the current `equipment_owned`
+  list of ids cannot express.
+- `resale_of()` is currently a flat constant per type. It has to take condition,
+  and — per the market ruling — eventually district and day as well.
+- **`faulty` needs a mechanical meaning**, not just a lower price. Undecided:
+  a chance to fail, reduced effect, or something weapon-specific.
+- Whether `broken` is kept, discarded, or sold for scrap is undecided.
+
+---
+
 ## 9. Why you would spend a hireling, and why you would not
 
 The brakes, in the order they bite:
