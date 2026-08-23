@@ -1,52 +1,29 @@
-# UX concepts, 2026-08-23
+# UX concepts
 
-Three phone-shaped mockups made against the owner's reference layout. **Concepts,
-not runtime art** — nothing here is in `art/v3/manifest.json` and nothing is
-drawn by the game. They exist to settle how the screens should look now that the
-sizing work is done and the *look* has not moved.
+## What happened here, recorded so it is not repeated
 
-## What they establish
+Three concepts were made and **deleted the same day**. They described flat
+cut-paper silhouettes on a 2D isometric board — the game as it was before the
+3D ruling in `PHASING.md` §1.055. Owner: *"these are old designs and don't treat
+this like the game it is now with 3d fights."*
 
-| | |
-|---|---|
-| `crew-screen-a.png` | Torn-paper cards on charcoal, one per person; the expanded card carries the choice buttons |
-| `map-medallions-a.png` | Site pins as **icon medallions with hanging label plates**, coloured dashed routes with arrowheads, a corner legend |
-| `battle-telegraph-a.png` | Isometric board, side panel of per-enemy reads, shot-caller inset, four large action buttons |
+The cause was mine and it is written in `QUEUE.md` already: `ART_BIBLE.md` still
+describes cut cardstock and contradicts the 3D ruling, and I generated against
+the art bible instead of against the build. **Look at what the game renders
+before drawing what it should look like.**
 
-## What is directly usable
+One idea survived, and only one: **pictograms as vectors**.
 
-- **The medallion pin.** A flat colour disc, a thick cream ring, a simple white
-  pictogram, and a cream plate hanging below with a notch. This is the highest-
-  impact visual change outstanding and it needs **no credits** — the pictograms
-  are simple enough for `PiritoriIcon` to draw as vectors, and there are about
-  six of them rather than one per anchor role.
-- **The corner legend** matches what is already built.
-- **Torn-paper cards** for crew, which the rail can do with a StyleBox and a
-  grain texture.
-- **The battle side-panel**, which is close to how telegraphs already read: name,
-  a quiet line, then a coloured line whose colour is the risk band.
+## `battle-3d-b.png` — kept
 
-## What is WRONG in them, and must not be copied
+Made after looking at `battle_stage_3d.gd` rather than at the art bible: dim blue
+ambient, one warm sodium lamp, cool blue rim light separating figures from the
+ground, a low-opacity grid tinted cyan / neutral / red across six lanes and eight
+rows.
 
-- **Titles and copy are invented.** "HELSINKI 2003: COLD CASE KALLIO" is not the
-  title. The Finnish on the crew screen is plausible but unauthored.
-- **`ELIMINATE`, with a skull.** Directly against the game: `COMBAT.md` §1
-  promises triage rather than a damage race, and `NARRATIVE.md` holds that people
-  are never scenery. The verb set in the third image — PUNCH / GUARD / MOVE /
-  LOOK — is much closer to correct.
-- **`SURVEIL / MOVE / DEAL / ELIMINATE`** is not our command bar. Ours is ROUTE,
-  CREW, MISSIONS, NEWS, END DAY.
-- **VOIMA / TAITO** as the two stats. There are five perks — strength, speed,
-  wits, nerve, toughness — and two bars would misrepresent them.
-- **Palette runs hot.** The amber and the reds are more saturated than
-  `ART_BIBLE`'s night palette. Take the composition, not the saturation.
-- **Figures are generic silhouettes.** The cast has twelve aptitudes and a look
-  family per class; these are placeholders.
+It is close to what the build already does, and the cast it drew is recognisably
+ours — the black bomber, the long grey coat, the grey hood, the cream parka, the
+striped tracksuit, the white suit — because those came from the real models
+rather than from an imagined style.
 
-## The open question they surface
-
-The map concept reads as **sites** (noodle bar, drop point, safe house, docks)
-where the game's map is built on **anchors** (districts) with sites hanging off
-them. The concept is more legible than the current map, and adopting it means
-deciding whether the pin is the district or the place — which is a design
-decision rather than an art one.
+Still not a spec. The button words are invented, and there is no MARK.
