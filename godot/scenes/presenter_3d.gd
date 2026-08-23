@@ -22,7 +22,27 @@ extends SubViewportContainer
 ## missing speaker fails by name here instead of silently rendering nobody.
 const SPEAKERS := {
 	"arvo": "res://data/art/presenter/arvo-linde-v05.glb",
+	# BORROWED BODIES, so the LOCATION and INSET framings can be judged on a
+	# screen before anybody is commissioned. Owner's call, 2026-08-22: "use any
+	# character in these places for now."
+	"toko": "res://data/art/cast3d/driver-v01.glb",
+	"shot-caller": "res://data/art/cast3d/enforcer-v01.glb",
 }
+
+## Which of the above is standing in for somebody who does not exist yet.
+##
+## Declared rather than silent. A placeholder that nothing distinguishes from a
+## finished asset is how the wrong face ships: it looks deliberate, so nobody
+## questions it. This list is what a gate reads and what QUEUE.md tracks.
+##
+## The enforcer standing in for a faction shot-caller is nearly right by accident
+## — a white suit reads as somebody senior — and is still listed, because "nearly
+## right" is exactly the kind of thing that quietly becomes permanent.
+const PLACEHOLDER_SPEAKERS := ["toko", "shot-caller"]
+
+
+static func is_placeholder(id: String) -> bool:
+	return PLACEHOLDER_SPEAKERS.has(id)
 
 ## Kept so existing callers and tests do not break while the news is still the
 ## only screen using this.

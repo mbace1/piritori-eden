@@ -503,10 +503,21 @@ commissioning any new person.
 | Speaker | Model | Needed for |
 |---|---|---|
 | Arvo Linde | yes | the daily news |
-| Toko Slomo | **no** | the noodle bar — the named example of location-talk |
-| Faction shot-callers | **no** | the battle inset, `COMBAT.md` §9.9 |
-| Jaska | **no** | moral counterweight, appears throughout `NARRATIVE.md` |
-| McCormick family | **no** | bars, and where retired crew are found (§9.8) |
+| Toko Slomo | **borrowed** — the driver's body | the noodle bar |
+| Faction shot-caller | **borrowed** — the white suit | the battle inset, `COMBAT.md` §9.9 |
+| Jaska | no | moral counterweight, all through `NARRATIVE.md` |
+| McCormick family | no | bars, and where retired crew are found (§9.8) |
+
+**Borrowed is not the same as done.** Owner's call was "use any character in
+these places for now", so the framings can be judged before anybody is
+commissioned. `presenter_3d.PLACEHOLDER_SPEAKERS` names them and a gate checks
+the list stays honest, because a placeholder that nothing distinguishes from
+finished art is how the wrong face ships — it looks deliberate, so nobody
+questions it.
+
+The white suit standing in for a faction shot-caller is nearly right by accident,
+which is precisely the kind of thing that quietly becomes permanent. Toko wearing
+the driver's body is plainly wrong and will announce itself.
 
 `presenter_3d.SPEAKERS` holds the list, and a speaker with no model fails by name
 rather than rendering nobody. A gate asserts the size of that dictionary, so

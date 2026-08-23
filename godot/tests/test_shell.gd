@@ -235,13 +235,38 @@ the speaking character")
 
 	# A speaker with no model must fail by NAME. Silently rendering nobody is how
 	# "no Arvo in news" took a headless probe to diagnose.
-	p.speaker_id = "toko"
+	# Jaska, who is all through NARRATIVE.md and has no model and no stand-in.
+	# Deliberately somebody real rather than a nonsense string: the failure being
+	# tested is a character the game genuinely wants and does not have.
+	p.speaker_id = "jaska"
 	check("somebody with no model is not available", not p.available())
 	check("and is not silently swapped for Arvo", p.model_path() == "")
 
-	# The backlog, asserted. When Toko gets a model this fails and points here.
-	check("only one speaker has a model so far (see QUEUE)",
-		p.SPEAKERS.size() == 1)
+	# Everyone listed must resolve to something real, placeholder or not. A
+	# speaker that is registered and missing is worse than one that was never
+	# registered, because the caller has been told it is fine.
+	var broken: PackedStringArray = []
+	for id in p.SPEAKERS:
+		if not ResourceLoader.exists(String(p.SPEAKERS[id])):
+			broken.append(String(id))
+	check("every registered speaker has a model on disk",
+		broken.is_empty(), " ".join(broken))
+
+	# Borrowed bodies must stay DECLARED. A placeholder nothing distinguishes
+	# from finished art is how the wrong face ships: it looks deliberate, so
+	# nobody questions it.
+	check("Toko is a borrowed body", p.is_placeholder("toko"))
+	check("the shot-caller is a borrowed body", p.is_placeholder("shot-caller"))
+	check("Arvo is not", not p.is_placeholder("arvo"))
+
+	# Every placeholder has to be a real speaker, or the list rots into names
+	# nobody uses.
+	var orphan: PackedStringArray = []
+	for id in p.PLACEHOLDER_SPEAKERS:
+		if not p.SPEAKERS.has(String(id)):
+			orphan.append(String(id))
+	check("no placeholder names somebody who is not a speaker",
+		orphan.is_empty(), " ".join(orphan))
 	p.free()
 
 

@@ -250,6 +250,7 @@ func _build() -> void:
 		_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
 		_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_board.add_child(_stage3d)
+		_mount_shot_caller()
 
 	# ── the command console, OVERLAID rather than stacked ──
 	# Anchored to the bottom of the frame instead of sitting in the column, so it
@@ -638,6 +639,45 @@ func _cover_warning_for(target_id: String) -> Control:
 			# kind of thing that should make a loadout feel like a choice.
 			return _label(tr("battle.cover_pierced"), 12, PiritoriPalette.ROUTE_GREEN)
 	return null
+
+
+## THE OTHER SIDE'S SHOT-CALLER, in the corner of the board.
+##
+## `UX_SPEC.md` §18: one speaking-character component, three framings. This is
+## the INSET one — the smallest and the only one that has to share the screen
+## with something else.
+##
+## `COMBAT.md` §9.9 makes the shot-caller a real position rather than a stat.
+## Putting the opposition's in the corner is what stops "they are being
+## aggressive" from being a number nobody attributes to a person.
+##
+## The body is BORROWED. Nobody has modelled a faction shot-caller, so the white
+## suit stands in — see presenter_3d.PLACEHOLDER_SPEAKERS. It is nearly right by
+## accident, which is exactly why it is declared rather than left to look
+## deliberate.
+const INSET_SIZE := Vector2(148.0, 148.0)
+const INSET_MARGIN := 10.0
+
+func _mount_shot_caller() -> void:
+	var speaker = preload("res://scenes/presenter_3d.gd").new()
+	speaker.speaker_id = "shot-caller"
+	speaker.framing = speaker.Framing.INSET
+	if not speaker.available():
+		# No model, no inset. Silence beats a hole in the corner of the board.
+		speaker.free()
+		return
+	speaker.custom_minimum_size = INSET_SIZE
+	speaker.size = INSET_SIZE
+	speaker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Top RIGHT: the player's own crew and the command console own the bottom and
+	# the left, and the opposition occupies the far half of the board — so the
+	# corner nearest them is the one that reads as theirs.
+	speaker.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	speaker.offset_left = -(INSET_SIZE.x + INSET_MARGIN)
+	speaker.offset_top = INSET_MARGIN
+	speaker.offset_right = -INSET_MARGIN
+	speaker.offset_bottom = INSET_SIZE.y + INSET_MARGIN
+	_board.add_child(speaker)
 
 
 ## Target paths stay visible while a command is being chosen (§13.3).
