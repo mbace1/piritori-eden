@@ -171,3 +171,7 @@ police.saved,Pulled out,Saatiin pois,救出
 police.saved_note,Somebody went back for them. It cost what it cost.,Joku palasi hakemaan. Se maksoi mitä maksoi.,誰かが戻って連れ出した。相応の代償を払って。
 police.unit,Police,Poliisi,警察
 ui.menu,Settings,Asetukset,設定
+map.legend_open,Open,Auki,開放
+map.legend_teaser,"Seen, not yet reachable","Nähty, ei vielä auki",見えるが行けない
+map.legend_locked,Closed to you,Suljettu sinulta,閉ざされている
+map.legend_lead,Something waiting,Jotain odottaa,何かが待っている

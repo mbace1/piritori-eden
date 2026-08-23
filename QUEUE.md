@@ -781,3 +781,27 @@ these numbers at once.
   exists, but no encounter, mission or day in the schedule sends you there — so
   it is reachable only by `?battle=battle-kattilahalli-3v3`.
 - The Suvilahti yard site has **no encounter**, so it is a name on a map.
+
+## The map: a legend, and text you can read
+
+- **A legend**, bottom right, drawn last because it is chrome rather than
+  geography. Four pin states — open, seen-but-not-reachable, closed, something
+  waiting — each drawn as the map draws it, so the panel explains SHAPE as well
+  as colour. Until now a dashed orange ring, a padlock, a filled dot and a
+  pulsing halo were four facts a player could only learn by clicking everything.
+- **Pins and labels now account for the real screen.** `_scale` fits the map to
+  its control and the control is in DESIGN units, which stay about 1280 wide on
+  a phone — so an 18-design-pixel label was about 6 CSS pixels. `_device_gain()`
+  is the ratio that was missing, and it is the same omission that made the
+  command bar, the header and the stat chips unreadable. Labels are now 18 CSS
+  px on a phone and unchanged on a desktop.
+
+### Role icons in pins: NOT done, and deliberately
+
+The reference layout shows a noodle bowl, a package, a temple. Those are
+per-LOCATION marks, and the anchors carry 25 different `roles` against 12
+generic icon kinds. Any mapping would be arbitrary symbolism that reads worse
+than the plain dot it replaced.
+
+This needs a designed icon set — art, not code — and it is the last piece of the
+reference map that is genuinely outstanding.

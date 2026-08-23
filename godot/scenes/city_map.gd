@@ -62,6 +62,22 @@ func _layer(layer_name: String) -> Array:
 ## Fit the whole production boundary (§7: "fit the full boundary inside the
 ## world area"). The landmass is wider than the anchor spread, so the fit is
 ## computed from the geometry, not from the twelve pins.
+## HOW MUCH BIGGER THINGS HAVE TO BE ON A SMALL SCREEN.
+##
+## `_scale` fits the map to the control, and the control is measured in DESIGN
+## units — which on a phone stay about 1280 wide however small the glass is. So
+## a label clamped to 18 design pixels is about 6 CSS pixels on a phone, and pins
+## and labels shrank invisibly for the same reason the command bar did.
+##
+## This is the ratio between the design space and the real screen, which is the
+## number that was missing everywhere. 1.0 on a desktop, about 3 on a phone.
+func _device_gain() -> float:
+	var win := get_window()
+	if win == null or win.size.x <= 0:
+		return 1.0
+	return clampf(1280.0 / float(win.size.x), 1.0, 3.5)
+
+
 func _rebuild_layout() -> void:
 	_layout.clear()
 	_hits.clear()
@@ -140,6 +156,7 @@ func _draw() -> void:
 	_draw_crew_and_goods()      # 8
 	_draw_anchors()             # 10 + 11
 	_draw_labels()              # 12
+	_draw_legend()              # 13
 	_draw_placeholder_note()
 
 
@@ -480,7 +497,7 @@ func _draw_anchor(a: Dictionary) -> void:
 	var pos: Vector2 = _layout[id]
 	var state: String = a.get("sliceState", "locked")
 	var live := _is_live_lead(id)
-	var r := maxf(17.0 * _scale, 9.0)
+	var r := maxf(17.0 * _scale, 9.0) * _device_gain()
 
 	draw_circle(pos + Vector2(0, maxf(3.0 * _scale, 1.0)), r * 1.05, Color(0, 0, 0, 0.45))
 	draw_circle(pos, r, MapStyle.NODE_OUTER)
@@ -513,6 +530,76 @@ func _draw_anchor(a: Dictionary) -> void:
 		draw_arc(pos, r * 1.32, 0, TAU, 40, MapStyle.SMALL_TEXT, _w(2.0), true)
 
 
+## 13. THE LEGEND.
+##
+## The map has four pin states and until now nothing said what any of them
+## meant: a dashed orange ring, a padlock, a filled dot and a pulsing halo were
+## four different facts a player could only learn by clicking everything.
+##
+## Owner's reference layout asks for one, and it costs nothing to be honest —
+## colour is never the only carrier here (`locked` keeps its padlock), so the
+## legend explains shapes as much as hues.
+##
+## Drawn last, over everything, because it is chrome rather than geography.
+const LEGEND_FRACTION := 0.030      ## row height, of the shorter screen edge
+
+func _draw_legend() -> void:
+	var vp := size
+	if vp.x <= 0.0 or vp.y <= 0.0:
+		return
+	# Sized from the shorter edge so it stays a corner panel in both
+	# orientations instead of a banner in one of them.
+	var basis: float = minf(vp.x, vp.y)
+	var row := clampf(basis * LEGEND_FRACTION, 16.0, 52.0)
+	var pad := row * 0.55
+	var dot := row * 0.34
+	var font_px := int(clampf(row * 0.62, 11.0, 30.0))
+
+	var rows := [
+		["active", tr("map.legend_open")],
+		["teaser", tr("map.legend_teaser")],
+		["locked", tr("map.legend_locked")],
+		["lead", tr("map.legend_lead")],
+	]
+
+	# Widest label decides the panel, so no translation gets clipped.
+	var text_w := 0.0
+	for r in rows:
+		text_w = maxf(text_w, _font.get_string_size(String(r[1]),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px).x)
+	var w := pad * 2.0 + dot * 2.0 + pad * 0.8 + text_w
+	var h := pad * 2.0 + row * rows.size()
+	var origin := Vector2(vp.x - w - pad, vp.y - h - pad)
+
+	var panel := Rect2(origin, Vector2(w, h))
+	draw_rect(panel, Color(0.04, 0.06, 0.07, 0.82))
+	draw_rect(panel, MapStyle.FRAME_EDGE, false, maxf(2.0 * _scale, 1.0))
+
+	var y := origin.y + pad + row * 0.5
+	for r in rows:
+		var kind := String(r[0])
+		var c := origin.x + pad + dot
+		match kind:
+			"teaser":
+				_draw_dashed_ring(Vector2(c, y), dot, MapStyle.TEASER_RIM,
+					maxf(2.0 * _scale, 1.5), MapStyle.TEASER_DASH * _scale)
+			"locked":
+				draw_circle(Vector2(c, y), dot * 0.62, MapStyle.anchor_fill("locked"))
+				draw_arc(Vector2(c, y), dot, 0, TAU, 24, MapStyle.LOCKED_RIM,
+					maxf(2.0 * _scale, 1.2), true)
+			"lead":
+				draw_circle(Vector2(c, y), dot * 0.55, MapStyle.anchor_fill("active"))
+				draw_arc(Vector2(c, y), dot * 1.25, 0, TAU, 28, MapStyle.ROUTE,
+					maxf(2.5 * _scale, 1.4), true)
+			_:
+				draw_circle(Vector2(c, y), dot * 0.62, MapStyle.anchor_fill("active"))
+				draw_arc(Vector2(c, y), dot, 0, TAU, 24, MapStyle.anchor_rim("active"),
+					maxf(2.0 * _scale, 1.2), true)
+		draw_string(_font, Vector2(c + dot + pad * 0.8, y + font_px * 0.36),
+			String(r[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, MapStyle.TITLE_TEXT)
+		y += row
+
+
 func _draw_dashed_ring(c: Vector2, r: float, col: Color, width: float, dash: Vector2) -> void:
 	var seg: float = maxf(dash.x + dash.y, 4.0)
 	var count: int = maxi(int(TAU * r / seg), 6)
@@ -534,7 +621,7 @@ func _draw_labels() -> void:
 			continue
 
 		var text := String(a.get("label", id)).to_upper()
-		var font_px := int(clampf(19.0 * _scale, 10.0, 18.0))
+		var font_px := int(clampf(19.0 * _scale, 10.0, 18.0) * _device_gain())
 		var off: Array = a.get("labelOffset", [0, 0])
 		var centre: Vector2 = _layout[id] + Vector2(float(off[0]), float(off[1])) * _scale
 

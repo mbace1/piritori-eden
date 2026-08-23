@@ -50,6 +50,7 @@ func _ready() -> void:
 	_test_every_outcome_has_words()
 	_test_interface_is_thumb_sized()
 	await _test_settings_menu()
+	_test_map_reads_on_a_phone()
 	_test_speaking_character()
 	_test_location_speaker()
 	await _test_debug_hud()
@@ -381,6 +382,41 @@ settings live behind the menu")
 	menu.emit_signal("pressed")
 	await get_tree().process_frame
 	check("and pressing again puts them away", not langs.visible)
+
+
+## The map's own text, which shrank for the same reason everything else did.
+##
+## `_scale` fits the map to its control and the control is measured in DESIGN
+## units, which on a phone stay about 1280 wide however small the glass is. A
+## label clamped to 18 design pixels is about 6 CSS pixels there. The missing
+## number was always the ratio between the design space and the real screen.
+func _test_map_reads_on_a_phone() -> void:
+	print("
+the map reads on a phone")
+	var map = _shell._city_map
+	check("there is a map", map != null)
+	if map == null:
+		return
+
+	var gain: float = map._device_gain()
+	check("the gain is never a shrink", gain >= 1.0, "%.2f" % gain)
+
+	# On this machine the window is desktop-sized, so the honest assertion is
+	# about the FORMULA rather than the current device: a phone-width screen must
+	# produce a real multiplier, and a desktop must produce none.
+	var phone_gain: float = clampf(1280.0 / 412.0, 1.0, 3.5)
+	var desk_gain: float = clampf(1280.0 / 1920.0, 1.0, 3.5)
+	check("a phone gets a real multiplier", phone_gain > 2.5, "%.2f" % phone_gain)
+	check("and a desktop gets none", is_equal_approx(desk_gain, 1.0))
+
+	# 18 design px was the old ceiling; on a phone it has to end up near the
+	# same CSS size a desktop reader gets, not a third of it.
+	var css_on_phone: float = 18.0 * phone_gain * (412.0 / 1280.0)
+	check("a map label is legible in CSS pixels", css_on_phone >= 14.0,
+		"%.0f px" % css_on_phone)
+
+	# And it is bounded, or a very narrow screen would show four giant pins.
+	check("the multiplier is capped", clampf(1280.0 / 200.0, 1.0, 3.5) <= 3.5)
 
 
 func _all_nodes(root: Node, out: Array = []) -> Array:
