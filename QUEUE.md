@@ -1014,3 +1014,42 @@ Authored crew fall back to their `role`, so nothing broke by adding this.
 - **Authored crew hold exactly one aptitude**, their old role. The interesting
   people are combinations, and the six hand-written ones are the least
   interesting crew in the game as a result.
+
+## Thirty-six skills, three per aptitude
+
+Authored, gated, and offered from the pools a person holds. Each aptitude gets a
+straight one, a positional one, and one with a twist — something that costs as
+well as gives, or that reaches a system you would not expect a fighter to touch.
+
+**Every skill names the system it `hooks` into**, so a skill nobody can implement
+is visible as one rather than being discovered during the build. The hooks in use:
+cover, pin, intel, telegraph, heat, police, nerve, condition, rescue,
+deployment, reposition, withdrawal, stand-down, loot, equipment, initiative,
+shove, third-party.
+
+**Breadth is a trade, and it is gated as one.** A third aptitude widens the pool
+and the offer stays three, so it costs depth rather than adding power.
+
+Offers are **deterministic** from seed, person and level — a level-up that
+rerolls on reload is a slot machine, not a decision.
+
+A few that reach further than expected, on purpose:
+
+- **Back door** (driver) — you know which end the police come in at, and you
+  chose it. Reaches into §9.5.1.
+- **Names** (fixer) — somebody who runs was never here, and does not raise heat.
+- **Spare keys** (driver) — one of yours on the ground is not taken.
+- **Who lives here** (local) — third parties do not turn on you, even provoked.
+- **Loud** (muscle) and **One in the air** (shooter) both make the night noisier
+  as their cost, which ties a fighter's choices to the meta.
+
+### Not built
+
+- **No skill DOES anything yet.** All thirty-six are data with a hook named and
+  no code behind it. Same for the twelve verbs.
+- **Nothing offers the choice on screen.** `skill_offer()` is gated and no
+  interface calls it, so a level-up currently grants a perk point silently and
+  nothing else.
+- **Tiers are unbalanced by inspection, not by play.** Tier 3 skills are the
+  showy ones and nobody has checked that a level-3 crew member is not simply
+  better than two level-1s.

@@ -2148,5 +2148,295 @@
     "min_per_person": 2,
     "max_per_person": 3,
     "note": "A person is not labelled. Appearance follows the FIRST aptitude; a third widens the skill pool and shallows it, so breadth is a trade against depth rather than a strict gain."
-  }
+  },
+  "skills": [
+    {
+      "id": "hold-them-there",
+      "aptitude": "bruiser",
+      "label": "Hold them there",
+      "note": "A pinned target loses its guard as well as its footing.",
+      "hooks": "pin",
+      "tier": 1
+    },
+    {
+      "id": "no-room",
+      "aptitude": "bruiser",
+      "label": "No room",
+      "note": "Enemies adjacent to your target cannot reposition either.",
+      "hooks": "pin",
+      "tier": 2
+    },
+    {
+      "id": "wind-up",
+      "aptitude": "bruiser",
+      "label": "Wind-up",
+      "note": "Skip a round to hit for double. Everyone can see you doing it.",
+      "hooks": "telegraph",
+      "tier": 3
+    },
+    {
+      "id": "wall",
+      "aptitude": "anchor",
+      "label": "Wall",
+      "note": "You count as hard cover for whoever is behind you.",
+      "hooks": "cover",
+      "tier": 1
+    },
+    {
+      "id": "take-it",
+      "aptitude": "anchor",
+      "label": "Take it",
+      "note": "Absorb the harm aimed at an adjacent ally.",
+      "hooks": "cover",
+      "tier": 2
+    },
+    {
+      "id": "planted",
+      "aptitude": "anchor",
+      "label": "Planted",
+      "note": "Nothing repositions you — not a shove, not a blast, not the police.",
+      "hooks": "shove",
+      "tier": 3
+    },
+    {
+      "id": "in-the-gap",
+      "aptitude": "blade",
+      "label": "In the gap",
+      "note": "Extra harm against anyone standing in cover.",
+      "hooks": "cover",
+      "tier": 1
+    },
+    {
+      "id": "quick-hands",
+      "aptitude": "blade",
+      "label": "Quick hands",
+      "note": "You act first when tempo ties.",
+      "hooks": "initiative",
+      "tier": 2
+    },
+    {
+      "id": "bleed",
+      "aptitude": "blade",
+      "label": "Bleed",
+      "note": "A hit takes a little more the following round, whatever else happens.",
+      "hooks": "condition",
+      "tier": 3
+    },
+    {
+      "id": "steady-hand",
+      "aptitude": "shooter",
+      "label": "Steady hand",
+      "note": "Ignore the first cover in the lane.",
+      "hooks": "cover",
+      "tier": 1
+    },
+    {
+      "id": "aimed",
+      "aptitude": "shooter",
+      "label": "Aimed",
+      "note": "You always have the exact read on your own target.",
+      "hooks": "intel",
+      "tier": 2
+    },
+    {
+      "id": "one-in-the-air",
+      "aptitude": "shooter",
+      "label": "One in the air",
+      "note": "Fire to scatter: no harm, everyone in the lane loses nerve — and the heat rises.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "call-it",
+      "aptitude": "spotter",
+      "label": "Call it",
+      "note": "Your marked target's aim is read by the whole crew.",
+      "hooks": "intel",
+      "tier": 1
+    },
+    {
+      "id": "shared-eyes",
+      "aptitude": "spotter",
+      "label": "Shared eyes",
+      "note": "Allies attacking your marked target ignore soft cover.",
+      "hooks": "cover",
+      "tier": 2
+    },
+    {
+      "id": "watch-the-hands",
+      "aptitude": "spotter",
+      "label": "Watch the hands",
+      "note": "You see the opposition's intent a round before they commit.",
+      "hooks": "telegraph",
+      "tier": 3
+    },
+    {
+      "id": "out-of-the-way",
+      "aptitude": "courier",
+      "label": "Out of the way",
+      "note": "A shove also breaks a pin.",
+      "hooks": "pin",
+      "tier": 1
+    },
+    {
+      "id": "carry",
+      "aptitude": "courier",
+      "label": "Carry",
+      "note": "Drag a downed ally one cell. This is how somebody gets out.",
+      "hooks": "rescue",
+      "tier": 2
+    },
+    {
+      "id": "first-there",
+      "aptitude": "courier",
+      "label": "First there",
+      "note": "You start the fight one cell further forward than you should be.",
+      "hooks": "deployment",
+      "tier": 3
+    },
+    {
+      "id": "backbone",
+      "aptitude": "muscle",
+      "label": "Backbone",
+      "note": "Adjacent allies do not rout.",
+      "hooks": "nerve",
+      "tier": 1
+    },
+    {
+      "id": "shrug",
+      "aptitude": "muscle",
+      "label": "Shrug",
+      "note": "The first hit you take each fight lands softer.",
+      "hooks": "condition",
+      "tier": 2
+    },
+    {
+      "id": "loud",
+      "aptitude": "muscle",
+      "label": "Loud",
+      "note": "Enemies hesitate to close on you. It also makes the night noisier.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "hand-off",
+      "aptitude": "runner",
+      "label": "Hand-off",
+      "note": "Pass a weapon to any ally on the board.",
+      "hooks": "equipment",
+      "tier": 1
+    },
+    {
+      "id": "long-legs",
+      "aptitude": "runner",
+      "label": "Long legs",
+      "note": "Move two cells instead of one.",
+      "hooks": "reposition",
+      "tier": 2
+    },
+    {
+      "id": "no-goodbyes",
+      "aptitude": "runner",
+      "label": "No goodbyes",
+      "note": "Withdrawing costs you nothing.",
+      "hooks": "withdrawal",
+      "tier": 3
+    },
+    {
+      "id": "patterns",
+      "aptitude": "watcher",
+      "label": "Patterns",
+      "note": "Read intent two rounds ahead instead of one.",
+      "hooks": "telegraph",
+      "tier": 1
+    },
+    {
+      "id": "tell",
+      "aptitude": "watcher",
+      "label": "Tell",
+      "note": "You know when somebody is about to break.",
+      "hooks": "nerve",
+      "tier": 2
+    },
+    {
+      "id": "count-them",
+      "aptitude": "watcher",
+      "label": "Count them",
+      "note": "You know how many are coming if it gets loud, and from which end.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "reasonable",
+      "aptitude": "fixer",
+      "label": "Reasonable",
+      "note": "A bloodless exit is on the table a round earlier.",
+      "hooks": "stand-down",
+      "tier": 1
+    },
+    {
+      "id": "split-the-difference",
+      "aptitude": "fixer",
+      "label": "Split the difference",
+      "note": "Somebody who stands down leaves their weapon behind.",
+      "hooks": "loot",
+      "tier": 2
+    },
+    {
+      "id": "names",
+      "aptitude": "fixer",
+      "label": "Names",
+      "note": "Somebody who runs was never here. They do not raise the heat.",
+      "hooks": "heat",
+      "tier": 3
+    },
+    {
+      "id": "engine-running",
+      "aptitude": "driver",
+      "label": "Engine running",
+      "note": "Pull an ally out of the fight without the usual cost.",
+      "hooks": "withdrawal",
+      "tier": 1
+    },
+    {
+      "id": "spare-keys",
+      "aptitude": "driver",
+      "label": "Spare keys",
+      "note": "One of yours on the ground is not taken when the police arrive.",
+      "hooks": "police",
+      "tier": 2
+    },
+    {
+      "id": "back-door",
+      "aptitude": "driver",
+      "label": "Back door",
+      "note": "You know which end they will come in at, and you chose it.",
+      "hooks": "police",
+      "tier": 3
+    },
+    {
+      "id": "the-yard",
+      "aptitude": "local",
+      "label": "The yard",
+      "note": "Turn a piece of the place into cover, once.",
+      "hooks": "cover",
+      "tier": 1
+    },
+    {
+      "id": "back-way",
+      "aptitude": "local",
+      "label": "Back way",
+      "note": "Your crew deploys anywhere in your own band.",
+      "hooks": "deployment",
+      "tier": 2
+    },
+    {
+      "id": "who-lives-here",
+      "aptitude": "local",
+      "label": "Who lives here",
+      "note": "Third parties do not turn on you, even provoked.",
+      "hooks": "third-party",
+      "tier": 3
+    }
+  ]
 }

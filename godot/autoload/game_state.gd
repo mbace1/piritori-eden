@@ -167,9 +167,76 @@ func spend_perk(crew_id: String, perk: String) -> bool:
 	return true
 
 
+## What this person could learn next (COMBAT.md §9.11, §9.12).
+##
+## Drawn from the pools of the aptitudes they hold, which is what makes holding
+## more than one worth anything — and what makes a third a TRADE rather than a
+## gain: the offer is the same size either way, so breadth costs depth.
+##
+## Deterministic from the campaign seed, the person and their level. A level-up
+## offer that rerolls on reload is a slot machine, not a decision.
+const SKILL_OFFER_SIZE := 3
+
+
+func skill_offer(crew_id: String) -> Array:
+	var level := level_of(crew_id)
+	var known := skills_of(crew_id)
+
+	var eligible: Array = []
+	for a in aptitudes_of(crew_id):
+		for sk in ContentRegistry.slice.get("skills", []):
+			var s: Dictionary = sk
+			if String(s.get("aptitude", "")) != String(a):
+				continue
+			if int(s.get("tier", 1)) > level:
+				continue
+			if known.has(String(s.get("id", ""))):
+				continue
+			eligible.append(s)
+
+	if eligible.size() <= SKILL_OFFER_SIZE:
+		return eligible
+
+	# Stable shuffle: the same person at the same level is offered the same
+	# three, however many times the screen is opened.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(crew_id) + seed_value * 13 + level * 101
+	var pool := eligible.duplicate()
+	var out: Array = []
+	for i in SKILL_OFFER_SIZE:
+		out.append(pool.pop_at(rng.randi_range(0, pool.size() - 1)))
+	return out
+
+
+## Everything this person could ever learn, for a screen that wants to show the
+## road rather than the next step.
+func skill_pool_size(crew_id: String) -> int:
+	var n := 0
+	for a in aptitudes_of(crew_id):
+		for sk in ContentRegistry.slice.get("skills", []):
+			if String((sk as Dictionary).get("aptitude", "")) == String(a):
+				n += 1
+	return n
+
+
 func learn_skill(crew_id: String, skill_id: String) -> bool:
 	var have: PackedStringArray = crew_skills.get(crew_id, PackedStringArray())
 	if have.has(skill_id):
+		return false
+	# It has to be a real skill, belonging to an aptitude this person holds, at a
+	# tier they have reached. Otherwise a typo teaches somebody a trick from a
+	# class they have never been.
+	var found := false
+	for sk in ContentRegistry.slice.get("skills", []):
+		var s: Dictionary = sk
+		if String(s.get("id", "")) != skill_id:
+			continue
+		if not has_aptitude(crew_id, String(s.get("aptitude", ""))):
+			return false
+		if int(s.get("tier", 1)) > level_of(crew_id):
+			return false
+		found = true
+	if not found:
 		return false
 	have.append(skill_id)
 	crew_skills[crew_id] = have

@@ -30,6 +30,7 @@ func _ready() -> void:
 	_test_careers()
 	_test_growing()
 	_test_aptitudes()
+	_test_skills()
 	_test_loot()
 	_test_fence()
 	_test_arrest()
@@ -686,10 +687,19 @@ growing (COMBAT.md §9.11)")
 	check("an unknown perk is refused", not GameState.spend_perk(who, "charisma"))
 	check("and the point was not eaten", GameState.unspent_perk_points(who) == 1)
 
-	# Skills are per person too, and not learned twice.
-	check("a skill is learned", GameState.learn_skill(who, "second-wind"))
-	check("and not learned twice", not GameState.learn_skill(who, "second-wind"))
-	check("it is on the person", GameState.skills_of(who).has("second-wind"))
+	# Skills come from the aptitudes this person holds, so the test asks what
+	# they could actually learn rather than inventing one.
+	var offer: Array = GameState.skill_offer(who)
+	check("there is something to learn", not offer.is_empty())
+	var learn := String((offer[0] as Dictionary).get("id", ""))
+	check("a skill is learned", GameState.learn_skill(who, learn))
+	check("and not learned twice", not GameState.learn_skill(who, learn))
+	check("it is on the person", GameState.skills_of(who).has(learn))
+
+	# A skill from an aptitude they do not hold is refused: a typo must not
+	# teach somebody a trick from a class they have never been.
+	check("and a stranger's trick is refused",
+		not GameState.learn_skill(who, "back-door") or GameState.has_aptitude(who, "driver"))
 
 	# Glory pays double, per §9.11.
 	var before := GameState.unspent_perk_points(who)
@@ -716,7 +726,7 @@ growing (COMBAT.md §9.11)")
 	check("a new campaign forgets", GameState.perk_value(who, "speed") == 0)
 	check("the save reloads", GameState.from_dict(saved))
 	check("the perk came back", GameState.perk_value(who, "speed") == 1)
-	check("and so did the skill", GameState.skills_of(who).has("second-wind"))
+	check("and so did the skill", GameState.skills_of(who).has(learn))
 
 
 ## Aptitudes (COMBAT.md §9.12): a person is not labelled.
@@ -785,6 +795,115 @@ func _unique(a: PackedStringArray) -> PackedStringArray:
 			seen[String(x)] = true
 			out.append(String(x))
 	return out
+
+
+## Skills (COMBAT.md §9.11) — three per aptitude, offered from what you hold.
+func _test_skills() -> void:
+	print("
+skills")
+	GameState.new_campaign()
+	var skills: Array = ContentRegistry.slice.get("skills", [])
+	var pool: Array = ContentRegistry.slice.get("classes", [])
+
+	check("skills are authored", not skills.is_empty())
+
+	# Every aptitude must have something to offer, or holding it is decoration.
+	var per: Dictionary = {}
+	for sk in skills:
+		var a := String((sk as Dictionary).get("aptitude", ""))
+		per[a] = int(per.get(a, 0)) + 1
+	var covered := true
+	var thin: PackedStringArray = []
+	for c in pool:
+		var id := String((c as Dictionary).get("id", ""))
+		if int(per.get(id, 0)) < 3:
+			covered = false
+			thin.append(id)
+	check("every aptitude has at least three", covered, " ".join(thin))
+
+	# Ids unique, aptitudes real, tiers sane.
+	var seen: Dictionary = {}
+	var dupes: PackedStringArray = []
+	var orphan: PackedStringArray = []
+	var bad_tier := false
+	var known: Dictionary = {}
+	for c in pool:
+		known[String((c as Dictionary).get("id", ""))] = true
+	for sk in skills:
+		var s2: Dictionary = sk
+		var id2 := String(s2.get("id", ""))
+		if seen.has(id2):
+			dupes.append(id2)
+		seen[id2] = true
+		if not known.has(String(s2.get("aptitude", ""))):
+			orphan.append(id2)
+		var t := int(s2.get("tier", 0))
+		if t < 1 or t > 3:
+			bad_tier = true
+	check("no two skills share an id", dupes.is_empty(), " ".join(dupes))
+	check("every skill belongs to a real aptitude", orphan.is_empty(), " ".join(orphan))
+	check("and every tier is reachable", not bad_tier)
+
+	# Every skill names the system it touches, so a wish is visible as one.
+	var unhooked: PackedStringArray = []
+	for sk in skills:
+		if String((sk as Dictionary).get("hooks", "")) == "":
+			unhooked.append(String((sk as Dictionary).get("id", "")))
+	check("every skill names what it hooks into", unhooked.is_empty(), " ".join(unhooked))
+
+	# ── the offer ──
+	var who := ""
+	for c in ContentRegistry.slice.get("crew", []):
+		var cid := String(c.get("id", ""))
+		if not GameState.is_named(cid):
+			who = cid
+			break
+	if not GameState.roster.has(who):
+		GameState.roster.append(who)
+
+	var offer: Array = GameState.skill_offer(who)
+	check("an offer is made", not offer.is_empty())
+	check("and it is no bigger than three",
+		offer.size() <= GameState.SKILL_OFFER_SIZE)
+
+	# Only from aptitudes they hold, and only at a tier they have reached.
+	var wrong := false
+	for o in offer:
+		var od: Dictionary = o
+		if not GameState.has_aptitude(who, String(od.get("aptitude", ""))):
+			wrong = true
+		if int(od.get("tier", 1)) > GameState.level_of(who):
+			wrong = true
+	check("everything offered is theirs to learn", not wrong)
+
+	# Stable: a level-up that rerolls on reload is a slot machine.
+	var again: Array = GameState.skill_offer(who)
+	var same := offer.size() == again.size()
+	for i in offer.size():
+		if String((offer[i] as Dictionary).get("id", "")) 				!= String((again[i] as Dictionary).get("id", "")):
+			same = false
+	check("the same offer comes back", same)
+
+	# Learning one removes it from the next offer.
+	var first := String((offer[0] as Dictionary).get("id", ""))
+	GameState.learn_skill(who, first)
+	var after: Array = GameState.skill_offer(who)
+	var still := false
+	for o in after:
+		if String((o as Dictionary).get("id", "")) == first:
+			still = true
+	check("a learned skill is not offered again", not still)
+
+	# BREADTH IS A TRADE. A third aptitude widens the pool but the offer stays
+	# three, so it costs depth rather than adding power.
+	var two := GameState.skill_pool_size(who)
+	var apt := GameState.aptitudes_of(who)
+	apt.append("driver")
+	GameState.set_aptitudes(who, apt)
+	check("a third aptitude widens the pool",
+		GameState.skill_pool_size(who) > two)
+	check("but the offer is still the same size",
+		GameState.skill_offer(who).size() <= GameState.SKILL_OFFER_SIZE)
 
 
 ## Careers (COMBAT.md §7). The ceiling is the mechanic — without it, XP builds a
