@@ -1263,3 +1263,19 @@ no contact shadow under a fighter, which is most of what glues a figure to a
 floor; and the idle pose is a single frame per body, so a standing crew is
 literally static cardboard. Worth confirming which of the three it is by
 capturing the battle before changing anything.
+
+**Owner's read, 2026-08-24: none of the three. "Bad and old art."** The three
+candidates above are all rendering fixes, and the diagnosis behind them is
+wrong — the source art is the problem, not the light falling on it or the
+shadow under it. Lighting a bad figure better produces a better-lit bad figure.
+
+This promotes the item from a note to a **lane: Art**, and it changes what the
+first step is. Not a capture of the battle to tell three rendering causes
+apart; a look at what the crew bodies actually are and when they were made,
+against what `ART_BIBLE.md` asks for now. The Sprint 1 audit is the precedent —
+its dog was called "the best-looking image in the set and the furthest from the
+Art Bible", and the fix there was not to render it better but to redraw it
+(`art-src/concepts/sprint1/v2/`).
+
+Do not re-rank the three candidates. They stay written down only so nobody
+proposes them again as the cause.
