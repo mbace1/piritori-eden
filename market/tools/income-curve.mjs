@@ -98,49 +98,73 @@ for (const [name, cap] of BANDS) {
 // You are holding N units you did not pay for. Find buyers. Patience is a
 // price: sell only above a floor and it takes longer; dump and you eat the
 // saturation you created.
+/** A consignment, measured in MINUTES.
+ *
+ *  OWNER RULING: ten units should be about THREE IN-GAME HOURS and ten to
+ *  fifteen real minutes — not three days. The first sim said 2.8 days, and the
+ *  reason was the time unit, not the market: it allowed one selling stop per
+ *  BLOCK, three blocks a day, so ten units could not help but take days. A
+ *  seller does not visit one buyer per afternoon.
+ *
+ *  The unit is now a stop and a walk:
+ *    ASK_MIN   30   working a place — finding buyers, doing the deal
+ *    HOP_MIN   20   getting to the next anchor, tram or foot
+ *
+ *  So a four-stop afternoon is 30+20+30+20+30+20+30 = 180 minutes, and if each
+ *  stop takes about three units then ten units IS three hours. That is the
+ *  arithmetic the ruling implies, and the liquidity floor was raised to 2 to
+ *  make "about three units a stop" true everywhere on the board.
+ */
+const ASK_MIN = 30, HOP_MIN = 20;
+
 function consign(units, seed, floorFrac) {
   const sat = new Map(anchors.map(a => [a.id, 0]));
   const floor = GOODS.piri.base * floorFrac;
-  let left = units, revenue = 0, blocks = 0, day = 0, bi = 0;
-  while (left > 0 && blocks < 60) {
-    const block = BLOCKS[bi];
-    // best place to put ONE unit right now
+  let left = units, revenue = 0, minutes = 0, stops = 0, day = 0;
+  let block = 'day';
+  const seenHere = new Set();
+  while (left > 0 && minutes < 60 * 24) {
+    // Where to go next: best price you can still get, not counting places you
+    // have already worked flat this run.
     let best = null;
     for (const a of anchors) {
       const p = priceAt(a, day, block, seed, sat.get(a.id)).sell;
       if (!best || p > best.p) best = { p, a };
     }
-    // Sell as many as this place will still take ABOVE THE FLOOR. That is where
-    // patience becomes a price: a high floor takes one or two units a block and
-    // walks away; a low floor keeps selling into a price you are yourself
-    // pushing down. Selling one unit per block made the two identical, which is
-    // the sim refusing to model the only decision in the mission.
-    if (best && best.p >= floor) {
-      for (let k = 0; k < 6 && left > 0; k++) {
-        const p = priceAt(best.a, day, block, seed, sat.get(best.a.id)).sell;
-        if (p < floor) break;
-        revenue += p; left--;
-        sat.set(best.a.id, sat.get(best.a.id) + 1);
-      }
+    if (!best || best.p < floor) break;               // nothing left worth selling to
+    if (stops) minutes += HOP_MIN;
+    minutes += ASK_MIN;
+    stops++;
+    seenHere.add(best.a.id);
+    for (let k = 0; k < 8 && left > 0; k++) {
+      const p = priceAt(best.a, day, block, seed, sat.get(best.a.id)).sell;
+      if (p < floor) break;
+      revenue += p; left--;
+      sat.set(best.a.id, sat.get(best.a.id) + 1);
     }
-    blocks++; bi++;
-    if (bi >= BLOCKS.length) { bi = 0; day++; for (const k of sat.keys()) sat.set(k, sat.get(k) * RECOVER); }
+    // A long afternoon rolls into the evening, and then into tomorrow.
+    if (minutes > 300 && block === 'day') block = 'evening';
+    if (minutes > 600) { block = 'day'; day++; minutes += 0; for (const kk of sat.keys()) sat.set(kk, sat.get(kk) * RECOVER); }
   }
-  return { left, revenue, blocks, days: day + 1 };
+  return { left, revenue, minutes, stops, hours: minutes / 60 };
 }
 
 console.log(`\n  CONSIGNMENT — "here are N units, go find buyers"\n`);
-console.log('  units   patience        blocks   days   revenue   €/unit   unplaced');
+console.log('  units   patience                 stops   in-game   revenue   €/unit   unplaced');
 for (const units of [5, 10, 20]) {
-  for (const [label, frac] of [['hold out (≥90% base)', 0.9], ['take what comes (≥65%)', 0.65]]) {
+  for (const [label, frac] of [
+    ['hold out (≥90% of base)', 0.90],
+    ['work it (≥78%)', 0.78],
+    ['take what comes (≥65%)', 0.65],
+  ]) {
     let B = 0, D = 0, R = 0, L = 0;
     for (let s = 0; s < SEEDS; s++) {
       const r = consign(units, 'con' + s, frac);
-      B += r.blocks; D += r.days; R += r.revenue; L += r.left;
+      B += r.stops; D += r.hours; R += r.revenue; L += r.left;
     }
     const placed = units - L / SEEDS;
     console.log('  ' + String(units).padStart(5) + '   ' + label.padEnd(24)
-      + (B / SEEDS).toFixed(0).padStart(4) + (D / SEEDS).toFixed(1).padStart(7)
+      + (B / SEEDS).toFixed(1).padStart(6) + ((D / SEEDS).toFixed(1) + 'h').padStart(9)
       + money(R / SEEDS).padStart(10)
       + (placed > 0 ? money(R / SEEDS / placed).padStart(9) : '—'.padStart(9))
       + (L / SEEDS).toFixed(1).padStart(11));

@@ -103,7 +103,7 @@ const ok = (cond, what) => { if (cond) { pass++; } else { fail++; console.log(' 
     const p = nodeProfile(a);
     if (p.demand < 0.72 || p.demand > 1.42) bad++;
     if (p.spread < 0.06 || p.spread > 0.34) bad++;
-    if (p.liquidity < 1 || p.liquidity > 9) bad++;
+    if (p.liquidity < 2 || p.liquidity > 10) bad++;
   }
   ok(bad === 0, 'every anchor profile is inside its clamps, whatever its role count');
 }

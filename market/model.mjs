@@ -116,7 +116,12 @@ export function nodeProfile(anchor) {
   return {
     demand: clamp(1 + p.demand, 0.72, 1.42),
     supply: clamp(1 + p.supply, 0.72, 1.55),
-    liquidity: clamp(2 + p.liquidity * 6, 1, 9),          // packs before saturation bites
+    // FLOOR RAISED FROM 1 TO 2 (owner ruling: ten units is three in-game hours,
+    // not three days). A node that can only take a single unit forces a
+    // consignment to crawl across the whole board over days. Every anchor now
+    // absorbs about three units before the price turns hard, which is what makes
+    // a ten-unit load a three-or-four-stop afternoon.
+    liquidity: clamp(2 + p.liquidity * 6, 2, 10),         // packs before saturation bites
     volatility: clamp(1 + p.volatility, 0.7, 1.6),
     spread: clamp(0.16 + p.spread, 0.06, 0.34),           // buy/sell gap, fraction of mid
     watch: clamp(1 + p.watch, 0.5, 1.6),

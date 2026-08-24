@@ -262,32 +262,95 @@ Note the decay across weeks: the same perfect play earns a third less by week
 three, because you have been saturating your own board. **The trickle runs dry,
 and that is the pressure that should push a player toward the missions.**
 
-### 7b.1 A consignment is a time problem
+### 7b.1 A consignment is an afternoon, not a week
 
-"Here are ten units, go find buyers" is not a delivery. There is no retailer —
-the difficulty is the market's own shape, and it is entirely made of saturation:
-you cannot put ten units into one place, so it becomes a route across days.
+> "It should take you 3h and real time 10-15mins max" — owner, 2026-08-24
 
-| units | patience | days | revenue | €/unit |
-|---:|---|---:|---:|---:|
-| 5 | hold out (≥90% of base) | 1.2 | €311 | €62 |
-| 5 | take what comes (≥65%) | 1.0 | €294 | €59 |
-| 10 | hold out | 2.8 | €596 | €60 |
-| 10 | take what comes | 2.0 | €558 | €56 |
-| 20 | hold out | 5.0 | €1,186 | €59 |
-| 20 | take what comes | 2.0 | €1,047 | €52 |
+**The first measurement said 2.8 days and that was wrong — the time unit was.**
+The sim allowed one selling stop per BLOCK, three blocks a day, so ten units
+could not help but take days. A seller does not visit one buyer per afternoon.
+The market's clock is a stop and a walk:
 
-**Speed costs about 12%; patience costs days.** That is the whole mission in one
-line, and neither side of it had to be authored — a deadline bites because the
-board is slow, and dumping is expensive because dumping is what saturation is
-for. A mission that says *by Friday* is now a real problem, and a mission that
-adds *and the McCormicks are watching Hakaniemi* takes a node out of the route
-and makes it worse.
+| | |
+|---|---|
+| working a place — finding buyers, doing the deal | **30 min** |
+| getting to the next anchor, tram or foot | **20 min** |
 
-**The ratio the owner asked for:** one twenty-unit consignment clears roughly
-€1,050–1,190 in two to five days. Perfect side-hustle play clears €243 a week.
-**One mission is worth four or five weeks of trading** — and the trading is not
-risky, which is exactly the right way round.
+A four-stop afternoon is therefore `30+20+30+20+30+20+30` = **three hours**, and
+if each stop takes about three units then **ten units is three hours** exactly as
+the ruling says. To make "about three units a stop" true everywhere, the
+liquidity floor rose from 1 to 2 — a node that can only absorb a single unit
+forces a load to crawl across the whole board.
+
+| units | patience | stops | in-game | revenue | €/unit | unplaced |
+|---:|---|---:|---:|---:|---:|---:|
+| 10 | hold out (≥90% of base) | 5.2 | 4.0h | €574 | €60 | **0.5** |
+| 10 | work it (≥78%) | 2.7 | **1.9h** | €584 | €58 | 0 |
+| 10 | take what comes (≥65%) | 2.0 | 1.3h | €559 | €56 | 0 |
+| 20 | hold out | 5.5 | 4.3h | €602 | €60 | **10** |
+| 20 | work it | 6.2 | 4.8h | €1,105 | €55 | 0 |
+| 20 | take what comes | 3.7 | 2.7h | €1,049 | €52 | 0 |
+
+Three things fall out of that table, none of them authored:
+
+- **There is no "wait for a good price" strategy.** Holding out for 90% leaves
+  half a unit unsold at ten and *half the load* unsold at twenty — you run out of
+  buyers who will pay it. The only real decision is how far down you will go.
+- **Speed costs about 7%**, and it is worth it when something is chasing you.
+- **Twenty units is not two tens.** It is a genuinely different job: nearly five
+  hours, six stops, and the board visibly tiring underneath you.
+
+At roughly three stops, ten units is three or four player interactions — which
+is the ten to fifteen real minutes the ruling asks for.
+
+---
+
+## 7c. How the risk actually triggers
+
+> "these should be more random, like someone saw you, reported it and police had
+> a unit near. Piritori gets police there often and sometimes they just need to
+> fill some arrest quota" — owner
+
+> "we can think of how things trigger. One could be that weed can smell on trams
+> if not packed well, you should have a carbon lined bag, etc." — owner
+
+So exposure is **not a meter that fills as you sell**. It is a set of named
+triggers that either fire or do not, each with a fictional reason a player can
+repeat afterwards: *somebody saw me and there was a car on Hämeentie.*
+
+That gives three ingredients, and all three already exist:
+
+| | where it comes from |
+|---|---|
+| **a place's appetite for police** | `watch`, already computed per anchor from its roles — Piritori and the transfer nodes score high, Torkkelinmäki low |
+| **a context** | the transit layer. A tram is not a street; a platform is not a park |
+| **a tell** | per good. Something about carrying *this* in *that* place |
+
+And a tell can be answered by **kit** — a better bag — which is where the
+loot-economy branch's "money buys volume, loot buys capability" meets this
+document.
+
+**One flag, and it is a real one.** `DESIGN_LOCKS.md` §9.1 says the abstraction
+must never add *"dosage, preparation, concealment, consumption or real-world
+trafficking instruction."* A carbon-lined bag is concealment. The mechanic the
+owner wants is good and the lock is also right, so the way through is to keep
+the **trigger** and the **kit** while never modelling the **method**:
+
+- the game may say *"a bag like that is no good on a tram"* — a named tell and a
+  named remedy;
+- it may carry an item with a stat, which reduces one named trigger;
+- it must never describe what makes the bag work, how to pack anything, or what
+  to do instead if you lack one.
+
+That keeps a real, teachable-by-play risk system on the right side of a lock
+whose whole purpose is that the game not be a manual. **If a piece of kit needs
+an explanation to be useful, it is the wrong piece of kit.**
+
+An arrest quota is worth keeping as an explicit trigger, because it is the one
+that is genuinely nobody's fault — a month-end sweep at Piritori that has
+nothing to do with you is exactly the city the fiction describes.
+
+---
 
 ---
 
@@ -415,6 +478,16 @@ file.
    missions are narrative beats — multi-step, multi-location, and they may be a
    consignment, a hit, a fight or a chase. §7b measures the ratio and finds one
    twenty-unit consignment worth four or five weeks of perfect trading.
+
+8. **Ten units is three in-game hours and ten to fifteen real minutes.** The
+   market's clock is 30 minutes to work a place and 20 to reach the next one, so
+   a four-stop afternoon is three hours. The liquidity floor rose to 2 to make
+   about three units a stop true across the board.
+
+9. **Risk triggers rather than accumulates.** Named, situational, and
+   explainable after the fact: a witness, a unit nearby, a place that draws
+   police, an arrest quota, a tell that a piece of kit answers. See §7c,
+   including where that meets DESIGN_LOCKS §9.1 and how it stays inside it.
 
 ---
 
