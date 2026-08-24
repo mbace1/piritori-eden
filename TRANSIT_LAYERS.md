@@ -452,91 +452,98 @@ timetable.
 
 ---
 
-## 10. The actual maps — what the repo has, and what it does not
+## 10. The actual maps — and we have them now
 
-Asked directly, 2026-08-23. The honest inventory, because the gap is smaller
-than it looks and is in a different place than you would guess.
+Asked whether we had the real Helsinki tram maps. We did not. **We do now** —
+`map/kallio-rail-v1.json`, 49 KB, extracted and committed 2026-08-23.
 
-### 10.1 What is already here, and it is more than nothing
+### 10.1 What was here already
 
-**Real coordinates for every anchor.** `map/kallio-era1-2003-v1.json` carries
-WGS84 for all thirteen — Hakaniemi at `60.1789, 24.9511`, Kallion kirkko at
-`60.18427, 24.94936`, and so on — each with a `coordinateStatus`. The nodes are
-geographically true today.
+Real WGS84 for all thirteen anchors, and the 2003 service patterns as anchor
+sequences in `periodServices`, already flagged for provenance:
+`metro_m_2003` is `documented`, the two trams are
+`documented-service-inferred-anchor-sequence`.
 
-**The 2003 service patterns, as anchor sequences.** `periodServices` already
-holds them:
+What was missing was **geometry** — the board's tram lines were two hand-drawn
+polylines of five and three points, schematic marks rather than the path the
+rails take — and **stops**, of which the board had none.
 
-| service | sequence | `sourceClass` |
-|---|---|---|
-| `metro_m_2003` | hakaniemi → piritori, continuing centre and east | `documented` |
-| `tram_3b_2003` | hakaniemi → kallio_church → karhupuisto → harju → alppiharju | `documented-service-inferred-anchor-sequence` |
-| `tram_6_2003` | hakaniemi → linjat_yard → piritori, continuing to Arabia | `documented-service-inferred-anchor-sequence` |
+### 10.2 Where it came from
 
-That naming is the part worth admiring: it already says *the service is
-documented, the anchor sequence is inferred*, which is exactly the distinction
-this section would otherwise have to invent.
+HSL's own GTFS, reached through a mirror published with the `r5py` sample data
+(`r5py/r5py.sampledata.helsinki`, `data/helsinki_gtfs.zip`, **SHA-256 verified
+against the value that package publishes**). HSL's own host is unreachable from
+this environment; GitHub raw is not, and the mirror is the same feed under the
+same licence. 36 MB in, 49 KB out.
 
-### 10.2 What is missing: geometry and stops
+`map/tools/gtfs-extract.mjs` does the work and is committed with it, so the
+extract is reproducible rather than a thing that appeared: routes filtered to
+tram and metro, one shape per line per direction (the longest, which is the
+full-length working rather than a short turn), clipped to the production
+boundary, Douglas–Peucker at ~2 m — under the width the line is drawn at, so
+the simplification is invisible at every zoom the board has.
 
-**Route geometry.** The board's tram lines are two hand-drawn polylines —
-`M463 783 L422 528 L489 546 L429 374 L206 205` and one more. Five points and
-three. They are schematic marks between board positions, not the path the rails
-take, and §9.3's whole claim — *a Helsinki player says "that is my tram"* —
-cannot be met by a five-point polyline.
+It deliberately never opens `stop_times.txt`. That file is **472 MB** of every
+departure of every trip in the region, and the board does not want a timetable:
+§2's `period` source authors Era I headways and Era II asks the live feed.
 
-**Stops.** The board has thirteen anchors. A tram line through Kallio has many
-more stops than that, and the ones a passenger actually names are mostly not
-anchors.
+**26 line directions, 287 stops.** Metro M1/M2/M2M; trams 1, 2, 3, 4, 5, 6, 7,
+8, 9, 10.
 
-Nothing in either repository holds either. No GTFS, no GeoJSON, no shapes.
+### 10.3 It agrees with the board, and that is a check on both
 
-### 10.3 Where they come from — one download
+Neither file knew about the other — the anchors were placed by hand from public
+sources, the geometry came out of a feed — so laying them together tests both.
+`map/tools/rail-anchors.mjs` does it, needs no network, and reports:
 
-**HSL GTFS static is the tram map.** It is a zip of CSVs, CC BY 4.0, and three
-files in it are the whole answer:
-
-| file | is |
+| | |
 |---|---|
-| `shapes.txt` | **the route geometry** — every line as an ordered polyline of lat/lon. This is the thing that is missing. |
-| `stops.txt` | every stop, with coordinates and its real name |
-| `routes.txt` | line ids, names and **HSL's own colours**, so §9.1 stops being a table I typed from memory |
+| Siltasaari | **3 m** from tram 3 |
+| Alppiharju | **14 m** from tram 3 |
+| Karhupuisto | **16 m** from tram 9, **11 m** from the metro |
+| Linjat / Hämeentie | **17 m** from tram 3 |
+| Piritori / Kurvi | **17 m** from tram 1, **28 m** from the metro |
 
-Filtered to the Kallio bounding box and to rail modes it is small — kilobytes,
-not megabytes — and it commits comfortably as the `snapshot` source §2 already
-describes. **No key, no account, no server**, which is the same conclusion §5.1
-reached for vehicles.
+**Ten of thirteen anchors sit within 150 m of a real tram line.** The three that
+do not are right to be: Torkkelinmäki is a hill between two lines, and the
+harbour and Suvilahti had no tram then and have none now. The board was placed
+well.
 
-For Era I it gives *today's* geometry, which §2b already argues is the right
-answer: the metro is unchanged and correct outright, and the trams inherit
-corridor geometry that mostly survived even where the service number did not.
-The 2003 service pattern is the `periodServices` sequences above, laid over it.
+Plate: **`ux/kallio-rail-check.svg`** — the extract drawn against the anchors.
 
-### 10.4 A decision this forces: stops are not anchors
+### 10.4 Two things I got wrong, recorded because both produced confident errors
 
-Real stops outnumber game anchors several to one, and that is a design question
-rather than a data one.
+**Distance must be point-to-SEGMENT, not point-to-vertex.** The extract is
+simplified, so a straight run can be 400 m between kept points, and an anchor
+beside the middle of one measures far from both ends while being metres from
+the line. Hakaniemi read as 180 m that way; it is 35 m.
 
-Drawing only the thirteen anchors keeps the board clean and loses the
-recognisability that is the entire point. Drawing every stop as an actionable
-place adds a dozen game nodes nobody authored content for.
+**And I doubted the data before I doubted my mental model.** The metro comes out
+11 m from Karhupuisto, which I called suspicious on the grounds that the tunnel
+runs under Hämeentie, well east. It does not — between Hakaniemi and Sörnäinen
+it bows west through the Kallio blocks, and the 44 published shape points say so
+plainly. The feed was right and I was wrong, which is the argument for checking
+numerically instead of by eye.
+
+### 10.5 A decision this forces: stops are not anchors
+
+287 stops against 13 anchors. Drawing only anchors keeps the board clean and
+throws away the recognisability that is the whole point; making every stop
+actionable adds nodes nobody authored content for.
 
 **Recommendation: draw them all, make only anchors actionable.** Real stops
-render as small marks on L2 with their real names — the line looks like the
-line, and Hakaniemi reads as Hakaniemi because Sörnäinen is visibly three stops
-along. Anchors get the full treatment and are where you can stand, act and be
-seen. A player sees a true map and plays a curated one, which is what `MAP.md`
-§2's production boundary already does for geography.
+render as small marks on L2 with their real names — Hakaniemi reads as Hakaniemi
+*because* Sörnäinen is visibly three stops along. A player sees a true map and
+plays a curated one, which is what `MAP.md` §2's production boundary already
+does for geography.
 
-### 10.5 The ask, then
+### 10.6 What is still not here
 
-Same shape as §8's step 0, and for the same reason — it needs a machine with an
-open network, which this one is not:
+**The feed is dated 2022-02-22.** It is real HSL data and right for geometry,
+which barely moves, but it is not this week's timetable and must not be
+presented as one. Refreshing it is one run of the same extractor against a
+current feed, on a machine that can reach HSL directly.
 
-> Fetch the HSL GTFS static zip. Keep `shapes.txt`, `stops.txt` and
-> `routes.txt`, filtered to roughly `60.17–60.20 N, 24.93–24.98 E` and to tram
-> and metro. Commit it under `map/` as the snapshot source.
-
-That is the actual Helsinki tram map, in the repository, under a licence that
-allows it, at a size that does not hurt — and it is the input everything in §9
-is drawn against.
+**Era I service patterns are still `periodServices`** — this changes nothing
+about them. The geometry is modern, used for Era I under §2b's argument; the
+2003 lines that ran on it stay inferred, and stay labelled as inferred.
