@@ -47,12 +47,13 @@ and sudden danger. Night is heavy; people are not uniformly miserable.
 
 1. **Shape before line.** A figure, building or button must read from its large
    paper masses before ink detail appears.
-2. **One material family.** Map, locations, battles, characters, animals,
-   weapons, props and UI all use cut paper and hand marker.
-   **Under review.** The owner's rendered targets paint the fight stages and city
-   backdrops rather than cutting them, and cut only what is separated — see §7.5.
-   That is a proposed amendment to this rule, not a licence to ignore it. Until it
-   is ruled on, this rule stands as written.
+2. **Two material families, split by layer** — owner ruling, 2026-08-24.
+   **What is cut out is cut paper; what is never cut is painted.** Characters,
+   heads, weapons, props, animals and UI are cut card and hand marker. Fight
+   stages and city backdrops are painted night. See §7.5.
+   This replaces the older "one material family" rule, which the rendered targets
+   had already outgrown. It is not a licence to paint a thing that moves: if a
+   layer is ever separated, recoloured, restated or given input, it is cut paper.
 3. **Helsinki before generic noir.** Geography, architecture, trams, weather,
    clothes and period objects make the setting specific.
 4. **Drama through light and composition.** Battle intensity comes from
@@ -281,12 +282,15 @@ regions remain rectangular and predictable.
   symbolism reads worse than the plain dot it replaces. The set is authored per
   site instead, and a site with no authored mark keeps the plain dot until it
   has one.
-- **Unresolved, and named rather than absorbed:** the rendered target
-  (`art-library/references/ui-target-city-map-v01.jpg`) marks Sörnäinen with a
-  **pagoda**, which is the first thing the rule above forbids. Sörnäinen is a
-  Helsinki district. Either the rule bends for a specific authored reason that
-  belongs in `NARRATIVE.md`, or that mark is replaced before the set is drawn.
-  It is not settled here, and the target should not be traced from until it is.
+- **The Sörnäinen mark is a door** — owner ruling, 2026-08-24. The rendered
+  targets mark Sörnäinen with a pagoda, which is the first thing the rule above
+  forbids by name. It is replaced by **a closed door with a sign hanging on it**,
+  read as the door of somewhere organised: no lettering, the shape of the sign and
+  the shut door do the work. That is an invented, specific mark for a place with
+  people behind it, which is what the rule asks for, and it says the same thing
+  the pagoda was reaching for without borrowing a culture to say it.
+  **The pagoda is not to be traced from.** It survives in the reference set
+  because the set is evidence, not a source.
 - Weapon icons are silhouettes, not diagrams.
 - The icon may decorate a command, never replace its text at first use.
 

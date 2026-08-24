@@ -25,9 +25,12 @@ be a decision rather than a drift:
 | **painted night** | fight stages and city backdrops | rendered, lit, atmospheric, not cut from anything |
 
 The split tracks §1 rule 5 — *every useful layer stays separable*. **What is cut
-out is cut paper; what is never cut is painted.** That is coherent, and it is
-still a change to rule 2, which is the owner's to make. Recorded in
-`ART_BIBLE.md` §7.5 rather than assumed here.
+out is cut paper; what is never cut is painted.**
+
+**Ruled 2026-08-24: this is now rule 2.** `ART_BIBLE.md` §1 rule 2 reads "two
+material families, split by layer". It is not a licence to paint a thing that
+moves — if a layer is ever separated, recoloured, restated or given input, it is
+cut paper.
 
 ---
 
@@ -132,11 +135,12 @@ different builds.
 
 **Not on magenta.** These are style references, not cut-ready.
 
-**One thing to resolve before these become production:**
-`body-thin-tracksuit` carries **Adidas trefoil and three stripes**. Period-true
-for 2003 Kallio and a real trademark. `ART_BIBLE.md` §9.3 asks for Finnish and
-Kallio specificity; it does not authorise a live mark. Needs either a decision or
-a redraw into a generic three-stripe.
+**Ruled 2026-08-24: two stripes, no trefoil.** `body-thin-tracksuit` carries
+Adidas trefoil and three stripes — period-true for 2003 Kallio and a live
+trademark. Tracksuits in this game carry **two stripes** and no maker's mark.
+Two rather than three is the point: three stripes is the trademark, two is a
+tracksuit. The reference keeps its stripes because the set is evidence; nothing
+drawn from it does.
 
 ---
 
@@ -156,5 +160,12 @@ geography and lamp behaviour; they are not a style target.
 `kallio-kulma-night-iso-v01.jpg` — a Kallio corner at night.
 
 Ink line with muted fills, more drawn than the painted stages and more detailed
-than the cut-paper register. A third position between the two, and the one this
-set is least decided about.
+than the cut-paper register.
+
+**One of these is a duplicate in a second register, and that is the thing to
+decide.** `kallio-kulma-night-iso-v01.jpg` here and
+`stages/stage-kallio-kulma-yard-night-v01.jpg` are **the same corner of Kallio at
+night**, rendered two ways — the first ink-line and detailed, the second painted
+and atmospheric. Under the ruled rule 2 the stage version is the register for a
+backdrop, so the ink-line one is either a location card, a different mode's art,
+or a superseded pass. It is not two locations; it is one location twice.
