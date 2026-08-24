@@ -1,0 +1,60 @@
+Style: a hybrid. Hard black ink-line illustration with flat, slightly muted
+fills — Darkest Dungeon rather than a comic — printed as a risograph: visible
+paper grain over everything, screen-print colour separations, slight
+registration drift between layers. Limited palette, hard seams between colours,
+flat cut-paper shapes where the silhouette does the work rather than the
+shading. No gradients, no glow, no lens effects, no photographic rendering.
+Night, cold, used, deadpan. Helsinki in 2003, not a crime film about it.
+
+Subject: an older man, around sixty, a Helsinki street character in 2003. Lean
+and slightly stooped, shoulders rounded forward, head carried a little ahead of
+the spine. Thinning grey hair, a lined face, heavy eyelids, a long nose. He
+wears a dark brown-grey overcoat over a collared shirt, plain dark trousers and
+worn leather shoes. Tired, patient, deadpan expression.
+
+Seen from directly at the SIDE, in profile, facing the viewer's left. Neutral
+T-pose held from this angle, so the near arm projects straight towards the
+viewer and is seen end-on. Draw the arm as a short simple foreshortened shape
+clearly separated from the chest by an outline, never merged into it. The legs
+are in profile with the near leg slightly clear of the far one.
+
+This drawing is input for image-to-3D reconstruction, so it must obey these
+exactly: one single figure, whole body, standing upright and centred, feet
+flat on an implied ground line at the bottom of the frame and the top of the
+head near the top, with a clear margin of at least ten percent of the image
+on all four sides. Strictly orthographic — a flat elevation with no
+perspective, no foreshortening of the body, no camera tilt and no vanishing
+point. No cast shadow on the ground and no contact shadow under the feet. No
+held object of any kind, nothing in the hands, no bag, no phone, no tool, no
+weapon. No circles, dots or discs drawn on the shoulders, elbows, hips or
+knees. No ground plane, no floor, no horizon, no scenery.
+
+A reference image is attached. Copy ONLY the drawing system from it: the same
+flat cut-paper construction, the same hard thin dark outline, the same muted
+skin and cloth fills, the same paper grain, the same degree of simplification,
+and the same overall height of the figure within the frame. Do NOT copy the
+build of the body, the face, the clothing colours or the number of figures —
+the attached sheet holds a different, slimmer character and there are several
+of them. Draw exactly one figure.
+
+The background is a completely flat, solid, uniform magenta (#FF00FF) with
+nothing on it — no gradient, no vignette, no shadow, no texture, no border and
+no frame. The subject does not touch the edges of the image.
+
+The image is exactly square, 1:1 aspect ratio. The flat magenta fills the
+entire background all the way to all four edges and into all four corners at
+the same uniform value — there is no border, no frame, no darkened edge, no
+vignette, no corner shading and no paper edge anywhere in the picture.
+
+No text, no letters, no numbers, no labels, no captions, no watermark, no logo,
+no UI chrome, no panel, no card, no drop shadow. Do not present this as a sheet,
+a poster, a turnaround or a reference board. Just the subject.
+
+NIGHT palette (Piritori):
+paper #0f1216 · ink #e2dccd · dim #8c8778 · marks #b9b2a0 · unbuilt #232a33
+water #1b2c3a · warning orange #ff7a1a (pressure only) · slow amber #c8a24a
+lines: #e2dccd #57c8e8 #7fc98a #c98ad8
+city services: metro #b06a2a · tram #5d6b5e · car #46525e
+money gold #e8c24a
+Include a small swatch strip of every colour used along the bottom edge,
+outside the subject.
