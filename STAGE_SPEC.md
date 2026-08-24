@@ -175,9 +175,70 @@ question and all ten are in register and in the house palette.
 | `karhupuisto-clearing-v01` | **one edge short** — the far-left arena edge runs onto the railing line, and the floor margin overshoots into the console band at the bottom |
 | `sornainen-docks-v02` | **check in engine** — owner-supplied and pre-template; the arena's far edge sits near the water line, so the back rank wants the §5 capture before a real fight is staged here |
 | `karhupuisto-v01` | **not as a battle floor** — pre-template, and a bench-sized block stands inside the arena. It is an approved *location plate*, which is a different job |
-| `toko-slomo-noodles-prototype-v01/v02` | **not stages** — fullscreen narrative screens, correctly registered as such. The arena means nothing over them |
+| `toko-slomo-noodles-prototype-v01/v02` | **a different kind of screen entirely** — see §6. Drawing an arena on them was a category error on the sheet's part, not a defect in the art |
 
 Four usable unchanged, two needing a prop moved rather than a redraw, one to
-check in engine, and the two that fail were never battle floors. That is a
-healthier position than it looked — and it is the sheet saying so rather than
-anybody's memory, which is the whole reason it exists.
+check in engine, one that is a location plate rather than a battle floor, and
+two that are not battle art at all. That is a healthier position than it looked
+— and it is the sheet saying so rather than anybody's memory, which is the whole
+reason it exists.
+
+---
+
+## 6. The counter — the other kind of screen
+
+> "the two marked at the bottom are not levels, but Toko Slomo's Noodle Bar,
+> where you chat and get info, the scene and Toko are slightly animated. this is
+> the goal reference for conversations that don't happen on a fight area, but
+> also slightly to how Arvo Linde will work on the daily news bulletins"
+> — owner, 2026-08-24
+
+`toko-slomo-noodles-prototype-v02` is **the goal reference**, not a prototype
+that missed. It is the picture the whole non-combat conversation class is aiming
+at, and it is also the nearest thing on disk to what `UX_SPEC.md` §18 calls the
+LOCATION framing.
+
+**It is built the opposite way round from a stage, in every respect that
+matters:**
+
+| | a battle stage | the counter |
+|---|---|---|
+| projection | true 2:1 isometric, floor as a diamond | **frontal** — a counter across the frame, no board and no arena |
+| the console band | covered in play, compose nothing there | **the screen's other half** — portrait, transcript and choices live in it |
+| the character | a unit on a cell, small | **the subject**, filling the middle of the frame |
+| what moves | units, on their turn | the room: steam off the pot, the tram in the window, rain, Toko himself |
+
+So a plate for this class must not be judged against §2 at all. Judged against
+its own job it needs: a **frontal composition with the speaker behind something**
+(the counter is what makes it a conversation and not an interview); **a deep
+window or opening** so the world outside is visible and can move; **the
+character's face clear of the bottom band**; and **room in the band** for a
+portrait medallion, a name plate, a transcript slab and three or four choices.
+
+**What the art already demonstrates, and should be copied rather than
+re-derived:**
+
+- **The choices carry their price and their odds inline** — `BUY INFO · €120`,
+  `RISK SABOTAGE · €300 · 45%`. That is `NEGOTIATION.md` §3's visible-requirement
+  rule, already drawn, in a scene with no fight in it.
+- **The transcript is a torn paper slab**, not a rounded box — the house register
+  reaches the UI, not just the scenery.
+- **LEAVE is always the last option**, which is `DESIGN_LOCKS.md` §2's grammar.
+- **The place dates itself** without a caption: `VAASANKATU · 2003` on the sign,
+  a tram in the window, a mechanical till.
+
+**Known, and it is the whole production gap:** the plate is a **single baked
+image**. The manifest has said from the start that production must separate
+stage, Toko, mask, props, steam and window into passes; nothing in `godot/` yet
+references `scene-toko-noodles-prototype-v02`, so the "slightly animated" half of
+the reference is the part that does not exist. `presenter_3d.gd` already has the
+`LOCATION` framing and Toko already has his own model — the missing pieces are
+the layer separation and a speaking clip, not the engine.
+
+**And its relation to the news.** UX_SPEC §18 says the broadcast is the showcase
+and what is learned there defines how narrative animation works at map
+locations. That still holds, and it now runs both ways: **Arvo inside the
+television and Toko behind the counter are the same screen with different
+furniture** — a character in a place, animated, saying something, over a band
+carrying a portrait, a transcript and what you may do about it. One component,
+built once.

@@ -30,6 +30,45 @@ distance between the two figures is real information.
 It also means the negotiation inherits everything the fight view already knows:
 who is present, how many of them, where the exits are, who is armed.
 
+## 1.1 There are two venues, and the choice between them IS the warning
+
+> "this is the goal reference for conversations that don't happen on a fight
+> area" — owner, 2026-08-24, on the Toko Slomo's Noodles screen
+
+§1 was written as though every negotiation is staged on the board. It is not.
+There is a second venue, it already has its reference art, and the two are
+described in `STAGE_SPEC.md` §6:
+
+| | **the board** | **the counter** |
+|---|---|---|
+| looks like | the isometric fight view, both parties standing on it | a frontal room — Toko behind his counter, the tram passing in the window |
+| reference | `courtyard-prototype-v05` and the rest of §5.2 | `toko-slomo-noodles-prototype-v02` |
+| engine | `formation_battle.gd` + a portrait inset | `presenter_3d.gd` at `Framing.LOCATION` |
+| it says | *this can become a fight* | *this cannot, or not yet* |
+
+**The rule: a conversation is staged on the board if and only if it can turn
+into a fight from where it stands.** Not "if it is important" and not "if it is
+dangerous later" — if violence is a legal move in this scene, it happens on the
+board.
+
+That is what makes the venue itself a piece of information the player reads
+before a word is spoken, and it is the same argument §1 makes about position:
+**the room is the warning.** Buying information from Toko is the counter. The
+same information demanded from a rival at Hakaniemi at two in the morning is the
+board, and the player knows which one they are in the moment the screen draws.
+
+Two consequences worth stating, because they are the ways this gets built
+wrong:
+
+- **A counter scene can move to the board, and that move is the drama.** Escalation
+  is a cut to the fight view, and it should cost the scene something to reach it.
+  What must never happen is a fight resolving *in* the counter view, off-board,
+  because then the venue was lying.
+- **Everything in §3 and §6–§9 applies to both.** Gated options, the speaker
+  being any crew member, failure biting inside the scene, the other side having
+  keys too — none of that is about the board. It is about people talking. Only
+  §4, which is the fight view's own contribution, belongs to one venue.
+
 ## 2. The beat
 
 1. **A line runs.** Portrait box up, face working, text advancing.
@@ -212,3 +251,17 @@ closes a line somebody else was holding.
 
 1. Are portraits drawn per character, or per role with per-character marks? The
    art budget probably decides how many named speakers Era I can support.
+
+   *Partly settled by the reference, 2026-08-24.* The noodle bar plate shows the
+   shape a portrait takes: **a round medallion bottom-left with a name plate
+   under it**, beside a torn-paper transcript slab. So the frame is decided and
+   only the fill is open. It also narrows the question usefully — the medallion
+   is small, and at that size a role read with a per-character mark is very
+   likely enough for everyone except the handful of people who carry a whole
+   scene.
+
+2. Does the counter venue reuse the battle's portrait inset, or its own? §1.1
+   puts them in different engine paths (`formation_battle.gd` versus
+   `presenter_3d.gd`), and UX_SPEC §18's whole argument is that these are one
+   component with three framings — so the answer is probably "the same one", and
+   it is worth building it that way deliberately rather than discovering it.

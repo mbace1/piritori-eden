@@ -1490,9 +1490,9 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "role": "speaker",
+      "role": "hired",
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
-      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Also found unused on the account and rigged for 5 credits. Stands in for Toko Slomo, replacing the driver's body: a proprietor in outdoor clothes reads closer to somebody who runs a small place than a courier in a hi-vis armband does. STILL A PLACEHOLDER — Toko is a Japanese noodle chef and this is not him, so it stays listed in presenter_3d.PLACEHOLDER_SPEAKERS. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
+      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Found unused on the account and rigged for 5 credits. RECAST: he briefly stood in for Toko Slomo and was freed the moment Toko got his own model. He is now one of the `hired` bodies in battle_stage_3d.UNIT_VARIANTS — an ordinary heavy man in work clothes, which is what `hired` means. He is NOT a speaker and NOT in presenter_3d.PLACEHOLDER_SPEAKERS; this note claimed both for a while after the code had moved on, which is how a stale note misreports the cast. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
       "sha256": "57885c077f8120b91631b0920c12cb55cf33c655d5ba61f9da4ce2679afc07a9"
     },
     {
