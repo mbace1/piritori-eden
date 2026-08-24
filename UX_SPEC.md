@@ -258,8 +258,9 @@ Priority from back to front:
 3. crew assignments and goods return;
 4. local pressure/closure;
 5. missions and contacts;
-6. selection and route preview;
-7. focus rail/sheet and global shell.
+6. selection, route preview and the selected node's tab strip (6.6.1);
+7. legend block (6.6.2);
+8. focus rail/sheet and global shell.
 
 Controls:
 
@@ -366,7 +367,15 @@ mission in full stays in its own mode.
 - route preview shows time and capacity before commit;
 - no market table or long dialogue appears on the map;
 - focus returns to the changed node after every consequence;
-- map is operable without drag, pinch or hover.
+- map is operable without drag, pinch or hover;
+- a selected node opens on its goods tab, and all three tabs are reachable
+  without scrolling the map;
+- every price direction on the goods tab is readable with the hue removed;
+- the legend block is present, and every mark it explains is a mark the map
+  actually draws;
+- active missions in the legend block match the missions the map is badging. A
+  mission listed there and not badged, or badged and not listed, is a failure of
+  this gate rather than a cosmetic difference.
 
 ---
 
