@@ -378,7 +378,7 @@ recording how it looked, because both halves believed they were canon:
 | | the NIGHT palette | `godot/ui/palette.gd` |
 |---|---|---|
 | lives in | `NANO_BANANA.md`, `ART_PROMPTS.md`, `ART_REQUEST.md`, `ART_BRIEF_CONCEPT.md`, `CONTENT_HANDOVER.md` | the running game |
-| hostility | warning orange `#ff7a1a` | `MISSION_ORANGE #C87539` |
+| hostility | warning violet `#A62BFF` (was `#ff7a1a`) | `MISSION_ORANGE #C87539` |
 | critical | — | `DANGER_RED #A94B43` |
 | product | product magenta `#F0027F` | `GOODS_MAGENTA #B84D83` |
 | paper | `#0f1216` | `PAPER #D8D2C4` |
@@ -395,7 +395,14 @@ this section changes a running colour on its own.
 **Two colours stay reserved and must never appear in generated art**, unchanged
 by this lock: product magenta `#F0027F` is the player and the product and is
 also the key colour, and the warning colour means immediate pressure and nothing
-else. Both are applied in code.
+else.
+
+The warning colour is **violet `#A62BFF`** as of 2026-08-24, ruled in
+`TRANSIT_LAYERS.md` §9.2. It was orange `#ff7a1a`, which sat **dE 12** from the
+official HSL metro orange `#FF6319` the transit layer uses — identical
+saturation and lightness, six degrees of hue, indistinguishable at badge size.
+The replacement sits at dE 149. The name moved with it: it is warning **violet**
+everywhere, because leaving "warning orange" pointing at a violet hex is a trap.
 
 A correction that belongs with the lock: the documents claim both reserved
 colours are "applied in code", and as of this ruling **neither appears anywhere

@@ -363,23 +363,55 @@ thinnest.** A colour-blind player reads the network off stroke width and the
 line chips alone, which is the accessibility floor this repo already holds
 elsewhere.
 
-### 9.2 One collision, and it needs a ruling
+### 9.2 The collision, ruled
 
-**HSL metro orange is `#FF6319`. This project reserves `#ff7a1a` as warning
-orange** — applied in code, never in art, because it means something.
+**Owner ruling, 2026-08-24: the metro keeps official HSL orange `#FF6319`, and
+the warning colour moves to violet `#A62BFF`.**
 
-They are four points apart in hue and indistinguishable on a phone. Shipping
-both means the colour that says *you are about to be caught* and the colour that
-says *this is the metro* are the same colour on the same screen. Three ways out,
-and it is §6's kind of decision:
+The old text called `#FF6319` and `#ff7a1a` "four points apart in hue". Measured,
+they are 5.9 degrees apart **with identical saturation (1.00) and identical
+lightness (0.55)**, which is why no amount of weight or glow was going to
+separate them. In CIE Lab they are **dE 12** — under 20 is confusable at a
+glance, and a line badge on a phone is a glance.
 
-1. **Move the warning colour.** Cleanest read, touches the most code.
-2. **Print the metro rather than match it.** Era I is a 2003 paper map anyway —
-   a printed metro line in the board's own umber-orange `#cc7a3e` is period-
-   correct and clears the warning hue by a mile. Era II live keeps true HSL
-   orange, and the era difference does part of the work. **Recommended.**
-3. Keep both and separate by weight and glow alone. Cheapest, and it is the one
-   that fails on a bright day outdoors.
+Three options were on the table. What settled it was checking what the warning
+colour is actually used for, which nobody had:
+
+**It is not used at all.** `#ff7a1a` appeared in nine places and every one was a
+document. It is a *reservation* — an instruction not to draw with it — and the
+thing it was reserved for was never built. `#FF6319`, meanwhile, is live in three
+plate tools today. So the option ranked "cleanest read, touches the most code"
+touches **zero** code, and the recommended option would have changed three
+working tools to avoid a colour nothing uses.
+
+Candidates, by perceptual distance from the metro orange:
+
+| | | dE from metro | |
+|---|---|---|---|
+| kept | `#ff7a1a` | **12** | confusable |
+| red | `#E62E24` | 21 | nearest neighbour is still metro |
+| **violet** | **`#A62BFF`** | **149** | ruled |
+
+Red was the conventional answer and stays in the orange-red family; at badge
+size in peripheral vision that is a coin flip, and peripheral vision is the
+entire job of a warning colour. Violet is not marginally better, it is an order
+of magnitude.
+
+An earlier hue-only check called violet a collision with line violet `#c98ad8`
+at 14 degrees. In Lab they are 68 apart — `#c98ad8` is a pale lilac and
+`#A62BFF` is electric. Hue alone is the same mistake that made the original pair
+look survivable.
+
+**The cost, named:** violet does not mean danger by convention. It is accepted
+because the reserved colour means *immediate pressure*, not blood, and against
+sodium-lit night streets an electric violet reads as an alarm rather than as an
+object in the scene.
+
+The name changed with the colour. It is **warning violet** in every document now;
+leaving "warning orange" pointing at a violet hex is the kind of trap that costs
+a session.
+
+Era II live keeps true HSL colours throughout, which was never the problem.
 
 ### 9.3 Era reads at a glance: printed vs live
 

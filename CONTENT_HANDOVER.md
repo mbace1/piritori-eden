@@ -291,4 +291,4 @@ in `DECISIONS.md`; the ones that touch art:
 - **Pasila 2024 is canon but phase-gated** — no second-act art until Act I is
   feature complete.
 - Reserved colours that never appear in art because code applies them and they
-  mean something: warning orange `#ff7a1a`, product magenta `#F0027F`.
+  mean something: warning violet `#A62BFF`, product magenta `#F0027F`.
