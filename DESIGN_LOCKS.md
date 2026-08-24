@@ -366,6 +366,44 @@ mission inspired by history must label its internal source note as one of:
 Arvo Linde reports documented public facts. Inference and accusation are
 attributed to speakers; the newscast does not launder them into truth.
 
+## 12.3 One palette: the game is NIGHT
+
+**Owner ruling, 2026-08-24.** The whole game is the night palette. A daytime
+palette may come later; it is not being designed for now, and no system may be
+built with a second palette assumed. **The UX locks as a single entity first.**
+
+This settles a divergence that was found rather than declared, and it is worth
+recording how it looked, because both halves believed they were canon:
+
+| | the NIGHT palette | `godot/ui/palette.gd` |
+|---|---|---|
+| lives in | `NANO_BANANA.md`, `ART_PROMPTS.md`, `ART_REQUEST.md`, `ART_BRIEF_CONCEPT.md`, `CONTENT_HANDOVER.md` | the running game |
+| hostility | warning orange `#ff7a1a` | `MISSION_ORANGE #C87539` |
+| critical | — | `DANGER_RED #A94B43` |
+| product | product magenta `#F0027F` | `GOODS_MAGENTA #B84D83` |
+| paper | `#0f1216` | `PAPER #D8D2C4` |
+
+**They share no hex value.** The shipped palette is a desaturated cousin of the
+one every concept image is generated against, and nothing in either document
+said the other existed. Every piece of art approved so far has been judged
+against colours the build does not use.
+
+Under this lock the night palette is canon and `palette.gd` is the copy that has
+drifted. Reconciling it is Engine-lane work and is **not** done here; nothing in
+this section changes a running colour on its own.
+
+**Two colours stay reserved and must never appear in generated art**, unchanged
+by this lock: product magenta `#F0027F` is the player and the product and is
+also the key colour, and the warning colour means immediate pressure and nothing
+else. Both are applied in code.
+
+A correction that belongs with the lock: the documents claim both reserved
+colours are "applied in code", and as of this ruling **neither appears anywhere
+in `godot/`**. They are reservations, not usages — rules saying *do not draw
+with this, it is spoken for*. That is a legitimate thing for an art bible to do,
+but it is not what the documents say, and anyone reading them would conclude the
+build already uses them.
+
 ## 13. Decisions intentionally deferred
 
 The following are content or balance work, not blockers for Art Bible and UX:

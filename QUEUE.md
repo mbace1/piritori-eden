@@ -1263,3 +1263,24 @@ no contact shadow under a fighter, which is most of what glues a figure to a
 floor; and the idle pose is a single frame per body, so a standing crew is
 literally static cardboard. Worth confirming which of the three it is by
 capturing the battle before changing anything.
+
+## palette.gd has drifted from the night palette (2026-08-24)
+
+`DESIGN_LOCKS.md` §12.3 locks the night palette as the game's one palette. The
+running palette in `godot/ui/palette.gd` shares **no hex value** with it -
+`MISSION_ORANGE #C87539` against warning orange `#ff7a1a`, `GOODS_MAGENTA
+#B84D83` against product magenta `#F0027F`, `PAPER #D8D2C4` against `#0f1216`.
+It is a desaturated cousin, and it is what ships.
+
+Reconciling them is Engine lane and is deliberately not done in the lock. It is
+not a find-and-replace: `palette.gd` carries eight semantic roles with comments
+(player route, product flow, mission/hostility, intel, ordinary movement,
+transit, lethal intent, unavailable) and the night palette is a shorter list
+written for image generation. Somebody has to map roles to colours and decide
+what the night palette does not yet name.
+
+Do it before any further art is approved, not after. Every concept so far has
+been judged against colours the build does not use, and approving more of them
+first only grows the amount that has to be re-judged.
+
+Lane: Engine, with an Art review of the result.
