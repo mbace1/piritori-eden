@@ -82,9 +82,18 @@ const routes = rows('routes.txt')
 const routeById = new Map(routes.map(r => [r.route_id, r]));
 
 // ── trips: one shape per route per direction ─────────────────────────────
-// A route has thousands of trips and a handful of distinct shapes. The longest
-// shape per (route, direction) is the full-length working — the short turns are
-// genuinely shorter, so "longest" picks the line as a passenger thinks of it.
+// A route has thousands of trips and a handful of distinct shapes, and picking
+// the right one is not obvious.
+//
+// THE FIRST RULE HERE WAS "LONGEST", AND IT WAS WRONG. Diversions and depot
+// runs are LONGER than the ordinary working, not shorter, so longest reliably
+// picks the rarity. Tram 9 came out running via Kallion kirkko and Karhupuisto
+// on a shape used by 37 trips, while the route 695 trips actually take goes
+// somewhere else — and a whole finding was written on top of that before the
+// trip counts were looked at.
+//
+// MOST TRIPS is the line as a passenger knows it, and it is the only rule here
+// that is about how the city is actually used rather than about the geometry.
 const shapeUse = new Map();          // shape_id -> {route, dir, n}
 for (const t of rows('trips.txt')) {
   if (!routeById.has(t.route_id) || !t.shape_id) continue;
@@ -103,12 +112,12 @@ for (const s of rows('shapes.txt')) {
   pts.get(s.shape_id).push([lat, lon, +s.shape_pt_sequence]);
 }
 
-// pick the longest surviving shape per route+direction
+// pick the most-used surviving shape per route+direction — see above
 const best = new Map();
-for (const [id, list] of pts) {
+for (const [id] of pts) {
   const u = shapeUse.get(id);
   const k = `${u.route}:${u.dir}`;
-  if (!best.has(k) || list.length > pts.get(best.get(k)).length) best.set(k, id);
+  if (!best.has(k) || u.n > shapeUse.get(best.get(k)).n) best.set(k, id);
 }
 
 // Douglas–Peucker, so a 1,400-point shape ships as a few dozen without the
@@ -183,6 +192,7 @@ for (const [k, id] of best) {
     direction: +u.dir,
     name: r.route_long_name,
     trips: u.n,
+    routeId: u.route,
     points: simp.length,
     droppedFrom: raw.length,
     anchorSequence: anchorsAlong(simp),

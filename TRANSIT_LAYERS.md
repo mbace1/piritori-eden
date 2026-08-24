@@ -525,39 +525,50 @@ it bows west through the Kallio blocks, and the 44 published shape points say so
 plainly. The feed was right and I was wrong, which is the argument for checking
 numerically instead of by eye.
 
-### 10.5 The routes, per line — and what they say about the 2003 inferences
+### 10.5 The routes, per line — and a rule I had to fix to get them right
 
 Geometry is not a route. `anchorSequence` on each line is the bridge: which of
-the board's anchors it passes, in order. Plate: **`ux/kallio-routes.svg`**, one
-panel per service.
+the board's anchors it passes, in order. Plates: **`ux/kallio-routes.svg`**, one
+panel per service, and **`ux/tram9-kallio.svg`** for one line at street level
+with its real stop names.
 
-| | route through the board | anchors |
+**THE FIRST VERSION OF THIS SECTION WAS WRONG, and the bug is worth keeping.**
+The extractor picked the *longest* shape per route and direction, on the
+reasoning that short workings are short. **Diversions and depot runs are
+LONGER**, so "longest" reliably picks the rarity: tram 9 came out running via
+Kallion kirkko on a shape used by **37 trips**, while the route **695 trips**
+actually take goes another way — and a finding was written on top of that before
+anybody looked at the trip counts. The rule is now MOST TRIPS, which is the only
+one here that is about how the city is used rather than about geometry.
+
+| | route through the board | trips |
 |---|---|---|
-| **3** | siltasaari → hakaniemi → linjat → vaasankatu → piritori → harju → alppiharju | 7 |
-| **9** | siltasaari → hakaniemi → linjat → vaasankatu → piritori → harju | 6 |
-| **7** | siltasaari → hakaniemi → linjat → piritori → vallila | 5 |
-| **1** | harju → vaasankatu → piritori → vallila | 4 |
-| **6** | siltasaari → hakaniemi → linjat → piritori | 4 |
-| **8** | harju → vaasankatu → piritori | 3 |
-| **4** | one corner only | 1 |
-| **2, 5, 10** | clip the box, serve nothing on it | 0 |
+| **3** | siltasaari → hakaniemi → karhupuisto → kallio_church → harju → alppiharju | 696 |
+| **9** | siltasaari → hakaniemi → karhupuisto → kallio_church → harju → vaasankatu | 709 |
+| **7** | siltasaari → hakaniemi → linjat → piritori → vallila | 1382 |
+| **6** | siltasaari → hakaniemi → linjat → piritori | 659 |
+| **1** | harju → vaasankatu → piritori → vallila | 563 |
+| **8** | harju → vaasankatu → piritori | 640 |
+| **4** | one corner only | — |
+| **2, 5, 10** | clip the box, serve nothing on it | — |
 
-**Tram 6 corroborates its own 2003 inference, exactly.** The board guessed
-`hakaniemi → linjat_yard → piritori` and labelled it inferred. The measured
-modern route is `siltasaari → hakaniemi → linjat_yard → piritori` — the
-inference is a clean sub-sequence of it. Somebody guessed well.
+**Both of the board's 2003 inferences are corroborated, and now by the right
+lines.**
 
-**Tram 3B's inference is corroborated as a CORRIDOR, but not as line 3.** The
-board guessed `hakaniemi → kallio_church → karhupuisto → harju → alppiharju`.
-Modern tram 3 does not go that way — it runs east through Linjat and Vaasankatu.
-But **modern tram 9 does**: its return direction is `… harju → kallio_church →
-karhupuisto → hakaniemi → siltasaari`. So the 3B's inferred Kallio loop is a
-real tram corridor that still carries a tram, numbered 9 today.
+`tram_6_2003` guessed `hakaniemi → linjat_yard → piritori`. Measured modern 6:
+`siltasaari → hakaniemi → linjat_yard → piritori`. The inference is a clean
+sub-sequence.
 
-That is §2b's claim — *the corridor survives even where the service number does
-not* — arriving as evidence rather than assertion. It also means the Era I 3B
-can be drawn on real geometry with a clear conscience: the rails are there, and
-they were there then.
+`tram_3b_2003` guessed `hakaniemi → kallio_church → karhupuisto → harju →
+alppiharju`. Measured modern **3**: `siltasaari → hakaniemi → karhupuisto →
+kallio_church → harju → alppiharju`. **The same anchors and the same
+endpoints** — kirkko and karhupuisto are 200 m apart, so which is passed first
+is inside the 150 m tolerance and not a real disagreement. And 3B is line 3's
+own ancestor: the 3B/3T lettering became 2/3 in 2013.
+
+So the board's inferred 2003 routes are not merely plausible — they are the
+routes that still run, on rails that were there then. `MAP.md` §10 can move both
+from *design inference* toward *documented*, with this extract as the citation.
 
 ### 10.6 `anchorSequence` means PASSES, not CALLS AT — and for the metro that is everything
 
