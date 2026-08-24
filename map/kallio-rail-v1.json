@@ -1,0 +1,6569 @@
+{
+ "schemaVersion": 1,
+ "id": "kallio-rail-v1",
+ "title": "Kallio rail network — real geometry, clipped to the production boundary",
+ "generatedBy": "map/tools/gtfs-extract.mjs",
+ "source": {
+  "feed": "Helsingin seudun liikenne (HSL) GTFS",
+  "licence": "CC BY 4.0",
+  "attribution": "© Helsingin seudun liikenne (HSL)",
+  "anchorSequenceMeans": "PASSES WITHIN 150 m OF, not CALLS AT. For the metro the distinction is total: the tunnel runs under Karhupuisto, Torkkelinmäki and Kallion kirkko and stops at none of them — in the Kallio band it calls only at Hakaniemi and Sörnäinen. A game that lets you board at Karhupuisto is wrong.",
+  "stopSequenceMeans": "LIES WITHIN 45 m OF THE SHAPE, ordered along it — the same proximity rule as anchorSequence at a tighter tolerance, NOT the published calling list. Right for drawing and for naming; not authority for whether a service stops there. The real list is stop_times.txt joined to the representative trip, which this tool does not open (472 MB).",
+  "note": "Modern feed. Era II geometry outright; Era I under TRANSIT_LAYERS.md §2b — the Kallio metro is unchanged, and the trams inherit corridor geometry that survived the 2013 renumbering. The 2003 SERVICE pattern is periodServices in the board JSON and is not touched here."
+ },
+ "boundingBox": {
+  "s": 60.17,
+  "n": 60.2,
+  "w": 24.93,
+  "e": 24.98
+ },
+ "coordinateSystem": "WGS84 [lat, lon]",
+ "lines": [
+  {
+   "id": "M1_0",
+   "service": "M1",
+   "mode": "metro",
+   "direction": 0,
+   "name": "Matinkylä - Vuosaari",
+   "trips": 940,
+   "routeId": "31M1",
+   "points": 44,
+   "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
+   ],
+   "shape": [
+    [
+     60.170016,
+     24.936338
+    ],
+    [
+     60.170175,
+     24.93791
+    ],
+    [
+     60.170223,
+     24.93883
+    ],
+    [
+     60.170299,
+     24.942166
+    ],
+    [
+     60.170346,
+     24.94305
+    ],
+    [
+     60.170422,
+     24.943683
+    ],
+    [
+     60.170542,
+     24.944497
+    ],
+    [
+     60.171012,
+     24.946618
+    ],
+    [
+     60.171231,
+     24.947291
+    ],
+    [
+     60.171443,
+     24.947819
+    ],
+    [
+     60.171674,
+     24.948186
+    ],
+    [
+     60.171914,
+     24.948464
+    ],
+    [
+     60.173955,
+     24.950431
+    ],
+    [
+     60.174456,
+     24.95068
+    ],
+    [
+     60.174788,
+     24.95078
+    ],
+    [
+     60.176449,
+     24.950702
+    ],
+    [
+     60.180472,
+     24.950314
+    ],
+    [
+     60.18173,
+     24.950224
+    ],
+    [
+     60.182026,
+     24.950251
+    ],
+    [
+     60.182339,
+     24.950368
+    ],
+    [
+     60.182553,
+     24.9505
+    ],
+    [
+     60.182758,
+     24.950705
+    ],
+    [
+     60.183256,
+     24.95135
+    ],
+    [
+     60.183752,
+     24.952318
+    ],
+    [
+     60.184032,
+     24.953301
+    ],
+    [
+     60.184673,
+     24.956563
+    ],
+    [
+     60.185159,
+     24.957713
+    ],
+    [
+     60.185673,
+     24.958683
+    ],
+    [
+     60.187062,
+     24.960183
+    ],
+    [
+     60.187854,
+     24.961107
+    ],
+    [
+     60.18829,
+     24.961678
+    ],
+    [
+     60.188733,
+     24.962484
+    ],
+    [
+     60.188935,
+     24.963031
+    ],
+    [
+     60.189065,
+     24.963684
+    ],
+    [
+     60.189159,
+     24.96439
+    ],
+    [
+     60.189198,
+     24.965095
+    ],
+    [
+     60.189176,
+     24.965761
+    ],
+    [
+     60.188944,
+     24.967989
+    ],
+    [
+     60.188734,
+     24.969659
+    ],
+    [
+     60.188546,
+     24.970879
+    ],
+    [
+     60.187904,
+     24.97396
+    ],
+    [
+     60.187717,
+     24.975
+    ],
+    [
+     60.187565,
+     24.976059
+    ],
+    [
+     60.187162,
+     24.979598
+    ]
+   ]
+  },
+  {
+   "id": "M1_1",
+   "service": "M1",
+   "mode": "metro",
+   "direction": 1,
+   "name": "Matinkylä - Vuosaari",
+   "trips": 929,
+   "routeId": "31M1",
+   "points": 43,
+   "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.187303,
+     24.978683
+    ],
+    [
+     60.187743,
+     24.975037
+    ],
+    [
+     60.18793,
+     24.973997
+    ],
+    [
+     60.188656,
+     24.970468
+    ],
+    [
+     60.189024,
+     24.968027
+    ],
+    [
+     60.189284,
+     24.965674
+    ],
+    [
+     60.189326,
+     24.964899
+    ],
+    [
+     60.189295,
+     24.964123
+    ],
+    [
+     60.18922,
+     24.963364
+    ],
+    [
+     60.189091,
+     24.962639
+    ],
+    [
+     60.188854,
+     24.961893
+    ],
+    [
+     60.188429,
+     24.961034
+    ],
+    [
+     60.187915,
+     24.960207
+    ],
+    [
+     60.185884,
+     24.957968
+    ],
+    [
+     60.185324,
+     24.957069
+    ],
+    [
+     60.184884,
+     24.955921
+    ],
+    [
+     60.184526,
+     24.954486
+    ],
+    [
+     60.184215,
+     24.95289
+    ],
+    [
+     60.183899,
+     24.951872
+    ],
+    [
+     60.183375,
+     24.951028
+    ],
+    [
+     60.182806,
+     24.950328
+    ],
+    [
+     60.182521,
+     24.950085
+    ],
+    [
+     60.182145,
+     24.949912
+    ],
+    [
+     60.181912,
+     24.949869
+    ],
+    [
+     60.181553,
+     24.949877
+    ],
+    [
+     60.179675,
+     24.950075
+    ],
+    [
+     60.176576,
+     24.950435
+    ],
+    [
+     60.175624,
+     24.95048
+    ],
+    [
+     60.174835,
+     24.950385
+    ],
+    [
+     60.174415,
+     24.950174
+    ],
+    [
+     60.174014,
+     24.949802
+    ],
+    [
+     60.171735,
+     24.947179
+    ],
+    [
+     60.171486,
+     24.946794
+    ],
+    [
+     60.171301,
+     24.946374
+    ],
+    [
+     60.171098,
+     24.945792
+    ],
+    [
+     60.170923,
+     24.945192
+    ],
+    [
+     60.170691,
+     24.943817
+    ],
+    [
+     60.170606,
+     24.943058
+    ],
+    [
+     60.170575,
+     24.942443
+    ],
+    [
+     60.17053,
+     24.93983
+    ],
+    [
+     60.170431,
+     24.937251
+    ],
+    [
+     60.170298,
+     24.935824
+    ],
+    [
+     60.17009,
+     24.934683
+    ]
+   ]
+  },
+  {
+   "id": "M2_0",
+   "service": "M2",
+   "mode": "metro",
+   "direction": 0,
+   "name": "Tapiola - Mellunmäki",
+   "trips": 908,
+   "routeId": "31M2",
+   "points": 44,
+   "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
+   ],
+   "shape": [
+    [
+     60.170016,
+     24.936338
+    ],
+    [
+     60.170175,
+     24.93791
+    ],
+    [
+     60.170223,
+     24.93883
+    ],
+    [
+     60.170299,
+     24.942166
+    ],
+    [
+     60.170346,
+     24.94305
+    ],
+    [
+     60.170422,
+     24.943683
+    ],
+    [
+     60.170542,
+     24.944497
+    ],
+    [
+     60.171012,
+     24.946618
+    ],
+    [
+     60.171231,
+     24.947291
+    ],
+    [
+     60.171443,
+     24.947819
+    ],
+    [
+     60.171674,
+     24.948186
+    ],
+    [
+     60.171914,
+     24.948464
+    ],
+    [
+     60.173955,
+     24.950431
+    ],
+    [
+     60.174456,
+     24.95068
+    ],
+    [
+     60.174788,
+     24.95078
+    ],
+    [
+     60.176449,
+     24.950702
+    ],
+    [
+     60.180472,
+     24.950314
+    ],
+    [
+     60.18173,
+     24.950224
+    ],
+    [
+     60.182026,
+     24.950251
+    ],
+    [
+     60.182339,
+     24.950368
+    ],
+    [
+     60.182553,
+     24.9505
+    ],
+    [
+     60.182758,
+     24.950705
+    ],
+    [
+     60.183256,
+     24.95135
+    ],
+    [
+     60.183752,
+     24.952318
+    ],
+    [
+     60.184032,
+     24.953301
+    ],
+    [
+     60.184673,
+     24.956563
+    ],
+    [
+     60.185159,
+     24.957713
+    ],
+    [
+     60.185673,
+     24.958683
+    ],
+    [
+     60.187062,
+     24.960183
+    ],
+    [
+     60.187854,
+     24.961107
+    ],
+    [
+     60.18829,
+     24.961678
+    ],
+    [
+     60.188733,
+     24.962484
+    ],
+    [
+     60.188935,
+     24.963031
+    ],
+    [
+     60.189065,
+     24.963684
+    ],
+    [
+     60.189159,
+     24.96439
+    ],
+    [
+     60.189198,
+     24.965095
+    ],
+    [
+     60.189176,
+     24.965761
+    ],
+    [
+     60.188944,
+     24.967989
+    ],
+    [
+     60.188734,
+     24.969659
+    ],
+    [
+     60.188546,
+     24.970879
+    ],
+    [
+     60.187904,
+     24.97396
+    ],
+    [
+     60.187717,
+     24.975
+    ],
+    [
+     60.187565,
+     24.976059
+    ],
+    [
+     60.187162,
+     24.979598
+    ]
+   ]
+  },
+  {
+   "id": "M2_1",
+   "service": "M2",
+   "mode": "metro",
+   "direction": 1,
+   "name": "Tapiola - Mellunmäki",
+   "trips": 908,
+   "routeId": "31M2",
+   "points": 43,
+   "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.187303,
+     24.978683
+    ],
+    [
+     60.187743,
+     24.975037
+    ],
+    [
+     60.18793,
+     24.973997
+    ],
+    [
+     60.188656,
+     24.970468
+    ],
+    [
+     60.189024,
+     24.968027
+    ],
+    [
+     60.189284,
+     24.965674
+    ],
+    [
+     60.189326,
+     24.964899
+    ],
+    [
+     60.189295,
+     24.964123
+    ],
+    [
+     60.18922,
+     24.963364
+    ],
+    [
+     60.189091,
+     24.962639
+    ],
+    [
+     60.188854,
+     24.961893
+    ],
+    [
+     60.188429,
+     24.961034
+    ],
+    [
+     60.187915,
+     24.960207
+    ],
+    [
+     60.185884,
+     24.957968
+    ],
+    [
+     60.185324,
+     24.957069
+    ],
+    [
+     60.184884,
+     24.955921
+    ],
+    [
+     60.184526,
+     24.954486
+    ],
+    [
+     60.184215,
+     24.95289
+    ],
+    [
+     60.183899,
+     24.951872
+    ],
+    [
+     60.183375,
+     24.951028
+    ],
+    [
+     60.182806,
+     24.950328
+    ],
+    [
+     60.182521,
+     24.950085
+    ],
+    [
+     60.182145,
+     24.949912
+    ],
+    [
+     60.181912,
+     24.949869
+    ],
+    [
+     60.181553,
+     24.949877
+    ],
+    [
+     60.179675,
+     24.950075
+    ],
+    [
+     60.176576,
+     24.950435
+    ],
+    [
+     60.175624,
+     24.95048
+    ],
+    [
+     60.174835,
+     24.950385
+    ],
+    [
+     60.174415,
+     24.950174
+    ],
+    [
+     60.174014,
+     24.949802
+    ],
+    [
+     60.171735,
+     24.947179
+    ],
+    [
+     60.171486,
+     24.946794
+    ],
+    [
+     60.171301,
+     24.946374
+    ],
+    [
+     60.171098,
+     24.945792
+    ],
+    [
+     60.170923,
+     24.945192
+    ],
+    [
+     60.170691,
+     24.943817
+    ],
+    [
+     60.170606,
+     24.943058
+    ],
+    [
+     60.170575,
+     24.942443
+    ],
+    [
+     60.17053,
+     24.93983
+    ],
+    [
+     60.170431,
+     24.937251
+    ],
+    [
+     60.170298,
+     24.935824
+    ],
+    [
+     60.17009,
+     24.934683
+    ]
+   ]
+  },
+  {
+   "id": "M2M_0",
+   "service": "M2M",
+   "mode": "metro",
+   "direction": 0,
+   "name": "Matinkylä - Mellunmäki",
+   "trips": 3,
+   "routeId": "31M2M",
+   "points": 44,
+   "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
+   ],
+   "shape": [
+    [
+     60.170016,
+     24.936338
+    ],
+    [
+     60.170175,
+     24.93791
+    ],
+    [
+     60.170223,
+     24.93883
+    ],
+    [
+     60.170299,
+     24.942166
+    ],
+    [
+     60.170346,
+     24.94305
+    ],
+    [
+     60.170422,
+     24.943683
+    ],
+    [
+     60.170542,
+     24.944497
+    ],
+    [
+     60.171012,
+     24.946618
+    ],
+    [
+     60.171231,
+     24.947291
+    ],
+    [
+     60.171443,
+     24.947819
+    ],
+    [
+     60.171674,
+     24.948186
+    ],
+    [
+     60.171914,
+     24.948464
+    ],
+    [
+     60.173955,
+     24.950431
+    ],
+    [
+     60.174456,
+     24.95068
+    ],
+    [
+     60.174788,
+     24.95078
+    ],
+    [
+     60.176449,
+     24.950702
+    ],
+    [
+     60.180472,
+     24.950314
+    ],
+    [
+     60.18173,
+     24.950224
+    ],
+    [
+     60.182026,
+     24.950251
+    ],
+    [
+     60.182339,
+     24.950368
+    ],
+    [
+     60.182553,
+     24.9505
+    ],
+    [
+     60.182758,
+     24.950705
+    ],
+    [
+     60.183256,
+     24.95135
+    ],
+    [
+     60.183752,
+     24.952318
+    ],
+    [
+     60.184032,
+     24.953301
+    ],
+    [
+     60.184673,
+     24.956563
+    ],
+    [
+     60.185159,
+     24.957713
+    ],
+    [
+     60.185673,
+     24.958683
+    ],
+    [
+     60.187062,
+     24.960183
+    ],
+    [
+     60.187854,
+     24.961107
+    ],
+    [
+     60.18829,
+     24.961678
+    ],
+    [
+     60.188733,
+     24.962484
+    ],
+    [
+     60.188935,
+     24.963031
+    ],
+    [
+     60.189065,
+     24.963684
+    ],
+    [
+     60.189159,
+     24.96439
+    ],
+    [
+     60.189198,
+     24.965095
+    ],
+    [
+     60.189176,
+     24.965761
+    ],
+    [
+     60.188944,
+     24.967989
+    ],
+    [
+     60.188734,
+     24.969659
+    ],
+    [
+     60.188546,
+     24.970879
+    ],
+    [
+     60.187904,
+     24.97396
+    ],
+    [
+     60.187717,
+     24.975
+    ],
+    [
+     60.187565,
+     24.976059
+    ],
+    [
+     60.187162,
+     24.979598
+    ]
+   ]
+  },
+  {
+   "id": "M2M_1",
+   "service": "M2M",
+   "mode": "metro",
+   "direction": 1,
+   "name": "Matinkylä - Mellunmäki",
+   "trips": 14,
+   "routeId": "31M2M",
+   "points": 43,
+   "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.187303,
+     24.978683
+    ],
+    [
+     60.187743,
+     24.975037
+    ],
+    [
+     60.18793,
+     24.973997
+    ],
+    [
+     60.188656,
+     24.970468
+    ],
+    [
+     60.189024,
+     24.968027
+    ],
+    [
+     60.189284,
+     24.965674
+    ],
+    [
+     60.189326,
+     24.964899
+    ],
+    [
+     60.189295,
+     24.964123
+    ],
+    [
+     60.18922,
+     24.963364
+    ],
+    [
+     60.189091,
+     24.962639
+    ],
+    [
+     60.188854,
+     24.961893
+    ],
+    [
+     60.188429,
+     24.961034
+    ],
+    [
+     60.187915,
+     24.960207
+    ],
+    [
+     60.185884,
+     24.957968
+    ],
+    [
+     60.185324,
+     24.957069
+    ],
+    [
+     60.184884,
+     24.955921
+    ],
+    [
+     60.184526,
+     24.954486
+    ],
+    [
+     60.184215,
+     24.95289
+    ],
+    [
+     60.183899,
+     24.951872
+    ],
+    [
+     60.183375,
+     24.951028
+    ],
+    [
+     60.182806,
+     24.950328
+    ],
+    [
+     60.182521,
+     24.950085
+    ],
+    [
+     60.182145,
+     24.949912
+    ],
+    [
+     60.181912,
+     24.949869
+    ],
+    [
+     60.181553,
+     24.949877
+    ],
+    [
+     60.179675,
+     24.950075
+    ],
+    [
+     60.176576,
+     24.950435
+    ],
+    [
+     60.175624,
+     24.95048
+    ],
+    [
+     60.174835,
+     24.950385
+    ],
+    [
+     60.174415,
+     24.950174
+    ],
+    [
+     60.174014,
+     24.949802
+    ],
+    [
+     60.171735,
+     24.947179
+    ],
+    [
+     60.171486,
+     24.946794
+    ],
+    [
+     60.171301,
+     24.946374
+    ],
+    [
+     60.171098,
+     24.945792
+    ],
+    [
+     60.170923,
+     24.945192
+    ],
+    [
+     60.170691,
+     24.943817
+    ],
+    [
+     60.170606,
+     24.943058
+    ],
+    [
+     60.170575,
+     24.942443
+    ],
+    [
+     60.17053,
+     24.93983
+    ],
+    [
+     60.170431,
+     24.937251
+    ],
+    [
+     60.170298,
+     24.935824
+    ],
+    [
+     60.17009,
+     24.934683
+    ]
+   ]
+  },
+  {
+   "id": "1_0",
+   "service": "1",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Eira - Töölö - Sörnäinen (M) - Käpylä",
+   "trips": 563,
+   "routeId": "1001",
+   "points": 37,
+   "droppedFrom": 100,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 107
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 101
+    },
+    {
+     "anchor": "piritori",
+     "m": 18
+    },
+    {
+     "anchor": "vallila",
+     "m": 135
+    }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Arkadian puisto",
+    "Luonnontiet.museo",
+    "Pohj. Rautatiekatu",
+    "Kaupunginpuutarha",
+    "Linnanmäki (etelä)",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Vallilan kirjasto",
+    "Hattulantie",
+    "Mäkelänrinne",
+    "Rautalammintie"
+   ],
+   "shape": [
+    [
+     60.170428,
+     24.937665
+    ],
+    [
+     60.170809,
+     24.937118
+    ],
+    [
+     60.171082,
+     24.936567
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171156,
+     24.930737
+    ],
+    [
+     60.182971,
+     24.930959
+    ],
+    [
+     60.183113,
+     24.931233
+    ],
+    [
+     60.183389,
+     24.931457
+    ],
+    [
+     60.184454,
+     24.931919
+    ],
+    [
+     60.184606,
+     24.932049
+    ],
+    [
+     60.184747,
+     24.932324
+    ],
+    [
+     60.184817,
+     24.932668
+    ],
+    [
+     60.185939,
+     24.940271
+    ],
+    [
+     60.186073,
+     24.941626
+    ],
+    [
+     60.186321,
+     24.943363
+    ],
+    [
+     60.186378,
+     24.94405
+    ],
+    [
+     60.186584,
+     24.950454
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186829,
+     24.951362
+    ],
+    [
+     60.186942,
+     24.95178
+    ],
+    [
+     60.186981,
+     24.952646
+    ],
+    [
+     60.18722,
+     24.955753
+    ],
+    [
+     60.187569,
+     24.959548
+    ],
+    [
+     60.187703,
+     24.962203
+    ],
+    [
+     60.187806,
+     24.962783
+    ],
+    [
+     60.18804,
+     24.963317
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188482,
+     24.963668
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.190035,
+     24.963568
+    ],
+    [
+     60.191168,
+     24.962051
+    ],
+    [
+     60.192723,
+     24.960619
+    ],
+    [
+     60.195182,
+     24.955606
+    ],
+    [
+     60.197805,
+     24.949084
+    ],
+    [
+     60.198453,
+     24.947606
+    ],
+    [
+     60.198571,
+     24.947393
+    ],
+    [
+     60.199968,
+     24.945377
+    ]
+   ]
+  },
+  {
+   "id": "1_1",
+   "service": "1",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Eira - Töölö - Sörnäinen (M) - Käpylä",
+   "trips": 569,
+   "routeId": "1001",
+   "points": 37,
+   "droppedFrom": 107,
+   "anchorSequence": [
+    {
+     "anchor": "vallila",
+     "m": 134
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 108
+    }
+   ],
+   "stopSequence": [
+    "Mäkelänrinne",
+    "Hattulantie",
+    "Rautalammintie",
+    "Vallilan kirjasto",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Linnanmäki (etelä)",
+    "Kaupunginpuutarha",
+    "Luonnontiet.museo",
+    "Arkadian puisto",
+    "Pohj. Rautatiekatu",
+    "Lasipalatsi"
+   ],
+   "shape": [
+    [
+     60.199968,
+     24.945377
+    ],
+    [
+     60.198571,
+     24.947393
+    ],
+    [
+     60.198453,
+     24.947606
+    ],
+    [
+     60.197577,
+     24.949654
+    ],
+    [
+     60.195182,
+     24.955606
+    ],
+    [
+     60.192705,
+     24.960618
+    ],
+    [
+     60.192054,
+     24.961212
+    ],
+    [
+     60.19087,
+     24.962403
+    ],
+    [
+     60.18989,
+     24.963798
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188027,
+     24.96324
+    ],
+    [
+     60.187825,
+     24.962693
+    ],
+    [
+     60.187711,
+     24.962221
+    ],
+    [
+     60.187585,
+     24.959891
+    ],
+    [
+     60.1872,
+     24.955379
+    ],
+    [
+     60.186934,
+     24.951807
+    ],
+    [
+     60.186899,
+     24.951563
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186566,
+     24.950381
+    ],
+    [
+     60.186402,
+     24.944519
+    ],
+    [
+     60.186321,
+     24.943363
+    ],
+    [
+     60.186021,
+     24.941264
+    ],
+    [
+     60.185939,
+     24.940271
+    ],
+    [
+     60.184826,
+     24.93265
+    ],
+    [
+     60.184756,
+     24.932324
+    ],
+    [
+     60.184632,
+     24.932068
+    ],
+    [
+     60.184195,
+     24.931803
+    ],
+    [
+     60.183389,
+     24.931457
+    ],
+    [
+     60.183219,
+     24.931344
+    ],
+    [
+     60.183113,
+     24.931233
+    ],
+    [
+     60.182962,
+     24.93094
+    ],
+    [
+     60.17115,
+     24.930876
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171073,
+     24.936585
+    ],
+    [
+     60.170973,
+     24.936816
+    ],
+    [
+     60.170229,
+     24.937984
+    ]
+   ]
+  },
+  {
+   "id": "10_0",
+   "service": "10",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Kirurgi - Lasipalatsi - Ruskeasuo - Pikku Huopalahti",
+   "trips": 796,
+   "routeId": "1010",
+   "points": 8,
+   "droppedFrom": 9,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kansallismuseo"
+   ],
+   "shape": [
+    [
+     60.170428,
+     24.937665
+    ],
+    [
+     60.170809,
+     24.937118
+    ],
+    [
+     60.171082,
+     24.936567
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171546,
+     24.935752
+    ],
+    [
+     60.17245,
+     24.934859
+    ],
+    [
+     60.175106,
+     24.932358
+    ],
+    [
+     60.175993,
+     24.931391
+    ]
+   ]
+  },
+  {
+   "id": "10_1",
+   "service": "10",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Kirurgi - Lasipalatsi - Ruskeasuo - Pikku Huopalahti",
+   "trips": 795,
+   "routeId": "1010",
+   "points": 8,
+   "droppedFrom": 9,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Kansallismuseo",
+    "Lasipalatsi"
+   ],
+   "shape": [
+    [
+     60.175939,
+     24.931444
+    ],
+    [
+     60.174808,
+     24.932638
+    ],
+    [
+     60.17245,
+     24.934859
+    ],
+    [
+     60.171546,
+     24.935752
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171073,
+     24.936585
+    ],
+    [
+     60.170973,
+     24.936816
+    ],
+    [
+     60.170229,
+     24.937984
+    ]
+   ]
+  },
+  {
+   "id": "2_0",
+   "service": "2",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Olympiaterminaali - Töölö - Pasila as.",
+   "trips": 1408,
+   "routeId": "1002",
+   "points": 15,
+   "droppedFrom": 23,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Arkadian puisto",
+    "Luonnontiet.museo",
+    "Pohj. Rautatiekatu",
+    "Eläintarha",
+    "Ooppera",
+    "Junailijankuja",
+    "Pasilan asema",
+    "Asemapäällikönkatu",
+    "Pasila"
+   ],
+   "shape": [
+    [
+     60.170428,
+     24.937665
+    ],
+    [
+     60.170809,
+     24.937118
+    ],
+    [
+     60.171082,
+     24.936567
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171156,
+     24.930737
+    ],
+    [
+     60.193757,
+     24.930109
+    ],
+    [
+     60.193998,
+     24.93017
+    ],
+    [
+     60.194214,
+     24.930177
+    ],
+    [
+     60.197733,
+     24.93134
+    ],
+    [
+     60.198766,
+     24.940114
+    ],
+    [
+     60.199099,
+     24.939925
+    ],
+    [
+     60.199889,
+     24.934034
+    ],
+    [
+     60.199415,
+     24.934268
+    ],
+    [
+     60.198183,
+     24.934995
+    ],
+    [
+     60.198002,
+     24.933426
+    ]
+   ]
+  },
+  {
+   "id": "2_1",
+   "service": "2",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Olympiaterminaali - Töölö - Pasila as.",
+   "trips": 1384,
+   "routeId": "1002",
+   "points": 10,
+   "droppedFrom": 16,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Pasila",
+    "Pasilan asema",
+    "Eläintarha",
+    "Luonnontiet.museo",
+    "Ooppera",
+    "Arkadian puisto",
+    "Pohj. Rautatiekatu",
+    "Lasipalatsi"
+   ],
+   "shape": [
+    [
+     60.198002,
+     24.933426
+    ],
+    [
+     60.194403,
+     24.93002
+    ],
+    [
+     60.194169,
+     24.930103
+    ],
+    [
+     60.193972,
+     24.930098
+    ],
+    [
+     60.193766,
+     24.930038
+    ],
+    [
+     60.17115,
+     24.930876
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171073,
+     24.936585
+    ],
+    [
+     60.170973,
+     24.936816
+    ],
+    [
+     60.170229,
+     24.937984
+    ]
+   ]
+  },
+  {
+   "id": "3_0",
+   "service": "3",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Olympiaterminaali - Eira - Kallio - Meilahti",
+   "trips": 696,
+   "routeId": "1003",
+   "points": 40,
+   "droppedFrom": 94,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 51
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 122
+    },
+    {
+     "anchor": "harju",
+     "m": 66
+    },
+    {
+     "anchor": "alppiharju",
+     "m": 14
+    }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Hakaniemen metroasema",
+    "Kallion virastotalo",
+    "Karhupuisto",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Porvoonkatu",
+    "Alppila",
+    "Linnanmäki (pohj.)",
+    "Karjalankatu",
+    "Eläintarha"
+   ],
+   "shape": [
+    [
+     60.170254,
+     24.93948
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170498,
+     24.944423
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.171208,
+     24.946804
+    ],
+    [
+     60.171429,
+     24.947315
+    ],
+    [
+     60.171955,
+     24.947708
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.17428,
+     24.950225
+    ],
+    [
+     60.174513,
+     24.950321
+    ],
+    [
+     60.178024,
+     24.950027
+    ],
+    [
+     60.178123,
+     24.950066
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.178256,
+     24.950268
+    ],
+    [
+     60.178364,
+     24.950271
+    ],
+    [
+     60.17857,
+     24.950205
+    ],
+    [
+     60.179648,
+     24.950092
+    ],
+    [
+     60.179928,
+     24.949866
+    ],
+    [
+     60.18027,
+     24.949749
+    ],
+    [
+     60.181067,
+     24.949685
+    ],
+    [
+     60.183315,
+     24.953208
+    ],
+    [
+     60.183946,
+     24.951621
+    ],
+    [
+     60.184197,
+     24.951574
+    ],
+    [
+     60.18638,
+     24.951403
+    ],
+    [
+     60.186506,
+     24.951353
+    ],
+    [
+     60.186587,
+     24.951265
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186566,
+     24.950381
+    ],
+    [
+     60.186526,
+     24.948578
+    ],
+    [
+     60.189257,
+     24.948224
+    ],
+    [
+     60.18932,
+     24.94819
+    ],
+    [
+     60.18971,
+     24.947607
+    ],
+    [
+     60.190813,
+     24.945258
+    ],
+    [
+     60.191051,
+     24.944598
+    ],
+    [
+     60.191238,
+     24.939791
+    ],
+    [
+     60.191341,
+     24.939091
+    ],
+    [
+     60.191682,
+     24.937893
+    ],
+    [
+     60.193136,
+     24.934149
+    ],
+    [
+     60.192802,
+     24.93185
+    ],
+    [
+     60.192517,
+     24.930255
+    ]
+   ]
+  },
+  {
+   "id": "3_1",
+   "service": "3",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Olympiaterminaali - Eira - Kallio - Meilahti",
+   "trips": 690,
+   "routeId": "1003",
+   "points": 42,
+   "droppedFrom": 98,
+   "anchorSequence": [
+    {
+     "anchor": "alppiharju",
+     "m": 14
+    },
+    {
+     "anchor": "harju",
+     "m": 66
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 122
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 51
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
+   "stopSequence": [
+    "Eläintarha",
+    "Karjalankatu",
+    "Linnanmäki (pohj.)",
+    "Alppila",
+    "Porvoonkatu",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.192621,
+     24.930762
+    ],
+    [
+     60.193136,
+     24.934149
+    ],
+    [
+     60.191682,
+     24.937893
+    ],
+    [
+     60.191379,
+     24.938912
+    ],
+    [
+     60.191238,
+     24.939791
+    ],
+    [
+     60.191051,
+     24.944598
+    ],
+    [
+     60.190612,
+     24.945721
+    ],
+    [
+     60.18971,
+     24.947607
+    ],
+    [
+     60.18932,
+     24.94819
+    ],
+    [
+     60.189257,
+     24.948224
+    ],
+    [
+     60.186526,
+     24.948578
+    ],
+    [
+     60.186544,
+     24.949786
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186443,
+     24.951333
+    ],
+    [
+     60.186236,
+     24.951399
+    ],
+    [
+     60.183946,
+     24.951603
+    ],
+    [
+     60.183315,
+     24.953208
+    ],
+    [
+     60.181067,
+     24.949685
+    ],
+    [
+     60.180414,
+     24.949718
+    ],
+    [
+     60.18001,
+     24.949778
+    ],
+    [
+     60.179658,
+     24.950038
+    ],
+    [
+     60.178795,
+     24.950193
+    ],
+    [
+     60.17857,
+     24.950205
+    ],
+    [
+     60.178364,
+     24.950271
+    ],
+    [
+     60.178256,
+     24.950268
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.17806,
+     24.950028
+    ],
+    [
+     60.177971,
+     24.949989
+    ],
+    [
+     60.174539,
+     24.95034
+    ],
+    [
+     60.174423,
+     24.950301
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.173309,
+     24.949225
+    ],
+    [
+     60.172143,
+     24.947858
+    ],
+    [
+     60.171544,
+     24.94748
+    ],
+    [
+     60.171455,
+     24.947387
+    ],
+    [
+     60.171331,
+     24.947204
+    ],
+    [
+     60.171207,
+     24.946912
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170481,
+     24.944297
+    ],
+    [
+     60.17038,
+     24.940636
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170218,
+     24.939407
+    ]
+   ]
+  },
+  {
+   "id": "4_0",
+   "service": "4",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Katajanokka - Lasipalatsi - Meilahti - Munkkiniemi",
+   "trips": 846,
+   "routeId": "1004",
+   "points": 8,
+   "droppedFrom": 9,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kansallismuseo"
+   ],
+   "shape": [
+    [
+     60.170428,
+     24.937665
+    ],
+    [
+     60.170809,
+     24.937118
+    ],
+    [
+     60.171082,
+     24.936567
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171546,
+     24.935752
+    ],
+    [
+     60.17245,
+     24.934859
+    ],
+    [
+     60.175106,
+     24.932358
+    ],
+    [
+     60.175993,
+     24.931391
+    ]
+   ]
+  },
+  {
+   "id": "4_1",
+   "service": "4",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Katajanokka - Lasipalatsi - Meilahti - Munkkiniemi",
+   "trips": 845,
+   "routeId": "1004",
+   "points": 8,
+   "droppedFrom": 9,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Kansallismuseo",
+    "Lasipalatsi"
+   ],
+   "shape": [
+    [
+     60.175939,
+     24.931444
+    ],
+    [
+     60.174808,
+     24.932638
+    ],
+    [
+     60.17245,
+     24.934859
+    ],
+    [
+     60.171546,
+     24.935752
+    ],
+    [
+     60.171147,
+     24.936245
+    ],
+    [
+     60.171073,
+     24.936585
+    ],
+    [
+     60.170973,
+     24.936816
+    ],
+    [
+     60.170229,
+     24.937984
+    ]
+   ]
+  },
+  {
+   "id": "5_0",
+   "service": "5",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Katajanokan terminaali - Rautatieasema",
+   "trips": 126,
+   "routeId": "1005",
+   "points": 3,
+   "droppedFrom": 3,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema"
+   ],
+   "shape": [
+    [
+     60.170254,
+     24.93948
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170404,
+     24.941285
+    ]
+   ]
+  },
+  {
+   "id": "5_1",
+   "service": "5",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Katajanokan terminaali - Rautatieasema",
+   "trips": 126,
+   "routeId": "1005",
+   "points": 5,
+   "droppedFrom": 6,
+   "anchorSequence": [],
+   "stopSequence": [
+    "Rautatieasema",
+    "Rautatientori",
+    "Mikonkatu"
+   ],
+   "shape": [
+    [
+     60.170404,
+     24.941285
+    ],
+    [
+     60.170498,
+     24.944423
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170375,
+     24.945303
+    ],
+    [
+     60.170213,
+     24.945334
+    ]
+   ]
+  },
+  {
+   "id": "6_0",
+   "service": "6",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Eiranranta - Rautatieasema - Sörnäinen (M) - Arabia",
+   "trips": 659,
+   "routeId": "1006",
+   "points": 42,
+   "droppedFrom": 90,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Haapaniemi",
+    "Lintulahti",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Ristikkokatu",
+    "Hauhon puisto",
+    "Vallilan varikko",
+    "Paavalinkirkko"
+   ],
+   "shape": [
+    [
+     60.170254,
+     24.93948
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170498,
+     24.944423
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.171208,
+     24.946804
+    ],
+    [
+     60.171429,
+     24.947315
+    ],
+    [
+     60.171955,
+     24.947708
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.17428,
+     24.950225
+    ],
+    [
+     60.174513,
+     24.950321
+    ],
+    [
+     60.178024,
+     24.950027
+    ],
+    [
+     60.178123,
+     24.950066
+    ],
+    [
+     60.178309,
+     24.950395
+    ],
+    [
+     60.178443,
+     24.950471
+    ],
+    [
+     60.179862,
+     24.950314
+    ],
+    [
+     60.180067,
+     24.950482
+    ],
+    [
+     60.181537,
+     24.954543
+    ],
+    [
+     60.182224,
+     24.956348
+    ],
+    [
+     60.183206,
+     24.95834
+    ],
+    [
+     60.184558,
+     24.96011
+    ],
+    [
+     60.185271,
+     24.96087
+    ],
+    [
+     60.185548,
+     24.96104
+    ],
+    [
+     60.185852,
+     24.961175
+    ],
+    [
+     60.18708,
+     24.961446
+    ],
+    [
+     60.187688,
+     24.961788
+    ],
+    [
+     60.187703,
+     24.962203
+    ],
+    [
+     60.187806,
+     24.962783
+    ],
+    [
+     60.18804,
+     24.963317
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.190298,
+     24.964477
+    ],
+    [
+     60.19063,
+     24.964523
+    ],
+    [
+     60.193017,
+     24.964593
+    ],
+    [
+     60.193521,
+     24.964392
+    ],
+    [
+     60.193665,
+     24.964306
+    ],
+    [
+     60.195182,
+     24.963034
+    ],
+    [
+     60.197524,
+     24.961948
+    ],
+    [
+     60.197964,
+     24.961835
+    ],
+    [
+     60.19853,
+     24.961762
+    ],
+    [
+     60.198872,
+     24.961754
+    ],
+    [
+     60.199186,
+     24.961763
+    ],
+    [
+     60.199893,
+     24.961982
+    ]
+   ]
+  },
+  {
+   "id": "6_1",
+   "service": "6",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Eiranranta - Rautatieasema - Sörnäinen (M) - Arabia",
+   "trips": 646,
+   "routeId": "1006",
+   "points": 52,
+   "droppedFrom": 95,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 17
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 40
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
+   "stopSequence": [
+    "Paavalinkirkko",
+    "Vallilan varikko",
+    "Hauhon puisto",
+    "Ristikkokatu",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Lintulahti",
+    "Haapaniemi",
+    "Hakaniemi",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.199893,
+     24.961982
+    ],
+    [
+     60.199463,
+     24.961843
+    ],
+    [
+     60.198872,
+     24.961754
+    ],
+    [
+     60.198315,
+     24.961773
+    ],
+    [
+     60.197964,
+     24.961835
+    ],
+    [
+     60.197524,
+     24.961966
+    ],
+    [
+     60.195272,
+     24.963001
+    ],
+    [
+     60.194586,
+     24.963522
+    ],
+    [
+     60.193909,
+     24.964115
+    ],
+    [
+     60.193521,
+     24.964392
+    ],
+    [
+     60.193332,
+     24.964476
+    ],
+    [
+     60.192873,
+     24.964607
+    ],
+    [
+     60.192029,
+     24.9646
+    ],
+    [
+     60.19063,
+     24.964523
+    ],
+    [
+     60.190235,
+     24.964457
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188027,
+     24.96324
+    ],
+    [
+     60.187895,
+     24.962911
+    ],
+    [
+     60.187711,
+     24.962221
+    ],
+    [
+     60.187688,
+     24.961788
+    ],
+    [
+     60.187447,
+     24.961619
+    ],
+    [
+     60.187107,
+     24.961464
+    ],
+    [
+     60.185843,
+     24.961175
+    ],
+    [
+     60.18553,
+     24.96104
+    ],
+    [
+     60.185271,
+     24.96087
+    ],
+    [
+     60.18495,
+     24.96059
+    ],
+    [
+     60.184772,
+     24.960387
+    ],
+    [
+     60.183197,
+     24.95834
+    ],
+    [
+     60.18211,
+     24.956056
+    ],
+    [
+     60.180067,
+     24.950482
+    ],
+    [
+     60.179862,
+     24.950314
+    ],
+    [
+     60.17891,
+     24.950377
+    ],
+    [
+     60.178426,
+     24.950327
+    ],
+    [
+     60.178237,
+     24.950411
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.17806,
+     24.950028
+    ],
+    [
+     60.177971,
+     24.949989
+    ],
+    [
+     60.174539,
+     24.95034
+    ],
+    [
+     60.174423,
+     24.950301
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.173309,
+     24.949225
+    ],
+    [
+     60.172143,
+     24.947858
+    ],
+    [
+     60.171544,
+     24.94748
+    ],
+    [
+     60.171455,
+     24.947387
+    ],
+    [
+     60.171331,
+     24.947204
+    ],
+    [
+     60.171207,
+     24.946912
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170481,
+     24.944297
+    ],
+    [
+     60.17038,
+     24.940636
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170218,
+     24.939407
+    ]
+   ]
+  },
+  {
+   "id": "7_0",
+   "service": "7",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Länsiterminaali - Kruununhaka - Sörnäinen (M) - Pasila as.",
+   "trips": 1382,
+   "routeId": "1007",
+   "points": 44,
+   "droppedFrom": 104,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "vallila",
+     "m": 135
+    }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Hallituskatu",
+    "Kansallisarkisto",
+    "Snellmaninkatu",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Haapaniemi",
+    "Lintulahti",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Vallilan kirjasto",
+    "Hattulantie",
+    "Mäkelänrinne",
+    "Rautalammintie",
+    "Pasilan asema",
+    "Pasila"
+   ],
+   "shape": [
+    [
+     60.170254,
+     24.93948
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170498,
+     24.944423
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170375,
+     24.945303
+    ],
+    [
+     60.170213,
+     24.945334
+    ],
+    [
+     60.170001,
+     24.95356
+    ],
+    [
+     60.171457,
+     24.953404
+    ],
+    [
+     60.172149,
+     24.95328
+    ],
+    [
+     60.174089,
+     24.953085
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.17428,
+     24.950225
+    ],
+    [
+     60.174513,
+     24.950321
+    ],
+    [
+     60.178024,
+     24.950027
+    ],
+    [
+     60.178123,
+     24.950066
+    ],
+    [
+     60.178309,
+     24.950395
+    ],
+    [
+     60.178443,
+     24.950471
+    ],
+    [
+     60.179862,
+     24.950314
+    ],
+    [
+     60.180067,
+     24.950482
+    ],
+    [
+     60.181537,
+     24.954543
+    ],
+    [
+     60.182224,
+     24.956348
+    ],
+    [
+     60.183206,
+     24.95834
+    ],
+    [
+     60.184558,
+     24.96011
+    ],
+    [
+     60.185271,
+     24.96087
+    ],
+    [
+     60.185548,
+     24.96104
+    ],
+    [
+     60.185852,
+     24.961175
+    ],
+    [
+     60.18708,
+     24.961446
+    ],
+    [
+     60.187688,
+     24.961788
+    ],
+    [
+     60.187703,
+     24.962203
+    ],
+    [
+     60.187806,
+     24.962783
+    ],
+    [
+     60.18804,
+     24.963317
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188482,
+     24.963668
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.190035,
+     24.963568
+    ],
+    [
+     60.191168,
+     24.962051
+    ],
+    [
+     60.192723,
+     24.960619
+    ],
+    [
+     60.195182,
+     24.955606
+    ],
+    [
+     60.197805,
+     24.949084
+    ],
+    [
+     60.198453,
+     24.947606
+    ],
+    [
+     60.198571,
+     24.947393
+    ],
+    [
+     60.199968,
+     24.945377
+    ],
+    [
+     60.199889,
+     24.934034
+    ],
+    [
+     60.19896,
+     24.93448
+    ]
+   ]
+  },
+  {
+   "id": "7_1",
+   "service": "7",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Länsiterminaali - Kruununhaka - Sörnäinen (M) - Pasila as.",
+   "trips": 1372,
+   "routeId": "1007",
+   "points": 49,
+   "droppedFrom": 108,
+   "anchorSequence": [
+    {
+     "anchor": "vallila",
+     "m": 134
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 17
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 40
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
+   "stopSequence": [
+    "Pasilan asema",
+    "Junailijankuja",
+    "Asemapäällikönkatu",
+    "Mäkelänrinne",
+    "Hattulantie",
+    "Rautalammintie",
+    "Vallilan kirjasto",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Lintulahti",
+    "Haapaniemi",
+    "Hakaniemi",
+    "Kaisaniemenpuisto",
+    "Snellmaninkatu",
+    "Kansallisarkisto",
+    "Hallituskatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.19896,
+     24.93448
+    ],
+    [
+     60.198183,
+     24.934995
+    ],
+    [
+     60.198766,
+     24.940114
+    ],
+    [
+     60.199099,
+     24.939925
+    ],
+    [
+     60.199968,
+     24.945377
+    ],
+    [
+     60.198571,
+     24.947393
+    ],
+    [
+     60.198453,
+     24.947606
+    ],
+    [
+     60.197577,
+     24.949654
+    ],
+    [
+     60.195182,
+     24.955606
+    ],
+    [
+     60.192705,
+     24.960618
+    ],
+    [
+     60.192054,
+     24.961212
+    ],
+    [
+     60.19087,
+     24.962403
+    ],
+    [
+     60.18989,
+     24.963798
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.188455,
+     24.963649
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188089,
+     24.963332
+    ],
+    [
+     60.187974,
+     24.963112
+    ],
+    [
+     60.187825,
+     24.962693
+    ],
+    [
+     60.187711,
+     24.962221
+    ],
+    [
+     60.187688,
+     24.961788
+    ],
+    [
+     60.187447,
+     24.961619
+    ],
+    [
+     60.187107,
+     24.961464
+    ],
+    [
+     60.185843,
+     24.961175
+    ],
+    [
+     60.18553,
+     24.96104
+    ],
+    [
+     60.185271,
+     24.96087
+    ],
+    [
+     60.18495,
+     24.96059
+    ],
+    [
+     60.184772,
+     24.960387
+    ],
+    [
+     60.183197,
+     24.95834
+    ],
+    [
+     60.18211,
+     24.956056
+    ],
+    [
+     60.180067,
+     24.950482
+    ],
+    [
+     60.179862,
+     24.950314
+    ],
+    [
+     60.178452,
+     24.950418
+    ],
+    [
+     60.178309,
+     24.950341
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.17806,
+     24.950028
+    ],
+    [
+     60.177971,
+     24.949989
+    ],
+    [
+     60.174539,
+     24.95034
+    ],
+    [
+     60.174423,
+     24.950301
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.174089,
+     24.953085
+    ],
+    [
+     60.171816,
+     24.953325
+    ],
+    [
+     60.170001,
+     24.95356
+    ],
+    [
+     60.170285,
+     24.94539
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170481,
+     24.944297
+    ],
+    [
+     60.17038,
+     24.940636
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170218,
+     24.939407
+    ]
+   ]
+  },
+  {
+   "id": "8_0",
+   "service": "8",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Jätkäsaari - Töölö - Sörnäinen (M) - Arabia",
+   "trips": 640,
+   "routeId": "1008",
+   "points": 36,
+   "droppedFrom": 78,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 107
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 101
+    },
+    {
+     "anchor": "piritori",
+     "m": 18
+    }
+   ],
+   "stopSequence": [
+    "Kaupunginpuutarha",
+    "Linnanmäki (etelä)",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Ristikkokatu",
+    "Hauhon puisto",
+    "Vallilan varikko",
+    "Paavalinkirkko"
+   ],
+   "shape": [
+    [
+     60.182971,
+     24.930959
+    ],
+    [
+     60.183113,
+     24.931233
+    ],
+    [
+     60.183389,
+     24.931457
+    ],
+    [
+     60.184454,
+     24.931919
+    ],
+    [
+     60.184606,
+     24.932049
+    ],
+    [
+     60.184747,
+     24.932324
+    ],
+    [
+     60.184817,
+     24.932668
+    ],
+    [
+     60.185939,
+     24.940271
+    ],
+    [
+     60.186073,
+     24.941626
+    ],
+    [
+     60.186321,
+     24.943363
+    ],
+    [
+     60.186378,
+     24.94405
+    ],
+    [
+     60.186584,
+     24.950454
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186829,
+     24.951362
+    ],
+    [
+     60.186942,
+     24.95178
+    ],
+    [
+     60.186981,
+     24.952646
+    ],
+    [
+     60.18722,
+     24.955753
+    ],
+    [
+     60.187569,
+     24.959548
+    ],
+    [
+     60.187703,
+     24.962203
+    ],
+    [
+     60.187806,
+     24.962783
+    ],
+    [
+     60.18804,
+     24.963317
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188482,
+     24.963668
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.190298,
+     24.964477
+    ],
+    [
+     60.19063,
+     24.964523
+    ],
+    [
+     60.193017,
+     24.964593
+    ],
+    [
+     60.193521,
+     24.964392
+    ],
+    [
+     60.193665,
+     24.964306
+    ],
+    [
+     60.195182,
+     24.963034
+    ],
+    [
+     60.197524,
+     24.961948
+    ],
+    [
+     60.197964,
+     24.961835
+    ],
+    [
+     60.19853,
+     24.961762
+    ],
+    [
+     60.198872,
+     24.961754
+    ],
+    [
+     60.199186,
+     24.961763
+    ],
+    [
+     60.199893,
+     24.961982
+    ]
+   ]
+  },
+  {
+   "id": "8_1",
+   "service": "8",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Jätkäsaari - Töölö - Sörnäinen (M) - Arabia",
+   "trips": 652,
+   "routeId": "1008",
+   "points": 39,
+   "droppedFrom": 84,
+   "anchorSequence": [
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 107
+    }
+   ],
+   "stopSequence": [
+    "Paavalinkirkko",
+    "Vallilan varikko",
+    "Hauhon puisto",
+    "Ristikkokatu",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Linnanmäki (etelä)",
+    "Kaupunginpuutarha"
+   ],
+   "shape": [
+    [
+     60.199893,
+     24.961982
+    ],
+    [
+     60.199463,
+     24.961843
+    ],
+    [
+     60.198872,
+     24.961754
+    ],
+    [
+     60.198315,
+     24.961773
+    ],
+    [
+     60.197964,
+     24.961835
+    ],
+    [
+     60.197524,
+     24.961966
+    ],
+    [
+     60.195272,
+     24.963001
+    ],
+    [
+     60.194586,
+     24.963522
+    ],
+    [
+     60.193909,
+     24.964115
+    ],
+    [
+     60.193521,
+     24.964392
+    ],
+    [
+     60.193332,
+     24.964476
+    ],
+    [
+     60.192873,
+     24.964607
+    ],
+    [
+     60.192029,
+     24.9646
+    ],
+    [
+     60.19063,
+     24.964523
+    ],
+    [
+     60.190235,
+     24.964457
+    ],
+    [
+     60.189635,
+     24.964241
+    ],
+    [
+     60.188455,
+     24.963649
+    ],
+    [
+     60.188294,
+     24.963554
+    ],
+    [
+     60.188027,
+     24.96324
+    ],
+    [
+     60.187825,
+     24.962693
+    ],
+    [
+     60.187711,
+     24.962221
+    ],
+    [
+     60.187585,
+     24.959891
+    ],
+    [
+     60.1872,
+     24.955379
+    ],
+    [
+     60.186934,
+     24.951807
+    ],
+    [
+     60.186899,
+     24.951563
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186583,
+     24.95058
+    ],
+    [
+     60.186402,
+     24.944519
+    ],
+    [
+     60.186321,
+     24.943363
+    ],
+    [
+     60.186021,
+     24.941264
+    ],
+    [
+     60.185939,
+     24.940271
+    ],
+    [
+     60.184826,
+     24.93265
+    ],
+    [
+     60.184756,
+     24.932324
+    ],
+    [
+     60.184632,
+     24.932068
+    ],
+    [
+     60.184195,
+     24.931803
+    ],
+    [
+     60.183389,
+     24.931457
+    ],
+    [
+     60.183219,
+     24.931344
+    ],
+    [
+     60.183113,
+     24.931233
+    ],
+    [
+     60.182962,
+     24.93094
+    ]
+   ]
+  },
+  {
+   "id": "9_0",
+   "service": "9",
+   "mode": "tram",
+   "direction": 0,
+   "name": "Länsiterminaali - Rautatieasema - Kallio - Pasilan asema",
+   "trips": 709,
+   "routeId": "1009",
+   "points": 49,
+   "droppedFrom": 100,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 51
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 122
+    },
+    {
+     "anchor": "harju",
+     "m": 125
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 119
+    }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Hakaniemen metroasema",
+    "Kallion virastotalo",
+    "Karhupuisto",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Fleminginkatu",
+    "Sturenkatu",
+    "Kotkankatu",
+    "Pasilan konepaja",
+    "Jämsänkatu",
+    "Asemapäällikönkatu",
+    "Pasilan asema",
+    "Pasila"
+   ],
+   "shape": [
+    [
+     60.170254,
+     24.93948
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170498,
+     24.944423
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.171208,
+     24.946804
+    ],
+    [
+     60.171429,
+     24.947315
+    ],
+    [
+     60.1715,
+     24.947389
+    ],
+    [
+     60.17187,
+     24.94762
+    ],
+    [
+     60.174075,
+     24.950056
+    ],
+    [
+     60.17428,
+     24.950225
+    ],
+    [
+     60.174513,
+     24.950321
+    ],
+    [
+     60.174665,
+     24.950326
+    ],
+    [
+     60.176893,
+     24.950102
+    ],
+    [
+     60.178024,
+     24.950027
+    ],
+    [
+     60.178123,
+     24.950066
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.178256,
+     24.950268
+    ],
+    [
+     60.178364,
+     24.950271
+    ],
+    [
+     60.17857,
+     24.950205
+    ],
+    [
+     60.179648,
+     24.950092
+    ],
+    [
+     60.179928,
+     24.949866
+    ],
+    [
+     60.18027,
+     24.949749
+    ],
+    [
+     60.181067,
+     24.949685
+    ],
+    [
+     60.183315,
+     24.953208
+    ],
+    [
+     60.183946,
+     24.951621
+    ],
+    [
+     60.184197,
+     24.951574
+    ],
+    [
+     60.186307,
+     24.951399
+    ],
+    [
+     60.186801,
+     24.951398
+    ],
+    [
+     60.186899,
+     24.951545
+    ],
+    [
+     60.186942,
+     24.95178
+    ],
+    [
+     60.187022,
+     24.953152
+    ],
+    [
+     60.189547,
+     24.952901
+    ],
+    [
+     60.189656,
+     24.952688
+    ],
+    [
+     60.18973,
+     24.95242
+    ],
+    [
+     60.18997,
+     24.951327
+    ],
+    [
+     60.190641,
+     24.949256
+    ],
+    [
+     60.191078,
+     24.948276
+    ],
+    [
+     60.193188,
+     24.943236
+    ],
+    [
+     60.194376,
+     24.945253
+    ],
+    [
+     60.194794,
+     24.945896
+    ],
+    [
+     60.195659,
+     24.943857
+    ],
+    [
+     60.196732,
+     24.943518
+    ],
+    [
+     60.196695,
+     24.941772
+    ],
+    [
+     60.196744,
+     24.941197
+    ],
+    [
+     60.196901,
+     24.941035
+    ],
+    [
+     60.197469,
+     24.94078
+    ],
+    [
+     60.199099,
+     24.939925
+    ],
+    [
+     60.199889,
+     24.934034
+    ],
+    [
+     60.199415,
+     24.934268
+    ]
+   ]
+  },
+  {
+   "id": "9_1",
+   "service": "9",
+   "mode": "tram",
+   "direction": 1,
+   "name": "Länsiterminaali - Rautatieasema - Kallio - Pasilan asema",
+   "trips": 695,
+   "routeId": "1009",
+   "points": 48,
+   "droppedFrom": 94,
+   "anchorSequence": [
+    {
+     "anchor": "vaasankatu",
+     "m": 120
+    },
+    {
+     "anchor": "harju",
+     "m": 125
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 122
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 51
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
+   "stopSequence": [
+    "Pasila",
+    "Pasilan asema",
+    "Asemapäällikönkatu",
+    "Junailijankuja",
+    "Jämsänkatu",
+    "Pasilan konepaja",
+    "Kotkankatu",
+    "Sturenkatu",
+    "Fleminginkatu",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
+   ],
+   "shape": [
+    [
+     60.199415,
+     24.934268
+    ],
+    [
+     60.198183,
+     24.934995
+    ],
+    [
+     60.198766,
+     24.940114
+    ],
+    [
+     60.198048,
+     24.940397
+    ],
+    [
+     60.196911,
+     24.940963
+    ],
+    [
+     60.196785,
+     24.941068
+    ],
+    [
+     60.196702,
+     24.941372
+    ],
+    [
+     60.19669,
+     24.941696
+    ],
+    [
+     60.196732,
+     24.943518
+    ],
+    [
+     60.195659,
+     24.943857
+    ],
+    [
+     60.194794,
+     24.945896
+    ],
+    [
+     60.193188,
+     24.943236
+    ],
+    [
+     60.190833,
+     24.948739
+    ],
+    [
+     60.189899,
+     24.951307
+    ],
+    [
+     60.189547,
+     24.952901
+    ],
+    [
+     60.188901,
+     24.952936
+    ],
+    [
+     60.187022,
+     24.953152
+    ],
+    [
+     60.186899,
+     24.951563
+    ],
+    [
+     60.186654,
+     24.951109
+    ],
+    [
+     60.186443,
+     24.951333
+    ],
+    [
+     60.186236,
+     24.951399
+    ],
+    [
+     60.183946,
+     24.951603
+    ],
+    [
+     60.183315,
+     24.953208
+    ],
+    [
+     60.181067,
+     24.949685
+    ],
+    [
+     60.180414,
+     24.949718
+    ],
+    [
+     60.18001,
+     24.949778
+    ],
+    [
+     60.179658,
+     24.950038
+    ],
+    [
+     60.178795,
+     24.950193
+    ],
+    [
+     60.17857,
+     24.950205
+    ],
+    [
+     60.178364,
+     24.950271
+    ],
+    [
+     60.178256,
+     24.950268
+    ],
+    [
+     60.178193,
+     24.95023
+    ],
+    [
+     60.17806,
+     24.950028
+    ],
+    [
+     60.177971,
+     24.949989
+    ],
+    [
+     60.174539,
+     24.95034
+    ],
+    [
+     60.174423,
+     24.950301
+    ],
+    [
+     60.174146,
+     24.950113
+    ],
+    [
+     60.173309,
+     24.949225
+    ],
+    [
+     60.172143,
+     24.947858
+    ],
+    [
+     60.171544,
+     24.94748
+    ],
+    [
+     60.171455,
+     24.947387
+    ],
+    [
+     60.171331,
+     24.947204
+    ],
+    [
+     60.171207,
+     24.946912
+    ],
+    [
+     60.170627,
+     24.945184
+    ],
+    [
+     60.170481,
+     24.944297
+    ],
+    [
+     60.17038,
+     24.940636
+    ],
+    [
+     60.170386,
+     24.93988
+    ],
+    [
+     60.170218,
+     24.939407
+    ]
+   ]
+  }
+ ],
+ "stops": [
+  {
+   "id": "1100167",
+   "code": "H3006",
+   "name": "Agroksenkuja",
+   "lat": 60.19191,
+   "lon": 24.978519
+  },
+  {
+   "id": "1100168",
+   "code": "H3007",
+   "name": "Agroksenkuja",
+   "lat": 60.19295,
+   "lon": 24.979594
+  },
+  {
+   "id": "1122440",
+   "code": "H0631",
+   "name": "Alppila",
+   "lat": 60.19081,
+   "lon": 24.94525
+  },
+  {
+   "id": "1122441",
+   "code": "H0632",
+   "name": "Alppila",
+   "lat": 60.19058,
+   "lon": 24.94568
+  },
+  {
+   "id": "1040129",
+   "code": "H1272",
+   "name": "Arkadian puisto",
+   "lat": 60.17112,
+   "lon": 24.93338
+  },
+  {
+   "id": "1173112",
+   "code": "H0662",
+   "name": "Asemapäällikönkatu",
+   "lat": 60.198037,
+   "lon": 24.940327
+  },
+  {
+   "id": "1173402",
+   "code": "H0662",
+   "name": "Asemapäällikönkatu",
+   "lat": 60.198037,
+   "lon": 24.940327
+  },
+  {
+   "id": "1173434",
+   "code": "H0619",
+   "name": "Asemapäällikönkatu",
+   "lat": 60.199135,
+   "lon": 24.94007
+  },
+  {
+   "id": "1112105",
+   "code": "H0228",
+   "name": "Castréninkatu",
+   "lat": 60.18276,
+   "lon": 24.94536
+  },
+  {
+   "id": "1020128",
+   "code": "H2020",
+   "name": "Elielinaukio",
+   "lat": 60.171203,
+   "lon": 24.93958
+  },
+  {
+   "id": "1020130",
+   "code": "H2037",
+   "name": "Elielinaukio",
+   "lat": 60.171622,
+   "lon": 24.939018
+  },
+  {
+   "id": "1020131",
+   "code": "H2022",
+   "name": "Elielinaukio",
+   "lat": 60.171741,
+   "lon": 24.939733
+  },
+  {
+   "id": "1020132",
+   "code": "H2025",
+   "name": "Elielinaukio",
+   "lat": 60.171921,
+   "lon": 24.939716
+  },
+  {
+   "id": "1020133",
+   "code": "H2023",
+   "name": "Elielinaukio",
+   "lat": 60.171801,
+   "lon": 24.939727
+  },
+  {
+   "id": "1020135",
+   "code": "H2024",
+   "name": "Elielinaukio",
+   "lat": 60.171861,
+   "lon": 24.939722
+  },
+  {
+   "id": "1020239",
+   "code": "H2026",
+   "name": "Elielinaukio",
+   "lat": 60.171981,
+   "lon": 24.93971
+  },
+  {
+   "id": "1020241",
+   "code": "H2027",
+   "name": "Elielinaukio",
+   "lat": 60.172041,
+   "lon": 24.939704
+  },
+  {
+   "id": "1020243",
+   "code": "H2028",
+   "name": "Elielinaukio",
+   "lat": 60.172101,
+   "lon": 24.939698
+  },
+  {
+   "id": "1020245",
+   "code": "H2029",
+   "name": "Elielinaukio",
+   "lat": 60.172161,
+   "lon": 24.939692
+  },
+  {
+   "id": "1000002",
+   "code": " ",
+   "name": "Elielinaukio",
+   "lat": 60.171808,
+   "lon": 24.939488
+  },
+  {
+   "id": "1220101",
+   "code": "H2155",
+   "name": "Elimäenkatu",
+   "lat": 60.19302,
+   "lon": 24.95382
+  },
+  {
+   "id": "1220180",
+   "code": "H2154",
+   "name": "Elimäenkatu",
+   "lat": 60.19381,
+   "lon": 24.95531
+  },
+  {
+   "id": "1171120",
+   "code": "H2075",
+   "name": "Eläintarha",
+   "lat": 60.19249,
+   "lon": 24.93084
+  },
+  {
+   "id": "1171444",
+   "code": "H0638",
+   "name": "Eläintarha",
+   "lat": 60.1926,
+   "lon": 24.93078
+  },
+  {
+   "id": "1171445",
+   "code": "H0637",
+   "name": "Eläintarha",
+   "lat": 60.19255,
+   "lon": 24.93023
+  },
+  {
+   "id": "1121108",
+   "code": "H0652",
+   "name": "Fleminginkatu",
+   "lat": 60.1889,
+   "lon": 24.95285
+  },
+  {
+   "id": "1121404",
+   "code": "H0652",
+   "name": "Fleminginkatu",
+   "lat": 60.1889,
+   "lon": 24.95285
+  },
+  {
+   "id": "1220107",
+   "code": "H0653",
+   "name": "Fleminginkatu",
+   "lat": 60.18983,
+   "lon": 24.9519
+  },
+  {
+   "id": "1220123",
+   "code": "H2156",
+   "name": "Fleminginkatu",
+   "lat": 60.189365,
+   "lon": 24.953333
+  },
+  {
+   "id": "1220435",
+   "code": "H0653",
+   "name": "Fleminginkatu",
+   "lat": 60.18983,
+   "lon": 24.9519
+  },
+  {
+   "id": "1100141",
+   "code": "H2569",
+   "name": "Flöitti Dianan kuja",
+   "lat": 60.182258,
+   "lon": 24.979315
+  },
+  {
+   "id": "1100142",
+   "code": "H2570",
+   "name": "Flöitti Dianan kuja",
+   "lat": 60.181681,
+   "lon": 24.979282
+  },
+  {
+   "id": "1113125",
+   "code": "H2141",
+   "name": "Franzéninkatu",
+   "lat": 60.18528,
+   "lon": 24.95308
+  },
+  {
+   "id": "1113126",
+   "code": "H2142",
+   "name": "Franzéninkatu",
+   "lat": 60.18525,
+   "lon": 24.953016
+  },
+  {
+   "id": "1100125",
+   "code": "H2407",
+   "name": "Haapaniemi",
+   "lat": 60.182639,
+   "lon": 24.95751
+  },
+  {
+   "id": "1112126",
+   "code": "H2406",
+   "name": "Haapaniemi",
+   "lat": 60.182608,
+   "lon": 24.956868
+  },
+  {
+   "id": "1113127",
+   "code": "H2406",
+   "name": "Haapaniemi",
+   "lat": 60.182608,
+   "lon": 24.956868
+  },
+  {
+   "id": "1113140",
+   "code": "H2405",
+   "name": "Haapaniemi",
+   "lat": 60.18247,
+   "lon": 24.95715
+  },
+  {
+   "id": "1113432",
+   "code": "H0309",
+   "name": "Haapaniemi",
+   "lat": 60.182018,
+   "lon": 24.955852
+  },
+  {
+   "id": "1113433",
+   "code": "H0310",
+   "name": "Haapaniemi",
+   "lat": 60.181635,
+   "lon": 24.954746
+  },
+  {
+   "id": "1000105",
+   "code": " ",
+   "name": "Hakaniemen metroasema",
+   "lat": 60.180481,
+   "lon": 24.95017
+  },
+  {
+   "id": "1111112",
+   "code": "H2403",
+   "name": "Hakaniemi",
+   "lat": 60.17932,
+   "lon": 24.95073
+  },
+  {
+   "id": "1111116",
+   "code": "H2400",
+   "name": "Hakaniemi",
+   "lat": 60.178638,
+   "lon": 24.949881
+  },
+  {
+   "id": "1111142",
+   "code": "H2401",
+   "name": "Hakaniemi",
+   "lat": 60.17886,
+   "lon": 24.95075
+  },
+  {
+   "id": "1111143",
+   "code": "H2507",
+   "name": "Hakaniemi",
+   "lat": 60.178258,
+   "lon": 24.953103
+  },
+  {
+   "id": "1111151",
+   "code": "H2502",
+   "name": "Hakaniemi",
+   "lat": 60.179112,
+   "lon": 24.952311
+  },
+  {
+   "id": "1111180",
+   "code": "H2506",
+   "name": "Hakaniemi",
+   "lat": 60.178438,
+   "lon": 24.95265
+  },
+  {
+   "id": "1111203",
+   "code": "H2505",
+   "name": "Hakaniemi",
+   "lat": 60.178205,
+   "lon": 24.951532
+  },
+  {
+   "id": "1111204",
+   "code": "H2504",
+   "name": "Hakaniemi",
+   "lat": 60.179399,
+   "lon": 24.952301
+  },
+  {
+   "id": "1111301",
+   "code": "H2501",
+   "name": "Hakaniemi",
+   "lat": 60.179613,
+   "lon": 24.952783
+  },
+  {
+   "id": "1111427",
+   "code": "H0307",
+   "name": "Hakaniemi",
+   "lat": 60.179485,
+   "lon": 24.950353
+  },
+  {
+   "id": "1111428",
+   "code": "H0251",
+   "name": "Hakaniemi",
+   "lat": 60.179221,
+   "lon": 24.950207
+  },
+  {
+   "id": "1111429",
+   "code": "H0252",
+   "name": "Hakaniemi",
+   "lat": 60.179068,
+   "lon": 24.950066
+  },
+  {
+   "id": "1111430",
+   "code": "H0308",
+   "name": "Hakaniemi",
+   "lat": 60.178909,
+   "lon": 24.950318
+  },
+  {
+   "id": "1111601",
+   "code": "H0023",
+   "name": "Hakaniemi",
+   "lat": 60.180481,
+   "lon": 24.950188
+  },
+  {
+   "id": "1111602",
+   "code": "H0022",
+   "name": "Hakaniemi",
+   "lat": 60.18048,
+   "lon": 24.950152
+  },
+  {
+   "id": "1000012",
+   "code": " ",
+   "name": "Hakaniemi",
+   "lat": 60.179002,
+   "lon": 24.95128
+  },
+  {
+   "id": "1010419",
+   "code": "H0450",
+   "name": "Hallituskatu",
+   "lat": 60.17014,
+   "lon": 24.953501
+  },
+  {
+   "id": "1010420",
+   "code": "H0451",
+   "name": "Hallituskatu",
+   "lat": 60.17036,
+   "lon": 24.95353
+  },
+  {
+   "id": "1100102",
+   "code": "H2514",
+   "name": "Hanasaari",
+   "lat": 60.18206,
+   "lon": 24.96208
+  },
+  {
+   "id": "1100103",
+   "code": "H2515",
+   "name": "Hanasaari",
+   "lat": 60.18239,
+   "lon": 24.96182
+  },
+  {
+   "id": "1220103",
+   "code": "H2419",
+   "name": "Hattulantie",
+   "lat": 60.19531,
+   "lon": 24.95583
+  },
+  {
+   "id": "1220181",
+   "code": "H2421",
+   "name": "Hattulantie",
+   "lat": 60.19565,
+   "lon": 24.95499
+  },
+  {
+   "id": "1220182",
+   "code": "H2420",
+   "name": "Hattulantie",
+   "lat": 60.19531,
+   "lon": 24.95494
+  },
+  {
+   "id": "1220282",
+   "code": "H2423",
+   "name": "Hattulantie",
+   "lat": 60.19577,
+   "lon": 24.95466
+  },
+  {
+   "id": "1220416",
+   "code": "H0265",
+   "name": "Hattulantie",
+   "lat": 60.19508,
+   "lon": 24.9559
+  },
+  {
+   "id": "1220417",
+   "code": "H0266",
+   "name": "Hattulantie",
+   "lat": 60.1948,
+   "lon": 24.95635
+  },
+  {
+   "id": "1220408",
+   "code": "H0317",
+   "name": "Hauhon puisto",
+   "lat": 60.19333,
+   "lon": 24.96451
+  },
+  {
+   "id": "1220409",
+   "code": "H0318",
+   "name": "Hauhon puisto",
+   "lat": 60.19308,
+   "lon": 24.9646
+  },
+  {
+   "id": "1210163",
+   "code": "H3008",
+   "name": "Haukilahdenkatu",
+   "lat": 60.19775,
+   "lon": 24.970142
+  },
+  {
+   "id": "1210164",
+   "code": "H3009",
+   "name": "Haukilahdenkatu",
+   "lat": 60.198209,
+   "lon": 24.971762
+  },
+  {
+   "id": "1000201",
+   "code": " ",
+   "name": "Helsingin rautatieasema",
+   "lat": 60.171831,
+   "lon": 24.9412
+  },
+  {
+   "id": "1020603",
+   "code": "H0021",
+   "name": "Helsingin yliopisto",
+   "lat": 60.172009,
+   "lon": 24.947915
+  },
+  {
+   "id": "1020604",
+   "code": "H0020",
+   "name": "Helsingin yliopisto",
+   "lat": 60.172026,
+   "lon": 24.94785
+  },
+  {
+   "id": "1000104",
+   "code": " ",
+   "name": "Helsingin yliopiston metroasema",
+   "lat": 60.17202,
+   "lon": 24.94787
+  },
+  {
+   "id": "1121105",
+   "code": "H0651",
+   "name": "Helsinginkatu",
+   "lat": 60.187467,
+   "lon": 24.95313
+  },
+  {
+   "id": "1121405",
+   "code": "H0651",
+   "name": "Helsinginkatu",
+   "lat": 60.187467,
+   "lon": 24.95313
+  },
+  {
+   "id": "1121406",
+   "code": "H0250",
+   "name": "Helsinginkatu",
+   "lat": 60.186965,
+   "lon": 24.951799
+  },
+  {
+   "id": "1121450",
+   "code": "H0249",
+   "name": "Helsinginkatu",
+   "lat": 60.18708,
+   "lon": 24.95391
+  },
+  {
+   "id": "1020501",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.171298,
+   "lon": 24.941671
+  },
+  {
+   "id": "1020502",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.17272,
+   "lon": 24.939911
+  },
+  {
+   "id": "1020503",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.172992,
+   "lon": 24.942044
+  },
+  {
+   "id": "1020551",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.1713,
+   "lon": 24.941401
+  },
+  {
+   "id": "1020552",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.172732,
+   "lon": 24.939551
+  },
+  {
+   "id": "1020553",
+   "code": "H0070",
+   "name": "Helsinki",
+   "lat": 60.172987,
+   "lon": 24.941576
+  },
+  {
+   "id": "1173103",
+   "code": "H2165",
+   "name": "Junailijankuja",
+   "lat": 60.19855,
+   "lon": 24.93712
+  },
+  {
+   "id": "1220118",
+   "code": "H2159",
+   "name": "Junatie",
+   "lat": 60.1895,
+   "lon": 24.96051
+  },
+  {
+   "id": "1220119",
+   "code": "H2179",
+   "name": "Junatie",
+   "lat": 60.18964,
+   "lon": 24.96309
+  },
+  {
+   "id": "1220120",
+   "code": "H2180",
+   "name": "Junatie",
+   "lat": 60.189463,
+   "lon": 24.962315
+  },
+  {
+   "id": "1173113",
+   "code": "H0661",
+   "name": "Jämsänkatu",
+   "lat": 60.19669,
+   "lon": 24.941768
+  },
+  {
+   "id": "1173403",
+   "code": "H0661",
+   "name": "Jämsänkatu",
+   "lat": 60.19669,
+   "lon": 24.941768
+  },
+  {
+   "id": "1220131",
+   "code": "H2172",
+   "name": "Jämsänkatu",
+   "lat": 60.196616,
+   "lon": 24.94209
+  },
+  {
+   "id": "1220402",
+   "code": "H0660",
+   "name": "Jämsänkatu",
+   "lat": 60.19668,
+   "lon": 24.94305
+  },
+  {
+   "id": "1113480",
+   "code": "H0257",
+   "name": "Kaarlenkatu",
+   "lat": 60.186307,
+   "lon": 24.951442
+  },
+  {
+   "id": "1020457",
+   "code": "H0303",
+   "name": "Kaisaniemenkatu",
+   "lat": 60.171868,
+   "lon": 24.947656
+  },
+  {
+   "id": "1020458",
+   "code": "H0304",
+   "name": "Kaisaniemenkatu",
+   "lat": 60.17165,
+   "lon": 24.94751
+  },
+  {
+   "id": "1020105",
+   "code": "H2061",
+   "name": "Kaisaniemenpuisto",
+   "lat": 60.17502,
+   "lon": 24.95049
+  },
+  {
+   "id": "1020106",
+   "code": "H2060",
+   "name": "Kaisaniemenpuisto",
+   "lat": 60.17348,
+   "lon": 24.94914
+  },
+  {
+   "id": "1020169",
+   "code": "H2059",
+   "name": "Kaisaniemenpuisto",
+   "lat": 60.173545,
+   "lon": 24.94981
+  },
+  {
+   "id": "1020459",
+   "code": "H0305",
+   "name": "Kaisaniemenpuisto",
+   "lat": 60.1736,
+   "lon": 24.94958
+  },
+  {
+   "id": "1020460",
+   "code": "H0306",
+   "name": "Kaisaniemenpuisto",
+   "lat": 60.17331,
+   "lon": 24.94921
+  },
+  {
+   "id": "1020124",
+   "code": "H2056",
+   "name": "Kaivokatu",
+   "lat": 60.170187,
+   "lon": 24.939029
+  },
+  {
+   "id": "1020140",
+   "code": "H2055",
+   "name": "Kaivokatu",
+   "lat": 60.17022,
+   "lon": 24.93943
+  },
+  {
+   "id": "1100601",
+   "code": "H0027",
+   "name": "Kalasatama",
+   "lat": 60.187389,
+   "lon": 24.977068
+  },
+  {
+   "id": "1100602",
+   "code": "H0026",
+   "name": "Kalasatama",
+   "lat": 60.187523,
+   "lon": 24.977137
+  },
+  {
+   "id": "1100131",
+   "code": "H2565",
+   "name": "Kalasatama (M)",
+   "lat": 60.187162,
+   "lon": 24.977327
+  },
+  {
+   "id": "1100132",
+   "code": "H2564",
+   "name": "Kalasatama (M)",
+   "lat": 60.187006,
+   "lon": 24.976955
+  },
+  {
+   "id": "1100133",
+   "code": "H3005",
+   "name": "Kalasatama (M)",
+   "lat": 60.18831,
+   "lon": 24.97647
+  },
+  {
+   "id": "1100134",
+   "code": "H3004",
+   "name": "Kalasatama (M)",
+   "lat": 60.18831,
+   "lon": 24.97661
+  },
+  {
+   "id": "1000107",
+   "code": " ",
+   "name": "Kalasataman metroasema",
+   "lat": 60.187477,
+   "lon": 24.97694
+  },
+  {
+   "id": "1111102",
+   "code": "H2615",
+   "name": "Kallion virastotalo",
+   "lat": 60.180667,
+   "lon": 24.948367
+  },
+  {
+   "id": "1111131",
+   "code": "H0253",
+   "name": "Kallion virastotalo",
+   "lat": 60.180568,
+   "lon": 24.9498
+  },
+  {
+   "id": "1111431",
+   "code": "H0253",
+   "name": "Kallion virastotalo",
+   "lat": 60.180568,
+   "lon": 24.9498
+  },
+  {
+   "id": "1111432",
+   "code": "H0254",
+   "name": "Kallion virastotalo",
+   "lat": 60.180414,
+   "lon": 24.949718
+  },
+  {
+   "id": "1112103",
+   "code": "H0226",
+   "name": "Kallion virastotalo",
+   "lat": 60.181563,
+   "lon": 24.948399
+  },
+  {
+   "id": "1112117",
+   "code": "H2508",
+   "name": "Kallion virastotalo",
+   "lat": 60.180906,
+   "lon": 24.948746
+  },
+  {
+   "id": "1112137",
+   "code": "H2129",
+   "name": "Kallion virastotalo",
+   "lat": 60.182845,
+   "lon": 24.945305
+  },
+  {
+   "id": "1220128",
+   "code": "H3052",
+   "name": "Kangasalantie",
+   "lat": 60.19563,
+   "lon": 24.95916
+  },
+  {
+   "id": "1220129",
+   "code": "H3051",
+   "name": "Kangasalantie",
+   "lat": 60.195363,
+   "lon": 24.958996
+  },
+  {
+   "id": "1010421",
+   "code": "H0453",
+   "name": "Kansallisarkisto",
+   "lat": 60.17216,
+   "lon": 24.95335
+  },
+  {
+   "id": "1010422",
+   "code": "H0452",
+   "name": "Kansallisarkisto",
+   "lat": 60.17183,
+   "lon": 24.95326
+  },
+  {
+   "id": "1130105",
+   "code": "H1906",
+   "name": "Kansallismuseo",
+   "lat": 60.17391,
+   "lon": 24.93328
+  },
+  {
+   "id": "1130111",
+   "code": "H1907",
+   "name": "Kansallismuseo",
+   "lat": 60.17419,
+   "lon": 24.93349
+  },
+  {
+   "id": "1130432",
+   "code": "H0103",
+   "name": "Kansallismuseo",
+   "lat": 60.17511,
+   "lon": 24.93235
+  },
+  {
+   "id": "1130433",
+   "code": "H0104",
+   "name": "Kansallismuseo",
+   "lat": 60.1748,
+   "lon": 24.93261
+  },
+  {
+   "id": "1112433",
+   "code": "H0255",
+   "name": "Karhupuisto",
+   "lat": 60.18376,
+   "lon": 24.95233
+  },
+  {
+   "id": "1112434",
+   "code": "H0256",
+   "name": "Karhupuisto",
+   "lat": 60.1835,
+   "lon": 24.95273
+  },
+  {
+   "id": "1113123",
+   "code": "H2143",
+   "name": "Karhupuisto",
+   "lat": 60.1837,
+   "lon": 24.95316
+  },
+  {
+   "id": "1113124",
+   "code": "H2144",
+   "name": "Karhupuisto",
+   "lat": 60.18397,
+   "lon": 24.95305
+  },
+  {
+   "id": "1122115",
+   "code": "H0635",
+   "name": "Karjalankatu",
+   "lat": 60.19244,
+   "lon": 24.936076
+  },
+  {
+   "id": "1122116",
+   "code": "H0636",
+   "name": "Karjalankatu",
+   "lat": 60.19225,
+   "lon": 24.93641
+  },
+  {
+   "id": "1122415",
+   "code": "H0635",
+   "name": "Karjalankatu",
+   "lat": 60.19244,
+   "lon": 24.936076
+  },
+  {
+   "id": "1122416",
+   "code": "H0636",
+   "name": "Karjalankatu",
+   "lat": 60.19225,
+   "lon": 24.93641
+  },
+  {
+   "id": "1140452",
+   "code": "H0243",
+   "name": "Kaupunginpuutarha",
+   "lat": 60.18445,
+   "lon": 24.93198
+  },
+  {
+   "id": "1140453",
+   "code": "H0244",
+   "name": "Kaupunginpuutarha",
+   "lat": 60.184192,
+   "lon": 24.931828
+  },
+  {
+   "id": "1100130",
+   "code": "H2566",
+   "name": "Koksikatu",
+   "lat": 60.184792,
+   "lon": 24.974769
+  },
+  {
+   "id": "1220430",
+   "code": "H0656",
+   "name": "Kotkankatu",
+   "lat": 60.1929,
+   "lon": 24.94387
+  },
+  {
+   "id": "1220431",
+   "code": "H0657",
+   "name": "Kotkankatu",
+   "lat": 60.19304,
+   "lon": 24.94361
+  },
+  {
+   "id": "1122132",
+   "code": "H2125",
+   "name": "Kulttuuritalo",
+   "lat": 60.18724,
+   "lon": 24.94385
+  },
+  {
+   "id": "1122133",
+   "code": "H2124",
+   "name": "Kulttuuritalo",
+   "lat": 60.18774,
+   "lon": 24.94428
+  },
+  {
+   "id": "1112152",
+   "code": "H0229",
+   "name": "Kuntatalo",
+   "lat": 60.18445,
+   "lon": 24.94114
+  },
+  {
+   "id": "1112153",
+   "code": "H2128",
+   "name": "Kuntatalo",
+   "lat": 60.184128,
+   "lon": 24.941707
+  },
+  {
+   "id": "1100122",
+   "code": "H2517",
+   "name": "Käenkuja",
+   "lat": 60.185206,
+   "lon": 24.966406
+  },
+  {
+   "id": "1020443",
+   "code": "H0102",
+   "name": "Lasipalatsi",
+   "lat": 60.17023,
+   "lon": 24.93798
+  },
+  {
+   "id": "1020444",
+   "code": "H0101",
+   "name": "Lasipalatsi",
+   "lat": 60.17045,
+   "lon": 24.9377
+  },
+  {
+   "id": "1220406",
+   "code": "H0315",
+   "name": "Lautatarhankatu",
+   "lat": 60.19031,
+   "lon": 24.96448
+  },
+  {
+   "id": "1220407",
+   "code": "H0316",
+   "name": "Lautatarhankatu",
+   "lat": 60.19,
+   "lon": 24.96436
+  },
+  {
+   "id": "1220422",
+   "code": "H0331",
+   "name": "Lautatarhankatu",
+   "lat": 60.19005,
+   "lon": 24.96361
+  },
+  {
+   "id": "1220423",
+   "code": "H0332",
+   "name": "Lautatarhankatu",
+   "lat": 60.18986,
+   "lon": 24.96375
+  },
+  {
+   "id": "1010109",
+   "code": "H2016",
+   "name": "Liisanpuistikko",
+   "lat": 60.17428,
+   "lon": 24.96071
+  },
+  {
+   "id": "1010110",
+   "code": "H2015",
+   "name": "Liisanpuistikko",
+   "lat": 60.17433,
+   "lon": 24.96023
+  },
+  {
+   "id": "1121446",
+   "code": "H0245",
+   "name": "Linnanmäki (etelä)",
+   "lat": 60.186052,
+   "lon": 24.941642
+  },
+  {
+   "id": "1122101",
+   "code": "H2066",
+   "name": "Linnanmäki (etelä)",
+   "lat": 60.18642,
+   "lon": 24.94121
+  },
+  {
+   "id": "1122102",
+   "code": "H2067",
+   "name": "Linnanmäki (etelä)",
+   "lat": 60.18643,
+   "lon": 24.94185
+  },
+  {
+   "id": "1122447",
+   "code": "H0246",
+   "name": "Linnanmäki (etelä)",
+   "lat": 60.18603,
+   "lon": 24.94126
+  },
+  {
+   "id": "1122113",
+   "code": "H0633",
+   "name": "Linnanmäki (pohj.)",
+   "lat": 60.19124,
+   "lon": 24.9406
+  },
+  {
+   "id": "1122114",
+   "code": "H0634",
+   "name": "Linnanmäki (pohj.)",
+   "lat": 60.19117,
+   "lon": 24.94101
+  },
+  {
+   "id": "1122413",
+   "code": "H0633",
+   "name": "Linnanmäki (pohj.)",
+   "lat": 60.19124,
+   "lon": 24.9406
+  },
+  {
+   "id": "1122414",
+   "code": "H0634",
+   "name": "Linnanmäki (pohj.)",
+   "lat": 60.19117,
+   "lon": 24.94101
+  },
+  {
+   "id": "1113434",
+   "code": "H0311",
+   "name": "Lintulahti",
+   "lat": 60.185099,
+   "lon": 24.960737
+  },
+  {
+   "id": "1130436",
+   "code": "H0201",
+   "name": "Luonnontiet.museo",
+   "lat": 60.171159,
+   "lon": 24.930751
+  },
+  {
+   "id": "1130437",
+   "code": "H0202",
+   "name": "Luonnontiet.museo",
+   "lat": 60.171155,
+   "lon": 24.931459
+  },
+  {
+   "id": "1100206",
+   "code": "H2524",
+   "name": "Merihaka",
+   "lat": 60.180381,
+   "lon": 24.959355
+  },
+  {
+   "id": "1111146",
+   "code": "H2513",
+   "name": "Merihaka",
+   "lat": 60.17987,
+   "lon": 24.9576
+  },
+  {
+   "id": "1010107",
+   "code": "H2014",
+   "name": "Meritullinkatu",
+   "lat": 60.174128,
+   "lon": 24.955551
+  },
+  {
+   "id": "1010108",
+   "code": "H2013",
+   "name": "Meritullinkatu",
+   "lat": 60.174247,
+   "lon": 24.95796
+  },
+  {
+   "id": "1020401",
+   "code": "H0425",
+   "name": "Mikonkatu",
+   "lat": 60.17035,
+   "lon": 24.94545
+  },
+  {
+   "id": "1020402",
+   "code": "H0424",
+   "name": "Mikonkatu",
+   "lat": 60.17021,
+   "lon": 24.94523
+  },
+  {
+   "id": "1220106",
+   "code": "H2425",
+   "name": "Mäkelänrinne",
+   "lat": 60.19773,
+   "lon": 24.94984
+  },
+  {
+   "id": "1220108",
+   "code": "H2426",
+   "name": "Mäkelänrinne",
+   "lat": 60.19747,
+   "lon": 24.94955
+  },
+  {
+   "id": "1220207",
+   "code": "H2427",
+   "name": "Mäkelänrinne",
+   "lat": 60.19788,
+   "lon": 24.949406
+  },
+  {
+   "id": "1220420",
+   "code": "H0269",
+   "name": "Mäkelänrinne",
+   "lat": 60.19781,
+   "lon": 24.9491
+  },
+  {
+   "id": "1220421",
+   "code": "H0270",
+   "name": "Mäkelänrinne",
+   "lat": 60.19755,
+   "lon": 24.94961
+  },
+  {
+   "id": "1140199",
+   "code": "H2185",
+   "name": "Ooppera",
+   "lat": 60.18283,
+   "lon": 24.93003
+  },
+  {
+   "id": "1220105",
+   "code": "H3025",
+   "name": "Paavalinkirkko",
+   "lat": 60.19842,
+   "lon": 24.96205
+  },
+  {
+   "id": "1220127",
+   "code": "H3026",
+   "name": "Paavalinkirkko",
+   "lat": 60.19817,
+   "lon": 24.96153
+  },
+  {
+   "id": "1220205",
+   "code": "H3027",
+   "name": "Paavalinkirkko",
+   "lat": 60.19922,
+   "lon": 24.96206
+  },
+  {
+   "id": "1220403",
+   "code": "H0321",
+   "name": "Paavalinkirkko",
+   "lat": 60.19854,
+   "lon": 24.961785
+  },
+  {
+   "id": "1220404",
+   "code": "H0330",
+   "name": "Paavalinkirkko",
+   "lat": 60.198317,
+   "lon": 24.961737
+  },
+  {
+   "id": "1100106",
+   "code": "H2556",
+   "name": "Panimokatu",
+   "lat": 60.188557,
+   "lon": 24.9729
+  },
+  {
+   "id": "1100143",
+   "code": "H2571",
+   "name": "Parrulaituri",
+   "lat": 60.184379,
+   "lon": 24.974965
+  },
+  {
+   "id": "1174501",
+   "code": "H0071",
+   "name": "Pasila",
+   "lat": 60.199593,
+   "lon": 24.933611
+  },
+  {
+   "id": "1174502",
+   "code": "H0071",
+   "name": "Pasila",
+   "lat": 60.19941,
+   "lon": 24.93212
+  },
+  {
+   "id": "1174503",
+   "code": "H0087",
+   "name": "Pasila",
+   "lat": 60.199568,
+   "lon": 24.933358
+  },
+  {
+   "id": "1174504",
+   "code": "H0090",
+   "name": "Pasila",
+   "lat": 60.199483,
+   "lon": 24.932706
+  },
+  {
+   "id": "1174551",
+   "code": "H0071",
+   "name": "Pasila",
+   "lat": 60.199601,
+   "lon": 24.933683
+  },
+  {
+   "id": "1174552",
+   "code": "H0071",
+   "name": "Pasila",
+   "lat": 60.199449,
+   "lon": 24.932381
+  },
+  {
+   "id": "1174553",
+   "code": "H0089",
+   "name": "Pasila",
+   "lat": 60.199534,
+   "lon": 24.933032
+  },
+  {
+   "id": "1174554",
+   "code": "H0091",
+   "name": "Pasila",
+   "lat": 60.199474,
+   "lon": 24.932652
+  },
+  {
+   "id": "1000004",
+   "code": " ",
+   "name": "Pasila",
+   "lat": 60.198118,
+   "lon": 24.934074
+  },
+  {
+   "id": "1173105",
+   "code": "H2367",
+   "name": "Pasilan asema",
+   "lat": 60.199551,
+   "lon": 24.934538
+  },
+  {
+   "id": "1173106",
+   "code": "H0620",
+   "name": "Pasilan asema",
+   "lat": 60.19989,
+   "lon": 24.93402
+  },
+  {
+   "id": "1173148",
+   "code": "H2102",
+   "name": "Pasilan asema",
+   "lat": 60.1977,
+   "lon": 24.93506
+  },
+  {
+   "id": "1174128",
+   "code": "H2100",
+   "name": "Pasilan asema",
+   "lat": 60.197981,
+   "lon": 24.933994
+  },
+  {
+   "id": "1174147",
+   "code": "H2101",
+   "name": "Pasilan asema",
+   "lat": 60.1981,
+   "lon": 24.93365
+  },
+  {
+   "id": "1174402",
+   "code": "H0621",
+   "name": "Pasilan asema",
+   "lat": 60.198957,
+   "lon": 24.934437
+  },
+  {
+   "id": "1174410",
+   "code": "H0664",
+   "name": "Pasilan asema",
+   "lat": 60.198075,
+   "lon": 24.933694
+  },
+  {
+   "id": "1174411",
+   "code": "H0665",
+   "name": "Pasilan asema",
+   "lat": 60.198002,
+   "lon": 24.933908
+  },
+  {
+   "id": "1220434",
+   "code": "H0612",
+   "name": "Pasilan asema",
+   "lat": 60.199407,
+   "lon": 24.934201
+  },
+  {
+   "id": "1000202",
+   "code": " ",
+   "name": "Pasilan asema",
+   "lat": 60.199228,
+   "lon": 24.933114
+  },
+  {
+   "id": "1220114",
+   "code": "H2173",
+   "name": "Pasilan konepaja",
+   "lat": 60.194732,
+   "lon": 24.946392
+  },
+  {
+   "id": "1220117",
+   "code": "H2174",
+   "name": "Pasilan konepaja",
+   "lat": 60.19528,
+   "lon": 24.94443
+  },
+  {
+   "id": "1220428",
+   "code": "H0658",
+   "name": "Pasilan konepaja",
+   "lat": 60.1943,
+   "lon": 24.94499
+  },
+  {
+   "id": "1220429",
+   "code": "H0659",
+   "name": "Pasilan konepaja",
+   "lat": 60.19438,
+   "lon": 24.94526
+  },
+  {
+   "id": "1130113",
+   "code": "H1273",
+   "name": "Pohj. Rautatiekatu",
+   "lat": 60.170862,
+   "lon": 24.930898
+  },
+  {
+   "id": "1121438",
+   "code": "H0261",
+   "name": "Porvoonkatu",
+   "lat": 60.18978,
+   "lon": 24.94826
+  },
+  {
+   "id": "1121439",
+   "code": "H0262",
+   "name": "Porvoonkatu",
+   "lat": 60.189678,
+   "lon": 24.948237
+  },
+  {
+   "id": "1122134",
+   "code": "H2123",
+   "name": "Porvoonkatu",
+   "lat": 60.19007,
+   "lon": 24.94719
+  },
+  {
+   "id": "1122135",
+   "code": "H2122",
+   "name": "Porvoonkatu",
+   "lat": 60.18944,
+   "lon": 24.94694
+  },
+  {
+   "id": "1122196",
+   "code": "H2145",
+   "name": "Porvoonkatu",
+   "lat": 60.189145,
+   "lon": 24.946951
+  },
+  {
+   "id": "1020171",
+   "code": "H2038",
+   "name": "Postitalo",
+   "lat": 60.170872,
+   "lon": 24.938492
+  },
+  {
+   "id": "1220112",
+   "code": "H2177",
+   "name": "Päijänteentie",
+   "lat": 60.19091,
+   "lon": 24.95609
+  },
+  {
+   "id": "1220113",
+   "code": "H2178",
+   "name": "Päijänteentie",
+   "lat": 60.19119,
+   "lon": 24.95434
+  },
+  {
+   "id": "1220418",
+   "code": "H0267",
+   "name": "Rautalammintie",
+   "lat": 60.19633,
+   "lon": 24.9528
+  },
+  {
+   "id": "1220419",
+   "code": "H0268",
+   "name": "Rautalammintie",
+   "lat": 60.19601,
+   "lon": 24.95343
+  },
+  {
+   "id": "1020453",
+   "code": "H0301",
+   "name": "Rautatieasema",
+   "lat": 60.17036,
+   "lon": 24.9413
+  },
+  {
+   "id": "1020454",
+   "code": "H0302",
+   "name": "Rautatieasema",
+   "lat": 60.1704,
+   "lon": 24.94061
+  },
+  {
+   "id": "1020104",
+   "code": "H2057",
+   "name": "Rautatientori",
+   "lat": 60.17034,
+   "lon": 24.94382
+  },
+  {
+   "id": "1020112",
+   "code": "H2040",
+   "name": "Rautatientori",
+   "lat": 60.17076,
+   "lon": 24.94268
+  },
+  {
+   "id": "1020113",
+   "code": "H2041",
+   "name": "Rautatientori",
+   "lat": 60.17072,
+   "lon": 24.94324
+  },
+  {
+   "id": "1020115",
+   "code": "H2043",
+   "name": "Rautatientori",
+   "lat": 60.17141,
+   "lon": 24.94266
+  },
+  {
+   "id": "1020116",
+   "code": "H2044",
+   "name": "Rautatientori",
+   "lat": 60.17108,
+   "lon": 24.94283
+  },
+  {
+   "id": "1020117",
+   "code": "H2045",
+   "name": "Rautatientori",
+   "lat": 60.17133,
+   "lon": 24.94277
+  },
+  {
+   "id": "1020119",
+   "code": "H2047",
+   "name": "Rautatientori",
+   "lat": 60.17095,
+   "lon": 24.94308
+  },
+  {
+   "id": "1020120",
+   "code": "H2048",
+   "name": "Rautatientori",
+   "lat": 60.17132,
+   "lon": 24.94302
+  },
+  {
+   "id": "1020122",
+   "code": "H2050",
+   "name": "Rautatientori",
+   "lat": 60.17085,
+   "lon": 24.94333
+  },
+  {
+   "id": "1020123",
+   "code": "H2051",
+   "name": "Rautatientori",
+   "lat": 60.17134,
+   "lon": 24.94329
+  },
+  {
+   "id": "1020175",
+   "code": "H2058",
+   "name": "Rautatientori",
+   "lat": 60.17113,
+   "lon": 24.9448
+  },
+  {
+   "id": "1020182",
+   "code": "H2042",
+   "name": "Rautatientori",
+   "lat": 60.17098,
+   "lon": 24.9427
+  },
+  {
+   "id": "1020201",
+   "code": "H2139",
+   "name": "Rautatientori",
+   "lat": 60.17192,
+   "lon": 24.94376
+  },
+  {
+   "id": "1020204",
+   "code": "H2052",
+   "name": "Rautatientori",
+   "lat": 60.17165,
+   "lon": 24.94327
+  },
+  {
+   "id": "1020601",
+   "code": "H0019",
+   "name": "Rautatientori",
+   "lat": 60.170379,
+   "lon": 24.939846
+  },
+  {
+   "id": "1020602",
+   "code": "H0018",
+   "name": "Rautatientori",
+   "lat": 60.170388,
+   "lon": 24.939845
+  },
+  {
+   "id": "1000003",
+   "code": " ",
+   "name": "Rautatientori",
+   "lat": 60.171283,
+   "lon": 24.942572
+  },
+  {
+   "id": "1000103",
+   "code": " ",
+   "name": "Rautatientorin metroasema",
+   "lat": 60.170384,
+   "lon": 24.939846
+  },
+  {
+   "id": "1210101",
+   "code": "H3021",
+   "name": "Ristikkokatu",
+   "lat": 60.19261,
+   "lon": 24.9648
+  },
+  {
+   "id": "1220102",
+   "code": "H3022",
+   "name": "Ristikkokatu",
+   "lat": 60.19168,
+   "lon": 24.96451
+  },
+  {
+   "id": "1220414",
+   "code": "H0263",
+   "name": "Roineentie",
+   "lat": 60.193432,
+   "lon": 24.954775
+  },
+  {
+   "id": "1220415",
+   "code": "H0264",
+   "name": "Roineentie",
+   "lat": 60.19296,
+   "lon": 24.9534
+  },
+  {
+   "id": "1122127",
+   "code": "H2104",
+   "name": "Savonkatu",
+   "lat": 60.19505,
+   "lon": 24.93578
+  },
+  {
+   "id": "1122128",
+   "code": "H2130",
+   "name": "Savonkatu",
+   "lat": 60.19545,
+   "lon": 24.93699
+  },
+  {
+   "id": "1122126",
+   "code": "H2132",
+   "name": "Sipoonkatu",
+   "lat": 60.1942,
+   "lon": 24.94076
+  },
+  {
+   "id": "1220125",
+   "code": "H2131",
+   "name": "Sipoonkatu",
+   "lat": 60.194331,
+   "lon": 24.940659
+  },
+  {
+   "id": "1010124",
+   "code": "H0454",
+   "name": "Snellmaninkatu",
+   "lat": 60.17401,
+   "lon": 24.95236
+  },
+  {
+   "id": "1010125",
+   "code": "H0455",
+   "name": "Snellmaninkatu",
+   "lat": 60.17407,
+   "lon": 24.95208
+  },
+  {
+   "id": "1010427",
+   "code": "H0455",
+   "name": "Snellmaninkatu",
+   "lat": 60.17407,
+   "lon": 24.95208
+  },
+  {
+   "id": "1010428",
+   "code": "H0454",
+   "name": "Snellmaninkatu",
+   "lat": 60.17401,
+   "lon": 24.95236
+  },
+  {
+   "id": "1122110",
+   "code": "H0654",
+   "name": "Sturenkatu",
+   "lat": 60.190835,
+   "lon": 24.948841
+  },
+  {
+   "id": "1122400",
+   "code": "H0654",
+   "name": "Sturenkatu",
+   "lat": 60.190835,
+   "lon": 24.948841
+  },
+  {
+   "id": "1220109",
+   "code": "H0655",
+   "name": "Sturenkatu",
+   "lat": 60.191078,
+   "lon": 24.948312
+  },
+  {
+   "id": "1220130",
+   "code": "H2153",
+   "name": "Sturenkatu",
+   "lat": 60.19109,
+   "lon": 24.95012
+  },
+  {
+   "id": "1220433",
+   "code": "H0655",
+   "name": "Sturenkatu",
+   "lat": 60.191078,
+   "lon": 24.948312
+  },
+  {
+   "id": "1100105",
+   "code": "H2518",
+   "name": "Suvilahti",
+   "lat": 60.18688,
+   "lon": 24.96915
+  },
+  {
+   "id": "1100107",
+   "code": "H2519",
+   "name": "Suvilahti",
+   "lat": 60.18769,
+   "lon": 24.96954
+  },
+  {
+   "id": "1100121",
+   "code": "H2516",
+   "name": "Suvilahti",
+   "lat": 60.185638,
+   "lon": 24.967428
+  },
+  {
+   "id": "1121601",
+   "code": "H0025",
+   "name": "Sörnäinen",
+   "lat": 60.187124,
+   "lon": 24.959708
+  },
+  {
+   "id": "1121602",
+   "code": "H0024",
+   "name": "Sörnäinen",
+   "lat": 60.187131,
+   "lon": 24.959683
+  },
+  {
+   "id": "1113131",
+   "code": "H2410",
+   "name": "Sörnäinen (M)",
+   "lat": 60.187856,
+   "lon": 24.962443
+  },
+  {
+   "id": "1113435",
+   "code": "H0312",
+   "name": "Sörnäinen (M)",
+   "lat": 60.186453,
+   "lon": 24.9613
+  },
+  {
+   "id": "1121124",
+   "code": "H2409",
+   "name": "Sörnäinen (M)",
+   "lat": 60.18788,
+   "lon": 24.9632
+  },
+  {
+   "id": "1121130",
+   "code": "H2411",
+   "name": "Sörnäinen (M)",
+   "lat": 60.188606,
+   "lon": 24.96391
+  },
+  {
+   "id": "1121436",
+   "code": "H0313",
+   "name": "Sörnäinen (M)",
+   "lat": 60.18804,
+   "lon": 24.963313
+  },
+  {
+   "id": "1121437",
+   "code": "H0314",
+   "name": "Sörnäinen (M)",
+   "lat": 60.187624,
+   "lon": 24.960704
+  },
+  {
+   "id": "1000106",
+   "code": " ",
+   "name": "Sörnäisten metroasema",
+   "lat": 60.187128,
+   "lon": 24.959696
+  },
+  {
+   "id": "1210110",
+   "code": "H3018",
+   "name": "Sörnäistenkatu",
+   "lat": 60.19523,
+   "lon": 24.97448
+  },
+  {
+   "id": "1210111",
+   "code": "H3019",
+   "name": "Sörnäistenkatu",
+   "lat": 60.195803,
+   "lon": 24.975957
+  },
+  {
+   "id": "1220115",
+   "code": "H2176",
+   "name": "Telekatu",
+   "lat": 60.19326,
+   "lon": 24.94925
+  },
+  {
+   "id": "1220134",
+   "code": "H2175",
+   "name": "Telekatu",
+   "lat": 60.19321,
+   "lon": 24.95005
+  },
+  {
+   "id": "1173127",
+   "code": "H2105",
+   "name": "Teollisuuskatu",
+   "lat": 60.19699,
+   "lon": 24.93584
+  },
+  {
+   "id": "1100119",
+   "code": "H3000",
+   "name": "Tynnyrintekijänkatu",
+   "lat": 60.189218,
+   "lon": 24.971152
+  },
+  {
+   "id": "1100120",
+   "code": "H3001",
+   "name": "Tynnyrintekijänkatu",
+   "lat": 60.18906,
+   "lon": 24.97123
+  },
+  {
+   "id": "1100159",
+   "code": "H2551",
+   "name": "Tynnyrintekijänkatu",
+   "lat": 60.18875,
+   "lon": 24.96923
+  },
+  {
+   "id": "1100160",
+   "code": "H2550",
+   "name": "Tynnyrintekijänkatu",
+   "lat": 60.1886,
+   "lon": 24.96962
+  },
+  {
+   "id": "1121449",
+   "code": "H0248",
+   "name": "Urheilutalo",
+   "lat": 60.18656,
+   "lon": 24.94761
+  },
+  {
+   "id": "1121480",
+   "code": "H0259",
+   "name": "Urheilutalo",
+   "lat": 60.1875,
+   "lon": 24.94847
+  },
+  {
+   "id": "1121482",
+   "code": "H0278",
+   "name": "Urheilutalo",
+   "lat": 60.186544,
+   "lon": 24.949786
+  },
+  {
+   "id": "1220110",
+   "code": "H2417",
+   "name": "Vallilan kirjasto",
+   "lat": 60.19226,
+   "lon": 24.96136
+  },
+  {
+   "id": "1220111",
+   "code": "H2416",
+   "name": "Vallilan kirjasto",
+   "lat": 60.19201,
+   "lon": 24.96102
+  },
+  {
+   "id": "1220184",
+   "code": "H2415",
+   "name": "Vallilan kirjasto",
+   "lat": 60.19181,
+   "lon": 24.96179
+  },
+  {
+   "id": "1220424",
+   "code": "H0333",
+   "name": "Vallilan kirjasto",
+   "lat": 60.19228,
+   "lon": 24.9611
+  },
+  {
+   "id": "1220425",
+   "code": "H0334",
+   "name": "Vallilan kirjasto",
+   "lat": 60.192062,
+   "lon": 24.961208
+  },
+  {
+   "id": "1220104",
+   "code": "H3024",
+   "name": "Vallilan varikko",
+   "lat": 60.19551,
+   "lon": 24.96272
+  },
+  {
+   "id": "1220410",
+   "code": "H0319",
+   "name": "Vallilan varikko",
+   "lat": 60.1967,
+   "lon": 24.96246
+  },
+  {
+   "id": "1220411",
+   "code": "H0320",
+   "name": "Vallilan varikko",
+   "lat": 60.19645,
+   "lon": 24.96245
+  },
+  {
+   "id": "1100140",
+   "code": "H2568",
+   "name": "Vinsentinkatu",
+   "lat": 60.179362,
+   "lon": 24.977168
+  },
+  {
+   "id": "1112154",
+   "code": "H2127",
+   "name": "Wallininkatu",
+   "lat": 60.18556,
+   "lon": 24.94337
+  },
+  {
+   "id": "1112155",
+   "code": "H2126",
+   "name": "Wallininkatu",
+   "lat": 60.18563,
+   "lon": 24.94331
+  }
+ ]
+}

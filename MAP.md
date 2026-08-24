@@ -169,6 +169,9 @@ mission timers.
   Arabia. The 2003 slice renders the route only inside the production boundary.
 - Line numbers belong to dated schedule data, not permanent geography. The
   shared engine should store corridor IDs separately from period service IDs.
+  `TRANSIT_LAYERS.md` is the proposal that fills the second half of that seam —
+  a service model with a period source for Era I and a live HSL source for
+  Era II — and is a design proposal rather than canon.
 
 ### 4.3 Graph rules
 
