@@ -45,19 +45,25 @@ const B = { s: 60.1758, n: 60.1908, w: 24.9395, e: 24.9660 };
 const PHI = Math.cos(60.185 * Math.PI / 180);
 const wD = (B.e - B.w) * PHI, hD = B.n - B.s;
 const PAD = 78, MAP = 980, MW = MAP * wD / hD;
-const H = PAD + MAP + 200, W = Math.round(MW) + 2 * PAD;
+const H = PAD + MAP + 218, W = Math.round(MW) + 2 * PAD;
 const X = lon => PAD + ((lon - B.w) * PHI / wD) * MW;
 const Y = lat => PAD + ((B.n - lat) / hD) * MAP;
 
 // HSL's own, from hsl-map-publisher `colorsByMode`. Not per line — per MODE.
 const HSL = { tram: '#00985f', metro: '#ff6319', lightRail: '#0098A1' };
 
-// The legibility palette. Lines 1/3/6/7 are the values Wikidata carries for
-// them (community data, not HSL's); 8 and 9 have none there and are chosen to
-// sit in the same family without colliding with the gold the anchors use.
+// The legibility palette. Lines 1/6/7 are the values Wikidata carries for them
+// (community data, not HSL's); 8 and 9 have none there and are chosen to sit in
+// the same family without colliding with the gold the anchors use.
+//
+// 3 IS DEEPER THAN WIKIDATA'S #007fc1 on purpose. That value against 1's
+// #00b4e5 is two blues a step apart, and 1 and 3 run side by side down
+// Helsinginkatu and Siltasaarenkatu — precisely where telling them apart
+// matters. Separation between ADJACENT lines beats fidelity to a community
+// colour that HSL does not use either.
 const HUE = {
   M: '#ff6319',
-  1: '#00b4e5', 3: '#007fc1', 6: '#009757',
+  1: '#00b4e5', 3: '#0b5299', 6: '#009757',
   7: '#d5007f', 8: '#8a5cf0', 9: '#b8d430',
 };
 
@@ -273,7 +279,7 @@ function sheet(mode) {
   const LY = PAD + MAP + 40;
   s += `<text x="${PAD}" y="${LY - 18}" fill="${MUTED}" font-family="ui-monospace,monospace" font-size="11">`
     + (hsl ? `mode colour — HSL draws every tram the same green (hsl-map-publisher, colorsByMode)`
-      : `per-line colour — 1/3/6/7 are Wikidata's values, 8/9 have none published and are chosen here`)
+      : `per-line colour — 1/6/7 are Wikidata's values; 3 is deepened off it to clear line 1, and 8/9 have none published`)
     + `</text>`;
   // The first cut labelled each entry with the route name's FIRST token, which
   // gave two lines called "länsiterminaali" and one called "eira". Endpoints
@@ -289,8 +295,8 @@ function sheet(mode) {
   }
   s += `<g transform="translate(${PAD},${ly + 30})"><rect x="0" y="-6.5" width="13" height="13" fill="${INK}" stroke="${GOLD}" stroke-width="2.2" transform="rotate(45 6.5 0)"/>`;
   s += `<text x="22" y="4" fill="${MUTED}" font-family="ui-monospace,monospace" font-size="11">board anchor · stop names are on the per-line plates</text></g>`;
-  s += `<text x="${PAD}" y="${H - 22}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the fan is a drawing device — the real track is the centre of each bundle</text>`;
-  s += `<text x="${PAD}" y="${H - 8}" fill="#4a4237" font-family="ui-monospace,monospace" font-size="10.5">grey underlay = corridors that carry service, weighted by weekly trips. NOT a street map: a street with no route on it is not in it (§10.8)</text></svg>`;
+  s += `<text x="${PAD}" y="${H - 42}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the fan is a drawing device — the real track is the centre of each bundle</text>`;
+  s += `<text x="${PAD}" y="${H - 24}" fill="#4a4237" font-family="ui-monospace,monospace" font-size="10.5">grey underlay = corridors that carry service, weighted by weekly trips. NOT a street map: a street with no route on it is not in it (§10.8)</text></svg>`;
   return s;
 }
 
