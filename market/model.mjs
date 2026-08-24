@@ -52,13 +52,18 @@ export function rand01(...parts) {
 // is shaped for the full Era I roster rather than retrofitted later, and are
 // marked inactive. `base` is euros per abstract pack — a game unit, not a
 // quantity of anything.
+// OWNER RULING 2026-08-24: the scale is HALVED from the first cut. A pack of
+// piri is €60, so a good route clears €20–35 and a bad week clears nothing.
+// The point of the smaller scale is that the opening debt and the exit fund
+// loom larger against earnings without any mechanic changing — campaign
+// pressure comes from the ratio, not from the size of the numbers.
 export const GOODS = {
-  piri: { label: 'piri', tier: 3, base: 120, volatility: 0.16, bulk: 1, active: true },
-  pilvi: { label: 'pilvi', tier: 1, base: 45, volatility: 0.09, bulk: 2.2, active: false },
-  hasis: { label: 'hasis', tier: 1, base: 55, volatility: 0.10, bulk: 1.8, active: false },
-  subu: { label: 'subu', tier: 2, base: 90, volatility: 0.14, bulk: 0.7, active: false },
-  koka: { label: 'koka', tier: 4, base: 260, volatility: 0.22, bulk: 0.8, active: false },
-  hepo: { label: 'hepo', tier: 5, base: 300, volatility: 0.26, bulk: 0.8, active: false },
+  piri: { label: 'piri', tier: 3, base: 60, volatility: 0.16, bulk: 1, active: true },
+  pilvi: { label: 'pilvi', tier: 1, base: 22, volatility: 0.09, bulk: 2.2, active: false },
+  hasis: { label: 'hasis', tier: 1, base: 28, volatility: 0.10, bulk: 1.8, active: false },
+  subu: { label: 'subu', tier: 2, base: 45, volatility: 0.14, bulk: 0.7, active: false },
+  koka: { label: 'koka', tier: 4, base: 130, volatility: 0.22, bulk: 0.8, active: false },
+  hepo: { label: 'hepo', tier: 5, base: 150, volatility: 0.26, bulk: 0.8, active: false },
 };
 
 // ── a node's structural profile, DERIVED FROM ITS ROLES ─────────────────────

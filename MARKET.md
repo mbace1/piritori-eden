@@ -95,12 +95,12 @@ What that produces on the real board, unedited:
 
 | | buy | sell | spread | liquidity | why |
 |---|---:|---:|---:|---:|---|
-| Sörnäinen harbour | €73 | €60 | 20% | 5.0 | well supplied here |
-| Piritori / Kurvi | €98 | €91 | 7% | 5.3 | well supplied here |
-| Hakaniemi | €106 | €100 | 6% | 6.2 | quiet midweek |
-| Siltasaari | €146 | €116 | 23% | 2.0 | thin supply here |
-| Karhupuisto | €170 | €142 | 18% | 2.8 | thin supply here |
-| Torkkelinmäki | €186 | €132 | **34%** | **1.0** | thin supply here |
+| Sörnäinen harbour | €40 | €32 | 20% | 5.0 | well supplied here |
+| Piritori / Kurvi | €49 | €46 | 7% | 5.3 | well supplied here |
+| Hakaniemi | €53 | €50 | 6% | 6.2 | quiet midweek |
+| Siltasaari | €73 | €58 | 23% | 2.0 | thin supply here |
+| Karhupuisto | €85 | €71 | 18% | 2.8 | thin supply here |
+| Torkkelinmäki | €93 | €66 | **34%** | **1.0** | thin supply here |
 
 The harbour is cheap and deep; the residential hill is dear, illiquid and has a
 third of its value eaten by the spread. Nobody wrote those rows — they fall out
@@ -197,21 +197,27 @@ day 4  SILTASAARI → TORKKELINMÄKI     €137.1
 day 5  TORKKELINMÄKI → SILTASAARI      €64.6
 ```
 
+*(Those four lines are the original measurement, taken against the old €120
+base. They are left at the scale they were measured at rather than halved to
+match §12's ruling — the model that produced them no longer exists, so the
+numbers cannot be re-derived, and quietly rescaling a historical reading is how
+a record stops being one.)*
+
 **Saturating a market must make it stop paying, never start supplying.** So the
 factor only ever moves the side that hurts: sell into a place and it pays you
 less; buy a place out and it charges you more. The same fortnight now:
 
 ```
-day 0  SUVILAHTI → TORKKELINMÄKI       €65.0
-day 4  SÖRNÄINEN HARBOUR → LINJAT      €42.5
+day 0  SUVILAHTI → TORKKELINMÄKI       €32.5
+day 4  SÖRNÄINEN HARBOUR → LINJAT      €21.3
 day 7  nothing worth the trip
-day 10 SÖRNÄINEN HARBOUR → LINJAT       €9.2
-day 13 SUVILAHTI → TORKKELINMÄKI       €35.9
+day 10 SÖRNÄINEN HARBOUR → LINJAT       €4.6
+day 13 SUVILAHTI → TORKKELINMÄKI       €18.0
 ```
 
 Sources stay structural — the harbour is always the cheap end, because a dock
 *is* the cheap end — while destinations rotate as you use them up, margins decay
-from €65 to single figures, and **the board can be exhausted**. Day 7 offering
+from €33 to small change, and **the board can be exhausted**. Day 7 offering
 nothing worth the trip is not a bug; it is the pressure that makes missions,
 contacts and territory worth having.
 
@@ -301,23 +307,56 @@ file.
 
 ---
 
-## 12. The owner's calls
+## 12. Owner rulings, 2026-08-24
 
-1. **Base price scale.** Piri is €120 a pack, so a good trip clears €40–70 a
-   pack and the opening debt reads against that. If the debt or the exit fund
-   want a different order of magnitude, this is the single number to move.
-2. **Does the ledger show margin?** The plate computes `+€44/pack` per row. It
-   is a real convenience and it is also arithmetic the player could do. Showing
-   it makes the game about routes; hiding it makes the game about attention.
-3. **How long is a block, in decay terms?** Currently a quote is exact for one
-   block, a range for four, a rumour for twelve. That, more than any price,
-   decides how much of the game is travelling.
-4. **Should rumours be free?** They arrive by call and SMS. If they cost nothing
-   the player always has a weak signal everywhere, which is a floor on
-   ignorance. If they cost a relationship, information becomes political.
-5. **Era II goods.** §7.7 makes Alpha-PVP an uncomfortable incentive. The model
-   supports it as a row with high volatility and high harm, but the harm
-   feedback is a separate system and is not designed here.
-6. **Where does `watch` land?** The profile computes an exposure term per node
-   and the market does not use it. It belongs to §6.6 pressure, and the seam is
-   ready — but the pressure system is not this document's to write.
+1. **Base price scale: HALVED.** A pack of piri is **€60**, not €120. A good
+   route clears €20–35 a pack; a bad week clears nothing. The mechanics are
+   untouched — the point is the ratio: the opening debt and the exit fund loom
+   larger against earnings, so campaign pressure comes from proportion rather
+   than from the size of the numbers. All six goods scaled together to keep the
+   tier ordering.
+
+2. **The ledger shows the margin.** Every known row carries what you would
+   clear per pack. The arithmetic is not the interesting part — the decision
+   about stale information is.
+
+3. **No haggling, except where a mission's narrative demands it.**
+   > "just dope wars the game features otherwise" — owner
+
+   The quote is the quote. The spread carries the negotiation, and relationships
+   move the spread rather than opening a dialogue on every trade. A scripted
+   encounter may still stage a negotiation as a beat; that is authored content,
+   not a market feature, and it must never become the default path through a
+   transaction.
+
+   **This is a general steer, not one answer.** The market keeps the Dope Wars
+   feature set — check prices, buy, travel, sell — and systems that would thicken
+   the per-transaction loop need a reason beyond "it would be richer".
+
+4. **Both sides of the book are shown.** "They sell at €49 / they buy at €46."
+   A hidden second price reads as a bug rather than a mystery, and the spread is
+   how a place's character shows: Torkkelinmäki losing a third of its value to
+   the gap is the design working.
+
+---
+
+## 13. Still the owner's
+
+1. **The decay clock.** A quote is exact for one block, a range for four, a
+   rumour for twelve. That, more than any price, decides how much of the game is
+   travelling.
+2. **Are rumours free?** They arrive by call and SMS. Free means a floor on
+   ignorance everywhere; costed makes information political.
+3. **Can money buy a remote quote,** or only a range? An exact quote for a place
+   you are not standing in is the smartphone app §5 forbids.
+4. **Can a runner check a price for you?** It is the main way capacity turns
+   into information, and the best argument for hiring anyone.
+5. **Does travel time vary by route,** or is a trip a trip on a 2 km board?
+6. **Does missing a tram cost a block** in Timetable and Live modes?
+7. **Does selling volume feed §6.6 pressure** directly from the market? The
+   profile already computes a `watch` term the market does not use.
+8. **Saturation memory** — a node currently forgets about a third of your
+   footprint per day, so roughly five days to clear.
+9. **Stock across days** — is holding free and only carrying risky?
+10. **Era I goods rollout** — all five extra names at once, or in tiers?
+11. **Alpha-PVP** — model it now, or wait for the Era II gate and its harm loop?
