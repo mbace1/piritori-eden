@@ -1308,7 +1308,8 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "Hired street muscle: dark red tracksuit bottoms with side stripes, grey hooded sweatshirt, black quilted gilet, trainers. This is the 'Hired' subclass in MODULAR_CHARACTER_SYSTEM.md - planted stance, cheap gear - which was in the design and had no model. 6533 triangles, 24 bones. Arrived rigged rather than through the concept-to-Meshy route in art-library/characters/concepts-3d/SPEC.md, so it costs no credits and skips the T-pose step. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py: 6.2MB becomes 0.8MB.",
-      "sha256": "34445aad503d3076dd76b927a59431e15ab9efbc810a2509e03487ee1aa71519"
+      "sha256": "3465608f952ff912bd9cd0a3d7d9d592cc94e7b64358444f02b697c65593adff",
+      "bytes": null
     },
     {
       "id": "cast3d-hired-clips-v01",
@@ -1358,7 +1359,8 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "A second HIRED body: denim jacket, khaki trousers, white striped shirt, dreadlocks, red-gold-green accents, tan boots. Identified from its UV atlas, not its filename. 10390 triangles, 24 bones - the same rig as hired-v01, which is what makes the clip library shareable. Deliberately a VARIANT rather than a new role: SPEC.md 5 keeps one mesh per specialist because the silhouette IS the role, but 'hired' means somebody off the street, so two ordinary bodies make it more itself. Texture 2048 to 512: 6.1MB becomes 0.9MB.",
-      "sha256": "cc2cf36d31a75327f2179f93a089e49b04257effcd3ffd341a48ec10f0eeb694"
+      "sha256": "b369199d2374fbe088b72887d52fa5d994b2cd7f32b538a05cbd4021028685ec",
+      "bytes": null
     },
     {
       "id": "cast3d-hired-b-clips-v01",
@@ -1392,7 +1394,8 @@
       "baked_text": false,
       "source": "Meshy 'White Suit Enforcer' biped, supplied rigged",
       "note": "Cream-white suit jacket over a black shirt and black trousers. Reads senior and flash rather than street, which is the point: opposition currently wears the same six bodies as the player's crew, so an enemy fixer looks exactly like your fixer. CANON NOTE: MODULAR_CHARACTER_SYSTEM.md gives Enforcer a rain shell, a dark cap and a long silhouette. A white suit is none of those. It is mapped to `enforcer` because that slot had no model and this reads as the thing the slot is for - somebody who does not belong on the street - but either the brief updates or this is re-designated. 16059 triangles, 24 bones. Texture 2048 to 512: 5.1MB to 1.0MB.",
-      "sha256": "e086327c5eac2b33119cc190f7fa5bc2dfbe2b9ef1e9881fc8e2fab42aeeded5"
+      "sha256": "b1b9e3ea578b0e99a301402f8359eb638f0ad1b92346e06ac0e031e78c7d79bb",
+      "bytes": null
     },
     {
       "id": "cast3d-enforcer-clips-v01",
@@ -1426,7 +1429,8 @@
       "baked_text": true,
       "source": "Meshy 'Neon Raver Punk' biped, supplied rigged",
       "note": "Black techwear with acid-green trim, studded straps, gloves, boots. A third HIRED body - street people are what that role is. baked_text is TRUE: the garment carries the word RAVE and an acid-house smiley printed into the texture. Diegetic clothing print rather than UI, so it is not a localisation problem, but it cannot be translated and is declared rather than hidden. 20431 triangles, the heaviest of the street cast. Texture 2048 to 512: 6.1MB to 1.4MB.",
-      "sha256": "5457930b228a803bdd94ccba5f4bad5954a7410dcdbc784606607a5e642e93a5"
+      "sha256": "8689ab792f9389bddbd2cebaec893108151da59c788be8e640968917d2f9f334",
+      "bytes": null
     },
     {
       "id": "cast3d-street-raver-clips-v01",
@@ -1499,8 +1503,8 @@
       "id": "cast3d-toko-v01",
       "file": "cast3d/toko-v01.glb",
       "kind": "mesh-3d",
-      "source": "Meshy 'Smiling Noodle Chef', web-made, rig task 01a02d3f",
-      "source_version": "v01",
+      "source": "Meshy image-to-3D from art-src/meshy-input/toko-slomo-tpose-v01.png, task 01a035dd, rig task 01a035df",
+      "source_version": "v02-mesh",
       "approval_status": "semi-approved",
       "production_status": "prototype-only",
       "layer": "unit-3d",
@@ -1509,8 +1513,9 @@
       "format": "glb",
       "baked_text": true,
       "baked_ui": false,
-      "note": "Toko Slomo, the noodle chef on Vaasankatu — a named NARRATIVE.md character and the first to get a model of his own rather than a borrowed body. White shirt with rolled sleeves, black apron, black trousers, grey hair. baked_text is TRUE and it is his: the apron reads TOKO SLOMO'S NOODLES over a ramen bowl, with a red katakana patch. Diegetic signage on his own shop apron rather than UI, so it is not a localisation problem, but it cannot be translated and is declared. The gold smiling mask is CANON, not an artefact: it is the Toko face grammar — arched smiling eyes over a U-shaped mouth — carried across from the Toko Midori Games identity in the Suds-Jack repository, where 'the room where Toko takes the mask off' is a deliberate exception. Do not remove it. FETCHED BY ID, not uploaded — the first asset taken straight off the account. The API's list endpoints hide web-made tasks, but a direct GET on a task id resolves; ids are embedded in a meshy.ai /s/ share page. The RIGGED task is the one to take: the raw sculpt behind the same character is 3,084,844 triangles and 127MB, over the 320k rigging limit and too large for the remesh endpoint to accept. This one is 28765 triangles on the usual 24-bone skeleton. Texture 4096 to 512: 20.8MB to 1.9MB.",
-      "sha256": "57b40b0e01552cbf30af236f3ca32d7f34dceaadf86fff55f4141234d8c37d2f"
+      "note": "Toko Slomo, the noodle chef on Vaasankatu — a named NARRATIVE.md character and the first to get a model of his own rather than a borrowed body. White shirt with rolled sleeves, black apron, black trousers, grey hair. baked_text is TRUE and it is his: the apron reads TOKO SLOMO'S NOODLES over a ramen bowl, with a red katakana patch. Diegetic signage on his own shop apron rather than UI, so it is not a localisation problem, but it cannot be translated and is declared. The gold smiling mask is CANON, not an artefact: it is the Toko face grammar — arched smiling eyes over a U-shaped mouth — carried across from the Toko Midori Games identity in the Suds-Jack repository, where 'the room where Toko takes the mask off' is a deliberate exception. Do not remove it. FETCHED BY ID, not uploaded — the first asset taken straight off the account. The API's list endpoints hide web-made tasks, but a direct GET on a task id resolves; ids are embedded in a meshy.ai /s/ share page. The RIGGED task is the one to take: the raw sculpt behind the same character is 3,084,844 triangles and 127MB, over the 320k rigging limit and too large for the remesh endpoint to accept. This one is 28765 triangles on the usual 24-bone skeleton. Texture 4096 to 512: 20.8MB to 1.9MB. 2026-08-24: remeshed at 12k from the owner T-pose and retextured to 1024 - 28,765 tris and 2.0 MB down to 12,287 and 0.72 MB, which is the size problem this asset had. Rig and both walk/run clips regenerated; clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
+      "sha256": "a56a0d48e22c137949480e7b7249c15a62e963fe50af263a2f0a4450c6563909",
+      "bytes": null
     }
   ]
 }
