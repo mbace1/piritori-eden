@@ -525,7 +525,55 @@ it bows west through the Kallio blocks, and the 44 published shape points say so
 plainly. The feed was right and I was wrong, which is the argument for checking
 numerically instead of by eye.
 
-### 10.5 A decision this forces: stops are not anchors
+### 10.5 The routes, per line — and what they say about the 2003 inferences
+
+Geometry is not a route. `anchorSequence` on each line is the bridge: which of
+the board's anchors it passes, in order. Plate: **`ux/kallio-routes.svg`**, one
+panel per service.
+
+| | route through the board | anchors |
+|---|---|---|
+| **3** | siltasaari → hakaniemi → linjat → vaasankatu → piritori → harju → alppiharju | 7 |
+| **9** | siltasaari → hakaniemi → linjat → vaasankatu → piritori → harju | 6 |
+| **7** | siltasaari → hakaniemi → linjat → piritori → vallila | 5 |
+| **1** | harju → vaasankatu → piritori → vallila | 4 |
+| **6** | siltasaari → hakaniemi → linjat → piritori | 4 |
+| **8** | harju → vaasankatu → piritori | 3 |
+| **4** | one corner only | 1 |
+| **2, 5, 10** | clip the box, serve nothing on it | 0 |
+
+**Tram 6 corroborates its own 2003 inference, exactly.** The board guessed
+`hakaniemi → linjat_yard → piritori` and labelled it inferred. The measured
+modern route is `siltasaari → hakaniemi → linjat_yard → piritori` — the
+inference is a clean sub-sequence of it. Somebody guessed well.
+
+**Tram 3B's inference is corroborated as a CORRIDOR, but not as line 3.** The
+board guessed `hakaniemi → kallio_church → karhupuisto → harju → alppiharju`.
+Modern tram 3 does not go that way — it runs east through Linjat and Vaasankatu.
+But **modern tram 9 does**: its return direction is `… harju → kallio_church →
+karhupuisto → hakaniemi → siltasaari`. So the 3B's inferred Kallio loop is a
+real tram corridor that still carries a tram, numbered 9 today.
+
+That is §2b's claim — *the corridor survives even where the service number does
+not* — arriving as evidence rather than assertion. It also means the Era I 3B
+can be drawn on real geometry with a clear conscience: the rails are there, and
+they were there then.
+
+### 10.6 `anchorSequence` means PASSES, not CALLS AT — and for the metro that is everything
+
+The metro's sequence reads `siltasaari → hakaniemi → karhupuisto →
+torkkelinmäki → piritori`, and only two of those are stations. **The tunnel runs
+under Karhupuisto, Torkkelinmäki and Kallion kirkko and stops at none of them.**
+In the Kallio band the metro calls at Hakaniemi and Sörnäinen, full stop.
+
+A 150 m proximity test cannot know the difference, so the field says so in the
+data itself (`source.anchorSequenceMeans`). **A game that lets you board the
+metro at Karhupuisto is wrong**, and it would be an easy and completely
+invisible bug to write — the sequence looks like a stopping pattern and is not
+one. Calling points come from `stops.txt` and the route's stop list, which is
+the next extract if the layer is built.
+
+### 10.7 A decision this forces: stops are not anchors
 
 287 stops against 13 anchors. Drawing only anchors keeps the board clean and
 throws away the recognisability that is the whole point; making every stop
@@ -537,7 +585,7 @@ render as small marks on L2 with their real names — Hakaniemi reads as Hakanie
 plays a curated one, which is what `MAP.md` §2's production boundary already
 does for geography.
 
-### 10.6 What is still not here
+### 10.8 What is still not here
 
 **The feed is dated 2022-02-22.** It is real HSL data and right for geometry,
 which barely moves, but it is not this week's timetable and must not be

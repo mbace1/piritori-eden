@@ -26,6 +26,8 @@
  * Licence: the feed is HSL's, CC BY 4.0. Attribution rides in the output.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+
+const rad = d => d * Math.PI / 180;
 import path from 'node:path';
 
 // The production boundary of MAP.md §2, padded a little so a line that leaves
@@ -137,6 +139,37 @@ function simplify(line, tol = 2e-5) {
   return line.filter((_, i) => keep[i]);
 }
 
+// ── which board anchors does each line actually pass, and in what order ──
+// This is the bridge from geometry to game: the board thinks in anchors, and a
+// polyline does not. 150 m is the tolerance, and it is generous on purpose —
+// the anchors are "representative public area" positions, not stop positions.
+//
+// It is also the only honest way to compare a modern route against the board's
+// inferred 2003 ones: `periodServices` in the board JSON is a sequence of
+// anchors, so putting the modern lines in the same shape makes the two
+// directly readable against each other.
+const board = JSON.parse(readFileSync(path.join(path.dirname(out), 'kallio-era1-2003-v1.json'), 'utf8'));
+const PHI = rad(60.185);
+const xy = p => [rad(p[1]) * Math.cos(PHI) * 6371000, rad(p[0]) * 6371000];
+function segDist(P, A, B) {
+  const p = xy(P), a = xy(A), b = xy(B);
+  const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+  const t = L ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L)) : 0;
+  return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
+}
+function anchorsAlong(shape, tol = 150) {
+  const hits = [];
+  for (const a of board.anchors) {
+    let best = Infinity, at = 0;
+    for (let i = 1; i < shape.length; i++) {
+      const d = segDist(a.wgs84, shape[i - 1], shape[i]);
+      if (d < best) { best = d; at = i; }
+    }
+    if (best <= tol) hits.push({ anchor: a.id, at, m: Math.round(best) });
+  }
+  return hits.sort((x, y) => x.at - y.at).map(h => ({ anchor: h.anchor, m: h.m }));
+}
+
 const lines = [];
 for (const [k, id] of best) {
   const u = shapeUse.get(id);
@@ -152,6 +185,7 @@ for (const [k, id] of best) {
     trips: u.n,
     points: simp.length,
     droppedFrom: raw.length,
+    anchorSequence: anchorsAlong(simp),
     shape: simp,
   });
 }
@@ -181,6 +215,10 @@ const doc = {
     feed: 'Helsingin seudun liikenne (HSL) GTFS',
     licence: 'CC BY 4.0',
     attribution: '© Helsingin seudun liikenne (HSL)',
+    anchorSequenceMeans: 'PASSES WITHIN 150 m OF, not CALLS AT. For the metro the '
+      + 'distinction is total: the tunnel runs under Karhupuisto, Torkkelinmäki and '
+      + 'Kallion kirkko and stops at none of them — in the Kallio band it calls only at '
+      + 'Hakaniemi and Sörnäinen. A game that lets you board at Karhupuisto is wrong.',
     note: 'Modern feed. Era II geometry outright; Era I under TRANSIT_LAYERS.md §2b — '
         + 'the Kallio metro is unchanged, and the trams inherit corridor geometry that '
         + 'survived the 2013 renumbering. The 2003 SERVICE pattern is periodServices in '

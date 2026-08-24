@@ -7,6 +7,7 @@
   "feed": "Helsingin seudun liikenne (HSL) GTFS",
   "licence": "CC BY 4.0",
   "attribution": "© Helsingin seudun liikenne (HSL)",
+  "anchorSequenceMeans": "PASSES WITHIN 150 m OF, not CALLS AT. For the metro the distinction is total: the tunnel runs under Karhupuisto, Torkkelinmäki and Kallion kirkko and stops at none of them — in the Kallio band it calls only at Hakaniemi and Sörnäinen. A game that lets you board at Karhupuisto is wrong.",
   "note": "Modern feed. Era II geometry outright; Era I under TRANSIT_LAYERS.md §2b — the Kallio metro is unchanged, and the trams inherit corridor geometry that survived the 2013 renumbering. The 2003 SERVICE pattern is periodServices in the board JSON and is not touched here."
  },
  "boundingBox": {
@@ -26,6 +27,28 @@
    "trips": 940,
    "points": 44,
    "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
    "shape": [
     [
      60.170016,
@@ -214,6 +237,32 @@
    "trips": 929,
    "points": 43,
    "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
    "shape": [
     [
      60.187303,
@@ -398,6 +447,28 @@
    "trips": 908,
    "points": 44,
    "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
    "shape": [
     [
      60.170016,
@@ -586,6 +657,32 @@
    "trips": 908,
    "points": 43,
    "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
    "shape": [
     [
      60.187303,
@@ -770,6 +867,28 @@
    "trips": 3,
    "points": 44,
    "droppedFrom": 69,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 26
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 35
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 73
+    }
+   ],
    "shape": [
     [
      60.170016,
@@ -958,6 +1077,32 @@
    "trips": 14,
    "points": 43,
    "droppedFrom": 67,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 28
+    },
+    {
+     "anchor": "torkkelinmaki",
+     "m": 62
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 11
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 134
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 11
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 52
+    }
+   ],
    "shape": [
     [
      60.187303,
@@ -1142,6 +1287,24 @@
    "trips": 563,
    "points": 37,
    "droppedFrom": 100,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 107
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 101
+    },
+    {
+     "anchor": "piritori",
+     "m": 18
+    },
+    {
+     "anchor": "vallila",
+     "m": 135
+    }
+   ],
    "shape": [
     [
      60.170428,
@@ -1302,6 +1465,24 @@
    "trips": 569,
    "points": 37,
    "droppedFrom": 107,
+   "anchorSequence": [
+    {
+     "anchor": "vallila",
+     "m": 134
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 108
+    }
+   ],
    "shape": [
     [
      60.199968,
@@ -1462,6 +1643,7 @@
    "trips": 796,
    "points": 8,
    "droppedFrom": 9,
+   "anchorSequence": [],
    "shape": [
     [
      60.170428,
@@ -1506,6 +1688,12 @@
    "trips": 14,
    "points": 35,
    "droppedFrom": 61,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 66
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -1658,6 +1846,7 @@
    "trips": 1408,
    "points": 15,
    "droppedFrom": 23,
+   "anchorSequence": [],
    "shape": [
     [
      60.170428,
@@ -1730,6 +1919,12 @@
    "trips": 11,
    "points": 32,
    "droppedFrom": 63,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 66
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -1870,6 +2065,36 @@
    "trips": 696,
    "points": 43,
    "droppedFrom": 103,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 66
+    },
+    {
+     "anchor": "alppiharju",
+     "m": 14
+    }
+   ],
    "shape": [
     [
      60.170254,
@@ -2054,6 +2279,36 @@
    "trips": 690,
    "points": 50,
    "droppedFrom": 106,
+   "anchorSequence": [
+    {
+     "anchor": "alppiharju",
+     "m": 14
+    },
+    {
+     "anchor": "harju",
+     "m": 66
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 101
+    },
+    {
+     "anchor": "piritori",
+     "m": 18
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 17
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 40
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
    "shape": [
     [
      60.192621,
@@ -2266,6 +2521,12 @@
    "trips": 5,
    "points": 27,
    "droppedFrom": 52,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 66
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -2386,6 +2647,12 @@
    "trips": 21,
    "points": 35,
    "droppedFrom": 61,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 66
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -2538,6 +2805,7 @@
    "trips": 126,
    "points": 3,
    "droppedFrom": 3,
+   "anchorSequence": [],
    "shape": [
     [
      60.170254,
@@ -2562,6 +2830,7 @@
    "trips": 66,
    "points": 14,
    "droppedFrom": 17,
+   "anchorSequence": [],
    "shape": [
     [
      60.175939,
@@ -2630,6 +2899,24 @@
    "trips": 659,
    "points": 42,
    "droppedFrom": 90,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    }
+   ],
    "shape": [
     [
      60.170254,
@@ -2810,6 +3097,24 @@
    "trips": 25,
    "points": 51,
    "droppedFrom": 96,
+   "anchorSequence": [
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 17
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 40
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -3026,6 +3331,28 @@
    "trips": 1382,
    "points": 44,
    "droppedFrom": 104,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "vallila",
+     "m": 135
+    }
+   ],
    "shape": [
     [
      60.170254,
@@ -3214,6 +3541,28 @@
    "trips": 1372,
    "points": 49,
    "droppedFrom": 108,
+   "anchorSequence": [
+    {
+     "anchor": "vallila",
+     "m": 134
+    },
+    {
+     "anchor": "piritori",
+     "m": 139
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 17
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 40
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
    "shape": [
     [
      60.19896,
@@ -3422,6 +3771,20 @@
    "trips": 640,
    "points": 36,
    "droppedFrom": 78,
+   "anchorSequence": [
+    {
+     "anchor": "harju",
+     "m": 107
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 101
+    },
+    {
+     "anchor": "piritori",
+     "m": 18
+    }
+   ],
    "shape": [
     [
      60.182971,
@@ -3578,6 +3941,20 @@
    "trips": 27,
    "points": 39,
    "droppedFrom": 84,
+   "anchorSequence": [
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 107
+    }
+   ],
    "shape": [
     [
      60.199893,
@@ -3746,6 +4123,32 @@
    "trips": 709,
    "points": 49,
    "droppedFrom": 111,
+   "anchorSequence": [
+    {
+     "anchor": "siltasaari",
+     "m": 3
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 38
+    },
+    {
+     "anchor": "linjat_yard",
+     "m": 18
+    },
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 65
+    }
+   ],
    "shape": [
     [
      60.170254,
@@ -3954,6 +4357,36 @@
    "trips": 37,
    "points": 54,
    "droppedFrom": 112,
+   "anchorSequence": [
+    {
+     "anchor": "vaasankatu",
+     "m": 100
+    },
+    {
+     "anchor": "piritori",
+     "m": 17
+    },
+    {
+     "anchor": "harju",
+     "m": 125
+    },
+    {
+     "anchor": "kallio_church",
+     "m": 122
+    },
+    {
+     "anchor": "karhupuisto",
+     "m": 16
+    },
+    {
+     "anchor": "hakaniemi",
+     "m": 51
+    },
+    {
+     "anchor": "siltasaari",
+     "m": 5
+    }
+   ],
    "shape": [
     [
      60.199893,
