@@ -717,3 +717,126 @@ can reach HSL directly.
 **Era I service patterns are still `periodServices`** — this changes nothing
 about them. The geometry is modern, used for Era I under §2b's argument; the
 2003 lines that ran on it stay inferred, and stay labelled as inferred.
+
+---
+
+## 11. Era II — the bigger map, and the water that is still missing
+
+Owner direction, 2026-08-24: water on the Era I map and then lock it; then the
+same level of content for an Era II Helsinki covering **Tullinpuomi,
+Postipuisto, Kalasatama/Hermanni and the southern parts**.
+
+### 11.1 The Era II extent
+
+`60.148–60.218 N, 24.895–24.995 E` — **5.53 × 7.79 km**, which holds every area
+named and the whole southern peninsula: Postipuisto and Pohjois-Pasila at the
+top, Tullinpuomi and Laakso west, Kalasatama, Hermanni and Arabianranta east,
+and Kamppi, Kluuvi, Punavuori, Eira, Ullanlinna, Kaivopuisto, Katajanokka,
+Jätkäsaari and Hernesaari south.
+
+| | Era I | Era II |
+|---|---|---|
+| extent | 2.21 × 2.00 km | **5.53 × 7.79 km** |
+| rail | 26 line directions | **54** — metro, 13 commuter rail, 10 tram, 2 ferry |
+| stops | 287 | **766** |
+| corridors | 229 | **625** |
+| orientation | 13 board anchors | **41 city sub-district names** |
+| colour | one hue per line | **by MODE** |
+
+**Colour had to change, and that is not a compromise.** Era I has seven services
+and a hue each is readable. Era II has 27 across four modes, which no palette
+survives — so it goes back to HSL's own rule (§9.1): tram green, metro orange,
+rail purple, ferry blue, and the NUMBER does the wayfinding. The sheets are
+`ux/kallio-master.svg` and `ux/helsinki-era2-master.svg`, from **one renderer**
+— `master-plate.mjs [--era2|--both]`. A second file would have been this repo
+growing two lineages of one thing again.
+
+**Fanning is an Era I device.** It exists so differently-coloured lines over one
+corridor can be told apart. Applied to Era II it drew a 44 px purple ribbon
+through Pasila where there are two rails: thirteen commuter lines share that
+track, and fanning them described the legend instead of the city. Era II draws
+flat, so lines sharing a track overdraw into one line — which is the truth.
+
+The extractors are the same tools with a wider window (`--box s,w,n,e`,
+`--modes`, `--board none`); Era I's outputs were re-run and are byte-identical.
+One latent trap closed on the way: the depot-run filter was `/[HS]$/`, which is
+safe here only because no commuter-rail line is currently lettered H or S. HSL
+has run an H. It is `/\d[HS]$/` now — a tram short working is a digit then the
+letter.
+
+### 11.2 Water: the layer is built, the data is blocked
+
+**The maps have a water layer and no water in it**, and the reason is worth
+recording precisely rather than as "couldn't get it".
+
+Every OpenStreetMap source is refused by this environment's **organisation
+egress policy** — `overpass-api.de` and four mirrors, `api.openstreetmap.org`,
+`download.geofabrik.de`, `tile.openstreetmap.org`, `cdn.digitransit.fi`,
+`osmdata.openstreetmap.de`, and `wikidata.org` with them. The proxy returns 403
+on CONNECT and its own README says to report a policy denial rather than route
+around it. `raw.githubusercontent.com` is the only host that answers, which is
+how the GTFS arrived.
+
+So the layer is wired instead of faked:
+
+- **`map/tools/water-import.mjs`** takes Overpass JSON and writes the file.
+- **`master-plate.mjs` draws it the moment it exists** and prints `NO WATER`
+  and says so in its own gaps column until then.
+- Nothing invents a coastline. A hand-drawn bay would look right and be a
+  fabrication in a document whose whole argument is provenance.
+
+Run this anywhere with ordinary network access, save the JSON, and import it:
+
+```
+[out:json][timeout:120];
+(
+  way ["natural"="water"](60.148,24.895,60.218,24.995);
+  rel ["natural"="water"](60.148,24.895,60.218,24.995);
+  way ["waterway"="riverbank"](60.148,24.895,60.218,24.995);
+  way ["natural"="coastline"](60.148,24.895,60.218,24.995);
+);
+out geom;
+```
+
+```
+node map/tools/water-import.mjs water.json map/helsinki-era2-water-v1.json
+node map/tools/water-import.mjs water.json map/kallio-water-v1.json --box 60.170,24.930,60.200,24.980
+node map/tools/master-plate.mjs --both
+```
+
+**The one thing to know about OSM water**, because it is a trap that produces a
+confident wrong picture: inland water — Töölönlahti, Eläintarhanlahti — is
+closed ways tagged `natural=water` and fills cleanly. **The open sea is not.**
+It is `natural=coastline`, a directed OPEN line with land on its left and the
+sea only implied. Closing it into a polygon puts a lid across the harbour mouth.
+So the importer keeps `areas` (filled) and `edges` (stroked) apart, and a
+stroked coastline already gives the board its silhouette. Filling the sea needs
+the assembled water polygons from `osmdata.openstreetmap.de` clipped to the box;
+they drop in as more `areas` with no schema change.
+
+### 11.3 A wrong idea, recorded because it looked right
+
+Helsinki's official **sub-district polygons** are reachable (a mirror of the
+city's open geodata on GitHub), and the first plan was to take water as their
+complement: districts tile the land, so whatever is not in one is sea.
+
+**They are administrative areas and they include the sea.** Tested: points in
+Eläintarhanlahti, Töölönlahti, Sörnäistenselkä, Kruunuvuorenselkä and the open
+sea south of the city all fall *inside* a district polygon — Taka-Töölö, Kluuvi,
+Sompasaari, Mustikkamaa-Korkeasaari, Länsisaaret. Their union is not land and
+their complement is not water.
+
+What they are good for is **names**, and Era II needed those badly: with no
+anchor board, the sheet was a beautiful tangle you could not navigate.
+`map/tools/districts-extract.mjs` keeps only a label point per district — the
+**area-weighted (shoelace) centroid of the largest ring**, not a vertex mean,
+because a coastal district carries hundreds of points along its shoreline and
+three across the inland side, and a vertex mean drags the label out to sea.
+
+### 11.4 Era I status
+
+Era I is **complete except for water** and unchanged by any of the above. Its
+extract, its seven plates, its network sheets and its master sheet all reproduce
+byte-identically after the extractors were parameterised. It is ready to lock
+the moment the water file lands — that is one Overpass query and one import, and
+it changes no geometry that is already there.

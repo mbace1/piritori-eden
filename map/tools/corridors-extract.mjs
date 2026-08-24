@@ -38,11 +38,25 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const rad = d => d * Math.PI / 180;
-const BOX = { s: 60.170, n: 60.200, w: 24.930, e: 24.980 };
 
-const [dir, out = 'map/kallio-corridors-v1.json'] = process.argv.slice(2);
+// `--box s,w,n,e` for the Era II extent — same tool, bigger window. See the
+// note in gtfs-extract.mjs: two eras must not mean two extractors.
+const args = process.argv.slice(2);
+const flag = n => { const i = args.indexOf(n); return i < 0 ? null : args[i + 1]; };
+const positional = args.filter((a, i) =>
+  !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--')));
+const boxArg = flag('--box');
+const BOX = boxArg
+  ? (([s, w, n, e]) => ({ s: +s, w: +w, n: +n, e: +e }))(boxArg.split(','))
+  : { s: 60.170, n: 60.200, w: 24.930, e: 24.980 };
+if (Object.values(BOX).some(v => !Number.isFinite(v))) {
+  console.error('--box wants s,w,n,e as four numbers');
+  process.exit(1);
+}
+
+const [dir, out = 'map/kallio-corridors-v1.json'] = positional;
 if (!dir) {
-  console.error('usage: node map/tools/corridors-extract.mjs <unzipped-gtfs-dir> [out.json]');
+  console.error('usage: node map/tools/corridors-extract.mjs <gtfs-dir> [out.json] [--box s,w,n,e]');
   process.exit(1);
 }
 

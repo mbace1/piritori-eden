@@ -32,11 +32,29 @@ import path from 'node:path';
 
 // The production boundary of MAP.md §2, padded a little so a line that leaves
 // the board and comes back does not get chopped into two fragments.
-const BOX = { s: 60.170, n: 60.200, w: 24.930, e: 24.980 };
+//
+// ERA II NEEDS A DIFFERENT BOX, not a different tool. `--box s,w,n,e` overrides
+// it and `--board <file|none>` points the anchor test somewhere else, because
+// the Era II extent has no anchor board of its own yet. Forking this file for
+// the bigger map would have given the two eras two extractors that drift.
+const args = process.argv.slice(2);
+const flag = n => { const i = args.indexOf(n); return i < 0 ? null : args[i + 1]; };
+const positional = args.filter((a, i) =>
+  !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--')));
 
-const [dir, out = 'map/kallio-rail-v1.json'] = process.argv.slice(2);
+const boxArg = flag('--box');
+const BOX = boxArg
+  ? (([s, w, n, e]) => ({ s: +s, w: +w, n: +n, e: +e }))(boxArg.split(','))
+  : { s: 60.170, n: 60.200, w: 24.930, e: 24.980 };
+if (Object.values(BOX).some(v => !Number.isFinite(v))) {
+  console.error('--box wants s,w,n,e as four numbers');
+  process.exit(1);
+}
+const boardArg = flag('--board');
+
+const [dir, out = 'map/kallio-rail-v1.json'] = positional;
 if (!dir) {
-  console.error('usage: node map/tools/gtfs-extract.mjs <unzipped-gtfs-dir> [out.json]');
+  console.error('usage: node map/tools/gtfs-extract.mjs <gtfs-dir> [out.json] [--box s,w,n,e] [--board file|none] [--modes tram,metro,rail,ferry]');
   process.exit(1);
 }
 
@@ -71,14 +89,25 @@ function split(line) {
 
 const inBox = (lat, lon) => lat >= BOX.s && lat <= BOX.n && lon >= BOX.w && lon <= BOX.e;
 
-// ── routes: tram (0) and metro (1) only ──────────────────────────────────
-// Buses are Era II's problem and there are hundreds of them (§9.1). The `H`
-// and `S` suffixed variants are depot runs and short workings — real services,
-// but not the line anybody names, so they are dropped from the drawn map.
-const MODE = { 0: 'tram', 1: 'metro' };
+// ── routes: which modes get drawn as LINES ───────────────────────────────
+// Era I is tram and metro. Era II covers Pasila and Postipuisto, where the
+// commuter rail is not a detail — so `--modes tram,metro,rail,ferry` widens it.
+// Buses stay out of this file in BOTH eras: there are hundreds and §9.1 draws
+// them thinner and un-numbered; they reach the map through the corridor
+// underlay, which is the honest place for a mode you cannot label.
+//
+// HSL uses the EXTENDED route types. 109 is the commuter rail here, not 2.
+const MODE_ALL = { 0: 'tram', 1: 'metro', 2: 'rail', 109: 'rail', 4: 'ferry' };
+const wantModes = new Set((flag('--modes') || 'tram,metro').split(','));
+const MODE = Object.fromEntries(
+  Object.entries(MODE_ALL).filter(([, m]) => wantModes.has(m)));
 const routes = rows('routes.txt')
   .filter(r => MODE[r.route_type])
-  .filter(r => !/[HS]$/.test(r.route_short_name) || /^M/.test(r.route_short_name));
+  // Tram depot runs and short workings are "1H", "10H", "4S" — a DIGIT then the
+  // letter. The rule used to be a bare /[HS]$/, which happens to be safe in this
+  // feed only because no commuter-rail line is currently lettered H or S; HSL
+  // has run an H, and it would have vanished with no error. Require the digit.
+  .filter(r => !/\d[HS]$/.test(r.route_short_name));
 const routeById = new Map(routes.map(r => [r.route_id, r]));
 
 // ── trips: one shape per route per direction ─────────────────────────────
@@ -157,7 +186,12 @@ function simplify(line, tol = 2e-5) {
 // inferred 2003 ones: `periodServices` in the board JSON is a sequence of
 // anchors, so putting the modern lines in the same shape makes the two
 // directly readable against each other.
-const board = JSON.parse(readFileSync(path.join(path.dirname(out), 'kallio-era1-2003-v1.json'), 'utf8'));
+// No board = no anchor sequences. That is the honest Era II state: the bigger
+// map has real geometry and real stops and NOT YET a set of authored anchors,
+// and an empty anchorSequence says so rather than pretending.
+const boardPath = boardArg === 'none' ? null
+  : path.join(path.dirname(out), boardArg || 'kallio-era1-2003-v1.json');
+const board = boardPath ? JSON.parse(readFileSync(boardPath, 'utf8')) : { anchors: [] };
 const PHI = rad(60.185);
 const xy = p => [rad(p[1]) * Math.cos(PHI) * 6371000, rad(p[0]) * 6371000];
 function segDist(P, A, B) {
