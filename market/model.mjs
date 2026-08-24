@@ -358,3 +358,109 @@ export function present(trueOffer, level, blocks = 0, seed = 'piritori', nodeId 
     causeText: trueOffer.causeText,
   };
 }
+
+// ── exposure ────────────────────────────────────────────────────────────────
+/**
+ * How much attention are you drawing, right now, and WHY?
+ *
+ * OWNER DIRECTION 2026-08-24, and the whole subsystem comes out of it:
+ *
+ *   "there may be situations you need to drink with others, smoke weed, or
+ *    other drug use. This will give police a good reason to talk to you at
+ *    certain spots, travel and central spots are always a risk at day time
+ *    drunk, night time almost a requirement. You can lose your bag drunk. If
+ *    you travel with a big crew and weapons it can arouse suspicion etc"
+ *
+ * THE SAME STRUCTURAL RULE AS PRICE: exposure is a product of NAMED factors and
+ * the dominant one is the reason the player is told. A risk system that cannot
+ * say why is indistinguishable from the game cheating, and the point of §7c is
+ * that a player can repeat the reason afterwards — *somebody saw me and there
+ * was a car on Hämeentie* — rather than shrugging.
+ *
+ * THE SHARP BIT, which is §2.1's pillar rather than a balance number: **the same
+ * state is camouflage or a flare depending on where and when.** Drunk at
+ * midnight in Kallio is what everyone around you is; drunk at eleven in the
+ * morning on a transfer platform is the one thing in the frame that is wrong.
+ * So condition is never read on its own — only against the hour and the place.
+ *
+ * DESIGN_LOCKS §9.1 keeps this abstract: a condition is a STATE with named
+ * effects on attention and on what you can keep hold of. The model has no dose,
+ * no substance quantity, no effect curve and nowhere to put one. It knows that
+ * you are drunk the way a doorman knows.
+ */
+export const CONDITION = {
+  clear: { label: 'clear', slip: 0 },
+  drinking: { label: 'drinking', slip: 0.02 },
+  drunk: { label: 'drunk', slip: 0.12 },
+  stoned: { label: 'stoned', slip: 0.06 },
+};
+
+const NIGHT = b => b === 'night' || b === 'evening';
+
+/** @returns {{score, band, cause, causeText, factors, slipChance}} */
+export function exposure(a, ctx = {}) {
+  const prof = nodeProfile(a);
+  const block = ctx.block || 'day';
+  const cond = CONDITION[ctx.condition || 'clear'] || CONDITION.clear;
+  const F = [];
+
+  // The place's own appetite for police. Already computed from its roles —
+  // transfer and market nodes score high because that is where people are.
+  F.push([prof.watch, 'place',
+    prof.watch > 1.15 ? `${a.label.toLowerCase()} draws police`
+      : prof.watch < 0.85 ? 'quiet corner' : 'ordinary street']);
+
+  // Condition, READ AGAINST THE HOUR AND THE PLACE. This is the one factor that
+  // can go either way, and it is the reason the subsystem is interesting.
+  if (cond !== CONDITION.clear) {
+    const busy = prof.watch > 1.05;
+    let m, text;
+    if (NIGHT(block)) {
+      m = busy ? 0.95 : 1.0;
+      text = `${cond.label} at night — so is everyone`;
+    } else {
+      m = busy ? 1.75 : 1.25;
+      text = busy ? `${cond.label} in daylight, somewhere with eyes`
+        : `${cond.label} in daylight`;
+    }
+    F.push([m, 'condition', text]);
+  }
+
+  // A crew is a shape people notice. Two is a pair; five is a firm.
+  const crew = Math.max(1, ctx.crew || 1);
+  if (crew > 2) F.push([1 + (crew - 2) * 0.22, 'crew', `${crew} of you moving together`]);
+
+  // Weapons are the loudest thing you can be carrying that is not the goods.
+  if (ctx.armed) F.push([1.5, 'armed', 'somebody is carrying']);
+
+  // What you are holding. Modest — the goods are not the tell, the behaviour is.
+  const units = ctx.units || 0;
+  if (units > 0) F.push([1 + Math.min(0.35, units * 0.02), 'load', `holding ${units}`]);
+
+  // A TELL is per good and per context, and it is answered by KIT rather than by
+  // knowing anything. §7c: the game may name the tell and name the remedy, and
+  // must never describe the method.
+  if (ctx.tell && !ctx.kit) F.push([1.4, 'tell', ctx.tell]);
+
+  let score = 1;
+  for (const [m] of F) score *= m;
+  score = clamp(score, 0.35, 4);
+
+  let best = null;
+  for (const [m, id, text] of F) {
+    const w = Math.abs(Math.log(m));
+    if (!best || w > best.w) best = { w, id, text };
+  }
+  const quiet = !best || best.w < 0.05;
+
+  return {
+    score: +score.toFixed(3),
+    band: score < 0.8 ? 'unremarkable' : score < 1.3 ? 'noticed' : score < 2.2 ? 'watched' : 'a good reason to talk to you',
+    cause: quiet ? 'ordinary' : best.id,
+    causeText: quiet ? 'nothing about you stands out' : best.text,
+    factors: Object.fromEntries(F.map(([m, id]) => [id, +m.toFixed(3)])),
+    // Losing the bag is NOT exposure — it is its own named accident, and it is
+    // the one consequence of being drunk that has nothing to do with police.
+    slipChance: cond.slip,
+  };
+}

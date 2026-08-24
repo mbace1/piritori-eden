@@ -10,7 +10,7 @@
  * promise nobody checks drifts.
  */
 import { readFileSync } from 'node:fs';
-import { GOODS, nodeProfile, offer, present, decay, INFO } from '../model.mjs';
+import { GOODS, nodeProfile, offer, present, decay, INFO, exposure, CONDITION } from '../model.mjs';
 
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const anchors = board.anchors;
@@ -146,6 +146,47 @@ const ok = (cond, what) => { if (cond) { pass++; } else { fail++; console.log(' 
   ok(best && best.margin > 5, `a worthwhile route exists (${best.from} → ${best.to}, €${best.margin.toFixed(2)}/pack)`);
   const share = profitable / pairs;
   ok(share < 0.5, `most pairs are NOT worth the trip (${(share * 100).toFixed(0)}% profitable)`);
+}
+
+// ── 8. exposure: the same state is camouflage or a flare ────────────────────
+{
+  const busy = anchors.find(a => a.id === 'piritori');
+  const quiet = anchors.find(a => a.id === 'torkkelinmaki');
+
+  const dayDrunk = exposure(busy, { block: 'day', condition: 'drunk' });
+  const nightDrunk = exposure(busy, { block: 'night', condition: 'drunk' });
+  ok(dayDrunk.score > nightDrunk.score * 1.4,
+    `drunk at midday somewhere with eyes is far worse than drunk at night (${dayDrunk.score} vs ${nightDrunk.score})`);
+  ok(exposure(quiet, { block: 'day', condition: 'drunk' }).score < 1,
+    'drunk on a quiet residential hill is unremarkable');
+
+  const alone = exposure(busy, { block: 'day' });
+  ok(exposure(busy, { block: 'day', crew: 5 }).score > alone.score, 'a crew is a shape people notice');
+  ok(exposure(busy, { block: 'day', armed: true }).score > alone.score, 'weapons raise exposure');
+  ok(exposure(busy, { block: 'day', units: 10 }).score > alone.score, 'a bigger load draws more');
+
+  const tell = { block: 'day', units: 4, tell: 'it can be smelled on a tram' };
+  ok(exposure(busy, tell).score > exposure(busy, { ...tell, kit: true }).score,
+    'kit answers a tell');
+
+  // Same rule as price: the stated cause must BE the dominant factor.
+  let bad = 0, seen = new Set();
+  for (const a of anchors) for (const block of BLOCKS) {
+    for (const condition of Object.keys(CONDITION)) for (const crew of [1, 4]) {
+      const e = exposure(a, { block, condition, crew, units: 6, armed: crew > 2 });
+      seen.add(e.band);
+      if (e.cause === 'ordinary') continue;
+      const top = Object.entries(e.factors)
+        .reduce((m, kv) => Math.abs(Math.log(kv[1])) > Math.abs(Math.log(m[1])) ? kv : m);
+      if (e.cause !== top[0]) bad++;
+      if (!(e.score >= 0.35 && e.score <= 4)) bad++;
+    }
+  }
+  ok(bad === 0, 'exposure names its dominant factor and stays inside its clamp');
+  ok(seen.size >= 3, `the bands are actually reachable (${[...seen].length} of 4 seen)`);
+
+  ok(CONDITION.drunk.slip > CONDITION.stoned.slip && CONDITION.clear.slip === 0,
+    'losing the bag is its own accident, worst when drunk');
 }
 
 console.log(`\nmarket model — ${pass} passed, ${fail} failed\n`);

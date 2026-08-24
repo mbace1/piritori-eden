@@ -14,7 +14,7 @@ never produced a number is a wish:
 
 ```
 market/model.mjs              the model — one pure function, no dependencies
-market/test/model.mjs         the gate — 19 checks, bare node
+market/test/model.mjs         the gate — 28 checks, bare node
 market/tools/price-table.mjs  what the board quotes today, as a table
 market/tools/market-plate.mjs ux/market-era1.svg — what the player sees
 ```
@@ -352,6 +352,65 @@ nothing to do with you is exactly the city the fiction describes.
 
 ---
 
+## 7d. Condition, crew and the shape you cut
+
+> "there may be situations you need to drink with others, smoke weed, or other
+> drug use. This will give police a good reason to talk to you at certain spots,
+> travel and central spots are always a risk at day time drunk, night time
+> almost a requirement. You can lose your bag drunk. If you travel with a big
+> crew and weapons it can arouse suspicion etc" — owner, 2026-08-24
+
+`exposure()` is built and gated. It uses the **same structural rule as price** —
+a product of named factors, and the dominant one is the reason the player is
+told. A risk system that cannot say why is indistinguishable from the game
+cheating, and §7c's whole point is that you can repeat the reason afterwards.
+
+**The sharp part is that the same state is camouflage or a flare depending on
+where and when.** That is pillar §2.1 — the ordinary city and the hidden market
+share one body — expressed as a number rather than as a mood:
+
+| where you are | when | state | reads as | why |
+|---|---|---|---|---|
+| Piritori / Kurvi | midday | drunk, holding 10 | **a good reason to talk to you** ×3.25 | drunk in daylight, somewhere with eyes |
+| Piritori / Kurvi | night | drunk, holding 10 | watched ×1.77 | piritori draws police |
+| Torkkelinmäki | midday | drunk | **unremarkable** ×0.63 | quiet corner |
+| Hakaniemi | midday | five of you, armed | a good reason to talk to you ×3.98 | five of you moving together |
+| Hakaniemi | midday | alone, clear | watched ×1.60 | hakaniemi draws police |
+
+Drunk at midnight in Kallio is what everyone around you is. Drunk at eleven in
+the morning on a transfer platform is the one thing in the frame that is wrong.
+**So condition is never read on its own — only against the hour and the place.**
+That also means the social obligations the owner describes are not pure cost: a
+night you were made to drink through is a night you are harder to pick out.
+
+The factors, all of them already available:
+
+| factor | from |
+|---|---|
+| the place's appetite for police | `watch`, computed per anchor from its roles |
+| the hour | the campaign clock |
+| condition × hour × place | the table above |
+| crew size | two is a pair, five is a firm |
+| visible weapons | the loudest thing you can carry that is not the goods |
+| what you are holding | modest — the behaviour is the tell, not the load |
+| a per-good tell, answered by kit | §7c |
+
+**Losing the bag is not exposure.** It is its own named accident with its own
+roll (`slipChance`), worst when drunk, and it is the one consequence of the
+evening that has nothing to do with police. That separation matters: a system
+where every bad thing is "heat" teaches players that the world has one dial.
+
+### Where this meets the lock, again
+
+Same flag as §7c and the same resolution. `DESIGN_LOCKS.md` §9.1 bars the
+abstraction from adding *consumption*. So a condition here is a **state with
+named effects on attention and on what you can keep hold of** — the model has no
+dose, no quantity, no effect curve and nowhere to put one. **It knows you are
+drunk the way a doorman knows.** Everything it does with that is social:
+who notices you, and whether you still have your bag in the morning.
+
+---
+
 ---
 
 ## 8. What the player sees
@@ -488,6 +547,11 @@ file.
    explainable after the fact: a witness, a unit nearby, a place that draws
    police, an arrest quota, a tell that a piece of kit answers. See §7c,
    including where that meets DESIGN_LOCKS §9.1 and how it stays inside it.
+
+10. **Condition, crew and armament are an exposure layer, not a heat meter.**
+    Built and gated as `exposure()`. The same state is camouflage or a flare
+    depending on the hour and the place; losing the bag is a separate accident.
+    See §7d.
 
 ---
 
