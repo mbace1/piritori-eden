@@ -467,7 +467,14 @@ function sheet(era) {
   const GAPS = [];
   if (!water) GAPS.push('NO WATER — the biggest hole, because the coastline is what carries Helsinki’s silhouette. Every OSM source is refused by this environment’s egress policy. §11.2 has the query; water-import.mjs takes its output.');
   GAPS.push('L0 is corridors that carry service, NOT a street map. Any street with no route on it is absent.');
-  GAPS.push('Feed is 2022-02-22. Tram 13 opened 12 Aug 2024 through Kalasatama and Vallilanlaakso and is not in it.');
+  // Was a hardcoded sentence about tram 13 being absent. It is present now, so
+  // the sheet asks the data rather than repeating a claim that expired.
+  {
+    const names = new Set((rail.lines || []).map(l => String(l.service)));
+    GAPS.push(names.has('13')
+      ? `Feed is ${rail.source.feedVersion || 'unknown'}. Tram 13 (opened 12 Aug 2024) IS in it.`
+      : `Feed is ${rail.source.feedVersion || 'unknown'}. Tram 13 opened 12 Aug 2024 through Kalasatama and Vallilanlaakso and is not in it.`);
+  }
   if (era === 1) {
     GAPS.push('anchorSequence means PASSES, not CALLS AT. The metro runs under Karhupuisto and stops at Hakaniemi and Sörnäinen only.');
     GAPS.push('Line colours are ours, not HSL’s — HSL draws every tram one green and lets the number do the work.');
@@ -503,7 +510,7 @@ function sheet(era) {
 
   const overflow = y > py - 20;
   s += `<line x1="${IX}" y1="${py - 14}" x2="${IX + IW}" y2="${py - 14}" stroke="#263034" stroke-width="1"/>`;
-  s += `<text x="${IX}" y="${py}" fill="${DIM}" font-family="${mono}" font-size="10">${esc(rail.source.attribution)} · ${rail.source.licence} · GTFS 2022-02-22</text>`;
+  s += `<text x="${IX}" y="${py}" fill="${DIM}" font-family="${mono}" font-size="10">${esc(rail.source.attribution)} · ${rail.source.licence} · GTFS ${esc(rail.source.feedVersion || 'unknown')}</text>`;
   s += `<text x="${IX}" y="${py + 14}" fill="${DIM}" font-family="${mono}" font-size="10">generated · no network · map/tools/master-plate.mjs${era === 2 ? ' --era2' : ''}</text>`;
   s += `<text x="${IX}" y="${py + 28}" fill="${DIM}" font-family="${mono}" font-size="10">TRANSIT_LAYERS.md §3 layer stack, §10–§11 the data</text>`;
 

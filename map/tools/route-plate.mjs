@@ -128,7 +128,7 @@ function plate(service) {
   s += `<text x="20" y="0" fill="#7d6b52" font-family="ui-monospace,monospace" font-size="11.5">real HSL stop</text>`;
   s += `<rect x="168" y="-11" width="14" height="14" fill="#171d20" stroke="#e8c24a" stroke-width="2.2" transform="rotate(45 175 -4)"/>`;
   s += `<text x="194" y="0" fill="#7d6b52" font-family="ui-monospace,monospace" font-size="11.5">board anchor the line passes</text></g>`;
-  s += `<text x="${PAD}" y="${H - 24}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · grey is corridors that carry service, not a street map — see §10.8</text></svg>`;
+  s += `<text x="${PAD}" y="${H - 24}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed ${esc(rail.source.feedVersion || 'unknown')} · grey is corridors that carry service, not a street map — see §10.8</text></svg>`;
 
   return { svg: s, stops: stops.length, anchors: anchors.length, touches: d0.anchorSequence.length };
 }

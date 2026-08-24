@@ -296,7 +296,7 @@ function sheet(mode) {
   }
   s += `<g transform="translate(${PAD},${ly + 30})"><rect x="0" y="-6.5" width="13" height="13" fill="${INK}" stroke="${GOLD}" stroke-width="2.2" transform="rotate(45 6.5 0)"/>`;
   s += `<text x="22" y="4" fill="${MUTED}" font-family="ui-monospace,monospace" font-size="11">board anchor · stop names are on the per-line plates</text></g>`;
-  s += `<text x="${PAD}" y="${H - 42}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the fan is a drawing device — the real track is the centre of each bundle</text>`;
+  s += `<text x="${PAD}" y="${H - 42}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed ${esc(rail.source.feedVersion || 'unknown')} · the fan is a drawing device — the real track is the centre of each bundle</text>`;
   s += `<text x="${PAD}" y="${H - 24}" fill="#4a4237" font-family="ui-monospace,monospace" font-size="10.5">grey underlay = corridors that carry service, weighted by weekly trips. NOT a street map: a street with no route on it is not in it (§10.8)</text></svg>`;
   return s;
 }
