@@ -172,15 +172,11 @@ func _build() -> void:
 
 	# ── titled header (MAP.md §6 layer 12: labels and UX chrome) ──
 	_status = PanelContainer.new()
-	var head_sb := StyleBoxFlat.new()
-	head_sb.bg_color = MapStyle.FRAME
-	head_sb.border_color = MapStyle.FRAME_EDGE
-	head_sb.border_width_bottom = 3
-	head_sb.content_margin_left = 18
-	head_sb.content_margin_right = 18
-	head_sb.content_margin_top = 9
-	head_sb.content_margin_bottom = 9
-	_status.add_theme_stylebox_override("panel", head_sb)
+	# Carton, not a filled rectangle. Torn along the bottom, because that is
+	# the edge the world shows through — the header reads as a strip of card
+	# laid over the map rather than a bar the map stops at.
+	_status.add_theme_stylebox_override("panel",
+		PiritoriChrome.margins(PiritoriChrome.bar(false), 18, 9))
 
 	var head := VBoxContainer.new()
 	head.add_theme_constant_override("separation", 4)
@@ -251,7 +247,8 @@ func _build() -> void:
 	_body.add_child(_world_host)
 
 	_rail = PanelContainer.new()
-	_rail.add_theme_stylebox_override("panel", _panel_style(PiritoriPalette.PANEL))
+	# The rail is a sheet stacked on the world, so it is torn where it meets it.
+	_rail.add_theme_stylebox_override("panel", PiritoriChrome.panel(PiritoriChrome.RULE, true, true))
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -272,15 +269,7 @@ func _build() -> void:
 
 	# ── command bar (UX chrome, layer 12) ──
 	_command_bar = PanelContainer.new()
-	var bar_sb := StyleBoxFlat.new()
-	bar_sb.bg_color = MapStyle.FRAME
-	bar_sb.border_color = MapStyle.FRAME_EDGE
-	bar_sb.border_width_top = 3
-	bar_sb.content_margin_left = 10
-	bar_sb.content_margin_right = 10
-	bar_sb.content_margin_top = 8
-	bar_sb.content_margin_bottom = 8
-	_command_bar.add_theme_stylebox_override("panel", bar_sb)
+	_command_bar.add_theme_stylebox_override("panel", PiritoriChrome.bar(true))
 
 	var bar := HBoxContainer.new()
 	bar.add_theme_constant_override("separation", 10)
@@ -480,10 +469,8 @@ func _rebuild_language_buttons() -> void:
 		var active: bool = lang == Loc.code
 		b.add_theme_color_override("font_color",
 			MapStyle.TITLE_TEXT if active else MapStyle.TINY_TEXT)
-		var sb := StyleBoxFlat.new()
-		sb.bg_color = MapStyle.STREET_BED if active else MapStyle.DARK_TAB
-		sb.border_color = MapStyle.DARK_TAB_EDGE
-		sb.set_border_width_all(2 if active else 1)
+		var sb := PiritoriChrome.button(
+			MapStyle.SUB_TEXT if active else PiritoriChrome.RULE, active)
 		b.add_theme_stylebox_override("normal", sb)
 		b.add_theme_stylebox_override("hover", sb)
 		b.add_theme_stylebox_override("pressed", sb)
@@ -500,10 +487,7 @@ func _rebuild_language_buttons() -> void:
 	dev.focus_mode = Control.FOCUS_ALL
 	dev.add_theme_font_size_override("font_size", 11)
 	dev.add_theme_color_override("font_color", MapStyle.TINY_TEXT)
-	var dsb := StyleBoxFlat.new()
-	dsb.bg_color = MapStyle.DARK_TAB
-	dsb.border_color = MapStyle.DARK_TAB_EDGE
-	dsb.set_border_width_all(1)
+	var dsb := PiritoriChrome.button()
 	dev.add_theme_stylebox_override("normal", dsb)
 	dev.add_theme_stylebox_override("hover", dsb)
 	dev.add_theme_stylebox_override("pressed", dsb)
@@ -1084,14 +1068,11 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 	b.focus_mode = Control.FOCUS_ALL
 	b.tooltip_text = text
 
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = MapStyle.DARK_TAB
-	sb.border_color = MapStyle.DARK_TAB_EDGE
-	sb.set_border_width_all(2)
-	sb.content_margin_left = 12
-	sb.content_margin_right = 12
-	var hover := sb.duplicate()
-	hover.bg_color = MapStyle.STREET_BED
+	# The bone rule takes the command's own accent, which is what makes a row
+	# of five tabs distinguishable at a glance in the dark without relying on
+	# colour alone — ART_BIBLE §4.2 keeps the icon and the word beside it.
+	var sb := PiritoriChrome.button(accent)
+	var hover := PiritoriChrome.button(accent, true)
 	b.add_theme_stylebox_override("normal", sb)
 	b.add_theme_stylebox_override("hover", hover)
 	b.add_theme_stylebox_override("pressed", hover)

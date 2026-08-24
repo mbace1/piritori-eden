@@ -1254,13 +1254,10 @@ func _action_card(text: String, kind: int, accent: Color, handler: Callable,
 	b.tooltip_text = text
 	b.focus_mode = Control.FOCUS_ALL
 
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("#15191c")
-	sb.border_color = MapStyle.FRAME_EDGE
-	sb.set_border_width_all(2)
-	var hover := sb.duplicate()
-	hover.bg_color = MapStyle.STREET_BED
-	hover.border_color = accent
+	# Each verb's card carries its own accent in the rule, the way ATTACK,
+	# GUARD and REPOSITION read apart in the style target.
+	var sb := PiritoriChrome.button(accent)
+	var hover := PiritoriChrome.button(accent, true)
 	b.add_theme_stylebox_override("normal", sb)
 	b.add_theme_stylebox_override("disabled", sb)
 	for st in ["hover", "pressed", "focus"]:
@@ -1447,11 +1444,8 @@ func _chrome_button(text: String, accent: Color, handler: Callable) -> Button:
 	b.custom_minimum_size = Vector2(0, 44)
 	b.add_theme_font_size_override("font_size", 13)
 	b.add_theme_color_override("font_color", accent)
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("#101417")
-	sb.border_color = Color("#3a4143")
-	sb.set_border_width_all(1)
-	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("normal", PiritoriChrome.button(accent))
+	b.add_theme_stylebox_override("hover", PiritoriChrome.button(accent, true))
 	b.pressed.connect(handler)
 	return b
 
@@ -1627,19 +1621,19 @@ func _action_btn(text: String, accent: Color, handler: Callable) -> Button:
 	b.custom_minimum_size = Vector2(112, 48)   ## 44px floor, 48 preferred
 	b.add_theme_font_size_override("font_size", 14)
 	b.add_theme_color_override("font_color", accent)
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = MapStyle.STREET_BED
-	sb.border_color = MapStyle.DARK_TAB_EDGE
-	sb.set_border_width_all(2)
-	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("normal", PiritoriChrome.button(accent))
+	b.add_theme_stylebox_override("hover", PiritoriChrome.button(accent, true))
 	b.pressed.connect(handler)
 	return b
 
 
-func _panel(bg: Color, top: int, bottom: int) -> StyleBoxFlat:
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = bg
-	sb.border_color = MapStyle.FRAME_EDGE
-	sb.border_width_top = top
-	sb.border_width_bottom = bottom
-	return sb
+## The strips above and below the board. `top`/`bottom` no longer set a border
+## width — they say which side faces the world, and that is the side that tears.
+##
+## Zero padding, deliberately. These strips already pad their own contents, and
+## the chrome's default margins pushed the console 13px off the bottom of a
+## 720-high viewport — caught by the battle_ui gate, which is exactly the kind
+## of thing it is for.
+func _panel(_bg: Color, top: int, bottom: int) -> StyleBoxTexture:
+	return PiritoriChrome.margins(
+		PiritoriChrome.panel(PiritoriChrome.RULE, top > 0, bottom > 0), 0, 0)

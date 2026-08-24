@@ -1236,3 +1236,19 @@ anchor ROLES onto 12 generic icons is arbitrary. That still holds, but the
 reference's icons are **per-site** (noodle bowl, package, temple) and there are
 about six. `PiritoriIcon` draws vector icons in code, so this needs no credits.
 **Highest-impact visual change remaining.**
+
+## Found while fitting the carton chrome (2026-08-24)
+
+- **The portrait capture has been lying.** `tools/capture.gd` sets
+  `content_scale_size = Vector2i(390, 844)` for the phone shot, so the shell
+  lays out in 390 design units. The real build stretches `canvas_items` from a
+  1280×720 base, so a phone gets ~1280 design units and everything is a third
+  the relative size. Every portrait review shot taken this way has shown a
+  layout no device produces — which is very likely part of why the first scale
+  fix "did nothing". Engine/tools lane.
+- **A chrome gate.** Nothing asserts the UI material is applied: swap a
+  `StyleBoxTexture` back for a flat fill and all 672 checks stay green. A cheap
+  real one — assert the command bar's panel is a `StyleBoxTexture` and that its
+  torn edge really has transparent pixels in the top row. Engine lane.
+- **`market_ledger.gd` and `news_event.gd` still build flat boxes.** They were
+  out of the pass's reach; they will look like the old game beside the new one.
