@@ -678,39 +678,54 @@ a step:
 carries thirteen rigged, animated bodies. A concept that duplicates one is worse
 than no concept, because it costs credits to discover.
 
-#### Resolution: tested, not assumed
+#### Resolution and polycount, tested
 
-**An earlier version of this section claimed 512 x 512 was the style target and
-that "detail is the enemy of this style". That was wrong and is recorded here
-rather than quietly deleted.**
+**Settled 2026-08-24 by measurement.** Earlier text in this section claimed 512
+was the style target and that detail is the enemy of this style. **Both halves
+were wrong**, and the record is kept because the mistake is cheap to repeat.
 
-It was inferred from comparing *texture atlases*, where the 512 sheets looked
-crisp and a 2048 sheet looked soft. **An atlas is not the thing.** A low-res atlas
-has hard pixel edges and a high-res one has smooth gradients, so the comparison
-measured resolution and called it style. The existing 512s are also not a design
-decision: they came from source images kept small for an upload limit.
+The claim came from comparing texture *atlases*, where a 512 sheet has hard pixel
+edges and a 2048 sheet has smooth gradients — so it measured resolution and
+called it style. And the repo's 512 bodies were never a decision: `parka-man-v01`
+and its Meshy task are **the same 18,761 triangles** and differ only in the
+image. The 512s are downscaled masters, kept small for an upload limit.
 
-Rendered rather than eyeballed as atlases, on the same character from the same
-concept — `art-src/meshy-input/glb_render.py` draws any `.glb` without an engine:
+**The texture ladder, rendered on one model:**
 
-| | tris | texture | reads |
-|---|---|---|---|
-| `hired-b-v01` | 10.4k | 512 | flatter and more graphic; the ink line survives; **the headband keeps its red/yellow/green** |
-| `heavy-dreads-v02` | 31.2k | 2048 | **more of everything true** — pendant, pocket studs, fur trim, hood structure — but the **headband washes out to olive** |
+| texture | file | reads |
+|---|---|---|
+| 2048 | 1.84 MB | reference |
+| **1024** | **1.32 MB** | **indistinguishable from 2048** |
+| 512 | 1.21 MB | softer; the face loses definition |
+| 256 | 1.18 MB | breaks — face is mush, hood edge pixelates |
 
-So the higher-resolution run is **better on geometry and worse on colour**, and
-neither number is settled. What is settled is the method: **render both and
-look**, never judge a model from its atlas.
+**Texture resolution is nearly free, and it is the wrong lever.** 2048 down to
+256 saves 0.66 MB, because the *mesh* is most of the file.
 
-**The open question, for testing rather than assertion:** whether the washed-out
-headband is Meshy's texture bake, the source image's own saturation, or the
-polycount pulling detail away from colour. Until that is answered, a character
-whose identity depends on a specific colour — a headband, a team stripe, a
-faction mark — gets **checked in a render after generation**, not assumed.
+**Polycount is the lever:**
 
-The phone performance gate in `CLAUDE.md` §9 is a separate and real constraint,
-and it still applies. It is a budget argument, not a style argument, and the two
-were tangled together here by mistake.
+| model | file |
+|---|---|
+| 31k tris / 1024 | 1.32 MB |
+| **12k tris / 1024** | **0.55 MB** |
+
+And the 12k run reads **better**, not merely smaller — the headscarf pattern and
+the hood edge are crisper. Fewer, larger facets suit flat fills; a dense mesh
+gives the reconstructor room to bake soft shading that this style does not want.
+
+**The target: `--target-polycount 12000`, texture re-encoded to 1024.** About
+0.55 MB a character, which is under `hired-b-v01` at 0.9 MB and comfortably
+inside the phone gate in `CLAUDE.md` §9.
+
+Two practical notes. Meshy has no texture-size option, so 1024 is a local
+re-encode after download — `art-src/meshy-input/glb_retex.py`, free, and it must
+repack the binary chunk or the file does not shrink. And a `.glb` cannot be
+judged from its atlas: **render it** with `glb_render.py`.
+
+**Still open:** a character whose identity depends on one colour — a headband, a
+team stripe, a faction mark — can lose it in the bake. The dreads model's
+red/yellow/green washed to olive at 2048 while the 512 original kept it. Check
+the colour in a render before accepting a model.
 
 ## 10. Animals, foliage and ambient people
 
