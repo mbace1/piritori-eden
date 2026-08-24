@@ -570,8 +570,18 @@ one here that is about how the city is used rather than about geometry.
 | **6** | siltasaari → hakaniemi → linjat → piritori | 659 |
 | **1** | harju → vaasankatu → piritori → vallila | 563 |
 | **8** | harju → vaasankatu → piritori | 640 |
-| **4** | one corner only | — |
-| **2, 5, 10** | clip the box, serve nothing on it | — |
+| **2, 4, 5, 10** | clip the extract box at its west or south edge, never enter Kallio | — |
+
+**Six tram services, and that is all of them** — asked directly whether the
+plates are the complete set, and it is worth answering by measurement rather
+than by which lines happened to get a picture. Against the Kallio crop the
+plates use, 2, 4, 5 and 10 have **zero shape points inside it** and come no
+closer than **554 m** (2, at Alppiharju) to any board anchor; 4, 5 and 10 stay
+over a kilometre away. They are in the extract at all only because the box is
+padded west to Töölönlahti and south to Kaisaniemi, which is where they run.
+The line is clean: **1, 3, 6, 7, 8, 9 and the metro serve Kallio; nothing else
+does.** `map/tools/route-plate.mjs` skipping a service is therefore a fact about
+the network, not about the tool.
 
 **Both of the board's 2003 inferences are corroborated, and now by the right
 lines.**
@@ -633,10 +643,28 @@ does for geography.
 
 ### 10.8 What is still not here
 
-**The feed is dated 2022-02-22.** It is real HSL data and right for geometry,
-which barely moves, but it is not this week's timetable and must not be
-presented as one. Refreshing it is one run of the same extractor against a
-current feed, on a machine that can reach HSL directly.
+**The feed is dated 2022-02-22, and geometry moved after all.** The assumption
+under §10.2 was that track barely changes, so an old feed is fine for shape. In
+Helsinki that assumption has a date on it:
+
+- **Tram 13 opened 12 August 2024** — Nihti/Sompasaari → Kalasatama → Hermanni →
+  Vallilanlaakso → Pasila, 4.5 km of new track that did not exist when this feed
+  was cut. It is **not in the extract, and it is probably on the board**:
+  Kalasatama sits on top of the Suvilahti anchor and Vallilanlaakso beside
+  Vallila. Both of those anchors currently read as *correctly off-network* in
+  §10.3 — true in 2003 and true in 2022, and possibly **false today**. That is a
+  finding waiting on a current feed, not one this file can make.
+- **Route letters and diversions have moved since**: 6B withdrawn, 6T running,
+  7B/9B carrying their own patterns, and long 2025 works at Pitkäsilta that
+  diverted 1, 3, 7, 8 and 9 through Kallio for months. None of this touches the
+  Era I argument — 2003 does not care — but an Era II layer that draws 2022
+  shapes and calls them live is lying in a way a player from Kallio will catch
+  in one glance.
+
+So the refresh is not housekeeping. **Era I can ship on this extract** (§2b: the
+metro is era-invariant and the tram corridors survived), and **Era II cannot** —
+it needs a current feed, which is one run of the same extractor on a machine that
+can reach HSL directly.
 
 **Era I service patterns are still `periodServices`** — this changes nothing
 about them. The geometry is modern, used for Era I under §2b's argument; the
