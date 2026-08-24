@@ -49,6 +49,10 @@ and sudden danger. Night is heavy; people are not uniformly miserable.
    paper masses before ink detail appears.
 2. **One material family.** Map, locations, battles, characters, animals,
    weapons, props and UI all use cut paper and hand marker.
+   **Under review.** The owner's rendered targets paint the fight stages and city
+   backdrops rather than cutting them, and cut only what is separated — see §7.5.
+   That is a proposed amendment to this rule, not a licence to ignore it. Until it
+   is ruled on, this rule stands as written.
 3. **Helsinki before generic noir.** Geography, architecture, trams, weather,
    clothes and period objects make the setting specific.
 4. **Drama through light and composition.** Battle intensity comes from
@@ -271,6 +275,18 @@ regions remain rectangular and predictable.
 - Give every recurring system one original symbol.
 - Faction marks are invented and specific; no pagoda, dragon, shamrock or
   other ethnic shorthand substitutes for a written character or family.
+- **Location marks are a designed set, one symbol per site.** The city map wants
+  a pictogram inside every medallion (§7.5). `QUEUE.md` records why a mapping
+  from the anchors' 25 `roles` onto generic icon kinds was refused: arbitrary
+  symbolism reads worse than the plain dot it replaces. The set is authored per
+  site instead, and a site with no authored mark keeps the plain dot until it
+  has one.
+- **Unresolved, and named rather than absorbed:** the rendered target
+  (`art-library/references/ui-target-city-map-v01.jpg`) marks Sörnäinen with a
+  **pagoda**, which is the first thing the rule above forbids. Sörnäinen is a
+  Helsinki district. Either the rule bends for a specific authored reason that
+  belongs in `NARRATIVE.md`, or that mark is replaced before the set is drawn.
+  It is not settled here, and the target should not be traced from until it is.
 - Weapon icons are silhouettes, not diagrams.
 - The icon may decorate a command, never replace its text at first use.
 
@@ -362,6 +378,108 @@ baked into the plate.
 The map is a one-screen strategy surface. Individual windows, roof machinery
 and pavement wear appear only at landmarks. When zoomed out, district pieces,
 roads, water and nodes must remain legible before decorative blocks.
+
+### 7.5 The rendered targets, and the two registers
+
+`art-library/references/` holds the owner's rendered targets for every mode, the
+fight stages, the cut-out sheets and photographic ground truth. Its `README.md`
+is the index. They are **references, not shipping assets** — nothing there is in
+`APPROVALS.md` or `catalog.json`.
+
+#### The one thing they change
+
+**Rule 2 of §1 says one material family — everything in cut paper and hand
+marker. The targets do not do that, and they diverge consistently enough to be a
+decision rather than a drift:**
+
+| register | used for | look |
+|---|---|---|
+| **cut paper** | heads, weapons, props, UI chrome, the Toko interior | kraft card, torn edge, flat fill, paper grain |
+| **painted night** | fight stages, city backdrops | rendered, lit, atmospheric, cut from nothing |
+
+The split tracks rule 5 exactly — *every useful layer stays separable*. **What is
+cut out is cut paper; what is never cut is painted.** A stage is one image behind
+everything and is never separated, so nothing is lost by painting it, and
+practical light does what cut card cannot.
+
+This is coherent and it is **still an amendment to rule 2**, which is the owner's
+to make. Recorded, not assumed. Until it is ruled on, rule 2 stands as written
+and the targets are ahead of it.
+
+A third register sits unresolved between them: `locations/` holds ink-line
+isometric illustration, more drawn than the stages and more detailed than the
+cut-paper sheets.
+
+#### What the city-map target confirms
+
+Every accent in it lands within **six degrees of hue** of a §4.2 system accent —
+cyan 1°, pink 5°, pin orange 4°, cream 1°, olive 6°. What differs is lightness:
+**0.15 to 0.22 lighter** on cyan and pink. That is not a second palette, it is
+§6.2 practical lighting on medallions and paper. **The flat value in §4.2 is the
+pigment, not the pixel.** Expect a lit surface to sit lighter and keep its hue.
+
+**Pins are lit medallions**, refining §7.3: a coloured ring with a dark field and
+one pictogram, on a short stalk, with a torn kraft label tab below. A locked node
+is the same medallion in neutral grey carrying a padlock — §7.3's *neutral
+physical seal, not an empty mystery cloud*, built. District names lie flat on
+torn kraft plates at lower contrast, so they orient and never read as tappable.
+
+**Routes are dashed strips with arrowheads**, cyan for crew and magenta for
+product, which is §7.3 drawn. Direction survives with the colour removed.
+
+**The command bar is four commands, icon plus text** — `END DAY` separates from
+the other three. Every command keeps its word beside its icon, which is §5.4's
+*the icon may decorate a command, never replace its text*.
+
+#### Both orientations exist, and the UI is in Finnish
+
+City map and battle each have a portrait and a landscape target. The battle
+targets establish: cyan tiles yours, red theirs, `BACK / MIDDLE / FRONT` rails on
+both flanks, dashed red for declared threat, and `GUARD` and `NERVE` as segment
+bars rather than numbers.
+
+They read `PÄIVÄ 04` and `KIERROS 2`. **Localisation is in the target, not a
+post-process**, which is the right way round and matches `godot/locale/`.
+
+#### The key colour drifts on every cut-out sheet
+
+Measured on the delivered files:
+
+| sheet | background | dE from `#FF00FF` |
+|---|---|---|
+| props | `(247, 3, 247)` | 3.4 |
+| weapons | `(243, 4, 242)` | 5.5 |
+| heads A | `(240, 4, 238)` | 7.1 |
+| heads B | `(226, 2, 226)` | **12.2** |
+
+None is bit-exact. The same drift appeared on the Sprint 1 v2 turnaround from a
+different generator, so it is a property of the pipeline rather than of one
+prompt.
+
+**Rule: anything that cuts against the key matches on tolerance, never on
+equality.** A cutter written against `== #FF00FF` returns almost nothing from
+these sheets. Heads B is far enough off to be worth regenerating before it
+becomes production input.
+
+`toko-mask-v01.jpg` looks like a transparent PNG and is not — the checkerboard is
+painted into the pixels. It needs a real key or real alpha before use.
+
+#### Stages hold their middle
+
+Every stage reference keeps its props at the rim and its floor clear. That is the
+arena requirement built, and it is the thing to check first in a new one: a stage
+with something standing in the middle of it is not a stage.
+
+`stages/stage-park-day` and `stage-park-night` are **one asset under two
+lightings** — the day/night question answered in miniature, and worth looking at
+before anyone designs a daytime palette.
+
+#### One honest divergence
+
+§7.3 requires people to be *small varied cut silhouettes, not identical restroom
+symbols*. In the city-map targets they read as one repeated figure. A mock stubs
+exactly this kind of detail, but the rule stands and the shipped map owes the
+variation.
 
 ---
 
