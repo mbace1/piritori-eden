@@ -41,17 +41,17 @@ const money = v => '€' + v.toFixed(0);
 // every state rather than whatever a random walk happened to produce.
 const DAY = 3, BLOCK = 'day', SEED = 'piritori', GOOD = 'piri';
 const KNOWN = {
-  piritori: { level: INFO.QUOTE, age: 0 },
-  hakaniemi: { level: INFO.QUOTE, age: 1 },
-  siltasaari: { level: INFO.QUOTE, age: 3 },
-  linjat_yard: { level: INFO.QUOTE, age: 5 },
-  vaasankatu: { level: INFO.QUOTE, age: 2 },
-  harju: { level: INFO.RANGE, age: 4 },
-  karhupuisto: { level: INFO.RUMOUR, age: 6 },
-  sornainen_harbour: { level: INFO.QUOTE, age: 9 },
+  piritori: { level: INFO.QUOTE, age: 0, visited: true },
+  hakaniemi: { level: INFO.QUOTE, age: 1, visited: true },
+  siltasaari: { level: INFO.QUOTE, age: 3, visited: true },
+  linjat_yard: { level: INFO.QUOTE, age: 5, visited: true },
+  vaasankatu: { level: INFO.QUOTE, age: 2, visited: true },
+  harju: { level: INFO.RANGE, age: 4, visited: true },
+  karhupuisto: { level: INFO.RUMOUR, age: 6, visited: true },
+  sornainen_harbour: { level: INFO.QUOTE, age: 9, visited: true },
   torkkelinmaki: { level: INFO.NONE, age: 0 },
   kallio_church: { level: INFO.NONE, age: 0 },
-  suvilahti: { level: INFO.RUMOUR, age: 2 },
+  suvilahti: { level: INFO.RUMOUR, age: 2, visited: true },
 };
 const SHOCKS = [
   { id: 'closure', node: 'hakaniemi', good: 'piri', from: 2, to: 5, factor: 1.42, text: 'metro works, crowd rerouted' },
@@ -63,7 +63,10 @@ const truth = new Map(anchors.map(a => [a.id,
   offer(a, GOOD, { day: DAY, block: BLOCK }, { seed: SEED, shocks: SHOCKS })]));
 const seen = new Map(anchors.map(a => {
   const k = KNOWN[a.id] || { level: INFO.NONE, age: 0 };
-  return [a.id, present(truth.get(a.id), k.level, k.age, SEED, a.id, GOOD)];
+  // `visited` is the owner's rumour rule: a place you have WORKED keeps ringing
+  // you, so it never falls below a direction however stale the last number is.
+  // Torkkelinmäki and Kallion kirkko have never been worked and stay dark.
+  return [a.id, present(truth.get(a.id), k.level, k.age, SEED, a.id, GOOD, { visited: !!k.visited })];
 }));
 
 // ── layout ──────────────────────────────────────────────────────────────────

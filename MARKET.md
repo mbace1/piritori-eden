@@ -227,6 +227,70 @@ settlement dates, and opening hours.
 
 ---
 
+## 7b. The market is a side hustle; the missions are the game
+
+> "the dope wars side is a side hustle, the big bucks come from missions with risk"
+> — owner, 2026-08-24
+
+> "a mission could be 'here are 10 units of drug x' go find buyers, not a retailer"
+> — owner, 2026-08-24
+
+That is a statement about a ratio, and a ratio nobody has measured is a wish.
+`market/tools/income-curve.mjs` measures both halves. It plays perfectly — full
+knowledge of every price, the best route every block, no travel cost, no
+pressure, nothing going wrong — so everything below is a **ceiling**, not an
+expectation.
+
+**The side hustle, per week, played perfectly:**
+
+| capacity | packs/block | €/week | week 1 | week 3 |
+|---|---:|---:|---:|---:|
+| street buyer | 2 | €252 | €358 | €211 |
+| neighbourhood seller | 4 | €243 | €337 | €208 |
+| network builder | 8 | €238 | €333 | €203 |
+
+**Capacity does not help, and that is the finding.** An eleven-anchor
+neighbourhood cannot absorb volume: past two or three packs there is nowhere
+left to put them at a price worth the walk. Carrying more is not a way to earn
+more on this board — it is a way to be carrying more when something goes wrong.
+So §7.8's network stages are about **risk and access**, not throughput, and the
+only way volume becomes money is a mission that brings its own buyers or its own
+wholesale terms. The design did not have to be argued into that; the board says
+it.
+
+Note the decay across weeks: the same perfect play earns a third less by week
+three, because you have been saturating your own board. **The trickle runs dry,
+and that is the pressure that should push a player toward the missions.**
+
+### 7b.1 A consignment is a time problem
+
+"Here are ten units, go find buyers" is not a delivery. There is no retailer —
+the difficulty is the market's own shape, and it is entirely made of saturation:
+you cannot put ten units into one place, so it becomes a route across days.
+
+| units | patience | days | revenue | €/unit |
+|---:|---|---:|---:|---:|
+| 5 | hold out (≥90% of base) | 1.2 | €311 | €62 |
+| 5 | take what comes (≥65%) | 1.0 | €294 | €59 |
+| 10 | hold out | 2.8 | €596 | €60 |
+| 10 | take what comes | 2.0 | €558 | €56 |
+| 20 | hold out | 5.0 | €1,186 | €59 |
+| 20 | take what comes | 2.0 | €1,047 | €52 |
+
+**Speed costs about 12%; patience costs days.** That is the whole mission in one
+line, and neither side of it had to be authored — a deadline bites because the
+board is slow, and dumping is expensive because dumping is what saturation is
+for. A mission that says *by Friday* is now a real problem, and a mission that
+adds *and the McCormicks are watching Hakaniemi* takes a node out of the route
+and makes it worse.
+
+**The ratio the owner asked for:** one twenty-unit consignment clears roughly
+€1,050–1,190 in two to five days. Perfect side-hustle play clears €243 a week.
+**One mission is worth four or five weeks of trading** — and the trading is not
+risky, which is exactly the right way round.
+
+---
+
 ## 8. What the player sees
 
 `ux/market-era1.svg` is the plate. Three surfaces:
@@ -337,6 +401,20 @@ file.
    A hidden second price reads as a bug rather than a mystery, and the spread is
    how a place's character shows: Torkkelinmäki losing a third of its value to
    the gap is the design working.
+
+5. **The decay clock stands: 1 / 4 / 12 blocks.** A quote is exact for the
+   block you took it, a range for four, a rumour for twelve, then nothing.
+
+6. **Rumours are free for places you have worked.** Once you have been
+   somewhere, someone there still rings you, so a visited anchor never falls
+   below a direction however stale the last real number is. An anchor you have
+   never worked stays blank however long you look at the map. That is the floor
+   on ignorance, and exploration is what moves it.
+
+7. **The market is a side hustle.** The big money is missions with risk, and
+   missions are narrative beats — multi-step, multi-location, and they may be a
+   consignment, a hit, a fight or a chase. §7b measures the ratio and finds one
+   twenty-unit consignment worth four or five weeks of perfect trading.
 
 ---
 

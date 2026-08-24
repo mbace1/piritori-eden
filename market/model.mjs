@@ -204,7 +204,16 @@ function fSaturation(prof, sat) {
   // player actually pays, and at 1.8 that reached 3.7x base. At 1.6 the worst
   // quote in the game is 3.3x, which is a place gouging someone who has bought
   // it out in a dry week — extortionate, explainable, and bounded.
-  const m = clamp(Math.exp(-net / (prof.liquidity * 2.2)), 0.55, 1.6);
+  // THE SCALE CONSTANT IS 4.5, NOT 2.2, and the difference is the whole feel of
+  // volume play. `liquidity` is documented as "packs you can move before the
+  // price turns against you", so moving exactly `liquidity` packs should cost
+  // about 20% — that is exp(-1/k) = 0.8, so k = 4.5. At 2.2 the curve was twice
+  // as steep as the number it was named after: Torkkelinmäki, at liquidity 1.0,
+  // lost 36% of its price to a SINGLE pack, which is a cliff rather than a
+  // market. It also flattened §7.8's capacity bands into each other — a street
+  // buyer and a network builder both earned €22 a day, because nowhere on the
+  // board could absorb a second pack.
+  const m = clamp(Math.exp(-net / (prof.liquidity * 4.5)), 0.55, 1.6);
   return [m, 'saturation', net > 0 ? 'you have been selling here' : 'you have been buying here out'];
 }
 
@@ -300,19 +309,26 @@ export const INFO = { QUOTE: 'quote', RANGE: 'range', RUMOUR: 'rumour', NONE: 'n
  *
  *  So: precision(age) is the best any observation can be at that age, and what
  *  you have is the WORSE of that and what you were originally told. */
-export function decay(level, blocks) {
-  if (level === INFO.NONE) return INFO.NONE;
+export function decay(level, blocks, opts = {}) {
   const order = [INFO.QUOTE, INFO.RANGE, INFO.RUMOUR, INFO.NONE];
+  // OWNER RULING: a place you have WORKED keeps ringing you. Once you have been
+  // somewhere, someone there will still call with a direction — so a visited
+  // anchor never falls below RUMOUR however old the last real number is, and an
+  // anchor you have never worked stays blank however long you stare at the map.
+  // That is the floor on ignorance: the board you have walked keeps talking, the
+  // board you have not stays dark, and exploration is what moves the line.
+  const floor = opts.visited ? 2 : 3;
+  if (level === INFO.NONE) return order[Math.min(3, floor)];
   const ceiling = blocks <= 1 ? 0 : blocks <= 4 ? 1 : blocks <= 12 ? 2 : 3;
-  return order[Math.max(order.indexOf(level), ceiling)];
+  return order[Math.min(floor, Math.max(order.indexOf(level), ceiling))];
 }
 
 /** What the player is shown, given what they know. The TRUE offer is never
  *  handed to the UI at a lower level — a range is generated around the truth,
  *  so a range never excludes the real price and the player can trust the band
  *  even when they cannot trust the middle. */
-export function present(trueOffer, level, blocks = 0, seed = 'piritori', nodeId = '', good = '') {
-  const lv = decay(level, blocks);
+export function present(trueOffer, level, blocks = 0, seed = 'piritori', nodeId = '', good = '', opts = {}) {
+  const lv = decay(level, blocks, opts);
   if (lv === INFO.NONE) return { level: lv };
   if (lv === INFO.QUOTE) return { level: lv, buy: trueOffer.buy, sell: trueOffer.sell, ageBlocks: blocks, cause: trueOffer.cause, causeText: trueOffer.causeText };
   if (lv === INFO.RANGE) {
