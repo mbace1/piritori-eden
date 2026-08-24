@@ -7,6 +7,11 @@ is material for that decision.
 Proto stage: **three candidates per subclass, one settled on.** Sheets in this
 folder, cuts in `chosen/`, exact prompts in `prompts/`.
 
+**Weight.** The sheets are JPEG at 1600px — they are review material and nobody
+cuts from them. `chosen/` stays **PNG**, because each cut carries a magenta key
+edge and JPEG ringing on a key edge is the thing a cutter trips on. 45 MB of raw
+PNG went in before this was applied and git keeps it; the working tree is 10 MB.
+
 ---
 
 ## The hybrid question, and why these sheets are per-look-family
