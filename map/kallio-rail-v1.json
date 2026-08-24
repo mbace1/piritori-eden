@@ -8,6 +8,7 @@
   "licence": "CC BY 4.0",
   "attribution": "© Helsingin seudun liikenne (HSL)",
   "anchorSequenceMeans": "PASSES WITHIN 150 m OF, not CALLS AT. For the metro the distinction is total: the tunnel runs under Karhupuisto, Torkkelinmäki and Kallion kirkko and stops at none of them — in the Kallio band it calls only at Hakaniemi and Sörnäinen. A game that lets you board at Karhupuisto is wrong.",
+  "stopSequenceMeans": "LIES WITHIN 45 m OF THE SHAPE, ordered along it — the same proximity rule as anchorSequence at a tighter tolerance, NOT the published calling list. Right for drawing and for naming; not authority for whether a service stops there. The real list is stop_times.txt joined to the representative trip, which this tool does not open (472 MB).",
   "note": "Modern feed. Era II geometry outright; Era I under TRANSIT_LAYERS.md §2b — the Kallio metro is unchanged, and the trams inherit corridor geometry that survived the 2013 renumbering. The 2003 SERVICE pattern is periodServices in the board JSON and is not touched here."
  },
  "boundingBox": {
@@ -49,6 +50,30 @@
      "anchor": "piritori",
      "m": 73
     }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
    ],
    "shape": [
     [
@@ -265,6 +290,30 @@
      "m": 52
     }
    ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
    "shape": [
     [
      60.187303,
@@ -471,6 +520,30 @@
      "anchor": "piritori",
      "m": 73
     }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
    ],
    "shape": [
     [
@@ -687,6 +760,30 @@
      "m": 52
     }
    ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
    "shape": [
     [
      60.187303,
@@ -893,6 +990,30 @@
      "anchor": "piritori",
      "m": 73
     }
+   ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kaivokatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Hakaniemen metroasema",
+    "Karhupuisto",
+    "Sörnäinen",
+    "Sörnäisten metroasema",
+    "Sörnäinen (M)",
+    "Tynnyrintekijänkatu",
+    "Panimokatu",
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema"
    ],
    "shape": [
     [
@@ -1109,6 +1230,30 @@
      "m": 52
     }
    ],
+   "stopSequence": [
+    "Kalasatama",
+    "Kalasatama (M)",
+    "Kalasataman metroasema",
+    "Panimokatu",
+    "Tynnyrintekijänkatu",
+    "Sörnäinen",
+    "Sörnäinen (M)",
+    "Sörnäisten metroasema",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Rautatientori",
+    "Rautatieasema",
+    "Kaivokatu",
+    "Lasipalatsi",
+    "Postitalo",
+    "Rautatientorin metroasema"
+   ],
    "shape": [
     [
      60.187303,
@@ -1312,6 +1457,23 @@
      "m": 135
     }
    ],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Arkadian puisto",
+    "Luonnontiet.museo",
+    "Pohj. Rautatiekatu",
+    "Kaupunginpuutarha",
+    "Linnanmäki (etelä)",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Vallilan kirjasto",
+    "Hattulantie",
+    "Mäkelänrinne",
+    "Rautalammintie"
+   ],
    "shape": [
     [
      60.170428,
@@ -1491,6 +1653,23 @@
      "m": 108
     }
    ],
+   "stopSequence": [
+    "Mäkelänrinne",
+    "Hattulantie",
+    "Rautalammintie",
+    "Vallilan kirjasto",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Linnanmäki (etelä)",
+    "Kaupunginpuutarha",
+    "Luonnontiet.museo",
+    "Arkadian puisto",
+    "Pohj. Rautatiekatu",
+    "Lasipalatsi"
+   ],
    "shape": [
     [
      60.199968,
@@ -1653,6 +1832,10 @@
    "points": 8,
    "droppedFrom": 9,
    "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kansallismuseo"
+   ],
    "shape": [
     [
      60.170428,
@@ -1699,6 +1882,10 @@
    "points": 8,
    "droppedFrom": 9,
    "anchorSequence": [],
+   "stopSequence": [
+    "Kansallismuseo",
+    "Lasipalatsi"
+   ],
    "shape": [
     [
      60.175939,
@@ -1745,6 +1932,18 @@
    "points": 15,
    "droppedFrom": 23,
    "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Arkadian puisto",
+    "Luonnontiet.museo",
+    "Pohj. Rautatiekatu",
+    "Eläintarha",
+    "Ooppera",
+    "Junailijankuja",
+    "Pasilan asema",
+    "Asemapäällikönkatu",
+    "Pasila"
+   ],
    "shape": [
     [
      60.170428,
@@ -1819,6 +2018,16 @@
    "points": 10,
    "droppedFrom": 16,
    "anchorSequence": [],
+   "stopSequence": [
+    "Pasila",
+    "Pasilan asema",
+    "Eläintarha",
+    "Luonnontiet.museo",
+    "Ooppera",
+    "Arkadian puisto",
+    "Pohj. Rautatiekatu",
+    "Lasipalatsi"
+   ],
    "shape": [
     [
      60.198002,
@@ -1897,6 +2106,28 @@
      "anchor": "alppiharju",
      "m": 14
     }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Hakaniemen metroasema",
+    "Kallion virastotalo",
+    "Karhupuisto",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Porvoonkatu",
+    "Alppila",
+    "Linnanmäki (pohj.)",
+    "Karjalankatu",
+    "Eläintarha"
    ],
    "shape": [
     [
@@ -2097,6 +2328,28 @@
      "m": 5
     }
    ],
+   "stopSequence": [
+    "Eläintarha",
+    "Karjalankatu",
+    "Linnanmäki (pohj.)",
+    "Alppila",
+    "Porvoonkatu",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
+   ],
    "shape": [
     [
      60.192621,
@@ -2279,6 +2532,10 @@
    "points": 8,
    "droppedFrom": 9,
    "anchorSequence": [],
+   "stopSequence": [
+    "Lasipalatsi",
+    "Kansallismuseo"
+   ],
    "shape": [
     [
      60.170428,
@@ -2325,6 +2582,10 @@
    "points": 8,
    "droppedFrom": 9,
    "anchorSequence": [],
+   "stopSequence": [
+    "Kansallismuseo",
+    "Lasipalatsi"
+   ],
    "shape": [
     [
      60.175939,
@@ -2371,6 +2632,12 @@
    "points": 3,
    "droppedFrom": 3,
    "anchorSequence": [],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema"
+   ],
    "shape": [
     [
      60.170254,
@@ -2397,6 +2664,11 @@
    "points": 5,
    "droppedFrom": 6,
    "anchorSequence": [],
+   "stopSequence": [
+    "Rautatieasema",
+    "Rautatientori",
+    "Mikonkatu"
+   ],
    "shape": [
     [
      60.170404,
@@ -2447,6 +2719,26 @@
      "anchor": "piritori",
      "m": 139
     }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Haapaniemi",
+    "Lintulahti",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Ristikkokatu",
+    "Hauhon puisto",
+    "Vallilan varikko",
+    "Paavalinkirkko"
    ],
    "shape": [
     [
@@ -2646,6 +2938,26 @@
      "anchor": "siltasaari",
      "m": 5
     }
+   ],
+   "stopSequence": [
+    "Paavalinkirkko",
+    "Vallilan varikko",
+    "Hauhon puisto",
+    "Ristikkokatu",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Lintulahti",
+    "Haapaniemi",
+    "Hakaniemi",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
    ],
    "shape": [
     [
@@ -2890,6 +3202,28 @@
      "m": 135
     }
    ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Hallituskatu",
+    "Kansallisarkisto",
+    "Snellmaninkatu",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Haapaniemi",
+    "Lintulahti",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Vallilan kirjasto",
+    "Hattulantie",
+    "Mäkelänrinne",
+    "Rautalammintie",
+    "Pasilan asema",
+    "Pasila"
+   ],
    "shape": [
     [
      60.170254,
@@ -3100,6 +3434,29 @@
      "anchor": "siltasaari",
      "m": 5
     }
+   ],
+   "stopSequence": [
+    "Pasilan asema",
+    "Junailijankuja",
+    "Asemapäällikönkatu",
+    "Mäkelänrinne",
+    "Hattulantie",
+    "Rautalammintie",
+    "Vallilan kirjasto",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Lintulahti",
+    "Haapaniemi",
+    "Hakaniemi",
+    "Kaisaniemenpuisto",
+    "Snellmaninkatu",
+    "Kansallisarkisto",
+    "Hallituskatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
    ],
    "shape": [
     [
@@ -3324,6 +3681,19 @@
      "m": 18
     }
    ],
+   "stopSequence": [
+    "Kaupunginpuutarha",
+    "Linnanmäki (etelä)",
+    "Urheilutalo",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Sörnäinen (M)",
+    "Lautatarhankatu",
+    "Ristikkokatu",
+    "Hauhon puisto",
+    "Vallilan varikko",
+    "Paavalinkirkko"
+   ],
    "shape": [
     [
      60.182971,
@@ -3494,6 +3864,19 @@
      "anchor": "harju",
      "m": 107
     }
+   ],
+   "stopSequence": [
+    "Paavalinkirkko",
+    "Vallilan varikko",
+    "Hauhon puisto",
+    "Ristikkokatu",
+    "Lautatarhankatu",
+    "Sörnäinen (M)",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Urheilutalo",
+    "Linnanmäki (etelä)",
+    "Kaupunginpuutarha"
    ],
    "shape": [
     [
@@ -3689,6 +4072,31 @@
      "anchor": "vaasankatu",
      "m": 119
     }
+   ],
+   "stopSequence": [
+    "Kaivokatu",
+    "Rautatientori",
+    "Rautatientorin metroasema",
+    "Rautatieasema",
+    "Mikonkatu",
+    "Kaisaniemenkatu",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenpuisto",
+    "Hakaniemi",
+    "Hakaniemen metroasema",
+    "Kallion virastotalo",
+    "Karhupuisto",
+    "Kaarlenkatu",
+    "Helsinginkatu",
+    "Fleminginkatu",
+    "Sturenkatu",
+    "Kotkankatu",
+    "Pasilan konepaja",
+    "Jämsänkatu",
+    "Asemapäällikönkatu",
+    "Pasilan asema",
+    "Pasila"
    ],
    "shape": [
     [
@@ -3924,6 +4332,32 @@
      "anchor": "siltasaari",
      "m": 5
     }
+   ],
+   "stopSequence": [
+    "Pasila",
+    "Pasilan asema",
+    "Asemapäällikönkatu",
+    "Junailijankuja",
+    "Jämsänkatu",
+    "Pasilan konepaja",
+    "Kotkankatu",
+    "Sturenkatu",
+    "Fleminginkatu",
+    "Helsinginkatu",
+    "Kaarlenkatu",
+    "Karhupuisto",
+    "Hakaniemen metroasema",
+    "Hakaniemi",
+    "Kallion virastotalo",
+    "Kaisaniemenpuisto",
+    "Helsingin yliopisto",
+    "Helsingin yliopiston metroasema",
+    "Kaisaniemenkatu",
+    "Mikonkatu",
+    "Rautatieasema",
+    "Rautatientori",
+    "Kaivokatu",
+    "Rautatientorin metroasema"
    ],
    "shape": [
     [

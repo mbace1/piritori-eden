@@ -166,6 +166,35 @@ function segDist(P, A, B) {
   const t = L ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L)) : 0;
   return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
 }
+// The real calling points, in order. 45 m rather than 150 — a stop is a
+// physical object beside the rails, not a district, so the tolerance can be
+// tight. Paired stops (one per direction, same name) are deduped by name,
+// because the board wants the PLACE and there is only one Karhupuisto.
+//
+// This is proximity, not the route's published stop list — that lives in
+// stop_times.txt, which this tool will not open (see the header). It is right
+// for drawing and for "which stops are on this line"; it is NOT authority for
+// whether a given service calls there. §10.6 has the same caveat for anchors.
+function stopsAlong(shape, all, tol = 45) {
+  const hits = [];
+  for (const st of all) {
+    let best = Infinity, at = 0;
+    for (let i = 1; i < shape.length; i++) {
+      const d = segDist([st.lat, st.lon], shape[i - 1], shape[i]);
+      if (d < best) { best = d; at = i; }
+    }
+    if (best <= tol) hits.push({ st, at });
+  }
+  hits.sort((a, b) => a.at - b.at);
+  const seen = new Set(), out = [];
+  for (const h of hits) {
+    if (seen.has(h.st.name)) continue;
+    seen.add(h.st.name);
+    out.push(h.st.name);
+  }
+  return out;
+}
+
 function anchorsAlong(shape, tol = 150) {
   const hits = [];
   for (const a of board.anchors) {
@@ -196,6 +225,7 @@ for (const [k, id] of best) {
     points: simp.length,
     droppedFrom: raw.length,
     anchorSequence: anchorsAlong(simp),
+    stopSequence: [],            // filled once `stops` is built, below
     shape: simp,
   });
 }
@@ -216,6 +246,10 @@ const stops = rows('stops.txt')
   }))
   .sort((a, b) => a.name.localeCompare(b.name, 'fi'));
 
+// Stops are built after the lines, so the sequence is attached here. NOT
+// "calling points" — see stopsAlong above; this is what LIES ALONG the line.
+for (const L of lines) L.stopSequence = stopsAlong(L.shape, stops);
+
 const doc = {
   schemaVersion: 1,
   id: 'kallio-rail-v1',
@@ -229,6 +263,11 @@ const doc = {
       + 'distinction is total: the tunnel runs under Karhupuisto, Torkkelinmäki and '
       + 'Kallion kirkko and stops at none of them — in the Kallio band it calls only at '
       + 'Hakaniemi and Sörnäinen. A game that lets you board at Karhupuisto is wrong.',
+    stopSequenceMeans: 'LIES WITHIN 45 m OF THE SHAPE, ordered along it — the same '
+      + 'proximity rule as anchorSequence at a tighter tolerance, NOT the published '
+      + 'calling list. Right for drawing and for naming; not authority for whether a '
+      + 'service stops there. The real list is stop_times.txt joined to the '
+      + 'representative trip, which this tool does not open (472 MB).',
     note: 'Modern feed. Era II geometry outright; Era I under TRANSIT_LAYERS.md §2b — '
         + 'the Kallio metro is unchanged, and the trams inherit corridor geometry that '
         + 'survived the 2013 renumbering. The 2003 SERVICE pattern is periodServices in '
