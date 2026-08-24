@@ -148,6 +148,17 @@ const ok = (cond, what) => { if (cond) { pass++; } else { fail++; console.log(' 
   ok(share < 0.5, `most pairs are NOT worth the trip (${(share * 100).toFixed(0)}% profitable)`);
 }
 
+// ── 7b. rapport is worth more than the weather ─────────────────────────────
+{
+  const a = anchors.find(x => x.roles.includes('residential'));
+  const cold = offer(a, 'piri', { day: 3, block: 'day' }, { seed: 'r' });
+  const warm = offer(a, 'piri', { day: 3, block: 'day' }, { seed: 'r', rapport: 1 });
+  ok(warm.buy < cold.buy && warm.sell > cold.sell, 'rapport narrows the spread from both sides');
+  ok(Math.abs(warm.marketMid - cold.marketMid) < 0.01, 'rapport does not change what the goods are worth');
+  const gain = (warm.sell - warm.buy) - (cold.sell - cold.buy);
+  ok(gain > 0, `being known somewhere is worth €${gain.toFixed(2)}/pack on a wide book`);
+}
+
 // ── 8. exposure: the same state is camouflage or a flare ────────────────────
 {
   const busy = anchors.find(a => a.id === 'piritori');

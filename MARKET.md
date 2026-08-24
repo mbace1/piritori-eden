@@ -14,7 +14,7 @@ never produced a number is a wish:
 
 ```
 market/model.mjs              the model — one pure function, no dependencies
-market/test/model.mjs         the gate — 28 checks, bare node
+market/test/model.mjs         the gate — 31 checks, bare node
 market/tools/price-table.mjs  what the board quotes today, as a table
 market/tools/market-plate.mjs ux/market-era1.svg — what the player sees
 ```
@@ -411,6 +411,41 @@ who notices you, and whether you still have your bag in the morning.
 
 ---
 
+## 7e. Drinking is an investment, not only a cost
+
+> "Yes these are options to choose, can get cheaper prices, better quotas, free
+> gun, etc." — owner, 2026-08-24
+
+§7d prices what a night out costs you in attention. This is the other side: it
+**buys** things. Drinking with people, smoking with them, being there — these are
+choices the player makes, and they pay in cheaper prices, better terms, and
+occasionally something concrete somebody hands you.
+
+**Rapport lands on the SPREAD, never on the mid**, and that distinction is the
+whole design:
+
+```
+buy  = mid × (1 + spread/2)      spread ×= 1 − rapport × 0.5
+sell = mid × (1 − spread/2)
+```
+
+A relationship does not change what a pack is worth in Kallio — it changes **how
+much of the gap the other party keeps.** At full rapport the spread halves, which
+on a wide residential book is worth more than any day-of-week swing. *Being known
+somewhere is the strongest thing you can do to a price without moving stock*, and
+it costs you nothing that shows on a balance sheet.
+
+That also makes the trade legible: a night that leaves you drunk in daylight
+tomorrow (§7d, ×1.75 somewhere with eyes) bought you a book that pays better for
+weeks. Neither half is a punishment. **The evening is a real decision because both
+sides of it are real.**
+
+Where the conversation itself happens — police stop, consignment terms, a debt
+settled in person — is `NEGOTIATION.md`: the fight view, portrait boxes, choices
+after the line clears, and options gated by intelligence, a weapon or a name.
+
+---
+
 ---
 
 ## 8. What the player sees
@@ -552,6 +587,15 @@ file.
     Built and gated as `exposure()`. The same state is camouflage or a flare
     depending on the hour and the place; losing the bag is a separate accident.
     See §7d.
+
+11. **Social investment buys the spread.** Drinking and smoking with people are
+    player choices that pay in cheaper prices and better terms; rapport halves
+    the spread at most and never touches the mid. §7e.
+
+12. **Negotiations are staged in the fight view.** Portrait boxes, choices after
+    the line clears, options gated by intelligence, weapons or a relationship —
+    and a gated option is better at something and costs something else, or it
+    breaks GDD §9.4. Written up in `NEGOTIATION.md`.
 
 ---
 

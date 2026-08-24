@@ -269,6 +269,16 @@ export function offer(a, good, clock, ctx = {}) {
   }
   const quiet = !best || best.w < 0.04;
 
+  // RAPPORT NARROWS THE SPREAD. Owner ruling: drinking with people, smoking
+  // with them, showing up — these buy cheaper prices and better terms. That
+  // lands here rather than on the mid, because a relationship does not change
+  // what a thing is worth in Kallio; it changes how much of the gap the other
+  // party keeps. At full rapport the spread halves, which on a wide residential
+  // book is worth more than any day-of-week swing — being known somewhere is
+  // the strongest thing you can do to a price without moving stock.
+  const rapport = clamp(ctx.rapport || 0, 0, 1);
+  prof.spread *= 1 - rapport * 0.5;
+
   // Saturation lands on one side only, whichever one costs the player.
   const net = ctx.saturation?.units || 0;
   let buy = mid0 * (1 + prof.spread / 2);
