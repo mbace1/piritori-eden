@@ -271,26 +271,34 @@ the snapshot without an error, which the §2 source model gives for free.
 
 ---
 
-## 6. Decisions that are the owner's
+## 6. Decisions, ruled
 
-1. **Which of the three data options** in §5.4. The feed is now known to be
-   keyless (§5.1), so my recommendation is (2) — snapshot plus live positions —
-   **conditional on the WebSocket endpoint in §5.2 existing.** If it does not,
-   (2) and (3) cost the same architecturally and the choice becomes whether live
-   routing is worth a server at all.
-2. **Does Live mode want location?** A player physically in Helsinki is the case
-   this shines for, and geolocation would let the game know which stop you are
-   standing at. It also collects a real person's position, only helps people in
-   one city, and needs a recorded decision under `NARRATIVE.md`'s people-are-not-
-   scenery discipline before anyone writes it.
-3. **How real is Era I allowed to be?** 2003 headways can be researched or
-   invented. `MAP.md` §10 already separates documented fact from design
-   inference from fictional composite; the schedule tables need the same three
-   columns, and inventing a plausible 2003 timetable is legitimate as long as it
-   is filed in the right column.
-4. **Era II is phase-gated** (`PHASING.md` Phase E, `DESIGN_LOCKS.md` §12.1).
-   Everything in §2's `period` and `snapshot` sources serves Era I Phase C and
-   is not gated. Everything `live` is.
+**Owner rulings, 2026-08-24.** What was a list of open questions is a list of
+answers. Kept in place rather than deleted, because the reasoning under each one
+is what the answer has to survive.
+
+1. **Data option: the feed, and it is current.** §5.4's three options were framed
+   around a feed that could not be reached. It can be reached from here — HSL's
+   own host, not the 2022 mirror — so the extract now runs on
+   `feed_version 2026-08-21`, and §10.9's staleness finding is closed. See §10.9.
+
+2. **Live mode may ask for location. Ruled: yes.** *"It's for funsies now but
+   might become a game mechanic, so all tools are needed."* Geolocation is
+   permitted, on the standing conditions that already govern this layer: it is
+   opt-in, it is never required to play, and §7's safety seam holds — a real
+   position may place the player at a real stop and may never be given a
+   fictional cause. `NARRATIVE.md`'s people-are-not-scenery discipline applies to
+   the player as much as to the cast.
+
+3. **How real is Era I allowed to be? Ruled: research first, invent second.**
+   *"Always research if can, otherwise invent."* 2003 headways are researched
+   where a source exists and invented where none does — and the invented ones are
+   filed in `MAP.md` §10's third column as design inference, never promoted to
+   documented fact by having been written down for long enough.
+
+4. **Era II is phase-gated.** Unchanged (`PHASING.md` Phase E,
+   `DESIGN_LOCKS.md` §12.1). `period` and `snapshot` serve Era I Phase C and are
+   not gated; everything `live` is.
 
 ---
 
@@ -661,17 +669,21 @@ and reading it is a separate job with its own memory budget — worth doing the
 moment boarding is real, and not before, because until then the difference is
 invisible and the file is enormous.
 
-### 10.7 A decision this forces: stops are not anchors
+### 10.7 Stops are not anchors — ruled
 
-287 stops against 13 anchors. Drawing only anchors keeps the board clean and
-throws away the recognisability that is the whole point; making every stop
-actionable adds nodes nobody authored content for.
+287 stops against 13 anchors, and the recommendation was to draw them all and
+make only anchors actionable.
 
-**Recommendation: draw them all, make only anchors actionable.** Real stops
-render as small marks on L2 with their real names — Hakaniemi reads as Hakaniemi
-*because* Sörnäinen is visibly three stops along. A player sees a true map and
-plays a curated one, which is what `MAP.md` §2's production boundary already
-does for geography.
+**Owner ruling, 2026-08-24: draw all, always.** Every real stop renders; only
+board anchors are actionable. A player sees a true map and plays a curated one,
+which is what `MAP.md` §2's production boundary already does for geography —
+Hakaniemi reads as Hakaniemi *because* Sörnäinen is visibly three stops along.
+
+"Always" is the load-bearing word: this is not a density setting to be tuned
+away when a sheet gets busy. If the map is too crowded to read, that is a
+drawing problem to solve in the drawing, not by deleting true things.
+
+The current feed carries **271** stops in the Kallio box, not 287 — see §10.9.
 
 ### 10.8 A street underlay, and an honest label on it
 
@@ -721,38 +733,63 @@ One trap paid for building it: HSL uses the **extended** GTFS route types
 nothing, every bus falls through to `other`, and the first run reported 129
 corridors of no particular mode and not a single bus.
 
-### 10.9 What is still not here
+### 10.9 The feed was stale. It is not any more.
 
-**The feed is dated 2022-02-22, and geometry moved after all.** The assumption
-under §10.2 was that track barely changes, so an old feed is fine for shape. In
-Helsinki that assumption has a date on it:
+**Resolved 2026-08-24.** This section recorded that the extract came from a
+2022-02-22 feed, that tram 13 had opened since and was missing, and that Era II
+could not ship on it. All true when written. The environment it was written in
+could not reach HSL; this one can.
 
-- **Tram 13 opened 12 August 2024** — Nihti/Sompasaari → Kalasatama → Hermanni →
-  Vallilanlaakso → Pasila, 4.5 km of new track that did not exist when this feed
-  was cut. It is **not in the extract, and it is probably on the board**:
-  Kalasatama sits on top of the Suvilahti anchor and Vallilanlaakso beside
-  Vallila. Both of those anchors currently read as *correctly off-network* in
-  §10.3 — true in 2003 and true in 2022, and possibly **false today**. That is a
-  finding waiting on a current feed, not one this file can make.
-- **Route letters and diversions have moved since**: 6B withdrawn, 6T running,
-  7B/9B carrying their own patterns, and long 2025 works at Pitkäsilta that
-  diverted 1, 3, 7, 8 and 9 through Kallio for months. None of this touches the
-  Era I argument — 2003 does not care — but an Era II layer that draws 2022
-  shapes and calls them live is lying in a way a player from Kallio will catch
-  in one glance.
+The extract now runs on **HSL's own host** rather than the r5py mirror —
+`infopalvelut.storage.hsldev.com/gtfs/hsl.zip`, `feed_version 2026-08-21`, valid
+20260820–20261018, sha256 `c62722e8…d0e7`. `stop_times.txt` has grown to **817
+MB** from 472 and is still never opened.
 
-So the refresh is not housekeeping. **Era I can ship on this extract** (§2b: the
-metro is era-invariant and the tram corridors survived), and **Era II cannot** —
-it needs a current feed, which is one run of the same extractor on a machine that
-can reach HSL directly.
+| | 2022 feed | current |
+|---|---|---|
+| Kallio line directions | 26 | **40** |
+| Kallio stops | 287 | 271 |
+| Kallio corridors | 229 | 224 |
+| Era II line directions | 54 | **72** |
 
-**Era I service patterns are still `periodServices`** — this changes nothing
-about them. The geometry is modern, used for Era I under §2b's argument; the
-2003 lines that ran on it stay inferred, and stay labelled as inferred.
+**Tram 13 is on the board, and it does not overturn §10.3.** The worry was that
+Suvilahti and Vallila read as *correctly off-network* on a feed too old to know
+better. Measured against the current one:
+
+| anchor | 2022 | current |
+|---|---|---|
+| Sörnäinen Harbour | 640 m (line 6) | **427 m (line 13)** |
+| Suvilahti | 506 m (line 6) | **264 m (line 13)** |
+| Vallila | 134 m | 134 m |
+
+Both roughly halve. **Neither crosses the 150 m threshold**, so the count holds
+at 10/13 and §10.3's agreement between board and feed survives a feed it was
+never checked against. The prediction was right about the geometry and wrong
+about the consequence, which is a better outcome than either alone.
+
+**Era I service patterns are still `periodServices`.** The geometry is modern and
+used for Era I under §2b; the 2003 lines that ran on it stay inferred and stay
+labelled as inferred.
+
+Two things this refresh forced, both worth keeping:
+
+- **The feed date now lives in the data.** It used to live nowhere: the extract
+  carried no date and three plate tools printed `2022-02-22` as a string literal.
+  Refreshing the data alone would have left three sheets drawing a 2026 network
+  under a 2022 caption while denying a line visibly drawn on them — this
+  section's own failure mode. `gtfs-extract` writes `feedVersion`,
+  `feedStartDate` and `feedEndDate`; the legends read them.
+- **A bare `H` is now a route.** §11.1 fixed the depot filter to `/\d[HS]$/`
+  precisely because HSL has run an H, and the current feed carries one. It serves
+  no board anchor, so it gets no plate — but it is in the extract, and anything
+  that assumes a route id is numeric will meet it.
+
+New short workings the old feed lacked: **1T, 8T, 9N**. `5T` and `H` serve no
+board anchor and get no plate.
 
 ---
 
-## 11. Era II — the bigger map, and the water that is still missing
+## 11. Era II — the bigger map, and the water that is now in it
 
 Owner direction, 2026-08-24: water on the Era I map and then lock it; then the
 same level of content for an Era II Helsinki covering **Tullinpuomi,
@@ -796,55 +833,46 @@ safe here only because no commuter-rail line is currently lettered H or S. HSL
 has run an H. It is `/\d[HS]$/` now — a tram short working is a digit then the
 letter.
 
-### 11.2 Water: the layer is built, the data is blocked
+### 11.2 Water: imported
 
-**The maps have a water layer and no water in it**, and the reason is worth
-recording precisely rather than as "couldn't get it".
+**Resolved 2026-08-24.** This section recorded the water layer as built and
+empty, and named the reason precisely rather than as "couldn't get it": every
+OpenStreetMap source was refused by that environment's egress policy.
 
-Every OpenStreetMap source is refused by this environment's **organisation
-egress policy** — `overpass-api.de` and four mirrors, `api.openstreetmap.org`,
-`download.geofabrik.de`, `tile.openstreetmap.org`, `cdn.digitransit.fi`,
-`osmdata.openstreetmap.de`, and `wikidata.org` with them. The proxy returns 403
-on CONNECT and its own README says to report a policy denial rather than route
-around it. `raw.githubusercontent.com` is the only host that answers, which is
-how the GTFS arrived.
-
-So the layer is wired instead of faked:
-
-- **`map/tools/water-import.mjs`** takes Overpass JSON and writes the file.
-- **`master-plate.mjs` draws it the moment it exists** and prints `NO WATER`
-  and says so in its own gaps column until then.
-- Nothing invents a coastline. A hand-drawn bay would look right and be a
-  fabrication in a document whose whole argument is provenance.
-
-Run this anywhere with ordinary network access, save the JSON, and import it:
-
-```
-[out:json][timeout:120];
-(
-  way ["natural"="water"](60.148,24.895,60.218,24.995);
-  rel ["natural"="water"](60.148,24.895,60.218,24.995);
-  way ["waterway"="riverbank"](60.148,24.895,60.218,24.995);
-  way ["natural"="coastline"](60.148,24.895,60.218,24.995);
-);
-out geom;
-```
+From this environment they all answer — `overpass-api.de`,
+`api.openstreetmap.org`, `download.geofabrik.de`, `cdn.digitransit.fi`. So the
+query this section published was run unchanged and imported with the tool this
+section already committed:
 
 ```
 node map/tools/water-import.mjs water.json map/helsinki-era2-water-v1.json
 node map/tools/water-import.mjs water.json map/kallio-water-v1.json --box 60.170,24.930,60.200,24.980
-node map/tools/master-plate.mjs --both
 ```
 
-**The one thing to know about OSM water**, because it is a trap that produces a
-confident wrong picture: inland water — Töölönlahti, Eläintarhanlahti — is
-closed ways tagged `natural=water` and fills cleanly. **The open sea is not.**
-It is `natural=coastline`, a directed OPEN line with land on its left and the
-sea only implied. Closing it into a polygon puts a lid across the harbour mouth.
-So the importer keeps `areas` (filled) and `edges` (stroked) apart, and a
-stroked coastline already gives the board its silhouette. Filling the sea needs
-the assembled water polygons from `osmdata.openstreetmap.de` clipped to the box;
-they drop in as more `areas` with no schema change.
+| | filled areas | coastline runs |
+|---|---|---|
+| Era II | 111 | 139 |
+| Kallio | 27 | 27 |
+
+`master-plate.mjs` stopped printing `NO WATER` on its own, because it was written
+to draw the layer the moment the file existed.
+
+**The sea is still a line, and that is the documented behaviour, not a gap.**
+Inland water — Töölönlahti, Eläintarhanlahti — is mapped as closed ways and
+imports as filled areas. The open sea is `natural=coastline`: a directed open way
+with land on its left and the water implied, which cannot be closed into a
+polygon without laying a lid across the harbour mouth. Drawn as a line it gives
+the board its silhouette, which was the point. Assembled sea polygons from
+`osmdata.openstreetmap.de` can drop in later as more `areas` without changing the
+shape of this file.
+
+Attribution is on the plate: **© OpenStreetMap contributors**, beside the HSL
+CC BY 4.0 line. OSM data is ODbL.
+
+**Nothing invented a coastline while it was blocked**, and that judgement is why
+this was ten minutes of work rather than an archaeology problem. A hand-drawn bay
+would have looked right and been a fabrication in a document whose whole argument
+is provenance.
 
 ### 11.3 A wrong idea, recorded because it looked right
 
