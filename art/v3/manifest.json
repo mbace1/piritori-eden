@@ -1497,13 +1497,13 @@
       "role": "speaker",
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
       "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Also found unused on the account and rigged for 5 credits. Stands in for Toko Slomo, replacing the driver's body: a proprietor in outdoor clothes reads closer to somebody who runs a small place than a courier in a hi-vis armband does. STILL A PLACEHOLDER — Toko is a Japanese noodle chef and this is not him, so it stays listed in presenter_3d.PLACEHOLDER_SPEAKERS. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
-      "sha256": "57885c077f8120b91631b0920c12cb55cf33c655d5ba61f9da4ce2679afc07a9"
+      "sha256": "453f882df7c74c8ff1e4cb1692081f8c306b95d905a46f85d4619af83c0d4471"
     },
     {
       "id": "cast3d-toko-v01",
       "file": "cast3d/toko-v01.glb",
       "kind": "mesh-3d",
-      "source": "Meshy image-to-3D from art-src/meshy-input/toko-slomo-tpose-v01.png, task 01a035dd, rig task 01a035df",
+      "source": "Meshy image-to-3D from art-src/concepts/people/toko-slomo-notext-v01.png, task 01a035e8, rig task 01a035e9",
       "source_version": "v02-mesh",
       "approval_status": "semi-approved",
       "production_status": "prototype-only",
@@ -1511,11 +1511,11 @@
       "era": "2003",
       "role": "speaker",
       "format": "glb",
-      "baked_text": true,
+      "baked_text": false,
       "baked_ui": false,
-      "note": "Toko Slomo, the noodle chef on Vaasankatu — a named NARRATIVE.md character and the first to get a model of his own rather than a borrowed body. White shirt with rolled sleeves, black apron, black trousers, grey hair. baked_text is TRUE and it is his: the apron reads TOKO SLOMO'S NOODLES over a ramen bowl, with a red katakana patch. Diegetic signage on his own shop apron rather than UI, so it is not a localisation problem, but it cannot be translated and is declared. The gold smiling mask is CANON, not an artefact: it is the Toko face grammar — arched smiling eyes over a U-shaped mouth — carried across from the Toko Midori Games identity in the Suds-Jack repository, where 'the room where Toko takes the mask off' is a deliberate exception. Do not remove it. FETCHED BY ID, not uploaded — the first asset taken straight off the account. The API's list endpoints hide web-made tasks, but a direct GET on a task id resolves; ids are embedded in a meshy.ai /s/ share page. The RIGGED task is the one to take: the raw sculpt behind the same character is 3,084,844 triangles and 127MB, over the 320k rigging limit and too large for the remesh endpoint to accept. This one is 28765 triangles on the usual 24-bone skeleton. Texture 4096 to 512: 20.8MB to 1.9MB. 2026-08-24: remeshed at 12k from the owner T-pose and retextured to 1024 - 28,765 tris and 2.0 MB down to 12,287 and 0.72 MB, which is the size problem this asset had. Rig and both walk/run clips regenerated; clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
-      "sha256": "a56a0d48e22c137949480e7b7249c15a62e963fe50af263a2f0a4450c6563909",
-      "bytes": null
+      "note": "Toko Slomo, the noodle chef on Vaasankatu - a named NARRATIVE.md character. White shirt with rolled sleeves, black apron, black trousers, grey hair. The gold smiling mask is CANON. 2026-08-24: remeshed at 12k from the owner T-pose with ALL APRON TEXT REMOVED, rigged, retextured to 1024. 28,765 tris and 2.0 MB down to 12,481 and 0.69 MB. baked_text is now FALSE - the apron carried TOKO SLOMO'S NOODLES over a ramen bowl and a red katakana patch, which could not be translated and had to be declared; a blank apron removes the localisation dead end and spends no polygons on lettering. Walk/run clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
+      "sha256": "00787592e5361badae5291c32b08132847fa84eb2867de9656d24970dcebcb21",
+      "bytes": 691960
     }
   ]
 }
