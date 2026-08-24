@@ -153,11 +153,62 @@ consequence-free.
 
 ---
 
-## 8. Open
+## 8. Reading the other side
+
+> "Possibly, the narrative choices usually offer clues, and may give you
+> defensive advantage against ambush, etc" — owner, 2026-08-24
+
+**Not a disposition meter.** The tell is in the writing: what they say, what
+they offer, which of your options they seem to expect. A scene that is about to
+turn has said so, and the player who reads it gets to act first.
+
+That gives the clue a mechanical payoff rather than leaving it as flavour:
+**noticing early buys a defensive advantage** — position, initiative, the first
+move — if it turns into a fight. Which is only possible because the negotiation
+is already staged in the fight view (§1). Reading the room is a combat action
+taken before combat starts.
+
+Two rules keep it from becoming a lie detector:
+
+- **A clue is never a guarantee.** People bluff too. If reading the room always
+  worked it would be a meter with extra words.
+- **The advantage is defensive, not pre-emptive.** It lets you survive an
+  ambush, not win one you started. Otherwise the optimal play is to read every
+  scene as hostile and strike first, which is a different game.
+
+---
+
+## 9. The other side has gated lines too
+
+> "Yes" — owner, 2026-08-24, on whether a rival who knows about your debt gets a
+> line you cannot answer
+
+**Symmetry, and it is the thing that makes the system feel like people rather
+than a lock-picking minigame.** If only you have keys, every scene is a puzzle
+about your build. If they have keys too, a scene is about what each side knows
+and is carrying.
+
+So the same grammar runs both ways: a line they can use because of something
+true about you — a debt, a name, a body, a favour outstanding — and it lands
+whether or not you have an answer for it.
+
+What that requires:
+
+- **Their gates are visible in hindsight.** When somebody plays your debt at
+  you, the game has to make clear that is what happened, or it reads as the
+  scene arbitrarily going wrong.
+- **Most of them have an answer somewhere**, and finding it is the reason to
+  keep relationships, information and money in reserve.
+- **Some do not, and that is allowed.** A scene you cannot talk your way out of
+  is what makes the ones you can matter — and it is usually the moment the
+  fight view stops being a staging device.
+
+The pleasing consequence: **paying a debt off is not only arithmetic.** It
+closes a line somebody else was holding.
+
+---
+
+## 10. Open
 
 1. Are portraits drawn per character, or per role with per-character marks? The
    art budget probably decides how many named speakers Era I can support.
-2. Does the player see the other party's disposition before choosing, or only
-   read it off the face and the staging?
-3. Can the *other* side have gated options against you — does a rival who knows
-   about your debt get a line you cannot answer?
