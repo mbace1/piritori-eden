@@ -641,7 +641,55 @@ render as small marks on L2 with their real names — Hakaniemi reads as Hakanie
 plays a curated one, which is what `MAP.md` §2's production boundary already
 does for geography.
 
-### 10.8 What is still not here
+### 10.8 A street underlay, and an honest label on it
+
+The plates drew six lines in a void. `map/kallio-corridors-v1.json` puts a city
+under them — **229 corridors, 43 KB**, from `map/tools/corridors-extract.mjs`
+against the same feed.
+
+**It is not a street map, and the file says so in `source.isNot`.** These are
+the corridors HSL runs service along: every bus, tram, metro, train and ferry
+shape crossing the board, deduped and weighted. In Kallio that draws most of
+the grid that matters — Hämeentie, Siltasaarenkatu, Helsinginkatu, Sturenkatu,
+Aleksis Kiven katu, Fleminginkatu, Sörnäisten rantatie, the linjat — and it
+**omits every street with no route on it**. Torkkelinkatu, Agricolankatu,
+Wallininkatu and most of the quiet Torkkelinmäki blocks are simply absent, which
+is why the middle of the sheet has a hole in it. Measured: of the 64.7 km of
+corridor inside the Kallio crop, **12.8 km (20%) is more than 60 m from any tram
+or metro line** — that 20% is what the underlay actually adds, and it is real.
+
+**Weight is the useful part.** Each corridor carries the weekly trips summed
+over every route that uses it, and width and brightness follow it on a log
+scale. So a trunk reads as a trunk from *data* rather than from a road
+classification nobody here has authored. Linear scaling was wrong: the busiest
+corridor takes 10,943 trips a week and the quietest takes a handful, which
+renders Hämeentie and leaves the rest at zero.
+
+**Why not real OSM.** Every source is refused by this environment's egress
+proxy — `overpass-api.de`, `api.openstreetmap.org`, `download.geofabrik.de`,
+`tile.openstreetmap.org`, `cdn.digitransit.fi`, and `wikidata.org` with them.
+`raw.githubusercontent.com` is the only host that answers, which is how the GTFS
+arrived at all. **On any machine with ordinary network access this is one query**,
+and it should replace the underlay the moment there is one:
+
+```
+[out:json][timeout:60];
+way["highway"~"^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|living_street|pedestrian)$"]
+  (60.170,24.930,60.200,24.980);
+out geom;
+```
+
+Add `natural=water` and `waterway=riverbank` in the same pass: Kallio is defined
+by Eläintarhanlahti to the west and the harbour to the east, and **the water
+matters more to the read than the residential streets do** — without it the
+board has streets but no shape.
+
+One trap paid for building it: HSL uses the **extended** GTFS route types
+(0/1/4/109/700/701/702/704), not the basic ones. Matching `3` for bus catches
+nothing, every bus falls through to `other`, and the first run reported 129
+corridors of no particular mode and not a single bus.
+
+### 10.9 What is still not here
 
 **The feed is dated 2022-02-22, and geometry moved after all.** The assumption
 under §10.2 was that track barely changes, so an old feed is fine for shape. In

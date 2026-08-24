@@ -23,6 +23,7 @@ const here = path.dirname(new URL(import.meta.url).pathname);
 const root = path.resolve(here, '..', '..');
 const rail = JSON.parse(readFileSync(path.join(root, 'map/kallio-rail-v1.json'), 'utf8'));
 const board = JSON.parse(readFileSync(path.join(root, 'map/kallio-era1-2003-v1.json'), 'utf8'));
+const cor = JSON.parse(readFileSync(path.join(root, 'map/kallio-corridors-v1.json'), 'utf8'));
 
 // Kallio proper. Wider than the anchors so a line's approach reads, tighter
 // than the extract box so the stop names are legible at 1:1.
@@ -80,8 +81,16 @@ function plate(service) {
   s += `<text x="${PAD}" y="30" fill="#d6c5a5" font-family="ui-monospace,monospace" font-size="17" letter-spacing="2">${esc(label)} THROUGH KALLIO</text>`;
   s += `<text x="${PAD}" y="52" fill="#7d6b52" font-family="ui-monospace,monospace" font-size="11.5">${esc(d0.name)} · ${trips} trips · ${anchors.length} board anchors · ${stops.length} stops in frame</text>`;
 
-  // the rest of the network, faint, so the line has a city to be in
+  // The street underlay, then the rest of the network faint, so the line has a
+  // city to be in rather than a void. `kallio-corridors-v1.json` is corridors
+  // that carry service, NOT a street map — see §10.8; width and brightness
+  // follow weekly trips on a log scale so a trunk reads as a trunk.
   s += `<g clip-path="url(#fr)">`;
+  const maxW = Math.log(cor.corridors[0].trips + 1);
+  for (const c of [...cor.corridors].sort((a, b) => a.trips - b.trips)) {
+    const t = Math.log(c.trips + 1) / maxW;
+    s += `<path d="${c.shape.map((p, i) => (i ? 'L' : 'M') + X(p[1]).toFixed(1) + ' ' + Y(p[0]).toFixed(1)).join(' ')}" fill="none" stroke="#4a5a61" stroke-width="${(0.8 + t * 4.4).toFixed(2)}" opacity="${(0.15 + t * 0.28).toFixed(3)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
   for (const L of rail.lines) {
     if (mine.includes(L)) continue;
     const c = L.mode === 'metro' ? '#4a3226' : '#232e28';
@@ -118,7 +127,7 @@ function plate(service) {
   s += `<text x="20" y="0" fill="#7d6b52" font-family="ui-monospace,monospace" font-size="11.5">real HSL stop</text>`;
   s += `<rect x="168" y="-11" width="14" height="14" fill="#171d20" stroke="#e8c24a" stroke-width="2.2" transform="rotate(45 175 -4)"/>`;
   s += `<text x="194" y="0" fill="#7d6b52" font-family="ui-monospace,monospace" font-size="11.5">board anchor the line passes</text></g>`;
-  s += `<text x="${PAD}" y="${H - 24}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the rest of the network is drawn faint behind</text></svg>`;
+  s += `<text x="${PAD}" y="${H - 24}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · grey is corridors that carry service, not a street map — see §10.8</text></svg>`;
 
   return { svg: s, stops: stops.length, anchors: anchors.length, touches: d0.anchorSequence.length };
 }

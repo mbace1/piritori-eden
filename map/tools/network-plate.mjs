@@ -38,6 +38,7 @@ const here = path.dirname(new URL(import.meta.url).pathname);
 const root = path.resolve(here, '..', '..');
 const rail = JSON.parse(readFileSync(path.join(root, 'map/kallio-rail-v1.json'), 'utf8'));
 const board = JSON.parse(readFileSync(path.join(root, 'map/kallio-era1-2003-v1.json'), 'utf8'));
+const cor = JSON.parse(readFileSync(path.join(root, 'map/kallio-corridors-v1.json'), 'utf8'));
 
 // Same crop as the per-line plates, so the two sheets can be laid side by side.
 const B = { s: 60.1758, n: 60.1908, w: 24.9395, e: 24.9660 };
@@ -195,6 +196,31 @@ const chip = (x, y, label, fill) =>
   `<rect x="${(x - CHIP_W / 2).toFixed(1)}" y="${(y - CHIP_H / 2).toFixed(1)}" width="${CHIP_W}" height="${CHIP_H}" rx="3.5" fill="${fill}" stroke="${INK}" stroke-width="1.5"/>`
   + `<text x="${x.toFixed(1)}" y="${(y + 4.2).toFixed(1)}" text-anchor="middle" fill="${INK}" font-family="ui-monospace,monospace" font-size="11" font-weight="700">${esc(label)}</text>`;
 
+/** The street underlay.
+ *
+ *  `map/kallio-corridors-v1.json` is every corridor HSL runs service along,
+ *  with the weekly trip count on each. It is NOT a street map — a street with
+ *  no route on it is not in it — but in Kallio it draws most of the grid that
+ *  matters, and it is real geometry rather than a decorative scribble.
+ *
+ *  Weight drives width and brightness together, on a LOG scale: the busiest
+ *  corridor here carries 10,943 trips a week and the quietest carries a
+ *  handful, so linear scaling renders Hämeentie and leaves everything else at
+ *  zero. Log gives a trunk, a street and a lane instead of a trunk and a void.
+ */
+function streets() {
+  const max = Math.log(cor.corridors[0].trips + 1);
+  let g = `<g stroke-linecap="round" stroke-linejoin="round" fill="none">`;
+  // Quiet first, so a busy corridor is never buried by a bus diversion.
+  for (const c of [...cor.corridors].sort((a, b) => a.trips - b.trips)) {
+    const t = Math.log(c.trips + 1) / max;
+    const w = (0.8 + t * 4.4).toFixed(2);
+    const o = (0.17 + t * 0.33).toFixed(3);
+    g += `<path d="${d(px(c.shape))}" stroke="#4a5a61" stroke-width="${w}" opacity="${o}"/>`;
+  }
+  return g + `</g>`;
+}
+
 // ── the sheet ───────────────────────────────────────────────────────────────
 function sheet(mode) {
   const hsl = mode === 'hsl';
@@ -216,6 +242,7 @@ function sheet(mode) {
       : `one hue per line — a legibility device, NOT an HSL system`) + `</text>`;
 
   s += `<g clip-path="url(#fr)">`;
+  s += streets();
   // metro first and unbundled: it is in a tunnel under all of this, not sharing
   // street track with anything, so fanning it into the tram bundle would be a
   // lie about the geometry.
@@ -262,7 +289,8 @@ function sheet(mode) {
   }
   s += `<g transform="translate(${PAD},${ly + 30})"><rect x="0" y="-6.5" width="13" height="13" fill="${INK}" stroke="${GOLD}" stroke-width="2.2" transform="rotate(45 6.5 0)"/>`;
   s += `<text x="22" y="4" fill="${MUTED}" font-family="ui-monospace,monospace" font-size="11">board anchor · stop names are on the per-line plates</text></g>`;
-  s += `<text x="${PAD}" y="${H - 22}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the fan is a drawing device — the real track is the centre of each bundle</text></svg>`;
+  s += `<text x="${PAD}" y="${H - 22}" fill="#5d5343" font-family="ui-monospace,monospace" font-size="11">${esc(rail.source.attribution)} · ${rail.source.licence} · feed 2022-02-22 · the fan is a drawing device — the real track is the centre of each bundle</text>`;
+  s += `<text x="${PAD}" y="${H - 8}" fill="#4a4237" font-family="ui-monospace,monospace" font-size="10.5">grey underlay = corridors that carry service, weighted by weekly trips. NOT a street map: a street with no route on it is not in it (§10.8)</text></svg>`;
   return s;
 }
 
