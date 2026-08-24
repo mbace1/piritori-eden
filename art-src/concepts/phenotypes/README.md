@@ -1,5 +1,40 @@
 # Phenotypes — three per subclass, one settled
 
+**READ THIS FIRST — the axis below is wrong.**
+
+These sheets were built against `MODULAR_CHARACTER_SYSTEM.md`'s eight subclass
+names. `COMBAT.md` §9.11 **supersedes that table** as a description of what a unit
+is, and the live design is in `content/era1-slice-v1.json` — canon rank 10 — which
+I had not read when I generated them.
+
+The content defines **twelve aptitudes carrying six `look` values**, not eight
+subclasses:
+
+| look | aptitudes sharing it |
+|---|---|
+| `heavy` | bruiser, anchor, muscle |
+| `thin` | blade, shooter, courier, runner |
+| `hooded` | spotter, watcher |
+| `long-coat` | fixer |
+| `work-jacket` | driver |
+| `rounded` | local |
+
+A look is shared across characters, which is the whole point and is why there are
+six of them and not twelve. Two of my eight — `hired` and `enforcer` — are not
+aptitudes at all; they are opposition bodies.
+
+**And the coverage already existed.** `art/v3/manifest.json` carries **18
+`cast3d` assets**, including a body for every one of the six looks, plus approved
+cut-paper T-pose body frames in `art-library/characters/manifest.json`
+(`base-{light,medium,heavy}-{m,f}-tpose-cut-v02`) and an approved 3D modelling
+turnaround (`base-medium-mf-turnaround-cut-v02`).
+
+What survives from the work below is the **method and the measurements** — the
+T-pose collapse on bulky outerwear, the key-colour drift, the Block C-T
+one-scale result, and the tooling. The **eight-way split does not.**
+
+---
+
 **Unapproved.** Nothing here is in `APPROVALS.md`, `catalog.json` or
 `art/v3/manifest.json`. `DESIGN_AUTHORITY.md` puts approval with the owner; this
 is material for that decision.
