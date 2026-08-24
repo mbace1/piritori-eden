@@ -147,3 +147,37 @@ If it fails, **fix the art, not the arena.** An arena override exists in
 `formation_battle.gd` and is deliberately empty: a stage that plays differently
 from every other stage, for reasons the player cannot see, is worse than a
 location that had to be redrawn.
+
+### 5.1 Checking all of them at once, without Godot
+
+```bash
+node godot/tools/stage-contact.mjs > stage-contact.svg   # keep it at the repo root
+```
+
+Every plate in `art/v3/scenes/` on one sheet with the arena drawn on it, read
+out of `formation_battle.gd` the same way the template is. It answers a
+different question from the capture above — not *is this candidate right* but
+*which of the ones we already have are usable tonight* — and it needs no engine,
+so it is cheap enough to run before asking for new art.
+
+### 5.2 What the sheet says today — 2026-08-24
+
+**The floor is the only thing being judged here.** The frame is a separate
+question and all ten are in register and in the house palette.
+
+| plate | holds the board |
+|---|---|
+| `courtyard-prototype-v05` | **yes** — ground fills arena and margin, buildings begin past the dashed edge |
+| `hakaniemi-square-v01` | **yes** — the emptied square is the cleanest floor of the set |
+| `kallio-backyard-v01` | **yes** — every prop that gives the yard its character sits outside |
+| `sornainen-quay-v01` | **yes** — the rail tracks cross the arena, but they are flush, which is what flush means |
+| `kallio-service-yard-v01` | **one prop out** — the stacked kegs and crates cross into the arena's right quadrant. §2.1 allows nothing inside the diamond; they want moving, not a redraw |
+| `karhupuisto-clearing-v01` | **one edge short** — the far-left arena edge runs onto the railing line, and the floor margin overshoots into the console band at the bottom |
+| `sornainen-docks-v02` | **check in engine** — owner-supplied and pre-template; the arena's far edge sits near the water line, so the back rank wants the §5 capture before a real fight is staged here |
+| `karhupuisto-v01` | **not as a battle floor** — pre-template, and a bench-sized block stands inside the arena. It is an approved *location plate*, which is a different job |
+| `toko-slomo-noodles-prototype-v01/v02` | **not stages** — fullscreen narrative screens, correctly registered as such. The arena means nothing over them |
+
+Four usable unchanged, two needing a prop moved rather than a redraw, one to
+check in engine, and the two that fail were never battle floors. That is a
+healthier position than it looked — and it is the sheet saying so rather than
+anybody's memory, which is the whole reason it exists.
