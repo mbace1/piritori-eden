@@ -879,8 +879,14 @@ depth — which is what stops "three is simply better".
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off
    screen, or do genuinely trivial ones resolve with no ceremony?
-2. **How many traits does a generated hireling carry?** Two or three worth
-   reading, or a longer tail? §5.2 caps how deep any one of them can go.
+2. ~~**How many traits does a generated hireling carry?**~~ **Answered, with
+   evidence — see `PEOPLE.md` §1.** Two, with about 28% at three: the same
+   shape and proportion as aptitudes in §9.12. Read rather than argued — the
+   same four people printed at one, two, three and five traits. One is a fact
+   rather than a person; two give a contradiction you can hold; three usually
+   supply the cause of the other two; five collapses because nothing dominates
+   and it becomes a stat block written in sentences. Built and gated in
+   `people/`.
 3. **Does Aatami ever stand on the board?** `DESIGN_LOCKS.md` §3 fixes his
    physical role, and §7.1 makes named units rare and precious. Unresolved.
 4. **Where does free roam get its fights?** Wandering into trouble, a posted
