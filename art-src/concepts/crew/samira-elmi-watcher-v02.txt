@@ -1,0 +1,49 @@
+Style: hard black ink-line illustration over flat, slightly muted fills. Clean
+confident linework with a little wobble; flat colour blocks with hard seams
+between them. A light speckle of paper grain sits ON THE CLOTHING AND SKIN ONLY
+and never on the background. No
+gradients, no airbrushed volume, no glow, no lens effects, no photographic
+rendering, no rim lighting. Helsinki in 2003, not a crime film about it.
+
+Subject: a Somali-Finnish woman of about thirty-one, ordinary build, standing
+calmly. She watches things for a living and it shows in how still she is. Her
+clothes are practical Helsinki winter layers worn for several seasons: a dark
+navy hooded anorak with the HOOD UP over a headscarf, a knitted jumper visible
+at the collar, plain dark trousers, flat worn boots. A compact camera hangs on a
+short strap at her chest and a small early-2000s mobile phone sits in a chest
+pocket. Nothing tactical, nothing military, no weapon.
+
+Her face is a specific caricature rather than a generic one: a distinct nose,
+level brows, calm eyes with a slight downward set, a face that is paying
+attention rather than posing. Not grim, not smiling. Warm brown skin.
+
+She is in a strict T-POSE. Both arms are raised straight out sideways so they
+are LEVEL WITH THE SHOULDERS and PARALLEL TO THE GROUND, forming one straight
+horizontal line from the left fingertips through the shoulders to the right
+fingertips. Palms down, fingers together. Legs straight and slightly apart, feet
+flat and pointing forward.
+
+THE SLEEVES GO WITH THE ARMS. The anorak's sleeves point straight out sideways
+along the raised arms. The coat does not hang down and does not hide the arms.
+Under each arm, between the underside of the sleeve and the side of the body,
+the plain background is simply uncovered and continues at exactly the same
+colour as the rest of the background. Nothing is painted into that gap - no
+pale patch, no lighter wedge, no highlight, no glow, no soft shape.
+
+Strictly orthographic front elevation, facing the viewer square on. No
+perspective, no foreshortening, no camera tilt, no lean, no twist. This is a
+modelling reference for 3D reconstruction.
+
+The background is one completely flat, uniform light warm grey at a single
+value, edge to edge and corner to corner, and NOTHING else is on it: no grain,
+no speckle, no noise, no texture, no paper fibre, no gradient, no vignette, no
+shadow, no cast shadow, no contact shadow under the feet, no ground plane, no
+floor line, no horizon, no scenery, no border, no frame. If the background is
+sampled anywhere it returns the same colour. The whole figure fits inside the frame with a clear margin of
+at least ten percent on all four sides, and does not touch any edge.
+
+No text, no letters, no numbers, no labels, no captions, no watermark, no logo,
+no brand, no maker's mark, no swatch strip, no panel, no card, no drop shadow.
+Just the one figure.
+
+The image is exactly square, 1:1.

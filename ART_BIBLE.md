@@ -652,6 +652,51 @@ recurring restaurant contact at battle scale.
 
 ---
 
+### 9.7 The character pipeline, and the gate in the middle of it
+
+**Owner ruling, 2026-08-24.** Every 3D character follows this and nothing skips
+a step:
+
+```
+2D concept  ->  OWNER APPROVAL  ->  Meshy image-to-3D  ->  Meshy rigging  ->  register
+```
+
+1. **2D concept.** Nano Banana via `~/.nano-banana/nb.sh`, or supplied by the
+   owner. Full-figure **T-pose**, front, flat neutral ground, even light, no cast
+   shadow, margin on all four sides. `art-library/references/bodies/` holds the
+   format that is known to work.
+2. **Approval. This is a gate, not a formality.** `DESIGN_AUTHORITY.md` puts
+   approval with the owner. Nothing reaches Meshy without it, because the next
+   step costs money and produces a thing that is hard to argue with once it
+   exists.
+3. **Meshy image-to-3D** — `~/.meshy/m3d.sh --image ... --output ...`
+4. **Meshy rigging** — `~/.meshy/rig.py --task <id> --output ...`. It takes the
+   image-to-3D **task id**, not a file, so keep the id.
+5. **Register** in `art/v3/manifest.json` and `art-library/`.
+
+**Check what exists before generating anything.** `art/v3/manifest.json` already
+carries thirteen rigged, animated bodies. A concept that duplicates one is worse
+than no concept, because it costs credits to discover.
+
+#### The budget is a style rule, not a performance compromise
+
+Measured across the existing cast:
+
+| | tris | texture | rigged |
+|---|---|---|---|
+| existing bodies | 6.5k – 28k | **512 x 512** | yes |
+| a 30k / 2048px run | 31k | 2048 x 2048 | no |
+
+The 2048 model is 3x the polygons and 16x the texels and **looks worse** — the
+hard ink line and flat fill dissolve into photographic mush, which is the one
+thing §1 asks for and the one thing the resolution destroys. The existing crisp
+bodies are on 512.
+
+**So 512 is the target, and it is not only the phone budget** (§9 of `CLAUDE.md`,
+the performance gate). Detail is the enemy of this style: the more texel and
+polygon a body gets, the further it slides from cut card toward a photograph of
+a person.
+
 ## 10. Animals, foliage and ambient people
 
 Ambient life proves the city exists outside the mission.
