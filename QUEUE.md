@@ -1252,3 +1252,14 @@ about six. `PiritoriIcon` draws vector icons in code, so this needs no credits.
   torn edge really has transparent pixels in the top row. Engine lane.
 - **`market_ledger.gd` and `news_event.gd` still build flat boxes.** They were
   out of the pass's reach; they will look like the old game beside the new one.
+
+## Owner observation, 2026-08-24, not yet acted on
+
+**"Even crew looks like 2d pasted marionettes."** About the 3D board, and it is
+a different problem from the chrome — that pass touched only the UI on top.
+Candidates, cheapest first: the figures are lit by the stage's ambient and rim
+only, so they take no light from the sodium lamp and read as stickers; there is
+no contact shadow under a fighter, which is most of what glues a figure to a
+floor; and the idle pose is a single frame per body, so a standing crew is
+literally static cardboard. Worth confirming which of the three it is by
+capturing the battle before changing anything.
