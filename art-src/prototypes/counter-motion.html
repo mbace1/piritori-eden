@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>The counter — what a baked plate can be made to do</title>
+<!--
+  STAGE_SPEC.md §6.1, the free tier of layer separation, made real so it can be
+  judged by looking rather than argued about.
+
+  Nothing here is separated. The plate is the single baked 1536x864 image that
+  shipped, and every moving thing is drawn OVER it in code: steam off the pot,
+  rain in the window, the lantern and the tram's headlamps breathing, a slow
+  warm wash across the room.
+
+  That is the whole demonstration. Light, weather and particles need no layers,
+  because they ADD photons rather than reveal what was behind something. The
+  moment you want a baked OBJECT to move — Toko's arm, the tram crossing the
+  window — you need what is behind it, and no compositing trick invents that.
+
+  Open it. No build step, no dependencies, house rule intact.
+    file:///.../art-src/prototypes/counter-motion.html
+  Toggle each pass with the checkboxes; the plate alone is the honest baseline.
+-->
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; background: #0d1014; color: #c9c4b8;
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px;
+  }
+  h1 { font-size: 15px; color: #8faf6a; font-weight: 600; margin: 0; }
+  p.lede { margin: 0; max-width: 76ch; color: #8d8165; text-align: center; }
+  #wrap { position: relative; width: min(1200px, 96vw); aspect-ratio: 16 / 9; }
+  #wrap img, #wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #wrap img { object-fit: fill; }
+  fieldset {
+    border: 1px solid #2b3138; padding: 10px 14px; display: flex; gap: 18px;
+    flex-wrap: wrap; align-items: center; max-width: min(1200px, 96vw);
+  }
+  legend { color: #8d8165; padding: 0 6px; }
+  label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  input[type=checkbox] { accent-color: #8faf6a; width: 15px; height: 15px; }
+  code { color: #b3a98f; }
+</style>
+
+<h1>the counter — what a baked plate can be made to do</h1>
+<p class="lede">
+  One flat image, no layers. Everything moving is drawn over it in code. Turn the
+  passes off to see the plate as it ships.
+</p>
+
+<div id="wrap">
+  <img id="plate" src="../../art/v3/scenes/toko-slomo-noodles-prototype-v02.webp" alt="Toko Slomo's Noodles">
+  <canvas id="fx"></canvas>
+</div>
+
+<fieldset>
+  <legend>passes</legend>
+  <label><input type="checkbox" id="p-steam" checked> steam off the pot</label>
+  <label><input type="checkbox" id="p-rain" checked> rain in the window</label>
+  <label><input type="checkbox" id="p-glow" checked> lantern &amp; headlamps</label>
+  <label><input type="checkbox" id="p-wash" checked> warm wash</label>
+  <label><input type="checkbox" id="p-regions"> show the regions</label>
+</fieldset>
+
+<script type="module">
+// Every rectangle below is in SOURCE pixels of the 1536x864 plate, read off a
+// grid overlay rather than guessed. Keeping them in source space means the demo
+// is resolution-independent and the numbers can be lifted straight into the
+// engine when this stops being a prototype.
+const SRC = { w: 1536, h: 864 };
+
+const R = {
+  // The window onto Vaasankatu. Bounded by real architecture on all four sides,
+  // which is why it is the cheapest region in the picture to own.
+  window: { x: 1298, y: 18, w: 238, h: 424 },
+  // The pot. Steam leaves it at the lid line and is gone by the signboard.
+  pot:    { x: 150, y: 228, w: 136, h: 104 },
+  // The paper lantern, and the tram's two headlamps behind the glass.
+  lantern:{ x: 12, y: 16, w: 92, h: 200 },
+  lamps:  [{ x: 1449, y: 268, r: 13 }, { x: 1487, y: 268, r: 13 }],
+  // Where the UI band begins: the top edge of the torn cream seam that runs the
+  // full width, y=559 of 864. Against the battle console's 0.755, so this band
+  // is about 1.44x deeper. See STAGE_SPEC 6.2 - including why the FIRST attempt
+  // at this number was wrong.
+  band:   0.647,
+};
+
+const cv = document.getElementById('fx');
+const ctx = cv.getContext('2d');
+const on = id => document.getElementById('p-' + id).checked;
+
+// One scale for the whole pass list: the canvas is sized to its CSS box in
+// device pixels, and everything draws in source coordinates through this.
+let S = 1;
+function resize() {
+  const r = cv.getBoundingClientRect();
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = Math.round(r.width * dpr);
+  cv.height = Math.round(r.height * dpr);
+  S = cv.width / SRC.w;
+}
+addEventListener('resize', resize);
+
+// ── the passes ─────────────────────────────────────────────────────────────
+// A deterministic hash, so a wisp is in the same place on every reload and two
+// captures of the same t are the same picture. A demo you cannot reproduce is
+// a demo you cannot compare against a change.
+const rnd = n => { let x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+// STEAM. Soft additive blobs rising and widening, thinning as they climb. It
+// works over a baked plate because steam is translucent by nature - it never
+// has to occlude anything cleanly, which is exactly what makes it free.
+const WISPS = 22;
+function steam(t) {
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < WISPS; i++) {
+    const seed = i * 7.31;
+    const life = 3.4 + rnd(seed) * 2.2;
+    const k = ((t / life) + rnd(seed + 1)) % 1;          // 0 at the lid, 1 at the top
+    const rise = 168 * k;
+    const drift = Math.sin(t * 0.6 + seed) * 16 * k + (rnd(seed + 2) - 0.5) * 22;
+    const x = R.pot.x + 42 + R.pot.w * 0.28 * (rnd(seed + 3) - 0.5) + drift;
+    const y = R.pot.y + 6 - rise;
+    const rad = (9 + rnd(seed + 4) * 8) * (0.5 + k * 1.5);
+    // Fades in over the first fifth and out over the rest: a puff that appears
+    // at full strength at the lid reads as a pop, not a boil.
+    const a = 0.16 * Math.min(k / 0.18, 1) * (1 - k) ** 1.2;
+    const g = ctx.createRadialGradient(x * S, y * S, 0, x * S, y * S, rad * S);
+    g.addColorStop(0, `rgba(226,222,209,${a})`);
+    g.addColorStop(1, 'rgba(226,222,209,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x * S, y * S, rad * S, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// RAIN, clipped to the window. The streaks are the pass; the faint blue lift
+// underneath is the wet air between the glass and the far side of the street.
+const DROPS = 90;
+function rain(t) {
+  const w = R.window;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(w.x * S, w.y * S, w.w * S, w.h * S); ctx.clip();
+  ctx.fillStyle = 'rgba(120,150,180,0.045)';
+  ctx.fillRect(w.x * S, w.y * S, w.w * S, w.h * S);
+  ctx.lineCap = 'round';
+  for (let i = 0; i < DROPS; i++) {
+    const seed = i * 3.77;
+    const speed = 260 + rnd(seed) * 340;
+    const len = 12 + rnd(seed + 1) * 26;
+    const lean = 6 + rnd(seed + 2) * 5;              // rain off the sea, not vertical
+    const x0 = w.x + rnd(seed + 3) * (w.w + 60) - 40 + ((t * speed) / 9) % 1;
+    const y0 = w.y + ((rnd(seed + 4) * w.h + t * speed) % (w.h + len)) - len;
+    // Near drops are brighter and longer; far ones are a wash. Two speeds in
+    // one window is what stops rain reading as a moving texture.
+    const near = rnd(seed + 5);
+    ctx.strokeStyle = `rgba(198,216,232,${0.05 + near * 0.16})`;
+    ctx.lineWidth = (0.7 + near * 1.1) * S;
+    ctx.beginPath();
+    ctx.moveTo(x0 * S, y0 * S);
+    ctx.lineTo((x0 - lean) * S, (y0 + len) * S);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// GLOW. The lantern breathes on a slow irrational-ish period; the tram lamps
+// sit on a faster one with a little jitter, because a filament on a moving
+// vehicle is never steady. Nothing here needs to know what it is lighting.
+function glow(t) {
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const l = R.lantern;
+  const breathe = 0.5 + 0.5 * Math.sin(t * 0.62) * Math.sin(t * 0.23 + 1);
+  paint(l.x + l.w / 2, l.y + l.h * 0.52, l.w * 1.5, `rgba(226,124,58,${0.05 + breathe * 0.07})`);
+  for (const p of R.lamps) {
+    const flick = 0.82 + 0.18 * Math.sin(t * 7.1 + p.x) + 0.06 * (rnd(Math.floor(t * 14) + p.x) - 0.5);
+    paint(p.x, p.y, p.r * 5.2, `rgba(255,238,196,${0.16 * flick})`);
+    paint(p.x, p.y, p.r * 1.7, `rgba(255,250,232,${0.22 * flick})`);
+  }
+  ctx.restore();
+
+  function paint(x, y, rad, colour) {
+    const g = ctx.createRadialGradient(x * S, y * S, 0, x * S, y * S, rad * S);
+    g.addColorStop(0, colour);
+    g.addColorStop(1, colour.replace(/[\d.]+\)$/, '0)'));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x * S, y * S, rad * S, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+// WARM WASH. A very slow gradient crawling across the room. It does almost
+// nothing on any single frame and is the reason the still does not feel frozen
+// between the other passes - the cheapest pass here and the last one anybody
+// would think of.
+function wash(t) {
+  const cut = SRC.h * R.band;
+  const cx = (0.5 + 0.34 * Math.sin(t * 0.12)) * SRC.w;
+  const g = ctx.createRadialGradient(cx * S, cut * 0.42 * S, 0, cx * S, cut * 0.42 * S, SRC.w * 0.62 * S);
+  g.addColorStop(0, 'rgba(255,206,140,0.055)');
+  g.addColorStop(1, 'rgba(255,206,140,0)');
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.beginPath(); ctx.rect(0, 0, cv.width, cut * S); ctx.clip();
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, cv.width, cut * S);
+  ctx.restore();
+}
+
+function regions() {
+  ctx.save();
+  ctx.lineWidth = Math.max(1, 1.5 * S);
+  ctx.font = `${12 * S * 1.4}px ui-monospace, monospace`;
+  const box = (r, colour, label) => {
+    ctx.strokeStyle = colour; ctx.fillStyle = colour;
+    ctx.strokeRect(r.x * S, r.y * S, r.w * S, r.h * S);
+    ctx.fillText(label, r.x * S + 4 * S, (r.y + 16) * S);
+  };
+  box(R.window, '#4da6ff', 'window');
+  box(R.pot, '#ffb020', 'pot');
+  box(R.lantern, '#ff7ac6', 'lantern');
+  ctx.strokeStyle = '#8faf6a';
+  ctx.beginPath();
+  ctx.moveTo(0, SRC.h * R.band * S); ctx.lineTo(cv.width, SRC.h * R.band * S); ctx.stroke();
+  ctx.fillStyle = '#8faf6a';
+  ctx.fillText('band — nothing decorative below here', 10 * S, (SRC.h * R.band - 8) * S);
+  ctx.restore();
+}
+
+// ── the loop ───────────────────────────────────────────────────────────────
+// `?t=` freezes a single deterministic frame, which is how a capture harness
+// gets two comparable stills out of this without racing an animation.
+const frozen = new URLSearchParams(location.search).get('t');
+
+function draw(t) {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  if (on('wash')) wash(t);
+  if (on('steam')) steam(t);
+  if (on('rain')) rain(t);
+  if (on('glow')) glow(t);
+  if (on('regions')) regions();
+}
+
+resize();
+if (frozen !== null) {
+  draw(parseFloat(frozen));
+  addEventListener('resize', () => { resize(); draw(parseFloat(frozen)); });
+  for (const el of document.querySelectorAll('input')) el.addEventListener('change', () => draw(parseFloat(frozen)));
+  window.__ready = true;
+} else {
+  const t0 = performance.now();
+  (function frame() {
+    if (cv.width !== Math.round(cv.getBoundingClientRect().width * Math.min(devicePixelRatio || 1, 2))) resize();
+    draw((performance.now() - t0) / 1000);
+    requestAnimationFrame(frame);
+  })();
+}
+</script>
+</html>

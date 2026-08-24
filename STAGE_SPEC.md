@@ -242,3 +242,99 @@ television and Toko behind the counter are the same screen with different
 furniture** — a character in a place, animated, saying something, over a band
 carrying a portrait, a transcript and what you may do about it. One component,
 built once.
+
+## 6.1 How easy is layer separation? — the ramp
+
+**Start from the thing that decides the whole answer: there is no layered
+source.** The plate is a lossy 1536×864 VP8 WebP with no alpha channel,
+generated whole. So "separation" here never means *extraction* — every pixel
+behind a lifted element is simply **not in the file**, and has to be invented or
+re-generated. Nobody can cut Toko out and find shelving behind him, because
+there is no behind.
+
+That single fact sorts the work into four tiers, and they are wildly different
+sizes:
+
+| tier | what it buys | how it is actually done | cost |
+|---|---|---|---|
+| **0 — add, never separate** | steam, rain, glow, flicker, breath, a warm wash | draw over the plate; nothing is lifted | **hours, no new art, no credits** |
+| **1 — mask a bounded region** | the window: weather, reflections, something crossing it | one hand-drawn polygon; what is behind it is *not needed*, because the region **is** the layer | an afternoon per region |
+| **2 — regenerate the room empty** | Toko lifted out, live 3D Toko composited into the gap | a Nano Banana pass with the plate as `ref` and nobody behind the counter | 1–3 generate-and-look cycles |
+| **3 — true per-element extraction** | every prop independently animated | unavailable — the hidden pixels do not exist | don't |
+
+**Tier 0 is most of what "slightly animated" means, and it is nearly free.**
+`art-src/prototypes/counter-motion.html` is that claim built: the shipped plate,
+untouched, with steam off the pot, rain in the window, the lantern and the
+tram's headlamps breathing, and a slow warm wash — all in code, all toggleable,
+so the plate alone stays available as the honest baseline. Open it and judge it;
+that is the point of it existing.
+
+**The reason tier 0 works is worth stating, because it also says where it
+stops.** Light, weather and particles are *additive* — they contribute photons
+and never have to occlude anything cleanly, so they do not care what is
+underneath. The moment you want a baked **object** to move — Toko's arm, the
+tram crossing the window rather than sitting in it — you need what was behind
+it, and no compositing trick invents that. **Tier 0 buys you a room that is
+alive. It cannot buy you a room where things happen.**
+
+### The routing rule that removes most of the work
+
+The manifest has always listed six passes: *stage, Toko, mask, props, steam,
+window*. Read against the tiers, **three of the six dissolve**:
+
+- **steam** is tier 0 — it was never a layer, it is a pass;
+- **window** is tier 1 — bounded by real architecture on all four sides, which
+  makes it the cheapest region in the picture to own;
+- **props** are tier 0 if they only need to catch light, and tier 3 if they need
+  to move, so the answer is: light them;
+- **Toko and the mask are not a 2D layer at all.**
+
+That last one is the finding. `presenter_3d.gd` already renders a 3D character
+into a SubViewport through the posterise shader, it already has
+`Framing.LOCATION` sized for exactly this shot, and **Toko already has his own
+model**. So the requirement was never "cut Toko out of the painting" — it is
+**"the room without Toko"**, which is a *generation prompt*, not an extraction
+problem. And that matters practically, because an image model is far better at
+drawing a room empty than at removing a man and inventing the shelving he was
+standing in front of.
+
+Which leaves **exactly one real cost in the whole job: one regeneration.** The
+rest is tier 0 and tier 1.
+
+### What tier 2 risks, so it is entered with eyes open
+
+The plate is the **approved** baseline. A regeneration is a fresh roll and may
+not match it — `CONTENT_HANDOVER.md` §5 records both failure modes already:
+judging the result by a contents list instead of by the look (trap 1), and
+over-correcting off one complaint by deleting the register (trap 2). Two
+mitigations, both already in the pipeline: pass the shipped plate as `ref`,
+which is the mechanism that exists precisely so a subject survives a re-render;
+and keep the empty room as a **new asset id** rather than replacing v02, so the
+approved plate is never the thing at risk.
+
+## 6.2 The band is deeper here, and here is the number
+
+The band begins at the **torn cream seam that runs the full width**, y = 559 of
+864:
+
+| | battle console | the counter's band |
+|---|---|---|
+| band begins at | **0.755** of frame height (188 of 768) | **0.647** |
+| depth | 24.5% | **35.3%** |
+| holds | commands | portrait medallion, name plate, transcript slab, three or four choices |
+
+**The counter's band is about 1.44× deeper than the battle console's**, which is
+correct rather than sloppy — it is carrying a conversation, not a command row.
+Recorded here so the next plate in this class is drawn to a number instead of to
+a memory of this one. Below `0.647`, compose nothing: the torn seam runs to
+about `0.665`, flat band paper to the transcript slab at `0.675`, and the
+choices sit from roughly `0.85`.
+
+**A trap, because it cost a wrong number that looked rigorous.** The first
+attempt found this row by scanning for the darkest, flattest row in the frame —
+which returned `0.575` with convincing statistics (mean luminance 4, σ 7) and
+was **the shadow under the counter overhang**, two furniture elements above the
+seam. Drawing the line on the picture is what caught it. The general shape is
+the one `kindling/` already paid for: *a measurement that certifies **a number**
+cannot see **a place***. Find the band by looking for the **bright** seam, not
+the dark one — the darkest row in a night interior is always some overhang.
