@@ -678,6 +678,23 @@ a step:
 carries thirteen rigged, animated bodies. A concept that duplicates one is worse
 than no concept, because it costs credits to discover.
 
+#### A body is a look, not a person
+
+**Crew names are randomly generated from first- and last-name pools**, and a hire
+rolls random aptitudes and skills. So a mesh must never be named for a person:
+name it for what it looks like. `parka-man-v01`, `suited-man-v01`,
+`street-raver-v01` are the convention; only the six bodies backing a crew role
+are named for one.
+
+**Variation is the point, not naming.** One body serves many generated people,
+recoloured. §9.11's hue-band recolour is what makes that work, and a mesh tied to
+a single generated name quietly undoes it.
+
+A body also does not imply a crew slot. `hooded-camera-woman-v02` carries a
+camera and is **not hired crew** — owner ruling, 2026-08-24 — she is a bystander,
+an informant or press, undecided, and the asset does not need it decided to
+exist.
+
 #### Resolution and polycount, tested
 
 **Settled 2026-08-24 by measurement.** Earlier text in this section claimed 512
