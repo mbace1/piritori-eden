@@ -76,8 +76,20 @@ def collect(js, bin_):
     """Walk the scene graph so node transforms are honoured."""
     tris = []
     tex = None
-    if js.get('images'):
-        im = js['images'][0]
+    # Follow material -> baseColorTexture -> texture -> image. Assuming
+    # images[0] is the base colour breaks on any model that also embeds a
+    # normal or roughness map - Meshy's remesh output leads with the normal
+    # map, and rendering that paints the character purple.
+    img_idx = None
+    for m in js.get('materials', []):
+        bct = m.get('pbrMetallicRoughness', {}).get('baseColorTexture')
+        if bct is not None:
+            img_idx = js['textures'][bct['index']].get('source')
+            break
+    if img_idx is None and js.get('images'):
+        img_idx = 0
+    if img_idx is not None and js.get('images'):
+        im = js['images'][img_idx]
         if 'bufferView' in im:
             bv = js['bufferViews'][im['bufferView']]
             o = bv.get('byteOffset', 0)

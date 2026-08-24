@@ -1205,8 +1205,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "d4f87cb7b83dc23d0e5ff4d8cbc5af50b03b4ce0f05ba1160dad19dc38cc9e2c",
-      "note": "Tall, navy quilted work coat with a hi-vis stripe, keys at the belt. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "abb52e97e6a81d69df1756f291ad1380d2816ff3d0ea61ac5e9a1c7a6f26ef49",
+      "note": "Tall, navy quilted work coat with a hi-vis stripe, keys at the belt. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-fixer-v01",
@@ -1222,8 +1222,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "369a52836cf2ddd1684ebcc6225e8f63d739f15c3e1bea56391803ba6d8048ab",
-      "note": "A long charcoal coat — the only floor-length silhouette in the cast. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "296c44a8ed2f20dc4a67d9a02920c68d27ecbe2463746ffe1c32171a4aa69f34",
+      "note": "A long charcoal coat — the only floor-length silhouette in the cast. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-local-v01",
@@ -1239,8 +1239,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "dc9ee1083ebd66ee4151a436ff415049573a80ac49aed9b10cf99e0447e5b74b",
-      "note": "Short and round, maroon quilted coat. The only rounded outline. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "7e33762e2ae35d81ddc5bc2c65f5f16fd9a30bb37ab8e37249d800fbf0b3df15",
+      "note": "Short and round, maroon quilted coat. The only rounded outline. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-muscle-v01",
@@ -1256,8 +1256,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "ca6c31046f2dc1c40636c9230da57d7508db8136ce890fc896585f5ad841d670",
-      "note": "A wide slab on long legs: black bomber, heavy boots. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "670a2e22e435273a6c56c4e42ce455c4d8c0410a3fc0d30a753be19902f2d455",
+      "note": "A wide slab on long legs: black bomber, heavy boots. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-runner-v01",
@@ -1273,8 +1273,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "c4bb36831a944ba073d95addfcffd4d136f0da4323f6d179216f5d83dc868a27",
-      "note": "Thin vertical, dark tracksuit, white trainers. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "82c528b3a01c3315e21840b852ae8391d012928014cd36431668b4d01a37463a",
+      "note": "Thin vertical, dark tracksuit, white trainers. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-watcher-v01",
@@ -1290,8 +1290,8 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "d6199ad41973a6f2dc51d6fd9906e00a6140c452722c21e1765323c57cc6a456",
-      "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048."
+      "sha256": "afc71225e96c44997f9cced2f17db7601123d00deada487d7b4e55ed92593ca8",
+      "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-hired-v01",
