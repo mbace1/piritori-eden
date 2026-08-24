@@ -1264,23 +1264,27 @@ floor; and the idle pose is a single frame per body, so a standing crew is
 literally static cardboard. Worth confirming which of the three it is by
 capturing the battle before changing anything.
 
-## palette.gd has drifted from the night palette (2026-08-24)
+## palette.gd neutrals, and three colours the Art Bible does not name (2026-08-24)
 
-`DESIGN_LOCKS.md` §12.3 locks the night palette as the game's one palette. The
-running palette in `godot/ui/palette.gd` shares **no hex value** with it -
-`MISSION_ORANGE #C87539` against warning orange `#ff7a1a`, `GOODS_MAGENTA
-#B84D83` against product magenta `#F0027F`, `PAPER #D8D2C4` against `#0f1216`.
-It is a desaturated cousin, and it is what ships.
+**This entry replaces an earlier one that was wrong.** It claimed `palette.gd`
+had drifted from the night palette and shared no hex value with it, and that all
+approved art had been judged against unused colours. `DESIGN_LOCKS.md` §12.3 -
+the palette lock - records the correction: all eight signal colours are identical
+across `ART_BIBLE.md`, `palette.gd` and both reference layouts. There is no
+divergence to reconcile.
 
-Reconciling them is Engine lane and is deliberately not done in the lock. It is
-not a find-and-replace: `palette.gd` carries eight semantic roles with comments
-(player route, product flow, mission/hostility, intel, ordinary movement,
-transit, lethal intent, unavailable) and the night palette is a shorter list
-written for image generation. Somebody has to map roles to colours and decide
-what the night palette does not yet name.
+What is genuinely outstanding is small and not urgent:
 
-Do it before any further art is approved, not after. Every concept so far has
-been judged against colours the build does not use, and approving more of them
-first only grows the amount that has to be re-judged.
+- **Three neutrals sit dE 2.4-5.3 from their Art Bible values.** `PANEL #11151A`
+  against `night-paper #121719`, `PAPER #D8D2C4` against `paper-offwhite
+  #E2D8C2`, and the card grey. Rounding drift. Move `palette.gd` to the Bible's
+  values; the Bible is canon rank 7 and the code is the implementation.
+  Engine lane.
+- **`MAP_GROUND`, `MAP_RELIEF` and `MAP_WATER` exist in code and not in the
+  Bible.** That is a gap in the Bible rather than an invention in the code - the
+  map needs those three and nothing names them. Naming them is Art lane, and the
+  rendered target `art-library/references/ui-target-city-map-v01.jpg` shows what
+  they should be.
 
-Lane: Engine, with an Art review of the result.
+Neither blocks art approval, which the earlier version of this entry wrongly
+said it did.
