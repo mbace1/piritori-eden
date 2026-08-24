@@ -678,24 +678,39 @@ a step:
 carries thirteen rigged, animated bodies. A concept that duplicates one is worse
 than no concept, because it costs credits to discover.
 
-#### The budget is a style rule, not a performance compromise
+#### Resolution: tested, not assumed
 
-Measured across the existing cast:
+**An earlier version of this section claimed 512 x 512 was the style target and
+that "detail is the enemy of this style". That was wrong and is recorded here
+rather than quietly deleted.**
 
-| | tris | texture | rigged |
+It was inferred from comparing *texture atlases*, where the 512 sheets looked
+crisp and a 2048 sheet looked soft. **An atlas is not the thing.** A low-res atlas
+has hard pixel edges and a high-res one has smooth gradients, so the comparison
+measured resolution and called it style. The existing 512s are also not a design
+decision: they came from source images kept small for an upload limit.
+
+Rendered rather than eyeballed as atlases, on the same character from the same
+concept — `art-src/meshy-input/glb_render.py` draws any `.glb` without an engine:
+
+| | tris | texture | reads |
 |---|---|---|---|
-| existing bodies | 6.5k – 28k | **512 x 512** | yes |
-| a 30k / 2048px run | 31k | 2048 x 2048 | no |
+| `hired-b-v01` | 10.4k | 512 | flatter and more graphic; the ink line survives; **the headband keeps its red/yellow/green** |
+| `heavy-dreads-v02` | 31.2k | 2048 | **more of everything true** — pendant, pocket studs, fur trim, hood structure — but the **headband washes out to olive** |
 
-The 2048 model is 3x the polygons and 16x the texels and **looks worse** — the
-hard ink line and flat fill dissolve into photographic mush, which is the one
-thing §1 asks for and the one thing the resolution destroys. The existing crisp
-bodies are on 512.
+So the higher-resolution run is **better on geometry and worse on colour**, and
+neither number is settled. What is settled is the method: **render both and
+look**, never judge a model from its atlas.
 
-**So 512 is the target, and it is not only the phone budget** (§9 of `CLAUDE.md`,
-the performance gate). Detail is the enemy of this style: the more texel and
-polygon a body gets, the further it slides from cut card toward a photograph of
-a person.
+**The open question, for testing rather than assertion:** whether the washed-out
+headband is Meshy's texture bake, the source image's own saturation, or the
+polycount pulling detail away from colour. Until that is answered, a character
+whose identity depends on a specific colour — a headband, a team stripe, a
+faction mark — gets **checked in a render after generation**, not assumed.
+
+The phone performance gate in `CLAUDE.md` §9 is a separate and real constraint,
+and it still applies. It is a budget argument, not a style argument, and the two
+were tangled together here by mistake.
 
 ## 10. Animals, foliage and ambient people
 
