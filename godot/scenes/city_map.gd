@@ -497,7 +497,10 @@ func _draw_anchor(a: Dictionary) -> void:
 	var pos: Vector2 = _layout[id]
 	var state: String = a.get("sliceState", "locked")
 	var live := _is_live_lead(id)
-	var r := maxf(17.0 * _scale, 9.0) * _device_gain()
+	# BIGGER THAN IT WAS. A 17px pin could hold a dot and nothing else; the
+	# pictogram inside it was unreadable at real size, which is the whole point
+	# of having one. 28 is the smallest that carries a shape on a phone.
+	var r := maxf(28.0 * _scale, 15.0) * _device_gain()
 
 	draw_circle(pos + Vector2(0, maxf(3.0 * _scale, 1.0)), r * 1.05, Color(0, 0, 0, 0.45))
 	draw_circle(pos, r, MapStyle.NODE_OUTER)
@@ -519,7 +522,11 @@ func _draw_anchor(a: Dictionary) -> void:
 	elif state == "teaser":
 		draw_circle(pos, r * 0.28, MapStyle.TEASER_RIM)
 	else:
-		draw_circle(pos, r * 0.52, fill)
+		# THE MEDALLION. This was a plain filled dot, which told a player only
+		# that something was here. The pictogram says WHAT is here, from across
+		# the board, before anything is clicked or read.
+		draw_circle(pos, r * 0.70, MapStyle.NODE_INNER)
+		PiritoriIcon.paint(self, pos, r * 1.12, fill, MapStyle.anchor_glyph(id))
 
 	if live:
 		var pulse: float = 1.0 if _reduced_motion() else 1.0 + 0.07 * sin(_t * 2.6)
@@ -641,12 +648,58 @@ func _draw_labels() -> void:
 		if state == "locked" and not use_tan:
 			fg = MapStyle.TINY_TEXT
 
-		draw_rect(Rect2(box.position + Vector2(0, maxf(2.0 * _scale, 1.0)), box.size),
-			Color(0, 0, 0, 0.4))
-		draw_rect(box, bg)
-		draw_rect(box, edge, false, maxf(3.0 * _scale, 1.0))
+		# THE STALK. A tab that floats near a pin has to be guessed at; a tab
+		# that HANGS off one is unambiguous, which matters most where two pins
+		# are close (Hakaniemi and Siltasaari share a corner of the board).
+		var pin: Vector2 = _layout[id]
+		var stalk: Vector2 = box.get_center()
+		stalk.y = box.position.y if stalk.y > pin.y else box.end.y
+		stalk.x = clampf(pin.x, box.position.x + 6.0, box.end.x - 6.0)
+		draw_line(pin, stalk, MapStyle.NODE_RIM, maxf(2.5 * _scale, 1.2), true)
+		draw_circle(stalk, maxf(3.0 * _scale, 1.6), MapStyle.NODE_RIM)
+
+		_torn_tab(box, bg, edge, id)
 		draw_string(_font, box.position + pad + Vector2(0, float(font_px) * 0.82), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, fg)
+
+
+## A label tab as a piece of torn card rather than a rectangle.
+##
+## MAP.md §6 asks for "sparse marker names on separate rough paper tabs", and
+## `art-library/ux-concepts/README.md` settles that cardstock is the interface.
+## A `draw_rect` is neither — it is the shape a renderer makes when nobody has
+## decided anything.
+##
+## The tear is seeded on the anchor id, so a tab looks the same every frame and
+## on every device. A tab that reshuffled its own edges each redraw would be
+## worse than a clean rectangle.
+func _torn_tab(box: Rect2, bg: Color, edge: Color, seed_id: String) -> void:
+	var h: int = abs(seed_id.hash())
+	var steps: int = int(clampf(box.size.x / maxf(7.0 * _scale, 5.0), 3.0, 14.0))
+	# _device_gain, or the tear vanishes on the device it matters on: a phone
+	# lays the map out in ~1280 design units, so an un-gained 2px bite is a
+	# third of a real pixel there and the tab is a rectangle again.
+	var bite: float = maxf(3.4 * _scale, 1.8) * _device_gain()
+
+	var top := PackedVector2Array()
+	var bottom := PackedVector2Array()
+	for i in range(steps + 1):
+		var t: float = float(i) / float(steps)
+		var x: float = box.position.x + box.size.x * t
+		var a: float = float((h >> (i % 12)) & 3) / 3.0
+		var b: float = float((h >> ((i + 5) % 12)) & 3) / 3.0
+		top.append(Vector2(x, box.position.y + a * bite))
+		bottom.append(Vector2(box.end.x - box.size.x * t, box.end.y - b * bite))
+
+	var poly := top + bottom
+	var shadow := PackedVector2Array()
+	for pt in poly:
+		shadow.append(pt + Vector2(0, maxf(2.0 * _scale, 1.0)))
+	draw_colored_polygon(shadow, Color(0, 0, 0, 0.4))
+	draw_colored_polygon(poly, bg)
+	# The fibre edge: a lighter line along the tear, which is what makes card
+	# read as thick rather than as a cut-out silhouette.
+	draw_polyline(poly + PackedVector2Array([poly[0]]), edge, maxf(2.0 * _scale, 1.0), true)
 
 
 func _draw_placeholder_note() -> void:

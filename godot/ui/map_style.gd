@@ -120,3 +120,41 @@ static func anchor_rim(slice_state: String) -> Color:
 		"locked": return LOCKED_RIM
 		"landmark": return LANDMARK_EDGE
 		_: return NODE_RIM
+
+
+## THE PIN IS THE ANCHOR, AND THE PICTOGRAM COMES FROM ITS DEFINING SITE.
+##
+## That was an open design question — the style target draws medallions that
+## read as PLACES, while this map is built on anchors with sites hanging off
+## them. The map data settles it rather than taste: every site in
+## `map/kallio-era1-2003-v1.json` carries `addressPrecision: "anchor-only"`,
+## deliberately, because they are fictional businesses that must not be pinned
+## to a real address. A site pin would mean inventing coordinates, and MAP.md
+## does not allow the board to grow geography that the survey does not have.
+##
+## So a site lends its shape to the anchor that holds it. Toko Slomo's is on
+## Vaasankatu, so Vaasankatu wears a bowl of noodles.
+##
+## Two anchors have no authored site. Alppiharju takes the tram — the rail cut
+## and the Helsinginkatu line are its western edge — and Vallila takes the
+## workshops, which is what Vallila was before it was anything else.
+##
+## Never the only carrier (ART_BIBLE §4.2): the label tab, the state ring and
+## the legend all still say what a pin is.
+static func anchor_glyph(anchor_id: String) -> int:
+	match anchor_id:
+		"piritori": return PiritoriIcon.Kind.CREW          ## the plaza: people, and the first buy
+		"vaasankatu": return PiritoriIcon.Kind.NOODLES     ## Toko Slomo's
+		"torkkelinmaki": return PiritoriIcon.Kind.HOME     ## Jaska's studio
+		"linjat_yard": return PiritoriIcon.Kind.BAR        ## McCormick's
+		"siltasaari": return PiritoriIcon.Kind.BANK        ## the staffed bank
+		"hakaniemi": return PiritoriIcon.Kind.MARKET       ## the market hall
+		"karhupuisto": return PiritoriIcon.Kind.PARK       ## the bench
+		"harju": return PiritoriIcon.Kind.PITCH            ## the pitch
+		"kallio_church": return PiritoriIcon.Kind.CHURCH   ## the orientation landmark
+		"sornainen_harbour": return PiritoriIcon.Kind.DOCKS
+		"suvilahti": return PiritoriIcon.Kind.YARD         ## Kattilahalli, and the lot
+		"alppiharju": return PiritoriIcon.Kind.TRANSIT
+		"vallila": return PiritoriIcon.Kind.WORKS
+		_: return PiritoriIcon.Kind.MISSION
+
