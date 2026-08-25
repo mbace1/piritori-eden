@@ -1,0 +1,38 @@
+Style: the silhouette is built from a few broad pieces of cardstock, each keeping
+a physical cut edge, small misalignment and visible overlap. Ink is reserved for
+faces, joints, folds and one or two material cues. Marker strokes wobble, taper,
+skip or slightly overshoot. Flat, slightly muted fills with visible paper grain.
+No perfect vector contours, no airbrushed volume, no gradients, no glow, no tiny
+costume rendering, no photographic shading. Helsinki in 2003, not a crime film
+about it. Faces are specific caricatures with distinct noses, jaws and brows, and
+carry humour, irritation, nerves or vanity as readily as threat.
+
+Draw THREE DIFFERENT PEOPLE of the same type, laid out plainly in a single row,
+evenly spaced, all at exactly the same scale, all standing on the same invisible
+groundline, all the same height in frame.
+
+EVERY figure is in a strict T-POSE: standing upright and facing the viewer square
+on, both arms straight out horizontally to the sides at shoulder height, palms
+down, fingers together, legs straight and slightly apart. No contrapposto, no
+lean, no twist, no action pose. This is a modelling reference.
+
+Strictly orthographic front elevation. No perspective, no foreshortening, no
+camera tilt. Feet flat on an implied ground line. No cast shadow and no contact
+shadow. Nothing held in either hand. No ground plane, no floor, no scenery.
+
+The background is one completely flat, solid, uniform magenta, hex #FF00FF - pure
+full-intensity fuchsia, red 255, green 0, blue 255. A harsh electric screen
+colour, NOT pink, NOT rose, NOT dusty. It runs edge to edge and corner to corner
+behind and BETWEEN all three figures at that one exact value, with nothing on it:
+no gradient, no vignette, no shadow, no texture, no grain, no border, no frame.
+No figure touches the edge of the image, and there is clear magenta between them.
+
+No text, no letters, no numbers, no labels, no captions, no hex codes, no swatch
+strip, no watermark, no logo, no panel, no card, no drop shadow, no mounted card.
+Not a presentation board - just three figures on flat magenta.
+
+Any tracksuit stripe is TWO stripes and there is no maker's mark, logo or brand
+anywhere on any garment.
+
+THE TYPE, and all three are this type:
+LIGHT to MEDIUM build, planted stance, cheap clothes worn slightly too thin for the weather. Young men who stand around outside a bar in Helsinki in 2003 waiting to be given something to do. Full tracksuit with TWO stripes down the leg and no maker's mark anywhere, cheap trainers, a small nylon duffel strap across the chest, shaved head or gelled hair, a thin chain at the neck. Ordinary and a bit bored rather than menacing. Vary age and ethnicity across the three.

@@ -1,0 +1,49 @@
+Style: the silhouette is built from a few broad pieces of cardstock, each keeping
+a physical cut edge, small misalignment and visible overlap. Ink is reserved for
+faces, joints, folds and one or two material cues. Marker strokes wobble, taper,
+skip or slightly overshoot. Flat, slightly muted fills with visible paper grain.
+No perfect vector contours, no airbrushed volume, no gradients, no glow, no tiny
+costume rendering, no photographic shading. Helsinki in 2003, not a crime film
+about it. Faces are specific caricatures with distinct noses, jaws and brows, and
+carry humour, irritation, nerves or vanity as readily as threat.
+
+Draw THREE DIFFERENT PEOPLE of the same type, laid out plainly in a single row,
+evenly spaced, all at exactly the same scale, all standing on the same invisible
+groundline, all the same height in frame.
+
+EVERY figure is in a strict T-POSE. Both arms are raised straight out sideways so
+they are LEVEL WITH THE SHOULDERS and PARALLEL TO THE GROUND, forming one
+straight horizontal line from the left fingertips through the shoulders to the
+right fingertips. Palms down, fingers together. Legs straight and slightly apart.
+The arm span is as wide as the figure is tall.
+
+THE SLEEVES GO WITH THE ARMS. Whatever coat, parka or jacket a figure wears, its
+sleeves point straight out sideways along the raised arms. A heavy garment does
+not hang down and does not hide the arms. On every figure there is a clear open
+wedge of flat background visible in each armpit, between the underside of the arm
+and the side of the body.
+
+Arms hanging down at the sides is WRONG. Arms lowered, relaxed, folded, in
+pockets, or angled downward is WRONG. This is a modelling reference, not a
+portrait.
+
+Strictly orthographic front elevation. No perspective, no foreshortening, no
+camera tilt. Feet flat on an implied ground line. No cast shadow and no contact
+shadow. Nothing held in either hand. No ground plane, no floor, no scenery.
+
+The background is one completely flat, solid, uniform magenta, hex #FF00FF - pure
+full-intensity fuchsia, red 255, green 0, blue 255. A harsh electric screen
+colour, NOT pink, NOT rose, NOT dusty. It runs edge to edge and corner to corner
+behind and BETWEEN all three figures at that one exact value, with nothing on it:
+no gradient, no vignette, no shadow, no texture, no grain, no border, no frame.
+No figure touches the edge of the image, and there is clear magenta between them.
+
+No text, no letters, no numbers, no labels, no captions, no hex codes, no swatch
+strip, no watermark, no logo, no panel, no card, no drop shadow, no mounted card.
+Not a presentation board - just three figures on flat magenta.
+
+Any tracksuit stripe is TWO stripes and there is no maker's mark, logo or brand
+anywhere on any garment.
+
+THE TYPE, and all three are this type:
+HEAVY build with a CLOSED, LONG silhouette - dark rain shell or long coat that hides the hands, dark cap or hood, dark trousers, heavy plain boots. Organised rather than casual. Deliberately less individual than the others: the silhouette should read before the face does. Vary age and build weight across the three.
