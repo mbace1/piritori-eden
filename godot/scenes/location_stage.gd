@@ -75,7 +75,11 @@ func setup(encounter_id: String) -> void:
 
 	var enc := ContentRegistry.encounter(encounter_id)
 	var site := ContentRegistry.site(String(enc.get("site_id", "")))
-	_load_stage_art(String(site.get("anchorId", "")))
+	# The encounter's own choice wins. Falling straight through to the anchor
+	# meant an anchor with two scenes handed out whichever sat first in the
+	# manifest — karhupuisto has both the park and the clearing, and the bear
+	# path asked for the clearing and got the park.
+	_load_stage_art(String(site.get("anchorId", "")), String(enc.get("scene_asset_id", "")))
 
 	_copy.text = String(enc.get("opening", ""))
 	_note_label.text = _stage_note
@@ -85,12 +89,15 @@ func setup(encounter_id: String) -> void:
 
 ## Find a registered scene asset for this anchor. Missing art is reported as a
 ## labelled placeholder rather than a fallback picture.
-func _load_stage_art(anchor_id: String) -> void:
+func _load_stage_art(anchor_id: String, wanted_id: String = "") -> void:
 	_stage_texture = null
 	for asset in ContentRegistry.art.get("assets", []):
 		if asset.get("kind", "") != "scene":
 			continue
-		if String(asset.get("location", "")) != anchor_id:
+		if wanted_id != "":
+			if String(asset.get("id", "")) != wanted_id:
+				continue
+		elif String(asset.get("location", "")) != anchor_id:
 			continue
 		var path := "res://data/art/" + String(asset.get("file", ""))
 		if ResourceLoader.exists(path):
@@ -98,6 +105,11 @@ func _load_stage_art(anchor_id: String) -> void:
 			_stage_note = "%s — %s (prototype art)" % [
 				asset.get("id", ""), asset.get("production_status", "")]
 			return
+	# A named scene that does not resolve must not silently fall back to the
+	# anchor's — that is how you ship the wrong picture and never notice.
+	if wanted_id != "":
+		_load_stage_art(anchor_id)
+		return
 	_stage_note = tr("ui.no_stage_art") % anchor_id
 
 
