@@ -10,11 +10,11 @@
  * promise nobody checks drifts.
  */
 import { readFileSync } from 'node:fs';
-import { GOODS, nodeProfile, offer, present, decay, INFO, exposure, CONDITION } from '../model.mjs';
+import { GOODS, nodeProfile, offer, present, decay, INFO, exposure, CONDITION, BLOCKS as CANON_BLOCKS, SLICE_BLOCKS } from '../model.mjs';
 
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const anchors = board.anchors;
-const BLOCKS = ['morning', 'day', 'evening', 'night'];
+const BLOCKS = CANON_BLOCKS;
 
 let pass = 0, fail = 0;
 const ok = (cond, what) => { if (cond) { pass++; } else { fail++; console.log('  FAIL  ' + what); } };
@@ -198,6 +198,27 @@ const ok = (cond, what) => { if (cond) { pass++; } else { fail++; console.log(' 
 
   ok(CONDITION.drunk.slip > CONDITION.stoned.slip && CONDITION.clear.slip === 0,
     'losing the bag is its own accident, worst when drunk');
+}
+
+// ── 9. the clock is the one canon says it is ────────────────────────────────
+// DESIGN_LOCKS §1 locks two blocks for the slice and three for full Era I, and
+// this model had invented a fourth. A price model whose clock disagrees with
+// the campaign's is worse than a wrong number, because a mission's deadline is
+// denominated in blocks (MISSIONS.md §2).
+{
+  ok(CANON_BLOCKS.length === 3 && !CANON_BLOCKS.includes('morning'),
+    `the clock is Day / Evening / Night (${CANON_BLOCKS.join(' ')})`);
+  ok(SLICE_BLOCKS.every(b => CANON_BLOCKS.includes(b)) && SLICE_BLOCKS.length === 2,
+    'the slice runs two of those three');
+
+  const a = anchors[0];
+  const at = b => offer(a, 'piri', { day: 3, block: b }, { seed: 'clk' }).marketMid;
+  ok(at('night') > at('evening') && at('evening') > at('day'),
+    'the hour leans one way: day < evening < night');
+
+  // An unknown block must not silently become its own time of day again.
+  ok(Math.abs(at('morning') - at('day')) < 1e-9,
+    'a block canon does not have falls back to day rather than inventing one');
 }
 
 console.log(`\nmarket model — ${pass} passed, ${fail} failed\n`);

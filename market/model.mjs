@@ -148,12 +148,34 @@ function fDay(prof, day) {
   return [m, weekend ? 'weekend' : 'midweek', weekend ? 'weekend crowd' : 'quiet midweek'];
 }
 
+/** The canon blocks, and there are three of them.
+ *
+ *  `DESIGN_LOCKS.md` §1: the seven-day SLICE runs two — Day and Night — and the
+ *  full Era I target runs three, adding Evening. There is no MORNING anywhere in
+ *  canon, and this model had one: `fBlock` gave it its own multiplier and the
+ *  gate swept four blocks, which meant a quarter of every price surface tested
+ *  here described a time of day the game does not have.
+ *
+ *  Nothing was wrong with the numbers. The clock was wrong, and a clock is what
+ *  a mission's deadline is denominated in — see `MISSIONS.md` §2. Recorded
+ *  rather than quietly averaged, per DESIGN_AUTHORITY's rule for two sources
+ *  disagreeing.
+ *
+ *  Slice content passes only 'day' and 'night'; 'evening' is here so the model
+ *  is ready for §1.2 without a second edit. Anything else falls to day. */
+export const BLOCKS = ['day', 'evening', 'night'];
+export const SLICE_BLOCKS = ['day', 'night'];
+
 /** Blocks are the campaign clock (§3.4). Closed places do not quote at all —
  *  that is handled by the caller; this is only the pressure of the hour. */
 function fBlock(prof, block) {
-  const m = block === 'night' ? 1 + (prof.volatility - 1) * 0.35 + 0.05
-    : block === 'morning' ? 0.97 : 1;
-  return [m, 'hour', block === 'night' ? 'late hour' : block === 'morning' ? 'early, few buyers' : 'ordinary hour'];
+  const swing = (prof.volatility - 1) * 0.35;
+  if (block === 'night') return [1 + swing + 0.05, 'hour', 'late hour'];
+  // Evening is the block where both halves of the day's argument are live —
+  // the shops are shut and the street is awake — so it leans the same way as
+  // night at about half the strength rather than being an ordinary hour.
+  if (block === 'evening') return [1 + swing * 0.5 + 0.02, 'hour', 'evening trade'];
+  return [1, 'hour', 'ordinary hour'];
 }
 
 /** Seeded daily jitter. Small, and the only unnamed movement in the model —
