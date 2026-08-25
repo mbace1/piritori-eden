@@ -1,0 +1,54 @@
+The attached image is the finished painted style this must match exactly: the
+same cut-cardstock painted-night register, the same muted palette of cold
+blue-grey and warm interior light, the same level of detail, the same brush
+texture, the same deadpan restraint.
+
+The scene: the inside of an art-and-LAN commune in Kallio, Helsinki, at night
+in 2003 - a bare, shared, well-used room where local hobbyists gather to make
+things. Bare plaster walls with nothing on them but scuff marks and a few
+unframed pinned sketches. Low couches and a scatter of mattresses along one
+side for people who stay late. A cluster of small tables at one side, wired
+for a LAN party: a tangle of ethernet cable underfoot, two or three boxy CRT
+monitors glowing with abstract screen-light, tower cases with one case side
+off. One older television on a stand plays static-soft colour in a corner,
+ignored. A paraffin heater. Empty bottles and mugs on a windowsill. One tall
+window onto the street, cold blue night and a streetlamp outside.
+
+CAMERA: eye height, angled down only slightly - a person standing in the room
+looking across it, not a diorama seen from above.
+
+ONE OTHER PERSON is present, small, at the side, doing their own thing and not
+looking at the viewer: someone at the LAN tables, lit by a monitor, absorbed
+in a game. Ordinary Helsinki twenty-something in plain 2003 clothes, part of
+the room, not the subject.
+
+JASKA'S TABLE SITS AGAINST THE BACK WALL, ROUGHLY IN THE CENTRE OF THE FRAME,
+at the SAME DISTANCE FROM THE CAMERA as the television and the LAN desks
+either side of it - NOT in the foreground, NOT cropped by the bottom of the
+frame, NOT close to camera. It is one more piece of furniture at the far side
+of the room, comfortably inside the frame with clear space below and around
+it. On it: small cut paper receipts, a paste pot, scissors, an unfinished
+collage-map of the city pinned flat, a fat sealed envelope propping one edge.
+
+In front of this table, between it and the camera, leave a CLEAR STANDING
+SPACE the height and width of a person - open floor at the same middle
+distance as the table itself, not in the foreground - as if someone stands
+there talking to whoever is looking, just out of frame. Do not draw a person
+in this space; it stays empty floor, comfortably inside the picture with room
+above the head and below the feet.
+
+The near foreground, closest to camera, is simply more open floor - a rug, a
+few worn boards - with nothing important placed there.
+
+COMPOSITION: broad open floor fills the space between camera and the far
+wall. Everything - couches, mattresses, LAN tables, TV, heater, Jaska's table
+- sits at or near the far wall and the sides, never in the foreground.
+
+Warm, cluttered, communal, a bit stale with smoke and screen glow.
+
+No readable text anywhere: monitor screens are abstract glow and colour only,
+never legible words, code, icons or numbers; sketches on the wall are gesture
+and shape only. No letters, no digits, no watermark, no logo, no border, no
+frame, no UI.
+
+16:9 landscape.

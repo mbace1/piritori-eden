@@ -41,6 +41,33 @@
       "note": "Approved corrected-mask baseline: eye openings sit inside the white arches. The runtime overlays live copy and controls; production must separate stage, Toko, mask, props, steam and window pass."
     },
     {
+      "id": "scene-toko-noodles-empty-v01",
+      "kind": "scene",
+      "file": "scenes/toko-slomo-noodles-empty-v01.webp",
+      "source": "art-src/scenes/toko-noodles-empty-v04.png",
+      "source_version": "v04",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "vaasankatu",
+      "portrait_safe_bounds": [
+        0.24,
+        0.0,
+        0.76,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "fb86f9d3f5afe30a36e8b55516ceb89c41ea4c72e58b1e7bb32814321a24bea1",
+      "note": "The empty bar - STAGE_SPEC 6.3. Same room, same camera, same moment, nobody behind the counter, for the ruling that Toko is a 3D layer composited into the gap. What he stood in front of - tiled splashback, sink, shelving, stacked bowls, hanging utensils - is painted as continuing objects rather than smeared, and the counter where he worked is bare. NO UI BAND: the room runs to the bottom edge, so the stool legs and floorboards the baked band covered are visible, and the baked-screen exception in APPROVALS.md retires with this asset. NO TEXT AT ALL, which took three passes and is the point: the signboard is a blank aged board, the menu strips keep their pictograms and lose their characters, the poster is a picture, the lantern is plain, the till keys are blank. v02 still read TOKO SLOMO ... ; v03 removed the tram route number and left a glaring white destination box that looked like a mistake; v04 switches that panel off. A blank lit sign is as conspicuous as a written one."
+    },
+    {
       "id": "scene-karhupuisto-v01",
       "kind": "scene",
       "file": "scenes/karhupuisto-v01.webp",
@@ -794,6 +821,33 @@
       "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     },
     {
+      "id": "scene-piritori-square-v01",
+      "kind": "scene",
+      "file": "scenes/piritori-square-v01.webp",
+      "source": "art-src/scenes/piritori-square-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "piritori",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71",
+      "note": "Vaasanpuistikko at night - Piritori itself, the square the game is named for and the site of the day-1 first purchase, which until 2026-08-25 rendered as a labelled placeholder. Metro pavilion with lit M (official HSL orange per TRANSIT_LAYERS 9.2), shuttered kiosk, phone booth, advertising column, tram wires, bare trees; the middle is empty and every prop sits at the rim. Style-matched to scene-hakaniemi-square-v01; geography from art-library/references/photos/photo-sornainen-square-night.jpg. Semi-approved prototype. The M is a lit symbol, not text - baked_text stays false."
+    },
+    {
       "id": "cast-driver-v01",
       "kind": "animation-set",
       "approval_status": "approved",
@@ -1494,9 +1548,9 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "role": "speaker",
+      "role": "hired",
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
-      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Also found unused on the account and rigged for 5 credits. Stands in for Toko Slomo, replacing the driver's body: a proprietor in outdoor clothes reads closer to somebody who runs a small place than a courier in a hi-vis armband does. STILL A PLACEHOLDER — Toko is a Japanese noodle chef and this is not him, so it stays listed in presenter_3d.PLACEHOLDER_SPEAKERS. 18761 triangles, 24 bones. Texture 2048 to 512: 7.1MB to 1.1MB.",
+      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Found unused on the account and rigged for 5 credits. RECAST: he briefly stood in for Toko Slomo and was freed the moment Toko got his own model. He is now one of the `hired` bodies in battle_stage_3d.UNIT_VARIANTS — an ordinary heavy man in work clothes, which is what `hired` means. He is NOT a speaker and NOT in presenter_3d.PLACEHOLDER_SPEAKERS; this note claimed both for a while after the code had moved on, which is how a stale note misreports the cast. 18761 triangles, 24 bones. Texture 2048 to 1024, matching the polycount-is-the-lever finding in ART_BIBLE 9.7 rather than the older 512 target: 7.1MB to 0.77MB.",
       "sha256": "453f882df7c74c8ff1e4cb1692081f8c306b95d905a46f85d4619af83c0d4471"
     },
     {
@@ -1516,6 +1570,50 @@
       "note": "Toko Slomo, the noodle chef on Vaasankatu - a named NARRATIVE.md character. White shirt with rolled sleeves, black apron, black trousers, grey hair. The gold smiling mask is CANON. 2026-08-24: remeshed at 12k from the owner T-pose with ALL APRON TEXT REMOVED, rigged, retextured to 1024. 28,765 tris and 2.0 MB down to 12,481 and 0.69 MB. baked_text is now FALSE - the apron carried TOKO SLOMO'S NOODLES over a ramen bowl and a red katakana patch, which could not be translated and had to be declared; a blank apron removes the localisation dead end and spends no polygons on lettering. Walk/run clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
       "sha256": "00787592e5361badae5291c32b08132847fa84eb2867de9656d24970dcebcb21",
       "bytes": 691960
+    },
+    {
+      "id": "scene-scene-club-v01",
+      "kind": "scene",
+      "file": "scenes/scene-club-v01.webp",
+      "source": "art-src/scenes/scene-club-v04.png",
+      "source_version": "v04",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "makelansilta",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2",
+      "note": "Scene Club - the art-and-LAN commune at Makelansilta, owner-placed 2026-08-25, just north of Kurvi past the bridge where Makelankatu begins. Camera is LOWER than the other scenes, closer to eye height, so a full standing figure fits without cropping - owner direction: Jaska stands here and talks to camera. His table sits at the FAR WALL, mid-distance, matching the depth of the TV and LAN desks either side, with open floor left standing-room-clear in front of it for the live 3D speaker (Framing.LOCATION). v01-v03 put the table in the foreground where it cropped against the frame edge and would have cut a standing figure badly; v04 pulled it back. One background hobbyist (a LAN gamer) dresses the room; not a modelled participant. baked_text false, checked at final size: wall sketches are portraits and gesture only, monitor screens are abstract glow."
+    },
+    {
+      "id": "cast3d-jaska-v01",
+      "kind": "mesh-3d",
+      "file": "cast3d/jaska-v01.glb",
+      "source": "art-src/concepts/people/jaska-tpose-v07.png",
+      "source_version": "v07",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "speaker",
+      "format": "glb",
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "74086ed4923863bed0cc5faf562bf7f5d88438c09ad62bc6dcac9645aa9adf6d",
+      "note": "Jaska, Aatami's artist brother and moral counterweight (NARRATIVE.md), built from a likeness photo the owner supplied. 31k tris at 1024, Meshy image-to-3D task 01a03a67, rig task 01a03a69. A-POSE, NOT T-POSE, AND DELIBERATELY: a T-pose puts a narrow dark-on-dark notch between sleeve and torso that Meshy could not resolve - it bridged the gap with torn webbing geometry and baked the grey background into the shoulder seam as a visible stripe. Arms at 45 degrees over a bright cream ground opens the silhouette wide enough to reconstruct cleanly. That failure was in the MESH, not the drawing; the 2D passed every check. Glasses survive as texture rather than geometry - thin wireframe is below what image-to-3D resolves. Ten idle/talking clips staged unregistered at art-library/cast3d/jaska-v01-clips.glb."
     }
   ]
 }

@@ -337,6 +337,28 @@
         -96,
         -34
       ]
+    },
+    {
+      "id": "makelansilta",
+      "label": "MÄKELÄNSILTA",
+      "wgs84": [
+        60.1905,
+        24.9525
+      ],
+      "board": {
+        "x": 495.66,
+        "y": 233.13
+      },
+      "coordinateStatus": "public-vicinity-services-fictional",
+      "sliceState": "active",
+      "roles": [
+        "home",
+        "crowd-source"
+      ],
+      "labelOffset": [
+        20,
+        -18
+      ]
     }
   ],
   "sites": [
@@ -369,12 +391,13 @@
     },
     {
       "id": "jaska_studio",
-      "anchorId": "torkkelinmaki",
-      "label": "Jaska's studio",
-      "kind": "narrative-home",
+      "anchorId": "makelansilta",
+      "label": "Scene Club",
+      "kind": "narrative-venue",
       "fictional": true,
       "addressPrecision": "anchor-only",
-      "sliceState": "invitation"
+      "sliceState": "invitation",
+      "note": "An art and LAN commune just north of Kurvi, past the Makelansilta bridge - couches and mattresses, bare walls, a few TVs and tables wired for LAN. Jaska has a corner of it. Fictional composite, MAP.md 42."
     },
     {
       "id": "mccormick_yard",
@@ -705,6 +728,16 @@
       "modes": [
         "walk",
         "car"
+      ],
+      "lengthBand": "short"
+    },
+    {
+      "id": "e25",
+      "from": "piritori",
+      "to": "makelansilta",
+      "corridor": "makelankatu-band",
+      "modes": [
+        "walk"
       ],
       "lengthBand": "short"
     }

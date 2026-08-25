@@ -1,0 +1,30 @@
+The attached image is the reference. Keep this exact character, exactly as
+drawn: the same man, the same face, the same T-pose, the same clothes, the
+same chest patch, the same shoes, the same flat grey background, the same
+framing and the same scale in frame. Change nothing except what is described
+below.
+
+THE ONLY CHANGE: open up a gap under each arm.
+
+Right now the black sleeve and the black torso of the shirt touch and form one
+solid black shape all the way from the wrist down to the waist, with no
+background visible between the underside of the arm and the ribcage. Fix
+this specific area only.
+
+Redraw the torso of the shirt NARROWER, so its side edge sits close to his
+actual ribcage width - roughly as wide as his head. Redraw each sleeve as its
+own separate long shape running from the shoulder seam out to the hand, at
+the same height as the shoulders, not widening as it goes down. Between the
+bottom edge of the sleeve and the narrower side edge of the torso, there must
+be a visible gap of the flat grey background - roughly a triangle, about as
+wide as one of his ears at its widest point, getting narrower toward the
+shoulder and wider toward the hand. The sleeve and the torso must be two
+separate black shapes that do not touch anywhere except at the shoulder seam
+itself.
+
+Do this identically on both the left and right side of the body.
+
+Nothing else in the picture changes: not the face, not the pose, not the
+chest patch, not the shoes, not the background, not the framing.
+
+The image is exactly square, 1:1.

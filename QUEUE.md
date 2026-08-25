@@ -1325,3 +1325,33 @@ What is genuinely outstanding is small and not urgent:
 
 Neither blocks art approval, which the earlier version of this entry wrongly
 said it did.
+
+## What the first honest captures found (2026-08-25)
+
+The fixed capture tool and the new Piritori scene went through the full loop -
+generate, register, wire, import, capture - and the captures came back with a
+list. Recorded here instead of half-fixed:
+
+- **Four sites still play over the labelled placeholder**: `jaska_studio` (3
+  encounters), `staffed_bank` (3), `harju_pitch` (1), `jade_lantern_front` (1).
+  Each needs its own scene in the painted-night register; none of the nine
+  existing scenes fits honestly. Art lane, one scene at a time, the
+  Piritori/Hakaniemi pair is the template.
+- ~~**The opening line overflows the frame in portrait.**~~ **FIXED 2026-08-25,
+  and it was not a text bug.** The command bar pinned every command to at least
+  96 design units wide; five of those plus separation is a 665-unit minimum, and
+  a phone at the shipped UI scale has ~410 units. The bar forced the WHOLE SHELL
+  to 665, so every screen above it was cut off at the right edge — the hamburger,
+  the ends of every line, the fifth command. The command floor is now derived
+  from available width, and the words drop to icons when they no longer fit
+  beside them. 665 -> 415 against a 410 viewport.
+- **The location screen is still flat boxes against the Toko target.**
+  `art-library/references/ui/ui-target-location-toko-v01.jpg` shows what LOOK /
+  ACT should be: dialogue on a kraft card, choices as three carton buttons with
+  icon + text + price, a ringed portrait medallion for the speaker. The current
+  screen renders the same data as text links on dark panels. This is the next
+  real UI build, and the tab-strip spec in `UX_SPEC.md` 6.6.1 already names the
+  material language. Art lane (ui/ drawing code), after the scene gaps.
+
+Lane: mixed, each named above. Found by testing, which is the point of the
+capture tool existing.

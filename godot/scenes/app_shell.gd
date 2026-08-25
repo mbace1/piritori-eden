@@ -350,21 +350,53 @@ func _size_header(vp: Vector2) -> void:
 		_menu_button.add_theme_font_size_override("font_size", int(m * 0.52))
 
 
+## Separation between commands and the bar's own padding, needed to work out
+## what width is actually available to divide between them.
+const COMMAND_BAR_SEPARATION := 8.0
+const COMMAND_BAR_PADDING := 32.0
+
 func _size_commands(vp: Vector2) -> void:
 	# Portrait is the case that was broken. Landscape has height to spare and a
 	# bar taking a twelfth of it would be a cliff, so it keeps a modest share.
 	var share := COMMAND_BAR_FRACTION if vp.y > vp.x else COMMAND_BAR_FRACTION * 0.75
 	var h := clampf(vp.y * share, MIN_TARGET, 320.0)
+
+	# THE WIDTH MUST COME FROM THE SCREEN, NOT FROM A CONSTANT.
+	#
+	# This used to pin every command to at least 96 design units. Five of them
+	# plus separation is a 665-unit minimum, and a phone at the shipped UI scale
+	# has about 410 units to give — so the bar forced the WHOLE SHELL to 665,
+	# and every screen above it was silently cut off at the right edge. It
+	# looked like a text-wrapping bug in the encounter copy; it was the command
+	# bar dragging the column wider than the window.
+	#
+	# A minimum wider than the screen is not a minimum, it is a promise the
+	# layout cannot keep. So the floor is what fits, and MIN_TARGET keeps the
+	# touch target honest in the other axis.
+	var count := 0
+	for b in _commands:
+		if b != null:
+			count += 1
+	var per := 96.0
+	if count > 0:
+		var gaps := COMMAND_BAR_SEPARATION * float(count - 1) + COMMAND_BAR_PADDING
+		per = minf(maxf(h * 1.6, 96.0), maxf((vp.x - gaps) / float(count), 44.0))
+
+	# Below this the words stop fitting beside the icon and would themselves
+	# force the bar wide again, so they are dropped and the icon carries it.
+	var icons_only := per < 96.0
+
 	for b in _commands:
 		if b == null:
 			continue
-		b.custom_minimum_size = Vector2(maxf(h * 1.6, 96.0), h)
+		b.custom_minimum_size = Vector2(per, h)
 		var icon = b.get_meta("icon", null)
 		if icon != null:
 			icon.custom_minimum_size = Vector2(h * COMMAND_ICON_FRACTION,
 				h * COMMAND_ICON_FRACTION)
 		var label = b.get_meta("label", null)
 		if label != null:
+			label.visible = not icons_only
 			label.add_theme_font_size_override("font_size",
 				int(maxf(h * COMMAND_LABEL_FRACTION, 13.0)))
 
@@ -763,6 +795,37 @@ func _show_location(encounter_id: String) -> void:
 const LOCATION_SPEAKER_SIZE := Vector2(240.0, 300.0)
 const LOCATION_SPEAKER_MARGIN := 12.0
 
+## WHERE THE SPEAKER STANDS, as fractions of the stage rather than pixels.
+##
+## STAGE_SPEC 6.3 requires the live figure to stand where the painted one stood,
+## behind the same counter. Bottom-left corner was fine while the room still had
+## a painted Toko in it and the 3D one was a demo; with the empty bar it would
+## put him on the customer's side of his own counter.
+##
+## MEASURED, not chosen. The gold mask in
+## toko-slomo-noodles-prototype-v02.webp is a single colour blob at x 641-757,
+## y 139-264 of 1536x864 - so his head centres at 0.449 across and 0.196 down,
+## and is 0.145 of frame height. These place the presenter box so its rendered
+## head lands there.
+##
+## Per the brief these are "starting points to be judged on a screen, not
+## measurements" - the capture is what settles them.
+## THE COUNTER CROPS HIM, BECAUSE IT CANNOT OCCLUDE HIM.
+##
+## In the plate Toko stands BEHIND the counter. A live figure composited over a
+## flat painting is always in front of everything in it, so there is no depth to
+## put him behind - and a full standing figure reads as a man standing ON the
+## customer's side of his own bar.
+##
+## So the presenter's box ENDS at the counter's top edge, measured in the empty
+## room at y=409 of 864, and the viewport crops him there. From the front that
+## is indistinguishable from the counter passing in front of him, which is the
+## whole trick, and it costs nothing.
+const COUNTER_SPEAKER_CENTRE_X := 0.449
+const COUNTER_SPEAKER_TOP := 0.0
+const COUNTER_SPEAKER_BOTTOM := 0.473
+const COUNTER_SPEAKER_WIDTH := 0.46
+
 func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
 	var enc := ContentRegistry.encounter(encounter_id)
 	if enc.is_empty():
@@ -784,21 +847,29 @@ func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
 		return
 
 	speaker.speaker_id = who
-	speaker.framing = speaker.Framing.LOCATION
+	speaker.framing = speaker.Framing.COUNTER
 	if not speaker.available():
 		speaker.free()
 		return
-	speaker.custom_minimum_size = LOCATION_SPEAKER_SIZE
-	speaker.size = LOCATION_SPEAKER_SIZE
 	speaker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Bottom left, standing on the floor of the scene rather than floating in the
-	# middle of it — the location art behind is the room, and a person belongs at
-	# its near edge.
-	speaker.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	speaker.offset_left = LOCATION_SPEAKER_MARGIN
-	speaker.offset_top = -(LOCATION_SPEAKER_SIZE.y + LOCATION_SPEAKER_MARGIN)
-	speaker.offset_right = LOCATION_SPEAKER_SIZE.x + LOCATION_SPEAKER_MARGIN
-	speaker.offset_bottom = -LOCATION_SPEAKER_MARGIN
+	# Anchored to the stage in fractions so the figure keeps its place in the
+	# room at every screen size, instead of being pinned a fixed number of
+	# pixels from a corner.
+	speaker.set_anchors_preset(Control.PRESET_FULL_RECT)
+	speaker.anchor_left = COUNTER_SPEAKER_CENTRE_X - COUNTER_SPEAKER_WIDTH * 0.5
+	speaker.anchor_right = COUNTER_SPEAKER_CENTRE_X + COUNTER_SPEAKER_WIDTH * 0.5
+	speaker.anchor_top = COUNTER_SPEAKER_TOP
+	# ASK THE STAGE, do not assume. The art is drawn cover-and-cropped, so the
+	# counter's line in the file is not its line on screen — and it moves with
+	# the window. The stage owns that transform.
+	var bottom := COUNTER_SPEAKER_BOTTOM
+	if stage.has_method("texture_y_to_local"):
+		bottom = stage.texture_y_to_local(COUNTER_SPEAKER_BOTTOM)
+	speaker.anchor_bottom = bottom
+	speaker.offset_left = 0.0
+	speaker.offset_right = 0.0
+	speaker.offset_top = 0.0
+	speaker.offset_bottom = 0.0
 	stage.add_child(speaker)
 
 

@@ -26,8 +26,14 @@ func _ready() -> void:
 	for shot in SHOTS:
 		var label: String = shot[0]
 		var dim: Vector2i = shot[1]
+		# Window size ONLY. The old line here also forced content_scale_size to
+		# the window size, which made the shell lay out in 390 design units on
+		# the phone shot. The real build stretches canvas_items from a 1280x720
+		# base, so a phone gets ~1280 design units - every portrait review shot
+		# taken the old way showed a layout NO DEVICE PRODUCES, and at least one
+		# scale fix was judged "did nothing" against it. Let the project's own
+		# stretch settings do to this window exactly what they do to a phone.
 		get_window().size = dim
-		get_window().content_scale_size = dim
 
 		if _shell:
 			_shell.queue_free()
@@ -38,6 +44,22 @@ func _ready() -> void:
 		# Let layout settle, then step into the opening encounter for the
 		# second frame so both modes get looked at.
 		for i in range(12):
+			await get_tree().process_frame
+
+		# The shell is a child of this plain Node here, where in the game it is
+		# the scene root. Only the scene-tree root Control is resized by the
+		# engine when content_scale_factor changes, so under this harness the
+		# shell can keep a size from a transient mid-resize state - measured
+		# once at 665 design units wide in a 410-unit viewport, which clipped a
+		# third of every line and looked like a text bug. Pin it to the settled
+		# viewport, which is what being the main scene does for free.
+		# ...and setting .size alone is not enough: the full-rect anchors win
+		# the next layout pass and put the stale size straight back. Drop the
+		# anchors first; the harness owns the geometry from here.
+		_shell.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		_shell.position = Vector2.ZERO
+		_shell.size = _shell.get_viewport().get_visible_rect().size
+		for i in range(4):
 			await get_tree().process_frame
 
 		_select_piritori()

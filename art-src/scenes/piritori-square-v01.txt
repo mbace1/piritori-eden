@@ -1,0 +1,30 @@
+Two reference images are attached. The FIRST is the finished painted style this
+must match exactly: the same isometric-friendly viewpoint slightly from above,
+the same painted-night register, the same muted palette of cold blue-grey stone
+and warm sodium-orange practical light, the same level of detail, the same
+visible brush texture. The SECOND is a real photograph of the actual place, for
+geography only - take the layout and landmarks from it, not its photographic
+look.
+
+The scene: Vaasanpuistikko in Helsinki in 2003, at night - a small hard-paved
+plaza on the corner where Vaasankatu meets Hameentie, known on the street as
+Piritori. Around the OPEN MIDDLE of the plaza: the low square entrance pavilion
+of the Sornainen metro station with its glowing orange M sign, a small dark
+kiosk shuttered for the night, a couple of bare city trees in iron grilles, a
+few bollards and a bench, a phone booth, tram wires crossing overhead and their
+poles, and the massive early-1900s stone apartment blocks of Hameentie closing
+the background with a handful of lit windows. Wet paving stones catching the
+sodium lamps. A distant green tram glow down the street.
+
+COMPOSITION RULES, exactly as in the first reference: the plaza floor is a
+broad open diamond filling the lower two thirds of the frame, EMPTY in the
+middle - no people, no vehicles, nothing standing in the central area. All
+props and buildings sit at the rim. Slightly elevated viewpoint looking down
+into the square. Night, cold, used, deadpan - Helsinki in 2003, not a crime
+film about it.
+
+No people anywhere. No readable text: signs exist as shapes and glow only, and
+the metro M may read as a simple lit symbol. No letters, no numbers, no
+watermark, no logo, no border, no frame, no UI.
+
+16:9 landscape.

@@ -943,7 +943,8 @@
           ]
         }
       ],
-      "fallback": "A deferred purchase reappears at the next safe Piritori visit; refusal reshapes the opening but cannot soft-lock the slice."
+      "fallback": "A deferred purchase reappears at the next safe Piritori visit; refusal reshapes the opening but cannot soft-lock the slice.",
+      "scene_asset_id": "scene-piritori-square-v01"
     },
     {
       "id": "enc-jaska-receipt",
@@ -994,7 +995,8 @@
             "flag:markka-left-with-jaska"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-scene-club-v01"
     },
     {
       "id": "enc-first-sale",
@@ -1174,7 +1176,7 @@
         "toko"
       ],
       "source_status": "fiction",
-      "scene_asset_id": "scene-toko-noodles-prototype-v02",
+      "scene_asset_id": "scene-toko-noodles-empty-v01",
       "opening": "Toko dries a bowl and lowers his voice. Three delivery vans. Thursday. One of them is empty.",
       "inspectables": [
         "night tram through the window",
@@ -1351,7 +1353,8 @@
             "flag:mccormick-distance"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-kallio-service-yard-v01"
     },
     {
       "id": "enc-bear-path",
@@ -1417,7 +1420,8 @@
             "service:park-contact:closed-one-day"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-karhupuisto-clearing-v01"
     },
     {
       "id": "enc-first-firearm",
@@ -1474,7 +1478,8 @@
             "relationship:jaska:+1"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-piritori-square-v01"
     },
     {
       "id": "enc-jade-window",
@@ -1732,7 +1737,8 @@
             "flag:map-left-with-jaska"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-scene-club-v01"
     }
   ],
   "schedule": [
