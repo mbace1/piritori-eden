@@ -277,6 +277,10 @@ tram crossing the window rather than sitting in it — you need what was behind
 it, and no compositing trick invents that. **Tier 0 buys you a room that is
 alive. It cannot buy you a room where things happen.**
 
+> **Owner ruling, 2026-08-24: "Toko needs to be a 3D layer for this to work."**
+> That settles tier 2 as the required path rather than one option among several,
+> and it is recorded in `DESIGN_AUTHORITY.md`. §6.3 is the brief it obliges.
+
 ### The routing rule that removes most of the work
 
 The manifest has always listed six passes: *stage, Toko, mask, props, steam,
@@ -338,3 +342,102 @@ seam. Drawing the line on the picture is what caught it. The general shape is
 the one `kindling/` already paid for: *a measurement that certifies **a number**
 cannot see **a place***. Find the band by looking for the **bright** seam, not
 the dark one — the darkest row in a night interior is always some overhang.
+
+---
+
+## 6.3 The brief: THE EMPTY BAR
+
+**One asset. Everything else in §6 is waiting on it.** Under the 2026-08-24
+ruling Toko is a 3D layer, so what the painting has to supply is the room he
+stands in — and only that.
+
+| | |
+|---|---|
+| **proposed id** | `scene-toko-noodles-empty-v01` |
+| **file** | `art/v3/scenes/toko-slomo-noodles-empty-v01.webp` |
+| **size** | 1536 × 864, exactly, to match the plate it replaces |
+| **reference** | `toko-slomo-noodles-prototype-v02.webp`, passed as `ref` |
+| **background rule** | **full-bleed — the magenta rule does NOT apply.** This is a painting, not a cut-out |
+| **replaces** | nothing. v02 stays registered and approved |
+| **manifest** | `kind: scene`, `layer: location-stage`, `location: vaasankatu`, `format: webp-opaque`, **`baked_text: false`, `baked_ui: false`**, and its own `portrait_safe_bounds` |
+
+### What is being asked for, in one sentence
+
+**The same bar, from the same camera, at the same moment — with nobody behind
+the counter.**
+
+### What must not change
+
+This is the whole difficulty, and it is why the plate goes in as `ref`. The
+empty room has to be **the same room**, not a room like it:
+
+- the camera, the framing and the crop — identical, to the pixel where possible;
+- `TOKO SLOMO'S NOODLES · VAASANKATU · 2003` on the signboard, unchanged;
+- the paper lantern, the noren curtains, the menu strips, the KALLIO poster, the
+  bowl shelves, the pot, the till, the radio, the chopstick jars, the stools;
+- the window onto Vaasankatu with the tram in it, and the rain;
+- the light: the same warm interior against the same cold street;
+- **the cut-cardstock register** — torn fibrous edges, sparse crooked marker,
+  muted Kallio night. `ART_BIBLE.md` still governs.
+
+### What changes
+
+- **Toko is gone.** No figure behind the counter.
+- **What was behind him is now visible** — the tiled splashback, the shelving
+  and the bowls he was standing in front of, continued honestly rather than
+  smeared. This is the actual work, and it is why regenerating beats erasing.
+- **His hands leave with him**, along with the cup and the notes on the counter.
+  The counter surface where he was working is bare.
+
+### What must NOT be in it
+
+- **No UI band.** No portrait medallion, no transcript slab, no choice buttons,
+  no text of any kind below `0.647`. The band is live Godot UI —
+  `GODOT_HANDOFF.md` §5: *text and controls stay live Godot UI; do not bake new
+  copy into scene art.* **The shipped plate carries `baked_text: true` and
+  `baked_ui: true`**, which is the standing "Toko baked-screen exception" in
+  `art-library/APPROVALS.md`, and the runtime currently draws live copy over the
+  top of baked copy. The new asset ships `false` for both, the room continues to
+  the bottom edge of the frame, and **the exception retires with it** — which is
+  a second thing this one regeneration buys.
+- No arena, no diamond, no floor markings — this is not a stage (§6).
+- No substitute figure, no silhouette, no "ghost" of where he was.
+- No caption, watermark, border, mount or presentation board. This is
+  `art-src/NANO_BANANA.md` Block C, and it is the trap that has caught every
+  delivery to this repo so far.
+
+### How it will be judged
+
+Against the plate, side by side, at full size — not against a contents list.
+`CONTENT_HANDOVER.md` §5 trap 1 is exactly this: *"is the mask there, is there a
+lantern, is there a tram in the window" is not the same question as "does this
+look like the reference"*, and it passed four rooms that did not. The test is:
+**put the two images side by side and the only difference a stranger can name is
+that the man has gone.**
+
+### Concept art welcome, in one specific place
+
+The empty room is a **match**, not an invention, so it is not where concepts
+help. Where they do:
+
+1. **Toko's speaking poses** — he is a 3D layer now and has no talking clips.
+   Concepts of him leaning on the counter, drying a bowl mid-sentence, pushing
+   something across: **T-pose for anything to be rigged**, the standing rule in
+   the pipeline docs.
+2. **The next counter in this class.** Kallio has more people who talk without a
+   fight starting. A second location built to §6 and §6.2's band geometry from
+   the first stroke — rather than fitted to it afterwards — is the thing that
+   proves this is a format and not one lucky picture.
+
+### Then, and only then, the engine work
+
+1. Register the empty room in `art/v3/manifest.json`.
+2. Point a counter scene at it and mount `presenter_3d.gd` with
+   `speaker_id = "toko"`, `framing = Framing.LOCATION`.
+3. **Match the framing to the plate** — the 3D Toko stands where the painted one
+   stood, same size, behind the same counter. `_frame_presenter()`'s LOCATION
+   numbers are described in their own comment as "starting points to be judged on
+   a screen, not measurements", and this is the screen that judges them.
+4. Port the tier-0 passes out of `art-src/prototypes/counter-motion.html`. They
+   are canvas today and the regions are in source-plate coordinates precisely so
+   they can move without being re-derived.
