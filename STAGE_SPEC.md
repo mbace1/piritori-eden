@@ -429,6 +429,66 @@ help. Where they do:
    the first stroke — rather than fitted to it afterwards — is the thing that
    proves this is a format and not one lucky picture.
 
+## 6.4 What the engine actually showed — 2026-08-24
+
+**All three framings were put on a screen for the first time**, with
+`godot/tools/capture_counter.tscn` built for the counter, which had never had a
+picture of itself. Four things came back, and none of them were findable by
+reading.
+
+**1. The board's INSET was rendering the battle's world.** A `SubViewport`
+**shares its parent's `World3D`** unless told otherwise. On the news that is
+invisible — nothing else is in the scene — so it survived every capture of the
+only screen that used the component. Over the board it was not: the shot-caller
+appeared with one of the yard's dead birches behind him, lit by the battle's
+lights *on top of* the studio's own, which posterised his white suit into a flat
+white blob with two faint eyes in it. **One line** (`own_world_3d = true`) fixes
+both symptoms, because they were one cause.
+
+**2. The LOCATION and INSET framings were hand numbers, and hand numbers do not
+generalise.** Their own comment called them "starting points to be judged on a
+screen". Judged: the INSET cropped the top of the shot-caller's head off. The
+reason is that a hand offset is a measurement of *one model* — measured live,
+Toko is 1.683 units, the shot-caller 1.730 and Arvo 1.777, a 6% spread that
+frames each of them differently through the same camera. Both are now **derived
+from the model's own height**. BROADCAST keeps its exact hand numbers, because
+that shot is approved and nothing may move it.
+
+**3. A speaker needs a FOREGROUND, and it is not in the manifest's six passes.**
+Stage, Toko, mask, props, steam and window are all things *behind* him. With
+only those he stands **in front of his own counter** like a cut-out pasted on
+the picture — which is precisely the failure the 3D-layer ruling exists to
+avoid. The room needs three layers, not two:
+
+| layer | what | tier (§6.1) |
+|---|---|---|
+| **back** | the empty room | 2 — the regeneration §6.3 asks for |
+| **middle** | the speaker | live 3D |
+| **front** | the counter, its front and the stools | **1 — a bounded mask, an afternoon** |
+
+The harness draws that front layer from the same plate, clipped between the
+counter's own hard edge and the band, and it is what turns the composite from a
+sticker into a man standing behind a bar. **§6.3's brief should be read as
+asking for both**: the empty room, and the counter cut from it as a foreground
+strip.
+
+**4. A speaker must be clipped to above the band.** Unclipped he carries on down
+over the transcript and the choices. That is worse than any framing error,
+because it makes the interface unreadable rather than merely wrong.
+
+### One thing this does NOT settle, and it is the owner's
+
+**Does a speaker outside the television get the CRT treatment?** `ART_BIBLE.md`
+§13.2 grants the 3D exception to "the moving presenter inside the TV" and asks
+for limited colour, analogue softness, slight scanlines and CRT bloom on its
+output. That is a description of a *broadcast*, and it predates the counter.
+
+The harness reads it as: **posterise yes, scanlines no.** The posterise is the
+load-bearing half — limited colour is what lets a rendered figure sit inside
+cut-paper art at all — while scanlines on Toko would tell the player they are
+watching him on a screen rather than standing at his counter. That is a reading,
+not a ruling, and it is flagged in `presenter_3d.gd` where it is applied.
+
 ### Then, and only then, the engine work
 
 1. Register the empty room in `art/v3/manifest.json`.
