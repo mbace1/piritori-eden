@@ -26,8 +26,14 @@ func _ready() -> void:
 	for shot in SHOTS:
 		var label: String = shot[0]
 		var dim: Vector2i = shot[1]
+		# Window size ONLY. The old line here also forced content_scale_size to
+		# the window size, which made the shell lay out in 390 design units on
+		# the phone shot. The real build stretches canvas_items from a 1280x720
+		# base, so a phone gets ~1280 design units - every portrait review shot
+		# taken the old way showed a layout NO DEVICE PRODUCES, and at least one
+		# scale fix was judged "did nothing" against it. Let the project's own
+		# stretch settings do to this window exactly what they do to a phone.
 		get_window().size = dim
-		get_window().content_scale_size = dim
 
 		if _shell:
 			_shell.queue_free()
