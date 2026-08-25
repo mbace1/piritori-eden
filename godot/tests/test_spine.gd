@@ -72,8 +72,12 @@ func _test_content_loads() -> void:
 	# the harbour, with the two edges that make it reachable. Kattilahalli is in
 	# the old gasworks and the docks are the waterfront; filing both under one
 	# anchor had merged two places into one.
-	eq("thirteen anchors", ContentRegistry.anchors().size(), 13)
-	eq("twenty-four edges", ContentRegistry.edges().size(), 24)
+	# 13 -> 14 anchors and 24 -> 25 edges on 2026-08-25: Jaska's site moves off
+	# Torkkelinmaki to Scene Club, a new anchor at Makelansilta just north of
+	# Kurvi past the bridge where Makelankatu begins - owner-placed geography,
+	# with one edge connecting it to Piritori.
+	eq("fourteen anchors", ContentRegistry.anchors().size(), 14)
+	eq("twenty-five edges", ContentRegistry.edges().size(), 25)
 	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
 	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
 	# without somebody deciding it should.

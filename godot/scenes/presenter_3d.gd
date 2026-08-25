@@ -34,10 +34,9 @@ const SPEAKERS := {
 	# one is cast rather than borrowed.
 	"sean-mccormick": "res://data/art/cast3d/suited-man-v01.glb",
 	# Jaska stands and talks at his own table in Scene Club (enc-jaska-receipt,
-	# enc-jaska-last-light). No body reads "artist" any better than another in
-	# the current cast, so this is a borrowed placeholder like shot-caller and
-	# not a cast decision the way Sean's was.
-	"jaska": "res://data/art/cast3d/local-v01.glb",
+	# enc-jaska-last-light). His own model now, built from a likeness the owner
+	# supplied - no longer the borrowed local-v01 body.
+	"jaska": "res://data/art/cast3d/jaska-v01.glb",
 }
 
 ## Which of the above is standing in for somebody who does not exist yet.
@@ -49,7 +48,7 @@ const SPEAKERS := {
 ## The enforcer standing in for a faction shot-caller is nearly right by accident
 ## — a white suit reads as somebody senior — and is still listed, because "nearly
 ## right" is exactly the kind of thing that quietly becomes permanent.
-const PLACEHOLDER_SPEAKERS := ["shot-caller", "jaska"]
+const PLACEHOLDER_SPEAKERS := ["shot-caller"]
 
 
 static func is_placeholder(id: String) -> bool:

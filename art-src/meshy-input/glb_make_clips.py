@@ -49,7 +49,8 @@ def write_glb(path, js, bin_):
 
 
 def main():
-    out, srcs = sys.argv[1], sys.argv[2:]
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    out, srcs = args[0], args[1:]
     if not srcs:
         sys.exit("usage: glb_make_clips.py out.glb a.glb b.glb ...")
 
@@ -93,6 +94,17 @@ def main():
     base_js.pop("textures", None)
     base_js.pop("images", None)
     base_js.pop("samplers", None)
+
+    # ---- optionally drop the mesh itself ------------------------------------
+    # An animation file does not need geometry: the rigged body ships alongside
+    # it and the engine retargets these clips onto that skeleton. Meshy bakes a
+    # full mesh into every clip, so ten animations carry ten copies of a 31k
+    # mesh. Keeping the skeleton and dropping the mesh is most of the weight.
+    if "--no-mesh" in sys.argv:
+        for n in base_js.get("nodes", []):
+            n.pop("mesh", None)
+        base_js.pop("meshes", None)
+        base_js.pop("materials", None)
 
     # ---- repack: keep only referenced bufferViews ---------------------------
     keep = set()

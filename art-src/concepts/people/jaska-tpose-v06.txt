@@ -1,0 +1,35 @@
+The attached image is the reference. Keep this exact character, exactly as
+drawn: the same man, the same T-pose, the same clothes, the same shoes style,
+the same flat grey background, the same framing and the same scale in frame.
+
+DO NOT CHANGE THE HEAD AT ALL. It already faces directly forward, dead
+centre, symmetrical, both ears visible, both eyes level - keep it pixel for
+pixel exactly as it is, same angle, same expression, same hair, same glasses.
+This is the most important instruction: the head must not move, turn, tilt or
+redraw in any way.
+
+Three other things change:
+
+1. THE FEET. There is currently a faint extra ghost shoe or ghost foot
+partially visible behind the right foot. Remove it completely. End with
+EXACTLY TWO SHOES, one on each foot, fully separate, fully visible, side by
+side, and completely empty flat background around and behind both feet.
+
+2. THE PATCH. Move the small colourful abstract patch from the sleeve to the
+CENTRE OF THE CHEST, roughly where a chest pocket would be. It stays an
+abstract shape and colour only, no legible text or logo.
+
+3. THE ARMPITS. Right now the black sleeve and the black torso of the shirt
+touch and form one solid shape, with no background visible underneath the
+arm. Redraw the torso of the shirt narrower, roughly as wide as the head, and
+redraw each sleeve as its own separate shape from the shoulder seam to the
+hand. Between the underside of each sleeve and the narrower side of the
+torso, leave a visible triangular gap of the flat grey background - about as
+wide as one ear at its widest point. The sleeve and the torso must be two
+separate black shapes touching only at the shoulder seam. Do this identically
+on both sides.
+
+Nothing else changes: not the head, not the legs, not the background, not the
+framing, not the scale.
+
+The image is exactly square, 1:1.

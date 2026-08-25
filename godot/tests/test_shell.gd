@@ -269,10 +269,11 @@ the speaking character")
 
 	# A speaker with no model must fail by NAME. Silently rendering nobody is how
 	# "no Arvo in news" took a headless probe to diagnose.
-	# Jaska, who is all through NARRATIVE.md and has no model and no stand-in.
-	# Deliberately somebody real rather than a nonsense string: the failure being
-	# tested is a character the game genuinely wants and does not have.
-	p.speaker_id = "jaska"
+	# Sean McCormick's father was the example here until Jaska got a model and
+	# stopped qualifying - somebody real rather than a nonsense string, so the
+	# failure being tested is a character the game genuinely wants and does not
+	# have. Update this line again the day he does too.
+	p.speaker_id = "mccormick-senior"
 	check("somebody with no model is not available", not p.available())
 	check("and is not silently swapped for Arvo", p.model_path() == "")
 
@@ -297,6 +298,11 @@ the speaking character")
 	check("Toko is himself now", not p.is_placeholder("toko"))
 	check("and wears his own model",
 		String(p.SPEAKERS["toko"]).ends_with("toko-v01.glb"))
+	# Jaska too, 2026-08-25 - built from an owner-supplied likeness rather than
+	# borrowing local-v01.
+	check("Jaska is himself now", not p.is_placeholder("jaska"))
+	check("and wears his own model",
+		String(p.SPEAKERS["jaska"]).ends_with("jaska-v01.glb"))
 
 	# Every placeholder has to be a real speaker, or the list rots into names
 	# nobody uses.

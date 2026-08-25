@@ -669,6 +669,37 @@ a step:
    approval with the owner. Nothing reaches Meshy without it, because the next
    step costs money and produces a thing that is hard to argue with once it
    exists.
+
+   **Before approval, ALWAYS ZOOM AND CHECK. Never approve — never mesh — from
+   the thumbnail.** Written after Jaska's T-pose was sent to Meshy with a
+   three-quarter head, which a front-on Meshy job cannot reconstruct: it broke
+   the mesh down the centreline into a stretched, combed seam. That render was
+   never zoomed on before the spend. Four things, cropped and looked at
+   individually, every single time, on every T-pose before it goes to Meshy:
+
+   - **the head** — dead-front, not three-quarter. Crop the face alone. Check
+     both ears are equally visible, both eyes level and the same size, the nose
+     centred. A head turned even slightly breaks the mesh down its centreline.
+   - **both armpits** — crop each one alone. There must be an open wedge of
+     background between the sleeve and the torso. Arm and torso fabric forming
+     one solid connected shape reads to Meshy as webbing between the arm and
+     the body.
+   - **both feet** — crop the pair alone. Exactly two, fully separate, nothing
+     faint or duplicated behind either one. A generation can leave a ghost limb
+     at low opacity that is easy to miss at full-image scale and obvious once
+     cropped.
+   - **any placed detail** — a chest patch, a logo, a badge — is where the
+     brief put it, not wherever the model drifted it to on a later pass.
+
+   **A broad edit instruction can silently undo a check that already passed.**
+   Editing armpits and feet together moved the head back off-centre, because
+   "keep everything else the same" is not a guarantee. So: check all four again
+   after *every* edit, not only after the first generation — and when a fix
+   keeps breaking something else, edit ONE region at a time from the last known
+   image where the OTHER regions were already right, with an explicit
+   instruction not to touch anything but that one region. Chaining edits
+   forward from whichever image is newest, rather than from the best base, is
+   how a fixed head gets lost again on the very next pass.
 3. **Meshy image-to-3D** — `~/.meshy/m3d.sh --image ... --output ...`
 4. **Meshy rigging** — `~/.meshy/rig.py --task <id> --output ...`. It takes the
    image-to-3D **task id**, not a file, so keep the id.
