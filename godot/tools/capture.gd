@@ -46,6 +46,22 @@ func _ready() -> void:
 		for i in range(12):
 			await get_tree().process_frame
 
+		# The shell is a child of this plain Node here, where in the game it is
+		# the scene root. Only the scene-tree root Control is resized by the
+		# engine when content_scale_factor changes, so under this harness the
+		# shell can keep a size from a transient mid-resize state - measured
+		# once at 665 design units wide in a 410-unit viewport, which clipped a
+		# third of every line and looked like a text bug. Pin it to the settled
+		# viewport, which is what being the main scene does for free.
+		# ...and setting .size alone is not enough: the full-rect anchors win
+		# the next layout pass and put the stale size straight back. Drop the
+		# anchors first; the harness owns the geometry from here.
+		_shell.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		_shell.position = Vector2.ZERO
+		_shell.size = _shell.get_viewport().get_visible_rect().size
+		for i in range(4):
+			await get_tree().process_frame
+
 		_select_piritori()
 		for i in range(8):
 			await get_tree().process_frame

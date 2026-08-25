@@ -350,21 +350,53 @@ func _size_header(vp: Vector2) -> void:
 		_menu_button.add_theme_font_size_override("font_size", int(m * 0.52))
 
 
+## Separation between commands and the bar's own padding, needed to work out
+## what width is actually available to divide between them.
+const COMMAND_BAR_SEPARATION := 8.0
+const COMMAND_BAR_PADDING := 32.0
+
 func _size_commands(vp: Vector2) -> void:
 	# Portrait is the case that was broken. Landscape has height to spare and a
 	# bar taking a twelfth of it would be a cliff, so it keeps a modest share.
 	var share := COMMAND_BAR_FRACTION if vp.y > vp.x else COMMAND_BAR_FRACTION * 0.75
 	var h := clampf(vp.y * share, MIN_TARGET, 320.0)
+
+	# THE WIDTH MUST COME FROM THE SCREEN, NOT FROM A CONSTANT.
+	#
+	# This used to pin every command to at least 96 design units. Five of them
+	# plus separation is a 665-unit minimum, and a phone at the shipped UI scale
+	# has about 410 units to give — so the bar forced the WHOLE SHELL to 665,
+	# and every screen above it was silently cut off at the right edge. It
+	# looked like a text-wrapping bug in the encounter copy; it was the command
+	# bar dragging the column wider than the window.
+	#
+	# A minimum wider than the screen is not a minimum, it is a promise the
+	# layout cannot keep. So the floor is what fits, and MIN_TARGET keeps the
+	# touch target honest in the other axis.
+	var count := 0
+	for b in _commands:
+		if b != null:
+			count += 1
+	var per := 96.0
+	if count > 0:
+		var gaps := COMMAND_BAR_SEPARATION * float(count - 1) + COMMAND_BAR_PADDING
+		per = minf(maxf(h * 1.6, 96.0), maxf((vp.x - gaps) / float(count), 44.0))
+
+	# Below this the words stop fitting beside the icon and would themselves
+	# force the bar wide again, so they are dropped and the icon carries it.
+	var icons_only := per < 96.0
+
 	for b in _commands:
 		if b == null:
 			continue
-		b.custom_minimum_size = Vector2(maxf(h * 1.6, 96.0), h)
+		b.custom_minimum_size = Vector2(per, h)
 		var icon = b.get_meta("icon", null)
 		if icon != null:
 			icon.custom_minimum_size = Vector2(h * COMMAND_ICON_FRACTION,
 				h * COMMAND_ICON_FRACTION)
 		var label = b.get_meta("label", null)
 		if label != null:
+			label.visible = not icons_only
 			label.add_theme_font_size_override("font_size",
 				int(maxf(h * COMMAND_LABEL_FRACTION, 13.0)))
 

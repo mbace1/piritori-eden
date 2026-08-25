@@ -1337,9 +1337,14 @@ list. Recorded here instead of half-fixed:
   Each needs its own scene in the painted-night register; none of the nine
   existing scenes fits honestly. Art lane, one scene at a time, the
   Piritori/Hakaniemi pair is the template.
-- **The opening line overflows the frame in portrait.** The encounter copy
-  autowraps, but its first line runs past the right edge ("The tram unloa...")
-  - the label's wrap width is not the portrait safe width. Engine lane, small.
+- ~~**The opening line overflows the frame in portrait.**~~ **FIXED 2026-08-25,
+  and it was not a text bug.** The command bar pinned every command to at least
+  96 design units wide; five of those plus separation is a 665-unit minimum, and
+  a phone at the shipped UI scale has ~410 units. The bar forced the WHOLE SHELL
+  to 665, so every screen above it was cut off at the right edge — the hamburger,
+  the ends of every line, the fifth command. The command floor is now derived
+  from available width, and the words drop to icons when they no longer fit
+  beside them. 665 -> 415 against a 410 viewport.
 - **The location screen is still flat boxes against the Toko target.**
   `art-library/references/ui/ui-target-location-toko-v01.jpg` shows what LOOK /
   ACT should be: dialogue on a kraft card, choices as three carton buttons with
