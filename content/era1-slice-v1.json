@@ -943,7 +943,8 @@
           ]
         }
       ],
-      "fallback": "A deferred purchase reappears at the next safe Piritori visit; refusal reshapes the opening but cannot soft-lock the slice."
+      "fallback": "A deferred purchase reappears at the next safe Piritori visit; refusal reshapes the opening but cannot soft-lock the slice.",
+      "scene_asset_id": "scene-piritori-square-v01"
     },
     {
       "id": "enc-jaska-receipt",
@@ -1351,7 +1352,8 @@
             "flag:mccormick-distance"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-kallio-service-yard-v01"
     },
     {
       "id": "enc-bear-path",
@@ -1417,7 +1419,8 @@
             "service:park-contact:closed-one-day"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-karhupuisto-clearing-v01"
     },
     {
       "id": "enc-first-firearm",
@@ -1474,7 +1477,8 @@
             "relationship:jaska:+1"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-piritori-square-v01"
     },
     {
       "id": "enc-jade-window",
