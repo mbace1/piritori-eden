@@ -239,13 +239,17 @@ func _frame_presenter() -> void:
 			# behind a bar are different shots, and reusing one for the other is
 			# what made him look like a customer.
 			#
-			# These numbers were hand z=1.06 fov=46 against a 1.72 m assumption,
-			# already judged on a screen (Toko, cropped correctly at his own
-			# counter line) before this became the derived system. Converted
-			# rather than re-tuned, so the same judged shot survives: at fov 46
-			# the old z gave a shown extent of 2*1.06*tan(23deg)/1.72 = 0.523 of
-			# the body, and the old rig offset gave aim 1.05/1.72 = 0.610.
-			aim = 0.61
+			# These numbers were hand z=1.06, rig.y=-1.05, camera.y=+0.30, fov=46
+			# against a 1.72 m assumption, already judged on a screen (Toko,
+			# cropped correctly at his own counter line) before this became the
+			# derived system, which fixes camera.y at 0 for every framing. The
+			# FIRST conversion attempt dropped that +0.30 and used aim=0.61 alone
+			# — it re-cropped Toko's head clean off, caught by capturing and
+			# looking rather than trusting the arithmetic. The camera's own
+			# offset has to fold into aim, not vanish: aim = (1.05+0.30)/1.72 =
+			# 0.785. extent is untouched, since it never involved camera.y:
+			# 2*1.06*tan(23deg)/1.72 = 0.523.
+			aim = 0.785
 			extent = 0.52
 			_camera.fov = 46.0
 		Framing.INSET:
