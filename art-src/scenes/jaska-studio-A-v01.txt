@@ -1,0 +1,35 @@
+The attached image is the finished painted style this must match exactly: the
+same painted-night register, the same slightly-elevated isometric-friendly
+viewpoint looking down into an open space, the same muted palette of cold
+blue-grey and warm interior light, the same level of detail, the same brush
+texture, the same deadpan restraint.
+
+The scene: the inside of an artist's one-room studio flat in Torkkelinmaki,
+Kallio, Helsinki, at night in 2003. THE SUBJECT IS THE WORK. Covering most of
+the bare wooden floor, seen from above, lies an enormous unfinished map of the
+city built out of thousands of small cut paper receipts pasted flat to the
+boards - a cardboard city, streets and blocks assembled from till slips and
+tram tickets in creams, browns and faded pinks. It nearly lines up and does not
+quite. One corner of it is propped up by a fat sealed envelope. Near the edge
+of the paper city there are scissors, a paste pot, a craft knife and drifts of
+offcuts.
+
+Around the rim of the room, not in the middle: a low mattress with a blanket, a
+paint-stained kitchen chair, a small table with a kettle and an ashtray, a
+paraffin heater, stacked canvases leaning face-in against the wall, one tall
+sash window with the orange glow of a street lamp and bare branches beyond, a
+bare bulb on a flex. A small framed family photograph on the windowsill.
+
+COMPOSITION: the paper city fills the lower two thirds of the frame as a broad
+open field, and the middle of it is CLEAR - no people, no furniture standing on
+it. Everything else sits at the rim. Slightly elevated viewpoint looking down
+into the room.
+
+Warm, cluttered, patient, a bit stale. Somebody lives here and works here and
+has not been outside today.
+
+No people. No readable text anywhere: the receipts are texture and shape only,
+never legible words or numbers. No letters, no digits, no watermark, no logo,
+no border, no frame, no UI.
+
+16:9 landscape.

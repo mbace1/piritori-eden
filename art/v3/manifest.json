@@ -41,6 +41,33 @@
       "note": "Approved corrected-mask baseline: eye openings sit inside the white arches. The runtime overlays live copy and controls; production must separate stage, Toko, mask, props, steam and window pass."
     },
     {
+      "id": "scene-toko-noodles-empty-v01",
+      "kind": "scene",
+      "file": "scenes/toko-slomo-noodles-empty-v01.webp",
+      "source": "art-src/scenes/toko-noodles-empty-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "vaasankatu",
+      "portrait_safe_bounds": [
+        0.24,
+        0.0,
+        0.76,
+        1.0
+      ],
+      "baked_text": true,
+      "baked_ui": false,
+      "sha256": "4d93589cfa279269977784a544ecc93cbda1baf1e81cb2a2b3bbef0ace47175a",
+      "note": "The empty bar - STAGE_SPEC 6.3. Same room, same camera, same moment, nobody behind the counter, for the 2026-08-24 ruling that Toko is a 3D layer composited into the gap. What he stood in front of - tiled splashback, sink, shelving, stacked bowls, hanging utensils - is painted as continuing objects rather than smeared, and the counter where he worked is bare. NO UI BAND: the room runs to the bottom edge, so the stool legs and floorboards the baked band covered are now visible, and baked_ui is false. BAKED_TEXT IS TRUE, DELIBERATELY AND AGAINST THE BRIEF: 6.3 asks for false while also requiring the signboard to read TOKO SLOMO'S NOODLES / VAASANKATU / 2003 unchanged, and the KALLIO poster and the lantern katakana stay too. Declaring false would be a false declaration. It is diegetic signage on his own shop, not UI copy - the same call already recorded for his apron - so it is declared rather than denied. The baked-SCREEN exception in APPROVALS.md does retire with this asset; the baked-signage fact does not, and needs an owner ruling."
+    },
+    {
       "id": "scene-karhupuisto-v01",
       "kind": "scene",
       "file": "scenes/karhupuisto-v01.webp",
