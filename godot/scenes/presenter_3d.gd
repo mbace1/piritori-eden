@@ -72,10 +72,20 @@ enum Framing {
 var speaker_id: String = "arvo"
 var framing: Framing = Framing.BROADCAST
 
+## Drop the studio field and let whatever is behind this node show through.
+##
+## The flat blue is right for a television and wrong at a COUNTER, where the
+## painted room is the backdrop — a speaker standing in his own bar in front of
+## a blue screen reads as a compositing mistake, which is the exact failure
+## `DESIGN_AUTHORITY`'s 3D-layer ruling exists to avoid. Off by default, so the
+## news and the board inset are untouched.
+var transparent: bool = false
+
 ## Levels per channel. §13.2 asks for "limited colour"; the concept was tested
 ## down to eight and held.
 @export var colour_levels: int = 10
 
+var _use_transparent := false
 var _viewport: SubViewport
 var _rig: Node3D
 var _skeleton: Skeleton3D
@@ -113,15 +123,34 @@ func _ready() -> void:
 	# about a conversation you are having in person.
 	var broadcast := framing == Framing.BROADCAST
 	_viewport = SubViewport.new()
-	_viewport.transparent_bg = not broadcast
+	# EITHER the caller says so explicitly (the capture harness in
+	# tools/capture_counter.gd, which wants to try framings in isolation) OR it
+	# follows from the framing itself, so ordinary gameplay callers never have
+	# to remember to set a flag by hand.
+	_use_transparent = transparent or not broadcast
+	_viewport.transparent_bg = _use_transparent
+	# THE SPEAKER STANDS IN HIS OWN WORLD, and this line is load-bearing.
+	#
+	# A SubViewport SHARES its parent's World3D unless told otherwise. On the
+	# news that is invisible — nothing else is in the scene — so it survived
+	# every capture of the only screen using this. Over the BOARD it is not: the
+	# INSET came up showing one of the yard's dead birches behind the speaker,
+	# lit by the battle's lights on top of the studio's own, which posterised his
+	# white suit to a flat white blob with two faint eyes in it.
+	#
+	# Both symptoms are one cause. The fix is one line, and it must come BEFORE
+	# the environment and the lights below, or they are added to a world this
+	# viewport is about to stop using.
+	_viewport.own_world_3d = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.msaa_2d = Viewport.MSAA_DISABLED
 	_viewport.msaa_3d = Viewport.MSAA_2X
 	add_child(_viewport)
 
-	# The studio: a flat low-saturation blue field, per ART_BIBLE §4.3.
+	# The studio: a flat low-saturation blue field, per ART_BIBLE §4.3 — unless
+	# somebody is standing in a real room, in which case the room is the field.
 	var env := Environment.new()
-	env.background_mode = Environment.BG_COLOR if broadcast else Environment.BG_CLEAR_COLOR
+	env.background_mode = Environment.BG_CLEAR_COLOR if _use_transparent else Environment.BG_COLOR
 	env.background_color = Color("#1b2a36")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("#8fa8b8")
@@ -149,8 +178,7 @@ func _ready() -> void:
 		_find_skeleton(_rig)
 		_frame_presenter()
 
-	if broadcast:
-		_apply_tube_shader()
+	_apply_tube_shader()
 
 
 func _find_skeleton(n: Node) -> void:
@@ -176,42 +204,102 @@ func _find_skeleton(n: Node) -> void:
 func _frame_presenter() -> void:
 	if _rig == null:
 		return
-	# BROADCAST is the shot the news was built around and stays exactly as it
-	# was; the other two are starting points to be judged on a screen, not
-	# measurements. Named constants rather than numbers inline, so tuning one
-	# framing cannot quietly move another.
+	# BROADCAST is the shot the news was built around and stays EXACTLY as it
+	# was — hand numbers, tuned against Arvo, approved. Nothing below may move
+	# it.
+	if framing == Framing.BROADCAST:
+		_rig.position = Vector3(0, -1.32, 0)
+		_camera.position = Vector3(0, 0.10, 1.05)
+		_camera.fov = 42.0
+		_lower_arms()
+		return
+
+	# The other two were hand numbers too, and their own comment called them
+	# "starting points to be judged on a screen". Judged: the INSET cropped the
+	# top of the shot-caller's head off. The cause is that a hand offset is a
+	# measurement of ONE model — it was tuned against a 1.7m body and every
+	# speaker is a different height, so the same numbers frame each of them
+	# differently. Nobody would find that by reading it.
+	#
+	# So these two are DERIVED from the model instead: aim at a fraction of its
+	# own height, and show a fraction of its own height. Both are ratios of a
+	# human figure and hold for any body the cast grows.
+	var aim := 0.0
+	var extent := 0.0
 	match framing:
 		Framing.LOCATION:
-			# Further back and lower: a person standing in a room, not a bust.
-			_rig.position = Vector3(0, -1.05, 0)
-			_camera.position = Vector3(0, 0.25, 2.20)
+			# A person standing in a room, not a bust: waist up, so the counter
+			# or the table they are behind has somewhere to be.
+			aim = 0.72
+			extent = 0.62
 			_camera.fov = 46.0
 		Framing.COUNTER:
-			# HEAD AND TORSO, for somebody working behind a counter.
+			# HEAD AND TORSO, for somebody working behind a counter. LOCATION is
+			# left exactly as it was — a standing figure in a room and a man
+			# behind a bar are different shots, and reusing one for the other is
+			# what made him look like a customer.
 			#
-			# Derived rather than dialled. At fov 46 the vertical extent is
-			# 2·z·tan(23°) = 0.849·z, so framing about 0.9 m of a 1.72 m man —
-			# roughly the crown down to below the waist — wants z ≈ 1.06. The
-			# camera sits at chest height so the crop lands where a counter
-			# would, and the caller ends the viewport at the counter's own line.
-			#
-			# LOCATION is left exactly as it was. A standing figure in a room
-			# and a man behind a bar are different shots, and reusing one for
-			# the other is what made him look like a customer.
-			_rig.position = Vector3(0, -1.05, 0)
-			_camera.position = Vector3(0, 0.30, 1.06)
+			# These numbers were hand z=1.06 fov=46 against a 1.72 m assumption,
+			# already judged on a screen (Toko, cropped correctly at his own
+			# counter line) before this became the derived system. Converted
+			# rather than re-tuned, so the same judged shot survives: at fov 46
+			# the old z gave a shown extent of 2*1.06*tan(23deg)/1.72 = 0.523 of
+			# the body, and the old rig offset gave aim 1.05/1.72 = 0.610.
+			aim = 0.61
+			extent = 0.52
 			_camera.fov = 46.0
 		Framing.INSET:
-			# Tighter than broadcast. The inset is small on screen, so the face
-			# has to fill it or it reads as a smudge over the board.
-			_rig.position = Vector3(0, -1.42, 0)
-			_camera.position = Vector3(0, 0.06, 0.82)
+			# The inset is small on screen, so the face has to fill it or it
+			# reads as a smudge over the board — head and a little shoulder.
+			aim = 0.93
+			extent = 0.26
 			_camera.fov = 38.0
-		_:
-			_rig.position = Vector3(0, -1.32, 0)
-			_camera.position = Vector3(0, 0.10, 1.05)
-			_camera.fov = 42.0
+
+	var h := _rig_height()
+	# PIRITORI_FRAME_DEBUG prints what was measured. Worth keeping: the first
+	# version of _rig_height() returned 0.016 for a 1.7m man and the only
+	# symptom on screen was an empty blue square.
+	if OS.get_environment("PIRITORI_FRAME_DEBUG") != "":
+		print("frame %s: h=%.3f aim=%.2f extent=%.2f" % [speaker_id, h, aim, extent])
+	if h <= 0.0:
+		# No visual instances to measure. Fall back to the old hand numbers
+		# rather than dividing by zero and putting the camera inside his head.
+		push_warning("presenter_3d: could not measure '%s'; using fallback framing" % speaker_id)
+		h = 1.70
+	_rig.position = Vector3(0, -aim * h, 0)
+	var half := 0.5 * extent * h
+	_camera.position = Vector3(0, 0.0, half / tan(deg_to_rad(_camera.fov) * 0.5))
 	_lower_arms()
+
+
+## The model's own height, in its own units, measured off the SKELETON.
+##
+## Measured rather than declared: `art/v3/manifest.json` records triangle counts
+## and bone counts but not heights, and a rig that arrives 12% taller than the
+## last one silently reframes the shot if the camera is placed by hand.
+##
+## It reads bones and not mesh bounds, and that is not a preference — it is the
+## first thing tried and it failed. `MeshInstance3D.get_aabb()` on a SKINNED
+## mesh does not return the posed figure's box: Toko came back 0.016 units tall,
+## which put the camera 5mm from a 1.7m man and rendered an empty blue square.
+## Bone rests are in the skeleton's own space and are always real.
+##
+## Bones stop at the top of the skull rather than the top of the hair, so the
+## span is scaled back up by SKULL_TO_CROWN. Every speaker here is rigged — that
+## is what `Framing` is for — so there is no unskinned case to handle.
+const SKULL_TO_CROWN := 0.94
+
+func _rig_height() -> float:
+	if _skeleton == null:
+		return 0.0
+	var lo := INF
+	var hi := -INF
+	var t: Transform3D = _rig.global_transform.affine_inverse() * _skeleton.global_transform
+	for i in range(_skeleton.get_bone_count()):
+		var y: float = (t * _skeleton.get_bone_global_rest(i).origin).y
+		lo = min(lo, y)
+		hi = max(hi, y)
+	return 0.0 if hi <= lo else (hi - lo) / SKULL_TO_CROWN
 
 
 ## The rig arrives in a T-pose because that is what rigs cleanly. On air he
@@ -343,6 +431,22 @@ void fragment() {
 	var mat := ShaderMaterial.new()
 	mat.shader = sh
 	mat.set_shader_parameter("levels", colour_levels)
+	if _use_transparent:
+		# NOT INSIDE A TELEVISION. `ART_BIBLE` §13.2 grants the 3D exception to
+		# "the moving presenter inside the TV" and asks for scanlines and CRT
+		# bloom on its output — which is a description of a broadcast, not of a
+		# man behind a counter. Scanlines on Toko would say the player is
+		# watching him on a screen.
+		#
+		# The POSTERISE stays, and that is the load-bearing half: limited colour
+		# is what lets a rendered figure sit inside cut-paper art at all.
+		#
+		# OPEN, and the owner's to settle: §13.2 predates the counter, so it does
+		# not say what treatment a speaker gets outside the tube. This is the
+		# reading, not a ruling. See `STAGE_SPEC.md` §6.4.
+		mat.set_shader_parameter("scan_strength", 0.0)
+		mat.set_shader_parameter("bloom", 0.06)
+		mat.set_shader_parameter("tint", Vector3(1.0, 1.0, 1.0))
 	material = mat
 
 

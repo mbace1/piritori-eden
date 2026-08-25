@@ -2,13 +2,44 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-21
+Latest owner rulings: 2026-08-24
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
 because the playable prototype, several older briefs, an earlier Art Bible and
 the newer approved design library currently disagree. Future implementation
 must follow this hierarchy rather than selecting whichever file is convenient.
+
+## Owner rulings, 2026-08-24 — the counter
+
+Two decisions about conversations that do not happen on a fight board. Detail
+and consequences in `STAGE_SPEC.md` §6; the venue rule in `NEGOTIATION.md` §1.1.
+
+**1. The Toko Slomo's Noodles plate is the goal reference, not a prototype that
+missed.** It is the noodle bar, where you chat and buy information, and the
+scene and Toko are slightly animated. It sets the target for **every
+conversation staged off the board**, and partly for how Arvo Linde works on the
+daily bulletins. It is not a level and must not be judged against §2's arena
+rules.
+
+**2. Toko is a 3D LAYER.** Not a cut-out, not a sprite, not a painted figure in
+the plate. This settles the layer-separation question in the only direction that
+works: the shipped plate has no alpha and nothing behind him, so he cannot be
+lifted out of it — the room must be **regenerated empty** and the live 3D model
+composited into the gap through `presenter_3d.gd` at `Framing.LOCATION`.
+
+Everything that follows from ruling 2 is a consequence, not a preference:
+
+- **The empty room is a required asset**, not an optimisation. `STAGE_SPEC.md`
+  §6.3 is the brief for it.
+- **Toko needs speaking clips.** Nothing in `cast3d/clips/` covers talking; the
+  eight that shipped are walk, run, block and a bicep curl. This is the same gap
+  `UX_SPEC.md` §18 already names.
+- **The mask is part of the 3D character**, not a separate 2D pass. The manifest
+  listed it as its own layer; that list predates this ruling.
+- **The framing must match the plate.** The 3D Toko has to stand where the
+  painted one stood, at the same size behind the same counter, or the
+  composite reads as a cut-out — which is the exact failure the ruling avoids.
 
 ## Owner rulings, 2026-08-21
 
