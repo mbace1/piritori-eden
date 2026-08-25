@@ -366,6 +366,93 @@ mission inspired by history must label its internal source note as one of:
 Arvo Linde reports documented public facts. Inference and accusation are
 attributed to speakers; the newscast does not launder them into truth.
 
+## 12.3 One palette: the game is NIGHT
+
+**Owner ruling, 2026-08-24.** The whole game is the night palette. A daytime
+palette may come later; it is not being designed for now, and no system may be
+built with a second palette assumed. **The UX locks as a single entity first.**
+
+The night palette is the one in `ART_BIBLE.md` — `night-paper #121719`,
+`sodium-ochre #D09535`, `wet-blue #183542` and the eight signal colours. There is
+no competing list to choose between:
+
+| | `ART_BIBLE.md` | `godot/ui/palette.gd` | reference UI wireframe |
+|---|---|---|---|
+| player cyan | `#38B8C8` | `#38B8C8` | `#38B8C8` |
+| goods magenta | `#B84D83` | `#B84D83` | `#B84D83` |
+| mission orange | `#C87539` | `#C87539` | `#C87539` |
+| danger red | `#A94B43` | `#A94B43` | `#A94B43` |
+| route green | `#648F63` | `#648F63` | `#648F63` |
+| locked grey | `#676B6B` | `#676B6B` | `#676B6B` |
+| intel mustard | `#C5A044` | `#C5A044` | — |
+| public blue | `#4F7FA0` | `#4F7FA0` | — |
+
+**All eight signal colours are identical in all three places.** The Art Bible
+defines them, the build implements them, and `ux/five-modes-portrait.svg` — the
+portrait reference layout — is drawn in them. That chain is intact and this lock
+does not disturb it.
+
+### The rendered target agrees too
+
+`art-library/references/ui-target-city-map-v01.jpg` is the owner's rendered
+city-map target and the style guide for this UI. Sampling its accent pixels and
+matching each to its nearest Art Bible colour by hue:
+
+| reference accent | nearest Art Bible | hue gap |
+|---|---|---|
+| cyan — routes, ROUTE | `player-cyan #38B8C8` | **1°** |
+| pink — routes, CREW | `goods-magenta #B84D83` | **5°** |
+| orange — pins, MISSIONS | `brick-rust #9A4E34` | **4°** |
+| cream — label plates | `sodium-ochre #D09535` | 1° |
+| olive — noodle pin | `intel-mustard #C5A044` | 6° |
+
+**Every hue lands within six degrees.** What differs is lightness — the target
+runs +0.15 to +0.22 lighter on cyan and pink — and that is not a palette change.
+It is what happens when a flat palette is rendered with lit medallions, torn
+cardstock and paper grain on top. The Art Bible defines the pigment; the target
+shows it under a lamp.
+
+So the palette question has one answer from three independent directions: the
+Bible, the build and the owner's own target.
+
+### The reserved colours sit outside the palette on purpose
+
+The art-prompt documents (`NANO_BANANA.md`, `ART_PROMPTS.md`, `ART_REQUEST.md`,
+`ART_BRIEF_CONCEPT.md`, `CONTENT_HANDOVER.md`) carry a list headed *NIGHT palette
+(Piritori)*. It is the same palette — paper `#0f1216` against the Bible's
+`#121719` is **dE 2.5**, amber `#c8a24a` against `#C5A044` is **dE 2.0** — with
+two deliberate exceptions:
+
+| | prompt list | Art Bible neighbour | dE |
+|---|---|---|---|
+| warning | `#A62BFF` (was `#ff7a1a`) | `mission-orange #C87539` | large |
+| product | `#F0027F` | `goods-magenta #B84D83` | 33.5 |
+
+**That distance is the feature.** A colour reserved as *never draw with this* is
+more useful the further it sits from everything drawable, because the rule is
+enforced by looking. Product magenta is the player and the product and is also a
+key colour; the warning colour means immediate pressure and nothing else. Both
+are applied in code, never in art.
+
+A correction filed with this lock, because the mistake is easy to repeat: an
+earlier reading of this compared a handful of hexes, found no exact match, and
+concluded the two palettes shared nothing and that every approved concept had
+been judged against colours the game does not use. **That was wrong.** Comparing
+exact hex strings across two lists that name their colours differently finds
+disagreement whether or not any exists. The palettes agree everywhere except the
+two colours that are defined by disagreeing.
+
+### What is actually outstanding
+
+Only the neutrals, and only slightly. `palette.gd` names three greys the Bible
+also names, at **dE 2.4 to 5.3** — `PANEL #11151A` against `night-paper #121719`,
+`PAPER #D8D2C4` against `paper-offwhite #E2D8C2`. Rounding drift, not a second
+palette. Worth reconciling to the Bible's values, low priority, Engine lane.
+
+`palette.gd` additionally carries `MAP_GROUND`, `MAP_RELIEF` and `MAP_WATER`,
+which the Bible does not name. Those are real gaps in the Bible rather than
+inventions in the code, and naming them there is Art lane.
+
 ## 13. Decisions intentionally deferred
 
 The following are content or balance work, not blockers for Art Bible and UX:

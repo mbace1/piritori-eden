@@ -91,7 +91,7 @@ brand of the pair.
 
 ```
 NIGHT   paper #0f1216 · ink #e2dccd · dim #8c8778 · water #1b2c3a
-        orange #ff7a1a (pressure only) · magenta #F0027F (product/player only)
+        violet #A62BFF (pressure only) · magenta #F0027F (product/player only)
 DAY     paper #f4f1e8 · ink #20272e · water #bcd8e6
         mint #5aa860 · sky #2f9fb8 · coral #e2683c · yellow #e0a53a
 ```

@@ -156,7 +156,7 @@ it unless told, and it is the single most useful thing in the output.
 ```
 NIGHT palette (Piritori):
 paper #0f1216 · ink #e2dccd · dim #8c8778 · marks #b9b2a0 · unbuilt #232a33
-water #1b2c3a · warning orange #ff7a1a (pressure only) · slow amber #c8a24a
+water #1b2c3a · warning violet #A62BFF (pressure only) · slow amber #c8a24a
 lines: #e2dccd #57c8e8 #7fc98a #c98ad8
 city services: metro #b06a2a · tram #5d6b5e · car #46525e
 money gold #e8c24a
@@ -165,7 +165,7 @@ outside the subject.
 ```
 
 **Two colours are reserved and must not appear in generated art.** Warning
-orange `#ff7a1a` means immediate pressure and nothing else; product magenta
+violet `#A62BFF` means immediate pressure and nothing else; product magenta
 `#F0027F` is the player and the product, and is also the key colour. Both are
 applied in code.
 
@@ -285,7 +285,7 @@ colour, so there is no hole and no halo where a dot used to be.
 | secondary | **`#FF6A00`** orange | the fore-grip, where the second hand goes | — |
 
 Neither is anywhere near a palette colour. `#FF6A00` is deliberately *not*
-warning orange `#ff7a1a`, which means immediate pressure and is applied in code.
+warning violet `#A62BFF`, which means immediate pressure and is reserved in code.
 Raise `--tol` if a generator drifts off the exact value; the default of 90 is
 generous.
 
@@ -549,7 +549,7 @@ asset without them is not finished.
 
 1. `cut.mjs check` passes with the right flags for that asset class.
 2. Alpha is **binary** — a half-transparent pixel is a smudge, not an edge.
-3. No `#F0027F` and no `#ff7a1a` anywhere in the pixels. Both are applied in
+3. No `#F0027F` and no `#A62BFF` anywhere in the pixels. Both are applied in
    code and both mean something.
 4. The fitted size matches §5 exactly.
 5. Anchors recorded in `SHEETS.md` for anything in `weapons/` or `cast/`, and

@@ -1300,3 +1300,28 @@ Cheapest first, and none of these has been tried:
 
 Lane: Content (map tools). Raised while answering a question about the owner's
 viewport, not acted on.
+
+## palette.gd neutrals, and three colours the Art Bible does not name (2026-08-24)
+
+**This entry replaces an earlier one that was wrong.** It claimed `palette.gd`
+had drifted from the night palette and shared no hex value with it, and that all
+approved art had been judged against unused colours. `DESIGN_LOCKS.md` §12.3 -
+the palette lock - records the correction: all eight signal colours are identical
+across `ART_BIBLE.md`, `palette.gd` and both reference layouts. There is no
+divergence to reconcile.
+
+What is genuinely outstanding is small and not urgent:
+
+- **Three neutrals sit dE 2.4-5.3 from their Art Bible values.** `PANEL #11151A`
+  against `night-paper #121719`, `PAPER #D8D2C4` against `paper-offwhite
+  #E2D8C2`, and the card grey. Rounding drift. Move `palette.gd` to the Bible's
+  values; the Bible is canon rank 7 and the code is the implementation.
+  Engine lane.
+- **`MAP_GROUND`, `MAP_RELIEF` and `MAP_WATER` exist in code and not in the
+  Bible.** That is a gap in the Bible rather than an invention in the code - the
+  map needs those three and nothing names them. Naming them is Art lane, and the
+  rendered target `art-library/references/ui-target-city-map-v01.jpg` shows what
+  they should be.
+
+Neither blocks art approval, which the earlier version of this entry wrongly
+said it did.

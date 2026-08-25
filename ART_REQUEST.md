@@ -194,7 +194,7 @@ Locked by the owner, catalogued in `ART_BIBLE.md` §3.2:
 Palette (night): paper `#0f1216` · ink `#e2dccd` · dim `#8c8778` · water
 `#1b2c3a` · line colours `#e2dccd #57c8e8 #7fc98a #c98ad8` · metro `#b06a2a` ·
 tram `#5d6b5e` · car `#46525e`. Day palette in `ART_PROMPTS.md` §2.
-**Reserved, never in art:** warning orange `#ff7a1a` and product magenta
+**Reserved, never in art:** warning violet `#A62BFF` and product magenta
 `#F0027F` — both are applied in code and both mean something.
 
 ## 5. The named cast — second wave, after the sheets above land
