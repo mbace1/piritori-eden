@@ -114,6 +114,38 @@ board**, and a board cannot be cut because its background is not separable from
 its art. The one deliberate exception is the swatch strip, asked for explicitly
 in §4 and cropped off before `key`.
 
+**Block C-T — the turnaround exemption** (bodies only, never props or scenes):
+
+```
+No text, no letters, no numbers, no labels, no captions, no watermark, no logo,
+no UI chrome, no panel, no card, no drop shadow, no mounted card and no frame.
+Lay the views out plainly in a single row, evenly spaced, all at the same scale,
+standing on the same invisible groundline. The background is one completely flat,
+solid, uniform magenta (#FF00FF) running edge to edge behind and between every
+view, with nothing on it. Not a presentation board — just the views.
+```
+
+The ban in Block C is on *presentation*: panels, captions, drop shadows, mounted
+cards. That ban stands everywhere. What C-T lifts is the ban on the **layout**,
+and only for bodies, because of a collision the repo has already paid for nine
+times.
+
+Cross-view alignment to ±2px **is not achievable across separate generations**.
+Asking for front, side and back as three prompts and expecting one body scale is
+asking the model for something it has no way to give. The nine Sprint 1 concepts
+carry that as defect 1 — body scale does not match across views, all three
+subjects — and it is not a prompt failure, it is the two rules meeting.
+
+The counter-example is already approved and already in the tree:
+`base-medium-mf-turnaround-cut-v02.png` **is a board** — eight figures, one
+scale, flat magenta — and it is the base body everything else is measured
+against. **One image is what guarantees one scale.**
+
+A board is uncuttable when its background is not separable from its art. Flat
+magenta edge to edge, including *between* the views, is exactly what makes it
+separable — so a C-T sheet cuts into individual views the same way any single
+subject does. The condition is not decoration; it is the whole exemption.
+
 ---
 
 ## 4. The palette block
@@ -266,6 +298,8 @@ afternoon.
 ## 6. The prompts
 
 Paste **Block A + Block B + Block C + the palette block**, then one body below.
+For a body turnaround, swap C for **C-T** and omit Block B — C-T states the
+magenta rule itself, edge to edge, which is the condition it runs on.
 
 ### 6.1 Fight arena — the harbour (McCormicks)
 

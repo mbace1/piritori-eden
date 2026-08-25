@@ -1,0 +1,43 @@
+Style: hard black ink-line illustration with flat, slightly muted fills —
+Darkest Dungeon rather than a comic — printed as a risograph: visible paper
+grain over everything, screen-print colour separations, slight registration
+drift between layers. Limited palette, hard seams between colours.
+
+CONSTRUCTION, and this is the most important instruction in the prompt: build
+the entire animal out of about six flat, solid shapes of a single uniform
+colour each, as if cut from coloured paper with scissors and glued down. Every
+colour meets its neighbour at a hard cut edge. A shape is one colour from edge
+to edge — the same value at its centre as at its rim. The silhouette does all
+the work. Read it as a paper cut-out of a dog, not as a drawing of a dog.
+
+Subject: a medium-sized city mongrel, the kind that lives around a Helsinki
+housing block in 2003. Deep chest, blunt muzzle, ragged ears — one up, one
+half-folded — and a plain worn collar. Muddy brown and dirty cream, two flat
+tones only. Alert but unimpressed. Coat length is described by the OUTLINE
+being slightly rough and irregular, and by nothing else inside it.
+
+Draw THREE views of this one same dog, laid out plainly in a single row,
+evenly spaced, all at exactly the same scale, all standing on the same
+invisible groundline, all the same height:
+  left   — seen from directly the SIDE, in profile, facing the viewer's left,
+           all four legs separated with background visible between them
+  centre — seen from directly the FRONT, head on, forelegs apart
+  right  — seen from directly BEHIND, tail down, hind legs apart, no face
+Strictly orthographic: flat elevations, no perspective, no foreshortening, no
+camera tilt, no vanishing point. Standing square on all four legs in all three.
+
+The background is one completely flat, solid, uniform magenta, hex value
+#FF00FF — pure full-intensity fuchsia, red channel 255, green channel 0, blue
+channel 255. It is a harsh electric screen colour, NOT pink, NOT rose, NOT
+dusty, NOT desaturated, NOT a muted printed pink. It runs edge to edge and
+corner to corner behind and BETWEEN all three views at that one exact value,
+with nothing on it: no gradient, no vignette, no shadow, no texture, no grain,
+no border, no frame, no paper edge. No view touches the edge of the image.
+
+No cast shadow, no contact shadow, no ground plane, no floor, no horizon, no
+scenery. Nothing held. No circles or discs on the joints.
+
+No text, no letters, no numbers, no labels, no captions, no hex codes, no
+swatch strip, no colour chart, no watermark, no logo, no panel, no card, no
+drop shadow, no mounted card. Not a presentation board — just the three views
+on flat magenta.

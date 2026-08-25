@@ -258,8 +258,9 @@ Priority from back to front:
 3. crew assignments and goods return;
 4. local pressure/closure;
 5. missions and contacts;
-6. selection and route preview;
-7. focus rail/sheet and global shell.
+6. selection, route preview and the selected node's tab strip (6.6.1);
+7. legend block (6.6.2);
+8. focus rail/sheet and global shell.
 
 Controls:
 
@@ -300,6 +301,64 @@ Collapsed summary:
 Expanded summary may show known services, current crew and rumour/range/quote
 age. It does not show the full catalogue, roster or conversation.
 
+#### 6.6.1 The three tabs under the selected node
+
+**Owner spec, 2026-08-24.** The selected node carries a small tab strip beneath
+its name plate — the three-icon strip visible under `PIRITORI` in
+`art-library/references/ui-target-city-map-v01.jpg`. Three tabs, always the same
+three, always in this order:
+
+| | icon | shows |
+|---|---|---|
+| 1 | crew | **who is here to hire or deal with** — crew at this location, sellers, muscle for hire |
+| 2 | goods | **the market read** — default tab |
+| 3 | broadcast | **news or missions in this area** |
+
+**Tab 2 is the default.** A node opens on the market read, because that is the
+question the player is usually asking of a place.
+
+**Tab 2 lists the top substances that are currently mispriced**, in either
+direction, with an amount against each:
+
+- **high demand** — the place wants it and pays over the usual;
+- **oversupply** — the place is swimming in it and pays under.
+
+The amount is shown in **euro by default**, and **touching the icon shows the
+same figure in markka (`mk`)**. This is period texture with teeth: 2003 Finland
+is two years into the euro, the ledger already treats a markka holding as
+`MARKKA UNUSABLE · GO TO BANK`, and a price quoted in mk is a quote from someone
+who has not moved on. Touching the icon is a *view* toggle and never a currency
+conversion the player is committing to.
+
+**Direction must not be carried by colour alone.** §6.7 already gates on
+*ordinary and hidden flow are distinguishable without colour*, and red/green is
+the worst available pair — it is the common form of colour blindness, and this UI
+is read outdoors on a phone. So each amount carries a **glyph as well as a hue**:
+an up mark for demand, a down mark for glut. The hue is the reinforcement, not
+the message.
+
+The colours come from the Art Bible rather than from generic market convention;
+`DESIGN_LOCKS.md` §12.3 - the palette lock - makes that palette the game's one
+palette, and it does not contain a signal green or a market red.
+
+#### 6.6.2 The legend block
+
+**Owner spec, 2026-08-24.** A legend block sits at the **top right of the map**.
+It carries two things in one block:
+
+1. **the legend** — what the pin medallions, the route lines and the state marks
+   mean, in the same visual language the map draws them in;
+2. **active missions, listed short** — name and one line, not a mission log.
+
+They share a block deliberately. A legend nobody needs after the first hour
+becomes dead screen; giving it the live mission list keeps the same corner worth
+looking at on day forty.
+
+The mission list here is a **pointer, not a control surface**. Tapping an entry
+focuses that mission's node on the map, which is `6.4`'s `tap mission badge:
+focus mission tab` reached from the other end. Accepting, abandoning or reading a
+mission in full stays in its own mode.
+
 ### 6.7 Acceptance gates
 
 - full map fits at 360 × 640 and 1366 × 768;
@@ -308,7 +367,15 @@ age. It does not show the full catalogue, roster or conversation.
 - route preview shows time and capacity before commit;
 - no market table or long dialogue appears on the map;
 - focus returns to the changed node after every consequence;
-- map is operable without drag, pinch or hover.
+- map is operable without drag, pinch or hover;
+- a selected node opens on its goods tab, and all three tabs are reachable
+  without scrolling the map;
+- every price direction on the goods tab is readable with the hue removed;
+- the legend block is present, and every mark it explains is a mark the map
+  actually draws;
+- active missions in the legend block match the missions the map is badging. A
+  mission listed there and not badged, or badged and not listed, is a failure of
+  this gate rather than a cosmetic difference.
 
 ---
 
