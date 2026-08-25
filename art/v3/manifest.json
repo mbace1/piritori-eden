@@ -1516,6 +1516,33 @@
       "note": "Toko Slomo, the noodle chef on Vaasankatu - a named NARRATIVE.md character. White shirt with rolled sleeves, black apron, black trousers, grey hair. The gold smiling mask is CANON. 2026-08-24: remeshed at 12k from the owner T-pose with ALL APRON TEXT REMOVED, rigged, retextured to 1024. 28,765 tris and 2.0 MB down to 12,481 and 0.69 MB. baked_text is now FALSE - the apron carried TOKO SLOMO'S NOODLES over a ramen bowl and a red katakana patch, which could not be translated and had to be declared; a blank apron removes the localisation dead end and spends no polygons on lettering. Walk/run clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
       "sha256": "00787592e5361badae5291c32b08132847fa84eb2867de9656d24970dcebcb21",
       "bytes": 691960
+    },
+    {
+      "id": "scene-scene-club-v01",
+      "kind": "scene",
+      "file": "scenes/scene-club-v01.webp",
+      "source": "art-src/scenes/scene-club-v04.png",
+      "source_version": "v04",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "makelansilta",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2",
+      "note": "Scene Club - the art-and-LAN commune at Makelansilta, owner-placed 2026-08-25, just north of Kurvi past the bridge where Makelankatu begins. Camera is LOWER than the other scenes, closer to eye height, so a full standing figure fits without cropping - owner direction: Jaska stands here and talks to camera. His table sits at the FAR WALL, mid-distance, matching the depth of the TV and LAN desks either side, with open floor left standing-room-clear in front of it for the live 3D speaker (Framing.LOCATION). v01-v03 put the table in the foreground where it cropped against the frame edge and would have cut a standing figure badly; v04 pulled it back. One background hobbyist (a LAN gamer) dresses the room; not a modelled participant. baked_text false, checked at final size: wall sketches are portraits and gesture only, monitor screens are abstract glow."
     }
   ]
 }

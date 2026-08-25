@@ -1,0 +1,47 @@
+The attached image is the finished painted style this must match exactly: the
+same cut-cardstock painted-night register, the same muted palette of cold
+blue-grey and warm interior light, the same level of detail, the same brush
+texture, the same deadpan restraint.
+
+The scene: the inside of an art-and-LAN commune in Kallio, Helsinki, at night
+in 2003 - a bare, shared, well-used room where local hobbyists gather to make
+things. Bare plaster walls with nothing on them but scuff marks and a few
+unframed pinned sketches. Low couches and a scatter of mattresses along one
+side for people who stay late. A cluster of small tables at one side, wired
+for a LAN party: a tangle of ethernet cable underfoot, two or three boxy CRT
+monitors glowing with abstract screen-light, tower cases with one case side
+off. One older television on a stand plays static-soft colour in a corner,
+ignored. A paraffin heater. Empty bottles and mugs on a windowsill. One tall
+window onto the street, cold blue night and a streetlamp outside.
+
+CAMERA: LOWER than a typical overhead isometric shot - closer to standing eye
+height, angled down only slightly, the way a person would actually see the
+room while standing in it. This is not a top-down floor plan; it reads more
+like looking across a room at somebody than looking down into a diorama.
+
+ONE OTHER PERSON is present in the room, small, at the side, doing their own
+thing and not looking at the viewer: someone at the LAN tables, lit by a
+monitor, absorbed in a game. An ordinary Helsinki twenty-something in plain
+2003 clothes, part of the room, not the subject.
+
+JASKA'S CORNER IS THE FOCUS OF THE COMPOSITION, roughly centred and closer to
+the camera than the rest of the room: a low table covered in small cut paper
+receipts, a paste pot, scissors, and one unfinished collage-map of the city
+pinned flat, a fat sealed envelope propping one edge. In front of this table,
+between it and the camera, leave a CLEAR STANDING SPACE roughly the height and
+width of a person - open floor, nothing placed there, at the same eye level as
+the camera - as if someone is standing there talking to whoever is looking,
+just out of frame. Do not draw a person in this space. It stays empty floor.
+
+COMPOSITION: keep the centre-foreground standing space and the broad floor
+area clear of furniture and people. Everything else - couches, mattresses, LAN
+tables, TV, heater - sits around the rim and the sides, not in the middle.
+
+Warm, cluttered, communal, a bit stale with smoke and screen glow.
+
+No readable text anywhere: monitor screens are abstract glow and colour only,
+never legible words, code, icons or numbers; sketches on the wall are gesture
+and shape only. No letters, no digits, no watermark, no logo, no border, no
+frame, no UI.
+
+16:9 landscape.

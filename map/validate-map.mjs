@@ -75,7 +75,12 @@ for (const service of map.periodServices) {
 // anchor had merged two places. The real gasworks sit just EAST of the locked
 // production boundary, so the anchor is placed at the frame edge and marked
 // representative, exactly as the harbour already is.
-const EXPECTED_ACTIVE_ANCHORS = 10;
+// 10 -> 11 on 2026-08-25: Jaska's site moves off Torkkelinmäki to Scene Club, a
+// new anchor at Mäkelänsilta — just north of Kurvi, past the bridge where
+// Mäkelänkatu begins. Owner-placed geography, not invented: an art-and-LAN
+// commune belongs at a real bridgehead, not folded into the residential
+// district anchor it used to borrow.
+const EXPECTED_ACTIVE_ANCHORS = 11;
 const active = map.anchors.filter((anchor) => anchor.sliceState === 'active');
 if (active.length !== EXPECTED_ACTIVE_ANCHORS) {
   fail(`expected ${EXPECTED_ACTIVE_ANCHORS} active slice anchors, found ${active.length}`);

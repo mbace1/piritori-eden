@@ -994,7 +994,8 @@
             "flag:markka-left-with-jaska"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-scene-club-v01"
     },
     {
       "id": "enc-first-sale",
@@ -1732,7 +1733,8 @@
             "flag:map-left-with-jaska"
           ]
         }
-      ]
+      ],
+      "scene_asset_id": "scene-scene-club-v01"
     }
   ],
   "schedule": [
