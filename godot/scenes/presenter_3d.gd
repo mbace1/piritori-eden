@@ -59,7 +59,8 @@ const MODEL := "res://data/art/presenter/arvo-linde-v05.glb"
 ## place, and a battle puts a shot-caller in the corner of the board.
 enum Framing {
 	BROADCAST,   ## full screen, head and shoulders — the news
-	LOCATION,    ## the person in their place — Toko in the noodle bar
+	LOCATION,    ## the person in their place, standing — a full figure in a room
+	COUNTER,     ## head and torso, cropped by a counter — STAGE_SPEC §6
 	INSET,       ## small, over something else — the opposing shot-caller
 }
 
@@ -98,8 +99,17 @@ func _ready() -> void:
 	stretch = true
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+	# THE STUDIO IS THE NEWS, NOT THE COMPONENT.
+	#
+	# The blue field, the flat frontal key and the tube shader below are how a
+	# 1990s Finnish bulletin looks. They shipped as unconditional because the
+	# news was the only screen using this. The moment a speaker stands in a
+	# painted room, an opaque background is a rectangle punched through the
+	# room, and scanlines over a noodle bar say "you are watching television"
+	# about a conversation you are having in person.
+	var broadcast := framing == Framing.BROADCAST
 	_viewport = SubViewport.new()
-	_viewport.transparent_bg = false
+	_viewport.transparent_bg = not broadcast
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.msaa_2d = Viewport.MSAA_DISABLED
 	_viewport.msaa_3d = Viewport.MSAA_2X
@@ -107,7 +117,7 @@ func _ready() -> void:
 
 	# The studio: a flat low-saturation blue field, per ART_BIBLE §4.3.
 	var env := Environment.new()
-	env.background_mode = Environment.BG_COLOR
+	env.background_mode = Environment.BG_COLOR if broadcast else Environment.BG_CLEAR_COLOR
 	env.background_color = Color("#1b2a36")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("#8fa8b8")
@@ -135,7 +145,8 @@ func _ready() -> void:
 		_find_skeleton(_rig)
 		_frame_presenter()
 
-	_apply_tube_shader()
+	if broadcast:
+		_apply_tube_shader()
 
 
 func _find_skeleton(n: Node) -> void:
@@ -171,6 +182,21 @@ func _frame_presenter() -> void:
 			_rig.position = Vector3(0, -1.05, 0)
 			_camera.position = Vector3(0, 0.25, 2.20)
 			_camera.fov = 46.0
+		Framing.COUNTER:
+			# HEAD AND TORSO, for somebody working behind a counter.
+			#
+			# Derived rather than dialled. At fov 46 the vertical extent is
+			# 2·z·tan(23°) = 0.849·z, so framing about 0.9 m of a 1.72 m man —
+			# roughly the crown down to below the waist — wants z ≈ 1.06. The
+			# camera sits at chest height so the crop lands where a counter
+			# would, and the caller ends the viewport at the counter's own line.
+			#
+			# LOCATION is left exactly as it was. A standing figure in a room
+			# and a man behind a bar are different shots, and reusing one for
+			# the other is what made him look like a customer.
+			_rig.position = Vector3(0, -1.05, 0)
+			_camera.position = Vector3(0, 0.30, 1.06)
+			_camera.fov = 46.0
 		Framing.INSET:
 			# Tighter than broadcast. The inset is small on screen, so the face
 			# has to fill it or it reads as a smudge over the board.
@@ -201,27 +227,75 @@ func _lower_arms() -> void:
 		_skeleton.set_bone_pose(i, p)
 
 
-## §13.2: "idle motion is minimal: breathing, blink, paper glance, small hand
-## gesture." This does the breathing and the glance; a blink needs blendshapes
-## the mesh does not carry.
+## HOW A SPEAKER IS ALIVE, per speaker.
+##
+## Nobody here has talking clips. Arvo never did — his glb ships one unused
+## `clip0`, and everything the viewer reads as presence is procedural bone
+## motion in `_process`. So a new speaker does not need Meshy, it needs a
+## profile: the same three levers, different numbers, because a newsreader and
+## a noodle cook are not alive in the same way.
+##
+## `breathe`   metres the chest rises, and how fast
+## `glance`    how far the head drops, how long for, and how often
+## `sway`      slow lateral head drift, the thing that stops a bust looking
+##             switched off between glances
+##
+## ARVO'S NUMBERS ARE UNCHANGED. The broadcast shot is approved art direction
+## (§13.2: "idle motion is minimal: breathing, blink, paper glance, small hand
+## gesture") and this refactor must not quietly retune it.
+const IDLE := {
+	"arvo": {
+		# A presenter reading: shallow breath, a glance DOWN AT THE SCRIPT
+		# roughly every eleven seconds, a barely-there sway.
+		"breathe_amp": 0.010, "breathe_rate": 1.15,
+		"glance_amp": 0.16, "glance_period": 11.0, "glance_at": 8.4, "glance_len": 1.2,
+		"sway_amp": 0.022, "sway_rate": 0.42,
+	},
+	"toko": {
+		# A man working a counter while he talks. He is doing something with
+		# his hands, so the glance is DEEPER and MORE OFTEN than a presenter's
+		# — it is a look down at the bowl, not at a page — and it comes back up
+		# to the customer. Slower, heavier breath: he is standing, not seated
+		# under studio lights.
+		"breathe_amp": 0.014, "breathe_rate": 0.92,
+		"glance_amp": 0.22, "glance_period": 7.5, "glance_at": 4.6, "glance_len": 1.6,
+		"sway_amp": 0.030, "sway_rate": 0.31,
+	},
+}
+
+## What an unlisted speaker gets. Deliberately Arvo's, so a new face is alive
+## rather than frozen, and QUEUE gets told rather than the player.
+const IDLE_DEFAULT := "arvo"
+
+
+func _idle_profile() -> Dictionary:
+	return IDLE.get(speaker_id, IDLE[IDLE_DEFAULT])
+
+
 func _process(dt: float) -> void:
 	_t += dt
 	if _skeleton == null:
 		return
+	var prof := _idle_profile()
 	if _chest_bone >= 0:
-		var breathe := sin(_t * 1.15) * 0.010
+		var breathe: float = sin(_t * float(prof["breathe_rate"])) * float(prof["breathe_amp"])
 		var p := _rest_chest
 		p.origin.y += breathe
 		_skeleton.set_bone_pose(_chest_bone, p)
 	if _head_bone >= 0:
-		# a slow settle, and every so often a glance down at the script
+		# a slow settle, and every so often a glance down — at the script, or
+		# at the work, depending on who is standing there
 		var glance := 0.0
-		var cycle := fmod(_t, 11.0)
-		if cycle > 8.4 and cycle < 9.6:
-			glance = sin((cycle - 8.4) / 1.2 * PI) * 0.16
+		var period: float = float(prof["glance_period"])
+		var at: float = float(prof["glance_at"])
+		var glen: float = float(prof["glance_len"])
+		var cycle := fmod(_t, period)
+		if cycle > at and cycle < at + glen:
+			glance = sin((cycle - at) / glen * PI) * float(prof["glance_amp"])
 		var h := _rest_head
 		h.basis = h.basis.rotated(Vector3(1, 0, 0), glance)
-		h.basis = h.basis.rotated(Vector3(0, 1, 0), sin(_t * 0.42) * 0.022)
+		h.basis = h.basis.rotated(Vector3(0, 1, 0),
+			sin(_t * float(prof["sway_rate"])) * float(prof["sway_amp"]))
 		_skeleton.set_bone_pose(_head_bone, h)
 
 

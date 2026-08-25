@@ -14,6 +14,7 @@ extends Control
 ## placeholder (handoff §6) — never a silent substitution.
 
 var _encounter_id: String = ""
+var _stage_baked := true
 var _stage_texture: Texture2D
 var _stage_note: String = ""
 
@@ -91,6 +92,7 @@ func setup(encounter_id: String) -> void:
 ## labelled placeholder rather than a fallback picture.
 func _load_stage_art(anchor_id: String, wanted_id: String = "") -> void:
 	_stage_texture = null
+	_stage_baked = true
 	for asset in ContentRegistry.art.get("assets", []):
 		if asset.get("kind", "") != "scene":
 			continue
@@ -102,6 +104,7 @@ func _load_stage_art(anchor_id: String, wanted_id: String = "") -> void:
 		var path := "res://data/art/" + String(asset.get("file", ""))
 		if ResourceLoader.exists(path):
 			_stage_texture = load(path)
+			_stage_baked = bool(asset.get("baked_text", false)) or bool(asset.get("baked_ui", false))
 			_stage_note = "%s — %s (prototype art)" % [
 				asset.get("id", ""), asset.get("production_status", "")]
 			return
@@ -118,6 +121,20 @@ func show_inspect(text: String) -> void:
 	_inspect.visible = true
 
 
+## Where a fraction of the SCENE IMAGE lands in this control, as a fraction of
+## its height. The art is drawn "cover" — scaled to fill and centre-cropped — so
+## a y of 0.473 in the file is NOT 0.473 on screen, and anything positioned
+## against something painted in the scene has to ask rather than assume.
+func texture_y_to_local(frac: float) -> float:
+	if _stage_texture == null or size.y <= 0.0:
+		return frac
+	var tex := _stage_texture.get_size()
+	var s: float = maxf(size.x / tex.x, size.y / tex.y)
+	var drawn_h := tex.y * s
+	var top := (size.y - drawn_h) * 0.5
+	return (top + frac * drawn_h) / size.y
+
+
 func _draw() -> void:
 	if _stage_texture != null:
 		# Cover the world window without distorting the composition.
@@ -125,8 +142,17 @@ func _draw() -> void:
 		var s: float = maxf(size.x / tex.x, size.y / tex.y)
 		var drawn := tex * s
 		draw_texture_rect(_stage_texture, Rect2((size - drawn) * 0.5, drawn), false)
-		# Keep live copy legible over baked art.
-		draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.46))
+		# DIM ONLY WHAT COMPETES WITH LIVE COPY.
+		#
+		# This was a flat 46% black over every scene, to keep live text legible
+		# over art that had text baked into it. An asset that declares no baked
+		# copy is not competing with anything, and darkening it by nearly half
+		# throws away the light the painting was made for — the empty bar's warm
+		# interior against its cold street is most of the picture.
+		var dim := 0.46
+		if not _stage_baked:
+			dim = 0.14
+		draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, dim))
 	else:
 		draw_rect(Rect2(Vector2.ZERO, size), PiritoriPalette.MAP_RELIEF)
 		draw_rect(Rect2(0, size.y * 0.55, size.x, size.y * 0.45), PiritoriPalette.PANEL)
