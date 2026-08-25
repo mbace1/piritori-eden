@@ -1279,3 +1279,24 @@ Art Bible", and the fix there was not to render it better but to redraw it
 
 Do not re-rank the three candidates. They stay written down only so nobody
 proposes them again as the cause.
+
+## The plates are drawn for a desk, and reviewed on a phone (2026-08-24)
+
+`ux/kallio-master.svg` is 1872x1266 and `ux/helsinki-era2-master.svg` is
+1483x1266 - landscape sheets with a right-hand legend column in ~10px type. The
+owner reviews on an iPad or a Pixel 10, and `CLAUDE.md` rule 3 already says
+testing happens on a phone with no console and no diff. At phone width the
+legend is unreadable and the whole point of a legend is that it is read.
+
+Not a rendering bug - the sheets are correct and the tool is sound. It is that
+the one device they are looked at on was never in the layout.
+
+Cheapest first, and none of these has been tried:
+- a `--portrait` flag on `master-plate.mjs` that stacks the legend UNDER the
+  map instead of beside it, at ~1000px wide
+- type floor of 28px at that width, which is what survives the downscale
+- or accept it and cut a separate phone plate, which is the answer that grows
+  two lineages of one thing and 11.1 already warns against that
+
+Lane: Content (map tools). Raised while answering a question about the owner's
+viewport, not acted on.
