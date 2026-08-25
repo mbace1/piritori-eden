@@ -41,6 +41,33 @@
       "note": "Approved corrected-mask baseline: eye openings sit inside the white arches. The runtime overlays live copy and controls; production must separate stage, Toko, mask, props, steam and window pass."
     },
     {
+      "id": "scene-toko-noodles-empty-v01",
+      "kind": "scene",
+      "file": "scenes/toko-slomo-noodles-empty-v01.webp",
+      "source": "art-src/scenes/toko-noodles-empty-v04.png",
+      "source_version": "v04",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "vaasankatu",
+      "portrait_safe_bounds": [
+        0.24,
+        0.0,
+        0.76,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "fb86f9d3f5afe30a36e8b55516ceb89c41ea4c72e58b1e7bb32814321a24bea1",
+      "note": "The empty bar - STAGE_SPEC 6.3. Same room, same camera, same moment, nobody behind the counter, for the ruling that Toko is a 3D layer composited into the gap. What he stood in front of - tiled splashback, sink, shelving, stacked bowls, hanging utensils - is painted as continuing objects rather than smeared, and the counter where he worked is bare. NO UI BAND: the room runs to the bottom edge, so the stool legs and floorboards the baked band covered are visible, and the baked-screen exception in APPROVALS.md retires with this asset. NO TEXT AT ALL, which took three passes and is the point: the signboard is a blank aged board, the menu strips keep their pictograms and lose their characters, the poster is a picture, the lantern is plain, the till keys are blank. v02 still read TOKO SLOMO ... ; v03 removed the tram route number and left a glaring white destination box that looked like a mistake; v04 switches that panel off. A blank lit sign is as conspicuous as a written one."
+    },
+    {
       "id": "scene-karhupuisto-v01",
       "kind": "scene",
       "file": "scenes/karhupuisto-v01.webp",
@@ -792,6 +819,33 @@
       "baked_ui": false,
       "sha256": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
       "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
+    },
+    {
+      "id": "scene-piritori-square-v01",
+      "kind": "scene",
+      "file": "scenes/piritori-square-v01.webp",
+      "source": "art-src/scenes/piritori-square-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "piritori",
+      "portrait_safe_bounds": [
+        0.22,
+        0.0,
+        0.78,
+        1.0
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71",
+      "note": "Vaasanpuistikko at night - Piritori itself, the square the game is named for and the site of the day-1 first purchase, which until 2026-08-25 rendered as a labelled placeholder. Metro pavilion with lit M (official HSL orange per TRANSIT_LAYERS 9.2), shuttered kiosk, phone booth, advertising column, tram wires, bare trees; the middle is empty and every prop sits at the rim. Style-matched to scene-hakaniemi-square-v01; geography from art-library/references/photos/photo-sornainen-square-night.jpg. Semi-approved prototype. The M is a lit symbol, not text - baked_text stays false."
     },
     {
       "id": "cast-driver-v01",
