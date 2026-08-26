@@ -16,6 +16,17 @@ const MIN_TARGET := 48.0   ## UX_SPEC: 44 is the floor, 48 preferred
 
 var mode: Mode = Mode.CITY
 
+## The title reads "PIRITORI → EDEN" only on City, the de facto home/start
+## screen (owner ruling, 2026-08-26: no splash screen exists, and the title
+## does not need to compete with place/stats on every other screen). Crew and
+## Missions are not their own Mode value — see the enum above — so they keep
+## reading as City for this purpose, which matches them being City sub-panels
+## rather than independent modes in UX_SPEC.md §3.1.
+func _set_mode(m: Mode) -> void:
+	mode = m
+	if _title:
+		_title.visible = (m == Mode.CITY)
+
 var _root: VBoxContainer
 var _status: PanelContainer
 var _status_line2: Label
@@ -48,8 +59,20 @@ func _ready() -> void:
 	theme = PiritoriFonts.theme()
 
 	_build()
-	get_tree().root.size_changed.connect(_reflow)
+	# ORDER MATTERS. `_reflow()` sizes everything off `get_viewport_rect()`,
+	# which is itself downstream of `content_scale_factor` — Godot calls
+	# signal listeners in connection order, so with `_reflow` connected
+	# first, every resize laid the shell out against the PREVIOUS
+	# content_scale_factor, one step behind the one `_apply_ui_scale` was
+	# about to set. Invisible on a single resize at boot; visible the moment
+	# anything resizes twice in a session (rotating a phone, or this
+	# session's own capture harness switching shots) — the city map's own
+	# Control ended up 480 design units wide against a viewport that had
+	# already become 410, and a legend anchored to ITS right edge drew
+	# 70 units past the real one (2026-08-27, "map names are way too big"
+	# investigation surfaced this as a second, independent bug).
 	get_tree().root.size_changed.connect(_apply_ui_scale)
+	get_tree().root.size_changed.connect(_reflow)
 	_apply_ui_scale()
 	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
@@ -276,12 +299,19 @@ func _build() -> void:
 	bar.alignment = BoxContainer.ALIGNMENT_CENTER
 	_command_bar.add_child(bar)
 
+	# UX_SPEC.md §3.1 ("The five modes") and §3.3 ("Navigation model"): "these
+	# are full interaction modes, not five permanent bottom tabs" — the
+	# planning dock is meant to be four targets, and END DAY is explicitly
+	# "beside the clock", not a tab (moved to the header, see
+	# `_refresh_status()`). CITY / CREW / MESSAGES / MISSIONS is the minimal
+	# spec-conformant four; folding Crew and Missions into a real Ledger
+	# mode and badging missions on the map itself (§6.6.2) is bigger,
+	# separate work — see QUEUE.md.
 	for spec in [
-		["cmd.route", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
+		["cmd.city", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
 		["cmd.crew", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
+		["cmd.messages", PiritoriIcon.Kind.PRESSURE, MapStyle.SUB_TEXT, _show_news_list],
 		["cmd.missions", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
-		["cmd.news", PiritoriIcon.Kind.PRESSURE, MapStyle.SUB_TEXT, _show_news_list],
-		["cmd.end_day", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
 	]:
 		var btn := _command(tr(spec[0]), spec[1], spec[2], spec[3])
 		btn.set_meta("key", spec[0])
@@ -540,6 +570,7 @@ func _refresh_status() -> void:
 	# Each chip is icon + number, and every icon means one thing only.
 	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
 		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()])
+	_add_end_day_button()
 	_add_stat(PiritoriIcon.Kind.CREW, MapStyle.FLOW, "%d" % _crew_known())
 	var packs := 0
 	for v in GameState.stock.values():
@@ -547,6 +578,25 @@ func _refresh_status() -> void:
 	_add_stat(PiritoriIcon.Kind.STOCK, MapStyle.GOODS, "%d" % packs)
 	_add_stat(PiritoriIcon.Kind.MISSION, MapStyle.METRO, "%d" % _live_leads())
 	_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, "€ %s" % _thousands(GameState.cash_eur))
+
+
+## UX_SPEC.md §3.3 ("Navigation model"): "`WAIT / CLOSE BLOCK` is an explicit
+## City action beside the clock, not a primary navigation tab." The clock is
+## the day/block chip just added above; this is the separate control that
+## sits next to it, replacing the old fifth command-bar button.
+func _add_end_day_button() -> void:
+	var btn := Button.new()
+	btn.text = tr("cmd.end_day")
+	btn.custom_minimum_size = Vector2(0, MIN_TARGET)
+	btn.focus_mode = Control.FOCUS_ALL
+	btn.add_theme_font_size_override("font_size", 13)
+	var sb := PiritoriChrome.button(MapStyle.SMALL_TEXT)
+	var sb_hot := PiritoriChrome.button(MapStyle.SMALL_TEXT, true)
+	btn.add_theme_stylebox_override("normal", sb)
+	btn.add_theme_stylebox_override("hover", sb_hot)
+	btn.add_theme_stylebox_override("pressed", sb_hot)
+	btn.pressed.connect(_end_block)
+	_stats.add_child(btn)
 
 
 func _block_word() -> String:
@@ -681,7 +731,7 @@ func _clear_rail() -> void:
 
 
 func _show_city() -> void:
-	mode = Mode.CITY
+	_set_mode(Mode.CITY)
 	_open_encounter = ""
 	if _rail:
 		_rail.visible = true
@@ -766,7 +816,7 @@ func _build_city_rail(anchor_id: String) -> void:
 
 
 func _show_location(encounter_id: String) -> void:
-	mode = Mode.LOCATION
+	_set_mode(Mode.LOCATION)
 	_open_encounter = encounter_id
 	_clear_world()
 	var stage := preload("res://scenes/location_stage.gd").new()
@@ -826,22 +876,31 @@ const COUNTER_SPEAKER_TOP := 0.0
 const COUNTER_SPEAKER_BOTTOM := 0.473
 const COUNTER_SPEAKER_WIDTH := 0.46
 
-func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
-	var enc := ContentRegistry.encounter(encounter_id)
-	if enc.is_empty():
-		return
+## Which participant in this encounter has a 3D model, if any. Shared by the
+## stage's own big speaker and the rail's small medallion, so "who is in the
+## room" is answered once rather than re-derived twice and risking the two
+## disagreeing.
+const _Presenter3D := preload("res://scenes/presenter_3d.gd")
 
-	var speaker = preload("res://scenes/presenter_3d.gd").new()
-
-	var who := ""
+func _encounter_speaker_id(enc: Dictionary) -> String:
 	for p in enc.get("participants", []):
 		var pid := String(p)
 		# The player is in every scene and is not somebody you look at.
 		if pid == "aatami":
 			continue
-		if speaker.SPEAKERS.has(pid):
-			who = pid
-			break
+		if _Presenter3D.SPEAKERS.has(pid):
+			return pid
+	return ""
+
+
+func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
+	var enc := ContentRegistry.encounter(encounter_id)
+	if enc.is_empty():
+		return
+
+	var speaker = _Presenter3D.new()
+
+	var who := _encounter_speaker_id(enc)
 	if who == "":
 		speaker.free()
 		return
@@ -871,6 +930,14 @@ func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
 	speaker.offset_top = 0.0
 	speaker.offset_bottom = 0.0
 	stage.add_child(speaker)
+	# BEHIND THE TEXT LAYER, not in front of it. `location_stage.gd` builds its
+	# copy pad in `_ready()`, before this ever runs, so a plain `add_child`
+	# stacks the speaker on top of it — invisible while the copy was a bare
+	# label floating over dim art, but the dialogue card (concept A,
+	# 2026-08-24) is opaque kraft, and Toko's own head stood in front of his
+	# own line. Text is always the top layer over a body, the way a caption
+	# sits over an actor and not the other way round.
+	stage.move_child(speaker, 0)
 
 
 func _build_location_rail(encounter_id: String, stage: Control) -> void:
@@ -882,11 +949,15 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 	if GameState.is_resolved(encounter_id):
 		_rail_box.add_child(_make_label(tr("ui.already_resolved"), 15, PiritoriPalette.TEXT_DIM))
 	else:
-		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location)
+		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location), dressed as
+		# concept A's torn-card action row: an eye for LOOK, a blade for ACT, a
+		# door for LEAVE — the same three glyphs the owner approved, applied to
+		# however many real inspectables and choices an encounter actually has
+		# rather than a fixed three.
 		_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
 		for item in enc.get("inspectables", []):
-			var lb := _make_button("◉ " + String(item), PiritoriPalette.INTEL_MUSTARD)
 			var txt := String(item)
+			var lb := _make_icon_button(txt, PiritoriIcon.Kind.INFO, PiritoriChrome.ACCENT_LOOK)
 			lb.pressed.connect(func(): stage.show_inspect(txt))
 			_rail_box.add_child(lb)
 
@@ -895,9 +966,8 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 
 		for choice in enc.get("choices", []):
 			var can := GameState.meets_all(choice.get("requirements", []))
-			var b := _make_button(String(choice.get("label", choice["id"])),
-				PiritoriPalette.PLAYER_CYAN if can else PiritoriPalette.LOCKED_GREY)
-			b.disabled = not can
+			var b := _make_icon_button(String(choice.get("label", choice["id"])),
+				PiritoriIcon.Kind.RISK, PiritoriChrome.ACCENT_ACT, can)
 			# Commitment shows its forecast first (handoff §5, Market and mission)
 			var forecast := String(choice.get("forecast", ""))
 			if forecast != "":
@@ -915,7 +985,7 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 				_rail_box.add_child(req)
 
 	_rail_box.add_child(_separator())
-	var back := _make_button(tr("ui.leave_to_map"), PiritoriPalette.TEXT_DIM)
+	var back := _make_icon_button(tr("ui.leave_to_map"), PiritoriIcon.Kind.LEAVE, PiritoriChrome.ACCENT_LEAVE)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
 
@@ -926,7 +996,7 @@ func _commit_choice(encounter_id: String, choice_id: String) -> void:
 
 
 func _show_market() -> void:
-	mode = Mode.MARKET
+	_set_mode(Mode.MARKET)
 	_clear_world()
 	var ledger := preload("res://scenes/market_ledger.gd").new()
 	ledger.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1358,7 +1428,7 @@ func _battle_format(battle_id: String) -> String:
 
 ## Enter a formation battle. The campaign model is untouched until it resolves.
 func _show_battle(battle_id: String) -> void:
-	mode = Mode.BATTLE
+	_set_mode(Mode.BATTLE)
 	_clear_world()
 	_clear_rail()
 	var crew: Array = []
@@ -1559,10 +1629,10 @@ func _status_key(status: int) -> String:
 ## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its
 ## scheduled day and can be re-watched from here afterwards.
 func _show_news_list() -> void:
-	mode = Mode.NEWS
+	_set_mode(Mode.NEWS)
 	_clear_rail()
 	_rail.visible = true
-	_rail_box.add_child(_make_label(tr("cmd.news"), 19, MapStyle.TITLE_TEXT))
+	_rail_box.add_child(_make_label(tr("cmd.messages"), 19, MapStyle.TITLE_TEXT))
 
 	var any := false
 	for n in ContentRegistry.slice.get("news", []):
@@ -1590,7 +1660,7 @@ func _show_news_list() -> void:
 ## Play a bulletin full-screen. The television owns the world window; the rail
 ## is hidden so nothing competes with it.
 func _play_news(nid: String) -> void:
-	mode = Mode.NEWS
+	_set_mode(Mode.NEWS)
 	_clear_world()
 	var scene := preload("res://scenes/news_event.gd").new()
 	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1636,6 +1706,56 @@ func _make_button(text: String, accent: Color) -> Button:
 	b.add_theme_color_override("font_disabled_color", PiritoriPalette.LOCKED_GREY)
 	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	return b
+
+
+## A torn dark-card button with a vector icon and a coloured label — concept
+## A's action row (owner-approved 2026-08-24), applied to the location
+## screen's LOOK / ACT / LEAVE buttons. Kept separate from `_make_button`
+## rather than changing it in place: that helper is shared by the city rail
+## and the market ledger too, and this task is the location screen only.
+func _make_icon_button(text: String, icon_kind: int, accent: Color,
+		enabled: bool = true) -> Button:
+	var tint := accent if enabled else PiritoriPalette.LOCKED_GREY
+	var b := Button.new()
+	b.text = ""
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, 44.0))
+	b.disabled = not enabled
+	b.focus_mode = Control.FOCUS_ALL
+	var sb := PiritoriChrome.button(tint)
+	var sb_hot := PiritoriChrome.button(tint, true)
+	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("hover", sb_hot)
+	b.add_theme_stylebox_override("pressed", sb_hot)
+	b.add_theme_stylebox_override("disabled", sb)
+	b.add_theme_stylebox_override("focus", sb_hot)
+
+	var pad := MarginContainer.new()
+	pad.set_anchors_preset(Control.PRESET_FULL_RECT)
+	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.add_theme_constant_override("margin_left", 12)
+	pad.add_theme_constant_override("margin_right", 12)
+	pad.add_theme_constant_override("margin_top", 8)
+	pad.add_theme_constant_override("margin_bottom", 8)
+	b.add_child(pad)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.add_child(row)
+
+	var icon := PiritoriIcon.new(icon_kind, tint, 22.0)
+	row.add_child(icon)
+
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", 14)
+	lbl.add_theme_color_override("font_color", tint)
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(lbl)
+
 	return b
 
 

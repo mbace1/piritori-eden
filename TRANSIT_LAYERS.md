@@ -4,6 +4,20 @@
 nothing here overrides `DESIGN_AUTHORITY.md`, `MAP.md` or `DESIGN_LOCKS.md`, and
 §6 lists the decisions that are the owner's rather than mine.
 
+**§3's L2 is live on the real board, 2026-08-27 — the static half only.**
+Reported directly: the city map's tram lines should look like a real HSL
+network map, "layered... you should have gotten the basics in a PR earlier."
+They were extracted (§10) and proven on offline plates
+(`map/tools/master-plate.mjs`) but the board itself still drew three
+hand-sketched polylines. `godot/tools/build-map-geometry.mjs` now derives the
+game's own `public-transit` layer from the same real GTFS geometry and the
+same corridor-fanning algorithm the plates use — real per-line HSL-ish
+colours, the seven services that actually serve Kallio, numbered paper
+chips — and `city_map.gd` draws it in the §9.3 "printed" register: flat
+colour, hard black keyline, no glow. **L3 (live vehicles), L4 (congestion)
+and the whole waiting-for-a-real-tram mechanic in §4 remain proposal and
+phase-gated** — this is the picture, not the clock.
+
 The ask, in the owner's words: real metro and tram maps over Helsinki (Era II)
 and Greater Kallio (Era I); moving between locations shows the **real** tram
 route; an adjacent mode — *city real-time public* — carrying live HSL service

@@ -34,6 +34,15 @@ const CARTON := Color("#cfc4ab")        ## cream carton, for plates
 const CARTON_FIBRE := Color("#9c8b6b")  ## the pale inside of a torn edge
 const CARTON_INK := Color("#16191b")
 
+# ── concept A interface accents (owner-approved 2026-08-24, "a works") ─────
+# The location screen's dialogue card and torn-card action row match
+# `art-src/ui/band-A-warm.png` — the sheet the owner picked over the cooler
+# chrome-matched alternative. Named here rather than inlined at the call site
+# so the choice is a constant, not a colour retyped at every button.
+const ACCENT_LOOK := Color("#a62bff")   ## violet — inspect / look closer
+const ACCENT_ACT := Color("#9a4e34")    ## rust-orange — commit to a choice
+const ACCENT_LEAVE := Color("#4f7fa0")  ## teal — leave
+
 const TEX := 64                          ## nine-patch source size
 const MARGIN := 18                       ## corner size held unstretched
 const TEAR := 7                          ## deepest bite a torn edge takes

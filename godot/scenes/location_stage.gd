@@ -21,11 +21,29 @@ var _stage_note: String = ""
 var _copy: Label
 var _inspect: Label
 var _note_label: Label
+var _card: PanelContainer
 
 
 func _ready() -> void:
 	clip_contents = true
-	_build_text_layer()
+	# `setup()` can run BEFORE this node ever enters the tree — app_shell.gd
+	# calls it that way — so it already built the text layer itself if this
+	# fires second. Building it twice left a duplicate, empty-text copy
+	# clobbering `_copy`/`_card`, while the first, correctly-populated one
+	# stayed on screen unreferenced and unfittable: `_refit_card()` (below)
+	# was silently fitting the WRONG card. Caught by printing what it was
+	# actually operating on rather than trusting the layout math in
+	# isolation, one more time.
+	if _copy == null:
+		_build_text_layer()
+
+
+func _notification(what: int) -> void:
+	# A phone rotating, or a window resizing mid-conversation, changes the
+	# width the card's text wraps at — refit rather than leave the old
+	# height clipping (or over-padding) the new line count.
+	if what == NOTIFICATION_RESIZED:
+		call_deferred("_refit_card")
 
 
 ## Live UI text over the art layer.
@@ -40,21 +58,44 @@ func _build_text_layer() -> void:
 	add_child(pad)
 
 	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 14)
+	col.add_theme_constant_override("separation", 10)
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pad.add_child(col)
 
-	_copy = _make_label(17, PiritoriPalette.PAPER)
-	col.add_child(_copy)
-
-	_inspect = _make_label(15, PiritoriPalette.INTEL_MUSTARD)
-	_inspect.visible = false
-	col.add_child(_inspect)
-
+	# THE SPEAKER GETS THE TOP OF THE FRAME. `Framing.COUNTER` puts a
+	# standing figure's head near the top of the stage — the reference plate
+	# itself (`toko-slomo-noodles-prototype-v02.webp`) puts its baked band at
+	# the BOTTOM, at the torn seam, for the same reason. The card used to sit
+	# at the top instead, and Toko's own head disappeared behind it the
+	# moment it became an opaque card rather than loose text (2026-08-26,
+	# caught on the first render, not assumed fixed once it compiled).
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	col.add_child(spacer)
+
+	# THE DIALOGUE CARD. Concept A (owner-approved 2026-08-24): the speaker's
+	# line sits on a torn kraft card, not floating loose over the art.
+	# `PiritoriChrome.plate()` already IS that card — a NAME tag and a
+	# transcript are the same paper at different sizes, so this needed no new
+	# drawing code, only a bigger one.
+	_card = PanelContainer.new()
+	_card.add_theme_stylebox_override("panel",
+		PiritoriChrome.margins(PiritoriChrome.plate(), 22, 16))
+	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(_card)
+
+	var card_col := VBoxContainer.new()
+	card_col.add_theme_constant_override("separation", 8)
+	card_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_card.add_child(card_col)
+
+	_copy = _make_label(17, PiritoriChrome.plate_ink())
+	card_col.add_child(_copy)
+
+	_inspect = _make_label(15, Color("#8a3d12"))  ## warm rust ink, matches the ring
+	_inspect.visible = false
+	card_col.add_child(_inspect)
 
 	_note_label = _make_label(12, PiritoriPalette.TEXT_DIM)
 	col.add_child(_note_label)
@@ -86,6 +127,29 @@ func setup(encounter_id: String) -> void:
 	_note_label.text = _stage_note
 	_inspect.visible = false
 	queue_redraw()
+	# Wrapped-label height inside nested containers does not reliably settle
+	# on the pass that runs before this control has its own real width — the
+	# card clipped its own third line here (2026-08-26), caught by rendering
+	# the actual encounter rather than trusting that a clean compile meant a
+	# clean layout. Deferred so it runs after the stage has a real size.
+	call_deferred("_refit_card")
+
+
+## The card's minimum height, measured against the font directly rather than
+## trusted to container auto-sizing — see the note in `setup()`.
+func _refit_card() -> void:
+	if _copy == null or not is_inside_tree():
+		return
+	var font := _copy.get_theme_font("font")
+	var font_size := _copy.get_theme_font_size("font_size")
+	if font == null or _copy.size.x <= 0.0:
+		return
+	var h := font.get_multiline_string_size(_copy.text, HORIZONTAL_ALIGNMENT_LEFT,
+		_copy.size.x, font_size).y
+	if _inspect.visible and _inspect.text != "":
+		h += 8.0 + font.get_multiline_string_size(_inspect.text, HORIZONTAL_ALIGNMENT_LEFT,
+			_inspect.size.x, _copy.get_theme_font_size("font_size")).y
+	_copy.custom_minimum_size.y = h
 
 
 ## Find a registered scene asset for this anchor. Missing art is reported as a
@@ -119,6 +183,7 @@ func _load_stage_art(anchor_id: String, wanted_id: String = "") -> void:
 func show_inspect(text: String) -> void:
 	_inspect.text = tr("ui.you_look") % text
 	_inspect.visible = true
+	call_deferred("_refit_card")
 
 
 ## Where a fraction of the SCENE IMAGE lands in this control, as a fraction of
