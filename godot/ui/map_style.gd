@@ -15,10 +15,17 @@ extends RefCounted
 # ── surfaces ──────────────────────────────────────────────────────────────
 const WATER := Color("#102530")          ## waterNoise base
 const WATER_WAVE := Color("#19404e")
-const LAND := Color("#171d20")           ## paperNoise base
-const LAND_FIBRE := Color("#9b7e59")     ## torn tan seam
-const LAND_FIBRE_W := 7.0
-const PAPER_GRAIN := Color("#273034")
+## Real OSM coastline stroke — matches map/tools/master-plate.mjs's own water
+## treatment, so the game board and the offline reference plates read as the
+## same water.
+const COASTLINE := Color("#2b6076")
+# Reported directly, 2026-08-28: "Land can be lighter gray around Kallio.
+# Only water should be blue." The old LAND (#171d20) and the water colours
+# (#102530, #0f2934) share the same R channel and differ only in how much
+# blue is mixed in — land read as "slightly less blue water" rather than as
+# a different material. Neutral warm grey now, no blue in it at all.
+const LAND := Color("#4a4844")           ## paperNoise base — neutral grey, not blue
+const PAPER_GRAIN := Color("#39372f")    ## grain sits darker on the lighter land now
 const WATER_SHADOW := Color("#0f2934")
 
 ## The urban bed the blocks are cut out of. Streets read as the GAPS between
@@ -46,11 +53,16 @@ const RAIL_TIE := Color("#8a8272")
 const RAIL_TIE_W := 3.0
 const RAIL_TIE_DASH := Vector2(4, 12)
 
-const TRAM := Color("#71885b")
-const TRAM_W := 8.0
+## Kept as a general accent (missions icon, battle UI) even though the
+## transit lines themselves now carry their own real per-service colour —
+## see `TRANSIT_KEYLINE` below and `city_map.gd`'s `_draw_public_transit()`.
 const METRO := Color("#c1783b")
-const METRO_W := 7.0
-const METRO_DASH := Vector2(13, 9)
+
+## The Era I "printed" hard black keyline every real transit line and number
+## chip is drawn with (`TRANSIT_LAYERS.md` §9.3) — not glow, not per-line;
+## one dark outline colour shared by the whole layer, the way a riso plate
+## has one black ink regardless of what else is on the sheet.
+const TRANSIT_KEYLINE := Color("#0d0c0a")
 
 # ── live information ──────────────────────────────────────────────────────
 const ROUTE := Color("#43b8c4")          ## crew / player route

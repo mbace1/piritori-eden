@@ -1345,13 +1345,350 @@ list. Recorded here instead of half-fixed:
   the ends of every line, the fifth command. The command floor is now derived
   from available width, and the words drop to icons when they no longer fit
   beside them. 665 -> 415 against a 410 viewport.
-- **The location screen is still flat boxes against the Toko target.**
-  `art-library/references/ui/ui-target-location-toko-v01.jpg` shows what LOOK /
-  ACT should be: dialogue on a kraft card, choices as three carton buttons with
-  icon + text + price, a ringed portrait medallion for the speaker. The current
-  screen renders the same data as text links on dark panels. This is the next
-  real UI build, and the tab-strip spec in `UX_SPEC.md` 6.6.1 already names the
-  material language. Art lane (ui/ drawing code), after the scene gaps.
+- ~~**The location screen is still flat boxes against the Toko target.**~~
+  **DONE 2026-08-26.** Concept A (owner-approved, "a works") is built as real
+  procedural UI: `PiritoriChrome.medallion()` is a new torn-ring generator
+  matching the existing hash-grain technique; the dialogue text sits on
+  `PiritoriChrome.plate()` (already existed, no new drawing code needed for
+  that piece); LOOK/ACT/LEAVE are torn-card buttons with three new
+  `PiritoriIcon.Kind` glyphs (INFO/RISK/LEAVE) and per-row accent colour.
+  Verified against the real Toko encounter via a new capture harness,
+  `tools/capture_location_band.gd` — kept, alongside the existing
+  `capture_*.gd` tools, as a standing check for this screen.
+
+  The medallion (ringed portrait + NAME plate) from concept A was built,
+  verified, then CUT on review 2026-08-26: the standing figure already IS
+  the portrait, so a second small face in the rail duplicated it rather than
+  identifying anything new. Removed along with everything that existed only
+  to support it — `PiritoriChrome.medallion()`, `presenter_3d.display_name()`,
+  the app_shell mount — rather than left in the tree unused. If a future
+  screen wants a circular frame, `chrome.gd`'s `_pixel()`/`_bite()` pattern is
+  the reference for doing it again, not a resurrected copy of this function.
+
+  Three unrelated, real bugs surfaced by actually rendering the full figure
+  rather than the tight BROADCAST crop, all fixed in the same pass:
+  - `_lower_arms()` matched bone names containing "arm" OR "shoulder"; this
+    rig has both a `Shoulder` bone and a child `Arm` bone, so both rotated and
+    compounded past vertical, swinging the arm behind the torso — invisible
+    on Arvo (BROADCAST crops below the shoulder), and read as "no arms" on
+    Toko standing at his own counter. Fixed to rotate only the upper-arm
+    bone, and the angle re-tuned by rendering candidates side by side (72°
+    alone undershot; 100° lands the hand naturally on the counter).
+  - A `SubViewportContainer` pre-set to its own final size never fires
+    `NOTIFICATION_RESIZED`, so `presenter_3d.gd`'s internal viewport-size sync
+    (which only runs on that notification) never ran — the medallion's INSET
+    presenter rendered a fully transparent nothing, not a visibly broken
+    something, which is why it read as "no bug" until the pixels were sampled
+    directly. Fixed by leaving sizing to anchors alone, like every other
+    mount of this component.
+  - `location_stage.gd`'s `_ready()` unconditionally rebuilt the text layer
+    even when `setup()` had already built it (which happens whenever `setup()`
+    runs before the node enters the tree, which app_shell.gd always does) —
+    a duplicate, empty-text card clobbered `_copy`/`_card`, while the
+    original, correctly-populated one sat on screen unreferenced and
+    un-fittable. Guarded with the same `if _copy == null` `setup()` already
+    used.
+
+  Not done: the ACT row's icon is the same blade/RISK glyph for every choice
+  regardless of whether it is actually risky (e.g. "Eat, listen, owe a
+  favour" gets the same icon as "Risk sabotage — €300") — a deliberate scope
+  cut to ship the three approved glyphs rather than invent a fourth, but
+  worth a look once more encounters exist to judge it against.
+
+- **The bottom command bar was five permanent tabs against its own spec.**
+  `UX_SPEC.md` §3.1 ("The five modes") says plainly "these are full
+  interaction modes, not five permanent bottom tabs", and §3.3 ("Navigation
+  model") names the planning dock as CITY / LEDGER / MESSAGES / MENU, with
+  `WAIT / CLOSE BLOCK` "an explicit City action beside the clock, not a
+  primary navigation tab." The build had drifted to Route / Crew / Missions /
+  News / End Day, five buttons, plus a separate header ≡ for settings.
+
+  Fixed to the MINIMAL spec-conformant shape (owner's call, 2026-08-26,
+  choosing this over the fuller rebuild below): the bar is now four —
+  `cmd.city` (renamed from `cmd.route`, was already `_show_city`) / CREW /
+  `cmd.messages` (renamed from `cmd.news`) / MISSIONS. END DAY moved beside
+  the day/block chip in the header as its own small button
+  (`_add_end_day_button()`), off the bar entirely. The title "PIRITORI →
+  EDEN" now shows only on City — the de facto home screen, since no splash
+  screen exists — and is hidden everywhere else via a new `_set_mode()`
+  that all six mode switches now go through, instead of assigning `mode`
+  directly.
+
+  Not done, and bigger: `UX_SPEC.md` §8.2 wants Ledger as ONE mode with four
+  persistent sections (Market, Crew, Loadout, Obligations) — Loadout and
+  Obligations do not exist as screens at all yet, so a real merge is a
+  multi-screen build, not a rename. §6.6.2 wants missions badged on the map
+  itself with a legend/pointer list, which also does not exist — Missions
+  currently only has its own standalone list, so it stayed on the bar rather
+  than becoming unreachable. Both are the honest next step toward the
+  three-item dock (CITY / LEDGER / MESSAGES) the spec actually asks for.
+
+- **`node godot/tools/sync-data.mjs --check` fails on `main` right now**,
+  unrelated to the location-screen work above: `data/kallio-era1-2003-v1.json`
+  and `data/art-v3-manifest.json` have drifted from their sources. Neither
+  source file appears in this session's diff, so this predates it — most
+  likely a prior PR merge that updated the source but never re-ran the sync
+  script before committing. `CLAUDE.md` rule 7 says run
+  `node godot/tools/sync-data.mjs` rather than hand-edit `godot/data/`; this
+  was left alone rather than bundled into an unrelated commit.
+
+- **The city map's anchor labels were massively oversized** (reported
+  directly, 2026-08-27: "map names are way too big"). Root cause:
+  `city_map.gd` had its own `_device_gain()`, a second independent
+  implementation of the exact "phone is small, scale up" fix `app_shell.gd`'s
+  `content_scale_factor` already applies to the whole window — multiplying
+  BOTH together on labels, pins and tab-tears compounded to roughly 10x.
+  Removed `_device_gain()` entirely; everything it touched now just uses the
+  same design-space clamps as the rest of the shell, correctly stretched
+  once by the engine.
+
+  Labels were also shown for every anchor regardless of zoom — twelve names
+  fighting for the same small board. Now a label draws only for the
+  SELECTED anchor (the click) or a LIVE lead (the minimum needed to still
+  find an actionable place without clicking everything), matching "should
+  mainly appear when clicked... smaller text can be there as long as
+  visibility remains." The existing rail the `anchor_selected` signal opens
+  already IS the "small quick view menu" asked for — nothing new needed
+  there.
+
+  The legend (already built, §6.6.2) was there but invisibly clipped past
+  the right edge of the screen — a real, separate bug found while
+  investigating the label sizing: this Control's own `size` can end up wider
+  than `get_viewport_rect()` after a runtime resize (proven in isolation;
+  root cause not fully chased down, see below), harmless for content that
+  fits ITSELF to `size` but fatal for the legend's hard corner anchor.
+  Clamped against the true visible rect rather than trusted to match it.
+  Also reordered `app_shell.gd`'s two `size_changed` listeners so
+  `_apply_ui_scale` always runs before `_reflow` (was backwards; correct
+  regardless, even though it did not turn out to be this bug's cause).
+
+  **Not fully explained:** why `city_map`'s Control.size (480 design units,
+  observed) exceeds `get_viewport_rect()` (410.5, observed) after a resize
+  even when `AppShell` is parented exactly like a real launch (tested
+  directly, ruling out "it's just the capture harness"). The legend clamp
+  makes this harmless where it was visible; it may still be under-fitting
+  the map's own relief/pins by the same small margin, which reads as
+  "slightly more zoomed out than ideal" rather than as a visible bug. Worth
+  a real investigation if anything else ever hard-anchors to this control's
+  edge.
+
+- **Squares removed, land re-coloured, real streets and water wired in
+  (2026-08-27/28, direct feedback across several rounds).** In order:
+  - The procedural block-grid (`_draw_blocks()`) was suppressed — see that
+    function's own comment. It read as filing-cabinet texture competing
+    with the pins and lines drawn over it; "the squares should be gone
+    first and take it from there."
+  - `MapStyle.LAND` moved off the same hue family as the water colours
+    (`#171d20` shared its R channel with `#102530`/`#0f2934` — land was
+    reading as "slightly less blue water") to a neutral warm grey
+    (`#4a4844`), on "only water should be blue."
+  - Real coastline (`map/kallio-water-v1.json`, already extracted for the
+    offline plates per `TRANSIT_LAYERS.md` §11.2) is now drawn in the
+    board's own water backing — real bay shapes instead of a flat rect.
+  - Real streets are new: `map/tools/streets-import.mjs` (Overpass, same
+    pattern as `water-import.mjs`) produced `map/kallio-streets-v1.json` —
+    3624 real OSM ways in the Kallio box, classified major/mid/minor by
+    `highway=`. `build-map-geometry.mjs` clips them to the board's own
+    hand-drawn landmass at BUILD time (`clipRunsToLand()`, ray casting) —
+    the first render fetched by lat/lon box and not by the actual
+    coastline, so streets sailed off the edge into open water until this.
+    Drawn behind the locked major-road geometry and the transit lines, so
+    the canonical hand-placed roads stay the loudest thing on the board.
+  - Tram-line topology was cross-referenced against the owner's own
+    reference photo directly: both it and this board's `public-transit`
+    layer come from the same real HSL GTFS extract
+    (`map/kallio-rail-v1.json`), so the branching pattern already agreed —
+    no routing correction was needed, only the earlier fixes above.
+  - `1T` is excluded from the transit layer by name (owner's diagnostic
+    request, "take out 1T and see if the others are real") — a real HSL
+    short working, not a data error, and reversible by deleting one line
+    in `build-map-geometry.mjs`'s `EXCLUDED_SERVICES`.
+
+  Not done: `streets-real`'s `minor` tier (2403 of 3624 ways — residential,
+  unclassified, living_street, pedestrian) draws at low opacity by default;
+  worth a look at whether it should be heavier, lighter, or gated behind a
+  zoom/selection state once there is feedback on it specifically. `8T`
+  still draws with its own chip and may want the same "too many stops"
+  scrutiny 1T got.
+
+- **The land shape is real now, not hand-drawn** (2026-08-28, direct
+  feedback: "the map is not aligned at all with real maps, start from
+  scratch with the PR layers and then add details"). Overlaying the old
+  hand-drawn `land-relief` "land" polygon against the real coastline showed
+  why: a rough rectangle that ignored every real bay, the island and the
+  harbour complexity, while the streets and transit lines drawn on top of
+  it were already real and correctly positioned — sitting on a silhouette
+  that was not.
+
+  `build-map-geometry.mjs`'s new `buildRealLand()` derives the shape from
+  real streets and real anchors instead of the coastline. Three different
+  coastline-only flood-fill attempts failed first, in order, and are
+  recorded in that function's own comment because the next person will try
+  the same things: seeding from the grid border (leaked across Kallio's
+  coastline-free north), seeding from the "sea side" of every coastline
+  segment per OSM's own left-hand convention (one reversed way among 27
+  flooded almost the whole grid from a seed that was actually on land), and
+  treating each water area's outline as a barrier (safe, but left no way to
+  seed the open sea at all, so everything but the explicit bays read as
+  "land" — the opposite failure). Each was caught by dumping the raster and
+  looking at it, not by trusting a cell count, which changed for a
+  plausible-sounding reason each time and was wrong twice anyway.
+
+  The fix uses a different, unambiguous signal: real streets exist only on
+  land, no directionality to get backwards. Land is a buffer around real
+  street points and real anchors, with enclosed gaps filled (a city block
+  with no road through its own middle is not water), then the real bays
+  carved back out last. Emitted as merged rectangles rather than a traced
+  outline — two real bugs in a hand-built contour tracer (a broken
+  marching-squares table, then a trace that silently stopped at a
+  one-cell-wide pinch) cost more time than a smooth outline is worth for
+  what is fundamentally a backdrop everything else already sits correctly
+  on. All 14 board anchors verified to land inside the result.
+
+  A standalone twin, `map/tools/land-from-coastline.mjs`, exists for future
+  tuning (`LAND_DEBUG=1`, `LAND_DUMP_RASTER=1` env vars dump a raw raster to
+  eyeball) and must be kept in sync BY HAND with `buildRealLand()` if either
+  changes.
+
+  Not done: the buffer radii (26/20/16 board units by tier) and the anchor
+  buffer (55 units) were picked once and eyeballed on a render, not tuned
+  against a measured block size — worth a look if the land shape reads as
+  too generous or too thin around any particular street once there is
+  feedback on it specifically.
+
+- **Still open, asked and not yet answered:** whether the Suds-Jack arcade
+  hub is supposed to carry both a Godot build and a separate lighter JS
+  version side by side. Interrupted before it was investigated — the
+  now-orphaned old `piritori/` JS-prototype folder on Suds-Jack's
+  `gh-pages` (noted earlier in this file, "Download weight" section) is
+  probably the same question from the other direction.
+
+- **The land was real but the view was still fitted to the fake shape**
+  (2026-08-26, direct feedback: "the grey can continue on the right as
+  well. add some bigger streets"). The harbour/Sörnäinen side was missing
+  two separate ways, both engine bugs rather than missing data:
+
+  1. `streets-import.mjs`'s Overpass query excluded `highway=service` and
+     `highway=track` — exactly the road classes common in a harbour and
+     industrial area. Re-fetched with them included (`TIER` maps both to
+     `minor`); `kallio-streets-v1.json` grew from missing that whole
+     texture to covering it, and `land-real` fell from 1037 to 850
+     rectangles — fewer but more contiguous, the shape closing up rather
+     than fragmenting.
+  2. The real fix: `city_map.gd`'s `_rebuild_layout()` — the function that
+     fits the whole board into the screen — was still measuring its
+     bounding box from `land-relief`, the retired hand-drawn SVG rectangle
+     the real land shape replaced two rounds ago. `land-real` is genuinely
+     wider than that old rectangle, so the fit box was too small and the
+     real land, streets and transit past its edge were drawn correctly but
+     scrolled off past the visible Control's own clip — reading as a hard
+     cut a good deal short of the true coastline. Refitting the bounding
+     box to `land-real` itself was the actual fix; the harbour texture had
+     been correct in the data since the streets round, just not shown.
+     Also boosted major/mid street line weight (alpha 0.60→0.78/width
+     3.2→4.8, and 0.40→0.55/1.9→2.6) per "add some bigger streets", with
+     minor tier trimmed slightly (0.20→0.16, 1.1→1.0) since it nearly
+     doubled in count from the service/track roads.
+
+  One more thing surfaced only by re-running the full gate suite, not
+  asked for: `_draw_backing_and_water()` was throwing "Invalid polygon
+  data, triangulation failed" every single frame, for six of the real
+  water areas out of the water-import fetch — four were zero-area (a
+  closed OSM way whose first and last point round to the same board
+  pixel, seen on a few of the small decorative ponds/fountains the same
+  fetch also picked up), two were genuinely self-intersecting. Both are
+  now filtered out at build time in `buildWaterOverlay()`
+  (`hasArea()`/`isSimple()`), rather than drawn and silently failing.
+  Worth a look some day why those two specific OSM ways self-intersect —
+  not investigated, just kept off the board.
+
+  The metro's own real endpoint (Kalasatama/Itäkeskus direction) still
+  runs a short stretch past the fitted land edge with no grey under it —
+  its real board coordinate is about 130 units east of the nominal
+  1000-unit board, beyond `buildRealLand()`'s 60-unit pad, and every rail
+  line's raw shape already ran hundreds of units past the board before this
+  round (checked: e.g. tram `6`'s y-range alone is -215 to 1204). Reads as
+  the line continuing into the unmapped rest of the city rather than a
+  bug, and left alone rather than guessed at — a real fix, if one is
+  wanted, would be raising the query box on `streets-import.mjs`/pad on
+  `buildRealLand()` enough to cover it without pulling in the far-flung,
+  unrelated street segments a raw Overpass fetch also returns, which needs
+  its own pass, not a PAD bump today.
+
+- **A second pass, direct feedback 2026-08-26: "closer, but do some more
+  passes with bigger roads, maybe larger landmarks."** Major real streets
+  went 4.8→6.6 width / 0.78→0.88 alpha, mid 2.6→3.6 / 0.55→0.66, minor left
+  alone on purpose (it is the fine grain the majors are meant to stand out
+  of). Anchor pins went 28→34 board-scaled radius, with the touch-target
+  hit rect in `_rebuild_layout()` grown to match (26→32) so the drawn size
+  and the clickable size do not drift apart again.
+
+  Found re-running the gates for this, not asked for: `tests/test_shell.gd`
+  called a `_device_gain()` method on the map that an earlier round this
+  same session had already deliberately removed (the fix for oversized map
+  labels turned out to be showing fewer of them, not scaling them bigger —
+  see `city_map.gd`'s `_draw_labels()` comment) — the call hit a hard
+  GDScript runtime error and silently aborted the whole test function
+  before a single assertion ran, so "0 failed" was true only because
+  nothing had run to fail. `_test_map_reads_on_a_phone()` is rewritten to
+  assert something real instead: every anchor's `_hits` rectangle clears
+  the 44px touch floor at a phone-width window. CLAUDE.md rule 10's own
+  line about this — "a gate that cannot fail is a finding, not a pass" —
+  named exactly, for once, by the gate itself.
+
+
+- **HANDOFF, 2026-08-26. The land is still a rectangle, and I built three
+  rounds of detail on top of it instead of fixing that.** Direct feedback,
+  ending the session: "the map, it's clearly not made from scratch since
+  you can still see the squares under."
+
+  Correct, and measurable. `buildRealLand()` rasterises into a grid padded
+  60 board units around the nominal 1000-unit board, so the grid runs
+  -60..1060 on both axes. Of the 850 emitted land rectangles, **182 sit
+  flush against the right pad edge and 60 against the left** — those are
+  not coastline, they are the grid boundary cutting the street buffer off
+  flat. That is the visible "square". The straight top/right edges of the
+  landmass are an artefact of the derivation box, full stop.
+
+  The deeper problem, which is mine and not the data's: **the land mask
+  never consults the coastline at all.** After three failed
+  coastline-flood-fill attempts (documented at length in `buildRealLand()`'s
+  own comment, and those failures are still worth reading) I switched to
+  "land = buffer around real streets and anchors, holes filled, bays carved
+  out". That produces a *plausible* blob with correct streets and transit
+  on it, but it is structurally incapable of ever having a real shoreline,
+  because the only thing that could give it one — `kallio-water-v1.json`'s
+  27 real coastline edges — is used exclusively as a thin decorative
+  stroked line in `_draw_backing_and_water()` and never as a cutting edge.
+  The hole-filling pass makes it worse: any pocket not touching the grid
+  border becomes land, which is what turns a sparse street buffer into a
+  solid slab.
+
+  So the last three rounds (harbour service/track roads, the fit-boundary
+  refit, bigger roads, bigger landmarks) were all real fixes to real bugs,
+  and all of them were detail work on a silhouette that was wrong
+  underneath. That was the wrong call — the "squares should be gone first"
+  instruction from 2026-08-27 was still unmet the whole time, and I should
+  have said so instead of polishing.
+
+  **What a fresh attempt should probably do**, in the spirit of the
+  original instruction rather than my workaround: build the land as a real
+  polygon from the real coastline, using the fact that OSM `natural=
+  coastline` ways are a directed *network*, not 27 independent strokes —
+  join them end-to-end into continuous chains first, then close each chain
+  against the fetch-box edge to get genuine polygons, and only then decide
+  inside/outside. The winding-direction inconsistency that killed attempt
+  (2) is survivable once the ways are chained, because a chain's overall
+  orientation can be checked against known-land anchors instead of trusted
+  per-segment. The 14 board anchors are the ground truth available for
+  that check, and all 14 are already verified to land inside the current
+  blob. Do NOT re-try per-segment sea-side seeding or border-seeded
+  flood-fill; both are recorded above with the exact reason each failed.
+
+  Everything else on the board — transit lines, chips, streets, water
+  overlay, the anchor/label/legend chrome — is real, aligned and verified,
+  and does not need redoing. It is only the silhouette under it.
+
 
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

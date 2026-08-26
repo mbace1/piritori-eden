@@ -307,19 +307,37 @@ func _rig_height() -> float:
 
 
 ## The rig arrives in a T-pose because that is what rigs cleanly. On air he
-## needs them down, so the shoulder bones are rotated once at load.
+## needs them down, so the upper-arm bones are rotated once at load.
+##
+## ONLY the upper arm. This used to also match "shoulder" — every rig here
+## has BOTH a `Shoulder` bone and a separate child `Arm` bone, so rotating
+## both compounded past where either bone's own local axis reads as "down":
+## the arm swung past vertical and behind the torso, hidden from the camera
+## entirely and reading as no arm at all. Invisible on Arvo, whose BROADCAST
+## framing crops everything below the shoulder — nothing caught it until
+## Toko stood at his own counter in `Framing.COUNTER`, full torso in frame,
+## and looked armless (2026-08-26, flagged on sight).
+##
+## 100, not 72. Single-bone rotation alone at the old 72 degrees undershot —
+## the arm barely left horizontal, because this bone's own local axis is not
+## the clean anatomical hinge a Mixamo-style name implies. Both numbers came
+## from rendering candidates side by side (`tools/debug_arm_pose.gd`,
+## `tools/capture_counter.gd`) and looking at the hand landing on the
+## counter, not from reasoning about the angle in isolation — the same
+## "always check the actual render" lesson as the T-pose checklist, one
+## layer downstream in the pipeline.
 func _lower_arms() -> void:
 	if _skeleton == null:
 		return
 	for i in range(_skeleton.get_bone_count()):
 		var nm := _skeleton.get_bone_name(i).to_lower()
-		if not (nm.contains("arm") or nm.contains("shoulder")):
+		if not nm.contains("arm"):
 			continue
 		if nm.contains("fore") or nm.contains("hand"):
 			continue
 		var sign := 1.0 if nm.contains("left") else -1.0
 		var p := _skeleton.get_bone_pose(i)
-		p.basis = p.basis.rotated(Vector3(0, 0, 1), deg_to_rad(-72.0 * sign))
+		p.basis = p.basis.rotated(Vector3(0, 0, 1), deg_to_rad(-100.0 * sign))
 		_skeleton.set_bone_pose(i, p)
 
 

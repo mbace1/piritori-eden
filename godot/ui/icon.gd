@@ -16,6 +16,9 @@ class_name PiritoriIcon
 enum Kind {
 	ROUTE, CREW, MISSION, END_DAY, CASH, STOCK, PRESSURE, PEOPLE, LOCK, SHIELD,
 	SWAP, STRIKE,
+	## the location screen's action row (concept A, owner-approved 2026-08-24):
+	## an eye to look closer, a blade for a choice with a cost, a door to leave.
+	INFO, RISK, LEAVE,
 	## places
 	NOODLES, DOCKS, BAR, MARKET, YARD, CHURCH, TRANSIT, HOME,
 	PARK, WORKS, BANK, PITCH,
@@ -131,6 +134,44 @@ static func paint(ci: CanvasItem, c: Vector2, s: float, tint: Color, kind: int) 
 			ci.draw_rect(Rect2(c - Vector2(s * 0.22, -s * 0.02), Vector2(s * 0.44, s * 0.30)),
 				tint, true)
 			ci.draw_arc(c + Vector2(0, s * 0.02), s * 0.16, PI, TAU, 16, tint, w, true)
+		Kind.INFO:
+			# an open eye: look closer
+			var left := c + Vector2(-s * 0.32, 0.0)
+			var right := c + Vector2(s * 0.32, 0.0)
+			var top_lid := PackedVector2Array()
+			var bot_lid := PackedVector2Array()
+			for i in range(9):
+				var t: float = float(i) / 8.0
+				var x: float = lerp(left.x, right.x, t)
+				var bulge: float = sin(t * PI) * s * 0.20
+				top_lid.append(Vector2(x, c.y - bulge))
+				bot_lid.append(Vector2(x, c.y + bulge))
+			ci.draw_polyline(top_lid, tint, w, true)
+			ci.draw_polyline(bot_lid, tint, w, true)
+			ci.draw_circle(c, s * 0.09, tint)
+		Kind.RISK:
+			# a blade, angled across the corner — the choice that costs something
+			var tip := c + Vector2(s * 0.32, -s * 0.30)
+			var heel := c + Vector2(-s * 0.06, s * 0.10)
+			var grip := c + Vector2(-s * 0.30, s * 0.30)
+			ci.draw_line(tip, heel, tint, w * 1.4, true)
+			ci.draw_line(heel, grip, tint, w, true)
+			var guard: Vector2 = (heel - tip).normalized().orthogonal() * s * 0.10
+			ci.draw_line(heel - guard, heel + guard, tint, w, true)
+		Kind.LEAVE:
+			# an open door frame with an arrow passing through it — the way out
+			ci.draw_line(c + Vector2(-s * 0.16, -s * 0.32), c + Vector2(-s * 0.16, s * 0.32),
+				tint, w, true)
+			ci.draw_line(c + Vector2(-s * 0.16, -s * 0.32), c + Vector2(s * 0.10, -s * 0.32),
+				tint, w, true)
+			ci.draw_line(c + Vector2(-s * 0.16, s * 0.32), c + Vector2(s * 0.10, s * 0.32),
+				tint, w, true)
+			var ay: float = c.y
+			ci.draw_line(Vector2(c.x - s * 0.06, ay), Vector2(c.x + s * 0.34, ay), tint, w, true)
+			ci.draw_line(Vector2(c.x + s * 0.34, ay), Vector2(c.x + s * 0.18, ay - s * 0.14),
+				tint, w, true)
+			ci.draw_line(Vector2(c.x + s * 0.34, ay), Vector2(c.x + s * 0.18, ay + s * 0.14),
+				tint, w, true)
 		# ── places ──────────────────────────────────────────────────────────
 		Kind.NOODLES:
 			# a bowl with steam: Toko's, and any food front

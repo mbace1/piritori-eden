@@ -15,7 +15,7 @@ func check(l: String, c: bool, d: String = "") -> void:
 
 func _ready() -> void:
 	print("── locale ──")
-	var keys := ["cmd.route", "cmd.crew", "cmd.missions", "cmd.end_day",
+	var keys := ["cmd.city", "cmd.crew", "cmd.missions", "cmd.messages", "cmd.end_day",
 		"verb.look", "verb.act", "ui.leave_to_map", "ui.block.day", "ui.block.night",
 		"ui.ledger", "ui.back_to_map", "ui.no_missions", "state.open"]
 
