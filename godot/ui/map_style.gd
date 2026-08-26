@@ -46,10 +46,14 @@ const BLOCK_W := 3.0
 const STREET := Color("#42494b")
 
 const RAIL := Color("#090c0e")
-const RAIL_W := 18.0
-const RAIL_TIE := Color("#8a8272")
-const RAIL_TIE_W := 3.0
-const RAIL_TIE_DASH := Vector2(4, 12)
+# Sized for ONE hand-drawn line until 2026-08-26; the real OSM alignment is
+# 143 parallel track runs through the same corridor, and 18 units each merged
+# them into a solid black slab. A real track bed is a few metres wide.
+#
+# RAIL_TIE / RAIL_TIE_W / RAIL_TIE_DASH retired with the sleeper hatching —
+# see `_draw_rail_and_roads()`. Hatching is what sells a single schematic
+# line as a railway; on real parallel track it just draws a zebra.
+const RAIL_W := 3.2
 
 ## Kept as a general accent (missions icon, battle UI) even though the
 ## transit lines themselves now carry their own real per-service colour —

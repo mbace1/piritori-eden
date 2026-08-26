@@ -1773,15 +1773,45 @@ list. Recorded here instead of half-fixed:
   `_torn_tab()` replaced by `_label_tab()`: straight edges, one drop shadow,
   one edge line.
 
-- **STILL HAND-DRAWN, and it will show:** the single `rail` + `railTie` pair
-  in `rail-and-roads` — the heavy black dashed line running north-south
-  through the board. It survived this pass because the feedback named the
-  GREY lines and this one is black, and because it happens to sit at about
-  lon 24.939, which is roughly where the real Helsinki main line runs. But
-  it is drawn, not derived, and it is now the only invented geometry left on
-  the map. The honest fix is a `railway=rail` Overpass fetch alongside the
-  existing street and water imports, same shape as
-  `map/tools/streets-import.mjs`. Small job, not started.
+- ~~**STILL HAND-DRAWN, and it will show:** the single `rail` + `railTie`
+  pair.~~ **DONE 2026-08-26.** `map/tools/railway-import.mjs` fetches real
+  OSM `railway=rail|light_rail|narrow_gauge` for the same box the streets
+  and water use — 485 ways, tiered `main` (311, `usage=main`), `branch` (52)
+  and `yard` (122, `service=yard|siding|crossover`). `subway` and `tram` are
+  deliberately NOT fetched: the metro and trams already come from real HSL
+  GTFS in `kallio-rail-v1.json`, and fetching their track again would draw
+  every one of them twice, in two styles, from two sources that do not
+  perfectly agree. Yard track is carried by the importer but dropped by
+  `buildRealRailway()` — 122 ways of depot scribble is texture, not
+  information, and the real streets already do texture. Clipped to real land
+  like the streets, for the same reason (the fetch is a lat/lon box, not a
+  landmass).
+
+  Two treatment things fell out of it, both worth naming because both were
+  stylisation standing in for geometry we now actually have:
+
+  `RAIL_W` was 18 board units, sized for ONE schematic hand-drawn line. The
+  real alignment is 143 parallel track runs through one corridor, and 18
+  units each merged them into a solid black slab. Now 3.2.
+
+  The dark-bed-plus-dashed-sleeper treatment is what sells a single line as
+  a railway. Applied to 143 real parallel tracks it gave every track its own
+  ladder and the corridor came out as a zebra crossing laid across Kallio.
+  Dropped entirely — real parallel alignments say "railway" by being
+  parallel. `RAIL_TIE`, `RAIL_TIE_W` and `RAIL_TIE_DASH` retired with it.
+
+  **There is now no invented geometry anywhere on the city map.** Every line
+  on it is real OSM or real HSL GTFS.
+
+- **Dead layers still in the generated geometry:** `land-relief` (3),
+  `minor-blocks` (19) and `rail-and-roads` (18) are all still built and
+  emitted, and none of them is drawn any more. They are kept on purpose for
+  now — the `build-map-geometry.mjs --check` gate verifies them against the
+  structural SVG, so they act as a canary that the SVG has not been
+  tampered with, and they cost a few KB against a 415 KB file that is mostly
+  real land and streets. But nothing reads them, and a future session
+  deciding the SVG is fully retired should drop all three and find the
+  drift gate a new subject.
 
 - **Asked for, not started: UI visual elements** (2026-08-26, "Maybe we
   start also adding UI visual elements soon as the map gets close"). Noted

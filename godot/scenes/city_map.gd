@@ -296,36 +296,37 @@ func _draw_real_streets() -> void:
 
 ## 4. Railway and major road cuts. Roads are a casing plus an inner strip, which
 ## is what gives the hand-cut grey ribbon its edge.
+## 4. The railway — real OSM alignment.
+##
+## This layer used to be the whole hand-drawn structural SVG: 5 `road`, 5
+## `roadInner`, 6 `street` and one `rail`/`railTie` pair. The roads went
+## 2026-08-26 ("the grey lines that are there from the squares that you
+## re-colored") because `streets-real` already draws the real network for the
+## same ground, and two road networks disagreeing in one picture is exactly
+## the tell that gets noticed.
+##
+## The railway was the last of it, and the last invented geometry anywhere on
+## this map. It survived one extra round because it is black rather than
+## grey, and because it happened to sit near where the real Helsinki main
+## line runs — which is precisely the sort of nearly-right that shows. It is
+## real OSM `railway=*` now, via `map/tools/railway-import.mjs`, clipped to
+## real land like the streets are. Yard and siding track is fetched and
+## carried but not drawn: 122 ways of depot scribble is texture, not
+## information, and the real streets already do texture.
+##
+## NO SLEEPER HATCHING. The old dark-bed-plus-dashed-tie treatment is what
+## makes a railway read as a railway when it is ONE schematic line. Applied
+## to 143 real parallel track runs it gave every track its own ladder and the
+## corridor came out as a zebra crossing — a caterpillar track laid across
+## Kallio. Real parallel alignments already say "railway" by being parallel;
+## the hatch was standing in for geometry we now actually have.
 func _draw_rail_and_roads() -> void:
-	var by_class: Dictionary = {}
-	for item in _layer("rail-and-roads"):
-		var c := String(item.get("class", ""))
-		if not by_class.has(c):
-			by_class[c] = []
-		by_class[c].append(item)
-
-	# THE HAND-DRAWN ROADS ARE GONE. Reported directly, 2026-08-26: "the grey
-	# lines that are there from the squares that you re-colored."
-	#
-	# Correct — the 5 `road`, 5 `roadInner` and 6 `street` runs in this layer
-	# are the last of the original hand-drawn structural SVG, the same
-	# invented geometry the blocks came from. Recolouring them made them
-	# quieter without making them true: they are broad blunt ribbons that do
-	# not correspond to any real street, laid over `streets-real`, which is
-	# actual OSM geometry for the same ground. Two road networks, one real,
-	# one not, disagreeing with each other in the same picture.
-	#
-	# `_draw_real_streets()` already draws the real ones. These are simply
-	# not drawn any more.
-	for item in by_class.get("rail", []):
+	for item in _layer("railway-real"):
 		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.RAIL, _w(MapStyle.RAIL_W), true)
-	for item in by_class.get("railTie", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			_draw_dashed(pts, MapStyle.RAIL_TIE, _w(MapStyle.RAIL_TIE_W),
-				MapStyle.RAIL_TIE_DASH * _scale)
+		if pts.size() < 2:
+			continue
+		var heavy := String(item.get("tier", "main")) == "main"
+		draw_polyline(pts, MapStyle.RAIL, _w(MapStyle.RAIL_W * (1.0 if heavy else 0.7)), true)
 
 
 ## 6. Public transit — real HSL geometry, one hue per Kallio line

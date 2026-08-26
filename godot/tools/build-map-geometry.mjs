@@ -54,6 +54,7 @@ const SVG = resolve(piritori, 'map/kallio-era1-2003-v1.svg');
 const RAIL = resolve(piritori, 'map/kallio-rail-v1.json');
 const WATER = resolve(piritori, 'map/kallio-water-v1.json');
 const STREETS = resolve(piritori, 'map/kallio-streets-v1.json');
+const RAILWAY = resolve(piritori, 'map/kallio-railway-v1.json');
 const BOARD_JSON = resolve(piritori, 'map/kallio-era1-2003-v1.json');
 const OUT = resolve(godotRoot, 'data/map-geometry.json');
 
@@ -859,6 +860,37 @@ function clipRunsToLand(flat, landRects) {
 // road cuts" (`rail-and-roads`) and the transit lines, so the canonical,
 // hand-placed geometry stays the loudest thing on the board — this is
 // texture and orientation, not a replacement for it.
+/** Real railway alignment, from OSM `railway=*` — replaces the single
+ *  hand-drawn `rail`/`railTie` pair that was the last invented geometry on
+ *  the board. Clipped to real land like the streets are, for the same
+ *  reason: the fetch is a lat/lon box, not a landmass, so an unclipped way
+ *  sails out over open water.
+ *
+ *  Yard and siding track is carried by the importer but dropped here — 122
+ *  ways of depot scribble at this scale is texture, not information, and the
+ *  board already has real street texture doing that job. */
+function buildRealRailway(landRects) {
+  if (!existsSync(RAILWAY)) return [];
+  const railway = JSON.parse(readFileSync(RAILWAY, 'utf8'));
+  const board = JSON.parse(readFileSync(BOARD_JSON, 'utf8'));
+  const CS = board.coordinateSystem;
+  const toBoard = (lat, lon) => [
+    CS.board.offsetX + (lon - CS.origin.lon) * CS.metresPerDegree.lon / CS.board.metresPerUnit,
+    CS.board.offsetY - (lat - CS.origin.lat) * CS.metresPerDegree.lat / CS.board.metresPerUnit,
+  ];
+  const items = [];
+  for (const l of railway.lines || []) {
+    if (l.tier === 'yard') continue;
+    if (!l.shape || l.shape.length < 2) continue;
+    const flat = l.shape.map(([lat, lon]) => toBoard(lat, lon)).flat().map((n) => +n.toFixed(2));
+    for (const run of clipRunsToLand(flat, landRects)) {
+      if (run.length >= 4) items.push({ kind: 'railway', tier: l.tier, points: run });
+    }
+  }
+  return items;
+}
+
+
 function buildRealStreets(landRects) {
   if (!existsSync(STREETS)) return [];
   const streets = JSON.parse(readFileSync(STREETS, 'utf8'));
@@ -907,6 +939,7 @@ out.layers['land-real'] = landRects;
 out.layers['public-transit'] = buildTransitLines();
 out.layers['water-real'] = buildWaterOverlay();
 out.layers['streets-real'] = buildRealStreets(landRects);
+out.layers['railway-real'] = buildRealRailway(landRects);
 
 const json = JSON.stringify(out);
 const changed = !existsSync(OUT) || readFileSync(OUT, 'utf8') !== json;
