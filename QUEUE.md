@@ -1824,5 +1824,62 @@ list. Recorded here instead of half-fixed:
   pass has to agree with.
 
 
+- **First UI pass: carton choice cards** (2026-08-26, "Maybe we start also
+  adding UI visual elements soon as the map gets close" → "Go ahead").
+  `art-library/ux-concepts/README.md` already settles the direction — "a 3D
+  world, and torn-carton UI on top of it... cardstock is the interface, not
+  the world" — and `PiritoriChrome` already had the machinery (`plate()`,
+  `CARTON_INK`, torn-edge nine-patch). It was applied in exactly ONE place,
+  the location screen's narration plate. Directly beneath that plate its own
+  choice rows were dark cards with a hairline accent outline, which read as
+  the wireframe the plate was built to replace.
+
+  New `PiritoriChrome.plate_button()` — same cream carton, pressable, torn on
+  the bottom edge only (torn both edges reads as a scrap; torn one edge reads
+  as taken off a pad, and keeps stacked rows separable without dividers).
+  `_make_icon_button()` uses it: carton face, near-black ink, and the accent
+  moved OFF the text onto a printed spine down the left edge, the way the
+  concept sheet rules its name plates. Violet-on-charcoal was never as
+  legible as ink-on-cream.
+
+- **The portrait split follows the scene now** (2026-08-26: "Text options
+  below should be a bit more condensed and hopefully no scrolling too much"
+  and "We need to see the small characters and their faces close up screens
+  when they talk, so that area needs a bit more room on the vertical
+  format").
+
+  These two pull against each other, and the first attempt — just cutting the
+  rail from 34% to 26% — bought the stage its room by pushing ACT below the
+  fold on EVERY screen, including the ones with nobody standing in them.
+  That traded one half of the request for the other.
+
+  The operative words were WHEN THEY TALK. The split now follows the scene:
+  25% rail when a speaker is actually mounted, 33% when the stage is only a
+  place. The condensing paid for the rest — row separation 8→4, separators
+  8→3, rail padding 14→8/12. The rows themselves could not shrink: they are
+  44px touch targets and that floor is a gate.
+
+- **The capture tool can see a talking scene now.** Every capture it has ever
+  taken used the opening encounter, which is a place with no speaker — so the
+  empty case was the only case ever looked at, and it is exactly the one that
+  does NOT exercise the portrait split, the speaker mount or `presenter_3d`.
+  Added `piritori-speaker-*.png`, using `enc-toko-quiet-voice`. Previously
+  the only way to see a face was to play to day 3 by hand.
+
+- **FOUND BY THAT SHOT, and it needs owner input: Toko's face is a yellow
+  smiley.** Not a render fault — extracted the texture atlas out of
+  `art/v3/cast3d/toko-v01.glb` and the smiley UV islands are baked into it.
+  A Meshy image-to-3D generation went wrong and shipped. He is a named
+  character in `NARRATIVE.md`, he is the first face the game shows, and he is
+  currently wearing an emoji.
+
+  The fix is regenerating the model, which **costs real Meshy credits and
+  therefore needs an explicit go-ahead** (CLAUDE.md rule 2 / the Meshy note
+  in the user's global preferences: image-to-3D at 30k polycount is ~15
+  credits, and the balance should be checked first). Worth checking the other
+  `cast3d/` models with the same extraction before spending anything — if the
+  same thing happened to more than one, one batch beats several one-offs.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.
