@@ -1744,5 +1744,55 @@ list. Recorded here instead of half-fixed:
   tracer attempts recorded earlier both failed — budget properly for it.
 
 
+- **The last squares were the transit chips, not the land** (2026-08-26,
+  direct feedback: "The square frames still are there"). With the coastline
+  rebuilt, 107 line-number chips — one every 90 board units, each a filled
+  rectangle with a hard keyline border — were the last hard-cornered thing
+  on the board, and read as a rash of squares over the geography. Cut to 14
+  (two per line, placed on the visible board, well spaced, kept off the
+  anchors) and redrawn as rounded capsules, which is the shape a transit map
+  actually uses. The drawn frame added the round before — a hairline
+  rectangle around the board — was itself one more square frame, and is
+  gone; the edge mask alone gives a clean cut.
+
+- **The hand-drawn road ribbons are gone** (2026-08-26, direct feedback:
+  "The grey lines that are there from the squares that you re-colored").
+  The 5 `road`, 5 `roadInner` and 6 `street` runs in `rail-and-roads` were
+  the last of the original structural SVG — the same invented geometry the
+  blocks came from. Recolouring them had made them quieter without making
+  them true: broad blunt ribbons corresponding to no real street, laid over
+  `streets-real`, which is real OSM geometry for the same ground. Two road
+  networks disagreeing in one picture, one of them fake. `MapStyle`'s
+  `ROAD`, `ROAD_W`, `ROAD_INNER`, `ROAD_INNER_W` and `STREET_W` retired with
+  them.
+
+- **The label tab is a rectangle now** (2026-08-26, direct feedback: "the
+  Piritori text box is wavy, not like a proper rectangle"). It was a
+  torn-cardstock effect with its edge jittered from a hash of the anchor id
+  — at phone label size that reads as a rendering fault, not as paper.
+  `_torn_tab()` replaced by `_label_tab()`: straight edges, one drop shadow,
+  one edge line.
+
+- **STILL HAND-DRAWN, and it will show:** the single `rail` + `railTie` pair
+  in `rail-and-roads` — the heavy black dashed line running north-south
+  through the board. It survived this pass because the feedback named the
+  GREY lines and this one is black, and because it happens to sit at about
+  lon 24.939, which is roughly where the real Helsinki main line runs. But
+  it is drawn, not derived, and it is now the only invented geometry left on
+  the map. The honest fix is a `railway=rail` Overpass fetch alongside the
+  existing street and water imports, same shape as
+  `map/tools/streets-import.mjs`. Small job, not started.
+
+- **Asked for, not started: UI visual elements** (2026-08-26, "Maybe we
+  start also adding UI visual elements soon as the map gets close"). Noted
+  rather than begun — the map was the task in hand and CLAUDE.md rule 1 says
+  one part per prompt. Worth knowing before it starts: the legend panel and
+  the header chips are currently the only real chrome on the city screen,
+  `art-library/ux-concepts/README.md` already settles cardstock as the
+  interface material, and `UX_SPEC.md` §3.1 and §3.3 (the nav dock, and END
+  DAY sitting beside the clock rather than in a tab) are the canon a first
+  pass has to agree with.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

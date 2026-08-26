@@ -40,12 +40,10 @@ const BLOCK2_EDGE := Color("#101416")
 const BLOCK_W := 3.0
 
 # ── ways ──────────────────────────────────────────────────────────────────
-const ROAD := Color("#555b5b")
-const ROAD_W := 18.0
-const ROAD_INNER := Color("#2e3538")
-const ROAD_INNER_W := 11.0
+# ROAD / ROAD_INNER / STREET_W retired 2026-08-26 with the hand-drawn road
+# ribbons they styled — see `_draw_rail_and_roads()`. STREET stays: it is the
+# colour `_draw_real_streets()` tints the real OSM network with.
 const STREET := Color("#42494b")
-const STREET_W := 7.0
 
 const RAIL := Color("#090c0e")
 const RAIL_W := 18.0

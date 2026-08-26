@@ -393,21 +393,41 @@ function buildTransitLines() {
   const strands = bundle(new Map(surface.map((l) => [l.id, resample(px(l.shape), STEP)])));
   const lineById = new Map(served.map((l) => [l.id, l]));
 
-  // ── number chips, spaced along the arc and kept off anchors and each other
-  const CHIP_EVERY = 90, CHIP_CLEAR = 22;
+  // ── number chips: A LABEL PER LINE, NOT A STRING OF BEADS ────────────────
+  //
+  // Reported directly, 2026-08-26: "The square frames still are there." One
+  // chip every 90 board units put 107 of them on the board — nine lines'
+  // worth of little bordered boxes strung along every corridor, which read as
+  // a rash of squares over the whole map and buried the geography the rest of
+  // this file works to get right. They were also the LAST square left after
+  // the land was rebuilt from the real coastline, which is exactly why they
+  // stood out.
+  //
+  // A transit map labels a line a couple of times so you can pick it out and
+  // follow it; it does not stamp the number every few hundred metres. Two per
+  // line, placed inside the visible board so they are actually useful, spaced
+  // well apart, and kept off the anchors.
+  const CHIP_MAX = 2, CHIP_CLEAR = 64;
+  const bw = CS.board.width, bh = CS.board.height;
+  const INSET = 70;   // keep labels off the frame edge, where they get cut
+  const onBoard = ([x, y]) => x > INSET && x < bw - INSET && y > INSET && y < bh - INSET;
   const placedChips = board.anchors.map((a) => [a.board.x, a.board.y]);
   function chipsFor(pts) {
+    // only the stretch actually on the visible board is worth labelling
+    const vis = pts.filter(onBoard);
+    if (!vis.length) return [];
     const out = [];
-    let arc = 0, next = 40;
-    for (let i = 1; i < pts.length; i++) {
-      arc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-      if (arc < next) continue;
-      const [x, y] = pts[i];
-      if (!placedChips.some(([px_, py_]) => Math.hypot(px_ - x, py_ - y) < CHIP_CLEAR)) {
-        placedChips.push([x, y]);
-        out.push([+x.toFixed(2), +y.toFixed(2)]);
-      }
-      next = arc + CHIP_EVERY;
+    // walk candidate positions spread across the visible run, take the first
+    // CHIP_MAX that clear everything already placed
+    const tries = 11;
+    const order = [];
+    for (let i = 1; i < tries; i++) order.push(Math.floor(vis.length * i / tries));
+    for (const idx of order) {
+      if (out.length >= CHIP_MAX) break;
+      const [x, y] = vis[idx];
+      if (placedChips.some(([px_, py_]) => Math.hypot(px_ - x, py_ - y) < CHIP_CLEAR)) continue;
+      placedChips.push([x, y]);
+      out.push([+x.toFixed(2), +y.toFixed(2)]);
     }
     return out;
   }

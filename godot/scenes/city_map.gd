@@ -304,18 +304,19 @@ func _draw_rail_and_roads() -> void:
 			by_class[c] = []
 		by_class[c].append(item)
 
-	for item in by_class.get("road", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.ROAD, _w(MapStyle.ROAD_W), true)
-	for item in by_class.get("roadInner", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.ROAD_INNER, _w(MapStyle.ROAD_INNER_W), true)
-	for item in by_class.get("street", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.STREET, _w(MapStyle.STREET_W), true)
+	# THE HAND-DRAWN ROADS ARE GONE. Reported directly, 2026-08-26: "the grey
+	# lines that are there from the squares that you re-colored."
+	#
+	# Correct — the 5 `road`, 5 `roadInner` and 6 `street` runs in this layer
+	# are the last of the original hand-drawn structural SVG, the same
+	# invented geometry the blocks came from. Recolouring them made them
+	# quieter without making them true: they are broad blunt ribbons that do
+	# not correspond to any real street, laid over `streets-real`, which is
+	# actual OSM geometry for the same ground. Two road networks, one real,
+	# one not, disagreeing with each other in the same picture.
+	#
+	# `_draw_real_streets()` already draws the real ones. These are simply
+	# not drawn any more.
 	for item in by_class.get("rail", []):
 		var pts := _pts(item)
 		if pts.size() >= 2:
@@ -369,19 +370,36 @@ func _draw_transit_chips(item: Dictionary) -> void:
 	var raw: Array = item.get("chips", [])
 	if raw.is_empty():
 		return
-	var font_px := int(clampf(13.0 * _scale, 9.0, 13.0))
+	# A CAPSULE, NOT A BOX. Reported directly, 2026-08-26: "The square frames
+	# still are there" — with the land finally rebuilt from the real coastline
+	# these bordered rectangles were the last hard-cornered thing left on the
+	# board, and 107 of them read as a rash of squares over the geography.
+	# The count is cut at the source (`chipsFor()` in build-map-geometry.mjs);
+	# this is the other half — a rounded badge, the shape a transit map
+	# actually uses, with no keyline to draw a square with.
+	var font_px := int(clampf(14.0 * _scale, 10.0, 14.0))
 	var ink := Color("#16191b") if col.get_luminance() > 0.45 else Color("#f0e9d8")
-	var pad := Vector2(maxf(5.0 * _scale, 3.0), maxf(3.0 * _scale, 2.0))
+	var padx := maxf(6.0 * _scale, 4.0)
 	for c in raw:
 		var pair: Array = c
 		var centre := _to_screen(Vector2(float(pair[0]), float(pair[1])))
 		var tw := _font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px).x
-		var box_size := Vector2(tw, float(font_px)) + pad * 2.0
-		var rect := Rect2(centre - box_size * 0.5, box_size)
-		draw_rect(rect, col)
-		draw_rect(rect, MapStyle.TRANSIT_KEYLINE, false, maxf(_w(1.6), 1.0))
-		draw_string(_font, rect.position + pad + Vector2(0, float(font_px) * 0.78), label,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, ink)
+		var r := float(font_px) * 0.5 + maxf(3.0 * _scale, 2.0)
+		var half := maxf(tw * 0.5 + padx - r, 0.0)
+		var a := centre - Vector2(half, 0.0)
+		var b := centre + Vector2(half, 0.0)
+		# a soft drop so the badge lifts off the line it sits on
+		draw_circle(a + Vector2(0, r * 0.12), r * 1.06, Color(0, 0, 0, 0.38))
+		draw_circle(b + Vector2(0, r * 0.12), r * 1.06, Color(0, 0, 0, 0.38))
+		if half > 0.0:
+			draw_rect(Rect2(a.x, centre.y - r * 1.06 + r * 0.12, half * 2.0, r * 2.12),
+				Color(0, 0, 0, 0.38))
+		draw_circle(a, r, col)
+		draw_circle(b, r, col)
+		if half > 0.0:
+			draw_rect(Rect2(a.x, centre.y - r, half * 2.0, r * 2.0), col)
+		draw_string(_font, Vector2(centre.x - tw * 0.5, centre.y + float(font_px) * 0.35),
+			label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, ink)
 
 
 ## 7. Ordinary people flow — "small neutral residents as paper pips". They drift
@@ -591,8 +609,10 @@ func _draw_edge_mask() -> void:
 		draw_rect(Rect2(0, tl.y, tl.x, br.y - tl.y), col)
 	if br.x < size.x:
 		draw_rect(Rect2(br.x, tl.y, size.x - br.x, br.y - tl.y), col)
-	# a hairline so the cut reads as a frame rather than a fade
-	draw_rect(Rect2(tl, br - tl), MapStyle.COASTLINE, false, maxf(_w(1.4), 1.0))
+	# NO drawn border. A hairline rectangle here was itself one more square
+	# frame on a map whose whole problem was square frames. The mask alone
+	# gives a clean edge for free: land stops against the water tone, and
+	# water blends into it invisibly, which is the softer and honester cut.
 
 
 ## 13. THE LEGEND.
@@ -735,7 +755,7 @@ func _draw_labels() -> void:
 		draw_line(pin, stalk, MapStyle.NODE_RIM, maxf(2.5 * _scale, 1.2), true)
 		draw_circle(stalk, maxf(3.0 * _scale, 1.6), MapStyle.NODE_RIM)
 
-		_torn_tab(box, bg, edge, id)
+		_label_tab(box, bg, edge)
 		draw_string(_font, box.position + pad + Vector2(0, float(font_px) * 0.82), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, fg)
 
@@ -743,37 +763,21 @@ func _draw_labels() -> void:
 ## A label tab as a piece of torn card rather than a rectangle.
 ##
 ## MAP.md §6 asks for "sparse marker names on separate rough paper tabs", and
-## `art-library/ux-concepts/README.md` settles that cardstock is the interface.
-## A `draw_rect` is neither — it is the shape a renderer makes when nobody has
-## decided anything.
+## A label tab: a plain, properly square-cornered card.
 ##
-## The tear is seeded on the anchor id, so a tab looks the same every frame and
-## on every device. A tab that reshuffled its own edges each redraw would be
-## worse than a clean rectangle.
-func _torn_tab(box: Rect2, bg: Color, edge: Color, seed_id: String) -> void:
-	var h: int = abs(seed_id.hash())
-	var steps: int = int(clampf(box.size.x / maxf(7.0 * _scale, 5.0), 3.0, 14.0))
-	var bite: float = maxf(3.4 * _scale, 1.8)
-
-	var top := PackedVector2Array()
-	var bottom := PackedVector2Array()
-	for i in range(steps + 1):
-		var t: float = float(i) / float(steps)
-		var x: float = box.position.x + box.size.x * t
-		var a: float = float((h >> (i % 12)) & 3) / 3.0
-		var b: float = float((h >> ((i + 5) % 12)) & 3) / 3.0
-		top.append(Vector2(x, box.position.y + a * bite))
-		bottom.append(Vector2(box.end.x - box.size.x * t, box.end.y - b * bite))
-
-	var poly := top + bottom
-	var shadow := PackedVector2Array()
-	for pt in poly:
-		shadow.append(pt + Vector2(0, maxf(2.0 * _scale, 1.0)))
-	draw_colored_polygon(shadow, Color(0, 0, 0, 0.4))
-	draw_colored_polygon(poly, bg)
-	# The fibre edge: a lighter line along the tear, which is what makes card
-	# read as thick rather than as a cut-out silhouette.
-	draw_polyline(poly + PackedVector2Array([poly[0]]), edge, maxf(2.0 * _scale, 1.0), true)
+## Reported directly, 2026-08-26: "the Piritori text box is wavy, not like a
+## proper rectangle." It was — deliberately, as a torn-cardstock effect whose
+## edge was jittered from a hash of the anchor id. On a phone-sized label that
+## reads as a rendering fault rather than as paper, and it fought the one
+## thing a name tab has to do, which is be legible instantly.
+##
+## Straight edges, one soft drop shadow for lift, one edge line so the card
+## reads as thick rather than as a hole cut in the map.
+func _label_tab(box: Rect2, bg: Color, edge: Color) -> void:
+	var lift := maxf(2.0 * _scale, 1.0)
+	draw_rect(Rect2(box.position + Vector2(0, lift), box.size), Color(0, 0, 0, 0.4))
+	draw_rect(box, bg)
+	draw_rect(box, edge, false, maxf(1.5 * _scale, 1.0))
 
 
 func _draw_placeholder_note() -> void:
