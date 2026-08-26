@@ -515,186 +515,279 @@ function buildWaterOverlay() {
   return items;
 }
 
-// ── real land, from real streets and real anchors — NOT from the coastline ─
+// ── real land, from the REAL COASTLINE — public OSM data, nothing invented ─
 //
-// Reported directly, 2026-08-28: "the map is not aligned at all with real
-// maps, start from scratch with the PR layers and then add details."
+// Reported directly, 2026-08-26: "the map, it's clearly not made from scratch
+// since you can still see the squares under", then "just use public data to
+// make the map look good and useful. trying to fake it will show."
 //
-// THREE ATTEMPTS AT COASTLINE-ONLY FLOOD-FILL FAILED, in order, and the
-// failures are worth keeping here because the next person will try the same
-// things: (1) seeding flood-fill from the grid's own border, wrong because
-// Kallio's north has no coastline nearby and the flood leaked across the
-// whole inland region unopposed; (2) seeding from a point offset to the
-// "sea side" of every coastline segment on the documented `natural=coastline`
-// convention that land is on the way's LEFT — wrong because real OSM data is
-// not perfectly consistent about winding direction, and one reversed way
-// among 27 flooded almost the entire grid from a seed that was actually on
-// land; (3) treating each closed water AREA's own outline as a barrier so a
-// flood seeded inside it could not escape onto surrounding land — safe, but
-// with no surviving way to seed the OPEN sea at all, "water" shrank to just
-// the explicit bay polygons and everything else, including real open water,
-// became "land". Three different, confident-looking wrong pictures, each
-// only caught by dumping the raster and looking at it rather than trusting a
-// cell count — worth naming because "the flood-fill count changed" was NOT
-// enough evidence on its own, twice.
+// Both were right about the version this replaces, which derived land from a
+// BUFFER AROUND REAL STREETS. That looked plausible and was correctly
+// aligned, but could never have a shoreline: the real coastline was only a
+// decorative stroke and never cut anything. 182 of its 850 rectangles sat
+// flush against the derivation grid's own pad edge, chopped off flat — that
+// flat chop was the visible "square".
 //
-// THE FIX IS A DIFFERENT SIGNAL, NOT A BETTER FLOOD-FILL. Real streets
-// (`map/kallio-streets-v1.json`) exist ONLY on land — no directionality to
-// get backwards, no open/closed distinction to reconcile. Land is:
+// Three earlier coastline flood-fills failed, and all three failed on the
+// same missing thing: NO TRUSTWORTHY SEED. Each guessed where open sea was —
+// from the grid border, or from OSM's "land is on the way's LEFT" winding
+// convention — and each guess was wrong somewhere. The seed was in canon all
+// along: `kallio-era1-2003-v1.json`'s 14 board anchors are real places in
+// Kallio standing on real ground. So:
 //
-//   1. within a buffer of a real street point, OR within a buffer of a real
-//      board anchor (parks, waterfronts and other real land the street layer
-//      under-samples still have an anchor sitting on them);
-//   2. with enclosed gaps filled — a city block with no street through its
-//      own middle is not water, and no buffer radius closes every such gap
-//      without also fattening the coastline past recognition; any "not yet
-//      land" pocket that does not touch the grid's own border cannot be open
-//      sea, so it is land;
-//   3. AND NOT inside a real closed water area (the actual bays) — carved
-//      out last, so the real bays survive regardless of what the street
-//      buffer alone would have read there.
+//   BARRIER = real coastline (chained), real island rings, real inland water.
+//   SEED    = the 14 canonical anchors, known land by authorship.
+//   LAND    = everything the flood reaches from them.
 //
-// Emits merged rectangles rather than a smooth traced outline. A first
-// version of this traced one (Moore-neighbour boundary tracing); two real
-// bugs in that tracer (a broken hand-derived marching-squares table, then a
-// trace that silently stopped at a one-cell-wide pinch between the mainland
-// and what the raster read as a near-island) cost more time than the payoff
-// is worth for what is fundamentally a backdrop — every functional layer
-// (anchors, streets, transit) is already real and already aligned; this
-// shape only has to look like solid ground under them. Row-run rectangles at
-// ~5 m resolution are visually indistinguishable from a smooth coastline at
-// the zoom this board is ever viewed at, need no contour algorithm, and
-// cannot silently drop part of the shape the way a single traced ring can.
+// Nothing is guessed. The flood cannot leak into the sea (the coastline stops
+// it) and cannot start in the sea (it starts on authored ground). Where the
+// mainland genuinely continues past the fetch box — the inland north and
+// west, which have no coastline at all — the flood reaches the grid edge and
+// stops, which is correct: that is a map edge, not a shore, drawn off-screen.
 //
-// Kept in sync BY HAND with the standalone `map/tools/land-from-coastline.mjs`
-// (same algorithm, run manually to inspect a raster dump while tuning it —
-// see that file's own `LAND_DEBUG`/`LAND_DUMP_RASTER` env vars). If this
-// drifts from that file, that file is the one to re-derive it from.
+// DO NOT RETRY, each already failed and cost a session:
+//   (1) seeding from the grid border (Kallio's north has no coastline, so the
+//       flood leaked across the whole inland region);
+//   (2) seeding from the "sea side" of each segment per OSM's left-hand
+//       convention (one reversed way among 27 seeded on land and flooded
+//       almost the entire grid);
+//   (3) using each water area's outline as a barrier with no open-sea seed
+//       (everything but the explicit bays then read as land).
+//
+// `map/tools/land-from-coastline.mjs` is the standalone twin of this, with
+// LAND_DEBUG=1 and LAND_DUMP_RASTER=1 for dumping the raster and LOOKING at
+// it. Use it before believing a cell count — the counts moved plausibly
+// during all three failures above, and during a fourth bug caught this round
+// (a shore-reclaim pass that read and wrote one array in a single scan, so a
+// single touching cell cascaded a 1-cell land thread out across open water).
+// Keep the two files in sync BY HAND.
 function buildRealLand() {
   const board = JSON.parse(readFileSync(BOARD_JSON, 'utf8'));
+  const water = existsSync(WATER)
+    ? JSON.parse(readFileSync(WATER, 'utf8'))
+    : { edges: [], areas: [] };
   const CS = board.coordinateSystem;
   const toBoard = (lat, lon) => [
     CS.board.offsetX + (lon - CS.origin.lon) * CS.metresPerDegree.lon / CS.board.metresPerUnit,
     CS.board.offsetY - (lat - CS.origin.lat) * CS.metresPerDegree.lat / CS.board.metresPerUnit,
   ];
 
-  const PAD = 60;
-  const gx0 = -PAD, gy0 = -PAD, gx1 = CS.board.width + PAD, gy1 = CS.board.height + PAD;
-  const CELL = 2.2;
-  const cols = Math.ceil((gx1 - gx0) / CELL), rows = Math.ceil((gy1 - gy0) / CELL);
+  // OSM serves `natural=coastline` as many separate ways sharing endpoints.
+  // Chained head-to-tail they are the actual shoreline; left loose they are
+  // 27 strokes with gaps a flood pours straight through. 25 of the 27 join
+  // cleanly; the 2 loose tails are where the fetch box cut the data.
+  const edges = water.edges || [];
+  const keyOf = (p) => p[0].toFixed(7) + ',' + p[1].toFixed(7);
+  const byHead = new Map();
+  edges.forEach((e, i) => byHead.set(keyOf(e.shape[0]), i));
+  const tailSet = new Set(edges.map((e) => keyOf(e.shape[e.shape.length - 1])));
+  const usedWay = new Set();
+  const walkFrom = (start) => {
+    let pts = [];
+    let cur = start;
+    while (cur !== undefined && !usedWay.has(cur)) {
+      usedWay.add(cur);
+      const s = edges[cur].shape;
+      pts = pts.length ? pts.concat(s.slice(1)) : s.slice();
+      cur = byHead.get(keyOf(s[s.length - 1]));
+    }
+    return pts;
+  };
+  const chains = [];
+  edges.forEach((e, i) => {
+    if (usedWay.has(i) || tailSet.has(keyOf(e.shape[0]))) return;
+    chains.push({ closed: false, pts: walkFrom(i) });
+  });
+  edges.forEach((e, i) => {          // leftovers are closed rings: real islands
+    if (usedWay.has(i)) return;
+    chains.push({ closed: true, pts: walkFrom(i) });
+  });
+  for (const c of chains) c.pts = c.pts.map(([lat, lon]) => toBoard(lat, lon));
+
+  // The grid IS the real data box. A pad beyond the data is exactly what let
+  // the previous version chop the shape flat — the coastline ended at the
+  // fetch edge and the flood walked around its end through the empty pad.
+  let gx0 = Infinity, gy0 = Infinity, gx1 = -Infinity, gy1 = -Infinity;
+  const see = ([x, y]) => {
+    gx0 = Math.min(gx0, x); gx1 = Math.max(gx1, x);
+    gy0 = Math.min(gy0, y); gy1 = Math.max(gy1, y);
+  };
+  for (const c of chains) c.pts.forEach(see);
+  for (const a of water.areas || []) a.shape.forEach(([lat, lon]) => see(toBoard(lat, lon)));
+  for (const a of board.anchors || []) see([a.board.x, a.board.y]);
+
+  const CELL = 1.2;                  // board units per cell — under 3 m
+  const cols = Math.ceil((gx1 - gx0) / CELL) + 1;
+  const rows = Math.ceil((gy1 - gy0) / CELL) + 1;
   const cellOf = (x, y) => [Math.round((x - gx0) / CELL), Math.round((y - gy0) / CELL)];
   const at = (cx, cy) => cy * cols + cx;
   const inGrid = (cx, cy) => cx >= 0 && cx < cols && cy >= 0 && cy < rows;
+
+  const barrier = new Uint8Array(cols * rows);
   const land = new Uint8Array(cols * rows);
 
-  function stampDisc(x, y, r) {
-    const rc = Math.ceil(r / CELL);
+  const stamp = (arr, x, y, v) => {
     const [cx, cy] = cellOf(x, y);
-    for (let oy = -rc; oy <= rc; oy++) for (let ox = -rc; ox <= rc; ox++) {
-      const gx = cx + ox, gy = cy + oy;
-      if (!inGrid(gx, gy) || ox * ox + oy * oy > rc * rc) continue;
-      land[at(gx, gy)] = 1;
+    // 3x3 brush: a 1-cell line leaks diagonally under a 4-way flood
+    for (let oy = -1; oy <= 1; oy++) {
+      for (let ox = -1; ox <= 1; ox++) {
+        if (inGrid(cx + ox, cy + oy)) arr[at(cx + ox, cy + oy)] = v;
+      }
     }
-  }
-  function stampLine(a, b, r) {
+  };
+  const stampLine = (arr, a, b, v) => {
     const L = Math.hypot(b[0] - a[0], b[1] - a[1]);
-    const steps = Math.max(1, Math.ceil(L / (CELL * 0.8)));
+    const steps = Math.max(1, Math.ceil(L / (CELL * 0.5)));
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
-      stampDisc(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, r);
+      stamp(arr, a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, v);
+    }
+  };
+  const stampPath = (arr, pts, v, close) => {
+    for (let i = 1; i < pts.length; i++) stampLine(arr, pts[i - 1], pts[i], v);
+    if (close && pts.length > 2) stampLine(arr, pts[pts.length - 1], pts[0], v);
+  };
+  // Push an open chain's ends out to the nearest grid edge so the shoreline
+  // seals against the frame instead of leaving a gap the flood walks around.
+  const extendToEdge = ([x, y]) => {
+    const d = [x - gx0, gx1 - x, y - gy0, gy1 - y];
+    const m = Math.min(...d);
+    if (m === d[0]) return [gx0 - CELL, y];
+    if (m === d[1]) return [gx1 + CELL, y];
+    if (m === d[2]) return [x, gy0 - CELL];
+    return [x, gy1 + CELL];
+  };
+
+  for (const c of chains) {
+    stampPath(barrier, c.pts, 1, c.closed);
+    if (!c.closed) {
+      stampLine(barrier, c.pts[0], extendToEdge(c.pts[0]), 1);
+      stampLine(barrier, c.pts[c.pts.length - 1], extendToEdge(c.pts[c.pts.length - 1]), 1);
+    }
+  }
+  for (const a of water.areas || []) {
+    if (!a.shape || a.shape.length < 3) continue;
+    stampPath(barrier, a.shape.map(([lat, lon]) => toBoard(lat, lon)), 1, true);
+  }
+
+  // flood from authored ground, not from a guess about where the sea is
+  const queue = [];
+  for (const a of board.anchors || []) {
+    const [cx, cy] = cellOf(a.board.x, a.board.y);
+    if (!inGrid(cx, cy)) continue;
+    const i = at(cx, cy);
+    if (barrier[i] || land[i]) continue;
+    land[i] = 1;
+    queue.push(i);
+  }
+  let qi = 0;
+  while (qi < queue.length) {
+    const ci = queue[qi++];
+    const cx = ci % cols;
+    const cy = (ci - cx) / cols;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nx = cx + dx, ny = cy + dy;
+      if (!inGrid(nx, ny)) continue;
+      const ni = at(nx, ny);
+      if (barrier[ni] || land[ni]) continue;
+      land[ni] = 1;
+      queue.push(ni);
     }
   }
 
-  const TIER_BUFFER = { major: 26, mid: 20, minor: 16 };
-  if (existsSync(STREETS)) {
-    const streets = JSON.parse(readFileSync(STREETS, 'utf8'));
-    for (const r of streets.roads || []) {
-      if (!r.shape || r.shape.length < 2) continue;
-      const pts = r.shape.map(([lat, lon]) => toBoard(lat, lon));
-      const buf = TIER_BUFFER[r.tier] || 16;
-      for (let i = 1; i < pts.length; i++) stampLine(pts[i - 1], pts[i], buf);
-    }
-  }
-  for (const a of board.anchors || []) stampDisc(a.board.x, a.board.y, 55);
-
-  function fillPolygon(pts, target, value) {
+  const fillRing = (pts, target, v) => {
     let miny = Infinity, maxy = -Infinity;
     for (const [, y] of pts) { miny = Math.min(miny, y); maxy = Math.max(maxy, y); }
-    const [, rowMin] = cellOf(0, miny), [, rowMax] = cellOf(0, maxy);
+    const [, rowMin] = cellOf(0, miny);
+    const [, rowMax] = cellOf(0, maxy);
     for (let ry = Math.max(0, rowMin); ry <= Math.min(rows - 1, rowMax); ry++) {
       const y = gy0 + ry * CELL;
       const xs = [];
       for (let i = 0; i < pts.length; i++) {
-        const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length];
-        if ((y1 <= y && y2 > y) || (y2 <= y && y1 > y)) xs.push(x1 + (y - y1) / (y2 - y1) * (x2 - x1));
+        const [x1, y1] = pts[i];
+        const [x2, y2] = pts[(i + 1) % pts.length];
+        if ((y1 <= y && y2 > y) || (y2 <= y && y1 > y)) {
+          xs.push(x1 + (y - y1) / (y2 - y1) * (x2 - x1));
+        }
       }
       xs.sort((a, b) => a - b);
       for (let i = 0; i + 1 < xs.length; i += 2) {
-        const [cxA] = cellOf(xs[i], y), [cxB] = cellOf(xs[i + 1], y);
-        for (let cx = Math.max(0, cxA); cx <= Math.min(cols - 1, cxB); cx++) target[at(cx, ry)] = value;
-      }
-    }
-  }
-
-  // Fill enclosed holes before carving the real bays out.
-  {
-    const seen = new Uint8Array(cols * rows);
-    for (let cy = 0; cy < rows; cy++) for (let cx = 0; cx < cols; cx++) {
-      const idx = at(cx, cy);
-      if (land[idx] || seen[idx]) continue;
-      const comp = [idx];
-      seen[idx] = 1;
-      let touchesBorder = (cx === 0 || cy === 0 || cx === cols - 1 || cy === rows - 1);
-      let qi = 0;
-      while (qi < comp.length) {
-        const ci = comp[qi++];
-        const ccx = ci % cols, ccy = (ci - ccx) / cols;
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          const nx = ccx + dx, ny = ccy + dy;
-          if (!inGrid(nx, ny)) continue;
-          if (nx === 0 || ny === 0 || nx === cols - 1 || ny === rows - 1) touchesBorder = true;
-          const nidx = at(nx, ny);
-          if (land[nidx] || seen[nidx]) continue;
-          seen[nidx] = 1;
-          comp.push(nidx);
+        const [cxA] = cellOf(xs[i], y);
+        const [cxB] = cellOf(xs[i + 1], y);
+        for (let cx = Math.max(0, cxA); cx <= Math.min(cols - 1, cxB); cx++) {
+          target[at(cx, ry)] = v;
         }
       }
-      if (!touchesBorder) for (const ci of comp) land[ci] = 1;
+    }
+  };
+
+  // islands are land the mainland flood can never reach — fill them back in
+  for (const c of chains) if (c.closed) fillRing(c.pts, land, 1);
+
+  // The coastline is land's edge, not a moat: reclaim barrier cells touching
+  // land, or every shore reads a brush-width thin. AGAINST A SNAPSHOT — doing
+  // it in place lets a reclaimed cell qualify its own neighbour and cascade a
+  // 1-cell land thread out across open water along any chain that touches
+  // land once. That bug shipped invisibly until the raster was zoomed into.
+  const shoreSnapshot = land.slice();
+  for (let cy = 0; cy < rows; cy++) {
+    for (let cx = 0; cx < cols; cx++) {
+      const i = at(cx, cy);
+      if (!barrier[i] || land[i]) continue;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        if (inGrid(cx + dx, cy + dy) && shoreSnapshot[at(cx + dx, cy + dy)]) {
+          land[i] = 1;
+          break;
+        }
+      }
     }
   }
-
-  if (existsSync(WATER)) {
-    const water = JSON.parse(readFileSync(WATER, 'utf8'));
-    for (const a of water.areas || []) {
-      fillPolygon(a.shape.map(([lat, lon]) => toBoard(lat, lon)), land, 0);
-    }
+  // real inland water carved last, so the bays survive everything above
+  for (const a of water.areas || []) {
+    if (!a.shape || a.shape.length < 3) continue;
+    fillRing(a.shape.map(([lat, lon]) => toBoard(lat, lon)), land, 0);
   }
 
-  // Row-run merge, then vertical merge of matching runs.
+  // row runs, merged vertically
   const rowRects = [];
   for (let cy = 0; cy < rows; cy++) {
-    let runStart = -1;
+    let run = -1;
     for (let cx = 0; cx <= cols; cx++) {
       const isLand = cx < cols && land[at(cx, cy)];
-      if (isLand && runStart < 0) runStart = cx;
-      else if (!isLand && runStart >= 0) { rowRects.push([runStart, cy, cx - runStart, 1]); runStart = -1; }
+      if (isLand && run < 0) run = cx;
+      else if (!isLand && run >= 0) { rowRects.push([run, cy, cx - run, 1]); run = -1; }
     }
   }
   const byRow = new Map();
-  for (const r of rowRects) { if (!byRow.has(r[1])) byRow.set(r[1], []); byRow.get(r[1]).push(r); }
+  for (const r of rowRects) {
+    if (!byRow.has(r[1])) byRow.set(r[1], []);
+    byRow.get(r[1]).push(r);
+  }
   const merged = [];
   const carry = new Map();
   for (let cy = 0; cy < rows; cy++) {
-    const here_ = byRow.get(cy) || [];
     const seenKeys = new Set();
-    for (const r of here_) {
-      const key = `${r[0]},${r[2]}`;
+    for (const r of byRow.get(cy) || []) {
+      const key = r[0] + ',' + r[2];
       seenKeys.add(key);
       if (carry.has(key)) carry.get(key)[3] += 1;
       else { const nr = [...r]; carry.set(key, nr); merged.push(nr); }
     }
     for (const key of [...carry.keys()]) if (!seenKeys.has(key)) carry.delete(key);
   }
+
+  // A gate that cannot fail is not a gate: every authored anchor must end up
+  // on land, or the barrier/seed logic is wrong and this must not ship.
+  const total = (board.anchors || []).length;
+  const onLand = (board.anchors || []).filter((a) => {
+    const [cx, cy] = cellOf(a.board.x, a.board.y);
+    return inGrid(cx, cy) && land[at(cx, cy)];
+  }).length;
+  if (onLand !== total) {
+    throw new Error('land derivation put ' + (total - onLand) + ' anchor(s) in water — ' +
+      'the coastline barrier or the seed set is wrong, do not ship this');
+  }
+
   return merged.map(([cx, cy, cw, ch]) => ({
     kind: 'rect',
     pos: [+(gx0 + cx * CELL).toFixed(1), +(gy0 + cy * CELL).toFixed(1)],
@@ -778,6 +871,17 @@ for (const id of LAYERS) {
 }
 
 const landRects = buildRealLand();
+
+// The view fits to THIS, not to the land's own extent. Real land now runs the
+// full width of the coastline data, which is deliberately wider than the
+// playable board — fitting to it would shrink Kallio to a patch in the middle
+// and waste the screen on off-board water. The board's own declared extent is
+// the honest frame; land simply continues past it and is clipped, the way a
+// city map continues past its own edge.
+{
+  const b = JSON.parse(readFileSync(BOARD_JSON, 'utf8')).coordinateSystem.board;
+  out.boardExtent = { x: 0, y: 0, w: b.width, h: b.height };
+}
 
 out.layers['land-real'] = landRects;
 out.layers['public-transit'] = buildTransitLines();

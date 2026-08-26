@@ -1690,5 +1690,59 @@ list. Recorded here instead of half-fixed:
   and does not need redoing. It is only the silhouette under it.
 
 
+- **The land is derived from the real coastline now, and the squares are
+  gone** (2026-08-26, direct feedback: "the map, it's clearly not made from
+  scratch since you can still see the squares under" and "just use public
+  data to make the map look good and useful. trying to fake it will show").
+
+  The handoff note above diagnosed it correctly, so this is the fix rather
+  than a fresh investigation. What unlocked it was noticing that the 27
+  `natural=coastline` ways in `kallio-water-v1.json` are a NETWORK, not 27
+  loose strokes: 25 of 27 join another way head-to-tail, and the 2 loose
+  tails both sit on the fetch box's east edge where the data was cut.
+  Chained, they resolve to two open coastal runs plus three closed rings,
+  and those three rings are real islands.
+
+  With the shoreline continuous, the flood-fill finally has a real barrier —
+  and the seed problem that killed all three earlier attempts turned out to
+  be already solved in canon. The 14 board anchors are real places standing
+  on real ground, so they are the seed. Barrier = chained coastline + island
+  rings + real inland water; seed = the anchors; land = whatever the flood
+  reaches. Nothing guessed in either direction. Islands are filled back
+  afterwards (the mainland flood cannot cross to them), the bays are carved
+  last. `buildRealLand()` now throws outright if any anchor lands in water,
+  so the derivation cannot silently ship wrong again.
+
+  The grid is the real data box with no pad, and each open chain's ends are
+  extended to the nearest grid edge — the old 60-unit pad was exactly what
+  let the flood walk around the end of the coastline and get chopped flat
+  against the grid, which is what the "squares" were.
+
+  Found and fixed on the way, worth naming because it looked completely
+  plausible: the shore-reclaim pass (which widens land by one cell so the
+  coast is not a brush-width thin) read and wrote the same array in a single
+  scan, so one reclaimed cell qualified its neighbour and cascaded a 1-cell
+  land thread straight out across open water along any chain touching land
+  once. The cell count moved by less than 1% and the rect count by 13%;
+  neither would have caught it. Zooming into the raster dump did. That is
+  now the fourth bug in this file's history caught only by looking at the
+  picture, which is why `LAND_DUMP_RASTER=1` stays.
+
+  Also: `_rebuild_layout()` now fits the view to the board's own declared
+  extent from the coordinate system, not to the land's extent — real land
+  is deliberately wider than the playable board, and fitting to it shrank
+  Kallio to a patch surrounded by off-board water. And `_draw_edge_mask()`
+  gives the board a real frame, because real streets and transit lines
+  genuinely continue past the shoreline and, unmasked, read as lines
+  floating on open sea — which looked exactly like the invented geometry
+  this map spent several rounds removing, despite being the honest data.
+
+  Not done: the land is still emitted as merged rectangles (969 of them at
+  a 1.2-unit cell, roughly 2.8 m) rather than a traced outline. At the
+  current fit that is well under a pixel per cell so the shore reads smooth,
+  but if the map ever gains zoom it will need a real contour, and the two
+  tracer attempts recorded earlier both failed — budget properly for it.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

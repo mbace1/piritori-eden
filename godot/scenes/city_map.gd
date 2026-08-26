@@ -29,6 +29,7 @@ var _hits: Dictionary = {}        ## anchor id -> Rect2 (screen)
 var _scale: float = 1.0
 var _origin := Vector2.ZERO
 var _mn := Vector2.ZERO
+var _mx := Vector2.ONE      ## board-space frame, used by _draw_edge_mask()
 
 var _selected: String = ""
 var _hovered: String = ""
@@ -59,13 +60,17 @@ func _layer(layer_name: String) -> Array:
 	return _geo.get("layers", {}).get(layer_name, [])
 
 
-## Fit the whole production boundary (§7: "fit the full boundary inside the
-## world area"). The landmass is wider than the anchor spread, so the fit is
-## computed from the real land extent (`land-real`), not the retired
-## hand-drawn `land-relief` outline it replaced — that outline was a rough
-## rectangle narrower than the real shoreline, so fitting to it clipped real
-## streets and transit reaching further out (e.g. the Sörnäinen/harbour
-## side) even though the geometry for them was already correct.
+## Fit the board's own declared extent (§7: "fit the full boundary inside the
+## world area").
+##
+## NOT the land's extent. Real land is derived from the real OSM coastline
+## now, which covers a deliberately wider box than the playable board — fit
+## to that and Kallio shrinks to a patch in the middle with the screen spent
+## on off-board water. `boardExtent` comes from the coordinate system in
+## `map/kallio-era1-2003-v1.json`, the same block that defines what a board
+## unit means, so the frame and the geometry agree by construction. Land
+## simply continues past the frame and is clipped, the way a real city map
+## continues past its own edge.
 func _rebuild_layout() -> void:
 	_layout.clear()
 	_hits.clear()
@@ -76,14 +81,11 @@ func _rebuild_layout() -> void:
 	var mn := Vector2(INF, INF)
 	var mx := Vector2(-INF, -INF)
 
-	for item in _layer("land-real"):
-		var pos: Array = item.get("pos", [0, 0])
-		var siz: Array = item.get("size", [0, 0])
-		var p0 := Vector2(pos[0], pos[1])
-		var p1 := p0 + Vector2(siz[0], siz[1])
-		mn = mn.min(p0)
-		mx = mx.max(p1)
-	if mn.x == INF:
+	var extent: Dictionary = _geo.get("boardExtent", {})
+	if extent.has("w") and extent.has("h"):
+		mn = Vector2(extent.get("x", 0.0), extent.get("y", 0.0))
+		mx = mn + Vector2(extent["w"], extent["h"])
+	else:
 		for a in anchors:
 			var p := Vector2(a["board"]["x"], a["board"]["y"])
 			mn = mn.min(p)
@@ -93,6 +95,7 @@ func _rebuild_layout() -> void:
 	span.x = maxf(span.x, 1.0)
 	span.y = maxf(span.y, 1.0)
 	_mn = mn
+	_mx = mn + span
 
 	var m := maxf(minf(size.x, size.y) * MARGIN_RATIO, MARGIN_MIN)
 	var avail := Vector2(maxf(size.x - m * 2.0, 32.0), maxf(size.y - m * 2.0, 32.0))
@@ -144,6 +147,7 @@ func _draw() -> void:
 	_draw_public_transit()      # 6
 	_draw_ordinary_flow()       # 7
 	_draw_crew_and_goods()      # 8
+	_draw_edge_mask()           # 9, the frame the city continues past
 	_draw_anchors()             # 10 + 11
 	_draw_labels()              # 12
 	_draw_legend()              # 13
@@ -558,6 +562,37 @@ func _draw_anchor(a: Dictionary) -> void:
 		draw_arc(pos, r * 1.32, 0, TAU, 40, MapStyle.TAB, _w(4.0), true)
 	elif id == _hovered:
 		draw_arc(pos, r * 1.32, 0, TAU, 40, MapStyle.SMALL_TEXT, _w(2.0), true)
+
+
+## 9. The frame.
+##
+## Real geography does not stop at the board. The coastline, the streets and
+## the transit lines all come from public OSM data covering a wider box than
+## the playable 1000x1000 board, and drawing them raw left tram lines and
+## roads apparently floating on open sea past the shoreline — which looked
+## exactly like the invented geometry this map spent several rounds getting
+## rid of, even though it was the honest data.
+##
+## So the board gets an actual edge: everything outside it is painted back
+## down to the deep water tone. The city visibly continues past the frame and
+## is cut by it, which is what a real city map does. Drawn after all
+## geography and before the pins, which sit well inside it.
+func _draw_edge_mask() -> void:
+	var tl := _to_screen(_mn)
+	var br := _to_screen(_mx)
+	# Solid. A translucent mask left ghost lines legible outside the frame,
+	# which is the confusing half of both worlds.
+	var col := MapStyle.WATER
+	if tl.y > 0.0:
+		draw_rect(Rect2(0, 0, size.x, tl.y), col)
+	if br.y < size.y:
+		draw_rect(Rect2(0, br.y, size.x, size.y - br.y), col)
+	if tl.x > 0.0:
+		draw_rect(Rect2(0, tl.y, tl.x, br.y - tl.y), col)
+	if br.x < size.x:
+		draw_rect(Rect2(br.x, tl.y, size.x - br.x, br.y - tl.y), col)
+	# a hairline so the cut reads as a frame rather than a fade
+	draw_rect(Rect2(tl, br - tl), MapStyle.COASTLINE, false, maxf(_w(1.4), 1.0))
 
 
 ## 13. THE LEGEND.
