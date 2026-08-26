@@ -1876,9 +1876,20 @@ list. Recorded here instead of half-fixed:
   The fix is regenerating the model, which **costs real Meshy credits and
   therefore needs an explicit go-ahead** (CLAUDE.md rule 2 / the Meshy note
   in the user's global preferences: image-to-3D at 30k polycount is ~15
-  credits, and the balance should be checked first). Worth checking the other
-  `cast3d/` models with the same extraction before spending anything — if the
-  same thing happened to more than one, one batch beats several one-offs.
+  credits, and the balance should be checked first).
+
+  **All 14 `cast3d/` models were checked first, for free** — extract the
+  texture atlas straight out of each GLB and measure how much of it is
+  emoji-yellow (warm hue, very high saturation, bright; skin tones are far
+  less saturated and hi-vis workwear sits lower in hue). **Only Toko is
+  affected.** He scores 0.95% on an actual emoji; the runner-up, `hired-b`,
+  scores 0.14% on a red/yellow/green hat band and is fine. So this is one
+  regeneration, not a batch. Balance at the time of checking: 114 credits.
+
+  Two tooling notes found while checking that balance, both wrong in the
+  notes they came from: `~/.meshy/m3d.sh` has **no `--balance` flag**, and
+  the endpoint is **`openapi/v1/balance`**, not the documented `v1/balance`,
+  which returns `NoMatchingRoute`.
 
 
 Lane: mixed, each named above. Found by testing, which is the point of the
