@@ -1,5 +1,50 @@
 # Piritori → Eden — versions
 
+> **Numbers are `vMAJOR.MINOR` from v4.** The integer is a milestone, the
+> decimal an increment on it — the scheme `eeri/` already uses, adopted because
+> burning a whole integer on ordinary work is what makes version collisions
+> easy. `?v=` module tokens stay INTEGERS; they are cache-busters tracking
+> module churn, not releases, and the two numbers are deliberately different.
+>
+> **Every entry carries a `### Port` block.** A version is a port unit now
+> (`PORTING.md` §2): the block names what the Godot side must re-port, so it
+> never has to read a diff to find out.
+
+## v4.0 — 2026-08-25
+
+**JS becomes the build; Godot becomes the port.** Owner ruling, recorded in
+`DESIGN_AUTHORITY.md` and superseding 2026-08-21's "Godot is the
+implementation".
+
+- The browser build moves out of `legacy/` to **`web/`** and runs again from a
+  clean checkout. Three fixes: every path to `content/`, `map/` and `art/` was
+  one `../` short; `index.html` loaded the old monorepo's `hub/shell.js` with a
+  hard `<script>` tag, now an optional dynamic import; and its contract gate
+  had not run since the build was parked. What stayed in `legacy/` is the dead
+  flow prototype, which still imports a `flow-core/` from another repository.
+- **`PORTING.md`** is the working document for the new shape — what each build
+  owns, what a version is, and the three kinds of thing that cross between them.
+- **`port/vectors.mjs`** emits (input, expected output) rows from every model,
+  so "ported" has an objective pass condition instead of a code review. 604
+  rows across market, exposure, missions and people. `--check` is the gate.
+- **`MISSIONS.md`** and `missions/model.mjs`: the beat, the clock and triggers
+  that fire rather than fill. 34 checks.
+- The market's clock is corrected to canon — Day / Evening / Night, with the
+  slice's two named separately. It had invented a fourth block.
+- Unparking the browser gate immediately found canon drift it had been carrying:
+  13 anchors where it asserted 12, 10 active where it asserted 8, a third
+  authored battle, and a courtyard scene three versions on. Recorded in
+  `QUEUE.md`; not silently reconciled.
+
+### Port
+- **vectors:** `market@1`, `exposure@1`, `missions@1`, `people@1` — all new, all
+  to port
+- **data:** unchanged; run `godot/tools/sync-data.mjs`
+- **meshes:** none this version
+- **presentation:** `presenter_3d.gd` gained `own_world_3d`, derived LOCATION and
+  INSET framing, and a `transparent` mode — Godot-side already, no port needed
+- **status:** handed off
+
 ## v3.1 source pack — 2026-08-21
 
 - Promotes the corrected Toko Slomo screen to the active v02 source and runtime

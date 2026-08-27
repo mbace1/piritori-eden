@@ -2,13 +2,44 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-24
+Latest owner rulings: 2026-08-25
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
 because the playable prototype, several older briefs, an earlier Art Bible and
 the newer approved design library currently disagree. Future implementation
 must follow this hierarchy rather than selecting whichever file is convenient.
+
+## Owner ruling, 2026-08-25 — JS is the build, Godot is the port
+
+> "we develop on js and the version control and documentation assumes that each
+> version will be ported to Godot for landscape and controller testing. Only
+> meshes will be given to you via PR, but you control the primary tester build
+> and hand off each version to the godot side."
+
+**This SUPERSEDES the 2026-08-21 ruling that "Godot is the implementation."**
+Recorded as a reversal rather than applied quietly, because that ruling is still
+written below and would otherwise be read as current.
+
+- **`web/` is the primary tester build**, and it is where behaviour is defined.
+  The browser build has moved out of `legacy/` — a directory named `legacy`
+  holding the primary build is a lie. What stayed behind is the genuinely dead
+  flow prototype.
+- **`godot/` is the port**, and it exists to answer a question the browser
+  cannot: whether this plays in **landscape, on a controller**. It reproduces
+  behaviour; it never invents it.
+- **Every version is a port unit.** `VERSIONS.md` entries carry a `### Port`
+  block naming what the Godot side must re-port. Numbers are `vMAJOR.MINOR`,
+  the decimal scheme `eeri/` already uses; `?v=` tokens stay integers.
+- **Rules cross as VECTORS, not as code.** GDScript cannot run the models, so
+  `port/vectors.mjs` emits (input, expected output) rows and the port has one
+  test that must reproduce them. That gives "ported" an objective pass
+  condition instead of a code review.
+- **Only meshes arrive here by PR.** This side does not make art; it receives,
+  registers and checks meshes against `PORTING.md` §6.
+
+`PORTING.md` is the working document and is ACTIVE. It sits directly under this
+file in the authority order.
 
 ## Owner rulings, 2026-08-24 — the counter
 
@@ -45,7 +76,10 @@ Everything that follows from ruling 2 is a consequence, not a preference:
 
 Three decisions, recorded here rather than applied silently.
 
-**1. Godot is the implementation.** The browser prototype is superseded and
+**1. Godot is the implementation.** *(SUPERSEDED 2026-08-25 — see the ruling at
+the top of this file. Kept because a reversed decision that is deleted looks
+like it was never made, and the reasoning below is still why the two builds
+share their canon.)* The browser prototype is superseded and
 parked at `legacy/`. It is kept as evidence, not as code to extend; it does not
 run in this repository by construction (its page loads the arcade's
 `../hub/shell.js`, which lived in the old monorepo). The canon it read —
@@ -67,21 +101,23 @@ From highest to lowest:
 
 1. Direct owner decisions recorded after this reset.
 2. `DESIGN_AUTHORITY.md`.
-3. `DESIGN_LOCKS.md`.
-4. `GAME_DESIGN_DOCUMENT.md`.
-5. `ART_BIBLE.md` for visual and asset-production decisions.
-6. `UX_SPEC.md` for interaction, navigation and responsive layout.
-7. `MAP.md` and `map/kallio-era1-2003-v1.json` for Era I geography,
+3. `PORTING.md`, for anything about which build owns what, versions and the
+   handoff to Godot.
+4. `DESIGN_LOCKS.md`.
+5. `GAME_DESIGN_DOCUMENT.md`.
+6. `ART_BIBLE.md` for visual and asset-production decisions.
+7. `UX_SPEC.md` for interaction, navigation and responsive layout.
+8. `MAP.md` and `map/kallio-era1-2003-v1.json` for Era I geography,
    public anchors, sites, corridors, projection and map-layer separation.
-8. `content/era1-slice-v1.json` for the finite authored vertical-slice data,
+9. `content/era1-slice-v1.json` for the finite authored vertical-slice data,
    where it implements rather than contradicts the documents above.
-9. `art/v3/manifest.json` for registered prototype runtime-art ids and status.
-10. `NARRATIVE.md` and `SCREEN_AND_COMBAT_BASELINE.md`.
-11. `art-library/APPROVALS.md`, `art-library/CATALOG.md` and the system contracts
+10. `art/v3/manifest.json` for registered prototype runtime-art ids and status.
+11. `NARRATIVE.md` and `SCREEN_AND_COMBAT_BASELINE.md`.
+12. `art-library/APPROVALS.md`, `art-library/CATALOG.md` and the system contracts
    linked from them.
-12. `FIGHT_BRIEF.md` and `DECISIONS.md`, but only where they do not
+13. `FIGHT_BRIEF.md` and `DECISIONS.md`, but only where they do not
    conflict with the documents above.
-13. The current runtime, tests and legacy design documents. These are evidence
+14. The current runtime, tests and legacy design documents. These are evidence
    and prototypes, not permission to change the design.
 
 When two sources at the same level disagree, stop and record a decision. Do not

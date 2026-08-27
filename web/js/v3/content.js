@@ -1,6 +1,6 @@
-const CONTENT_URL = '../../content/era1-slice-v1.json';
-const MAP_URL = '../../map/kallio-era1-2003-v1.json';
-const ART_URL = '../../art/v3/manifest.json';
+const CONTENT_URL = '../../../content/era1-slice-v1.json';
+const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
+const ART_URL = '../../../art/v3/manifest.json';
 
 async function readJson(url) {
   const response = await fetch(new URL(url, import.meta.url));

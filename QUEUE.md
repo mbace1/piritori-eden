@@ -19,6 +19,30 @@ pick up, and half of it will turn out to be wrong.
   Still thin: it reports frames but cannot **profile** them. If something is
   slow the HUD says so and not why.
 
+## Canon drift the browser gate found when it was unparked (2026-08-25)
+
+`web/test/v3-contract.mjs` had not run since the build was parked on
+2026-08-21, and content moved out from under its assertions. The additions look
+legitimate — Sörnäinen harbour and Suvilahti are referenced by the slice — so
+the gate now asserts what the content IS, to stop the next drift. But one of
+them is a **document disagreeing with data**, which `DESIGN_AUTHORITY.md`'s own
+rule says to record rather than average:
+
+| | the doc says | the file has |
+|---|---|---|
+| anchors | `DESIGN_AUTHORITY.md` locked direction: **twelve-anchor graph** | **13** |
+| active slice anchors | **eight** | **10** |
+| authored battles | (undocumented) | `2v2, 3v3, 3v3` |
+| courtyard scene | `scene-courtyard-prototype-v02` | `…-v05` |
+
+**Owner question: should the locked-direction paragraph move to 13 and 10, or
+should two anchors come out of the map?** Not edited either way here — a
+level-2 document and a level-7 file disagreeing is exactly the case the
+authority order says to stop on.
+
+The general lesson is already in `PORTING.md` §7: a build nobody runs stops
+being a check on anything, and the checks it was carrying die quietly with it.
+
 ## Known gaps
 
 - **Finnish and Japanese are drafts.** Written to match register, not

@@ -61,6 +61,13 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script type="module" src="js/v3/app.js?v=2"></script>
-  <script type="module" src="../hub/shell.js?v=17"></script>
+  <!-- The arcade's HOME button, which lives in the Suds-Jack site root and not
+       in this repository. Loaded optionally so a clean checkout runs: a missing
+       shell is a missing nicety, never the reason the build does not boot.
+       This one hard <script> tag is why DESIGN_AUTHORITY 2026-08-21 could say
+       the browser build "does not run in this repository by construction". -->
+  <script type="module">
+    import('../hub/shell.js?v=17').catch(() => {});
+  </script>
 </body>
 </html>
