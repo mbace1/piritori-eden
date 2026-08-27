@@ -97,6 +97,15 @@ export const TESTS = [
     jump: { kind: 'news', id: 'news-markka-afterlife' },
   },
   {
+    id: 'the-board',
+    rev: 1,
+    build: 'js',
+    title: 'The board — live prices and what you know',
+    where: 'LEDGER, under the paper book',
+    note: 'market/model.mjs on a screen for the first time. Check that a place you have never stood in shows NOTHING (that empty row is the reason to travel), that a quote decays to a range and then a rumour as blocks pass, and that the stated cause never disagrees with the number — the model names the dominant factor and the table must print that one.',
+    jump: { kind: 'ledger' },
+  },
+  {
     id: 'ending-screen',
     rev: 1,
     build: 'js',

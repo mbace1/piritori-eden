@@ -1,6 +1,13 @@
 const CONTENT_URL = '../../../content/era1-slice-v1.json';
 const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
 const ART_URL = '../../../art/v3/manifest.json';
+// Asset URLs are resolved by the BROWSER against the page, not against this
+// module, so they need one more step out of `web/` than the fetches above.
+// Promoting this build out of `legacy/` fixed the three JSON paths and left
+// these three behind, and the only symptom was ~40 silent 404s: every unit
+// drew its fallback and nothing threw. Same class of bug, twice, which is why
+// v3-contract now asserts the prefix.
+const ART_BASE = '../art/v3';
 
 async function readJson(url) {
   const response = await fetch(new URL(url, import.meta.url));
@@ -11,13 +18,13 @@ async function readJson(url) {
 function flattenArt(manifest) {
   const byId = new Map();
   for (const group of manifest.assets) {
-    if (group.file) byId.set(group.id, { ...group, url: `art/v3/${group.file}` });
+    if (group.file) byId.set(group.id, { ...group, url: `${ART_BASE}/${group.file}` });
     for (const member of group.members ?? []) {
       byId.set(member.id, {
         ...member,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `art/v3/${member.file}`,
+        url: `${ART_BASE}/${member.file}`,
       });
     }
     for (const frame of group.frames ?? []) {
@@ -27,7 +34,7 @@ function flattenArt(manifest) {
         id: frameId,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `art/v3/${frame.file}`,
+        url: `${ART_BASE}/${frame.file}`,
       });
     }
   }

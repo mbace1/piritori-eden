@@ -10,6 +10,42 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.2 — 2026-08-27
+
+**A pause menu with THINGS TO TEST, and the market model finally on a screen.**
+
+- **Pause menu** (Esc or ⏸) with a **THINGS TO TEST** submenu: twelve screens
+  that are hard to reach by playing, each with a jump straight to it and a note
+  saying what to look for. Approving one removes it. Approval stamps the item's
+  **`rev`**, not a tick — bump the rev when the screen changes and it returns
+  marked CHANGED, because a look signed off six versions ago is not a look at
+  this build. Godot items carry no jump and say why (§3.3: presentation is
+  deliberately different, so only the port can answer them).
+- **THE BOARD** in the ledger: `market/model.mjs` rendered for the first time
+  since it was written. Every active anchor, priced live, with the model's own
+  stated cause — and shown only to the level you have earned. A place you have
+  never stood in shows nothing, which is the reason to go there. Additive: the
+  authored offers still work, and are still the leads.
+- Trading now leaves a **footprint**, which is what saturation prices; standing
+  somewhere **marks it seen**, which is what decays.
+- **Exposure** is on the ledger, reading the same `exposure()` a mission trigger
+  reads, so the two can never disagree about whether you are conspicuous.
+- **Bug, mine, from the `legacy/` → `web/` move:** asset URLs resolve against
+  the PAGE, not the module, so they needed one more step out of `web/` than the
+  JSON fetches did. I fixed the three fetches and left the three asset paths,
+  and the only symptom was about forty silent 404s — every unit drew its
+  fallback and nothing threw. `v3-contract` now asserts the prefix.
+
+### Port
+- **vectors:** unchanged — `market@2`, `exposure@2`, `missions@1`, `people@1`.
+  The board renders the model; it does not alter it.
+- **data:** unchanged
+- **meshes:** none
+- **presentation:** the pause menu and the board are `web/` UI. The port wants
+  its own pause and its own board — and the three Godot items in THINGS TO TEST
+  are the list it should work from.
+- **status:** handed off
+
 ## v4.1 — 2026-08-27
 
 **Caught up with `main`.** This branch was 74 commits behind and one thing in

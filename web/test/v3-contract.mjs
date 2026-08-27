@@ -20,6 +20,13 @@ assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app modu
 assert(css.includes('min-width: 44px') && css.includes('min-height: 44px'), '44px control floor is declared');
 assert(!/smartphone|app grid/i.test(html), 'shell does not present the market as a smartphone app');
 assert(app.includes('era1-slice-v1.json') === false, 'the app loads content through the content adapter');
+// Asset URLs resolve against the PAGE, so they need one more step out of web/
+// than the module's own fetches. Missing it produced ~40 silent 404s — every
+// unit drew its fallback and nothing threw — which is exactly the kind of
+// failure a gate has to catch because a person will not.
+const contentModule = await read('../js/v3/content.js');
+assert(/ART_BASE\s*=\s*'\.\.\/art\/v3'/.test(contentModule), 'asset URLs step out of web/');
+assert(!/url:\s*`art\/v3\//.test(contentModule), 'no asset URL is page-relative');
 assert(app.includes('ordinary journeys'), 'ordinary and hidden route capacity is visible');
 assert(app.includes('weather-rain-fine-v01'), 'weather stays a separate runtime layer');
 // THE MAP GREW WHILE THIS GATE WAS PARKED, and that is the whole argument for
