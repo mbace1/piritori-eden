@@ -87,6 +87,38 @@ reach across.
 
 ## 5. Canon, in authority order
 
+**Read the documentation FIRST. Every time. Before diagnosing, before
+generating, before calling anything broken.** Owner, 2026-08-27: *"please,
+always use documentation."*
+
+This is not advice, and it is not satisfied by having read a doc once in some
+earlier session. Two failures in a single round produced this rule:
+
+- Toko's gold mask was reported as a shipped bug. It is **canon**, and said so
+  in two places — `ART_BIBLE.md` §8.3 is literally titled "Toko Slomo
+  character and mask", and `art/v3/manifest.json` says "The gold smiling mask
+  is CANON". A render was looked at; the documentation was not.
+- Three replacement T-poses were then generated, badly, when the correct
+  edited source was already in the repo at
+  `art-src/concepts/people/toko-slomo-notext-v01.png`, with its own `.txt`
+  sidecar carrying the prompt that made it.
+
+So, before touching anything:
+
+1. **`grep` the docs for the thing you are about to change**, by name. A
+   character, a colour, a layer, a file — if it has a name, search for it.
+2. **Look for the asset before making one.** `art-src/` is organised by
+   pipeline stage — `concepts/people/`, `meshy-input/`, `scenes/`,
+   `approved/` — and every `.png` there has a `.txt` beside it with the prompt
+   that produced it. `art-library/references/` holds the formats known to
+   work. Generating a duplicate of something that already exists is worse than
+   doing nothing, because it looks like progress.
+3. **"It looks wrong to me" is not a finding until the docs have been
+   checked.** Deliberate design reads as a bug all the time.
+
+If the documentation is genuinely silent, say so explicitly and ask — do not
+fill the gap with an assumption and carry on.
+
 1. Direct instruction in this session
 2. `PHASING.md` — current phase and its exit gates
 3. `DESIGN_AUTHORITY.md` — resolves contradictions between the rest
