@@ -2028,5 +2028,36 @@ list. Recorded here instead of half-fixed:
   first move.
 
 
+- **The battle console is legible on a phone now** (2026-08-27, continuing
+  "non-optimized UI edges, sizes"). It had never been photographed at ANY
+  size — the capture tool shot the city, the location and a speaker scene and
+  stopped — so the owner's own screenshot was the first look anyone had at it.
+  A screen the capture tool cannot see is a screen nobody checks. It now takes
+  `piritori-battle-*` and `piritori-site-*` shots too.
+
+  Three corrections in a row before it was right, which is worth recording:
+  scaling the type 2.2x like the rail made the labels outgrow their cards and
+  clipped REPOSITION and WITHDRAW; dropping to 1.55 fixed the verbs but the
+  automation column, pinned at a fixed 210px while its buttons grew, still lost
+  WITHDRAW off the edge; 1.3 is the largest ceiling at which the crew card,
+  four verb cards and the automation column all fit side by side on a
+  1079-wide phone.
+
+  **The real bug underneath was in all three scenes at once.** `_text_scale()`
+  fell back to the viewport HEIGHT in landscape, so an ordinary 1280x720
+  desktop window scaled its type up by 1.67 — inflating layouts that were
+  already correct, and pushing the battle console 8px off the bottom of the
+  viewport. Caught by `test_battle_ui`'s "sits inside the viewport" check, the
+  second time that same gate has caught that same thing. Landscape now returns
+  1.0 outright: the reason to scale at all is a dense portrait phone, and a
+  landscape window is the size the authored numbers were chosen for.
+
+- **Still worth doing, not attempted:** in portrait the battle console would
+  read better with the automation column REFLOWED BELOW the verb cards rather
+  than beside them. That buys back enough width to raise the 1.3 ceiling. Left
+  alone deliberately — it would have been a fourth correction in one sitting,
+  and CLAUDE.md rule 8 says stop after two.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

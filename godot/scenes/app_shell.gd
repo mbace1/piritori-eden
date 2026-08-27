@@ -1788,7 +1788,15 @@ func _text_scale() -> float:
 		return 1.0
 	# Portrait scales on width, which is the axis the reading column is cut
 	# from; landscape has width to spare and would over-inflate on it.
-	var basis := vp.x if vp.y > vp.x else vp.y
+	# LANDSCAPE DOES NOT SCALE. This used to fall back to the viewport HEIGHT
+	# in landscape, so a perfectly ordinary 1280x720 desktop window scaled its
+	# type up by 1.67 — inflating a layout that was already correct, and in the
+	# battle console pushing it 8px off the bottom of the viewport. The reason
+	# to scale at all is a dense portrait phone; a landscape window is the size
+	# the authored numbers were chosen for.
+	if vp.x >= vp.y:
+		return 1.0
+	var basis := vp.x
 	return clampf(basis / 430.0, 1.0, 2.2)
 
 
