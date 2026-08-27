@@ -43,6 +43,7 @@ func _notification(what: int) -> void:
 	# width the card's text wraps at — refit rather than leave the old
 	# height clipping (or over-padding) the new line count.
 	if what == NOTIFICATION_RESIZED:
+		_apply_text_scale()
 		call_deferred("_refit_card")
 
 
@@ -101,8 +102,25 @@ func _build_text_layer() -> void:
 	col.add_child(_note_label)
 
 
+## Scaled against the viewport, the same way the shell scales its body text.
+## The narration plate is the thing a player actually reads on this screen, and
+## at a fixed 17px it was the smallest type in the frame on a phone.
+func _text_scale() -> float:
+	var vp := get_viewport_rect().size
+	if vp.x <= 0.0:
+		return 1.0
+	var basis := vp.x if vp.y > vp.x else vp.y
+	return clampf(basis / 430.0, 1.0, 2.2)
+
+
+## The base size is REMEMBERED, not baked in. These labels are built before the
+## stage is mounted, when the viewport still reads zero, so scaling them once at
+## construction scaled them by 1.0 and the narration plate stayed the smallest
+## type on the screen. `_apply_text_scale()` re-applies whenever the size is
+## actually known.
 func _make_label(size_px: int, col: Color) -> Label:
 	var l := Label.new()
+	l.set_meta("base_px", size_px)
 	l.add_theme_font_size_override("font_size", size_px)
 	l.add_theme_color_override("font_color", col)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -110,10 +128,20 @@ func _make_label(size_px: int, col: Color) -> Label:
 	return l
 
 
+func _apply_text_scale() -> void:
+	var s := _text_scale()
+	for l in [_copy, _inspect, _note_label]:
+		if l == null or not l.has_meta("base_px"):
+			continue
+		l.add_theme_font_size_override("font_size",
+			int(round(float(l.get_meta("base_px")) * s)))
+
+
 func setup(encounter_id: String) -> void:
 	_encounter_id = encounter_id
 	if _copy == null:
 		_build_text_layer()
+	_apply_text_scale()
 
 	var enc := ContentRegistry.encounter(encounter_id)
 	var site := ContentRegistry.site(String(enc.get("site_id", "")))

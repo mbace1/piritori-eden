@@ -1960,7 +1960,40 @@ list. Recorded here instead of half-fixed:
     Fine for a hiring pool you meet one at a time, visible when a roster is
     listed together.
 
-- **Not looked at, reported 2026-08-27:** "non-optimized UI edges, sizes" —
+- ~~**Not looked at:** "non-optimized UI edges, sizes"~~ **DONE 2026-08-27.**
+  Three separate faults, all reproduced by adding the owner's real viewport
+  (1079x2047) to the capture tool, which had only ever photographed 390x844:
+
+  1. **The header ran off the right edge.** `_apply_chrome` decided narrow by
+     `real_w < 620`, and a Pixel reports 1079 physical pixels — so a screen
+     that is narrow in the hand read as desktop. A raw pixel count has not
+     meant physical width since phones got dense screens. Portrait is now
+     always narrow, which is true on every device with no DPI guesswork.
+  2. **The dock lost MISSIONS entirely.** The label size was
+     `h * COMMAND_LABEL_FRACTION` with a floor and no ceiling, so a tall phone
+     made a tall bar made a huge font — and a button whose CONTENT exceeds its
+     `custom_minimum_size` simply grows. `per` was never the real width. The
+     type is now fitted by measuring the longest command against the space it
+     has, which also protects Finnish and Japanese, where the words differ.
+  3. **Body text was a thread.** The header and command bar scaled themselves;
+     the rail did not, so ~70 call sites passed literal 12/13/15px and the rail
+     rendered a third the height of the dock beneath it. `_make_label` now
+     scales against the viewport, and rail buttons, the carton choice cards and
+     the location narration plate with it.
+
+  Two traps hit on the way, both recorded because they are cheap to repeat:
+  **double-scaling** (the status chips already computed their size from the
+  screen, so scaling again gave 130px chips that shoved the header off-screen —
+  the exact bug `_device_gain()` was removed for, so `_make_label` has an
+  explicit opt-out), and **a floor that did not grow with its type** (cards
+  stayed 44px tall while the label scaled, slicing the descenders off).
+
+  Trade-off worth knowing: legible location text means the ACT list scrolls
+  again on a phone, against "no scrolling too much" from earlier the same day.
+  Readability won on the grounds that an unreadable list does not benefit from
+  fitting. If the balance is wrong, the lever is `_text_scale()`'s 2.2 ceiling.
+
+- **Superseded note, kept for the reasoning:** "non-optimized UI edges, sizes" —
   from a Pixel screenshot, the command dock and the battle console both run
   off the right edge, clipped mid-word ("MESSAGE", "MISSIO", "WITHDR"). The
   capture tool only ever photographed 390x844 (aspect 0.462); that phone is
