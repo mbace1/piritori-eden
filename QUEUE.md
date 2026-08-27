@@ -1824,5 +1824,104 @@ list. Recorded here instead of half-fixed:
   pass has to agree with.
 
 
+- **First UI pass: carton choice cards** (2026-08-26, "Maybe we start also
+  adding UI visual elements soon as the map gets close" → "Go ahead").
+  `art-library/ux-concepts/README.md` already settles the direction — "a 3D
+  world, and torn-carton UI on top of it... cardstock is the interface, not
+  the world" — and `PiritoriChrome` already had the machinery (`plate()`,
+  `CARTON_INK`, torn-edge nine-patch). It was applied in exactly ONE place,
+  the location screen's narration plate. Directly beneath that plate its own
+  choice rows were dark cards with a hairline accent outline, which read as
+  the wireframe the plate was built to replace.
+
+  New `PiritoriChrome.plate_button()` — same cream carton, pressable, torn on
+  the bottom edge only (torn both edges reads as a scrap; torn one edge reads
+  as taken off a pad, and keeps stacked rows separable without dividers).
+  `_make_icon_button()` uses it: carton face, near-black ink, and the accent
+  moved OFF the text onto a printed spine down the left edge, the way the
+  concept sheet rules its name plates. Violet-on-charcoal was never as
+  legible as ink-on-cream.
+
+- **The portrait split follows the scene now** (2026-08-26: "Text options
+  below should be a bit more condensed and hopefully no scrolling too much"
+  and "We need to see the small characters and their faces close up screens
+  when they talk, so that area needs a bit more room on the vertical
+  format").
+
+  These two pull against each other, and the first attempt — just cutting the
+  rail from 34% to 26% — bought the stage its room by pushing ACT below the
+  fold on EVERY screen, including the ones with nobody standing in them.
+  That traded one half of the request for the other.
+
+  The operative words were WHEN THEY TALK. The split now follows the scene:
+  25% rail when a speaker is actually mounted, 33% when the stage is only a
+  place. The condensing paid for the rest — row separation 8→4, separators
+  8→3, rail padding 14→8/12. The rows themselves could not shrink: they are
+  44px touch targets and that floor is a gate.
+
+- **The capture tool can see a talking scene now.** Every capture it has ever
+  taken used the opening encounter, which is a place with no speaker — so the
+  empty case was the only case ever looked at, and it is exactly the one that
+  does NOT exercise the portrait split, the speaker mount or `presenter_3d`.
+  Added `piritori-speaker-*.png`, using `enc-toko-quiet-voice`. Previously
+  the only way to see a face was to play to day 3 by hand.
+
+- ~~**FOUND BY THAT SHOT: Toko's face is a yellow smiley.**~~ **WRONG, AND
+  CORRECTED 2026-08-27 — the mask is CANON.** `ART_BIBLE.md` §8.3 is titled
+  "Toko Slomo character and mask" and `art/v3/manifest.json` says outright
+  "The gold smiling mask is CANON". I called a canon character design a
+  shipped bug because I diagnosed from a render without reading the art
+  bible first. The whole entry below is kept rather than deleted because the
+  free 14-model survey in it is still useful and the mistake is worth
+  leaving visible. **Nothing about Toko's face needs fixing.** The real
+  follow-up is the opposite one: his 3D model should be judged against §8.3's
+  mask spec (eye openings cut INSIDE the white arches), not replaced.
+
+  **And the source art already existed.** Told 2026-08-27: "you should also
+  already have edited versions of the attachment. see documentation." Correct
+  — `art-src/meshy-input/toko-slomo-tpose-v01.png` is the owner T-pose that
+  was actually meshed, and `art-src/concepts/people/toko-slomo-notext-v01.png`
+  is the edited, apron-blanked version that fed the 12k remesh the manifest
+  records. That second file is canon-correct in every way three generations
+  of mine were not: the gold mask sits at face size over a real NECK, the eye
+  slits are cut inside the white arches with white all round them, the
+  proportions are a normal adult, and the apron is already clean. Its `.txt`
+  sidecar even carries the exact edit prompt used.
+
+  So the correct answer to "regenerate Toko" was never to generate anything.
+  The lesson, and it is the second half of the same mistake: **before making
+  a new asset, look for the existing one.** `art-src/` is organised by
+  pipeline stage — `concepts/people/`, `meshy-input/`, `scenes/`, `approved/`
+  — each `.png` carries a `.txt` with the prompt that made it. A generated
+  `art-src/cast3d-refs/` folder was created here in ignorance of that and has
+  been deleted.
+
+  The original, incorrect entry follows.
+
+- **Toko's face is a yellow smiley.** Not a render fault — extracted the texture atlas out of
+  `art/v3/cast3d/toko-v01.glb` and the smiley UV islands are baked into it.
+  A Meshy image-to-3D generation went wrong and shipped. He is a named
+  character in `NARRATIVE.md`, he is the first face the game shows, and he is
+  currently wearing an emoji.
+
+  The fix is regenerating the model, which **costs real Meshy credits and
+  therefore needs an explicit go-ahead** (CLAUDE.md rule 2 / the Meshy note
+  in the user's global preferences: image-to-3D at 30k polycount is ~15
+  credits, and the balance should be checked first).
+
+  **All 14 `cast3d/` models were checked first, for free** — extract the
+  texture atlas straight out of each GLB and measure how much of it is
+  emoji-yellow (warm hue, very high saturation, bright; skin tones are far
+  less saturated and hi-vis workwear sits lower in hue). **Only Toko is
+  affected.** He scores 0.95% on an actual emoji; the runner-up, `hired-b`,
+  scores 0.14% on a red/yellow/green hat band and is fine. So this is one
+  regeneration, not a batch. Balance at the time of checking: 114 credits.
+
+  Two tooling notes found while checking that balance, both wrong in the
+  notes they came from: `~/.meshy/m3d.sh` has **no `--balance` flag**, and
+  the endpoint is **`openapi/v1/balance`**, not the documented `v1/balance`,
+  which returns `NoMatchingRoute`.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

@@ -4,6 +4,10 @@ extends Node
 ## so an art change ends in a screenshot, never in a green suite.
 ## Run WITHOUT --headless: godot --path piritori/godot res://tools/capture.tscn
 
+## An encounter that actually puts a person on screen — Toko at the noodle
+## bar. `test_shell` already asserts this one has a speaker with a model.
+const SPEAKER_SHOT := "enc-toko-quiet-voice"
+
 const SHOTS := [
 	["landscape", Vector2i(1366, 768)],
 	["portrait", Vector2i(390, 844)],
@@ -83,6 +87,23 @@ func _ready() -> void:
 			var p2 := out_dir.path_join("piritori-location-%s-%s.png" % [label, Loc.code])
 			img2.save_png(p2)
 			print("wrote ", p2)
+
+		# AND A SCENE WITH SOMEBODY IN IT. The opening encounter is a place
+		# with no speaker, so every capture this tool has ever taken showed the
+		# empty case — which is exactly the case that does NOT exercise the
+		# portrait stage/rail split, the speaker mount, or `presenter_3d`.
+		# Reported directly, 2026-08-26: "We need to see the small characters
+		# and their faces close up screens when they talk", and there was no
+		# way to look at that without playing to day 3 by hand.
+		if _shell.has_method("_show_location"):
+			_shell._show_location(SPEAKER_SHOT)
+			for i in range(14):
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			var img3 := get_viewport().get_texture().get_image()
+			var p3 := out_dir.path_join("piritori-speaker-%s-%s.png" % [label, Loc.code])
+			img3.save_png(p3)
+			print("wrote ", p3)
 
 	get_tree().quit(0)
 

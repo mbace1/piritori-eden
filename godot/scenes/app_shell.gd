@@ -45,6 +45,7 @@ var _rail: PanelContainer
 var _rail_box: VBoxContainer
 var _city_map: Control
 var _is_portrait := false
+var _stage_has_speaker := false   ## drives the portrait stage/rail split
 var _hud: CanvasLayer
 
 
@@ -277,10 +278,17 @@ func _build() -> void:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_rail_box = VBoxContainer.new()
 	_rail_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_rail_box.add_theme_constant_override("separation", 8)
+	# Reported directly, 2026-08-26: "Text options below should be a bit more
+	# condensed and hopefully no scrolling too much." The rows themselves
+	# cannot shrink — they are 44px touch targets and that floor is a gate —
+	# so the space comes out of the gaps between them and the rail's own
+	# padding, which is where it was going.
+	_rail_box.add_theme_constant_override("separation", 4)
 	var rpad := MarginContainer.new()
-	for side in ["left", "right", "top", "bottom"]:
-		rpad.add_theme_constant_override("margin_" + side, 14)
+	rpad.add_theme_constant_override("margin_left", 12)
+	rpad.add_theme_constant_override("margin_right", 12)
+	rpad.add_theme_constant_override("margin_top", 8)
+	rpad.add_theme_constant_override("margin_bottom", 8)
 	# A ScrollContainer gives its child the child's MINIMUM width unless the
 	# child is told to expand. Without this the rail collapsed to one character
 	# per line as soon as a label was long enough to wrap.
@@ -469,7 +477,18 @@ func _reflow() -> void:
 
 func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
 	if portrait:
-		_rail.custom_minimum_size = Vector2(0, maxf(vp.y * 0.34, 190.0))
+		# Reported directly, 2026-08-26: "We need to see the small characters
+		# and their faces close up screens when they talk, so that area needs a
+		# bit more room on the vertical format."
+		#
+		# The operative words are WHEN THEY TALK. A flat cut to the rail bought
+		# the stage its room by pushing ACT below the fold on every screen,
+		# including the ones with nobody standing in them — trading one half of
+		# the same request for the other. So the split follows the scene: when
+		# a speaker is actually mounted, the stage takes the room and the list
+		# scrolls; when the stage is only a place, the list keeps it.
+		var share := 0.25 if _stage_has_speaker else 0.33
+		_rail.custom_minimum_size = Vector2(0, maxf(vp.y * share, 168.0))
 		_rail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_rail.size_flags_vertical = Control.SIZE_SHRINK_END
 	else:
@@ -733,6 +752,7 @@ func _clear_rail() -> void:
 func _show_city() -> void:
 	_set_mode(Mode.CITY)
 	_open_encounter = ""
+	_stage_has_speaker = false
 	if _rail:
 		_rail.visible = true
 	# Era I news is a SCHEDULED broadcast: it arrives, it is not browsed to.
@@ -818,6 +838,9 @@ func _build_city_rail(anchor_id: String) -> void:
 func _show_location(encounter_id: String) -> void:
 	_set_mode(Mode.LOCATION)
 	_open_encounter = encounter_id
+	# Cleared per scene, not per session: a face in the LAST location must not
+	# keep shrinking the list in the next one, which has nobody in it.
+	_stage_has_speaker = false
 	_clear_world()
 	var stage := preload("res://scenes/location_stage.gd").new()
 	stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -910,6 +933,11 @@ func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
 	if not speaker.available():
 		speaker.free()
 		return
+	# The portrait split reads this: a scene with a face in it gets more of the
+	# screen than a scene that is only a place. Set before the reflow below.
+	_stage_has_speaker = true
+	if _is_portrait:
+		_apply_rail_size(get_viewport_rect().size, true)
 	speaker.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Anchored to the stage in fractions so the figure keeps its place in the
 	# room at every screen size, instead of being pinned a fixed number of
@@ -1716,19 +1744,34 @@ func _make_button(text: String, accent: Color) -> Button:
 ## and the market ledger too, and this task is the location screen only.
 func _make_icon_button(text: String, icon_kind: int, accent: Color,
 		enabled: bool = true) -> Button:
+	# CARTON, NOT A DARK CARD. `art-library/ux-concepts/README.md` settles the
+	# direction — "cardstock is the interface, not the world" — and the
+	# narration plate directly above these rows already proves it reads at
+	# phone size. These stayed dark cards with a hairline accent outline, which
+	# sitting under that plate looked like the wireframe it replaced.
+	#
+	# The accent moves OFF the text and onto a spine down the left edge, the
+	# way the concept sheet rules its name plates. Ink stays near-black on
+	# cream, which is legible in a way violet-on-charcoal never was, and the
+	# category is still carried by shape and colour without colour being the
+	# only carrier (ART_BIBLE §4.2).
 	var tint := accent if enabled else PiritoriPalette.LOCKED_GREY
 	var b := Button.new()
 	b.text = ""
 	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, 44.0))
 	b.disabled = not enabled
 	b.focus_mode = Control.FOCUS_ALL
-	var sb := PiritoriChrome.button(tint)
-	var sb_hot := PiritoriChrome.button(tint, true)
+	var sb := PiritoriChrome.plate_button(tint)
+	var sb_hot := PiritoriChrome.plate_button(tint, true)
 	b.add_theme_stylebox_override("normal", sb)
 	b.add_theme_stylebox_override("hover", sb_hot)
 	b.add_theme_stylebox_override("pressed", sb_hot)
 	b.add_theme_stylebox_override("disabled", sb)
 	b.add_theme_stylebox_override("focus", sb_hot)
+
+	var ink := PiritoriChrome.plate_ink()
+	if not enabled:
+		ink = ink.lerp(PiritoriChrome.CARTON, 0.45)
 
 	var pad := MarginContainer.new()
 	pad.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1744,13 +1787,21 @@ func _make_icon_button(text: String, icon_kind: int, accent: Color,
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pad.add_child(row)
 
+	# the spine: the accent as a printed rule down the card, not as text colour
+	var spine := ColorRect.new()
+	spine.color = tint
+	spine.custom_minimum_size = Vector2(4, 0)
+	spine.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	spine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(spine)
+
 	var icon := PiritoriIcon.new(icon_kind, tint, 22.0)
 	row.add_child(icon)
 
 	var lbl := Label.new()
 	lbl.text = text
 	lbl.add_theme_font_size_override("font_size", 14)
-	lbl.add_theme_color_override("font_color", tint)
+	lbl.add_theme_color_override("font_color", ink)
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1761,7 +1812,7 @@ func _make_icon_button(text: String, icon_kind: int, accent: Color,
 
 func _separator() -> Control:
 	var s := HSeparator.new()
-	s.custom_minimum_size = Vector2(0, 8)
+	s.custom_minimum_size = Vector2(0, 3)
 	return s
 
 

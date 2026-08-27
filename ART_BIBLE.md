@@ -661,10 +661,24 @@ a step:
 2D concept  ->  OWNER APPROVAL  ->  Meshy image-to-3D  ->  Meshy rigging  ->  register
 ```
 
+0. **LOOK FOR THE ASSET BEFORE MAKING ONE.** `find . -iname "*name*"` first,
+   every time. `art-src/` is organised by pipeline stage —
+   `concepts/people/`, `meshy-input/`, `scenes/`, `approved/` — and every
+   `.png` has a `.txt` beside it holding the prompt that produced it, so an
+   existing asset can be re-edited instead of re-invented. Written after three
+   Toko T-poses were generated, all worse, while the correct apron-blanked
+   edit sat in `art-src/concepts/people/toko-slomo-notext-v01.png` and the
+   owner T-pose it came from sat in `art-src/meshy-input/`. A duplicate of
+   something that already exists is worse than nothing: it looks like
+   progress.
+
 1. **2D concept.** Nano Banana via `~/.nano-banana/nb.sh`, or supplied by the
-   owner. Full-figure **T-pose**, front, flat neutral ground, even light, no cast
-   shadow, margin on all four sides. `art-library/references/bodies/` holds the
-   format that is known to work.
+   owner. Full-figure **T-pose**, front, **direct to camera** (owner,
+   2026-08-27: *"t-pose is always direct to camera"*), flat neutral ground,
+   even light, no cast shadow, margin on all four sides.
+   `art-library/references/bodies/` holds the format that is known to work.
+   For a character who already exists, the mask, proportions and neck are
+   **not** yours to reinterpret — match the existing approved art exactly.
 2. **Approval. This is a gate, not a formality.** `DESIGN_AUTHORITY.md` puts
    approval with the owner. Nothing reaches Meshy without it, because the next
    step costs money and produces a thing that is hard to argue with once it

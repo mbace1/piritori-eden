@@ -74,6 +74,24 @@ static func plate(accent: Color = CARTON) -> StyleBoxTexture:
 	return _box("plate", accent, CARTON_INK, true, true, 10, 6)
 
 
+## A choice card: the same cream carton as `plate()`, but pressable.
+##
+## `art-library/ux-concepts/README.md` settles the direction — "a 3D world,
+## and torn-carton UI on top of it... cardstock is the interface, not the
+## world" — and the location screen's narration plate already proves it reads
+## at phone size. Its own choice rows underneath were still dark cards with a
+## hairline accent outline, which next to the carton plate looked like the
+## wireframe the plate had been built to replace.
+##
+## Torn on the BOTTOM only. A card torn on both edges reads as a scrap; torn
+## along one edge reads as something taken off a pad, and in a stacked list of
+## choices it keeps the rows visually separable without a divider between
+## them.
+static func plate_button(accent: Color = CARTON, hot: bool = false) -> StyleBoxTexture:
+	var face := CARTON.lightened(0.10) if hot else CARTON
+	return _box("plateBtn" + ("H" if hot else ""), face, accent, false, true, 12, 9)
+
+
 ## A copy with different padding. The cache hands out SHARED StyleBoxes, so
 ## anything that needs its own margins must take a duplicate — writing to the
 ## cached one would silently repad every other control using that kind.
@@ -118,7 +136,7 @@ static func _box(kind: String, base: Color, accent: Color, torn_top: bool,
 static func _paint(kind: String, base: Color, accent: Color, torn_top: bool,
 		torn_bottom: bool) -> ImageTexture:
 	var img := Image.create_empty(TEX, TEX, false, Image.FORMAT_RGBA8)
-	var is_plate := kind == "plate"
+	var is_plate := kind.begins_with("plate")
 	var rule := RULE.lerp(accent, 0.55) if not is_plate else accent
 
 	for y in TEX:
