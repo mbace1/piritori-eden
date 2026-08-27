@@ -1923,5 +1923,51 @@ list. Recorded here instead of half-fixed:
   which returns `NoMatchingRoute`.
 
 
+- **Crew names are generated now, not authored** (2026-08-27, direct: "there
+  are no crew members that are canon, only mainline characters. every other
+  name is generated from first and last pool to make combo. fix this").
+  `COMBAT.md` §7.1 already said it — named characters are FFT story units,
+  "everyone else is disposable... generated... their interest comes from
+  generated traits worth reading, not from authorship" — but six crew shipped
+  with hand-written names, and one of them turned up on a battle screen
+  looking like canon. Authored `name` fields removed from the slice; the six
+  ids renamed from people to slots (`crew-slot-runner` etc.) so nothing in the
+  data carries a fake canon name; `enc-mira-at-tram-stop` renamed to
+  `enc-runner-at-tram-stop`; six lines of prose de-named. The name now comes
+  from `CrewGenerator.name_for_id()`, seeded from the crew id so a slot is the
+  same person every run and across a save.
+
+  **Careful with the word "named".** A crew member's `named` flag is NOT "is
+  canon" — `content/validate-slice.mjs` uses it to mean "an encounter refers
+  to this id, so careers must not retire them and break that content". Those
+  three flags are content-dependency facts and were left alone.
+
+  Two gates were hardcoding authored names and are fixed: `test_battle_ui`
+  asserted `"Mira" in labels` (now asks the registry what this fighter is
+  actually called, which is the stronger check), and `test_spine`'s
+  named-character career test was wrapped in `if named != ""` so it skipped
+  silently — rule 10's "a gate that cannot fail is a finding", two assertions
+  that had quietly stopped existing.
+
+- **The name pools are still flagged PLACEHOLDER** by `crew_generator.gd`
+  itself, and generating the six slots showed two specific weaknesses worth
+  naming before someone mistakes them for design:
+  - **No gendered family forms.** The Russian pool produced "Galina Smirnov"
+    and "Galina Ivanov"; a woman called Galina would be Smirnova / Ivanova.
+    The Slavic and Baltic pools need either gendered pairs or given names
+    tagged with gender.
+  - **The pools are small enough to collide.** Six slots drew "Galina" twice.
+    Fine for a hiring pool you meet one at a time, visible when a roster is
+    listed together.
+
+- **Not looked at, reported 2026-08-27:** "non-optimized UI edges, sizes" —
+  from a Pixel screenshot, the command dock and the battle console both run
+  off the right edge, clipped mid-word ("MESSAGE", "MISSIO", "WITHDR"). The
+  capture tool only ever photographed 390x844 (aspect 0.462); that phone is
+  1079x2047 (0.527), a shape it has never been tested at. Testing one narrow
+  portrait is not testing portrait. Adding that viewport to `SHOTS` is the
+  first move.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

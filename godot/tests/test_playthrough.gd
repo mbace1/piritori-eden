@@ -178,7 +178,7 @@ func _test_endings_are_reachable() -> void:
 	# "Only an unresolved, clearly flagged critical wound at the final
 	# settlement can become death." Prove the settlement honours both halves.
 	GameState.new_campaign()
-	GameState.apply_effect("recruit:crew-mira-hamalainen")
+	GameState.apply_effect("recruit:crew-slot-runner")
 	GameState.apply_effect("crew-outcome:critical-wound-possible")
 	check("a critical wound is visible before the end",
 		GameState.open_critical_wounds() == 1)
@@ -188,7 +188,7 @@ func _test_endings_are_reachable() -> void:
 		GameState.crew_deaths, 1)
 
 	GameState.new_campaign()
-	GameState.apply_effect("recruit:crew-mira-hamalainen")
+	GameState.apply_effect("recruit:crew-slot-runner")
 	GameState.apply_effect("crew-outcome:critical-wound-possible")
 	GameState.apply_effect("resolve-critical-wound:one")
 	check("treating it clears the risk", GameState.open_critical_wounds() == 0)

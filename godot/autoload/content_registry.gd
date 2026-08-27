@@ -72,8 +72,30 @@ func _index() -> void:
 		_offers[o["id"]] = o
 	for m in slice.get("missions", []):
 		_missions[m["id"]] = m
+	# CREW NAMES ARE GENERATED, NEVER AUTHORED.
+	#
+	# Owner, 2026-08-27: "there are no crew members that are canon, only
+	# mainline characters. every other name is generated from first and last
+	# pool to make combo." `COMBAT.md` §7.1 already said the same thing —
+	# named characters are FFT story units, "everyone else is disposable...
+	# generated... their interest comes from generated traits worth reading,
+	# not from authorship" — but six crew shipped with hand-written names
+	# anyway, and one of them turned up on a battle screen looking like canon.
+	#
+	# The slice still defines six recruitable people, because the content
+	# needs six distinct field roles to hire and their stats, wage and origin
+	# are real authorship. It does not get to name them: the name comes from
+	# the same first/family pools as anyone hired off the street, seeded from
+	# the crew id so a slot is the same person in every run and across a save.
+	#
+	# NOTE the overloaded word. A crew member's `named` flag is NOT "is canon"
+	# — `content/validate-slice.mjs` uses it to mean "an encounter refers to
+	# this id, so careers must not retire them and break that content". That
+	# is a content-dependency fact and is left alone here.
 	for c in slice.get("crew", []):
-		_crew[c["id"]] = c
+		var rec: Dictionary = c.duplicate(true)
+		rec["name"] = CrewGenerator.name_for_id(String(rec.get("id", "")))
+		_crew[rec["id"]] = rec
 	for p in slice.get("products", []):
 		_products[p["id"]] = p
 	for b in slice.get("battles", []):
