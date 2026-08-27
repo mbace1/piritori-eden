@@ -1877,6 +1877,25 @@ list. Recorded here instead of half-fixed:
   follow-up is the opposite one: his 3D model should be judged against §8.3's
   mask spec (eye openings cut INSIDE the white arches), not replaced.
 
+  **And the source art already existed.** Told 2026-08-27: "you should also
+  already have edited versions of the attachment. see documentation." Correct
+  — `art-src/meshy-input/toko-slomo-tpose-v01.png` is the owner T-pose that
+  was actually meshed, and `art-src/concepts/people/toko-slomo-notext-v01.png`
+  is the edited, apron-blanked version that fed the 12k remesh the manifest
+  records. That second file is canon-correct in every way three generations
+  of mine were not: the gold mask sits at face size over a real NECK, the eye
+  slits are cut inside the white arches with white all round them, the
+  proportions are a normal adult, and the apron is already clean. Its `.txt`
+  sidecar even carries the exact edit prompt used.
+
+  So the correct answer to "regenerate Toko" was never to generate anything.
+  The lesson, and it is the second half of the same mistake: **before making
+  a new asset, look for the existing one.** `art-src/` is organised by
+  pipeline stage — `concepts/people/`, `meshy-input/`, `scenes/`, `approved/`
+  — each `.png` carries a `.txt` with the prompt that made it. A generated
+  `art-src/cast3d-refs/` folder was created here in ignorance of that and has
+  been deleted.
+
   The original, incorrect entry follows.
 
 - **Toko's face is a yellow smiley.** Not a render fault — extracted the texture atlas out of
