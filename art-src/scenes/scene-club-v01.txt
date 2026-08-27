@@ -1,0 +1,42 @@
+The attached image is the finished painted style this must match exactly: the
+same painted-night register, the same slightly-elevated isometric-friendly
+viewpoint looking down into an open space, the same muted palette of cold
+blue-grey and warm interior light, the same level of detail, the same brush
+texture, the same deadpan restraint.
+
+The scene: the inside of an art-and-LAN commune in Kallio, Helsinki, at night
+in 2003 - a bare, shared, well-used room where local hobbyists gather to make
+things. Bare plaster walls with nothing on them but scuff marks and a few
+unframed pinned sketches. Low couches and a scatter of mattresses along one
+side for people who stay late. A cluster of small tables pushed together at
+the rim, wired for a LAN party: a tangle of ethernet cable underfoot, two or
+three boxy CRT monitors glowing with abstract screen-light, tower cases with
+one case side off. One older television on a stand plays static-soft colour in
+a corner, ignored. A paraffin heater. Empty bottles and mugs on a windowsill.
+One tall window onto the street, cold blue night and a streetlamp outside.
+
+TWO OTHER PEOPLE ARE PRESENT, small and at the rim, doing their own things and
+not looking at the viewer: one stands at a wooden easel with a half-finished
+canvas, brush in hand; another sits low at the LAN tables, lit by a monitor,
+absorbed in a game. Ordinary Helsinki twenty-somethings in plain 2003 clothes -
+nobody dressed remarkable, nobody looking toward camera. They are part of the
+room, not the subject of the picture.
+
+Jaska's own corner is at one rim, distinct from the LAN tables: a low table
+covered in small cut paper receipts, a paste pot, scissors, and one unfinished
+collage-map of the city pinned flat, a fat sealed envelope propping one edge.
+
+COMPOSITION: the bare floor forms a broad open area filling the lower two
+thirds of the frame, and its middle is COMPLETELY CLEAR - no furniture, no
+people, nothing standing there. Every object and every person sits at the rim
+of the room. Slightly elevated viewpoint looking down into the space.
+
+Warm, cluttered, communal, a bit stale with smoke and screen glow. A place
+people drift through and stay too long in.
+
+No readable text anywhere: monitor screens are abstract glow and colour only,
+never legible words, code, icons or numbers; sketches on the wall are gesture
+and shape only. No letters, no digits, no watermark, no logo, no border, no
+frame, no UI.
+
+16:9 landscape.

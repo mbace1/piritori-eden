@@ -1,0 +1,24 @@
+Staffed bank counter, Siltasaari, Kallio 2003 — the `staffed_bank` site.
+
+Made 2026-08-27 because three sites still played over the labelled placeholder.
+(The QUEUE listed four; `jaska_studio` already had art via `scene-club`, shipped
+in PR #11, and that note was stale.)
+
+Style locked by attaching `art/v3/scenes/toko-slomo-noodles-empty-v01.webp` as
+an image reference rather than describing the register in prose — the same
+technique its own sidecar uses.
+
+Two passes. The first took "cut-cardstock with torn fibrous edges" literally and
+drew an actual torn-paper border with a dead black band across the lower 40% of
+the frame. The second pass fixed composition only: fill the frame edge to edge,
+no paper border, no letterbox, extend the room downward so the customer side,
+the floor and the queue rope carry the lower half.
+
+Deliberate: NOBODY IN THE PICTURE, and the space above the counter where a
+teller would stand is left clear with the wall behind it painted as a room that
+continues — STAGE_SPEC 6.3, the same ruling as the empty Toko bar, so a person
+can be composited in as a 3D layer instead of being baked into the plate.
+
+NO TEXT ANYWHERE was a hard requirement in both prompts: the clock face,
+brochures, screen and paper slips carry abstract marks only, so the asset is
+`baked_text: false` and needs no localisation.

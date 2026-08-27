@@ -272,7 +272,10 @@ func _build() -> void:
 	row.add_theme_constant_override("separation", 20)
 
 	_crew_col = VBoxContainer.new()
-	_crew_col.custom_minimum_size = Vector2(230, 0)
+	# Narrower now the 64px portrait has gone — this column is a name and three
+	# tracks, and it was reserving the widest slot in the console to show a
+	# picture of somebody already visible on the board.
+	_crew_col.custom_minimum_size = Vector2(150.0 * _text_scale(), 0)
 	_crew_col.add_theme_constant_override("separation", 4)
 	row.add_child(_crew_col)
 
@@ -282,7 +285,9 @@ func _build() -> void:
 	row.add_child(_action_col)
 
 	_auto_col = VBoxContainer.new()
-	_auto_col.custom_minimum_size = Vector2(210, 0)
+	# Scales with its own contents, or the buttons inside it overflow a column
+	# that stayed the size it was when the text was smaller.
+	_auto_col.custom_minimum_size = Vector2(210.0 * _text_scale(), 0)
 	_auto_col.add_theme_constant_override("separation", 5)
 	row.add_child(_auto_col)
 
@@ -1077,9 +1082,14 @@ func _build_crew_column() -> void:
 	var panel := PanelContainer.new()
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("#15191c")
-	sb.border_color = MapStyle.FRAME_EDGE       # cream edge
+	# The border carries the role colour, with a heavier left edge. The old
+	# comment here called that left edge "the role-colour tab" while the colour
+	# was actually cream — StyleBoxFlat has ONE border colour, so it never
+	# could be. Now that the portrait is gone this is what says who is active,
+	# so it says it honestly.
+	sb.border_color = _role_color(String(f.role))
 	sb.set_border_width_all(2)
-	sb.border_width_left = 5                     # the role-colour tab
+	sb.border_width_left = 5
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 8
@@ -1091,18 +1101,21 @@ func _build_crew_column() -> void:
 	row.add_theme_constant_override("separation", 10)
 	panel.add_child(row)
 
-	# portrait, cut from the unit's own idle pose
-	var pic := Control.new()
-	pic.custom_minimum_size = Vector2(64, 64)
-	var role := String(f.role)
-	pic.draw.connect(func():
-		var box := Rect2(Vector2.ZERO, pic.size)
-		pic.draw_rect(box, Color("#0d1215"))
-		if not PoseArt.draw_portrait(pic, role, box):
-			pic.draw_string(_font, Vector2(6, 38), _initials(f.display_name),
-				HORIZONTAL_ALIGNMENT_LEFT, -1, 22, MapStyle.TITLE_TEXT)
-		pic.draw_rect(box, _role_color(role), false, 2.0))
-	row.add_child(pic)
+	# NO PORTRAIT. Reported directly, 2026-08-27: "the whole face and name
+	# screen is not needed. only when a character is active and even then the
+	# old faces add nothing."
+	#
+	# The card already only appears when a character IS active —
+	# `_select_first_actionable()` picks the first fighter who `can_act()` —
+	# so that half was already true. The faces were the real complaint, and
+	# they were right: a 64px crop of a 2D idle pose, from the cast art that
+	# predates the 3D ruling, sitting beside a board where the same person is
+	# rendered as a lit 3D figure doing the thing being described. It told you
+	# nothing the board was not already showing, in an older style, using the
+	# widest part of the console to do it.
+	#
+	# The role colour survives on the panel border, which is what actually
+	# carried the "who is this" job.
 
 	var info := VBoxContainer.new()
 	info.add_theme_constant_override("separation", 3)
@@ -1249,7 +1262,15 @@ func _build_action_column() -> void:
 func _action_card(text: String, kind: int, accent: Color, handler: Callable,
 		wide: bool = false) -> Button:
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(0 if wide else 92, 62)
+	# The card grows with its own word. Left at a flat 92 while the label
+	# scaled, the text simply overflowed and dragged the button wider than the
+	# row could hold.
+	# WIDTH scales, HEIGHT does not. The console is a fixed-height overlay
+	# (see `_panel`), so growing the cards vertically pushed it 8px off the
+	# bottom of a 720-high viewport — caught by the battle_ui gate, which is
+	# the second time that same gate has caught this exact thing.
+	var s := _text_scale()
+	b.custom_minimum_size = Vector2(0 if wide else 92.0 * s, 62)
 	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b.tooltip_text = text
 	b.focus_mode = Control.FOCUS_ALL
@@ -1269,7 +1290,7 @@ func _action_card(text: String, kind: int, accent: Color, handler: Callable,
 	col.add_theme_constant_override("separation", 2)
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var icon := PiritoriIcon.new(kind, accent, 24.0)
+	var icon := PiritoriIcon.new(kind, accent, 24.0 * s)
 	icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(icon)
 	var l := _label(text, 12, accent)
@@ -1442,7 +1463,7 @@ func _chrome_button(text: String, accent: Color, handler: Callable) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.custom_minimum_size = Vector2(0, 44)
-	b.add_theme_font_size_override("font_size", 13)
+	b.add_theme_font_size_override("font_size", int(round(13.0 * _text_scale())))
 	b.add_theme_color_override("font_color", accent)
 	b.add_theme_stylebox_override("normal", PiritoriChrome.button(accent))
 	b.add_theme_stylebox_override("hover", PiritoriChrome.button(accent, true))
@@ -1607,10 +1628,52 @@ func _select_first_actionable() -> void:
 	_selected_unit = ""
 
 
-func _label(text: String, px: int, col: Color) -> Label:
+## The battle console had the same fault the city rail had, and for the same
+## reason: thirty call sites passing literal pixel sizes, which read fine in a
+## 1280-wide desktop window and came out microscopic on a phone. The owner's
+## own screenshot showed the whole console as a band of unreadable specks under
+## a full-size 3D board. Same fix as `app_shell.gd`: the authored numbers stay
+## meaningful as a RATIO to each other, and the whole set scales with the
+## viewport.
+##
+## `scale` is opt-OUT for anything that has already worked its size out from
+## the screen — scaling twice is what produced 130px status chips in the shell.
+func _text_scale() -> float:
+	var vp := get_viewport_rect().size
+	if vp.x <= 0.0:
+		return 1.0
+	# LANDSCAPE DOES NOT SCALE. This used to fall back to the viewport HEIGHT
+	# in landscape, so a perfectly ordinary 1280x720 desktop window scaled its
+	# type up by 1.67 — inflating a layout that was already correct, and in the
+	# battle console pushing it 8px off the bottom of the viewport. The reason
+	# to scale at all is a dense portrait phone; a landscape window is the size
+	# the authored numbers were chosen for.
+	if vp.x >= vp.y:
+		return 1.0
+	var basis := vp.x
+	# A LOWER CEILING THAN THE SHELL'S 2.2, on purpose. The rail is reading
+	# text and wants to be generous; this is a dense tactical HUD where four
+	# verb cards and the automation column share one row. Scaled to 2.2 the
+	# labels outgrew their cards, the cards pushed the row past the screen and
+	# REPOSITION and WITHDRAW were clipped mid-word — the exact fault this pass
+	# set out to remove, reintroduced from the other direction.
+	#
+	# 1.3, arrived at by measuring rather than taste: the console is one row of
+	# crew card + four verb cards + the automation column, and at 1.55 the
+	# automation column's own buttons outgrew it and WITHDRAW fell off the
+	# right. 1.3 is the largest ceiling at which all three still fit side by
+	# side on a 1079-wide phone. The honest fix is to reflow the automation
+	# column BELOW the verbs in portrait, which would buy back the headroom —
+	# recorded in QUEUE.md rather than attempted as a third correction in one
+	# sitting.
+	return clampf(basis / 430.0, 1.0, 1.3)
+
+
+func _label(text: String, px: int, col: Color, scale: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", px)
+	var s := _text_scale() if scale else 1.0
+	l.add_theme_font_size_override("font_size", int(round(float(px) * s)))
 	l.add_theme_color_override("font_color", col)
 	return l
 
@@ -1618,8 +1681,11 @@ func _label(text: String, px: int, col: Color) -> Label:
 func _action_btn(text: String, accent: Color, handler: Callable) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(112, 48)   ## 44px floor, 48 preferred
-	b.add_theme_font_size_override("font_size", 14)
+	# The floor grows with the type, or the label overflows the card the way the
+	# location choice rows did — pressable but not readable is not finished.
+	var s := _text_scale()
+	b.custom_minimum_size = Vector2(112.0 * s, 48)   ## height fixed — see _action_card
+	b.add_theme_font_size_override("font_size", int(round(14.0 * s)))
 	b.add_theme_color_override("font_color", accent)
 	b.add_theme_stylebox_override("normal", PiritoriChrome.button(accent))
 	b.add_theme_stylebox_override("hover", PiritoriChrome.button(accent, true))

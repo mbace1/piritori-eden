@@ -87,7 +87,7 @@ photographic realism.
 ```
 NIGHT palette (Piritori):
 paper #0f1216 · ink #e2dccd · dim #8c8778 · marks #b9b2a0 · unbuilt #232a33
-water #1b2c3a · warning orange #ff7a1a (pressure only) · slow amber #c8a24a
+water #1b2c3a · warning violet #A62BFF (pressure only) · slow amber #c8a24a
 lines: #e2dccd #57c8e8 #7fc98a #c98ad8
 city services: metro #b06a2a · tram #5d6b5e · car #46525e
 accents: magenta #F0027F (product/player only) · gold #e8c24a (money)

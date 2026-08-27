@@ -1,0 +1,44 @@
+Style: hard black ink-line illustration over FLAT fills. Every garment is a small
+number of broad, solid colour shapes with hard seams between them, like cut
+paper. Line does the describing, not shading. NO gradients, NO airbrushed volume,
+NO fabric wrinkles, NO cloth folds, NO creases, NO drop shadows, NO photographic
+rendering, NO cloth simulation detail. A sleeve is one flat shape with an outline,
+not a study of a sleeve. Keep the whole figure very simple and graphic.
+
+Subject: a Helsinki noodle-stall cook in 2003, a man of about sixty, ordinary
+build, slightly stooped shoulders. Grey hair, tanned forearms. He wears a plain
+white shirt with the sleeves rolled to the elbow, a plain BLACK apron over it,
+plain black trousers and plain black shoes.
+
+HIS FACE IS COVERED BY A SMOOTH ROUNDED GOLDEN-YELLOW MASK, a simple oval shell
+covering the whole face, with a wide curved white smile and two curved white
+closed eyes painted on it. The mask is flat, cheerful and slightly too calm. His
+grey hair shows above and around the mask. This mask is the character and must be
+clearly readable.
+
+THE APRON IS COMPLETELY BLANK. No writing, no letters, no words, no Japanese
+characters, no logo, no printed bowl, no picture, no patch, no pocket panel, no
+badge, no embroidery, no decoration of any kind anywhere on it. It is one plain
+solid black shape from top to bottom with a simple neck strap and a simple waist
+tie.
+
+He is in a strict T-POSE. Both arms are raised straight out sideways so they are
+LEVEL WITH THE SHOULDERS and PARALLEL TO THE GROUND, forming one straight
+horizontal line from the left fingertips through the shoulders to the right
+fingertips. Palms down, fingers together. Legs straight and slightly apart, feet
+flat and pointing forward. The shirt sleeves point straight out along the arms.
+There is a clear open wedge of plain background visible in each armpit.
+
+Strictly orthographic front elevation, facing the viewer square on. No
+perspective, no foreshortening, no camera tilt, no lean, no twist.
+
+The background is one completely flat, uniform light warm grey at a single value,
+edge to edge and corner to corner, and NOTHING else is on it: no grain, no
+speckle, no noise, no texture, no gradient, no vignette, no shadow, no cast
+shadow, no contact shadow under the feet, no ground plane, no floor line, no
+scenery, no border, no frame. Sampled anywhere it returns the same colour. The
+figure has a clear margin of at least ten percent on all four sides.
+
+There is no text anywhere in the image at all.
+
+The image is exactly square, 1:1.

@@ -3,7 +3,7 @@ ui.block.day,DAY,PÄIVÄ,昼
 ui.block.night,NIGHT,YÖ,夜
 ui.day_n,DAY %02d,PÄIVÄ %02d,%02d日目
 ui.era_line,2003 · AATAMI,2003 · AATAMI,2003 · アアタミ
-cmd.route,ROUTE,REITTI,ルート
+cmd.city,CITY,KAUPUNKI,街
 cmd.crew,CREW,PORUKKA,仲間
 cmd.missions,MISSIONS,KEIKAT,依頼
 cmd.end_day,END DAY,LOPETA PÄIVÄ,一日を終える
@@ -87,7 +87,7 @@ news.fiction,FICTION,FIKTIO,創作
 news.sources,Sources,Lähteet,出典
 news.continue,Turn it off,Sammuta,消す
 news.presenter_placeholder,presenter model not yet approved,esiintyjämallia ei ole hyväksytty,presenter モデル未承認
-cmd.news,NEWS,UUTISET,ニュース
+cmd.messages,MESSAGES,VIESTIT,情報
 news.none,Nothing has been broadcast yet.,Mitään ei ole vielä lähetetty.,まだ何も放送されていない。
 battle.item,ITEM,TAVARA,道具
 battle.no_item,Nothing to use.,Ei mitään käytettävää.,使える物がない。

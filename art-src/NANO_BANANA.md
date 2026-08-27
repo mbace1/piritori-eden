@@ -114,6 +114,38 @@ board**, and a board cannot be cut because its background is not separable from
 its art. The one deliberate exception is the swatch strip, asked for explicitly
 in §4 and cropped off before `key`.
 
+**Block C-T — the turnaround exemption** (bodies only, never props or scenes):
+
+```
+No text, no letters, no numbers, no labels, no captions, no watermark, no logo,
+no UI chrome, no panel, no card, no drop shadow, no mounted card and no frame.
+Lay the views out plainly in a single row, evenly spaced, all at the same scale,
+standing on the same invisible groundline. The background is one completely flat,
+solid, uniform magenta (#FF00FF) running edge to edge behind and between every
+view, with nothing on it. Not a presentation board — just the views.
+```
+
+The ban in Block C is on *presentation*: panels, captions, drop shadows, mounted
+cards. That ban stands everywhere. What C-T lifts is the ban on the **layout**,
+and only for bodies, because of a collision the repo has already paid for nine
+times.
+
+Cross-view alignment to ±2px **is not achievable across separate generations**.
+Asking for front, side and back as three prompts and expecting one body scale is
+asking the model for something it has no way to give. The nine Sprint 1 concepts
+carry that as defect 1 — body scale does not match across views, all three
+subjects — and it is not a prompt failure, it is the two rules meeting.
+
+The counter-example is already approved and already in the tree:
+`base-medium-mf-turnaround-cut-v02.png` **is a board** — eight figures, one
+scale, flat magenta — and it is the base body everything else is measured
+against. **One image is what guarantees one scale.**
+
+A board is uncuttable when its background is not separable from its art. Flat
+magenta edge to edge, including *between* the views, is exactly what makes it
+separable — so a C-T sheet cuts into individual views the same way any single
+subject does. The condition is not decoration; it is the whole exemption.
+
 ---
 
 ## 4. The palette block
@@ -124,7 +156,7 @@ it unless told, and it is the single most useful thing in the output.
 ```
 NIGHT palette (Piritori):
 paper #0f1216 · ink #e2dccd · dim #8c8778 · marks #b9b2a0 · unbuilt #232a33
-water #1b2c3a · warning orange #ff7a1a (pressure only) · slow amber #c8a24a
+water #1b2c3a · warning violet #A62BFF (pressure only) · slow amber #c8a24a
 lines: #e2dccd #57c8e8 #7fc98a #c98ad8
 city services: metro #b06a2a · tram #5d6b5e · car #46525e
 money gold #e8c24a
@@ -133,7 +165,7 @@ outside the subject.
 ```
 
 **Two colours are reserved and must not appear in generated art.** Warning
-orange `#ff7a1a` means immediate pressure and nothing else; product magenta
+violet `#A62BFF` means immediate pressure and nothing else; product magenta
 `#F0027F` is the player and the product, and is also the key colour. Both are
 applied in code.
 
@@ -253,7 +285,7 @@ colour, so there is no hole and no halo where a dot used to be.
 | secondary | **`#FF6A00`** orange | the fore-grip, where the second hand goes | — |
 
 Neither is anywhere near a palette colour. `#FF6A00` is deliberately *not*
-warning orange `#ff7a1a`, which means immediate pressure and is applied in code.
+warning violet `#A62BFF`, which means immediate pressure and is reserved in code.
 Raise `--tol` if a generator drifts off the exact value; the default of 90 is
 generous.
 
@@ -266,6 +298,8 @@ afternoon.
 ## 6. The prompts
 
 Paste **Block A + Block B + Block C + the palette block**, then one body below.
+For a body turnaround, swap C for **C-T** and omit Block B — C-T states the
+magenta rule itself, edge to edge, which is the condition it runs on.
 
 ### 6.1 Fight arena — the harbour (McCormicks)
 
@@ -515,7 +549,7 @@ asset without them is not finished.
 
 1. `cut.mjs check` passes with the right flags for that asset class.
 2. Alpha is **binary** — a half-transparent pixel is a smudge, not an edge.
-3. No `#F0027F` and no `#ff7a1a` anywhere in the pixels. Both are applied in
+3. No `#F0027F` and no `#A62BFF` anywhere in the pixels. Both are applied in
    code and both mean something.
 4. The fitted size matches §5 exactly.
 5. Anchors recorded in `SHEETS.md` for anything in `weapons/` or `cast/`, and

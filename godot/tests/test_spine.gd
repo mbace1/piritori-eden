@@ -72,8 +72,12 @@ func _test_content_loads() -> void:
 	# the harbour, with the two edges that make it reachable. Kattilahalli is in
 	# the old gasworks and the docks are the waterfront; filing both under one
 	# anchor had merged two places into one.
-	eq("thirteen anchors", ContentRegistry.anchors().size(), 13)
-	eq("twenty-four edges", ContentRegistry.edges().size(), 24)
+	# 13 -> 14 anchors and 24 -> 25 edges on 2026-08-25: Jaska's site moves off
+	# Torkkelinmaki to Scene Club, a new anchor at Makelansilta just north of
+	# Kurvi past the bridge where Makelankatu begins - owner-placed geography,
+	# with one edge connecting it to Piritori.
+	eq("fourteen anchors", ContentRegistry.anchors().size(), 14)
+	eq("twenty-five edges", ContentRegistry.edges().size(), 25)
 	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
 	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
 	# without somebody deciding it should.
@@ -970,11 +974,19 @@ careers (COMBAT.md 7)")
 
 	# A named character has no ceiling: they leave in authored beats, never by
 	# attrition, and NARRATIVE.md decides when.
+	# NOT `if named != ""`. This used to skip silently when the slice happened
+	# to contain nobody flagged `named`, which is CLAUDE.md rule 10's "a gate
+	# that cannot fail is a finding" written out in full — two assertions that
+	# quietly stopped existing while the suite still reported zero failures.
+	# It now fails loudly instead, because the flag is a real mechanic and
+	# something in the slice has to exercise it.
 	var named := ""
 	for c in ContentRegistry.slice.get("crew", []):
 		if bool(c.get("named", false)):
 			named = String(c.get("id", ""))
 			break
+	check("the slice exercises the named-character mechanic", named != "",
+		"no crew is flagged `named`, so the two checks below cannot run")
 	if named != "":
 		check("a named character has no career ceiling",
 			GameState.career_left(named) == -1)

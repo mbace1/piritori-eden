@@ -269,10 +269,11 @@ the speaking character")
 
 	# A speaker with no model must fail by NAME. Silently rendering nobody is how
 	# "no Arvo in news" took a headless probe to diagnose.
-	# Jaska, who is all through NARRATIVE.md and has no model and no stand-in.
-	# Deliberately somebody real rather than a nonsense string: the failure being
-	# tested is a character the game genuinely wants and does not have.
-	p.speaker_id = "jaska"
+	# Sean McCormick's father was the example here until Jaska got a model and
+	# stopped qualifying - somebody real rather than a nonsense string, so the
+	# failure being tested is a character the game genuinely wants and does not
+	# have. Update this line again the day he does too.
+	p.speaker_id = "mccormick-senior"
 	check("somebody with no model is not available", not p.available())
 	check("and is not silently swapped for Arvo", p.model_path() == "")
 
@@ -297,6 +298,11 @@ the speaking character")
 	check("Toko is himself now", not p.is_placeholder("toko"))
 	check("and wears his own model",
 		String(p.SPEAKERS["toko"]).ends_with("toko-v01.glb"))
+	# Jaska too, 2026-08-25 - built from an owner-supplied likeness rather than
+	# borrowing local-v01.
+	check("Jaska is himself now", not p.is_placeholder("jaska"))
+	check("and wears his own model",
+		String(p.SPEAKERS["jaska"]).ends_with("jaska-v01.glb"))
 
 	# Every placeholder has to be a real speaker, or the list rots into names
 	# nobody uses.
@@ -385,12 +391,21 @@ settings live behind the menu")
 	check("and pressing again puts them away", not langs.visible)
 
 
-## The map's own text, which shrank for the same reason everything else did.
+## The map's own touch targets, which shrank for the same reason everything
+## else did.
 ##
-## `_scale` fits the map to its control and the control is measured in DESIGN
-## units, which on a phone stay about 1280 wide however small the glass is. A
-## label clamped to 18 design pixels is about 6 CSS pixels there. The missing
-## number was always the ratio between the design space and the real screen.
+## This used to assert a `_device_gain()` text-scaling formula that was
+## removed 2026-08-27 (see `city_map.gd`'s `_draw_labels()` comment — the fix
+## for oversized labels turned out to be showing fewer of them, not scaling
+## them) without updating this test, which called the now-missing method,
+## hit a hard GDScript runtime error, and aborted before a single `check()`
+## ran — CLAUDE.md rule 10's "a gate that cannot fail is a finding" made
+## literal: it could not even RUN, and the pass count did not notice.
+##
+## What actually matters for reading the map on a phone is still true and
+## still worth asserting: every anchor's hit target — `_hits`, built in
+## `_rebuild_layout()` from the same pin radius `_draw_anchor()` paints —
+## clears the 44px touch floor at a phone-width window.
 func _test_map_reads_on_a_phone() -> void:
 	print("
 the map reads on a phone")
@@ -399,25 +414,23 @@ the map reads on a phone")
 	if map == null:
 		return
 
-	var gain: float = map._device_gain()
-	check("the gain is never a shrink", gain >= 1.0, "%.2f" % gain)
+	var prior_size := get_tree().root.size
+	get_tree().root.size = Vector2i(390, 844)
+	await get_tree().process_frame
+	await get_tree().process_frame
 
-	# On this machine the window is desktop-sized, so the honest assertion is
-	# about the FORMULA rather than the current device: a phone-width screen must
-	# produce a real multiplier, and a desktop must produce none.
-	var phone_gain: float = clampf(1280.0 / 412.0, 1.0, 3.5)
-	var desk_gain: float = clampf(1280.0 / 1920.0, 1.0, 3.5)
-	check("a phone gets a real multiplier", phone_gain > 2.5, "%.2f" % phone_gain)
-	check("and a desktop gets none", is_equal_approx(desk_gain, 1.0))
+	var hits: Dictionary = map._hits
+	check("the map has hit targets", not hits.is_empty())
+	var too_small: Array = []
+	for id in hits:
+		var r: Rect2 = hits[id]
+		if r.size.x < 44.0 or r.size.y < 44.0:
+			too_small.append(id)
+	check("every anchor clears the 44px touch floor", too_small.is_empty(),
+		str(too_small))
 
-	# 18 design px was the old ceiling; on a phone it has to end up near the
-	# same CSS size a desktop reader gets, not a third of it.
-	var css_on_phone: float = 18.0 * phone_gain * (412.0 / 1280.0)
-	check("a map label is legible in CSS pixels", css_on_phone >= 14.0,
-		"%.0f px" % css_on_phone)
-
-	# And it is bounded, or a very narrow screen would show four giant pins.
-	check("the multiplier is capped", clampf(1280.0 / 200.0, 1.0, 3.5) <= 3.5)
+	get_tree().root.size = prior_size
+	await get_tree().process_frame
 
 
 ## A level you cannot spend is not a level (UX_SPEC §19, CLAUDE.md rule 6).
@@ -618,13 +631,13 @@ language switch keeps the run (§13)")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	check("Finnish actually reaches the command bar",
-		_find_button("REITTI") != null,
+		_find_button("KAUPUNKI") != null,
 		str(_buttons().map(func(b): return _button_text(b))))
 	Loc.set_language("ja")
 	await get_tree().process_frame
 	await get_tree().process_frame
 	check("Japanese actually reaches the command bar",
-		_find_button("ルート") != null,
+		_find_button("街") != null,
 		str(_buttons().map(func(b): return _button_text(b))))
 	Loc.set_language("en")
 	await get_tree().process_frame

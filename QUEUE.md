@@ -1287,3 +1287,824 @@ no contact shadow under a fighter, which is most of what glues a figure to a
 floor; and the idle pose is a single frame per body, so a standing crew is
 literally static cardboard. Worth confirming which of the three it is by
 capturing the battle before changing anything.
+
+**Owner's read, 2026-08-24: none of the three. "Bad and old art."** The three
+candidates above are all rendering fixes, and the diagnosis behind them is
+wrong — the source art is the problem, not the light falling on it or the
+shadow under it. Lighting a bad figure better produces a better-lit bad figure.
+
+This promotes the item from a note to a **lane: Art**, and it changes what the
+first step is. Not a capture of the battle to tell three rendering causes
+apart; a look at what the crew bodies actually are and when they were made,
+against what `ART_BIBLE.md` asks for now. The Sprint 1 audit is the precedent —
+its dog was called "the best-looking image in the set and the furthest from the
+Art Bible", and the fix there was not to render it better but to redraw it
+(`art-src/concepts/sprint1/v2/`).
+
+Do not re-rank the three candidates. They stay written down only so nobody
+proposes them again as the cause.
+
+## The plates are drawn for a desk, and reviewed on a phone (2026-08-24)
+
+`ux/kallio-master.svg` is 1872x1266 and `ux/helsinki-era2-master.svg` is
+1483x1266 - landscape sheets with a right-hand legend column in ~10px type. The
+owner reviews on an iPad or a Pixel 10, and `CLAUDE.md` rule 3 already says
+testing happens on a phone with no console and no diff. At phone width the
+legend is unreadable and the whole point of a legend is that it is read.
+
+Not a rendering bug - the sheets are correct and the tool is sound. It is that
+the one device they are looked at on was never in the layout.
+
+Cheapest first, and none of these has been tried:
+- a `--portrait` flag on `master-plate.mjs` that stacks the legend UNDER the
+  map instead of beside it, at ~1000px wide
+- type floor of 28px at that width, which is what survives the downscale
+- or accept it and cut a separate phone plate, which is the answer that grows
+  two lineages of one thing and 11.1 already warns against that
+
+Lane: Content (map tools). Raised while answering a question about the owner's
+viewport, not acted on.
+
+## palette.gd neutrals, and three colours the Art Bible does not name (2026-08-24)
+
+**This entry replaces an earlier one that was wrong.** It claimed `palette.gd`
+had drifted from the night palette and shared no hex value with it, and that all
+approved art had been judged against unused colours. `DESIGN_LOCKS.md` §12.3 -
+the palette lock - records the correction: all eight signal colours are identical
+across `ART_BIBLE.md`, `palette.gd` and both reference layouts. There is no
+divergence to reconcile.
+
+What is genuinely outstanding is small and not urgent:
+
+- **Three neutrals sit dE 2.4-5.3 from their Art Bible values.** `PANEL #11151A`
+  against `night-paper #121719`, `PAPER #D8D2C4` against `paper-offwhite
+  #E2D8C2`, and the card grey. Rounding drift. Move `palette.gd` to the Bible's
+  values; the Bible is canon rank 7 and the code is the implementation.
+  Engine lane.
+- **`MAP_GROUND`, `MAP_RELIEF` and `MAP_WATER` exist in code and not in the
+  Bible.** That is a gap in the Bible rather than an invention in the code - the
+  map needs those three and nothing names them. Naming them is Art lane, and the
+  rendered target `art-library/references/ui-target-city-map-v01.jpg` shows what
+  they should be.
+
+Neither blocks art approval, which the earlier version of this entry wrongly
+said it did.
+
+## What the first honest captures found (2026-08-25)
+
+The fixed capture tool and the new Piritori scene went through the full loop -
+generate, register, wire, import, capture - and the captures came back with a
+list. Recorded here instead of half-fixed:
+
+- **CORRECTED 2026-08-27: it was THREE, not four, and one is now done.**
+  `jaska_studio` already had art — `scene-club`, shipped in PR #11 — so this
+  entry had been stale for two days. Checked by asking the loader's own rule
+  (`asset.location == site.anchorId`) which sites actually resolve, rather
+  than by re-reading the note. `staffed_bank` now has
+  `scene-bank-counter-v01` and renders in the running game, verified by
+  capture rather than by the manifest saying an id exists — the capture tool
+  gained a `piritori-site-*` shot for exactly that.
+
+  **Still placeholder: `harju_pitch` (harju, 1 encounter) and
+  `jade_lantern_front` (linjat_yard, 1).** Both are one-encounter sites, so
+  this is the low-value tail of the job.
+
+  Two things worth reusing from doing the bank: attach an approved scene as an
+  IMAGE reference rather than describing the painted register in prose (the
+  same trick its own sidecar uses), and expect to spend a second pass purely
+  on composition — the first one read "cut-cardstock with torn fibrous edges"
+  literally and drew an actual paper border with a dead black band over the
+  bottom 40% of the frame.
+
+  Also note `art-src/scenes/jaska-studio-A-v01.png` and `-B-v01.png`: two
+  finished, unused alternates for Jaska's own studio, superseded by the Scene
+  Club direction. Kept, not shipped.
+
+  The original entry follows.
+
+- **Four sites still play over the labelled placeholder**: `jaska_studio` (3
+  encounters), `staffed_bank` (3), `harju_pitch` (1), `jade_lantern_front` (1).
+  Each needs its own scene in the painted-night register; none of the nine
+  existing scenes fits honestly. Art lane, one scene at a time, the
+  Piritori/Hakaniemi pair is the template.
+- ~~**The opening line overflows the frame in portrait.**~~ **FIXED 2026-08-25,
+  and it was not a text bug.** The command bar pinned every command to at least
+  96 design units wide; five of those plus separation is a 665-unit minimum, and
+  a phone at the shipped UI scale has ~410 units. The bar forced the WHOLE SHELL
+  to 665, so every screen above it was cut off at the right edge — the hamburger,
+  the ends of every line, the fifth command. The command floor is now derived
+  from available width, and the words drop to icons when they no longer fit
+  beside them. 665 -> 415 against a 410 viewport.
+- ~~**The location screen is still flat boxes against the Toko target.**~~
+  **DONE 2026-08-26.** Concept A (owner-approved, "a works") is built as real
+  procedural UI: `PiritoriChrome.medallion()` is a new torn-ring generator
+  matching the existing hash-grain technique; the dialogue text sits on
+  `PiritoriChrome.plate()` (already existed, no new drawing code needed for
+  that piece); LOOK/ACT/LEAVE are torn-card buttons with three new
+  `PiritoriIcon.Kind` glyphs (INFO/RISK/LEAVE) and per-row accent colour.
+  Verified against the real Toko encounter via a new capture harness,
+  `tools/capture_location_band.gd` — kept, alongside the existing
+  `capture_*.gd` tools, as a standing check for this screen.
+
+  The medallion (ringed portrait + NAME plate) from concept A was built,
+  verified, then CUT on review 2026-08-26: the standing figure already IS
+  the portrait, so a second small face in the rail duplicated it rather than
+  identifying anything new. Removed along with everything that existed only
+  to support it — `PiritoriChrome.medallion()`, `presenter_3d.display_name()`,
+  the app_shell mount — rather than left in the tree unused. If a future
+  screen wants a circular frame, `chrome.gd`'s `_pixel()`/`_bite()` pattern is
+  the reference for doing it again, not a resurrected copy of this function.
+
+  Three unrelated, real bugs surfaced by actually rendering the full figure
+  rather than the tight BROADCAST crop, all fixed in the same pass:
+  - `_lower_arms()` matched bone names containing "arm" OR "shoulder"; this
+    rig has both a `Shoulder` bone and a child `Arm` bone, so both rotated and
+    compounded past vertical, swinging the arm behind the torso — invisible
+    on Arvo (BROADCAST crops below the shoulder), and read as "no arms" on
+    Toko standing at his own counter. Fixed to rotate only the upper-arm
+    bone, and the angle re-tuned by rendering candidates side by side (72°
+    alone undershot; 100° lands the hand naturally on the counter).
+  - A `SubViewportContainer` pre-set to its own final size never fires
+    `NOTIFICATION_RESIZED`, so `presenter_3d.gd`'s internal viewport-size sync
+    (which only runs on that notification) never ran — the medallion's INSET
+    presenter rendered a fully transparent nothing, not a visibly broken
+    something, which is why it read as "no bug" until the pixels were sampled
+    directly. Fixed by leaving sizing to anchors alone, like every other
+    mount of this component.
+  - `location_stage.gd`'s `_ready()` unconditionally rebuilt the text layer
+    even when `setup()` had already built it (which happens whenever `setup()`
+    runs before the node enters the tree, which app_shell.gd always does) —
+    a duplicate, empty-text card clobbered `_copy`/`_card`, while the
+    original, correctly-populated one sat on screen unreferenced and
+    un-fittable. Guarded with the same `if _copy == null` `setup()` already
+    used.
+
+  Not done: the ACT row's icon is the same blade/RISK glyph for every choice
+  regardless of whether it is actually risky (e.g. "Eat, listen, owe a
+  favour" gets the same icon as "Risk sabotage — €300") — a deliberate scope
+  cut to ship the three approved glyphs rather than invent a fourth, but
+  worth a look once more encounters exist to judge it against.
+
+- **The bottom command bar was five permanent tabs against its own spec.**
+  `UX_SPEC.md` §3.1 ("The five modes") says plainly "these are full
+  interaction modes, not five permanent bottom tabs", and §3.3 ("Navigation
+  model") names the planning dock as CITY / LEDGER / MESSAGES / MENU, with
+  `WAIT / CLOSE BLOCK` "an explicit City action beside the clock, not a
+  primary navigation tab." The build had drifted to Route / Crew / Missions /
+  News / End Day, five buttons, plus a separate header ≡ for settings.
+
+  Fixed to the MINIMAL spec-conformant shape (owner's call, 2026-08-26,
+  choosing this over the fuller rebuild below): the bar is now four —
+  `cmd.city` (renamed from `cmd.route`, was already `_show_city`) / CREW /
+  `cmd.messages` (renamed from `cmd.news`) / MISSIONS. END DAY moved beside
+  the day/block chip in the header as its own small button
+  (`_add_end_day_button()`), off the bar entirely. The title "PIRITORI →
+  EDEN" now shows only on City — the de facto home screen, since no splash
+  screen exists — and is hidden everywhere else via a new `_set_mode()`
+  that all six mode switches now go through, instead of assigning `mode`
+  directly.
+
+  Not done, and bigger: `UX_SPEC.md` §8.2 wants Ledger as ONE mode with four
+  persistent sections (Market, Crew, Loadout, Obligations) — Loadout and
+  Obligations do not exist as screens at all yet, so a real merge is a
+  multi-screen build, not a rename. §6.6.2 wants missions badged on the map
+  itself with a legend/pointer list, which also does not exist — Missions
+  currently only has its own standalone list, so it stayed on the bar rather
+  than becoming unreachable. Both are the honest next step toward the
+  three-item dock (CITY / LEDGER / MESSAGES) the spec actually asks for.
+
+- **`node godot/tools/sync-data.mjs --check` fails on `main` right now**,
+  unrelated to the location-screen work above: `data/kallio-era1-2003-v1.json`
+  and `data/art-v3-manifest.json` have drifted from their sources. Neither
+  source file appears in this session's diff, so this predates it — most
+  likely a prior PR merge that updated the source but never re-ran the sync
+  script before committing. `CLAUDE.md` rule 7 says run
+  `node godot/tools/sync-data.mjs` rather than hand-edit `godot/data/`; this
+  was left alone rather than bundled into an unrelated commit.
+
+- **The city map's anchor labels were massively oversized** (reported
+  directly, 2026-08-27: "map names are way too big"). Root cause:
+  `city_map.gd` had its own `_device_gain()`, a second independent
+  implementation of the exact "phone is small, scale up" fix `app_shell.gd`'s
+  `content_scale_factor` already applies to the whole window — multiplying
+  BOTH together on labels, pins and tab-tears compounded to roughly 10x.
+  Removed `_device_gain()` entirely; everything it touched now just uses the
+  same design-space clamps as the rest of the shell, correctly stretched
+  once by the engine.
+
+  Labels were also shown for every anchor regardless of zoom — twelve names
+  fighting for the same small board. Now a label draws only for the
+  SELECTED anchor (the click) or a LIVE lead (the minimum needed to still
+  find an actionable place without clicking everything), matching "should
+  mainly appear when clicked... smaller text can be there as long as
+  visibility remains." The existing rail the `anchor_selected` signal opens
+  already IS the "small quick view menu" asked for — nothing new needed
+  there.
+
+  The legend (already built, §6.6.2) was there but invisibly clipped past
+  the right edge of the screen — a real, separate bug found while
+  investigating the label sizing: this Control's own `size` can end up wider
+  than `get_viewport_rect()` after a runtime resize (proven in isolation;
+  root cause not fully chased down, see below), harmless for content that
+  fits ITSELF to `size` but fatal for the legend's hard corner anchor.
+  Clamped against the true visible rect rather than trusted to match it.
+  Also reordered `app_shell.gd`'s two `size_changed` listeners so
+  `_apply_ui_scale` always runs before `_reflow` (was backwards; correct
+  regardless, even though it did not turn out to be this bug's cause).
+
+  **Not fully explained:** why `city_map`'s Control.size (480 design units,
+  observed) exceeds `get_viewport_rect()` (410.5, observed) after a resize
+  even when `AppShell` is parented exactly like a real launch (tested
+  directly, ruling out "it's just the capture harness"). The legend clamp
+  makes this harmless where it was visible; it may still be under-fitting
+  the map's own relief/pins by the same small margin, which reads as
+  "slightly more zoomed out than ideal" rather than as a visible bug. Worth
+  a real investigation if anything else ever hard-anchors to this control's
+  edge.
+
+- **Squares removed, land re-coloured, real streets and water wired in
+  (2026-08-27/28, direct feedback across several rounds).** In order:
+  - The procedural block-grid (`_draw_blocks()`) was suppressed — see that
+    function's own comment. It read as filing-cabinet texture competing
+    with the pins and lines drawn over it; "the squares should be gone
+    first and take it from there."
+  - `MapStyle.LAND` moved off the same hue family as the water colours
+    (`#171d20` shared its R channel with `#102530`/`#0f2934` — land was
+    reading as "slightly less blue water") to a neutral warm grey
+    (`#4a4844`), on "only water should be blue."
+  - Real coastline (`map/kallio-water-v1.json`, already extracted for the
+    offline plates per `TRANSIT_LAYERS.md` §11.2) is now drawn in the
+    board's own water backing — real bay shapes instead of a flat rect.
+  - Real streets are new: `map/tools/streets-import.mjs` (Overpass, same
+    pattern as `water-import.mjs`) produced `map/kallio-streets-v1.json` —
+    3624 real OSM ways in the Kallio box, classified major/mid/minor by
+    `highway=`. `build-map-geometry.mjs` clips them to the board's own
+    hand-drawn landmass at BUILD time (`clipRunsToLand()`, ray casting) —
+    the first render fetched by lat/lon box and not by the actual
+    coastline, so streets sailed off the edge into open water until this.
+    Drawn behind the locked major-road geometry and the transit lines, so
+    the canonical hand-placed roads stay the loudest thing on the board.
+  - Tram-line topology was cross-referenced against the owner's own
+    reference photo directly: both it and this board's `public-transit`
+    layer come from the same real HSL GTFS extract
+    (`map/kallio-rail-v1.json`), so the branching pattern already agreed —
+    no routing correction was needed, only the earlier fixes above.
+  - `1T` is excluded from the transit layer by name (owner's diagnostic
+    request, "take out 1T and see if the others are real") — a real HSL
+    short working, not a data error, and reversible by deleting one line
+    in `build-map-geometry.mjs`'s `EXCLUDED_SERVICES`.
+
+  Not done: `streets-real`'s `minor` tier (2403 of 3624 ways — residential,
+  unclassified, living_street, pedestrian) draws at low opacity by default;
+  worth a look at whether it should be heavier, lighter, or gated behind a
+  zoom/selection state once there is feedback on it specifically. `8T`
+  still draws with its own chip and may want the same "too many stops"
+  scrutiny 1T got.
+
+- **The land shape is real now, not hand-drawn** (2026-08-28, direct
+  feedback: "the map is not aligned at all with real maps, start from
+  scratch with the PR layers and then add details"). Overlaying the old
+  hand-drawn `land-relief` "land" polygon against the real coastline showed
+  why: a rough rectangle that ignored every real bay, the island and the
+  harbour complexity, while the streets and transit lines drawn on top of
+  it were already real and correctly positioned — sitting on a silhouette
+  that was not.
+
+  `build-map-geometry.mjs`'s new `buildRealLand()` derives the shape from
+  real streets and real anchors instead of the coastline. Three different
+  coastline-only flood-fill attempts failed first, in order, and are
+  recorded in that function's own comment because the next person will try
+  the same things: seeding from the grid border (leaked across Kallio's
+  coastline-free north), seeding from the "sea side" of every coastline
+  segment per OSM's own left-hand convention (one reversed way among 27
+  flooded almost the whole grid from a seed that was actually on land), and
+  treating each water area's outline as a barrier (safe, but left no way to
+  seed the open sea at all, so everything but the explicit bays read as
+  "land" — the opposite failure). Each was caught by dumping the raster and
+  looking at it, not by trusting a cell count, which changed for a
+  plausible-sounding reason each time and was wrong twice anyway.
+
+  The fix uses a different, unambiguous signal: real streets exist only on
+  land, no directionality to get backwards. Land is a buffer around real
+  street points and real anchors, with enclosed gaps filled (a city block
+  with no road through its own middle is not water), then the real bays
+  carved back out last. Emitted as merged rectangles rather than a traced
+  outline — two real bugs in a hand-built contour tracer (a broken
+  marching-squares table, then a trace that silently stopped at a
+  one-cell-wide pinch) cost more time than a smooth outline is worth for
+  what is fundamentally a backdrop everything else already sits correctly
+  on. All 14 board anchors verified to land inside the result.
+
+  A standalone twin, `map/tools/land-from-coastline.mjs`, exists for future
+  tuning (`LAND_DEBUG=1`, `LAND_DUMP_RASTER=1` env vars dump a raw raster to
+  eyeball) and must be kept in sync BY HAND with `buildRealLand()` if either
+  changes.
+
+  Not done: the buffer radii (26/20/16 board units by tier) and the anchor
+  buffer (55 units) were picked once and eyeballed on a render, not tuned
+  against a measured block size — worth a look if the land shape reads as
+  too generous or too thin around any particular street once there is
+  feedback on it specifically.
+
+- **Still open, asked and not yet answered:** whether the Suds-Jack arcade
+  hub is supposed to carry both a Godot build and a separate lighter JS
+  version side by side. Interrupted before it was investigated — the
+  now-orphaned old `piritori/` JS-prototype folder on Suds-Jack's
+  `gh-pages` (noted earlier in this file, "Download weight" section) is
+  probably the same question from the other direction.
+
+- **The land was real but the view was still fitted to the fake shape**
+  (2026-08-26, direct feedback: "the grey can continue on the right as
+  well. add some bigger streets"). The harbour/Sörnäinen side was missing
+  two separate ways, both engine bugs rather than missing data:
+
+  1. `streets-import.mjs`'s Overpass query excluded `highway=service` and
+     `highway=track` — exactly the road classes common in a harbour and
+     industrial area. Re-fetched with them included (`TIER` maps both to
+     `minor`); `kallio-streets-v1.json` grew from missing that whole
+     texture to covering it, and `land-real` fell from 1037 to 850
+     rectangles — fewer but more contiguous, the shape closing up rather
+     than fragmenting.
+  2. The real fix: `city_map.gd`'s `_rebuild_layout()` — the function that
+     fits the whole board into the screen — was still measuring its
+     bounding box from `land-relief`, the retired hand-drawn SVG rectangle
+     the real land shape replaced two rounds ago. `land-real` is genuinely
+     wider than that old rectangle, so the fit box was too small and the
+     real land, streets and transit past its edge were drawn correctly but
+     scrolled off past the visible Control's own clip — reading as a hard
+     cut a good deal short of the true coastline. Refitting the bounding
+     box to `land-real` itself was the actual fix; the harbour texture had
+     been correct in the data since the streets round, just not shown.
+     Also boosted major/mid street line weight (alpha 0.60→0.78/width
+     3.2→4.8, and 0.40→0.55/1.9→2.6) per "add some bigger streets", with
+     minor tier trimmed slightly (0.20→0.16, 1.1→1.0) since it nearly
+     doubled in count from the service/track roads.
+
+  One more thing surfaced only by re-running the full gate suite, not
+  asked for: `_draw_backing_and_water()` was throwing "Invalid polygon
+  data, triangulation failed" every single frame, for six of the real
+  water areas out of the water-import fetch — four were zero-area (a
+  closed OSM way whose first and last point round to the same board
+  pixel, seen on a few of the small decorative ponds/fountains the same
+  fetch also picked up), two were genuinely self-intersecting. Both are
+  now filtered out at build time in `buildWaterOverlay()`
+  (`hasArea()`/`isSimple()`), rather than drawn and silently failing.
+  Worth a look some day why those two specific OSM ways self-intersect —
+  not investigated, just kept off the board.
+
+  The metro's own real endpoint (Kalasatama/Itäkeskus direction) still
+  runs a short stretch past the fitted land edge with no grey under it —
+  its real board coordinate is about 130 units east of the nominal
+  1000-unit board, beyond `buildRealLand()`'s 60-unit pad, and every rail
+  line's raw shape already ran hundreds of units past the board before this
+  round (checked: e.g. tram `6`'s y-range alone is -215 to 1204). Reads as
+  the line continuing into the unmapped rest of the city rather than a
+  bug, and left alone rather than guessed at — a real fix, if one is
+  wanted, would be raising the query box on `streets-import.mjs`/pad on
+  `buildRealLand()` enough to cover it without pulling in the far-flung,
+  unrelated street segments a raw Overpass fetch also returns, which needs
+  its own pass, not a PAD bump today.
+
+- **A second pass, direct feedback 2026-08-26: "closer, but do some more
+  passes with bigger roads, maybe larger landmarks."** Major real streets
+  went 4.8→6.6 width / 0.78→0.88 alpha, mid 2.6→3.6 / 0.55→0.66, minor left
+  alone on purpose (it is the fine grain the majors are meant to stand out
+  of). Anchor pins went 28→34 board-scaled radius, with the touch-target
+  hit rect in `_rebuild_layout()` grown to match (26→32) so the drawn size
+  and the clickable size do not drift apart again.
+
+  Found re-running the gates for this, not asked for: `tests/test_shell.gd`
+  called a `_device_gain()` method on the map that an earlier round this
+  same session had already deliberately removed (the fix for oversized map
+  labels turned out to be showing fewer of them, not scaling them bigger —
+  see `city_map.gd`'s `_draw_labels()` comment) — the call hit a hard
+  GDScript runtime error and silently aborted the whole test function
+  before a single assertion ran, so "0 failed" was true only because
+  nothing had run to fail. `_test_map_reads_on_a_phone()` is rewritten to
+  assert something real instead: every anchor's `_hits` rectangle clears
+  the 44px touch floor at a phone-width window. CLAUDE.md rule 10's own
+  line about this — "a gate that cannot fail is a finding, not a pass" —
+  named exactly, for once, by the gate itself.
+
+
+- **HANDOFF, 2026-08-26. The land is still a rectangle, and I built three
+  rounds of detail on top of it instead of fixing that.** Direct feedback,
+  ending the session: "the map, it's clearly not made from scratch since
+  you can still see the squares under."
+
+  Correct, and measurable. `buildRealLand()` rasterises into a grid padded
+  60 board units around the nominal 1000-unit board, so the grid runs
+  -60..1060 on both axes. Of the 850 emitted land rectangles, **182 sit
+  flush against the right pad edge and 60 against the left** — those are
+  not coastline, they are the grid boundary cutting the street buffer off
+  flat. That is the visible "square". The straight top/right edges of the
+  landmass are an artefact of the derivation box, full stop.
+
+  The deeper problem, which is mine and not the data's: **the land mask
+  never consults the coastline at all.** After three failed
+  coastline-flood-fill attempts (documented at length in `buildRealLand()`'s
+  own comment, and those failures are still worth reading) I switched to
+  "land = buffer around real streets and anchors, holes filled, bays carved
+  out". That produces a *plausible* blob with correct streets and transit
+  on it, but it is structurally incapable of ever having a real shoreline,
+  because the only thing that could give it one — `kallio-water-v1.json`'s
+  27 real coastline edges — is used exclusively as a thin decorative
+  stroked line in `_draw_backing_and_water()` and never as a cutting edge.
+  The hole-filling pass makes it worse: any pocket not touching the grid
+  border becomes land, which is what turns a sparse street buffer into a
+  solid slab.
+
+  So the last three rounds (harbour service/track roads, the fit-boundary
+  refit, bigger roads, bigger landmarks) were all real fixes to real bugs,
+  and all of them were detail work on a silhouette that was wrong
+  underneath. That was the wrong call — the "squares should be gone first"
+  instruction from 2026-08-27 was still unmet the whole time, and I should
+  have said so instead of polishing.
+
+  **What a fresh attempt should probably do**, in the spirit of the
+  original instruction rather than my workaround: build the land as a real
+  polygon from the real coastline, using the fact that OSM `natural=
+  coastline` ways are a directed *network*, not 27 independent strokes —
+  join them end-to-end into continuous chains first, then close each chain
+  against the fetch-box edge to get genuine polygons, and only then decide
+  inside/outside. The winding-direction inconsistency that killed attempt
+  (2) is survivable once the ways are chained, because a chain's overall
+  orientation can be checked against known-land anchors instead of trusted
+  per-segment. The 14 board anchors are the ground truth available for
+  that check, and all 14 are already verified to land inside the current
+  blob. Do NOT re-try per-segment sea-side seeding or border-seeded
+  flood-fill; both are recorded above with the exact reason each failed.
+
+  Everything else on the board — transit lines, chips, streets, water
+  overlay, the anchor/label/legend chrome — is real, aligned and verified,
+  and does not need redoing. It is only the silhouette under it.
+
+
+- **The land is derived from the real coastline now, and the squares are
+  gone** (2026-08-26, direct feedback: "the map, it's clearly not made from
+  scratch since you can still see the squares under" and "just use public
+  data to make the map look good and useful. trying to fake it will show").
+
+  The handoff note above diagnosed it correctly, so this is the fix rather
+  than a fresh investigation. What unlocked it was noticing that the 27
+  `natural=coastline` ways in `kallio-water-v1.json` are a NETWORK, not 27
+  loose strokes: 25 of 27 join another way head-to-tail, and the 2 loose
+  tails both sit on the fetch box's east edge where the data was cut.
+  Chained, they resolve to two open coastal runs plus three closed rings,
+  and those three rings are real islands.
+
+  With the shoreline continuous, the flood-fill finally has a real barrier —
+  and the seed problem that killed all three earlier attempts turned out to
+  be already solved in canon. The 14 board anchors are real places standing
+  on real ground, so they are the seed. Barrier = chained coastline + island
+  rings + real inland water; seed = the anchors; land = whatever the flood
+  reaches. Nothing guessed in either direction. Islands are filled back
+  afterwards (the mainland flood cannot cross to them), the bays are carved
+  last. `buildRealLand()` now throws outright if any anchor lands in water,
+  so the derivation cannot silently ship wrong again.
+
+  The grid is the real data box with no pad, and each open chain's ends are
+  extended to the nearest grid edge — the old 60-unit pad was exactly what
+  let the flood walk around the end of the coastline and get chopped flat
+  against the grid, which is what the "squares" were.
+
+  Found and fixed on the way, worth naming because it looked completely
+  plausible: the shore-reclaim pass (which widens land by one cell so the
+  coast is not a brush-width thin) read and wrote the same array in a single
+  scan, so one reclaimed cell qualified its neighbour and cascaded a 1-cell
+  land thread straight out across open water along any chain touching land
+  once. The cell count moved by less than 1% and the rect count by 13%;
+  neither would have caught it. Zooming into the raster dump did. That is
+  now the fourth bug in this file's history caught only by looking at the
+  picture, which is why `LAND_DUMP_RASTER=1` stays.
+
+  Also: `_rebuild_layout()` now fits the view to the board's own declared
+  extent from the coordinate system, not to the land's extent — real land
+  is deliberately wider than the playable board, and fitting to it shrank
+  Kallio to a patch surrounded by off-board water. And `_draw_edge_mask()`
+  gives the board a real frame, because real streets and transit lines
+  genuinely continue past the shoreline and, unmasked, read as lines
+  floating on open sea — which looked exactly like the invented geometry
+  this map spent several rounds removing, despite being the honest data.
+
+  Not done: the land is still emitted as merged rectangles (969 of them at
+  a 1.2-unit cell, roughly 2.8 m) rather than a traced outline. At the
+  current fit that is well under a pixel per cell so the shore reads smooth,
+  but if the map ever gains zoom it will need a real contour, and the two
+  tracer attempts recorded earlier both failed — budget properly for it.
+
+
+- **The last squares were the transit chips, not the land** (2026-08-26,
+  direct feedback: "The square frames still are there"). With the coastline
+  rebuilt, 107 line-number chips — one every 90 board units, each a filled
+  rectangle with a hard keyline border — were the last hard-cornered thing
+  on the board, and read as a rash of squares over the geography. Cut to 14
+  (two per line, placed on the visible board, well spaced, kept off the
+  anchors) and redrawn as rounded capsules, which is the shape a transit map
+  actually uses. The drawn frame added the round before — a hairline
+  rectangle around the board — was itself one more square frame, and is
+  gone; the edge mask alone gives a clean cut.
+
+- **The hand-drawn road ribbons are gone** (2026-08-26, direct feedback:
+  "The grey lines that are there from the squares that you re-colored").
+  The 5 `road`, 5 `roadInner` and 6 `street` runs in `rail-and-roads` were
+  the last of the original structural SVG — the same invented geometry the
+  blocks came from. Recolouring them had made them quieter without making
+  them true: broad blunt ribbons corresponding to no real street, laid over
+  `streets-real`, which is real OSM geometry for the same ground. Two road
+  networks disagreeing in one picture, one of them fake. `MapStyle`'s
+  `ROAD`, `ROAD_W`, `ROAD_INNER`, `ROAD_INNER_W` and `STREET_W` retired with
+  them.
+
+- **The label tab is a rectangle now** (2026-08-26, direct feedback: "the
+  Piritori text box is wavy, not like a proper rectangle"). It was a
+  torn-cardstock effect with its edge jittered from a hash of the anchor id
+  — at phone label size that reads as a rendering fault, not as paper.
+  `_torn_tab()` replaced by `_label_tab()`: straight edges, one drop shadow,
+  one edge line.
+
+- ~~**STILL HAND-DRAWN, and it will show:** the single `rail` + `railTie`
+  pair.~~ **DONE 2026-08-26.** `map/tools/railway-import.mjs` fetches real
+  OSM `railway=rail|light_rail|narrow_gauge` for the same box the streets
+  and water use — 485 ways, tiered `main` (311, `usage=main`), `branch` (52)
+  and `yard` (122, `service=yard|siding|crossover`). `subway` and `tram` are
+  deliberately NOT fetched: the metro and trams already come from real HSL
+  GTFS in `kallio-rail-v1.json`, and fetching their track again would draw
+  every one of them twice, in two styles, from two sources that do not
+  perfectly agree. Yard track is carried by the importer but dropped by
+  `buildRealRailway()` — 122 ways of depot scribble is texture, not
+  information, and the real streets already do texture. Clipped to real land
+  like the streets, for the same reason (the fetch is a lat/lon box, not a
+  landmass).
+
+  Two treatment things fell out of it, both worth naming because both were
+  stylisation standing in for geometry we now actually have:
+
+  `RAIL_W` was 18 board units, sized for ONE schematic hand-drawn line. The
+  real alignment is 143 parallel track runs through one corridor, and 18
+  units each merged them into a solid black slab. Now 3.2.
+
+  The dark-bed-plus-dashed-sleeper treatment is what sells a single line as
+  a railway. Applied to 143 real parallel tracks it gave every track its own
+  ladder and the corridor came out as a zebra crossing laid across Kallio.
+  Dropped entirely — real parallel alignments say "railway" by being
+  parallel. `RAIL_TIE`, `RAIL_TIE_W` and `RAIL_TIE_DASH` retired with it.
+
+  **There is now no invented geometry anywhere on the city map.** Every line
+  on it is real OSM or real HSL GTFS.
+
+- **Dead layers still in the generated geometry:** `land-relief` (3),
+  `minor-blocks` (19) and `rail-and-roads` (18) are all still built and
+  emitted, and none of them is drawn any more. They are kept on purpose for
+  now — the `build-map-geometry.mjs --check` gate verifies them against the
+  structural SVG, so they act as a canary that the SVG has not been
+  tampered with, and they cost a few KB against a 415 KB file that is mostly
+  real land and streets. But nothing reads them, and a future session
+  deciding the SVG is fully retired should drop all three and find the
+  drift gate a new subject.
+
+- **Asked for, not started: UI visual elements** (2026-08-26, "Maybe we
+  start also adding UI visual elements soon as the map gets close"). Noted
+  rather than begun — the map was the task in hand and CLAUDE.md rule 1 says
+  one part per prompt. Worth knowing before it starts: the legend panel and
+  the header chips are currently the only real chrome on the city screen,
+  `art-library/ux-concepts/README.md` already settles cardstock as the
+  interface material, and `UX_SPEC.md` §3.1 and §3.3 (the nav dock, and END
+  DAY sitting beside the clock rather than in a tab) are the canon a first
+  pass has to agree with.
+
+
+- **First UI pass: carton choice cards** (2026-08-26, "Maybe we start also
+  adding UI visual elements soon as the map gets close" → "Go ahead").
+  `art-library/ux-concepts/README.md` already settles the direction — "a 3D
+  world, and torn-carton UI on top of it... cardstock is the interface, not
+  the world" — and `PiritoriChrome` already had the machinery (`plate()`,
+  `CARTON_INK`, torn-edge nine-patch). It was applied in exactly ONE place,
+  the location screen's narration plate. Directly beneath that plate its own
+  choice rows were dark cards with a hairline accent outline, which read as
+  the wireframe the plate was built to replace.
+
+  New `PiritoriChrome.plate_button()` — same cream carton, pressable, torn on
+  the bottom edge only (torn both edges reads as a scrap; torn one edge reads
+  as taken off a pad, and keeps stacked rows separable without dividers).
+  `_make_icon_button()` uses it: carton face, near-black ink, and the accent
+  moved OFF the text onto a printed spine down the left edge, the way the
+  concept sheet rules its name plates. Violet-on-charcoal was never as
+  legible as ink-on-cream.
+
+- **The portrait split follows the scene now** (2026-08-26: "Text options
+  below should be a bit more condensed and hopefully no scrolling too much"
+  and "We need to see the small characters and their faces close up screens
+  when they talk, so that area needs a bit more room on the vertical
+  format").
+
+  These two pull against each other, and the first attempt — just cutting the
+  rail from 34% to 26% — bought the stage its room by pushing ACT below the
+  fold on EVERY screen, including the ones with nobody standing in them.
+  That traded one half of the request for the other.
+
+  The operative words were WHEN THEY TALK. The split now follows the scene:
+  25% rail when a speaker is actually mounted, 33% when the stage is only a
+  place. The condensing paid for the rest — row separation 8→4, separators
+  8→3, rail padding 14→8/12. The rows themselves could not shrink: they are
+  44px touch targets and that floor is a gate.
+
+- **The capture tool can see a talking scene now.** Every capture it has ever
+  taken used the opening encounter, which is a place with no speaker — so the
+  empty case was the only case ever looked at, and it is exactly the one that
+  does NOT exercise the portrait split, the speaker mount or `presenter_3d`.
+  Added `piritori-speaker-*.png`, using `enc-toko-quiet-voice`. Previously
+  the only way to see a face was to play to day 3 by hand.
+
+- ~~**FOUND BY THAT SHOT: Toko's face is a yellow smiley.**~~ **WRONG, AND
+  CORRECTED 2026-08-27 — the mask is CANON.** `ART_BIBLE.md` §8.3 is titled
+  "Toko Slomo character and mask" and `art/v3/manifest.json` says outright
+  "The gold smiling mask is CANON". I called a canon character design a
+  shipped bug because I diagnosed from a render without reading the art
+  bible first. The whole entry below is kept rather than deleted because the
+  free 14-model survey in it is still useful and the mistake is worth
+  leaving visible. **Nothing about Toko's face needs fixing.** The real
+  follow-up is the opposite one: his 3D model should be judged against §8.3's
+  mask spec (eye openings cut INSIDE the white arches), not replaced.
+
+  **And the source art already existed.** Told 2026-08-27: "you should also
+  already have edited versions of the attachment. see documentation." Correct
+  — `art-src/meshy-input/toko-slomo-tpose-v01.png` is the owner T-pose that
+  was actually meshed, and `art-src/concepts/people/toko-slomo-notext-v01.png`
+  is the edited, apron-blanked version that fed the 12k remesh the manifest
+  records. That second file is canon-correct in every way three generations
+  of mine were not: the gold mask sits at face size over a real NECK, the eye
+  slits are cut inside the white arches with white all round them, the
+  proportions are a normal adult, and the apron is already clean. Its `.txt`
+  sidecar even carries the exact edit prompt used.
+
+  So the correct answer to "regenerate Toko" was never to generate anything.
+  The lesson, and it is the second half of the same mistake: **before making
+  a new asset, look for the existing one.** `art-src/` is organised by
+  pipeline stage — `concepts/people/`, `meshy-input/`, `scenes/`, `approved/`
+  — each `.png` carries a `.txt` with the prompt that made it. A generated
+  `art-src/cast3d-refs/` folder was created here in ignorance of that and has
+  been deleted.
+
+  The original, incorrect entry follows.
+
+- **Toko's face is a yellow smiley.** Not a render fault — extracted the texture atlas out of
+  `art/v3/cast3d/toko-v01.glb` and the smiley UV islands are baked into it.
+  A Meshy image-to-3D generation went wrong and shipped. He is a named
+  character in `NARRATIVE.md`, he is the first face the game shows, and he is
+  currently wearing an emoji.
+
+  The fix is regenerating the model, which **costs real Meshy credits and
+  therefore needs an explicit go-ahead** (CLAUDE.md rule 2 / the Meshy note
+  in the user's global preferences: image-to-3D at 30k polycount is ~15
+  credits, and the balance should be checked first).
+
+  **All 14 `cast3d/` models were checked first, for free** — extract the
+  texture atlas straight out of each GLB and measure how much of it is
+  emoji-yellow (warm hue, very high saturation, bright; skin tones are far
+  less saturated and hi-vis workwear sits lower in hue). **Only Toko is
+  affected.** He scores 0.95% on an actual emoji; the runner-up, `hired-b`,
+  scores 0.14% on a red/yellow/green hat band and is fine. So this is one
+  regeneration, not a batch. Balance at the time of checking: 114 credits.
+
+  Two tooling notes found while checking that balance, both wrong in the
+  notes they came from: `~/.meshy/m3d.sh` has **no `--balance` flag**, and
+  the endpoint is **`openapi/v1/balance`**, not the documented `v1/balance`,
+  which returns `NoMatchingRoute`.
+
+
+- **Crew names are generated now, not authored** (2026-08-27, direct: "there
+  are no crew members that are canon, only mainline characters. every other
+  name is generated from first and last pool to make combo. fix this").
+  `COMBAT.md` §7.1 already said it — named characters are FFT story units,
+  "everyone else is disposable... generated... their interest comes from
+  generated traits worth reading, not from authorship" — but six crew shipped
+  with hand-written names, and one of them turned up on a battle screen
+  looking like canon. Authored `name` fields removed from the slice; the six
+  ids renamed from people to slots (`crew-slot-runner` etc.) so nothing in the
+  data carries a fake canon name; `enc-mira-at-tram-stop` renamed to
+  `enc-runner-at-tram-stop`; six lines of prose de-named. The name now comes
+  from `CrewGenerator.name_for_id()`, seeded from the crew id so a slot is the
+  same person every run and across a save.
+
+  **Careful with the word "named".** A crew member's `named` flag is NOT "is
+  canon" — `content/validate-slice.mjs` uses it to mean "an encounter refers
+  to this id, so careers must not retire them and break that content". Those
+  three flags are content-dependency facts and were left alone.
+
+  Two gates were hardcoding authored names and are fixed: `test_battle_ui`
+  asserted `"Mira" in labels` (now asks the registry what this fighter is
+  actually called, which is the stronger check), and `test_spine`'s
+  named-character career test was wrapped in `if named != ""` so it skipped
+  silently — rule 10's "a gate that cannot fail is a finding", two assertions
+  that had quietly stopped existing.
+
+- **The name pools are still flagged PLACEHOLDER** by `crew_generator.gd`
+  itself, and generating the six slots showed two specific weaknesses worth
+  naming before someone mistakes them for design:
+  - **No gendered family forms.** The Russian pool produced "Galina Smirnov"
+    and "Galina Ivanov"; a woman called Galina would be Smirnova / Ivanova.
+    The Slavic and Baltic pools need either gendered pairs or given names
+    tagged with gender.
+  - **The pools are small enough to collide.** Six slots drew "Galina" twice.
+    Fine for a hiring pool you meet one at a time, visible when a roster is
+    listed together.
+
+- ~~**Not looked at:** "non-optimized UI edges, sizes"~~ **DONE 2026-08-27.**
+  Three separate faults, all reproduced by adding the owner's real viewport
+  (1079x2047) to the capture tool, which had only ever photographed 390x844:
+
+  1. **The header ran off the right edge.** `_apply_chrome` decided narrow by
+     `real_w < 620`, and a Pixel reports 1079 physical pixels — so a screen
+     that is narrow in the hand read as desktop. A raw pixel count has not
+     meant physical width since phones got dense screens. Portrait is now
+     always narrow, which is true on every device with no DPI guesswork.
+  2. **The dock lost MISSIONS entirely.** The label size was
+     `h * COMMAND_LABEL_FRACTION` with a floor and no ceiling, so a tall phone
+     made a tall bar made a huge font — and a button whose CONTENT exceeds its
+     `custom_minimum_size` simply grows. `per` was never the real width. The
+     type is now fitted by measuring the longest command against the space it
+     has, which also protects Finnish and Japanese, where the words differ.
+  3. **Body text was a thread.** The header and command bar scaled themselves;
+     the rail did not, so ~70 call sites passed literal 12/13/15px and the rail
+     rendered a third the height of the dock beneath it. `_make_label` now
+     scales against the viewport, and rail buttons, the carton choice cards and
+     the location narration plate with it.
+
+  Two traps hit on the way, both recorded because they are cheap to repeat:
+  **double-scaling** (the status chips already computed their size from the
+  screen, so scaling again gave 130px chips that shoved the header off-screen —
+  the exact bug `_device_gain()` was removed for, so `_make_label` has an
+  explicit opt-out), and **a floor that did not grow with its type** (cards
+  stayed 44px tall while the label scaled, slicing the descenders off).
+
+  Trade-off worth knowing: legible location text means the ACT list scrolls
+  again on a phone, against "no scrolling too much" from earlier the same day.
+  Readability won on the grounds that an unreadable list does not benefit from
+  fitting. If the balance is wrong, the lever is `_text_scale()`'s 2.2 ceiling.
+
+- **Superseded note, kept for the reasoning:** "non-optimized UI edges, sizes" —
+  from a Pixel screenshot, the command dock and the battle console both run
+  off the right edge, clipped mid-word ("MESSAGE", "MISSIO", "WITHDR"). The
+  capture tool only ever photographed 390x844 (aspect 0.462); that phone is
+  1079x2047 (0.527), a shape it has never been tested at. Testing one narrow
+  portrait is not testing portrait. Adding that viewport to `SHOTS` is the
+  first move.
+
+
+- **The battle console is legible on a phone now** (2026-08-27, continuing
+  "non-optimized UI edges, sizes"). It had never been photographed at ANY
+  size — the capture tool shot the city, the location and a speaker scene and
+  stopped — so the owner's own screenshot was the first look anyone had at it.
+  A screen the capture tool cannot see is a screen nobody checks. It now takes
+  `piritori-battle-*` and `piritori-site-*` shots too.
+
+  Three corrections in a row before it was right, which is worth recording:
+  scaling the type 2.2x like the rail made the labels outgrow their cards and
+  clipped REPOSITION and WITHDRAW; dropping to 1.55 fixed the verbs but the
+  automation column, pinned at a fixed 210px while its buttons grew, still lost
+  WITHDRAW off the edge; 1.3 is the largest ceiling at which the crew card,
+  four verb cards and the automation column all fit side by side on a
+  1079-wide phone.
+
+  **The real bug underneath was in all three scenes at once.** `_text_scale()`
+  fell back to the viewport HEIGHT in landscape, so an ordinary 1280x720
+  desktop window scaled its type up by 1.67 — inflating layouts that were
+  already correct, and pushing the battle console 8px off the bottom of the
+  viewport. Caught by `test_battle_ui`'s "sits inside the viewport" check, the
+  second time that same gate has caught that same thing. Landscape now returns
+  1.0 outright: the reason to scale at all is a dense portrait phone, and a
+  landscape window is the size the authored numbers were chosen for.
+
+- **Still worth doing, not attempted:** in portrait the battle console would
+  read better with the automation column REFLOWED BELOW the verb cards rather
+  than beside them. That buys back enough width to raise the 1.3 ceiling. Left
+  alone deliberately — it would have been a fourth correction in one sitting,
+  and CLAUDE.md rule 8 says stop after two.
+
+
+- **The old 2D faces are off the battle console** (2026-08-27, direct: "the
+  whole face and name screen is not needed. only when a character is active
+  and even then the old faces add nothing").
+
+  Half of it was already true and worth checking before changing anything:
+  `_select_first_actionable()` only builds the card for a fighter who
+  `can_act()`, so it did already appear only for an active character. The
+  faces were the real complaint and the complaint was right — a 64px crop of a
+  2D idle pose, from the cast art that predates the 3D ruling in
+  `PHASING.md` §1.055, sitting beside a board where that same person is a lit
+  3D figure doing the thing being described. It repeated what the board showed,
+  in an older style, using the widest slot in the console to do it.
+
+  `PoseArt.portrait()` and `PoseArt.draw_portrait()` retired with it — this was
+  their only caller. The role colour moved onto the card's border, which is now
+  what says who is active. The column dropped 230px → 150px, and the verbs and
+  automation column took the width back.
+
+  Note for whoever revisits the 2D cast art: `art/v3/cast/*/idle-smile-*.webp`
+  is now used only for the board figures via `PoseArt.draw_into()`, not for any
+  portrait. If the board ever goes fully 3D there, that whole set is dead.
+
+
+Lane: mixed, each named above. Found by testing, which is the point of the
+capture tool existing.

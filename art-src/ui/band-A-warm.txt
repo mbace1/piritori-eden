@@ -1,0 +1,36 @@
+The attached image is the style reference: match its exact material language -
+thick worn cardstock, ripped torn edges with visible pale fibre showing through
+the tear, hand ink lettering, a soft warm interior light, deadpan handmade
+construction, no gradients, no vector-clean edges anywhere.
+
+Design a UI CONCEPT SHEET, not a scene - just the interface band, isolated,
+for a dialogue screen in the same game. Lay out these THREE pieces exactly as
+described, on a plain dark flat background (no room, no counter, no person):
+
+1. TOP LEFT: a circular portrait medallion, a plain grey-brown placeholder
+   headshot silhouette inside it (no specific character, just a generic
+   rounded head-and-shoulders silhouette), surrounded by a torn-paper RING
+   border in a warm rust-orange, with small hand-drawn tick notches around the
+   rim like a worn coin's edge. Below the medallion, a small torn kraft label
+   plate with the placeholder word "NAME" hand-lettered on it.
+
+2. CENTRE, taking most of the width: a large torn kraft dialogue card, ripped
+   top-left corner, holding three lines of placeholder body text in a
+   monospace hand-stencilled style: "Placeholder line one of dialogue text."
+   / "Placeholder line two continues here." / "A third line finishes it."
+
+3. BOTTOM, a full-width row of exactly THREE separate torn dark cardstock
+   buttons side by side, each with: a simple hand-drawn icon on the left,
+   a short placeholder label in capitals, and where relevant a placeholder
+   price. Button one: a simple EYE icon, label "LOOK CLOSER", no price. Button
+   two: a simple crossed-KNIFE-AND-FORK-shaped tool icon (a blade), label
+   "TAKE A RISK", with a placeholder price "€000". Button three: a simple open
+   DOOR with an arrow through it icon, label "LEAVE", no price. Each button's
+   icon sits in a different accent colour: button one's icon area tinted
+   violet, button two's tinted rust-orange, button three's tinted teal.
+
+No other text anywhere. No watermark, no logo, no border around the whole
+sheet, no caption, no mounting card. Just the three UI pieces floating on
+flat dark background with clear gaps between them.
+
+16:9 landscape, high detail.

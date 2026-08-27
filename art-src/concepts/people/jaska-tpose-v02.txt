@@ -1,0 +1,47 @@
+The attached image is the approved character concept - the exact same person,
+face, build, hair, glasses and clothing. Reproduce this same character,
+simplified into a strict modelling T-pose.
+
+Style: hard black ink-line illustration over flat, slightly muted fills, cut
+cardstock construction, painted-night register, visible paper grain. No
+gradients, no airbrushed volume, no photographic rendering, no glow.
+
+Subject: the same man - wiry build, average height, slightly soft through the
+middle, short thinning light-brown hair, light wire-frame glasses, stud
+earring, slight amused half-smile. Same black long-sleeve top with the small
+colourful abstract patch low on one sleeve, same plain grey trousers, same
+worn trainers.
+
+He is in a strict T-POSE. Both arms are raised straight out sideways so they
+are LEVEL WITH THE SHOULDERS and PARALLEL TO THE GROUND, forming one straight
+horizontal line from the left fingertips through the shoulders to the right
+fingertips. Palms down, fingers together. Legs straight and slightly apart,
+feet flat and pointing forward.
+
+THE SLEEVES GO WITH THE ARMS. The top's sleeves point straight out sideways
+along the raised arms. There is a clear open wedge of flat background visible
+in each armpit, between the underside of the arm and the side of the body.
+Arms hanging down at the sides is WRONG. This is a modelling reference for 3D
+reconstruction, not a portrait.
+
+Strictly orthographic front elevation. THE HEAD FACES DIRECTLY FORWARD, DEAD
+CENTRE, LOOKING STRAIGHT AT THE VIEWER - not turned to either side, not in
+three-quarter view, not tilted. Both eyes are equally visible and the same
+size, the nose points straight out of the centre of the face, the face is
+symmetrical left to right. This is a modelling reference and an angled head
+on a front-on body produces a broken, twisted 3D reconstruction - this is the
+single most important instruction in this prompt. No perspective, no
+foreshortening, no camera tilt, no lean, no twist, anywhere in the body
+either.
+
+The background is one completely flat, uniform, solid mid-grey, edge to edge
+and corner to corner, and nothing else is on it: no gradient, no vignette, no
+shadow, no cast shadow, no contact shadow under the feet, no ground plane, no
+floor line, no scenery, no border, no frame. If the background is sampled
+anywhere it returns the exact same flat grey. Clear margin of at least ten
+percent on all four sides; the figure does not touch any edge.
+
+No text, no letters, no numbers, no watermark, no logo, no caption, no panel,
+no border, no frame, no mount, no drop shadow. Just the one figure.
+
+The image is exactly square, 1:1.

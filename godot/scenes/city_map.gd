@@ -29,6 +29,7 @@ var _hits: Dictionary = {}        ## anchor id -> Rect2 (screen)
 var _scale: float = 1.0
 var _origin := Vector2.ZERO
 var _mn := Vector2.ZERO
+var _mx := Vector2.ONE      ## board-space frame, used by _draw_edge_mask()
 
 var _selected: String = ""
 var _hovered: String = ""
@@ -59,25 +60,17 @@ func _layer(layer_name: String) -> Array:
 	return _geo.get("layers", {}).get(layer_name, [])
 
 
-## Fit the whole production boundary (§7: "fit the full boundary inside the
-## world area"). The landmass is wider than the anchor spread, so the fit is
-## computed from the geometry, not from the twelve pins.
-## HOW MUCH BIGGER THINGS HAVE TO BE ON A SMALL SCREEN.
+## Fit the board's own declared extent (§7: "fit the full boundary inside the
+## world area").
 ##
-## `_scale` fits the map to the control, and the control is measured in DESIGN
-## units — which on a phone stay about 1280 wide however small the glass is. So
-## a label clamped to 18 design pixels is about 6 CSS pixels on a phone, and pins
-## and labels shrank invisibly for the same reason the command bar did.
-##
-## This is the ratio between the design space and the real screen, which is the
-## number that was missing everywhere. 1.0 on a desktop, about 3 on a phone.
-func _device_gain() -> float:
-	var win := get_window()
-	if win == null or win.size.x <= 0:
-		return 1.0
-	return clampf(1280.0 / float(win.size.x), 1.0, 3.5)
-
-
+## NOT the land's extent. Real land is derived from the real OSM coastline
+## now, which covers a deliberately wider box than the playable board — fit
+## to that and Kallio shrinks to a patch in the middle with the screen spent
+## on off-board water. `boardExtent` comes from the coordinate system in
+## `map/kallio-era1-2003-v1.json`, the same block that defines what a board
+## unit means, so the frame and the geometry agree by construction. Land
+## simply continues past the frame and is clipped, the way a real city map
+## continues past its own edge.
 func _rebuild_layout() -> void:
 	_layout.clear()
 	_hits.clear()
@@ -88,13 +81,11 @@ func _rebuild_layout() -> void:
 	var mn := Vector2(INF, INF)
 	var mx := Vector2(-INF, -INF)
 
-	for item in _layer("land-relief"):
-		var pts: Array = item.get("points", [])
-		for i in range(0, pts.size(), 2):
-			var p := Vector2(pts[i], pts[i + 1])
-			mn = mn.min(p)
-			mx = mx.max(p)
-	if mn.x == INF:
+	var extent: Dictionary = _geo.get("boardExtent", {})
+	if extent.has("w") and extent.has("h"):
+		mn = Vector2(extent.get("x", 0.0), extent.get("y", 0.0))
+		mx = mn + Vector2(extent["w"], extent["h"])
+	else:
 		for a in anchors:
 			var p := Vector2(a["board"]["x"], a["board"]["y"])
 			mn = mn.min(p)
@@ -104,6 +95,7 @@ func _rebuild_layout() -> void:
 	span.x = maxf(span.x, 1.0)
 	span.y = maxf(span.y, 1.0)
 	_mn = mn
+	_mx = mn + span
 
 	var m := maxf(minf(size.x, size.y) * MARGIN_RATIO, MARGIN_MIN)
 	var avail := Vector2(maxf(size.x - m * 2.0, 32.0), maxf(size.y - m * 2.0, 32.0))
@@ -114,7 +106,7 @@ func _rebuild_layout() -> void:
 	for a in anchors:
 		var pos := _to_screen(Vector2(a["board"]["x"], a["board"]["y"]))
 		_layout[a["id"]] = pos
-		var r := maxf(TOUCH_MIN, 26.0 * _scale)
+		var r := maxf(TOUCH_MIN, 32.0 * _scale)
 		_hits[a["id"]] = Rect2(pos - Vector2(r, r) * 0.5, Vector2(r, r))
 
 	queue_redraw()
@@ -149,20 +141,43 @@ func _draw() -> void:
 		return
 	_draw_backing_and_water()   # 1 + 2
 	_draw_land()                # 3
-	_draw_blocks()              # 5 (under the road cuts, as the collage reads)
+	# _draw_blocks() suppressed — see the function's own comment.
+	_draw_real_streets()        # 5, real OSM texture under the locked roads
 	_draw_rail_and_roads()      # 4
 	_draw_public_transit()      # 6
 	_draw_ordinary_flow()       # 7
 	_draw_crew_and_goods()      # 8
+	_draw_edge_mask()           # 9, the frame the city continues past
 	_draw_anchors()             # 10 + 11
 	_draw_labels()              # 12
 	_draw_legend()              # 13
 	_draw_placeholder_note()
 
 
-## 1-2. Deep paper backing, then water with its wave grain.
+## 1-2. Deep paper backing, then real coastline where it exists.
+##
+## Reported directly, 2026-08-27: "it looks like it's just water now around
+## Kallio, make it more realistic." The flat rect was the whole backing —
+## no bay, no coast, one undifferentiated colour behind the board's own
+## landmass. `map/kallio-water-v1.json` is real OSM coastline for this exact
+## box (`TRANSIT_LAYERS.md` §11.2), already proven on the offline plates and
+## now projected into board space by `build-map-geometry.mjs` the same way
+## the transit lines were. It draws BEFORE `_draw_land()`, so the board's own
+## (locked, hand-drawn) landmass still wins wherever the two overlap — this
+## only ever enriches what was empty sea.
 func _draw_backing_and_water() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), MapStyle.WATER)
+
+	for item in _layer("water-real"):
+		var kind := String(item.get("kind", ""))
+		var pts := _pts(item)
+		if pts.size() < 2:
+			continue
+		if kind == "water-area" and pts.size() >= 3:
+			draw_colored_polygon(pts, MapStyle.WATER_SHADOW)
+		elif kind == "coastline":
+			draw_polyline(pts, MapStyle.COASTLINE, _w(1.6), true)
+
 	var step := maxf(34.0 * _scale, 12.0)
 	var col := MapStyle.WATER_WAVE
 	col.a = 0.55
@@ -172,25 +187,43 @@ func _draw_backing_and_water() -> void:
 		y += step
 
 
-## 3. District relief: the land card with torn tan fibre at the seam.
+## 3. District relief — real land, from real streets and real anchors
+## (`build-map-geometry.mjs`'s `buildRealLand()`; that function's own
+## comment records why not the old hand-drawn shape, and why not a traced
+## coastline either — both tried and both wrong). Reported directly,
+## 2026-08-28: "the map is not aligned at all with real maps, start from
+## scratch with the PR layers and then add details."
+##
+## Flat rectangles, not one smooth polygon with a torn-fibre seam — real
+## land is now merged cells rather than one hand-authored outline, and the
+## real coastline is drawn separately and accurately in
+## `_draw_backing_and_water()`, which does the "where the edge actually is"
+## job better than a procedural tear on a shape that has no single
+## contiguous boundary to trace any more.
 func _draw_land() -> void:
-	for item in _layer("land-relief"):
-		var pts := _pts(item)
-		if pts.size() < 3:
+	var bb := Rect2()
+	var any := false
+	for item in _layer("land-real"):
+		if String(item.get("kind", "")) != "rect":
 			continue
-		if String(item.get("class", "")) == "land":
-			draw_colored_polygon(pts, MapStyle.LAND)
-			_draw_grain(pts)
-			draw_polyline(pts, MapStyle.LAND_FIBRE, _w(MapStyle.LAND_FIBRE_W), true)
-		else:
-			var c := MapStyle.WATER_SHADOW
-			c.a = float(item.get("opacity", 0.8))
-			draw_colored_polygon(pts, c)
+		var pos: Array = item.get("pos", [0, 0])
+		var siz: Array = item.get("size", [0, 0])
+		var origin := _to_screen(Vector2(float(pos[0]), float(pos[1])))
+		var r := Rect2(origin, Vector2(float(siz[0]), float(siz[1])) * _scale)
+		draw_rect(r, MapStyle.LAND)
+		bb = r if not any else bb.merge(r)
+		any = true
+	if any:
+		_draw_grain(bb)
 
 
-## Paper grain inside the land card: sparse fibres, seeded so it never crawls.
-func _draw_grain(pts: PackedVector2Array) -> void:
-	var bb := _bounds(pts)
+## Paper grain over the land: sparse fibres, seeded so it never crawls.
+## Drawn once across the whole land bounding box rather than per rectangle —
+## a fibre landing on a real water cell here and there is the same kind of
+## harmless softness real paper grain has; drawing it separately per one of
+## a thousand small rects would not read as different and would cost far
+## more.
+func _draw_grain(bb: Rect2) -> void:
 	var step := maxf(31.0 * _scale, 9.0)
 	var col := MapStyle.PAPER_GRAIN
 	col.a = 0.5
@@ -206,158 +239,168 @@ func _draw_grain(pts: PackedVector2Array) -> void:
 		y += step
 
 
-func _land_polygon() -> PackedVector2Array:
-	for item in _layer("land-relief"):
-		if String(item.get("class", "")) == "land":
-			return _pts(item)
-	return PackedVector2Array()
-
-
-func _water_shadows() -> Array:
-	var out: Array = []
-	for item in _layer("land-relief"):
-		if String(item.get("class", "")) != "land":
-			out.append(_pts(item))
-	return out
-
-
-func _bounds(pts: PackedVector2Array) -> Rect2:
-	var mn := Vector2(INF, INF)
-	var mx := Vector2(-INF, -INF)
-	for p in pts:
-		mn = mn.min(p)
-		mx = mx.max(p)
-	return Rect2(mn, mx - mn)
-
-
-## 5. Minor street/block collage.
+## 5. Minor street/block collage — SUPPRESSED, 2026-08-27.
 ##
-## The structural SVG carries nineteen LARGE district masses because it is a
-## geometry blueprint, not final art. MAP.md §2 allows the visible relief to
-## elaborate "labels, minor blocks and decorative streets" within a 12% local
-## displacement, while "public anchors, coastline, rail edge and major corridor
-## order may not be mirrored or rearranged" — so the masses are subdivided into
-## a cut-card collage here and nothing structural moves.
+## Reported directly against the transit-line work: "not close enough yet.
+## The squares should be gone first and take it from there." This was a
+## procedural grid of small rectangles — cell, drop shadow, fill, edge —
+## tiled across the whole land polygon, and it read as noisy filing-cabinet
+## texture competing with the pins, roads and the transit lines now drawn
+## over it, nothing like the flat paper the reference asks for.
 ##
-## The subdivision is seeded, so the city is the same city every run.
-const CELL_BOARD := 30.0      ## nominal block size in board units
-const STREET_BOARD := 7.5     ## gap between blocks = a decorative street
-const JITTER := 0.12          ## MAP.md §2 displacement allowance
-
+## Left undrawn rather than deleted: the seeded subdivision and the
+## nineteen authored district masses (`_layer("minor-blocks")`) are still
+## real geometry that MAP.md §6 layer 5 names, and a future, quieter
+## treatment (a soft tone shift per district mass, no grid lines) may want
+## them. Calling this from `_draw()` is what actually draws squares; that
+## call is removed, not this function's ability to be rewritten.
 func _draw_blocks() -> void:
-	var land := _land_polygon()
-	if land.size() < 3:
-		return
-	var shadows := _water_shadows()
+	pass
 
-	# The bed the blocks are cut out of. Everything left uncovered reads as a
-	# decorative street, which is why it is lighter than the block faces.
-	draw_colored_polygon(land, MapStyle.STREET_BED)
 
-	var cell := maxf(CELL_BOARD * _scale, 7.0)
-	var gap := maxf(STREET_BOARD * _scale, 1.5)
-	var lift := maxf(1.5 * _scale, 1.0)
-	var edge_w := maxf(_w(MapStyle.BLOCK_W) * 0.6, 1.0)
-
-	# The nineteen authored masses do not tile the land; they mark where the
-	# denser fabric sits. Use them to pick the tone, not to bound the grid.
-	var masses: Array = []
-	for item in _layer("minor-blocks"):
-		var mp := _pts(item)
-		if mp.size() >= 3:
-			masses.append([mp, String(item.get("class", ""))])
-
-	var bb := _bounds(land)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 20030101
-
-	var row := 0
-	var y := bb.position.y
-	while y < bb.end.y:
-		var col := 0
-		var x := bb.position.x
-		while x < bb.end.x:
-			col += 1
-			var o := Vector2(
-				(rng.randf() - 0.5) * cell * JITTER * 2.0,
-				(rng.randf() - 0.5) * cell * JITTER * 2.0)
-			var r := Rect2(Vector2(x, y) + Vector2(gap, gap) * 0.5 + o,
-				Vector2(cell - gap, cell - gap))
-			x += cell
-			if r.size.x <= 1.0 or r.size.y <= 1.0:
-				continue
-
-			var c := r.get_center()
-			if not Geometry2D.is_point_in_polygon(c, land):
-				continue
-			var wet := false
-			for sh in shadows:
-				if Geometry2D.is_point_in_polygon(c, sh):
-					wet = true
-					break
-			if wet:
-				continue
-
-			# tone: inside an authored mass keeps that mass's class
-			var cls := "block" if (row + col) % 2 == 0 else "block2"
-			for m in masses:
-				if Geometry2D.is_point_in_polygon(c, m[0]):
-					cls = String(m[1])
-					break
-			var pair := MapStyle.block_colors(cls)
-
-			draw_rect(Rect2(r.position + Vector2(0, lift), r.size), Color(0, 0, 0, 0.32))
-			draw_rect(r, pair[0])
-			draw_rect(r, pair[1], false, edge_w)
-		row += 1
-		y += cell
+## 5. Real streets — actual OSM geometry, cross-referenced to real Kallio
+## rather than invented. Reported directly, 2026-08-28: "larger streets can
+## be visible on cross referenced to actual maps." `map/tools/streets-import.mjs`
+## classifies every real way by `highway=`; this draws it as texture BEHIND
+## the board's own locked major roads (`_draw_rail_and_roads()`, drawn right
+## after this) and the transit lines, so the hand-placed canonical geometry
+## stays the loudest thing on the board. Weight and opacity fall off from
+## major to minor rather than a hard cutoff, which is what makes "larger
+## streets visible" true without pretending the smaller ones are not real.
+func _draw_real_streets() -> void:
+	for item in _layer("streets-real"):
+		var pts := _pts(item)
+		if pts.size() < 2:
+			continue
+		var tier := String(item.get("tier", "minor"))
+		var col := MapStyle.STREET
+		var w := 1.0
+		# Reported directly, 2026-08-28: "add some bigger streets," then
+		# 2026-08-26: "closer, but do some more passes with bigger roads" —
+		# the first pass (4.8/2.6) still read as texture rather than roads
+		# next to the transit lines and the structural avenues. Pushed again;
+		# minor stays put, it is the fine grain the majors are meant to stand
+		# out of, not another thing to grow.
+		match tier:
+			"major":
+				col.a = 0.88
+				w = 6.6
+			"mid":
+				col.a = 0.66
+				w = 3.6
+			_:
+				col.a = 0.16
+				w = 1.0
+		draw_polyline(pts, col, _w(w), true)
 
 
 ## 4. Railway and major road cuts. Roads are a casing plus an inner strip, which
 ## is what gives the hand-cut grey ribbon its edge.
+## 4. The railway — real OSM alignment.
+##
+## This layer used to be the whole hand-drawn structural SVG: 5 `road`, 5
+## `roadInner`, 6 `street` and one `rail`/`railTie` pair. The roads went
+## 2026-08-26 ("the grey lines that are there from the squares that you
+## re-colored") because `streets-real` already draws the real network for the
+## same ground, and two road networks disagreeing in one picture is exactly
+## the tell that gets noticed.
+##
+## The railway was the last of it, and the last invented geometry anywhere on
+## this map. It survived one extra round because it is black rather than
+## grey, and because it happened to sit near where the real Helsinki main
+## line runs — which is precisely the sort of nearly-right that shows. It is
+## real OSM `railway=*` now, via `map/tools/railway-import.mjs`, clipped to
+## real land like the streets are. Yard and siding track is fetched and
+## carried but not drawn: 122 ways of depot scribble is texture, not
+## information, and the real streets already do texture.
+##
+## NO SLEEPER HATCHING. The old dark-bed-plus-dashed-tie treatment is what
+## makes a railway read as a railway when it is ONE schematic line. Applied
+## to 143 real parallel track runs it gave every track its own ladder and the
+## corridor came out as a zebra crossing — a caterpillar track laid across
+## Kallio. Real parallel alignments already say "railway" by being parallel;
+## the hatch was standing in for geometry we now actually have.
 func _draw_rail_and_roads() -> void:
-	var by_class: Dictionary = {}
-	for item in _layer("rail-and-roads"):
-		var c := String(item.get("class", ""))
-		if not by_class.has(c):
-			by_class[c] = []
-		by_class[c].append(item)
-
-	for item in by_class.get("road", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.ROAD, _w(MapStyle.ROAD_W), true)
-	for item in by_class.get("roadInner", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.ROAD_INNER, _w(MapStyle.ROAD_INNER_W), true)
-	for item in by_class.get("street", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.STREET, _w(MapStyle.STREET_W), true)
-	for item in by_class.get("rail", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			draw_polyline(pts, MapStyle.RAIL, _w(MapStyle.RAIL_W), true)
-	for item in by_class.get("railTie", []):
-		var pts := _pts(item)
-		if pts.size() >= 2:
-			_draw_dashed(pts, MapStyle.RAIL_TIE, _w(MapStyle.RAIL_TIE_W),
-				MapStyle.RAIL_TIE_DASH * _scale)
-
-
-## 6. Public transit corridors: tram solid, metro dashed.
-func _draw_public_transit() -> void:
-	for item in _layer("public-transit"):
-		var cls := String(item.get("class", ""))
+	for item in _layer("railway-real"):
 		var pts := _pts(item)
 		if pts.size() < 2:
 			continue
-		if cls == "tram":
-			draw_polyline(pts, MapStyle.TRAM, _w(MapStyle.TRAM_W), true)
-		elif cls == "metro":
-			_draw_dashed(pts, MapStyle.METRO, _w(MapStyle.METRO_W),
-				MapStyle.METRO_DASH * _scale)
+		var heavy := String(item.get("tier", "main")) == "main"
+		draw_polyline(pts, MapStyle.RAIL, _w(MapStyle.RAIL_W * (1.0 if heavy else 0.7)), true)
+
+
+## 6. Public transit — real HSL geometry, one hue per Kallio line
+## (`TRANSIT_LAYERS.md` §9, §10.5: seven services actually serve Kallio, real
+## GTFS shapes, shared corridors fanned apart). Reported directly, 2026-08-27:
+## "the map should look much closer to [HSL's own layered network map]... you
+## should have gotten the basics in a PR earlier" — the basics existed as
+## extracted data and offline plates (`map/kallio-rail-v1.json`,
+## `map/tools/master-plate.mjs`) but the board itself still drew three
+## hand-sketched polylines whose own number chips were never even wired up.
+## `godot/tools/build-map-geometry.mjs` now derives this layer from the same
+## real data and fanning algorithm the plates use; this just draws it.
+##
+## §9.3's Era I "printed" treatment: flat matte colour, a hard black keyline,
+## paper number chips, no glow — the bloom is reserved for Era II's live
+## layer, which this board is not.
+func _draw_public_transit() -> void:
+	for item in _layer("public-transit"):
+		if String(item.get("kind", "")) != "transit-line":
+			continue
+		var pts := _pts(item)
+		if pts.size() < 2:
+			continue
+		var col := Color(String(item.get("colour", "#999999")))
+		var heavy: bool = String(item.get("mode", "")) == "metro"
+		var w := _w(9.0 if heavy else 5.2)
+		draw_polyline(pts, MapStyle.TRANSIT_KEYLINE, w + _w(2.6), true)
+		draw_polyline(pts, col, w, true)
+
+	# Chips drawn in their own pass, over every line, so a badge is never
+	# hidden under a later line's keyline.
+	for item in _layer("public-transit"):
+		if String(item.get("kind", "")) == "transit-line":
+			_draw_transit_chips(item)
+
+
+func _draw_transit_chips(item: Dictionary) -> void:
+	var col := Color(String(item.get("colour", "#999999")))
+	var label := String(item.get("service", ""))
+	if label == "":
+		return
+	var raw: Array = item.get("chips", [])
+	if raw.is_empty():
+		return
+	# A CAPSULE, NOT A BOX. Reported directly, 2026-08-26: "The square frames
+	# still are there" — with the land finally rebuilt from the real coastline
+	# these bordered rectangles were the last hard-cornered thing left on the
+	# board, and 107 of them read as a rash of squares over the geography.
+	# The count is cut at the source (`chipsFor()` in build-map-geometry.mjs);
+	# this is the other half — a rounded badge, the shape a transit map
+	# actually uses, with no keyline to draw a square with.
+	var font_px := int(clampf(14.0 * _scale, 10.0, 14.0))
+	var ink := Color("#16191b") if col.get_luminance() > 0.45 else Color("#f0e9d8")
+	var padx := maxf(6.0 * _scale, 4.0)
+	for c in raw:
+		var pair: Array = c
+		var centre := _to_screen(Vector2(float(pair[0]), float(pair[1])))
+		var tw := _font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px).x
+		var r := float(font_px) * 0.5 + maxf(3.0 * _scale, 2.0)
+		var half := maxf(tw * 0.5 + padx - r, 0.0)
+		var a := centre - Vector2(half, 0.0)
+		var b := centre + Vector2(half, 0.0)
+		# a soft drop so the badge lifts off the line it sits on
+		draw_circle(a + Vector2(0, r * 0.12), r * 1.06, Color(0, 0, 0, 0.38))
+		draw_circle(b + Vector2(0, r * 0.12), r * 1.06, Color(0, 0, 0, 0.38))
+		if half > 0.0:
+			draw_rect(Rect2(a.x, centre.y - r * 1.06 + r * 0.12, half * 2.0, r * 2.12),
+				Color(0, 0, 0, 0.38))
+		draw_circle(a, r, col)
+		draw_circle(b, r, col)
+		if half > 0.0:
+			draw_rect(Rect2(a.x, centre.y - r, half * 2.0, r * 2.0), col)
+		draw_string(_font, Vector2(centre.x - tw * 0.5, centre.y + float(font_px) * 0.35),
+			label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, ink)
 
 
 ## 7. Ordinary people flow — "small neutral residents as paper pips". They drift
@@ -497,10 +540,13 @@ func _draw_anchor(a: Dictionary) -> void:
 	var pos: Vector2 = _layout[id]
 	var state: String = a.get("sliceState", "locked")
 	var live := _is_live_lead(id)
-	# BIGGER THAN IT WAS. A 17px pin could hold a dot and nothing else; the
-	# pictogram inside it was unreadable at real size, which is the whole point
-	# of having one. 28 is the smallest that carries a shape on a phone.
-	var r := maxf(28.0 * _scale, 15.0) * _device_gain()
+	# BIGGER THAN IT WAS, TWICE NOW. A 17px pin could hold a dot and nothing
+	# else; 28 made the pictogram readable but direct feedback 2026-08-26
+	# ("larger landmarks") still read them as small next to the thicker
+	# roads from the same pass. 34 is the anchor radius now; the touch
+	# target in _rebuild_layout() grew to match so the drawn size and the
+	# hit-tested size do not drift apart again.
+	var r := maxf(34.0 * _scale, 18.0)
 
 	draw_circle(pos + Vector2(0, maxf(3.0 * _scale, 1.0)), r * 1.05, Color(0, 0, 0, 0.45))
 	draw_circle(pos, r, MapStyle.NODE_OUTER)
@@ -537,6 +583,39 @@ func _draw_anchor(a: Dictionary) -> void:
 		draw_arc(pos, r * 1.32, 0, TAU, 40, MapStyle.SMALL_TEXT, _w(2.0), true)
 
 
+## 9. The frame.
+##
+## Real geography does not stop at the board. The coastline, the streets and
+## the transit lines all come from public OSM data covering a wider box than
+## the playable 1000x1000 board, and drawing them raw left tram lines and
+## roads apparently floating on open sea past the shoreline — which looked
+## exactly like the invented geometry this map spent several rounds getting
+## rid of, even though it was the honest data.
+##
+## So the board gets an actual edge: everything outside it is painted back
+## down to the deep water tone. The city visibly continues past the frame and
+## is cut by it, which is what a real city map does. Drawn after all
+## geography and before the pins, which sit well inside it.
+func _draw_edge_mask() -> void:
+	var tl := _to_screen(_mn)
+	var br := _to_screen(_mx)
+	# Solid. A translucent mask left ghost lines legible outside the frame,
+	# which is the confusing half of both worlds.
+	var col := MapStyle.WATER
+	if tl.y > 0.0:
+		draw_rect(Rect2(0, 0, size.x, tl.y), col)
+	if br.y < size.y:
+		draw_rect(Rect2(0, br.y, size.x, size.y - br.y), col)
+	if tl.x > 0.0:
+		draw_rect(Rect2(0, tl.y, tl.x, br.y - tl.y), col)
+	if br.x < size.x:
+		draw_rect(Rect2(br.x, tl.y, size.x - br.x, br.y - tl.y), col)
+	# NO drawn border. A hairline rectangle here was itself one more square
+	# frame on a map whose whole problem was square frames. The mask alone
+	# gives a clean edge for free: land stops against the water tone, and
+	# water blends into it invisibly, which is the softer and honester cut.
+
+
 ## 13. THE LEGEND.
 ##
 ## The map has four pin states and until now nothing said what any of them
@@ -551,7 +630,17 @@ func _draw_anchor(a: Dictionary) -> void:
 const LEGEND_FRACTION := 0.030      ## row height, of the shorter screen edge
 
 func _draw_legend() -> void:
-	var vp := size
+	# `size` can end up wider than what is actually on screen after a runtime
+	# resize — a real mismatch between this Control's own layout size and the
+	# true visible viewport that surfaced 2026-08-27 while chasing the
+	# oversized-label report: everything else in this file fits itself TO
+	# `size` (the relief map, the pins), so a slightly-too-generous size just
+	# reads as "very slightly more zoomed out than ideal" — but the legend is
+	# hard-anchored to the far corner, which is the one thing that turned the
+	# gap into a visibly clipped panel. Clamped against the true visible rect,
+	# in this control's own local space, rather than trusted to match it.
+	var visible := get_viewport_rect().size - global_position
+	var vp := Vector2(minf(size.x, visible.x), minf(size.y, visible.y))
 	if vp.x <= 0.0 or vp.y <= 0.0:
 		return
 	# Sized from the shorter edge so it stays a corner panel in both
@@ -618,17 +707,26 @@ func _draw_dashed_ring(c: Vector2, r: float, col: Color, width: float, dash: Vec
 
 # ── 12. labels on rough paper tabs ────────────────────────────────────────
 
+## Reported directly (2026-08-27): "map names are way too big... should
+## mainly appear when clicked... smaller text can be there as long as
+## visibility remains." Twelve-plus anchor names drawn every frame, at any
+## zoom, was the clutter half of that report — the oversized-font half was
+## `_device_gain()` double-scaling (see the removed function above); this is
+## the other half. A label now shows only for the SELECTED anchor (the
+## click) or a LIVE lead (the minimum needed so an actionable place is still
+## findable without clicking everything) — not for all eleven merely-`active`
+## anchors regardless of zoom. The rail `anchor_selected` opens is the "small
+## quick view menu" for whichever one is clicked; this tab is just the name.
 func _draw_labels() -> void:
-	var tight := _scale < 0.34
 	for a in ContentRegistry.anchors():
 		var id: String = a["id"]
 		var state: String = a.get("sliceState", "locked")
 		var live := _is_live_lead(id)
-		if tight and not (live or id == _selected or state == "active"):
+		if not (live or id == _selected):
 			continue
 
 		var text := String(a.get("label", id)).to_upper()
-		var font_px := int(clampf(19.0 * _scale, 10.0, 18.0) * _device_gain())
+		var font_px := int(clampf(19.0 * _scale, 10.0, 18.0))
 		var off: Array = a.get("labelOffset", [0, 0])
 		var centre: Vector2 = _layout[id] + Vector2(float(off[0]), float(off[1])) * _scale
 
@@ -658,7 +756,7 @@ func _draw_labels() -> void:
 		draw_line(pin, stalk, MapStyle.NODE_RIM, maxf(2.5 * _scale, 1.2), true)
 		draw_circle(stalk, maxf(3.0 * _scale, 1.6), MapStyle.NODE_RIM)
 
-		_torn_tab(box, bg, edge, id)
+		_label_tab(box, bg, edge)
 		draw_string(_font, box.position + pad + Vector2(0, float(font_px) * 0.82), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, fg)
 
@@ -666,40 +764,21 @@ func _draw_labels() -> void:
 ## A label tab as a piece of torn card rather than a rectangle.
 ##
 ## MAP.md §6 asks for "sparse marker names on separate rough paper tabs", and
-## `art-library/ux-concepts/README.md` settles that cardstock is the interface.
-## A `draw_rect` is neither — it is the shape a renderer makes when nobody has
-## decided anything.
+## A label tab: a plain, properly square-cornered card.
 ##
-## The tear is seeded on the anchor id, so a tab looks the same every frame and
-## on every device. A tab that reshuffled its own edges each redraw would be
-## worse than a clean rectangle.
-func _torn_tab(box: Rect2, bg: Color, edge: Color, seed_id: String) -> void:
-	var h: int = abs(seed_id.hash())
-	var steps: int = int(clampf(box.size.x / maxf(7.0 * _scale, 5.0), 3.0, 14.0))
-	# _device_gain, or the tear vanishes on the device it matters on: a phone
-	# lays the map out in ~1280 design units, so an un-gained 2px bite is a
-	# third of a real pixel there and the tab is a rectangle again.
-	var bite: float = maxf(3.4 * _scale, 1.8) * _device_gain()
-
-	var top := PackedVector2Array()
-	var bottom := PackedVector2Array()
-	for i in range(steps + 1):
-		var t: float = float(i) / float(steps)
-		var x: float = box.position.x + box.size.x * t
-		var a: float = float((h >> (i % 12)) & 3) / 3.0
-		var b: float = float((h >> ((i + 5) % 12)) & 3) / 3.0
-		top.append(Vector2(x, box.position.y + a * bite))
-		bottom.append(Vector2(box.end.x - box.size.x * t, box.end.y - b * bite))
-
-	var poly := top + bottom
-	var shadow := PackedVector2Array()
-	for pt in poly:
-		shadow.append(pt + Vector2(0, maxf(2.0 * _scale, 1.0)))
-	draw_colored_polygon(shadow, Color(0, 0, 0, 0.4))
-	draw_colored_polygon(poly, bg)
-	# The fibre edge: a lighter line along the tear, which is what makes card
-	# read as thick rather than as a cut-out silhouette.
-	draw_polyline(poly + PackedVector2Array([poly[0]]), edge, maxf(2.0 * _scale, 1.0), true)
+## Reported directly, 2026-08-26: "the Piritori text box is wavy, not like a
+## proper rectangle." It was — deliberately, as a torn-cardstock effect whose
+## edge was jittered from a hash of the anchor id. On a phone-sized label that
+## reads as a rendering fault rather than as paper, and it fought the one
+## thing a name tab has to do, which is be legible instantly.
+##
+## Straight edges, one soft drop shadow for lift, one edge line so the card
+## reads as thick rather than as a hole cut in the map.
+func _label_tab(box: Rect2, bg: Color, edge: Color) -> void:
+	var lift := maxf(2.0 * _scale, 1.0)
+	draw_rect(Rect2(box.position + Vector2(0, lift), box.size), Color(0, 0, 0, 0.4))
+	draw_rect(box, bg)
+	draw_rect(box, edge, false, maxf(1.5 * _scale, 1.0))
 
 
 func _draw_placeholder_note() -> void:

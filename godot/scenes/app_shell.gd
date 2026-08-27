@@ -16,6 +16,17 @@ const MIN_TARGET := 48.0   ## UX_SPEC: 44 is the floor, 48 preferred
 
 var mode: Mode = Mode.CITY
 
+## The title reads "PIRITORI → EDEN" only on City, the de facto home/start
+## screen (owner ruling, 2026-08-26: no splash screen exists, and the title
+## does not need to compete with place/stats on every other screen). Crew and
+## Missions are not their own Mode value — see the enum above — so they keep
+## reading as City for this purpose, which matches them being City sub-panels
+## rather than independent modes in UX_SPEC.md §3.1.
+func _set_mode(m: Mode) -> void:
+	mode = m
+	if _title:
+		_title.visible = (m == Mode.CITY)
+
 var _root: VBoxContainer
 var _status: PanelContainer
 var _status_line2: Label
@@ -34,6 +45,7 @@ var _rail: PanelContainer
 var _rail_box: VBoxContainer
 var _city_map: Control
 var _is_portrait := false
+var _stage_has_speaker := false   ## drives the portrait stage/rail split
 var _hud: CanvasLayer
 
 
@@ -48,8 +60,20 @@ func _ready() -> void:
 	theme = PiritoriFonts.theme()
 
 	_build()
-	get_tree().root.size_changed.connect(_reflow)
+	# ORDER MATTERS. `_reflow()` sizes everything off `get_viewport_rect()`,
+	# which is itself downstream of `content_scale_factor` — Godot calls
+	# signal listeners in connection order, so with `_reflow` connected
+	# first, every resize laid the shell out against the PREVIOUS
+	# content_scale_factor, one step behind the one `_apply_ui_scale` was
+	# about to set. Invisible on a single resize at boot; visible the moment
+	# anything resizes twice in a session (rotating a phone, or this
+	# session's own capture harness switching shots) — the city map's own
+	# Control ended up 480 design units wide against a viewport that had
+	# already become 410, and a legend anchored to ITS right edge drew
+	# 70 units past the real one (2026-08-27, "map names are way too big"
+	# investigation surfaced this as a second, independent bug).
 	get_tree().root.size_changed.connect(_apply_ui_scale)
+	get_tree().root.size_changed.connect(_reflow)
 	_apply_ui_scale()
 	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
@@ -254,10 +278,17 @@ func _build() -> void:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_rail_box = VBoxContainer.new()
 	_rail_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_rail_box.add_theme_constant_override("separation", 8)
+	# Reported directly, 2026-08-26: "Text options below should be a bit more
+	# condensed and hopefully no scrolling too much." The rows themselves
+	# cannot shrink — they are 44px touch targets and that floor is a gate —
+	# so the space comes out of the gaps between them and the rail's own
+	# padding, which is where it was going.
+	_rail_box.add_theme_constant_override("separation", 4)
 	var rpad := MarginContainer.new()
-	for side in ["left", "right", "top", "bottom"]:
-		rpad.add_theme_constant_override("margin_" + side, 14)
+	rpad.add_theme_constant_override("margin_left", 12)
+	rpad.add_theme_constant_override("margin_right", 12)
+	rpad.add_theme_constant_override("margin_top", 8)
+	rpad.add_theme_constant_override("margin_bottom", 8)
 	# A ScrollContainer gives its child the child's MINIMUM width unless the
 	# child is told to expand. Without this the rail collapsed to one character
 	# per line as soon as a label was long enough to wrap.
@@ -276,12 +307,19 @@ func _build() -> void:
 	bar.alignment = BoxContainer.ALIGNMENT_CENTER
 	_command_bar.add_child(bar)
 
+	# UX_SPEC.md §3.1 ("The five modes") and §3.3 ("Navigation model"): "these
+	# are full interaction modes, not five permanent bottom tabs" — the
+	# planning dock is meant to be four targets, and END DAY is explicitly
+	# "beside the clock", not a tab (moved to the header, see
+	# `_refresh_status()`). CITY / CREW / MESSAGES / MISSIONS is the minimal
+	# spec-conformant four; folding Crew and Missions into a real Ledger
+	# mode and badging missions on the map itself (§6.6.2) is bigger,
+	# separate work — see QUEUE.md.
 	for spec in [
-		["cmd.route", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
+		["cmd.city", PiritoriIcon.Kind.ROUTE, MapStyle.ROUTE, _show_city],
 		["cmd.crew", PiritoriIcon.Kind.CREW, MapStyle.GOODS, _show_crew],
+		["cmd.messages", PiritoriIcon.Kind.PRESSURE, MapStyle.SUB_TEXT, _show_news_list],
 		["cmd.missions", PiritoriIcon.Kind.MISSION, MapStyle.METRO, _show_missions],
-		["cmd.news", PiritoriIcon.Kind.PRESSURE, MapStyle.SUB_TEXT, _show_news_list],
-		["cmd.end_day", PiritoriIcon.Kind.END_DAY, MapStyle.SMALL_TEXT, _end_block],
 	]:
 		var btn := _command(tr(spec[0]), spec[1], spec[2], spec[3])
 		btn.set_meta("key", spec[0])
@@ -350,23 +388,95 @@ func _size_header(vp: Vector2) -> void:
 		_menu_button.add_theme_font_size_override("font_size", int(m * 0.52))
 
 
+## Separation between commands and the bar's own padding, needed to work out
+## what width is actually available to divide between them.
+const COMMAND_BAR_SEPARATION := 8.0
+const COMMAND_BAR_PADDING := 32.0
+
 func _size_commands(vp: Vector2) -> void:
 	# Portrait is the case that was broken. Landscape has height to spare and a
 	# bar taking a twelfth of it would be a cliff, so it keeps a modest share.
 	var share := COMMAND_BAR_FRACTION if vp.y > vp.x else COMMAND_BAR_FRACTION * 0.75
 	var h := clampf(vp.y * share, MIN_TARGET, 320.0)
+
+	# THE WIDTH MUST COME FROM THE SCREEN, NOT FROM A CONSTANT.
+	#
+	# This used to pin every command to at least 96 design units. Five of them
+	# plus separation is a 665-unit minimum, and a phone at the shipped UI scale
+	# has about 410 units to give — so the bar forced the WHOLE SHELL to 665,
+	# and every screen above it was silently cut off at the right edge. It
+	# looked like a text-wrapping bug in the encounter copy; it was the command
+	# bar dragging the column wider than the window.
+	#
+	# A minimum wider than the screen is not a minimum, it is a promise the
+	# layout cannot keep. So the floor is what fits, and MIN_TARGET keeps the
+	# touch target honest in the other axis.
+	var count := 0
+	for b in _commands:
+		if b != null:
+			count += 1
+	var per := 96.0
+	if count > 0:
+		var gaps := COMMAND_BAR_SEPARATION * float(count - 1) + COMMAND_BAR_PADDING
+		per = minf(maxf(h * 1.6, 96.0), maxf((vp.x - gaps) / float(count), 44.0))
+
+	# Below this the words stop fitting beside the icon and would themselves
+	# force the bar wide again, so they are dropped and the icon carries it.
+	var icons_only := per < 96.0
+
+	# MEASURE THE WORDS, DO NOT ASSUME THEM.
+	#
+	# The label size used to be h * COMMAND_LABEL_FRACTION with a floor and no
+	# ceiling. On a tall phone the bar is tall, so that produced a very large
+	# font, and a button whose CONTENT is wider than its `custom_minimum_size`
+	# simply grows — four of them then overflowed the screen and MISSIONS was
+	# cut off the right edge entirely. `per` was never the real width.
+	#
+	# So the type is fitted to the space instead: the largest size at which the
+	# longest command still sits beside its icon within `per`, chosen once and
+	# shared so the bar stays even. This also stops the same bug happening
+	# again in Finnish or Japanese, where the words are not the same length.
+	var icon_w := h * COMMAND_ICON_FRACTION
+	var room := per - icon_w - COMMAND_BAR_SEPARATION - 14.0
+	var size_px := int(maxf(h * COMMAND_LABEL_FRACTION, 13.0))
+	if not icons_only and room > 0.0:
+		var font: Font = null
+		for b in _commands:
+			if b == null:
+				continue
+			var l = b.get_meta("label", null)
+			if l != null and l is Label:
+				font = l.get_theme_font("font")
+				break
+		if font != null:
+			while size_px > 11:
+				var widest := 0.0
+				for b in _commands:
+					if b == null:
+						continue
+					var l2 = b.get_meta("label", null)
+					if l2 == null or not (l2 is Label):
+						continue
+					widest = maxf(widest, font.get_string_size(
+						l2.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x)
+				if widest <= room:
+					break
+				size_px -= 1
+			# Still too wide at the floor: the word cannot share the button.
+			if size_px <= 11:
+				icons_only = true
+
 	for b in _commands:
 		if b == null:
 			continue
-		b.custom_minimum_size = Vector2(maxf(h * 1.6, 96.0), h)
+		b.custom_minimum_size = Vector2(per, h)
 		var icon = b.get_meta("icon", null)
 		if icon != null:
-			icon.custom_minimum_size = Vector2(h * COMMAND_ICON_FRACTION,
-				h * COMMAND_ICON_FRACTION)
+			icon.custom_minimum_size = Vector2(icon_w, icon_w)
 		var label = b.get_meta("label", null)
 		if label != null:
-			label.add_theme_font_size_override("font_size",
-				int(maxf(h * COMMAND_LABEL_FRACTION, 13.0)))
+			label.visible = not icons_only
+			label.add_theme_font_size_override("font_size", size_px)
 
 
 ## Landscape: world beside a rail. Portrait: world above a lower sheet.
@@ -407,7 +517,18 @@ func _reflow() -> void:
 
 func _apply_rail_size(vp: Vector2, portrait: bool) -> void:
 	if portrait:
-		_rail.custom_minimum_size = Vector2(0, maxf(vp.y * 0.34, 190.0))
+		# Reported directly, 2026-08-26: "We need to see the small characters
+		# and their faces close up screens when they talk, so that area needs a
+		# bit more room on the vertical format."
+		#
+		# The operative words are WHEN THEY TALK. A flat cut to the rail bought
+		# the stage its room by pushing ACT below the fold on every screen,
+		# including the ones with nobody standing in them — trading one half of
+		# the same request for the other. So the split follows the scene: when
+		# a speaker is actually mounted, the stage takes the room and the list
+		# scrolls; when the stage is only a place, the list keeps it.
+		var share := 0.25 if _stage_has_speaker else 0.33
+		_rail.custom_minimum_size = Vector2(0, maxf(vp.y * share, 168.0))
 		_rail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_rail.size_flags_vertical = Control.SIZE_SHRINK_END
 	else:
@@ -428,7 +549,14 @@ func _apply_chrome(vp: Vector2) -> void:
 	# the window, not the viewport.
 	var win := get_window()
 	var real_w := float(win.size.x) if win != null else vp.x
-	var narrow := real_w < 620.0
+	# PORTRAIT IS ALWAYS NARROW. Reported 2026-08-27 from a Pixel screenshot:
+	# the status chips ran off the right edge, half a chip visible. That phone
+	# reports 1079 physical pixels, so `real_w < 620` said "wide" and the shell
+	# laid out desktop chrome on a screen that is, in the hand, narrow. A raw
+	# pixel count has not meant physical width since phones got dense screens.
+	# Whether the display is taller than it is wide does mean it, on every
+	# device, with no DPI guesswork.
+	var narrow := real_w < 620.0 or vp.y > vp.x
 
 	var want: Node = _head_row2 if narrow else _head_row
 	if _stats.get_parent() != want:
@@ -508,6 +636,7 @@ func _refresh_status() -> void:
 	# Each chip is icon + number, and every icon means one thing only.
 	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
 		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()])
+	_add_end_day_button()
 	_add_stat(PiritoriIcon.Kind.CREW, MapStyle.FLOW, "%d" % _crew_known())
 	var packs := 0
 	for v in GameState.stock.values():
@@ -515,6 +644,28 @@ func _refresh_status() -> void:
 	_add_stat(PiritoriIcon.Kind.STOCK, MapStyle.GOODS, "%d" % packs)
 	_add_stat(PiritoriIcon.Kind.MISSION, MapStyle.METRO, "%d" % _live_leads())
 	_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, "€ %s" % _thousands(GameState.cash_eur))
+
+
+## UX_SPEC.md §3.3 ("Navigation model"): "`WAIT / CLOSE BLOCK` is an explicit
+## City action beside the clock, not a primary navigation tab." The clock is
+## the day/block chip just added above; this is the separate control that
+## sits next to it, replacing the old fifth command-bar button.
+func _add_end_day_button() -> void:
+	var btn := Button.new()
+	btn.text = tr("cmd.end_day")
+	# UX_SPEC §3.3 puts this beside the clock rather than in a tab, so it is
+	# chrome and takes its size from the screen like the chips it sits with.
+	var s := _text_scale()
+	btn.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, MIN_TARGET * s * 0.8))
+	btn.focus_mode = Control.FOCUS_ALL
+	btn.add_theme_font_size_override("font_size", int(round(13.0 * s)))
+	var sb := PiritoriChrome.button(MapStyle.SMALL_TEXT)
+	var sb_hot := PiritoriChrome.button(MapStyle.SMALL_TEXT, true)
+	btn.add_theme_stylebox_override("normal", sb)
+	btn.add_theme_stylebox_override("hover", sb_hot)
+	btn.add_theme_stylebox_override("pressed", sb_hot)
+	btn.pressed.connect(_end_block)
+	_stats.add_child(btn)
 
 
 func _block_word() -> String:
@@ -575,7 +726,8 @@ func _add_stat(kind: int, col: Color, text: String) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", int(maxf(icon_px * 0.35, 6.0)))
 	row.add_child(PiritoriIcon.new(kind, col, icon_px))
-	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT)
+	# Already sized from the screen two lines up — must not be scaled again.
+	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT, false)
 	row.add_child(l)
 	_stats.add_child(row)
 
@@ -649,8 +801,9 @@ func _clear_rail() -> void:
 
 
 func _show_city() -> void:
-	mode = Mode.CITY
+	_set_mode(Mode.CITY)
 	_open_encounter = ""
+	_stage_has_speaker = false
 	if _rail:
 		_rail.visible = true
 	# Era I news is a SCHEDULED broadcast: it arrives, it is not browsed to.
@@ -734,8 +887,11 @@ func _build_city_rail(anchor_id: String) -> void:
 
 
 func _show_location(encounter_id: String) -> void:
-	mode = Mode.LOCATION
+	_set_mode(Mode.LOCATION)
 	_open_encounter = encounter_id
+	# Cleared per scene, not per session: a face in the LAST location must not
+	# keep shrinking the list in the next one, which has nobody in it.
+	_stage_has_speaker = false
 	_clear_world()
 	var stage := preload("res://scenes/location_stage.gd").new()
 	stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -763,43 +919,104 @@ func _show_location(encounter_id: String) -> void:
 const LOCATION_SPEAKER_SIZE := Vector2(240.0, 300.0)
 const LOCATION_SPEAKER_MARGIN := 12.0
 
-func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
-	var enc := ContentRegistry.encounter(encounter_id)
-	if enc.is_empty():
-		return
+## WHERE THE SPEAKER STANDS, as fractions of the stage rather than pixels.
+##
+## STAGE_SPEC 6.3 requires the live figure to stand where the painted one stood,
+## behind the same counter. Bottom-left corner was fine while the room still had
+## a painted Toko in it and the 3D one was a demo; with the empty bar it would
+## put him on the customer's side of his own counter.
+##
+## MEASURED, not chosen. The gold mask in
+## toko-slomo-noodles-prototype-v02.webp is a single colour blob at x 641-757,
+## y 139-264 of 1536x864 - so his head centres at 0.449 across and 0.196 down,
+## and is 0.145 of frame height. These place the presenter box so its rendered
+## head lands there.
+##
+## Per the brief these are "starting points to be judged on a screen, not
+## measurements" - the capture is what settles them.
+## THE COUNTER CROPS HIM, BECAUSE IT CANNOT OCCLUDE HIM.
+##
+## In the plate Toko stands BEHIND the counter. A live figure composited over a
+## flat painting is always in front of everything in it, so there is no depth to
+## put him behind - and a full standing figure reads as a man standing ON the
+## customer's side of his own bar.
+##
+## So the presenter's box ENDS at the counter's top edge, measured in the empty
+## room at y=409 of 864, and the viewport crops him there. From the front that
+## is indistinguishable from the counter passing in front of him, which is the
+## whole trick, and it costs nothing.
+const COUNTER_SPEAKER_CENTRE_X := 0.449
+const COUNTER_SPEAKER_TOP := 0.0
+const COUNTER_SPEAKER_BOTTOM := 0.473
+const COUNTER_SPEAKER_WIDTH := 0.46
 
-	var speaker = preload("res://scenes/presenter_3d.gd").new()
+## Which participant in this encounter has a 3D model, if any. Shared by the
+## stage's own big speaker and the rail's small medallion, so "who is in the
+## room" is answered once rather than re-derived twice and risking the two
+## disagreeing.
+const _Presenter3D := preload("res://scenes/presenter_3d.gd")
 
-	var who := ""
+func _encounter_speaker_id(enc: Dictionary) -> String:
 	for p in enc.get("participants", []):
 		var pid := String(p)
 		# The player is in every scene and is not somebody you look at.
 		if pid == "aatami":
 			continue
-		if speaker.SPEAKERS.has(pid):
-			who = pid
-			break
+		if _Presenter3D.SPEAKERS.has(pid):
+			return pid
+	return ""
+
+
+func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
+	var enc := ContentRegistry.encounter(encounter_id)
+	if enc.is_empty():
+		return
+
+	var speaker = _Presenter3D.new()
+
+	var who := _encounter_speaker_id(enc)
 	if who == "":
 		speaker.free()
 		return
 
 	speaker.speaker_id = who
-	speaker.framing = speaker.Framing.LOCATION
+	speaker.framing = speaker.Framing.COUNTER
 	if not speaker.available():
 		speaker.free()
 		return
-	speaker.custom_minimum_size = LOCATION_SPEAKER_SIZE
-	speaker.size = LOCATION_SPEAKER_SIZE
+	# The portrait split reads this: a scene with a face in it gets more of the
+	# screen than a scene that is only a place. Set before the reflow below.
+	_stage_has_speaker = true
+	if _is_portrait:
+		_apply_rail_size(get_viewport_rect().size, true)
 	speaker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Bottom left, standing on the floor of the scene rather than floating in the
-	# middle of it — the location art behind is the room, and a person belongs at
-	# its near edge.
-	speaker.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	speaker.offset_left = LOCATION_SPEAKER_MARGIN
-	speaker.offset_top = -(LOCATION_SPEAKER_SIZE.y + LOCATION_SPEAKER_MARGIN)
-	speaker.offset_right = LOCATION_SPEAKER_SIZE.x + LOCATION_SPEAKER_MARGIN
-	speaker.offset_bottom = -LOCATION_SPEAKER_MARGIN
+	# Anchored to the stage in fractions so the figure keeps its place in the
+	# room at every screen size, instead of being pinned a fixed number of
+	# pixels from a corner.
+	speaker.set_anchors_preset(Control.PRESET_FULL_RECT)
+	speaker.anchor_left = COUNTER_SPEAKER_CENTRE_X - COUNTER_SPEAKER_WIDTH * 0.5
+	speaker.anchor_right = COUNTER_SPEAKER_CENTRE_X + COUNTER_SPEAKER_WIDTH * 0.5
+	speaker.anchor_top = COUNTER_SPEAKER_TOP
+	# ASK THE STAGE, do not assume. The art is drawn cover-and-cropped, so the
+	# counter's line in the file is not its line on screen — and it moves with
+	# the window. The stage owns that transform.
+	var bottom := COUNTER_SPEAKER_BOTTOM
+	if stage.has_method("texture_y_to_local"):
+		bottom = stage.texture_y_to_local(COUNTER_SPEAKER_BOTTOM)
+	speaker.anchor_bottom = bottom
+	speaker.offset_left = 0.0
+	speaker.offset_right = 0.0
+	speaker.offset_top = 0.0
+	speaker.offset_bottom = 0.0
 	stage.add_child(speaker)
+	# BEHIND THE TEXT LAYER, not in front of it. `location_stage.gd` builds its
+	# copy pad in `_ready()`, before this ever runs, so a plain `add_child`
+	# stacks the speaker on top of it — invisible while the copy was a bare
+	# label floating over dim art, but the dialogue card (concept A,
+	# 2026-08-24) is opaque kraft, and Toko's own head stood in front of his
+	# own line. Text is always the top layer over a body, the way a caption
+	# sits over an actor and not the other way round.
+	stage.move_child(speaker, 0)
 
 
 func _build_location_rail(encounter_id: String, stage: Control) -> void:
@@ -811,11 +1028,15 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 	if GameState.is_resolved(encounter_id):
 		_rail_box.add_child(_make_label(tr("ui.already_resolved"), 15, PiritoriPalette.TEXT_DIM))
 	else:
-		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location)
+		# LOOK / TALK / USE / LEAVE grammar (handoff §5, Location), dressed as
+		# concept A's torn-card action row: an eye for LOOK, a blade for ACT, a
+		# door for LEAVE — the same three glyphs the owner approved, applied to
+		# however many real inspectables and choices an encounter actually has
+		# rather than a fixed three.
 		_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
 		for item in enc.get("inspectables", []):
-			var lb := _make_button("◉ " + String(item), PiritoriPalette.INTEL_MUSTARD)
 			var txt := String(item)
+			var lb := _make_icon_button(txt, PiritoriIcon.Kind.INFO, PiritoriChrome.ACCENT_LOOK)
 			lb.pressed.connect(func(): stage.show_inspect(txt))
 			_rail_box.add_child(lb)
 
@@ -824,9 +1045,8 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 
 		for choice in enc.get("choices", []):
 			var can := GameState.meets_all(choice.get("requirements", []))
-			var b := _make_button(String(choice.get("label", choice["id"])),
-				PiritoriPalette.PLAYER_CYAN if can else PiritoriPalette.LOCKED_GREY)
-			b.disabled = not can
+			var b := _make_icon_button(String(choice.get("label", choice["id"])),
+				PiritoriIcon.Kind.RISK, PiritoriChrome.ACCENT_ACT, can)
 			# Commitment shows its forecast first (handoff §5, Market and mission)
 			var forecast := String(choice.get("forecast", ""))
 			if forecast != "":
@@ -844,7 +1064,7 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 				_rail_box.add_child(req)
 
 	_rail_box.add_child(_separator())
-	var back := _make_button(tr("ui.leave_to_map"), PiritoriPalette.TEXT_DIM)
+	var back := _make_icon_button(tr("ui.leave_to_map"), PiritoriIcon.Kind.LEAVE, PiritoriChrome.ACCENT_LEAVE)
 	back.pressed.connect(_show_city)
 	_rail_box.add_child(back)
 
@@ -855,7 +1075,7 @@ func _commit_choice(encounter_id: String, choice_id: String) -> void:
 
 
 func _show_market() -> void:
-	mode = Mode.MARKET
+	_set_mode(Mode.MARKET)
 	_clear_world()
 	var ledger := preload("res://scenes/market_ledger.gd").new()
 	ledger.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1287,7 +1507,7 @@ func _battle_format(battle_id: String) -> String:
 
 ## Enter a formation battle. The campaign model is untouched until it resolves.
 func _show_battle(battle_id: String) -> void:
-	mode = Mode.BATTLE
+	_set_mode(Mode.BATTLE)
 	_clear_world()
 	_clear_rail()
 	var crew: Array = []
@@ -1488,10 +1708,10 @@ func _status_key(status: int) -> String:
 ## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its
 ## scheduled day and can be re-watched from here afterwards.
 func _show_news_list() -> void:
-	mode = Mode.NEWS
+	_set_mode(Mode.NEWS)
 	_clear_rail()
 	_rail.visible = true
-	_rail_box.add_child(_make_label(tr("cmd.news"), 19, MapStyle.TITLE_TEXT))
+	_rail_box.add_child(_make_label(tr("cmd.messages"), 19, MapStyle.TITLE_TEXT))
 
 	var any := false
 	for n in ContentRegistry.slice.get("news", []):
@@ -1519,7 +1739,7 @@ func _show_news_list() -> void:
 ## Play a bulletin full-screen. The television owns the world window; the rail
 ## is hidden so nothing competes with it.
 func _play_news(nid: String) -> void:
-	mode = Mode.NEWS
+	_set_mode(Mode.NEWS)
 	_clear_world()
 	var scene := preload("res://scenes/news_event.gd").new()
 	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1548,10 +1768,52 @@ func _end_block() -> void:
 
 # ── small builders ─────────────────────────────────────────────────────────
 
-func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) -> Label:
+## Every label in the shell goes through here, so this is where body text gets
+## its one honest size.
+##
+## Reported 2026-08-27 from a Pixel: "non-optimized UI edges, sizes." The
+## header and the command bar already scaled themselves with the screen; the
+## rail did not. Its labels were passed literal 12/13/15 pixel sizes by
+## seventy-odd call sites, which is a readable size on a 1280-wide desktop
+## window and a thread on a 1079-wide phone — the text ended up a third the
+## height of the words in the dock directly beneath it.
+##
+## The base numbers stay meaningful as a RATIO to each other (12 is a caption,
+## 15 is a heading), and this scales the lot against the viewport. Clamped at
+## both ends: never shrink below the authored size, never inflate a desktop
+## window where the authored size was already right.
+func _text_scale() -> float:
+	var vp := get_viewport_rect().size
+	if vp.x <= 0.0:
+		return 1.0
+	# Portrait scales on width, which is the axis the reading column is cut
+	# from; landscape has width to spare and would over-inflate on it.
+	# LANDSCAPE DOES NOT SCALE. This used to fall back to the viewport HEIGHT
+	# in landscape, so a perfectly ordinary 1280x720 desktop window scaled its
+	# type up by 1.67 — inflating a layout that was already correct, and in the
+	# battle console pushing it 8px off the bottom of the viewport. The reason
+	# to scale at all is a dense portrait phone; a landscape window is the size
+	# the authored numbers were chosen for.
+	if vp.x >= vp.y:
+		return 1.0
+	var basis := vp.x
+	return clampf(basis / 430.0, 1.0, 2.2)
+
+
+## `scale` is opt-OUT, and opting out matters. A caller that has ALREADY worked
+## its size out from the viewport must pass `false`, or the two multiply: the
+## status chips compute up to 60px from the screen, `_text_scale()` multiplies
+## by up to 2.2, and the chips came out at 130px and shoved the whole header
+## past the right edge of the window. This repo has paid for that lesson once
+## before — `_device_gain()` did the same double-scaling to the map labels and
+## was removed for it. Screen-derived sizes are already scaled. Authored ones
+## are not.
+func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT,
+		scale: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", size_px)
+	var px := float(size_px) * (_text_scale() if scale else 1.0)
+	l.add_theme_font_size_override("font_size", int(round(px)))
 	l.add_theme_color_override("font_color", col)
 	return l
 
@@ -1559,8 +1821,13 @@ func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) 
 func _make_button(text: String, accent: Color) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(0, MIN_TARGET)
-	b.add_theme_font_size_override("font_size", 15)
+	var s := _text_scale()
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, MIN_TARGET * s * 0.8))
+	# Same reasoning as _make_label: 15px is a readable authored size on a
+	# desktop window and a thread on a phone. These are the rail's actionable
+	# rows — the ones a player is meant to press — and they were rendering
+	# smaller than the labels above them.
+	b.add_theme_font_size_override("font_size", int(round(15.0 * s)))
 	b.add_theme_color_override("font_color", accent)
 	b.add_theme_color_override("font_disabled_color", PiritoriPalette.LOCKED_GREY)
 	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1568,9 +1835,89 @@ func _make_button(text: String, accent: Color) -> Button:
 	return b
 
 
+## A torn dark-card button with a vector icon and a coloured label — concept
+## A's action row (owner-approved 2026-08-24), applied to the location
+## screen's LOOK / ACT / LEAVE buttons. Kept separate from `_make_button`
+## rather than changing it in place: that helper is shared by the city rail
+## and the market ledger too, and this task is the location screen only.
+func _make_icon_button(text: String, icon_kind: int, accent: Color,
+		enabled: bool = true) -> Button:
+	# CARTON, NOT A DARK CARD. `art-library/ux-concepts/README.md` settles the
+	# direction — "cardstock is the interface, not the world" — and the
+	# narration plate directly above these rows already proves it reads at
+	# phone size. These stayed dark cards with a hairline accent outline, which
+	# sitting under that plate looked like the wireframe it replaced.
+	#
+	# The accent moves OFF the text and onto a spine down the left edge, the
+	# way the concept sheet rules its name plates. Ink stays near-black on
+	# cream, which is legible in a way violet-on-charcoal never was, and the
+	# category is still carried by shape and colour without colour being the
+	# only carrier (ART_BIBLE §4.2).
+	var tint := accent if enabled else PiritoriPalette.LOCKED_GREY
+	var b := Button.new()
+	b.text = ""
+	# The floor has to grow with the type. Left at a flat 44 the scaled label
+	# overflowed its own card and the descenders were sliced off along the
+	# bottom edge — a touch target that is tall enough to press but too short
+	# to read is not finished.
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, 44.0 * _text_scale()))
+	b.disabled = not enabled
+	b.focus_mode = Control.FOCUS_ALL
+	var sb := PiritoriChrome.plate_button(tint)
+	var sb_hot := PiritoriChrome.plate_button(tint, true)
+	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("hover", sb_hot)
+	b.add_theme_stylebox_override("pressed", sb_hot)
+	b.add_theme_stylebox_override("disabled", sb)
+	b.add_theme_stylebox_override("focus", sb_hot)
+
+	var ink := PiritoriChrome.plate_ink()
+	if not enabled:
+		ink = ink.lerp(PiritoriChrome.CARTON, 0.45)
+
+	var pad := MarginContainer.new()
+	pad.set_anchors_preset(Control.PRESET_FULL_RECT)
+	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.add_theme_constant_override("margin_left", 12)
+	pad.add_theme_constant_override("margin_right", 12)
+	pad.add_theme_constant_override("margin_top", 8)
+	pad.add_theme_constant_override("margin_bottom", 8)
+	b.add_child(pad)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.add_child(row)
+
+	# the spine: the accent as a printed rule down the card, not as text colour
+	var spine := ColorRect.new()
+	spine.color = tint
+	spine.custom_minimum_size = Vector2(4, 0)
+	spine.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	spine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(spine)
+
+	var icon := PiritoriIcon.new(icon_kind, tint, 22.0 * _text_scale())
+	row.add_child(icon)
+
+	var lbl := Label.new()
+	lbl.text = text
+	# Scaled like the rest of the body text. Left at a fixed 14 these came out
+	# SMALLER than the forecast line printed underneath each one — the thing
+	# you press was quieter than the note about it.
+	lbl.add_theme_font_size_override("font_size", int(round(14.0 * _text_scale())))
+	lbl.add_theme_color_override("font_color", ink)
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(lbl)
+
+	return b
+
+
 func _separator() -> Control:
 	var s := HSeparator.new()
-	s.custom_minimum_size = Vector2(0, 8)
+	s.custom_minimum_size = Vector2(0, 3)
 	return s
 
 

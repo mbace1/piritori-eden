@@ -392,15 +392,42 @@ Auto-rigging fails on a stick figure.
 
 ### Phase 0 — make it testable from a phone *(prerequisite)*
 
-`CLAUDE.md` rules 3 and 6 are currently unsatisfiable: nothing reads a URL
-parameter, so reaching a battle means playing a dozen blocks from cold. Every
-phase below is iterated by **feel**, and feel cannot be reviewed through a
-twelve-block click path.
+**BUILT — awaiting the owner's own check on a phone.** *(status corrected
+2026-08-27; the paragraph below described the state before it was built and
+was left stale for some time. Flagged rather than marked passed, because the
+gate says "on a phone" and that is not a thing this repo's tooling can do for
+you.)*
+
+The original statement of the problem, kept because it is still why this
+phase exists:
+
+> `CLAUDE.md` rules 3 and 6 are currently unsatisfiable: nothing reads a URL
+> parameter, so reaching a battle means playing a dozen blocks from cold.
+> Every phase below is iterated by **feel**, and feel cannot be reviewed
+> through a twelve-block click path.
 
 Done when `?day=5&battle=courtyard-3v3` drops you straight into a fight on a
 phone, and a debug HUD shows block, cash and load errors.
 
-This is small and it pays for itself the first afternoon.
+**What exists now.** `godot/autoload/debug_entry.gd` reads `?battle=`,
+`?day=`, `?block=`, `?stage=` and `?hud=1`, from the query string in the web
+build and from `--` arguments on desktop. The campaign is walked forward with
+the model's own `advance_block()` rather than by assigning an index, so a day
+reached this way has really had those days happen to it. `godot/ui/debug_hud.gd`
+is the HUD: off unless asked for, with an on-screen DEV toggle so it needs no
+keyboard, and it reports fps and the campaign block.
+
+Verified on desktop: launching with `--battle=battle-courtyard-3v3 --hud=1`
+logs the parsed parameters and loads `battle_stage_3d` immediately, with no
+click path. `tests/test_shell.gd` covers the parsing, the documented battle id
+being real, and the HUD's mount, default-off state and 48px toggle.
+
+**The remaining check is yours, and takes about fifteen seconds:**
+
+    https://mbace1.github.io/piritori-eden/?battle=battle-courtyard-3v3&hud=1
+
+If that opens on a fight on your phone with the HUD reachable, this phase is
+met and Phase A is the live one.
 
 ### Phase A — the fight is worth repeating
 

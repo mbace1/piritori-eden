@@ -284,6 +284,23 @@ const stops = rows('stops.txt')
 // "calling points" — see stopsAlong above; this is what LIES ALONG the line.
 for (const L of lines) L.stopSequence = stopsAlong(L.shape, stops);
 
+// ── feed identity ────────────────────────────────────────────────────────
+// WHY THIS IS IN THE OUTPUT. It used to live nowhere: the extract carried no
+// feed date at all and three plate tools printed one as a string literal. Data
+// refreshed underneath them and the sheets kept printing the old date, which is
+// the exact failure §10.9 warns about — drawing one feed and calling it another.
+// The date now travels with the geometry it describes.
+let feedInfo = {};
+try {
+  const fi = readFileSync(path.join(dir, 'feed_info.txt'), 'utf8').trim().split(/\r?\n/);
+  const hdr = fi[0].split(',').map(h => h.trim());
+  const val = (fi[1] || '').split(',');
+  hdr.forEach((h, i) => { feedInfo[h] = (val[i] || '').trim(); });
+} catch { feedInfo = {}; }
+const feedVersion = feedInfo.feed_version || 'unknown';
+const feedStart = feedInfo.feed_start_date || null;
+const feedEnd = feedInfo.feed_end_date || null;
+
 const doc = {
   schemaVersion: 1,
   id: 'kallio-rail-v1',
@@ -291,6 +308,9 @@ const doc = {
   generatedBy: 'map/tools/gtfs-extract.mjs',
   source: {
     feed: 'Helsingin seudun liikenne (HSL) GTFS',
+    feedVersion,
+    feedStartDate: feedStart,
+    feedEndDate: feedEnd,
     licence: 'CC BY 4.0',
     attribution: '© Helsingin seudun liikenne (HSL)',
     anchorSequenceMeans: 'PASSES WITHIN 150 m OF, not CALLS AT. For the metro the '

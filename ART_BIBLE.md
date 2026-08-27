@@ -47,8 +47,13 @@ and sudden danger. Night is heavy; people are not uniformly miserable.
 
 1. **Shape before line.** A figure, building or button must read from its large
    paper masses before ink detail appears.
-2. **One material family.** Map, locations, battles, characters, animals,
-   weapons, props and UI all use cut paper and hand marker.
+2. **Two material families, split by layer** — owner ruling, 2026-08-24.
+   **What is cut out is cut paper; what is never cut is painted.** Characters,
+   heads, weapons, props, animals and UI are cut card and hand marker. Fight
+   stages and city backdrops are painted night. See §7.5.
+   This replaces the older "one material family" rule, which the rendered targets
+   had already outgrown. It is not a licence to paint a thing that moves: if a
+   layer is ever separated, recoloured, restated or given input, it is cut paper.
 3. **Helsinki before generic noir.** Geography, architecture, trams, weather,
    clothes and period objects make the setting specific.
 4. **Drama through light and composition.** Battle intensity comes from
@@ -271,6 +276,21 @@ regions remain rectangular and predictable.
 - Give every recurring system one original symbol.
 - Faction marks are invented and specific; no pagoda, dragon, shamrock or
   other ethnic shorthand substitutes for a written character or family.
+- **Location marks are a designed set, one symbol per site.** The city map wants
+  a pictogram inside every medallion (§7.5). `QUEUE.md` records why a mapping
+  from the anchors' 25 `roles` onto generic icon kinds was refused: arbitrary
+  symbolism reads worse than the plain dot it replaces. The set is authored per
+  site instead, and a site with no authored mark keeps the plain dot until it
+  has one.
+- **The Sörnäinen mark is a door** — owner ruling, 2026-08-24. The rendered
+  targets mark Sörnäinen with a pagoda, which is the first thing the rule above
+  forbids by name. It is replaced by **a closed door with a sign hanging on it**,
+  read as the door of somewhere organised: no lettering, the shape of the sign and
+  the shut door do the work. That is an invented, specific mark for a place with
+  people behind it, which is what the rule asks for, and it says the same thing
+  the pagoda was reaching for without borrowing a culture to say it.
+  **The pagoda is not to be traced from.** It survives in the reference set
+  because the set is evidence, not a source.
 - Weapon icons are silhouettes, not diagrams.
 - The icon may decorate a command, never replace its text at first use.
 
@@ -362,6 +382,108 @@ baked into the plate.
 The map is a one-screen strategy surface. Individual windows, roof machinery
 and pavement wear appear only at landmarks. When zoomed out, district pieces,
 roads, water and nodes must remain legible before decorative blocks.
+
+### 7.5 The rendered targets, and the two registers
+
+`art-library/references/` holds the owner's rendered targets for every mode, the
+fight stages, the cut-out sheets and photographic ground truth. Its `README.md`
+is the index. They are **references, not shipping assets** — nothing there is in
+`APPROVALS.md` or `catalog.json`.
+
+#### The one thing they change
+
+**Rule 2 of §1 says one material family — everything in cut paper and hand
+marker. The targets do not do that, and they diverge consistently enough to be a
+decision rather than a drift:**
+
+| register | used for | look |
+|---|---|---|
+| **cut paper** | heads, weapons, props, UI chrome, the Toko interior | kraft card, torn edge, flat fill, paper grain |
+| **painted night** | fight stages, city backdrops | rendered, lit, atmospheric, cut from nothing |
+
+The split tracks rule 5 exactly — *every useful layer stays separable*. **What is
+cut out is cut paper; what is never cut is painted.** A stage is one image behind
+everything and is never separated, so nothing is lost by painting it, and
+practical light does what cut card cannot.
+
+This is coherent and it is **still an amendment to rule 2**, which is the owner's
+to make. Recorded, not assumed. Until it is ruled on, rule 2 stands as written
+and the targets are ahead of it.
+
+A third register sits unresolved between them: `locations/` holds ink-line
+isometric illustration, more drawn than the stages and more detailed than the
+cut-paper sheets.
+
+#### What the city-map target confirms
+
+Every accent in it lands within **six degrees of hue** of a §4.2 system accent —
+cyan 1°, pink 5°, pin orange 4°, cream 1°, olive 6°. What differs is lightness:
+**0.15 to 0.22 lighter** on cyan and pink. That is not a second palette, it is
+§6.2 practical lighting on medallions and paper. **The flat value in §4.2 is the
+pigment, not the pixel.** Expect a lit surface to sit lighter and keep its hue.
+
+**Pins are lit medallions**, refining §7.3: a coloured ring with a dark field and
+one pictogram, on a short stalk, with a torn kraft label tab below. A locked node
+is the same medallion in neutral grey carrying a padlock — §7.3's *neutral
+physical seal, not an empty mystery cloud*, built. District names lie flat on
+torn kraft plates at lower contrast, so they orient and never read as tappable.
+
+**Routes are dashed strips with arrowheads**, cyan for crew and magenta for
+product, which is §7.3 drawn. Direction survives with the colour removed.
+
+**The command bar is four commands, icon plus text** — `END DAY` separates from
+the other three. Every command keeps its word beside its icon, which is §5.4's
+*the icon may decorate a command, never replace its text*.
+
+#### Both orientations exist, and the UI is in Finnish
+
+City map and battle each have a portrait and a landscape target. The battle
+targets establish: cyan tiles yours, red theirs, `BACK / MIDDLE / FRONT` rails on
+both flanks, dashed red for declared threat, and `GUARD` and `NERVE` as segment
+bars rather than numbers.
+
+They read `PÄIVÄ 04` and `KIERROS 2`. **Localisation is in the target, not a
+post-process**, which is the right way round and matches `godot/locale/`.
+
+#### The key colour drifts on every cut-out sheet
+
+Measured on the delivered files:
+
+| sheet | background | dE from `#FF00FF` |
+|---|---|---|
+| props | `(247, 3, 247)` | 3.4 |
+| weapons | `(243, 4, 242)` | 5.5 |
+| heads A | `(240, 4, 238)` | 7.1 |
+| heads B | `(226, 2, 226)` | **12.2** |
+
+None is bit-exact. The same drift appeared on the Sprint 1 v2 turnaround from a
+different generator, so it is a property of the pipeline rather than of one
+prompt.
+
+**Rule: anything that cuts against the key matches on tolerance, never on
+equality.** A cutter written against `== #FF00FF` returns almost nothing from
+these sheets. Heads B is far enough off to be worth regenerating before it
+becomes production input.
+
+`toko-mask-v01.jpg` looks like a transparent PNG and is not — the checkerboard is
+painted into the pixels. It needs a real key or real alpha before use.
+
+#### Stages hold their middle
+
+Every stage reference keeps its props at the rim and its floor clear. That is the
+arena requirement built, and it is the thing to check first in a new one: a stage
+with something standing in the middle of it is not a stage.
+
+`stages/stage-park-day` and `stage-park-night` are **one asset under two
+lightings** — the day/night question answered in miniature, and worth looking at
+before anyone designs a daytime palette.
+
+#### One honest divergence
+
+§7.3 requires people to be *small varied cut silhouettes, not identical restroom
+symbols*. In the city-map targets they read as one repeated figure. A mock stubs
+exactly this kind of detail, but the rule stands and the shipped map owes the
+variation.
 
 ---
 
@@ -529,6 +651,143 @@ Do not rely on a name label to distinguish Aatami, Jaska, Toko, a McCormick or a
 recurring restaurant contact at battle scale.
 
 ---
+
+### 9.7 The character pipeline, and the gate in the middle of it
+
+**Owner ruling, 2026-08-24.** Every 3D character follows this and nothing skips
+a step:
+
+```
+2D concept  ->  OWNER APPROVAL  ->  Meshy image-to-3D  ->  Meshy rigging  ->  register
+```
+
+0. **LOOK FOR THE ASSET BEFORE MAKING ONE.** `find . -iname "*name*"` first,
+   every time. `art-src/` is organised by pipeline stage —
+   `concepts/people/`, `meshy-input/`, `scenes/`, `approved/` — and every
+   `.png` has a `.txt` beside it holding the prompt that produced it, so an
+   existing asset can be re-edited instead of re-invented. Written after three
+   Toko T-poses were generated, all worse, while the correct apron-blanked
+   edit sat in `art-src/concepts/people/toko-slomo-notext-v01.png` and the
+   owner T-pose it came from sat in `art-src/meshy-input/`. A duplicate of
+   something that already exists is worse than nothing: it looks like
+   progress.
+
+1. **2D concept.** Nano Banana via `~/.nano-banana/nb.sh`, or supplied by the
+   owner. Full-figure **T-pose**, front, **direct to camera** (owner,
+   2026-08-27: *"t-pose is always direct to camera"*), flat neutral ground,
+   even light, no cast shadow, margin on all four sides.
+   `art-library/references/bodies/` holds the format that is known to work.
+   For a character who already exists, the mask, proportions and neck are
+   **not** yours to reinterpret — match the existing approved art exactly.
+2. **Approval. This is a gate, not a formality.** `DESIGN_AUTHORITY.md` puts
+   approval with the owner. Nothing reaches Meshy without it, because the next
+   step costs money and produces a thing that is hard to argue with once it
+   exists.
+
+   **Before approval, ALWAYS ZOOM AND CHECK. Never approve — never mesh — from
+   the thumbnail.** Written after Jaska's T-pose was sent to Meshy with a
+   three-quarter head, which a front-on Meshy job cannot reconstruct: it broke
+   the mesh down the centreline into a stretched, combed seam. That render was
+   never zoomed on before the spend. Four things, cropped and looked at
+   individually, every single time, on every T-pose before it goes to Meshy:
+
+   - **the head** — dead-front, not three-quarter. Crop the face alone. Check
+     both ears are equally visible, both eyes level and the same size, the nose
+     centred. A head turned even slightly breaks the mesh down its centreline.
+   - **both armpits** — crop each one alone. There must be an open wedge of
+     background between the sleeve and the torso. Arm and torso fabric forming
+     one solid connected shape reads to Meshy as webbing between the arm and
+     the body.
+   - **both feet** — crop the pair alone. Exactly two, fully separate, nothing
+     faint or duplicated behind either one. A generation can leave a ghost limb
+     at low opacity that is easy to miss at full-image scale and obvious once
+     cropped.
+   - **any placed detail** — a chest patch, a logo, a badge — is where the
+     brief put it, not wherever the model drifted it to on a later pass.
+
+   **A broad edit instruction can silently undo a check that already passed.**
+   Editing armpits and feet together moved the head back off-centre, because
+   "keep everything else the same" is not a guarantee. So: check all four again
+   after *every* edit, not only after the first generation — and when a fix
+   keeps breaking something else, edit ONE region at a time from the last known
+   image where the OTHER regions were already right, with an explicit
+   instruction not to touch anything but that one region. Chaining edits
+   forward from whichever image is newest, rather than from the best base, is
+   how a fixed head gets lost again on the very next pass.
+3. **Meshy image-to-3D** — `~/.meshy/m3d.sh --image ... --output ...`
+4. **Meshy rigging** — `~/.meshy/rig.py --task <id> --output ...`. It takes the
+   image-to-3D **task id**, not a file, so keep the id.
+5. **Register** in `art/v3/manifest.json` and `art-library/`.
+
+**Check what exists before generating anything.** `art/v3/manifest.json` already
+carries thirteen rigged, animated bodies. A concept that duplicates one is worse
+than no concept, because it costs credits to discover.
+
+#### A body is a look, not a person
+
+**Crew names are randomly generated from first- and last-name pools**, and a hire
+rolls random aptitudes and skills. So a mesh must never be named for a person:
+name it for what it looks like. `parka-man-v01`, `suited-man-v01`,
+`street-raver-v01` are the convention; only the six bodies backing a crew role
+are named for one.
+
+**Variation is the point, not naming.** One body serves many generated people,
+recoloured. §9.11's hue-band recolour is what makes that work, and a mesh tied to
+a single generated name quietly undoes it.
+
+A body also does not imply a crew slot. `hooded-camera-woman-v02` carries a
+camera and is **not hired crew** — owner ruling, 2026-08-24 — she is a bystander,
+an informant or press, undecided, and the asset does not need it decided to
+exist.
+
+#### Resolution and polycount, tested
+
+**Settled 2026-08-24 by measurement.** Earlier text in this section claimed 512
+was the style target and that detail is the enemy of this style. **Both halves
+were wrong**, and the record is kept because the mistake is cheap to repeat.
+
+The claim came from comparing texture *atlases*, where a 512 sheet has hard pixel
+edges and a 2048 sheet has smooth gradients — so it measured resolution and
+called it style. And the repo's 512 bodies were never a decision: `parka-man-v01`
+and its Meshy task are **the same 18,761 triangles** and differ only in the
+image. The 512s are downscaled masters, kept small for an upload limit.
+
+**The texture ladder, rendered on one model:**
+
+| texture | file | reads |
+|---|---|---|
+| 2048 | 1.84 MB | reference |
+| **1024** | **1.32 MB** | **indistinguishable from 2048** |
+| 512 | 1.21 MB | softer; the face loses definition |
+| 256 | 1.18 MB | breaks — face is mush, hood edge pixelates |
+
+**Texture resolution is nearly free, and it is the wrong lever.** 2048 down to
+256 saves 0.66 MB, because the *mesh* is most of the file.
+
+**Polycount is the lever:**
+
+| model | file |
+|---|---|
+| 31k tris / 1024 | 1.32 MB |
+| **12k tris / 1024** | **0.55 MB** |
+
+And the 12k run reads **better**, not merely smaller — the headscarf pattern and
+the hood edge are crisper. Fewer, larger facets suit flat fills; a dense mesh
+gives the reconstructor room to bake soft shading that this style does not want.
+
+**The target: `--target-polycount 12000`, texture re-encoded to 1024.** About
+0.55 MB a character, which is under `hired-b-v01` at 0.9 MB and comfortably
+inside the phone gate in `CLAUDE.md` §9.
+
+Two practical notes. Meshy has no texture-size option, so 1024 is a local
+re-encode after download — `art-src/meshy-input/glb_retex.py`, free, and it must
+repack the binary chunk or the file does not shrink. And a `.glb` cannot be
+judged from its atlas: **render it** with `glb_render.py`.
+
+**Still open:** a character whose identity depends on one colour — a headband, a
+team stripe, a faction mark — can lose it in the bake. The dreads model's
+red/yellow/green washed to olive at 2048 while the 512 original kept it. Check
+the colour in a render before accepting a model.
 
 ## 10. Animals, foliage and ambient people
 
