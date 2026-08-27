@@ -1599,6 +1599,34 @@
       "note": "Scene Club - the art-and-LAN commune at Makelansilta, owner-placed 2026-08-25, just north of Kurvi past the bridge where Makelankatu begins. Camera is LOWER than the other scenes, closer to eye height, so a full standing figure fits without cropping - owner direction: Jaska stands here and talks to camera. His table sits at the FAR WALL, mid-distance, matching the depth of the TV and LAN desks either side, with open floor left standing-room-clear in front of it for the live 3D speaker (Framing.LOCATION). v01-v03 put the table in the foreground where it cropped against the frame edge and would have cut a standing figure badly; v04 pulled it back. One background hobbyist (a LAN gamer) dresses the room; not a modelled participant. baked_text false, checked at final size: wall sketches are portraits and gesture only, monitor screens are abstract glow."
     },
     {
+      "id": "scene-bank-counter-v01",
+      "kind": "scene",
+      "file": "scenes/bank-counter-v01.webp",
+      "source": "art-src/scenes/bank-counter-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "siltasaari",
+      "portrait_safe_bounds": [
+        0.24,
+        0,
+        0.76,
+        1
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6",
+      "bytes": 137948,
+      "note": "Staffed bank counter on Siltasaari - the staffed_bank site, which had been playing over the labelled placeholder. Nobody in the picture and the space above the counter left clear, per STAGE_SPEC 6.3, so the teller is a 3D layer composited into the gap rather than baked into the plate - the same ruling as the empty Toko bar. No text anywhere: the clock, brochures, screen and slips carry abstract marks only."
+    },
+    {
       "id": "cast3d-jaska-v01",
       "kind": "mesh-3d",
       "file": "cast3d/jaska-v01.glb",

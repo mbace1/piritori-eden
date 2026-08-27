@@ -1332,6 +1332,32 @@ The fixed capture tool and the new Piritori scene went through the full loop -
 generate, register, wire, import, capture - and the captures came back with a
 list. Recorded here instead of half-fixed:
 
+- **CORRECTED 2026-08-27: it was THREE, not four, and one is now done.**
+  `jaska_studio` already had art — `scene-club`, shipped in PR #11 — so this
+  entry had been stale for two days. Checked by asking the loader's own rule
+  (`asset.location == site.anchorId`) which sites actually resolve, rather
+  than by re-reading the note. `staffed_bank` now has
+  `scene-bank-counter-v01` and renders in the running game, verified by
+  capture rather than by the manifest saying an id exists — the capture tool
+  gained a `piritori-site-*` shot for exactly that.
+
+  **Still placeholder: `harju_pitch` (harju, 1 encounter) and
+  `jade_lantern_front` (linjat_yard, 1).** Both are one-encounter sites, so
+  this is the low-value tail of the job.
+
+  Two things worth reusing from doing the bank: attach an approved scene as an
+  IMAGE reference rather than describing the painted register in prose (the
+  same trick its own sidecar uses), and expect to spend a second pass purely
+  on composition — the first one read "cut-cardstock with torn fibrous edges"
+  literally and drew an actual paper border with a dead black band over the
+  bottom 40% of the frame.
+
+  Also note `art-src/scenes/jaska-studio-A-v01.png` and `-B-v01.png`: two
+  finished, unused alternates for Jaska's own studio, superseded by the Scene
+  Club direction. Kept, not shipped.
+
+  The original entry follows.
+
 - **Four sites still play over the labelled placeholder**: `jaska_studio` (3
   encounters), `staffed_bank` (3), `harju_pitch` (1), `jade_lantern_front` (1).
   Each needs its own scene in the painted-night register; none of the nine

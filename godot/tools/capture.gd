@@ -8,6 +8,11 @@ extends Node
 ## bar. `test_shell` already asserts this one has a speaker with a model.
 const SPEAKER_SHOT := "enc-toko-quiet-voice"
 
+## A site whose stage art was only just registered. Shot so the "does the
+## placeholder still play here" question is answered by a picture rather than
+## by the manifest saying an id exists.
+const SITE_SHOT := "enc-bank-counter"
+
 ## `phone` is the owner's actual device, added 2026-08-27 after a screenshot
 ## from it showed the command dock and the battle console both running off the
 ## right edge — clipped mid-word — on a shape this tool had never photographed.
@@ -111,6 +116,15 @@ func _ready() -> void:
 			var p3 := out_dir.path_join("piritori-speaker-%s-%s.png" % [label, Loc.code])
 			img3.save_png(p3)
 			print("wrote ", p3)
+
+			_shell._show_location(SITE_SHOT)
+			for i in range(14):
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			var img4 := get_viewport().get_texture().get_image()
+			var p4 := out_dir.path_join("piritori-site-%s-%s.png" % [label, Loc.code])
+			img4.save_png(p4)
+			print("wrote ", p4)
 
 	get_tree().quit(0)
 
