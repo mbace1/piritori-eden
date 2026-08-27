@@ -89,25 +89,6 @@ static func pose_for(f: Fighter, acting: bool = false) -> String:
 const PORTRAIT_REGION := Rect2(0.30, 0.005, 0.40, 0.26)
 
 
-static func portrait(role: String) -> Texture2D:
-	return texture(role, IDLE)
-
-
-static func draw_portrait(ci: CanvasItem, role: String, box: Rect2,
-		tint: Color = Color.WHITE) -> bool:
-	var tex := portrait(role)
-	if tex == null:
-		return false
-	var ts := tex.get_size()
-	var region := Rect2(
-		PORTRAIT_REGION.position.x * ts.x, PORTRAIT_REGION.position.y * ts.y,
-		PORTRAIT_REGION.size.x * ts.x, PORTRAIT_REGION.size.y * ts.y)
-	# Fill the box without distorting the crop.
-	var s: float = maxf(box.size.x / region.size.x, box.size.y / region.size.y)
-	var drawn := region.size * s
-	var at := box.position + (box.size - drawn) * 0.5
-	ci.draw_texture_rect_region(tex, Rect2(at, drawn), region, tint)
-	return true
 
 
 static func night_modulate() -> Color:
