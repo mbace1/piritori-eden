@@ -4,6 +4,7 @@ import {
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
   transactOffer, applyEffects, commitRoute, sendOnRoute,
 } from './state.js?v=1';
+import { createPauseMenu } from './pause.js?v=1';
 import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
@@ -807,6 +808,56 @@ async function boot() {
         target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     });
+    // ── the pause menu, and the jumps THINGS TO TEST depends on ──────────
+    //
+    // Every jump puts the app into a state a player would have to earn. They
+    // are deliberately written here rather than inside the menu: the menu
+    // should not know how this game changes mode, or it becomes the thing that
+    // breaks when the game does.
+    function jumpTo(target) {
+      if (!target) return;
+      if (target.kind === 'encounter') {
+        // Walk the schedule to the block this encounter belongs to, so the
+        // screen arrives with the state around it rather than out of context —
+        // a conversation with the wrong day on the clock is not the screen.
+        const index = data.content.schedule.findIndex(slot => slot.encounter_id === target.id);
+        if (index >= 0) state.scheduleIndex = index;
+        state.mode = 'encounter';
+        observation = '';
+      } else if (target.kind === 'battle') {
+        if (!startBattle(target.id)) return;
+      } else if (target.kind === 'news') {
+        state.newsSeen = state.newsSeen.filter(id => id !== target.id);
+        state.newsReturnMode = 'route';
+        state.mode = 'news';
+      } else if (target.kind === 'ending') {
+        state.scheduleIndex = data.content.schedule.length;
+        state.mode = 'route';
+      } else if (target.kind === 'day') {
+        const index = data.content.schedule.findIndex(slot => slot.day === target.day);
+        if (index >= 0) state.scheduleIndex = index;
+        state.mode = 'route';
+      }
+      persist();
+      render();
+      $('modeRoot').focus();
+    }
+
+    const pause = createPauseMenu({
+      root: $('pause'),
+      version: 'v4.1',
+      jump: jumpTo,
+    });
+    $('pauseButton').addEventListener('click', () => pause.toggle());
+    // Esc pauses from anywhere. The menu handles Esc itself once it is open,
+    // where it backs out one level instead of closing.
+    window.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || pause.isOpen) return;
+      if ($('splash').hidden === false) return;
+      event.preventDefault();
+      pause.open();
+    });
+
     render();
     window.__ptv3 = {
       get data() { return data; },
@@ -816,6 +867,8 @@ async function boot() {
         startBattle(id) { startBattle(id); persist(); render(); },
         openEncounter,
         render,
+        jumpTo,
+        pause,
       },
     };
   } catch (error) {
