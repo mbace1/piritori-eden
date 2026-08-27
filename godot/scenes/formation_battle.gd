@@ -272,7 +272,10 @@ func _build() -> void:
 	row.add_theme_constant_override("separation", 20)
 
 	_crew_col = VBoxContainer.new()
-	_crew_col.custom_minimum_size = Vector2(230, 0)
+	# Narrower now the 64px portrait has gone — this column is a name and three
+	# tracks, and it was reserving the widest slot in the console to show a
+	# picture of somebody already visible on the board.
+	_crew_col.custom_minimum_size = Vector2(150.0 * _text_scale(), 0)
 	_crew_col.add_theme_constant_override("separation", 4)
 	row.add_child(_crew_col)
 
@@ -1079,9 +1082,14 @@ func _build_crew_column() -> void:
 	var panel := PanelContainer.new()
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("#15191c")
-	sb.border_color = MapStyle.FRAME_EDGE       # cream edge
+	# The border carries the role colour, with a heavier left edge. The old
+	# comment here called that left edge "the role-colour tab" while the colour
+	# was actually cream — StyleBoxFlat has ONE border colour, so it never
+	# could be. Now that the portrait is gone this is what says who is active,
+	# so it says it honestly.
+	sb.border_color = _role_color(String(f.role))
 	sb.set_border_width_all(2)
-	sb.border_width_left = 5                     # the role-colour tab
+	sb.border_width_left = 5
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 8
@@ -1093,18 +1101,21 @@ func _build_crew_column() -> void:
 	row.add_theme_constant_override("separation", 10)
 	panel.add_child(row)
 
-	# portrait, cut from the unit's own idle pose
-	var pic := Control.new()
-	pic.custom_minimum_size = Vector2(64, 64)
-	var role := String(f.role)
-	pic.draw.connect(func():
-		var box := Rect2(Vector2.ZERO, pic.size)
-		pic.draw_rect(box, Color("#0d1215"))
-		if not PoseArt.draw_portrait(pic, role, box):
-			pic.draw_string(_font, Vector2(6, 38), _initials(f.display_name),
-				HORIZONTAL_ALIGNMENT_LEFT, -1, 22, MapStyle.TITLE_TEXT)
-		pic.draw_rect(box, _role_color(role), false, 2.0))
-	row.add_child(pic)
+	# NO PORTRAIT. Reported directly, 2026-08-27: "the whole face and name
+	# screen is not needed. only when a character is active and even then the
+	# old faces add nothing."
+	#
+	# The card already only appears when a character IS active —
+	# `_select_first_actionable()` picks the first fighter who `can_act()` —
+	# so that half was already true. The faces were the real complaint, and
+	# they were right: a 64px crop of a 2D idle pose, from the cast art that
+	# predates the 3D ruling, sitting beside a board where the same person is
+	# rendered as a lit 3D figure doing the thing being described. It told you
+	# nothing the board was not already showing, in an older style, using the
+	# widest part of the console to do it.
+	#
+	# The role colour survives on the panel border, which is what actually
+	# carried the "who is this" job.
 
 	var info := VBoxContainer.new()
 	info.add_theme_constant_override("separation", 3)

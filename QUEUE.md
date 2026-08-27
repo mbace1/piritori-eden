@@ -2059,5 +2059,28 @@ list. Recorded here instead of half-fixed:
   and CLAUDE.md rule 8 says stop after two.
 
 
+- **The old 2D faces are off the battle console** (2026-08-27, direct: "the
+  whole face and name screen is not needed. only when a character is active
+  and even then the old faces add nothing").
+
+  Half of it was already true and worth checking before changing anything:
+  `_select_first_actionable()` only builds the card for a fighter who
+  `can_act()`, so it did already appear only for an active character. The
+  faces were the real complaint and the complaint was right — a 64px crop of a
+  2D idle pose, from the cast art that predates the 3D ruling in
+  `PHASING.md` §1.055, sitting beside a board where that same person is a lit
+  3D figure doing the thing being described. It repeated what the board showed,
+  in an older style, using the widest slot in the console to do it.
+
+  `PoseArt.portrait()` and `PoseArt.draw_portrait()` retired with it — this was
+  their only caller. The role colour moved onto the card's border, which is now
+  what says who is active. The column dropped 230px → 150px, and the verbs and
+  automation column took the width back.
+
+  Note for whoever revisits the 2D cast art: `art/v3/cast/*/idle-smile-*.webp`
+  is now used only for the board figures via `PoseArt.draw_into()`, not for any
+  portrait. If the board ever goes fully 3D there, that whole set is dead.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.
