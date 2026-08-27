@@ -10,6 +10,36 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.1 — 2026-08-27
+
+**Caught up with `main`.** This branch was 74 commits behind and one thing in
+v4.0 rested on a premise that had already been overturned.
+
+- Merged `origin/main`. Conflict surface was one file — the rest of v4.0 is
+  additive — but the content it brought is not small: the real-data map
+  (`kallio-water/streets/railway-v1.json`, no invented geometry), generated crew
+  names, the committed-context UI work, the carton chrome, and
+  `JS_BUILD_CATCHUP.md`.
+- **`PHASING.md` §1.055 (2026-08-22): THE GAME IS 3D.** It landed the day after
+  the browser build was parked, which is why that build has none in it.
+  `PORTING.md` §1 has been corrected: promoting a `getContext('2d')` build to
+  primary tester is not the same as it being the shape the game is now.
+- **`STAGE_SPEC.md` §6.3's brief is FULFILLED** —
+  `art/v3/scenes/toko-slomo-noodles-empty-v01.webp` exists, built through four
+  drafts in `art-src/scenes/`, and `bank-counter-v01.webp` was built the same
+  way. Marked done rather than left standing as an ask.
+- The map gained `makelansilta`: 14 anchors, 11 active. `QUEUE.md`'s
+  document-versus-data question widened rather than closed.
+
+### Port
+- **vectors:** `market@2`, `exposure@2` — the new anchor changes both surfaces.
+  `missions@1` and `people@1` unchanged, so nothing to re-port there.
+- **data:** the map files changed; run `godot/tools/sync-data.mjs`
+- **meshes:** `cast3d-jaska-v01` arrived on main
+- **presentation:** main added a `COUNTER` framing to `presenter_3d.gd` on top
+  of v4.0's fixes — Godot side already
+- **status:** handed off
+
 ## v4.0 — 2026-08-25
 
 **JS becomes the build; Godot becomes the port.** Owner ruling, recorded in

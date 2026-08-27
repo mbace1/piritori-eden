@@ -29,8 +29,8 @@ assert(app.includes('weather-rain-fine-v01'), 'weather stays a separate runtime 
 // the slice. Neither number is asserted against the document here — a gate that
 // fails on purpose is a broken gate — but the drift is real and is recorded in
 // QUEUE.md for the owner to settle. These assertions exist to stop the NEXT one.
-assert.equal(map.anchors.length, 13, 'anchor count changed — check QUEUE.md before editing this number');
-assert.equal(map.anchors.filter(anchor => anchor.sliceState === 'active').length, 10);
+assert.equal(map.anchors.length, 14, 'anchor count changed — check QUEUE.md before editing this number');
+assert.equal(map.anchors.filter(anchor => anchor.sliceState === 'active').length, 11);
 assert.equal(content.schedule.length, 14);
 assert.deepEqual(content.schedule.slice(0, 2).map(item => item.encounter_id),
   ['enc-first-purchase', 'enc-first-sale'], 'classic purchase-to-profit opening stays immediate');
@@ -50,4 +50,4 @@ for (const id of ['scene-toko-noodles-prototype-v02', 'scene-karhupuisto-v01',
   assert(ids.has(id), `${id} remains registered`);
 }
 
-console.log('V3 CONTRACT OK: five modes, 44px floor, 13-anchor map, 14 blocks and registered scene art.');
+console.log('V3 CONTRACT OK: five modes, 44px floor, 14-anchor map, 14 blocks and registered scene art.');

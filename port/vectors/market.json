@@ -4591,6 +4591,465 @@
      "marketMid": 41,
      "cause": "site"
     }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 90.36,
+     "sell": 73.93,
+     "mid": 82.14,
+     "marketMid": 82.14,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 90.36,
+     "sell": 40.66,
+     "mid": 65.51,
+     "marketMid": 82.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 144.57,
+     "sell": 73.93,
+     "mid": 109.25,
+     "marketMid": 82.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 92.48,
+     "sell": 75.67,
+     "mid": 84.07,
+     "marketMid": 84.07,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 92.48,
+     "sell": 41.62,
+     "mid": 67.05,
+     "marketMid": 84.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 147.97,
+     "sell": 75.67,
+     "mid": 111.82,
+     "marketMid": 84.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 95.51,
+     "sell": 78.14,
+     "mid": 86.83,
+     "marketMid": 86.83,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 95.51,
+     "sell": 42.98,
+     "mid": 69.24,
+     "marketMid": 86.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 152.81,
+     "sell": 78.14,
+     "mid": 115.48,
+     "marketMid": 86.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 84.38,
+     "sell": 69.04,
+     "mid": 76.71,
+     "marketMid": 76.71,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 84.38,
+     "sell": 37.97,
+     "mid": 61.18,
+     "marketMid": 76.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 135.01,
+     "sell": 69.04,
+     "mid": 102.03,
+     "marketMid": 76.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 86.37,
+     "sell": 70.66,
+     "mid": 78.51,
+     "marketMid": 78.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 86.37,
+     "sell": 38.86,
+     "mid": 62.62,
+     "marketMid": 78.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 138.19,
+     "sell": 70.66,
+     "mid": 104.42,
+     "marketMid": 78.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 89.19,
+     "sell": 72.98,
+     "mid": 81.08,
+     "marketMid": 81.08,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 89.19,
+     "sell": 40.14,
+     "mid": 64.66,
+     "marketMid": 81.08,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 142.71,
+     "sell": 72.98,
+     "mid": 107.84,
+     "marketMid": 81.08,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 89.36,
+     "sell": 73.11,
+     "mid": 81.23,
+     "marketMid": 81.23,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 89.36,
+     "sell": 40.21,
+     "mid": 64.78,
+     "marketMid": 81.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 142.97,
+     "sell": 73.11,
+     "mid": 108.04,
+     "marketMid": 81.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 91.46,
+     "sell": 74.83,
+     "mid": 83.14,
+     "marketMid": 83.14,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 91.46,
+     "sell": 41.16,
+     "mid": 66.31,
+     "marketMid": 83.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 146.33,
+     "sell": 74.83,
+     "mid": 110.58,
+     "marketMid": 83.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.45,
+     "sell": 77.28,
+     "mid": 85.86,
+     "marketMid": 85.86,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.45,
+     "sell": 42.5,
+     "mid": 68.48,
+     "marketMid": 85.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 151.12,
+     "sell": 77.28,
+     "mid": 114.2,
+     "marketMid": 85.86,
+     "cause": "saturation"
+    }
    }
   ],
   "profiles": [
@@ -4765,6 +5224,22 @@
      "volatility": 1.28,
      "watch": 0.9
     }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "roles": [
+      "home",
+      "crowd-source"
+     ]
+    },
+    "out": {
+     "demand": 1.27,
+     "spread": 0.2,
+     "liquidity": 2.9,
+     "volatility": 1.02,
+     "watch": 0.95
+    }
    }
   ],
   "decay": [
@@ -4932,6 +5407,6 @@
    }
   ]
  },
- "rev": 1,
+ "rev": 2,
  "note": "Generated by port/vectors.mjs — see PORTING.md §4. Do not hand-edit."
 }

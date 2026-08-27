@@ -30,13 +30,15 @@ rule says to record rather than average:
 
 | | the doc says | the file has |
 |---|---|---|
-| anchors | `DESIGN_AUTHORITY.md` locked direction: **twelve-anchor graph** | **13** |
-| active slice anchors | **eight** | **10** |
+| anchors | `DESIGN_AUTHORITY.md` locked direction: **twelve-anchor graph** | **14** |
+| active slice anchors | **eight** | **11** |
 | authored battles | (undocumented) | `2v2, 3v3, 3v3` |
 | courtyard scene | `scene-courtyard-prototype-v02` | `…-v05` |
 
-**Owner question: should the locked-direction paragraph move to 13 and 10, or
-should two anchors come out of the map?** Not edited either way here — a
+**Owner question: should the locked-direction paragraph move to 14 and 11, or
+should anchors come out of the map?** It moved again between 2026-08-25 and
+2026-08-27 — `makelansilta` was added — so the gap is widening rather than
+sitting still, which is the argument for settling it rather than watching it. Not edited either way here — a
 level-2 document and a level-7 file disagreeing is exactly the case the
 authority order says to stop on.
 

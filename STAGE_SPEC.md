@@ -345,7 +345,14 @@ the dark one — the darkest row in a night interior is always some overhang.
 
 ---
 
-## 6.3 The brief: THE EMPTY BAR
+## 6.3 The brief: THE EMPTY BAR — **DELIVERED 2026-08-27**
+
+> **This brief has been filled.** `art/v3/scenes/toko-slomo-noodles-empty-v01.webp`
+> exists, built through four drafts kept in `art-src/scenes/`, and
+> `bank-counter-v01.webp` was built to the same rule. `JS_BUILD_CATCHUP.md`
+> states the rule generally now: *a location plate contains no people, and the
+> space where a person would stand is painted as a room that continues.*
+> The brief is kept below as the record of what was asked for and why.
 
 **One asset. Everything else in §6 is waiting on it.** Under the 2026-08-24
 ruling Toko is a 3D layer, so what the painting has to supply is the room he

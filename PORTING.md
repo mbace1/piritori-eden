@@ -22,6 +22,24 @@ parked, this wins.
 | what it proves | *do the rules work* | *does it play on a pad, in landscape* |
 | moves first | always | never |
 
+### 1.0 A correction, made the day after this document was written
+
+**`PHASING.md` §1.055 — "change the goal from 2d to 3d", 2026-08-22 — was in
+force before any of this was written, and this document did not know it.** It
+landed the day after the browser build was parked, which is exactly why that
+build has no 3D in it: it renders with `getContext('2d')` and nothing else.
+
+So the table above is right about *authority* and was quietly wrong about
+*shape*. Promoting the browser build to primary tester does not make a 2D canvas
+the form of the game. The honest statement is:
+
+- **`web/` is where behaviour is defined, and it is not yet the game's shape.**
+  A 2D board is a legitimate presentation choice — `JS_BUILD_CATCHUP.md` notes
+  the Godot build deliberately keeps one behind a `use_3d` flag — but choosing it
+  is a decision to write down, not a default to inherit from a parked prototype.
+- **The 3D assets are the assets.** 26 GLBs, 32 MB. Any build adopting them
+  inherits the texture budget in §4 of the catch-up brief, not just the meshes.
+
 **Both are real builds.** This is not a prototype and a product. The port exists
 to answer a question the browser cannot — whether a game about routes, blocks
 and formations is playable with two sticks on a television — and that question
