@@ -424,19 +424,59 @@ func _size_commands(vp: Vector2) -> void:
 	# force the bar wide again, so they are dropped and the icon carries it.
 	var icons_only := per < 96.0
 
+	# MEASURE THE WORDS, DO NOT ASSUME THEM.
+	#
+	# The label size used to be h * COMMAND_LABEL_FRACTION with a floor and no
+	# ceiling. On a tall phone the bar is tall, so that produced a very large
+	# font, and a button whose CONTENT is wider than its `custom_minimum_size`
+	# simply grows — four of them then overflowed the screen and MISSIONS was
+	# cut off the right edge entirely. `per` was never the real width.
+	#
+	# So the type is fitted to the space instead: the largest size at which the
+	# longest command still sits beside its icon within `per`, chosen once and
+	# shared so the bar stays even. This also stops the same bug happening
+	# again in Finnish or Japanese, where the words are not the same length.
+	var icon_w := h * COMMAND_ICON_FRACTION
+	var room := per - icon_w - COMMAND_BAR_SEPARATION - 14.0
+	var size_px := int(maxf(h * COMMAND_LABEL_FRACTION, 13.0))
+	if not icons_only and room > 0.0:
+		var font: Font = null
+		for b in _commands:
+			if b == null:
+				continue
+			var l = b.get_meta("label", null)
+			if l != null and l is Label:
+				font = l.get_theme_font("font")
+				break
+		if font != null:
+			while size_px > 11:
+				var widest := 0.0
+				for b in _commands:
+					if b == null:
+						continue
+					var l2 = b.get_meta("label", null)
+					if l2 == null or not (l2 is Label):
+						continue
+					widest = maxf(widest, font.get_string_size(
+						l2.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x)
+				if widest <= room:
+					break
+				size_px -= 1
+			# Still too wide at the floor: the word cannot share the button.
+			if size_px <= 11:
+				icons_only = true
+
 	for b in _commands:
 		if b == null:
 			continue
 		b.custom_minimum_size = Vector2(per, h)
 		var icon = b.get_meta("icon", null)
 		if icon != null:
-			icon.custom_minimum_size = Vector2(h * COMMAND_ICON_FRACTION,
-				h * COMMAND_ICON_FRACTION)
+			icon.custom_minimum_size = Vector2(icon_w, icon_w)
 		var label = b.get_meta("label", null)
 		if label != null:
 			label.visible = not icons_only
-			label.add_theme_font_size_override("font_size",
-				int(maxf(h * COMMAND_LABEL_FRACTION, 13.0)))
+			label.add_theme_font_size_override("font_size", size_px)
 
 
 ## Landscape: world beside a rail. Portrait: world above a lower sheet.
@@ -509,7 +549,14 @@ func _apply_chrome(vp: Vector2) -> void:
 	# the window, not the viewport.
 	var win := get_window()
 	var real_w := float(win.size.x) if win != null else vp.x
-	var narrow := real_w < 620.0
+	# PORTRAIT IS ALWAYS NARROW. Reported 2026-08-27 from a Pixel screenshot:
+	# the status chips ran off the right edge, half a chip visible. That phone
+	# reports 1079 physical pixels, so `real_w < 620` said "wide" and the shell
+	# laid out desktop chrome on a screen that is, in the hand, narrow. A raw
+	# pixel count has not meant physical width since phones got dense screens.
+	# Whether the display is taller than it is wide does mean it, on every
+	# device, with no DPI guesswork.
+	var narrow := real_w < 620.0 or vp.y > vp.x
 
 	var want: Node = _head_row2 if narrow else _head_row
 	if _stats.get_parent() != want:
@@ -606,9 +653,12 @@ func _refresh_status() -> void:
 func _add_end_day_button() -> void:
 	var btn := Button.new()
 	btn.text = tr("cmd.end_day")
-	btn.custom_minimum_size = Vector2(0, MIN_TARGET)
+	# UX_SPEC §3.3 puts this beside the clock rather than in a tab, so it is
+	# chrome and takes its size from the screen like the chips it sits with.
+	var s := _text_scale()
+	btn.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, MIN_TARGET * s * 0.8))
 	btn.focus_mode = Control.FOCUS_ALL
-	btn.add_theme_font_size_override("font_size", 13)
+	btn.add_theme_font_size_override("font_size", int(round(13.0 * s)))
 	var sb := PiritoriChrome.button(MapStyle.SMALL_TEXT)
 	var sb_hot := PiritoriChrome.button(MapStyle.SMALL_TEXT, true)
 	btn.add_theme_stylebox_override("normal", sb)
@@ -676,7 +726,8 @@ func _add_stat(kind: int, col: Color, text: String) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", int(maxf(icon_px * 0.35, 6.0)))
 	row.add_child(PiritoriIcon.new(kind, col, icon_px))
-	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT)
+	# Already sized from the screen two lines up — must not be scaled again.
+	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT, false)
 	row.add_child(l)
 	_stats.add_child(row)
 
@@ -1717,10 +1768,44 @@ func _end_block() -> void:
 
 # ── small builders ─────────────────────────────────────────────────────────
 
-func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) -> Label:
+## Every label in the shell goes through here, so this is where body text gets
+## its one honest size.
+##
+## Reported 2026-08-27 from a Pixel: "non-optimized UI edges, sizes." The
+## header and the command bar already scaled themselves with the screen; the
+## rail did not. Its labels were passed literal 12/13/15 pixel sizes by
+## seventy-odd call sites, which is a readable size on a 1280-wide desktop
+## window and a thread on a 1079-wide phone — the text ended up a third the
+## height of the words in the dock directly beneath it.
+##
+## The base numbers stay meaningful as a RATIO to each other (12 is a caption,
+## 15 is a heading), and this scales the lot against the viewport. Clamped at
+## both ends: never shrink below the authored size, never inflate a desktop
+## window where the authored size was already right.
+func _text_scale() -> float:
+	var vp := get_viewport_rect().size
+	if vp.x <= 0.0:
+		return 1.0
+	# Portrait scales on width, which is the axis the reading column is cut
+	# from; landscape has width to spare and would over-inflate on it.
+	var basis := vp.x if vp.y > vp.x else vp.y
+	return clampf(basis / 430.0, 1.0, 2.2)
+
+
+## `scale` is opt-OUT, and opting out matters. A caller that has ALREADY worked
+## its size out from the viewport must pass `false`, or the two multiply: the
+## status chips compute up to 60px from the screen, `_text_scale()` multiplies
+## by up to 2.2, and the chips came out at 130px and shoved the whole header
+## past the right edge of the window. This repo has paid for that lesson once
+## before — `_device_gain()` did the same double-scaling to the map labels and
+## was removed for it. Screen-derived sizes are already scaled. Authored ones
+## are not.
+func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT,
+		scale: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", size_px)
+	var px := float(size_px) * (_text_scale() if scale else 1.0)
+	l.add_theme_font_size_override("font_size", int(round(px)))
 	l.add_theme_color_override("font_color", col)
 	return l
 
@@ -1728,8 +1813,13 @@ func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) 
 func _make_button(text: String, accent: Color) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(0, MIN_TARGET)
-	b.add_theme_font_size_override("font_size", 15)
+	var s := _text_scale()
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, MIN_TARGET * s * 0.8))
+	# Same reasoning as _make_label: 15px is a readable authored size on a
+	# desktop window and a thread on a phone. These are the rail's actionable
+	# rows — the ones a player is meant to press — and they were rendering
+	# smaller than the labels above them.
+	b.add_theme_font_size_override("font_size", int(round(15.0 * s)))
 	b.add_theme_color_override("font_color", accent)
 	b.add_theme_color_override("font_disabled_color", PiritoriPalette.LOCKED_GREY)
 	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1758,7 +1848,11 @@ func _make_icon_button(text: String, icon_kind: int, accent: Color,
 	var tint := accent if enabled else PiritoriPalette.LOCKED_GREY
 	var b := Button.new()
 	b.text = ""
-	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, 44.0))
+	# The floor has to grow with the type. Left at a flat 44 the scaled label
+	# overflowed its own card and the descenders were sliced off along the
+	# bottom edge — a touch target that is tall enough to press but too short
+	# to read is not finished.
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET, 44.0 * _text_scale()))
 	b.disabled = not enabled
 	b.focus_mode = Control.FOCUS_ALL
 	var sb := PiritoriChrome.plate_button(tint)
@@ -1795,12 +1889,15 @@ func _make_icon_button(text: String, icon_kind: int, accent: Color,
 	spine.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(spine)
 
-	var icon := PiritoriIcon.new(icon_kind, tint, 22.0)
+	var icon := PiritoriIcon.new(icon_kind, tint, 22.0 * _text_scale())
 	row.add_child(icon)
 
 	var lbl := Label.new()
 	lbl.text = text
-	lbl.add_theme_font_size_override("font_size", 14)
+	# Scaled like the rest of the body text. Left at a fixed 14 these came out
+	# SMALLER than the forecast line printed underneath each one — the thing
+	# you press was quieter than the note about it.
+	lbl.add_theme_font_size_override("font_size", int(round(14.0 * _text_scale())))
 	lbl.add_theme_color_override("font_color", ink)
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
