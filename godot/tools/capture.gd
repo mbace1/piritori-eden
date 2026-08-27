@@ -13,6 +13,12 @@ const SPEAKER_SHOT := "enc-toko-quiet-voice"
 ## by the manifest saying an id exists.
 const SITE_SHOT := "enc-bank-counter"
 
+## The battle console was never photographed at all, at any size — and the
+## owner's own phone screenshot showed it running off the right edge with
+## SKIP TO RESULT and WITHDRAW clipped. A screen the capture tool cannot see
+## is a screen nobody checks.
+const BATTLE_SHOT := "battle-karhupuisto-2v2"
+
 ## `phone` is the owner's actual device, added 2026-08-27 after a screenshot
 ## from it showed the command dock and the battle console both running off the
 ## right edge — clipped mid-word — on a shape this tool had never photographed.
@@ -125,6 +131,16 @@ func _ready() -> void:
 			var p4 := out_dir.path_join("piritori-site-%s-%s.png" % [label, Loc.code])
 			img4.save_png(p4)
 			print("wrote ", p4)
+
+			if _shell.has_method("_show_battle"):
+				_shell._show_battle(BATTLE_SHOT)
+				for i in range(18):
+					await get_tree().process_frame
+				await RenderingServer.frame_post_draw
+				var img5 := get_viewport().get_texture().get_image()
+				var p5 := out_dir.path_join("piritori-battle-%s-%s.png" % [label, Loc.code])
+				img5.save_png(p5)
+				print("wrote ", p5)
 
 	get_tree().quit(0)
 
