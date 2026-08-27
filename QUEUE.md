@@ -1866,8 +1866,20 @@ list. Recorded here instead of half-fixed:
   Added `piritori-speaker-*.png`, using `enc-toko-quiet-voice`. Previously
   the only way to see a face was to play to day 3 by hand.
 
-- **FOUND BY THAT SHOT, and it needs owner input: Toko's face is a yellow
-  smiley.** Not a render fault — extracted the texture atlas out of
+- ~~**FOUND BY THAT SHOT: Toko's face is a yellow smiley.**~~ **WRONG, AND
+  CORRECTED 2026-08-27 — the mask is CANON.** `ART_BIBLE.md` §8.3 is titled
+  "Toko Slomo character and mask" and `art/v3/manifest.json` says outright
+  "The gold smiling mask is CANON". I called a canon character design a
+  shipped bug because I diagnosed from a render without reading the art
+  bible first. The whole entry below is kept rather than deleted because the
+  free 14-model survey in it is still useful and the mistake is worth
+  leaving visible. **Nothing about Toko's face needs fixing.** The real
+  follow-up is the opposite one: his 3D model should be judged against §8.3's
+  mask spec (eye openings cut INSIDE the white arches), not replaced.
+
+  The original, incorrect entry follows.
+
+- **Toko's face is a yellow smiley.** Not a render fault — extracted the texture atlas out of
   `art/v3/cast3d/toko-v01.glb` and the smiley UV islands are baked into it.
   A Meshy image-to-3D generation went wrong and shipped. He is a named
   character in `NARRATIVE.md`, he is the first face the game shows, and he is
