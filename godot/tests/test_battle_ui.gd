@@ -46,8 +46,16 @@ func _ready() -> void:
 	check("round state is on screen", "ROUND" in labels.to_upper(), labels.substr(0, 90))
 	check("enemy intent is telegraphed",
 		"block" in labels.to_lower() or "withdraw" in labels.to_lower(), labels.substr(0, 200))
+	# NOT a hardcoded name. This asserted `"Mira" in labels`, which only worked
+	# while the slice shipped hand-written crew names — and those are gone:
+	# COMBAT.md §7.1 makes everyone below a mainline character generated, so a
+	# crew member's name is drawn from the first/family pools and is not
+	# knowable when the test is written. Asking the registry what this person
+	# is actually called is also the stronger check: it proves the screen shows
+	# THIS fighter, not merely that some expected string is present.
+	var who: String = String(ContentRegistry.crew_member(String(crew[0])).get("name", ""))
 	check("the selected crew member is named",
-		"Mira" in labels or "Hämäl" in labels, labels.substr(0, 200))
+		who != "" and who in labels, "expected '%s' in: %s" % [who, labels.substr(0, 160)])
 	check("condition is shown", "condition" in labels.to_lower())
 	# §12.5: "text/numerals plus shapes; do not rely on tiny segments alone."
 	check("tracks show numerals, not only pips",

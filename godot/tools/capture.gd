@@ -8,9 +8,16 @@ extends Node
 ## bar. `test_shell` already asserts this one has a speaker with a model.
 const SPEAKER_SHOT := "enc-toko-quiet-voice"
 
+## `phone` is the owner's actual device, added 2026-08-27 after a screenshot
+## from it showed the command dock and the battle console both running off the
+## right edge — clipped mid-word — on a shape this tool had never photographed.
+## 390x844 is aspect 0.462; a Pixel 10 is 1079x2047, which is 0.527 and a good
+## deal wider relative to its height. Testing one narrow portrait is not
+## testing portrait.
 const SHOTS := [
 	["landscape", Vector2i(1366, 768)],
 	["portrait", Vector2i(390, 844)],
+	["phone", Vector2i(1079, 2047)],
 ]
 
 ## PIRITORI_SHOT_LANG picks the interface language for the capture.

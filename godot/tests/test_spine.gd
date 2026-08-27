@@ -974,11 +974,19 @@ careers (COMBAT.md 7)")
 
 	# A named character has no ceiling: they leave in authored beats, never by
 	# attrition, and NARRATIVE.md decides when.
+	# NOT `if named != ""`. This used to skip silently when the slice happened
+	# to contain nobody flagged `named`, which is CLAUDE.md rule 10's "a gate
+	# that cannot fail is a finding" written out in full — two assertions that
+	# quietly stopped existing while the suite still reported zero failures.
+	# It now fails loudly instead, because the flag is a real mechanic and
+	# something in the slice has to exercise it.
 	var named := ""
 	for c in ContentRegistry.slice.get("crew", []):
 		if bool(c.get("named", false)):
 			named = String(c.get("id", ""))
 			break
+	check("the slice exercises the named-character mechanic", named != "",
+		"no crew is flagged `named`, so the two checks below cannot run")
 	if named != "":
 		check("a named character has no career ceiling",
 			GameState.career_left(named) == -1)

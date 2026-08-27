@@ -192,8 +192,7 @@
   ],
   "crew": [
     {
-      "id": "crew-mira-hamalainen",
-      "name": "Mira Hämäläinen",
+      "id": "crew-slot-runner",
       "age": 24,
       "origin_anchor_id": "harju",
       "role": "runner",
@@ -213,12 +212,11 @@
       "initial_equipment": [
         "feature-phone"
       ],
-      "recruit_encounter_id": "enc-mira-at-tram-stop",
+      "recruit_encounter_id": "enc-runner-at-tram-stop",
       "named": true
     },
     {
-      "id": "crew-rauno-lahti",
-      "name": "Rauno Lahti",
+      "id": "crew-slot-muscle",
       "age": 46,
       "origin_anchor_id": "linjat_yard",
       "role": "muscle",
@@ -242,8 +240,7 @@
       "named": true
     },
     {
-      "id": "crew-samira-elmi",
-      "name": "Samira Elmi",
+      "id": "crew-slot-watcher",
       "age": 31,
       "origin_anchor_id": "hakaniemi",
       "role": "watcher",
@@ -267,8 +264,7 @@
       "named": true
     },
     {
-      "id": "crew-duy-nguyen",
-      "name": "Duy Nguyen",
+      "id": "crew-slot-fixer",
       "age": 29,
       "origin_anchor_id": "vaasankatu",
       "role": "fixer",
@@ -292,8 +288,7 @@
       "named": false
     },
     {
-      "id": "crew-ilkka-koskinen",
-      "name": "Ilkka “Ile” Koskinen",
+      "id": "crew-slot-driver",
       "age": 39,
       "origin_anchor_id": "siltasaari",
       "role": "driver",
@@ -317,8 +312,7 @@
       "named": false
     },
     {
-      "id": "crew-jelena-markovic",
-      "name": "Jelena Marković",
+      "id": "crew-slot-local",
       "age": 35,
       "origin_anchor_id": "torkkelinmaki",
       "role": "local",
@@ -1040,7 +1034,7 @@
           "effects": [
             "cash:+55",
             "stock:piri:-1",
-            "reveal:enc-mira-at-tram-stop",
+            "reveal:enc-runner-at-tram-stop",
             "flag:first-sale-introduction"
           ]
         },
@@ -1057,16 +1051,16 @@
       ]
     },
     {
-      "id": "enc-mira-at-tram-stop",
+      "id": "enc-runner-at-tram-stop",
       "day": 2,
       "block": "night",
       "site_id": "harju_pitch",
       "participants": [
         "aatami",
-        "crew-mira-hamalainen"
+        "crew-slot-runner"
       ],
       "source_status": "fiction",
-      "opening": "Mira has already read the timetable and Aatami. She asks which one is more reliable.",
+      "opening": "The runner has already read the timetable, and read Aatami. She asks which one of them is more reliable.",
       "inspectables": [
         "creased paper timetable",
         "repair tape on messenger bag",
@@ -1079,9 +1073,9 @@
           "requirements": [
             "cash>=18"
           ],
-          "forecast": "Recruit Mira with a clear wage and a promise she will remember.",
+          "forecast": "Recruit her with a clear wage and a promise she will remember.",
           "effects": [
-            "recruit:crew-mira-hamalainen",
+            "recruit:crew-slot-runner",
             "flag:promise-no-waiting"
           ]
         },
@@ -1091,9 +1085,9 @@
           "requirements": [
             "cash>=10"
           ],
-          "forecast": "Mira joins for one job; loyalty starts low.",
+          "forecast": "She joins for one job; loyalty starts low.",
           "effects": [
-            "recruit-temporary:crew-mira-hamalainen",
+            "recruit-temporary:crew-slot-runner",
             "relationship:mira:-1"
           ]
         },
@@ -1241,12 +1235,12 @@
       "site_id": "karhupuisto_bench",
       "participants": [
         "aatami",
-        "crew-samira-elmi",
+        "crew-slot-watcher",
         "dog-owner"
       ],
       "source_status": "fiction",
       "scene_asset_id": "scene-karhupuisto-v01",
-      "opening": "Wind turns the lime leaves. Samira points out the same man crossing the park without ever arriving.",
+      "opening": "Wind turns the lime leaves. The watcher points out the same man crossing the park without ever arriving.",
       "inspectables": [
         "dog changing direction",
         "empty bench kept dry",
@@ -1255,13 +1249,13 @@
       "choices": [
         {
           "id": "hire-watcher",
-          "label": "Hire Samira — €24 per night",
+          "label": "Hire the watcher — €24 per night",
           "requirements": [
             "cash>=24"
           ],
           "forecast": "Recruit a watcher and reveal intent more clearly in the coming mission.",
           "effects": [
-            "recruit:crew-samira-elmi",
+            "recruit:crew-slot-watcher",
             "reveal:offer-karhupuisto-sell"
           ]
         },
@@ -1298,7 +1292,7 @@
       "participants": [
         "aatami",
         "sean-mccormick",
-        "crew-rauno-lahti"
+        "crew-slot-muscle"
       ],
       "source_status": "fiction",
       "opening": "The public room closes. In the yard, three relatives disagree about the same invoice at full volume.",
@@ -1310,13 +1304,13 @@
       "choices": [
         {
           "id": "hire-rauno",
-          "label": "Hire Rauno — €28 per night",
+          "label": "Hire the muscle — €28 per night",
           "requirements": [
             "cash>=28"
           ],
           "forecast": "Recruit muscle; owe the family no extra favour.",
           "effects": [
-            "recruit:crew-rauno-lahti",
+            "recruit:crew-slot-muscle",
             "relationship:mccormick_family:+1"
           ]
         },
@@ -1763,7 +1757,7 @@
     {
       "day": 2,
       "block": "night",
-      "encounter_id": "enc-mira-at-tram-stop",
+      "encounter_id": "enc-runner-at-tram-stop",
       "anchor_id": "harju"
     },
     {

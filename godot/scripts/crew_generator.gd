@@ -99,6 +99,40 @@ const SPREAD := 1
 ## One candidate, decided entirely by `seed`. The same seed gives the same
 ## person forever, which is what lets a hiring pool be regenerated on demand
 ## instead of stored, and what makes a campaign reproducible from its seed.
+## A first name and a family name from the SAME origin pool, combined.
+##
+## Owner, 2026-08-27: "there are no crew members that are canon, only mainline
+## characters. every other name is generated from first and last pool to make
+## combo." This is the one place that combination happens, so the authored
+## slice and the hiring pool cannot drift into two different naming schemes —
+## which is exactly what had happened: six crew shipped with hand-written
+## names while everyone hired off the street was generated.
+##
+## Drawing both halves from one origin is deliberate. Mixing them would
+## produce people whose names no family ever had, which reads as noise rather
+## than as a neighbourhood.
+static func _name_from(rng: RandomNumberGenerator, origin: String) -> String:
+	var given: Array = GIVEN[origin]
+	var family: Array = FAMILY[origin]
+	return "%s %s" % [
+		given[rng.randi_range(0, given.size() - 1)],
+		family[rng.randi_range(0, family.size() - 1)],
+	]
+
+
+## A stable name for an AUTHORED crew slot, derived from its id.
+##
+## The slice defines six recruitable people because the content needs six
+## distinct roles to hire; it does not get to name them. Seeding from the id
+## means the same slot is the same person in every run and across a save,
+## while the name itself still comes from the pools like everyone else's.
+static func name_for_id(crew_id: String) -> String:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(crew_id)
+	var pools: Array = GIVEN.keys()
+	return _name_from(rng, String(pools[rng.randi_range(0, pools.size() - 1)]))
+
+
 static func generate(seed_value: int) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
@@ -111,10 +145,7 @@ static func generate(seed_value: int) -> Dictionary:
 	var given: Array = GIVEN[origin]
 	var family: Array = FAMILY[origin]
 
-	var display := "%s %s" % [
-		given[rng.randi_range(0, given.size() - 1)],
-		family[rng.randi_range(0, family.size() - 1)],
-	]
+	var display := _name_from(rng, origin)
 
 	# The id has to survive a save file and must not collide with an authored
 	# one, so it is derived from the seed rather than from the name — two
