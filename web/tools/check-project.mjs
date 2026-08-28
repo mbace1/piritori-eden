@@ -6,18 +6,26 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
 const includeBrowser = process.argv.includes('--browser');
 
+// This list assumed a repo shaped like SHARED_ENGINE.md's suggested seams —
+// flow-core/, piritori/, toko-move/ as SIBLING folders — which is not the
+// shape this repo actually took: piritori-eden became its own single-product
+// repo with its content flat at the root, and flow-core/ went to the
+// Suds-Jack repo instead (legacy/README.md). Every path below was still
+// pointing at the old, unbuilt shape, so this gate has never run since
+// v4.0 — a dead path always exits non-zero before check 2. `flow-core/`'s
+// own check is dropped rather than repointed cross-repo: `legacy/` (its
+// only caller here) is genuinely retired, not merely relocated.
 const checks = [
-  'flow-core/test/contract.mjs',
-  'piritori/map/validate-map.mjs',
-  'piritori/content/validate-slice.mjs',
-  'piritori/test/v3-contract.mjs',
-  'piritori/test/v3-state.mjs',
-  'piritori/test/v3-battle.mjs',
-  'piritori/test/fight.mjs',
-  'piritori/test/market.mjs',
+  'map/validate-map.mjs',
+  'content/validate-slice.mjs',
+  'web/test/v3-contract.mjs',
+  'web/test/v3-state.mjs',
+  'web/test/v3-battle.mjs',
+  'missions/test/model.mjs',
+  'market/test/model.mjs',
 ];
 
-if (includeBrowser) checks.push('piritori/test/v3-playthrough.cjs');
+if (includeBrowser) checks.push('web/test/v3-playthrough.cjs');
 
 for (const script of checks) {
   console.log(`\n▶ ${script}`);
