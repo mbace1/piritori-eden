@@ -126,6 +126,12 @@ being a check on anything, and the checks it was carrying die quietly with it.
 - **The courtyard v03 fits and is the reference** for what a stage should give.
 - **`art-library/archive/needs-rework/`** should probably gain the off-spec
   stages rather than leaving them registered and unusable.
+- **Every stage note above was written against the fallback yard, not the
+  named one.** `VERSIONS.md` v4.6: `battle_stage_3d.gd` never actually
+  showed a battle's own stage until 2026-08-28 — a mounting-order bug meant
+  every 3D fight rendered `STAGE_FALLBACK` regardless of `scene_asset_id`.
+  Fixed now. Re-judge stage quality against the CORRECT stage per battle,
+  not the backyard everything used to silently borrow.
 
 ## The stage (see COMBAT.md 3.1)
 

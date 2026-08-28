@@ -10,6 +10,61 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.6 — 2026-08-28
+
+**Every 3D battle stage was always the Kallio backyard fallback — found from
+owner feedback, not a report.** Owner, looking at a battle capture: *"the 3d
+level looks bad an is pointing the wrong way... characters look like they
+are weird."* Chasing that down (not assuming it was a taste question) found
+a real ordering bug: `formation_battle.gd`'s `_build()` mounts `_stage3d`
+from `_ready()`, which fires the instant the scene enters the tree —
+**before `begin()` has ever run `_load_stage()`**, so `scene_asset_id` was
+always still `""` at the moment `battle_stage_3d.gd` picked its model in its
+own `_ready()`. Nothing afterward ever told it the id had changed. Confirmed
+by capturing two DIFFERENT battles (`battle-courtyard-3v3`,
+`battle-kattilahalli-3v3`) and finding the render pixel-identical both
+times — every fight in the game, regardless of what it names, has only ever
+shown the same generic yard.
+
+- **Fixed**: `_stage3d` construction moved out of `_build()` into a new
+  `_mount_stage3d()`, called from `begin()` *after* `_load_stage(id)` sets
+  the real id. Re-captured both battles: courtyard still (correctly) shows
+  the fallback, since `scene-courtyard-prototype-v05` is a flat 2D webp with
+  no 3D stage of its own — but kattilahalli now shows its own registered
+  hall (tank/silo, rust pillars, checkered floor), genuinely different from
+  the backyard for the first time.
+- **A second, smaller bug found alongside it**: `_load_stage()` (the 2D
+  loader, kept live for `use_3d = false`) tried to load every
+  `scene_asset_id` as a `Texture2D`, including ones that are now `mesh-3d`
+  assets — throwing a script error on every 3D battle
+  (`res://scenes/formation_battle.gd:200`). Fixed by skipping any asset
+  whose `kind` ends `-3d` before the `load()` call.
+- **What the fix did NOT resolve, and the owner's complaint may still stand
+  on**: the correctly-matched kattilahalli render is still rough —
+  `art/v3/manifest.json`'s own note on that asset already says *"some
+  textures are mirrored across opposite sides... owner's read is that
+  colour and lighting hide it; not attempted here"*, and a fresh capture at
+  the render's own resolution suggests they don't hide it completely. And
+  **"characters look weird" has a confirmed, separate cause**, already
+  named in `QUEUE.md`'s "3D cast" section and now seen directly in a
+  close-crop capture: all six units share the muscle rig's fight clips
+  regardless of their own proportions, so a 3v3 currently reads as six
+  bodies frozen in one borrowed lunge, several of them clipping into each
+  other at battle distance. Neither is a one-line fix. Brought back to the
+  owner as a live question rather than picked unilaterally — this reopens
+  `PHASING.md` §1.055 (2D vs 3D), which is a ruling this file does not get
+  to make a second time on its own.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none added; existing `stage3d`/`cast3d` assets unchanged.
+- **presentation:** Godot-only — `formation_battle.gd`, `battle_stage_3d.gd`
+  loading order. Nothing for `web/` to port; the 2D `web/` build never had
+  this bug (no equivalent stage-fallback lookup exists there).
+- **status:** landed. The two remaining issues named above are open
+  questions for the owner, not follow-up work assigned to either build yet.
+
 ## v4.5 — 2026-08-28
 
 **`web/` wears the same chrome as Godot — the actual algorithm, not a

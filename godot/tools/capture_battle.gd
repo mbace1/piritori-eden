@@ -7,6 +7,13 @@ func _ready() -> void:
 	if out == "": out = "user://"
 	var lang: String = OS.get_environment("PIRITORI_SHOT_LANG")
 	if lang != "": Loc.set_language(lang)
+	# Which battle to render — content names a scene_asset_id, and different
+	# battles can point at different (or no) 3D stages. Unset means the
+	# original default. Added chasing VERSIONS.md v4.6: comparing two
+	# DIFFERENT battle ids is what caught every 3D battle rendering the same
+	# fallback stage.
+	var battle_id: String = OS.get_environment("PIRITORI_SHOT_BATTLE")
+	if battle_id == "": battle_id = "battle-courtyard-3v3"
 
 	# Before anything is instantiated: _ready() builds the console, so a flag set
 	# after add_child() arrives too late and the chrome stays up.
@@ -21,6 +28,7 @@ func _ready() -> void:
 	# PIRITORI_SHOT_BOARD is "lanes x rows", e.g. "4x4". Unset means canon.
 	var board: String = OS.get_environment("PIRITORI_SHOT_BOARD")
 	var tag := "canon"
+	if battle_id != "battle-courtyard-3v3": tag += "-" + battle_id
 	if board != "":
 		var bits := board.split("x")
 		if bits.size() == 2:
@@ -55,7 +63,7 @@ func _ready() -> void:
 		crew.append(String(c.get("id", "")))
 		if crew.size() >= 3: break
 
-	_s.begin("battle-courtyard-3v3", crew, 4242)
+	_s.begin(battle_id, crew, 4242)
 
 	# A candidate background, dropped in behind the board so the composition can
 	# be judged before anything is registered as art.

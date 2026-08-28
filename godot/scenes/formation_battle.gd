@@ -174,6 +174,7 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	# that committing is decided with the whole board visible.
 	GameState.crew_levelled.connect(_on_crew_levelled)
 	_load_stage(id)
+	_mount_stage3d()
 	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
 	if errors.is_empty():
 		fight.state_changed.connect(_refresh)
@@ -184,7 +185,12 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 
 
 ## The battle's own location art. Each battle names a scene_asset_id, and the
-## slice ships approved art for both — Karhupuisto and the courtyard.
+## slice ships approved art for both — Karhupuisto and the courtyard. Only
+## for the 2D renderer: some battles now name a `mesh-3d` stage instead of a
+## flat image (kattilahalli), and `_stage` is typed `Texture2D` — loading a
+## `.glb` into it used to throw a script error every 3D battle ("Trying to
+## assign value of type 'PackedScene' to a variable of type 'Texture2D'"),
+## found alongside the stage-mounting bug this file also fixes 2026-08-28.
 func _load_stage(id: String) -> void:
 	_stage = null
 	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
@@ -194,10 +200,33 @@ func _load_stage(id: String) -> void:
 	for asset in ContentRegistry.art.get("assets", []):
 		if String(asset.get("id", "")) != asset_id:
 			continue
+		if String(asset.get("kind", "")).ends_with("-3d"):
+			return
 		var path := "res://data/art/" + String(asset.get("file", ""))
 		if ResourceLoader.exists(path):
 			_stage = load(path)
 		return
+
+## Builds the 3D stage now that _stage_id names the real battle. Called from
+## begin(), after _load_stage() -- never from _build()/_ready(), where
+## the id is not known yet (see the note where this used to be mounted).
+## Guarded so a second begin() on the same instance (not used by any real
+## caller today, but cheap to not assume) frees the old stage instead of
+## stacking a second one under it.
+func _mount_stage3d() -> void:
+	if not use_3d:
+		return
+	if _stage3d != null:
+		_stage3d.queue_free()
+		_stage3d = null
+	_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
+	# Told WHERE it is before it is in the tree, because the stage picks its
+	# model in _ready and cannot ask afterwards.
+	_stage3d.scene_asset_id = _stage_id
+	_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_board.add_child(_stage3d)
+	_mount_shot_caller()
 
 
 # ── layout ────────────────────────────────────────────────────────────────
@@ -244,20 +273,17 @@ func _build() -> void:
 	_board.gui_input.connect(_board_input)
 	col.add_child(_board)
 
-	# The 3D stage sits INSIDE the board control and covers it. Everything the
-	# console does — selection, forecast, confirm, withdraw — is untouched:
-	# only what the board draws has changed. `use_3d` decides which, so the 2D
-	# renderer stays reachable and testable rather than being deleted on the
-	# strength of one prototype.
-	if use_3d:
-		_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
-		# Told WHERE it is before it is in the tree, because the stage picks its
-		# model in _ready and cannot ask afterwards.
-		_stage3d.scene_asset_id = _stage_id
-		_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
-		_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_board.add_child(_stage3d)
-		_mount_shot_caller()
+	# The 3D stage is NOT mounted here. `_build()` runs from `_ready()`, which
+	# fires the instant this scene enters the tree — before `begin()` has ever
+	# run `_load_stage()`, so `_stage_id` is still "". Mounting `_stage3d` here
+	# used to bake that empty id in at construction: `battle_stage_3d.gd` picks
+	# its model in ITS OWN `_ready()`, the moment `add_child` puts it in the
+	# tree, and nothing afterward ever told it the id had changed. Every 3D
+	# battle in the shipped game rendered `STAGE_FALLBACK` (the Kallio backyard)
+	# regardless of what the fight actually named — found 2026-08-28 by
+	# capturing two DIFFERENT battles (courtyard, kattilahalli) and noticing
+	# the render was pixel-identical both times. See `_mount_stage3d()`, called
+	# from `begin()` after the real id is known.
 
 	# ── the command console, OVERLAID rather than stacked ──
 	# Anchored to the bottom of the frame instead of sitting in the column, so it
