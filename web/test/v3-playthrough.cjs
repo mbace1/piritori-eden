@@ -92,12 +92,27 @@ server.listen(0, '127.0.0.1', async () => {
     ok('the opening names the full €45 → €68 spread',
       openingLadder.includes('€45') && openingLadder.includes('€68') && openingLadder.includes('+€23'), openingLadder);
 
-    for (const mode of ['encounter', 'ledger', 'battle', 'news', 'route']) {
+    // 'encounter' and 'battle' are committed context (UX_SPEC §3.2/§3.4,
+    // VERSIONS.md v4.4): entering either HIDES .mode-nav entirely, so a loop
+    // that clicks straight through mode-nav buttons dies on whichever mode
+    // comes right after one of those two — the nav it needs is gone. 'battle'
+    // goes mid-list because its empty state (no fight has started yet) offers
+    // a real "go-route" button to withdraw through, same as a player would;
+    // 'encounter' goes last because there IS a live encounter at this point
+    // (the Siltasaari lead) and the only real way out is choosing and
+    // advancing it, which this loop has no business doing just to prove a nav
+    // button works.
+    for (const mode of ['ledger', 'battle', 'news', 'route']) {
       await page.locator(`[data-mode-target="${mode}"]`).click();
       ok(`${mode} is reachable through its real navigation control`,
         await page.locator('#game').getAttribute('data-mode') === mode
           && (await page.locator('#modeRoot').textContent()).trim().length > 30);
+      if (mode === 'battle') await page.locator('[data-action="go-route"]').click();
     }
+    await page.locator('[data-mode-target="encounter"]').click();
+    ok('encounter is reachable through its real navigation control',
+      await page.locator('#game').getAttribute('data-mode') === 'encounter'
+        && (await page.locator('#modeRoot').textContent()).trim().length > 30);
 
     // Set up Toko's authored night, then enter it through the visible mode nav.
     await page.evaluate(() => {
@@ -111,25 +126,44 @@ server.listen(0, '127.0.0.1', async () => {
       window.__ptv3.debug.setState(next);
     });
     await page.locator('[data-mode-target="encounter"]').click();
-    await page.waitForSelector('.scene-viewport.toko .scene-image');
-    const tokoCrop = await page.locator('.scene-viewport.toko').evaluate(viewport => {
-      const image = viewport.querySelector('.scene-image');
-      const vr = viewport.getBoundingClientRect();
-      const ir = image.getBoundingClientRect();
-      return {
-        overflow: getComputedStyle(viewport).overflow,
-        cropped: ir.height > vr.height + 20,
-        liveChoices: viewport.closest('.encounter-layout').querySelectorAll('[data-choice]').length,
-      };
-    });
-    ok('Toko art is deliberately cropped above its baked prototype UI',
-      tokoCrop.overflow === 'hidden' && tokoCrop.cropped, JSON.stringify(tokoCrop));
-    ok('Toko receives live narrative choices', tokoCrop.liveChoices === 4, String(tokoCrop.liveChoices));
+    // A soft wait, not page.waitForSelector: that throws on timeout, and an
+    // uncaught throw here skips the try/catch straight to `finally` — the
+    // AUTO-battle, news and portrait-reflow checks below never even run.
+    // QUEUE.md: content moved enc-toko-quiet-voice's scene_asset_id to
+    // scene-toko-noodles-empty-v01 (the Godot-side live-3D-presenter asset,
+    // no baked Toko or UI drawn into it) while .toko stayed hardcoded to the
+    // old scene-toko-noodles-prototype-v02 id, so the class this test looks
+    // for is never applied on the current content — real content/engine
+    // drift, not a flaky test, and not something to paper over here.
+    const hasToko = await page.locator('.scene-viewport.toko .scene-image').first()
+      .waitFor({ timeout: 5000 }).then(() => true).catch(() => false);
+    if (hasToko) {
+      const tokoCrop = await page.locator('.scene-viewport.toko').evaluate(viewport => {
+        const image = viewport.querySelector('.scene-image');
+        const vr = viewport.getBoundingClientRect();
+        const ir = image.getBoundingClientRect();
+        return {
+          overflow: getComputedStyle(viewport).overflow,
+          cropped: ir.height > vr.height + 20,
+          liveChoices: viewport.closest('.encounter-layout').querySelectorAll('[data-choice]').length,
+        };
+      });
+      ok('Toko art is deliberately cropped above its baked prototype UI',
+        tokoCrop.overflow === 'hidden' && tokoCrop.cropped, JSON.stringify(tokoCrop));
+      ok('Toko receives live narrative choices', tokoCrop.liveChoices === 4, String(tokoCrop.liveChoices));
+    } else {
+      ok('Toko art is deliberately cropped above its baked prototype UI', false,
+        'scene-viewport.toko not found — see QUEUE.md, scene_asset_id drift');
+      ok('Toko receives live narrative choices', false, 'skipped: no .toko viewport');
+    }
 
     // Set up the 2v2, then issue an actual AUTO command through the interface.
+    // Crew ids are role slots now, not authored names (content: "crew names
+    // are generated from the pools, never authored") — this test still had
+    // the two pre-pool names, which crashed setting a status on `undefined`.
     await page.evaluate(() => {
       const next = structuredClone(window.__ptv3.state);
-      const ids = ['crew-mira-hamalainen', 'crew-samira-elmi'];
+      const ids = ['crew-slot-muscle', 'crew-slot-watcher'];
       next.recruited = ids;
       next.deployed = ids;
       for (const id of ids) next.crewStatus[id].status = 'available';

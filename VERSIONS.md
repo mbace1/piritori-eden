@@ -10,6 +10,39 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.10 — 2026-08-28
+
+**`v3-playthrough.cjs` runs to completion again**, and found two more real
+drifts in the process. `QUEUE.md`'s "found running it, not fixed here" list
+named the mode-nav loop's crash as the reason AUTO-battle/news/portrait
+checks never ran at all; that crash is fixed (the loop now withdraws through
+`battle`'s real `go-route` button — the same one a player would use — before
+continuing, and tests `encounter` last since the only real way out of it is
+choosing and advancing, not something this loop should do). The whole test
+runs now: 23 passed, 5 failed, up from 11 checks even reached before.
+
+Fixing the crash uncovered two more drifts, both genuinely pre-existing and
+unrelated to this fix: `battle-karhupuisto-2v2`'s test setup used two
+pre-pool crew ids that crashed on `undefined.status` (`content.crew` moved
+to generated `crew-slot-*` ids a while back) — fixed, trivially, by using
+real current ids. The Toko scene is a different animal: `web/`'s `isToko`
+check still hardcodes the retired prototype art id, and even pointing it at
+the current one wouldn't help — that asset is Godot's live-3D-presenter
+background plate with no Toko drawn into it, and `web/` has no compositing
+system to put him there. Recorded in `QUEUE.md`, not fixed — it's a real
+system gap, not a one-line id swap. The test now soft-fails that section
+instead of throwing, so one content gap can't blind the gate to everything
+after it again.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** none — `web/`-only test fixes, no app behavior change.
+- **status:** landed. The mode-nav-loop and crew-id items in `QUEUE.md`'s
+  `v3-playthrough.cjs` section are closed; the Toko compositing gap is
+  intentionally left open there.
+
 ## v4.9 — 2026-08-28
 
 **The portrait battle console reflows the automation column below the verb

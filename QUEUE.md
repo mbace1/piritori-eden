@@ -16,24 +16,59 @@ MIME map missing `.mjs`, which made the stances port's `battle.js` import of
 `market/model.mjs` — the first cross-directory ES module import a browser
 had to load in this gate — serve as `application/octet-stream`, which a
 browser silently refuses to execute as a module). Both fixed, and the gate
-now actually boots the app and runs 11 of 14 checks.
+now actually boots the app and ran 11 of 14 checks.
 
-**Found running it for the first time in a while, not caused by this
-session's own changes, not fixed here:**
-- **The mode-nav loop (`for (const mode of ['encounter', 'ledger', …])`)
-  times out clicking `ledger`.** It predates the committed-context rule
-  (`VERSIONS.md` v4.4, 2026-08-27): entering `encounter` mode now correctly
-  HIDES the mode-nav (`UX_SPEC.md` §3.2/§3.4), so the very next click in the
-  loop has nothing to click. The test's flow needs updating to withdraw/
-  return-to-map between mode switches, not the feature.
-- **"the whole twelve-anchor Kallio board is present" fails** — already
-  named in this file, "Canon drift the browser gate found when it was
-  unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still says
-  twelve. Open owner question there already; not re-litigated here.
-- **One console 404** keeps the "boots with no browser errors" check red —
-  `hub/shell.js?v=17`, the cross-repo hub-shell convention this standalone
-  repo doesn't have. Harmless, seen throughout this session's other
-  captures too.
+**The mode-nav loop is fixed** (2026-08-28, the item below picked back up):
+`for (const mode of ['encounter', 'ledger', …])` predates the committed-
+context rule (`VERSIONS.md` v4.4, 2026-08-27) — entering `encounter` mode
+now correctly HIDES `.mode-nav` (`UX_SPEC.md` §3.2/§3.4), so the very next
+click in the loop had nothing to click and threw, which — since the whole
+test body sits in ONE try/catch — skipped straight to `finally` and silently
+dropped every check after it (AUTO-battle, news, portrait reflow: never ran,
+not merely unreported). Fixed by reordering the loop (`battle` before the
+still-nav-visible modes, `encounter` last) and withdrawing through `battle`'s
+own real `[data-action="go-route"]` button — the same one an actual player
+would use — rather than faking the nav click. `encounter` goes last because
+there's a live encounter at that point and the only real way out is choosing
+and advancing it, which this loop has no business doing.
+
+**Fixing that surfaced two more real, independent content/test drifts —
+found and reported, not both fixed:**
+
+- **Fixed: `battle-karhupuisto-2v2`'s setup used pre-pool crew ids**
+  (`crew-mira-hamalainen`, `crew-samira-elmi`), which crashed setting
+  `.status` on `undefined` — `content.crew` moved to generated `crew-slot-*`
+  role ids ("content: crew names are generated from the pools, never
+  authored") and the test was never updated. Swapped to `crew-slot-muscle`/
+  `crew-slot-watcher`; the AUTO-battle check runs and passes again.
+- **Not fixed, and not a small fix: the web build's Toko scene is missing
+  Toko.** `enc-toko-quiet-voice`'s `scene_asset_id` moved to
+  `scene-toko-noodles-empty-v01` (commit `323846e`, "Toko stands in the
+  empty bar") — a background-only plate meant for Godot's live 3D
+  `presenter_3d` compositing. `web/js/v3/app.js`'s `isToko` check still
+  hardcodes the retired `scene-toko-noodles-prototype-v02` id (the old baked
+  illustration WITH Toko drawn into it, plus a fake mocked-up choice UI at
+  the bottom that `.scene-viewport.toko`'s crop exists to hide). Even
+  pointing `isToko` at the new id would not fix this: the new plate has no
+  Toko figure in it at all — `web/` has no equivalent of Godot's live
+  compositing, so the scene renders as an empty counter while the text says
+  "Toko dries a bowl and lowers his voice." Fixing this for real means either
+  a `web/`-side presenter compositing system (its own project) or a second,
+  `web/`-specific art asset with Toko drawn back in — not a one-line id
+  swap. The test (`v3-playthrough.cjs`) now soft-fails this instead of
+  throwing, so it no longer blocks the checks after it from running.
+- **"the whole twelve-anchor Kallio board is present" still fails** —
+  already named in this file, "Canon drift the browser gate found when it
+  was unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still
+  says twelve. Open owner question there already; not re-litigated here.
+- **Two console 404s** keep "boots with no browser errors" and "still no
+  browser errors after the click-through" red — `hub/shell.js?v=17`, the
+  cross-repo hub-shell convention this standalone repo doesn't have.
+  Harmless, seen throughout this session's other captures too.
+
+The gate now runs all of it: 23 passed, 5 failed (up from 11 checks even
+reached before today) — three of the five are the pre-existing/documented
+ones above, one pair is the newly-found and honestly-unfixed Toko gap.
 
 ---
 
