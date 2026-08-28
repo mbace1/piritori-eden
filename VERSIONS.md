@@ -10,6 +10,61 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.11 — 2026-08-28
+
+**Sync fire** (COMBAT.md §9.13) — the one Metal Slug Tactics mechanic
+`PHASING.md`'s reference table credited MST for but never actually took. Any
+attack that lands now pulls in every ally who could also reach the target:
+they fire their held weapon too, for free, using the SAME reach test
+(`_get_attack_targets()`) a normal attack already uses, so there is no second
+targeting model to keep in sync with the first.
+
+- **`FightManager._resolve_attack()`** now calls `_trigger_sync_attacks()`
+  after a hit lands. The harm/nerve roll-and-apply core was pulled out into
+  `_apply_attack_harm()`, shared by a normal hit and a sync hit so the two
+  can never drift apart. `_sync_allies_for()` is the one function that
+  decides who's in range — called both by the trigger (after the fact) and
+  by `get_command_forecast()` (before commitment), so the forecast IS the
+  list sync will actually use, not a second guess at it.
+- **One hop, not a cascade**: a sync shot can down a target, absorb guard,
+  earn Glory — but never triggers a second wave of sync off its own hit.
+- **A downed target stops the chain mid-resolution**, not just before it —
+  proved with a three-ally setup where the SECOND sync shot is what actually
+  downs the target (this game's roster takes two condition-zero hits to go
+  down, so the first hit alone never does) and the third ally is skipped.
+  Verified failing first: temporarily disabling the trigger call failed all
+  four of the mechanic's new assertions with the exact wrong numbers, then
+  passed clean again restored.
+- **Symmetric**, like cover and reach already are — an ally for sync purposes
+  is `other.side == attacker.side`, nothing softer, so the opposition earns
+  it the same way the player does.
+- Surfaced in play as a flash over the syncing ally (`battle.sync` — SYNC /
+  SYNKRONI / 連携, same pattern Glory's flash already uses) and, before
+  commitment, as a forecast line next to harm and risk.
+- **Not built**: MST's Desync (tough enemies immune to further sync after
+  the first hit each round) — this content has no "tough" flag yet, and
+  inventing one to gate a brand-new mechanic in the same pass is exactly the
+  unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Also not
+  built: the purple-tile range overlay showing sync BEFORE you pick a
+  target, not just confirming it after — real UI work on top of a forecast
+  field that already carries the data. Both recorded in `QUEUE.md`.
+
+271 of `test_battle`'s checks pass (was 260); the other five gates
+(`test_battle_ui`, `test_shell`, `test_spine`, `test_locale`,
+`test_playthrough`) plus `map/validate-map.mjs`, `content/validate-slice.mjs`
+and `tools/sync-data.mjs --check` all still pass.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** none — the flash/forecast additions are Godot-only UI.
+- **status:** landed, Godot-only. `web/`'s battle system has no sync
+  equivalent yet; not ported here, and not silently assumed away — `web/`'s
+  own combat model would need its own pass to decide whether and how it
+  applies (`PORTING.md` §3.3's chrome/stance exception is the precedent for
+  Godot-canonical systems the other build re-derives, not this).
+
 ## v4.10 — 2026-08-28
 
 **`v3-playthrough.cjs` runs to completion again**, and found two more real

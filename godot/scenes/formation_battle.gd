@@ -861,6 +861,18 @@ func _on_crew_levelled(crew_id: String, level: int) -> void:
 func _on_battle_event(ev) -> void:
 	if ev == null:
 		return
+	if int(ev.kind) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+		# COMBAT.md §9.13: the one thing on screen that says WHY a second gun
+		# just fired — over the syncing ally (source), the same fighter the
+		# harm just landed from, not over the shared target.
+		var sf := Flash.new()
+		sf.fighter_id = String(ev.source_id)
+		sf.text = tr("battle.sync")
+		sf.colour = PiritoriPalette.ROUTE_GREEN
+		sf.life = FLASH_LIFE
+		sf.max_life = FLASH_LIFE
+		_flashes.append(sf)
+		return
 	if int(ev.kind) != int(FightManager.BattleEvent.Kind.GLORY):
 		return
 	var f := Flash.new()
@@ -1318,6 +1330,12 @@ func _build_action_column() -> void:
 			lines_out.append("%s %d%%" % [tr("battle.chance"), int(round(float(fc["hit_chance"]) * 100.0))])
 		if fc.has("risk_band"):
 			lines_out.append("%s %s" % [tr("battle.risk"), String(fc["risk_band"])])
+		# COMBAT.md §9.13: forecast before commitment applies to sync same as
+		# harm or risk — a chain the player cannot see coming before they
+		# commit is a surprise, not a tactical decision.
+		var sync_n: int = (fc.get("sync_allies", []) as Array).size()
+		if sync_n > 0:
+			lines_out.append("%s ×%d" % [tr("battle.sync"), sync_n])
 		var lethal := bool(fc.get("lethal_exposure", false))
 		if lethal:
 			lines_out.append(tr("battle.lethal_risk"))

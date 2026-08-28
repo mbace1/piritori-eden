@@ -875,6 +875,82 @@ depth — which is what stops "three is simply better".
 
 ---
 
+## 9.13 Sync fire — a clean shot pulls the whole formation's guns in, 2026-08-28
+
+`PHASING.md` §1's reference table has always credited Metal Slug Tactics with
+"compact encounters, momentum, the feel of a fight that resolves fast," but the
+one mechanic that actually produces that feel — the reason MST reads as fast
+and never as static — was never taken. This closes that gap.
+
+**The rule: any attack that lands pulls in every ally who could also hit that
+target, for free.** The instant an ATTACK resolves as a hit (not blocked, not
+intercepted — cover already decided nothing landed), every active ally on the
+attacker's side is checked with the same reach test `_get_attack_targets()`
+already runs for a normal attack: if the target is in THEIR held weapon's
+reach from THEIR own slot, they fire too. No action spent, no command queued
+— it does not touch `acted_this_round`, so a synced ally still gets their own
+turn this round exactly as if nothing happened.
+
+**Why free rather than costed:** §5's whole point is that the loadout is fixed
+and the board supplies the variance. A formation is only worth building if
+holding it PAYS OFF the moment somebody opens fire — that is the entire MST
+lesson, "characters simply don't have enough action points to deal with
+multiple enemies any other way." Costing sync would just be a second, worse
+Attack command wearing a coat.
+
+**Symmetric, like everything else that reads position** (cover, reach,
+initiative). Sync is not a player perk — it is a property of standing where
+your gun already reaches, and the opposition earns it the same way the player
+does. `Fighter.is_enemy_of()` already exists precisely because "not
+player-controlled" quietly meant "enemy" once before and looted the police for
+it (§9.5.36); an ally, for sync, is `other.side == attacker.side` and nothing
+softer.
+
+**One hop, not a cascade.** A sync shot can itself kill, absorb guard, and
+earn Glory exactly like a normal hit — but it does not trigger a second wave
+of sync off ITS OWN hit. MST's chain is "one clean shot, several guns," not a
+detonation; letting sync trigger sync would turn one attack into an
+unbounded formation-wide alpha strike with no read on how big it will be
+before you commit.
+
+**A downed target stops the chain mid-resolution, not just before it.**
+Allies are resolved in formation order; each one re-checks the target is
+still active before firing. The first sync hit that finishes the target ends
+it there — nobody fires a bonus round into a body already on the ground.
+
+**Not taken, and it is a real simplification worth naming:** MST syncs only
+the PRIMARY (unlimited-ammo) weapon, holding the special weapon back from the
+chain. This game has no basic/special split yet — `held_weapon_id` is
+singular — so a sync shot fires whatever the ally currently holds. If a
+two-weapon system is ever built, sync should move to the primary slot then;
+until it exists there is nothing to hold back.
+
+**Deliberately not built here — MST's Desync, which makes tough targets
+immune to further sync hits after the first one each round.** That needs a
+notion of "tough" this content doesn't have a flag for yet, and inventing one
+to gate a brand-new mechanic in the same pass is exactly the kind of
+unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Recorded in
+`QUEUE.md` as a real follow-up, not assumed away: an unthrottled chain may
+turn out to trivialise anything grouped tightly, and the honest way to find
+out is to ship the mechanic and read a real fight, not to guess a cap now.
+
+### What this obliges
+
+- `FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT` — its own kind, not
+  `ATTACK_HIT` with a flag, so a screen can tell a chained shot from the shot
+  that caused it without inspecting `detail`.
+- `get_command_forecast()` for ATTACK reports which allies would chain-fire
+  **before** the player commits — §5.1's "forecast before commitment" and
+  §18.1 both require this, and a sync system the player cannot see coming is
+  not a tactical decision, it is a surprise.
+- The board shows it happened: a flash over each syncing ally, same pattern
+  Glory already uses. **Not built here:** MST's purple-tile range overlay —
+  showing which cells WOULD sync before you even pick a target, not just
+  confirming it after. That is real UI work on top of a working forecast
+  field, not a blocker to shipping the mechanic underneath it. `QUEUE.md`.
+
+---
+
 ## 10. Open questions
 
 1. **Trivial fights and skip-to-result:** does *every* fight get a face-off

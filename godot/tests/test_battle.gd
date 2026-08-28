@@ -67,6 +67,7 @@ func _ready() -> void:
 	_test_determinism()
 	_test_withdrawal()
 	_test_board_shape()
+	_test_sync_fire()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1463,3 +1464,123 @@ func _test_withdrawal() -> void:
 	check("the objective does not require defeating everyone",
 		String(battle.get("objective", "")).to_lower().find("unnecessary") != -1,
 		String(battle.get("objective", "")))
+
+
+## Sync fire (COMBAT.md §9.13) — a clean shot pulls in every ally who can
+## also reach the target, for free. Built on a hand-assembled battle_def
+## rather than a canon battle: canon cover/aptitudes would make it very hard
+## to prove a NEGATIVE (that the out-of-range ally never fires) without also
+## proving nothing else is quietly interfering.
+func _test_sync_fire() -> void:
+	print("\nsync fire pulls the whole formation's guns in (COMBAT.md §9.13)")
+	GameState.new_campaign()
+
+	var wide_rows: Array = []
+	for r in range(FightBoard.rows):
+		wide_rows.append(r)
+
+	var scenario1 := FightManager.new()
+	# harm is fixed (min == max), so the total damage a scenario ends with is
+	# a direct, deterministic count of how many shots actually landed.
+	scenario1.register_weapon("test-sync-spread", {
+		"harm_min": 2, "harm_max": 2, "nerve_min": 0, "nerve_max": 0,
+		"allowed_rows": wide_rows, "lane_spread": 1, "piercing": false,
+	})
+	var def1 := {
+		"battle_id": "test-sync", "stage_id": "test-stage",
+		"player_units": [
+			{"fighter_id": "a", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 1, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			# In range: lane 2 is one away from the target's lane 1, inside
+			# the weapon's lane_spread of 1.
+			{"fighter_id": "b", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 2, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			# Out of range on purpose: lane 5 is four lanes from the target's
+			# lane 1, well past lane_spread 1. Proves sync is selective, not
+			# "the whole side fires whenever anybody hits anything".
+			{"fighter_id": "c", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 5, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+		],
+		"opposition_units": [
+			{"fighter_id": "t", "side": int(Fighter.Side.OPPOSITION),
+				"slot_lane": 1, "slot_row": FightBoard.rows,
+				"condition": 6, "condition_max": 6},
+		],
+	}
+	var errs1 := scenario1.initialise(def1, 1)
+	check("scenario 1 sets up clean", errs1.is_empty(), str(errs1))
+
+	var a1: Fighter = scenario1.get_fighter("a")
+	var t1: Fighter = scenario1.get_fighter("t")
+	var cmd1 := FightManager.Command.new(FightManager.Command.Type.ATTACK, "a")
+	cmd1.target_id = "t"
+
+	var fc := scenario1.get_command_forecast(cmd1)
+	check("the forecast names the in-range ally", fc["sync_allies"].has("b"),
+		str(fc["sync_allies"]))
+	check("and never the out-of-range one", not fc["sync_allies"].has("c"),
+		str(fc["sync_allies"]))
+
+	scenario1._resolve_attack(cmd1)
+	eq("both the attacker's shot and the sync shot land (2x2 harm)",
+		t1.condition, 2)
+	check("the syncing ally never spent an action",
+		not scenario1.get_fighter("b").acted_this_round)
+	check("the out-of-range ally's condition is untouched either way",
+		scenario1.get_fighter("c").condition == 6)
+	var sync_hits := 0
+	for e in scenario1._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits += 1
+	eq("exactly one sync shot fired, from the one ally in range", sync_hits, 1)
+
+	# Scenario 2: a downed target stops the chain mid-resolution, not just
+	# before it. T starts at exactly the attacker's own harm (2) — A's shot
+	# brings it to 0 and CRITICAL, not DOWNED yet (COMBAT.md's roster rules
+	# take two condition-zero hits to go down). B's sync shot is the SECOND
+	# hit at condition 0, which is what actually downs it. C, who can also
+	# reach T, must never fire on a body already on the ground.
+	var scenario2 := FightManager.new()
+	scenario2.register_weapon("test-sync-spread", {
+		"harm_min": 2, "harm_max": 2, "nerve_min": 0, "nerve_max": 0,
+		"allowed_rows": wide_rows, "lane_spread": 2, "piercing": false,
+	})
+	var def2 := {
+		"battle_id": "test-sync-2", "stage_id": "test-stage",
+		"player_units": [
+			{"fighter_id": "a", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 1, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "b", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 2, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "c", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 3, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+		],
+		"opposition_units": [
+			{"fighter_id": "t", "side": int(Fighter.Side.OPPOSITION),
+				"slot_lane": 1, "slot_row": FightBoard.rows,
+				"condition": 2, "condition_max": 6},
+		],
+	}
+	var errs2 := scenario2.initialise(def2, 2)
+	check("scenario 2 sets up clean", errs2.is_empty(), str(errs2))
+
+	var cmd2 := FightManager.Command.new(FightManager.Command.Type.ATTACK, "a")
+	cmd2.target_id = "t"
+	scenario2._resolve_attack(cmd2)
+
+	var t2: Fighter = scenario2.get_fighter("t")
+	eq("the second hit (a sync shot) is what actually downs the target",
+		t2.status, Fighter.Status.DOWNED)
+	eq("condition clamps at zero rather than going negative", t2.condition, 0)
+	var sync_hits2 := 0
+	for e in scenario2._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits2 += 1
+	eq("only ONE sync shot lands — the second ally is skipped once the target is down",
+		sync_hits2, 1)

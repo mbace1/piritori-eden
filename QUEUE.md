@@ -8,6 +8,30 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Sync fire (COMBAT.md §9.13, `VERSIONS.md` v4.11) — two follow-ups left open
+
+- **Desync is not built.** MST makes tough enemies immune to further sync
+  hits after the first one lands each round, so a boss cannot just be
+  zerged. This content has no "tough"/"elite" flag anywhere, and inventing
+  one to gate a mechanic in the same pass it shipped would be exactly the
+  unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Shipped
+  unthrottled instead. **Worth watching in play**: an unthrottled chain may
+  turn out to trivialise any tight formation, player or opposition side
+  alike — the honest way to find out is to read a real fight, not guess a
+  cap now. If it does need one, the flag belongs in content
+  (`content/era1-slice-v1.json`'s opposition entries), Content lane's call,
+  and the throttle itself is Engine's.
+- **No purple-tile range overlay.** MST shows which cells WOULD sync before
+  you even pick a target — this ships a forecast field (`sync_allies` on
+  `get_command_forecast()`) and a post-hoc flash, but nothing paints the
+  board itself before commitment. The forecast text line ("SYNC ×N") already
+  carries the same information the tiles would show; the tiles are a
+  Presentation/Art pass on top of a working data source, not a blocker to
+  the mechanic underneath. `formation_battle.gd`'s `_draw_target_path()` is
+  the nearest existing precedent for pre-commit board painting.
+
+---
+
 ## `v3-playthrough.cjs` had been silently not-running since 2026-08-25
 
 Fixed two real bugs getting it to boot at all (stale `page.goto` target —
