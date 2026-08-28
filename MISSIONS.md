@@ -202,22 +202,42 @@ plus effects, and the effects are the point:
 **A mission must never pay only cash.** Cash is what the side hustle is for, and
 a mission that pays only cash is a side hustle with a cutscene.
 
-## 6. What the four authored missions already prove
+## 6. What the four authored missions prove — WRITTEN 2026-08-27
 
-Run through `missions/model.mjs`, the slice's four validate as *errands* — they
-have signals, deadlines, requirements, three outcome sets and intel levels, and
-**one location each**. Which is the useful finding: the schema is nearly right
-and the content is one field short.
+All four now carry steps and validate cleanly against `missions/model.mjs`.
+This section was originally written the other way round — the slice's four
+validated only as *errands*, one location each, and the table below predicted
+what each one wanted. The prediction held for three of four and was corrected
+by one on the fourth, which is worth recording rather than quietly fixing:
 
-| mission | family | has | wants |
+| mission | family | predicted | delivered |
 |---|---|---|---|
-| `mission-paper-bag` | delivery-collection | signal, deadline, 3 outcomes | steps; a `smell` or `bulk` trigger |
-| `mission-three-vans` | information | intel levels, 3 approaches | steps; it is a `FIND` beat |
-| `mission-bear-path` | protection | battle + `battle_avoidance` | steps; `shape` is its natural trigger |
-| `mission-courtyard-receipts` | recovery | battle + avoidance | steps; a `LOSE` beat on the way out |
+| `mission-paper-bag` | delivery-collection | a `smell` or `bulk` trigger | both — `TAKE` → `MOVE` (smell+bulk) → `SELL` (dry) |
+| `mission-three-vans` | information | a `FIND` beat | `MOVE` → `FIND` → `MEET` (report to Toko) |
+| `mission-bear-path` | protection | `shape` is its natural trigger | `MOVE`(shape) → `FIND` → `HOLD` → `MOVE`(known) |
+| `mission-courtyard-receipts` | recovery | a `LOSE` beat on the way out | **`HURT`, not `LOSE`** — see below |
 
-`approaches` is already the alternatives rule from §3 written at mission scope.
-Moving it down to per-step is most of the work.
+**The correction.** `mission-courtyard-receipts`' `battle_avoidance` field is
+`null`, where `mission-bear-path`'s is populated. That is the data saying this
+one does not have a side door — asking for what is owed can end at
+`battle-courtyard-3v3` with nothing to talk your way around. A `LOSE` beat
+would have quietly invented an escape the mission was written not to have.
+`HURT`, with `withdraw and settle for the partial` as its alternative, says the
+honest thing: you can still walk away, but not by outrunning anything.
+
+**One deliberate connection.** `mission-bear-path`'s `FIND` step —casing which
+van is empty — is the same act as its `battle_avoidance.choice`,
+`name-the-empty-van`. Its alternative is *"trust the pattern from Toko instead
+of checking again"*, which spends the flag `mission-three-vans` can hand you.
+Two missions that used to only share a flag in the effects table now share it
+in the beat itself.
+
+`approaches` was already the alternatives rule from §3 written at mission
+scope; moving it down to per-step was most of the work, plus one place fixed
+per mission along the way — `mission-bear-path` was thin on real time until a
+step was added, and `mission-courtyard-receipts` opened at Piritori (rallying
+the crew) rather than only ever standing at Torkkelinmäki, which is also just
+true to `requirements.deployed: 3` being a real assembly rather than a number.
 
 ## 7. Open
 

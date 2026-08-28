@@ -10,6 +10,46 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.3 — 2026-08-27
+
+**Missions are beats now, not errands — and the texture budget, measured.**
+
+- **All four authored missions carry steps.** `content/era1-slice-v1.json`:
+  each mission is now `TAKE`/`MOVE`/`FIND`/`MEET`/`HOLD`/`HURT` across two
+  places with alternatives at every step, per `MISSIONS.md` §3. All four
+  validate cleanly and none are thin. `mission-bear-path`'s `FIND` step is the
+  same act as its `battle_avoidance.choice` ("name-the-empty-van"), and its
+  alternative spends the flag `mission-three-vans` can hand you — two missions
+  that used to only share a flag in the effects table now share it in the beat.
+  `mission-courtyard-receipts` got `HURT` rather than the predicted `LOSE`:
+  its `battle_avoidance` is `null` in the data, which is the mission saying it
+  has no side door, and a `LOSE` step would have quietly invented one.
+  **Not yet wired into the runtime** — `web/` still only shows a mission's
+  status line; there is no screen that walks a step. That is the next real
+  gap, and it is a mode to build, not more content to write.
+- **The texture budget, measured rather than repeated.** `PORTING.md` §9: a
+  real `GLTFLoader` measured every registered GLB and image. The full
+  catalogue is **234.9MB** uncompressed, worse than `JS_BUILD_CATCHUP.md`'s
+  182MB because that figure predates `stage3d/`, `jaska-v01` and `equipment/`.
+  But neither engine eager-loads meshes — a realistic single battle (one
+  diorama, four bodies, the inset presenter) measures **36MB**, comfortably
+  inside budget. The Pixel 10 black screen is still unexplained; ordinary play
+  does not approach the number that reportedly broke it.
+- **Branch hygiene on the Suds-Jack side:** `claude/piritori-eden-game-8ptx2o`
+  had a merged PR (#305, squashed as `83934c8d`) but kept accumulating commits
+  on the pre-merge base — 52 behind `main`. Restarted from fresh `main`,
+  cherry-picked forward the one genuinely unmerged commit (the two Piritori
+  hub cabinets), verified 166/166 hub checks, force-with-lease pushed.
+
+### Port
+- **vectors:** `missions@2` — the four missions now carry steps, which the
+  vectored `fire()` cases already exercised; `market@2`, `exposure@2`,
+  `people@1` unchanged.
+- **data:** `content/era1-slice-v1.json` changed; run `sync-data.mjs`
+- **meshes:** none
+- **presentation:** none
+- **status:** handed off
+
 ## v4.2 — 2026-08-27
 
 **A pause menu with THINGS TO TEST, and the market model finally on a screen.**

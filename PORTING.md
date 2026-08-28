@@ -209,7 +209,59 @@ has not been edited here.
 stops being a check on anything, and the checks it was carrying die quietly with
 it. Two builds only stay honest if both of them run.
 
-## 8. Open
+## 9. The texture budget, measured rather than repeated — 2026-08-27
+
+`JS_BUILD_CATCHUP.md` §4 reported a Pixel 10 black-screening the Godot web
+build against **182MB of uncompressed texture**, and flagged that any build
+adopting the 3D assets inherits that budget. Before writing more art-dependent
+`web/` code it was worth checking whether that number still describes the
+catalogue, and whether "182MB" is actually what a play session loads.
+
+**Method.** A real `GLTFLoader` (the same vendored three.js the rest of this
+repo uses) loaded every registered GLB and every registered scene/cast image,
+and every decoded texture was measured as `width × height × 4` — uncompressed
+RGBA, the number that actually determines VRAM, not file size on disk.
+
+### The whole catalogue is worse than the number on record
+
+| | JS_BUILD_CATCHUP (22 Aug) | measured today |
+|---|---|---|
+| scope | scenes(14) + cast3d(14) + 2D cast(72) | **everything currently registered**: 26 GLB + 112 images |
+| total | 182 MB | **234.9 MB** |
+
+The gap is not drift in the old categories — it is categories that did not
+exist yet when 182MB was measured: the three `stage3d/` dioramas (32MB, none
+counted before), `jaska-v01` (4MB, cast after 22 Aug), and `equipment/` (6.7MB).
+**The number was right for what existed on 22 Aug and is stale now**, which is
+the same shape of finding as the anchor-count drift in §7 — a figure that
+was never wrong when written keeps getting quoted after the thing it measured
+moved.
+
+### But nothing loads the whole catalogue at once
+
+Neither engine eager-loads meshes. `godot/scenes/battle_stage_3d.gd` and
+`presenter_3d.gd` call `load(path)` per unit as it is deployed, not at boot —
+checked directly, not assumed. Simulating one realistic 2v2 battle (one
+`stage3d` diorama, four cast bodies with their clips, the inset presenter) came
+to **36MB**, comfortably inside any device's budget. **182–235MB is a
+stress-test number, not a play-session number.**
+
+### What this does and does not settle
+
+- **`web/` owes nothing here today.** It is a `getContext('2d')` build that
+  loads zero GLBs (checked: `app.js` never references a `.glb`, only
+  `assetUrl()` for 2D layers). The 3D texture budget is not this build's
+  problem until §1.0's open question — does `web/` adopt 3D — is answered.
+- **The Pixel 10 black screen is still unexplained.** Ordinary play does not
+  approach the number that reportedly broke it, so uncompressed VRAM is
+  probably not the direct cause. `JS_BUILD_CATCHUP.md` already named two other
+  live suspects — `vram_texture_compression/for_mobile=false` and
+  `thread_support=false` (GitHub Pages cannot send COOP/COEP) — and this
+  measurement narrows toward them without confirming either. **Nobody has
+  reproduced this on the actual device since**; a real Pixel 10 (or the same
+  PowerVR driver family) is what settles it, not another desktop measurement.
+
+## 10. Open
 
 1. **Does the Godot side run the vector gate in CI, or by hand?** By hand is
    fine while one person drives both; it stops being fine the moment it isn't.
@@ -220,3 +272,6 @@ it. Two builds only stay honest if both of them run.
 3. **Does `web/` still owe a portrait layout?** §3.3 says the Godot build owns
    landscape. It does not say the browser build may stop caring about phones,
    and `UX_SPEC.md` still has a responsive-reflow section.
+4. **Does anything actually reproduce on the Pixel 10?** §9 narrowed the
+   texture-budget theory without confirming it. The device (or its PowerVR
+   driver family) is the only thing that can settle this now.

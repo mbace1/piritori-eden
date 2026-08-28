@@ -191,9 +191,10 @@ const GOOD = {
 
   ok(withSignal === missions.length, 'every authored mission arrives through somebody (§1)');
   ok(withThree === missions.length, 'every one has three outcomes (§1)');
-  // This is the finding, asserted so it cannot quietly stop being true either
-  // way: today NONE of them have steps, and MISSIONS.md §6 says so.
-  ok(withSteps === 0, 'and none of them have steps yet — they are errands, as §6 records');
+  // §6, updated 2026-08-27: all four now carry steps and validate cleanly.
+  // Asserted both ways so this cannot quietly regress to an errand either.
+  ok(withSteps === missions.length, 'every authored mission is a beat now, not an errand (§6)');
+  ok(missions.every(m => validate(m).ok), 'and every one of them validates cleanly');
 }
 
 console.log(`\nmissions model — ${pass} passed, ${fail} failed\n`);
