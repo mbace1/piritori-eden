@@ -1,5 +1,53 @@
 # Piritori → Eden — versions
 
+## Unreleased — canon and systems since v3.1, recorded 2026-08-28
+
+This changelog is the JS/web build's own record and stopped at the 2026-08-21
+split. It describes a 12-anchor, 8-active, 22-edge map and two battle formats
+that are no longer what this repo actually contains, and it never mentions
+several systems that exist in the repo today. Recorded here rather than
+silently left wrong, per `DESIGN_AUTHORITY.md`'s 2026-08-28 ruling that this
+build now leads.
+
+**Canon moved past this changelog while nothing here tracked it:**
+- The map was rebuilt from real OSM coastline, streets and railway plus real
+  HSL GTFS transit — no invented geometry remains. **14 anchors (11 active),
+  25 edges**, not 12/8/22.
+- A third authored battle exists: `2v2, 3v3, 3v3`, not `2v2, 3v3`.
+- Crew are generated from name pools, never authored — `COMBAT.md` §7.1.
+  Six crew that shipped with hand-written names lost them.
+
+**Godot's implementation went well beyond what this changelog ever
+described**, none of it logged here because it landed directly in
+`godot/`'s own GDScript rather than as a JS build milestone: careers,
+twelve aptitudes, fifty-two skills, perks, chapters, loot, the fence, arrest,
+gear wear, hireling generation, plus in the fight itself — cover, telegraphed
+enemy intent, the spotter's MARK, the anchor's shield, three stances, third
+parties, police, skip-to-result. None of this exists in `legacy/js/v3/`,
+which still runs a shallower, earlier battle model (fixed `hp:3/guard:1-2/
+nerve:3`, a 25-line greedy auto-command, no cover, no stances as a real
+system).
+
+**A real, tested, unused layer exists and this changelog never mentioned
+it.** `market/model.mjs`, `missions/model.mjs`, `people/roster.mjs` — pure,
+seeded, engine-agnostic modules implementing the economy, mission triggers,
+and the twelve-aptitude hiring model. **92 passing checks.** `legacy/js/v3`
+imports none of them.
+
+**Fixed today, in the JS build itself:** it could not load its own content
+— `content.js`'s `content/map/art` fetch and its `assetUrl()` image paths
+were both one directory level off a folder that moved during the split, and
+three of its own tests had the same bug. `check-project.mjs` pointed at a
+three-repo layout that never shipped and had not run since the split.
+`node legacy/tools/check-project.mjs` passes 5/5 now.
+
+**Still open:** the `legacy/` folder name is stale (a rename was proposed and
+is blocked on tooling permission); `market/missions/people` are not wired
+into the live UI; no `battle`/`fight` pure model exists yet to receive
+`fixtures/stance-weights.json`, which was dumped from Godot's real
+`stance_weight()` specifically so that model can be built to match rather
+than re-guessed.
+
 ## v3.1 source pack — 2026-08-21
 
 - Promotes the corrected Toko Slomo screen to the active v02 source and runtime
