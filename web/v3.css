@@ -318,9 +318,6 @@ button { -webkit-tap-highlight-color: transparent; }
 .transit-keyline { fill: none; stroke: #0d0c0a; stroke-linecap: round; stroke-linejoin: round; }
 .transit-line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .transit-chip-text { font: 700 15px var(--mono); text-anchor: middle; dominant-baseline: central; }
-.map-edge { fill: none; stroke: #778089; stroke-width: 8; stroke-linecap: round; opacity: .48; }
-.map-edge.tram { stroke: #9f8d63; stroke-width: 11; opacity: .5; }
-.map-edge.metro { stroke: #d05c5b; stroke-width: 13; stroke-dasharray: 15 8; opacity: .65; }
 .map-route {
   fill: none;
   stroke: var(--cyan);

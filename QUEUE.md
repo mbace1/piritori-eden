@@ -8,11 +8,12 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
-## The transit layer (`VERSIONS.md` v4.16) — what it left open
+## The transit layer (`VERSIONS.md` v4.16, v4.17) — what it left open
 
 `web/`'s route map now draws the real HSL tram/metro network (L2), ported
-from the same `map/tools/transit-layer.mjs` Godot's `city_map.gd` uses.
-Real gaps noticed while doing that, none fixed here:
+from the same `map/tools/transit-layer.mjs` Godot's `city_map.gd` uses,
+and (v4.17) no longer draws a straight fake line for every anchor pair on
+top of it. Real gaps noticed while doing that, none fixed here:
 
 - **The schematic `data.map.edges` graph and the real transit layer are two
   separate data shapes drawn on the same board**, and nothing connects
@@ -21,7 +22,12 @@ Real gaps noticed while doing that, none fixed here:
   not reason about. `TRANSIT_LAYERS.md` §4's whole "wait for a real tram"
   proposal assumes the two ARE connected (a route follows an actual line
   with an actual headway) — closing that gap is most of what building §4
-  for real would take.
+  for real would take. It is also why `.map-route` (the player's chosen
+  path) still draws as a straight line (v4.17 left it, on purpose): there
+  is no real street/corridor geometry behind a route yet for it to follow
+  instead. `map/kallio-corridors-v1.json` (`TRANSIT_LAYERS.md` §10.8, 229
+  real corridors) exists and is not loaded into `web/` at all — it is the
+  next real piece, if this is picked up again.
 - **L3 (live vehicles) and L4 (congestion) are still nothing on either
   side** — `TRANSIT_LAYERS.md` §5 settles that the HSL vehicle feed is
   keyless and reachable, but whether a browser can actually open the

@@ -154,9 +154,11 @@ function luminance(hex) {
  * colours and corridor fanning `map/tools/transit-layer.mjs` derives for
  * BOTH builds, drawn here as a flat colour line over a hard dark keyline —
  * no glow, because this build has no live layer for a glow to distinguish
- * from. Independent of `data.map.edges` (the `.map-edge` schematic lines
- * below, which `shortestPath()` still routes over) — this is the real
- * network a Helsinki player recognises, not the click-to-travel graph.
+ * from. Independent of `data.map.edges` (still what `shortestPath()` plans
+ * a route over — no straight line is drawn for it any more, 2026-08-28:
+ * "you only use trams, metro, or go by foot on bigger actual streets") —
+ * this is the real network a Helsinki player recognises, not the
+ * click-to-travel graph.
  */
 function transitLayerSvg() {
   const services = data.transit?.services ?? [];
@@ -267,13 +269,15 @@ function renderRoute() {
   const selected = data.anchors.get(state.selectedAnchor) ?? data.anchors.get(slot.anchor_id);
   const draftPath = routeDraft.length === 2 ? shortestPath(data.map, routeDraft[0], routeDraft[1]) : routeDraft;
   const routePath = routePlanning ? draftPath : state.route?.path ?? [];
-  const edgeSvg = data.map.edges.map(edge => {
-    const a = data.anchors.get(edge.from)?.board;
-    const b = data.anchors.get(edge.to)?.board;
-    if (!a || !b) return '';
-    const mode = edge.modes.includes('metro') ? 'metro' : edge.modes.includes('tram') ? 'tram' : '';
-    return `<path class="map-edge ${mode}" d="M ${a.x} ${a.y} L ${b.x} ${b.y}"/>`;
-  }).join('');
+  // No straight bee-line edges drawn between every anchor pair any more
+  // (owner, 2026-08-28: "the direct map lines... don't make sense. you
+  // only use trams, metro, or go by foot on bigger actual streets") — the
+  // real tram/metro network is `transitLayerSvg()`; a straight schematic
+  // line ignoring the streets it claims to run along read as wrong the
+  // moment the real curved geometry was drawn right next to it.
+  // `data.map.edges` still exists and is still what `shortestPath()`
+  // plans over — only the always-on visual web of every connection is
+  // gone, not the underlying route graph.
   const routeSvg = routePath.length > 1 ? `<path class="map-route" d="${mapPath(routePath)}"/>` : '';
   const hiddenPips = (state.route?.hidden ?? 0) && !routePlanning
     ? `<circle class="map-hidden-flow" r="9"><animateMotion path="${mapPath(state.route.path)}" dur="3s" repeatCount="indefinite"/></circle>` : '';
@@ -298,7 +302,7 @@ function renderRoute() {
           <desc id="mapDesc">Twelve accurate public anchors compressed into one relief map. The next encounter is at ${esc(data.anchors.get(slot.anchor_id)?.label)}.</desc>
           ${mapBackground()}
           ${transitLayerSvg()}
-          <g aria-hidden="true">${edgeSvg}${routeSvg}${ordinaryFlowSvg()}${hiddenPips}</g>
+          <g aria-hidden="true">${routeSvg}${ordinaryFlowSvg()}${hiddenPips}</g>
           ${data.map.anchors.map(anchor => anchorSvg(anchor, anchor.id === slot.anchor_id, anchor.id === selected.id)).join('')}
         </svg>
       </section>

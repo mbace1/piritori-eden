@@ -10,6 +10,53 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.17 — 2026-08-28
+
+**The fake straight-line edges are gone from the route map.** Owner,
+directly, minutes after v4.16 shipped the real transit network: "the
+direct map lines from location to the next don't make sense so let's
+remove those. you only use trams, metro, or go by foot on bigger actual
+streets." Every anchor pair in `data.map.edges` had been drawn as a
+straight schematic segment (`.map-edge`, tinted by mode) regardless of
+what actually lay between the two points — and once the real curved HSL
+geometry was drawn right next to it in v4.16, a diagonal line cutting
+through blocks a real tram or a real street would never cross read as
+straightforwardly wrong rather than as a stylised abstraction.
+
+- **`renderRoute()`'s `edgeSvg` (the always-on web of every connection)
+  is removed**, along with the now-dead `.map-edge`/`.map-edge.tram`/
+  `.map-edge.metro` CSS. `data.map.edges` itself is untouched — it is
+  still the graph `shortestPath()` plans a route over, and it still
+  carries a real `corridor` id per edge (`e.g. "hameentie"`,
+  `"fleminginkatu"`) that was never fictional to begin with. Only the
+  ALWAYS-VISIBLE straight-line rendering of every possible connection is
+  gone; the DATA a route is planned over is unchanged.
+- **What stayed, and why**: the player's own actively-chosen route
+  (`.map-route`, drawn only once a route is drafted or pinned) is left
+  as a straight highlighted line between its stops. It is not what the
+  owner's "direct map lines from location to the next" describes (that
+  read as the persistent all-pairs web, always on, not the one path a
+  player picked); it is also the one line this build has no real street
+  geometry to replace yet — same honest gap `QUEUE.md`'s v4.16 entry
+  already named. `ordinaryFlowSvg()`'s ambient drifting dots are also
+  untouched — they render as points, not lines, and were not the thing
+  reported.
+- **Verified by screenshot**: the route map now shows only the real
+  transit network and the fourteen anchor dots at rest; drafting a route
+  via `debug.setState({ route: {...} })` still draws `.map-route`
+  correctly. No new console errors.
+
+### Port
+- **vectors/data/rules/meshes:** unchanged.
+- **presentation:** `web/`-only visual cleanup; nothing for Godot to
+  re-port (`city_map.gd` never drew this schematic edge web — it draws
+  the real corridor-and-street data directly, per `TRANSIT_LAYERS.md`
+  §10.8's `map/kallio-corridors-v1.json` underlay, which `web/` still
+  does not load).
+- **status:** the straight-route highlight and the ambient flow dots are
+  the two remaining places this build still draws a straight line
+  standing in for a real path — see `QUEUE.md`.
+
 ## v4.16 — 2026-08-28
 
 **The real transit network reaches `web/`'s map — L2, ported.** Owner
