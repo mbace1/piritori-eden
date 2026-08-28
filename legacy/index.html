@@ -61,6 +61,17 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script type="module" src="js/v3/app.js?v=2"></script>
+
+  <!-- Correct once this deploys to gh-pages/piritori/, one level under
+       Suds-Jack's arcade hub — ../hub/shell.js then reaches the hub's own
+       shared HOME-button chrome, which genuinely exists there. It has no
+       local equivalent in THIS repo (piritori-eden owns the game, not the
+       arcade hub around it), so it 404s harmlessly when run standalone via
+       legacy/tools/serve.mjs: a failed `type="module"` fetch rejects that
+       one script's own load and does not block or throw into the rest of
+       the page. Checked directly, 2026-08-28, against Suds-Jack's real
+       hub/shell.js rather than assumed. Do not delete this to silence a
+       local-dev-only 404 — that would break the real integration. -->
   <script type="module" src="../hub/shell.js?v=17"></script>
 </body>
 </html>

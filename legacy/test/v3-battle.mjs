@@ -6,7 +6,7 @@ import {
   withdrawBattle, resultEffects,
 } from '../js/v3/battle.js';
 
-const content = JSON.parse(await readFile(new URL('../content/era1-slice-v1.json', import.meta.url)));
+const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const data = {
   content,
   crew: new Map(content.crew.map(item => [item.id, item])),

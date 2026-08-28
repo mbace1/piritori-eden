@@ -2,13 +2,45 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-24
+Latest owner rulings: 2026-08-28
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
 because the playable prototype, several older briefs, an earlier Art Bible and
 the newer approved design library currently disagree. Future implementation
 must follow this hierarchy rather than selecting whichever file is convenient.
+
+## Owner rulings, 2026-08-28 — the JS build leads
+
+**This supersedes item 1 of the 2026-08-21 ruling below**, which is kept
+verbatim rather than edited, per this file's own rule that rulings are
+recorded rather than silently replaced.
+
+**The JS/web build LEADS.** New gameplay, new levels and new mechanics are
+designed, played and proved there first. **Godot FOLLOWS** — it ports what
+landed, then does the part the web build cannot: landscape framing,
+controller feel, 3D presentation. A feature is never designed twice: if it is
+new, it goes to the JS build first, even in a week when Godot is the one
+being looked at.
+
+**Content is authored once and flows; code is not shared.** Levels, strings,
+art and audio are authored in the canonical `content/`, `map/` and `art/`
+trees and generated into Godot's own copy by `godot/tools/sync-data.mjs`,
+never hand-copied. This was already true and does not change.
+
+**What changes concretely, corrected 2026-08-28:** `legacy/` was found to
+still be the actual, current, on-disk name — no rename to a clearer name (`js/`
+was proposed) has happened, because the rename itself was blocked by a tooling
+permission gate and needs the owner's own hand or explicit approval. Do not
+assume the folder has moved; check before citing a `js/` path. The 2026-08-21
+claim that the page "does not run in this repository by construction" is also
+corrected: that was three separate stale relative paths left over from the
+2026-08-21 repo split (`legacy/js/v3/content.js`'s content/map/art fetch URLs,
+its `assetUrl()` image paths, and three of `legacy/test/`'s own gates), not
+one structural fact about `../hub/shell.js`. All three were fixed 2026-08-28;
+`../hub/shell.js` itself was checked directly against its real source in
+Suds-Jack and left alone — it is correct once deployed and merely 404s
+harmlessly in local dev.
 
 ## Owner rulings, 2026-08-24 — the counter
 

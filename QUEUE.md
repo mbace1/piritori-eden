@@ -2082,5 +2082,60 @@ list. Recorded here instead of half-fixed:
   portrait. If the board ever goes fully 3D there, that whole set is dead.
 
 
+- **The JS build genuinely could not load its own content, and now can**
+  (2026-08-28, following DESIGN_AUTHORITY.md's "the JS build leads" ruling).
+  Three stale-path bugs, all left over from the 2026-08-21 Suds-Jack split,
+  none fixed until they were checked directly rather than assumed: a plan
+  claiming this was "already done" turned out to describe nothing on disk —
+  see the ruling's own text for what was corrected there. `content.js`'s
+  content/map/art fetch, its `assetUrl()` image paths, and three of
+  `legacy/test/`'s own gates were each one directory level off. `legacy/tools/
+  check-project.mjs` pointed at a never-shipped three-repo layout from
+  SHARED_ENGINE.md and had not run since the split. All fixed; `node legacy/
+  tools/check-project.mjs` now passes 5/5.
+
+  `--browser` needs `playwright`, undeclared in `legacy/package.json` — not
+  installed, named rather than silently added (CLAUDE.md rule 2).
+
+- **BIGGEST FINDING, not acted on — a real systems layer already exists and
+  the live JS build does not use it.** `market/model.mjs`, `missions/
+  model.mjs` and `people/roster.mjs` are pure, engine-agnostic, seeded ES
+  modules implementing real canon math — the economy, mission cost/trigger
+  rules, and the twelve-aptitude hiring/generation model from `COMBAT.md`
+  §9.12 and §7.1-7.2. **92 passing checks between them, confirmed running.**
+  `legacy/js/v3/*` imports none of them; it has its own separate, shallower
+  logic instead (hardcoded `hp:3/guard:1-2/nerve:3` in `battle.js`, a
+  25-line greedy `autoCommand()`, no stances/cover/telegraphs/MARK/spotter/
+  anchor/careers/chapters/loot at all).
+
+  This is the single highest-value next step for whoever picks up the JS
+  side, and it is wiring/integration work that belongs there, not something
+  taken on here: the new Godot section's own rule — *"two implementations of
+  one verb is the only thing here that can still cause drift, and it is a
+  hard line"* — is already being broken by `legacy/js/v3` duplicating logic
+  `people/roster.mjs` already has, tested, right next to it.
+
+  What IS missing outright, confirmed by `find`: no `battle`/`fight` model in
+  the same house pattern. That is real new work, not a wiring job — see the
+  fixture below for what it would need to match.
+
+- **A Godot-side fixture for whoever builds that battle model.**
+  `fixtures/stance-weights.json`, dumped by `godot/tools/
+  dump-stance-fixture.gd`. `COMBAT.md` §6.2 states stance policy in words
+  only; the exact multipliers live in exactly one place,
+  `fight_manager.gd`'s `stance_weight()`. The fixture's own header is
+  explicit that the table alone does not reproduce stance behaviour — it is
+  a multiplier on a command-scoring AI (`_ai_select_command`) that has no JS
+  equivalent yet, and porting the table without the scorer produces numbers
+  with nothing to weight.
+
+- **Still open: the `legacy/` → `js/` rename.** Proposed, and blocked —
+  `git mv legacy js` was refused by the session's own tooling permission
+  gate, twice, on a plain rename with nothing unusual about it. Needs the
+  owner's own hand, or an explicit permission grant for that class of
+  operation. `START_HERE.md` and `DESIGN_AUTHORITY.md` both now say the name
+  is stale rather than silently calling it `js/` before it is.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.
