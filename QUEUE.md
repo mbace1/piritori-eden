@@ -8,18 +8,17 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
-## The whole "THE 2D -> 3D MOVE" section below is stale — 2026-08-28
+## The stale "THE 2D -> 3D MOVE" section — fixed, 2026-08-28
 
-Confirmed by capturing the actual current battle screen (`PORTING.md` §11),
-not by reading: **"the board renders 2D standees" and "nothing draws 3D units
-in battle" are both false now.** `battle_stage_3d.gd` renders a lit 3D board
-with 3D cast models on it. The section was accurate when written and nobody
-has passed back through it since to strike what shipped.
-
-Not fixed here — it wants a fresh read against the current render, not a
-patch line by line, and that is real work rather than a note. Flagged so the
-next session does not cite it as current, the way `VERSIONS.md` v4.4's now-
-retracted claim did.
+The flag above (dated the same day) said this wanted a fresh read against the
+current render rather than a line-by-line patch. Done: ran the real capture
+tool (`godot/tools/capture_battle.gd`, headless + `xvfb-run`) against the
+canon 3v3 courtyard, looked at the PNG, then re-read every claim in the three
+sections below against both the render and the actual code (not the doc's
+memory of the code). Corrections are inline below, each dated and each
+saying how it was checked — reading `battle_stage_3d.gd` is not the same
+class of evidence as watching it draw, and this file has been burned by that
+gap before (`VERSIONS.md` v4.4's retraction).
 
 ---
 
@@ -155,40 +154,78 @@ being a check on anything, and the checks it was carrying die quietly with it.
 
 ## THE 2D -> 3D MOVE (see PHASING 1.055)
 
-- **`ART_BIBLE.md` describes a different game now.** It is the visual authority
-  and it says cut cardstock. It needs rewriting, and until it is, it and
-  PHASING openly disagree.
-- **The battle renderer draws standees.** 3D units are a renderer change.
-- **No isometric Camera3D exists.** The arena assumes a 2:1 projection that the
-  2D code fakes; in 3D it wants an orthographic camera actually set to it.
-- **Six arenas and six cast sets become reference art**, not runtime art.
+Re-checked 2026-08-28 against a live capture (`godot/tools/capture_battle.gd`,
+canon 3v3 courtyard) and the current code, not the doc's memory of it:
+
+- ~~**The battle renderer draws standees.**~~ **False now.** The capture shows
+  five clothed 3D figures with real depth, cast shadows and perspective
+  foreshortening on the courtyard floor — not flat cards. Struck rather than
+  deleted: this WAS true when written, per `PHASING.md`'s own account, and the
+  section existed to be caught up, not erased.
+- ~~**No isometric Camera3D exists; the arena assumes a 2:1 projection that
+  the 2D code fakes.**~~ **False now.** `battle_stage_3d.gd:500-501`: `_cam =
+  Camera3D.new(); _cam.projection = Camera3D.PROJECTION_ORTHOGONAL`. A real
+  orthographic camera, not arithmetic pretending to be one.
+- **`ART_BIBLE.md` describes a different game now.** Still true — checked
+  2026-08-28, not just cited from memory: `git log` shows zero commits to
+  `ART_BIBLE.md` since this was first flagged, and it still opens "Visual
+  system id: `cut-cardstock-hand-ink-v03`" with §13.2 framing 3D as one
+  named exception (Arvo Linde) rather than the rule. It and `PHASING.md`
+  still openly disagree; nobody has touched the older document.
+- **Six arenas and six cast sets become reference art, not runtime art** —
+  not re-verified here. The cast half is covered below ("now reference art").
+  The six-arenas claim was not checked against the current stage list; flag
+  stands, unconfirmed either way, rather than guessed at.
 
 ## The 3D cast, now that it exists
 
-- **The night grade eats them.** Six models are on the board and four wear dark
-  clothes; at battle scale under the current lighting they read as six dark
-  shapes rather than six people. The silhouettes differ, which was the point of
-  choosing them that way — but the fixer's coat, the local's maroon and the
-  driver's hi-vis should be legible and are not. A rim light, or lifting the
-  ambient on units only, is the likely fix.
-- **Only the muscle has fight clips.** idle / attack / hit / dead are lifted
-  onto any rig, so the other five play them — but they were authored against the
-  muscle's proportions and may read oddly on the round local or the lanky
-  watcher.
-- **The 2D cast sets are now reference art.** They still ship and PoseArt still
-  resolves them; nothing draws them while `use_3d` is on.
+Not flagged as stale, and the fresh capture broadly agrees with it — kept as
+written, with one corroboration:
+
+- **The night grade eats them** — partially confirmed by the 2026-08-28
+  capture, at close crop: two figures read as near-black silhouettes, three
+  as legible olive drab against the lit tile, so the effect is real but not
+  as total as "six dark shapes" suggested — some silhouettes ARE already
+  reading. Faces wash pale at any distance. Still an open problem, just not
+  a uniform one.
+- **Only the muscle has fight clips** — still true, checked 2026-08-28
+  directly against the code: `battle_stage_3d.gd`'s `CLIPS` dict still points
+  all four states (idle/attack/hit/dead) at `cast3d/clips/muscle-*-v01.glb`
+  only. Nothing has changed here.
+- **The 2D cast sets are now reference art** — not re-checked this pass.
 
 ## 3D units (see PHASING 1.06)
 
-- **`art/v3/cast3d/` is staged but NOT registered.** Two rigged glbs sit there
-  outside the manifest, which is exactly the antipattern that made every unit
-  look identical for weeks. Register them or delete them; do not leave them.
-- **Textures are uncapped.** 6.5MB of PNG per character. `process/size_limit`
-  on the imported texture is the known fix.
-- **`ART_BIBLE.md` §13.2 still says 3D is one exception.** The owner has ruled
-  otherwise; the document has not caught up.
-- **Nothing draws 3D units in battle.** The board renders 2D standees. Adopting
-  3D is a renderer change, not an asset swap.
+Re-checked 2026-08-28 against `art/v3/manifest.json` and `battle_stage_3d.gd`
+directly, not the earlier note's memory of either:
+
+- **`art/v3/cast3d/` IS now registered — but the runtime still doesn't read
+  the registration, which is the half of the complaint that actually
+  mattered.** `art/v3/manifest.json` carries 19 real entries now
+  (`cast3d-muscle-v01`, `cast3d-driver-v01`, … `approval_status:
+  semi-approved`, `production_status: prototype-only`) — so "staged but NOT
+  registered" is literally false. But `battle_stage_3d.gd`'s `UNIT_BY_ROLE`
+  and `CLIPS` dicts still hold raw `res://data/art/cast3d/...` paths, and
+  neither `battle_stage_3d.gd` nor `content_registry.gd` ever resolves a
+  cast3d id through the manifest to get there — grepped for it, nothing
+  calls it that way. The registration is real and currently decorative: an
+  entry exists to look an id up by, and nothing looks one up. That is a
+  smaller, more precise bug than "not registered," and worth its own line
+  rather than being marked simply fixed.
+- **Textures are "uncapped," but the 6.5MB figure is stale — the underlying
+  gap is not.** Current `cast3d/*_texture_0.png` files run 280-470KB each,
+  not 6.5MB; citing the old number now would overstate the problem. But
+  `process/size_limit=0` is still set on every cast3d texture import — the
+  actual fix (a size cap) was never applied, the files just happen to be
+  smaller today, for reasons not investigated here. The next asset that
+  isn't will hit the same unbounded import with nothing to catch it.
+- **`ART_BIBLE.md` §13.2 still says 3D is one exception** — still true, see
+  above; same unrewritten document.
+- ~~**Nothing draws 3D units in battle. The board renders 2D standees.**~~
+  **False now**, and this was the flat self-contradiction sitting inside this
+  same file: the section directly above this one ("The 3D cast, now that it
+  exists") already said six 3D models are on the board. One of the two was
+  wrong and nobody had gone back to strike it. It was this one.
 
 ## Art
 
