@@ -371,7 +371,7 @@ Still open, deliberately not touched:
   Unexplained. Probably a stale local import cache, but it has not been proven,
   and it means local size numbers are a lower bound rather than the truth.
 
-## A test scene with a parse error HANGS, it does not fail
+## A test scene with a parse error HANGS, it does not fail — fixed, 2026-08-28
 
 Found while adding the aftermath gate: `test_shell.gd` has `check()` but no
 `eq()`, and calling the missing helper was a parse error. Every scene ends in
@@ -381,6 +381,37 @@ until it was killed at 6m40s rather than reporting anything.
 CI would have caught it as a timeout, eventually, with no useful message. Worth
 a `--timeout` on the gate invocations, or a watchdog in the scene, so the
 failure says what it is.
+
+Done: `godot/tools/run-tests.sh` wraps every gate in `timeout`, named per
+test. A watchdog INSIDE the scene was considered and rejected — the failure
+mode is a parse error IN the script, so nothing inside that same file can
+run to rescue itself; the timeout has to live outside the process.
+
+**Found building it, a second and unrelated staleness trap, same shape as
+the timeout one but silent instead of slow:** running the full suite showed
+`test_locale` and `test_shell` FAILING on two real keys (`cmd.city`,
+`cmd.messages`) in every language — but `tools/check-locale.mjs`, which
+reads `locale/ui.csv` directly, already said the CSV was fine. The keys
+WERE in the CSV (added 26 Aug). The compiled `locale/*.translation` files
+Godot actually loads are gitignored, editor-generated artifacts that only
+rebuild when the editor opens the project — this checkout had pulled the
+CSV change without ever doing that, so `--headless` silently ran every
+gate against week-old compiled translations and reported it as a content
+regression. One `--editor --quit-after` pass fixed all of it; nothing was
+actually wrong with the game. `run-tests.sh` now forces that pass by
+default (`PIRITORI_TEST_NO_IMPORT=1` to skip it). Worth remembering next
+time a gate fails on something `check-locale.mjs`/`sync-data.mjs --check`
+already called clean: the two can disagree, and when they do, the CSV-level
+check is reading the real source and the compiled one may just be stale.
+
+**And the fix has its own trap.** Forcing that import pass with a Godot
+binary OLDER than the README's declared 4.7.2 (a 4.3 stable happened to be
+what was on hand) silently rewrote two font `.import` files and
+`ui.csv.import`, each losing two lines — engine-version default params, not
+real content, but a tracked-file diff all the same. Reverted rather than
+committed. `run-tests.sh` now says so in its own header; repeating it here
+because "run the import pass" is exactly the kind of advice someone will
+follow without reading the script first.
 
 ## The hired character — what is wired and what is not
 
