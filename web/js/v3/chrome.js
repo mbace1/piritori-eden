@@ -153,11 +153,15 @@ function pixel(x, y, base, rule, isPlate) {
   return col;
 }
 
-function paint(kind, baseHex, accentHex, tornTop, tornBottom) {
-  const canvas = document.createElement('canvas');
-  canvas.width = TEX; canvas.height = TEX;
-  const ctx = canvas.getContext('2d');
-  const img = ctx.createImageData(TEX, TEX);
+/**
+ * The pure pixel loop — no `document`, no canvas. Split out so a bare-node
+ * test can call the SAME code the browser draws with, rather than a second
+ * reimplementation that could itself drift from this file the way this file
+ * once drifted from `chrome.gd`. Returns a flat RGBA byte array, row-major,
+ * same layout `ImageData.data` uses.
+ */
+export function paintPixels(kind, baseHex, accentHex, tornTop, tornBottom) {
+  const data = new Uint8ClampedArray(TEX * TEX * 4);
   const isPlate = kind.startsWith('plate');
   const base = hexToRgb(baseHex);
   const accent = hexToRgb(accentHex);
@@ -179,12 +183,22 @@ function paint(kind, baseHex, accentHex, tornTop, tornBottom) {
       // FLOORED, not rounded: Image.set_pixel casts straight to uint8_t with
       // no +0.5, so 0.5-1.0 of a level is discarded, not banked. Rounding
       // here read a byte high at eight of eight sampled pixels.
-      img.data[i] = Math.floor(Math.max(0, Math.min(1, col[0])) * 255);
-      img.data[i + 1] = Math.floor(Math.max(0, Math.min(1, col[1])) * 255);
-      img.data[i + 2] = Math.floor(Math.max(0, Math.min(1, col[2])) * 255);
-      img.data[i + 3] = a;
+      data[i] = Math.floor(Math.max(0, Math.min(1, col[0])) * 255);
+      data[i + 1] = Math.floor(Math.max(0, Math.min(1, col[1])) * 255);
+      data[i + 2] = Math.floor(Math.max(0, Math.min(1, col[2])) * 255);
+      data[i + 3] = a;
     }
   }
+  return { width: TEX, height: TEX, data };
+}
+
+function paint(kind, baseHex, accentHex, tornTop, tornBottom) {
+  const { width, height, data } = paintPixels(kind, baseHex, accentHex, tornTop, tornBottom);
+  const canvas = document.createElement('canvas');
+  canvas.width = width; canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(width, height);
+  img.data.set(data);
   ctx.putImageData(img, 0, 0);
   return canvas.toDataURL('image/png');
 }

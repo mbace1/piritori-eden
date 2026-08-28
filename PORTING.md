@@ -128,14 +128,28 @@ build must never be asked to look like the browser.
 Asked whether `web/` should adopt `godot/ui/chrome.gd`'s torn-carton chrome —
 "absolutely, no doubt" — and whether that should be a lighter CSS
 approximation or the same algorithm — "why not the same?" `web/js/v3/chrome.js`
-is accordingly a pixel-exact port of `chrome.gd` (verified byte-for-byte, all
-five box kinds, full 64×64 grid, against a headless dump of the real
-`PiritoriChrome._paint()`), reached through CSS `border-image` rather than a
-`StyleBoxTexture`. This does not reopen §3.3: layout, input, camera and
-portrait-vs-landscape are still each build's own, and nothing here ports a
-screen's *shape*. Only the card/button/plate material — a texture built from
-constants, not a layout decision — crossed, and it crossed because the owner
-named it a shared decision rather than a look either side improvises.
+is accordingly a pixel-exact port of `chrome.gd`, reached through CSS
+`border-image` rather than a `StyleBoxTexture`. This does not reopen §3.3:
+layout, input, camera and portrait-vs-landscape are still each build's own,
+and nothing here ports a screen's *shape*. Only the card/button/plate
+material — a texture built from constants, not a layout decision — crossed,
+and it crossed because the owner named it a shared decision rather than a
+look either side improvises.
+
+**But the reminder that mattered here: Godot's own UI was also very WIP** —
+`chrome.gd` had already moved three times in three commits when this was
+written. So "verified byte-for-byte" cannot mean a one-off diff against
+whatever `chrome.gd` happened to say that day; it has to mean a standing
+check, or the port is exact today and silently stale the next time Godot's
+UI moves. It runs **backwards** from every other vector in §4 — Godot is
+canonical here, `web/` is the port — but it uses the same fixture-file
+discipline: `godot/tools/chrome-dump.gd` (headless, committed) dumps
+`PiritoriChrome._paint()` for all five box kinds at full 64×64 into
+`port/vectors/chrome.json`, and `node port/chrome-vectors.mjs --check` (bare
+node, no Godot needed) diffs `chrome.js`'s exported `paintPixels()` against
+it. **Whoever changes `chrome.gd` next re-runs the dump and re-commits the
+fixture** — the node gate only notices `chrome.js` drifting from the fixture,
+never the fixture drifting from a `chrome.gd` nobody re-dumped.
 
 ## 4. Vectors: what "ported" actually means
 
