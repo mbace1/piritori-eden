@@ -124,6 +124,19 @@ and a controller; asking it to reproduce a browser layout would defeat the point
 of having it. **The JS build must never assume a portrait phone**, and the Godot
 build must never be asked to look like the browser.
 
+**Exception, owner ruling 2026-08-28: the UI MATERIAL is not a screen shape.**
+Asked whether `web/` should adopt `godot/ui/chrome.gd`'s torn-carton chrome —
+"absolutely, no doubt" — and whether that should be a lighter CSS
+approximation or the same algorithm — "why not the same?" `web/js/v3/chrome.js`
+is accordingly a pixel-exact port of `chrome.gd` (verified byte-for-byte, all
+five box kinds, full 64×64 grid, against a headless dump of the real
+`PiritoriChrome._paint()`), reached through CSS `border-image` rather than a
+`StyleBoxTexture`. This does not reopen §3.3: layout, input, camera and
+portrait-vs-landscape are still each build's own, and nothing here ports a
+screen's *shape*. Only the card/button/plate material — a texture built from
+constants, not a layout decision — crossed, and it crossed because the owner
+named it a shared decision rather than a look either side improvises.
+
 ## 4. Vectors: what "ported" actually means
 
 A **vector file** is a list of `(input, expected output)` rows generated from

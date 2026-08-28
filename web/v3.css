@@ -53,18 +53,15 @@ button { -webkit-tap-highlight-color: transparent; }
   align-items: stretch;
   gap: 9px;
   padding: 9px 12px;
-  background: #111820;
-  border-bottom: 2px solid #6d5a45;
+  /* Godot's own header: PiritoriChrome.bar(false) — torn on the bottom, the
+     edge the world (the mode content) shows through. Same texture, same
+     border-image discipline as every other chrome() consumer below. */
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-bar-top);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
   box-shadow: 0 5px 15px var(--shadow);
-}
-.topbar::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 -5px;
-  height: 7px;
-  background: linear-gradient(90deg, transparent 1%, #7a6449 2% 13%, transparent 13% 15%, #7a6449 15% 58%, transparent 58% 61%, #7a6449 61% 97%, transparent);
-  opacity: .38;
-  clip-path: polygon(0 18%, 12% 35%, 24% 15%, 42% 40%, 62% 12%, 78% 32%, 100% 10%, 100% 65%, 0 70%);
 }
 .brand-lockup { align-self: center; min-width: 0; }
 .brand-lockup h1 {
@@ -132,20 +129,30 @@ button { -webkit-tap-highlight-color: transparent; }
   min-width: 44px;
   min-height: 44px;
 }
+/* PiritoriChrome.button(accent) — same card, same broken rule, and the same
+   move Godot makes at the call site: the accent tints the RULE, and (per
+   `_chrome_button`/`_action_btn`) the label's `font_color` too, rather than
+   filling the whole face. That is why `.primary`/`.danger`/`.cyan` below
+   only change `color` and `border-image-source`, never `background`. */
 .paper-button {
   position: relative;
-  border: 1px solid #80705b;
   padding: 10px 14px;
   color: var(--ink);
-  background: #252c31;
   font: 700 12px/1.2 var(--mono);
   letter-spacing: .055em;
   cursor: pointer;
-  clip-path: polygon(2% 3%, 97% 0, 100% 88%, 94% 100%, 1% 96%, 0 13%);
-  box-shadow: 0 4px 0 #080c10;
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-btn);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
 }
 .paper-button:hover:not(:disabled),
-.paper-button:focus-visible { color: #fff8e8; border-color: var(--cyan); transform: translateY(-1px); }
+.paper-button:focus-visible {
+  color: #fff8e8;
+  border-image-source: var(--chrome-btn-hot);
+  transform: translateY(-1px);
+}
 .paper-button:focus-visible,
 .mode-nav button:focus-visible,
 .choice-card:focus-visible,
@@ -153,10 +160,25 @@ button { -webkit-tap-highlight-color: transparent; }
 .formation-cell:focus-visible,
 .unit-token:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .paper-button:disabled { cursor: not-allowed; opacity: .46; }
-.paper-button.primary { color: #10202a; background: var(--mustard); border-color: #f4cf65; }
-.paper-button.danger { color: #fff0db; background: #652e2a; border-color: var(--danger); }
-.paper-button.cyan { color: #06161a; background: var(--cyan); border-color: #a8f5ff; }
-.paper-button.icon-button { width: 46px; padding: 0; font-size: 16px; }
+.paper-button.primary { color: var(--mustard); border-image-source: var(--chrome-btn-primary); }
+.paper-button.primary:hover:not(:disabled),
+.paper-button.primary:focus-visible { border-image-source: var(--chrome-btn-primary-hot); }
+.paper-button.danger { color: var(--chrome-accent-leave, #4f7fa0); border-image-source: var(--chrome-btn-danger); }
+.paper-button.danger:hover:not(:disabled),
+.paper-button.danger:focus-visible { border-image-source: var(--chrome-btn-danger-hot); }
+.paper-button.cyan { color: var(--cyan); border-image-source: var(--chrome-btn-cyan); }
+.paper-button.cyan:hover:not(:disabled),
+.paper-button.cyan:focus-visible { border-image-source: var(--chrome-btn-cyan-hot); }
+.paper-button.inspect-button { color: var(--chrome-accent-look, #a62bff); border-image-source: var(--chrome-btn-look); }
+.paper-button.inspect-button:hover:not(:disabled),
+.paper-button.inspect-button:focus-visible { border-image-source: var(--chrome-btn-look-hot); }
+.paper-button.icon-button {
+  width: 46px;
+  padding: 0;
+  font-size: 16px;
+  border-width: 10px;
+  border-image-width: 10px;
+}
 .mode-root {
   min-height: 0;
   overflow: auto;
@@ -172,38 +194,58 @@ button { -webkit-tap-highlight-color: transparent; }
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 3px;
   padding: 5px 8px 7px;
-  background: #0d131a;
-  border-top: 2px solid #65523f;
+  /* PiritoriChrome.bar(true) — torn on the top, the mode content's edge. */
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-bar-bottom);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
 }
+/* `border-image-slice: 18` still cuts the source at chrome.js's own MARGIN —
+   the baked pixels are untouched — but at 44px tall an 18px frame would eat
+   the whole button, so `border-image-width` renders that same slice smaller.
+   Godot's own texture_margin never scales down like this; a 44px mobile nav
+   button has no Godot-side equivalent to be faithful TO. */
 .mode-nav button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
-  border: 1px solid #333a3e;
   padding: 8px 10px;
   color: var(--ink-dim);
-  background: #171f26;
   font: 700 12px/1 var(--mono);
   letter-spacing: .08em;
   cursor: pointer;
-  clip-path: polygon(1% 5%, 99% 0, 100% 91%, 95% 100%, 0 96%);
+  border-style: solid;
+  border-width: 10px;
+  border-image-source: var(--chrome-btn);
+  border-image-slice: 18 fill;
+  border-image-width: 10px;
+  border-image-repeat: repeat;
 }
-.mode-nav button[aria-current="page"] { color: var(--ink); border-color: var(--cyan); background: #1b3039; }
+.mode-nav button[aria-current="page"] {
+  color: var(--ink);
+  border-image-source: var(--chrome-btn-hot);
+}
 .mode-nav button:disabled { opacity: .38; cursor: not-allowed; }
 .nav-icon { color: var(--cyan); font-size: 20px; line-height: 1; }
 .mode-nav button:nth-child(2) .nav-icon { color: var(--orange); }
 .mode-nav button:nth-child(3) .nav-icon { color: var(--mustard); }
 .mode-nav button:nth-child(4) .nav-icon { color: var(--danger); }
 .mode-nav button:nth-child(5) .nav-icon { color: var(--magenta); }
+/* PiritoriChrome.panel(RULE, true, true) — the same texture as the command
+   rail in app_shell.gd. The old clip-path corners cut a SECOND worn edge on
+   top of the material's own broken rule and torn top/bottom bite; the
+   texture already carries its own edge, so the polygon is gone rather than
+   layered under it. */
 .paper-panel {
   position: relative;
-  background:
-    repeating-linear-gradient(25deg, rgba(255,255,255,.018) 0 1px, transparent 1px 7px),
-    #1a242c;
-  border: 1px solid #6c5944;
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-panel);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
   box-shadow: 0 10px 25px var(--shadow);
-  clip-path: polygon(.4% .7%, 99.1% 0, 100% 98.8%, 97.8% 100%, .2% 99.1%, 0 2.2%);
 }
 .section-label {
   margin: 0;
@@ -403,21 +445,28 @@ button { -webkit-tap-highlight-color: transparent; }
 .inspect-button { min-height: 44px; padding: 6px 9px; font: 11px var(--mono); }
 .observation { min-height: 38px; margin: 9px 0 0; color: var(--cyan); font: 12px/1.4 var(--mono); }
 .choice-list { display: grid; gap: 8px; margin-top: 11px; }
+/* PiritoriChrome.plate_button(ACCENT_ACT) — location_stage.gd's own words:
+   "torn on the BOTTOM only... reads as something taken off a pad", which is
+   exactly what a stacked list of choices is. Cream carton, not dark card —
+   text flips to `plate_ink()` (the same luminance test Godot runs) rather
+   than the old light-on-dark palette. */
 .choice-card {
   width: 100%;
   padding: 11px 12px;
-  border: 1px solid #695a49;
   text-align: left;
-  color: var(--ink);
-  background: #22292d;
+  color: var(--chrome-plate-ink, #16191b);
   cursor: pointer;
-  clip-path: polygon(1% 2%, 99% 0, 100% 92%, 96% 100%, 0 96%);
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-plate-btn);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
 }
-.choice-card:hover:not(:disabled) { border-color: var(--orange); background: #2c2b29; }
-.choice-card:disabled { opacity: .42; cursor: not-allowed; }
-.choice-card strong { display: block; color: #fff0d4; font: 700 13px/1.25 var(--mono); }
-.choice-card span { display: block; margin-top: 5px; color: var(--ink-dim); font-size: 12px; line-height: 1.35; }
-.choice-card em { display: block; margin-top: 5px; color: var(--orange); font: normal 10px/1.3 var(--mono); }
+.choice-card:hover:not(:disabled) { border-image-source: var(--chrome-plate-btn-hot); }
+.choice-card:disabled { opacity: .5; cursor: not-allowed; }
+.choice-card strong { display: block; color: var(--chrome-plate-ink, #16191b); font: 700 13px/1.25 var(--mono); }
+.choice-card span { display: block; margin-top: 5px; color: #4a4331; font-size: 12px; line-height: 1.35; }
+.choice-card em { display: block; margin-top: 5px; color: var(--chrome-accent-act, #9a4e34); font: normal 10px/1.3 var(--mono); }
 .outcome-card { padding: 14px; margin-top: 12px; border: 1px solid #755e43; background: #28241f; }
 .outcome-card h3 { margin: 0 0 6px; color: var(--mustard); font: 500 23px var(--display); letter-spacing: .04em; }
 .outcome-card p { margin: 5px 0; }
@@ -609,10 +658,12 @@ button { -webkit-tap-highlight-color: transparent; }
   position: relative;
   max-width: 610px;
   padding: clamp(25px, 5vw, 58px);
-  background: #1e252b;
-  border: 2px solid #7a6249;
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-panel);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
   box-shadow: 14px 17px 0 rgba(0,0,0,.42);
-  clip-path: polygon(1% 2%, 97% 0, 100% 94%, 94% 100%, 2% 98%, 0 10%);
 }
 .splash-card h2 { margin: 7px 0 14px; font: 500 clamp(42px, 9vw, 80px)/.86 var(--display); letter-spacing: .045em; }
 .splash-card h2 span { color: var(--orange); }
@@ -746,9 +797,12 @@ button { -webkit-tap-highlight-color: transparent; }
   width: min(560px, 100%);
   max-height: calc(100dvh - clamp(24px, 6vw, 64px));
   overflow-y: auto;
-  background: var(--panel);
   color: var(--ink);
-  border: 1px solid var(--kraft-dark);
+  border-style: solid;
+  border-width: var(--chrome-margin, 18px);
+  border-image-source: var(--chrome-panel);
+  border-image-slice: 18 fill;
+  border-image-repeat: repeat;
   padding: clamp(16px, 3vw, 26px);
   box-shadow: 0 18px 44px var(--shadow);
 }

@@ -11,6 +11,7 @@ import {
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers,
 } from './battle.js?v=1';
+import { boot as bootChrome } from './chrome.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -828,6 +829,7 @@ function resetCampaign() {
 
 async function boot() {
   try {
+    bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);

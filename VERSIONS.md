@@ -10,6 +10,73 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.5 — 2026-08-28
+
+**`web/` wears the same chrome as Godot — the actual algorithm, not a
+lookalike.** Owner, asked whether `web/` should adopt `godot/ui/chrome.gd`'s
+torn-carton material: *"absolutely, no doubt."* Asked whether that should be
+a lighter CSS approximation instead of the same system: *"why not the
+same?"* — an explicit, current instruction to port the algorithm, not the
+look. `PORTING.md` §3.3 gets a named exception for it.
+
+- **`web/js/v3/chrome.js`** is a line-for-line port of `chrome.gd`'s `_hash`,
+  `_bite` and `_pixel`/`_paint` — same constants, same seed — reached through
+  CSS `border-image` (`border-image-slice: 18 fill` maps to Godot's fixed
+  nine-patch margin; `border-image-repeat: repeat` maps to
+  `AXIS_STRETCH_MODE_TILE`). Verified byte-for-byte, not "looks close": a
+  headless Godot script dumps `PiritoriChrome._paint()` pixel-for-pixel for
+  all five box kinds (`panel`/`btn`/`bar`/`plate`/`plateBtn`) at their full
+  64×64, and a matching pure-JS harness diffs the two. All five are
+  identical, every channel, every pixel, after fixing three real porting
+  bugs this same verification caught:
+  1. **The hash used 32-bit JS bitwise ops** (`|0`/`Math.imul`/`>>>`) — the
+     pattern `market/model.mjs` and `people/roster.mjs`'s own hashes use.
+     GDScript's `int` is a true 64-bit signed integer; every value was
+     silently wrong, no crash, just a different noise field. Fixed with
+     `BigInt` and an explicit 64-bit two's-complement wrap.
+  2. **Colour ops rounded to an 8-bit hex string after every step**
+     (lighten/darken/lerp each quantised). Godot's `Color` stays in float
+     0..1 space through all of that and quantises once, at final write.
+     Rounding four times instead of once put pixels ±1 off. Fixed by
+     rewriting the colour helpers to operate on `[r,g,b]` float triples
+     throughout, one quantisation at the very end.
+  3. **The final byte write ROUNDED; `Image.set_pixel` TRUNCATES** (a
+     `uint8_t` cast with no `+0.5`). Fixed the same way it was found — this
+     one hid behind the float-space fix above and only showed up as a
+     stubborn ±1 on 5 of 8 sample pixels until the actual `Image.set_pixel`
+     round-trip was isolated from the `ImageTexture`/GPU path (which is NOT
+     where the drift was; that was a dead end worth recording so it isn't
+     re-chased) and traced to this one cast.
+- **Wired into `v3.css`**: `.paper-panel`, `.splash-card`, `.pause-card`,
+  `.topbar` (`bar(false)`, torn bottom — the world's edge), `.mode-nav`
+  (`bar(true)`, torn top), `.paper-button` + variants, `.choice-card` (now
+  `plate_button(ACCENT_ACT)` — cream carton, torn bottom only, per
+  `location_stage.gd`'s own words on why: "reads as something taken off a
+  pad"). The old clip-path "cut corner" polygons are gone on every one of
+  these — the baked texture already carries its own torn/broken edge, and
+  layering the two read as two different worn-paper languages fighting.
+  `.inspect-button` takes `ACCENT_LOOK` (violet); `.paper-button.danger`
+  (WITHDRAW) takes `ACCENT_LEAVE`, not its old red, because withdrawing IS
+  "leave, back out" — chrome.gd has no fourth accent for danger.
+  `.primary`/`.cyan` keep their own mustard/cyan hex as the `button()`
+  accent rather than collapsing into ACT, matching how Godot's own battle
+  screen gives each verb its own accent color rather than reusing the
+  three icon-button accents everywhere.
+- Verified in a real browser (Playwright + the pre-installed Chromium), not
+  just the pixel-diff harness: splash, main shell (topbar/rail/mode-nav),
+  an encounter (inspect-buttons + choice-cards), and the pause menu all
+  render the material correctly with no layout breakage and no console
+  errors beyond an unrelated stray favicon 404.
+
+### Port
+- **vectors:** unchanged — no rule moved.
+- **data:** unchanged
+- **meshes:** none
+- **presentation:** the chrome MATERIAL, which is the one presentation thing
+  that did cross — see the `PORTING.md` §3.3 exception this entry adds.
+  Nothing else about either build's layout, input or camera moved.
+- **status:** landed on `web/`; nothing for Godot to do, it already had this.
+
 ## v4.4 — 2026-08-27
 
 > **RETRACTION, added 2026-08-28.** This entry claimed the dock-hiding change
