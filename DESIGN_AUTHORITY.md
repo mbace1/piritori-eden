@@ -61,6 +61,48 @@ written. `../hub/shell.js` was checked directly against its real source in
 Suds-Jack and left alone — it is correct once deployed and only 404s
 harmlessly in local dev; it was never the reason the build failed to load.
 
+### Addendum, 2026-08-28 — the ruling has a start line, not just a direction
+
+**Owner: "That ruling only starts AFTER js has feature and asset parity with
+Godot!"**
+
+Asked directly rather than assumed, after a session read "web/ is the primary
+build" and took it as license to keep designing new mechanics there while
+`web/` was still visibly behind `godot/` on things Godot already has — real
+3D presentation, the transit-layer map, and depth in the economy screens.
+That is not what the ruling above says, and this addendum is the correction,
+recorded rather than applied quietly, same as every other one in this file.
+
+**The direction is not reversed. The starting line moved.** `web/` is still
+where NEW rules get designed once this holds; it is not yet where the game's
+existing shape lives. Until parity, the flow is Godot → web, not web → Godot,
+for anything Godot already has built that `web/` does not:
+
+- **The 3D fighters and stages** — `art/v3/cast3d/*.glb`, `stage3d/*.glb`,
+  the presenter. Not "meshes only" as the original ruling's mesh-intake
+  language implied; the browser needs to actually RENDER them, which is a
+  real WebGL/Three.js pipeline this build does not have yet (§1.0 already
+  flagged this: "web/ is where behaviour is defined, and it is not yet the
+  game's shape... choosing [2D] is a decision to write down, not a default to
+  inherit").
+- **The transit-layer map** — `TRANSIT_LAYERS.md`'s L0–L5 stack, live on
+  Godot's board as of 2026-08-27 (real HSL GTFS lines, stops, the printed/
+  live era distinction). `web/`'s map is data-parity only (it reads the same
+  `map/*.json`) — it does not yet DRAW the layer stack Godot draws.
+- **Economy depth** — `market/model.mjs` is genuinely JS-canonical (Godot
+  re-implements the model), so this is narrower: check `MARKET.md`'s full
+  ruleset (saturation, information-as-resource, the risk/exposure loop,
+  §7e's drinking-as-investment) against what `web/`'s screens actually
+  expose, and close whatever gap is presentation rather than model.
+- **Anything else Godot has that `web/` does not**, found by comparison, not
+  assumed from a list written in one sitting.
+
+`VERSIONS.md` should keep naming Port blocks as it already does; a version
+that closes a parity gap says so there. Once `web/` is not visibly behind —
+judged the way this whole project judges a look, on a screen, not a
+checklist — the original 2026-08-25 ruling governs everything that comes
+after, exactly as written above.
+
 ## Owner rulings, 2026-08-24 — the counter
 
 Two decisions about conversations that do not happen on a fight board. Detail

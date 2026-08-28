@@ -45,6 +45,25 @@ to answer a question the browser cannot — whether a game about routes, blocks
 and formations is playable with two sticks on a television — and that question
 is worth a whole second implementation.
 
+### 1.05 The ruling has a start line — owner addendum, 2026-08-28
+
+**"That ruling only starts AFTER js has feature and asset parity with
+Godot!"** Full text in `DESIGN_AUTHORITY.md`'s matching addendum, which is
+the authoritative record; this is the pointer so nobody reads §1's table in
+isolation and assumes new work belongs here before parity is real.
+
+**Direction unchanged, starting line moved.** Until `web/` is not visibly
+behind `godot/`, the flow for anything Godot already has is Godot → web, not
+the reverse — concretely: the 3D fighters and stages actually rendering in
+the browser (not just registered as meshes), the transit-layer map
+(`TRANSIT_LAYERS.md`'s L0–L5, live on Godot's board since 2026-08-27), and
+whatever gap `MARKET.md`'s full ruleset has against what `web/`'s screens
+currently show. `market/model.mjs` etc. staying JS-canonical is unaffected —
+that was already true and parity does not change it.
+
+Once parity holds — judged on a screen, the way this project judges every
+look, not off a checklist — §1's table governs again as written.
+
 ### 1.1 `legacy/` really is legacy now, and `web/` is not
 
 The browser build has been moved out of `legacy/` to **`web/`**, because a
