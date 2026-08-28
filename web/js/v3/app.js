@@ -4,11 +4,15 @@ import {
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
   transactOffer, applyEffects, commitRoute, sendOnRoute,
 } from './state.js?v=1';
+import { createPauseMenu } from './pause.js?v=1';
+import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
 import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
-  negotiateBattle, resultEffects, injuredPlayers,
+  negotiateBattle, resultEffects, injuredPlayers, selectStance,
 } from './battle.js?v=1';
+import { boot as bootChrome } from './chrome.js?v=1';
+import { STANCE, STANCES } from './stance.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -18,6 +22,9 @@ const money = value => `€${Number(value).toLocaleString('fi-FI', { maximumFrac
 const cap = value => String(value ?? '').replaceAll('-', ' ').replaceAll('_', ' ').toUpperCase();
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Stance labels are the exact English/Finnish/Japanese Godot already ships
+// (`locale/ui.csv` battle.stance_*) — one vocabulary for one concept, not a
+// second translation of the same three words.
 const UI = {
   en: {
     route: 'ROUTE', encounter: 'ENCOUNTER', ledger: 'LEDGER', battle: 'BATTLE', news: 'NEWS',
@@ -25,6 +32,7 @@ const UI = {
     commit: 'PIN ROUTE', clear: 'CLEAR', send: 'SEND ONE PACK', objective: 'OBJECTIVE',
     attack: 'ATTACK', move: 'REPOSITION', brace: 'BRACE', end: 'END TEAM TURN',
     auto: 'AUTO TEAM', withdraw: 'WITHDRAW', negotiate: 'NEGOTIATE',
+    stance: 'STANCE', stance_AGGRESSIVE: 'AGGRESSIVE', stance_DEFENSIVE: 'DEFENSIVE', stance_HOLD_THE_LINE: 'HOLD THE LINE',
   },
   fi: {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
@@ -32,6 +40,7 @@ const UI = {
     commit: 'KIINNITÄ REITTI', clear: 'TYHJENNÄ', send: 'LÄHETÄ YKSI PAKKAUS', objective: 'TAVOITE',
     attack: 'HYÖKKÄÄ', move: 'VAIHDA ASEMAA', brace: 'SUOJAA', end: 'LOPETA VUORO',
     auto: 'AUTO-JOUKKUE', withdraw: 'VETÄYDY', negotiate: 'NEUVOTTELE',
+    stance: 'ASENTO', stance_AGGRESSIVE: 'HYÖKKÄÄVÄ', stance_DEFENSIVE: 'PUOLUSTAVA', stance_HOLD_THE_LINE: 'PIDÄ LINJA',
   },
 };
 
@@ -379,6 +388,49 @@ function renderEncounterOutcome(choice, pendingBattle) {
   </div>`;
 }
 
+/**
+ * THE BOARD — every active anchor, in the information you have about it.
+ *
+ * This is `market/model.mjs` on a screen for the first time. It sits UNDER the
+ * paper book rather than replacing it: the authored offers are leads somebody
+ * gave you, and this is what you read to decide whether the lead is worth the
+ * trip.
+ */
+function renderBoard() {
+  const { clock, rows } = board(state, data);
+  const eye = exposureHere(state, data);
+  const known = rows.filter(row => row.shown.level !== INFO.NONE);
+
+  const priceCell = row => {
+    const s = row.shown;
+    if (s.level === INFO.NONE) return '<span class="dim">never been</span>';
+    if (s.level === INFO.QUOTE) return `${money(s.buy)} <span class="dim">/</span> ${money(s.sell)}`;
+    if (s.level === INFO.RANGE) return `${money(s.lowBuy)}–${money(s.highBuy)}<br><span class="dim">${money(s.lowSell)}–${money(s.highSell)}</span>`;
+    return `<span class="dim">${esc(s.text ?? 'a rumour, no more')}</span>`;
+  };
+
+  return `<section class="paper-panel">
+    <p class="section-label">THE BOARD · DAY ${clock.day} · ${clock.block.toUpperCase()}</p>
+    <h2 class="section-title">WHAT YOU KNOW</h2>
+    <p class="consequence-strip">A quote is exact for the block you took it in, a range for four,
+      a rumour for twelve, then nothing. Standing somewhere is how you learn its price.</p>
+    <table class="offer-table board-table">
+      <thead><tr><th>PLACE</th><th>BUY / SELL</th><th>WHY</th><th>KNOWN</th></tr></thead>
+      <tbody>${rows.map(row => `<tr class="${row.here ? 'board-here' : ''}${row.shown.level === INFO.NONE ? ' board-dark' : ''}">
+        <td><b>${esc(row.label)}</b>${row.here ? ' <span class="board-tag">HERE</span>' : ''}</td>
+        <td class="quote">${priceCell(row)}</td>
+        <td><span class="dim">${esc(row.shown.level === INFO.NONE ? '—' : (row.shown.causeText ?? row.shown.cause ?? 'ordinary'))}</span></td>
+        <td><span class="dim">${row.visited ? `${row.age} block${row.age === 1 ? '' : 's'} ago` : '—'}</span></td>
+      </tr>`).join('')}</tbody>
+    </table>
+    ${known.length === 0
+      ? '<p class="consequence-strip">You have not stood anywhere long enough to know a price. Go somewhere.</p>'
+      : ''}
+    ${eye ? `<p class="board-exposure"><span class="dim">STANDING HERE READS AS</span>
+      <b>${esc(String(eye.band).toUpperCase())}</b> — ${esc(eye.causeText ?? eye.cause)}</p>` : ''}
+  </section>`;
+}
+
 function renderLedger() {
   const visibleOffers = data.content.market_offers.filter(offer => state.revealedOffers.includes(offer.id));
   const critical = Object.values(state.crewStatus).filter(item => item.critical).length;
@@ -409,6 +461,7 @@ function renderLedger() {
           </table>
           <p class="consequence-strip">The slice trades one abstract good. No dosage, preparation, concealment or consumption detail is simulated.</p>
         </section>
+        ${renderBoard()}
         <section class="paper-panel">
           <p class="section-label">CREW / FRONT THREE DEPLOY AUTOMATICALLY</p>
           <div class="crew-grid">${data.content.crew.map(renderCrewCard).join('')}</div>
@@ -541,6 +594,11 @@ function renderBattle() {
             <div class="track-row"><span>CONDITION</span><span class="track danger">${Array.from({ length: unit.maxHp }, (_, i) => `<i class="${i < unit.hp ? 'on' : ''}"></i>`).join('')}</span></div>
             <div class="track-row"><span>GUARD</span><span class="track">${Array.from({ length: 3 }, (_, i) => `<i class="${i < unit.guard ? 'on' : ''}"></i>`).join('')}</span></div>
             <div class="track-row"><span>NERVE</span><span class="track">${Array.from({ length: 3 }, (_, i) => `<i class="${i < unit.nerve ? 'on' : ''}"></i>`).join('')}</span></div>` : ''}
+          ${battle.status === 'active' ? `
+            <p class="section-label stance-label">${tr('stance')}</p>
+            <div class="stance-row">
+              ${STANCES.map(s => `<button class="paper-button ${battle.stance === s ? 'cyan' : ''}" data-action="select-stance" data-stance="${s}">${tr(`stance_${s}`)}</button>`).join('')}
+            </div>` : ''}
         </div>
         <div class="paper-panel battle-log" aria-live="polite">${battle.log.slice(0, 7).map(item => `<p>${esc(item)}</p>`).join('')}</div>
         ${battle.status === 'active' ? `
@@ -615,6 +673,7 @@ function renderCampaignEnd() {
 
 function openEncounter() {
   const slot = currentSchedule(state, data.content);
+  markSeen(state, slot?.anchor_id);
   if (slot?.news_before && !state.newsSeen.includes(slot.news_before)) {
     state.newsReturnMode = 'encounter';
     state.mode = 'news';
@@ -668,6 +727,9 @@ function handleRootClick(event) {
   if (action === 'select-anchor') {
     const id = target.dataset.anchor;
     state.selectedAnchor = id;
+    // Standing somewhere is how you learn its price (board.js). Without this
+    // line the board is permanently blank and looks broken rather than unearned.
+    markSeen(state, id);
     if (routePlanning) {
       const anchor = data.anchors.get(id);
       if (['locked', 'teaser'].includes(anchor?.sliceState)) {
@@ -709,6 +771,13 @@ function handleRootClick(event) {
   } else if (action === 'trade') {
     const offer = data.offers.get(target.dataset.offer);
     const result = transactOffer(state, offer);
+    // Your own footprint at that place, which is the ONE side of the book
+    // saturation moves (MARKET.md §7). Selling into a small market lowers what
+    // it pays you without also making it cheap to buy back.
+    if (result?.ok !== false) {
+      addFootprint(state, offer.anchor_id, offer.side === 'sell' ? 1 : -1);
+      markSeen(state, offer.anchor_id);
+    }
     logToast(result.message); persist(); render();
   } else if (action === 'select-unit') {
     selectUnit(state.battle, target.dataset.unit); persist(); render();
@@ -727,6 +796,8 @@ function handleRootClick(event) {
     endPlayerPhase(state.battle); persist(); render();
   } else if (action === 'auto') {
     autoCommand(state.battle); persist(); render();
+  } else if (action === 'select-stance') {
+    selectStance(state.battle, target.dataset.stance); persist(); render();
   } else if (action === 'withdraw') {
     withdrawBattle(state.battle); persist(); render();
   } else if (action === 'negotiate') {
@@ -771,6 +842,7 @@ function resetCampaign() {
 
 async function boot() {
   try {
+    bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
@@ -807,6 +879,77 @@ async function boot() {
         target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     });
+    // ── the pause menu, and the jumps THINGS TO TEST depends on ──────────
+    //
+    // Every jump puts the app into a state a player would have to earn. They
+    // are deliberately written here rather than inside the menu: the menu
+    // should not know how this game changes mode, or it becomes the thing that
+    // breaks when the game does.
+    function jumpTo(target) {
+      if (!target) return;
+      if (target.kind === 'encounter') {
+        // Walk the schedule to the block this encounter belongs to, so the
+        // screen arrives with the state around it rather than out of context —
+        // a conversation with the wrong day on the clock is not the screen.
+        const index = data.content.schedule.findIndex(slot => slot.encounter_id === target.id);
+        if (index >= 0) state.scheduleIndex = index;
+        state.mode = 'encounter';
+        observation = '';
+      } else if (target.kind === 'battle') {
+        // A jump must not depend on how far the campaign has been played.
+        // startBattle throws if fewer than player_deployed are recruited, and
+        // on a fresh campaign that is everyone — the jump found this itself
+        // the first time it was driven rather than read from the code.
+        const def = data.battles.get(target.id);
+        const need = def?.player_deployed ?? 2;
+        for (const crew of data.content.crew) {
+          if (state.recruited.length >= need) break;
+          if (!state.recruited.includes(crew.id)) state.recruited.push(crew.id);
+        }
+        if (!startBattle(target.id)) return;
+      } else if (target.kind === 'news') {
+        state.newsSeen = state.newsSeen.filter(id => id !== target.id);
+        state.newsReturnMode = 'route';
+        state.mode = 'news';
+      } else if (target.kind === 'ending') {
+        state.scheduleIndex = data.content.schedule.length;
+        state.mode = 'route';
+      } else if (target.kind === 'ledger') {
+        state.mode = 'ledger';
+      } else if (target.kind === 'day') {
+        const index = data.content.schedule.findIndex(slot => slot.day === target.day);
+        if (index >= 0) state.scheduleIndex = index;
+        state.mode = 'route';
+      }
+      persist();
+      render();
+      $('modeRoot').focus();
+    }
+
+    // You are STANDING at the opening anchor, and at whatever each scheduled
+    // block puts you in front of. Without seeding those the board opens
+    // completely blank, which reads as broken rather than as unearned.
+    markSeen(state, state.selectedAnchor);
+    for (let i = 0; i <= state.scheduleIndex; i++) {
+      const slot = data.content.schedule[i];
+      if (slot?.anchor_id) { const keep = state.scheduleIndex; state.scheduleIndex = i; markSeen(state, slot.anchor_id); state.scheduleIndex = keep; }
+    }
+
+    const pause = createPauseMenu({
+      root: $('pause'),
+      version: 'v4.1',
+      jump: jumpTo,
+    });
+    $('pauseButton').addEventListener('click', () => pause.toggle());
+    // Esc pauses from anywhere. The menu handles Esc itself once it is open,
+    // where it backs out one level instead of closing.
+    window.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || pause.isOpen) return;
+      if ($('splash').hidden === false) return;
+      event.preventDefault();
+      pause.open();
+    });
+
     render();
     window.__ptv3 = {
       get data() { return data; },
@@ -816,6 +959,8 @@ async function boot() {
         startBattle(id) { startBattle(id); persist(); render(); },
         openEncounter,
         render,
+        jumpTo,
+        pause,
       },
     };
   } catch (error) {

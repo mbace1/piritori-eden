@@ -52,6 +52,11 @@ class BattleEvent:
 		ATTACK_HIT,
 		ATTACK_BLOCKED,       ## Stopped by hard cover
 		ATTACK_INTERCEPTED,   ## Soft-cover interception, no harm
+		## COMBAT.md §9.13. An ally's free bonus shot, pulled in by another
+		## fighter's hit landing on a target this fighter can also reach. Its
+		## own kind rather than ATTACK_HIT + a flag, so a screen can tell a
+		## chained shot from the shot that caused it without reading `detail`.
+		SYNC_ATTACK_HIT,
 		GUARD_SET,
 		REPOSITIONED,
 		ITEM_USED,
@@ -1058,6 +1063,11 @@ func get_command_forecast(cmd: Command) -> Dictionary:
 		"guard_gain":     0,
 		"dest_slot":      [-1, -1],
 		"notes":          [],
+		## COMBAT.md §9.13. fighter_ids that would chain-fire for free if this
+		## attack lands — computed the same way `_trigger_sync_attacks()` does,
+		## so this is a real forecast and not a guess the actual resolve can
+		## contradict. Always [] for anything but ATTACK.
+		"sync_allies":    [],
 	}
 	fc.legal = _is_legal_command(cmd)
 	if not fc.legal:
@@ -1094,6 +1104,10 @@ func get_command_forecast(cmd: Command) -> Dictionary:
 				fc.lethal_exposure = _weapon_is_lethal(weapon)
 				if tgt.guard > 0:
 					fc.notes.append("Target has %d guard (absorbs harm first)" % tgt.guard)
+				fc.sync_allies = _sync_allies_for(src, tgt)
+				if not fc.sync_allies.is_empty():
+					fc.notes.append("%d ally(ies) chain-fire free if this lands" %
+						fc.sync_allies.size())
 
 		Command.Type.GUARD:
 			var weapon := _get_weapon_data(src.held_weapon_id)
@@ -1207,7 +1221,21 @@ func _resolve_attack(cmd: Command) -> void:
 		_emit_event(ev)
 		return
 
-	var harm      := _roll_range(weapon.get("harm_min", 1), weapon.get("harm_max", 2))
+	_apply_attack_harm(src, tgt, weapon, BattleEvent.Kind.ATTACK_HIT)
+	_check_glory(src, tgt)
+	_trigger_sync_attacks(src, tgt)
+
+
+## The roll-and-apply core shared by a normal attack and a sync shot
+## (COMBAT.md §9.13) — same harm/nerve math, same event shape, different
+## `kind` so a screen can tell which one it was without reading `detail`.
+## Cover is NOT checked here: the caller already resolved cover for the
+## shooter making THIS shot (a normal attack against its own line of sight,
+## a sync shot by already being in `_get_attack_targets()`'s result, which
+## walks that ally's own line of sight and cover independently).
+func _apply_attack_harm(src: Fighter, tgt: Fighter, weapon: Dictionary,
+		kind: BattleEvent.Kind) -> void:
+	var harm := _roll_range(weapon.get("harm_min", 1), weapon.get("harm_max", 2))
 	# Strength is read here rather than folded into the weapon, so it is visible
 	# that the person and the tool are two different contributions.
 	harm += _perk(src, "strength") * PERK_HARM_PER_POINT
@@ -1217,7 +1245,10 @@ func _resolve_attack(cmd: Command) -> void:
 	var overflow      := tgt.receive_harm(harm)
 	tgt.receive_nerve_damage(nerve_dmg)
 
-	ev.kind           = BattleEvent.Kind.ATTACK_HIT
+	var ev := BattleEvent.new()
+	ev.source_id      = src.fighter_id
+	ev.target_id      = tgt.fighter_id
+	ev.kind           = kind
 	ev.harm_absorbed  = guard_before - tgt.guard
 	ev.harm_dealt     = overflow
 	ev.nerve_dealt    = nerve_dmg
@@ -1225,7 +1256,45 @@ func _resolve_attack(cmd: Command) -> void:
 	_emit_event(ev)
 
 	_update_fighter_status(tgt)
-	_check_glory(src, tgt)
+
+
+## COMBAT.md §9.13. Every OTHER active fighter on `src`'s own side who could
+## reach `tgt` with their currently held weapon, from where they stand right
+## now. Shared by the forecast (before commitment) and the actual trigger
+## (after the hit lands) so the two can never disagree — the forecast IS this
+## list, not a separate guess at it.
+func _sync_allies_for(src: Fighter, tgt: Fighter) -> Array:
+	var result: Array = []
+	for ally_raw in get_fighters(src.side):
+		var ally: Fighter = ally_raw
+		if ally == null or ally.fighter_id == src.fighter_id or not ally.is_active():
+			continue
+		var ally_weapon := _get_weapon_data(ally.held_weapon_id)
+		if _get_attack_targets(ally, ally_weapon).has(tgt.fighter_id):
+			result.append(ally.fighter_id)
+	return result
+
+
+## `src` just landed a real hit (never a sync shot itself — one hop, not a
+## cascade) on `tgt`. Every ally `_sync_allies_for()` names fires for free: no
+## action spent, `acted_this_round` untouched, so a synced ally still gets
+## their own separate turn this round.
+func _trigger_sync_attacks(src: Fighter, tgt: Fighter) -> void:
+	for ally_id in _sync_allies_for(src, tgt):
+		# Re-checked per ally, not once before the loop: an earlier sync shot
+		# in this same chain may already have downed the target, and nobody
+		# fires a bonus round into a body already on the ground. Reach itself
+		# is not re-checked — nobody moves mid-chain, so the snapshot taken
+		# before the first shot still holds.
+		if not tgt.is_active():
+			return
+		var ally: Fighter = _fighters.get(ally_id)
+		if ally == null or not ally.is_active():
+			continue
+		var ally_weapon := _get_weapon_data(ally.held_weapon_id)
+		_apply_attack_harm(ally, tgt, ally_weapon, BattleEvent.Kind.SYNC_ATTACK_HIT)
+		_check_glory(ally, tgt)
+
 
 ## GLORY (COMBAT.md §9.11) — worth two perk points, and worth seeing.
 ##

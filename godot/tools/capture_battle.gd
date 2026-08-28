@@ -7,6 +7,13 @@ func _ready() -> void:
 	if out == "": out = "user://"
 	var lang: String = OS.get_environment("PIRITORI_SHOT_LANG")
 	if lang != "": Loc.set_language(lang)
+	# Which battle to render — content names a scene_asset_id, and different
+	# battles can point at different (or no) 3D stages. Unset means the
+	# original default. Added chasing VERSIONS.md v4.6: comparing two
+	# DIFFERENT battle ids is what caught every 3D battle rendering the same
+	# fallback stage.
+	var battle_id: String = OS.get_environment("PIRITORI_SHOT_BATTLE")
+	if battle_id == "": battle_id = "battle-courtyard-3v3"
 
 	# Before anything is instantiated: _ready() builds the console, so a flag set
 	# after add_child() arrives too late and the chrome stays up.
@@ -15,12 +22,17 @@ func _ready() -> void:
 	fb.debug_chrome_off = OS.get_environment("PIRITORI_SHOT_NOCHROME") != ""
 
 	await get_tree().process_frame
-	get_window().size = Vector2i(1366, 768)
+	var win_size := Vector2i(1366, 768)
+	var want_size: String = OS.get_environment("PIRITORI_SHOT_SIZE")
+	if want_size == "phone":
+		win_size = Vector2i(1079, 2047)
+	get_window().size = win_size
 
 	# The board's shape, so several can be rendered and compared side by side.
 	# PIRITORI_SHOT_BOARD is "lanes x rows", e.g. "4x4". Unset means canon.
 	var board: String = OS.get_environment("PIRITORI_SHOT_BOARD")
 	var tag := "canon"
+	if battle_id != "battle-courtyard-3v3": tag += "-" + battle_id
 	if board != "":
 		var bits := board.split("x")
 		if bits.size() == 2:
@@ -55,7 +67,7 @@ func _ready() -> void:
 		crew.append(String(c.get("id", "")))
 		if crew.size() >= 3: break
 
-	_s.begin("battle-courtyard-3v3", crew, 4242)
+	_s.begin(battle_id, crew, 4242)
 
 	# A candidate background, dropped in behind the board so the composition can
 	# be judged before anything is registered as art.
@@ -73,6 +85,13 @@ func _ready() -> void:
 	# open an attack so the forecast and target path are visible
 	for n in _all(_s):
 		if n is Button and "attack" in String(n.text).to_lower():
+			n.pressed.emit(); break
+	for i in range(10): await get_tree().process_frame
+
+	# Also toggle AUTO ON, to stress the tallest state of the automation
+	# column (stance buttons only appear then) against the reflowed layout.
+	for n in _all(_s):
+		if n is Button and "auto" in String(n.text).to_lower():
 			n.pressed.emit(); break
 	for i in range(10): await get_tree().process_frame
 

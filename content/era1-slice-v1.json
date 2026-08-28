@@ -472,6 +472,36 @@
       "failure_effects": [
         "stock:piri:-1",
         "debt-holder-memory:late"
+      ],
+      "steps": [
+        {
+          "verb": "TAKE",
+          "anchor": "piritori",
+          "alternatives": [
+            "send a recruit to collect it"
+          ]
+        },
+        {
+          "verb": "MOVE",
+          "anchor": "siltasaari",
+          "alternatives": [
+            "walk the long way round"
+          ],
+          "triggers": [
+            "smell",
+            "bulk"
+          ]
+        },
+        {
+          "verb": "SELL",
+          "anchor": "siltasaari",
+          "alternatives": [
+            "hold out for a better quote"
+          ],
+          "triggers": [
+            "dry"
+          ]
+        }
       ]
     },
     {
@@ -512,6 +542,33 @@
       "failure_effects": [
         "relationship:toko:-1",
         "mccormick-family:advantage"
+      ],
+      "steps": [
+        {
+          "verb": "MOVE",
+          "anchor": "harju",
+          "alternatives": [
+            "send someone who already knows the corner"
+          ],
+          "triggers": [
+            "known"
+          ]
+        },
+        {
+          "verb": "FIND",
+          "anchor": "harju",
+          "alternatives": [
+            "buy the information instead of watching for it",
+            "accept an incomplete picture and move on"
+          ]
+        },
+        {
+          "verb": "MEET",
+          "anchor": "vaasankatu",
+          "alternatives": [
+            "leave the pattern for Toko to piece together himself"
+          ]
+        }
       ]
     },
     {
@@ -559,6 +616,43 @@
       "failure_effects": [
         "crew-outcome:possible-wound",
         "service:park-contact:closed-one-day"
+      ],
+      "steps": [
+        {
+          "verb": "MOVE",
+          "anchor": "karhupuisto",
+          "alternatives": [
+            "send the crew ahead and follow quiet"
+          ],
+          "triggers": [
+            "shape"
+          ]
+        },
+        {
+          "verb": "FIND",
+          "anchor": "karhupuisto",
+          "alternatives": [
+            "trust the pattern from Toko instead of checking again"
+          ]
+        },
+        {
+          "verb": "HOLD",
+          "anchor": "karhupuisto",
+          "alternatives": [
+            "keep the handover visible rather than quiet",
+            "withdraw before it starts"
+          ]
+        },
+        {
+          "verb": "MOVE",
+          "anchor": "torkkelinmaki",
+          "alternatives": [
+            "leave separately, not as a group"
+          ],
+          "triggers": [
+            "known"
+          ]
+        }
       ]
     },
     {
@@ -605,6 +699,40 @@
         "crew-outcome:critical-wound-possible",
         "pressure:torkkelinmaki:+2",
         "relationship:jaska:-2"
+      ],
+      "steps": [
+        {
+          "verb": "MEET",
+          "anchor": "piritori",
+          "alternatives": [
+            "go in with whoever is already on hand"
+          ]
+        },
+        {
+          "verb": "MOVE",
+          "anchor": "torkkelinmaki",
+          "alternatives": [
+            "send the crew in ahead, arrive after"
+          ],
+          "triggers": [
+            "shape"
+          ]
+        },
+        {
+          "verb": "MEET",
+          "anchor": "torkkelinmaki",
+          "alternatives": [
+            "trade a favour instead of asking outright",
+            "hold the porttikongi and wait them out"
+          ]
+        },
+        {
+          "verb": "HURT",
+          "anchor": "torkkelinmaki",
+          "alternatives": [
+            "withdraw and settle for the partial"
+          ]
+        }
       ]
     }
   ],

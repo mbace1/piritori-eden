@@ -148,6 +148,23 @@ const NICK = [
   'Pastori', 'Rouva', 'Kettu', 'Peltsi', 'Musta', 'Hiiri', 'Vinkki', 'Pomo',
 ];
 
+/**
+ * A first + family name from a stable id, with nothing else attached.
+ *
+ * For the SLICE's six named crew slots, not the hiring pool — they carry a
+ * role, stats and a recruit encounter already, and lost their authored
+ * `name` field when `COMBAT.md` §7.1 moved names to generation (2026-08-27).
+ * `hireling()` needs a numeric index and a trait count; a crew slot has
+ * neither, so this is the FIRST/LAST pools alone, keyed on whatever string the
+ * caller has to hand — `id` for a crew slot, and it produces the same person
+ * every time for the same id, which is the property a recurring character
+ * needs. Same rule as `hireling()`: both halves come from the one pool
+ * (DESIGN_LOCKS §9.2), never mixed with a second one by the caller.
+ */
+export function nameFrom(seed) {
+  return `${pick(FIRST, seed, 'first')} ${pick(LAST, seed, 'last')}`;
+}
+
 // ── generate ────────────────────────────────────────────────────────────────
 /**
  * @param {string} seed   campaign seed

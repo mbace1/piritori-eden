@@ -1,17 +1,15 @@
-// Repo-root relative. This file lives at legacy/js/v3/, so three levels up
-// (../../../) reaches the repo root — content/, map/ and art/v3/ live there
-// directly, the same canonical files godot/tools/sync-data.mjs generates
-// Godot's own copy from. There is no local copy to keep in sync here; a
-// plain fetch() is not sandboxed the way Godot's res:// is.
-//
-// Fixed 2026-08-28: these were '../../' (two levels), which resolves to
-// legacy/content/ — a directory that has never existed in this repo. It was
-// only ever correct when this file lived one level deeper, inside the old
-// Suds-Jack monorepo layout that predates this repo's 2026-08-21 split. The
-// page has been unable to load its own content since that split.
+import { nameFrom } from '../../../people/roster.mjs';
+
 const CONTENT_URL = '../../../content/era1-slice-v1.json';
 const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
 const ART_URL = '../../../art/v3/manifest.json';
+// Asset URLs are resolved by the BROWSER against the page, not against this
+// module, so they need one more step out of `web/` than the fetches above.
+// Promoting this build out of `legacy/` fixed the three JSON paths and left
+// these three behind, and the only symptom was ~40 silent 404s: every unit
+// drew its fallback and nothing threw. Same class of bug, twice, which is why
+// v3-contract now asserts the prefix.
+const ART_BASE = '../art/v3';
 
 async function readJson(url) {
   const response = await fetch(new URL(url, import.meta.url));
@@ -22,13 +20,13 @@ async function readJson(url) {
 function flattenArt(manifest) {
   const byId = new Map();
   for (const group of manifest.assets) {
-    if (group.file) byId.set(group.id, { ...group, url: `../art/v3/${group.file}` });
+    if (group.file) byId.set(group.id, { ...group, url: `${ART_BASE}/${group.file}` });
     for (const member of group.members ?? []) {
       byId.set(member.id, {
         ...member,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `../art/v3/${member.file}`,
+        url: `${ART_BASE}/${member.file}`,
       });
     }
     for (const frame of group.frames ?? []) {
@@ -38,7 +36,7 @@ function flattenArt(manifest) {
         id: frameId,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `../art/v3/${frame.file}`,
+        url: `${ART_BASE}/${frame.file}`,
       });
     }
   }
@@ -53,7 +51,14 @@ function indexContent(content, map, artManifest) {
     encounters: new Map(content.encounters.map(item => [item.id, item])),
     missions: new Map(content.missions.map(item => [item.id, item])),
     battles: new Map(content.battles.map(item => [item.id, item])),
-    crew: new Map(content.crew.map(item => [item.id, item])),
+    // COMBAT.md §7.1 moved crew display names to generation (2026-08-27) and
+    // the slice's six `crew-slot-*` records no longer carry `name` at all.
+    // `unit.name.split(' ')` in the battle screen crashed on it — every unit
+    // label read `crew.name`, which nothing since the data change had ever
+    // populated. Backfilled here, once, at load, rather than in the template
+    // that happened to be the first to dereference it: the same crash was
+    // one render away in the ledger's crew list and the recruitment copy too.
+    crew: new Map(content.crew.map(item => [item.id, { ...item, name: item.name ?? nameFrom(item.id) }])),
     offers: new Map(content.market_offers.map(item => [item.id, item])),
     equipment: new Map(content.equipment.map(item => [item.id, item])),
     news: new Map(content.news.map(item => [item.id, item])),

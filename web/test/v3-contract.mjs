@@ -24,18 +24,29 @@ assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app modu
 assert(css.includes('min-width: 44px') && css.includes('min-height: 44px'), '44px control floor is declared');
 assert(!/smartphone|app grid/i.test(html), 'shell does not present the market as a smartphone app');
 assert(app.includes('era1-slice-v1.json') === false, 'the app loads content through the content adapter');
+// Asset URLs resolve against the PAGE, so they need one more step out of web/
+// than the module's own fetches. Missing it produced ~40 silent 404s — every
+// unit drew its fallback and nothing threw — which is exactly the kind of
+// failure a gate has to catch because a person will not.
+const contentModule = await read('../js/v3/content.js');
+assert(/ART_BASE\s*=\s*'\.\.\/art\/v3'/.test(contentModule), 'asset URLs step out of web/');
+assert(!/url:\s*`art\/v3\//.test(contentModule), 'no asset URL is page-relative');
 assert(app.includes('ordinary journeys'), 'ordinary and hidden route capacity is visible');
 assert(app.includes('weather-rain-fine-v01'), 'weather stays a separate runtime layer');
-// 12/8 were stale: the board has grown since this test was written (the map
-// was rebuilt from real OSM/HSL data this session — see MAP.md). Corrected
-// against map/validate-map.mjs's own authoritative count, 2026-08-28.
-assert.equal(map.anchors.length, 14);
+// THE MAP GREW WHILE THIS GATE WAS PARKED, and that is the whole argument for
+// unparking it. DESIGN_AUTHORITY's locked-direction paragraph still says
+// "twelve-anchor graph ... with eight active slice anchors"; the file has 13 and
+// 10, because Sörnäinen harbour and Suvilahti were added and ARE referenced by
+// the slice. Neither number is asserted against the document here — a gate that
+// fails on purpose is a broken gate — but the drift is real and is recorded in
+// QUEUE.md for the owner to settle. These assertions exist to stop the NEXT one.
+assert.equal(map.anchors.length, 14, 'anchor count changed — check QUEUE.md before editing this number');
 assert.equal(map.anchors.filter(anchor => anchor.sliceState === 'active').length, 11);
 assert.equal(content.schedule.length, 14);
 assert.deepEqual(content.schedule.slice(0, 2).map(item => item.encounter_id),
   ['enc-first-purchase', 'enc-first-sale'], 'classic purchase-to-profit opening stays immediate');
-// Stale for the same reason as the anchor counts — content/validate-slice.mjs
-// already reports "2v2 + 3v3 + 3v3", a third battle since this was written.
+// Same drift as the anchors above: a third battle was authored while this gate
+// was parked. Asserted as it IS, to stop the next silent change.
 assert.equal(content.battles.map(item => item.format).sort().join(','), '2v2,3v3,3v3');
 assert(app.includes('FIRST ARBITRAGE') && app.includes('EMERGING SUPPLIER'),
   'map communicates the buyer-to-supplier growth ladder');
@@ -46,8 +57,6 @@ for (const group of art.assets) {
   for (const member of group.members ?? []) ids.add(member.id);
 }
 for (const id of ['scene-toko-noodles-prototype-v02', 'scene-karhupuisto-v01',
-  // v02 -> v05: the asset was re-versioned since this test was written. The
-  // other three ids in this list are still current; checked individually.
   'scene-courtyard-prototype-v05', 'formation-grid-3x3-v01']) {
   assert(ids.has(id), `${id} remains registered`);
 }

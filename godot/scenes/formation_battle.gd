@@ -90,7 +90,13 @@ const FIGURE_HEADROOM := 0.0
 ## Height of the overlaid command console. It was 188 and took a quarter of the
 ## frame OUT of the layout; overlaid and trimmed it costs the board nothing and
 ## covers only the near corner of the arena, where the least happens.
-const CONSOLE_H := 168.0
+##
+## A `var`, not a `const`: in portrait the automation column reflows below the
+## crew/verb row instead of beside it (QUEUE.md, "the honest fix... recorded
+## rather than attempted as a third correction in one sitting" — this is that
+## fix), and a second row needs a taller console. Set once in `_build()`
+## before anything below reads it.
+var CONSOLE_H := 168.0
 
 ## Set to a non-empty Rect2 to override the play area for a comparison render.
 ## The owner asked (2026-08-21) whether the board is big enough to carry the
@@ -116,6 +122,15 @@ var _console: PanelContainer
 var _crew_col: VBoxContainer
 var _action_col: VBoxContainer
 var _auto_col: VBoxContainer
+## Set once in `_build()`. `_build_auto_column()` reads it to lay the stance
+## row out HORIZONTALLY when `_auto_col` has real width to spend (the
+## reflowed portrait row) instead of stacking three buttons vertically —
+## which is what a stress capture with AUTO ON caught: the taller CONSOLE_H
+## this reflow already added still was not enough with three stacked stance
+## buttons plus everything above and below them, and the bottom of the list
+## ran off the viewport. Fixed by spending the WIDTH the reflow bought back
+## instead of raising the height estimate a second time.
+var _console_portrait: bool = false
 
 var _selected_unit: String = ""
 var _auto_mode := false
@@ -174,6 +189,7 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	# that committing is decided with the whole board visible.
 	GameState.crew_levelled.connect(_on_crew_levelled)
 	_load_stage(id)
+	_mount_stage3d()
 	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
 	if errors.is_empty():
 		fight.state_changed.connect(_refresh)
@@ -184,7 +200,12 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 
 
 ## The battle's own location art. Each battle names a scene_asset_id, and the
-## slice ships approved art for both — Karhupuisto and the courtyard.
+## slice ships approved art for both — Karhupuisto and the courtyard. Only
+## for the 2D renderer: some battles now name a `mesh-3d` stage instead of a
+## flat image (kattilahalli), and `_stage` is typed `Texture2D` — loading a
+## `.glb` into it used to throw a script error every 3D battle ("Trying to
+## assign value of type 'PackedScene' to a variable of type 'Texture2D'"),
+## found alongside the stage-mounting bug this file also fixes 2026-08-28.
 func _load_stage(id: String) -> void:
 	_stage = null
 	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
@@ -194,10 +215,33 @@ func _load_stage(id: String) -> void:
 	for asset in ContentRegistry.art.get("assets", []):
 		if String(asset.get("id", "")) != asset_id:
 			continue
+		if String(asset.get("kind", "")).ends_with("-3d"):
+			return
 		var path := "res://data/art/" + String(asset.get("file", ""))
 		if ResourceLoader.exists(path):
 			_stage = load(path)
 		return
+
+## Builds the 3D stage now that _stage_id names the real battle. Called from
+## begin(), after _load_stage() -- never from _build()/_ready(), where
+## the id is not known yet (see the note where this used to be mounted).
+## Guarded so a second begin() on the same instance (not used by any real
+## caller today, but cheap to not assume) frees the old stage instead of
+## stacking a second one under it.
+func _mount_stage3d() -> void:
+	if not use_3d:
+		return
+	if _stage3d != null:
+		_stage3d.queue_free()
+		_stage3d = null
+	_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
+	# Told WHERE it is before it is in the tree, because the stage picks its
+	# model in _ready and cannot ask afterwards.
+	_stage3d.scene_asset_id = _stage_id
+	_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_board.add_child(_stage3d)
+	_mount_shot_caller()
 
 
 # ── layout ────────────────────────────────────────────────────────────────
@@ -244,32 +288,54 @@ func _build() -> void:
 	_board.gui_input.connect(_board_input)
 	col.add_child(_board)
 
-	# The 3D stage sits INSIDE the board control and covers it. Everything the
-	# console does — selection, forecast, confirm, withdraw — is untouched:
-	# only what the board draws has changed. `use_3d` decides which, so the 2D
-	# renderer stays reachable and testable rather than being deleted on the
-	# strength of one prototype.
-	if use_3d:
-		_stage3d = preload("res://scenes/battle_stage_3d.gd").new()
-		# Told WHERE it is before it is in the tree, because the stage picks its
-		# model in _ready and cannot ask afterwards.
-		_stage3d.scene_asset_id = _stage_id
-		_stage3d.set_anchors_preset(Control.PRESET_FULL_RECT)
-		_stage3d.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_board.add_child(_stage3d)
-		_mount_shot_caller()
+	# The 3D stage is NOT mounted here. `_build()` runs from `_ready()`, which
+	# fires the instant this scene enters the tree — before `begin()` has ever
+	# run `_load_stage()`, so `_stage_id` is still "". Mounting `_stage3d` here
+	# used to bake that empty id in at construction: `battle_stage_3d.gd` picks
+	# its model in ITS OWN `_ready()`, the moment `add_child` puts it in the
+	# tree, and nothing afterward ever told it the id had changed. Every 3D
+	# battle in the shipped game rendered `STAGE_FALLBACK` (the Kallio backyard)
+	# regardless of what the fight actually named — found 2026-08-28 by
+	# capturing two DIFFERENT battles (courtyard, kattilahalli) and noticing
+	# the render was pixel-identical both times. See `_mount_stage3d()`, called
+	# from `begin()` after the real id is known.
 
 	# ── the command console, OVERLAID rather than stacked ──
 	# Anchored to the bottom of the frame instead of sitting in the column, so it
 	# costs the board nothing. Slightly translucent, because the ground it covers
 	# is the near corner of the arena and seeing it continue underneath is what
 	# keeps the stage reading as one place.
+	#
+	# PORTRAIT REFLOWS THE AUTOMATION COLUMN BELOW THE CREW/VERB ROW instead of
+	# beside it — the fix `_text_scale()`'s own comment named and deferred
+	# rather than risk a third correction in one sitting. Same portrait test
+	# `_text_scale()` uses (`vp.x < vp.y`), so the two never disagree about
+	# which shape the screen is. Landscape is untouched: one row, same as
+	# before this existed.
+	var vp := get_viewport_rect().size
+	var portrait := vp.x < vp.y
+	_console_portrait = portrait
 	_console = PanelContainer.new()
 	_console.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 0))
+	if portrait:
+		# Measured, not guessed: the single-row CONSOLE_H (168) was sized to
+		# the tallest of the three columns, which was _auto_col's own stacked
+		# content. Stacking the crew/verb row ABOVE that same content roughly
+		# adds that row's own height back in, plus room for the gap between.
+		CONSOLE_H = 168.0 + 210.0 * _text_scale()
 	_console.custom_minimum_size = Vector2(0, CONSOLE_H)
 	_console.modulate = Color(1, 1, 1, 0.94)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 20)
+
+	var outer: BoxContainer = VBoxContainer.new() if portrait else HBoxContainer.new()
+	outer.add_theme_constant_override("separation", 10 if portrait else 20)
+	# The crew card and the verb cards stay side by side in EITHER shape —
+	# only the automation column moves. Portrait gets its own inner row for
+	# them; landscape just uses `outer` itself, matching the original layout.
+	var top_row: HBoxContainer = HBoxContainer.new() if portrait else outer
+	if portrait:
+		top_row.add_theme_constant_override("separation", 20)
+		outer.add_child(top_row)
+	var row := outer  # kept for the rest of this function's existing references
 
 	_crew_col = VBoxContainer.new()
 	# Narrower now the 64px portrait has gone — this column is a name and three
@@ -277,19 +343,25 @@ func _build() -> void:
 	# picture of somebody already visible on the board.
 	_crew_col.custom_minimum_size = Vector2(150.0 * _text_scale(), 0)
 	_crew_col.add_theme_constant_override("separation", 4)
-	row.add_child(_crew_col)
+	top_row.add_child(_crew_col)
 
 	_action_col = VBoxContainer.new()
 	_action_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_action_col.add_theme_constant_override("separation", 5)
-	row.add_child(_action_col)
+	top_row.add_child(_action_col)
 
 	_auto_col = VBoxContainer.new()
 	# Scales with its own contents, or the buttons inside it overflow a column
 	# that stayed the size it was when the text was smaller.
 	_auto_col.custom_minimum_size = Vector2(210.0 * _text_scale(), 0)
 	_auto_col.add_theme_constant_override("separation", 5)
-	row.add_child(_auto_col)
+	if portrait:
+		# Its own full-width row below top_row, not squeezed into top_row's
+		# narrow third — that squeeze is exactly what this reflow removes.
+		_auto_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		outer.add_child(_auto_col)
+	else:
+		row.add_child(_auto_col)
 
 	var cpad := MarginContainer.new()
 	for s in ["left", "right", "top", "bottom"]:
@@ -542,8 +614,23 @@ func _draw_board() -> void:
 						col = MapStyle.TAB
 						fill_a = 0.22
 					"target":
+						# COMBAT.md §9.13: the currently chosen target gets the same
+						# green the alternates below use when picking it would ALSO
+						# chain an ally in — one question, asked the same way, drawn
+						# on every candidate tile including this one. Gated on
+						# ATTACK specifically: _hovered_target is also set while
+						# targeting MARK, which has no sync question to answer.
+						var target_syncs := _pending != null \
+							and _pending.type == FightManager.Command.Type.ATTACK \
+							and _would_sync(_pending.source_id, _hovered_target)
+						col = PiritoriPalette.ROUTE_GREEN if target_syncs else SIDE_RED
+						fill_a = 0.30 if target_syncs else 0.26
+					"alt_sync":
+						col = PiritoriPalette.ROUTE_GREEN
+						fill_a = 0.15
+					"alt_target":
 						col = SIDE_RED
-						fill_a = 0.26
+						fill_a = 0.09
 					"reachable":
 						fill_a = 0.07
 					_:
@@ -587,7 +674,34 @@ func _cells_to_reveal() -> Dictionary:
 		var t := _fighter(_hovered_target)
 		if t:
 			out[Vector3i(t.slot.x, t.slot.y, int(t.side))] = "target"
+	# COMBAT.md §9.13: every OTHER live target this attack could pick, not
+	# only the one actually chosen — MST's "purple tile," telling you which
+	# of your options chains an ally in before you spend the round finding
+	# out from the text forecast. The hovered target's own cell keeps its
+	# existing key above and is re-coloured in _draw_board() by asking the
+	# same question, so the two never disagree about which tile is which.
+	if _pending != null and _pending.type == FightManager.Command.Type.ATTACK:
+		for tid_raw in fight.attack_targets_for(_pending.source_id):
+			var tid := String(tid_raw)
+			if tid == _hovered_target:
+				continue
+			var tf := _fighter(tid)
+			if tf == null:
+				continue
+			var key := Vector3i(tf.slot.x, tf.slot.y, int(tf.side))
+			out[key] = "alt_sync" if _would_sync(_pending.source_id, tid) else "alt_target"
 	return out
+
+
+## Whether choosing `target_id` for `source_id`'s attack would chain-fire at
+## least one ally (COMBAT.md §9.13) — asks `get_command_forecast()` itself
+## rather than re-deriving reach here, so the board can never show a tile
+## the actual mechanic would disagree with.
+func _would_sync(source_id: String, target_id: String) -> bool:
+	var cmd := FightManager.Command.new(FightManager.Command.Type.ATTACK, source_id)
+	cmd.target_id = target_id
+	var fc := fight.get_command_forecast(cmd)
+	return not (fc.get("sync_allies", []) as Array).is_empty()
 
 
 func _reachable_slots(f: Fighter) -> Array:
@@ -789,6 +903,18 @@ func _on_crew_levelled(crew_id: String, level: int) -> void:
 func _on_battle_event(ev) -> void:
 	if ev == null:
 		return
+	if int(ev.kind) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+		# COMBAT.md §9.13: the one thing on screen that says WHY a second gun
+		# just fired — over the syncing ally (source), the same fighter the
+		# harm just landed from, not over the shared target.
+		var sf := Flash.new()
+		sf.fighter_id = String(ev.source_id)
+		sf.text = tr("battle.sync")
+		sf.colour = PiritoriPalette.ROUTE_GREEN
+		sf.life = FLASH_LIFE
+		sf.max_life = FLASH_LIFE
+		_flashes.append(sf)
+		return
 	if int(ev.kind) != int(FightManager.BattleEvent.Kind.GLORY):
 		return
 	var f := Flash.new()
@@ -905,7 +1031,24 @@ func _draw_unit(f: Fighter) -> void:
 		_board.draw_polyline(d + PackedVector2Array([d[0]]), MapStyle.TAB, 2.0, true)
 	elif f.fighter_id == _hovered_target:
 		var d2 := _diamond(pos, tile.x * 1.2 * depth, tile.y * 0.58 * depth)
-		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), SIDE_RED, 2.0, true)
+		# COMBAT.md §9.13: green when picking THIS target would chain an
+		# ally in, same colour the tile underneath and the forecast text
+		# already use — one fact, said three ways rather than three facts.
+		# Gated on ATTACK: _hovered_target is also set while targeting MARK.
+		var syncs := _pending != null and _pending.type == FightManager.Command.Type.ATTACK \
+			and _would_sync(_pending.source_id, f.fighter_id)
+		var ring_col := PiritoriPalette.ROUTE_GREEN if syncs else SIDE_RED
+		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), ring_col, 2.0, true)
+	elif _pending != null and _pending.type == FightManager.Command.Type.ATTACK \
+			and fight.attack_targets_for(_pending.source_id).has(f.fighter_id):
+		# An alternate target this same attack could pick instead — thinner
+		# and dimmer than the active choice, so the eye finds the real
+		# decision first and the menu second.
+		var d3 := _diamond(pos, tile.x * 1.1 * depth, tile.y * 0.52 * depth)
+		var alt_syncs := _would_sync(_pending.source_id, f.fighter_id)
+		var alt_col := PiritoriPalette.ROUTE_GREEN if alt_syncs else SIDE_RED
+		alt_col.a = 0.55
+		_board.draw_polyline(d3 + PackedVector2Array([d3[0]]), alt_col, 1.5, true)
 
 	# 4. the standee's white stand marks, doubling as the condition read
 	var frac := 0.0 if f.condition_max <= 0 else float(f.condition) / float(f.condition_max)
@@ -1246,6 +1389,12 @@ func _build_action_column() -> void:
 			lines_out.append("%s %d%%" % [tr("battle.chance"), int(round(float(fc["hit_chance"]) * 100.0))])
 		if fc.has("risk_band"):
 			lines_out.append("%s %s" % [tr("battle.risk"), String(fc["risk_band"])])
+		# COMBAT.md §9.13: forecast before commitment applies to sync same as
+		# harm or risk — a chain the player cannot see coming before they
+		# commit is a surprise, not a tactical decision.
+		var sync_n: int = (fc.get("sync_allies", []) as Array).size()
+		if sync_n > 0:
+			lines_out.append("%s ×%d" % [tr("battle.sync"), sync_n])
 		var lethal := bool(fc.get("lethal_exposure", false))
 		if lethal:
 			lines_out.append(tr("battle.lethal_risk"))
@@ -1417,6 +1566,17 @@ func _build_auto_column() -> void:
 	# resource punishes exactly the players it exists for.
 	if _auto_mode:
 		_auto_col.add_child(_label(tr("battle.stance"), 11, MapStyle.TINY_TEXT))
+		# Sideways in the reflowed portrait row, where _auto_col has real
+		# width to spend — three buttons stacked vertically there, on top of
+		# everything else in this column, is what ran the console off the
+		# bottom of the viewport in the first place (caught by stress-testing
+		# AUTO ON against a real phone capture, not assumed). Landscape's
+		# narrow column keeps the original vertical stack.
+		var stance_holder: Container = _auto_col
+		if _console_portrait:
+			stance_holder = HBoxContainer.new()
+			stance_holder.add_theme_constant_override("separation", 5)
+			_auto_col.add_child(stance_holder)
 		for st in [FightManager.Stance.AGGRESSIVE,
 				FightManager.Stance.DEFENSIVE,
 				FightManager.Stance.HOLD_THE_LINE]:
@@ -1427,7 +1587,9 @@ func _build_auto_column() -> void:
 				func():
 					fight.player_stance = st
 					_refresh())
-			_auto_col.add_child(b)
+			if _console_portrait:
+				b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			stance_holder.add_child(b)
 
 	# SKIP TO RESULT (COMBAT.md §6.4) — the third tier, for players here for the
 	# story. It goes through a FACE-OFF first: the beat is what stops skipping

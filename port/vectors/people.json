@@ -1,0 +1,502 @@
+{
+ "model": "people",
+ "rows": {
+  "hirelings": [
+   {
+    "in": {
+     "seed": "port",
+     "index": 0
+    },
+    "out": {
+     "id": "port:0",
+     "name": "Tero Nurmi",
+     "nick": null,
+     "aptitudes": [
+      "shooter",
+      "anchor"
+     ],
+     "look": "shooter",
+     "traits": [
+      "invisible",
+      "never_drinks",
+      "skims"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 1
+    },
+    "out": {
+     "id": "port:1",
+     "name": "Janne Koskinen",
+     "nick": "Nappi",
+     "aptitudes": [
+      "watcher",
+      "courier",
+      "spotter"
+     ],
+     "look": "watcher",
+     "traits": [
+      "brother_inside",
+      "counts"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 2
+    },
+    "out": {
+     "id": "port:2",
+     "name": "Linh Nieminen",
+     "nick": null,
+     "aptitudes": [
+      "anchor",
+      "courier"
+     ],
+     "look": "anchor",
+     "traits": [
+      "early",
+      "known_harbour"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 3
+    },
+    "out": {
+     "id": "port:3",
+     "name": "Kari Hiltunen",
+     "nick": null,
+     "aptitudes": [
+      "watcher",
+      "local"
+     ],
+     "look": "watcher",
+     "traits": [
+      "boxed",
+      "invisible"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 4
+    },
+    "out": {
+     "id": "port:4",
+     "name": "Esa Turunen",
+     "nick": null,
+     "aptitudes": [
+      "driver",
+      "fixer"
+     ],
+     "look": "driver",
+     "traits": [
+      "doesnt_sleep",
+      "late"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 5
+    },
+    "out": {
+     "id": "port:5",
+     "name": "Goran Aho",
+     "nick": "Sähkö",
+     "aptitudes": [
+      "spotter",
+      "runner"
+     ],
+     "look": "spotter",
+     "traits": [
+      "no_finnish",
+      "skims"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 6
+    },
+    "out": {
+     "id": "port:6",
+     "name": "Ville Tuominen",
+     "nick": null,
+     "aptitudes": [
+      "bruiser",
+      "anchor"
+     ],
+     "look": "bruiser",
+     "traits": [
+      "known_harbour",
+      "no_finnish"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 7
+    },
+    "out": {
+     "id": "port:7",
+     "name": "Juha Leinonen",
+     "nick": null,
+     "aptitudes": [
+      "runner",
+      "local"
+     ],
+     "look": "runner",
+     "traits": [
+      "bad_knee",
+      "sends_money"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 8
+    },
+    "out": {
+     "id": "port:8",
+     "name": "Piia Pitkänen",
+     "nick": null,
+     "aptitudes": [
+      "spotter",
+      "courier"
+     ],
+     "look": "spotter",
+     "traits": [
+      "cannot_lie",
+      "carries_more"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 9
+    },
+    "out": {
+     "id": "port:9",
+     "name": "Rauno Lahtinen",
+     "nick": "Peltsi",
+     "aptitudes": [
+      "anchor",
+      "watcher",
+      "shooter"
+     ],
+     "look": "anchor",
+     "traits": [
+      "counts",
+      "kid",
+      "no_finnish"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 10
+    },
+    "out": {
+     "id": "port:10",
+     "name": "Mikko Lahtinen",
+     "nick": null,
+     "aptitudes": [
+      "bruiser",
+      "driver",
+      "local"
+     ],
+     "look": "bruiser",
+     "traits": [
+      "cannot_lie",
+      "never_drinks"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 11
+    },
+    "out": {
+     "id": "port:11",
+     "name": "Dmitri Määttä",
+     "nick": "Musta",
+     "aptitudes": [
+      "anchor",
+      "fixer"
+     ],
+     "look": "anchor",
+     "traits": [
+      "bad_knee",
+      "was_a_nurse"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 12
+    },
+    "out": {
+     "id": "port:12",
+     "name": "Janne Nieminen",
+     "nick": null,
+     "aptitudes": [
+      "driver",
+      "shooter"
+     ],
+     "look": "driver",
+     "traits": [
+      "boxed",
+      "known_hakaniemi",
+      "threatens_well"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 13
+    },
+    "out": {
+     "id": "port:13",
+     "name": "Timo Jokinen",
+     "nick": null,
+     "aptitudes": [
+      "blade",
+      "spotter"
+     ],
+     "look": "blade",
+     "traits": [
+      "boxed",
+      "listens"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 14
+    },
+    "out": {
+     "id": "port:14",
+     "name": "Sami Karjalainen",
+     "nick": null,
+     "aptitudes": [
+      "local",
+      "runner",
+      "bruiser"
+     ],
+     "look": "local",
+     "traits": [
+      "brother_inside",
+      "first_in",
+      "skims"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 15
+    },
+    "out": {
+     "id": "port:15",
+     "name": "Piia Hiltunen",
+     "nick": null,
+     "aptitudes": [
+      "runner",
+      "anchor",
+      "muscle"
+     ],
+     "look": "runner",
+     "traits": [
+      "brother_inside",
+      "doesnt_sleep",
+      "invisible"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 16
+    },
+    "out": {
+     "id": "port:16",
+     "name": "Mika Laine",
+     "nick": null,
+     "aptitudes": [
+      "muscle",
+      "driver"
+     ],
+     "look": "muscle",
+     "traits": [
+      "bad_knee",
+      "did_time"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 17
+    },
+    "out": {
+     "id": "port:17",
+     "name": "Riitta Laine",
+     "nick": "Tohtori",
+     "aptitudes": [
+      "spotter",
+      "local"
+     ],
+     "look": "spotter",
+     "traits": [
+      "asks_why",
+      "wont_run"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 18
+    },
+    "out": {
+     "id": "port:18",
+     "name": "Janne Lehtonen",
+     "nick": null,
+     "aptitudes": [
+      "spotter",
+      "runner"
+     ],
+     "look": "spotter",
+     "traits": [
+      "kid",
+      "talks_police"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 19
+    },
+    "out": {
+     "id": "port:19",
+     "name": "Riitta Leinonen",
+     "nick": null,
+     "aptitudes": [
+      "spotter",
+      "shooter",
+      "courier"
+     ],
+     "look": "spotter",
+     "traits": [
+      "bad_knee",
+      "never_drinks",
+      "was_a_nurse"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 20
+    },
+    "out": {
+     "id": "port:20",
+     "name": "Heidi Virtanen",
+     "nick": null,
+     "aptitudes": [
+      "local",
+      "spotter"
+     ],
+     "look": "local",
+     "traits": [
+      "brother_inside",
+      "threatens_well"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 21
+    },
+    "out": {
+     "id": "port:21",
+     "name": "Ari Korhonen",
+     "nick": null,
+     "aptitudes": [
+      "spotter",
+      "driver",
+      "anchor"
+     ],
+     "look": "spotter",
+     "traits": [
+      "asks_why",
+      "small"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 22
+    },
+    "out": {
+     "id": "port:22",
+     "name": "Kari Määttä",
+     "nick": null,
+     "aptitudes": [
+      "courier",
+      "local"
+     ],
+     "look": "courier",
+     "traits": [
+      "freezes",
+      "was_a_nurse"
+     ]
+    }
+   },
+   {
+    "in": {
+     "seed": "port",
+     "index": 23
+    },
+    "out": {
+     "id": "port:23",
+     "name": "Leena Ahonen",
+     "nick": null,
+     "aptitudes": [
+      "courier",
+      "shooter"
+     ],
+     "look": "courier",
+     "traits": [
+      "cannot_lie",
+      "late"
+     ]
+    }
+   }
+  ]
+ },
+ "rev": 1,
+ "note": "Generated by port/vectors.mjs — see PORTING.md §4. Do not hand-edit."
+}

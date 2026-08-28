@@ -42,5 +42,5 @@ createServer(async (request, response) => {
     response.end('Not found');
   }
 }).listen(port, '127.0.0.1', () => {
-  console.log(`Piritori → Eden: http://localhost:${port}/piritori/`);
+  console.log(`Piritori → Eden: http://localhost:${port}/web/`);
 });

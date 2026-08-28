@@ -1,0 +1,4464 @@
+{
+ "model": "exposure",
+ "rows": {
+  "calls": [
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.33,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.434,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.312,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.33,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.434,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.312,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.792,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.279,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 3.136,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 3.136,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.792,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.279,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.702,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.115,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.702,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.115,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.792,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.279,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.702,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.115,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.702,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.115,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.352,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.352,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.428,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.613,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.556,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.428,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.613,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.556,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.142,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.091,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.845,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.7,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.281,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.743,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.7,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.281,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.743,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 0.56,
+     "band": "unremarkable",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.025,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.394,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.254,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.296,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.123,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.195,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.195,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.254,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.296,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.123,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.192,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.181,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.967,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.192,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.181,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.967,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.254,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.296,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.123,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.192,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.181,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.967,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.192,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.181,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.967,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.352,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 2.352,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.344,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.46,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.347,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.277,
+     "band": "noticed",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.337,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.179,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.736,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.177,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 3.038,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 3.038,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.736,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.177,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.649,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.018,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.649,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.018,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.736,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.177,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.649,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.018,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.649,
+     "band": "watched",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.018,
+     "band": "a good reason to talk to you",
+     "cause": "place"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 4,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.4,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.562,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.486,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.4,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.562,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.486,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.12,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.05,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.789,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.26,
+     "band": "noticed",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.306,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.137,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.26,
+     "band": "noticed",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.306,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.137,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.008,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.845,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.51,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.33,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.434,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.312,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.33,
+     "band": "watched",
+     "cause": "condition"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.434,
+     "band": "a good reason to talk to you",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "day",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 3.312,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "evening",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "clear",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "clear",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "clear",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "drunk",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 1,
+     "units": 6,
+     "armed": false
+    },
+    "out": {
+     "score": 1.064,
+     "band": "noticed",
+     "cause": "load"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 3,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 1.947,
+     "band": "watched",
+     "cause": "armed"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "block": "night",
+     "condition": "stoned",
+     "crew": 5,
+     "units": 6,
+     "armed": true
+    },
+    "out": {
+     "score": 2.649,
+     "band": "a good reason to talk to you",
+     "cause": "crew"
+    }
+   }
+  ]
+ },
+ "rev": 2,
+ "note": "Generated by port/vectors.mjs — see PORTING.md §4. Do not hand-edit."
+}

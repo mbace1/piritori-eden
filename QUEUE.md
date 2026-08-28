@@ -8,6 +8,117 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Sync fire (COMBAT.md §9.13, `VERSIONS.md` v4.11) — two follow-ups left open
+
+- **Desync is not built.** MST makes tough enemies immune to further sync
+  hits after the first one lands each round, so a boss cannot just be
+  zerged. This content has no "tough"/"elite" flag anywhere, and inventing
+  one to gate a mechanic in the same pass it shipped would be exactly the
+  unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Shipped
+  unthrottled instead. **Worth watching in play**: an unthrottled chain may
+  turn out to trivialise any tight formation, player or opposition side
+  alike — the honest way to find out is to read a real fight, not guess a
+  cap now. If it does need one, the flag belongs in content
+  (`content/era1-slice-v1.json`'s opposition entries), Content lane's call,
+  and the throttle itself is Engine's.
+- ~~**No purple-tile range overlay.**~~ **Built 2026-08-28.** Every cell
+  `attack_targets_for()` names for the acting unit now paints in
+  `_cells_to_reveal()`/`_draw_unit()` — green when picking it would chain an
+  ally in (`_would_sync()`, which just asks `get_command_forecast()` the
+  same question the mechanic itself answers, so the tile can't show
+  something the mechanic would disagree with), red/dim when it wouldn't, all
+  BEFORE the target is committed. Gated on `Command.Type.ATTACK`
+  specifically — `_hovered_target` is also set while targeting MARK, which
+  has no sync question to answer, and the first cut asked `_would_sync` for
+  that case too before it was caught and gated off.
+  **Not verified by eye**: this sandbox's `capture_battle.gd` pipeline hung
+  on every attempt this session (same failure the portrait-reflow work hit
+  earlier — a real, pre-existing environment limitation, not something
+  either change caused), so this shipped on code review and the passing
+  gates (`test_battle_ui`'s "forecast before commitment" checks, `test_battle`)
+  rather than a look at the render. Worth an actual look next session a
+  capture succeeds in.
+
+---
+
+## `v3-playthrough.cjs` had been silently not-running since 2026-08-25
+
+Fixed two real bugs getting it to boot at all (stale `page.goto` target —
+`/piritori/`, not `/web/`, same class of drift as `check-project.mjs`; and a
+MIME map missing `.mjs`, which made the stances port's `battle.js` import of
+`market/model.mjs` — the first cross-directory ES module import a browser
+had to load in this gate — serve as `application/octet-stream`, which a
+browser silently refuses to execute as a module). Both fixed, and the gate
+now actually boots the app and ran 11 of 14 checks.
+
+**The mode-nav loop is fixed** (2026-08-28, the item below picked back up):
+`for (const mode of ['encounter', 'ledger', …])` predates the committed-
+context rule (`VERSIONS.md` v4.4, 2026-08-27) — entering `encounter` mode
+now correctly HIDES `.mode-nav` (`UX_SPEC.md` §3.2/§3.4), so the very next
+click in the loop had nothing to click and threw, which — since the whole
+test body sits in ONE try/catch — skipped straight to `finally` and silently
+dropped every check after it (AUTO-battle, news, portrait reflow: never ran,
+not merely unreported). Fixed by reordering the loop (`battle` before the
+still-nav-visible modes, `encounter` last) and withdrawing through `battle`'s
+own real `[data-action="go-route"]` button — the same one an actual player
+would use — rather than faking the nav click. `encounter` goes last because
+there's a live encounter at that point and the only real way out is choosing
+and advancing it, which this loop has no business doing.
+
+**Fixing that surfaced two more real, independent content/test drifts —
+found and reported, not both fixed:**
+
+- **Fixed: `battle-karhupuisto-2v2`'s setup used pre-pool crew ids**
+  (`crew-mira-hamalainen`, `crew-samira-elmi`), which crashed setting
+  `.status` on `undefined` — `content.crew` moved to generated `crew-slot-*`
+  role ids ("content: crew names are generated from the pools, never
+  authored") and the test was never updated. Swapped to `crew-slot-muscle`/
+  `crew-slot-watcher`; the AUTO-battle check runs and passes again.
+- **Not fixed, and not a small fix: the web build's Toko scene is missing
+  Toko.** `enc-toko-quiet-voice`'s `scene_asset_id` moved to
+  `scene-toko-noodles-empty-v01` (commit `323846e`, "Toko stands in the
+  empty bar") — a background-only plate meant for Godot's live 3D
+  `presenter_3d` compositing. `web/js/v3/app.js`'s `isToko` check still
+  hardcodes the retired `scene-toko-noodles-prototype-v02` id (the old baked
+  illustration WITH Toko drawn into it, plus a fake mocked-up choice UI at
+  the bottom that `.scene-viewport.toko`'s crop exists to hide). Even
+  pointing `isToko` at the new id would not fix this: the new plate has no
+  Toko figure in it at all — `web/` has no equivalent of Godot's live
+  compositing, so the scene renders as an empty counter while the text says
+  "Toko dries a bowl and lowers his voice." Fixing this for real means either
+  a `web/`-side presenter compositing system (its own project) or a second,
+  `web/`-specific art asset with Toko drawn back in — not a one-line id
+  swap. The test (`v3-playthrough.cjs`) now soft-fails this instead of
+  throwing, so it no longer blocks the checks after it from running.
+- **"the whole twelve-anchor Kallio board is present" still fails** —
+  already named in this file, "Canon drift the browser gate found when it
+  was unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still
+  says twelve. Open owner question there already; not re-litigated here.
+- **Two console 404s** keep "boots with no browser errors" and "still no
+  browser errors after the click-through" red — `hub/shell.js?v=17`, the
+  cross-repo hub-shell convention this standalone repo doesn't have.
+  Harmless, seen throughout this session's other captures too.
+
+The gate now runs all of it: 23 passed, 5 failed (up from 11 checks even
+reached before today) — three of the five are the pre-existing/documented
+ones above, one pair is the newly-found and honestly-unfixed Toko gap.
+
+---
+
+## The stale "THE 2D -> 3D MOVE" section — fixed, 2026-08-28
+
+The flag above (dated the same day) said this wanted a fresh read against the
+current render rather than a line-by-line patch. Done: ran the real capture
+tool (`godot/tools/capture_battle.gd`, headless + `xvfb-run`) against the
+canon 3v3 courtyard, looked at the PNG, then re-read every claim in the three
+sections below against both the render and the actual code (not the doc's
+memory of the code). Corrections are inline below, each dated and each
+saying how it was checked — reading `battle_stage_3d.gd` is not the same
+class of evidence as watching it draw, and this file has been burned by that
+gap before (`VERSIONS.md` v4.4's retraction).
+
+---
+
 ## Debug affordances (blocks rule 3 and rule 6)
 
 - ~~**No URL parameters.**~~ Done — `autoload/debug_entry.gd`. See `CLAUDE.md`
@@ -18,6 +129,32 @@ pick up, and half of it will turn out to be wrong.
 
   Still thin: it reports frames but cannot **profile** them. If something is
   slow the HUD says so and not why.
+
+## Canon drift the browser gate found when it was unparked (2026-08-25)
+
+`web/test/v3-contract.mjs` had not run since the build was parked on
+2026-08-21, and content moved out from under its assertions. The additions look
+legitimate — Sörnäinen harbour and Suvilahti are referenced by the slice — so
+the gate now asserts what the content IS, to stop the next drift. But one of
+them is a **document disagreeing with data**, which `DESIGN_AUTHORITY.md`'s own
+rule says to record rather than average:
+
+| | the doc says | the file has |
+|---|---|---|
+| anchors | `DESIGN_AUTHORITY.md` locked direction: **twelve-anchor graph** | **14** |
+| active slice anchors | **eight** | **11** |
+| authored battles | (undocumented) | `2v2, 3v3, 3v3` |
+| courtyard scene | `scene-courtyard-prototype-v02` | `…-v05` |
+
+**Owner question: should the locked-direction paragraph move to 14 and 11, or
+should anchors come out of the map?** It moved again between 2026-08-25 and
+2026-08-27 — `makelansilta` was added — so the gap is widening rather than
+sitting still, which is the argument for settling it rather than watching it. Not edited either way here — a
+level-2 document and a level-7 file disagreeing is exactly the case the
+authority order says to stop on.
+
+The general lesson is already in `PORTING.md` §7: a build nobody runs stops
+being a check on anything, and the checks it was carrying die quietly with it.
 
 ## Known gaps
 
@@ -86,6 +223,12 @@ pick up, and half of it will turn out to be wrong.
 - **The courtyard v03 fits and is the reference** for what a stage should give.
 - **`art-library/archive/needs-rework/`** should probably gain the off-spec
   stages rather than leaving them registered and unusable.
+- **Every stage note above was written against the fallback yard, not the
+  named one.** `VERSIONS.md` v4.6: `battle_stage_3d.gd` never actually
+  showed a battle's own stage until 2026-08-28 — a mounting-order bug meant
+  every 3D fight rendered `STAGE_FALLBACK` regardless of `scene_asset_id`.
+  Fixed now. Re-judge stage quality against the CORRECT stage per battle,
+  not the backyard everything used to silently borrow.
 
 ## The stage (see COMBAT.md 3.1)
 
@@ -114,40 +257,82 @@ pick up, and half of it will turn out to be wrong.
 
 ## THE 2D -> 3D MOVE (see PHASING 1.055)
 
-- **`ART_BIBLE.md` describes a different game now.** It is the visual authority
-  and it says cut cardstock. It needs rewriting, and until it is, it and
-  PHASING openly disagree.
-- **The battle renderer draws standees.** 3D units are a renderer change.
-- **No isometric Camera3D exists.** The arena assumes a 2:1 projection that the
-  2D code fakes; in 3D it wants an orthographic camera actually set to it.
-- **Six arenas and six cast sets become reference art**, not runtime art.
+Re-checked 2026-08-28 against a live capture (`godot/tools/capture_battle.gd`,
+canon 3v3 courtyard) and the current code, not the doc's memory of it:
+
+- ~~**The battle renderer draws standees.**~~ **False now.** The capture shows
+  five clothed 3D figures with real depth, cast shadows and perspective
+  foreshortening on the courtyard floor — not flat cards. Struck rather than
+  deleted: this WAS true when written, per `PHASING.md`'s own account, and the
+  section existed to be caught up, not erased.
+- ~~**No isometric Camera3D exists; the arena assumes a 2:1 projection that
+  the 2D code fakes.**~~ **False now.** `battle_stage_3d.gd:500-501`: `_cam =
+  Camera3D.new(); _cam.projection = Camera3D.PROJECTION_ORTHOGONAL`. A real
+  orthographic camera, not arithmetic pretending to be one.
+- **`ART_BIBLE.md` describes a different game now.** Still true — checked
+  2026-08-28, not just cited from memory: `git log` shows zero commits to
+  `ART_BIBLE.md` since this was first flagged, and it still opens "Visual
+  system id: `cut-cardstock-hand-ink-v03`" with §13.2 framing 3D as one
+  named exception (Arvo Linde) rather than the rule. It and `PHASING.md`
+  still openly disagree; nobody has touched the older document.
+- **Six arenas and six cast sets become reference art, not runtime art** —
+  not re-verified here. The cast half is covered below ("now reference art").
+  The six-arenas claim was not checked against the current stage list; flag
+  stands, unconfirmed either way, rather than guessed at.
 
 ## The 3D cast, now that it exists
 
-- **The night grade eats them.** Six models are on the board and four wear dark
-  clothes; at battle scale under the current lighting they read as six dark
-  shapes rather than six people. The silhouettes differ, which was the point of
-  choosing them that way — but the fixer's coat, the local's maroon and the
-  driver's hi-vis should be legible and are not. A rim light, or lifting the
-  ambient on units only, is the likely fix.
-- **Only the muscle has fight clips.** idle / attack / hit / dead are lifted
-  onto any rig, so the other five play them — but they were authored against the
-  muscle's proportions and may read oddly on the round local or the lanky
-  watcher.
-- **The 2D cast sets are now reference art.** They still ship and PoseArt still
-  resolves them; nothing draws them while `use_3d` is on.
+Not flagged as stale, and the fresh capture broadly agrees with it — kept as
+written, with one corroboration:
+
+- **The night grade eats them** — partially confirmed by the 2026-08-28
+  capture, at close crop: two figures read as near-black silhouettes, three
+  as legible olive drab against the lit tile, so the effect is real but not
+  as total as "six dark shapes" suggested — some silhouettes ARE already
+  reading. Faces wash pale at any distance. Still an open problem, just not
+  a uniform one.
+- **Only the muscle has fight clips** — still true, checked 2026-08-28
+  directly against the code: `battle_stage_3d.gd`'s `CLIPS` dict still points
+  all four states (idle/attack/hit/dead) at `cast3d/clips/muscle-*-v01.glb`
+  only. Nothing has changed here.
+- **The 2D cast sets are now reference art** — not re-checked this pass.
 
 ## 3D units (see PHASING 1.06)
 
-- **`art/v3/cast3d/` is staged but NOT registered.** Two rigged glbs sit there
-  outside the manifest, which is exactly the antipattern that made every unit
-  look identical for weeks. Register them or delete them; do not leave them.
-- **Textures are uncapped.** 6.5MB of PNG per character. `process/size_limit`
-  on the imported texture is the known fix.
-- **`ART_BIBLE.md` §13.2 still says 3D is one exception.** The owner has ruled
-  otherwise; the document has not caught up.
-- **Nothing draws 3D units in battle.** The board renders 2D standees. Adopting
-  3D is a renderer change, not an asset swap.
+Re-checked 2026-08-28 against `art/v3/manifest.json` and `battle_stage_3d.gd`
+directly, not the earlier note's memory of either:
+
+- ~~**`art/v3/cast3d/` IS now registered — but the runtime still doesn't read
+  the registration.**~~ **Gated instead of rewritten, 2026-08-28.** A full
+  runtime rewrite (`UNIT_BY_ROLE` from `const` to a lookup resolved through
+  `ContentRegistry.art` at load) was scoped and set aside: GDScript `const`
+  must be compile-time-literal, so this would have meant `static var` plus a
+  `_static_init()`-or-equivalent that reads an autoload — real timing risk
+  to a 258-check passing suite, for a fix whose rendered RESULT is identical
+  either way (the hardcoded paths already matched the registered files).
+  Took the house-style answer instead: `_test_battle_stage_matches_manifest()`
+  in `test_battle.gd`, the same shape as `sync-data.mjs --check`/the vector
+  files — asserts `UNIT_BY_ROLE`/`UNIT_VARIANTS` agree with the manifest's
+  registered `mesh-3d` roles, verified both ways (fails when a hardcoded
+  path is pointed at a real file the manifest does NOT say for that role —
+  the actual failure mode this line worried about, since a plain
+  file-exists check does not catch it). The registration is no longer
+  merely decorative: nothing reads it live, but drift between it and the
+  hardcode now fails loudly instead of silently.
+- **Textures are "uncapped," but the 6.5MB figure is stale — the underlying
+  gap is not.** Current `cast3d/*_texture_0.png` files run 280-470KB each,
+  not 6.5MB; citing the old number now would overstate the problem. But
+  `process/size_limit=0` is still set on every cast3d texture import — the
+  actual fix (a size cap) was never applied, the files just happen to be
+  smaller today, for reasons not investigated here. The next asset that
+  isn't will hit the same unbounded import with nothing to catch it.
+- **`ART_BIBLE.md` §13.2 still says 3D is one exception** — still true, see
+  above; same unrewritten document.
+- ~~**Nothing draws 3D units in battle. The board renders 2D standees.**~~
+  **False now**, and this was the flat self-contradiction sitting inside this
+  same file: the section directly above this one ("The 3D cast, now that it
+  exists") already said six 3D models are on the board. One of the two was
+  wrong and nobody had gone back to strike it. It was this one.
 
 ## Art
 
@@ -287,7 +472,7 @@ Still open, deliberately not touched:
   Unexplained. Probably a stale local import cache, but it has not been proven,
   and it means local size numbers are a lower bound rather than the truth.
 
-## A test scene with a parse error HANGS, it does not fail
+## A test scene with a parse error HANGS, it does not fail — fixed, 2026-08-28
 
 Found while adding the aftermath gate: `test_shell.gd` has `check()` but no
 `eq()`, and calling the missing helper was a parse error. Every scene ends in
@@ -297,6 +482,37 @@ until it was killed at 6m40s rather than reporting anything.
 CI would have caught it as a timeout, eventually, with no useful message. Worth
 a `--timeout` on the gate invocations, or a watchdog in the scene, so the
 failure says what it is.
+
+Done: `godot/tools/run-tests.sh` wraps every gate in `timeout`, named per
+test. A watchdog INSIDE the scene was considered and rejected — the failure
+mode is a parse error IN the script, so nothing inside that same file can
+run to rescue itself; the timeout has to live outside the process.
+
+**Found building it, a second and unrelated staleness trap, same shape as
+the timeout one but silent instead of slow:** running the full suite showed
+`test_locale` and `test_shell` FAILING on two real keys (`cmd.city`,
+`cmd.messages`) in every language — but `tools/check-locale.mjs`, which
+reads `locale/ui.csv` directly, already said the CSV was fine. The keys
+WERE in the CSV (added 26 Aug). The compiled `locale/*.translation` files
+Godot actually loads are gitignored, editor-generated artifacts that only
+rebuild when the editor opens the project — this checkout had pulled the
+CSV change without ever doing that, so `--headless` silently ran every
+gate against week-old compiled translations and reported it as a content
+regression. One `--editor --quit-after` pass fixed all of it; nothing was
+actually wrong with the game. `run-tests.sh` now forces that pass by
+default (`PIRITORI_TEST_NO_IMPORT=1` to skip it). Worth remembering next
+time a gate fails on something `check-locale.mjs`/`sync-data.mjs --check`
+already called clean: the two can disagree, and when they do, the CSV-level
+check is reading the real source and the compiled one may just be stale.
+
+**And the fix has its own trap.** Forcing that import pass with a Godot
+binary OLDER than the README's declared 4.7.2 (a 4.3 stable happened to be
+what was on hand) silently rewrote two font `.import` files and
+`ui.csv.import`, each losing two lines — engine-version default params, not
+real content, but a tracked-file diff all the same. Reverted rather than
+committed. `run-tests.sh` now says so in its own header; repeating it here
+because "run the import pass" is exactly the kind of advice someone will
+follow without reading the script first.
 
 ## The hired character — what is wired and what is not
 
@@ -2052,11 +2268,34 @@ list. Recorded here instead of half-fixed:
   1.0 outright: the reason to scale at all is a dense portrait phone, and a
   landscape window is the size the authored numbers were chosen for.
 
-- **Still worth doing, not attempted:** in portrait the battle console would
-  read better with the automation column REFLOWED BELOW the verb cards rather
-  than beside them. That buys back enough width to raise the 1.3 ceiling. Left
-  alone deliberately — it would have been a fourth correction in one sitting,
-  and CLAUDE.md rule 8 says stop after two.
+- **The automation column reflows below the verb cards in portrait now**
+  (2026-08-28, picking up the item above). `CONSOLE_H` went from a `const` to
+  a `var`, set once in `_build()` from the same portrait test `_text_scale()`
+  already uses (`vp.x < vp.y`), so the two never disagree about which shape
+  the screen is; landscape reassigns nothing and stays byte-for-byte the
+  single HBoxContainer row it always was.
+
+  Three iterations on the added height, because guessing it once and moving
+  on is how the 1.3 ceiling above got left at three tries: `+110` (a guess)
+  clipped the stance buttons off the bottom of a real phone capture with AUTO
+  toggled on — the tallest state, and the one the original ceiling note never
+  stress-tested either. `+300` confirmed generous with margin to spare.
+  `+210` is the measured value: a phone capture cropped to the console's own
+  region shows the verb cards, AUTOMATION / AUTO ON, the STANCE row and
+  SKIP TO RESULT / WITHDRAW all present with a small margin and no clipping.
+
+  The height alone was not the whole fix. Three stance buttons stacked
+  vertically inside `_auto_col` were tall enough on their own to blow the
+  budget a second time — so `_build_auto_column()` now lays them out in an
+  `HBoxContainer` (`stance_holder`) when `_console_portrait` is true, spending
+  the width the reflow bought back instead of raising the height estimate
+  again. Landscape keeps the original vertical stack in the narrow column.
+  `capture_battle.gd` gained `PIRITORI_SHOT_SIZE=phone` and an AUTO-ON toggle
+  step so this state is reachable by the capture tool at all, not just by a
+  hand-driven session.
+
+  `test_battle` (260), `test_battle_ui` (28) and `test_shell` (105) all still
+  pass — this only touches layout, not any measured behaviour.
 
 
 - **The old 2D faces are off the battle console** (2026-08-27, direct: "the

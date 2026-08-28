@@ -1,41 +1,27 @@
-# legacy — the browser prototype, parked
+# legacy — the flow prototype, genuinely parked
 
-**Nothing in this folder is live.** It is kept the way `sudsjack/` is kept in
-the Suds-Jack repo: as the record of a lineage that taught the design, not as
-code anybody should extend.
+**Nothing in this folder is live**, and unlike the last time that sentence was
+written here, it is now true of everything that is left.
 
-Parked 2026-08-21, when the Godot port at `../godot/` became the build.
+The browser build that used to live here **was promoted to `../web/` on
+2026-08-25** and is the primary tester build again — see `../PORTING.md`. This
+folder keeps only the lineage that really is dead.
 
 ## What is in here
 
 | Path | What it was |
 |---|---|
-| `index.html`, `v3.css`, `js/v3/` | the v3.1 browser slice — the last playable JS build |
-| `js/*.js` (not `v3/`) | the older v2 runtime, already superseded before the split |
-| `test/` | the JS runtime's own gates |
-| `tools/` | its no-build local runner and validator |
-| `package.json` | npm scripts for the above |
-| `explorations/trading-prototype` | an early trading sketch |
+| `js/main.js`, `js/fight.js`, `js/market.js` | the city-flow prototype |
+| `js/fightview.js`, `js/heat.js`, `js/narrative.js`, `js/palette.js` | its supporting modules |
+| `test/fight.mjs`, `test/market.mjs` | its gates |
+| `explorations/` | the trading prototype that preceded all of it |
 
-## Why it is parked rather than deleted
+## Why it cannot be revived as-is
 
-Deleting it would take the evidence with it. Several decisions now recorded in
-`../DESIGN_AUTHORITY.md` and `../GAME_DESIGN_DOCUMENT.md` were made by building
-this and watching it fail — the market table that was more interesting than the
-map, the encounters that were clicked through for rewards. The documents state
-the conclusions; this is the working that produced them.
+It imports **`../flow-core/`**, the neutral engine shared with Toko Move, which
+lives in the **Suds-Jack** repository and did not come across in the split. See
+`../SHARED_ENGINE.md`. That is a real dependency on another tree, not a broken
+path — which is the difference between this folder and the one that moved out.
 
-## It does not run here
-
-`index.html` loads `../hub/shell.js` — the Suds-Jack arcade's HOME button, which
-lived one level above `piritori/` in the monorepo. That path does not exist in
-this repository, so the page is broken by construction as well as by intent.
-
-That is deliberate. An orphan that still runs is the one somebody edits by
-mistake.
-
-## The canon it read is still live
-
-`content/`, `map/`, `art/` and the design documents did **not** move in here.
-They are shared: the Godot build syncs from exactly those files through
-`godot/tools/sync-data.mjs`. This folder is the only part that was superseded.
+Its ideas are not dead: the heat model fed `market/model.mjs`'s `exposure()`,
+and the city-flow reading is still what `MAP.md` describes.

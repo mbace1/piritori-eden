@@ -45,6 +45,7 @@ func _ready() -> void:
 	_test_hired_crew_can_fight()
 	_test_aftermath()
 	_test_every_role_has_a_body()
+	_test_battle_stage_matches_manifest()
 	_test_every_stage_exists()
 	_test_unit_variants()
 	_test_ground_fill()
@@ -66,6 +67,7 @@ func _ready() -> void:
 	_test_determinism()
 	_test_withdrawal()
 	_test_board_shape()
+	_test_sync_fire()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1178,6 +1180,67 @@ func _test_every_role_has_a_body() -> void:
 		fell_back.is_empty(), " ".join(fell_back))
 
 
+## `UNIT_BY_ROLE`/`UNIT_VARIANTS` are hardcoded `res://` paths, not resolved
+## from `art/v3/manifest.json` at runtime — QUEUE.md 2026-08-28: the models
+## ARE registered there (real ids, `approval_status`), but nothing ever reads
+## the registration, which makes it decorative rather than load-bearing. A
+## full runtime rewrite (const -> autoload-backed lookup) was judged not
+## worth the risk to a passing 258-check suite for a fix whose visible result
+## is identical either way. This is the cheaper, house-style answer instead:
+## a gate that fails the moment the two representations disagree, same shape
+## as `sync-data.mjs --check`/the vector files, so the hardcode cannot drift
+## from the manifest silently the way it already had for cast3d.
+func _test_battle_stage_matches_manifest() -> void:
+	print("\nBattleStage3D's hardcoded paths match the manifest")
+	var by_role: Dictionary = {}  # role -> Array[String] of "res://data/art/" + file
+	for asset in ContentRegistry.art.get("assets", []):
+		if String(asset.get("kind", "")) != "mesh-3d":
+			continue
+		var role := String(asset.get("role", ""))
+		if role == "":
+			continue
+		var path := "res://data/art/" + String(asset.get("file", ""))
+		if not by_role.has(role):
+			by_role[role] = []
+		by_role[role].append(path)
+
+	# `police` is a deliberate, documented alias onto `enforcer`'s glb (no
+	# uniformed-police model exists yet) — not a manifest role of its own.
+	var aliases := {"police": "enforcer"}
+
+	var mismatched: PackedStringArray = []
+	for role in BattleStage3D.UNIT_BY_ROLE:
+		if BattleStage3D.UNIT_VARIANTS.has(role):
+			continue  # checked separately below, against the full variant set
+		var manifest_role: String = aliases.get(role, role)
+		var registered: Array = by_role.get(manifest_role, [])
+		var hardcoded := String(BattleStage3D.UNIT_BY_ROLE[role])
+		if registered.size() != 1 or registered[0] != hardcoded:
+			mismatched.append("%s: hardcoded=%s manifest=%s" % [role, hardcoded, str(registered)])
+	check("every single-body role's hardcoded path is the manifest's own",
+		mismatched.is_empty(), " | ".join(mismatched))
+
+	for role in BattleStage3D.UNIT_VARIANTS:
+		var hardcoded_set: Dictionary = {}
+		for p in BattleStage3D.UNIT_VARIANTS[role]:
+			hardcoded_set[String(p)] = true
+		var manifest_set: Dictionary = {}
+		for p in by_role.get(role, []):
+			manifest_set[String(p)] = true
+		check("%s's variant set matches the manifest's %s-role bodies" % [role, role],
+			_same_set(hardcoded_set, manifest_set),
+			"hardcoded=%s manifest=%s" % [str(hardcoded_set.keys()), str(manifest_set.keys())])
+
+
+func _same_set(a: Dictionary, b: Dictionary) -> bool:
+	if a.size() != b.size():
+		return false
+	for k in a:
+		if not b.has(k):
+			return false
+	return true
+
+
 ## The fight has to be able to SAY what happened. Every result was computed and
 ## none was ever shown: a rout, a negotiated exit, a withdrawal and a defeat all
 ## returned to the map identically, so losing read as a bug.
@@ -1401,3 +1464,123 @@ func _test_withdrawal() -> void:
 	check("the objective does not require defeating everyone",
 		String(battle.get("objective", "")).to_lower().find("unnecessary") != -1,
 		String(battle.get("objective", "")))
+
+
+## Sync fire (COMBAT.md §9.13) — a clean shot pulls in every ally who can
+## also reach the target, for free. Built on a hand-assembled battle_def
+## rather than a canon battle: canon cover/aptitudes would make it very hard
+## to prove a NEGATIVE (that the out-of-range ally never fires) without also
+## proving nothing else is quietly interfering.
+func _test_sync_fire() -> void:
+	print("\nsync fire pulls the whole formation's guns in (COMBAT.md §9.13)")
+	GameState.new_campaign()
+
+	var wide_rows: Array = []
+	for r in range(FightBoard.rows):
+		wide_rows.append(r)
+
+	var scenario1 := FightManager.new()
+	# harm is fixed (min == max), so the total damage a scenario ends with is
+	# a direct, deterministic count of how many shots actually landed.
+	scenario1.register_weapon("test-sync-spread", {
+		"harm_min": 2, "harm_max": 2, "nerve_min": 0, "nerve_max": 0,
+		"allowed_rows": wide_rows, "lane_spread": 1, "piercing": false,
+	})
+	var def1 := {
+		"battle_id": "test-sync", "stage_id": "test-stage",
+		"player_units": [
+			{"fighter_id": "a", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 1, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			# In range: lane 2 is one away from the target's lane 1, inside
+			# the weapon's lane_spread of 1.
+			{"fighter_id": "b", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 2, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			# Out of range on purpose: lane 5 is four lanes from the target's
+			# lane 1, well past lane_spread 1. Proves sync is selective, not
+			# "the whole side fires whenever anybody hits anything".
+			{"fighter_id": "c", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 5, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+		],
+		"opposition_units": [
+			{"fighter_id": "t", "side": int(Fighter.Side.OPPOSITION),
+				"slot_lane": 1, "slot_row": FightBoard.rows,
+				"condition": 6, "condition_max": 6},
+		],
+	}
+	var errs1 := scenario1.initialise(def1, 1)
+	check("scenario 1 sets up clean", errs1.is_empty(), str(errs1))
+
+	var a1: Fighter = scenario1.get_fighter("a")
+	var t1: Fighter = scenario1.get_fighter("t")
+	var cmd1 := FightManager.Command.new(FightManager.Command.Type.ATTACK, "a")
+	cmd1.target_id = "t"
+
+	var fc := scenario1.get_command_forecast(cmd1)
+	check("the forecast names the in-range ally", fc["sync_allies"].has("b"),
+		str(fc["sync_allies"]))
+	check("and never the out-of-range one", not fc["sync_allies"].has("c"),
+		str(fc["sync_allies"]))
+
+	scenario1._resolve_attack(cmd1)
+	eq("both the attacker's shot and the sync shot land (2x2 harm)",
+		t1.condition, 2)
+	check("the syncing ally never spent an action",
+		not scenario1.get_fighter("b").acted_this_round)
+	check("the out-of-range ally's condition is untouched either way",
+		scenario1.get_fighter("c").condition == 6)
+	var sync_hits := 0
+	for e in scenario1._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits += 1
+	eq("exactly one sync shot fired, from the one ally in range", sync_hits, 1)
+
+	# Scenario 2: a downed target stops the chain mid-resolution, not just
+	# before it. T starts at exactly the attacker's own harm (2) — A's shot
+	# brings it to 0 and CRITICAL, not DOWNED yet (COMBAT.md's roster rules
+	# take two condition-zero hits to go down). B's sync shot is the SECOND
+	# hit at condition 0, which is what actually downs it. C, who can also
+	# reach T, must never fire on a body already on the ground.
+	var scenario2 := FightManager.new()
+	scenario2.register_weapon("test-sync-spread", {
+		"harm_min": 2, "harm_max": 2, "nerve_min": 0, "nerve_max": 0,
+		"allowed_rows": wide_rows, "lane_spread": 2, "piercing": false,
+	})
+	var def2 := {
+		"battle_id": "test-sync-2", "stage_id": "test-stage",
+		"player_units": [
+			{"fighter_id": "a", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 1, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "b", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 2, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "c", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 3, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+		],
+		"opposition_units": [
+			{"fighter_id": "t", "side": int(Fighter.Side.OPPOSITION),
+				"slot_lane": 1, "slot_row": FightBoard.rows,
+				"condition": 2, "condition_max": 6},
+		],
+	}
+	var errs2 := scenario2.initialise(def2, 2)
+	check("scenario 2 sets up clean", errs2.is_empty(), str(errs2))
+
+	var cmd2 := FightManager.Command.new(FightManager.Command.Type.ATTACK, "a")
+	cmd2.target_id = "t"
+	scenario2._resolve_attack(cmd2)
+
+	var t2: Fighter = scenario2.get_fighter("t")
+	eq("the second hit (a sync shot) is what actually downs the target",
+		t2.status, Fighter.Status.DOWNED)
+	eq("condition clamps at zero rather than going negative", t2.condition, 0)
+	var sync_hits2 := 0
+	for e in scenario2._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits2 += 1
+	eq("only ONE sync shot lands — the second ally is skipped once the target is down",
+		sync_hits2, 1)

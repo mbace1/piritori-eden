@@ -122,7 +122,7 @@ answers to that before it answers to whether it is fun.
 |---|---|---|
 | **Into the Breach** | The goal for readability. Perfect information, small board, deterministic player actions, telegraphed everything. | Its tiny item count — this game wants more. |
 | **Final Fantasy Tactics** | Story units used rarely and deliberately. A world map with nodes, travel, and encounters en route. | Its sprawl, its job grind, its free-walking grid. |
-| **Metal Slug Tactics** | Compact encounters, momentum, the feel of a fight that resolves fast. | — |
+| **Metal Slug Tactics** | Compact encounters, momentum, the feel of a fight that resolves fast — and, as of `COMBAT.md` §9.13, **sync fire**: a clean shot pulls in every ally who can also reach the target, free. | Desync (needs a "tough" flag this content doesn't have) and its per-round-after-first-hit throttle — shipped unthrottled, see how a real fight reads first. |
 | **Mewgenics** | The item and buff *flavour* — generated units with traits worth reading. | **Its depth.** Owner: "likely even too deep for this game." |
 | **Slay the Spire** | Build-crafting: a run is defined by what you assembled. | Literal cards, draw, energy, discard. |
 | **Dope Wars** | The market pressure and the clock. | Being the whole game. |

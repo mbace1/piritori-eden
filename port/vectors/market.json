@@ -1,0 +1,5412 @@
+{
+ "model": "market",
+ "rows": {
+  "offers": [
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 68.09,
+     "sell": 54.05,
+     "mid": 61.07,
+     "marketMid": 61.07,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 68.09,
+     "sell": 29.73,
+     "mid": 48.91,
+     "marketMid": 61.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 108.95,
+     "sell": 54.05,
+     "mid": 81.5,
+     "marketMid": 61.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 68.98,
+     "sell": 54.75,
+     "mid": 61.86,
+     "marketMid": 61.86,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 68.98,
+     "sell": 30.11,
+     "mid": 49.54,
+     "marketMid": 61.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 110.36,
+     "sell": 54.75,
+     "mid": 82.56,
+     "marketMid": 61.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 70.54,
+     "sell": 55.99,
+     "mid": 63.27,
+     "marketMid": 63.27,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 70.54,
+     "sell": 30.8,
+     "mid": 50.67,
+     "marketMid": 63.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 112.87,
+     "sell": 55.99,
+     "mid": 84.43,
+     "marketMid": 63.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 75.53,
+     "sell": 59.95,
+     "mid": 67.74,
+     "marketMid": 67.74,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 75.53,
+     "sell": 32.97,
+     "mid": 54.25,
+     "marketMid": 67.74,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 120.85,
+     "sell": 59.95,
+     "mid": 90.4,
+     "marketMid": 67.74,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 76.51,
+     "sell": 60.73,
+     "mid": 68.62,
+     "marketMid": 68.62,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 76.51,
+     "sell": 33.4,
+     "mid": 54.96,
+     "marketMid": 68.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 122.42,
+     "sell": 60.73,
+     "mid": 91.58,
+     "marketMid": 68.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 78.25,
+     "sell": 62.11,
+     "mid": 70.18,
+     "marketMid": 70.18,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 78.25,
+     "sell": 34.16,
+     "mid": 56.21,
+     "marketMid": 70.18,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 125.2,
+     "sell": 62.11,
+     "mid": 93.66,
+     "marketMid": 70.18,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 67.34,
+     "sell": 53.45,
+     "mid": 60.39,
+     "marketMid": 60.39,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 67.34,
+     "sell": 29.4,
+     "mid": 48.37,
+     "marketMid": 60.39,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 107.74,
+     "sell": 53.45,
+     "mid": 80.59,
+     "marketMid": 60.39,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 68.21,
+     "sell": 54.14,
+     "mid": 61.18,
+     "marketMid": 61.18,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 68.21,
+     "sell": 29.78,
+     "mid": 48.99,
+     "marketMid": 61.18,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 109.14,
+     "sell": 54.14,
+     "mid": 81.64,
+     "marketMid": 61.18,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 69.76,
+     "sell": 55.37,
+     "mid": 62.56,
+     "marketMid": 62.56,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 69.76,
+     "sell": 30.45,
+     "mid": 50.11,
+     "marketMid": 62.56,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 111.62,
+     "sell": 55.37,
+     "mid": 83.49,
+     "marketMid": 62.56,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 53.59,
+     "sell": 50.47,
+     "mid": 52.03,
+     "marketMid": 52.03,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 53.59,
+     "sell": 37.89,
+     "mid": 45.74,
+     "marketMid": 52.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 71.39,
+     "sell": 50.47,
+     "mid": 60.93,
+     "marketMid": 52.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 56.26,
+     "sell": 52.98,
+     "mid": 54.62,
+     "marketMid": 54.62,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 56.26,
+     "sell": 39.77,
+     "mid": 48.02,
+     "marketMid": 54.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 74.94,
+     "sell": 52.98,
+     "mid": 63.96,
+     "marketMid": 54.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 59.46,
+     "sell": 56,
+     "mid": 57.73,
+     "marketMid": 57.73,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 59.46,
+     "sell": 42.04,
+     "mid": 50.75,
+     "marketMid": 57.73,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 79.21,
+     "sell": 56,
+     "mid": 67.6,
+     "marketMid": 57.73,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 56.66,
+     "sell": 53.36,
+     "mid": 55.01,
+     "marketMid": 55.01,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 56.66,
+     "sell": 40.06,
+     "mid": 48.36,
+     "marketMid": 55.01,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 75.48,
+     "sell": 53.36,
+     "mid": 64.42,
+     "marketMid": 55.01,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 59.48,
+     "sell": 56.01,
+     "mid": 57.75,
+     "marketMid": 57.75,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 59.48,
+     "sell": 42.05,
+     "mid": 50.76,
+     "marketMid": 57.75,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 79.23,
+     "sell": 56.01,
+     "mid": 67.62,
+     "marketMid": 57.75,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 62.86,
+     "sell": 59.2,
+     "mid": 61.03,
+     "marketMid": 61.03,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 62.86,
+     "sell": 44.44,
+     "mid": 53.65,
+     "marketMid": 61.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 83.74,
+     "sell": 59.2,
+     "mid": 71.47,
+     "marketMid": 61.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 59.08,
+     "sell": 55.64,
+     "mid": 57.36,
+     "marketMid": 57.36,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 59.08,
+     "sell": 41.77,
+     "mid": 50.42,
+     "marketMid": 57.36,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 78.7,
+     "sell": 55.64,
+     "mid": 67.17,
+     "marketMid": 57.36,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 62.02,
+     "sell": 58.4,
+     "mid": 60.21,
+     "marketMid": 60.21,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 62.02,
+     "sell": 43.84,
+     "mid": 52.93,
+     "marketMid": 60.21,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 82.61,
+     "sell": 58.4,
+     "mid": 70.51,
+     "marketMid": 60.21,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 65.55,
+     "sell": 61.73,
+     "mid": 63.64,
+     "marketMid": 63.64,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 65.55,
+     "sell": 46.34,
+     "mid": 55.94,
+     "marketMid": 63.64,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 87.31,
+     "sell": 61.73,
+     "mid": 74.52,
+     "marketMid": 63.64,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 59.93,
+     "sell": 55.32,
+     "mid": 57.62,
+     "marketMid": 57.62,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 59.93,
+     "sell": 36.93,
+     "mid": 48.43,
+     "marketMid": 57.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 89.77,
+     "sell": 55.32,
+     "mid": 72.54,
+     "marketMid": 57.62,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 64.59,
+     "sell": 59.62,
+     "mid": 62.1,
+     "marketMid": 62.1,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 64.59,
+     "sell": 39.8,
+     "mid": 52.2,
+     "marketMid": 62.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 96.74,
+     "sell": 59.62,
+     "mid": 78.18,
+     "marketMid": 62.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 69.85,
+     "sell": 64.47,
+     "mid": 67.16,
+     "marketMid": 67.16,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 69.85,
+     "sell": 43.04,
+     "mid": 56.45,
+     "marketMid": 67.16,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 104.62,
+     "sell": 64.47,
+     "mid": 84.55,
+     "marketMid": 67.16,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 59.59,
+     "sell": 55.01,
+     "mid": 57.3,
+     "marketMid": 57.3,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 59.59,
+     "sell": 36.72,
+     "mid": 48.16,
+     "marketMid": 57.3,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 89.26,
+     "sell": 55.01,
+     "mid": 72.13,
+     "marketMid": 57.3,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 64.23,
+     "sell": 59.28,
+     "mid": 61.76,
+     "marketMid": 61.76,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 64.23,
+     "sell": 39.58,
+     "mid": 51.9,
+     "marketMid": 61.76,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 96.2,
+     "sell": 59.28,
+     "mid": 77.74,
+     "marketMid": 61.76,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 69.45,
+     "sell": 64.11,
+     "mid": 66.78,
+     "marketMid": 66.78,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 69.45,
+     "sell": 42.8,
+     "mid": 56.13,
+     "marketMid": 66.78,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 104.03,
+     "sell": 64.11,
+     "mid": 84.07,
+     "marketMid": 66.78,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 55.96,
+     "sell": 51.65,
+     "mid": 53.81,
+     "marketMid": 53.81,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 55.96,
+     "sell": 34.48,
+     "mid": 45.22,
+     "marketMid": 53.81,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 83.82,
+     "sell": 51.65,
+     "mid": 67.73,
+     "marketMid": 53.81,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 60.31,
+     "sell": 55.67,
+     "mid": 57.99,
+     "marketMid": 57.99,
+     "cause": "midweek"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 60.31,
+     "sell": 37.17,
+     "mid": 48.74,
+     "marketMid": 57.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 90.33,
+     "sell": 55.67,
+     "mid": 73,
+     "marketMid": 57.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 65.22,
+     "sell": 60.2,
+     "mid": 62.71,
+     "marketMid": 62.71,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 65.22,
+     "sell": 40.19,
+     "mid": 52.7,
+     "marketMid": 62.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 97.69,
+     "sell": 60.2,
+     "mid": 78.94,
+     "marketMid": 62.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 85.62,
+     "sell": 71.48,
+     "mid": 78.55,
+     "marketMid": 78.55,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 85.62,
+     "sell": 39.32,
+     "mid": 62.47,
+     "marketMid": 78.55,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 137,
+     "sell": 71.48,
+     "mid": 104.24,
+     "marketMid": 78.55,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 89.43,
+     "sell": 74.67,
+     "mid": 82.05,
+     "marketMid": 82.05,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 89.43,
+     "sell": 41.07,
+     "mid": 65.25,
+     "marketMid": 82.05,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 143.1,
+     "sell": 74.67,
+     "mid": 108.88,
+     "marketMid": 82.05,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.1,
+     "sell": 78.56,
+     "mid": 86.33,
+     "marketMid": 86.33,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.1,
+     "sell": 43.21,
+     "mid": 68.66,
+     "marketMid": 86.33,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 150.56,
+     "sell": 78.56,
+     "mid": 114.56,
+     "marketMid": 86.33,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 78.32,
+     "sell": 65.38,
+     "mid": 71.85,
+     "marketMid": 71.85,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 78.32,
+     "sell": 35.96,
+     "mid": 57.14,
+     "marketMid": 71.85,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 125.31,
+     "sell": 65.38,
+     "mid": 95.35,
+     "marketMid": 71.85,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 81.8,
+     "sell": 68.29,
+     "mid": 75.05,
+     "marketMid": 75.05,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 81.8,
+     "sell": 37.56,
+     "mid": 59.68,
+     "marketMid": 75.05,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 130.88,
+     "sell": 68.29,
+     "mid": 99.59,
+     "marketMid": 75.05,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 86.07,
+     "sell": 71.86,
+     "mid": 78.96,
+     "marketMid": 78.96,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 86.07,
+     "sell": 39.52,
+     "mid": 62.8,
+     "marketMid": 78.96,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 137.71,
+     "sell": 71.86,
+     "mid": 104.78,
+     "marketMid": 78.96,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 75.65,
+     "sell": 63.15,
+     "mid": 69.4,
+     "marketMid": 69.4,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 75.65,
+     "sell": 34.73,
+     "mid": 55.19,
+     "marketMid": 69.4,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 121.03,
+     "sell": 63.15,
+     "mid": 92.09,
+     "marketMid": 69.4,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 79.01,
+     "sell": 65.96,
+     "mid": 72.49,
+     "marketMid": 72.49,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 79.01,
+     "sell": 36.28,
+     "mid": 57.65,
+     "marketMid": 72.49,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 126.42,
+     "sell": 65.96,
+     "mid": 96.19,
+     "marketMid": 72.49,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 83.13,
+     "sell": 69.41,
+     "mid": 76.27,
+     "marketMid": 76.27,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 83.13,
+     "sell": 38.17,
+     "mid": 60.65,
+     "marketMid": 76.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 133.02,
+     "sell": 69.41,
+     "mid": 101.21,
+     "marketMid": 76.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 97.55,
+     "sell": 69.2,
+     "mid": 83.37,
+     "marketMid": 83.37,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 97.55,
+     "sell": 38.06,
+     "mid": 67.8,
+     "marketMid": 83.37,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 156.07,
+     "sell": 69.2,
+     "mid": 112.64,
+     "marketMid": 83.37,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 96.25,
+     "sell": 68.28,
+     "mid": 82.27,
+     "marketMid": 82.27,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 96.25,
+     "sell": 37.56,
+     "mid": 66.9,
+     "marketMid": 82.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 154.01,
+     "sell": 68.28,
+     "mid": 111.14,
+     "marketMid": 82.27,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 95.94,
+     "sell": 68.06,
+     "mid": 82,
+     "marketMid": 82,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 95.94,
+     "sell": 37.43,
+     "mid": 66.68,
+     "marketMid": 82,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 153.5,
+     "sell": 68.06,
+     "mid": 110.78,
+     "marketMid": 82,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 96.08,
+     "sell": 68.16,
+     "mid": 82.12,
+     "marketMid": 82.12,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 96.08,
+     "sell": 37.49,
+     "mid": 66.78,
+     "marketMid": 82.12,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 153.73,
+     "sell": 68.16,
+     "mid": 110.94,
+     "marketMid": 82.12,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.81,
+     "sell": 67.25,
+     "mid": 81.03,
+     "marketMid": 81.03,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.81,
+     "sell": 36.99,
+     "mid": 65.9,
+     "marketMid": 81.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 151.69,
+     "sell": 67.25,
+     "mid": 109.47,
+     "marketMid": 81.03,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.49,
+     "sell": 67.03,
+     "mid": 80.76,
+     "marketMid": 80.76,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.49,
+     "sell": 36.87,
+     "mid": 65.68,
+     "marketMid": 80.76,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 151.19,
+     "sell": 67.03,
+     "mid": 109.11,
+     "marketMid": 80.76,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.59,
+     "sell": 67.1,
+     "mid": 80.84,
+     "marketMid": 80.84,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.59,
+     "sell": 36.91,
+     "mid": 65.75,
+     "marketMid": 80.84,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 151.34,
+     "sell": 67.1,
+     "mid": 109.22,
+     "marketMid": 80.84,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 93.33,
+     "sell": 66.21,
+     "mid": 79.77,
+     "marketMid": 79.77,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 93.33,
+     "sell": 36.42,
+     "mid": 64.88,
+     "marketMid": 79.77,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 149.33,
+     "sell": 66.21,
+     "mid": 107.77,
+     "marketMid": 79.77,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 93.03,
+     "sell": 65.99,
+     "mid": 79.51,
+     "marketMid": 79.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 93.03,
+     "sell": 36.3,
+     "mid": 64.66,
+     "marketMid": 79.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 148.84,
+     "sell": 65.99,
+     "mid": 107.42,
+     "marketMid": 79.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 62.64,
+     "sell": 52.29,
+     "mid": 57.46,
+     "marketMid": 57.46,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 62.64,
+     "sell": 28.76,
+     "mid": 45.7,
+     "marketMid": 57.46,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 100.22,
+     "sell": 52.29,
+     "mid": 76.25,
+     "marketMid": 57.46,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 64.76,
+     "sell": 54.07,
+     "mid": 59.42,
+     "marketMid": 59.42,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 64.76,
+     "sell": 29.74,
+     "mid": 47.25,
+     "marketMid": 59.42,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 103.62,
+     "sell": 54.07,
+     "mid": 78.85,
+     "marketMid": 59.42,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 67.52,
+     "sell": 56.37,
+     "mid": 61.95,
+     "marketMid": 61.95,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 67.52,
+     "sell": 31,
+     "mid": 49.26,
+     "marketMid": 61.95,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 108.03,
+     "sell": 56.37,
+     "mid": 82.2,
+     "marketMid": 61.95,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 68.38,
+     "sell": 57.09,
+     "mid": 62.74,
+     "marketMid": 62.74,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 68.38,
+     "sell": 31.4,
+     "mid": 49.89,
+     "marketMid": 62.74,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 109.41,
+     "sell": 57.09,
+     "mid": 83.25,
+     "marketMid": 62.74,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 70.71,
+     "sell": 59.03,
+     "mid": 64.87,
+     "marketMid": 64.87,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 70.71,
+     "sell": 32.47,
+     "mid": 51.59,
+     "marketMid": 64.87,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 113.13,
+     "sell": 59.03,
+     "mid": 86.08,
+     "marketMid": 64.87,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 73.72,
+     "sell": 61.54,
+     "mid": 67.63,
+     "marketMid": 67.63,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 73.72,
+     "sell": 33.85,
+     "mid": 53.78,
+     "marketMid": 67.63,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 117.95,
+     "sell": 61.54,
+     "mid": 89.75,
+     "marketMid": 67.63,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 65.51,
+     "sell": 54.69,
+     "mid": 60.1,
+     "marketMid": 60.1,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 65.51,
+     "sell": 30.08,
+     "mid": 47.8,
+     "marketMid": 60.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 104.82,
+     "sell": 54.69,
+     "mid": 79.75,
+     "marketMid": 60.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 67.74,
+     "sell": 56.55,
+     "mid": 62.14,
+     "marketMid": 62.14,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 67.74,
+     "sell": 31.1,
+     "mid": 49.42,
+     "marketMid": 62.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 108.38,
+     "sell": 56.55,
+     "mid": 82.47,
+     "marketMid": 62.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 70.62,
+     "sell": 58.96,
+     "mid": 64.79,
+     "marketMid": 64.79,
+     "cause": "hour"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 70.62,
+     "sell": 32.43,
+     "mid": 51.52,
+     "marketMid": 64.79,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 112.99,
+     "sell": 58.96,
+     "mid": 85.97,
+     "marketMid": 64.79,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 56.53,
+     "sell": 51.67,
+     "mid": 54.1,
+     "marketMid": 54.1,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 56.53,
+     "sell": 28.42,
+     "mid": 42.48,
+     "marketMid": 54.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 90.46,
+     "sell": 51.67,
+     "mid": 71.06,
+     "marketMid": 54.1,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 57.47,
+     "sell": 52.52,
+     "mid": 54.99,
+     "marketMid": 54.99,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 57.47,
+     "sell": 28.89,
+     "mid": 43.18,
+     "marketMid": 54.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 91.95,
+     "sell": 52.52,
+     "mid": 72.23,
+     "marketMid": 54.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 58.97,
+     "sell": 53.89,
+     "mid": 56.43,
+     "marketMid": 56.43,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 58.97,
+     "sell": 29.64,
+     "mid": 44.3,
+     "marketMid": 56.43,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 94.35,
+     "sell": 53.89,
+     "mid": 74.12,
+     "marketMid": 56.43,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 57.94,
+     "sell": 52.95,
+     "mid": 55.45,
+     "marketMid": 55.45,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 57.94,
+     "sell": 29.12,
+     "mid": 43.53,
+     "marketMid": 55.45,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 92.7,
+     "sell": 52.95,
+     "mid": 72.83,
+     "marketMid": 55.45,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 58.9,
+     "sell": 53.82,
+     "mid": 56.36,
+     "marketMid": 56.36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 58.9,
+     "sell": 29.6,
+     "mid": 44.25,
+     "marketMid": 56.36,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 94.23,
+     "sell": 53.82,
+     "mid": 74.03,
+     "marketMid": 56.36,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 60.43,
+     "sell": 55.23,
+     "mid": 57.83,
+     "marketMid": 57.83,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 60.43,
+     "sell": 30.38,
+     "mid": 45.4,
+     "marketMid": 57.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 96.69,
+     "sell": 55.23,
+     "mid": 75.96,
+     "marketMid": 57.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 54.76,
+     "sell": 50.04,
+     "mid": 52.4,
+     "marketMid": 52.4,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 54.76,
+     "sell": 27.52,
+     "mid": 41.14,
+     "marketMid": 52.4,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 87.61,
+     "sell": 50.04,
+     "mid": 68.83,
+     "marketMid": 52.4,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 55.66,
+     "sell": 50.87,
+     "mid": 53.26,
+     "marketMid": 53.26,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 55.66,
+     "sell": 27.98,
+     "mid": 41.82,
+     "marketMid": 53.26,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 89.06,
+     "sell": 50.87,
+     "mid": 69.96,
+     "marketMid": 53.26,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 57.11,
+     "sell": 52.19,
+     "mid": 54.65,
+     "marketMid": 54.65,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 57.11,
+     "sell": 28.71,
+     "mid": 42.91,
+     "marketMid": 54.65,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 91.38,
+     "sell": 52.19,
+     "mid": 71.79,
+     "marketMid": 54.65,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 46.51,
+     "sell": 43.37,
+     "mid": 44.94,
+     "marketMid": 44.94,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 46.51,
+     "sell": 31.01,
+     "mid": 38.76,
+     "marketMid": 44.94,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 65.05,
+     "sell": 43.37,
+     "mid": 54.21,
+     "marketMid": 44.94,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 48.5,
+     "sell": 45.22,
+     "mid": 46.86,
+     "marketMid": 46.86,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 48.5,
+     "sell": 32.34,
+     "mid": 40.42,
+     "marketMid": 46.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 67.83,
+     "sell": 45.22,
+     "mid": 56.53,
+     "marketMid": 46.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 50.96,
+     "sell": 47.51,
+     "mid": 49.23,
+     "marketMid": 49.23,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 50.96,
+     "sell": 33.97,
+     "mid": 42.46,
+     "marketMid": 49.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 71.26,
+     "sell": 47.51,
+     "mid": 59.39,
+     "marketMid": 49.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 49.65,
+     "sell": 46.29,
+     "mid": 47.97,
+     "marketMid": 47.97,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 49.65,
+     "sell": 33.1,
+     "mid": 41.37,
+     "marketMid": 47.97,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 69.44,
+     "sell": 46.29,
+     "mid": 57.86,
+     "marketMid": 47.97,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 51.77,
+     "sell": 48.27,
+     "mid": 50.02,
+     "marketMid": 50.02,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 51.77,
+     "sell": 34.51,
+     "mid": 43.14,
+     "marketMid": 50.02,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 72.4,
+     "sell": 48.27,
+     "mid": 60.34,
+     "marketMid": 50.02,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 54.39,
+     "sell": 50.71,
+     "mid": 52.55,
+     "marketMid": 52.55,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 54.39,
+     "sell": 36.26,
+     "mid": 45.32,
+     "marketMid": 52.55,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 76.07,
+     "sell": 50.71,
+     "mid": 63.39,
+     "marketMid": 52.55,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 46.56,
+     "sell": 43.41,
+     "mid": 44.99,
+     "marketMid": 44.99,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 46.56,
+     "sell": 31.04,
+     "mid": 38.8,
+     "marketMid": 44.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 65.12,
+     "sell": 43.41,
+     "mid": 54.27,
+     "marketMid": 44.99,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 48.55,
+     "sell": 45.27,
+     "mid": 46.91,
+     "marketMid": 46.91,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 48.55,
+     "sell": 32.37,
+     "mid": 40.46,
+     "marketMid": 46.91,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 67.9,
+     "sell": 45.27,
+     "mid": 56.59,
+     "marketMid": 46.91,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 51.01,
+     "sell": 47.56,
+     "mid": 49.29,
+     "marketMid": 49.29,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 51.01,
+     "sell": 34.01,
+     "mid": 42.51,
+     "marketMid": 49.29,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 71.34,
+     "sell": 47.56,
+     "mid": 59.45,
+     "marketMid": 49.29,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 42.36,
+     "sell": 34.66,
+     "mid": 38.51,
+     "marketMid": 38.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 42.36,
+     "sell": 24.29,
+     "mid": 33.33,
+     "marketMid": 38.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 60.45,
+     "sell": 34.66,
+     "mid": 47.55,
+     "marketMid": 38.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 32.4,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.6,
+     "sell": 22.71,
+     "mid": 31.15,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 56.51,
+     "sell": 32.4,
+     "mid": 44.45,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 32.94,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 19.82,
+     "mid": 29.44,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 62.5,
+     "sell": 32.94,
+     "mid": 47.72,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 32.94,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 19.82,
+     "mid": 29.44,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 62.5,
+     "sell": 32.94,
+     "mid": 47.72,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 32.94,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 19.82,
+     "mid": 29.44,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 62.5,
+     "sell": 32.94,
+     "mid": 47.72,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 32.94,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 19.82,
+     "mid": 29.44,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 62.5,
+     "sell": 32.94,
+     "mid": 47.72,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 41.4,
+     "sell": 34.91,
+     "mid": 38.15,
+     "marketMid": 38.15,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 41.4,
+     "sell": 21.01,
+     "mid": 31.2,
+     "marketMid": 38.15,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 66.23,
+     "sell": 34.91,
+     "mid": 50.57,
+     "marketMid": 38.15,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 44.45,
+     "sell": 37.49,
+     "mid": 40.97,
+     "marketMid": 40.97,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 44.45,
+     "sell": 22.56,
+     "mid": 33.51,
+     "marketMid": 40.97,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 71.13,
+     "sell": 37.49,
+     "mid": 54.31,
+     "marketMid": 40.97,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 32.94,
+     "mid": 36,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 39.06,
+     "sell": 19.82,
+     "mid": 29.44,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 62.5,
+     "sell": 32.94,
+     "mid": 47.72,
+     "marketMid": 36,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 41.43,
+     "sell": 34.94,
+     "mid": 38.18,
+     "marketMid": 38.18,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 41.43,
+     "sell": 21.02,
+     "mid": 31.23,
+     "marketMid": 38.18,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 66.28,
+     "sell": 34.94,
+     "mid": 50.61,
+     "marketMid": 38.18,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 44.49,
+     "sell": 37.52,
+     "mid": 41,
+     "marketMid": 41,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 44.49,
+     "sell": 22.58,
+     "mid": 33.53,
+     "marketMid": 41,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 71.18,
+     "sell": 37.52,
+     "mid": 54.35,
+     "marketMid": 41,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 90.36,
+     "sell": 73.93,
+     "mid": 82.14,
+     "marketMid": 82.14,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 90.36,
+     "sell": 40.66,
+     "mid": 65.51,
+     "marketMid": 82.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 144.57,
+     "sell": 73.93,
+     "mid": 109.25,
+     "marketMid": 82.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 92.48,
+     "sell": 75.67,
+     "mid": 84.07,
+     "marketMid": 84.07,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 92.48,
+     "sell": 41.62,
+     "mid": 67.05,
+     "marketMid": 84.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 147.97,
+     "sell": 75.67,
+     "mid": 111.82,
+     "marketMid": 84.07,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 95.51,
+     "sell": 78.14,
+     "mid": 86.83,
+     "marketMid": 86.83,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 95.51,
+     "sell": 42.98,
+     "mid": 69.24,
+     "marketMid": 86.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 0,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 152.81,
+     "sell": 78.14,
+     "mid": 115.48,
+     "marketMid": 86.83,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 84.38,
+     "sell": 69.04,
+     "mid": 76.71,
+     "marketMid": 76.71,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 84.38,
+     "sell": 37.97,
+     "mid": 61.18,
+     "marketMid": 76.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 135.01,
+     "sell": 69.04,
+     "mid": 102.03,
+     "marketMid": 76.71,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 86.37,
+     "sell": 70.66,
+     "mid": 78.51,
+     "marketMid": 78.51,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 86.37,
+     "sell": 38.86,
+     "mid": 62.62,
+     "marketMid": 78.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 138.19,
+     "sell": 70.66,
+     "mid": 104.42,
+     "marketMid": 78.51,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 89.19,
+     "sell": 72.98,
+     "mid": 81.08,
+     "marketMid": 81.08,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 89.19,
+     "sell": 40.14,
+     "mid": 64.66,
+     "marketMid": 81.08,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 3,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 142.71,
+     "sell": 72.98,
+     "mid": 107.84,
+     "marketMid": 81.08,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 89.36,
+     "sell": 73.11,
+     "mid": 81.23,
+     "marketMid": 81.23,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 89.36,
+     "sell": 40.21,
+     "mid": 64.78,
+     "marketMid": 81.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "day",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 142.97,
+     "sell": 73.11,
+     "mid": 108.04,
+     "marketMid": 81.23,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 91.46,
+     "sell": 74.83,
+     "mid": 83.14,
+     "marketMid": 83.14,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 91.46,
+     "sell": 41.16,
+     "mid": 66.31,
+     "marketMid": 83.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "evening",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 146.33,
+     "sell": 74.83,
+     "mid": 110.58,
+     "marketMid": 83.14,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 0
+    },
+    "out": {
+     "buy": 94.45,
+     "sell": 77.28,
+     "mid": 85.86,
+     "marketMid": 85.86,
+     "cause": "site"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": 8
+    },
+    "out": {
+     "buy": 94.45,
+     "sell": 42.5,
+     "mid": 68.48,
+     "marketMid": 85.86,
+     "cause": "saturation"
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "good": "piri",
+     "day": 9,
+     "block": "night",
+     "seed": "port",
+     "saturation": -8
+    },
+    "out": {
+     "buy": 151.12,
+     "sell": 77.28,
+     "mid": 114.2,
+     "marketMid": 85.86,
+     "cause": "saturation"
+    }
+   }
+  ],
+  "profiles": [
+   {
+    "in": {
+     "anchor": "siltasaari",
+     "roles": [
+      "threshold",
+      "service",
+      "home"
+     ]
+    },
+    "out": {
+     "demand": 1.14,
+     "spread": 0.23,
+     "liquidity": 2,
+     "volatility": 0.96,
+     "watch": 0.95
+    }
+   },
+   {
+    "in": {
+     "anchor": "hakaniemi",
+     "roles": [
+      "market",
+      "transfer",
+      "crowd-source"
+     ]
+    },
+    "out": {
+     "demand": 1.4,
+     "spread": 0.06,
+     "liquidity": 6.2,
+     "volatility": 1.17,
+     "watch": 1.6
+    }
+   },
+   {
+    "in": {
+     "anchor": "linjat_yard",
+     "roles": [
+      "nightlife",
+      "service",
+      "faction"
+     ]
+    },
+    "out": {
+     "demand": 1.39,
+     "spread": 0.08,
+     "liquidity": 4.4,
+     "volatility": 1.33,
+     "watch": 1.2
+    }
+   },
+   {
+    "in": {
+     "anchor": "karhupuisto",
+     "roles": [
+      "park",
+      "social",
+      "weather"
+     ]
+    },
+    "out": {
+     "demand": 1.29,
+     "spread": 0.18,
+     "liquidity": 2.78,
+     "volatility": 1.14,
+     "watch": 1.02
+    }
+   },
+   {
+    "in": {
+     "anchor": "torkkelinmaki",
+     "roles": [
+      "home",
+      "family",
+      "residential"
+     ]
+    },
+    "out": {
+     "demand": 1.17,
+     "spread": 0.34,
+     "liquidity": 2,
+     "volatility": 0.81,
+     "watch": 0.5
+    }
+   },
+   {
+    "in": {
+     "anchor": "harju",
+     "roles": [
+      "mission",
+      "recruitment",
+      "sport"
+     ]
+    },
+    "out": {
+     "demand": 1.1,
+     "spread": 0.18,
+     "liquidity": 2.6,
+     "volatility": 1.08,
+     "watch": 1.12
+    }
+   },
+   {
+    "in": {
+     "anchor": "vaasankatu",
+     "roles": [
+      "service",
+      "information",
+      "shops"
+     ]
+    },
+    "out": {
+     "demand": 1.1,
+     "spread": 0.09,
+     "liquidity": 2.6,
+     "volatility": 0.98,
+     "watch": 1.2
+    }
+   },
+   {
+    "in": {
+     "anchor": "piritori",
+     "roles": [
+      "opening",
+      "transfer",
+      "recruitment",
+      "market"
+     ]
+    },
+    "out": {
+     "demand": 1.25,
+     "spread": 0.07,
+     "liquidity": 5.3,
+     "volatility": 1.13,
+     "watch": 1.55
+    }
+   },
+   {
+    "in": {
+     "anchor": "sornainen_harbour",
+     "roles": [
+      "docks",
+      "industrial",
+      "expansion",
+      "market"
+     ]
+    },
+    "out": {
+     "demand": 0.88,
+     "spread": 0.2,
+     "liquidity": 5,
+     "volatility": 1.28,
+     "watch": 1
+    }
+   },
+   {
+    "in": {
+     "anchor": "suvilahti",
+     "roles": [
+      "industrial",
+      "faction",
+      "expansion"
+     ]
+    },
+    "out": {
+     "demand": 0.93,
+     "spread": 0.17,
+     "liquidity": 3.5,
+     "volatility": 1.28,
+     "watch": 0.9
+    }
+   },
+   {
+    "in": {
+     "anchor": "makelansilta",
+     "roles": [
+      "home",
+      "crowd-source"
+     ]
+    },
+    "out": {
+     "demand": 1.27,
+     "spread": 0.2,
+     "liquidity": 2.9,
+     "volatility": 1.02,
+     "watch": 0.95
+    }
+   }
+  ],
+  "decay": [
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 0
+    },
+    "out": {
+     "level": "quote"
+    }
+   },
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 1
+    },
+    "out": {
+     "level": "quote"
+    }
+   },
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 3
+    },
+    "out": {
+     "level": "range"
+    }
+   },
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 8
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 12
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "quote",
+     "blocks": 40
+    },
+    "out": {
+     "level": "none"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 0
+    },
+    "out": {
+     "level": "range"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 1
+    },
+    "out": {
+     "level": "range"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 3
+    },
+    "out": {
+     "level": "range"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 8
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 12
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "range",
+     "blocks": 40
+    },
+    "out": {
+     "level": "none"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 0
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 1
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 3
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 8
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 12
+    },
+    "out": {
+     "level": "rumour"
+    }
+   },
+   {
+    "in": {
+     "level": "rumour",
+     "blocks": 40
+    },
+    "out": {
+     "level": "none"
+    }
+   }
+  ]
+ },
+ "rev": 2,
+ "note": "Generated by port/vectors.mjs — see PORTING.md §4. Do not hand-edit."
+}

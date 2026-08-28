@@ -29,17 +29,37 @@ IDs stay the authored strings.
 
 ```sh
 godot --path .                                  # play
-godot --headless --path . res://tests/test_spine.tscn   # data spine, 64 checks
-godot --headless --path . res://tests/test_shell.tscn   # interface,   34 checks
-godot --headless --path . res://tests/test_locale.tscn  # en/fi/ja,     6 checks
-godot --headless --path . res://tests/test_battle.tscn  # combat model, 43 checks
-godot --headless --path . res://tests/test_battle_ui.tscn # battle screen, 20 checks
-godot --headless --path . res://tests/test_playthrough.tscn # 7-day slice, 31 checks
-godot --path . res://tools/capture_battle.tscn          # battle screenshot
-godot --path . res://tools/capture.tscn         # write screenshots (needs a GPU)
+tools/run-tests.sh                              # every gate below, one command — see why
 ```
 
-`PIRITORI_SHOT_DIR` sets where `capture.tscn` writes its PNGs.
+`tools/run-tests.sh` is the one to actually run. It (1) forces an import pass
+first — `locale/*.translation` is gitignored and only regenerates when the
+EDITOR opens the project, so a checkout that pulled a `locale/ui.csv` change
+without ever opening the editor silently runs gates against STALE compiled
+translations and reports failures that are not real (found 2026-08-28: two
+keys "failed" in every language until one import pass fixed all of it); and
+(2) wraps each gate in a timeout, so a scene with a parse error — which means
+its own `quit()` never runs — times out with a named failure instead of
+hanging until something external kills it (`QUEUE.md`, ~6m40s the first
+time). Pass test names to run a subset: `tools/run-tests.sh test_battle`.
+
+The gates it runs, if you want to call one directly instead (skips both of
+the above — do the import pass yourself first, or trust it's fresh):
+
+```sh
+godot --headless --path . res://tests/test_spine.tscn        # data spine
+godot --headless --path . res://tests/test_shell.tscn        # interface
+godot --headless --path . res://tests/test_locale.tscn       # en/fi/ja
+godot --headless --path . res://tests/test_battle.tscn       # combat model
+godot --headless --path . res://tests/test_battle_ui.tscn    # battle screen
+godot --headless --path . res://tests/test_playthrough.tscn  # 7-day slice
+godot --path . res://tools/capture_battle.tscn   # battle screenshot; PIRITORI_SHOT_BATTLE picks the battle id
+godot --path . res://tools/capture.tscn          # write screenshots (needs a GPU)
+```
+
+`PIRITORI_SHOT_DIR` sets where `capture.tscn`/`capture_battle.tscn` write
+their PNGs. Check counts drift — the tests print their own — so none are
+repeated here a second time to disagree with them.
 
 The shell gate drives real `Button` nodes found by their authored label, never
 the model directly — AGENTS.md §4, the rule that a gate calling the model proves
