@@ -106,6 +106,15 @@ export const TESTS = [
     jump: { kind: 'ledger' },
   },
   {
+    id: 'committed-context',
+    rev: 1,
+    build: 'js',
+    title: 'Committed context — the dock disappears',
+    where: 'any encounter or battle',
+    note: 'UX_SPEC §3.2/§3.4: Location and Battle contract the shell — the planning dock hides and the resource strip drops to time block and cash only, so a scene cannot be tab-switched away from mid-way. Check the dock is genuinely gone (not just disabled), that no gap opens where it sat, and that RETURN TO MAP / WITHDRAW still gets you out — those are the scene’s own exits, not the dock.',
+    jump: { kind: 'encounter', id: 'enc-toko-quiet-voice' },
+  },
+  {
     id: 'placeholder-harju-pitch',
     rev: 1,
     build: 'js',

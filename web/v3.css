@@ -816,3 +816,27 @@ button { -webkit-tap-highlight-color: transparent; }
   .pause-veil { align-items: start; }
   .pause-card { max-height: calc(100dvh - 24px); }
 }
+
+/* ── committed context — UX_SPEC §3.2 / §3.4 ──────────────────────────────
+   Location (encounter) and Battle contract the shell: the planning dock
+   disappears rather than merely disabling, and the resource strip drops to
+   time block and cash only. Switching to an unrelated mode mid-scene was
+   previously still possible by clicking the dock — the exit this build
+   already has is the encounter's own RETURN TO MAP / battle's WITHDRAW, both
+   rendered in the mode's own content, so hiding the dock removes a second
+   route out rather than removing the only one. */
+.game-shell[data-mode="encounter"] .mode-nav,
+.game-shell[data-mode="battle"] .mode-nav {
+  display: none;
+}
+.game-shell[data-mode="encounter"] .res-markka,
+.game-shell[data-mode="encounter"] .res-debt,
+.game-shell[data-mode="encounter"] .res-intel,
+.game-shell[data-mode="battle"] .res-markka,
+.game-shell[data-mode="battle"] .res-debt,
+.game-shell[data-mode="battle"] .res-intel {
+  display: none;
+}
+/* .game-shell is grid-template-rows: auto minmax(0,1fr) auto — a display:none
+   row drops out of grid flow entirely, so .mode-root's 1fr row reclaims the
+   space with nothing left to zero out. Checked in the browser, not assumed. */

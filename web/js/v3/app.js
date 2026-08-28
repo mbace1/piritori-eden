@@ -881,6 +881,16 @@ async function boot() {
         state.mode = 'encounter';
         observation = '';
       } else if (target.kind === 'battle') {
+        // A jump must not depend on how far the campaign has been played.
+        // startBattle throws if fewer than player_deployed are recruited, and
+        // on a fresh campaign that is everyone — the jump found this itself
+        // the first time it was driven rather than read from the code.
+        const def = data.battles.get(target.id);
+        const need = def?.player_deployed ?? 2;
+        for (const crew of data.content.crew) {
+          if (state.recruited.length >= need) break;
+          if (!state.recruited.includes(crew.id)) state.recruited.push(crew.id);
+        }
         if (!startBattle(target.id)) return;
       } else if (target.kind === 'news') {
         state.newsSeen = state.newsSeen.filter(id => id !== target.id);

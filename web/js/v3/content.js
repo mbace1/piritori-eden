@@ -1,3 +1,5 @@
+import { nameFrom } from '../../../people/roster.mjs';
+
 const CONTENT_URL = '../../../content/era1-slice-v1.json';
 const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
 const ART_URL = '../../../art/v3/manifest.json';
@@ -49,7 +51,14 @@ function indexContent(content, map, artManifest) {
     encounters: new Map(content.encounters.map(item => [item.id, item])),
     missions: new Map(content.missions.map(item => [item.id, item])),
     battles: new Map(content.battles.map(item => [item.id, item])),
-    crew: new Map(content.crew.map(item => [item.id, item])),
+    // COMBAT.md §7.1 moved crew display names to generation (2026-08-27) and
+    // the slice's six `crew-slot-*` records no longer carry `name` at all.
+    // `unit.name.split(' ')` in the battle screen crashed on it — every unit
+    // label read `crew.name`, which nothing since the data change had ever
+    // populated. Backfilled here, once, at load, rather than in the template
+    // that happened to be the first to dereference it: the same crash was
+    // one render away in the ledger's crew list and the recruitment copy too.
+    crew: new Map(content.crew.map(item => [item.id, { ...item, name: item.name ?? nameFrom(item.id) }])),
     offers: new Map(content.market_offers.map(item => [item.id, item])),
     equipment: new Map(content.equipment.map(item => [item.id, item])),
     news: new Map(content.news.map(item => [item.id, item])),

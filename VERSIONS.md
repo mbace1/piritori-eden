@@ -10,6 +10,38 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.4 — 2026-08-27
+
+**Committed context: Location and Battle contract the shell.**
+
+- **The planning dock hides, and the resource strip drops to time block and
+  cash only**, per `UX_SPEC.md` §3.2/§3.4 — matching what the Godot battle
+  screen already does. The dock was the previous, unintended way out of a
+  scene mid-way; the actual exits (`RETURN TO MAP`, `WITHDRAW`) already
+  existed in the mode's own content and needed nothing new. Verified in a
+  browser: the dock is gone (not disabled), no gap opens where it sat — a real
+  CSS Grid row dropping out, not padding hacked to zero — and both exits still
+  work, restoring the dock on return.
+- **Bug found while verifying it, not caused by it:** the battle screen
+  crashed (`unit.name.split` on `undefined`) because `crew-slot-*` records
+  lost their authored `name` field when crew names moved to generation
+  (2026-08-27, on `main`) and nothing had generated one since. Fixed at the
+  content adapter — `content.js` backfills a name from `people/roster.mjs`'s
+  own pools, exported as `nameFrom()`, the same FIRST/LAST lists the hiring
+  pool uses rather than a third naming scheme. A THINGS TO TEST jump into a
+  battle also crashed the same way on a fresh campaign, for a second reason:
+  `startBattle` requires `player_deployed` crew and nobody is recruited yet.
+  The jump now recruits enough to actually reach the screen.
+
+### Port
+- **vectors:** `people@1` unchanged — `nameFrom()` reuses the existing pools
+  and rev tracks vector *outputs*, which this did not add any of.
+- **data:** unchanged
+- **meshes:** none
+- **presentation:** `web/`-only (CSS + the mode-nav visibility rule). The
+  Godot battle screen already contracts; nothing to port.
+- **status:** handed off
+
 ## v4.3 — 2026-08-27
 
 **Missions are beats now, not errands — and the texture budget, measured.**
