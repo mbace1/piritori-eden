@@ -40,14 +40,18 @@ assert(app.includes('weather-rain-fine-v01'), 'weather stays a separate runtime 
 // the slice. Neither number is asserted against the document here — a gate that
 // fails on purpose is a broken gate — but the drift is real and is recorded in
 // QUEUE.md for the owner to settle. These assertions exist to stop the NEXT one.
-assert.equal(map.anchors.length, 14, 'anchor count changed — check QUEUE.md before editing this number');
+// 14 -> 15 on 2026-08-28: hermanni_skatepark added as a training-only anchor
+// (VERSIONS.md; owner ruling — a battle test area, sliceState 'training' so
+// it stays out of the 11 active/market-participating anchors below).
+assert.equal(map.anchors.length, 15, 'anchor count changed — check QUEUE.md before editing this number');
 assert.equal(map.anchors.filter(anchor => anchor.sliceState === 'active').length, 11);
 assert.equal(content.schedule.length, 14);
 assert.deepEqual(content.schedule.slice(0, 2).map(item => item.encounter_id),
   ['enc-first-purchase', 'enc-first-sale'], 'classic purchase-to-profit opening stays immediate');
-// Same drift as the anchors above: a third battle was authored while this gate
-// was parked. Asserted as it IS, to stop the next silent change.
-assert.equal(content.battles.map(item => item.format).sort().join(','), '2v2,3v3,3v3');
+// Same drift as the anchors above. A third battle was authored while this
+// gate was parked; a fourth (battle-hermanni-training) on 2026-08-28.
+// Asserted as it IS, to stop the next silent change.
+assert.equal(content.battles.map(item => item.format).sort().join(','), '2v2,3v3,3v3,3v3');
 assert(app.includes('FIRST ARBITRAGE') && app.includes('EMERGING SUPPLIER'),
   'map communicates the buyer-to-supplier growth ladder');
 
@@ -61,4 +65,4 @@ for (const id of ['scene-toko-noodles-prototype-v02', 'scene-karhupuisto-v01',
   assert(ids.has(id), `${id} remains registered`);
 }
 
-console.log('V3 CONTRACT OK: five modes, 44px floor, 14-anchor map, 14 blocks and registered scene art.');
+console.log('V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 14 blocks and registered scene art.');

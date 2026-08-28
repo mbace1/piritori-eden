@@ -359,6 +359,28 @@
         20,
         -18
       ]
+    },
+    {
+      "id": "hermanni_skatepark",
+      "label": "HERMANNI SKATE PARK",
+      "wgs84": [
+        60.1938,
+        24.9735
+      ],
+      "board": {
+        "x": 990.18,
+        "y": 76.81
+      },
+      "coordinateStatus": "representative-inside-production-boundary",
+      "sliceState": "training",
+      "roles": [
+        "training",
+        "test"
+      ],
+      "labelOffset": [
+        -170,
+        26
+      ]
     }
   ],
   "sites": [

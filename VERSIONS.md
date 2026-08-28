@@ -10,6 +10,131 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.18 — 2026-08-28
+
+**The Hermanni skate park is a real, playable test area for battle
+training.** Owner ruling, directly: "add the Hermanni spot as a test area
+for battle training in Era1. keep putting parity there." `stage3d-hermanni-
+skatepark-v01` had been registered art since it arrived — a real, textured
+concrete skate park glb — and QUEUE.md's own "The skate park arena — a
+canon decision nobody has made" recorded it as "placed nowhere," reachable
+only through `?stage=` on the Godot side and not renderable as an arena on
+`web/` at all (`render3d.js` only ever loaded the cast, never a stage —
+named explicitly in v4.14's "not attempted" list). This closes both gaps
+at once: the arena gets a real place in the game, and `render3d.js` gains
+its second capability.
+
+- **`hermanni_skatepark` (new anchor, `map/kallio-era1-2003-v1.json`,
+  15th anchor)** — `sliceState: 'training'`, a value that exists nowhere
+  else on purpose: it keeps the anchor out of the 11 `active` anchors
+  `board.js`'s market participates in (a training ground has no market
+  offers, no schedule slot, no travel-time economy) while still rendering
+  and being selectable like any other anchor. Its wgs84 is nudged to sit
+  just inside the locked production boundary and marked `representative-
+  inside-production-boundary` — the exact compromise `suvilahti`'s anchor
+  already uses for the same reason (the real district sits just past the
+  boundary; QUEUE.md's skate-park entry names this precisely). No edge
+  connects it to the route graph: reaching a practice ground isn't a
+  smuggling run, and inventing a tram/street connection with no research
+  behind it would be exactly the "invent first" TRANSIT_LAYERS.md's own
+  ruling #3 forbids.
+- **`battle-hermanni-training` (new battle, 4th authored battle — the
+  pinned count in both `content/validate-slice.mjs` and `v3-contract.mjs`
+  moves 3→4 deliberately, matching the existing convention for
+  intentional battle additions)** — a repeatable, no-stakes 3v3 against a
+  fixed training set (`hold-position` intent, one of each: baseball-bat/
+  front-adjacent reach, folding-knife/front-only, first-handgun/all-rows) —
+  chosen to exercise the full reach-pattern and cover system the grid
+  rebuild (v4.15) shipped, in one sparring session. `scene_asset_id` is
+  the real registered manifest id (`stage3d-hermanni-skatepark-v01`)
+  directly, the same convention `battle-kattilahalli-3v3` already uses.
+- **A training battle costs nothing, by construction, not by a special
+  case scattered through the code.** `battle.js`'s `missionId` derivation
+  — previously a two-way ternary that could not correctly support a third
+  battle, let alone a fourth — becomes a real `BATTLE_MISSION` lookup;
+  anything absent from it (any new battle) gets `missionId: null`, and
+  `resultEffects()` already treated a missing mission as "no effects."
+  `recordBattleConsequences()` (app.js) now also skips the permanent
+  crew-condition damage and the campaign-clock advance specifically when
+  `battle.training` is true — verified end-to-end with a real Playwright
+  run: fight, withdraw, finish, and the campaign day and every crew
+  member's condition are bit-for-bit unchanged after.
+- **`render3d.js` renders the real arena now, not just the cast.**
+  `loadStageModel()` loads whichever asset a battle's `scene_asset_id`
+  names IF it is itself a registered `mesh-3d` asset (which is exactly
+  how `battle-kattilahalli-3v3` and the new training battle both already
+  author it) — battles with real 2D scene art (karhupuisto, courtyard)
+  have no such entry and render exactly as before. The arena is scaled by
+  the same fixed 5.4 `battle_stage_3d.gd`'s `_build_stage()` uses, then
+  centred on its own bounding box and dropped so its lowest point sits at
+  y=0 — NOT a port of Godot's real auto-fit (vertex-sampling the open
+  middle of the mesh to find the true walkable surface, then deriving the
+  board's own cell size from the measured footprint); this build's board
+  is already a fixed size, so the arena only needs to look right under
+  it, and that gap is named rather than silently simplified away. A new
+  `stage3d-arena` class (parallel to `stage3d-ready`) only appears once
+  the real arena mesh has actually loaded, and only then does CSS hide
+  the flat 2D scene image underneath — this quietly fixes
+  `battle-kattilahalli-3v3` too, which had been pointing its 2D
+  `<img>` at an unloadable `.glb` URL with nothing behind it since v4.14.
+- **`battle_stage_3d.gd` gets a one-line fix**, the only Godot-side edit
+  this version makes: `STAGE_BY_SCENE` had no entry for the real
+  registered id (`stage3d-hermanni-skatepark-v01`), only for the `scene-`
+  alias — a battle authored with the real id (as `battle-kattilahalli-
+  3v3` already established the convention for) would have silently
+  fallen through to the default backyard on Godot's side while `web/`
+  showed the correct arena. Added, mirroring the exact pattern the
+  kattilahalli entry already uses two lines above it.
+- **The stale "CANON NOTE" on the registered asset itself
+  (`art/v3/manifest.json`) is updated** — it had said "NOT placed at any
+  anchor... until someone rules." Someone has.
+
+**Verified**: `map/validate-map.mjs`, `content/validate-slice.mjs`,
+`v3-contract.mjs` (pinned counts moved deliberately), `v3-battle.mjs`,
+`missions`/`market` model suites, `port/vectors.mjs --check` all green;
+`v3-playthrough.cjs` unchanged at the established 23/28 baseline. A real
+Playwright run (SwiftShader) drove the actual UI: selected the anchor,
+started training, confirmed `stage3d-arena stage3d-ready` on the stage,
+screenshotted the real arena with six character models standing in it,
+withdrew, finished, and confirmed the campaign day and crew condition
+were untouched. No new console errors beyond the same pre-existing,
+unrelated `hub/shell.js?v=` 404 every prior version this session has
+disclaimed.
+
+**Not attempted here:**
+
+- **The auto-fit arena system** (vertex-sampled ground height, board size
+  derived from the measured arena) — named above; this build's fixed
+  board and a bounding-box ground estimate are the honest substitute.
+- **A second or third training battle.** "Test area" implied one
+  repeatable session is enough to start; more sparring configurations
+  (different weapon sets, different formats) are additional content, not
+  required by this version.
+- **`battle-kattilahalli-3v3`'s pre-existing mission-sharing with
+  `battle-courtyard-3v3`** — noticed while building the new
+  `BATTLE_MISSION` table, preserved exactly as it was rather than
+  silently "corrected," since whether that sharing is intentional is a
+  separate question this version does not resolve.
+
+### Port
+- **vectors:** unchanged.
+- **data:** `content/era1-slice-v1.json` (`battle-hermanni-training`) and
+  `map/kallio-era1-2003-v1.json` (`hermanni_skatepark`) are the shared
+  source both builds read — Godot needed no content change.
+- **rules:** the training-battle no-consequence behaviour
+  (`missionId: null` → no effects, `battle.training` → no injury/clock
+  cost) is `web/`-only bookkeeping around content flags Godot already
+  reads the same way (an absent mission link, an explicit `training`
+  field) — nothing to re-port.
+- **meshes:** none new — uses the arena already registered.
+- **presentation:** `render3d.js`'s arena loading is `web/`-only, closing
+  a gap named since v4.14; the one Godot edit (`STAGE_BY_SCENE`) is a
+  missing-key fix, not new presentation.
+- **status:** the Hermanni arena is placed and playable on both sides.
+  MARK, anchor cover, persistent injuries, tempo/initiative, L3/L4
+  transit, the wait mechanic, and the corridors underlay remain open —
+  see `QUEUE.md`.
+
 ## v4.17 — 2026-08-28
 
 **The fake straight-line edges are gone from the route map.** Owner,

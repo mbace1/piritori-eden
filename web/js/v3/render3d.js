@@ -14,6 +14,22 @@
  * first honest look. This proves the pipeline — load, place, light, render —
  * which is the part that had to exist before any of that is worth doing.
  *
+ * `loadStageModel()` (2026-08-28) is the second slice: the real arena, not
+ * just the cast. `godot/scenes/battle_stage_3d.gd`'s own version is a real
+ * auto-fit system — a fixed 5.4 scale, then it SAMPLES THE MESH to find the
+ * actual walkable surface (the open middle of the yard, not "30% up the
+ * bounding box" — a diorama's height is mostly tree and lamp-post) and
+ * derives the board's own cell size from the measured footprint
+ * (`_fit_board()`). None of that is ported here: this build's board is
+ * already a fixed size (`grid.js`), units are already positioned by it
+ * regardless of what arena sits under them, so this only needs the arena to
+ * LOOK right, not to drive placement. The same fixed 5.4 scale is kept for
+ * visual parity, and the ground height uses the model's bounding-box
+ * minimum Y rather than a sampled walkable surface — simpler, and a
+ * legitimate first look at an arena with no trees or lamp-posts to be
+ * fooled by, but a real simplification, not a hidden port of the real
+ * algorithm.
+ *
  * `app.js` calls `mountBattleStage3D()` after every battle-mode render and
  * `disposeBattleStage3D()` is called first thing inside it. It has to be:
  * `root.innerHTML = view()` destroys the `<canvas>` on every single re-render
@@ -57,6 +73,41 @@ function loadUnitModel(data, assetId) {
   return new Promise((resolve, reject) => {
     if (!url) { reject(new Error(`render3d: no registered asset for '${assetId}'`)); return; }
     loader.load(url, gltf => resolve(gltf.scene), undefined, reject);
+  });
+}
+
+/** Fixed scale factor, matching `battle_stage_3d.gd`'s `_build_stage()`
+ *  exactly ("Scale is inherited, not measured" — QUEUE.md), so an arena
+ *  reads at the same size in both builds even though nothing here refits
+ *  the board to it the way Godot's `_fit_board()` does. */
+const STAGE_SCALE = 5.4;
+
+/** A battle's `sceneAssetId` is only an arena when the SAME id is
+ *  registered as a `mesh-3d` asset (`battle-kattilahalli-3v3` and
+ *  `battle-hermanni-training` both already author it that way — the real
+ *  manifest id directly, not a 2D scene-art id). Battles with real 2D
+ *  scene art (karhupuisto, courtyard) have no such entry and keep
+ *  rendering flat, exactly as before this function existed. */
+function stageAssetId(data, battle) {
+  return data.art.get(battle.sceneAssetId)?.kind === 'mesh-3d' ? battle.sceneAssetId : null;
+}
+
+/** Loads the arena, scales it, and settles it onto the board's own origin:
+ *  centred in X/Z on its own bounding box (a diorama's origin is wherever
+ *  the generator put it, not the middle of the model — same reasoning as
+ *  `_build_stage()`'s own centring comment), and dropped so its lowest
+ *  point sits at y=0. Resolves to `null` when the battle has no arena, so
+ *  callers do not need a separate has-an-arena branch. */
+function loadStageModel(data, battle) {
+  const assetId = stageAssetId(data, battle);
+  if (!assetId) return Promise.resolve(null);
+  return loadUnitModel(data, assetId).then(model => {
+    model.scale.setScalar(STAGE_SCALE);
+    model.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    model.position.set(-center.x, -box.min.y, -center.z);
+    return model;
   });
 }
 
@@ -124,6 +175,10 @@ export function mountBattleStage3D(container, battle, data) {
   rim.position.set(-3, 4, -3);
   scene.add(rim);
 
+  // A flat ground plane is the fallback for a battle with no registered
+  // arena mesh (karhupuisto, courtyard) — kept in the scene unconditionally
+  // and only removed once a real arena actually finishes loading, so a
+  // slow or failed arena fetch never leaves units floating over nothing.
   const ground = new THREE.Mesh(
     new THREE.PlaneGeometry(LANES * 0.85 + 1.5, totalRows() * 0.85 + 1.5),
     new THREE.MeshStandardMaterial({ color: 0x1b222c, roughness: 0.95 }),
@@ -139,12 +194,16 @@ export function mountBattleStage3D(container, battle, data) {
   // sprite ART specifically (not the label/track/button around it, which
   // stays the real hit target and readout either way). A partial failure
   // — one unit's mesh 404s — leaves 2D art showing for EVERYONE this
-  // battle rather than mixing a rendered body with a blank one.
+  // battle rather than mixing a rendered body with a blank one. The same
+  // logic extends to the arena: `stage3d-arena` only goes on once the real
+  // arena mesh is up, and only THEN does CSS hide the flat 2D scene image —
+  // a battle with no registered arena (karhupuisto, courtyard) never gets
+  // that class and keeps its real 2D backdrop forever, unchanged.
   const stage = container.closest('.battle-stage');
-  stage?.classList.remove('stage3d-ready');
+  stage?.classList.remove('stage3d-ready', 'stage3d-arena');
 
   const units = [...battle.players, ...battle.enemies].filter(unit => unit.alive);
-  const loads = units.map(unit => {
+  const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
     const assetId = ROLE_MODEL[unit.role] ?? fallback;
     return loadUnitModel(data, assetId)
@@ -159,7 +218,15 @@ export function mountBattleStage3D(container, battle, data) {
       })
       .catch(err => { console.error(`render3d: '${unit.id}' (${assetId})`, err); throw err; });
   });
-  Promise.all(loads)
+  const stageLoad = loadStageModel(data, battle)
+    .then(model => {
+      if (!model || myGeneration !== generation) return;
+      scene.remove(ground);
+      scene.add(model);
+      if (myGeneration === generation) stage?.classList.add('stage3d-arena');
+    })
+    .catch(err => { console.error(`render3d: arena '${battle.sceneAssetId}'`, err); });
+  Promise.all([...unitLoads, stageLoad])
     .then(() => { if (myGeneration === generation) stage?.classList.add('stage3d-ready'); })
     .catch(() => {}); // logged per-unit above; 2D sprites stay the fallback
 

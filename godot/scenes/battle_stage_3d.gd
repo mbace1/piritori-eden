@@ -34,6 +34,14 @@ const STAGE_BY_SCENE := {
 	# instead of at a painting that never will.
 	"stage3d-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
 	"scene-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
+	# battle-hermanni-training (era1-slice-v1.json, 2026-08-28: the skate park
+	# is placed as a real, repeatable training battle at a new `training`-only
+	# anchor) authors its `scene_asset_id` as the real registered manifest id
+	# directly, the same convention battle-kattilahalli-3v3 already uses,
+	# rather than the `scene-` alias above — without this key the lookup
+	# fell through to STAGE_FALLBACK and the training battle silently showed
+	# the wrong yard.
+	"stage3d-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
 }
 
 ## Used when a battle names a scene nothing has been built for. Unlike the unit

@@ -526,6 +526,11 @@ button { -webkit-tap-highlight-color: transparent; }
    partially-loaded or WebGL-less browser still gets the complete 2D
    fallback it always had; only the art layer on top of it ever changes. */
 .battle-stage.stage3d-ready .unit-body { visibility: hidden; }
+/* render3d.js sets this only once a battle's REAL arena mesh (not the
+   fallback flat ground plane) has actually loaded — a battle with no
+   registered arena (karhupuisto, courtyard) never gets this class and
+   keeps its 2D scene backdrop forever, unchanged. */
+.battle-stage.stage3d-arena > .scene-image { visibility: hidden; }
 .battle-objective {
   position: absolute;
   z-index: 8;

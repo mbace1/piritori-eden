@@ -659,36 +659,37 @@ follow without reading the script first.
 - **Its stats are a guess** (DESIGN_LOCKS §13): condition 9, nerve 5, tempo 5,
   wage 14 — cheap, sturdy and easily rattled. Never playtested.
 
-## The skate park arena — a canon decision nobody has made
+## ~~The skate park arena — a canon decision nobody has made~~ Ruled, 2026-08-28
 
-`stage3d-hermanni-skatepark-v01` is registered art and is **placed nowhere**.
+**Owner ruling: option 3, elevated.** "add the Hermanni spot as a test area
+for battle training in Era1." Not merely left reachable by `?stage=` — a real
+`hermanni_skatepark` anchor (`sliceState: 'training'`, so it never joins the
+11 active/market anchors) and a real, repeatable, no-stakes battle
+(`battle-hermanni-training`) now exist (`VERSIONS.md` v4.18). The boundary
+itself was not extended (option 1 was not taken): the anchor's wgs84 sits
+just inside the locked line and is marked `representative-inside-production-
+boundary`, the same compromise `suvilahti`'s anchor already used for the same
+real-geography-vs-locked-box reason.
 
-**Hermanni is outside the locked Era I production boundary.** `MAP.md` §4.1 puts
-Vallila at the northern and eastern edge; Hermanni is the district beyond it.
-The twelve anchors do not include it. Three ways forward, and this is a Design
-call, not an Engine one:
+Two things this closed and one it did not:
 
-1. **Extend the boundary** to take in Hermanni. Real cost: `MAP.md` calls the
-   boundary locked, and the map geometry, edges and travel times all assume it.
-2. **Re-site the arena** at an anchor already in bounds. Alppiharju (Brahen
-   kenttä, sports ground) and Vallila (industrial edge) both plausibly hold a
-   concrete skate park in 2003. The model itself is generic — graffitied ramps,
-   a bowl, a road along one edge — and only the asset id says Hermanni.
-3. **Leave it as a proving ground** reachable by `?stage=` and never placed.
-
-Until someone rules, it is reachable and unplaced, which is honest but means it
-is in the download without being in the game.
-
-Also open on it:
-
-- **Scale is inherited, not measured.** `_build_stage()` scales every arena by a
-  hardcoded 5.4, chosen for the backyard. The skate park is a different size in
-  its own units, and `_measure_ground()` will find a floor either way — but
-  whether the board sits sensibly inside the bowl has been reasoned about, not
-  watched. `STAGE_SPEC.md` §1.1 wants the floor 1.22x the arena.
-- **The ORM map may not be wanted.** It came at 4096 and is now 1024, but the
-  stage is lit stylistically. If the shader ignores it, that is another 0.7MB
-  doing nothing.
+- **Scale is still inherited, not measured** — `render3d.js`'s `web/`-side
+  arena loader (v4.18) keeps `_build_stage()`'s exact fixed 5.4, for parity,
+  but does not port the vertex-sampled ground-height measurement or
+  `_fit_board()`'s board-from-footprint sizing. `web/`'s board is a fixed
+  size regardless of arena, so this gap is honest rather than urgent — see
+  `VERSIONS.md` v4.18's "not attempted."
+- **The ORM-map question is untouched** — still unmeasured, still open.
+- **"Nothing fields either new arena"** (below) is now half true, the other
+  way round from what it sounds: Kattilahalli's battle already names a real
+  anchor (`location_anchor_id: "suvilahti"`) but nothing in ordinary play
+  ever fires `start-battle:battle-kattilahalli-3v3` — no encounter triggers
+  it, so it is still reachable only through `?battle=`. Hermanni's training
+  battle is reachable a different, better way: a dedicated, always-available
+  button on its own anchor, not an encounter trigger at all — appropriate
+  for a battle nothing in the story should ever gate, but it means
+  Kattilahalli's specific gap (a placed battle nobody can reach in play) is
+  untouched by this change and still worth closing on its own.
 
 ## The second hired body
 
@@ -711,13 +712,21 @@ accents. Registered, wired as a `hired` variant, picked by fighter id.
 **Kattilahalli is in bounds.** Unlike the skate park: Suvilahti sits at
 Sörnäinen and `sornainen_harbour` is already an anchor, roles `docks,
 industrial, expansion`. Its `sliceState` is **teaser**, so putting a battle
-there is a content decision but NOT a boundary change. That is the difference
-between this arena and the Hermanni one, which is still unplaced.
+there is a content decision but NOT a boundary change. Hermanni's own
+boundary question is now ruled (see the entry above) — placed a different
+way, at its own new `training`-only anchor rather than at Suvilahti's.
 
 - **Mirrored textures.** Some faces repeat across opposite sides. The owner's
   read is that colour and lighting hide it. Not attempted.
-- **Nothing fields either new arena.** Both are reachable only through `?stage=`.
-  Kattilahalli has a home anchor waiting; the skate park still does not.
+- **Kattilahalli's battle still has no way in from ordinary play.**
+  `battle-kattilahalli-3v3` already names a real anchor
+  (`location_anchor_id: "suvilahti"`) and is a real, authored fight — but no
+  encounter fires `start-battle:battle-kattilahalli-3v3`, so it is reachable
+  only through `?battle=`. Hermanni's training battle solved the equivalent
+  problem for itself with a dedicated always-on button rather than an
+  encounter trigger (appropriate there — nothing should gate practice); the
+  same move would not fit Kattilahalli, which is a real narrative fight, not
+  a test area, and wants a real encounter that leads to it.
 - **The concrete slab is untested against a real hole.** `_build_ground_fill()`
   lays a slab under every arena at 1.22x the footprint. Its constants are gated
   but the *effect* has never been looked at — whether Kattilahalli's open sides

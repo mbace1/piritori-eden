@@ -32,6 +32,7 @@ const UI = {
     route: 'ROUTE', encounter: 'ENCOUNTER', ledger: 'LEDGER', battle: 'BATTLE', news: 'NEWS',
     enter: 'ENTER ENCOUNTER', continue: 'RETURN TO MAP', planning: 'PLAN A ROUTE',
     commit: 'PIN ROUTE', clear: 'CLEAR', send: 'SEND ONE PACK', objective: 'OBJECTIVE',
+    start_training: 'START TRAINING',
     attack: 'ATTACK', move: 'REPOSITION', brace: 'BRACE', end: 'END TEAM TURN',
     auto: 'AUTO TEAM', withdraw: 'WITHDRAW', negotiate: 'NEGOTIATE',
     stance: 'STANCE', stance_AGGRESSIVE: 'AGGRESSIVE', stance_DEFENSIVE: 'DEFENSIVE', stance_HOLD_THE_LINE: 'HOLD THE LINE',
@@ -40,6 +41,7 @@ const UI = {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
     enter: 'MENE KOHTAAMISEEN', continue: 'PALAA KARTALLE', planning: 'SUUNNITTELE REITTI',
     commit: 'KIINNITÄ REITTI', clear: 'TYHJENNÄ', send: 'LÄHETÄ YKSI PAKKAUS', objective: 'TAVOITE',
+    start_training: 'ALOITA HARJOITUS',
     attack: 'HYÖKKÄÄ', move: 'VAIHDA ASEMAA', brace: 'SUOJAA', end: 'LOPETA VUORO',
     auto: 'AUTO-JOUKKUE', withdraw: 'VETÄYDY', negotiate: 'NEUVOTTELE',
     stance: 'ASENTO', stance_AGGRESSIVE: 'HYÖKKÄÄVÄ', stance_DEFENSIVE: 'PUOLUSTAVA', stance_HOLD_THE_LINE: 'PIDÄ LINJA',
@@ -315,7 +317,9 @@ function renderRoute() {
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
             ${selected.id === slot.anchor_id ? `<button class="paper-button primary" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
-            <button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>
+            ${selected.sliceState === 'training'
+              ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
+              : `<button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>`}
           </div>
           ${routePlanning ? renderRoutePlanner(draftPath) : ''}
         </section>
@@ -342,6 +346,7 @@ function anchorDescription(anchor) {
     alppiharju: 'Visible north-western expansion, sealed during this slice.',
     vallila: 'Visible northern expansion, sealed during this slice.',
     sornainen_harbour: 'A distant industrial teaser at the old harbour edge.',
+    hermanni_skatepark: 'A test area, not a real destination — the crew never has business here. Fight the training set as often as you like; nothing carries back to the campaign.',
   };
   return descriptions[anchor.id] ?? 'A public map anchor. Fictional services inherit the area without claiming a real address.';
 }
@@ -788,22 +793,30 @@ function startBattle(id) {
 function recordBattleConsequences() {
   const battle = state.battle;
   if (!battle || battle.status !== 'resolved') return;
-  applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
-  for (const id of injuredPlayers(battle)) {
-    const status = state.crewStatus[id];
-    status.condition = Math.max(0, status.condition - 4);
-    if (battle.id === 'battle-courtyard-3v3') {
-      status.status = 'critical';
-      status.critical = true;
-    } else {
-      status.status = 'wounded';
-      status.condition = Math.max(1, status.condition);
+  // A training battle (content's own `training: true` field, "no cost —
+  // this is a test area") is not allowed to cost anything real: no mission
+  // effects (already guaranteed — `resultEffects()` returns [] when
+  // `missionId` is null), no permanent crew condition loss, and no
+  // campaign-clock advance. Without this a "test area" would quietly
+  // punish the very thing it exists to let you do safely.
+  if (!battle.training) {
+    applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
+    for (const id of injuredPlayers(battle)) {
+      const status = state.crewStatus[id];
+      status.condition = Math.max(0, status.condition - 4);
+      if (battle.id === 'battle-courtyard-3v3') {
+        status.status = 'critical';
+        status.critical = true;
+      } else {
+        status.status = 'wounded';
+        status.condition = Math.max(1, status.condition);
+      }
     }
   }
   state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round });
   state.battle = null;
   state.battleOpeningNerve = 0;
-  advanceSchedule(state, data);
+  if (!battle.training) advanceSchedule(state, data);
   state.mode = 'route';
 }
 
@@ -826,7 +839,10 @@ function handleRootClick(event) {
     }
     persist(); render();
   } else if (action === 'open-encounter') openEncounter();
-  else if (action === 'plan-route') {
+  else if (action === 'start-training') {
+    if (!startBattle('battle-hermanni-training')) { render(); return; }
+    persist(); render();
+  } else if (action === 'plan-route') {
     routePlanning = !routePlanning;
     routeDraft = routePlanning ? [state.selectedAnchor] : [];
     render();

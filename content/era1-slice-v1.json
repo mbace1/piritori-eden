@@ -1008,6 +1008,84 @@
         "crew-condition",
         "contact-access"
       ]
+    },
+    {
+      "id": "battle-hermanni-training",
+      "format": "3v3",
+      "location_anchor_id": "hermanni_skatepark",
+      "scene_asset_id": "stage3d-hermanni-skatepark-v01",
+      "training": true,
+      "grid": {
+        "rows": [
+          "front",
+          "middle",
+          "back"
+        ],
+        "lanes": 3,
+        "cells_per_side": 9,
+        "normally_visible": false
+      },
+      "player_deployed": 3,
+      "opponents": [
+        {
+          "id": "opp-training-anchor",
+          "name": "Training Set — Anchor",
+          "role": "muscle",
+          "cell": "front-2",
+          "intent": "hold-position",
+          "equipment": "baseball-bat"
+        },
+        {
+          "id": "opp-training-runner",
+          "name": "Training Set — Runner",
+          "role": "runner",
+          "cell": "middle-1",
+          "intent": "hold-position",
+          "equipment": "folding-knife"
+        },
+        {
+          "id": "opp-training-watcher",
+          "name": "Training Set — Watcher",
+          "role": "watcher",
+          "cell": "back-3",
+          "intent": "hold-position",
+          "equipment": "first-handgun"
+        }
+      ],
+      "cover": [
+        {
+          "id": "ramp-edge",
+          "cells": [
+            "front-1"
+          ],
+          "effect": "guard-from-direct-line"
+        },
+        {
+          "id": "graffiti-wall",
+          "cells": [
+            "middle-2"
+          ],
+          "effect": "cover-but-pinned-on-heavy-hit"
+        }
+      ],
+      "objective": "No stakes: read formations, weapon reach and cover against a fixed set that holds position. Leave whenever the read is done.",
+      "intent_logic": "The training set never advances, retreats or de-escalates — it holds its cell and answers reach with reach, so every weapon's real pattern stays visible round to round.",
+      "negotiation": {
+        "available": true,
+        "requires_any": []
+      },
+      "withdrawal": {
+        "available_from_round": 1,
+        "known_cost": "no cost — this is a test area"
+      },
+      "casualty_table": {
+        "zero_condition": [
+          "shaken"
+        ],
+        "death": "not-eligible-in-this-battle",
+        "telegraph": "Nothing here is permanent; condition and the campaign clock are both untouched when you leave."
+      },
+      "aftermath": []
     }
   ],
   "encounters": [

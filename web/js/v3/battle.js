@@ -100,6 +100,22 @@ function buildCover(definition) {
   return map;
 }
 
+/** Which mission a battle's result reports to — content has no `mission_id`
+ *  field of its own (`battle.js`'s only, not ported from anywhere), so this
+ *  table is the one place that link lives. An id with no entry here (any
+ *  new battle, training included) gets `missionId: null`, and
+ *  `resultEffects()` already treats a missing mission as "no effects" —
+ *  which is exactly right for a battle with no mission behind it, not a
+ *  gap to patch. `battle-kattilahalli-3v3` sharing `mission-courtyard-
+ *  receipts` with `battle-courtyard-3v3` is preserved exactly as it was
+ *  before this table existed; whether that's the intended mission is a
+ *  separate, pre-existing question this change doesn't resolve. */
+const BATTLE_MISSION = {
+  'battle-karhupuisto-2v2': 'mission-bear-path',
+  'battle-courtyard-3v3': 'mission-courtyard-receipts',
+  'battle-kattilahalli-3v3': 'mission-courtyard-receipts',
+};
+
 export function createBattleState(definition, crew, state, data) {
   const required = definition.player_deployed;
   if (crew.length < required) throw new Error(`${definition.id} requires ${required} deployed crew`);
@@ -107,7 +123,11 @@ export function createBattleState(definition, crew, state, data) {
   const enemies = definition.opponents.map((opponent, index) => makeEnemy(opponent, index, state.battleOpeningNerve ?? 0));
   return {
     id: definition.id,
-    missionId: definition.id === 'battle-karhupuisto-2v2' ? 'mission-bear-path' : 'mission-courtyard-receipts',
+    missionId: BATTLE_MISSION[definition.id] ?? null,
+    // content's own field, on battle-hermanni-training: no mission, no
+    // permanent crew injury, no campaign-clock cost — see
+    // `recordBattleConsequences()` in app.js.
+    training: Boolean(definition.training),
     format: definition.format,
     sceneAssetId: definition.scene_asset_id,
     objective: definition.objective,
