@@ -10,6 +10,100 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.16 — 2026-08-28
+
+**The real transit network reaches `web/`'s map — L2, ported.** Owner
+picked "map / economy" as the next Godot→web gap after the grid rebuild
+(`QUEUE.md`'s "Sync fire was designed in the wrong build" entry had flagged
+`TRANSIT_LAYERS.md` and `MARKET.md` as substantial, owner-ruled systems
+never engaged with this session). Audited both against the current build:
+`MARKET.md`'s economy is NOT a Godot-ahead gap — `web/js/v3/board.js` /
+`market/model.mjs` already exceed Godot's simple `market_ledger.gd` (see
+v4.13/earlier audit) — but the map is: `city_map.gd`'s L2 (real HSL tram
+and metro geometry, `TRANSIT_LAYERS.md` §3, live on the Godot board since
+2026-08-27) had no counterpart here at all — `web/`'s route screen drew
+twelve schematic anchor dots, straight-line edges, and one hand-sketched
+dashed rail path with no relation to a real network.
+
+- **`map/tools/transit-layer.mjs` (new)** — `buildTransitLines()` moved out
+  of `godot/tools/build-map-geometry.mjs` verbatim (confirmed byte-identical
+  output before/after), so it is now a SHARED module rather than something
+  only Godot's build could call: real GTFS geometry for the seven services
+  that actually serve Kallio (`TRANSIT_LAYERS.md` §10.5), real per-line
+  colours, the same corridor-fanning algorithm `map/tools/master-plate.mjs`'s
+  offline plates use, projected into the shared board coordinate space.
+  `godot/tools/build-map-geometry.mjs` now imports it instead of defining
+  it locally — one algorithm, not two copies that can drift.
+- **`map/tools/build-transit-layer.mjs` (new)** — calls the same function
+  and commits the result as `map/kallio-transit-layer-v1.json` (63 KB, 9
+  services), matching the naming and `--check`-gated convention of its
+  sibling committed extracts (`kallio-rail-v1.json`, `kallio-corridors-
+  v1.json`). `web/` has no build step (`CLAUDE.md`), so the derived layer
+  has to already exist as a file a plain `fetch()` can read — this is DATA
+  (`PORTING.md` §1), generated once from committed sources and shared, not
+  ported or reimplemented per side.
+- **`web/js/v3/content.js`** loads it alongside the existing map/content
+  fetches; **`web/js/v3/app.js`**'s route screen draws it as a new
+  `transitLayerSvg()` layer, between the paper board background and the
+  existing schematic anchor graph — hard dark keyline under each line's
+  real HSL-derived colour (`§9.3`'s Era I "printed" register: flat colour,
+  no glow, since this build has no live layer for a glow to distinguish
+  from), a rounded paper-chip badge with the line's own number where it
+  crosses the visible board, ink colour picked by the SAME relative-
+  luminance formula Godot's `Color.get_luminance()` uses so a chip's text
+  contrast rule isn't invented twice. The old single hand-drawn `.map-rail`
+  dashed path — the exact leftover `build-map-geometry.mjs`'s own comment
+  names as replaced on the Godot side — is removed rather than left drawn
+  underneath the real thing.
+- **The schematic anchor graph (`data.map.edges`, `.map-edge`) is
+  untouched and stays** — `shortestPath()` still routes over it, and it
+  is not the same graph as the real transit geometry (it has no per-stop
+  structure to route over). The new layer is the real network a Kallio
+  player recognises; the schematic graph is still what "pin a route"
+  clicks against. Two data shapes doing two different jobs, not a
+  duplication to resolve.
+- **Verified by screenshot** (`PHASING.md` standing rule 4), not by "no
+  console errors": nine lines, fourteen chips, distinct real colours,
+  running the correct corridors past the correct anchors (the metro through
+  Hakaniemi, tram 7 and tram 3 sharing Hämeentie fanned apart rather than
+  overdrawing one line). No new console errors beyond the same pre-existing
+  unrelated `hub/shell.js?v=` 404 v4.15 already disclaimed.
+
+**Not attempted here:**
+
+- **L3 (live vehicles) and L4 (pressure/congestion)** are explicitly
+  "proposal and phase-gated" per `TRANSIT_LAYERS.md`'s own status line —
+  nothing exists on the Godot side to port yet, so building either here
+  would be new cross-build design work, not a port.
+- **The waiting-for-a-real-tram mechanic (`TRANSIT_LAYERS.md` §4)** —
+  Story/Timetable/Live rate modes, the service model's `nextDepartures()`,
+  the wait screen — is design proposal only, not canon, and not built on
+  either side.
+- **`MARKET.md`'s own §8 spec gaps** (factor-breakdown bars, map-integrated
+  info-state marks, no drinking/condition UI) are real but are NOT a
+  Godot-ahead gap — `web/`'s economy already leads Godot's — so they are
+  out of scope for a Godot→web port pass and belong to `web/`'s own
+  backlog instead.
+- **No route-planner integration.** Clicking a route still plans over
+  `data.map.edges`; the real transit layer is not yet consulted to prefer
+  or narrate a route along an actual tram line.
+
+### Port
+- **vectors:** unchanged.
+- **data:** `map/kallio-transit-layer-v1.json` is new, committed, shared —
+  `map/tools/build-transit-layer.mjs --check` is the gate (wired into
+  `web/tools/check-project.mjs`); regenerate with
+  `node map/tools/build-transit-layer.mjs` whenever `map/kallio-rail-v1.json`
+  changes.
+- **rules:** none — this is a presentation/data slice, no combat or
+  economy rule moved either direction.
+- **meshes:** none.
+- **presentation:** `web/`'s own printed-register rendering of the shared
+  layer; Godot's `city_map.gd` is untouched (confirmed via a byte-identical
+  `data/map-geometry.json` before/after the `transit-layer.mjs` extraction).
+- **status:** L2 landed on `web/`. L3/L4 and the wait mechanic remain
+  proposal-only on both sides — see `QUEUE.md`.
+
 ## v4.15 — 2026-08-28
 
 **The grid rebuild: `battle.js`'s board IS `board.gd` now, not a JS

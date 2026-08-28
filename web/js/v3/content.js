@@ -2,6 +2,7 @@ import { nameFrom } from '../../../people/roster.mjs';
 
 const CONTENT_URL = '../../../content/era1-slice-v1.json';
 const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
+const TRANSIT_URL = '../../../map/kallio-transit-layer-v1.json';
 const ART_URL = '../../../art/v3/manifest.json';
 // Asset URLs are resolved by the BROWSER against the page, not against this
 // module, so they need one more step out of `web/` than the fetches above.
@@ -43,10 +44,11 @@ function flattenArt(manifest) {
   return byId;
 }
 
-function indexContent(content, map, artManifest) {
+function indexContent(content, map, transit, artManifest) {
   return {
     content,
     map,
+    transit,
     artManifest,
     encounters: new Map(content.encounters.map(item => [item.id, item])),
     missions: new Map(content.missions.map(item => [item.id, item])),
@@ -69,12 +71,13 @@ function indexContent(content, map, artManifest) {
 }
 
 export async function loadGameData() {
-  const [content, map, artManifest] = await Promise.all([
+  const [content, map, transit, artManifest] = await Promise.all([
     readJson(CONTENT_URL),
     readJson(MAP_URL),
+    readJson(TRANSIT_URL),
     readJson(ART_URL),
   ]);
-  return indexContent(content, map, artManifest);
+  return indexContent(content, map, transit, artManifest);
 }
 
 export function shortestPath(map, from, to) {

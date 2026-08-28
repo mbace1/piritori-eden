@@ -127,8 +127,58 @@ function mapBackground() {
     <path class="map-district" d="M358 496L729 356 842 566 753 823 424 742Z"/>
     <path class="map-district" d="M760 336L932 366 951 585 839 632 751 556Z"/>
     <path class="map-park" d="M415 482L540 464 571 575 440 598Z"/>
-    <path class="map-rail" d="M116 23C168 259 143 478 231 980"/>
   `;
+}
+
+/** flat [x0,y0,x1,y1,...] board points -> an SVG path `d`. */
+function flatPointsToPath(points) {
+  let d = '';
+  for (let i = 0; i < points.length; i += 2) d += `${i === 0 ? 'M' : 'L'} ${points[i]} ${points[i + 1]} `;
+  return d;
+}
+
+// Relative luminance off sRGB, same formula `Color.get_luminance()` uses in
+// Godot — so a chip's ink colour picks the same side of the line the real
+// game does, not a second contrast rule invented for this build.
+function luminance(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const [r, g, b] = [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255];
+  const lin = c => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+/**
+ * The real HSL tram/metro network — `map/kallio-transit-layer-v1.json`,
+ * ported from Godot's L2 (`TRANSIT_LAYERS.md` §3, §9.3; `city_map.gd`'s
+ * `_draw_public_transit()`): the same real GTFS geometry, real per-line
+ * colours and corridor fanning `map/tools/transit-layer.mjs` derives for
+ * BOTH builds, drawn here as a flat colour line over a hard dark keyline —
+ * no glow, because this build has no live layer for a glow to distinguish
+ * from. Independent of `data.map.edges` (the `.map-edge` schematic lines
+ * below, which `shortestPath()` still routes over) — this is the real
+ * network a Helsinki player recognises, not the click-to-travel graph.
+ */
+function transitLayerSvg() {
+  const services = data.transit?.services ?? [];
+  const lines = services.map(item => {
+    const d = flatPointsToPath(item.points);
+    const heavy = item.mode === 'metro';
+    const w = heavy ? 10 : 6;
+    return `
+      <path class="transit-keyline" d="${d}" stroke-width="${w + 3}"/>
+      <path class="transit-line" d="${d}" stroke="${item.colour}" stroke-width="${w}"/>`;
+  }).join('');
+  const chips = services.flatMap(item => item.chips.map(([x, y]) => {
+    const label = esc(item.service);
+    const h = 34, charW = 15;
+    const w = Math.max(h, label.length * charW + 16);
+    const ink = luminance(item.colour) > 0.45 ? '#16191b' : '#f0e9d8';
+    return `<g class="transit-chip">
+      <rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${h / 2}" fill="${item.colour}"/>
+      <text class="transit-chip-text" x="${x}" y="${y}" fill="${ink}">${label}</text>
+    </g>`;
+  })).join('');
+  return `<g aria-hidden="true">${lines}${chips}</g>`;
 }
 
 function ordinaryFlowSvg() {
@@ -247,6 +297,7 @@ function renderRoute() {
           <title id="mapTitle">Kallio operations map, north up</title>
           <desc id="mapDesc">Twelve accurate public anchors compressed into one relief map. The next encounter is at ${esc(data.anchors.get(slot.anchor_id)?.label)}.</desc>
           ${mapBackground()}
+          ${transitLayerSvg()}
           <g aria-hidden="true">${edgeSvg}${routeSvg}${ordinaryFlowSvg()}${hiddenPips}</g>
           ${data.map.anchors.map(anchor => anchorSvg(anchor, anchor.id === slot.anchor_id, anchor.id === selected.id)).join('')}
         </svg>

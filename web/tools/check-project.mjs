@@ -17,6 +17,11 @@ const includeBrowser = process.argv.includes('--browser');
 // only caller here) is genuinely retired, not merely relocated.
 const checks = [
   'map/validate-map.mjs',
+  // --check: this script's default (no-arg) mode WRITES
+  // map/kallio-transit-layer-v1.json; the gate must only ever read it, or a
+  // stale commit would be silently "fixed" instead of failing the gate that
+  // is supposed to catch it.
+  'map/tools/build-transit-layer.mjs --check',
   'content/validate-slice.mjs',
   'web/test/v3-contract.mjs',
   'web/test/v3-state.mjs',
@@ -27,9 +32,10 @@ const checks = [
 
 if (includeBrowser) checks.push('web/test/v3-playthrough.cjs');
 
-for (const script of checks) {
-  console.log(`\n▶ ${script}`);
-  const result = spawnSync(process.execPath, [script], {
+for (const entry of checks) {
+  const [script, ...args] = entry.split(' ');
+  console.log(`\n▶ ${entry}`);
+  const result = spawnSync(process.execPath, [script, ...args], {
     cwd: root,
     env: process.env,
     stdio: 'inherit',

@@ -8,6 +8,42 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## The transit layer (`VERSIONS.md` v4.16) — what it left open
+
+`web/`'s route map now draws the real HSL tram/metro network (L2), ported
+from the same `map/tools/transit-layer.mjs` Godot's `city_map.gd` uses.
+Real gaps noticed while doing that, none fixed here:
+
+- **The schematic `data.map.edges` graph and the real transit layer are two
+  separate data shapes drawn on the same board**, and nothing connects
+  them. `shortestPath()` still plans a route over the schematic graph;
+  the real geometry is decoration a player can look at but the game does
+  not reason about. `TRANSIT_LAYERS.md` §4's whole "wait for a real tram"
+  proposal assumes the two ARE connected (a route follows an actual line
+  with an actual headway) — closing that gap is most of what building §4
+  for real would take.
+- **L3 (live vehicles) and L4 (congestion) are still nothing on either
+  side** — `TRANSIT_LAYERS.md` §5 settles that the HSL vehicle feed is
+  keyless and reachable, but whether a browser can actually open the
+  WebSocket endpoint (§5.2) has never been checked from an environment
+  with real network access. That's the one thing to check before any of
+  L3 is worth starting, per the doc's own §8 first-slice plan.
+- **Chip placement is unowned by either build's own layout, not fought
+  over.** `chipsFor()`'s candidate-position walk (`map/tools/transit-
+  layer.mjs`) was tuned against Godot's board rendering; `web/`'s route
+  map is a different aspect ratio and panel size, so a chip that clears
+  every other chip on Godot's board is not guaranteed to clear the
+  anchor labels on this one. Looked fine in the one screenshot checked
+  (v4.16) but was not stress-tested against every anchor/route-drafting
+  state.
+- **`MARKET.md`'s real gap — its own §8 spec vs the current screen — is
+  still open**, and unrelated to the map: no factor-breakdown bars, no
+  map-integrated info-state marks, no drinking/condition UI (`condition`
+  is still hardcoded `'clear'`). Not a Godot port target since Godot's
+  economy is behind, not ahead — this is ordinary `web/`-primary backlog.
+
+---
+
 ## The grid rebuild (`VERSIONS.md` v4.15) — what it left open
 
 `battle.js` now runs the real `board.gd`/`battle_builder.gd`/
