@@ -877,6 +877,24 @@ depth — which is what stops "three is simply better".
 
 ## 9.13 Sync fire — a clean shot pulls the whole formation's guns in, 2026-08-28
 
+**Correction, 2026-08-28, same day.** This was designed and built directly in
+`fight_manager.gd`, which is backwards: `DESIGN_AUTHORITY.md`'s 2026-08-25
+ruling (reaffirmed 2026-08-28) already had web/ as the primary build and
+Godot as the port that "reproduces behaviour; it never invents it" —
+`PORTING.md` §3.2 puts new rules squarely in that category. Caught the same
+day, not by re-reading the ruling first (which is the actual lesson: `CLAUDE.md`
+rule 5 says read the documentation FIRST, and `DESIGN_AUTHORITY.md` sat
+unread all session despite being #2 in the authority order). Reconciled: the
+same rule now lives in `web/js/v3/battle.js` (`syncAlliesFor`/
+`triggerSyncFire`) as the canonical design, verified against
+`port/vectors/sync.json` (`PORTING.md` §4). Godot's implementation below is
+unchanged and correct — it already satisfies the rule described here — but
+it is now properly understood as the port, not the original. See
+`VERSIONS.md` for the reconciliation entry.
+
+The rule description below is accurate for BOTH builds; only the origin was
+wrong.
+
 `PHASING.md` §1's reference table has always credited Metal Slug Tactics with
 "compact encounters, momentum, the feel of a fight that resolves fast," but the
 one mechanic that actually produces that feel — the reason MST reads as fast

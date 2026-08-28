@@ -8,6 +8,44 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Sync fire was designed in the wrong build — caught and reconciled same day
+
+`VERSIONS.md` v4.11 built and shipped a real new mechanic (COMBAT.md §9.13)
+directly in `fight_manager.gd`. `DESIGN_AUTHORITY.md`'s 2026-08-25 ruling
+(reaffirmed 2026-08-28) already had `web/` as the primary build and Godot as
+the port — new rules belong on the JS side first. That document sat unread
+for the whole session despite being #2 in `CLAUDE.md` rule 5's authority
+order and named first in `START_HERE.md`'s reading order. Not a subtle miss:
+the working branch this whole session used is literally named
+`design/transit-layers`, after `TRANSIT_LAYERS.md`, a document also never
+opened.
+
+Reconciled in v4.13: the same rule now lives in `web/js/v3/battle.js` as
+canonical, with `port/vectors/sync.json` pinning it. Godot's implementation
+needed no code change — it already satisfied the rule — but the origin was
+backwards and is now correctly understood as a port.
+
+**Two real gaps found while doing this, neither fixed here:**
+
+- **Nothing on the Godot side actually consumes `port/vectors/*.json`.**
+  `market.json`, `missions.json`, `people.json` (and now `sync.json`) all
+  exist and are checked for staleness by `node port/vectors.mjs --check`,
+  but no GDScript test reads any of them and asserts Godot's own
+  `market`/`missions`/`people`/combat logic reproduces the rows. Only the
+  two REVERSED exceptions (`stance-dump.gd`, `chrome-dump.gd` — Godot dumps,
+  JS checks) have a real consumer. `PORTING.md` §4's "the Godot side has one
+  test that reads it and must reproduce every row" is written but not built,
+  for every model, not just this one.
+- **Two systems named at the top of the authority order were never engaged
+  with this session: `TRANSIT_LAYERS.md`** (a real, owner-ruled multilayer
+  map — L0 ground through L5 play, real HSL GTFS data, §3's L2 already live
+  on the board as of 2026-08-27) **and `MARKET.md`** ("The market — Dope
+  Wars as an economy tied to the map," 621 lines, owner-ruled, gated,
+  directly tied to the transit layer in its own §6). Both substantial,
+  neither touched. Whoever picks either up should start there, not here.
+
+---
+
 ## Sync fire (COMBAT.md §9.13, `VERSIONS.md` v4.11) — two follow-ups left open
 
 - **Desync is not built.** MST makes tough enemies immune to further sync

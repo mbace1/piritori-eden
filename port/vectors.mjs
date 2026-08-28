@@ -28,6 +28,7 @@ import { dirname, resolve, join } from 'node:path';
 import { offer, exposure, nodeProfile, decay, INFO, BLOCKS } from '../market/model.mjs';
 import { cost, validate, fire } from '../missions/model.mjs';
 import { hireling } from '../people/roster.mjs';
+import { createBattleState, syncAlliesFor } from '../web/js/v3/battle.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = resolve(here, '..');
@@ -154,6 +155,109 @@ function missionVectors() {
   };
 }
 
+// ── sync fire (COMBAT.md §9.13) ───────────────────────────────────────────
+//
+// Designed on this side first (PORTING.md §3.2: "we develop on js... you
+// control the primary tester build"), unlike stance/chrome, which are the
+// two named exceptions running the other way. Godot's fight_manager.gd
+// already carries its own working implementation of the same RULE, built
+// before this vectors file existed — this is what makes it canonical here
+// going forward, not a claim that Godot's copy is wrong.
+//
+// What this file deliberately does NOT attempt: a literal position-for-
+// position replay on the Godot side. The two boards do not share a
+// coordinate system — this build is 3 lanes, mirrored front/middle/back per
+// side; Godot's is 6 lanes on one unified depth axis (COMBAT.md §3.05). A
+// vector row here names a JS cell layout; there is no coordinate translation
+// from that to Godot's board, and inventing one is a bigger job than sync
+// fire itself. So these rows are the RULE, objectively pinned for this
+// build's own regression protection and read by whoever next touches either
+// side — not a cross-build replay like `stance.json`/`chrome.json` are.
+function syncVectors() {
+  const slice = JSON.parse(readFileSync(join(repo, 'content/era1-slice-v1.json')));
+  const battleDef = slice.battles.find(b => b.id === 'battle-courtyard-3v3');
+  const crew = slice.crew.slice(0, 3);
+  const state = { crewStatus: Object.fromEntries(crew.map(c => [c.id, { status: 'available' }])), battleOpeningNerve: 0 };
+
+  // Each scenario is a hand-placed formation (cells set directly, not the
+  // authored opening layout) so reach is unambiguous rather than incidental.
+  // The slice's first three crew are runner/muscle/watcher (in that order),
+  // and `watcher`/`fixer` have their own lane-only reach in `attackable()`
+  // regardless of row — every scenario below that is not specifically
+  // testing that rule keeps the watcher two lanes from the target (distance
+  // 2, so its special reach does not quietly join a scenario about something
+  // else and produce a confusing row).
+  const scenarios = [
+    {
+      name: 'adjacent-lane-front-row-ally-syncs',
+      place(b) {
+        b.players[0].cell = 'front-1';
+        b.players[1].cell = 'front-2'; // adjacent lane, front row: also in reach
+        b.players[2].cell = 'back-3';  // watcher, but 2 lanes out: out of reach either way
+        b.enemies[0].cell = 'front-1';
+        return { attacker: b.players[0], target: b.enemies[0] };
+      },
+    },
+    {
+      name: 'same-lane-non-front-row-does-not-sync-an-ordinary-role',
+      place(b) {
+        b.players[0].cell = 'front-1';
+        b.players[1].cell = 'middle-1'; // same lane, but not the front row
+        b.players[2].cell = 'back-3';   // watcher, kept 2 lanes out
+        b.enemies[0].cell = 'front-1';
+        return { attacker: b.players[0], target: b.enemies[0] };
+      },
+    },
+    {
+      name: 'two-lanes-away-is-out-of-reach-for-an-ordinary-role',
+      place(b) {
+        b.players[0].cell = 'front-1';
+        b.players[1].cell = 'front-3'; // 2 lanes from the target: past a 1-lane reach
+        b.players[2].cell = 'back-3';  // watcher, kept 2 lanes out
+        b.enemies[0].cell = 'front-1';
+        return { attacker: b.players[0], target: b.enemies[0] };
+      },
+    },
+    {
+      name: 'no-ally-in-reach-syncs-nobody',
+      place(b) {
+        b.players[0].cell = 'front-1';
+        b.players[1].cell = 'back-2';
+        b.players[2].cell = 'back-3';
+        b.enemies[0].cell = 'front-1';
+        return { attacker: b.players[0], target: b.enemies[0] };
+      },
+    },
+    {
+      name: 'watcher-and-fixer-reach-by-lane-alone-ignoring-row',
+      place(b) {
+        b.players[0].cell = 'front-1';
+        b.players[1].cell = 'back-3';  // muscle, kept 2 lanes out
+        b.players[2].cell = 'back-2';  // watcher: 1 lane out, but NOT the front row
+        b.enemies[0].cell = 'front-1';
+        return { attacker: b.players[0], target: b.enemies[0] };
+      },
+    },
+  ];
+
+  const rows = scenarios.map(({ name, place }) => {
+    const battle = createBattleState(battleDef, crew, state);
+    const { attacker, target } = place(battle);
+    const allies = syncAlliesFor(battle, attacker, target);
+    return {
+      in: {
+        scenario: name,
+        cells: Object.fromEntries(battle.players.map(p => [p.id, p.cell])),
+        attacker: attacker.id,
+        target: target.id,
+      },
+      out: { syncAllies: allies.map(u => u.id).sort() },
+    };
+  });
+
+  return { model: 'sync', rows: { allies: rows } };
+}
+
 // ── people ─────────────────────────────────────────────────────────────────
 function peopleVectors() {
   const rows = [];
@@ -168,7 +272,7 @@ function peopleVectors() {
 }
 
 // ── write / check ──────────────────────────────────────────────────────────
-const BUILDERS = [marketVectors, exposureVectors, missionVectors, peopleVectors];
+const BUILDERS = [marketVectors, exposureVectors, missionVectors, syncVectors, peopleVectors];
 const check = process.argv.includes('--check');
 
 if (!check) mkdirSync(outDir, { recursive: true });

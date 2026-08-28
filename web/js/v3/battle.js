@@ -144,6 +144,36 @@ function attackableInBattle(battle, attacker, target) {
     && Math.abs(cellParts(attacker.cell).lane - cellParts(target.cell).lane) <= 1;
 }
 
+/**
+ * Sync fire (COMBAT.md §9.13; PORTING.md §3.2 — this is where it's canonical
+ * now, ported to Godot's fight_manager.gd, not the other way around). Every
+ * OTHER active fighter on `attacker`'s own side who can also reach `target`
+ * right now, using the SAME reach test a normal attack already uses
+ * (`attackableInBattle`) — so there is no second targeting model to keep in
+ * sync with the first.
+ */
+export function syncAlliesFor(battle, attacker, target) {
+  const side = attacker.side === 'player' ? battle.players : battle.enemies;
+  return side.filter(unit => unit.alive && unit.id !== attacker.id
+    && attackableInBattle(battle, unit, target));
+}
+
+/**
+ * `attacker` just landed a real hit (never a sync shot itself — one hop, not
+ * a cascade) on `target`. Every ally `syncAlliesFor()` names fires too, for
+ * free: it costs no action and isn't added to `battle.acted`, so a synced
+ * ally still gets their own separate turn this round.
+ */
+function triggerSyncFire(battle, attacker, target) {
+  for (const ally of syncAlliesFor(battle, attacker, target)) {
+    // Re-checked per ally, not once before the loop: an earlier sync shot in
+    // this same chain may already have downed the target, and nobody fires a
+    // bonus round into a body already on the ground.
+    if (!target.alive) return;
+    battle.log.unshift(`${ally.name} syncs fire: ${hit(target)}`);
+  }
+}
+
 function markActed(battle, unit) {
   if (!battle.acted.includes(unit.id)) battle.acted.push(unit.id);
   battle.action = null;
@@ -175,6 +205,7 @@ export function playerAttack(battle, targetId) {
     battle.log.unshift(`${attacker.name} marks ${target.name}'s lane. Guard and nerve drop.`);
   } else {
     battle.log.unshift(`${attacker.name}: ${hit(target)}`);
+    triggerSyncFire(battle, attacker, target);
   }
   markActed(battle, attacker);
   checkBattleEnd(battle);
@@ -224,6 +255,9 @@ function enemyPhase(battle) {
     const target = targets.find(item => attackableInBattle(battle, enemy, item)) ?? targets[0];
     if (!target) break;
     battle.log.unshift(`${enemy.name}: ${hit(target)}`);
+    // Symmetric with the player side (COMBAT.md §9.13): sync fire is a
+    // property of standing where a gun already reaches, not a player perk.
+    triggerSyncFire(battle, enemy, target);
     target.nerve = Math.max(0, target.nerve - 1);
     if (target.nerve === 0 && target.alive) battle.log.unshift(`${target.name} is shaken; withdrawal stays available.`);
   }

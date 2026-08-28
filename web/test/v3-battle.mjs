@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, deployedCrew } from '../js/v3/state.js';
 import {
-  createBattleState, selectAction, validMoveCells, moveUnit, autoCommand,
-  withdrawBattle, resultEffects,
+  createBattleState, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
+  withdrawBattle, resultEffects, playerAttack, syncAlliesFor,
 } from '../js/v3/battle.js';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -57,4 +57,33 @@ assert.equal(withdrawBattle(battle3), true, 'withdrawal is available from round 
 assert.equal(battle3.result, 'withdraw');
 assert.deepEqual(resultEffects(battle3, data), data.missions.get('mission-courtyard-receipts').partial_effects);
 
-console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command and withdrawal.');
+// Sync fire (COMBAT.md §9.13). PORTING.md §3.2: this is where it is
+// canonical now — designed here first, Godot's fight_manager.gd re-ports it.
+// A fresh battle, positions set directly so reach is unambiguous rather than
+// depending on the authored opening formation.
+const syncDef = data.battles.get('battle-courtyard-3v3');
+const syncBattle = createBattleState(syncDef, deployedCrew(state, data), state);
+const [ally, syncer, bystander] = syncBattle.players;
+ally.cell = 'front-1';
+syncer.cell = 'front-2';       // adjacent lane, front row: in reach of front-1's target too
+bystander.cell = 'back-3';     // not in the front row at all: out of reach either way
+const enemyTarget = syncBattle.enemies[0];
+enemyTarget.cell = 'front-1';
+enemyTarget.guard = 0; // isolate the harm count from guard absorption
+
+const syncAllies = syncAlliesFor(syncBattle, ally, enemyTarget);
+assert.deepEqual(syncAllies.map(u => u.id).sort(), [syncer.id],
+  'only the ally who can also reach the target syncs, not the one who cannot');
+
+selectUnit(syncBattle, ally.id);
+selectAction(syncBattle, 'attack');
+const hpBefore = enemyTarget.hp;
+assert.equal(playerAttack(syncBattle, enemyTarget.id).ok, true);
+assert.equal(hpBefore - enemyTarget.hp, 2,
+  'both the attacker\'s hit and the sync hit landed (1 hp each)');
+assert.equal(syncBattle.acted.includes(syncer.id), false,
+  'the syncing ally spent no action — they still have their own turn this round');
+assert(syncBattle.log[0].includes('syncs fire') || syncBattle.log[1].includes('syncs fire'),
+  'the sync shot is visible in the log');
+
+console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal and sync fire.');

@@ -10,6 +10,58 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.13 — 2026-08-28
+
+**Sync fire reconciled to the correct build.** v4.11 designed and shipped it
+directly in `fight_manager.gd` — backwards, per `DESIGN_AUTHORITY.md`'s
+2026-08-25 ruling (reaffirmed 2026-08-28, the same day): `web/` is the
+primary build, new rules are designed there first, and Godot reproduces
+them. `DESIGN_AUTHORITY.md` went unread this session despite being #2 in
+`CLAUDE.md` rule 5's authority order — the actual failure, not the mechanic
+itself, which was already correct.
+
+- **`web/js/v3/battle.js`** gains `syncAlliesFor()`/`triggerSyncFire()`,
+  wired into `playerAttack()` and `enemyPhase()` (symmetric, same as the
+  Godot side): every OTHER active ally on the attacking side who can also
+  reach the target via the same `attackableInBattle()` reach test fires
+  free, one hop only, and a target downed mid-chain stops the rest of the
+  chain.
+- **`port/vectors/sync.json`** (`rev 1`) — five hand-placed formations
+  proving the rule: an adjacent-lane front-row ally syncs, a same-lane
+  non-front-row ordinary role does not, two lanes out is past reach, no
+  ally in reach syncs nobody, and `watcher`/`fixer` roles reach by lane
+  alone regardless of row (their own pre-existing special case in
+  `attackable()`, which very nearly produced a wrong scenario name before
+  the actual rule was traced through).
+- **Honestly scoped, not silently overclaimed**: this is NOT a literal
+  cross-build vector replay the way `stance.json`/`chrome.json` are. Those
+  two work because `stance_weight()` is a pure lookup table with no board
+  geometry in it at all. Sync fire inherently depends on board shape, and
+  the two builds do not share one — `web/` is 3 lanes, mirrored
+  front/middle/back per side; Godot is 6 lanes on one unified depth axis
+  (`COMBAT.md` §3.05). Inventing a coordinate translation between them is a
+  real job and not this reconciliation's. `port/vectors/sync.json` pins
+  this build's own rule objectively; Godot's existing implementation
+  already satisfies the same rule description (`COMBAT.md` §9.13,
+  corrected in place rather than rewritten) and needed no code change here.
+- **A pre-existing gap, found while in this exact code, not fixed here**:
+  `port/vectors/market.json`, `missions.json` and `people.json` have existed
+  since before this session and nothing on the Godot side actually reads
+  any of them — there is no GDScript test consuming `port/vectors/*.json`
+  at all except the two reversed-direction dumps (`stance-dump.gd`,
+  `chrome-dump.gd`). The "Godot reproduces the vectors" half of `PORTING.md`
+  §4 is unbuilt for every model, not just this one. `QUEUE.md`.
+
+### Port
+- **vectors:** `sync@1` — new. `market`/`missions`/`people` unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** none — `battle.js`'s change is rules, not layout.
+- **status:** landed on the `web/` side, which is now canonical. Godot's
+  `fight_manager.gd` needs no change — its existing v4.11 implementation
+  already satisfies the rule vectored here — but is retroactively
+  reclassified as the port rather than the origin.
+
 ## v4.12 — 2026-08-28
 
 **The sync-fire purple-tile overlay** — v4.11's first recorded follow-up,
