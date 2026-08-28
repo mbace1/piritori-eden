@@ -8,6 +8,35 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## `v3-playthrough.cjs` had been silently not-running since 2026-08-25
+
+Fixed two real bugs getting it to boot at all (stale `page.goto` target —
+`/piritori/`, not `/web/`, same class of drift as `check-project.mjs`; and a
+MIME map missing `.mjs`, which made the stances port's `battle.js` import of
+`market/model.mjs` — the first cross-directory ES module import a browser
+had to load in this gate — serve as `application/octet-stream`, which a
+browser silently refuses to execute as a module). Both fixed, and the gate
+now actually boots the app and runs 11 of 14 checks.
+
+**Found running it for the first time in a while, not caused by this
+session's own changes, not fixed here:**
+- **The mode-nav loop (`for (const mode of ['encounter', 'ledger', …])`)
+  times out clicking `ledger`.** It predates the committed-context rule
+  (`VERSIONS.md` v4.4, 2026-08-27): entering `encounter` mode now correctly
+  HIDES the mode-nav (`UX_SPEC.md` §3.2/§3.4), so the very next click in the
+  loop has nothing to click. The test's flow needs updating to withdraw/
+  return-to-map between mode switches, not the feature.
+- **"the whole twelve-anchor Kallio board is present" fails** — already
+  named in this file, "Canon drift the browser gate found when it was
+  unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still says
+  twelve. Open owner question there already; not re-litigated here.
+- **One console 404** keeps the "boots with no browser errors" check red —
+  `hub/shell.js?v=17`, the cross-repo hub-shell convention this standalone
+  repo doesn't have. Harmless, seen throughout this session's other
+  captures too.
+
+---
+
 ## The stale "THE 2D -> 3D MOVE" section — fixed, 2026-08-28
 
 The flag above (dated the same day) said this wanted a fresh read against the

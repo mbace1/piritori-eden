@@ -586,6 +586,9 @@ button { -webkit-tap-highlight-color: transparent; }
 .track i { flex: 1; height: 8px; background: #4b4540; }
 .track i.on { background: var(--cyan); }
 .track.danger i.on { background: var(--orange); }
+.stance-label { margin-top: 10px; }
+.stance-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 5px; }
+.stance-row .paper-button { min-width: 0; padding: 7px 4px; font-size: 8.5px; line-height: 1.2; letter-spacing: .02em; }
 .battle-log { min-height: 115px; max-height: 145px; overflow: auto; }
 .battle-log p { margin: 0; color: var(--ink-dim); font: 11px/1.35 var(--mono); }
 .battle-log p:first-child { color: var(--ink); }

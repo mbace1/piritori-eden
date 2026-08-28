@@ -10,6 +10,69 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.7 — 2026-08-28
+
+**Stances land in `web/` — the first rule ported the reverse direction, and
+it found a real bug in the process.** Scoped as "stances + a minimal
+scorer" after the owner picked it over a smaller, less useful proof case.
+
+- **`web/js/v3/stance.js`** ports `FightManager.stance_weight()`
+  (`fight_manager.gd:1554`) line for line, verified against a Godot-dumped
+  fixture (`godot/tools/stance-dump.gd` → `port/vectors/stance.json` →
+  `port/stance-vectors.mjs --check`, same reversed pattern as chrome — all
+  24 (stance, command-type) pairs byte-identical).
+- **`battle.js`'s `autoCommand`** now scores ATTACK/GUARD/REPOSITION instead
+  of always attacking when legal. ATTACK and GUARD's base formulas are
+  ported faithfully from `_score_base()` (same fractions, same constants);
+  the per-role `behaviour_package` multiplier layer is deliberately NOT
+  ported — player crew's `behaviour_package` there is literally their
+  `role`, but three of six crew roles (driver/local/muscle) don't appear in
+  that match statement at all, and reconciling the two vocabularies is its
+  own investigation.
+- **A real bug, found by the port and fixed by the port**: the first cut
+  always took the single top-scored command. A unit whose own nerve had
+  dropped (from being hit) could get permanently GUARD-locked — nerve
+  falling raises GUARD's score with no ceiling on ATTACK's side, so once
+  GUARD overtook ATTACK it never gave it back. A 2v2 sat at round 60 with
+  neither enemy having taken real damage. Fixed by porting the OTHER half
+  of `_ai_select_command()` too — weighted-random selection across the top
+  3 scored commands, not the flat top pick, seeded through the house
+  `rand01()` (`market/model.mjs`) rather than a second hash. `web/test/
+  v3-battle.mjs`'s safety-valve cap moved 12 → 60 accordingly: the old
+  number was tuned to a heuristic that always attacked by construction, and
+  real stance-weighted play (default HOLD_THE_LINE, deliberately cautious)
+  takes longer to resolve, not never.
+- **A stance picker landed in the battle screen** — three buttons in the
+  active-unit panel, wired to `selectStance()`, labelled with Godot's own
+  `battle.stance_*` strings so the vocabulary matches across both builds.
+  Was previously unreachable in the model with no UI at all.
+- **Two unrelated, pre-existing bugs fixed along the way**, found only
+  because verifying this needed the browser gate to actually run:
+  `web/tools/check-project.mjs` pointed at a repo shape
+  (`piritori/`/`flow-core/` as siblings) that was never built — fixed to
+  the shape that shipped, and the "999 lines" a stale note already claimed
+  turned out to be exactly right once mapped correctly. `web/test/
+  v3-playthrough.cjs` had been dead since the 2026-08-25 `web/` promotion
+  (still navigated to `/piritori/`) AND was missing `.mjs` in its MIME map,
+  which would have silently broken on the very import this port needed —
+  a browser refuses to execute a module served as
+  `application/octet-stream`, with no error a Node-only test could ever
+  have caught.
+
+### Port
+- **vectors:** new — `stance@1`, reverse direction (Godot canonical). See
+  `PORTING.md` §4 for the general vector discipline; this is the first
+  reverse one after chrome's.
+- **data:** unchanged
+- **meshes:** none
+- **presentation:** the stance picker's placement/labels are `web/`'s own;
+  Godot's own stance UI (`app_shell.gd` `_auto_col`) is untouched and was
+  the reference the labels were read from, not rewritten to match.
+- **status:** landed on `web/`. Nothing for Godot to do — it already had
+  this; the port caught up to it. If `fight_manager.gd`'s
+  `stance_weight()` ever changes, re-run `godot/tools/stance-dump.gd` and
+  re-commit the fixture.
+
 ## v4.6 — 2026-08-28
 
 **Every 3D battle stage was always the Kallio backyard fallback — found from

@@ -10,6 +10,14 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  // battle.js now imports market/model.mjs (the stances port's rand01, kept
+  // to the house RNG rather than a second one) — the first cross-directory
+  // ES module import a browser has to load in this gate. Without this entry
+  // it served as application/octet-stream, which a browser refuses to
+  // execute as a module: a real error, but a silent one from this gate's
+  // point of view, since it only surfaces as window.__ptv3.data never
+  // appearing and a 30s waitForFunction timeout with no named cause.
+  '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
@@ -48,7 +56,11 @@ server.listen(0, '127.0.0.1', async () => {
   });
 
   try {
-    await page.goto(`${base}/piritori/`);
+    // web/, not piritori/ — the browser build was promoted out of piritori/
+    // (later legacy/) on 2026-08-25 (legacy/README.md); this was still
+    // pointed at the old name, so the gate has been 404ing and timing out
+    // on window.__ptv3 rather than actually testing anything since then.
+    await page.goto(`${base}/web/`);
     await page.waitForFunction(() => Boolean(window.__ptv3?.data));
     ok('boots with no browser errors', errors.length === 0, errors.join(' | '));
     ok('content warning is the first interaction', await page.locator('#splash').isVisible());

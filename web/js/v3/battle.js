@@ -1,3 +1,6 @@
+import { stanceWeight, STANCE } from './stance.js?v=1';
+import { rand01 } from '../../../market/model.mjs';
+
 const ROWS = ['front', 'middle', 'back'];
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],
@@ -28,6 +31,7 @@ function makePlayer(member, state, index, count) {
     maxHp: 3,
     guard: member.role === 'muscle' ? 2 : 1,
     nerve: 3,
+    maxNerve: 3,
     alive: status?.status !== 'missing',
     head: member.portrait_asset_id,
     torso,
@@ -48,6 +52,7 @@ function makeEnemy(opponent, index, openingNerve = 0) {
     maxHp: 3,
     guard: opponent.role === 'muscle' ? 2 : 1,
     nerve: Math.max(1, 3 + openingNerve),
+    maxNerve: 3,
     alive: true,
     head: ENEMY_HEADS[index % ENEMY_HEADS.length],
     torso,
@@ -73,6 +78,9 @@ export function createBattleState(definition, crew, state) {
     selectedId: players[0]?.id ?? null,
     action: null,
     acted: [],
+    // COMBAT.md §6.2 / fight_manager.gd: player_stance defaults to
+    // HOLD_THE_LINE — the same default as the Godot side.
+    stance: STANCE.HOLD_THE_LINE,
     players,
     enemies,
     cover: definition.cover,
@@ -105,6 +113,15 @@ export function selectAction(battle, action) {
   const unit = selectedUnit(battle);
   if (!unit || battle.acted.includes(unit.id)) return false;
   battle.action = action;
+  return true;
+}
+
+/** The player's team-wide AUTO-play instruction (COMBAT.md §6.2). Changeable
+ *  any time, including mid-round — it only affects `autoCommand()`'s choices
+ *  from here on, never anything already resolved. */
+export function selectStance(battle, stance) {
+  if (!Object.values(STANCE).includes(stance)) return false;
+  battle.stance = stance;
   return true;
 }
 
@@ -226,27 +243,111 @@ export function endPlayerPhase(battle) {
   return true;
 }
 
+/**
+ * Base score before the stance multiplier — ATTACK and GUARD are ported
+ * faithfully from `FightManager._score_base()` (`fight_manager.gd:1629`):
+ * same fractions, same constants (`1.0 + (1-nerve)*1.5 + (1-condition)*0.8`
+ * for attack, `0.6 + (1-nerve)*1.2` for guard). REPOSITION keeps its flat
+ * 0.4 base.
+ *
+ * What this deliberately does NOT port: `_score_base()`'s per-role
+ * "behaviour_package" multiplier (collector/veteran/watcher/fixer/runner/
+ * local_pusher). Player crew's `behaviour_package` there is literally their
+ * `role` (`battle_builder.gd:212`), but crew roles are driver/fixer/local/
+ * muscle/runner/watcher — three of six don't even appear in that match
+ * statement, and reconciling the two vocabularies is its own investigation,
+ * not part of a "minimal scorer" pass. Every role scores as Godot's
+ * unlisted roles already do: no bonus, the `_:` default.
+ */
+function scoreBase(battle, type, unit, target) {
+  switch (type) {
+    case 'ATTACK': {
+      if (!target) return 0;
+      const targetNerveFraction = target.nerve / (target.maxNerve ?? 3);
+      const targetConditionFraction = target.hp / target.maxHp;
+      return 1.0 + (1 - targetNerveFraction) * 1.5 + (1 - targetConditionFraction) * 0.8;
+    }
+    case 'GUARD': {
+      const nerveFraction = unit.nerve / (unit.maxNerve ?? 3);
+      return 0.6 + (1 - nerveFraction) * 1.2;
+    }
+    case 'REPOSITION':
+      return 0.4;
+    default:
+      return 0;
+  }
+}
+
+/** `scoreBase() * stanceWeight()` — the same multiplication
+ *  `FightManager._score_command()` does for the player side only. */
+function scoreCommand(battle, type, unit, target) {
+  return Math.max(scoreBase(battle, type, unit, target), 0) * stanceWeight(battle.stance, type);
+}
+
 export function autoCommand(battle) {
   if (battle.status !== 'active') return false;
   for (const unit of battle.players.filter(item => item.alive && !battle.acted.includes(item.id))) {
     battle.selectedId = unit.id;
-    const target = battle.enemies.find(item => attackableInBattle(battle, unit, item));
-    if (target) {
-      battle.action = 'attack';
-      playerAttack(battle, target.id);
-    } else {
-      const candidates = validMoveCells(battle, unit).filter(cell => cell !== unit.cell)
-        .sort((a, b) => cellParts(a).rowIndex - cellParts(b).rowIndex
-          || Math.abs(cellParts(a).lane - 2) - Math.abs(cellParts(b).lane - 2));
-      const forward = candidates.find(cell => cellParts(cell).rowIndex < cellParts(unit.cell).rowIndex);
-      const reposition = forward ?? candidates[0];
-      if (reposition) {
-        battle.action = 'move';
-        moveUnit(battle, reposition);
-      } else {
-        battle.action = 'brace';
-        brace(battle);
+
+    // The best-scoring attackable target, not merely the first one — this is
+    // what makes the ATTACK score (and its wounded-target preference) mean
+    // anything at all.
+    const reachable = battle.enemies.filter(item => attackableInBattle(battle, unit, item));
+    let bestTarget = null;
+    let bestTargetScore = -Infinity;
+    for (const candidate of reachable) {
+      const s = scoreBase(battle, 'ATTACK', unit, candidate);
+      if (s > bestTargetScore) { bestTargetScore = s; bestTarget = candidate; }
+    }
+
+    const candidates = validMoveCells(battle, unit).filter(cell => cell !== unit.cell)
+      .sort((a, b) => cellParts(a).rowIndex - cellParts(b).rowIndex
+        || Math.abs(cellParts(a).lane - 2) - Math.abs(cellParts(b).lane - 2));
+    const forward = candidates.find(cell => cellParts(cell).rowIndex < cellParts(unit.cell).rowIndex);
+    const reposition = forward ?? candidates[0];
+
+    // Pick the highest-scoring TYPE (deterministic top pick — the same
+    // choice Godot's own `_ai_select_command(preview=true)` makes; the
+    // weighted-random-across-top-3 personality variation on a live turn is
+    // not ported, since web/'s auto-play has always been deterministic).
+    const options = [
+      bestTarget && { type: 'attack', score: scoreCommand(battle, 'ATTACK', unit, bestTarget) },
+      { type: 'brace', score: scoreCommand(battle, 'GUARD', unit, null) },
+      reposition && { type: 'move', score: scoreCommand(battle, 'REPOSITION', unit, null) },
+    ].filter(Boolean).sort((a, b) => b.score - a.score);
+
+    // Weighted-random across the top 3, not the flat top pick — ported from
+    // `_ai_select_command()` (`fight_manager.gd:1591`), and load-bearing,
+    // not decoration: an early cut of this always took the single best
+    // score, and a unit whose own nerve had dropped could get GUARD-locked
+    // permanently — nerve falling raises GUARD's score with no ceiling on
+    // ATTACK's side, so once GUARD overtook ATTACK it never gave it back,
+    // and a 2v2 sat at round 60 with neither enemy having taken real
+    // damage. Weighting by score instead of always taking the max is what
+    // stops a temporarily-dominant option from becoming a permanent one.
+    // Seeded through the house `rand01()` (`market/model.mjs`), not
+    // `Math.random()` — this codebase's one hash convention, so a replayed
+    // seed reproduces the same fight.
+    const top = options.slice(0, 3);
+    const total = top.reduce((sum, entry) => sum + entry.score, 0);
+    let choice = top[0]?.type ?? 'brace';
+    if (total > 0) {
+      const pick = rand01(battle.id, battle.round, unit.id, 'auto-command') * total;
+      let acc = 0;
+      for (const entry of top) {
+        acc += entry.score;
+        if (pick <= acc) { choice = entry.type; break; }
       }
+    }
+    if (choice === 'attack') {
+      battle.action = 'attack';
+      playerAttack(battle, bestTarget.id);
+    } else if (choice === 'move') {
+      battle.action = 'move';
+      moveUnit(battle, reposition);
+    } else {
+      battle.action = 'brace';
+      brace(battle);
     }
     if (battle.status !== 'active') break;
   }

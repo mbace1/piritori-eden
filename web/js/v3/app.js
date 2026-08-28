@@ -9,9 +9,10 @@ import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=
 import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
-  negotiateBattle, resultEffects, injuredPlayers,
+  negotiateBattle, resultEffects, injuredPlayers, selectStance,
 } from './battle.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
+import { STANCE, STANCES } from './stance.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -21,6 +22,9 @@ const money = value => `€${Number(value).toLocaleString('fi-FI', { maximumFrac
 const cap = value => String(value ?? '').replaceAll('-', ' ').replaceAll('_', ' ').toUpperCase();
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Stance labels are the exact English/Finnish/Japanese Godot already ships
+// (`locale/ui.csv` battle.stance_*) — one vocabulary for one concept, not a
+// second translation of the same three words.
 const UI = {
   en: {
     route: 'ROUTE', encounter: 'ENCOUNTER', ledger: 'LEDGER', battle: 'BATTLE', news: 'NEWS',
@@ -28,6 +32,7 @@ const UI = {
     commit: 'PIN ROUTE', clear: 'CLEAR', send: 'SEND ONE PACK', objective: 'OBJECTIVE',
     attack: 'ATTACK', move: 'REPOSITION', brace: 'BRACE', end: 'END TEAM TURN',
     auto: 'AUTO TEAM', withdraw: 'WITHDRAW', negotiate: 'NEGOTIATE',
+    stance: 'STANCE', stance_AGGRESSIVE: 'AGGRESSIVE', stance_DEFENSIVE: 'DEFENSIVE', stance_HOLD_THE_LINE: 'HOLD THE LINE',
   },
   fi: {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
@@ -35,6 +40,7 @@ const UI = {
     commit: 'KIINNITÄ REITTI', clear: 'TYHJENNÄ', send: 'LÄHETÄ YKSI PAKKAUS', objective: 'TAVOITE',
     attack: 'HYÖKKÄÄ', move: 'VAIHDA ASEMAA', brace: 'SUOJAA', end: 'LOPETA VUORO',
     auto: 'AUTO-JOUKKUE', withdraw: 'VETÄYDY', negotiate: 'NEUVOTTELE',
+    stance: 'ASENTO', stance_AGGRESSIVE: 'HYÖKKÄÄVÄ', stance_DEFENSIVE: 'PUOLUSTAVA', stance_HOLD_THE_LINE: 'PIDÄ LINJA',
   },
 };
 
@@ -588,6 +594,11 @@ function renderBattle() {
             <div class="track-row"><span>CONDITION</span><span class="track danger">${Array.from({ length: unit.maxHp }, (_, i) => `<i class="${i < unit.hp ? 'on' : ''}"></i>`).join('')}</span></div>
             <div class="track-row"><span>GUARD</span><span class="track">${Array.from({ length: 3 }, (_, i) => `<i class="${i < unit.guard ? 'on' : ''}"></i>`).join('')}</span></div>
             <div class="track-row"><span>NERVE</span><span class="track">${Array.from({ length: 3 }, (_, i) => `<i class="${i < unit.nerve ? 'on' : ''}"></i>`).join('')}</span></div>` : ''}
+          ${battle.status === 'active' ? `
+            <p class="section-label stance-label">${tr('stance')}</p>
+            <div class="stance-row">
+              ${STANCES.map(s => `<button class="paper-button ${battle.stance === s ? 'cyan' : ''}" data-action="select-stance" data-stance="${s}">${tr(`stance_${s}`)}</button>`).join('')}
+            </div>` : ''}
         </div>
         <div class="paper-panel battle-log" aria-live="polite">${battle.log.slice(0, 7).map(item => `<p>${esc(item)}</p>`).join('')}</div>
         ${battle.status === 'active' ? `
@@ -785,6 +796,8 @@ function handleRootClick(event) {
     endPlayerPhase(state.battle); persist(); render();
   } else if (action === 'auto') {
     autoCommand(state.battle); persist(); render();
+  } else if (action === 'select-stance') {
+    selectStance(state.battle, target.dataset.stance); persist(); render();
   } else if (action === 'withdraw') {
     withdrawBattle(state.battle); persist(); render();
   } else if (action === 'negotiate') {
