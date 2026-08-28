@@ -10,6 +10,41 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.12 — 2026-08-28
+
+**The sync-fire purple-tile overlay** — v4.11's first recorded follow-up,
+closed the same day. Every cell a valid attack target occupies now paints
+on the board BEFORE the target is committed, not just named in the
+after-the-fact flash and the text forecast: green when picking it would
+chain an ally in, dim red when it would not. One question
+(`_would_sync(source_id, target_id)`) answers the tile fill, the tile
+outline, the standee ring, AND the forecast line — it just asks
+`get_command_forecast()`, the same function the mechanic itself resolves
+through, so nothing here can show the player a promise the actual attack
+would break.
+
+Caught in review before it shipped: the first cut asked the sync question
+for `_hovered_target` unconditionally, but `_hovered_target` is also set
+while targeting MARK (COMBAT.md §9.11's Spotter verb) — MARK has no sync
+question to answer, and would have tinted its target ring by asking a
+hypothetical ATTACK's sync eligibility instead. Gated on
+`Command.Type.ATTACK` specifically in both places it appears.
+
+**Not verified by eye.** `capture_battle.gd` hung on every attempt this
+session, in this sandbox specifically — the same failure the portrait
+console reflow hit earlier, and not something either change caused (a
+capture with zero code changes hung identically). Shipped on code review
+plus the passing gates rather than a render; `QUEUE.md` names it as worth an
+actual look once a capture succeeds again.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** Godot-only board painting; no `web/` counterpart (sync
+  fire itself isn't ported there yet — see v4.11's Port block).
+- **status:** landed, Godot-only.
+
 ## v4.11 — 2026-08-28
 
 **Sync fire** (COMBAT.md §9.13) — the one Metal Slug Tactics mechanic

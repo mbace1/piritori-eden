@@ -21,14 +21,23 @@ pick up, and half of it will turn out to be wrong.
   cap now. If it does need one, the flag belongs in content
   (`content/era1-slice-v1.json`'s opposition entries), Content lane's call,
   and the throttle itself is Engine's.
-- **No purple-tile range overlay.** MST shows which cells WOULD sync before
-  you even pick a target — this ships a forecast field (`sync_allies` on
-  `get_command_forecast()`) and a post-hoc flash, but nothing paints the
-  board itself before commitment. The forecast text line ("SYNC ×N") already
-  carries the same information the tiles would show; the tiles are a
-  Presentation/Art pass on top of a working data source, not a blocker to
-  the mechanic underneath. `formation_battle.gd`'s `_draw_target_path()` is
-  the nearest existing precedent for pre-commit board painting.
+- ~~**No purple-tile range overlay.**~~ **Built 2026-08-28.** Every cell
+  `attack_targets_for()` names for the acting unit now paints in
+  `_cells_to_reveal()`/`_draw_unit()` — green when picking it would chain an
+  ally in (`_would_sync()`, which just asks `get_command_forecast()` the
+  same question the mechanic itself answers, so the tile can't show
+  something the mechanic would disagree with), red/dim when it wouldn't, all
+  BEFORE the target is committed. Gated on `Command.Type.ATTACK`
+  specifically — `_hovered_target` is also set while targeting MARK, which
+  has no sync question to answer, and the first cut asked `_would_sync` for
+  that case too before it was caught and gated off.
+  **Not verified by eye**: this sandbox's `capture_battle.gd` pipeline hung
+  on every attempt this session (same failure the portrait-reflow work hit
+  earlier — a real, pre-existing environment limitation, not something
+  either change caused), so this shipped on code review and the passing
+  gates (`test_battle_ui`'s "forecast before commitment" checks, `test_battle`)
+  rather than a look at the render. Worth an actual look next session a
+  capture succeeds in.
 
 ---
 

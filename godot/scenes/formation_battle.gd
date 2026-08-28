@@ -614,8 +614,23 @@ func _draw_board() -> void:
 						col = MapStyle.TAB
 						fill_a = 0.22
 					"target":
+						# COMBAT.md §9.13: the currently chosen target gets the same
+						# green the alternates below use when picking it would ALSO
+						# chain an ally in — one question, asked the same way, drawn
+						# on every candidate tile including this one. Gated on
+						# ATTACK specifically: _hovered_target is also set while
+						# targeting MARK, which has no sync question to answer.
+						var target_syncs := _pending != null \
+							and _pending.type == FightManager.Command.Type.ATTACK \
+							and _would_sync(_pending.source_id, _hovered_target)
+						col = PiritoriPalette.ROUTE_GREEN if target_syncs else SIDE_RED
+						fill_a = 0.30 if target_syncs else 0.26
+					"alt_sync":
+						col = PiritoriPalette.ROUTE_GREEN
+						fill_a = 0.15
+					"alt_target":
 						col = SIDE_RED
-						fill_a = 0.26
+						fill_a = 0.09
 					"reachable":
 						fill_a = 0.07
 					_:
@@ -659,7 +674,34 @@ func _cells_to_reveal() -> Dictionary:
 		var t := _fighter(_hovered_target)
 		if t:
 			out[Vector3i(t.slot.x, t.slot.y, int(t.side))] = "target"
+	# COMBAT.md §9.13: every OTHER live target this attack could pick, not
+	# only the one actually chosen — MST's "purple tile," telling you which
+	# of your options chains an ally in before you spend the round finding
+	# out from the text forecast. The hovered target's own cell keeps its
+	# existing key above and is re-coloured in _draw_board() by asking the
+	# same question, so the two never disagree about which tile is which.
+	if _pending != null and _pending.type == FightManager.Command.Type.ATTACK:
+		for tid_raw in fight.attack_targets_for(_pending.source_id):
+			var tid := String(tid_raw)
+			if tid == _hovered_target:
+				continue
+			var tf := _fighter(tid)
+			if tf == null:
+				continue
+			var key := Vector3i(tf.slot.x, tf.slot.y, int(tf.side))
+			out[key] = "alt_sync" if _would_sync(_pending.source_id, tid) else "alt_target"
 	return out
+
+
+## Whether choosing `target_id` for `source_id`'s attack would chain-fire at
+## least one ally (COMBAT.md §9.13) — asks `get_command_forecast()` itself
+## rather than re-deriving reach here, so the board can never show a tile
+## the actual mechanic would disagree with.
+func _would_sync(source_id: String, target_id: String) -> bool:
+	var cmd := FightManager.Command.new(FightManager.Command.Type.ATTACK, source_id)
+	cmd.target_id = target_id
+	var fc := fight.get_command_forecast(cmd)
+	return not (fc.get("sync_allies", []) as Array).is_empty()
 
 
 func _reachable_slots(f: Fighter) -> Array:
@@ -989,7 +1031,24 @@ func _draw_unit(f: Fighter) -> void:
 		_board.draw_polyline(d + PackedVector2Array([d[0]]), MapStyle.TAB, 2.0, true)
 	elif f.fighter_id == _hovered_target:
 		var d2 := _diamond(pos, tile.x * 1.2 * depth, tile.y * 0.58 * depth)
-		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), SIDE_RED, 2.0, true)
+		# COMBAT.md §9.13: green when picking THIS target would chain an
+		# ally in, same colour the tile underneath and the forecast text
+		# already use — one fact, said three ways rather than three facts.
+		# Gated on ATTACK: _hovered_target is also set while targeting MARK.
+		var syncs := _pending != null and _pending.type == FightManager.Command.Type.ATTACK \
+			and _would_sync(_pending.source_id, f.fighter_id)
+		var ring_col := PiritoriPalette.ROUTE_GREEN if syncs else SIDE_RED
+		_board.draw_polyline(d2 + PackedVector2Array([d2[0]]), ring_col, 2.0, true)
+	elif _pending != null and _pending.type == FightManager.Command.Type.ATTACK \
+			and fight.attack_targets_for(_pending.source_id).has(f.fighter_id):
+		# An alternate target this same attack could pick instead — thinner
+		# and dimmer than the active choice, so the eye finds the real
+		# decision first and the menu second.
+		var d3 := _diamond(pos, tile.x * 1.1 * depth, tile.y * 0.52 * depth)
+		var alt_syncs := _would_sync(_pending.source_id, f.fighter_id)
+		var alt_col := PiritoriPalette.ROUTE_GREEN if alt_syncs else SIDE_RED
+		alt_col.a = 0.55
+		_board.draw_polyline(d3 + PackedVector2Array([d3[0]]), alt_col, 1.5, true)
 
 	# 4. the standee's white stand marks, doubling as the condition read
 	var frac := 0.0 if f.condition_max <= 0 else float(f.condition) / float(f.condition_max)
