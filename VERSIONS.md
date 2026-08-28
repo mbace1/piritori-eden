@@ -12,11 +12,19 @@
 
 ## v4.4 — 2026-08-27
 
+> **RETRACTION, added 2026-08-28.** This entry claimed the dock-hiding change
+> "matches what the Godot battle screen already does." That was read off a
+> document, not checked against a render, and `PORTING.md` §10 exists because
+> of exactly this mistake. A capture taken 28 Aug shows the Godot battle screen
+> still carrying its full dock, END DAY button and resource icons. Whether the
+> two builds should match is still an open question (§10) — they did not match
+> when this was written, and the claim is struck rather than quietly edited.
+
 **Committed context: Location and Battle contract the shell.**
 
 - **The planning dock hides, and the resource strip drops to time block and
-  cash only**, per `UX_SPEC.md` §3.2/§3.4 — matching what the Godot battle
-  screen already does. The dock was the previous, unintended way out of a
+  cash only**, per `UX_SPEC.md` §3.2/§3.4 — ~~matching what the Godot battle
+  screen already does~~ (see the retraction above). The dock was the previous, unintended way out of a
   scene mid-way; the actual exits (`RETURN TO MAP`, `WITHDRAW`) already
   existed in the mode's own content and needed nothing new. Verified in a
   browser: the dock is gone (not disabled), no gap opens where it sat — a real

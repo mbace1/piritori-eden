@@ -8,6 +8,21 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## The whole "THE 2D -> 3D MOVE" section below is stale — 2026-08-28
+
+Confirmed by capturing the actual current battle screen (`PORTING.md` §11),
+not by reading: **"the board renders 2D standees" and "nothing draws 3D units
+in battle" are both false now.** `battle_stage_3d.gd` renders a lit 3D board
+with 3D cast models on it. The section was accurate when written and nobody
+has passed back through it since to strike what shipped.
+
+Not fixed here — it wants a fresh read against the current render, not a
+patch line by line, and that is real work rather than a note. Flagged so the
+next session does not cite it as current, the way `VERSIONS.md` v4.4's now-
+retracted claim did.
+
+---
+
 ## Debug affordances (blocks rule 3 and rule 6)
 
 - ~~**No URL parameters.**~~ Done — `autoload/debug_entry.gd`. See `CLAUDE.md`

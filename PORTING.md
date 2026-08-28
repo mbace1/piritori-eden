@@ -261,7 +261,61 @@ stress-test number, not a play-session number.**
   reproduced this on the actual device since**; a real Pixel 10 (or the same
   PowerVR driver family) is what settles it, not another desktop measurement.
 
-## 10. Open
+## 10. Before touching UI on either side — render both, first
+
+> owner, 2026-08-28, on a session of `web/` UI work built without once looking
+> at the current Godot screens: "you seem to have old 2d graphics and UI"
+
+**What happened.** A pause menu, a market panel and committed-context CSS were
+all built against `v3.css`'s existing flat dark panels — the material that
+predates `PHASING.md` §1.055 entirely. In the same checkout, `godot/ui/chrome.gd`
+had already shipped a torn-carton material (dark card, ripped edges, cream
+plates, per-action accent colours) weeks earlier, following the direction
+`art-library/ux-concepts/README.md` settled on 24 Aug. Nothing forced a look at
+it before adding more of the old material on the other side.
+
+**The general shape, and it is not new — it is §7 again.** A build nobody
+looks at stops being a check on anything. §7 was about a gate that stopped
+running; this is the same failure one layer up, about a *person* who stopped
+looking. Having both trees in one checkout does not fix it by itself — it has
+to be a step, not a hope.
+
+**The rule.** Before UI or chrome work on either side, render **both**, in the
+same sitting:
+
+```bash
+NODE_PATH=$(npm root -g) node web/tools/capture.mjs .capture   # this build
+cd godot && PIRITORI_SHOT_DIR=../.capture xvfb-run -a \
+  /path/to/Godot --path . --rendering-driver opengl3 res://tools/capture.tscn
+```
+
+Both write `piritori(-web)-<screen>-<size>-<lang>.png` into the same
+directory, so `ls .capture` puts a `web-` file next to its Godot counterpart
+by name. `web/tools/capture.mjs` needs Playwright, and ESM `import` does not
+honour `NODE_PATH` the way CJS `require` does — symlink it once:
+`ln -sfn "$(npm root -g)" web/tools/node_modules` (gitignored — see the note
+in `.gitignore` about why a *symlinked* `node_modules` needed its own rule).
+
+**What this is not.** It does not mean `web/` must match Godot's material —
+§1.0 already leaves open whether `web/` even adopts 3D, and matching a chrome
+built for a 3D board onto a 2D canvas might be the wrong move entirely. It
+means the decision gets made **looking at the current render of both**, which
+is the one thing that did not happen this time.
+
+## 11. A correction to §7's own list, made looking rather than reading
+
+§7's drift table and `QUEUE.md`'s "THE 2D -> 3D MOVE" section both still say
+things like *"the board renders 2D standees"* and *"nothing draws 3D units in
+battle."* Both are now false — `battle_stage_3d.gd` renders a lit 3D board with
+3D cast models, confirmed by capturing it. Neither has been corrected here
+before now; VERSIONS.md's v4.4 entry also stated, without checking, that
+`web/`'s committed-context change matched "what the Godot battle screen
+already does" for hiding its planning dock — a captured battle screen still
+shows it. Recorded as a retraction there rather than edited quietly. `QUEUE.md`'s
+whole 2D→3D section wants a fresh pass against the current render, not a
+patch; flagged there rather than done piecemeal here.
+
+## 12. Open
 
 1. **Does the Godot side run the vector gate in CI, or by hand?** By hand is
    fine while one person drives both; it stops being fine the moment it isn't.

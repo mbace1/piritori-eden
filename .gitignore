@@ -6,7 +6,16 @@
 /piritori-godot/
 
 # Node's own noise, if a tool ever needs it. There is no build step.
+#
+# TWO PATTERNS, not one, and it cost finding out the hard way. `node_modules/`
+# (trailing slash) matches a real directory ONLY — git's own semantics, not a
+# typo — so a capture tool's local symlink to the global npm root
+# (`ln -sfn "$(npm root -g)" web/tools/node_modules`, since ESM `import` does
+# not honour NODE_PATH the way CJS `require` does) sailed straight past this
+# rule and showed up staged under `git status`. The second line matches a
+# symlink too.
 node_modules/
+node_modules
 
 # Generated sheets from godot/tools. Derived from the engine and the plates;
 # regenerate rather than commit.
