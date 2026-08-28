@@ -22,7 +22,11 @@ func _ready() -> void:
 	fb.debug_chrome_off = OS.get_environment("PIRITORI_SHOT_NOCHROME") != ""
 
 	await get_tree().process_frame
-	get_window().size = Vector2i(1366, 768)
+	var win_size := Vector2i(1366, 768)
+	var want_size: String = OS.get_environment("PIRITORI_SHOT_SIZE")
+	if want_size == "phone":
+		win_size = Vector2i(1079, 2047)
+	get_window().size = win_size
 
 	# The board's shape, so several can be rendered and compared side by side.
 	# PIRITORI_SHOT_BOARD is "lanes x rows", e.g. "4x4". Unset means canon.
@@ -81,6 +85,13 @@ func _ready() -> void:
 	# open an attack so the forecast and target path are visible
 	for n in _all(_s):
 		if n is Button and "attack" in String(n.text).to_lower():
+			n.pressed.emit(); break
+	for i in range(10): await get_tree().process_frame
+
+	# Also toggle AUTO ON, to stress the tallest state of the automation
+	# column (stance buttons only appear then) against the reflowed layout.
+	for n in _all(_s):
+		if n is Button and "auto" in String(n.text).to_lower():
 			n.pressed.emit(); break
 	for i in range(10): await get_tree().process_frame
 

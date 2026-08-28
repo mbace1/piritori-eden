@@ -90,7 +90,13 @@ const FIGURE_HEADROOM := 0.0
 ## Height of the overlaid command console. It was 188 and took a quarter of the
 ## frame OUT of the layout; overlaid and trimmed it costs the board nothing and
 ## covers only the near corner of the arena, where the least happens.
-const CONSOLE_H := 168.0
+##
+## A `var`, not a `const`: in portrait the automation column reflows below the
+## crew/verb row instead of beside it (QUEUE.md, "the honest fix... recorded
+## rather than attempted as a third correction in one sitting" — this is that
+## fix), and a second row needs a taller console. Set once in `_build()`
+## before anything below reads it.
+var CONSOLE_H := 168.0
 
 ## Set to a non-empty Rect2 to override the play area for a comparison render.
 ## The owner asked (2026-08-21) whether the board is big enough to carry the
@@ -116,6 +122,15 @@ var _console: PanelContainer
 var _crew_col: VBoxContainer
 var _action_col: VBoxContainer
 var _auto_col: VBoxContainer
+## Set once in `_build()`. `_build_auto_column()` reads it to lay the stance
+## row out HORIZONTALLY when `_auto_col` has real width to spend (the
+## reflowed portrait row) instead of stacking three buttons vertically —
+## which is what a stress capture with AUTO ON caught: the taller CONSOLE_H
+## this reflow already added still was not enough with three stacked stance
+## buttons plus everything above and below them, and the bottom of the list
+## ran off the viewport. Fixed by spending the WIDTH the reflow bought back
+## instead of raising the height estimate a second time.
+var _console_portrait: bool = false
 
 var _selected_unit: String = ""
 var _auto_mode := false
@@ -290,12 +305,37 @@ func _build() -> void:
 	# costs the board nothing. Slightly translucent, because the ground it covers
 	# is the near corner of the arena and seeing it continue underneath is what
 	# keeps the stage reading as one place.
+	#
+	# PORTRAIT REFLOWS THE AUTOMATION COLUMN BELOW THE CREW/VERB ROW instead of
+	# beside it — the fix `_text_scale()`'s own comment named and deferred
+	# rather than risk a third correction in one sitting. Same portrait test
+	# `_text_scale()` uses (`vp.x < vp.y`), so the two never disagree about
+	# which shape the screen is. Landscape is untouched: one row, same as
+	# before this existed.
+	var vp := get_viewport_rect().size
+	var portrait := vp.x < vp.y
+	_console_portrait = portrait
 	_console = PanelContainer.new()
 	_console.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 0))
+	if portrait:
+		# Measured, not guessed: the single-row CONSOLE_H (168) was sized to
+		# the tallest of the three columns, which was _auto_col's own stacked
+		# content. Stacking the crew/verb row ABOVE that same content roughly
+		# adds that row's own height back in, plus room for the gap between.
+		CONSOLE_H = 168.0 + 210.0 * _text_scale()
 	_console.custom_minimum_size = Vector2(0, CONSOLE_H)
 	_console.modulate = Color(1, 1, 1, 0.94)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 20)
+
+	var outer: BoxContainer = VBoxContainer.new() if portrait else HBoxContainer.new()
+	outer.add_theme_constant_override("separation", 10 if portrait else 20)
+	# The crew card and the verb cards stay side by side in EITHER shape —
+	# only the automation column moves. Portrait gets its own inner row for
+	# them; landscape just uses `outer` itself, matching the original layout.
+	var top_row: HBoxContainer = HBoxContainer.new() if portrait else outer
+	if portrait:
+		top_row.add_theme_constant_override("separation", 20)
+		outer.add_child(top_row)
+	var row := outer  # kept for the rest of this function's existing references
 
 	_crew_col = VBoxContainer.new()
 	# Narrower now the 64px portrait has gone — this column is a name and three
@@ -303,19 +343,25 @@ func _build() -> void:
 	# picture of somebody already visible on the board.
 	_crew_col.custom_minimum_size = Vector2(150.0 * _text_scale(), 0)
 	_crew_col.add_theme_constant_override("separation", 4)
-	row.add_child(_crew_col)
+	top_row.add_child(_crew_col)
 
 	_action_col = VBoxContainer.new()
 	_action_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_action_col.add_theme_constant_override("separation", 5)
-	row.add_child(_action_col)
+	top_row.add_child(_action_col)
 
 	_auto_col = VBoxContainer.new()
 	# Scales with its own contents, or the buttons inside it overflow a column
 	# that stayed the size it was when the text was smaller.
 	_auto_col.custom_minimum_size = Vector2(210.0 * _text_scale(), 0)
 	_auto_col.add_theme_constant_override("separation", 5)
-	row.add_child(_auto_col)
+	if portrait:
+		# Its own full-width row below top_row, not squeezed into top_row's
+		# narrow third — that squeeze is exactly what this reflow removes.
+		_auto_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		outer.add_child(_auto_col)
+	else:
+		row.add_child(_auto_col)
 
 	var cpad := MarginContainer.new()
 	for s in ["left", "right", "top", "bottom"]:
@@ -1443,6 +1489,17 @@ func _build_auto_column() -> void:
 	# resource punishes exactly the players it exists for.
 	if _auto_mode:
 		_auto_col.add_child(_label(tr("battle.stance"), 11, MapStyle.TINY_TEXT))
+		# Sideways in the reflowed portrait row, where _auto_col has real
+		# width to spend — three buttons stacked vertically there, on top of
+		# everything else in this column, is what ran the console off the
+		# bottom of the viewport in the first place (caught by stress-testing
+		# AUTO ON against a real phone capture, not assumed). Landscape's
+		# narrow column keeps the original vertical stack.
+		var stance_holder: Container = _auto_col
+		if _console_portrait:
+			stance_holder = HBoxContainer.new()
+			stance_holder.add_theme_constant_override("separation", 5)
+			_auto_col.add_child(stance_holder)
 		for st in [FightManager.Stance.AGGRESSIVE,
 				FightManager.Stance.DEFENSIVE,
 				FightManager.Stance.HOLD_THE_LINE]:
@@ -1453,7 +1510,9 @@ func _build_auto_column() -> void:
 				func():
 					fight.player_stance = st
 					_refresh())
-			_auto_col.add_child(b)
+			if _console_portrait:
+				b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			stance_holder.add_child(b)
 
 	# SKIP TO RESULT (COMBAT.md §6.4) — the third tier, for players here for the
 	# story. It goes through a FACE-OFF first: the beat is what stops skipping

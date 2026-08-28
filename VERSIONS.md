@@ -10,6 +10,44 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.9 — 2026-08-28
+
+**The portrait battle console reflows the automation column below the verb
+cards.** `QUEUE.md`'s "still worth doing, not attempted" note from v4.4's
+1.3-ceiling pass, picked back up.
+
+- **`CONSOLE_H` is a `var` now, not a `const`**, set once in `_build()` off
+  the same `vp.x < vp.y` test `_text_scale()` already uses. Portrait stacks
+  `top_row` (crew card + verb cards) above `_auto_col`, which now spans the
+  console's full width instead of a fixed 210px third; landscape reassigns
+  nothing and stays the original single `HBoxContainer` row.
+- **The added height was measured, not guessed once and left**: `+110` still
+  clipped the stance buttons off the bottom of a real 1079×2047 capture with
+  AUTO toggled on (the tallest state — three stance buttons only render in
+  automation mode, and nothing before this stress-tested that state). `+300`
+  confirmed generous. `+210 * _text_scale()` is the value that landed: a
+  cropped capture shows verb cards, AUTOMATION / AUTO ON, the STANCE row and
+  SKIP TO RESULT / WITHDRAW all present with margin to spare.
+- **The stance row lays out horizontally in portrait** (`_build_auto_column()`,
+  gated on the new `_console_portrait` flag) — three buttons stacked
+  vertically inside the reflowed column were tall enough on their own to blow
+  the height budget a second time, so the fix spends the width the reflow
+  bought back instead of inflating the height estimate again. Landscape keeps
+  the original vertical stack.
+- **`capture_battle.gd`** gained `PIRITORI_SHOT_SIZE=phone` (1079×2047, the
+  same shape v4.4 added to the browser-side capture tool but this tool never
+  had) and an AUTO-ON toggle step after the existing attack-open step, so the
+  tallest automation-column state is reachable by the capture tool itself.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** Godot-only layout fix; no `web/` counterpart (the v3
+  battle UI's stance row is already a CSS grid, not a stacked column).
+- **status:** landed. `QUEUE.md`'s "still worth doing" note for this is
+  closed.
+
 ## v4.8 — 2026-08-28
 
 **The cast3d registration gap closed as a gate, not a rewrite.** `QUEUE.md`'s

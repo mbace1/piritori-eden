@@ -2200,11 +2200,34 @@ list. Recorded here instead of half-fixed:
   1.0 outright: the reason to scale at all is a dense portrait phone, and a
   landscape window is the size the authored numbers were chosen for.
 
-- **Still worth doing, not attempted:** in portrait the battle console would
-  read better with the automation column REFLOWED BELOW the verb cards rather
-  than beside them. That buys back enough width to raise the 1.3 ceiling. Left
-  alone deliberately — it would have been a fourth correction in one sitting,
-  and CLAUDE.md rule 8 says stop after two.
+- **The automation column reflows below the verb cards in portrait now**
+  (2026-08-28, picking up the item above). `CONSOLE_H` went from a `const` to
+  a `var`, set once in `_build()` from the same portrait test `_text_scale()`
+  already uses (`vp.x < vp.y`), so the two never disagree about which shape
+  the screen is; landscape reassigns nothing and stays byte-for-byte the
+  single HBoxContainer row it always was.
+
+  Three iterations on the added height, because guessing it once and moving
+  on is how the 1.3 ceiling above got left at three tries: `+110` (a guess)
+  clipped the stance buttons off the bottom of a real phone capture with AUTO
+  toggled on — the tallest state, and the one the original ceiling note never
+  stress-tested either. `+300` confirmed generous with margin to spare.
+  `+210` is the measured value: a phone capture cropped to the console's own
+  region shows the verb cards, AUTOMATION / AUTO ON, the STANCE row and
+  SKIP TO RESULT / WITHDRAW all present with a small margin and no clipping.
+
+  The height alone was not the whole fix. Three stance buttons stacked
+  vertically inside `_auto_col` were tall enough on their own to blow the
+  budget a second time — so `_build_auto_column()` now lays them out in an
+  `HBoxContainer` (`stance_holder`) when `_console_portrait` is true, spending
+  the width the reflow bought back instead of raising the height estimate
+  again. Landscape keeps the original vertical stack in the narrow column.
+  `capture_battle.gd` gained `PIRITORI_SHOT_SIZE=phone` and an AUTO-ON toggle
+  step so this state is reachable by the capture tool at all, not just by a
+  hand-driven session.
+
+  `test_battle` (260), `test_battle_ui` (28) and `test_shell` (105) all still
+  pass — this only touches layout, not any measured behaviour.
 
 
 - **The old 2D faces are off the battle console** (2026-08-27, direct: "the
