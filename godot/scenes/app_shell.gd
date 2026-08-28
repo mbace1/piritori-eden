@@ -22,10 +22,33 @@ var mode: Mode = Mode.CITY
 ## Missions are not their own Mode value — see the enum above — so they keep
 ## reading as City for this purpose, which matches them being City sub-panels
 ## rather than independent modes in UX_SPEC.md §3.1.
+## UX_SPEC §3.2, COMMITTED CONTEXT — and it was not implemented.
+##
+## "Committed context: Location and Battle. The global shell contracts to a
+## small status strip; switching to unrelated modes is disabled until the
+## player leaves, resolves or explicitly withdraws." §3.4 narrows it further:
+## "In committed context, show time block, cash and the current mission/scene
+## only."
+##
+## The fight screen carried the full four-tab dock and an END DAY button, so a
+## player could walk out of a committed fight straight into the market — and
+## the board was starved of the space to do it, drawing at under half the
+## frame while the chrome kept a bar it should not have had.
+##
+## Battle only for now. Location is committed too by the same clause and still
+## shows its dock; that is a separate pass, filed in QUEUE.md, because the
+## location screen's LEAVE affordance lives in its rail rather than the bar.
+func _is_committed() -> bool:
+	return mode == Mode.BATTLE
+
+
 func _set_mode(m: Mode) -> void:
 	mode = m
 	if _title:
 		_title.visible = (m == Mode.CITY)
+	if _command_bar:
+		_command_bar.visible = not _is_committed()
+	_refresh_status()
 
 var _root: VBoxContainer
 var _status: PanelContainer
@@ -636,6 +659,16 @@ func _refresh_status() -> void:
 	# Each chip is icon + number, and every icon means one thing only.
 	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
 		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()])
+
+	# §3.4: committed context shows the time block, the cash and the scene —
+	# and nothing else. END DAY in particular must not be reachable mid-fight:
+	# it is a City action (§3.3), and ending the day out from under a battle
+	# is not a decision the player should be able to make by mistake.
+	if _is_committed():
+		_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE,
+			"€ %s" % _thousands(GameState.cash_eur))
+		return
+
 	_add_end_day_button()
 	_add_stat(PiritoriIcon.Kind.CREW, MapStyle.FLOW, "%d" % _crew_known())
 	var packs := 0

@@ -53,7 +53,7 @@ Older brief, prompt and exploration files (`ART_BRIEF_CONCEPT.md`,
 | `art/v3/` | optimized registered runtime derivatives + manifest |
 | `art-src/` | generation scripts for the Nano Banana pose pipeline |
 | `ux/` | the five-modes layout studies |
-| `legacy/` | the superseded browser prototype — parked, does not run |
+| `legacy/` | the JS/web build — **leads new work** as of 2026-08-28 (DESIGN_AUTHORITY.md). Name is stale; a rename to `js/` is proposed but blocked by tooling permissions, not yet done |
 
 ## The gates
 

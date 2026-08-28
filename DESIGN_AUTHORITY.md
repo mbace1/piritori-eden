@@ -2,7 +2,7 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-25
+Latest owner rulings: 2026-08-28
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
@@ -40,6 +40,26 @@ written below and would otherwise be read as current.
 
 `PORTING.md` is the working document and is ACTIVE. It sits directly under this
 file in the authority order.
+
+### Addendum, 2026-08-28 — the rename landed, and a stale claim corrected
+
+Two facts, checked directly rather than assumed, from a session that reached
+this same ruling independently before finding it already recorded above.
+
+**The rename is done, as of this merge.** A plain `git mv legacy js` was
+refused by that session's own tooling permission gate — recorded here because
+the block is real and specific to that class of operation, not because the
+rename itself was ever in doubt. It landed as `web/`, not `js/`, on the branch
+that is now merged in.
+
+**The 2026-08-21 ruling below claims the page "does not run in this
+repository by construction," attributing it to the `../hub/shell.js` import.**
+Corrected: the real cause was three separate stale relative paths in
+`content.js`'s own content/map/art fetch and its `assetUrl()` image paths,
+left over from the 2026-08-21 split, fixed the same day this addendum was
+written. `../hub/shell.js` was checked directly against its real source in
+Suds-Jack and left alone — it is correct once deployed and only 404s
+harmlessly in local dev; it was never the reason the build failed to load.
 
 ## Owner rulings, 2026-08-24 — the counter
 

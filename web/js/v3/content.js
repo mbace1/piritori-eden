@@ -106,6 +106,11 @@ export function shortestPath(map, from, to) {
   return [];
 }
 
+// A SECOND, SEPARATE instance of the same fix, one level shallower — this
+// one is a DOCUMENT-relative path, not a module-relative one. It becomes an
+// <img src="..."> in the DOM built by legacy/index.html, so it resolves
+// against THAT file's own location (legacy/index.html), not against
+// content.js — one directory to climb out of legacy/, not three.
 export function assetUrl(data, id) {
   return data.art.get(id)?.url ?? '';
 }

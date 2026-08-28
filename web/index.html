@@ -64,11 +64,23 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script type="module" src="js/v3/app.js?v=2"></script>
-  <!-- The arcade's HOME button, which lives in the Suds-Jack site root and not
-       in this repository. Loaded optionally so a clean checkout runs: a missing
-       shell is a missing nicety, never the reason the build does not boot.
-       This one hard <script> tag is why DESIGN_AUTHORITY 2026-08-21 could say
-       the browser build "does not run in this repository by construction". -->
+  <!-- The arcade's HOME button, which lives in the Suds-Jack site root and
+       not in this repository. Correct once this deploys to gh-pages/piritori/,
+       one level under the arcade hub — ../hub/shell.js then reaches the hub's
+       own shared HOME-button chrome, which genuinely exists there (checked
+       directly against Suds-Jack's real hub/shell.js, 2026-08-28, rather than
+       assumed). It has no local equivalent in THIS repo, so it 404s locally.
+
+       NOT the reason the build failed to load. An earlier merge of this file
+       attributed "does not run in this repository by construction" to this
+       one hard <script> tag; the real cause, found and fixed the same day,
+       was js/v3/content.js's own relative paths being one directory level
+       off after the 2026-08-21 split — this reference was never the fault,
+       it just 404s quietly. Wrapped as a dynamic import with a swallowed
+       catch anyway, since that is strictly quieter than a bare <script> tag
+       failing its own load (which is also harmless, just noisier in the
+       console) and costs nothing. Do not delete this to silence a
+       local-dev-only 404 — that would break the real integration. -->
   <script type="module">
     import('../hub/shell.js?v=17').catch(() => {});
   </script>

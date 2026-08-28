@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
+// content/map/art paths are two levels up (test/ -> legacy/ -> repo root),
+// one more than ../index.html etc. — fixed 2026-08-28, the same stale-depth
+// bug as legacy/js/v3/content.js, left over from this file moving one
+// directory shallower when the repo split out of Suds-Jack on 2026-08-21.
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, content, map, art] = await Promise.all([
   read('../index.html'),
