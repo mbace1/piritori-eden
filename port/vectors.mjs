@@ -29,6 +29,7 @@ import { offer, exposure, nodeProfile, decay, INFO, BLOCKS } from '../market/mod
 import { cost, validate, fire } from '../missions/model.mjs';
 import { hireling } from '../people/roster.mjs';
 import { createBattleState, syncAlliesFor } from '../web/js/v3/battle.js';
+import { parseCellFor, slotKey, ROWS } from '../web/js/v3/grid.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = resolve(here, '..');
@@ -164,84 +165,105 @@ function missionVectors() {
 // before this vectors file existed — this is what makes it canonical here
 // going forward, not a claim that Godot's copy is wrong.
 //
-// What this file deliberately does NOT attempt: a literal position-for-
-// position replay on the Godot side. The two boards do not share a
-// coordinate system — this build is 3 lanes, mirrored front/middle/back per
-// side; Godot's is 6 lanes on one unified depth axis (COMBAT.md §3.05). A
-// vector row here names a JS cell layout; there is no coordinate translation
-// from that to Godot's board, and inventing one is a bigger job than sync
-// fire itself. So these rows are the RULE, objectively pinned for this
-// build's own regression protection and read by whoever next touches either
-// side — not a cross-build replay like `stance.json`/`chrome.json` are.
+// Until the grid rebuild (VERSIONS.md, this entry), this file deliberately
+// did NOT attempt a literal position-for-position replay on the Godot
+// side: the two boards did not share a coordinate system. They do now —
+// `battle.js`'s board IS `grid.js`, the same unified lane/depth axis ported
+// from `godot/scripts/fight/board.gd` — so a row's `cells` are real board
+// coordinates, not a JS-only layout, even though a cross-build replay
+// fixture (like `stance.json`/`chrome.json`) is still a separate, larger
+// job than sync fire itself and not attempted here.
 function syncVectors() {
   const slice = JSON.parse(readFileSync(join(repo, 'content/era1-slice-v1.json')));
   const battleDef = slice.battles.find(b => b.id === 'battle-courtyard-3v3');
   const crew = slice.crew.slice(0, 3);
+  const equipment = slice.equipment;
   const state = { crewStatus: Object.fromEntries(crew.map(c => [c.id, { status: 'available' }])), battleOpeningNerve: 0 };
+  const dataForBattle = { equipment: new Map(equipment.map(item => [item.id, item])) };
+
+  // Authored "front-2" text -> a real `battle.js` cell (a grid.js slotKey),
+  // for the given side — what `createBattleState` itself does when it reads
+  // a battle definition's own authored cells.
+  const cellFor = (text, isPlayer) => { const { lane, depth } = parseCellFor(text, isPlayer); return slotKey(lane, depth); };
+  const playerCell = text => cellFor(text, true);
+  const enemyCell = text => cellFor(text, false);
 
   // Each scenario is a hand-placed formation (cells set directly, not the
-  // authored opening layout) so reach is unambiguous rather than incidental.
-  // The slice's first three crew are runner/muscle/watcher (in that order),
-  // and `watcher`/`fixer` have their own lane-only reach in `attackable()`
-  // regardless of row — every scenario below that is not specifically
-  // testing that rule keeps the watcher two lanes from the target (distance
-  // 2, so its special reach does not quietly join a scenario about something
-  // else and produce a confusing row).
+  // authored opening layout) so reach is unambiguous rather than
+  // incidental. The slice's first three crew are runner/muscle/watcher (in
+  // that order): runner and watcher both carry a feature-phone
+  // (front-same-lane, 0 lane spread — and support items reach exactly like
+  // a weapon since `equipment.js` doesn't special-case `kind`); muscle
+  // carries a baseball-bat (front-same-or-adjacent-lane, 1 lane spread).
+  // Reach comes ONLY from the held item now — nothing here reads `role` —
+  // so lane 3 is the shared hub for attacker/target throughout: courtyard-
+  // 3v3's own authored cover ("stone-bin") sits at the opposition's
+  // front-1, and cover blocks a non-piercing walk through that depth even
+  // when the walk's own target is the body standing on it, so front-1 is a
+  // real no-shot cell here and every scenario below avoids it on purpose
+  // rather than by accident.
   const scenarios = [
     {
       name: 'adjacent-lane-front-row-ally-syncs',
       place(b) {
-        b.players[0].cell = 'front-1';
-        b.players[1].cell = 'front-2'; // adjacent lane, front row: also in reach
-        b.players[2].cell = 'back-3';  // watcher, but 2 lanes out: out of reach either way
-        b.enemies[0].cell = 'front-1';
+        b.players[0].cell = playerCell('front-3');
+        b.players[1].cell = playerCell('front-2'); // adjacent lane, front row: also in reach
+        b.players[2].cell = playerCell('back-1');  // watcher: feature-phone only fires from the front row
+        b.enemies[0].cell = enemyCell('front-3');
         return { attacker: b.players[0], target: b.enemies[0] };
       },
     },
     {
-      name: 'same-lane-non-front-row-does-not-sync-an-ordinary-role',
+      name: 'same-lane-non-front-row-does-not-sync-a-front-only-weapon',
       place(b) {
-        b.players[0].cell = 'front-1';
-        b.players[1].cell = 'middle-1'; // same lane, but not the front row
-        b.players[2].cell = 'back-3';   // watcher, kept 2 lanes out
-        b.enemies[0].cell = 'front-1';
+        b.players[0].cell = playerCell('front-3');
+        b.players[1].cell = playerCell('middle-3'); // same lane, but baseball-bat only fires from the front row
+        b.players[2].cell = playerCell('back-1');
+        b.enemies[0].cell = enemyCell('front-3');
         return { attacker: b.players[0], target: b.enemies[0] };
       },
     },
     {
-      name: 'two-lanes-away-is-out-of-reach-for-an-ordinary-role',
+      name: 'two-lanes-away-is-out-of-reach-for-a-one-lane-spread',
       place(b) {
-        b.players[0].cell = 'front-1';
-        b.players[1].cell = 'front-3'; // 2 lanes from the target: past a 1-lane reach
-        b.players[2].cell = 'back-3';  // watcher, kept 2 lanes out
-        b.enemies[0].cell = 'front-1';
+        b.players[0].cell = playerCell('front-3');
+        b.players[1].cell = playerCell('front-1'); // 2 lanes from the target: past baseball-bat's 1-lane spread
+        b.players[2].cell = playerCell('back-1');
+        b.enemies[0].cell = enemyCell('front-3');
         return { attacker: b.players[0], target: b.enemies[0] };
       },
     },
     {
       name: 'no-ally-in-reach-syncs-nobody',
       place(b) {
-        b.players[0].cell = 'front-1';
-        b.players[1].cell = 'back-2';
-        b.players[2].cell = 'back-3';
-        b.enemies[0].cell = 'front-1';
+        b.players[0].cell = playerCell('front-3');
+        b.players[1].cell = playerCell('back-2'); // baseball-bat cannot fire from the back row either
+        b.players[2].cell = playerCell('back-1');
+        b.enemies[0].cell = enemyCell('front-3');
         return { attacker: b.players[0], target: b.enemies[0] };
       },
     },
     {
-      name: 'watcher-and-fixer-reach-by-lane-alone-ignoring-row',
+      // fight_manager.gd's own ruling: a fighter who has advanced out of
+      // their own band counts as ROW_FRONT by definition, not as "nowhere"
+      // — crossing the whole shared board is a normal position. Player[0]
+      // (muscle, baseball-bat) attacks normally from the front row;
+      // player[1] (runner, feature-phone — 0 lane spread, front row only)
+      // is placed PAST their own band, in the real, occupiable neutral
+      // strip, same lane as the target: still counts as front, still syncs.
+      name: 'advanced-past-own-band-still-counts-as-front',
       place(b) {
-        b.players[0].cell = 'front-1';
-        b.players[1].cell = 'back-3';  // muscle, kept 2 lanes out
-        b.players[2].cell = 'back-2';  // watcher: 1 lane out, but NOT the front row
-        b.enemies[0].cell = 'front-1';
+        b.players[0].cell = playerCell('front-3');
+        b.players[1].cell = slotKey(parseCellFor('front-3', true).lane, ROWS); // first neutral depth
+        b.players[2].cell = playerCell('back-1');
+        b.enemies[0].cell = enemyCell('front-3');
         return { attacker: b.players[0], target: b.enemies[0] };
       },
     },
   ];
 
   const rows = scenarios.map(({ name, place }) => {
-    const battle = createBattleState(battleDef, crew, state);
+    const battle = createBattleState(battleDef, crew, state, dataForBattle);
     const { attacker, target } = place(battle);
     const allies = syncAlliesFor(battle, attacker, target);
     return {

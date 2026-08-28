@@ -1,7 +1,11 @@
 import { stanceWeight, STANCE } from './stance.js?v=1';
 import { rand01 } from '../../../market/model.mjs';
+import {
+  LANES, totalRows, rowOf, laneCentre,
+  parseCell, defaultPlayerSlot, slotKey, parseSlotKey, describeSlot,
+} from './grid.js?v=1';
+import { weaponsFrom, UNARMED, ROW_FRONT } from './equipment.js?v=1';
 
-const ROWS = ['front', 'middle', 'back'];
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],
   watcher: ['torso-watcher-v03', 'legs-watcher-v03'],
@@ -12,21 +16,31 @@ const ROLE_PARTS = {
 };
 const ENEMY_HEADS = ['head-kallio-03-v03', 'head-kallio-09-v03', 'head-kallio-11-v03'];
 
-function cellParts(cell) {
-  const [row, lane] = cell.split('-');
-  return { row, rowIndex: ROWS.indexOf(row), lane: Number(lane) };
+/** A unit's `cell` field is a grid.js `slotKey` ("lane,depth") — not the
+ *  authored "front-2" vocabulary, which only names a slot inside a SIDE's
+ *  own band and cannot name the neutral cells a unit can now stand in (see
+ *  grid.js's module doc). `laneDepth()` is the one place battle.js reads
+ *  a unit's position back out for the arithmetic below. */
+function laneDepth(unit) { return parseSlotKey(unit.cell); }
+
+/** Human-readable form of a `slotKey` cell, for logs and aria-labels. */
+function describeCell(cell) {
+  const { lane, depth } = parseSlotKey(cell);
+  return describeSlot(lane, depth);
 }
 
 function makePlayer(member, state, index, count) {
   const [torso, legs] = ROLE_PARTS[member.role] ?? ROLE_PARTS.local;
-  const openingCells = count === 2 ? ['front-2', 'middle-1'] : ['front-2', 'middle-1', 'back-3'];
+  // BattleBuilder._default_player_slot(): front rank first, each row read
+  // from the centre outward; two fighters hold the centre lane in depth.
+  const slot = defaultPlayerSlot(index, count);
   const status = state.crewStatus[member.id];
   return {
     id: member.id,
     name: member.name,
     side: 'player',
     role: member.role,
-    cell: openingCells[index] ?? `back-${index + 1}`,
+    cell: slotKey(slot.lane, slot.depth),
     hp: 3,
     maxHp: 3,
     guard: member.role === 'muscle' ? 2 : 1,
@@ -42,12 +56,15 @@ function makePlayer(member, state, index, count) {
 
 function makeEnemy(opponent, index, openingNerve = 0) {
   const [torso, legs] = ROLE_PARTS[opponent.role] ?? ROLE_PARTS.local;
+  // BattleBuilder._opponent_to_unit(): parse_cell() always answers for the
+  // OPPOSITION band, centred onto the real board width.
+  const slot = parseCell(opponent.cell);
   return {
     id: opponent.id,
     name: opponent.name,
     side: 'enemy',
     role: opponent.role,
-    cell: opponent.cell,
+    cell: slotKey(slot.lane, slot.depth),
     hp: 3,
     maxHp: 3,
     guard: opponent.role === 'muscle' ? 2 : 1,
@@ -62,7 +79,28 @@ function makeEnemy(opponent, index, openingNerve = 0) {
   };
 }
 
-export function createBattleState(definition, crew, state) {
+/** BattleBuilder._cover_props(): cover is built into the LOCATION, and the
+ *  two half-boards are mirrors of one place, so a bench the slice names
+ *  exists identically for both sides — Godot's own `_cover_props` parses
+ *  every cover cell once (always via the opposition-band `parseCell`) and
+ *  tags it for side 0 and side 1 with the SAME lane/depth either way,
+ *  which is why side is not threaded through the lookup here: nothing in
+ *  the content yet needs a cover prop to sit at two different depths
+ *  depending on who is asking. "hard" cover would stop even a firearm;
+ *  nothing in the slice asks for that yet, so every authored effect is
+ *  soft cover until one does — same as equipment_rules.gd. */
+function buildCover(definition) {
+  const map = new Map();
+  for (const prop of definition.cover ?? []) {
+    for (const cell of prop.cells ?? []) {
+      const { lane, depth } = parseCell(cell);
+      map.set(slotKey(lane, depth), { hardBlock: false, softBlock: true, propId: prop.id, effect: prop.effect });
+    }
+  }
+  return map;
+}
+
+export function createBattleState(definition, crew, state, data) {
   const required = definition.player_deployed;
   if (crew.length < required) throw new Error(`${definition.id} requires ${required} deployed crew`);
   const players = crew.slice(0, required).map((member, index) => makePlayer(member, state, index, required));
@@ -83,7 +121,11 @@ export function createBattleState(definition, crew, state) {
     stance: STANCE.HOLD_THE_LINE,
     players,
     enemies,
-    cover: definition.cover,
+    // EquipmentRules.weapons(): every registered item, keyed by id, reach
+    // and tuning derived from its own `hold`/`reach_pattern` — not a
+    // hand-kept catalogue in this file.
+    weapons: weaponsFrom(data ? [...data.equipment.values()] : []),
+    cover: buildCover(definition),
     withdrawal: definition.withdrawal,
     negotiation: definition.negotiation,
     status: 'active',
@@ -125,23 +167,71 @@ export function selectStance(battle, stance) {
   return true;
 }
 
-export function attackable(attacker, target) {
-  if (!attacker?.alive || !target?.alive) return false;
-  const from = cellParts(attacker.cell);
-  const to = cellParts(target.cell);
-  const laneDistance = Math.abs(from.lane - to.lane);
-  if (attacker.equipment === 'first-handgun') return laneDistance === 0;
-  if (attacker.role === 'watcher' || attacker.role === 'fixer') return laneDistance <= 1;
-  return from.row === 'front' && to.row === 'front' && laneDistance <= 1;
+/** All living fighters standing anywhere on the board, keyed by slot — the
+ *  unified `_grid` fight_manager.gd walks: ONE grid, so a cell that holds a
+ *  body blocks EITHER side's line, not just an ally's. */
+function occupiedGrid(battle) {
+  const map = new Map();
+  for (const unit of battle.players.concat(battle.enemies)) {
+    if (unit.alive) map.set(unit.cell, unit);
+  }
+  return map;
+}
+
+function weaponFor(battle, unit) {
+  return battle.weapons?.[unit.equipment] ?? UNARMED;
+}
+
+/**
+ * FightManager._get_attack_targets(), ported. Non-piercing: the frontmost
+ * body or cover per lane; piercing: every body until hard cover. Reach
+ * comes entirely from the equipped item's `reach_pattern` (equipment.js) —
+ * nothing here reads `attacker.role`, which is what makes this the same
+ * test for every fighter regardless of which side authored them.
+ */
+export function attackTargets(battle, attacker) {
+  const targets = [];
+  if (!attacker?.alive) return targets;
+  const isPlayer = attacker.side === 'player';
+  const weapon = weaponFor(battle, attacker);
+  const laneSpread = weapon.laneSpread ?? 0;
+  const piercing = weapon.piercing ?? false;
+  const allowedRows = weapon.allowedRows ?? [ROW_FRONT];
+  const { lane: fromLane, depth: fromDepth } = laneDepth(attacker);
+
+  // allowedRows names rows within the ATTACKER'S OWN formation (front/
+  // middle/back); a fighter who has advanced out of their own band counts
+  // as front, by definition — Godot's ruling that crossing the whole board
+  // is a normal position, not an edge case.
+  let ownRow = rowOf(fromDepth, isPlayer);
+  if (ownRow < 0) ownRow = ROW_FRONT;
+  if (!allowedRows.includes(ownRow)) return targets;
+
+  const laneMin = Math.max(0, fromLane - laneSpread);
+  const laneMax = Math.min(LANES - 1, fromLane + laneSpread);
+  const toward = isPlayer ? 1 : -1;
+  const occupied = occupiedGrid(battle);
+
+  for (let lane = laneMin; lane <= laneMax; lane += 1) {
+    let d = fromDepth + toward;
+    while (d >= 0 && d < totalRows()) {
+      const cover = battle.cover.get(slotKey(lane, d));
+      if (cover?.hardBlock) break;
+      if (cover?.softBlock && !piercing) break;
+      const other = occupied.get(slotKey(lane, d));
+      if (other) {
+        if (other.side !== attacker.side && other.alive) targets.push(other);
+        if (!piercing) break;
+      }
+      d += toward;
+    }
+  }
+  return targets;
 }
 
 function attackableInBattle(battle, attacker, target) {
-  if (attackable(attacker, target)) return true;
-  if (!attacker?.alive || !target?.alive || cellParts(attacker.cell).row !== 'front') return false;
-  const opponents = (attacker.side === 'player' ? battle.enemies : battle.players).filter(item => item.alive);
-  const nearestRow = Math.min(...opponents.map(item => cellParts(item.cell).rowIndex));
-  return cellParts(target.cell).rowIndex === nearestRow
-    && Math.abs(cellParts(attacker.cell).lane - cellParts(target.cell).lane) <= 1;
+  if (!attacker?.alive || !target?.alive) return false;
+  return attackTargets(battle, attacker).some(item => item.id === target.id);
 }
 
 /**
@@ -222,16 +312,32 @@ export function brace(battle) {
   return { ok: true };
 }
 
+/**
+ * FightManager.free_slots_for(), ported — every unoccupied cell on the
+ * WHOLE shared board, not merely adjacent ones and not merely a unit's own
+ * half. Godot's own version loops `range(3)` rather than
+ * `FightBoard.total_rows()`, which is a leftover from before the board was
+ * unified (board.gd's own docstring: "a `range(3)` in the intent scan" was
+ * one of four places the three-row assumption hid, three of which were
+ * already found and fixed there) — as written it silently limits every
+ * fighter, opposition included, to depths 0-2 (the PLAYER's home band).
+ * That contradicts the owner ruling both `free_slots_for`'s own comment and
+ * board.gd quote outright ("crews start in their colour areas and can move
+ * to all coloured areas", "[the neutral rows] are ground a unit can be
+ * pushed or repositioned into") and has no adjacency check of its own to
+ * fall back on — a reposition here is a placement anywhere free, not a
+ * step. This port uses the documented-correct wide range rather than
+ * replicating what reads as an unported leftover; flagged here rather than
+ * silently diverging.
+ */
 export function validMoveCells(battle, unit = selectedUnit(battle)) {
   if (!unit) return [];
-  const occupied = new Set(battle.players.filter(item => item.alive && item.id !== unit.id).map(item => item.cell));
-  const from = cellParts(unit.cell);
+  const occupied = occupiedGrid(battle);
   const cells = [];
-  for (const row of ROWS) {
-    for (let lane = 1; lane <= 3; lane += 1) {
-      const cell = `${row}-${lane}`;
-      const next = cellParts(cell);
-      if (!occupied.has(cell) && Math.abs(next.rowIndex - from.rowIndex) + Math.abs(next.lane - from.lane) <= 1) cells.push(cell);
+  for (let lane = 0; lane < LANES; lane += 1) {
+    for (let depth = 0; depth < totalRows(); depth += 1) {
+      const cell = slotKey(lane, depth);
+      if (cell !== unit.cell && !occupied.has(cell)) cells.push(cell);
     }
   }
   return cells;
@@ -239,10 +345,10 @@ export function validMoveCells(battle, unit = selectedUnit(battle)) {
 
 export function moveUnit(battle, cell) {
   const unit = selectedUnit(battle);
-  if (!unit || battle.action !== 'move' || !validMoveCells(battle, unit).includes(cell)) return { ok: false, message: 'That paper cell is not reachable.' };
+  if (!unit || battle.action !== 'move' || !validMoveCells(battle, unit).includes(cell)) return { ok: false, message: 'That formation cell is not reachable.' };
   const old = unit.cell;
   unit.cell = cell;
-  battle.log.unshift(`${unit.name} repositions ${old} → ${cell}.`);
+  battle.log.unshift(`${unit.name} repositions ${describeCell(old)} → ${describeCell(cell)}.`);
   markActed(battle, unit);
   return { ok: true };
 }
@@ -334,11 +440,19 @@ export function autoCommand(battle) {
       if (s > bestTargetScore) { bestTargetScore = s; bestTarget = candidate; }
     }
 
-    const candidates = validMoveCells(battle, unit).filter(cell => cell !== unit.cell)
-      .sort((a, b) => cellParts(a).rowIndex - cellParts(b).rowIndex
-        || Math.abs(cellParts(a).lane - 2) - Math.abs(cellParts(b).lane - 2));
-    const forward = candidates.find(cell => cellParts(cell).rowIndex < cellParts(unit.cell).rowIndex);
-    const reposition = forward ?? candidates[0];
+    // "Forward" is toward the OPPOSITION along the shared depth axis — for
+    // the player that's increasing depth, for the opposition decreasing
+    // depth (grid.js: front sits nearest the middle for both sides).
+    // Candidates prefer the most-forward cell first, then the one closest
+    // to the lane centre, matching the old sort's intent on the wider board.
+    const { depth: fromDepth } = laneDepth(unit);
+    const toward = unit.side === 'player' ? 1 : -1;
+    const centre = laneCentre();
+    const candidates = validMoveCells(battle, unit)
+      .map(cell => ({ cell, ...parseSlotKey(cell) }))
+      .sort((a, b) => (toward * b.depth - toward * a.depth) || Math.abs(a.lane - centre) - Math.abs(b.lane - centre));
+    const forward = candidates.find(item => toward * (item.depth - fromDepth) > 0)?.cell;
+    const reposition = forward ?? candidates[0]?.cell;
 
     // Pick the highest-scoring TYPE (deterministic top pick — the same
     // choice Godot's own `_ai_select_command(preview=true)` makes; the

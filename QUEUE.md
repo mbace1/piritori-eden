@@ -8,6 +8,51 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## The grid rebuild (`VERSIONS.md` v4.15) — what it left open
+
+`battle.js` now runs the real `board.gd`/`battle_builder.gd`/
+`equipment_rules.gd` board instead of its own small invented one. Real gaps
+noticed while doing that, none fixed here:
+
+- **MARK, anchor cover, persistent injuries, and tempo/initiative are still
+  not ported.** `battle.js` still uses its own hp=3/guard=1-3 model and the
+  watcher/feature-phone guard-nerve shortcut standing in for MARK. Anchor
+  cover needs a skills system this build does not have at all. Comprehensive
+  parity ("until all Godot features are in the JS version") is a direction
+  from this session, not something one version closes.
+- **An AI crew member can now reposition into the OPPOSITION's own home
+  band**, since `free_slots_for()` has no adjacency check and this port
+  uses the wide, documented-correct depth range rather than Godot's own
+  `range(3)` (flagged as a likely bug in `battle.js`'s own comment — see
+  v4.15). Nothing currently stops `autoCommand()`'s "most forward" pick
+  from sending a unit deep into enemy territory alone. Untested in real
+  play: worth watching whether this reads as bold or as an exploit once a
+  human is choosing moves by hand rather than the deterministic auto-player.
+- **A live-play formation can now put a fighter ON a covered cell**, and
+  Godot's own cover check (ported faithfully) blocks even a shot at the
+  body standing on it for a non-piercing weapon. Thematically defensible —
+  they are standing behind their own cover — but never stated as a rule
+  anywhere in `COMBAT.md`, and worth a design word before a player wonders
+  why their own gunman is unhittable.
+- **`deployedCrew()` (`web/js/v3/state.js`) returns raw `content.crew`
+  entries, which have no `name` field** — crew names are generated
+  elsewhere at runtime (a comment in `v3-playthrough.cjs` confirms this:
+  "crew names are generated from the pools, never authored"), so any script
+  that builds a battle via `deployedCrew()` without going through the app's
+  normal recruit path gets `undefined` names in the battle log. Not a
+  regression from the grid rebuild — `makePlayer()`'s `name: member.name`
+  is unchanged — but it was invisible until this session's own debug
+  scripts printed battle logs directly. Not investigated further; flagged
+  for whoever next touches the naming pipeline.
+- **Weapon reach was tuned for a 3-lane board and is now read onto a
+  6-lane one** (the same open question `QUEUE.md`'s "The bigger board"
+  section already raises for the Godot side): `lane_spread` 0 now covers
+  one column of six rather than one of three. Nothing is broken and units
+  can act, but the numbers have not been re-judged against the wider board
+  from either side.
+
+---
+
 ## Sync fire was designed in the wrong build — caught and reconciled same day
 
 `VERSIONS.md` v4.11 built and shipped a real new mechanic (COMBAT.md §9.13)

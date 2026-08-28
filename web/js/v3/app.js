@@ -11,8 +11,10 @@ import {
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
 } from './battle.js?v=1';
+import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
+import { mountBattleStage3D, disposeBattleStage3D } from './render3d.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -95,6 +97,17 @@ function render() {
     news: renderNews,
   };
   root.innerHTML = (views[state.mode] ?? renderRoute)();
+
+  // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
+  // meshes, is one of the parity gaps this build owes Godot. Mounted here
+  // rather than inside renderBattle() because it needs the REAL <canvas>'s
+  // container already attached to the document (WebGL context creation
+  // reads its size), which is only true after innerHTML has landed.
+  if (state.mode === 'battle' && state.battle) {
+    mountBattleStage3D($('stage3dMount'), state.battle, data);
+  } else {
+    disposeBattleStage3D();
+  }
 }
 
 function mapPath(path) {
@@ -517,31 +530,50 @@ function renderEquipment(id) {
   </div>`;
 }
 
-function cellPosition(side, cell) {
-  const [rowName, laneText] = cell.split('-');
-  const row = ['front', 'middle', 'back'].indexOf(rowName);
-  const lane = Number(laneText) - 2;
-  const x = side === 'player' ? 43 - row * 10 + lane * 2.6 : 57 + row * 10 + lane * 2.6;
-  const y = 59 + lane * 13 + row * 2.5;
+/**
+ * Slot -> screen percentage. One unified board now (grid.js: a lane/depth
+ * pair, not a per-side layout) — depth runs vertically, player's own back
+ * row nearest the bottom of the stage and the opposition's back row
+ * nearest the top, lane spread evenly across the width. Independent of
+ * `worldFor()` in render3d.js (same slot vocabulary, a different, 3D
+ * output space) — see that file's note on why the two do not share units.
+ */
+function cellPosition(cell) {
+  const { lane, depth } = parseSlotKey(cell);
+  const x = 8 + (lane / (LANES - 1)) * 84;
+  const y = 88 - (depth / (totalRows() - 1)) * 76;
   return { x, y };
 }
 
-function renderFormationCells(battle, side) {
-  const valid = battle.action === 'move' && side === 'player' ? new Set(validMoveCells(battle)) : new Set();
-  const occupied = new Set((side === 'player' ? battle.players : battle.enemies).filter(unit => unit.alive).map(unit => unit.cell));
-  const cover = new Set(battle.cover.flatMap(item => item.cells));
-  return ['front', 'middle', 'back'].flatMap(row => [1, 2, 3].map(lane => {
-    const cell = `${row}-${lane}`;
-    const pos = cellPosition(side, cell);
-    const isValid = valid.has(cell) && !occupied.has(cell);
-    return `<button type="button" class="formation-cell ${isValid ? 'valid' : ''} ${cover.has(cell) ? 'cover' : ''}"
-      style="left:${pos.x}%;top:${pos.y}%" data-action="${isValid ? 'move-cell' : ''}" data-cell="${cell}"
-      aria-label="${side} ${row} lane ${lane}${cover.has(cell) ? ', cover' : ''}" ${isValid ? '' : 'disabled'}></button>`;
-  })).join('');
+/** A depth's row label, along the stage's left edge — the unified board
+ *  runs depth vertically now, so "front"/"back" is one label per depth
+ *  rather than one per side-and-row. */
+function rowLabel(text, depth) {
+  const y = 88 - (depth / (totalRows() - 1)) * 76;
+  return `<span class="row-label" style="left:4%;top:${y}%">${text}</span>`;
+}
+
+function renderFormationCells(battle) {
+  const valid = battle.action === 'move' ? new Set(validMoveCells(battle)) : new Set();
+  const occupied = new Set(battle.players.concat(battle.enemies).filter(unit => unit.alive).map(unit => unit.cell));
+  const cover = battle.cover; // Map: slotKey -> { propId, effect, ... }
+  const cells = [];
+  for (let lane = 0; lane < LANES; lane += 1) {
+    for (let depth = 0; depth < totalRows(); depth += 1) {
+      const cell = slotKey(lane, depth);
+      const pos = cellPosition(cell);
+      const isValid = valid.has(cell) && !occupied.has(cell);
+      const isCover = cover.has(cell);
+      cells.push(`<button type="button" class="formation-cell ${isValid ? 'valid' : ''} ${isCover ? 'cover' : ''}"
+        style="left:${pos.x}%;top:${pos.y}%" data-action="${isValid ? 'move-cell' : ''}" data-cell="${cell}"
+        aria-label="${esc(describeSlot(lane, depth))}${isCover ? ', cover' : ''}" ${isValid ? '' : 'disabled'}></button>`);
+    }
+  }
+  return cells.join('');
 }
 
 function renderUnit(unit, battle) {
-  const pos = cellPosition(unit.side, unit.cell);
+  const pos = cellPosition(unit.cell);
   const selected = unit.id === battle.selectedId && unit.side === 'player';
   const targetable = unit.side === 'enemy' && battle.action === 'attack';
   const disabled = unit.side === 'player' ? battle.acted.includes(unit.id) || battle.phase !== 'player' : !targetable;
@@ -576,13 +608,13 @@ function renderBattle() {
       <section class="battle-stage" aria-label="${esc(battle.format)} isometric formation battle">
         <img class="scene-image" src="${scene}" alt="">
         <img class="weather-layer front" src="${assetUrl(data, 'weather-rain-fine-v01')}" alt="">
+        <div class="stage3d-mount" id="stage3dMount" aria-hidden="true"></div>
         <p class="battle-objective"><b>${tr('objective')} · ${esc(battle.format)}</b><br>${esc(battle.objective)}</p>
-        <span class="row-label" style="left:19%;top:87%">BACK</span>
-        <span class="row-label" style="left:39%;top:87%">FRONT</span>
-        <span class="row-label" style="right:39%;top:87%">FRONT</span>
-        <span class="row-label" style="right:19%;top:87%">BACK</span>
-        ${renderFormationCells(battle, 'player')}
-        ${renderFormationCells(battle, 'enemy')}
+        ${rowLabel('BACK', depthOf(ROWS - 1, true))}
+        ${rowLabel('FRONT', depthOf(0, true))}
+        ${rowLabel('FRONT', depthOf(0, false))}
+        ${rowLabel('BACK', depthOf(ROWS - 1, false))}
+        ${renderFormationCells(battle)}
         ${battle.players.concat(battle.enemies).map(item => renderUnit(item, battle)).join('')}
       </section>
       <section class="battle-console">
@@ -689,7 +721,7 @@ function startBattle(id) {
   const definition = data.battles.get(id);
   const crew = deployedCrew(state, data);
   try {
-    state.battle = createBattleState(definition, crew, state);
+    state.battle = createBattleState(definition, crew, state, data);
     state.mode = 'battle';
   } catch (error) {
     logToast(error.message);

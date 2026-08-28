@@ -10,6 +10,233 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.15 — 2026-08-28
+
+**The grid rebuild: `battle.js`'s board IS `board.gd` now, not a JS
+invention of its own.** Owner ruling, this same day: "the grid structure
+was already set and much bigger. please check Godot repo for actual
+details" — followed by "use all the Godot info, never revert to the JS
+version. do this until all Godot features are in the JS version." v4.14's
+`render3d.js` had positioned real meshes correctly onto `battle.js`'s OWN
+small mirrored 3-lane board, which was never a port of anything: two
+private per-side grids, adjacency-limited reposition, and role-based reach
+shortcuts (`role === 'watcher' || role === 'fixer'`, a hardcoded
+`first-handgun` special case) hand-invented for this build and never
+checked against Godot's real combat code. This version replaces that board
+and its reach/movement rules wholesale with a faithful port of
+`godot/scripts/fight/board.gd`, `battle_builder.gd`, and
+`equipment_rules.gd`.
+
+- **`web/js/v3/grid.js` (new)** — `FightBoard`, ported: 6 lanes, ONE unified
+  depth axis shared by both sides (`totalRows() = 8`: 3 player rows + 2 real,
+  occupiable neutral rows + 3 opposition rows), front nearest the midline
+  for both sides, `depthOf`/`rowOf`/`bandOf` as the exact inverse pair
+  `board.gd` defines. Authored content ("front-2") is centred onto the wider
+  canon board via `AUTHORED_LANES`/`authoredLaneOffset()`
+  (`battle_builder.gd`'s `_authored_lane_offset()`), and `deployOrder()` /
+  `defaultPlayerSlot()` port `_deploy_order()` / `_default_player_slot()`
+  exactly — front rank first, each row read from the lane centre outward,
+  two-fighter crews holding the centre lane at two depths instead of
+  spreading wide.
+- **`web/js/v3/equipment.js` (new)** — `EquipmentRules.weapons()`, ported:
+  the five `reach_pattern`s (`front-same-lane`, `front-same-or-adjacent-
+  lane`, `clear-same-lane-through-front`, `front-same-lane-through`,
+  `front-wide-short`) and the `HOLD_TUNING` harm/nerve table, read straight
+  off each item's own `hold`/`reach_pattern` in `content.equipment` — not a
+  hand-kept catalogue in `battle.js`.
+- **Reach is equipment-only now — nothing reads `role`.** The old
+  `role === 'watcher' || role === 'fixer'` lane-only exception and the
+  `first-handgun` special case are both gone; `attackTargets()` (ported from
+  `FightManager._get_attack_targets()`) walks the shared depth axis outward
+  from the attacker per lane, checking cover then occupancy, non-piercing
+  stopping at the first body or soft cover, piercing continuing to hard
+  cover. A fighter who has advanced out of their own band counts as FRONT
+  by definition (`row_of()` returning -1 falls back to `ROW_FRONT`) — a
+  normal position on this board, not an edge case, and now vectored
+  (`sync@2`'s `advanced-past-own-band-still-counts-as-front`).
+- **Cover is real now.** `battle.cover` (built from each battle's own
+  `cover` field via the same `parseCell()` opponent cells use) blocks a
+  non-piercing walk at the exact depth it sits on — including the depth a
+  body is standing on, since Godot's own cover check runs before the
+  occupancy check at each step. `battle-courtyard-3v3`'s "stone-bin" at
+  the opposition's front-1 is a genuine no-shot cell now; the sync-fire
+  vectors were moved off it on purpose, not by accident (see below).
+- **Reposition is a placement anywhere free, not a step.** `free_slots_for()`
+  (ported as `validMoveCells()`) has no adjacency check in Godot at all —
+  the old build's Manhattan-distance-1 rule was never a port either. Godot's
+  own version loops `range(3)` rather than `FightBoard.total_rows()`, which
+  — per `board.gd`'s own docstring, "a `range(3)` in the intent scan" was
+  one of four places a leftover three-row assumption hid, three of which
+  were already found and fixed there — reads as an unported leftover: it
+  would silently cap every fighter, opposition included, at depths 0-2 (the
+  PLAYER's home band), contradicting both the function's own comment
+  ("free cells on this unit's own half-board") and the owner's board.gd
+  ruling ("crews start in their colour areas and can move to ALL coloured
+  areas"; the neutral rows are explicitly "ground a unit can be pushed or
+  repositioned into"). This port uses the documented-correct wide range
+  rather than replicating what reads as a bug — flagged in `battle.js`'s
+  own doc comment rather than silently diverging, for whoever ports
+  `free_slots_for()` next to weigh.
+- **The 2D formation board (`app.js`) and the 3D stage (`render3d.js`) both
+  read the SAME `grid.js` slot** a unit's `cell` now carries (a `slotKey`
+  — `"lane,depth"` — not the authored "front-2" text, which cannot name the
+  neutral cells a unit can now stand in). `cellPosition()` lays depth out
+  vertically (player's own back row at the bottom, the opposition's at the
+  top) across one continuous 48-cell board instead of two mirrored 3×3
+  halves; `worldFor()` maps the same slot into 3D space, with the camera
+  and ground plane resized for a board that is now deeper than it is wide.
+  `describeSlot()` (grid.js) extends Godot's own `cell_name()` — which is
+  only ever called on a side's own band — to label the real neutral cells
+  too, for logs and aria-labels.
+- **`web/test/v3-battle.mjs`, `port/vectors.mjs`'s sync-fire vectors, and
+  `web/test/v3-playthrough.cjs` all updated for the real board**: cells are
+  set via `parseCellFor()` rather than assigned as raw authored strings
+  (which are no longer what `unit.cell` holds); the sync-fire vectors'
+  `watcher-and-fixer-reach-by-lane-alone-ignoring-row` scenario — testing a
+  rule that no longer exists — is replaced with
+  `advanced-past-own-band-still-counts-as-front`, a real ported rule worth
+  protecting; the formation-cell count assertion moves from 18 (two mirrored
+  3×3 halves) to 48 (one 6×8 board). The 2v2 smoke battle's auto-play safety
+  cap moves from 60 to 150 rounds: the ported deployment for a 2-fighter
+  crew no longer happens to land lane-for-lane with this battle's authored
+  opponent positions the way the old board's hand-picked opening cells
+  coincidentally did, so `HOLD_THE_LINE`'s real GUARD-over-REPOSITION
+  weighting (`stance.js`, ported from `fight_manager.gd`) makes an
+  out-of-reach crew brace far more often than it drifts into range before
+  the fight resolves — a real consequence of the port, not a bug in it.
+
+**Verified**: `map/validate-map.mjs`, `content/validate-slice.mjs`,
+`v3-contract.mjs`, `v3-state.mjs`, `v3-battle.mjs`, `missions/test/
+model.mjs`, `market/test/model.mjs`, `port/vectors.mjs --check` (`sync`
+moved `1 -> 2`, four other vector files unchanged) all green.
+`v3-playthrough.cjs` (real Chromium) passes the same 23/28 it passed before
+this version, including the two checks this version touches directly
+("2v2 renders four modular combatants", "the shared formation board
+renders every lane and depth" — 48, not 18); the 5 pre-existing failures
+(a stale `hub/shell.js?v=` reference this repo has never carried a real
+`hub/` for, a map-anchor-count assertion, and two `.toko` viewport checks
+tracked in `QUEUE.md`) reproduce identically on `main` before this change
+and are untouched by it — confirmed by running the same gate against a
+stash of this version's diff. The v4.14 3D stage was also re-verified by
+screenshot against the new coordinates (real Playwright + SwiftShader,
+not "no console errors"): four distinct meshes at four distinct depths on
+the wider ground plane, no new errors beyond that same pre-existing
+`hub/shell.js` 404.
+
+**Not attempted here — comprehensive parity is a direction, not one
+version's scope, and this is the grid/reach/cover/deployment slice of it:**
+
+- **MARK** (`fight_manager.gd`'s real Spotter verb — a duration-tracked
+  intent-priority command, `Command.Type.MARK`, `_resolve_mark()`,
+  `MARK_ROUNDS_BASE`/`MARK_ROUNDS_CALL_IT`/`MARK_WHOLE_FIGHT`) is a
+  separate, larger system than reach and is NOT ported; `battle.js` keeps
+  its own much simpler watcher/feature-phone guard-and-nerve shortcut,
+  unchanged, now gated by the same universal reach test as every other
+  attack rather than a role exception.
+- **Anchor cover** (`fight_manager.gd`'s `anchor_cover_at()` — a standing
+  fighter as cover, gated by a `GameState.skills_of()` perk) depends on a
+  skills system this build does not have; only prop cover from each
+  battle's own `cover` field is ported.
+- **Persistent injuries, tempo/initiative ordering, and the full
+  condition/nerve/guard numeric model** (`fight_manager.gd`'s `_roll_range`,
+  `_apply_perks_to`, the tempo queue) are untouched — `battle.js` still
+  uses its own simpler hp=3/guard=1-3 model from before this version.
+- **`?rows=&lanes=` live board-size overrides** (`board.gd`'s own debug
+  query) are not plumbed through `web/` — `grid.js`'s `ROWS`/`LANES` are
+  the canon default only.
+
+### Port
+- **vectors:** `sync@2` — five rows, all cross-checked against the new
+  equipment-driven reach and the real board; `advanced-past-own-band-
+  still-counts-as-front` is new.
+- **data:** unchanged — `content.equipment`'s `hold`/`reach_pattern`/
+  `unlock` fields are read directly, same as `equipment_rules.gd` reads
+  them.
+- **rules:** THIS is the port, running Godot -> web for the first time
+  under the 2026-08-28 addendum (`DESIGN_AUTHORITY.md`) — `board.gd`,
+  the grid half of `battle_builder.gd`, and `equipment_rules.gd` are now
+  canonical on the Godot side and mirrored here; sync fire (`sync@2`)
+  remains web-designed-first per PORTING.md §3.2 and is unaffected by
+  which side owns the board under it.
+- **meshes:** none new.
+- **presentation:** `render3d.js`'s `worldFor()` and `app.js`'s
+  `cellPosition()` both moved to the new board; no art or camera pass.
+- **status:** the grid/reach/cover/deployment slice landed. MARK, anchor
+  cover, persistent injuries, tempo/initiative, and the map/economy gaps
+  named in the 2026-08-28 audit remain open — see `QUEUE.md`.
+
+## v4.14 — 2026-08-28
+
+**The first slice of 3D parity: real `.glb` cast rendering live in the
+browser.** `DESIGN_AUTHORITY.md`'s addendum this same day — "that ruling
+only starts AFTER js has feature and asset parity with Godot" — named this
+as the single biggest gap: `web/` rendered battles as flat DOM images;
+Godot's `battle_stage_3d.gd` renders the real registered meshes.
+
+- **`web/vendor/`** gains a local Three.js r167 (`three.module.min.js` +
+  `jsm/loaders/GLTFLoader.js` + its `BufferGeometryUtils.js` dependency),
+  copied from the same MIT-licensed vendored copy this repo's sibling
+  projects already use (`eeri/vendor/`) rather than a CDN — no new build
+  step, matching this project's own "no new dependencies without asking"
+  rule; flagged rather than silently added.
+- **`web/js/v3/render3d.js`** loads and positions the SAME registered
+  assets every other screen resolves through `assetUrl()` — `art/v3/
+  manifest.json`'s `cast3d-<role>-v01` ids, one id convention shared with
+  Godot's `UNIT_BY_ROLE`, not a second path table. Deliberately NOT
+  cached/cloned per unit: Three.js's default `Object3D.clone()` does not
+  correctly share a `SkinnedMesh`'s bone bindings, so two units of the same
+  role would move together if the same loaded template were reused. A
+  fresh load per unit is correct at this battle's scale (≤6 bodies);
+  `SkeletonUtils.clone()` is the real fix once animation makes sharing
+  worth it.
+- **Additive, verified by screenshot, not by "no console errors."** The
+  existing flat 2D unit sprites stay in the DOM underneath the 3D canvas
+  and only hide (`.stage3d-ready`, CSS) once EVERY unit's mesh has actually
+  loaded — a partial failure (one 404) leaves the 2D fallback showing for
+  the whole battle rather than mixing a rendered body with a blank one. A
+  browser with no WebGL, or a network that drops a mesh, still gets the
+  complete screen it always had.
+- **A real bug caught before it shipped**: the first cut only vendored
+  `three.module.min.js` and `GLTFLoader.js`; GLTFLoader's own static import
+  of `BufferGeometryUtils.js` 404'd, which — because it's a module-graph
+  failure, not a runtime one — broke the ENTIRE app's boot, not just the 3D
+  feature. Found by an actual Playwright capture (headless Chromium +
+  `--use-gl=swiftshader`) timing out on the app's own boot check, not by
+  reading the diff.
+- **`WebGLRenderer` is disposed and recreated on every render**, not
+  reused: `root.innerHTML = view()` destroys the `<canvas>` on every single
+  battle-mode re-render (any action), so a renderer that does not release
+  its old context leaks one per click — browsers cap live WebGL contexts
+  (commonly 8–16), so a battle would go dark a few actions in without this.
+
+**Not attempted here, and this is one slice of a much larger gap, not the
+whole of it:**
+
+- **No animation.** `cast3d/clips/*` (idle/attack/behit/dead) is not wired;
+  every model renders in its bind pose.
+- **The stage itself is still the flat 2D scene image**, not the registered
+  `stage3d/*.glb` arenas — the 3D canvas currently only replaces the CAST,
+  sitting over the same background this build already had.
+- **No `ART_BIBLE` §13.2 stylisation** (the posterize/CRT treatment the
+  presenter gets) — this is a plain lit render, unstylised on purpose, to
+  prove the pipeline before spending effort on a look.
+- **Camera, lighting and ground plane are first-honest-look numbers**, not
+  measured — `PHASING.md` standing rule 4 (an art change ends in a picture)
+  applies to whatever comes next here too.
+- **No mobile/perf budget check.** `JS_BUILD_CATCHUP.md` §4 already found a
+  Pixel 10 black-screens on Godot's own web export under an uncompressed
+  182 MB texture load; this build now carries the same textured meshes and
+  has not been measured on a real device at all.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none new — uses the meshes already registered.
+- **presentation:** `web/`-only; this is closing a `web/` gap against
+  Godot, not something for Godot to re-port.
+- **status:** first slice landed. Animation, the 3D stage background, and
+  the art pass are open — see `QUEUE.md`.
+
 ## v4.13 — 2026-08-28
 
 **Sync fire reconciled to the correct build.** v4.11 designed and shipped it

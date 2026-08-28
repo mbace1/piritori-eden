@@ -507,6 +507,21 @@ button { -webkit-tap-highlight-color: transparent; }
 .battle-stage { position: relative; min-height: 440px; overflow: hidden; background: #141921; border-bottom: 2px solid #80684b; }
 .battle-stage > .scene-image { position: absolute; inset: 0; filter: brightness(.66) saturate(.72) contrast(1.08); }
 .battle-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6,11,15,.38), transparent 25% 75%, rgba(6,11,15,.38)), linear-gradient(transparent 55%, rgba(4,8,12,.45)); }
+/* First 3D-parity slice (DESIGN_AUTHORITY.md addendum 2026-08-28): the real
+   cast3d/stage3d meshes, rendered live, sitting over the flat 2D scene it is
+   replacing rather than deleting it — if a model fails to load the 2D plate
+   and the existing unit tokens underneath are still a complete, playable
+   screen, not a hole. z-index above the scene image and its gradient veil,
+   below the formation cells/unit tokens/objective text (§battle-objective is
+   z-index 8) so the HTML hit targets a player actually taps stay on top. */
+.stage3d-mount { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.stage3d-mount .stage3d-canvas { display: block; width: 100%; height: 100%; }
+/* render3d.js sets this once every unit's real mesh has actually loaded —
+   only then does the flat sprite ART stop drawing over it. The label/track
+   text and the button itself (the real click target) are untouched, so a
+   partially-loaded or WebGL-less browser still gets the complete 2D
+   fallback it always had; only the art layer on top of it ever changes. */
+.battle-stage.stage3d-ready .unit-body { visibility: hidden; }
 .battle-objective {
   position: absolute;
   z-index: 8;

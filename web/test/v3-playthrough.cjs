@@ -172,8 +172,11 @@ server.listen(0, '127.0.0.1', async () => {
     });
     await page.waitForSelector('.battle-stage');
     ok('2v2 renders four modular combatants', await page.locator('.unit-token').count() === 4);
-    ok('both sides expose front, middle and back formation cells',
-      await page.locator('.formation-cell').count() === 18);
+    // The board is one unified 6-lane x 8-depth grid now (grid.js, ported
+    // from godot/scripts/fight/board.gd) — 48 cells total, not two mirrored
+    // 3x3 halves.
+    ok('the shared formation board renders every lane and depth',
+      await page.locator('.formation-cell').count() === 48);
     const beforeRound = await page.evaluate(() => window.__ptv3.state.battle.round);
     await page.locator('[data-action="auto"]').click();
     const afterAuto = await page.evaluate(() => ({
