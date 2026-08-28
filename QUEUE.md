@@ -234,19 +234,23 @@ written, with one corroboration:
 Re-checked 2026-08-28 against `art/v3/manifest.json` and `battle_stage_3d.gd`
 directly, not the earlier note's memory of either:
 
-- **`art/v3/cast3d/` IS now registered — but the runtime still doesn't read
-  the registration, which is the half of the complaint that actually
-  mattered.** `art/v3/manifest.json` carries 19 real entries now
-  (`cast3d-muscle-v01`, `cast3d-driver-v01`, … `approval_status:
-  semi-approved`, `production_status: prototype-only`) — so "staged but NOT
-  registered" is literally false. But `battle_stage_3d.gd`'s `UNIT_BY_ROLE`
-  and `CLIPS` dicts still hold raw `res://data/art/cast3d/...` paths, and
-  neither `battle_stage_3d.gd` nor `content_registry.gd` ever resolves a
-  cast3d id through the manifest to get there — grepped for it, nothing
-  calls it that way. The registration is real and currently decorative: an
-  entry exists to look an id up by, and nothing looks one up. That is a
-  smaller, more precise bug than "not registered," and worth its own line
-  rather than being marked simply fixed.
+- ~~**`art/v3/cast3d/` IS now registered — but the runtime still doesn't read
+  the registration.**~~ **Gated instead of rewritten, 2026-08-28.** A full
+  runtime rewrite (`UNIT_BY_ROLE` from `const` to a lookup resolved through
+  `ContentRegistry.art` at load) was scoped and set aside: GDScript `const`
+  must be compile-time-literal, so this would have meant `static var` plus a
+  `_static_init()`-or-equivalent that reads an autoload — real timing risk
+  to a 258-check passing suite, for a fix whose rendered RESULT is identical
+  either way (the hardcoded paths already matched the registered files).
+  Took the house-style answer instead: `_test_battle_stage_matches_manifest()`
+  in `test_battle.gd`, the same shape as `sync-data.mjs --check`/the vector
+  files — asserts `UNIT_BY_ROLE`/`UNIT_VARIANTS` agree with the manifest's
+  registered `mesh-3d` roles, verified both ways (fails when a hardcoded
+  path is pointed at a real file the manifest does NOT say for that role —
+  the actual failure mode this line worried about, since a plain
+  file-exists check does not catch it). The registration is no longer
+  merely decorative: nothing reads it live, but drift between it and the
+  hardcode now fails loudly instead of silently.
 - **Textures are "uncapped," but the 6.5MB figure is stale — the underlying
   gap is not.** Current `cast3d/*_texture_0.png` files run 280-470KB each,
   not 6.5MB; citing the old number now would overstate the problem. But

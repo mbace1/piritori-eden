@@ -10,6 +10,40 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.8 — 2026-08-28
+
+**The cast3d registration gap closed as a gate, not a rewrite.** `QUEUE.md`'s
+"3D units" section had one item left unresolved from v4.6's pass: models are
+registered in `art/v3/manifest.json` with real ids, but `battle_stage_3d.gd`
+resolves them through hardcoded `res://` paths and never reads the
+registration — decorative, not load-bearing.
+
+- **Considered and set aside**: making `UNIT_BY_ROLE` resolve through
+  `ContentRegistry.art` at runtime. GDScript `const` must be a compile-time
+  literal, so this meant converting to `static var` plus static
+  initialization that depends on an autoload being ready — real timing
+  risk to `test_battle.gd`'s 258 passing checks, for a change whose
+  rendered output is identical either way (the hardcoded paths already
+  matched what's registered).
+- **Done instead**: `_test_battle_stage_matches_manifest()`, new in
+  `test_battle.gd` — the same discipline `godot/tools/sync-data.mjs
+  --check` and the `port/vectors/` files already use elsewhere in this
+  repo, applied to this one spot. Asserts `UNIT_BY_ROLE`/`UNIT_VARIANTS`
+  agree with the manifest's registered `mesh-3d` roles. Verified both
+  directions before trusting it: passes clean, and fails precisely when a
+  hardcoded path is pointed at a real, existing file the manifest does NOT
+  say for that role (the actual failure mode worth catching — a plain
+  file-exists check passes on a wrong-but-real file and would have missed
+  it).
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **meshes:** none.
+- **presentation:** none — Godot-only, a test addition. No behavior change
+  on either build.
+- **status:** landed. `QUEUE.md`'s "3D units" line for this is closed.
+
 ## v4.7 — 2026-08-28
 
 **Stances land in `web/` — the first rule ported the reverse direction, and

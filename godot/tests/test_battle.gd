@@ -45,6 +45,7 @@ func _ready() -> void:
 	_test_hired_crew_can_fight()
 	_test_aftermath()
 	_test_every_role_has_a_body()
+	_test_battle_stage_matches_manifest()
 	_test_every_stage_exists()
 	_test_unit_variants()
 	_test_ground_fill()
@@ -1176,6 +1177,67 @@ func _test_every_role_has_a_body() -> void:
 			fell_back.append(String(role))
 	check("and no role is silently wearing the fallback",
 		fell_back.is_empty(), " ".join(fell_back))
+
+
+## `UNIT_BY_ROLE`/`UNIT_VARIANTS` are hardcoded `res://` paths, not resolved
+## from `art/v3/manifest.json` at runtime — QUEUE.md 2026-08-28: the models
+## ARE registered there (real ids, `approval_status`), but nothing ever reads
+## the registration, which makes it decorative rather than load-bearing. A
+## full runtime rewrite (const -> autoload-backed lookup) was judged not
+## worth the risk to a passing 258-check suite for a fix whose visible result
+## is identical either way. This is the cheaper, house-style answer instead:
+## a gate that fails the moment the two representations disagree, same shape
+## as `sync-data.mjs --check`/the vector files, so the hardcode cannot drift
+## from the manifest silently the way it already had for cast3d.
+func _test_battle_stage_matches_manifest() -> void:
+	print("\nBattleStage3D's hardcoded paths match the manifest")
+	var by_role: Dictionary = {}  # role -> Array[String] of "res://data/art/" + file
+	for asset in ContentRegistry.art.get("assets", []):
+		if String(asset.get("kind", "")) != "mesh-3d":
+			continue
+		var role := String(asset.get("role", ""))
+		if role == "":
+			continue
+		var path := "res://data/art/" + String(asset.get("file", ""))
+		if not by_role.has(role):
+			by_role[role] = []
+		by_role[role].append(path)
+
+	# `police` is a deliberate, documented alias onto `enforcer`'s glb (no
+	# uniformed-police model exists yet) — not a manifest role of its own.
+	var aliases := {"police": "enforcer"}
+
+	var mismatched: PackedStringArray = []
+	for role in BattleStage3D.UNIT_BY_ROLE:
+		if BattleStage3D.UNIT_VARIANTS.has(role):
+			continue  # checked separately below, against the full variant set
+		var manifest_role: String = aliases.get(role, role)
+		var registered: Array = by_role.get(manifest_role, [])
+		var hardcoded := String(BattleStage3D.UNIT_BY_ROLE[role])
+		if registered.size() != 1 or registered[0] != hardcoded:
+			mismatched.append("%s: hardcoded=%s manifest=%s" % [role, hardcoded, str(registered)])
+	check("every single-body role's hardcoded path is the manifest's own",
+		mismatched.is_empty(), " | ".join(mismatched))
+
+	for role in BattleStage3D.UNIT_VARIANTS:
+		var hardcoded_set: Dictionary = {}
+		for p in BattleStage3D.UNIT_VARIANTS[role]:
+			hardcoded_set[String(p)] = true
+		var manifest_set: Dictionary = {}
+		for p in by_role.get(role, []):
+			manifest_set[String(p)] = true
+		check("%s's variant set matches the manifest's %s-role bodies" % [role, role],
+			_same_set(hardcoded_set, manifest_set),
+			"hardcoded=%s manifest=%s" % [str(hardcoded_set.keys()), str(manifest_set.keys())])
+
+
+func _same_set(a: Dictionary, b: Dictionary) -> bool:
+	if a.size() != b.size():
+		return false
+	for k in a:
+		if not b.has(k):
+			return false
+	return true
 
 
 ## The fight has to be able to SAY what happened. Every result was computed and
