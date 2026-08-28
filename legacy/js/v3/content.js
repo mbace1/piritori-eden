@@ -1,6 +1,17 @@
-const CONTENT_URL = '../../content/era1-slice-v1.json';
-const MAP_URL = '../../map/kallio-era1-2003-v1.json';
-const ART_URL = '../../art/v3/manifest.json';
+// Repo-root relative. This file lives at legacy/js/v3/, so three levels up
+// (../../../) reaches the repo root — content/, map/ and art/v3/ live there
+// directly, the same canonical files godot/tools/sync-data.mjs generates
+// Godot's own copy from. There is no local copy to keep in sync here; a
+// plain fetch() is not sandboxed the way Godot's res:// is.
+//
+// Fixed 2026-08-28: these were '../../' (two levels), which resolves to
+// legacy/content/ — a directory that has never existed in this repo. It was
+// only ever correct when this file lived one level deeper, inside the old
+// Suds-Jack monorepo layout that predates this repo's 2026-08-21 split. The
+// page has been unable to load its own content since that split.
+const CONTENT_URL = '../../../content/era1-slice-v1.json';
+const MAP_URL = '../../../map/kallio-era1-2003-v1.json';
+const ART_URL = '../../../art/v3/manifest.json';
 
 async function readJson(url) {
   const response = await fetch(new URL(url, import.meta.url));
@@ -11,13 +22,13 @@ async function readJson(url) {
 function flattenArt(manifest) {
   const byId = new Map();
   for (const group of manifest.assets) {
-    if (group.file) byId.set(group.id, { ...group, url: `art/v3/${group.file}` });
+    if (group.file) byId.set(group.id, { ...group, url: `../art/v3/${group.file}` });
     for (const member of group.members ?? []) {
       byId.set(member.id, {
         ...member,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `art/v3/${member.file}`,
+        url: `../art/v3/${member.file}`,
       });
     }
     for (const frame of group.frames ?? []) {
@@ -27,7 +38,7 @@ function flattenArt(manifest) {
         id: frameId,
         approval_status: group.approval_status,
         kind: group.kind,
-        url: `art/v3/${frame.file}`,
+        url: `../art/v3/${frame.file}`,
       });
     }
   }
@@ -90,6 +101,11 @@ export function shortestPath(map, from, to) {
   return [];
 }
 
+// A SECOND, SEPARATE instance of the same fix, one level shallower — this
+// one is a DOCUMENT-relative path, not a module-relative one. It becomes an
+// <img src="..."> in the DOM built by legacy/index.html, so it resolves
+// against THAT file's own location (legacy/index.html), not against
+// content.js — one directory to climb out of legacy/, not three.
 export function assetUrl(data, id) {
   return data.art.get(id)?.url ?? '';
 }

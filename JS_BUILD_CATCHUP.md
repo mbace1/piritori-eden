@@ -5,11 +5,20 @@ forward. It is an inventory and a status report, not instructions: it says what
 exists, where it is, and which decisions have been made since the JS build
 stopped.
 
-**Where the JS build stands today.** The live JS instance on the arcade hub is
-`piritori/` on Suds-Jack's `gh-pages`, deployed **20 Aug 2026** as "Piritori v3
-vertical slice". Its source is `legacy/` in this repo, parked 21 Aug when the
-Godot port became the build. It renders with `getContext('2d')` — there is no
-WebGL in it. Everything below post-dates it.
+**Update, 2026-08-28 — the JS build leads now.** `DESIGN_AUTHORITY.md`'s
+2026-08-28 ruling reverses the framing this whole document was written under:
+new gameplay is designed on the JS build first, Godot ports it after. The
+paragraph below is kept as history — it explains why the build was unable to
+load its own content, which mattered for exactly the reason this document
+gives, and every one of the three bugs it names was found and fixed today. See
+`QUEUE.md`, 2026-08-28, for the fix itself.
+
+**Where the JS build stood, and why it could not load.** The live JS instance
+on the arcade hub is `piritori/` on Suds-Jack's `gh-pages`, deployed **20 Aug
+2026** as "Piritori v3 vertical slice". Its source is `legacy/` in this repo
+(name unchanged — a rename to something clearer was proposed and blocked by
+tooling, not yet done). It renders with `getContext('2d')` — there is no
+WebGL in it. Everything below post-dates the 20 Aug deploy.
 
 The one thing to read before anything else: **`PHASING.md` §1.055, the 3D
 ruling of 22 Aug** — *"change the goal from 2d to 3d"*. It landed the day after

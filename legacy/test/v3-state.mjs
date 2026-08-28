@@ -5,8 +5,8 @@ import {
   advanceSchedule, transactOffer, requirementStatus,
 } from '../js/v3/state.js';
 
-const content = JSON.parse(await readFile(new URL('../content/era1-slice-v1.json', import.meta.url)));
-const map = JSON.parse(await readFile(new URL('../map/kallio-era1-2003-v1.json', import.meta.url)));
+const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
+const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const data = {
   content,
   encounters: new Map(content.encounters.map(item => [item.id, item])),
