@@ -10,6 +10,54 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.20 — 2026-08-28
+
+**In-combat item use, ported.** Second item on the audited "continue in
+order" list: `fight_manager.gd`'s `Command.Type.ITEM` — a fighter using a
+carried consumable mid-fight — had no reference anywhere in `web/js/v3`.
+
+- **`equipment.js` gains `itemsFrom()`** — `EquipmentRules.items()`
+  ported exactly: every `content.equipment` entry with `kind: 'support'`
+  gets the same generic `{effectType:'signal', magnitude:1, target:
+  'ally', singleUse:false}` shape. Today that is exactly one entry
+  (feature-phone) — the slice's only support item.
+- **`battle.js` gains `useItem()`**, ported from `_resolve_item()`'s
+  effect-type match. Honest about what it found: Godot's own match has no
+  `'signal'` branch, so using the slice's one registered item is a legal
+  command on BOTH builds that logs and spends the action without changing
+  a single stat — not a gap this port introduced, a gap it faithfully
+  reproduced rather than quietly "fixed" by inventing an effect Godot
+  itself doesn't have. `restore_condition` and `restore_nerve` — the two
+  effect types this build actually has a stat for — are real and would
+  fire the moment content registers an item that uses them.
+- **`item_ids` follows `battle_builder.gd`'s exact rule**: a crew
+  member's `initial_equipment` filtered to `feature-phone` specifically
+  — other carried equipment is a held WEAPON, not a usable item — and
+  opponents never get any (`_opponent_to_unit()` sets none either).
+- **A "USE · Feature-phone" button** appears in the battle console only
+  for a unit that actually carries one, one click like brace (no target
+  picker — Godot's `target: 'ally'` implies one, building it for an item
+  with no observable effect on either build is not attempted here).
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check`
+green, `v3-playthrough.cjs` unchanged at 23/28. A real Playwright run
+used the item through the actual UI and confirmed the log line, the
+spent action, and no stat change (the honest, faithful result).
+
+**Not attempted:** wiring item use into `autoCommand()`'s AI scoring —
+Godot's own comment on its flat `0.5` score ("extend per item type")
+already marks it a placeholder, and risking the tested, previously-
+regressed auto-play scorer for a currently-inert command was judged not
+worth it this pass. An ally-target picker, per the note above.
+
+### Port
+- **rules:** ported — nothing to re-port, Godot has the canonical copy.
+- **data/vectors/meshes:** unchanged. **presentation:** the button is
+  `web/`-only UI.
+- **status:** item use lands. Next in order: the hiring pool
+  (`crew_generator.gd`), then `roster.mjs`'s name-pairing bug — see
+  `QUEUE.md`.
+
 ## v4.19 — 2026-08-28
 
 **Police and heat (COMBAT.md §9.5), ported.** Owner: "continue in order" —

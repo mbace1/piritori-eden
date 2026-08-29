@@ -7,7 +7,7 @@ import {
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
 import {
-  createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace,
+  createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
@@ -35,6 +35,7 @@ const UI = {
     commit: 'PIN ROUTE', clear: 'CLEAR', send: 'SEND ONE PACK', objective: 'OBJECTIVE',
     start_training: 'START TRAINING',
     attack: 'ATTACK', move: 'REPOSITION', brace: 'BRACE', end: 'END TEAM TURN',
+    use_item: 'USE',
     auto: 'AUTO TEAM', withdraw: 'WITHDRAW', negotiate: 'NEGOTIATE',
     stance: 'STANCE', stance_AGGRESSIVE: 'AGGRESSIVE', stance_DEFENSIVE: 'DEFENSIVE', stance_HOLD_THE_LINE: 'HOLD THE LINE',
     police_here: 'POLICE ARE HERE', police_one_down: 'of the crew is on the ground.',
@@ -47,6 +48,7 @@ const UI = {
     commit: 'KIINNITÄ REITTI', clear: 'TYHJENNÄ', send: 'LÄHETÄ YKSI PAKKAUS', objective: 'TAVOITE',
     start_training: 'ALOITA HARJOITUS',
     attack: 'HYÖKKÄÄ', move: 'VAIHDA ASEMAA', brace: 'SUOJAA', end: 'LOPETA VUORO',
+    use_item: 'KÄYTÄ',
     auto: 'AUTO-JOUKKUE', withdraw: 'VETÄYDY', negotiate: 'NEUVOTTELE',
     stance: 'ASENTO', stance_AGGRESSIVE: 'HYÖKKÄÄVÄ', stance_DEFENSIVE: 'PUOLUSTAVA', stance_HOLD_THE_LINE: 'PIDÄ LINJA',
     police_here: 'POLIISI ON PAIKALLA', police_one_down: 'jäsen makaa maassa.',
@@ -729,6 +731,7 @@ function renderBattle() {
             <button class="paper-button ${battle.action === 'attack' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="attack" ${unit ? '' : 'disabled'}>${tr('attack')}</button>
             <button class="paper-button ${battle.action === 'move' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="move" ${unit ? '' : 'disabled'}>${tr('move')}</button>
             <button class="paper-button" data-action="brace" ${unit ? '' : 'disabled'}>${tr('brace')}</button>
+            ${(unit?.itemIds ?? []).map(itemId => `<button class="paper-button" data-action="use-item" data-item="${esc(itemId)}">${tr('use_item')} · ${esc(cap(itemId))}</button>`).join('')}
             <button class="paper-button" data-action="auto">${tr('auto')}</button>
             <button class="paper-button" data-action="end-turn">${tr('end')}</button>
             <button class="paper-button" data-action="negotiate" ${negotiationReady ? '' : 'disabled'}>${tr('negotiate')}</button>
@@ -937,6 +940,9 @@ function handleRootClick(event) {
     if (!result.ok) logToast(result.message); persist(); render();
   } else if (action === 'brace') {
     selectAction(state.battle, 'brace'); const result = brace(state.battle);
+    if (!result.ok) logToast(result.message); persist(); render();
+  } else if (action === 'use-item') {
+    selectAction(state.battle, 'item'); const result = useItem(state.battle, target.dataset.item);
     if (!result.ok) logToast(result.message); persist(); render();
   } else if (action === 'end-turn') {
     endPlayerPhase(state.battle); persist(); render();

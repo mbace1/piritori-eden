@@ -110,3 +110,23 @@ export function weaponsFrom(equipmentList) {
   }
   return out;
 }
+
+/**
+ * EquipmentRules.items() — the SUPPORT half of the equipment list, in the
+ * shape `battle.js`'s `useItem()` reads. Every `kind: 'support'` item gets
+ * the same generic `{effectType:'signal', magnitude:1, target:'ally',
+ * singleUse:false}` — Godot's own table has no per-item tuning here either,
+ * and its own `_resolve_item()` has no `'signal'` branch in its effect
+ * match, so using the one item the slice actually registers (feature-phone)
+ * is a real, legal command that does nothing observable yet on either
+ * build. Ported as-is rather than inventing a working effect Godot itself
+ * does not have — see `useItem()`'s own note.
+ */
+export function itemsFrom(equipmentList) {
+  const out = {};
+  for (const e of equipmentList ?? []) {
+    if (e.kind !== 'support') continue;
+    out[e.id] = { effectType: 'signal', magnitude: 1, target: 'ally', singleUse: false };
+  }
+  return out;
+}

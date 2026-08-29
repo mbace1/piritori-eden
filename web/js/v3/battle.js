@@ -4,7 +4,7 @@ import {
   LANES, totalRows, rowOf, laneCentre,
   parseCell, defaultPlayerSlot, slotKey, parseSlotKey, describeSlot,
 } from './grid.js?v=1';
-import { weaponsFrom, UNARMED, ROW_FRONT } from './equipment.js?v=1';
+import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from './equipment.js?v=1';
 
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],
@@ -51,6 +51,12 @@ function makePlayer(member, state, index, count) {
     torso,
     legs,
     equipment: member.initial_equipment?.[0] ?? 'feature-phone',
+    // BattleBuilder._crew_to_unit(): item_ids is initial_equipment filtered
+    // to feature-phone specifically — a fighter's other carried equipment
+    // is a held WEAPON (`equipment` above), not a usable in-combat item.
+    // Opponents never get item_ids at all (`_opponent_to_unit()` has no
+    // such field), which `makeEnemy()` matches by simply not setting one.
+    itemIds: (member.initial_equipment ?? []).filter(id => id === 'feature-phone'),
   };
 }
 
@@ -145,6 +151,9 @@ export function createBattleState(definition, crew, state, data) {
     // and tuning derived from its own `hold`/`reach_pattern` — not a
     // hand-kept catalogue in this file.
     weapons: weaponsFrom(data ? [...data.equipment.values()] : []),
+    // EquipmentRules.items(): the support-kind half of the same list, in
+    // the shape `useItem()` reads.
+    items: itemsFrom(data ? [...data.equipment.values()] : []),
     cover: buildCover(definition),
     withdrawal: definition.withdrawal,
     negotiation: definition.negotiation,
@@ -338,6 +347,43 @@ export function playerAttack(battle, targetId) {
   }
   markActed(battle, attacker);
   checkBattleEnd(battle);
+  return { ok: true };
+}
+
+/**
+ * `Command.Type.ITEM`, ported: `_resolve_item()` looks up the item's
+ * `effect_type` and applies the one matching branch it has code for. This
+ * build has no `tempo` and no discrete status track beyond hp/nerve/alive
+ * (`QUEUE.md`'s audited "campaign progression" gap), so only the two
+ * effect types with a real stat to touch — `restore_condition`,
+ * `restore_nerve` — do anything; everything else (`boost_tempo`,
+ * `clear_status`, `apply_status`, and the slice's own registered
+ * `'signal'`) falls through exactly as it does in Godot's own `match`,
+ * which has no `'signal'` branch either: a legal command that logs and
+ * spends the action, nothing more. Always targets the user — Godot's
+ * `target: 'ally'` field implies a picker; building one for an item with
+ * no observable effect on either build is not attempted here.
+ */
+export function useItem(battle, itemId) {
+  if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
+  const unit = selectedUnit(battle);
+  if (!unit || battle.action !== 'item' || !(unit.itemIds ?? []).includes(itemId)) return { ok: false, message: 'That item is not carried.' };
+  const item = battle.items?.[itemId];
+  if (!item) return { ok: false, message: 'That item is not carried.' };
+  switch (item.effectType) {
+    case 'restore_condition':
+      unit.hp = Math.min(unit.maxHp, unit.hp + item.magnitude);
+      battle.log.unshift(`${unit.name} uses ${itemId}: condition rises to ${unit.hp}/${unit.maxHp}.`);
+      break;
+    case 'restore_nerve':
+      unit.nerve = Math.min(unit.maxNerve, unit.nerve + item.magnitude);
+      battle.log.unshift(`${unit.name} uses ${itemId}: nerve rises to ${unit.nerve}/${unit.maxNerve}.`);
+      break;
+    default:
+      battle.log.unshift(`${unit.name} uses ${itemId}.`);
+  }
+  if (item.singleUse) unit.itemIds = unit.itemIds.filter(id => id !== itemId);
+  markActed(battle, unit);
   return { ok: true };
 }
 
