@@ -108,7 +108,7 @@ export function exposureHere(state, data) {
     condition: state.condition ?? 'clear',
     crew: 1 + (state.recruited?.length ?? 0),
     units: state.stock?.piri ?? 0,
-    armed: (state.equipment ?? []).some(id => /firearm|pistol|knife/.test(id)),
+    armed: (state.equipment ?? []).some(item => /firearm|pistol|knife/.test(item.id)),
   });
 }
 

@@ -10,6 +10,123 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.24 — 2026-08-29
+
+**Equipment as condition-tracked instances, loot, and fencing —
+`take_loot()`/`sell_loot()`/`decay_equipment()`'s `Condition` half.**
+Second slice of the sixth audited item. `state.equipment` was a flat
+array of type-id strings (a de-duplicated set, via `addUnique`); Godot's
+`equipment` is `Array[Dictionary]` — real instances, each with its own
+`cond` — and nothing in `web/js/v3` could put anything IN it except
+narrative effects, since there was no loot-from-battle path at all.
+
+Read `_crew_to_unit()`/`_best_unlocked_weapon()` in `battle_builder.gd`
+before writing anything, because it settles a question that shapes the
+whole port: **a battle unit's weapon comes from the crew record's own
+authored `initial_equipment`, never from `GameState.equipment`.** The
+owned/looted stash and a fighter's loadout are two unconnected systems
+in Godot — there is no equipment-purchase function anywhere in
+`game_state.gd` either, despite `acquisition: 'market'` sitting in
+content for several items. So this version does not wire loot into
+what crew can wield (there is nothing in Godot to port that would do
+that), and does not add a "buy a weapon" screen (Godot doesn't have
+one). It is a self-contained fencing economy: loot comes off downed
+opponents, decays with wear, and converts down into cash — never back
+into capability.
+
+- **`state.equipment` is now `{id, cond}[]`.** `CONDITION` (NEW/USED/
+  FAULTY/BROKEN, 0-3) and `CONDITION_RESALE` (1.0/0.7/0.4/0.15) are
+  `game_state.gd`'s own enum and table. `addEquipment`/`countOf`/
+  `removeOne`/`conditionWord` port `add_equipment`/`count_of`/
+  `remove_one`/`condition_word` — `removeOne` takes the WORST instance
+  first, matching the comment on why (a wrecked one and a good one in
+  the same stash means the wrecked one was in use).
+- **Found and fixed a real bug this structural change would have hit
+  anyway**: the `equipment:+` narrative-effect handler used `addUnique`,
+  silently deduping owned gear — Godot's own effect-application switch
+  calls `add_equipment(eq)` with an explicit comment, "Authored grants
+  may repeat: a second pipe is a second pipe." Fixed to match.
+- **`isPurchasable`/`resaleOf`/`resaleAt`** port the read side of §8's
+  asymmetry (loot converts down into money freely; the best gear —
+  `acquisition: 'taken'`, `chain` and `sawn-off` in this slice's content
+  — cannot be bought at any price, though nothing buys anything yet on
+  either build).
+- **`droppedKit(battle, data, side)`** ports `dropped_kit()`: only a
+  downed unit's real WEAPON drops, never the feature-phone — checked
+  here off the equipment content's own `kind`, since this build's
+  single-slot `unit.equipment` field doesn't carry Godot's separate
+  `weapon_ids`/`item_ids` split on the unit object itself. `'police'`
+  stays excluded by construction (only `'player'`/`'enemy'` are valid
+  sides, matching the comment on why asking about police here would
+  have the player looting them).
+- **`takeLoot`/`loseKitOf`** port `take_loot`/`lose_kit_of`, wired into
+  `recordBattleConsequences()` in `app.js` ahead of the mission-effects
+  call, matching `_settle_loot()`'s position at the top of
+  `app_shell.gd`'s `battle_finished` handler. `loseKitOf` (the player's
+  own downed crew) fires on every non-training result; `takeLoot`
+  (the losing side's dead) only on `battle.result === 'win'` — the
+  closest this build's simpler win/loss model has to Godot's
+  `VICTORY_ROUT`/`VICTORY_BREAK` gate. **Ported a quiet Godot behaviour
+  rather than "fixing" it**: because a unit's weapon is read off its own
+  authored kit, not off `state.equipment`, `loseKitOf`'s attempted
+  removal usually finds nothing to remove and is a silent no-op — this
+  is exactly how `lose_kit_of()` behaves too, not a JS-side gap.
+- **Fencing**: `canFenceHere`/`sellLoot` port `can_fence_here`/
+  `sell_loot` — Piritori only (§9.7), sells the BEST instance of a
+  type (lowest `cond`), pays `resaleAt`, one-way. A FENCE button now
+  sits on every EQUIPMENT chip when standing at Piritori, showing the
+  live resale price for that specific instance; the panel names why
+  it's absent everywhere else. A battle's spoils toast names what was
+  taken.
+- **`board.js`'s `exposureHere()`** read `state.equipment` as a flat
+  array of strings for its "armed" exposure signal
+  (`/firearm|pistol|knife/.test(id)`) — fixed to read `item.id` now
+  that the array holds instances. Left the regex itself untouched: it
+  is JS-original (no Godot equivalent exists to check it against) and
+  already only ever matches `folding-knife` against this slice's actual
+  weapon ids (`first-handgun`/`sawn-off` don't contain "firearm" or
+  "pistol" as substrings) — a pre-existing, narrower-than-it-reads
+  heuristic this version didn't touch beyond the type fix.
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check`
+green. A scratch bare-node script covered the instance model end to
+end: no-dedup on `addEquipment`, worst-first `removeOne`, purchasable/
+resale reads including the `taken`-only gate, fencing paying the
+condition-scaled price and picking the BEST instance of a type,
+`droppedKit` against a real `createBattleState()` 2v2 (nothing drops
+before anyone is down, a downed armed opponent drops their weapon, a
+downed feature-phone-only unit drops nothing), and both loot wrappers
+including the faithful no-op case. A real Playwright run forced a real
+2v2 to a win with a marked-down armed opponent, finished it through the
+actual `finish-battle` control, confirmed the real weapon landed in
+`state.equipment` at NEW condition, then fenced it through the live
+EQUIPMENT panel at Piritori and confirmed the cash payout, the
+instance leaving the stash, and the FENCE button disappearing once
+nothing of that type remained. `v3-playthrough.cjs` unchanged at
+23/28 (same pre-existing failures).
+
+**Not attempted:** `decay_equipment()` itself — its only call site in
+Godot is `begin_next_chapter()`, which doesn't exist in this build yet
+(chapters, still queued), so porting it now would ship a function with
+no caller. `record_chapter_loot()` is not called from `takeLoot()`
+either, for the same reason — chapters isn't wired up to record
+anything yet. No equipment-purchase UI (Godot has none to port). No
+UI distinguishes "cannot be bought" loot from ordinary loot the way
+`_add_spoils_lines()`'s tag does — `isPurchasable()` exists and is
+tested but nothing calls it from `app.js` yet.
+
+### Port
+- **rules:** ported — `add_equipment`/`remove_one`/`take_loot`/
+  `sell_loot`/`dropped_kit`/`condition_word`/the `Condition` enum and
+  `CONDITION_RESALE` table are the canonical copy; nothing to re-port.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** the FENCE button and condition display are
+  `web/`-only UI.
+- **status:** loot/fencing lands. `decay_equipment()` and chapters are
+  the two remaining, coupled pieces of "campaign progression" — see
+  `QUEUE.md`. Leveling/perks/skills (combat-math changes to `battle.js`)
+  and `train()` remain unstarted and independent of this entry.
+
 ## v4.23 — 2026-08-29
 
 **Career length and retirement, ported from `age_crew()`/`retire()`.**

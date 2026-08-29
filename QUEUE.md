@@ -38,22 +38,23 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
-## Campaign progression — the five pieces career/retirement did not touch
-## (`VERSIONS.md` v4.23)
+## Campaign progression — what's left after career/retirement (v4.23) and
+## equipment/loot/fencing (`VERSIONS.md` v4.24)
 
 The audited "continue in order" list's sixth item was written down as one
 line, "leveling, chapters, equipment decay, career lifecycle." Reading
 `game_state.gd` in full to scope it turned up something closer to six
-separate systems, of which v4.23 (career length/retirement) is the only
-one with no dependency on any other. The rest, roughly ordered by size:
+separate systems. Two are done (career/retirement, v4.23; equipment
+instances + loot + fencing, v4.24). Four remain:
 
 - **Leveling** (`level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3`/
   `crew_levelled` signal). Small in isolation — a level is just
-  `(fights / 3) + 1` — and now has a real fight counter to read
-  (`state.crewFights`, this version). The only real design question is
-  what a level *does* in this build if perks/skills (below) are not
-  also ported: a level that grants an unspendable point is a counter
-  with no payoff.
+  `(fights / 3) + 1` — and `state.crewFights` already exists to read
+  (v4.23). **Deliberately not done yet**: a level that grants an
+  unspendable perk point is a counter with no payoff, and perks/skills
+  (below) are what a level's point is actually FOR. Shipping leveling
+  alone would be exactly the half-finished feature this project's own
+  discipline rules out.
 - **Perks and glory** (`crew_perks`/`crew_perk_points`/`spend_perk`/
   `grant_glory`, `content.perks` = `["strength","speed","wits","nerve",
   "toughness"]`, `GLORY_PERK_POINTS = 2` for a near-death survival or a
@@ -70,50 +71,56 @@ one with no dependency on any other. The rest, roughly ordered by size:
   **`battle.js` does not currently read `content.classes`/
   `aptitude_rules`/`skills` AT ALL** — porting this is new combat logic,
   not a port of existing JS behaviour, and is the single largest piece
-  of this whole item.
-- **Equipment as condition-tracked instances, loot, and fencing**
-  (`Condition` enum NEW/USED/FAULTY/BROKEN, `take_loot`/`sell_loot`/
-  `remove_one`, `decay_equipment()`). **Structural, not additive**:
-  `state.equipment` is currently a flat array of type-id strings
-  (`['feature-phone']`); Godot's is an array of `{id, cond}` instances.
-  Every read site (`renderEquipment`, the `equipment:+` effect handler,
-  `initial_equipment`/`item_ids` filtering for battle) would need to
-  agree on the new shape. There is currently **no loot-drop-from-battle
-  path in `web/js/v3` at all** (`_settle_loot()`'s `take_loot`/
-  `lose_kit_of` have no JS counterpart), so this is also new mechanics,
-  not a data-shape migration alone.
+  of this whole item. Leveling, perks, and skills are really one
+  three-part growth loop and probably want doing together, not as three
+  separate passes that each ship something inert until the last one lands.
 - **Chapters** (`chapter_earned`/`chapter_goal_met`/
   `attempt_chapter_ending`/`begin_next_chapter`, `state.upgrades`,
   `CHAPTER_DAYS = 10` vs. the authored slice's 7 — a PLACEHOLDER per
-  `game_state.gd`'s own comment). `content/era1-slice-v1.json` already
+  `game_state.gd`'s own comment; `decay_equipment()`, whose only call
+  site is `begin_next_chapter()`). `content/era1-slice-v1.json` already
   authors one real chapter (`chapter-1-piritori`, a money goal of 400,
   an operation ending `op-sornainen-shipment` that stakes €400 at
   Sörnäinen for the `stash-house-sornainen` upgrade) — completely
   unreachable from `web/js/v3` today, a genuine missing ending distinct
   from the four existing `pasila-*` narrative endings
-  (`chooseEnding()`). **Depends on loot/fencing above to mean
-  anything**: `record_chapter_income()` — despite its own comment
-  claiming "a chapter cleared by earning has to see every way of
-  earning" — is in fact called from exactly ONE place in the whole of
-  `game_state.gd`: `sell_loot()`. Market sales and mission payouts do
-  NOT count toward the chapter goal in Godot, however the comment reads.
-  This is the same class of overpromising-comment gap `VERSIONS.md`
-  v4.20 already found in `Command.Type.ITEM`'s effect match — ported at
-  face value, not "fixed" into matching the comment's aspiration.
-  `decay_equipment()` also needs the equipment-instance model above
-  before it has anything to act on.
+  (`chooseEnding()`). Equipment/loot/fencing (v4.24) is done, so the
+  one piece `record_chapter_income()` actually needs
+  (`sell_loot()` — the ONLY call site in the whole of `game_state.gd`,
+  despite its own comment claiming "a chapter cleared by earning has to
+  see every way of earning": market sales and mission payouts do NOT
+  count toward the chapter goal in Godot) now exists and could be wired
+  in directly. This is now the cheapest remaining piece to start.
 - **`train()`** (a retired veteran gives a rookie a head start, §7.4) is
   smaller but sits on top of retirement — `retired_crew.is_empty()` is
   its first check, and that list is real and populated as of v4.23. Not
   attempted; no UI concept of "the veterans you know" exists yet either.
 
-None of these six pieces block each other except where noted (skills
-needs classes/aptitude_rules content wiring into `battle.js`; chapters
-needs loot/fencing; `train()` needs retirement, which now exists). A
-future pass could reasonably do leveling next (cheapest, and
-`state.crewFights` already exists to read), but whether a level means
-anything without perks/skills to spend it on is a real design question,
-not just a sizing one.
+None of these four block each other except where noted (skills needs
+classes/aptitude_rules content wiring into `battle.js`; `train()` needs
+retirement, which now exists). Chapters is now the best next pick: its
+one real dependency (loot/fencing) is done, and it delivers a genuine
+missing ending the content has been sitting on since v4.21 first read
+`chapter-1-piritori`.
+
+---
+
+## Equipment/loot/fencing (`VERSIONS.md` v4.24) — what it left open
+
+- **No "cannot be bought" tag on loot.** `isPurchasable()` is real and
+  tested, but nothing in `app.js` calls it yet — `_add_spoils_lines()`'s
+  tag on `chain`/`sawn-off`-style taken-only gear was not built.
+- **No equipment-purchase UI**, because Godot has no equipment-purchase
+  function to port — `acquisition: 'market'` sits in content unused by
+  either build.
+- **`decay_equipment()` is not ported.** Its one call site is
+  `begin_next_chapter()`, which doesn't exist yet — see the campaign-
+  progression section above.
+- **The EQUIPMENT panel lists every instance separately**, including
+  multiple identical-condition copies of the same type — matches
+  `state.equipment`'s real shape, but a long campaign with a lot of loot
+  could make that panel long. Not addressed; grouping was judged a UI
+  taste call, not something to guess at without the owner's read on it.
 
 ---
 

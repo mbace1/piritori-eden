@@ -12,6 +12,7 @@ const PRESSURE = { low: 0, watchful: 1, hot: 2, closed: 3 };
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const addUnique = (items, value) => { if (!items.includes(value)) items.push(value); };
 const relKey = key => key.replaceAll('-', '_');
+const cap = value => String(value ?? '').replaceAll('-', ' ').replaceAll('_', ' ');
 
 export function createState(content) {
   const start = content.campaign.starting_state;
@@ -43,7 +44,9 @@ export function createState(content) {
     cityHarm: start.city_harm,
     flags: [],
     obligations: {},
-    equipment: ['feature-phone'],
+    // `{id, cond}` instances, not a set of owned type ids (§8) —
+    // `CONDITION.NEW` below.
+    equipment: [{ id: 'feature-phone', cond: 0 }],
     recruited: [],
     temporaryCrew: [],
     deployed: [],
@@ -192,6 +195,137 @@ export function ageCrew(state, data, deployedIds) {
     }
   }
   return left;
+}
+
+// ── equipment (GameState.gd's equipment/Condition, COMBAT.md §8) ───────────
+// new -> used -> faulty -> broken, and it only goes one way. `state.equipment`
+// is an ARRAY OF INSTANCES (`{id, cond}`), not a set of owned type ids — a
+// crew of four can each carry a pipe, and a good one and a wrecked one in
+// the same stash are two different things. Deliberately separate from what
+// a crew member actually wields in a fight: `makePlayer()` picks a weapon
+// off `member.initial_equipment` (the crew record's own authored kit), the
+// same way `battle_builder.gd`'s `_crew_to_unit()` reads `initial_equipment`
+// rather than `GameState.equipment` — the owned/looted stash is a fencing
+// economy, not a loadout screen. Godot has no equipment PURCHASE function
+// anywhere either, despite `acquisition: 'market'` existing in content, so
+// none is built here — `isPurchasable()` stays read-only informational, the
+// same way `_add_spoils_lines()` only uses it for a "cannot be bought" tag.
+export const CONDITION = { NEW: 0, USED: 1, FAULTY: 2, BROKEN: 3 };
+const CONDITION_WORD = ['New', 'Used', 'Faulty', 'Broken'];
+const CONDITION_RESALE = { 0: 1.0, 1: 0.7, 2: 0.4, 3: 0.15 };
+
+export function conditionWord(cond) {
+  return CONDITION_WORD[cond] ?? CONDITION_WORD[0];
+}
+
+export function addEquipment(state, typeId, cond = CONDITION.NEW) {
+  if (!typeId) return;
+  // Authored grants may repeat: a second pipe is a second pipe. No dedup —
+  // `add_equipment()` has none either.
+  state.equipment.push({ id: typeId, cond });
+}
+
+export function countOf(state, typeId) {
+  return state.equipment.filter(item => item.id === typeId).length;
+}
+
+/** Takes the WORST first: what a fallen crew member was carrying is gone,
+ *  and if a good one and a wrecked one were both in the stash, the wrecked
+ *  one is the one that was being used. */
+export function removeOne(state, typeId) {
+  let worst = -1;
+  for (let i = 0; i < state.equipment.length; i++) {
+    if (state.equipment[i].id !== typeId) continue;
+    if (worst < 0 || state.equipment[i].cond > state.equipment[worst].cond) worst = i;
+  }
+  if (worst < 0) return false;
+  state.equipment.splice(worst, 1);
+  return true;
+}
+
+/** §8 is asymmetric on purpose: loot converts DOWN into money freely, but
+ *  the best gear cannot be bought at any price. */
+export function isPurchasable(data, equipmentId) {
+  return (data.equipment.get(equipmentId)?.acquisition ?? 'market') !== 'taken';
+}
+
+export function resaleOf(data, equipmentId) {
+  return data.equipment.get(equipmentId)?.resale_eur ?? 0;
+}
+
+export function resaleAt(state, data, index) {
+  const item = state.equipment[index];
+  if (!item) return 0;
+  return Math.round(resaleOf(data, item.id) * (CONDITION_RESALE[item.cond] ?? 1.0));
+}
+
+/** Piritori, and only Piritori for now (§9.7) — carrying loot across the
+ *  city to sell it puts you where the hiring pool and the pressure both
+ *  are; the better fence you have to earn later is not attempted. */
+const FENCE_ANCHORS = ['piritori'];
+export function canFenceHere(state) {
+  return FENCE_ANCHORS.includes(state.selectedAnchor);
+}
+
+/** Sells the BEST one you have — what somebody selling would do, leaving
+ *  the worn one to keep using or lose. Deliberately one-way and
+ *  deliberately poor: loot only ever converts down into money. */
+export function sellLoot(state, data, equipmentId) {
+  let best = -1;
+  for (let i = 0; i < state.equipment.length; i++) {
+    if (state.equipment[i].id !== equipmentId) continue;
+    if (best < 0 || state.equipment[i].cond < state.equipment[best].cond) best = i;
+  }
+  if (best < 0) return 0;
+  const paid = resaleAt(state, data, best);
+  state.equipment.splice(best, 1);
+  state.cash += paid;
+  addLog(state, `Fenced ${cap(equipmentId)} for €${paid}.`);
+  return paid;
+}
+
+/** What is lying on the ground when a battle ends, for one side —
+ *  `dropped_kit()`. Gear is carried by a PERSON, so it comes off the
+ *  fallen, not off the field: only a downed unit's WEAPON drops (a
+ *  support item, the feature-phone, never does — mirrors Godot's
+ *  `weapon_ids` vs `item_ids` split, read here off the equipment
+ *  content's own `kind` since this build's single-slot `unit.equipment`
+ *  does not distinguish the two on the unit object itself). `'police'` is
+ *  deliberately not a valid `side` — `battle.police` is a third side, and
+ *  asking here would have the player looting them. Returns type ids, not
+ *  unique ones: two people carrying pipes drop two pipes. */
+export function droppedKit(battle, data, side) {
+  const units = side === 'player' ? battle.players : battle.enemies;
+  const out = [];
+  for (const unit of units ?? []) {
+    if (unit.alive || !unit.equipment) continue;
+    if (data.equipment.get(unit.equipment)?.kind !== 'weapon') continue;
+    out.push(unit.equipment);
+  }
+  return out;
+}
+
+/** Take what the losing side was carrying — the ONLY way taken-only gear
+ *  enters the game. Returns the ids actually added, for a spoils line. No
+ *  duplicate check: a crew of four with a pipe each is ordinary. */
+export function takeLoot(state, data, equipmentIds) {
+  const got = [];
+  for (const id of equipmentIds ?? []) {
+    if (!id || !data.equipment.get(id)) continue;
+    addEquipment(state, id, CONDITION.NEW);
+    got.push(id);
+  }
+  return got;
+}
+
+/** What a fallen crew member was carrying is gone — an attempted removal
+ *  per id, which is usually a no-op: a battle unit's weapon comes off its
+ *  own authored `initial_equipment`, not off `state.equipment`, so most of
+ *  the time there is nothing here to take. Ported as-is (`lose_kit_of()`
+ *  makes the same attempt unconditionally) rather than skipped as
+ *  pointless — Godot's own version is exactly this quiet. */
+export function loseKitOf(state, equipmentIds) {
+  for (const id of equipmentIds ?? []) removeOne(state, id);
 }
 
 /** Today's three candidates — `hiringPool()` is pure and re-derives the
@@ -363,7 +497,8 @@ export function applyEffects(state, effects, data, label = 'choice') {
     if (effect.startsWith('flag:')) { addUnique(state.flags, effect.slice(5)); continue; }
     if (effect.startsWith('memory:')) { addUnique(state.flags, effect); continue; }
     if (effect.startsWith('reveal:')) { reveal(state, effect.slice(7)); continue; }
-    if (effect.startsWith('equipment:+')) { addUnique(state.equipment, effect.slice(11)); continue; }
+    // Authored grants may repeat: a second pipe is a second pipe (§8).
+    if (effect.startsWith('equipment:+')) { addEquipment(state, effect.slice(11)); continue; }
     if (effect.startsWith('recruit:') || effect.startsWith('recruit-temporary:')) {
       const temporary = effect.startsWith('recruit-temporary:');
       const id = effect.slice(temporary ? 18 : 8);

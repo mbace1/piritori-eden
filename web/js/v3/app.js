@@ -5,6 +5,7 @@ import {
   transactOffer, applyEffects, commitRoute, sendOnRoute,
   crewRecord, hiringPoolFor, hireFromPool,
   isNamed, careerLeft, careerIsVisible, ageCrew,
+  droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord,
 } from './state.js?v=1';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
@@ -556,7 +557,10 @@ function renderLedger() {
         <section class="paper-panel">
           <p class="section-label">EQUIPMENT</p>
           <h2 class="section-title">WHAT CAN BE HELD</h2>
-          <div class="equipment-list">${state.equipment.map(renderEquipment).join('')}</div>
+          <div class="equipment-list">${state.equipment.map((item, index) => renderEquipment(item, index)).join('')}</div>
+          ${canFenceHere(state)
+            ? '<p class="consequence-strip">Fencing pays best on the best condition, worst on broken. Loot converts down into money — never the other way.</p>'
+            : '<p class="consequence-strip">Nothing fences from here. Piritori is the only corner buying.</p>'}
         </section>
         <section class="paper-panel">
           <p class="section-label">OBLIGATIONS</p>
@@ -631,12 +635,16 @@ function renderHireCandidate(candidate) {
   </article>`;
 }
 
-function renderEquipment(id) {
-  const equipment = data.equipment.get(id);
+function renderEquipment(item, index) {
+  const equipment = data.equipment.get(item.id);
   const artId = equipment?.asset_id;
+  const canFence = canFenceHere(state);
   return `<div class="equipment-chip">
     ${artId ? `<img src="${assetUrl(data, artId)}" alt="">` : '<span aria-hidden="true">◇</span>'}
-    <span>${esc(cap(id))}<br><span class="dim">${esc(equipment?.hold ?? 'personal')}</span></span>
+    <span>${esc(cap(item.id))}<br><span class="dim">${esc(conditionWord(item.cond))}${equipment?.hold ? ` · ${esc(equipment.hold)}` : ''}</span></span>
+    ${canFence
+      ? `<button class="paper-button" data-action="sell-loot" data-equipment="${esc(item.id)}">FENCE · ${money(resaleAt(state, data, index))}</button>`
+      : ''}
   </div>`;
 }
 
@@ -875,6 +883,16 @@ function recordBattleConsequences() {
   // campaign-clock advance. Without this a "test area" would quietly
   // punish the very thing it exists to let you do safely.
   if (!battle.training) {
+    // COMBAT.md §8: gear is carried by a person, so it comes off the
+    // fallen. `_settle_loot()`'s order — the player's own downed crew's
+    // weapons are always attempted lost, win or not; only a real win
+    // loots the losing side's dead. `takeLoot` returns [] if nothing
+    // qualified, so the toast is silent on an empty haul.
+    loseKitOf(state, droppedKit(battle, data, 'player'));
+    if (battle.result === 'win') {
+      const spoils = takeLoot(state, data, droppedKit(battle, data, 'enemy'));
+      if (spoils.length) logToast(`Took: ${spoils.map(cap).join(', ')}.`);
+    }
     applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
     // COMBAT.md §9.5.3: the police's default posture is subdue, and its
     // bite is on the fallen — a downed crew member the police take is not
@@ -974,6 +992,10 @@ function handleRootClick(event) {
       markSeen(state, offer.anchor_id);
     }
     logToast(result.message); persist(); render();
+  } else if (action === 'sell-loot') {
+    const paid = sellLoot(state, data, target.dataset.equipment);
+    logToast(paid > 0 ? `Fenced for ${money(paid)}.` : 'Nothing there to fence.');
+    persist(); render();
   } else if (action === 'hire-from-pool') {
     const ok = hireFromPool(state, data, target.dataset.candidate);
     logToast(ok ? 'Hired on.' : 'Cannot hire — not enough cash, or already on the roster.');
