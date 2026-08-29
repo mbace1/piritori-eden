@@ -10,6 +10,100 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.19 — 2026-08-28
+
+**Police and heat (COMBAT.md §9.5), ported.** Owner: "continue in order" —
+the first item on the audited list of Godot mechanics with no web
+counterpart: `fight_manager.gd`'s heat/police intervention (spawn on a
+threshold, the player's posture choice, arrest-vs-rescue), previously not
+referenced anywhere in `web/js/v3`. Ported into `battle.js` as a real
+third combat side rather than a stand-in.
+
+- **Heat accrues per round** (`+1`), **per downed body either side**
+  (`+2.5`), and **once**, the first round any fighter who acted was
+  holding a lethal-held weapon (`+4` — `equipment.js`'s `lethal` flag,
+  already covering blades as well as firearms, not a separate check
+  invented for this). At `HEAT_THRESHOLD` (12) the police arrive — 2 to 5
+  of them, scaled to how far past the threshold heat climbed, filling
+  lanes from the centre outward at whichever end the side still standing
+  in greater numbers is NOT behind (§9.5.1: "the ones who look like they
+  are winning are the ones who look like they started it"). Skipped
+  entirely for a training battle — "no cost, this is a test area" (v4.18)
+  now covers heat too, not just injury and the campaign clock.
+- **Police are a real third side** (`battle.police`, `side: 'police'`),
+  occupying the shared grid like anyone else — they block movement and
+  stop a non-piercing shot exactly like a body from either crew — but
+  `attackTargets()` now explicitly excludes `'police'` from ever becoming
+  a valid target for either side, matching `Fighter.Side.THIRD_PARTY` /
+  `Disposition.REACTIVE`: on the board, not yet anybody's enemy, starting
+  nothing. They never act — this build's simple deterministic AI has no
+  concept of a third side taking a turn, and neither does Godot's (`"noth-
+  ing gives them a turn yet — that is the next piece"`).
+- **The posture choice outranks every other command** (§9.5.2) while
+  awaiting an answer: `attack`/`brace`/`move`/`end-turn`/`withdraw`/
+  `negotiate`/`autoCommand` all refuse to act, and the battle console
+  replaces its whole action panel with the two available postures —
+  matching `formation_battle.gd`'s own framing exactly. ENGAGE (fighting
+  the police) is refused, not faked: neither build has a real third
+  combat side to run that fight on.
+- **`resolvePoliceOutcome()`** ports `_resolve_police_outcome()` exactly:
+  BACK_OFF loses every downed player to the police; HELP_FRIENDS spends
+  standing crew to pull the fallen out, nearest the entry point first (the
+  ones actually in danger), and a rescue close enough that the helper
+  "walks into it" (within `RESCUE_DANGER_DEPTH`) costs the helper too — a
+  body on its feet for a body on the ground, usually a bad trade and meant
+  to be. Verified against a hand-placed scenario (near/far fallen, one
+  standing helper) matching Godot's own function line for line.
+- **The consequence lands in `recordBattleConsequences()`** (app.js): a
+  taken player's status becomes `'missing'` — reusing the status value
+  `deployedCrew()` already excludes on, not a new vocabulary half the
+  codebase wouldn't recognise — instead of the ordinary wounded/critical
+  path; a STANDING helper taken during a rescue gets the same outcome
+  despite never being wounded in the fight itself, which is the whole
+  point of the trade being real.
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check` green,
+`v3-playthrough.cjs` unchanged at the established 23/28 baseline. A real
+Playwright run drove the police panel directly: forced heat to threshold,
+confirmed the action panel is replaced by the posture choice, confirmed
+two blue-bordered police tokens render on the board (a new `.unit-token
+.police` treatment, `--police` added to the palette), clicked BACK OFF,
+confirmed the panel reverts and the correct crew member is recorded taken.
+`web/test/v3-battle.mjs`'s existing 100+-round auto-play regression test
+now also doubles as heat-clock coverage — the fight runs long enough to
+cross the threshold on its own, and the harness answers the posture the
+same way a player would (HELP_FRIENDS, the branch with real logic to
+exercise) rather than getting stuck, which it now correctly would without
+an answer.
+
+**Not attempted here:**
+
+- **`Command.Type.ITEM`** (in-combat item use) — next on the audited list,
+  a separate mechanic from police/heat and not touched by this version.
+- **Police taking a real turn.** Both builds currently have them stand and
+  be seen; Godot's own comment names this as future work, not a gap this
+  version was expected to close.
+- **A 3D-specific police body pose/animation.** `render3d.js` loads the
+  same registered `cast3d-enforcer-v01` Godot's own `UNIT_BY_ROLE` uses for
+  police (the generic non-player fallback already resolved to it
+  correctly, needing no new mapping) — no clip wiring, matching the
+  existing "no animation" disclaimer standing since v4.14.
+
+### Port
+- **vectors:** unchanged.
+- **data:** unchanged.
+- **rules:** THIS is the port — `battle.js`'s heat/police block mirrors
+  `fight_manager.gd`'s constants and control flow directly; nothing to
+  re-port from web to Godot, since Godot already has the canonical copy.
+- **meshes:** none new — uses the enforcer body already registered.
+- **presentation:** the police-choice panel and unit-token treatment are
+  `web/`-only UI, patterned after `formation_battle.gd`'s own framing but
+  not a pixel port of it.
+- **status:** heat/police lands. Item use, the hiring pool, `roster.mjs`'s
+  name-pairing bug, campaign progression (leveling/chapters/equipment
+  decay/career), `ja` localization for the battle UI, and the news-bulletin
+  lookup are next in the audited order — see `QUEUE.md`.
+
 ## v4.18 — 2026-08-28
 
 **The Hermanni skate park is a real, playable test area for battle

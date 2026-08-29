@@ -202,7 +202,7 @@ export function mountBattleStage3D(container, battle, data) {
   const stage = container.closest('.battle-stage');
   stage?.classList.remove('stage3d-ready', 'stage3d-arena');
 
-  const units = [...battle.players, ...battle.enemies].filter(unit => unit.alive);
+  const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
   const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
     const assetId = ROLE_MODEL[unit.role] ?? fallback;

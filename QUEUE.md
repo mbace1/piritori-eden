@@ -8,6 +8,32 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Police and heat (`VERSIONS.md` v4.19) — what it left open
+
+- **Police stand and are seen; they do not act.** Matches Godot's own state
+  today (`_spawn_police()`'s comment: "nothing gives them a turn yet — that
+  is the next piece"), not a corner cut in the port. If Godot ever gives
+  them a turn, this needs the same follow-up.
+- **`RESCUE_DANGER_DEPTH` (1) and the whole threshold/heat table are
+  PLAYTEST GATES in Godot's own comments, not canon** (`DESIGN_LOCKS §13`).
+  Ported at the same numbers for parity; nobody has watched this build's
+  own fights long enough to know whether they read right here too.
+- **A downed-and-taken crew member's `'missing'` status has nowhere further
+  to go.** `state.crewStatus`'s status vocabulary (available/wounded/
+  critical/missing) has no "released"/"traded back" path — once someone
+  is `missing` they stay that way. This is the same gap the audited
+  "campaign progression" list already named (no career lifecycle in
+  `state.js`), not a new one; police just gives it a second way in.
+- **No UI names WHICH crew member is in danger before the posture choice
+  is answered.** `renderPoliceChoice()` shows a count ("2 of the crew are
+  on the ground"), not names or a highlighted list — Godot's own
+  `_build_police_choice()` doesn't appear to show more either
+  (`_action_col.add_child(_label(tr("police.on_the_ground") % down, ...`
+  is the same count-only shape), so this may not be a real gap, but it
+  was not checked against a live Godot build to be sure.
+
+---
+
 ## The transit layer (`VERSIONS.md` v4.16, v4.17) — what it left open
 
 `web/`'s route map now draws the real HSL tram/metro network (L2), ported

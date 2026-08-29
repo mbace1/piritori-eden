@@ -16,6 +16,7 @@
   --mustard: #d5ad43;
   --green: #8f9b57;
   --danger: #d65445;
+  --police: #4a7fd6;
   --shadow: rgba(1, 5, 9, .58);
   --display: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   --body: "Trebuchet MS", Arial, sans-serif;
@@ -572,6 +573,10 @@ button { -webkit-tap-highlight-color: transparent; }
 .unit-token:disabled { cursor: default; }
 .unit-token.selected .unit-body { filter: drop-shadow(0 0 6px var(--cyan)); }
 .unit-token.intent .unit-body { filter: drop-shadow(0 0 7px var(--danger)); }
+/* COMBAT.md §9.5: a third side, never a valid attack target — visually
+   distinct from both crews rather than reading as one more enemy. */
+.unit-token.police .unit-body { filter: drop-shadow(0 0 6px var(--police)) drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
+.unit-token.police .unit-label { border-color: var(--police); }
 .unit-body { position: absolute; inset: 0; filter: drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
 .unit-body img { position: absolute; object-fit: contain; pointer-events: none; }
 .unit-body .legs { width: 72%; left: 14%; bottom: 0; }
@@ -621,6 +626,10 @@ button { -webkit-tap-highlight-color: transparent; }
 .battle-actions .wide { grid-column: span 3; }
 .battle-result { grid-column: 1 / -1; padding: 12px; text-align: center; }
 .battle-result h2 { margin: 0; font: 500 29px var(--display); color: var(--mustard); }
+.police-choice { grid-column: 1 / -1; padding: 14px; text-align: center; border: 2px solid var(--police); }
+.police-choice h2 { margin: 0 0 4px; font: 500 22px var(--display); color: var(--police); }
+.police-choice p { margin: 0 0 10px; color: var(--ink-dim); font: 12px var(--mono); }
+.police-choice .node-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 
 /* News */
 .news-layout { min-height: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 12px; padding: 12px; }

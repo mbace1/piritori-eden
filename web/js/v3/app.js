@@ -10,6 +10,7 @@ import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
+  policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
 } from './battle.js?v=1';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
@@ -36,6 +37,9 @@ const UI = {
     attack: 'ATTACK', move: 'REPOSITION', brace: 'BRACE', end: 'END TEAM TURN',
     auto: 'AUTO TEAM', withdraw: 'WITHDRAW', negotiate: 'NEGOTIATE',
     stance: 'STANCE', stance_AGGRESSIVE: 'AGGRESSIVE', stance_DEFENSIVE: 'DEFENSIVE', stance_HOLD_THE_LINE: 'HOLD THE LINE',
+    police_here: 'POLICE ARE HERE', police_one_down: 'of the crew is on the ground.',
+    police_many_down: 'of the crew are on the ground.',
+    police_back_off: 'BACK OFF — LEAVE THEM', police_help: 'GO BACK FOR THEM',
   },
   fi: {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
@@ -45,6 +49,9 @@ const UI = {
     attack: 'HYÖKKÄÄ', move: 'VAIHDA ASEMAA', brace: 'SUOJAA', end: 'LOPETA VUORO',
     auto: 'AUTO-JOUKKUE', withdraw: 'VETÄYDY', negotiate: 'NEUVOTTELE',
     stance: 'ASENTO', stance_AGGRESSIVE: 'HYÖKKÄÄVÄ', stance_DEFENSIVE: 'PUOLUSTAVA', stance_HOLD_THE_LINE: 'PIDÄ LINJA',
+    police_here: 'POLIISI ON PAIKALLA', police_one_down: 'jäsen makaa maassa.',
+    police_many_down: 'jäsentä makaa maassa.',
+    police_back_off: 'PERÄÄNNY — JÄTÄ HEIDÄT', police_help: 'MENE HEIDÄN LUOKSEEN',
   },
 };
 
@@ -635,9 +642,12 @@ function renderFormationCells(battle) {
 function renderUnit(unit, battle) {
   const pos = cellPosition(unit.cell);
   const selected = unit.id === battle.selectedId && unit.side === 'player';
+  // Police (COMBAT.md §9.5) are a third side: on the board, never anybody's
+  // enemy yet — see attackTargets() in battle.js — so they are never a
+  // valid attack target regardless of the current action.
   const targetable = unit.side === 'enemy' && battle.action === 'attack';
   const disabled = unit.side === 'player' ? battle.acted.includes(unit.id) || battle.phase !== 'player' : !targetable;
-  return `<button type="button" class="unit-token ${unit.side === 'enemy' ? 'enemy' : ''} ${selected ? 'selected' : ''} ${targetable ? 'intent' : ''} ${unit.alive ? '' : 'down'}"
+  return `<button type="button" class="unit-token ${unit.side === 'enemy' ? 'enemy' : ''} ${unit.side === 'police' ? 'police' : ''} ${selected ? 'selected' : ''} ${targetable ? 'intent' : ''} ${unit.alive ? '' : 'down'}"
     style="left:${pos.x}%;top:${pos.y}%" data-action="${unit.side === 'player' ? 'select-unit' : 'target-unit'}" data-unit="${esc(unit.id)}"
     aria-label="${esc(unit.name)}, ${unit.role}, condition ${unit.hp}, guard ${unit.guard}" ${disabled ? 'disabled' : ''}>
     <span class="unit-body">
@@ -647,6 +657,27 @@ function renderUnit(unit, battle) {
     </span>
     <span class="unit-label">${esc(unit.name.split(' ')[0])}<br><b>${unit.hp}♥ · ${unit.guard}◇ · ${unit.nerve}!</b></span>
   </button>`;
+}
+
+/**
+ * COMBAT.md §9.5.2, ported from `formation_battle.gd`'s `_build_police_
+ * choice()`: "the police are here and nobody has answered them... outranks
+ * everything else on the console" — takes the whole action panel rather
+ * than sitting under the ordinary attack/brace/reposition buttons, and
+ * ENGAGE is not offered at all (Godot refuses it too — fighting the
+ * police is a third combat side neither build has).
+ */
+function renderPoliceChoice(battle) {
+  const down = injuredPlayers(battle).length;
+  return `
+    <div class="paper-panel police-choice">
+      <h2 class="section-title">${tr('police_here')}</h2>
+      <p>${down} ${down === 1 ? tr('police_one_down') : tr('police_many_down')}</p>
+      <div class="node-actions">
+        <button class="paper-button danger" data-action="police-posture" data-posture="${POLICE_POSTURE.BACK_OFF}">${tr('police_back_off')}</button>
+        <button class="paper-button primary" data-action="police-posture" data-posture="${POLICE_POSTURE.HELP_FRIENDS}">${tr('police_help')}</button>
+      </div>
+    </div>`;
 }
 
 function renderBattle() {
@@ -675,7 +706,7 @@ function renderBattle() {
         ${rowLabel('FRONT', depthOf(0, false))}
         ${rowLabel('BACK', depthOf(ROWS - 1, false))}
         ${renderFormationCells(battle)}
-        ${battle.players.concat(battle.enemies).map(item => renderUnit(item, battle)).join('')}
+        ${battle.players.concat(battle.enemies, battle.police ?? []).map(item => renderUnit(item, battle)).join('')}
       </section>
       <section class="battle-console">
         <div class="paper-panel active-unit">
@@ -693,7 +724,7 @@ function renderBattle() {
             </div>` : ''}
         </div>
         <div class="paper-panel battle-log" aria-live="polite">${battle.log.slice(0, 7).map(item => `<p>${esc(item)}</p>`).join('')}</div>
-        ${battle.status === 'active' ? `
+        ${battle.status === 'active' ? (policeAwaitingPosture(battle) ? renderPoliceChoice(battle) : `
           <div class="paper-panel battle-actions">
             <button class="paper-button ${battle.action === 'attack' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="attack" ${unit ? '' : 'disabled'}>${tr('attack')}</button>
             <button class="paper-button ${battle.action === 'move' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="move" ${unit ? '' : 'disabled'}>${tr('move')}</button>
@@ -702,7 +733,7 @@ function renderBattle() {
             <button class="paper-button" data-action="end-turn">${tr('end')}</button>
             <button class="paper-button" data-action="negotiate" ${negotiationReady ? '' : 'disabled'}>${tr('negotiate')}</button>
             <button class="paper-button danger wide" data-action="withdraw">${tr('withdraw')} · ${esc(battle.withdrawal.known_cost)}</button>
-          </div>` : `
+          </div>`) : `
           <div class="paper-panel battle-result">
             <h2>${esc(cap(battle.result))}</h2>
             <p>The battle ends here. Wounds, pressure and money return to the same campaign state.</p>
@@ -801,8 +832,16 @@ function recordBattleConsequences() {
   // punish the very thing it exists to let you do safely.
   if (!battle.training) {
     applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
-    for (const id of injuredPlayers(battle)) {
+    // COMBAT.md §9.5.3: the police's default posture is subdue, and its
+    // bite is on the fallen — a downed crew member the police take is not
+    // merely hurt, they are gone. `taken` can also name a STANDING crew
+    // member who went back for a fallen ally and paid for it (§9.5.2's
+    // rescue trade) — arrested without ever being wounded in the fight.
+    const taken = new Set(takenByPolice(battle));
+    const injured = new Set(injuredPlayers(battle));
+    for (const id of injured) {
       const status = state.crewStatus[id];
+      if (taken.has(id)) { status.status = 'missing'; continue; }
       status.condition = Math.max(0, status.condition - 4);
       if (battle.id === 'battle-courtyard-3v3') {
         status.status = 'critical';
@@ -811,6 +850,10 @@ function recordBattleConsequences() {
         status.status = 'wounded';
         status.condition = Math.max(1, status.condition);
       }
+    }
+    for (const id of taken) {
+      if (injured.has(id) || !state.crewStatus[id]) continue;
+      state.crewStatus[id].status = 'missing';
     }
   }
   state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round });
@@ -903,6 +946,8 @@ function handleRootClick(event) {
     selectStance(state.battle, target.dataset.stance); persist(); render();
   } else if (action === 'withdraw') {
     withdrawBattle(state.battle); persist(); render();
+  } else if (action === 'police-posture') {
+    choosePolicePosture(state.battle, target.dataset.posture); persist(); render();
   } else if (action === 'negotiate') {
     if (!negotiateBattle(state.battle)) logToast('The opposing formation is not ready to talk.');
     persist(); render();

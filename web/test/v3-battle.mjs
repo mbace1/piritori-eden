@@ -4,6 +4,7 @@ import { createState, deployedCrew } from '../js/v3/state.js';
 import {
   createBattleState, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor,
+  policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
 } from '../js/v3/battle.js';
 import { parseCellFor, slotKey } from '../js/v3/grid.js';
 
@@ -54,14 +55,27 @@ assert.equal(new Set(battle2.players.map(unit => unit.cell)).size, 2, 'units do 
 // Godot's weighted-random-across-top-3, and a unit whose nerve had dropped
 // could get GUARD-locked forever — this loop sitting at the cap with
 // status still 'active' is exactly what that regression looked like).
+// A 100+ round fight is also long enough to run the heat clock past
+// HEAT_THRESHOLD (COMBAT.md §9.5), so this loop is the coverage for
+// "police arrive mid-autoplay" too: `autoCommand()` correctly refuses to
+// act while `policeAwaitingPosture()` is true (§9.5.2 "outranks
+// everything"), so the harness answers it the same way a player would —
+// HELP_FRIENDS, the branch with real logic to exercise (BACK_OFF is a
+// straight list copy).
 let safety = 0;
+let policeAnswered = false;
 while (battle2.status === 'active' && safety < 150) {
+  if (policeAwaitingPosture(battle2)) {
+    assert.equal(choosePolicePosture(battle2, POLICE_POSTURE.HELP_FRIENDS), true, 'a posture is always answerable once the police arrive');
+    policeAnswered = true;
+  }
   autoCommand(battle2);
   safety += 1;
 }
 assert.notEqual(battle2.status, 'active', 'auto command reaches a battle result');
 assert(['win', 'loss'].includes(battle2.result));
 assert(resultEffects(battle2, data).length > 0);
+if (policeAnswered) assert(Array.isArray(takenByPolice(battle2)), 'a resolved police outcome still reports a taken list');
 
 const definition3 = data.battles.get('battle-courtyard-3v3');
 const battle3 = createBattleState(definition3, deployedCrew(state, data), state, data);

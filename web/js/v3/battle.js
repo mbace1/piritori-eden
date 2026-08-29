@@ -151,6 +151,20 @@ export function createBattleState(definition, crew, state, data) {
     status: 'active',
     result: null,
     log: [`Round 1. ${definition.objective}`],
+    // Heat and police (COMBAT.md §9.5) — see the block below `enemyPhase()`.
+    // `police` is a THIRD side, not battle.players/battle.enemies grown by
+    // one: fight_manager.gd's own Fighter.Side.THIRD_PARTY, occupying the
+    // shared grid like anyone else but never a valid attack target for
+    // either side (attackTargets() excludes it explicitly).
+    heat: 0,
+    firearmHeard: false,
+    police: [],
+    policeArrived: false,
+    policeEntryDepth: -1,
+    policePosture: null,
+    policeResolved: false,
+    policeTaken: [],
+    policeSaved: [],
   };
 }
 
@@ -172,6 +186,7 @@ export function selectUnit(battle, id) {
 }
 
 export function selectAction(battle, action) {
+  if (policeAwaitingPosture(battle)) return false;
   const unit = selectedUnit(battle);
   if (!unit || battle.acted.includes(unit.id)) return false;
   battle.action = action;
@@ -189,10 +204,13 @@ export function selectStance(battle, stance) {
 
 /** All living fighters standing anywhere on the board, keyed by slot — the
  *  unified `_grid` fight_manager.gd walks: ONE grid, so a cell that holds a
- *  body blocks EITHER side's line, not just an ally's. */
+ *  body blocks EITHER side's line, not just an ally's. Includes `police`:
+ *  a third-party body still occupies its cell and still stops a
+ *  non-piercing shot, it just never becomes a valid TARGET for either
+ *  side (see `attackTargets()`). */
 function occupiedGrid(battle) {
   const map = new Map();
-  for (const unit of battle.players.concat(battle.enemies)) {
+  for (const unit of battle.players.concat(battle.enemies, battle.police ?? [])) {
     if (unit.alive) map.set(unit.cell, unit);
   }
   return map;
@@ -240,7 +258,7 @@ export function attackTargets(battle, attacker) {
       if (cover?.softBlock && !piercing) break;
       const other = occupied.get(slotKey(lane, d));
       if (other) {
-        if (other.side !== attacker.side && other.alive) targets.push(other);
+        if (other.side !== attacker.side && other.side !== 'police' && other.alive) targets.push(other);
         if (!piercing) break;
       }
       d += toward;
@@ -305,6 +323,7 @@ function hit(target, amount = 1) {
 }
 
 export function playerAttack(battle, targetId) {
+  if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
   const attacker = selectedUnit(battle);
   const target = battle.enemies.find(item => item.id === targetId);
   if (!attacker || battle.action !== 'attack' || !attackableInBattle(battle, attacker, target)) return { ok: false, message: 'Target is outside this position and reach.' };
@@ -323,6 +342,7 @@ export function playerAttack(battle, targetId) {
 }
 
 export function brace(battle) {
+  if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
   const unit = selectedUnit(battle);
   if (!unit || battle.action !== 'brace') return { ok: false, message: 'Select a crew member first.' };
   unit.guard = Math.min(3, unit.guard + 1);
@@ -364,6 +384,7 @@ export function validMoveCells(battle, unit = selectedUnit(battle)) {
 }
 
 export function moveUnit(battle, cell) {
+  if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
   const unit = selectedUnit(battle);
   if (!unit || battle.action !== 'move' || !validMoveCells(battle, unit).includes(cell)) return { ok: false, message: 'That formation cell is not reachable.' };
   const old = unit.cell;
@@ -371,6 +392,180 @@ export function moveUnit(battle, cell) {
   battle.log.unshift(`${unit.name} repositions ${describeCell(old)} → ${describeCell(cell)}.`);
   markActed(battle, unit);
   return { ok: true };
+}
+
+// ── heat, and who it brings (COMBAT.md §9.5) ───────────────────────────────
+//
+// Ported from `FightManager`'s `heat`/`police_*` block. Heat rises with
+// firearms, long fights and bodies on the ground until somebody turns up —
+// the counterweight to a quick, merciful win being worth something
+// mechanically, not only morally. Skipped entirely for a training battle
+// (`battle.training`): "no cost — this is a test area" already covers heat
+// the same way it covers crew injury and the campaign clock.
+const HEAT_PER_ROUND = 1.0; // per ROUND, for simply still being here
+const HEAT_PER_DOWNED = 2.5; // per body on the ground, either side — the loud one
+const HEAT_FIREARM = 4.0; // once, the first round a lethal-held weapon is in play
+const HEAT_THRESHOLD = 12.0; // PLAYTEST GATE in Godot too, not canon
+
+const POLICE_BASE = 2;
+const POLICE_PER_STEP = 8.0;
+const POLICE_MAX = 5;
+// How close to the police a fallen crew member has to be before pulling
+// them out costs you the person doing the pulling.
+const RESCUE_DANGER_DEPTH = 1;
+
+export const POLICE_POSTURE = { BACK_OFF: 'BACK_OFF', HELP_FRIENDS: 'HELP_FRIENDS', ENGAGE: 'ENGAGE' };
+
+function weaponIsLethal(battle, unit) {
+  return Boolean(weaponFor(battle, unit)?.lethal);
+}
+
+/** How many turn up, scaled to how loud it got — a base pair, plus one for
+ *  every step of noise past the threshold, capped: past a certain number
+ *  they stop being a complication and start being a wall. */
+function policeCount(battle) {
+  const extra = Math.floor((battle.heat - HEAT_THRESHOLD) / POLICE_PER_STEP);
+  return Math.min(POLICE_MAX, Math.max(POLICE_BASE, POLICE_BASE + Math.max(extra, 0)));
+}
+
+/** Lanes filled from the middle outward, so a small number reads as a
+ *  group arriving rather than two figures at opposite edges. */
+function spawnPolice(battle) {
+  const n = policeCount(battle);
+  const mid = Math.floor(LANES / 2);
+  const order = [];
+  for (let step = 0; step < LANES; step += 1) {
+    const lane = mid + Math.floor((step + 1) / 2) * (step % 2 === 0 ? 1 : -1);
+    if (lane >= 0 && lane < LANES) order.push(lane);
+  }
+  const occupied = occupiedGrid(battle);
+  let placed = 0;
+  for (const lane of order) {
+    if (placed >= n) break;
+    const cell = slotKey(lane, battle.policeEntryDepth);
+    if (occupied.has(cell)) continue;
+    battle.police.push({
+      id: `police-${placed}`,
+      name: 'Police',
+      side: 'police',
+      role: 'police',
+      cell,
+      hp: 8,
+      maxHp: 8,
+      guard: 0,
+      nerve: 10,
+      maxNerve: 10,
+      alive: true,
+      head: ENEMY_HEADS[0],
+      torso: ROLE_PARTS.muscle[0],
+      legs: ROLE_PARTS.muscle[1],
+      equipment: 'unarmed',
+    });
+    placed += 1;
+  }
+}
+
+/** Put them in the yard. They arrive behind whichever side is still
+ *  standing in numbers — the ones who look like they are winning are the
+ *  ones who look like they started it — never in the middle: the one
+ *  entrance that threatens a formation instead of appearing inside it. */
+function policeArrive(battle) {
+  battle.policeArrived = true;
+  const ours = battle.players.filter(item => item.alive).length;
+  const theirs = battle.enemies.filter(item => item.alive).length;
+  battle.policeEntryDepth = totalRows() - 1;
+  if (ours >= theirs) battle.policeEntryDepth = 0;
+  spawnPolice(battle);
+  battle.log.unshift(`Sirens. Police arrive at the ${battle.policeEntryDepth === 0 ? 'crew’s' : 'opposition’s'} end of the yard.`);
+}
+
+function accrueHeat(battle) {
+  if (battle.training || battle.policeArrived) return;
+  battle.heat += HEAT_PER_ROUND;
+  for (const unit of battle.players.concat(battle.enemies)) {
+    if (!unit.alive) battle.heat += HEAT_PER_DOWNED;
+  }
+  if (!battle.firearmHeard) {
+    // Every fighter who acted this round, either side — `battle.acted`
+    // already tracks the player half; the current enemy AI gives every
+    // living enemy exactly one action a round, so "alive when the enemy
+    // phase runs" is that same set for the opposition.
+    const acted = battle.players.filter(item => battle.acted.includes(item.id))
+      .concat(battle.enemies.filter(item => item.alive));
+    if (acted.some(unit => weaponIsLethal(battle, unit))) {
+      battle.firearmHeard = true;
+      battle.heat += HEAT_FIREARM;
+    }
+  }
+  if (battle.heat >= HEAT_THRESHOLD) policeArrive(battle);
+}
+
+/** Still waiting on an answer — outranks every other command while true
+ *  (COMBAT.md §9.5.2): the player cannot attack, brace, reposition, end
+ *  the turn, withdraw or negotiate until the posture question is answered. */
+export function policeAwaitingPosture(battle) {
+  return Boolean(battle.policeArrived) && !battle.policeResolved;
+}
+
+/** BACK_OFF loses everyone on the ground. HELP_FRIENDS spends the people
+ *  still standing to pull them out, nearest the police first (they are the
+ *  ones actually in danger), and the ones close enough that the helper
+ *  walks into it cost the helper too — a body on its feet for a body on
+ *  the ground, usually a bad trade and meant to be. */
+function resolvePoliceOutcome(battle) {
+  battle.policeResolved = true;
+  battle.policeTaken = [];
+  battle.policeSaved = [];
+
+  const fallen = battle.players.filter(item => !item.alive);
+  if (battle.policePosture !== POLICE_POSTURE.HELP_FRIENDS) {
+    for (const item of fallen) battle.policeTaken.push(item.id);
+    return;
+  }
+
+  const entryDepth = battle.policeEntryDepth;
+  const byDanger = [...fallen].sort((a, b) =>
+    Math.abs(laneDepth(a).depth - entryDepth) - Math.abs(laneDepth(b).depth - entryDepth));
+  const standing = battle.players.filter(item => item.alive);
+  for (const item of byDanger) {
+    if (standing.length === 0) { battle.policeTaken.push(item.id); continue; }
+    const helper = standing.pop();
+    battle.policeSaved.push(item.id);
+    if (Math.abs(laneDepth(item).depth - entryDepth) <= RESCUE_DANGER_DEPTH) {
+      battle.policeTaken.push(helper.id);
+    }
+  }
+}
+
+/** Answer them. Returns false for a posture that is not available —
+ *  ENGAGE is deliberately refused rather than faked: fighting the police
+ *  means a third combat side, which this build (like Godot's own) does
+ *  not have. */
+export function choosePolicePosture(battle, posture) {
+  if (!battle.policeArrived || battle.policeResolved) return false;
+  if (posture === POLICE_POSTURE.ENGAGE) return false;
+  battle.policePosture = posture;
+  resolvePoliceOutcome(battle);
+  battle.log.unshift(battle.policeTaken.length
+    ? `The police take ${battle.policeTaken.length} of the crew.`
+    : 'The crew clears the yard before the police reach anyone.');
+  return true;
+}
+
+/** Who the police take. Their default posture is subdue, and its bite is
+ *  on the fallen: anyone downed on the board when they arrive is taken —
+ *  a downed crew member is not merely hurt, they are gone. Before a
+ *  posture is answered this reports the PROVISIONAL cost of doing
+ *  nothing: everyone currently on the ground. */
+export function takenByPolice(battle) {
+  if (!battle.policeArrived) return [];
+  if (battle.policeResolved) return battle.policeTaken;
+  return battle.players.filter(item => !item.alive).map(item => item.id);
+}
+
+/** Who was pulled out. Empty unless somebody went back for them. */
+export function savedFromPolice(battle) {
+  return battle.policeSaved;
 }
 
 function enemyPhase(battle) {
@@ -389,6 +584,7 @@ function enemyPhase(battle) {
   }
   checkBattleEnd(battle);
   if (battle.status !== 'active') return;
+  accrueHeat(battle);
   battle.round += 1;
   battle.phase = 'player';
   battle.acted = [];
@@ -398,7 +594,7 @@ function enemyPhase(battle) {
 }
 
 export function endPlayerPhase(battle) {
-  if (battle.status !== 'active' || battle.phase !== 'player') return false;
+  if (battle.status !== 'active' || battle.phase !== 'player' || policeAwaitingPosture(battle)) return false;
   enemyPhase(battle);
   return true;
 }
@@ -445,7 +641,7 @@ function scoreCommand(battle, type, unit, target) {
 }
 
 export function autoCommand(battle) {
-  if (battle.status !== 'active') return false;
+  if (battle.status !== 'active' || policeAwaitingPosture(battle)) return false;
   for (const unit of battle.players.filter(item => item.alive && !battle.acted.includes(item.id))) {
     battle.selectedId = unit.id;
 
@@ -524,7 +720,7 @@ export function autoCommand(battle) {
 }
 
 export function withdrawBattle(battle) {
-  if (battle.status !== 'active' || battle.round < battle.withdrawal.available_from_round) return false;
+  if (battle.status !== 'active' || policeAwaitingPosture(battle) || battle.round < battle.withdrawal.available_from_round) return false;
   battle.status = 'resolved';
   battle.result = 'withdraw';
   battle.log.unshift(`The crew withdraws. ${battle.withdrawal.known_cost}.`);
@@ -532,7 +728,7 @@ export function withdrawBattle(battle) {
 }
 
 export function negotiateBattle(battle) {
-  if (battle.status !== 'active' || !battle.negotiation?.available) return false;
+  if (battle.status !== 'active' || policeAwaitingPosture(battle) || !battle.negotiation?.available) return false;
   const enemyNerve = battle.enemies.filter(item => item.alive).reduce((sum, item) => sum + item.nerve, 0);
   const can = battle.round >= 2 || enemyNerve <= 4;
   if (!can) return false;
