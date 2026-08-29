@@ -10,6 +10,105 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.21 — 2026-08-29
+
+**The hiring pool, ported.** Third item on the audited "continue in order"
+list: `crew_generator.gd` — the disposable half of the roster
+(COMBAT.md §7, decision 2b) — had nothing in `web/js/v3` at all. Walking
+into a fight with only the six authored crew, forever, was the whole
+gap.
+
+Two generators already existed in this codebase and neither alone could
+drive a hire: `crew_generator.gd` rolls a battle-deployable person (one
+of the six art-backed roles, condition/nerve/tempo, a wage, real
+portrait/torso/legs ids) but names them from a flat, un-paired pool and
+gives them no traits worth reading; `people/roster.mjs`'s `hireling()`
+rolls a genuinely interesting person (paired first/family names from ONE
+origin — the exact discipline DESIGN_LOCKS §9.2 asks for — real traits,
+a career stage) but has no wage, no combat stats, and no art ids. Asked
+which to build on, the owner chose **combine both**.
+
+- **New `people/hiring.mjs`.** `hireCandidate(seed, i)` calls `hireling()`
+  for the name and the flavour, then rolls a role and battle stats the
+  same way `CrewGenerator.generate()` does — same `ROLES`, `ROLE_BASE`,
+  `ROLE_COMPETENCIES`, `PORTRAITS`, and `SPREAD` tables, read off
+  `crew_generator.gd` rather than invented. Seeded through this
+  codebase's one hash convention (`market/model.mjs`'s `rand01`) instead
+  of Godot's own `RandomNumberGenerator` — `PORTING.md` §4: rules travel
+  as (input, output) pairs and a fixed data shape, not a shared RNG
+  implementation. `roster.mjs` itself is untouched, so `port/vectors.mjs`'s
+  existing `people@1` fixture (24 rows) stays valid.
+- **`state.js` gains `state.hiredCrew`** (persisted, keyed by id) — a
+  second crew-record source alongside the static `data.crew` Map, since a
+  hired-off-the-street candidate does not exist in content loaded at
+  boot. **`crewRecord(state, data, id)`** checks both and every existing
+  call site that assumed `data.crew.get(id)` was the only source now
+  goes through it — `deployedCrew()`, the critical-wound log line in
+  `chooseEnding()`, and (a real, previously-latent bug) `settleNight()`'s
+  wage sum, which used `content.crew.find(...)` and would never have
+  matched a generated id, so a hired crew member's wage would silently
+  never have been collected.
+- **`hiringPoolFor(state, data)`** wraps `hiringPool(seed, day)`, derived
+  from the campaign seed (`state.seed`, defaulted to `GameState.gd`'s own
+  constant `20030101` — a fixed date-shaped seed, not a random roll) and
+  the current day, so the offer is stable across renders and cannot drift
+  out of sync with the day — walking away and back does not reroll the
+  board. Ported `GameState.gd`'s `hiring_pool()` exactly: candidates
+  already on `state.recruited` are filtered out of the pool, so a hired
+  person stops being offered next to themselves.
+- **`hireFromPool(state, data, candidateId)`** ports `GameState.gd`'s
+  `hire()`, signing-fee included: the fee is the candidate's own wage,
+  charged once up front, and the hire fails outright if cash can't cover
+  it — the owner's own comment there calls this a PLACEHOLDER, "never
+  playtested," and this port carries that caveat forward rather than
+  smoothing it into something that reads as settled design.
+- **UI**: a new "HIRE / TODAY'S CANDIDATES" panel in the ledger
+  (`app.js`) lists the day's three offers (name, role, age, one trait
+  line, the fee) each with a HIRE button, disabled and labelled CANNOT
+  AFFORD when short on cash. The existing CREW panel's grid now includes
+  hired-off-the-street crew alongside the authored six;
+  `renderCrewCard()` falls back to a hire candidate's first trait line
+  where an authored member would show `member.strength` (a field a
+  generated person never has).
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check`
+green (`people@1` unaffected). A scratch bare-node script exercised
+`hiringPoolFor`/`hireFromPool`/`crewRecord`/`settleNight` directly:
+determinism across repeated calls on the same day, the signing fee
+charged exactly once, insufficient cash refused, a hired candidate
+dropped from the next pool read, deployability alongside authored crew,
+and wage collection on night settlement for a hired-off-the-street
+person specifically (not just the authored six). A real Playwright run
+against the live UI hired a candidate through the actual HIRE button and
+confirmed the cash drop, the roster/hiredCrew update, the candidate's
+disappearance from the pool, and their appearance in the CREW grid, with
+no new console errors. `v3-playthrough.cjs` unchanged at 23/28 (the 5
+failures are pre-existing on `main`, confirmed by re-running it stashed).
+
+**Not attempted:** no way to fire or release a hired crew member (Godot
+has none either — `state.crewStatus`'s `'missing'` status already has
+nowhere further to go, per `QUEUE.md`'s v4.19 note, and this is the same
+gap surfacing a second way); no UI to view a hired candidate's full
+trait list, only the first one; the six recycled portraits are exactly
+as flagged a placeholder in `crew_generator.gd`'s own comment, not
+expanded; `ja` locale strings for the new panel — the panel follows the
+existing precedent that most non-battle panel labels in `app.js` are
+English-only text, not run through `tr()`, so this does not widen the
+localization gap `VERSIONS.md`'s ordered list already tracks as its own
+item.
+
+### Port
+- **rules:** ported — `crew_generator.gd`'s tables and the signing-fee
+  behaviour are the canonical copy; nothing to re-port.
+- **data/vectors/meshes:** unchanged. `people/roster.mjs` and its
+  `people@1` vector fixture are untouched.
+- **presentation:** the HIRE panel is `web/`-only UI.
+- **status:** hiring pool lands. Next in order: `roster.mjs`'s
+  name-pairing bug (its `FIRST`/`LAST` pools are flat and drawn
+  independently, unlike `_name_from()`'s same-origin discipline this
+  version just leaned on for `hireling()`), then campaign progression —
+  see `QUEUE.md`.
+
 ## v4.20 — 2026-08-28
 
 **In-combat item use, ported.** Second item on the audited "continue in

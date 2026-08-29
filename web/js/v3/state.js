@@ -1,5 +1,12 @@
+import { hiringPool } from '../../../people/hiring.mjs';
+
 export const SAVE_KEY = 'piritori-to-eden:v3';
 export const STATE_VERSION = 3;
+// GameState.gd's own default (`with_seed if with_seed != 0 else
+// 20030101`) — a date-shaped constant, not a random per-campaign roll, so
+// two players starting fresh see the same hiring pool on the same day
+// unless a debug entry ever sets its own.
+const DEFAULT_SEED = 20030101;
 
 const PRESSURE = { low: 0, watchful: 1, hot: 2, closed: 3 };
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -18,6 +25,7 @@ export function createState(content) {
   return {
     version: STATE_VERSION,
     contentId: content.id,
+    seed: DEFAULT_SEED,
     scheduleIndex: 0,
     mode: 'route',
     locale: 'en',
@@ -40,6 +48,11 @@ export function createState(content) {
     temporaryCrew: [],
     deployed: [],
     crewStatus,
+    // Generated hires (`people/hiring.mjs`), keyed by id — the authored
+    // six live in `data.crew` and never need this; `crewRecord()` below
+    // checks both so the rest of the game does not have to know which
+    // source a recruited id came from.
+    hiredCrew: {},
     revealedOffers: ['offer-piritori-buy'],
     revealedMissions: [],
     revealedEncounters: ['enc-first-purchase'],
@@ -66,6 +79,7 @@ export function restoreState(raw, content) {
     pressure: { ...fresh.pressure, ...(raw.pressure ?? {}) },
     obligations: { ...fresh.obligations, ...(raw.obligations ?? {}) },
     crewStatus: { ...fresh.crewStatus, ...(raw.crewStatus ?? {}) },
+    hiredCrew: { ...fresh.hiredCrew, ...(raw.hiredCrew ?? {}) },
   };
 }
 
@@ -96,11 +110,58 @@ export function formatBlock(state, content) {
   return `DAY ${slot.day} · ${slot.block.toUpperCase()}`;
 }
 
+/** The authored six live in `data.crew` (loaded once, static); a hire off
+ *  the street (`people/hiring.mjs`) lives in `state.hiredCrew` instead,
+ *  since it does not exist until generated. Everywhere a crew id needs
+ *  its full record — deployment, wages, the crew screen — reads through
+ *  this rather than assuming the source. */
+export function crewRecord(state, data, id) {
+  return data.crew.get(id) ?? state.hiredCrew[id] ?? null;
+}
+
 export function deployedCrew(state, data) {
   const available = state.recruited.filter(id => state.crewStatus[id]?.status !== 'missing');
   const chosen = state.deployed.filter(id => available.includes(id));
   const merged = [...chosen, ...available.filter(id => !chosen.includes(id))];
-  return merged.slice(0, 3).map(id => data.crew.get(id)).filter(Boolean);
+  return merged.slice(0, 3).map(id => crewRecord(state, data, id)).filter(Boolean);
+}
+
+/** Today's three candidates — `hiringPool()` is pure and re-derives the
+ *  same people every time it is called for the same day, so nothing here
+ *  is stored: walking away and coming back must not reroll the board.
+ *  `GameState.gd`'s `hiring_pool()` drops anyone already on the roster
+ *  (recognisable by id even after the day turns over, since the seed and
+ *  day pair are stable) — otherwise a hired candidate would keep
+ *  reappearing as an offer next to the person they already are. */
+export function hiringPoolFor(state, data) {
+  const day = currentSchedule(state, data.content)?.day ?? 1;
+  return hiringPool(state.seed, day).filter(candidate => !state.recruited.includes(candidate.id));
+}
+
+/** Hire a candidate off today's pool. `GameState.gd`'s `hire()`: the
+ *  signing fee is the candidate's own wage, deducted once up front — a
+ *  placeholder derived from authored data rather than invented, but the
+ *  owner's comment there is explicit that it was never playtested. Fails
+ *  outright (no partial hire) if cash can't cover it. */
+export function hireFromPool(state, data, candidateId) {
+  if (state.recruited.includes(candidateId) || state.hiredCrew[candidateId]) return false;
+  const day = currentSchedule(state, data.content)?.day ?? 1;
+  const candidate = hiringPoolFor(state, data).find(item => item.id === candidateId);
+  if (!candidate) return false;
+  const fee = candidate.wage_eur;
+  if (state.cash < fee) return false;
+  state.cash -= fee;
+  state.hiredCrew[candidateId] = candidate;
+  state.crewStatus[candidateId] = {
+    condition: candidate.condition,
+    maxCondition: candidate.condition,
+    nerve: candidate.nerve,
+    status: 'available',
+    critical: false,
+  };
+  addUnique(state.recruited, candidateId);
+  addLog(state, `Day ${day}: ${candidate.name} hired on for €${fee} — ${candidate.role}, €${candidate.wage_eur}/night after.`);
+  return true;
 }
 
 export function requirementStatus(requirement, state, data) {
@@ -187,7 +248,7 @@ function chooseEnding(state, data) {
     status.critical = false;
     status.status = 'dead';
     addUnique(state.flags, `unresolved-critical:${id}`);
-    addLog(state, `${data.crew.get(id)?.name ?? id}'s clearly flagged critical wound was not treated before final settlement.`);
+    addLog(state, `${crewRecord(state, data, id)?.name ?? id}'s clearly flagged critical wound was not treated before final settlement.`);
   }
   const deaths = Object.values(state.crewStatus).filter(x => x.status === 'dead').length;
   let id;
@@ -321,7 +382,7 @@ function settleNight(state, content, day) {
   const settlement = content.campaign.settlement;
   state.debt += settlement.nightly_interest_eur;
   const wages = state.recruited.reduce((sum, id) => {
-    const member = content.crew.find(item => item.id === id);
+    const member = content.crew.find(item => item.id === id) ?? state.hiredCrew[id];
     return sum + (member?.wage_eur ?? 0);
   }, 0);
   const paid = Math.min(state.cash, wages);

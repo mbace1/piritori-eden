@@ -8,6 +8,41 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## The hiring pool (`VERSIONS.md` v4.21) — what it left open
+
+- **No release/fire path for a hired crew member.** Once hired, an id sits
+  in `state.recruited`/`state.hiredCrew` forever — same gap `crewStatus`'s
+  `'missing'` status already has (v4.19's note), just reached from a second
+  direction. Godot has none either, so this is faithful, not a corner cut.
+- **`people/roster.mjs`'s name pairing is not origin-paired.** `FIRST` and
+  `LAST` (lines ~130, ~137) are flat pools drawn independently
+  (`pick(FIRST, seed, 'first', i)`, `pick(LAST, seed, 'last', i)`), while
+  `crew_generator.gd`'s `_name_from()` — which `people/hiring.mjs` leans on
+  faithfully for the generated-role half of a hire — draws both halves from
+  the SAME origin pool on purpose (DESIGN_LOCKS §9.2: mixing origins
+  "reads as noise rather than as a neighbourhood"). This is the next item on
+  the audited "continue in order" list, not fixed here: `roster.mjs` was
+  deliberately left untouched this pass to protect `port/vectors.mjs`'s
+  `people@1` fixture (24 rows), which would need regenerating alongside the
+  fix.
+- **A hired candidate's full trait list is never shown**, only the first
+  entry (`renderHireCandidate`'s `candidate.traits?.[0]?.text`) — the same
+  one-line-of-flavour shortcut `renderCrewCard()` already used for the
+  authored six's `strength` field, extended rather than fixed.
+- **The signing fee is unplaytested**, per `GameState.gd`'s own comment on
+  `hire()` — ported at face value (fee = wage, charged once, hire refused
+  outright below that) with no opinion on whether the number is right.
+- **Six recycled portraits.** `crew_generator.gd`'s own comment already
+  calls this a placeholder; `people/hiring.mjs` reuses the exact six ids
+  rather than inventing more art that doesn't exist.
+- **No `ja` strings for the new panel.** Consistent with the rest of
+  `app.js`'s non-battle panels (most section labels are English-only,
+  never passed through `tr()`), so this doesn't widen the localization gap
+  — it's the same pre-existing gap the ordered list already tracks
+  separately.
+
+---
+
 ## Police and heat (`VERSIONS.md` v4.19) — what it left open
 
 - **Police stand and are seen; they do not act.** Matches Godot's own state

@@ -3,6 +3,7 @@ import {
   SAVE_KEY, createState, loadState, saveState, currentSchedule, currentEncounter,
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
   transactOffer, applyEffects, commitRoute, sendOnRoute,
+  crewRecord, hiringPoolFor, hireFromPool,
 } from './state.js?v=1';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
@@ -546,8 +547,9 @@ function renderLedger() {
         ${renderBoard()}
         <section class="paper-panel">
           <p class="section-label">CREW / FRONT THREE DEPLOY AUTOMATICALLY</p>
-          <div class="crew-grid">${data.content.crew.map(renderCrewCard).join('')}</div>
+          <div class="crew-grid">${[...data.content.crew, ...Object.values(state.hiredCrew)].map(renderCrewCard).join('')}</div>
         </section>
+        ${renderHiringPool()}
       </div>
       <aside class="ledger-side">
         <section class="paper-panel">
@@ -575,6 +577,10 @@ function renderLedger() {
 function renderCrewCard(member) {
   const hired = state.recruited.includes(member.id) || state.temporaryCrew.includes(member.id);
   const status = state.crewStatus[member.id];
+  // Authored crew carry a one-line `strength`; a generated hire
+  // (`people/hiring.mjs`) has no such field and leans on its first
+  // rolled trait instead — both read as one line of flavour under the role.
+  const flavor = member.strength ?? member.traits?.[0]?.text ?? '';
   return `<article class="crew-card ${hired ? '' : 'not-hired'}">
     <div class="crew-portrait" aria-hidden="true">
       <img class="legs" src="${assetUrl(data, member.legs_asset_id)}" alt="">
@@ -582,10 +588,42 @@ function renderCrewCard(member) {
       <img class="head" src="${assetUrl(data, member.portrait_asset_id)}" alt="">
     </div>
     <div>
-      <h3>${esc(member.name)}</h3>
+      <h3>${esc(member.name)}${member.nick ? ` <span class="dim">"${esc(member.nick)}"</span>` : ''}</h3>
       <p>${esc(cap(member.role))} · ${hired ? esc(status.status.toUpperCase()) : 'NOT RECRUITED'}</p>
-      <p>${esc(member.strength)}</p>
+      <p>${esc(flavor)}</p>
       <div class="status-dots" aria-label="${status.condition} condition">${Array.from({ length: Math.min(8, status.maxCondition) }, (_, index) => `<i class="${index < status.condition ? 'on' : ''}"></i>`).join('')}</div>
+    </div>
+  </article>`;
+}
+
+/** Today's street offer (`state.hiringPoolFor`) — regenerated on demand
+ *  from the campaign seed and the day, so it is not stored and cannot
+ *  drift out of sync with the day (`GameState.gd`'s `hiring_pool()`). */
+function renderHiringPool() {
+  const pool = hiringPoolFor(state, data);
+  if (pool.length === 0) return '';
+  return `<section class="paper-panel">
+    <p class="section-label">HIRE / TODAY'S CANDIDATES</p>
+    <p class="consequence-strip">The signing fee is a candidate's own nightly wage, taken once, up front. Nobody stays for free after that.</p>
+    <div class="crew-grid">${pool.map(renderHireCandidate).join('')}</div>
+  </section>`;
+}
+
+function renderHireCandidate(candidate) {
+  const affordable = state.cash >= candidate.wage_eur;
+  const flavor = candidate.traits?.[0]?.text ?? '';
+  return `<article class="crew-card not-hired">
+    <div class="crew-portrait" aria-hidden="true">
+      <img class="legs" src="${assetUrl(data, candidate.legs_asset_id)}" alt="">
+      <img class="torso" src="${assetUrl(data, candidate.torso_asset_id)}" alt="">
+      <img class="head" src="${assetUrl(data, candidate.portrait_asset_id)}" alt="">
+    </div>
+    <div>
+      <h3>${esc(candidate.name)}${candidate.nick ? ` <span class="dim">"${esc(candidate.nick)}"</span>` : ''}</h3>
+      <p>${esc(cap(candidate.role))} · AGE ${candidate.age}</p>
+      <p>${esc(flavor)}</p>
+      <p><span class="dim">SIGNING FEE</span> <b>${money(candidate.wage_eur)}</b> · <span class="dim">THEN</span> ${money(candidate.wage_eur)}/night</p>
+      <button class="paper-button" data-action="hire-from-pool" data-candidate="${esc(candidate.id)}" ${affordable ? '' : 'disabled'}>${affordable ? 'HIRE' : 'CANNOT AFFORD'}</button>
     </div>
   </article>`;
 }
@@ -928,6 +966,10 @@ function handleRootClick(event) {
       markSeen(state, offer.anchor_id);
     }
     logToast(result.message); persist(); render();
+  } else if (action === 'hire-from-pool') {
+    const ok = hireFromPool(state, data, target.dataset.candidate);
+    logToast(ok ? 'Hired on.' : 'Cannot hire — not enough cash, or already on the roster.');
+    persist(); render();
   } else if (action === 'select-unit') {
     selectUnit(state.battle, target.dataset.unit); persist(); render();
   } else if (action === 'battle-action') {
