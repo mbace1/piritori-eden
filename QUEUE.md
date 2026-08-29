@@ -46,48 +46,18 @@ line, "leveling, chapters, equipment decay, career lifecycle." Reading
 `game_state.gd` in full to scope it turned up something closer to six
 separate systems. Three are done (career/retirement, v4.23; equipment
 instances + loot + fencing, v4.24; the chapter operation ending, v4.25).
-Three remain:
+Two remain:
 
-- **Leveling** (`level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3`/
-  `crew_levelled` signal). Small in isolation — a level is just
-  `(fights / 3) + 1` — and `state.crewFights` already exists to read
-  (v4.23). **Deliberately not done yet**: a level that grants an
-  unspendable perk point is a counter with no payoff, and perks/skills
-  (below) are what a level's point is actually FOR. Shipping leveling
-  alone would be exactly the half-finished feature this project's own
-  discipline rules out.
-- **Perks and glory** (`crew_perks`/`crew_perk_points`/`spend_perk`/
-  `grant_glory`, `content.perks` = `["strength","speed","wits","nerve",
-  "toughness"]`, `GLORY_PERK_POINTS = 2` for a near-death survival or a
-  double kill in one round). **Not decoration** —
-  `fight_manager.gd:760` reads `perk_value(cid, "wits") / 2` as a live
-  bonus to a "read" mechanic mid-fight. Porting this means `battle.js`
-  gaining a perk-aware combat calculation, not just a data screen.
-- **Skills** (`skill_offer`/`learn_skill`/`skill_pool_size`, gated by
-  `content.classes` — 12 entries, `content.aptitude_rules`, and
-  `content.skills` — 52 entries, each tied to a class/aptitude and a
-  tier). Also load-bearing in combat: `fight_manager.gd` checks
-  `GameState.skills_of(cid).has(ANCHOR_COVER_WIDE_SKILL)` and a hard-cover
-  variant to change what an anchor-class unit's cover verb actually does.
-  **`battle.js` does not currently read `content.classes`/
-  `aptitude_rules`/`skills` AT ALL** — porting this is new combat logic,
-  not a port of existing JS behaviour, and is the single largest piece
-  of this whole item. Leveling, perks, and skills are really one
-  three-part growth loop and probably want doing together, not as three
-  separate passes that each ship something inert until the last one lands.
 - **`begin_next_chapter()`/`decay_equipment()`.** The content only
   authors one chapter (`ERA_CHAPTERS = 4` in Godot, one in this slice),
   so there is nowhere for a "next chapter" to transition TO —
   `decay_equipment()`'s only call site is `begin_next_chapter()`, so both
   stay unported together. Unblocks the moment a second chapter is
-  authored; nothing else stands in the way.
-- **`train()`** (a retired veteran gives a rookie a head start, §7.4) sits
-  on top of retirement — `retired_crew.is_empty()` is its first check,
-  and that list is real and populated as of v4.23. Not attempted; no UI
-  concept of "the veterans you know" exists yet either.
-- **Leveling, perks, and skills** are really one three-part growth loop —
-  `level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3` (small, and
-  `state.crewFights` already exists to read, v4.23); `crew_perks`/
+  authored; nothing else stands in the way. Independent of everything
+  else on this list.
+- **Leveling, perks, skills — and `train()`, which turns out to depend
+  on them too.** `level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3` (small,
+  and `state.crewFights` already exists to read, v4.23); `crew_perks`/
   `spend_perk`/`grant_glory` (`content.perks` = `["strength","speed",
   "wits","nerve","toughness"]`, `GLORY_PERK_POINTS = 2`); `skill_offer`/
   `learn_skill` (gated by `content.classes` — 12 entries,
@@ -99,15 +69,24 @@ Three remain:
   currently read `content.classes`/`aptitude_rules`/`skills` AT ALL** —
   porting this is new combat logic, not a port of existing JS behaviour,
   and is the largest remaining piece of this whole item. Shipping
-  leveling alone (the cheap-looking one) first would grant an
-  unspendable perk point with no payoff — exactly the half-finished
-  feature this project's own discipline rules out — so the three want
-  doing together, not as three separate passes.
+  leveling alone would grant an unspendable perk point with no payoff —
+  exactly the half-finished feature this project's own discipline rules
+  out — so the three want doing together, not as three separate passes.
+  `train()` (a retired veteran gives a rookie a head start, §7.4) looked
+  independent at first — it only touches `retired_crew`/`crew_fights`,
+  both of which are real as of v4.23 — but reading it closely shows
+  its ENTIRE payoff is levels: it bumps `crew_fights[id]` by 2 and calls
+  nothing else, not even `grant_level()` (so it skips the perk points
+  those levels would have granted too) — the "head start" is purely
+  `level_of()` reading higher, which only matters for `learn_skill()`'s
+  tier gate. With no leveling/skills ported, `train()` would be a pure
+  cost (two fewer career fights) for zero observable benefit — the same
+  half-finished trap leveling alone would be. Folded in here rather than
+  left as its own bullet.
 
-None of these three block each other except where noted (skills needs
-classes/aptitude_rules content wiring into `battle.js`; `train()` needs
-retirement, which now exists; leveling/perks/skills want doing as one
-pass, not separately).
+Nothing here blocks `begin_next_chapter()`/`decay_equipment()`, and
+nothing outside this list blocks leveling/perks/skills/`train()` either
+— it is one growth-loop pass, not four separate ones.
 
 ---
 
