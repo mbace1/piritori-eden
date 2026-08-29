@@ -10,6 +10,114 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.23 — 2026-08-29
+
+**Career length and retirement, ported from `age_crew()`/`retire()`.**
+First slice of the sixth audited item, "campaign progression" — which
+turned out, on reading `game_state.gd` in full, to not be one item.
+It is at least six: career length/retirement (this entry), leveling
+(`level_of`/`grant_level`, fights-per-level), perks and glory
+(`crew_perks`/`grant_glory`, and both are read by `fight_manager.gd`'s
+combat math — `perk_value(cid, 'wits')` and specific learned skills
+change what a unit can do mid-fight), skills (`skill_offer`/
+`learn_skill`, gated by a 12-class/52-skill aptitude system this build's
+`battle.js` does not currently read at all), equipment as
+condition-tracked instances plus loot and fencing (`Condition` enum,
+`take_loot`/`sell_loot`, `state.equipment` would need to stop being a
+flat array of type-ids), and chapters (goal tracking, the operation
+ending, `decay_equipment()` at the chapter boundary) — the last of
+which depends on loot/fencing to mean anything, since Godot's own
+`record_chapter_income` is wired to exactly one source: fencing loot,
+not market sales or mission payouts, despite its comment claiming
+otherwise (the same class of overpromising-comment gap this port has
+now met twice — see v4.20's item-use entry). Leveling/perks/skills touch
+`fight_manager.gd`'s actual damage and cover resolution, not just data —
+porting them properly means changing `battle.js`'s combat math, which
+was judged too large and too risky to fold into the same pass as
+anything else. See `QUEUE.md` for the full breakdown.
+
+Career length and retirement was the one piece of the six with no
+dependency on any of the others, so it goes first:
+
+- **`state.crewFights`** (persisted, id → fight count) and
+  **`state.retiredCrew`** (persisted array) — `crew_fights`/
+  `retired_crew`'s exact shapes. **`CAREER_FIGHTS = 10`,
+  `CAREER_WARN_AT = 7`** — `game_state.gd`'s own constants.
+- **`isNamed(state, data, id)`** reads the SAME `named` field
+  `crewRecord()` already resolves across both `data.crew` (the six,
+  `named: true`) and `state.hiredCrew` (`people/hiring.mjs` candidates,
+  `named: false`) — `is_named()`'s exact check, and no new field needed
+  since v4.21 already carries it. A named crew member has no ceiling —
+  never ages, never retires.
+- **`fightsOf`/`careerLeft`/`careerIsVisible`** port `fights_of`/
+  `career_left`/`career_is_visible` exactly, including the "nothing
+  until they are close, then the game tells you" design: the warning
+  only becomes visible at 7 fights, never before.
+- **`ageCrew(state, data, deployedIds)`** ports `age_crew()`, wired into
+  `recordBattleConsequences()` in `app.js` — after the police-taken loop
+  (mirroring `_settle_loot()`/`arrest()`-before-`age_crew()` in
+  `app_shell.gd`), inside the same `!battle.training` guard everything
+  else in that function already uses (Godot has no training-battle
+  concept to compare against; this follows the guard's own established
+  spirit rather than inventing a second rule). **Kept a Godot quirk
+  faithfully**: `age_crew()` does not check whether a deployed id was
+  just taken by police this same fight — it still ages them, and can
+  still force them into `retiredCrew` on top of already being gone. Not
+  special-cased here either.
+- **A real, if obscure, second Godot quirk surfaced and was matched
+  rather than closed**: `hire()`'s dedup is `roster.has(id)` ALONE, not
+  "have I ever generated this id before." Once retirement exists, that
+  is weaker than it reads — a retired candidate is off `state.recruited`,
+  so the exact same person can resurface in a later pool read and be
+  re-hired, and because `state.retiredCrew` is never cleared,
+  `ageCrew()` then skips them forever: a re-hired "retired" veteran
+  becomes immortal. **v4.21's `hireFromPool` had accidentally been
+  stricter than Godot** (an extra `state.hiredCrew[candidateId]` check
+  that was redundant before retirement existed and became a real
+  divergence once it did) — removed here to match `roster.has(id)`
+  exactly, discovered by the scratch test below failing against the
+  original, stricter guard.
+- **UI**: `renderCrewCard()` shows a `N FIGHTS LEFT` warning tag once
+  `careerIsVisible()` is true, for a hired-and-active crew member only.
+  A battle's aftermath toasts `"<name> retires after this one."` for
+  each id `ageCrew()` returns.
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check`
+green. A scratch bare-node script drove `ageCrew`/`careerLeft`/
+`careerIsVisible` directly: a named crew member never ages across 20
+forced calls; a hired candidate's ceiling counts down from 10, the
+warning stays hidden through fight 6 and turns visible at 7, retirement
+fires exactly on fight 10 and not before, a retired id is idempotent
+against further aging, the missing-crew-still-ages quirk, and the
+re-hire-after-retirement immortality quirk. A real Playwright run hired
+a candidate through the live UI, deployed them into the real 2v2, forced
+four battles to a win through the actual `finish-battle` control, and
+confirmed the fight count climbing, the warning tag appearing at the
+right moment, and real retirement (off `state.recruited`, into
+`state.retiredCrew`) at fight 10. `v3-playthrough.cjs` unchanged at
+23/28 (same pre-existing failures).
+
+**Not attempted:** leveling, perks, skills, glory, equipment-as-
+instances/loot/fencing/decay, and chapters — see `QUEUE.md` for the
+full scope of each; none of career/retirement's code touches or assumes
+any of them. `train()` (a retired veteran giving a rookie a head start)
+is not ported — it reads `retired_crew`, which now exists and is
+populated, but the training-contact interaction itself is a separate,
+unattempted piece. No UI lists who has retired, only who is close to it.
+
+### Port
+- **rules:** ported — `age_crew()`/`retire()`/`career_left()`/
+  `career_is_visible()`/`is_named()` and the two constants are the
+  canonical copy; nothing to re-port. The `hire()` dedup fix is also a
+  match to the canonical behaviour, not a new rule.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** the warning tag and the retirement toast are
+  `web/`-only UI.
+- **status:** career/retirement lands. The remaining five pieces of
+  "campaign progression" are unstarted and unordered among themselves —
+  see `QUEUE.md` for the dependency notes (skills/perks need
+  `battle.js` combat-math changes; chapters need loot/fencing first).
+
 ## v4.22 — 2026-08-29
 
 **`roster.mjs`'s name-pairing bug, fixed.** Fifth item on the audited

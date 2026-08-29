@@ -4,6 +4,7 @@ import {
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
   transactOffer, applyEffects, commitRoute, sendOnRoute,
   crewRecord, hiringPoolFor, hireFromPool,
+  isNamed, careerLeft, careerIsVisible, ageCrew,
 } from './state.js?v=1';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
@@ -592,6 +593,8 @@ function renderCrewCard(member) {
       <p>${esc(cap(member.role))} · ${hired ? esc(status.status.toUpperCase()) : 'NOT RECRUITED'}</p>
       <p>${esc(flavor)}</p>
       <div class="status-dots" aria-label="${status.condition} condition">${Array.from({ length: Math.min(8, status.maxCondition) }, (_, index) => `<i class="${index < status.condition ? 'on' : ''}"></i>`).join('')}</div>
+      ${hired && careerIsVisible(state, data, member.id)
+        ? `<span class="tag warning">${careerLeft(state, data, member.id)} FIGHT${careerLeft(state, data, member.id) === 1 ? '' : 'S'} LEFT</span>` : ''}
     </div>
   </article>`;
 }
@@ -896,6 +899,11 @@ function recordBattleConsequences() {
       if (injured.has(id) || !state.crewStatus[id]) continue;
       state.crewStatus[id].status = 'missing';
     }
+    // A fight is where a career is spent (COMBAT.md §7.2) — after the
+    // police have taken whoever they took, so an already-gone crew member
+    // does not also come out of it one fight older for nothing.
+    const retired = ageCrew(state, data, battle.players.map(p => p.id));
+    for (const id of retired) logToast(`${crewRecord(state, data, id)?.name ?? id} retires after this one.`);
   }
   state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round });
   state.battle = null;

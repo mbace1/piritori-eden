@@ -53,6 +53,12 @@ export function createState(content) {
     // checks both so the rest of the game does not have to know which
     // source a recruited id came from.
     hiredCrew: {},
+    // Career (`GameState.gd`'s `crew_fights`/`retired_crew`, COMBAT.md
+    // §7): a fight survived, per non-named crew id, and who has already
+    // aged out. A named crew member never appears in either — they have
+    // no ceiling (§7.1).
+    crewFights: {},
+    retiredCrew: [],
     revealedOffers: ['offer-piritori-buy'],
     revealedMissions: [],
     revealedEncounters: ['enc-first-purchase'],
@@ -80,6 +86,7 @@ export function restoreState(raw, content) {
     obligations: { ...fresh.obligations, ...(raw.obligations ?? {}) },
     crewStatus: { ...fresh.crewStatus, ...(raw.crewStatus ?? {}) },
     hiredCrew: { ...fresh.hiredCrew, ...(raw.hiredCrew ?? {}) },
+    crewFights: { ...fresh.crewFights, ...(raw.crewFights ?? {}) },
   };
 }
 
@@ -126,6 +133,67 @@ export function deployedCrew(state, data) {
   return merged.slice(0, 3).map(id => crewRecord(state, data, id)).filter(Boolean);
 }
 
+// ── career (GameState.gd's crew_fights/retired_crew, COMBAT.md §7) ─────────
+// A named crew member (the six authored slots) is an FFT story unit: rare,
+// deployed deliberately, never lost to attrition — no ceiling, because they
+// leave in authored beats, not by running out of fights. Everyone else is
+// hired, and hired crew are disposable: a bounded career that ends in
+// retirement, alive, once they have survived enough of them.
+const CAREER_FIGHTS = 10;
+// Nothing until they are close, then the game tells you — a hidden counter
+// would turn the exact spend-or-save decision into a guess.
+const CAREER_WARN_AT = 7;
+
+export function isNamed(state, data, id) {
+  return crewRecord(state, data, id)?.named === true;
+}
+
+export function fightsOf(state, id) {
+  return state.crewFights[id] ?? 0;
+}
+
+/** -1 for a named character, who has no ceiling. */
+export function careerLeft(state, data, id) {
+  if (isNamed(state, data, id)) return -1;
+  return Math.max(CAREER_FIGHTS - fightsOf(state, id), 0);
+}
+
+export function careerIsVisible(state, data, id) {
+  if (isNamed(state, data, id)) return false;
+  return fightsOf(state, id) >= CAREER_WARN_AT;
+}
+
+function retireCrew(state, data, id) {
+  if (state.retiredCrew.includes(id)) return;
+  state.retiredCrew.push(id);
+  const index = state.recruited.indexOf(id);
+  if (index >= 0) state.recruited.splice(index, 1);
+  // A veteran in the city is a relationship, not a deleted row — the same
+  // `memory:` convention `applyEffects()` already writes into `state.flags`.
+  addUnique(state.flags, `memory:retired:${id}`);
+  addLog(state, `${crewRecord(state, data, id)?.name ?? id} has done enough fights. They retire, alive.`);
+}
+
+/** Everyone who was deployed comes out one fight older — called once when a
+ *  battle settles (`age_crew()`), never per round. Returns the ids who
+ *  reached the ceiling and left this call: RETIRED, not dead. Godot's own
+ *  loop does not special-case a crew member the police already took this
+ *  same fight (`state.crewStatus[id].status === 'missing'`) — they still
+ *  age, and can still be pushed into `retiredCrew` on top of already being
+ *  gone. Kept exactly that way rather than added a check Godot doesn't have. */
+export function ageCrew(state, data, deployedIds) {
+  const left = [];
+  for (const id of deployedIds) {
+    if (isNamed(state, data, id) || state.retiredCrew.includes(id)) continue;
+    state.crewFights[id] = fightsOf(state, id) + 1;
+    if (fightsOf(state, id) >= CAREER_FIGHTS) {
+      retireCrew(state, data, id);
+      left.push(id);
+    }
+  }
+  return left;
+}
+
 /** Today's three candidates — `hiringPool()` is pure and re-derives the
  *  same people every time it is called for the same day, so nothing here
  *  is stored: walking away and coming back must not reroll the board.
@@ -142,9 +210,17 @@ export function hiringPoolFor(state, data) {
  *  signing fee is the candidate's own wage, deducted once up front — a
  *  placeholder derived from authored data rather than invented, but the
  *  owner's comment there is explicit that it was never playtested. Fails
- *  outright (no partial hire) if cash can't cover it. */
+ *  outright (no partial hire) if cash can't cover it.
+ *
+ *  Godot's own dedup is `roster.has(id)` alone — NOT whether the id has
+ *  ever been seen in `generated_crew` before. That is weaker than it
+ *  sounds once retirement exists (`ageCrew()`): a retired candidate is off
+ *  `state.recruited`, so the exact same person can resurface in a later
+ *  pool read and be hired again — and because `state.retiredCrew` is
+ *  never cleared, `ageCrew()` will then skip them forever, an odd
+ *  immortality this port carries over rather than closes. */
 export function hireFromPool(state, data, candidateId) {
-  if (state.recruited.includes(candidateId) || state.hiredCrew[candidateId]) return false;
+  if (state.recruited.includes(candidateId)) return false;
   const day = currentSchedule(state, data.content)?.day ?? 1;
   const candidate = hiringPoolFor(state, data).find(item => item.id === candidateId);
   if (!candidate) return false;
