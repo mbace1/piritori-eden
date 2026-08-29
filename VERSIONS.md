@@ -10,6 +10,79 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.22 — 2026-08-29
+
+**`roster.mjs`'s name-pairing bug, fixed.** Fifth item on the audited
+"continue in order" list, and the one that turned up while porting the
+fourth (v4.21): `people/roster.mjs`'s own comment claimed first and
+family names came "from the one pool" (DESIGN_LOCKS §9.2's rule,
+mirroring `crew_generator.gd`'s `_name_from()`), but `FIRST` and `LAST`
+were two FLAT lists drawn independently. `LAST` held nothing but Finnish
+surnames — so anyone whose first name landed non-Finnish (`Ahmed`,
+`Nadia`, `Goran`…) got a Finnish family name **every single time**, not
+"eventually" the way `crew_generator.gd`'s own warning describes
+("the randomiser would quietly turn the neighbourhood Finnish over a
+long campaign"). It wasn't quiet or gradual here; it was 100% of the
+time from the first roll, on both the six authored crew slots
+(`nameFrom()`, keyed off crew id) and every hireling `roster()` /
+`hireling()` ever produced — which also means every hire v4.21 offered
+through the pool up to now.
+
+- **`GIVEN`/`FAMILY`**, `crew_generator.gd`'s exact origin-keyed tables
+  (fi/so/vi/yu/ee/ru, diacritics intact), replace the flat `FIRST`/`LAST`
+  pools. `GIVEN` is exported for the test suite; `FAMILY` stays private.
+- **`pairedName(...seed)`** rolls one origin, then a given and a family
+  name from THAT origin's pool — `_name_from()`'s own shape — and both
+  `nameFrom(seed)` (the six authored crew slots) and `hireling()`'s
+  `name` field now call it instead of drawing the two halves apart.
+  Nothing else in `hireling()` changed: aptitudes, traits, career stage,
+  and the nickname roll all use the same seeds and code as before.
+- **`people/test/roster.mjs`'s DESIGN_LOCKS §9.2 test** used a hand-kept
+  set of "the non-Finnish first names" to split the roster for the
+  statistical-independence check — the exact kind of drift-prone list
+  the fix above replaces elsewhere, so it would have silently stopped
+  testing anything the moment the pool changed. Rewritten to read origin
+  back off `GIVEN` itself.
+- **`port/vectors.mjs`'s `people@1` fixture went stale** the moment the
+  output changed (rows compare unequal — that's the mechanism, not a
+  bug) and was regenerated to **`people@2`** (`node port/vectors.mjs`,
+  24 rows, same seeds/indices as before — only the generated names and
+  nicks differ, e.g. `port:0` was `"Tero Nurmi"` before and is now
+  `"Sergei Ivanov"`).
+
+**Verified**: `node people/test/roster.mjs` — 23/23, including the
+rewritten origin-independence check. All bare-node project gates green.
+`port/vectors.mjs --check` clean at `people@2` (was correctly STALE
+before regenerating — confirmed the mechanism caught the change rather
+than silently passing). The v4.21 hiring scratch script and the real
+Playwright hiring-UI run were both re-run against the new names and stayed
+green (hire flow, cash, roster membership, pool exclusion, deployability,
+wage collection — none of that logic reads a specific name, so nothing
+there was expected to move, and nothing did). `v3-playthrough.cjs`
+unchanged at 23/28 (same pre-existing failures, confirmed against a
+stashed `main`).
+
+**Not attempted:** the pools themselves are still small (`GIVEN`/`FAMILY`
+are `crew_generator.gd`'s own tables, and that file already calls its own
+pools a first guess) — widening them is a content task, not a bug; this
+version only fixes how the two halves are drawn relative to each other.
+The six authored crew's displayed names change with this fix (a
+consequence of the pool swap, not a separate decision) — nothing pins a
+specific authored-crew name anywhere in `web/js/v3` or its tests, so this
+was not treated as a compatibility break.
+
+### Port
+- **rules:** ported — `crew_generator.gd`'s `GIVEN`/`FAMILY` tables and
+  `_name_from()`'s same-origin discipline are the canonical copy; nothing
+  to re-port.
+- **data/vectors/meshes:** `port/vectors/people.json` moved to **rev 2** —
+  name it as such in any Godot-side changelog that tracks vector revs.
+- **presentation:** none — no UI changed shape, only the names it shows.
+- **status:** the name-pairing bug is closed. Next in order: campaign
+  progression (leveling, chapters, equipment decay, career lifecycle),
+  then `ja` localization for the battle UI, then the hardcoded
+  `bulletin[0]` in news — see `QUEUE.md`.
+
 ## v4.21 — 2026-08-29
 
 **The hiring pool, ported.** Third item on the audited "continue in order"

@@ -14,17 +14,9 @@ pick up, and half of it will turn out to be wrong.
   in `state.recruited`/`state.hiredCrew` forever — same gap `crewStatus`'s
   `'missing'` status already has (v4.19's note), just reached from a second
   direction. Godot has none either, so this is faithful, not a corner cut.
-- **`people/roster.mjs`'s name pairing is not origin-paired.** `FIRST` and
-  `LAST` (lines ~130, ~137) are flat pools drawn independently
-  (`pick(FIRST, seed, 'first', i)`, `pick(LAST, seed, 'last', i)`), while
-  `crew_generator.gd`'s `_name_from()` — which `people/hiring.mjs` leans on
-  faithfully for the generated-role half of a hire — draws both halves from
-  the SAME origin pool on purpose (DESIGN_LOCKS §9.2: mixing origins
-  "reads as noise rather than as a neighbourhood"). This is the next item on
-  the audited "continue in order" list, not fixed here: `roster.mjs` was
-  deliberately left untouched this pass to protect `port/vectors.mjs`'s
-  `people@1` fixture (24 rows), which would need regenerating alongside the
-  fix.
+- **`people/roster.mjs`'s name pairing was not origin-paired — fixed in
+  `VERSIONS.md` v4.22.** See that entry; left here only so this list's own
+  cross-reference stays accurate.
 - **A hired candidate's full trait list is never shown**, only the first
   entry (`renderHireCandidate`'s `candidate.traits?.[0]?.text`) — the same
   one-line-of-flavour shortcut `renderCrewCard()` already used for the
@@ -40,6 +32,21 @@ pick up, and half of it will turn out to be wrong.
   never passed through `tr()`), so this doesn't widen the localization gap
   — it's the same pre-existing gap the ordered list already tracks
   separately.
+
+---
+
+## The name-pairing fix (`VERSIONS.md` v4.22) — what it left open
+
+- **`GIVEN`/`FAMILY` are still `crew_generator.gd`'s original small
+  tables** (13-14 given names for `fi`, 5-7 for the others; family pools
+  the same size). Fixing the pairing did not widen the pools — a long
+  campaign will still repeat names within an origin fairly often. Content
+  work, not a bug.
+- **The six authored crew's displayed names changed** as a direct
+  consequence (same `nameFrom(id)` call, different pools underneath).
+  Nothing pins the old names anywhere checked, but if any content written
+  since referred to a crew member's generated name by exact string
+  outside `web/js/v3` and its tests, it was not searched for here.
 
 ---
 

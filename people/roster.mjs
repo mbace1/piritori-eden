@@ -127,26 +127,52 @@ export const TRAITS = [
 // Kallio in 2003. The pool is mixed because the neighbourhood was, and it is
 // rolled from a SEPARATE seed that no aptitude, trait or stat ever reads —
 // DESIGN_LOCKS §9.2, made structural rather than promised.
-const FIRST = [
-  'Jari', 'Mika', 'Timo', 'Petri', 'Sami', 'Marko', 'Janne', 'Tero', 'Ville', 'Antti',
-  'Juha', 'Pekka', 'Kari', 'Harri', 'Jukka', 'Ari', 'Toni', 'Mikko', 'Esa', 'Rauno',
-  'Sari', 'Päivi', 'Minna', 'Anne', 'Tiina', 'Johanna', 'Katja', 'Heidi', 'Satu', 'Nina',
-  'Riitta', 'Marika', 'Hanna', 'Piia', 'Leena',
-  'Ahmed', 'Nadia', 'Goran', 'Vesa', 'Dmitri', 'Aleksi', 'Farid', 'Linh', 'Samir', 'Olga',
-];
-const LAST = [
-  'Virtanen', 'Korhonen', 'Nieminen', 'Mäkinen', 'Hämäläinen', 'Laine', 'Heikkinen',
-  'Koskinen', 'Järvinen', 'Lehtonen', 'Saarinen', 'Salminen', 'Heinonen', 'Niemi',
-  'Aho', 'Rantanen', 'Karjalainen', 'Jokinen', 'Mattila', 'Savolainen', 'Lahtinen',
-  'Ahonen', 'Turunen', 'Pitkänen', 'Väisänen', 'Manninen', 'Kinnunen', 'Räsänen',
-  'Hiltunen', 'Leinonen', 'Nurmi', 'Salo', 'Määttä', 'Tuominen', 'Kallio',
-];
+//
+// Origin-paired, not two independent pools. This file's own comment used to
+// claim "both halves come from the one pool" while `FIRST`/`LAST` were two
+// FLAT lists drawn independently — `LAST` held nothing but Finnish surnames,
+// so anyone whose first name landed non-Finnish (`Ahmed`, `Nadia`, `Goran`…)
+// was guaranteed a Finnish family name every single time. That is exactly
+// the failure `crew_generator.gd`'s own comment on `GIVEN`/`FAMILY` warns
+// about — "the randomiser would quietly turn the neighbourhood Finnish over
+// a long campaign" — except here it wasn't quiet or gradual, it was 100% of
+// the time from the first roll. `GIVEN`/`FAMILY` below are that file's exact
+// tables (`crew_generator.gd`, diacritics intact — Latin Extended-A, the
+// same font this build already relies on for the authored cast), so a first
+// and a family name are drawn from the SAME origin, and the two halves
+// really are the one pool `_name_from()`'s comment describes.
+export const GIVEN = {
+  fi: ['Aino', 'Eero', 'Hannele', 'Jouni', 'Kirsti', 'Lasse', 'Marja',
+    'Olli', 'Pirjo', 'Reijo', 'Sanna', 'Tuomas', 'Ulla', 'Veikko'],
+  so: ['Abdi', 'Ayaan', 'Farah', 'Hodan', 'Idil', 'Nasra', 'Yusuf'],
+  vi: ['Anh', 'Bao', 'Hien', 'Lan', 'Minh', 'Quang', 'Thuy'],
+  yu: ['Boris', 'Dragan', 'Ivana', 'Milena', 'Nikola', 'Vesna', 'Zoran'],
+  ee: ['Kadri', 'Maarja', 'Priit', 'Tarmo', 'Ülle'],
+  ru: ['Galina', 'Igor', 'Ludmila', 'Sergei', 'Tatjana'],
+};
+const FAMILY = {
+  fi: ['Aaltonen', 'Heikkilä', 'Järvinen', 'Kinnunen', 'Laine', 'Mäkelä',
+    'Nieminen', 'Peltola', 'Rantanen', 'Saarinen', 'Toivonen', 'Virtanen'],
+  so: ['Ahmed', 'Dirie', 'Hassan', 'Jama', 'Osman', 'Warsame'],
+  vi: ['Bui', 'Dang', 'Ho', 'Le', 'Pham', 'Tran', 'Vu'],
+  yu: ['Babić', 'Ilić', 'Jovanović', 'Kovač', 'Popović', 'Savić'],
+  ee: ['Kask', 'Lepik', 'Mägi', 'Saar', 'Tamm'],
+  ru: ['Ivanov', 'Morozov', 'Petrov', 'Smirnov', 'Volkov'],
+};
+const ORIGINS = Object.keys(GIVEN);
 // A street name is not everybody's. It arrives with reputation, so it is more
 // likely on somebody who has already done a few fights.
 const NICK = [
   'Kurvi', 'Pikku', 'Lankku', 'Tohtori', 'Rusina', 'Sähkö', 'Nappi', 'Kelmi',
   'Pastori', 'Rouva', 'Kettu', 'Peltsi', 'Musta', 'Hiiri', 'Vinkki', 'Pomo',
 ];
+
+/** One origin, then a given and a family name from THAT origin's pool —
+ *  `_name_from()`'s own shape. Never draw `GIVEN`/`FAMILY` separately. */
+function pairedName(...seed) {
+  const origin = pick(ORIGINS, ...seed, 'origin');
+  return `${pick(GIVEN[origin], ...seed, 'first')} ${pick(FAMILY[origin], ...seed, 'last')}`;
+}
 
 /**
  * A first + family name from a stable id, with nothing else attached.
@@ -155,14 +181,13 @@ const NICK = [
  * role, stats and a recruit encounter already, and lost their authored
  * `name` field when `COMBAT.md` §7.1 moved names to generation (2026-08-27).
  * `hireling()` needs a numeric index and a trait count; a crew slot has
- * neither, so this is the FIRST/LAST pools alone, keyed on whatever string the
- * caller has to hand — `id` for a crew slot, and it produces the same person
- * every time for the same id, which is the property a recurring character
- * needs. Same rule as `hireling()`: both halves come from the one pool
- * (DESIGN_LOCKS §9.2), never mixed with a second one by the caller.
+ * neither, so this is the origin-paired name draw alone, keyed on whatever
+ * string the caller has to hand — `id` for a crew slot, and it produces the
+ * same person every time for the same id, which is the property a
+ * recurring character needs.
  */
 export function nameFrom(seed) {
-  return `${pick(FIRST, seed, 'first')} ${pick(LAST, seed, 'last')}`;
+  return pairedName(seed);
 }
 
 // ── generate ────────────────────────────────────────────────────────────────
@@ -208,7 +233,7 @@ export function hireling(seed, i, o = {}) {
   const nick = s('hasnick') < 0.12 + fights * 0.04;
   return {
     id: `${seed}:${i}`,
-    name: `${pick(FIRST, seed, 'first', i)} ${pick(LAST, seed, 'last', i)}`,
+    name: pairedName(seed, i),
     nick: nick ? pick(NICK, seed, 'nick', i) : null,
     aptitudes: apts,
     look: apts[0],                       // §9.12: appearance follows the first

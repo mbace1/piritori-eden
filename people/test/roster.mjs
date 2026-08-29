@@ -9,7 +9,7 @@
  * is a behaviour, never a number) and DESIGN_LOCKS §9.2 (no name touches any
  * aptitude, trait or stat).
  */
-import { hireling, roster, APTITUDES, TRAITS } from '../roster.mjs';
+import { hireling, roster, APTITUDES, TRAITS, GIVEN } from '../roster.mjs';
 
 let pass = 0, fail = 0;
 const ok = (c, w) => { if (c) pass++; else { fail++; console.log('  FAIL  ' + w); } };
@@ -70,10 +70,20 @@ const ok = (c, w) => { if (c) pass++; else { fail++; console.log('  FAIL  ' + w)
 // The property that actually matters is STATISTICAL INDEPENDENCE: split the
 // roster by name origin and the capability distributions must not move. If a
 // name reached any aptitude or trait, this is where it would show.
+//
+// Origin is read back off the given name via `GIVEN` (people/roster.mjs,
+// `crew_generator.gd`'s own tables) rather than a hand-kept list of "the
+// non-Finnish ones" — the old list was itself the bug this test's sibling
+// fix was for (`VERSIONS.md`, roster naming): a hand-kept set of first names
+// drifts the moment the pool it was copied from changes, silently.
 {
-  const OTHER = new Set(['Ahmed', 'Nadia', 'Goran', 'Dmitri', 'Farid', 'Linh', 'Samir', 'Olga']);
+  const originOf = new Map();
+  for (const [origin, names] of Object.entries(GIVEN)) for (const n of names) originOf.set(n, origin);
   const R = roster('lock', 6000);
-  const groups = { a: R.filter(p => OTHER.has(p.name.split(' ')[0])), b: R.filter(p => !OTHER.has(p.name.split(' ')[0])) };
+  const groups = {
+    a: R.filter(p => originOf.get(p.name.split(' ')[0]) !== 'fi'),
+    b: R.filter(p => originOf.get(p.name.split(' ')[0]) === 'fi'),
+  };
   ok(groups.a.length > 500 && groups.b.length > 500,
     `both groups are big enough to compare (${groups.a.length} / ${groups.b.length})`);
 
