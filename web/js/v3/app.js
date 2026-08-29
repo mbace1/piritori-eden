@@ -6,6 +6,7 @@ import {
   crewRecord, hiringPoolFor, hireFromPool,
   isNamed, careerLeft, careerIsVisible, ageCrew,
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord,
+  arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
 } from './state.js?v=1';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
@@ -481,6 +482,48 @@ function renderEncounterOutcome(choice, pendingBattle) {
  * gave you, and this is what you read to decide whether the lead is worth the
  * trip.
  */
+/**
+ * THE CHAPTER — progress toward the authored operation ending
+ * (`chapter-1-piritori` → `op-sornainen-shipment`), ported from
+ * `chapter_goal_met()`/`attempt_chapter_ending()`. The threshold buys
+ * ENTRY to the climax; it is not the climax itself.
+ */
+function renderChapter() {
+  const def = data.content.chapters?.find(item => item.index === state.chapter);
+  if (!def) return '';
+  const ending = def.ending ?? {};
+  const anchor = data.anchors.get(ending.anchor_id);
+  const progress = chapterProgress(state);
+  if (state.chapterCleared) {
+    const outcomeCopy = {
+      clean: `The shipment got away clean.${ending.grants_upgrade ? ` ${esc(cap(ending.grants_upgrade))} is yours.` : ''}`,
+      messy: 'Something had to be left behind, but it got away.',
+      lost: 'Somebody did not come back.',
+    };
+    return `<section class="paper-panel">
+      <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
+      <h2 class="section-title">${esc((ending.label ?? 'THE OPERATION').toUpperCase())} — ${esc(state.lastEndingOutcome.toUpperCase())}</h2>
+      <p>${esc(outcomeCopy[state.lastEndingOutcome] ?? '')}</p>
+    </section>`;
+  }
+  const goalMet = chapterGoalMet(state);
+  const atAnchor = Boolean(ending.anchor_id) && state.selectedAnchor === ending.anchor_id;
+  const canAfford = state.cash >= (ending.stake_eur ?? 0);
+  const fmt = value => state.chapterGoal === 'money' ? money(value) : String(value);
+  return `<section class="paper-panel">
+    <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
+    <h2 class="section-title">${esc(cap(state.chapterGoal))} · ${fmt(progress)} / ${fmt(state.chapterThreshold)}</h2>
+    ${goalMet
+      ? `<p>${esc(ending.brief ?? '')}</p>
+         <button class="paper-button primary" data-action="attempt-chapter-ending" ${atAnchor && canAfford ? '' : 'disabled'}>
+           ATTEMPT ${esc((ending.label ?? 'THE OPERATION').toUpperCase())} · ${money(ending.stake_eur ?? 0)}
+         </button>
+         ${!atAnchor ? `<p class="consequence-strip">Stand at ${esc(anchor?.label ?? 'the site')} to attempt it.</p>` : ''}
+         ${atAnchor && !canAfford ? '<p class="consequence-strip">Not enough cash on hand for the stake.</p>' : ''}`
+      : '<p class="consequence-strip">Earned by fencing loot at Piritori — market sales and mission payouts do not count.</p>'}
+  </section>`;
+}
+
 function renderBoard() {
   const { clock, rows } = board(state, data);
   const eye = exposureHere(state, data);
@@ -546,6 +589,7 @@ function renderLedger() {
           </table>
           <p class="consequence-strip">The slice trades one abstract good. No dosage, preparation, concealment or consumption detail is simulated.</p>
         </section>
+        ${renderChapter()}
         ${renderBoard()}
         <section class="paper-panel">
           <p class="section-label">CREW / FRONT THREE DEPLOY AUTOMATICALLY</p>
@@ -594,7 +638,10 @@ function renderCrewCard(member) {
     </div>
     <div>
       <h3>${esc(member.name)}${member.nick ? ` <span class="dim">"${esc(member.nick)}"</span>` : ''}</h3>
-      <p>${esc(cap(member.role))} · ${hired ? esc(status.status.toUpperCase()) : 'NOT RECRUITED'}</p>
+      <p>${esc(cap(member.role))} · ${hired ? esc(status.status.toUpperCase())
+        : state.arrestedCrew.includes(member.id) ? 'ARRESTED'
+        : state.retiredCrew.includes(member.id) ? 'RETIRED'
+        : 'NOT RECRUITED'}</p>
       <p>${esc(flavor)}</p>
       <div class="status-dots" aria-label="${status.condition} condition">${Array.from({ length: Math.min(8, status.maxCondition) }, (_, index) => `<i class="${index < status.condition ? 'on' : ''}"></i>`).join('')}</div>
       ${hired && careerIsVisible(state, data, member.id)
@@ -917,6 +964,11 @@ function recordBattleConsequences() {
       if (injured.has(id) || !state.crewStatus[id]) continue;
       state.crewStatus[id].status = 'missing';
     }
+    // §9.5.3: they are gone — `arrest()`'s real consequence, not just a
+    // status label. Off the active roster (`crewRecord()` still resolves
+    // them for logs and history; `state.crewStatus` keeps 'missing' for
+    // what a card would show if one still pointed at them).
+    for (const id of taken) arrestCrew(state, data, id);
     // A fight is where a career is spent (COMBAT.md §7.2) — after the
     // police have taken whoever they took, so an already-gone crew member
     // does not also come out of it one fight older for nothing.
@@ -995,6 +1047,10 @@ function handleRootClick(event) {
   } else if (action === 'sell-loot') {
     const paid = sellLoot(state, data, target.dataset.equipment);
     logToast(paid > 0 ? `Fenced for ${money(paid)}.` : 'Nothing there to fence.');
+    persist(); render();
+  } else if (action === 'attempt-chapter-ending') {
+    const reason = attemptChapterEnding(state, data);
+    if (reason) logToast({ 'not-available': 'Not ready yet.', 'cannot-afford': 'Not enough cash for the stake.', 'wrong-place': 'Wrong place for this.' }[reason] ?? reason);
     persist(); render();
   } else if (action === 'hire-from-pool') {
     const ok = hireFromPool(state, data, target.dataset.candidate);

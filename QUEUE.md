@@ -38,14 +38,15 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
-## Campaign progression — what's left after career/retirement (v4.23) and
-## equipment/loot/fencing (`VERSIONS.md` v4.24)
+## Campaign progression — what's left after career/retirement (v4.23),
+## equipment/loot/fencing (v4.24), and chapters (`VERSIONS.md` v4.25)
 
 The audited "continue in order" list's sixth item was written down as one
 line, "leveling, chapters, equipment decay, career lifecycle." Reading
 `game_state.gd` in full to scope it turned up something closer to six
-separate systems. Two are done (career/retirement, v4.23; equipment
-instances + loot + fencing, v4.24). Four remain:
+separate systems. Three are done (career/retirement, v4.23; equipment
+instances + loot + fencing, v4.24; the chapter operation ending, v4.25).
+Three remain:
 
 - **Leveling** (`level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3`/
   `crew_levelled` signal). Small in isolation — a level is just
@@ -74,34 +75,62 @@ instances + loot + fencing, v4.24). Four remain:
   of this whole item. Leveling, perks, and skills are really one
   three-part growth loop and probably want doing together, not as three
   separate passes that each ship something inert until the last one lands.
-- **Chapters** (`chapter_earned`/`chapter_goal_met`/
-  `attempt_chapter_ending`/`begin_next_chapter`, `state.upgrades`,
-  `CHAPTER_DAYS = 10` vs. the authored slice's 7 — a PLACEHOLDER per
-  `game_state.gd`'s own comment; `decay_equipment()`, whose only call
-  site is `begin_next_chapter()`). `content/era1-slice-v1.json` already
-  authors one real chapter (`chapter-1-piritori`, a money goal of 400,
-  an operation ending `op-sornainen-shipment` that stakes €400 at
-  Sörnäinen for the `stash-house-sornainen` upgrade) — completely
-  unreachable from `web/js/v3` today, a genuine missing ending distinct
-  from the four existing `pasila-*` narrative endings
-  (`chooseEnding()`). Equipment/loot/fencing (v4.24) is done, so the
-  one piece `record_chapter_income()` actually needs
-  (`sell_loot()` — the ONLY call site in the whole of `game_state.gd`,
-  despite its own comment claiming "a chapter cleared by earning has to
-  see every way of earning": market sales and mission payouts do NOT
-  count toward the chapter goal in Godot) now exists and could be wired
-  in directly. This is now the cheapest remaining piece to start.
-- **`train()`** (a retired veteran gives a rookie a head start, §7.4) is
-  smaller but sits on top of retirement — `retired_crew.is_empty()` is
-  its first check, and that list is real and populated as of v4.23. Not
-  attempted; no UI concept of "the veterans you know" exists yet either.
+- **`begin_next_chapter()`/`decay_equipment()`.** The content only
+  authors one chapter (`ERA_CHAPTERS = 4` in Godot, one in this slice),
+  so there is nowhere for a "next chapter" to transition TO —
+  `decay_equipment()`'s only call site is `begin_next_chapter()`, so both
+  stay unported together. Unblocks the moment a second chapter is
+  authored; nothing else stands in the way.
+- **`train()`** (a retired veteran gives a rookie a head start, §7.4) sits
+  on top of retirement — `retired_crew.is_empty()` is its first check,
+  and that list is real and populated as of v4.23. Not attempted; no UI
+  concept of "the veterans you know" exists yet either.
+- **Leveling, perks, and skills** are really one three-part growth loop —
+  `level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3` (small, and
+  `state.crewFights` already exists to read, v4.23); `crew_perks`/
+  `spend_perk`/`grant_glory` (`content.perks` = `["strength","speed",
+  "wits","nerve","toughness"]`, `GLORY_PERK_POINTS = 2`); `skill_offer`/
+  `learn_skill` (gated by `content.classes` — 12 entries,
+  `content.aptitude_rules`, `content.skills` — 52 entries). **Not
+  decoration on either build** — `fight_manager.gd:760` reads
+  `perk_value(cid, "wits") / 2` as a live bonus mid-fight, and it checks
+  `GameState.skills_of(cid).has(ANCHOR_COVER_WIDE_SKILL)` to change what
+  an anchor-class unit's cover verb does. **`battle.js` does not
+  currently read `content.classes`/`aptitude_rules`/`skills` AT ALL** —
+  porting this is new combat logic, not a port of existing JS behaviour,
+  and is the largest remaining piece of this whole item. Shipping
+  leveling alone (the cheap-looking one) first would grant an
+  unspendable perk point with no payoff — exactly the half-finished
+  feature this project's own discipline rules out — so the three want
+  doing together, not as three separate passes.
 
-None of these four block each other except where noted (skills needs
+None of these three block each other except where noted (skills needs
 classes/aptitude_rules content wiring into `battle.js`; `train()` needs
-retirement, which now exists). Chapters is now the best next pick: its
-one real dependency (loot/fencing) is done, and it delivers a genuine
-missing ending the content has been sitting on since v4.21 first read
-`chapter-1-piritori`.
+retirement, which now exists; leveling/perks/skills want doing as one
+pass, not separately).
+
+---
+
+## Chapters (`VERSIONS.md` v4.25) — what it left open
+
+- **`begin_next_chapter()`/`decay_equipment()` still not ported** — see
+  the campaign-progression section above; this entry only made the ONE
+  piece (`record_chapter_income` via loot/fencing) that chapter 1's own
+  ending needed real.
+- **`day_of_chapter()` is not ported.** Nothing reads it yet — with one
+  chapter, every day is day-of-chapter-N with nothing to distinguish it
+  from the campaign day.
+- **No UI shows chapter 1's ending BRIEF or existence before the goal is
+  met** beyond the goal/threshold line — a player has no in-fiction hint
+  that Sörnäinen is where this is headed until they've already earned
+  their way there. Whether that's correct (a surprise) or a gap (should
+  be foreshadowed) is a design question, not something guessed at here.
+- **`arrestCrew()`'s retrofit into the police-taken flow changes
+  `state.recruited`'s membership for anyone taken in a fight** (they are
+  now actually removed, not just status-flagged). `renderCrewCard()` was
+  updated in the same pass to check `state.arrestedCrew`/`retiredCrew`
+  before falling back to `'NOT RECRUITED'`, so this did not ship as a
+  regression — noted here only because it would have been one.
 
 ---
 
@@ -113,9 +142,6 @@ missing ending the content has been sitting on since v4.21 first read
 - **No equipment-purchase UI**, because Godot has no equipment-purchase
   function to port — `acquisition: 'market'` sits in content unused by
   either build.
-- **`decay_equipment()` is not ported.** Its one call site is
-  `begin_next_chapter()`, which doesn't exist yet — see the campaign-
-  progression section above.
 - **The EQUIPMENT panel lists every instance separately**, including
   multiple identical-condition copies of the same type — matches
   `state.equipment`'s real shape, but a long campaign with a lot of loot

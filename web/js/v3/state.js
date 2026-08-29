@@ -1,4 +1,5 @@
 import { hiringPool } from '../../../people/hiring.mjs';
+import { rand01 } from '../../../market/model.mjs';
 
 export const SAVE_KEY = 'piritori-to-eden:v3';
 export const STATE_VERSION = 3;
@@ -14,6 +15,19 @@ const addUnique = (items, value) => { if (!items.includes(value)) items.push(val
 const relKey = key => key.replaceAll('-', '_');
 const cap = value => String(value ?? '').replaceAll('-', ' ').replaceAll('_', ' ');
 
+// `chapter_def()`/`_sync_chapter_from_content()` — the authored chapter, or
+// null if content has none for this number (the slice authors exactly one).
+function chapterDef(content, chapterNumber) {
+  return content.chapters?.find(item => item.index === chapterNumber) ?? null;
+}
+function syncChapterFromContent(state, content) {
+  const def = chapterDef(content, state.chapter);
+  if (!def) return;
+  const goal = def.goal ?? {};
+  if (['money', 'loot', 'fights'].includes(goal.type)) state.chapterGoal = goal.type;
+  if (goal.threshold != null) state.chapterThreshold = goal.threshold;
+}
+
 export function createState(content) {
   const start = content.campaign.starting_state;
   const crewStatus = Object.fromEntries(content.crew.map(member => [member.id, {
@@ -23,7 +37,7 @@ export function createState(content) {
     status: 'available',
     critical: false,
   }]));
-  return {
+  const state = {
     version: STATE_VERSION,
     contentId: content.id,
     seed: DEFAULT_SEED,
@@ -62,6 +76,29 @@ export function createState(content) {
     // no ceiling (§7.1).
     crewFights: {},
     retiredCrew: [],
+    // Everyone the police took (COMBAT.md §9.5.3) — deliberately not the
+    // same list as `retiredCrew`: a veteran who got out is a different
+    // fact about a different night than somebody carried off a yard.
+    arrestedCrew: [],
+    // Chapters (`GameState.gd`'s run structure, GDD): a chapter is a run
+    // within the larger campaign, and the authored slice is one chapter's
+    // worth, not a whole era's — `CHAPTER_DAYS` below is Godot's own
+    // PLACEHOLDER figure (10) against this slice's real 7. `chapterGoal`/
+    // `chapterThreshold` are set from content just below, matching
+    // `new_campaign()`'s own `_sync_chapter_from_content()` call.
+    chapter: 1,
+    chapterCleared: false,
+    chapterGoal: 'money',
+    chapterThreshold: 600,
+    chapterEarned: 0,
+    chapterLootTaken: 0,
+    chapterFightsWon: 0,
+    lastEndingOutcome: '',
+    // Built or bought, so it carries a chapter boundary (a stash house
+    // upgrade earned from the shipment operation, once chapters chain —
+    // §13 of the persistence ledger; unreachable with one authored
+    // chapter, kept for the shape).
+    upgrades: [],
     revealedOffers: ['offer-piritori-buy'],
     revealedMissions: [],
     revealedEncounters: ['enc-first-purchase'],
@@ -75,6 +112,8 @@ export function createState(content) {
     logs: ['Day 1. Piritori is the only corner that already knows Aatami.'],
     lastOutcome: null,
   };
+  syncChapterFromContent(state, content);
+  return state;
 }
 
 export function restoreState(raw, content) {
@@ -280,6 +319,13 @@ export function sellLoot(state, data, equipmentId) {
   const paid = resaleAt(state, data, best);
   state.equipment.splice(best, 1);
   state.cash += paid;
+  // Counted centrally (GDD run structure): a chapter cleared by earning
+  // has to see every way of earning, and the fence is one of them —
+  // `sell_loot()`'s own `record_chapter_income(paid)` call, and in fact
+  // the ONLY place `record_chapter_income` is called from in the whole of
+  // `game_state.gd` — market sales and mission payouts do not count
+  // toward a chapter's money goal, however the comment there reads.
+  recordChapterIncome(state, paid);
   addLog(state, `Fenced ${cap(equipmentId)} for €${paid}.`);
   return paid;
 }
@@ -313,6 +359,7 @@ export function takeLoot(state, data, equipmentIds) {
   for (const id of equipmentIds ?? []) {
     if (!id || !data.equipment.get(id)) continue;
     addEquipment(state, id, CONDITION.NEW);
+    recordChapterLoot(state, 1);
     got.push(id);
   }
   return got;
@@ -326,6 +373,112 @@ export function takeLoot(state, data, equipmentIds) {
  *  pointless — Godot's own version is exactly this quiet. */
 export function loseKitOf(state, equipmentIds) {
   for (const id of equipmentIds ?? []) removeOne(state, id);
+}
+
+// ── chapters (GameState.gd's run structure, GDD) ────────────────────────
+// PLACEHOLDER (DESIGN_LOCKS §13): ten days is Godot's own figure and the
+// slice authors seven, so its one chapter ends early on purpose rather
+// than pretending the content is longer than it is.
+export const CHAPTER_DAYS = 10;
+
+export function chapterProgress(state) {
+  if (state.chapterGoal === 'loot') return state.chapterLootTaken;
+  if (state.chapterGoal === 'fights') return state.chapterFightsWon;
+  return state.chapterEarned;
+}
+
+/** The threshold buys ENTRY to the climax; it is not the climax itself
+ *  (`MAP.md` §12.5 is the same idea one magnification down). */
+export function chapterGoalMet(state) {
+  return chapterProgress(state) >= state.chapterThreshold;
+}
+
+/** Counted here rather than at each call site, so a new way of earning
+ *  cannot quietly fail to count toward the chapter. */
+function recordChapterIncome(state, amount) {
+  if (amount > 0) state.chapterEarned += amount;
+}
+function recordChapterLoot(state, n) {
+  if (n > 0) state.chapterLootTaken += n;
+}
+
+function chapterEnding(state, content) {
+  return chapterDef(content, state.chapter)?.ending ?? {};
+}
+
+export function chapterEndingAvailable(state, data) {
+  return chapterGoalMet(state) && chapterDef(data.content, state.chapter) != null && !state.chapterCleared;
+}
+
+/** Everyone the police took, or who did not come back from an operation
+ *  (`arrest()`). Deliberately not the same list as `retiredCrew` — a
+ *  veteran who got out is a different fact from somebody carried off. */
+export function arrestCrew(state, data, id) {
+  if (state.arrestedCrew.includes(id)) return;
+  state.arrestedCrew.push(id);
+  const index = state.recruited.indexOf(id);
+  if (index >= 0) state.recruited.splice(index, 1);
+  addUnique(state.flags, `memory:arrested:${id}`);
+  addLog(state, `${crewRecord(state, data, id)?.name ?? id} is taken. Gone from the roster.`);
+}
+
+/** How many hands it takes for a container to move quietly. */
+const OPERATION_IDEAL_CREW = 3;
+
+/** Resolved from the seed and the chapter, like gear decay — a player who
+ *  reloads to reroll a shipment is playing a different game from the one
+ *  being built. THE PENALTY CANNOT BE MONEY (cash resets at a chapter
+ *  boundary elsewhere in Godot; this build has no boundary to reset it at
+ *  yet either, so the rule is carried forward on principle): what can be
+ *  lost is what carries — gear and people. Likewise the reward: a payout
+ *  would mean nothing here, so a clean run buys a built upgrade. */
+function resolveOperation(state, data, ending) {
+  const hands = state.recruited.length;
+  const margin = hands / OPERATION_IDEAL_CREW;
+  // Heat carried into the night makes it worse — connects §9.5 (police)
+  // to the meta rather than leaving it a battle-only idea.
+  const seen = state.arrestedCrew.length * 0.15;
+  const roll = rand01(state.seed, 'operation', state.chapter) * 0.7 - 0.35;
+  const score = margin - seen + roll;
+
+  if (score >= 1.0) {
+    if (ending.grants_upgrade) addUnique(state.upgrades, ending.grants_upgrade);
+    return 'clean';
+  }
+  if (score >= 0.5) {
+    // Something had to be left behind — the LAST thing in the stash, not
+    // the worst; `equipment.remove_at(equipment.size() - 1)` in Godot.
+    if (state.equipment.length) state.equipment.pop();
+    return 'messy';
+  }
+  // Somebody did not come back. Costs a person — the only currency that
+  // still means anything at a chapter boundary.
+  const target = state.recruited.find(id => !isNamed(state, data, id));
+  if (target) arrestCrew(state, data, target);
+  return 'lost';
+}
+
+/** Run the ending, and turn the chapter over. An OPERATION rather than a
+ *  battle: buying a shipment and moving it, not a fight — commerce is
+ *  allowed to be the climax (the GDD ruling `attempt_chapter_ending()`'s
+ *  own comment cites). Returns '' on success, or a reason it could not be
+ *  attempted. */
+export function attemptChapterEnding(state, data) {
+  if (!chapterEndingAvailable(state, data)) return 'not-available';
+  const ending = chapterEnding(state, data.content);
+  const stake = ending.stake_eur ?? 0;
+  if (state.cash < stake) return 'cannot-afford';
+  if (ending.anchor_id && state.selectedAnchor !== ending.anchor_id) return 'wrong-place';
+
+  state.cash -= stake;
+  state.chapterCleared = true;
+  state.lastEndingOutcome = resolveOperation(state, data, ending);
+  // A chapter you finished is a thing the city remembers (§9.8: memories
+  // are the seam every later system reads) — the same `memory:` convention
+  // `applyEffects()` and `retireCrew()` already write into `state.flags`.
+  addUnique(state.flags, `memory:chapter-cleared:${state.chapter}:${state.lastEndingOutcome}`);
+  addLog(state, `${ending.label ?? 'The operation'} goes ${state.lastEndingOutcome}.`);
+  return '';
 }
 
 /** Today's three candidates — `hiringPool()` is pure and re-derives the

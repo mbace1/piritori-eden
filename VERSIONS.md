@@ -10,6 +10,103 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.25 — 2026-08-29
+
+**Chapters — the operation ending, ported from `attempt_chapter_ending()`/
+`chapter_goal_met()`.** Third slice of the sixth audited item, and the
+one that gives `content/era1-slice-v1.json`'s `chapter-1-piritori` entry
+— read as far back as v4.21 but never reachable — a real path. Godot's
+`record_chapter_income()` has exactly one call site, `sell_loot()`
+(v4.24, last version), so this was the cheapest remaining piece of
+"campaign progression" the moment loot/fencing landed.
+
+- **`state.chapter`/`chapterGoal`/`chapterThreshold`/`chapterEarned`/
+  `chapterLootTaken`/`chapterFightsWon`/`chapterCleared`/
+  `lastEndingOutcome`/`upgrades`** — `new_campaign()`'s own reset shape,
+  synced from content at creation (`chapterDef()`/
+  `syncChapterFromContent()` port `chapter_def()`/
+  `_sync_chapter_from_content()`; the slice's `goal.threshold: 400`
+  overrides Godot's `600` default, same as Godot's own sync would do).
+  `CHAPTER_DAYS = 10` is carried over as the same PLACEHOLDER Godot's
+  own comment calls it, against this slice's real 7.
+- **`chapterProgress`/`chapterGoalMet`** port `chapter_progress()`/
+  `chapter_goal_met()` exactly — the threshold buys ENTRY to the climax,
+  not the climax itself.
+- **`attemptChapterEnding(state, data)`** ports `attempt_chapter_ending()`:
+  refuses if the goal isn't met or the chapter is already cleared
+  (`'not-available'`), if cash can't cover the stake (`'cannot-afford'`),
+  or if not standing at the ending's `anchor_id`, Sörnäinen Harbour
+  (`'wrong-place'`) — otherwise charges the stake, resolves the operation,
+  and marks the chapter cleared. **`resolveOperation()`** ports
+  `_resolve_operation()`'s exact formula (hands-on-the-job margin against
+  `OPERATION_IDEAL_CREW = 3`, minus 0.15 per arrested crew member, plus a
+  seeded roll in `[-0.35, 0.35]`) and its three outcomes: `clean` (≥1.0,
+  grants the chapter's upgrade), `messy` (≥0.5, the LAST equipment
+  instance is lost — not the worst one, matching `equipment.remove_at
+  (size() - 1)` exactly, a different rule than `removeOne()`'s
+  worst-first), `lost` (a non-named crew member is arrested). Deterministic
+  from the seed and the chapter, like gear decay — reloading to reroll a
+  shipment is playing a different game.
+- **`arrestCrew(state, data, id)`** is new infrastructure the `lost`
+  outcome needed — `arrest()`'s real behaviour, not the status-only
+  stand-in `state.crewStatus[id].status = 'missing'` has been since
+  v4.19. `state.arrestedCrew` is Godot's own `arrested_crew`, deliberately
+  a different list from `retiredCrew` (a veteran who got out is a
+  different fact from somebody carried off). **Retrofitted into the
+  existing police-taken flow in `recordBattleConsequences()`**, which is
+  the same `arrest()` call Godot's `app_shell.gd` makes for a
+  police-taken crew member — the app.js comment on that code has said
+  "they are gone" since v4.19 without the removal ever actually
+  happening; this closes that specific gap as a direct consequence of
+  building the same function chapters needed, not as an unrelated
+  change bundled in. The retrofit would have quietly regressed
+  `renderCrewCard()` — an arrested veteran, no longer in
+  `state.recruited`, would have fallen through to the same
+  `'NOT RECRUITED'` label as someone never hired — so the card now
+  checks `state.arrestedCrew`/`retiredCrew` first.
+- **UI**: a CHAPTER panel in the ledger shows the goal type and progress
+  against the threshold; once met, an ATTEMPT button (disabled at the
+  wrong anchor or without the stake, with a note saying which) names the
+  ending and its cost; once cleared, the panel shows the outcome and its
+  consequence in plain language instead of the button.
+
+**Verified**: all bare-node gates green, `port/vectors.mjs --check`
+green. A scratch bare-node script confirmed the goal syncs from content
+at creation (400, not Godot's 600 default), that only fencing moves
+`chapterEarned` (a plain cash grant does not), the full refusal ladder
+(`wrong-place`/`cannot-afford`/`not-available` after clearing), that the
+stake is always charged regardless of outcome, that the same seed/chapter
+resolves the operation identically across two independent states, and
+`arrestCrew`'s real removal + idempotency. A 30-seed sweep at full crew
+margin confirmed `clean` and `messy` are both reachable (not just the
+one outcome the deterministic test happened to land on). A real
+Playwright run drove the whole thing through the live ledger UI: no
+button before the goal, a disabled button at the wrong anchor with a
+"go here" note, a real click charging the stake and recording a real
+outcome, and the panel switching from progress to outcome once cleared.
+`v3-playthrough.cjs` unchanged at 23/28 (same pre-existing failures).
+
+**Not attempted:** `begin_next_chapter()` — the content only authors one
+chapter (`ERA_CHAPTERS = 4` in Godot, one in this slice), so there is
+nowhere for it to transition TO; building it now would ship a function
+with no reachable second chapter to verify against. `decay_equipment()`
+is the same situation (its only call site is `begin_next_chapter()`) and
+stays unported for the same reason. `day_of_chapter()` is not ported —
+nothing reads it yet, since there is only one chapter for a day to be
+"of." No UI distinguishes "cannot be bought" loot the way
+`_add_spoils_lines()` does (same gap v4.24 already named).
+
+### Port
+- **rules:** ported — `attempt_chapter_ending()`/`_resolve_operation()`/
+  `chapter_goal_met()`/`arrest()` and the scoring constants are the
+  canonical copy; nothing to re-port.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** the CHAPTER panel is `web/`-only UI.
+- **status:** the operation ending lands. `begin_next_chapter()`/
+  `decay_equipment()` stay queued pending a second authored chapter.
+  Leveling/perks/skills (`battle.js` combat-math changes) and `train()`
+  remain unstarted — see `QUEUE.md`.
+
 ## v4.24 — 2026-08-29
 
 **Equipment as condition-tracked instances, loot, and fencing —
