@@ -82,6 +82,104 @@ function neutralizeMetalness(model) {
   });
 }
 
+function enableShadows(model) {
+  model.traverse(node => {
+    if (!node.isMesh) return;
+    node.castShadow = true;
+    node.receiveShadow = true;
+  });
+}
+
+/** Godot's own values (`battle_stage_3d.gd`'s `SIDE_CYAN`/`SIDE_RED`/
+ *  `SIDE_THIRD`), not this build's UI `--cyan`/`--danger` — those are tuned
+ *  for a button at UI scale, these for a rim glow at battle-model scale. */
+const RIM_TINT = { player: 0x57c8e8, enemy: 0xc8443c, police: 0xdfe6ef };
+
+/** A short, stable hash of a fighter's own id into 0..1 — Godot's
+ *  `float(abs(hash(f.fighter_id)) % 1000) / 1000.0`, so the same person
+ *  gets the same shift every time the board rebuilds, ported to JS's lack
+ *  of a built-in `hash()`. */
+function seedFromId(id) {
+  let h = 0;
+  for (let i = 0; i < id.length; i += 1) h = (Math.imul(31, h) + id.charCodeAt(i)) | 0;
+  return (Math.abs(h) % 1000) / 1000;
+}
+
+/** `pt_rgb2hsv`/`pt_hsv2rgb` are `battle_stage_3d.gd`'s `RECOLOUR` shader's
+ *  own GLSL, copied rather than re-derived — a `pt_` prefix keeps them from
+ *  colliding with anything three.js's own generated shader already
+ *  declares. */
+const HSV_GLSL = `
+vec3 pt_rgb2hsv(vec3 c) {
+  vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+  vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+  vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+  float d = q.x - min(q.w, q.y);
+  return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + 1e-10)), d / (q.x + 1e-10), q.x);
+}
+vec3 pt_hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+`;
+
+/** Ports `battle_stage_3d.gd`'s `RECOLOUR` shader onto the real loaded
+ *  material via `onBeforeCompile`, rather than replacing it with a bespoke
+ *  `ShaderMaterial` — that keeps three.js's own PBR lighting integration
+ *  against this scene's real lights, instead of hand-rolling one to match.
+ *  Three things Godot's version does, all missing before this: **one
+ *  rigged mesh becomes a crew** (jacket/trouser hue shift seeded off the
+ *  fighter's own id, skin and dark boots protected by the same hue/sat
+ *  test); **black cloth is never pure black** (a lift toward the lit end);
+ *  and **team membership reads off the 3D body itself** (a side-tinted
+ *  Fresnel rim), which is `ART_BIBLE.md` §12.2's team/intent rule ("colour
+ *  never alone… enemy intent readable before confirmation") applied to the
+ *  model, not just the DOM label floating above it. */
+function styleUnitMaterial(model, { seed, rimTint, rimGain }) {
+  const jacketShift = seed * 0.16 - 0.08;
+  const trouserShift = seed * 0.20 - 0.10;
+  const tint = new THREE.Color(rimTint);
+  model.traverse(node => {
+    if (!node.isMesh) return;
+    const materials = Array.isArray(node.material) ? node.material : [node.material];
+    for (const mat of materials) {
+      if (!mat) continue;
+      // Matte, never glossy — the house register is hand marker on cut
+      // card, not a lit PBR surface (`ART_BIBLE.md` rule 4: "not a switch
+      // to polished fantasy rendering").
+      mat.roughness = 0.9;
+      mat.onBeforeCompile = shader => {
+        shader.uniforms.ptJacketShift = { value: jacketShift };
+        shader.uniforms.ptTrouserShift = { value: trouserShift };
+        shader.uniforms.ptRimTint = { value: tint };
+        shader.uniforms.ptRimGain = { value: rimGain };
+        shader.fragmentShader = shader.fragmentShader
+          .replace('#include <common>', `#include <common>\n${HSV_GLSL}\nuniform float ptJacketShift;\nuniform float ptTrouserShift;\nuniform vec3 ptRimTint;\nuniform float ptRimGain;`)
+          .replace('#include <map_fragment>', `#include <map_fragment>
+{
+  vec3 ptHsv = pt_rgb2hsv(diffuseColor.rgb);
+  bool ptSkin = ptHsv.x < 0.09 && ptHsv.y > 0.22 && ptHsv.y < 0.62 && ptHsv.z > 0.35;
+  bool ptBoots = ptHsv.x < 0.09 && ptHsv.y >= 0.62;
+  if (!ptSkin && !ptBoots) {
+    if (ptHsv.y < 0.30 && ptHsv.z > 0.45) ptHsv.x = fract(ptHsv.x + ptJacketShift);
+    else if (ptHsv.x > 0.45 && ptHsv.x < 0.62) ptHsv.x = fract(ptHsv.x + ptTrouserShift);
+  }
+  vec3 ptCol = pt_hsv2rgb(ptHsv);
+  ptCol = mix(ptCol, ptCol + vec3(0.10), 1.0 - ptHsv.z);
+  diffuseColor.rgb = ptCol;
+}`)
+          .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+{
+  float ptFresnel = pow(1.0 - clamp(dot(normalize(normal), normalize(vViewPosition)), 0.0, 1.0), 2.6);
+  totalEmissiveRadiance += ptRimTint * ptFresnel * ptRimGain;
+}`);
+      };
+      mat.needsUpdate = true;
+    }
+  });
+}
+
 /** Deliberately NOT cached/cloned. Three.js's default `Object3D.clone()`
  *  does not correctly share a SkinnedMesh's bone bindings across clones —
  *  reusing one loaded template for two units of the same role would bind
@@ -118,7 +216,9 @@ function stageAssetId(data, battle) {
  *  the generator put it, not the middle of the model — same reasoning as
  *  `_build_stage()`'s own centring comment), and dropped so its lowest
  *  point sits at y=0. Resolves to `null` when the battle has no arena, so
- *  callers do not need a separate has-an-arena branch. */
+ *  callers do not need a separate has-an-arena branch. Also returns the
+ *  model's own half-extents post-scale, so the caller can size a ground-
+ *  fill slab under it (see `_build_ground_fill()`'s reasoning below). */
 function loadStageModel(data, battle) {
   const assetId = stageAssetId(data, battle);
   if (!assetId) return Promise.resolve(null);
@@ -128,8 +228,40 @@ function loadStageModel(data, battle) {
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     model.position.set(-center.x, -box.min.y, -center.z);
-    return model;
+    const size = box.getSize(new THREE.Vector3());
+    return { model, halfX: size.x / 2, halfZ: size.z / 2 };
   });
+}
+
+/** `_build_ground_fill()`'s constant, ported verbatim: the floor has to be
+ *  bigger than the arena, not equal to it (`STAGE_SPEC.md` §1.1), or the
+ *  board runs to the exact edge of the world. */
+const GROUND_MARGIN = 1.22;
+
+/** CONCRETE UNDER THE HOLES — `_build_ground_fill()`'s own heading. A
+ *  generated diorama models what it was asked for and nothing else, so an
+ *  arena with open sides (kattilahalli is Godot's own named example: "a
+ *  hall with open sides and simply has no floor beyond its own footprint")
+ *  has real gaps a camera angle happens not to catch today but a different
+ *  one would. A plain dark slab under the whole arena, margin-padded, is
+ *  cheap insurance against exactly that — reads as ordinary Helsinki
+ *  industrial hardstanding and only ever shows where the diorama left a
+ *  gap. */
+function groundFillMesh(halfX, halfZ) {
+  const span = Math.max(halfX, halfZ) * 2 * GROUND_MARGIN;
+  const slab = new THREE.Mesh(
+    new THREE.PlaneGeometry(span, span),
+    new THREE.MeshStandardMaterial({ color: 0x3a3d3f, roughness: 0.92, metalness: 0 }),
+  );
+  slab.rotation.x = -Math.PI / 2;
+  slab.position.y = -0.02; // below y=0 so it never z-fights the arena's own floor
+  slab.receiveShadow = true;
+  // Cast nothing: it is a gap filler sitting fractionally below the real
+  // arena floor, and a slab shadowing the arena from underneath would
+  // darken the very holes it exists to hide — `_build_ground_fill()`'s own
+  // reasoning, ported along with the rest of it.
+  slab.castShadow = false;
+  return slab;
 }
 
 /** Cell -> world position, off the SAME `grid.js` slot a unit's `battle.cell`
@@ -176,21 +308,73 @@ export function mountBattleStage3D(container, battle, data) {
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  // `battle_stage_3d.gd`'s own comment: "the shadow is what does the
+  // work: a stylised figure and a photoreal yard stop arguing the moment
+  // the figure casts a real shadow onto the ground, which no amount of
+  // palette matching achieves."
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // Matches `_build_night()`'s `TONE_MAPPER_FILMIC` — Godot's closest named
+  // equivalent to three.js's ACES fit, both there to keep the warm lamp's
+  // highlight from blowing out against the cold night the rest of the
+  // scene sits in.
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
   renderer.domElement.className = 'stage3d-canvas';
   container.appendChild(renderer.domElement);
   current = { renderer, canvas: renderer.domElement, raf: 0 };
 
   const scene = new THREE.Scene();
-  // Framing for the real board (6 lanes x 8 depths, see `worldFor`) rather
-  // than the old 3-lane mirrored one: deeper than it is wide now, so the
-  // camera sits further back and higher to keep both back rows in frame.
-  const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 100);
-  camera.position.set(0, 4.4, 8.8);
+  // `_build_night()`'s own values: background/ambient are a single named
+  // palette there (`Environment`), not scattered magic hex — carried over
+  // literally rather than re-picked, so the two builds read as the same
+  // night rather than merely similar ones.
+  scene.background = new THREE.Color(0x0b0e13);
+  scene.fog = new THREE.FogExp2(0x12161d, 0.05);
+  // Orthographic, matching `battle_stage_3d.gd`'s `_build_camera()`: a
+  // perspective camera makes the board's far edge read smaller than its
+  // near edge, which is exactly what `STAGE_SPEC.md` §2.4 rules out ("true
+  // 2:1 isometric... there is no vanishing point") and is the likely cause
+  // of the 2D-label/3D-body drift noticed testing the metalness fix — the
+  // DOM grid approximates isometric with CSS while a perspective camera
+  // draws a genuinely different projection under it. Frustum size and
+  // camera distance are both derived from the board's own span (`CELL_M`
+  // matches `worldFor()`'s 0.85 spacing) so framing holds regardless of
+  // which arena is mounted, the same reasoning as Godot's `board_span`.
+  const CELL_M = 0.85;
+  const boardSpan = Math.max(LANES, totalRows()) * CELL_M;
+  const frustumSize = boardSpan * 1.1;
+  const aspect = width / height;
+  const camera = new THREE.OrthographicCamera(
+    (-frustumSize * aspect) / 2, (frustumSize * aspect) / 2,
+    frustumSize / 2, -frustumSize / 2,
+    0.1, 100,
+  );
+  const camBack = boardSpan * 1.6;
+  camera.position.set(-camBack, camBack * 0.62, -camBack);
   camera.lookAt(0, 0.9, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-  const key = new THREE.DirectionalLight(0xffffff, 1.15);
+  scene.add(new THREE.AmbientLight(0x3c5570, 0.55));
+  // "Cold ambient, one warm practical, and shadows" — `_build_night()`'s
+  // own summary of the pattern. The key stands in for that one practical
+  // light (Godot uses a warm OmniLight lamp, `#ffcf8f`); the directional
+  // form is kept rather than porting an omni/point light, since nothing
+  // here currently varies per-arena lamp placement.
+  const key = new THREE.DirectionalLight(0xffcf8f, 1.3);
   key.position.set(3, 6, 4);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.bias = -0.0015;
+  // Ortho shadow frustum sized off the board, same reasoning as the
+  // camera above it — big enough to cover the largest arena's footprint,
+  // not just the small board itself.
+  const shadowSpan = boardSpan * 2.5;
+  key.shadow.camera.left = -shadowSpan;
+  key.shadow.camera.right = shadowSpan;
+  key.shadow.camera.top = shadowSpan;
+  key.shadow.camera.bottom = -shadowSpan;
+  key.shadow.camera.near = 0.1;
+  key.shadow.camera.far = 40;
   scene.add(key);
   const rim = new THREE.DirectionalLight(0x8fb4ff, 0.4);
   rim.position.set(-3, 4, -3);
@@ -205,6 +389,7 @@ export function mountBattleStage3D(container, battle, data) {
     new THREE.MeshStandardMaterial({ color: 0x1b222c, roughness: 0.95 }),
   );
   ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
   scene.add(ground);
 
   // Additive, not a replacement: renderBattle() in app.js still draws every
@@ -235,15 +420,27 @@ export function mountBattleStage3D(container, battle, data) {
         const { x, z } = worldFor(unit.cell);
         model.position.set(x, 0, z);
         model.rotation.y = unit.side === 'player' ? Math.PI * 0.5 : -Math.PI * 0.5;
+        styleUnitMaterial(model, {
+          seed: seedFromId(unit.id),
+          rimTint: RIM_TINT[unit.side] ?? RIM_TINT.police,
+          // The currently selected unit reads brighter at its edge than the
+          // rest of the field — the nearest thing this build has to
+          // Godot's `is_active()` dim (that distinguishes downed-but-shown
+          // fighters, which this build simply never renders at all).
+          rimGain: unit.id === battle.selectedId ? 0.85 : 0.5,
+        });
+        enableShadows(model);
         scene.add(model);
       })
       .catch(err => { console.error(`render3d: '${unit.id}' (${assetId})`, err); throw err; });
   });
   const stageLoad = loadStageModel(data, battle)
-    .then(model => {
-      if (!model || myGeneration !== generation) return;
+    .then(loaded => {
+      if (!loaded || myGeneration !== generation) return;
       scene.remove(ground);
-      scene.add(model);
+      scene.add(groundFillMesh(loaded.halfX, loaded.halfZ));
+      enableShadows(loaded.model);
+      scene.add(loaded.model);
       if (myGeneration === generation) stage?.classList.add('stage3d-arena');
     })
     .catch(err => { console.error(`render3d: arena '${battle.sceneAssetId}'`, err); });

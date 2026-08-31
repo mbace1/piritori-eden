@@ -10,6 +10,99 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.27 — 2026-08-31
+
+**`render3d.js` closes most of its stylistic gap with `battle_stage_3d.gd`,
+in the order the owner asked for after v4.26's deep-analysis pass: camera,
+material/shader, ground-fill, shadows, palette.** v4.26 fixed the near-
+black rendering bug; this version is the follow-up — bringing the pipeline
+itself toward parity rather than just making it visible. Every change below
+was screenshotted against the same four real battles
+(karhupuisto/courtyard/kattilahalli/hermanni-training) before and after,
+this project's own standing discipline.
+
+- **Orthographic camera**, replacing the perspective one. A perspective
+  camera makes the board's far edge read smaller than its near edge, which
+  `STAGE_SPEC.md` §2.4 rules out by name ("true 2:1 isometric… there is no
+  vanishing point"); it is also the likely cause of the 2D-label/3D-body
+  drift noticed testing v4.26's fix, since the DOM grid approximates
+  isometric with CSS while a perspective camera draws a genuinely
+  different projection under it. Frustum size and camera distance are
+  both derived from the board's own span (`Math.max(LANES, totalRows())`),
+  matching `_build_camera()`'s `board_span` reasoning, and the camera sits
+  on the player's own side (negative X/Z) — Godot's own bugfix comment
+  ("your own people belong in the foreground") ported along with the
+  position formula itself. **Not settled**: exact DOM/3D pixel registration
+  remains open — the two are still two different rendering systems reading
+  the same slot, not one shared projection.
+- **The recolour/rim shader**, ported from `RECOLOUR`'s exact GLSL
+  (`pt_rgb2hsv`/`pt_hsv2rgb` are copied, not re-derived) onto the real
+  loaded material via `onBeforeCompile` rather than a bespoke
+  `ShaderMaterial`, so three.js's own PBR lighting integration against
+  this scene's real lights survives. Three gaps close together because
+  they were one shader in Godot: **team identity now reads off the 3D
+  body itself** (a side-tinted Fresnel rim — cyan/red/`SIDE_THIRD`, Godot's
+  own hex values, not this build's UI `--cyan`/`--danger`), which is
+  `ART_BIBLE.md` §12.2's team/intent rule applied to the model, not just
+  the DOM label floating above it; **one rigged mesh reads as many
+  people** (jacket/trouser hue shift seeded off the fighter's own id, skin
+  and dark boots protected); and **black cloth is never pure black** (the
+  same lift term). `mat.roughness = 0.9` forced everywhere, matching
+  `ART_BIBLE.md` rule 4 ("not a switch to polished fantasy rendering").
+  The selected unit's rim reads brighter than the rest of the field — the
+  nearest equivalent this build has to Godot's `is_active()` dim, which
+  distinguishes downed-but-still-rendered fighters, a state this build's
+  `alive`-filtered unit list never reaches.
+- **A permanent ground-fill slab under every loaded arena**
+  (`groundFillMesh()`, `GROUND_MARGIN = 1.22` ported verbatim from
+  `_build_ground_fill()`), replacing outright removal of the fallback
+  plane. Godot's own comment names kattilahalli directly as "a hall with
+  open sides and simply has no floor beyond its own footprint" — v4.26's
+  camera angle happened not to catch a gap, but a different one would, and
+  this is the cheap insurance against it existing at all.
+- **Real shadows**: `renderer.shadowMap.enabled`, the key light casts
+  (shadow camera frustum sized off the board span), units and the arena
+  both cast and receive, the ground-fill slab receives only — it is a gap
+  filler sitting fractionally below the real floor, and a slab shadowing
+  the arena from underneath would darken the very holes it exists to hide,
+  Godot's own reasoning for `cast_shadow = OFF` on the same slab. Godot's
+  comment was taken at face value rather than re-argued: *"a stylised
+  figure and a photoreal yard stop arguing the moment the figure casts a
+  real shadow onto the ground, which no amount of palette matching
+  achieves."*
+- **Palette carried over from `_build_night()`**: background `#0b0e13`,
+  ambient `#3c5570` at 0.55, `FogExp2`, `ACESFilmicToneMapping` (three.js's
+  closest named equivalent to Godot's `TONE_MAPPER_FILMIC`), and the key
+  light recoloured warm (`#ffcf8f`) to stand in for Godot's practical
+  lamp — "cold ambient, one warm practical, and shadows" is `_build_night()`'s
+  own summary of the pattern it authors.
+
+**Not attempted here**: bloom/glow (Godot's `env.glow_enabled` — three.js
+has no bundled `EffectComposer`/`UnrealBloomPass` in this repo's `vendor/`,
+so adding it means vendoring new files, deliberately left for its own
+pass rather than folded in here); idle/attack/behit/dead animation clips;
+the ART_BIBLE presenter posterize treatment (distinct from the recolour
+shader — that is a screen-space pass on the presenter framing, not a
+per-material one); and the DOM/3D registration gap named above.
+
+**Verified**: `v3-battle.mjs`/`v3-contract.mjs`/`v3-state.mjs` unaffected
+(`render3d.js` outside their import graph). All four real battles
+screenshotted via Playwright/SwiftShader — no shader compile errors, no
+new console errors, rim colour visibly correct by side on every unit,
+visible ground-contact shadows, true parallel (non-converging) floor
+edges on every arena and the flat-ground fallback alike.
+
+### Port
+- **rules:** N/A — no game-state change, same as v4.26.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** `web/`-only; this version is closing the gap the other
+  direction (JS toward what Godot's `battle_stage_3d.gd` already does), so
+  there is nothing for Godot to re-port.
+- **status:** camera, shader, ground-fill and shadows now port
+  `battle_stage_3d.gd`'s core look. Bloom, animation clips, the presenter
+  posterize treatment and DOM/3D pixel registration remain open — see
+  `QUEUE.md`/the session record for the full next-steps list.
+
 ## v4.26 — 2026-08-31
 
 **`render3d.js`'s cast and arenas were rendering near-black — a material
