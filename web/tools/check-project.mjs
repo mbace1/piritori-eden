@@ -28,6 +28,11 @@ const checks = [
   'web/test/v3-battle.mjs',
   'missions/test/model.mjs',
   'market/test/model.mjs',
+  // Found missing 2026-08-31: people/roster.mjs is wired into the live hiring
+  // pool (crew: hiring pool, v4.21) with its own 23 passing checks, and had
+  // never been added here -- the same "a gate that cannot fail is a finding"
+  // shape as CLAUDE.md rule 10, just from omission rather than a dead path.
+  'people/test/roster.mjs',
 ];
 
 if (includeBrowser) checks.push('web/test/v3-playthrough.cjs');

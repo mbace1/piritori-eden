@@ -76,7 +76,11 @@ func _test_content_loads() -> void:
 	# Torkkelinmaki to Scene Club, a new anchor at Makelansilta just north of
 	# Kurvi past the bridge where Makelankatu begins - owner-placed geography,
 	# with one edge connecting it to Piritori.
-	eq("fourteen anchors", ContentRegistry.anchors().size(), 14)
+	# 14 -> 15, 2026-08-28 (v4.18): "add the Hermanni spot as a test area for
+	# battle training in Era1" added hermanni_skatepark as a real board anchor.
+	# Checked against map/validate-map.mjs's own authoritative count before
+	# bumping the number, same discipline as the JS side's v3-contract.mjs.
+	eq("fifteen anchors", ContentRegistry.anchors().size(), 15)
 	eq("twenty-five edges", ContentRegistry.edges().size(), 25)
 	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
 	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
