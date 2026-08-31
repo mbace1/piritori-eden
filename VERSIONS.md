@@ -10,6 +10,65 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.28 — 2026-08-31
+
+**The DOM grid/labels now agree with the 3D camera, closing the gap
+v4.27 named as open.** Reported directly after v4.27 shipped: "grids look
+very broken and all characters are in t-pose." The second half is a
+pre-existing, unrelated limitation named in this file since v4.14 (no
+`cast3d/clips/*` animation is ported yet) — not a regression from
+anything in this session. The first half was real: v4.27's orthographic
+camera made the 3D cast legible enough that the pre-existing drift
+between the DOM grid (`app.js`'s `cellPosition()`, a static CSS
+`skewY(-20deg)` approximation with no relation to any camera) and the 3D
+canvas (a real projection) became obvious rather than a minor blur.
+
+- **`web/js/v3/stage-camera.js` (new module)** is now the one place
+  `worldFor()`, the board-span math and the orthographic camera
+  construction live — `render3d.js` builds its real WebGL camera through
+  it (`buildStageCamera(aspect)`), and `app.js` uses the same function
+  (`positionBattleDOM()`) to project every `.formation-cell` and
+  `.unit-token`'s true screen position through an IDENTICAL camera, then
+  overwrites `cellPosition()`'s static guess with it. Ground level
+  (`y = 0`) is used for both — a `.unit-token`'s `translate(-50%, -86%)`
+  anchors near the feet, matching where `render3d.js` roots a unit's
+  model, so the DOM anchor and the 3D model's own origin now agree in
+  height as well as lane/depth, not just lane/depth alone.
+- **`cellPosition()` itself is untouched** — a browser with no WebGL, or
+  one where the network never delivers a mesh, still gets the same
+  complete, if approximate, static 2D grid it always had.
+  `positionBattleDOM()` is a correction pass that only runs once
+  `mountBattleStage3D()`'s container is actually measurable, called right
+  after it in `app.js`'s `render()` (both read the same just-attached
+  container, so there is nothing to keep in sync between them beyond
+  calling them back to back).
+- **Row labels (`FRONT`/`FRONT`/`BACK`) are NOT reprojected** — they are
+  margin markers, not grid-anchored to a lane, and were left as they
+  were. Named rather than silently included in "fixed."
+
+**Verified**: a new diagnostic (`positionBattleDOM`'s effect measured via
+`getBoundingClientRect()` on real `.unit-token`/`.formation-cell`
+elements after a real battle mount) confirmed unit labels now sit on or
+immediately beside their actual 3D bodies rather than off in an unrelated
+grid cell, on all four real battles, by screenshot. `v3-battle.mjs`/
+`v3-contract.mjs`/`v3-state.mjs` unchanged and still green.
+
+**Not attempted here**: idle/attack/behit/dead animation clips (the
+T-pose half of the report) — `cast3d/clips/*` exist per `ART_BIBLE.md`
+§9.7 and Godot's own `_clips()`/`_animate()`, but wiring an AnimationMixer
+into `render3d.js` is a separate, sizeable piece of work, not folded into
+this fix; label collision at tight depth spacing (two labels touching
+when their real 3D units stand close together) is a small cosmetic
+remainder, not the reported "broken."
+
+### Port
+- **rules:** N/A — no game-state change.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** `web/`-only — Godot's own 3D board never had a
+  parallel 2D DOM layer to drift from in the first place.
+- **status:** DOM/3D registration fixed. Animation clips remain the
+  largest named gap toward `battle_stage_3d.gd` parity.
+
 ## v4.27 — 2026-08-31
 
 **`render3d.js` closes most of its stylistic gap with `battle_stage_3d.gd`,

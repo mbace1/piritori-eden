@@ -41,7 +41,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
 import { assetUrl } from './content.js?v=1';
-import { LANES, totalRows, laneCentre, parseSlotKey } from './grid.js?v=1';
+import { LANES, totalRows } from './grid.js?v=1';
+import { CELL_M, boardSpan, worldFor, buildStageCamera } from './stage-camera.js?v=1';
 
 /** COMBAT.md / PHASING.md 1.06: the six generic crew roles all have their
  *  own registered body. Matches Godot's `UNIT_BY_ROLE` naming exactly
@@ -264,22 +265,6 @@ function groundFillMesh(halfX, halfZ) {
   return slab;
 }
 
-/** Cell -> world position, off the SAME `grid.js` slot a unit's `battle.cell`
- *  already carries (lane 0..LANES-1, depth 0..totalRows()-1 — the real
- *  unified board ported from `godot/scripts/fight/board.gd`, not a
- *  screen-space layout of its own). `cellPosition()` in app.js is the 2D
- *  DOM equivalent and reads the same slot the same way; a battle's depth
- *  axis maps to world Z (front nearest the midline, Z 0, for both sides)
- *  and lane maps to world X, centred on the board's own `laneCentre()` so
- *  neither side sits off-centre on the ground plane. */
-function worldFor(cell) {
-  const { lane, depth } = parseSlotKey(cell);
-  const depthReach = (totalRows() - 1) / 2;
-  const x = (lane - laneCentre()) * 0.85;
-  const z = (depth - depthReach) * 0.85;
-  return { x, z };
-}
-
 let current = null; // { renderer, canvas, raf, generation }
 let generation = 0;
 
@@ -334,25 +319,12 @@ export function mountBattleStage3D(container, battle, data) {
   // Orthographic, matching `battle_stage_3d.gd`'s `_build_camera()`: a
   // perspective camera makes the board's far edge read smaller than its
   // near edge, which is exactly what `STAGE_SPEC.md` §2.4 rules out ("true
-  // 2:1 isometric... there is no vanishing point") and is the likely cause
-  // of the 2D-label/3D-body drift noticed testing the metalness fix — the
-  // DOM grid approximates isometric with CSS while a perspective camera
-  // draws a genuinely different projection under it. Frustum size and
-  // camera distance are both derived from the board's own span (`CELL_M`
-  // matches `worldFor()`'s 0.85 spacing) so framing holds regardless of
-  // which arena is mounted, the same reasoning as Godot's `board_span`.
-  const CELL_M = 0.85;
-  const boardSpan = Math.max(LANES, totalRows()) * CELL_M;
-  const frustumSize = boardSpan * 1.1;
+  // 2:1 isometric... there is no vanishing point"). Built by
+  // `stage-camera.js` rather than inline, so the exact same camera can be
+  // reconstructed by `positionBattleDOM()` in `app.js` to keep the DOM
+  // grid/labels agreeing with what this canvas actually draws.
   const aspect = width / height;
-  const camera = new THREE.OrthographicCamera(
-    (-frustumSize * aspect) / 2, (frustumSize * aspect) / 2,
-    frustumSize / 2, -frustumSize / 2,
-    0.1, 100,
-  );
-  const camBack = boardSpan * 1.6;
-  camera.position.set(-camBack, camBack * 0.62, -camBack);
-  camera.lookAt(0, 0.9, 0);
+  const camera = buildStageCamera(aspect);
 
   scene.add(new THREE.AmbientLight(0x3c5570, 0.55));
   // "Cold ambient, one warm practical, and shadows" — `_build_night()`'s
@@ -368,7 +340,7 @@ export function mountBattleStage3D(container, battle, data) {
   // Ortho shadow frustum sized off the board, same reasoning as the
   // camera above it — big enough to cover the largest arena's footprint,
   // not just the small board itself.
-  const shadowSpan = boardSpan * 2.5;
+  const shadowSpan = boardSpan() * 2.5;
   key.shadow.camera.left = -shadowSpan;
   key.shadow.camera.right = shadowSpan;
   key.shadow.camera.top = shadowSpan;
@@ -385,7 +357,7 @@ export function mountBattleStage3D(container, battle, data) {
   // and only removed once a real arena actually finishes loading, so a
   // slow or failed arena fetch never leaves units floating over nothing.
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(LANES * 0.85 + 1.5, totalRows() * 0.85 + 1.5),
+    new THREE.PlaneGeometry(LANES * CELL_M + 1.5, totalRows() * CELL_M + 1.5),
     new THREE.MeshStandardMaterial({ color: 0x1b222c, roughness: 0.95 }),
   );
   ground.rotation.x = -Math.PI / 2;

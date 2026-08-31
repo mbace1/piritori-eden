@@ -20,6 +20,7 @@ import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } 
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
 import { mountBattleStage3D, disposeBattleStage3D } from './render3d.js?v=1';
+import { positionBattleDOM } from './stage-camera.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -120,6 +121,11 @@ function render() {
   // reads its size), which is only true after innerHTML has landed.
   if (state.mode === 'battle' && state.battle) {
     mountBattleStage3D($('stage3dMount'), state.battle, data);
+    // Both calls measure the SAME just-attached container; running this
+    // right after gives the DOM grid/unit tokens the real projected
+    // positions instead of `cellPosition()`'s static guess — see
+    // `stage-camera.js`'s header for why the two ever disagreed.
+    positionBattleDOM($('stage3dMount'), state.battle);
   } else {
     disposeBattleStage3D();
   }
