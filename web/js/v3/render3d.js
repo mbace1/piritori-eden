@@ -61,6 +61,27 @@ const ENEMY_FALLBACK = 'cast3d-enforcer-v01';
 
 const loader = new GLTFLoader();
 
+/** Every exported cast3d/stage3d material comes in as `metalness: 1`
+ *  (Blender's default PBR metallic-roughness preset, left unedited). That
+ *  is fine under an environment map/IBL — this scene has none (`scene.
+ *  environment` is never set below) — so with only direct lights a
+ *  metalness-1 surface has no diffuse term left to catch them and reads as
+ *  near-black outside a thin specular highlight; a dark garment texture on
+ *  top of that renders as a near-solid silhouette. Confirmed by a
+ *  side-by-side render (scratch `inspect-material-fix.cjs`): forcing
+ *  metalness to 0 restores the base-color texture, clearing the emissive
+ *  map did not. Zeroing it here is the honest fix rather than adding an
+ *  environment map this pipeline doesn't otherwise need. */
+function neutralizeMetalness(model) {
+  model.traverse(node => {
+    if (!node.isMesh) return;
+    const materials = Array.isArray(node.material) ? node.material : [node.material];
+    for (const mat of materials) {
+      if (mat && 'metalness' in mat) mat.metalness = 0;
+    }
+  });
+}
+
 /** Deliberately NOT cached/cloned. Three.js's default `Object3D.clone()`
  *  does not correctly share a SkinnedMesh's bone bindings across clones —
  *  reusing one loaded template for two units of the same role would bind
@@ -72,7 +93,7 @@ function loadUnitModel(data, assetId) {
   const url = assetUrl(data, assetId);
   return new Promise((resolve, reject) => {
     if (!url) { reject(new Error(`render3d: no registered asset for '${assetId}'`)); return; }
-    loader.load(url, gltf => resolve(gltf.scene), undefined, reject);
+    loader.load(url, gltf => { neutralizeMetalness(gltf.scene); resolve(gltf.scene); }, undefined, reject);
   });
 }
 

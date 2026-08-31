@@ -10,6 +10,67 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.26 — 2026-08-31
+
+**`render3d.js`'s cast and arenas were rendering near-black — a material
+bug, not a lighting or positioning one.** Owner ask: "let's try to get
+the 2d arena and 3d characters to work in the battle scenarios... we
+should prototype and test how the elements we already have work." Every
+registered `cast3d-*`/`stage3d-*` `.glb` ships `metalness: 1` (Blender's
+untouched PBR-metallic-roughness export default). Under an environment
+map/IBL that is fine; `mountBattleStage3D()` never sets `scene.
+environment`, so with only the scene's two direct lights a metalness-1
+surface has no diffuse term left to catch them — a dark garment or the
+kattilahalli tank's dark paint reads as a near-solid silhouette, worst on
+already-dark base-color textures. Confirmed empirically (scratch
+`inspect-material-fix.cjs`) with a three-way side-by-side render of
+`cast3d-muscle-v01` under the real in-game lights: unmodified (near-
+black), `metalness` forced to `0` (restores the base-color texture in
+full), `emissiveMap`/`emissive` cleared (barely changes anything) — ruling
+out the emissive channel as a red herring before touching the source.
+
+- **`neutralizeMetalness(model)`** (`render3d.js`) traverses every mesh's
+  material(s) and zeroes `metalness`, called once inside `loadUnitModel()`
+  right as each GLTF resolves. `loadStageModel()` already calls
+  `loadUnitModel()` internally to fetch the arena mesh, so the one call
+  site fixes cast AND arenas with no duplicated logic and no second code
+  path to drift from the first.
+- **Verified by screenshot**, this project's own standing discipline: the
+  real 4-battle capture (scratch `capture-3d-battles.cjs`) re-run against
+  the actual game — karhupuisto 2v2, courtyard 3v3, kattilahalli 3v3,
+  hermanni-training 3v3 — all four now show legible clothing/skin detail
+  instead of black silhouettes; the kattilahalli tank/building and
+  hermanni skatepark arenas read with proper material tone rather than
+  dark blobs blending into the void background. `v3-battle.mjs`/
+  `v3-contract.mjs`/`v3-state.mjs` unaffected (`render3d.js` is outside
+  their import graph, as documented — additive rendering only).
+- A separately noticed, **not yet fixed**, systematic offset between each
+  unit's 2D DOM nameplate/status label and its 3D body's on-screen
+  position across all four battles — not root-caused this pass (candidate
+  cause: the DOM label follows `cellPosition()`'s 2D layout while the 3D
+  body follows `worldFor()` through the camera's own perspective
+  projection, two different projection systems that were never made to
+  agree).
+
+**Not attempted here:** idle/attack/behit/dead animation clips, the
+ART_BIBLE presenter posterize treatment, an actual environment map/IBL
+(zeroing metalness is the honest minimal fix for a pipeline that doesn't
+otherwise need one), or the label/body alignment issue above.
+
+### Port
+- **rules:** N/A — no game-state change.
+- **data/vectors/meshes:** unchanged; the `.glb` exports themselves are
+  untouched, only how `web/` interprets their materials at render time.
+- **presentation:** `web/`-only. Godot's `battle_stage_3d.gd` builds a
+  real `WorldEnvironment`/`Environment` with `ambient_light_source =
+  AMBIENT_SOURCE_COLOR` (lines ~277-290) — Godot's ambient already lights
+  a metalness-1 surface the way this fix's zeroed metalness does in
+  Three.js, by a different mechanism. Godot is not known to exhibit this
+  bug and needs no equivalent change.
+- **status:** cast + arena materials read correctly now. Label/body
+  screen-position alignment is open; see the deep-analysis note this
+  version's commit references for the fuller next-steps list.
+
 ## v4.25 — 2026-08-29
 
 **Chapters — the operation ending, ported from `attempt_chapter_ending()`/
