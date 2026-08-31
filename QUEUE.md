@@ -2672,5 +2672,46 @@ list. Recorded here instead of half-fixed:
   is stale rather than silently calling it `js/` before it is.
 
 
+- **`--browser` genuinely works on this machine and had never been run
+  recently enough to catch two real regressions** (2026-08-31). `playwright`
+  is not declared in `web/package.json` and `npm ls -g playwright` shows it
+  only in the global `hermes` node install
+  (`~/AppData/Local/hermes/node/node_modules`) — reachable by setting
+  `NODE_PATH` to that folder before `node web/tools/check-project.mjs
+  --browser`, undocumented anywhere until now. Running it for real (not
+  trusting VERSIONS.md's account of an earlier Playwright capture) found:
+
+  - **"the whole twelve-anchor Kallio board is present" was stale.** The
+    board has 15 anchors now; the assertion still said 12. Same class of
+    drift fixed repeatedly this session, this time in
+    `web/test/v3-playthrough.cjs`, which apparently had not been run since
+    the board grew.
+  - **"boots with no browser errors" had been permanently failing for a
+    known-good reason.** `../hub/shell.js` genuinely 404s every run in this
+    repo (it has no local equivalent, by design — see the 2026-08-28
+    addendum in `DESIGN_AUTHORITY.md`), and Chromium logs a failed
+    subresource load to the console regardless of whether the triggering
+    script's own `.catch()` swallows the rejection — that is the browser's
+    network layer, not something page JS can suppress. Fixed by tracking
+    the actual failing URL via the `response` event and forgiving exactly
+    one generic 404-shaped console message per confirmed `hub/shell.js`
+    404 — never more, so a genuinely new 404 still fails the gate. A
+    gate that fails permanently for an accepted reason is worse than
+    useless: it trains a reader to stop believing it.
+
+  **Still open:** `playwright` needs either a proper declared
+  `devDependency` (with its own local install, portable to any machine) or
+  at minimum a documented `NODE_PATH` recipe — right now the browser gate
+  only runs at all because this specific machine happens to have a global
+  install left over from another project. Not fixed here: adding a real
+  dependency is exactly the kind of decision `CLAUDE.md` rule 2 says to ask
+  about first, not decide alone.
+
+  The two failures the browser gate still correctly reports —
+  `scene-viewport.toko not found` and its cascade — are the already-tracked
+  `scene_asset_id` drift a few entries up. Left alone; the fix needs its
+  own web-side presenter-compositing project, not a quick patch here.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.

@@ -55,6 +55,40 @@ server.listen(0, '127.0.0.1', async () => {
     if (message.type() === 'error') errors.push(`console: ${message.text()}`);
   });
 
+  // ONE known, accepted, harmless 404: ../hub/shell.js. It reaches the
+  // arcade hub's real shared chrome once deployed under it (checked directly
+  // against Suds-Jack's own hub/shell.js, 2026-08-28); this repo does not
+  // own hub/ and never will, so it 404s here every single run, on purpose.
+  // Wrapping the import in .catch() (already done, index.html) stops it
+  // throwing INTO the page, but Chromium logs a failed subresource load to
+  // the console regardless of whether the script that triggered it caught
+  // the rejection — that is the browser's own network layer, not something
+  // page-level JS can suppress. Found 2026-08-31 running this gate for real:
+  // "boots with no browser errors" had apparently been failing on exactly
+  // this, permanently, for a known-good reason, which trains a reader to
+  // stop trusting the gate. Fixed by accounting for it precisely rather than
+  // by loosening the check generally: track the ACTUAL 404'd URL via the
+  // response event (a generic "Failed to load resource: ... 404" console
+  // message carries no URL to match on), and forgive exactly one generic
+  // 404-shaped console message per confirmed hub/shell.js 404 — never more,
+  // so a second, different, real 404 still fails the gate.
+  let expectedFailures = 0;
+  page.on('response', response => {
+    if (response.status() === 404 && new URL(response.url()).pathname.endsWith('/hub/shell.js')) {
+      expectedFailures += 1;
+    }
+  });
+  function unexpectedErrors() {
+    const generic404 = /^console: Failed to load resource: the server responded with a status of 404/;
+    const rest = [];
+    let toForgive = expectedFailures;
+    for (const e of errors) {
+      if (toForgive > 0 && generic404.test(e)) { toForgive -= 1; continue; }
+      rest.push(e);
+    }
+    return rest;
+  }
+
   try {
     // web/, not piritori/ — the browser build was promoted out of piritori/
     // (later legacy/) on 2026-08-25 (legacy/README.md); this was still
@@ -62,14 +96,20 @@ server.listen(0, '127.0.0.1', async () => {
     // on window.__ptv3 rather than actually testing anything since then.
     await page.goto(`${base}/web/`);
     await page.waitForFunction(() => Boolean(window.__ptv3?.data));
-    ok('boots with no browser errors', errors.length === 0, errors.join(' | '));
+    ok('boots with no browser errors', unexpectedErrors().length === 0, unexpectedErrors().join(' | '));
     ok('content warning is the first interaction', await page.locator('#splash').isVisible());
     ok('all five modes exist before play', await page.locator('[data-mode-target]').count() === 5);
 
     await page.locator('#beginButton').click();
     await page.waitForSelector('.city-map');
     ok('BEGIN lands on the route map', await page.locator('#game').getAttribute('data-mode') === 'route');
-    ok('the whole twelve-anchor Kallio board is present', await page.locator('[data-anchor-group]').count() === 12);
+    // 12 -> 15, 2026-08-31: the board grew (hermanni_skatepark, v4.18, and
+    // others since) and this assertion was never updated for it -- found by
+    // actually running this gate, which apparently had not happened recently
+    // enough to catch it. Checked against data.map.anchors.map(...) in
+    // app.js, which renders one <g data-anchor-group> per anchor with no
+    // filter -- ALL anchors, not just active ones, matching "the whole board".
+    ok('the whole fifteen-anchor Kallio board is present', await page.locator('[data-anchor-group]').count() === 15);
     ok('Piritori is both selected and the live destination',
       await page.locator('[data-anchor-group="piritori"].current.selected').count() === 1);
     ok('the player chooses to enter Piritori from the map',
@@ -217,7 +257,7 @@ server.listen(0, '127.0.0.1', async () => {
       .filter(item => item.width < 44 || item.height < 44));
     ok('every enabled portrait control clears the 44px floor', undersized.length === 0,
       JSON.stringify(undersized.slice(0, 5)));
-    ok('still no browser errors after the click-through', errors.length === 0, errors.join(' | '));
+    ok('still no browser errors after the click-through', unexpectedErrors().length === 0, unexpectedErrors().join(' | '));
   } catch (error) {
     failed += 1;
     console.error(`  FAIL unhandled browser gate error → ${error.stack || error}`);
