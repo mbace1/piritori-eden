@@ -1,0 +1,43 @@
+Jade Lantern restaurant front — the `jade_lantern_front` site, a fictional
+faction-teaser location (kind: faction-teaser, fictional: true,
+addressPrecision: anchor-only per the site record).
+
+Made 2026-09-01, the last of the four originally-flagged placeholder sites.
+No existing source found for this one (checked first, per CLAUDE.md rule 5) -
+unlike Harju, this had to be designed rather than found.
+
+NARRATIVE.md is explicit and was read before writing any prompt: "The
+fictional Jade Lantern Network... grows through restaurant fronts across
+Kallio... Its members must be written as individuals rather than an ethnic
+stereotype." The brief followed from that directly: an ordinary, dignified,
+real-feeling small Kallio shopfront at closing time - one modest window,
+condensation, a folding paper sign, ONE small plain lantern (not a decorative
+string), delivery crates, a chained bicycle. Explicitly prompted AGAINST
+dragon motifs, red-and-gold theming, strings of lanterns, pagoda shapes -
+restrained and real, the same as any other shopfront on the street. The
+encounter's own opening line ("Mei Lan serves the lunch queue before
+acknowledging Aatami. The restaurant is a workplace first...") set the tone.
+
+Four passes:
+  v01 - first cut, on-theme and correctly restrained, but style-compared
+        against bank-counter-v01 side by side and found noticeably smoother/
+        more painterly than this repo's flat cut-cardstock register.
+  v02 - restyle pass matching the flatter, coarser, grainier register.
+        Genuinely closer on a second side-by-side comparison. Also carried
+        the first real find: stencilled marks on the delivery crates reading
+        as text/codes.
+  v03 - asked to "remove the marks" on the crates directly; reduced but did
+        not eliminate them (the model kept the label-shaped rectangle, just
+        blurred its contents) - the SAME failure shape twice on the same
+        object is exactly CLAUDE.md rule 8's stop condition for that one
+        detail, so the next attempt changed approach rather than repeating it.
+  v04 - replaced the crates with a plain unmarked wooden slat crate instead
+        of asking to edit the marked ones. Worked immediately. Kept.
+
+No live speaker is registered for enc-jade-window (no speaker_id on the
+encounter, and no Mei Lan model exists) - a plain ambient location plate per
+STAGE_SPEC 6.3's actual scope (the empty-gap-for-a-presenter rule is
+specifically for COUNTER scenes with a registered speaker; this site has
+neither), not the empty-bar pattern. No people, no text anywhere - checked by
+cropping the paper sign, all three crate faces, the door, and every window
+individually across all four passes, not by a glance at the full frame.

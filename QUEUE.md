@@ -1853,9 +1853,36 @@ list. Recorded here instead of half-fixed:
   capture rather than by the manifest saying an id exists — the capture tool
   gained a `piritori-site-*` shot for exactly that.
 
-  **Still placeholder: `harju_pitch` (harju, 1 encounter) and
-  `jade_lantern_front` (linjat_yard, 1).** Both are one-encounter sites, so
-  this is the low-value tail of the job.
+  ~~**Still placeholder: `harju_pitch` (harju, 1 encounter) and
+  `jade_lantern_front` (linjat_yard, 1).**~~ **DONE 2026-09-01.** All four
+  originally-flagged sites now have real art; nothing plays over the
+  labelled placeholder any more.
+
+  `harju_pitch` used an EXISTING, previously-unregistered reference photo
+  found in `art-library/references/stages/` — the real place
+  (Brahenkenttä), photographed already, just never turned into a runtime
+  asset. Two passes: the first reproduced it closely but carried over the
+  reference's own painted graffiti lettering and a near-readable sign; the
+  second was a surgical fix on that one generation (blank the sign, redraw
+  the graffiti as pure abstract scribble) rather than a fresh regeneration.
+
+  `jade_lantern_front` had no existing source and needed real judgement:
+  `NARRATIVE.md`'s explicit rule that Jade Lantern members "must be written
+  as individuals rather than an ethnic stereotype" drove the brief directly
+  — an ordinary, dignified small Kallio shopfront, one plain lantern, no
+  dragon/red-gold/pagoda theming, prompted against by name. Four passes: a
+  style-match correction once compared side-by-side against `bank-counter
+  -v01` and found too smooth/painterly; two attempts to remove text from
+  delivery-crate labels, the first only blurring them rather than
+  eliminating them (the same failure shape twice — `CLAUDE.md` rule 8's
+  stop condition), so the second attempt replaced the crates with a plain
+  unmarked wooden one instead of re-editing the marked ones, which worked
+  immediately.
+
+  Both verified in the actual running game via `capture.gd` (new
+  `SITE_SHOT_2`/`SITE_SHOT_3`), not by the manifest saying an id exists —
+  the same discipline the bank counter established. Full gate suite green
+  on both builds after.
 
   Two things worth reusing from doing the bank: attach an approved scene as an
   IMAGE reference rather than describing the painted register in prose (the
