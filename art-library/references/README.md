@@ -110,7 +110,20 @@ anyone builds a daytime palette.
 | `ui-target-city-map-landscape-v01.jpg` | city map, landscape |
 | `ui-target-battle-portrait-v01.jpg` | battle, portrait |
 | `ui-target-battle-landscape-v01.jpg` | battle, landscape |
+| `ui-target-battle-landscape-v02.jpg` | battle, landscape — second variant, received 2026-09-01 |
 | `ui-target-location-toko-v01.jpg` | location encounter — Toko Slomo's Noodles |
+
+**`v02` is a second generation of the same battle-landscape target, not a
+replacement for `v01`.** Same composition template — `KIERROS 2` header,
+`RANE` in the portrait/HP/GUARD/NERVE panel at 18/24, the same four-icon
+ATTACK/GUARD/REPOSITION/ITEM console plus a separate AUTO OFF/WITHDRAW
+panel, cyan-vs-red tile teams, dashed red threat lines, BACK/MIDDLE/FRONT
+rails — but a different backdrop (an archway with a lit passage and a
+brick building with a bicycle, rather than `v01`'s tram on rails) and
+minor differences in enemy pose/count. Kept as a second data point on
+what stays constant across generations (the UI chrome and read rules)
+versus what varies (the backdrop dressing) — not ruled on which backdrop
+is closer to canon; that is the owner's call per `DESIGN_AUTHORITY.md`.
 
 **Both orientations exist for both modes**, which is what `UX_SPEC.md` §2 asks
 for and what the five-mode wireframes only sketched.
