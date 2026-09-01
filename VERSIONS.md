@@ -10,6 +10,48 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.29 — 2026-08-31
+
+**The grid tiles themselves were still the wrong shape after v4.28** —
+reported immediately as "now the grid looks like it's standing up."
+v4.28 fixed WHERE each `.formation-cell` sits (its centre, via real
+camera projection) but left its SHAPE alone: the CSS class still drew
+every tile with a constant `skewY(-20deg)`, a fixed-angle guess from
+before any of this was measured against a real camera. Moving a tile to
+its true centre while keeping the old constant angle is exactly why it
+read as tilted upright rather than lying flat — the real orthographic
+projection's parallelogram is a different angle/proportion than a flat
+20° guess.
+
+- **`positionBattleDOM()` now projects all four of a cell's world
+  corners** (`lane ± 0.5, depth ± 0.5`, via the new
+  `worldForLaneDepth(lane, depth)` — `worldFor()`'s fractional-input
+  sibling) individually, rather than only its centre, and draws the
+  result with `clip-path: polygon(...)` in real pixels. This is exact at
+  any camera angle or container aspect, rather than another constant to
+  eventually be wrong again.
+- **The 44px control floor stays honoured**: `CLAUDE.md`'s house rule
+  (checked by `v3-contract.mjs`'s CSS-text assertion) is about the
+  TAPPABLE box, not the drawn shape, and an orthographic cell's true
+  footprint can measure under 44px on a small viewport. The bounding box
+  (not the polygon) is padded symmetrically up to 44px per side when
+  that happens — a bigger invisible tap area around a small visual mark,
+  the same pattern any small icon gets.
+
+**Verified**: all four real battles by screenshot — every tile now reads
+as a flat diamond lying on the ground, matching the arena floor under it
+(kattilahalli/hermanni) or the flat fallback ground (karhupuisto/
+courtyard). `v3-battle.mjs`/`v3-contract.mjs`/`v3-state.mjs` unchanged
+and green.
+
+### Port
+- **rules:** N/A — no game-state change.
+- **data/vectors/meshes:** unchanged.
+- **presentation:** `web/`-only, same reasoning as v4.28.
+- **status:** grid tile shape now matches the real camera at any
+  aspect. Row-label reprojection and animation clips remain the named
+  open items.
+
 ## v4.28 — 2026-08-31
 
 **The DOM grid/labels now agree with the 3D camera, closing the gap

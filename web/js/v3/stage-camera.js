@@ -31,15 +31,20 @@ export const CELL_M = 0.85;
 export function boardSpan() { return Math.max(LANES, totalRows()) * CELL_M; }
 export function frustumSize() { return boardSpan() * 1.1; }
 
+/** Lane/depth -> world (x, z), fractional values allowed on purpose —
+ *  `positionBattleDOM()`'s cell corners sit at `lane ± 0.5` and need the
+ *  same formula a whole-number cell centre uses. */
+export function worldForLaneDepth(lane, depth) {
+  const depthReach = (totalRows() - 1) / 2;
+  return { x: (lane - laneCentre()) * CELL_M, z: (depth - depthReach) * CELL_M };
+}
+
 /** Cell -> world position. The one place lane/depth become an (x, z) —
  *  `render3d.js` and `app.js` both call this rather than keeping their
  *  own copies, which is the whole point of this module existing. */
 export function worldFor(cell) {
   const { lane, depth } = parseSlotKey(cell);
-  const depthReach = (totalRows() - 1) / 2;
-  const x = (lane - laneCentre()) * CELL_M;
-  const z = (depth - depthReach) * CELL_M;
-  return { x, z };
+  return worldForLaneDepth(lane, depth);
 }
 
 /** Builds the same orthographic camera `render3d.js` renders through.
@@ -104,18 +109,60 @@ export function positionBattleDOM(container, battle) {
   if (!width || !height) return;
   const aspect = width / height;
   const camera = buildStageCamera(aspect);
-  const project = (x, z) => {
+  const projectPx = (x, z) => {
     const ndc = new THREE.Vector3(x, 0, z).project(camera);
-    return { left: `${((ndc.x + 1) / 2) * 100}%`, top: `${((1 - ndc.y) / 2) * 100}%` };
+    return { px: ((ndc.x + 1) / 2) * width, py: ((1 - ndc.y) / 2) * height };
+  };
+  const project = (x, z) => {
+    const { px, py } = projectPx(x, z);
+    return { left: `${(px / width) * 100}%`, top: `${(py / height) * 100}%` };
   };
 
+  // A `.formation-cell` is a flat GROUND tile, not a billboard, so its
+  // shape has to be the real projected quad — CSS's `skewY(-20deg)` was a
+  // fixed-angle guess for one particular (never-measured) camera framing.
+  // Re-centring it without also re-deriving its shape is why the tiles
+  // read as "standing up": the true isometric parallelogram this camera
+  // actually draws is flatter/wider than a constant 20° skew, so a tile
+  // moved to its correct centre but kept at the old angle looks tilted
+  // toward vertical rather than lying on the ground. Each cell's four
+  // world corners (lane ± 0.5, depth ± 0.5) are projected individually
+  // and drawn via `clip-path`, which is exact at any camera angle or
+  // container aspect rather than another hand-tuned constant.
   for (let lane = 0; lane < LANES; lane += 1) {
     for (let depth = 0; depth < totalRows(); depth += 1) {
       const cell = slotKey(lane, depth);
       const el = stage.querySelector(`.formation-cell[data-cell="${cell}"]`);
       if (!el) continue;
-      const { x, z } = worldFor(cell);
-      Object.assign(el.style, project(x, z));
+      const corners = [
+        [lane - 0.5, depth - 0.5], [lane + 0.5, depth - 0.5],
+        [lane + 0.5, depth + 0.5], [lane - 0.5, depth + 0.5],
+      ].map(([l, d]) => {
+        const { x, z } = worldForLaneDepth(l, d);
+        return projectPx(x, z);
+      });
+      const quadMinX = Math.min(...corners.map(c => c.px));
+      const quadMaxX = Math.max(...corners.map(c => c.px));
+      const quadMinY = Math.min(...corners.map(c => c.py));
+      const quadMaxY = Math.max(...corners.map(c => c.py));
+      // The 44px control floor (`CLAUDE.md`'s house rule, checked in
+      // `v3-contract.mjs`) is about the TAPPABLE box, not the drawn
+      // shape — an orthographic cell's true projected footprint can dip
+      // under that on a small viewport. Pad the box (not the polygon)
+      // symmetrically up to 44px per side when it does, same pattern as
+      // any small icon getting a bigger invisible tap area.
+      const padX = Math.max(0, (44 - (quadMaxX - quadMinX)) / 2);
+      const padY = Math.max(0, (44 - (quadMaxY - quadMinY)) / 2);
+      const boxMinX = quadMinX - padX;
+      const boxMinY = quadMinY - padY;
+      el.style.left = `${boxMinX}px`;
+      el.style.top = `${boxMinY}px`;
+      el.style.width = `${quadMaxX - quadMinX + padX * 2}px`;
+      el.style.height = `${quadMaxY - quadMinY + padY * 2}px`;
+      el.style.minHeight = '0';
+      el.style.aspectRatio = 'auto';
+      el.style.transform = 'none';
+      el.style.clipPath = `polygon(${corners.map(c => `${c.px - boxMinX}px ${c.py - boxMinY}px`).join(', ')})`;
     }
   }
 
