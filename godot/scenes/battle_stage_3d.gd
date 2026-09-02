@@ -113,10 +113,21 @@ const UNIT_VARIANTS := {
 		"res://data/art/cast3d/hired-v01.glb",
 		"res://data/art/cast3d/hired-b-v01.glb",
 		"res://data/art/cast3d/street-raver-v01.glb",
-		# Freed when Toko got his own model. A heavy man in a work parka is an
-		# ordinary person off the street, which is exactly what `hired` means —
-		# better than leaving a paid-for asset registered and unreferenced.
-		"res://data/art/cast3d/parka-man-v01.glb",
+		# parka-man RETIRED from this pool 2026-09-02. He was added here on the
+		# reasoning that a heavy man in a work parka is an ordinary person off
+		# the street, which is exactly what `hired` means — sound, except the
+		# asset HAS NO SKELETON. `port/rig-vectors.mjs` measured it: 13 of 14
+		# cast bodies carry an identical 24-joint rig and can take the shared
+		# fight clips; this one carries none and cannot be animated at all.
+		# With clips now wired in both builds, leaving him in a pool of four
+		# meant roughly one hired crew member in four standing motionless while
+		# the other three fought.
+		#
+		# He stays REGISTERED — he is a real, paid-for, usable body for any
+		# ambient or non-combat use, and the manifest note keeps his history.
+		# What he is not is a fighter. The manifest's `role` is cleared in the
+		# same change, because `test_battle`'s own gate asserts this list and
+		# the manifest agree.
 	],
 }
 

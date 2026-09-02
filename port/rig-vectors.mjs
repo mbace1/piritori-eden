@@ -126,7 +126,14 @@ if (isCheck) {
     console.error(`DRIFT: ${OUT} does not exist. Run: node port/rig-vectors.mjs`);
     process.exit(1);
   }
-  if (readFileSync(OUT, 'utf8') !== json) {
+  // Compare PARSED content, not raw text — the house pattern that
+  // chrome-vectors.mjs and stance-vectors.mjs already use, and for a reason
+  // this gate rediscovered the hard way: git normalises line endings on
+  // checkout, so a byte comparison reports DRIFT on Windows for a file whose
+  // every joint name is identical. A gate that cries wolf over CRLF trains a
+  // reader to regenerate without looking, which is the exact habit a drift
+  // gate exists to prevent.
+  if (JSON.stringify(JSON.parse(readFileSync(OUT, 'utf8'))) !== JSON.stringify(doc)) {
     console.error('DRIFT: the cast\'s skeletons changed. Run: node port/rig-vectors.mjs');
     process.exit(1);
   }
