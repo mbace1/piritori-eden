@@ -33,6 +33,11 @@ const checks = [
   // never been added here -- the same "a gate that cannot fail is a finding"
   // shape as CLAUDE.md rule 10, just from omission rather than a dead path.
   'people/test/roster.mjs',
+  // Shared fight clips are only safe while every rigged body carries the
+  // clip source's own skeleton. Added 2026-09-02 with the animation wiring
+  // in render3d.js -- see port/rig-vectors.mjs for why that is a design
+  // choice rather than a shortcut, and which single body fails it.
+  'port/rig-vectors.mjs --check',
 ];
 
 if (includeBrowser) checks.push('web/test/v3-playthrough.cjs');
