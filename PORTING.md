@@ -64,6 +64,60 @@ that was already true and parity does not change it.
 Once parity holds — judged on a screen, the way this project judges every
 look, not off a checklist — §1's table governs again as written.
 
+### 1.06 Parity measured, 2026-09-02 — three of four gaps closed, one is wide
+
+§1.05 named the gaps in a sentence. This is what they measure at, read out of
+the code rather than recalled, so the start line is a fact and not a feeling.
+
+**1. The 3D fighters and stages — CLOSED.** `web/js/v3/render3d.js` loads the
+real `cast3d/` bodies AND the real `stage3d/` arena, at the same fixed scale
+`battle_stage_3d.gd` uses, and as of v4.25 it animates them: idle, attack,
+hit and dead, driven by the same four shared clips Godot plays.
+`port/rig-vectors.mjs` now gates the thing that made those shared clips safe —
+13 of 14 cast bodies carry an identical 24-joint skeleton.
+
+**2. The transit-layer map — CLOSED, and honestly.** `web/`'s board draws the
+real HSL GTFS geometry from `map/kallio-transit-layer-v1.json`, per-line
+colours and corridor fanning included, out of the same generator that feeds
+Godot's L2. Not a schematic standing in for one.
+
+**3. Economy depth — NOT A PARITY GAP.** Measured, this is a different thing
+from what §1.05 assumed. `web/`'s board imports `offer`, `present`, `decay`
+and `exposure` — the whole live loop. What is missing is `CONDITION`, the
+seller's-condition table behind `MARKET.md` §7e, "drinking is an investment,
+not only a cost". **Godot does not implement it either** (its `condition` is
+an unrelated crew stat in `crew_generator.gd`). So it is an unbuilt design,
+not `web/` lagging, and moving it under the parity heading would have had the
+wrong build waiting on the wrong build.
+
+**4. THE MAP'S REAL GEOMETRY — OPEN, and this is the whole remaining gap.**
+
+`godot/data/map-geometry.json` is 425 KB of imported OSM, nine layers:
+
+| layer | polylines |
+|---|---|
+| `streets-real` | 4020 |
+| `railway-real` | 169 |
+| `land-real` | 969 |
+| `water-real` | 48 |
+
+Godot's `city_map.gd` draws all of it — coastline, land, the street network,
+rail. `web/` draws **one hard-coded twenty-point SVG blob** for the landmass
+(`app.js`, `class="map-land"`) and nothing at all for streets, water or rail.
+Zero references to any of those layers anywhere in `web/js/`.
+
+This is the one place a screenshot of the two builds side by side still tells
+you instantly which is which, so by this project's own standard — judged on a
+screen, not a checklist — parity does not hold yet, and this is why.
+
+**It is not a copy-paste, and that is the point of writing it down.** 4020
+street polylines as SVG paths is both a download (rule 9, the phone gate) and
+a DOM cost that the board re-renders on every state change. Godot pays it once
+into a `_draw()` on a canvas. Closing this needs a decision about form —
+simplified geometry at build time, a canvas element, or a pre-rendered layer —
+and the generator is `godot/tools/build-map-geometry.mjs`, which already
+serves one build and should serve both rather than being copied.
+
 ### 1.1 `legacy/` really is legacy now, and `web/` is not
 
 The browser build has been moved out of `legacy/` to **`web/`**, because a
