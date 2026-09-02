@@ -58,6 +58,23 @@ const RAILWAY = resolve(piritori, 'map/kallio-railway-v1.json');
 const BOARD_JSON = resolve(piritori, 'map/kallio-era1-2003-v1.json');
 const OUT = resolve(godotRoot, 'data/map-geometry.json');
 
+/** THE SECOND CONSUMER. `web/` drew a hard-coded twenty-point SVG blob for the
+ *  landmass and nothing at all for streets, water or rail, while Godot drew
+ *  all of this — measured 2026-09-02 and recorded in `PORTING.md` §1.06 as the
+ *  last open parity gap. The fix is NOT to copy this tool: the rule is that
+ *  content is authored once and FLOWS, so the one derivation emits both files
+ *  and `--check` gates both.
+ *
+ *  It is a different SHAPE, not different data. Godot reads dictionaries with
+ *  `kind`/`tier`/`points` keys because `_draw()` walks them once per frame and
+ *  the keys cost nothing there. Shipping that shape to a browser costs 415 KB
+ *  over a phone connection (rule 9), so this flattens to bare coordinate
+ *  arrays grouped by tier, rounds to 0.1 board units — a tenth of a pixel at
+ *  the board's own 1000-unit extent, invisible — and drops the redundant
+ *  per-item `kind`. 415 KB -> 185 KB, and 55 KB gzipped, which is what
+ *  actually crosses the wire. */
+const OUT_WEB = resolve(piritori, 'web/data/map-geometry-web-v1.json');
+
 /** Layer groups we lift, in MAP.md §6 back-to-front order. */
 const LAYERS = [
   'land-relief',
@@ -768,18 +785,67 @@ out.layers['streets-real'] = buildRealStreets(landRects);
 out.layers['railway-real'] = buildRealRailway(landRects);
 
 const json = JSON.stringify(out);
+
+// ── the web build's copy of the same derivation ───────────────────────────
+// Grouped BY TIER rather than carrying a `tier` string per item, because the
+// canvas draws one tier per pass with one strokeStyle — the grouping the
+// consumer already wants, done once here instead of 4020 times at load.
+const r1 = (v) => Math.round(v * 10) / 10;
+const packPts = (items) => items
+  .filter((i) => (i.points || []).length >= 4)
+  .map((i) => i.points.map(r1));
+const byTier = (layer, tiers, fallback) => {
+  const g = Object.fromEntries(tiers.map((t) => [t, []]));
+  for (const item of out.layers[layer] || []) {
+    const t = String(item.tier ?? fallback);
+    if (!g[t] || (item.points || []).length < 4) continue;
+    g[t].push(item.points.map(r1));
+  }
+  return g;
+};
+
+const web = {
+  generated_by: 'godot/tools/build-map-geometry.mjs',
+  note: 'The SAME derivation godot/data/map-geometry.json carries, reshaped '
+    + 'for a browser: bare coordinate arrays, grouped by tier, rounded to 0.1 '
+    + 'board units. Do not hand-edit; it is generated. See PORTING.md 1.06.',
+  boardExtent: out.boardExtent,
+  // The land arrives as horizontal scanline strips from the flood fill, which
+  // is why it is [x, y, w, h] rather than a polygon — see buildRealLand().
+  land: (out.layers['land-real'] || [])
+    .filter((i) => i.kind === 'rect')
+    .map((i) => [r1(i.pos[0]), r1(i.pos[1]), r1(i.size[0]), r1(i.size[1])]),
+  water: packPts(out.layers['water-real'] || []),
+  streets: byTier('streets-real', ['major', 'mid', 'minor'], 'minor'),
+  railway: byTier('railway-real', ['main', 'branch'], 'main'),
+};
+const webJson = JSON.stringify(web);
+
 const changed = !existsSync(OUT) || readFileSync(OUT, 'utf8') !== json;
+const webChanged = !existsSync(OUT_WEB) || readFileSync(OUT_WEB, 'utf8') !== webJson;
 
 if (process.argv.includes('--check')) {
+  // BOTH outputs are gated. One of two generated files going unchecked is how
+  // a lineage forks, and this repo has already paid for that three times.
   if (changed) {
     console.error('DRIFT: data/map-geometry.json is stale (SVG or real map data changed). Run: node tools/build-map-geometry.mjs');
     process.exit(1);
   }
+  if (webChanged) {
+    console.error('DRIFT: web/data/map-geometry-web-v1.json is stale. Run: node tools/build-map-geometry.mjs');
+    process.exit(1);
+  }
   console.log('MAP GEOMETRY OK: derived layers match the structural SVG and the real map data.');
+  console.log(`  both consumers current — godot ${(json.length / 1024).toFixed(0)} KB, web ${(webJson.length / 1024).toFixed(0)} KB.`);
 } else {
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, json);
+  mkdirSync(dirname(OUT_WEB), { recursive: true });
+  writeFileSync(OUT_WEB, webJson);
   const counts = LAYERS.map((l) => `${l} ${(out.layers[l] || []).length}`).join(' · ');
   console.log(`wrote data/map-geometry.json  (${(json.length / 1024).toFixed(1)} KB)`);
   console.log(`  ${counts}  ·  land-real ${landRects.length}`);
+  const st = Object.entries(web.streets).map(([k, v]) => `${k} ${v.length}`).join(' · ');
+  console.log(`wrote web/data/map-geometry-web-v1.json  (${(webJson.length / 1024).toFixed(1)} KB)`);
+  console.log(`  land ${web.land.length} · water ${web.water.length} · streets ${st}`);
 }
