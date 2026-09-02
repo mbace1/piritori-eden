@@ -109,6 +109,33 @@ jobs:
           godot --headless --path . --export-release "Web" ../build/web/index.html
           test -f ../build/web/index.html
 
+      # The JS build, deployed BESIDE the Godot export rather than instead of
+      # it. DESIGN_AUTHORITY.md (2026-08-25): web/ is the primary tester
+      # build — but until 2026-09-01 it was deployed nowhere current; the only
+      # copy online was the pre-render3d 20-Aug snapshot on Suds-Jack's own
+      # gh-pages. The immediate need is the PowerVR test: Godot's 3D is a
+      # known driver black-screen on the owner's Pixel 10 (upstream
+      # godotengine/godot#121005, proved by the same build rendering on an M2
+      # iPad), and whether three.js's different driver path survives on that
+      # GPU is the single question that decides where 3D presentation effort
+      # goes next. The file list below is exactly what web/ reaches for at
+      # runtime — grep 'from (../)+' and the content.js fetch URLs — and no
+      # more; missions/model.mjs, for instance, is NOT imported by the live
+      # app and is deliberately absent.
+      - name: the JS build rides along
+        run: |
+          cp -r web build/web/web
+          mkdir -p build/web/content build/web/map build/web/market build/web/people
+          cp content/era1-slice-v1.json build/web/content/
+          cp map/kallio-era1-2003-v1.json map/kallio-transit-layer-v1.json build/web/map/
+          mkdir -p build/web/art
+          cp -r art/v3 build/web/art/
+          cp market/model.mjs build/web/market/
+          cp people/hiring.mjs people/roster.mjs build/web/people/
+          test -f build/web/web/index.html
+          test -f build/web/art/v3/manifest.json
+          test -f build/web/art/v3/cast3d/muscle-v01.glb
+
       - name: the payload, and what it will cost on a phone
         run: |
           touch build/web/.nojekyll

@@ -1239,6 +1239,40 @@ async function boot() {
     });
 
     render();
+
+    // ?battle=<id> — the same debug entry Godot has had since Phase 0
+    // (godot/autoload/debug_entry.gd), ported per DESIGN_AUTHORITY.md's
+    // parity addendum: anything Godot already has flows Godot -> web. The
+    // console hook below (__ptv3.debug.startBattle) already existed, but a
+    // phone has no console, and CLAUDE.md rule 6 is explicit that reaching a
+    // battle must never require one. Written for exactly the test that
+    // needs it first: opening render3d on the owner's PowerVR Pixel 10,
+    // where Godot's own 3D is a known driver black-screen (upstream
+    // godotengine/godot#121005) and the open question is whether three.js
+    // takes a different-enough driver path to survive.
+    const wantBattle = new URLSearchParams(location.search).get('battle');
+    if (wantBattle) {
+      if (!data.battles.get(wantBattle)) {
+        logToast(`unknown battle id '${wantBattle}'`);
+      } else {
+        // A fresh state has NOBODY recruited or deployed (deployedCrew()
+        // returns [] on day one), so a bare startBattle() throws its
+        // "requires N deployed crew" and silently stays on the route map —
+        // exactly what happened on this handler's first test run. Field the
+        // slice's crew slots the same way v3-playthrough.cjs does. Not
+        // persisted: a debug jump must not overwrite a real save
+        // (debug_entry.gd makes the same choice).
+        state = createState(data.content);
+        const need = data.battles.get(wantBattle).player_deployed;
+        const slots = data.content.crew.map(c => c.id).slice(0, need);
+        state.recruited = slots;
+        state.deployed = slots;
+        for (const id of slots) state.crewStatus[id].status = 'available';
+        $('splash').hidden = true;
+        if (startBattle(wantBattle)) render();
+      }
+    }
+
     window.__ptv3 = {
       get data() { return data; },
       get state() { return state; },
