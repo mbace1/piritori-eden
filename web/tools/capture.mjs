@@ -31,11 +31,33 @@ const repo = resolve(here, '../..');
 const outDir = resolve(process.argv[2] || join(here, '../../.capture'));
 mkdirSync(outDir, { recursive: true });
 
-// Same three sizes as capture.gd's SHOTS, so a screen can be compared at each.
+/**
+ * The same three shots as `capture.gd`'s SHOTS, so a screen can be compared at
+ * each — but in CSS PIXELS, with the device ratio supplied separately.
+ *
+ * THIS WAS WRONG, AND IT HID A BUG FOR MONTHS. `phone` used to be
+ * `1079 x 2047`: `capture.gd`'s numbers copied across unchanged. Godot renders
+ * at DEVICE resolution and has no CSS, so 1079 is right there. A browser lays
+ * out in CSS pixels, and 1079 of them is WIDER than this build's own
+ * two-column breakpoint — so every "phone" shot ever taken by this tool was
+ * really a narrow-desktop shot, and the stacked layout the owner actually sees
+ * on a Pixel had never once been rendered here. The overlapping header in
+ * QUEUE.md is what that concealed: at a real 412px viewport the "DAY 1" status
+ * chip lands on top of the wordmark.
+ *
+ * So the layout width is CSS and the ratio is applied on top, which gets both
+ * halves right at once: the page reflows the way the real device reflows, and
+ * the PNG still comes out at the device's real pixel count, close enough to
+ * `capture.gd`'s output that the two sets still sort and read together.
+ *
+ * Pixel 10 — the device this project is actually tested on — is 1080 x 2424
+ * at a ratio of 2.625, which is 411 x 923 CSS.
+ */
 const SIZES = [
-  ['landscape', 1366, 768],
-  ['portrait', 390, 844],
-  ['phone', 1079, 2047],
+  // label, CSS width, CSS height, device pixel ratio
+  ['landscape', 1366, 768, 1],
+  ['portrait', 390, 844, 2],
+  ['phone', 411, 923, 2.625],
 ];
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webp': 'image/webp', '.png': 'image/png' };
@@ -54,8 +76,8 @@ const port = server.address().port;
 const browser = await chromium.launch();
 const errors = [];
 
-async function shoot(label, width, height, setup, name) {
-  const page = await browser.newPage({ viewport: { width, height } });
+async function shoot(label, width, height, dpr, setup, name) {
+  const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: dpr });
   page.on('pageerror', e => errors.push(`${name}: ${e}`));
   page.on('response', r => { if (r.status() >= 400 && !r.url().includes('hub/shell.js')) errors.push(`${name}: ${r.status()} ${r.url()}`); });
   page.on('console', m => {
@@ -103,9 +125,9 @@ const SCREENS = [
   }],
 ];
 
-for (const [label, width, height] of SIZES) {
+for (const [label, width, height, dpr] of SIZES) {
   for (const [name, setup] of SCREENS) {
-    await shoot(label, width, height, setup, name);
+    await shoot(label, width, height, dpr, setup, name);
   }
 }
 
