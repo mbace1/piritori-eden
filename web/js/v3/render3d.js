@@ -279,6 +279,21 @@ function applyClips(model, clips, pose) {
  *  the board to it the way Godot's `_fit_board()` does. */
 const STAGE_SCALE = 5.4;
 
+/** And the matching HALF of that pair, which this build never had.
+ *
+ *  `battle_stage_3d.gd` scales the arena by 5.4 AND every fighter by 0.60
+ *  (`n.scale = Vector3(0.60, 0.60, 0.60)`). Only the first was ported, so
+ *  bodies rendered at their native GLB size — about 1.7x too big for the
+ *  ground they stand on. Reported directly on sight, 2026-09-02: "that level
+ *  is way too small compared to the characters".
+ *
+ *  It reads as the ARENA being wrong, which is why it survived: the arena is
+ *  the thing that changed recently and the thing with a scale constant next
+ *  to it. The bodies were the untouched half. Both numbers are Godot's and
+ *  neither is re-tuned here — they are one pair, and picking a third value
+ *  for one of them is how the two builds stop being one game. */
+const UNIT_SCALE = 0.60;
+
 /** A battle's `sceneAssetId` is only an arena when the SAME id is
  *  registered as a `mesh-3d` asset (`battle-kattilahalli-3v3` and
  *  `battle-hermanni-training` both already author it that way — the real
@@ -460,6 +475,7 @@ export function mountBattleStage3D(container, battle, data) {
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
   const mixers = [];
   const clipsReady = loadFightClips(data);
+
   const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
     const assetId = ROLE_MODEL[unit.role] ?? fallback;
@@ -471,6 +487,7 @@ export function mountBattleStage3D(container, battle, data) {
         const mixer = applyClips(model, clips, poseFor(unit, battle));
         if (mixer) mixers.push(mixer);
         const { x, z } = worldFor(unit.cell);
+        model.scale.setScalar(UNIT_SCALE);
         model.position.set(x, 0, z);
         model.rotation.y = unit.side === 'player' ? Math.PI * 0.5 : -Math.PI * 0.5;
         styleUnitMaterial(model, {
