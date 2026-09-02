@@ -49,26 +49,43 @@ const PY = process.env.PIRITORI_PY
 /** The house rule, PORTING.md §6. */
 const MAX = 512;
 
-/** SCOPE, and this is a real distinction rather than caution.
+/** SCOPE — a real distinction, and one that was settled by a render.
  *
  * §6's rule lives in the MESH INTAKE list, next to "it is rigged" and "its
  * height is human" — it is about CHARACTER BODIES. A fighter on the battle
  * board is roughly 40px tall, so 512 is already generous for one. A
  * `stage3d/` diorama is the opposite case: it fills the frame, the camera
  * sits inside it, and `kallio-backyard-3d-v01` ships a 2048 texture for
- * exactly that reason.
+ * exactly that reason. So stages stay OUT of the default pass: a character
+ * rule applied blind to arenas is over-applying it past its own scope.
  *
- * Blanket-applying a character rule to arenas would be over-applying it past
- * its own scope, so stages are REPORTED and skipped. They are the larger
- * share of the saving (49 of the 69 MB), and worth their own decision with a
- * rendered before/after — not a decision to make silently inside a tool
- * called "enforce".
+ * `--stages` opts them in, and it exists because the before/after this
+ * header asked for was actually done, 2026-09-02:
+ *
+ *   `kallio-backyard-3d-v01` was rewritten to 512, synced, imported, and
+ *   captured through `godot/tools/capture.gd` — the REAL battle scene at the
+ *   real 1366x768 landscape framing, not the offline rasterizer in
+ *   `glb_render.py` (whose own header warns it "is not a preview of how the
+ *   game will light anything"). Cropped to the arena at NATIVE resolution,
+ *   with no downscale to hide detail loss, 2048 and 512 are
+ *   indistinguishable — including the highest-frequency thing in frame, the
+ *   brick course lines on the shed roof.
+ *
+ * The reason that holds despite the arena filling the frame: these dioramas
+ * are Meshy photogrammetry-style bakes whose real detail is in the MESH, and
+ * their texel density is already low because one atlas covers a whole yard.
+ * 2048 was never buying 2048 worth of detail.
+ *
+ * 49 of the 69 MB of the saving is here, so this is the bigger half — but it
+ * stays behind an explicit flag so that enabling it remains a decision
+ * somebody made, not a default that crept in.
  */
-const SKIP_PREFIX = 'stage3d/';
+const STAGE_PREFIX = 'stage3d/';
+const stages = process.argv.includes('--stages');
 
 const apply = process.argv.includes('--apply');
 if (!apply && !process.argv.includes('--check')) {
-  console.error('usage: enforce-texture-budget.mjs --check | --apply');
+  console.error('usage: enforce-texture-budget.mjs --check | --apply [--stages]');
   process.exit(1);
 }
 
@@ -119,7 +136,7 @@ for (const asset of manifest.assets) {
     const tex = textures(readFileSync(abs));
     if (!tex.length) continue;
     const over = tex.filter(t => t.w > MAX || t.h > MAX);
-    const inScope = !file.startsWith(SKIP_PREFIX);
+    const inScope = stages || !file.startsWith(STAGE_PREFIX);
     for (const t of tex) {
       vramBefore += t.w * t.h * 4;
       vramAfter += inScope
@@ -128,7 +145,7 @@ for (const asset of manifest.assets) {
     }
     if (!over.length) continue;
     const entry = { file, abs, holder, sizes: over.map(t => `${t.w}x${t.h}`) };
-    if (file.startsWith(SKIP_PREFIX)) { skipped.push(entry); continue; }
+    if (!inScope) { skipped.push(entry); continue; }
     targets.push(entry);
   }
 }
@@ -141,7 +158,8 @@ for (const t of targets) console.log(`  ${t.file}  ${t.sizes.join(', ')}`);
 if (skipped.length) {
   console.log(`
 out of scope (arenas fill the frame; §6 is a character-mesh ` +
-    `rule) — reported, not rewritten:`);
+    `rule) — reported, not rewritten. Pass --stages to include them; the ` +
+    `render that justifies doing so is in this script's SCOPE note:`);
   for (const t of skipped) console.log(`  ${t.file}  ${t.sizes.join(', ')}`);
 }
 

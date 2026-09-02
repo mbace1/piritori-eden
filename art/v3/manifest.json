@@ -1202,7 +1202,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "b09620f3a598015339620977bd0a8cef918df7c36bb177570e243893a8b715b5",
+      "sha256": "c31ff141a4c3a71d231c3208566bfa959ff5d371bbfd18627563cda5940013ce",
       "note": "A Kallio back yard as one diorama mesh: open ground with a brick outbuilding, chain-link and gate, a leaning lamp, pallets, a skip and bare birches. Generated as a single centred object because that is what image-to-3D is good at — a scene asked for as a scene comes back as soup. Its walkable surface is NOT at y=0; the base has real thickness and the ground must be measured from the AABB."
     },
     {
@@ -1395,7 +1395,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "2f1441a4095e4af6c624f7d101b408b5bb1cf33501a3d731e22f1226425c7f85",
+      "sha256": "2edef6ffe56acc09fb02efb915f6cd502a8f09d1e3a4703ff57253b19e137ea2",
       "note": "Concrete skate park: graffitied ramps and a bowl, weeds through the cracks, a road along one edge. 15882 triangles, one material. CANON NOTE (updated 2026-08-28): owner ruling placed this as a real, repeatable no-stakes training battle (era1-slice-v1.json battle-hermanni-training) at a new `training`-sliceState anchor (hermanni_skatepark, map/kallio-era1-2003-v1.json) — no longer merely reachable through ?stage=. The real district is still outside the locked Era I production boundary (MAP.md 4.1); the anchor's wgs84 is nudged to sit just inside it and marked `representative-inside-production-boundary`, the same compromise already used for the Suvilahti gasworks anchor. Base colour was 2048 and the ORM map 4096; both to 1024 by art-src/tools/strip_glb_texture.py, 16.4MB to 2.8MB."
     },
     {
@@ -1516,7 +1516,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "43ea179438bed67699403aba616f939f002001ff90acca8b385d6d4379859391",
+      "sha256": "e5e26dc097ba39683bd8d7eaad2ca80f7c68e2565bed310642993e2c6993c53d",
       "note": "Kattilahalli, the boiler hall at Suvilahti. 23272 triangles. IN BOUNDS, unlike the skate park: Suvilahti sits at Sornainen, and the map already carries a `sornainen_harbour` anchor whose roles are docks, industrial and expansion. Its sliceState is 'teaser', so placing a battle here is a content decision but not a boundary change. The hall has open sides and no floor beyond its own footprint, which is why BattleStage3D lays a concrete slab under every arena - see _build_ground_fill(). KNOWN: some textures are mirrored across opposite sides. Owner's read is that colour and lighting hide it; not attempted here. Textures were 2048 and 4096, both to 1024: 17.8MB to 3.2MB."
     },
     {
