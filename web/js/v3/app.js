@@ -1,4 +1,5 @@
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=1';
+import { mountMapRelief } from './map-relief.js?v=1';
 import {
   SAVE_KEY, createState, loadState, saveState, currentSchedule, currentEncounter,
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
@@ -119,6 +120,11 @@ function render() {
   // rather than inside renderBattle() because it needs the REAL <canvas>'s
   // container already attached to the document (WebGL context creation
   // reads its size), which is only true after innerHTML has landed.
+  // Same rule as the 3D stage below: a canvas must be attached and laid out
+  // before it can be measured, so this runs after innerHTML, not inside
+  // renderRoute()'s string.
+  if (state.mode === 'route') mountMapRelief($('cityRelief'));
+
   if (state.mode === 'battle' && state.battle) {
     mountBattleStage3D($('stage3dMount'), state.battle, data);
     // Both calls measure the SAME just-attached container; running this
@@ -138,18 +144,26 @@ function mapPath(path) {
   }).join(' ');
 }
 
+/**
+ * The relief used to be SEVEN INVENTED SHAPES: a twenty-point landmass blob,
+ * five "districts" and a park, none of which corresponded to anything in
+ * Helsinki. They are gone, replaced by the real OSM land, water, streets and
+ * railway that `map-relief.js` draws onto a canvas UNDER this SVG — the last
+ * parity gap `PORTING.md` §1.06 measured against the Godot build.
+ *
+ * Removed rather than kept underneath, deliberately. Reported directly about
+ * the Godot map, 2026-08-26: "the grey lines that are there from the squares
+ * that you re-colored" — two road networks, or an invented coastline under a
+ * real one, disagreeing in one picture is exactly the tell that gets noticed.
+ * `city_map.gd` dropped its own hand-drawn roads for the same reason.
+ *
+ * Nothing replaces the districts. They were decoration standing in for
+ * geography this build did not have; it has the geography now.
+ */
 function mapBackground() {
-  return `
-    <path class="map-water" d="M0 0H1000V1000H0Z"/>
-    <path class="map-land" d="M58 36L844 39 918 127 872 260 966 350 1000 517 924 674 811 729 758 958 83 954 28 809 77 676 35 511 91 371 36 222Z"/>
-    <path class="map-district" d="M112 79L388 76 445 315 338 496 89 448Z"/>
-    <path class="map-district" d="M402 67L773 62 855 242 719 356 449 319Z"/>
-    <path class="map-district" d="M87 462L339 506 421 742 309 910 69 825Z"/>
-    <path class="map-district" d="M358 496L729 356 842 566 753 823 424 742Z"/>
-    <path class="map-district" d="M760 336L932 366 951 585 839 632 751 556Z"/>
-    <path class="map-park" d="M415 482L540 464 571 575 440 598Z"/>
-  `;
+  return '';
 }
+
 
 /** flat [x0,y0,x1,y1,...] board points -> an SVG path `d`. */
 function flatPointsToPath(points) {
@@ -318,6 +332,8 @@ function renderRoute() {
   return `
     <div class="route-layout">
       <section class="paper-panel map-panel" aria-label="Era I Kallio operations map">
+        <div class="map-stage">
+        <canvas class="city-relief" id="cityRelief" aria-hidden="true"></canvas>
         <svg class="city-map" viewBox="0 0 1000 1000" role="img" aria-labelledby="mapTitle mapDesc">
           <title id="mapTitle">Kallio operations map, north up</title>
           <desc id="mapDesc">Twelve accurate public anchors compressed into one relief map. The next encounter is at ${esc(data.anchors.get(slot.anchor_id)?.label)}.</desc>
@@ -326,6 +342,7 @@ function renderRoute() {
           <g aria-hidden="true">${routeSvg}${ordinaryFlowSvg()}${hiddenPips}</g>
           ${data.map.anchors.map(anchor => anchorSvg(anchor, anchor.id === slot.anchor_id, anchor.id === selected.id)).join('')}
         </svg>
+        </div>
       </section>
       <aside class="map-side">
         ${progressionCard(slot)}

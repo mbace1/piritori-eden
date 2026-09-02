@@ -2767,3 +2767,26 @@ list. Recorded here instead of half-fixed:
 
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.
+
+## Spotted 2026-09-02, while drawing the real map — not acted on
+
+- **The phone header overlaps itself.** At a 412px-wide Pixel viewport the
+  "DAY 1 · DAY" status chip sits ON TOP of the "PIRITORI → EDEN" wordmark,
+  which reads as "EDEI". Visible in the capture at
+  `art-src/renders/` and in any `web/tools/capture.mjs` phone run. It is a
+  `v3.css` chrome/flex problem in the top bar, not a map one, so it is left
+  for a UI pass rather than fixed in an Art/Content commit — CLAUDE.md rule 1
+  and rule 4.
+
+- **`web/tools/capture.mjs`'s "phone" viewport is 1079 CSS px**, which is
+  wider than the two-column breakpoint, so the "phone" shots are really
+  narrow-desktop shots and have never exercised the stacked layout the owner
+  actually sees. It mirrors `capture.gd`'s DEVICE pixel size without dividing
+  by the device pixel ratio. The real Pixel 10 is ~412 CSS px at dpr 2.7.
+  Worth fixing next time that harness is opened; it would have caught the
+  header overlap above months ago.
+
+- **`port/rig-vectors.mjs` reports a false DRIFT on a fresh checkout.** The
+  fix (compare parsed JSON, not raw text, because git normalises line endings
+  on Windows) is written and sitting in PR #28; until that merges,
+  `check-project.mjs` fails on main for a reason that is not real.

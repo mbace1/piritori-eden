@@ -302,15 +302,58 @@ button { -webkit-tap-highlight-color: transparent; }
   min-height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(290px, 360px);
+  /* `start`, not the grid default `stretch`: the map panel is now sized by the
+     square board inside it (see .map-stage), so stretching it to the sidebar's
+     height just wraps the map in a tall empty frame. */
+  align-items: start;
   gap: 12px;
   padding: 12px;
 }
-.map-panel { min-height: 560px; overflow: hidden; background: #0e1c29; }
-.city-map { display: block; width: 100%; height: 100%; min-height: 560px; touch-action: manipulation; }
-.map-water { fill: #0c2637; }
-.map-land { fill: #262b31; stroke: #7d684f; stroke-width: 6; }
-.map-district { fill: #30343a; stroke: #1b2128; stroke-width: 4; }
-.map-park { fill: #4f593e; stroke: #8b915e; stroke-width: 3; }
+/* No min-height. The panel is sized by the square board inside it now; a
+   560px floor here is half of what pushed the southern half of Kallio off
+   the bottom of the screen, and on a 412px-wide phone it wrapped a 362px
+   map in 200px of empty frame. */
+.map-panel { overflow: hidden; background: #0e1c29; }
+/* THE MAP STAGE. The relief canvas and the interactive SVG are two layers of
+   ONE picture and must occupy the exact same box, or the streets sit beside
+   their own anchors — a misalignment that reads as "the data is wrong" rather
+   than "the box is". Both are absolutely positioned inside this one element,
+   so they are the same box by construction rather than by two rules agreeing.
+
+   IT IS SQUARE, and that is load-bearing twice over.
+
+   1. It matches the SVG's `viewBox="0 0 1000 1000"`, which makes the default
+      `xMidYMid meet` a no-op and the canvas projection exact.
+   2. It CLIPS. Real map data does not stop at the board's declared extent —
+      build-map-geometry.mjs says so explicitly, "land simply continues past
+      it and is clipped, the way a city map continues past its own edge" — and
+      Godot has `_draw_edge_mask()` for precisely this. A square stage is that
+      mask for free: an SVG viewport clips its own overflow, and a canvas
+      cannot draw outside its bitmap.
+
+   The width clamp is the fix for a real fault the relief exposed rather than
+   caused. Measured 2026-09-02: the map panel grew to 943px tall inside a
+   768px landscape viewport, and 1776px on the phone — the southern half of
+   Kallio, Hakaniemi and Siltasaari included, was simply off-screen and always
+   had been. `min-height: 560px` was holding the floor up while nothing at all
+   held the ceiling down. Now the board is sized to FIT, which is what a map
+   you navigate by has to do. */
+.map-stage {
+  position: relative;
+  width: min(100%, calc(100dvh - 15rem));
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  border-radius: inherit;
+}
+.city-relief, .city-map {
+  position: absolute; inset: 0;
+  display: block; width: 100%; height: 100%;
+  border-radius: inherit;
+}
+.city-relief { pointer-events: none; }
+.city-map { touch-action: manipulation; z-index: 1; }
+/* .map-water / .map-land / .map-district / .map-park are gone with the seven
+   invented shapes they styled — see mapBackground() in app.js. */
 /* The real HSL tram/metro network (TRANSIT_LAYERS.md §3 L2, §9.3's Era I
    "printed" treatment — flat colour, hard keyline, no glow, since this
    build has no live layer for a glow to distinguish from). Replaces the
@@ -753,8 +796,8 @@ button { -webkit-tap-highlight-color: transparent; }
   .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 8px; letter-spacing: .03em; }
   .nav-icon { font-size: 17px; }
   .route-layout, .encounter-layout, .ledger-layout, .news-layout { min-height: auto; display: block; padding: 7px; }
-  .map-panel { min-height: 620px; height: calc(100dvh - 192px); }
-  .city-map { min-height: 620px; }
+  /* The stage sizes itself now — see .map-stage. A min-height here is what
+     pushed the board off the bottom of the screen in the first place. */
   .map-side { margin-top: 7px; }
   .map-side > section { padding: 13px; }
   .scene-card { min-height: auto; }
