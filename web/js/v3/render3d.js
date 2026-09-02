@@ -196,6 +196,83 @@ function loadUnitModel(data, assetId) {
   });
 }
 
+// ── animation ───────────────────────────────────────────────────────────────
+//
+// THE FOUR FIGHT CLIPS, LIFTED ONTO WHOEVER IS WEARING THE BODY. Exactly what
+// `battle_stage_3d.gd`'s `CLIPS` table does: the clips ship as four separate
+// one-animation GLBs (that is how Meshy delivers them), all four cut from the
+// MUSCLE's rig, and every fighter borrows them. That is a deliberate design
+// choice, not a shortcut — Meshy rigs come out near-identical, so buying four
+// clips per role would be paying repeatedly for the same motion.
+//
+// It is now checked rather than assumed: `port/rig-vectors.mjs` asserts every
+// rigged cast body carries the SAME 24 joints as the clip source (measured
+// 2026-09-02: 13 of 14 do, exactly). The fourteenth, `parka-man`, has no
+// skeleton at all and cannot animate — it is in the live `hired` variant pool,
+// so roughly one hired crew member in four gets a still body. Named in
+// QUEUE.md; `applyClips()` below degrades to a static figure for it rather
+// than throwing, which is what it already did before animation existed.
+// The ids are the manifest's own flattened FRAME ids
+// (`<group-id>:<pose>`, built by content.js's flattenArt) — the clips ship as
+// one `animation-set-3d` group with four frames, not four separate assets.
+// Resolved through the same assetUrl() every other screen uses, so there is
+// still no second path table to drift. Note `behit` is the manifest's pose
+// name; `hit` is Godot's key for the same clip, kept here so poseFor()'s
+// vocabulary matches battle_stage_3d.gd's _pose_for() exactly.
+const CLIP_SOURCES = {
+  idle: 'cast3d-muscle-clips-v01:idle',
+  attack: 'cast3d-muscle-clips-v01:attack',
+  hit: 'cast3d-muscle-clips-v01:behit',
+  dead: 'cast3d-muscle-clips-v01:dead',
+};
+
+/** Loaded once and shared across every unit in the battle. Godot's own version
+ *  notes why: four clips fetched per unit per refresh would reload the same
+ *  files six times a round. AnimationClips are immutable data — unlike the
+ *  SkinnedMesh above, they are safe to share. */
+let clipCache = null;
+
+function loadFightClips(data) {
+  if (clipCache) return clipCache;
+  clipCache = Promise.all(Object.entries(CLIP_SOURCES).map(([key, assetId]) => {
+    const url = assetUrl(data, assetId);
+    if (!url) return Promise.resolve([key, null]);
+    return new Promise(resolve => {
+      loader.load(url,
+        gltf => resolve([key, gltf.animations?.[0] ?? null]),
+        undefined,
+        () => resolve([key, null]));   // a missing clip is a static pose, not a crash
+    });
+  })).then(pairs => Object.fromEntries(pairs));
+  return clipCache;
+}
+
+/** Which clip a fighter should be playing — mirrors `battle_stage_3d.gd`'s
+ *  `_pose_for()` against this build's own unit shape. Godot reads
+ *  Fighter.Status; web/ has no status enum, so the equivalents are: not
+ *  alive -> dead, nerve exhausted -> hit (battle.js prints "is shaken" on
+ *  exactly that condition), currently selected and yet to act -> attack. */
+function poseFor(unit, battle) {
+  if (!unit.alive) return 'dead';
+  if (unit.nerve === 0) return 'hit';
+  const acting = unit.id === battle.selectedId && !battle.acted?.includes(unit.id);
+  return acting ? 'attack' : 'idle';
+}
+
+/** Binds the shared clips to this figure's own skeleton and starts one.
+ *  Returns the mixer so the render loop can advance it, or null for a body
+ *  with no skeleton to bind to. */
+function applyClips(model, clips, pose) {
+  const clip = clips[pose] ?? clips.idle;
+  if (!clip) return null;
+  const mixer = new THREE.AnimationMixer(model);
+  const action = mixer.clipAction(clip);
+  // A downed fighter holds its last frame instead of looping back upright.
+  if (pose === 'dead') { action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; }
+  action.play();
+  return mixer;
+}
+
 /** Fixed scale factor, matching `battle_stage_3d.gd`'s `_build_stage()`
  *  exactly ("Scale is inherited, not measured" — QUEUE.md), so an arena
  *  reads at the same size in both builds even though nothing here refits
@@ -381,14 +458,18 @@ export function mountBattleStage3D(container, battle, data) {
   stage?.classList.remove('stage3d-ready', 'stage3d-arena');
 
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
+  const mixers = [];
+  const clipsReady = loadFightClips(data);
   const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
     const assetId = ROLE_MODEL[unit.role] ?? fallback;
-    return loadUnitModel(data, assetId)
-      .then(model => {
+    return Promise.all([loadUnitModel(data, assetId), clipsReady])
+      .then(([model, clips]) => {
         // The mount that requested this load may already have been torn
         // down by a later render before the network resolved.
         if (myGeneration !== generation) return;
+        const mixer = applyClips(model, clips, poseFor(unit, battle));
+        if (mixer) mixers.push(mixer);
         const { x, z } = worldFor(unit.cell);
         model.position.set(x, 0, z);
         model.rotation.y = unit.side === 'player' ? Math.PI * 0.5 : -Math.PI * 0.5;
@@ -420,7 +501,13 @@ export function mountBattleStage3D(container, battle, data) {
     .then(() => { if (myGeneration === generation) stage?.classList.add('stage3d-ready'); })
     .catch(() => {}); // logged per-unit above; 2D sprites stay the fallback
 
+  // Real elapsed time, not a fixed step: AnimationMixer.update() takes a
+  // DELTA, and feeding it a constant would run every clip at whatever rate
+  // this particular device happens to hit rather than at its authored speed.
+  const clock = new THREE.Clock();
   function tick() {
+    const dt = clock.getDelta();
+    for (const mixer of mixers) mixer.update(dt);
     renderer.render(scene, camera);
     if (myGeneration === generation) current.raf = requestAnimationFrame(tick);
   }

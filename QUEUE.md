@@ -2740,5 +2740,30 @@ list. Recorded here instead of half-fixed:
   own web-side presenter-compositing project, not a quick patch here.
 
 
+- **`parka-man-v01.glb` has no skeleton and cannot animate** (found
+  2026-09-02, wiring animation into `web/`). It is in
+  `battle_stage_3d.gd`'s live `UNIT_VARIANTS["hired"]` pool alongside three
+  rigged bodies, so **roughly one hired crew member in four gets a body that
+  stands still while the other three fight**. `PORTING.md` §6's intake list
+  already requires "it is rigged, and the skeleton is measurable"; this asset
+  predates that check being applied.
+
+  `port/rig-vectors.mjs` names it explicitly rather than failing on it, so
+  the suite stays green while the fact stays visible. Two honest fixes:
+  re-run it through Meshy's rigging (costs credits, needs a go-ahead), or
+  drop it from the `hired` pool and leave it registered as the ambient/
+  non-combat body it can still be. The second is free and probably right —
+  a heavy man in a work parka is good scenery even if he never throws a
+  punch.
+
+- **Every rigged cast body shares one 24-joint skeleton, and that is now
+  gated.** `battle_stage_3d.gd` has always played the MUSCLE's four fight
+  clips on every fighter, and `render3d.js` now does the same — a deliberate
+  choice, since Meshy rigs come out near-identical and buying four clips per
+  role would pay repeatedly for the same motion. It was never checked.
+  `port/rig-vectors.mjs` now asserts it (13 of 14 bodies, exactly matching
+  joint sets) and is in the standing `check-project.mjs` run.
+
+
 Lane: mixed, each named above. Found by testing, which is the point of the
 capture tool existing.
