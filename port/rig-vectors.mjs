@@ -17,9 +17,36 @@
  * rather than "one asset regressed".
  *
  * Measured 2026-09-02: 13 of 14 cast bodies carry an IDENTICAL 24-joint
- * skeleton (`Hips`, `LeftUpLeg`, `LeftLeg`, `LeftFoot`, `LeftToeBase`, ...) —
- * so the shared-clip approach is safe by construction, not by luck. This
- * pins that fact so the next mesh PR cannot quietly break it.
+ * skeleton (`Hips`, `LeftUpLeg`, `LeftLeg`, `LeftFoot`, `LeftToeBase`, ...).
+ *
+ * MATCHING NAMES ARE NOT ENOUGH, AND THIS GATE ONCE SAID THEY WERE. It
+ * originally checked joint names only and reported the shared-clip approach
+ * "safe by construction, not by luck". It is not, and the false confidence
+ * cost a session: reported on sight, 2026-09-02, "the models hips are janky...
+ * their hips are rotated almost 180 degrees".
+ *
+ * A glTF rotation channel is a node's LOCAL rotation, absolute rather than a
+ * delta, so playing a clip on a rig whose REST orientation differs overwrites
+ * that skeleton's rest with the source's. Same names, same joint count, torn
+ * pelvis. So rest orientation is checked too, and the numbers are damning:
+ *
+ *   - `Hips` splits the cast into two families — near-identity (toko, local,
+ *     enforcer, hired) and rotated 105-142 degrees (muscle, runner, fixer,
+ *     watcher, driver).
+ *   - `LeftUpLeg` is worse: the clip source has [0.97, 0.07, -0.09, 0.2]
+ *     where toko has [-1, -0.05, 0.05, 0].
+ *   - Worst, and the actual root cause: `clips/muscle-idle-v01.glb` is NOT
+ *     the same rig as `muscle-v01.glb`, THE BODY IT IS NAMED AFTER. Its Hips
+ *     rest is [0.191, -0.016, -0.016, 0.981] against the body's
+ *     [0.442, -0.261, 0.607, 0.607]. There is no body in this repo whose
+ *     skeleton these clips were authored against, so every fighter — the
+ *     muscle included — is playing foreign motion.
+ *
+ * This gate now FAILS on that rather than certifying it, because a gate that
+ * cannot fail is a finding and not a pass. Fixing it is an asset job, not a
+ * code one: the clips need re-exporting against a real body rig. Retargeting
+ * in the player was tried twice and made it worse — see QUEUE.md before
+ * trying a third time.
  *
  * THE ONE EXCEPTION, and it is a real defect rather than a tolerance:
  * `parka-man-v01.glb` has NO SKIN AND NO SKELETON. It cannot be animated at
@@ -78,6 +105,42 @@ for (const name of CAST) {
   rigs[name] = names.slice().sort();
 }
 
+// ── rest orientation, the check the name comparison was missing ──────────
+function restRotations(relPath) {
+  const d = readFileSync(resolve(root, relPath));
+  const gltf = JSON.parse(d.subarray(20, 20 + d.readUInt32LE(12)).toString('utf8'));
+  const out = {};
+  for (const n of gltf.nodes ?? []) {
+    if (n.name) out[n.name] = (n.rotation ?? [0, 0, 0, 1]).map(v => +v.toFixed(3));
+  }
+  return out;
+}
+
+/** Angle between two unit quaternions, in degrees. */
+function angleBetween(a, b) {
+  const dot = Math.abs(a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]);
+  return (2 * Math.acos(Math.min(1, dot)) * 180) / Math.PI;
+}
+
+/** How far a rest orientation may drift before the shared clip visibly tears
+ *  the body. Deliberately generous — this is not a tolerance to tune until it
+ *  passes, it is a line well below "obviously broken". */
+const REST_TOLERANCE_DEG = 15;
+
+const srcRest = restRotations(CLIP_REF);
+const restDrift = {};
+for (const name of Object.keys(rigs)) {
+  const bodyRest = restRotations(`art/v3/cast3d/${name}-v01.glb`);
+  const worst = { joint: null, deg: 0 };
+  for (const joint of ref) {
+    if (!srcRest[joint] || !bodyRest[joint]) continue;
+    const deg = angleBetween(srcRest[joint], bodyRest[joint]);
+    if (deg > worst.deg) { worst.joint = joint; worst.deg = +deg.toFixed(1); }
+  }
+  restDrift[name] = worst;
+}
+
+
 const doc = {
   generated_by: 'port/rig-vectors.mjs',
   note: 'Joint names per cast body, sorted. Every rigged body must carry the ' +
@@ -86,6 +149,7 @@ const doc = {
   clip_source: CLIP_REF,
   clip_source_joints: ref.slice().sort(),
   unrigged_known: UNRIGGED_KNOWN,
+  rest_drift_deg: restDrift,
   rigs,
 };
 
@@ -104,6 +168,36 @@ for (const [name, names] of Object.entries(rigs)) {
     console.error(`  FAIL ${name}: ${missing.length} joint(s) the clip needs ` +
       `and this rig lacks${missing.length ? ` (${missing.slice(0, 4).join(', ')})` : ''}` +
       `, ${extra.length} extra`);
+  }
+}
+// EVERY rigged body currently fails this, which is the honest result and not
+// a tolerance that wants loosening. Treated the same way UNRIGGED_KNOWN treats
+// parka-man: the numbers are printed in full on every run so the fact cannot
+// go quiet, and the gate fails only if a body gets WORSE than its recorded
+// baseline — so this real, owner-decision-blocked asset defect does not sit
+// red across every unrelated PR, while a NEW regression still stops the line.
+const prior = existsSync(OUT)
+  ? (JSON.parse(readFileSync(OUT, 'utf8')).rest_drift_deg ?? {})
+  : {};
+const broken = Object.entries(restDrift).filter(([, w]) => w.deg > REST_TOLERANCE_DEG);
+if (broken.length) {
+  console.log(`
+  ${broken.length} body(s) CANNOT safely take the shared clips ` +
+    `(rest orientation over ${REST_TOLERANCE_DEG} deg from the clip source):`);
+  for (const [name, w] of broken) console.log(`    ${name}: ${w.deg} deg at '${w.joint}'`);
+  console.log(`  Root cause: ${CLIP_REF} is not the same rig as ANY body here, ` +
+    `including muscle-v01.glb, the body it is named after. See this file's ` +
+    `header and QUEUE.md. Fixing it is an asset job.`);
+}
+// Only in --check. In generate mode this would make a regression impossible
+// to RECORD: the run that writes the new baseline would abort before writing
+// it, and the only way out would be deleting the fixture by hand.
+for (const [name, worst] of (process.argv.includes('--check') ? Object.entries(restDrift) : [])) {
+  const was = prior[name]?.deg;
+  if (was !== undefined && worst.deg > was + 2) {
+    failures += 1;
+    console.error(`  FAIL ${name}: rest drift got WORSE — ${was} -> ${worst.deg} deg ` +
+      `at '${worst.joint}'. A mesh PR has regressed this rig.`);
   }
 }
 for (const name of unrigged) {
