@@ -1,0 +1,30 @@
+Harju sports pitch (Brahenkenttä), Kallio — the `harju_pitch` site.
+
+Made 2026-09-01, the third of the four originally-flagged placeholder sites
+(jaska_studio already had art via scene-club, PR #11; staffed_bank got
+bank-counter-v01, PR #17). Real public place, addressPrecision "public-anchor"
+per the site record — fictional: false.
+
+Built from an EXISTING, previously-unused reference photo found in
+art-library/references/stages/stage-harju-sports-yard-night-v01.jpg — a real
+top-down isometric render of the actual pitch (fenced yard, tiered concrete
+stands, goal, basketball hoop, low brick clubhouse), attached as an image
+reference and asked to match closely rather than described from scratch. Look
+for the asset before making one (CLAUDE.md rule 5) — this one was already
+sitting there, unregistered.
+
+Two passes. The first reproduced the reference well but carried over the
+reference's own painted graffiti lettering on the clubhouse wall ("HARJU
+KALLIO") plus a small sign near the gate with near-readable marks on it — a
+hard no per this project's baked_text rule. The second pass was a surgical
+fix on the first generation rather than a fresh regeneration: blanked the
+small sign, redrew the wall graffiti and fence tags as pure abstract
+spray/scribble with no letterforms, kept everything else pixel-for-pixel.
+Checked afterward by cropping every graffiti zone and the sign individually
+and looking, not by a single glance at the full frame — the same discipline
+that caught the bank scene's missing security mirror.
+
+No people, no text anywhere, full-bleed. No live speaker registered for
+enc-runner-at-tram-stop (no speaker_id on the encounter), so this is a plain
+ambient location plate, not a STAGE_SPEC 6.3 counter scene — no empty gap for
+a 3D presenter to composite into is needed here.

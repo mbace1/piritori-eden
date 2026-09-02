@@ -8,10 +8,12 @@ extends Node
 ## bar. `test_shell` already asserts this one has a speaker with a model.
 const SPEAKER_SHOT := "enc-toko-quiet-voice"
 
-## A site whose stage art was only just registered. Shot so the "does the
+## Sites whose stage art was only just registered. Shot so the "does the
 ## placeholder still play here" question is answered by a picture rather than
 ## by the manifest saying an id exists.
 const SITE_SHOT := "enc-bank-counter"
+const SITE_SHOT_2 := "enc-runner-at-tram-stop"   ## harju_pitch, 2026-09-01
+const SITE_SHOT_3 := "enc-jade-window"           ## jade_lantern_front, 2026-09-01"
 
 ## The battle console was never photographed at all, at any size — and the
 ## owner's own phone screenshot showed it running off the right edge with
@@ -131,6 +133,24 @@ func _ready() -> void:
 			var p4 := out_dir.path_join("piritori-site-%s-%s.png" % [label, Loc.code])
 			img4.save_png(p4)
 			print("wrote ", p4)
+
+			_shell._show_location(SITE_SHOT_2)
+			for i in range(14):
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			var img4b := get_viewport().get_texture().get_image()
+			var p4b := out_dir.path_join("piritori-site2-%s-%s.png" % [label, Loc.code])
+			img4b.save_png(p4b)
+			print("wrote ", p4b)
+
+			_shell._show_location(SITE_SHOT_3)
+			for i in range(14):
+				await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			var img4c := get_viewport().get_texture().get_image()
+			var p4c := out_dir.path_join("piritori-site3-%s-%s.png" % [label, Loc.code])
+			img4c.save_png(p4c)
+			print("wrote ", p4c)
 
 			if _shell.has_method("_show_battle"):
 				_shell._show_battle(BATTLE_SHOT)

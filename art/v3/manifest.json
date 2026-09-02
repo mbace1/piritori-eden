@@ -1627,6 +1627,62 @@
       "note": "Staffed bank counter on Siltasaari - the staffed_bank site, which had been playing over the labelled placeholder. Nobody in the picture and the space above the counter left clear, per STAGE_SPEC 6.3, so the teller is a 3D layer composited into the gap rather than baked into the plate - the same ruling as the empty Toko bar. No text anywhere: the clock, brochures, screen and slips carry abstract marks only."
     },
     {
+      "id": "scene-harju-pitch-v01",
+      "kind": "scene",
+      "file": "scenes/harju-pitch-v01.webp",
+      "source": "art-src/scenes/harju-pitch-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "harju",
+      "portrait_safe_bounds": [
+        0.24,
+        0,
+        0.76,
+        1
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "901eae140701556051fbe84610560668dcf3a3cd34f4ab6a9898bac0652926e7",
+      "bytes": 174090,
+      "note": "Harju sports pitch (Brahenkentta) - the harju_pitch site, real public place, addressPrecision public-anchor. Built from an existing unused reference photo (art-library/references/stages/stage-harju-sports-yard-night-v01.jpg) rather than invented. No people, no text - the reference's own painted graffiti lettering was replaced with abstract marks in a second pass."
+    },
+    {
+      "id": "scene-jade-lantern-front-v01",
+      "kind": "scene",
+      "file": "scenes/jade-lantern-front-v01.webp",
+      "source": "art-src/scenes/jade-lantern-front-v01.png",
+      "source_version": "v01",
+      "approval_status": "semi-approved",
+      "production_status": "prototype-only",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-opaque",
+      "layer": "location-stage",
+      "era": "2003",
+      "location": "linjat_yard",
+      "portrait_safe_bounds": [
+        0.24,
+        0,
+        0.76,
+        1
+      ],
+      "baked_text": false,
+      "baked_ui": false,
+      "sha256": "32d181b2c07e8168222bb84f639609b443cf8371149fddb5530fb5739540f590",
+      "bytes": 191264,
+      "note": "Jade Lantern restaurant front - the jade_lantern_front site, fictional (faction-teaser). NARRATIVE.md's rule that members read as individuals, never a stereotype, drove the brief directly: an ordinary dignified Kallio shopfront, one plain lantern, no dragon/red-gold/pagoda theming. Four passes - a style-match correction against bank-counter-v01, then two attempts to de-text delivery crates, the second by replacing them with a plain wooden crate rather than re-editing the marked ones."
+    },
+    {
       "id": "cast3d-jaska-v01",
       "kind": "mesh-3d",
       "file": "cast3d/jaska-v01.glb",
