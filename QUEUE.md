@@ -2790,3 +2790,36 @@ capture tool existing.
   fix (compare parsed JSON, not raw text, because git normalises line endings
   on Windows) is written and sitting in PR #28; until that merges,
   `check-project.mjs` fails on main for a reason that is not real.
+
+## The battle frame, 2026-09-02 — measured, not fixed
+
+`render3d.js` now scales fighters correctly (0.60, matching Godot), but the
+SHOT is still wrong on a phone, and this is the next real piece of work on the
+fight screen:
+
+- the camera frames a magnified corner of the arena rather than the fight;
+- the opposition sits hard against the right edge;
+- the player's own three fighters stand behind a chimney and cannot be seen
+  at all, which is fatal in a game about who is standing where.
+
+Godot solves this with two functions that were never ported, and
+`render3d.js`'s own header admits it — "nothing here refits the board to it the
+way Godot's `_fit_board()` does":
+
+- **`_fit_board()`** grows `CELL` until the board covers the arena's smaller
+  horizontal half-extent, so the fight is laid out across the floor instead of
+  on a fixed 2.5m square in one corner.
+- **`_measure_ground()`** finds the WALKABLE surface by sampling vertices from
+  the open middle of the diorama. Its own comment is the warning worth
+  reading first: a fraction of the bounding box does not work, because a
+  diorama's height is mostly tree and lamp-post.
+
+Two attempts at porting the fit were made in this session. Neither changed the
+frame — `CELL_M` measured 0.85, its unchanged default, after the arena had
+loaded — and both were reverted rather than shipped unproven. Whoever picks
+this up should start by finding out WHY the fitted value came back as the
+default, not by writing the port again.
+
+Note also that the board is centred on the arena's bounding-box centre, which
+for the boiler hall is inside the building rather than on the open floor.
+`_measure_ground()` is likely the missing half, not `_fit_board()`.
