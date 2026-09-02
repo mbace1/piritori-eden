@@ -2823,3 +2823,50 @@ default, not by writing the port again.
 Note also that the board is centred on the arena's bounding-box centre, which
 for the boiler hall is inside the building rather than on the open floor.
 `_measure_ground()` is likely the missing half, not `_fit_board()`.
+
+## The fight animation is broken at the ASSET level — 2026-09-02
+
+Reported on sight: *"the models hips are janky... their hips are rotated almost
+180 degrees."* Measured, and it is worse than the hips.
+
+`battle_stage_3d.gd` and `render3d.js` both play ONE body's four fight clips on
+every fighter. `port/rig-vectors.mjs` certified that safe because all 13 rigged
+bodies carry the same 24 joint NAMES. **Names are not enough**, and that gate
+gave false confidence for weeks:
+
+- A glTF rotation channel is a node's LOCAL rotation, **absolute, not a
+  delta**. Playing it on a rig with a different REST orientation overwrites
+  that skeleton's rest with the source's.
+- The clips are a full absolute-pose bake — all 24 joints carry rotation,
+  translation AND scale (72 channels). The translation tracks overwrite bone
+  OFFSETS, i.e. the target's own limb lengths, while the mesh is still skinned
+  with its own inverse bind matrices. The body tears at the joints.
+- **The root cause: `art/v3/cast3d/clips/muscle-idle-v01.glb` is not the same
+  rig as `muscle-v01.glb`, the body it is named after.** Hips rest
+  `[0.191, -0.016, -0.016, 0.981]` against the body's
+  `[0.442, -0.261, 0.607, 0.607]`. There is no body in this repo whose
+  skeleton these clips were authored against, so every fighter — the muscle
+  included — plays foreign motion. Every one of the 13 is over tolerance; the
+  worst are runner (108 deg at Hips), watcher (103 deg) and fixer (99 deg).
+
+`rig-vectors.mjs` now measures rest orientation, prints the full broken list on
+every run, and fails on REGRESSION against a recorded baseline rather than
+sitting red forever over an asset defect that needs an owner decision.
+
+**Retargeting in the player was tried twice and made it worse.** The standard
+composition (`target(t) = restTarget * inv(restSource) * clip(t)`, translation
+tracks dropped for every bone but the root) laid every fighter flat on the
+ground. Both attempts were reverted rather than shipped. Do not write a third
+without first establishing which skeleton the clips actually belong to — that
+is the unknown, and no amount of arithmetic substitutes for it.
+
+**The fix is an asset job and costs credits, so it is the owner's call:**
+
+1. Re-rig and re-export the four clips against a real body rig (Meshy rigging,
+   roughly 5 credits per body) so the source rest is a skeleton that exists; or
+2. Buy per-body clips, which is what shared clips existed to avoid; or
+3. Turn fight animation off until 1 or 2 happens — a still, correct body reads
+   better than a torn moving one.
+
+**Do not put an arena behind this until it is settled.** Owner, 2026-09-02:
+"don't use a background level before getting everything else right."

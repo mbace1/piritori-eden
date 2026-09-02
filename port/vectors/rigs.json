@@ -31,6 +31,60 @@
   "unrigged_known": {
     "parka-man": "no skin/skeleton in the GLB; cannot be animated. In the live hired variant pool, so ~1 hired crew in 4 gets a body that will not move. Violates PORTING.md §6 \"it is rigged, and the skeleton is measurable\"."
   },
+  "rest_drift_deg": {
+    "driver": {
+      "joint": "Spine02",
+      "deg": 159.3
+    },
+    "enforcer": {
+      "joint": "RightForeArm",
+      "deg": 24.6
+    },
+    "fixer": {
+      "joint": "LeftUpLeg",
+      "deg": 98.7
+    },
+    "hired-b": {
+      "joint": "RightUpLeg",
+      "deg": 157.6
+    },
+    "hired": {
+      "joint": "LeftFoot",
+      "deg": 27.8
+    },
+    "jaska": {
+      "joint": "RightArm",
+      "deg": 70.4
+    },
+    "local": {
+      "joint": "Spine02",
+      "deg": 39.4
+    },
+    "muscle": {
+      "joint": "LeftUpLeg",
+      "deg": 96.4
+    },
+    "runner": {
+      "joint": "Hips",
+      "deg": 108.2
+    },
+    "street-raver": {
+      "joint": "Spine02",
+      "deg": 32
+    },
+    "suited-man": {
+      "joint": "Spine02",
+      "deg": 69
+    },
+    "toko": {
+      "joint": "Spine02",
+      "deg": 27.3
+    },
+    "watcher": {
+      "joint": "LeftUpLeg",
+      "deg": 102.6
+    }
+  },
   "rigs": {
     "driver": [
       "Head",
