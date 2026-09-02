@@ -2870,3 +2870,32 @@ is the unknown, and no amount of arithmetic substitutes for it.
 
 **Do not put an arena behind this until it is settled.** Owner, 2026-09-02:
 "don't use a background level before getting everything else right."
+
+### Retargeting was tried a THIRD time, with the canonical tool — 2026-09-02
+
+Do not try a fourth without new assets.
+
+`SkeletonUtils.retargetClip()` is three.js's own solution to exactly this
+problem, and it costs nothing to adopt: it ships in the SAME three.js r167
+already vendored here, from the same `examples/jsm/` directory `GLTFLoader.js`
+comes from. (Provenance was checked the way this repo checks its three.js
+copies — the vendored `GLTFLoader.js` is byte-identical to upstream r167.) So
+it is not a new dependency under rule 2.
+
+It works in WORLD space via matrices — reset the target to its own bind pose,
+take each source bone's global matrix, convert into the target's parent space,
+decompose to local TRS — which is precisely the part the two hand-rolled
+attempts got wrong.
+
+**It fails on this data too.** Wired up correctly (SkinnedMesh passed rather
+than the scene Group, mixer bound to the SkinnedMesh so the `.bones[...]`
+tracks resolve, no console errors at all), the fighters come out crumpled with
+their legs folded into the torso.
+
+That is the conclusive evidence. The canonical retargeter, correctly applied,
+cannot rescue these clips — because retargeting needs a source skeleton that
+structurally corresponds to the target, and `clips/muscle-idle-v01.glb`
+corresponds to nothing in this repo, including the body it is named after.
+
+**No runtime code fixes this. The clips must be re-authored against a real
+body rig.** Three approaches, all reverted, none shipped.
