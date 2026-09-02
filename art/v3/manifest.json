@@ -31,9 +31,9 @@
       "location": "vaasankatu",
       "portrait_safe_bounds": [
         0.2,
-        0.0,
+        0,
         0.8,
-        1.0
+        1
       ],
       "baked_text": true,
       "baked_ui": true,
@@ -58,9 +58,9 @@
       "location": "vaasankatu",
       "portrait_safe_bounds": [
         0.24,
-        0.0,
+        0,
         0.76,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -85,9 +85,9 @@
       "location": "karhupuisto",
       "portrait_safe_bounds": [
         0.24,
-        0.0,
+        0,
         0.76,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -628,7 +628,7 @@
       "skeleton_bones": 24,
       "triangles": 20826,
       "presentation_rule": "Only the moving presenter inside the television is 3D. Output receives limited colour, analogue softness, slight scanlines and CRT bloom. The CRT shell, lower third, newsroom props and all surrounding UI remain cut-cardstock layers.",
-      "sha256": "613a6b5ebc010e0cf4acdb46d98db12b5163bba2c512e8417a4e8c46853ee8a2",
+      "sha256": "3a5172c7c980a0461873bacd9cbad793b1243afd89dbe0f85d09694e9b88875e",
       "note": "ART_BIBLE 13.2 exception. Fictional composite, not a likeness of any living person: wardrobe, colouring and demeanour follow the owner's reference, the face does not. Rigged by Meshy auto-rigging, 24-bone humanoid; head bone 'headfront'. Idle motion is breathing and a scripted paper glance - lip sync needs blendshapes this mesh does not carry."
     },
     {
@@ -649,9 +649,9 @@
       "location": "sornainen-docks",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -676,9 +676,9 @@
       "location": "torkkelinmaki-composite",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -703,9 +703,9 @@
       "location": "kallio-backyard",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -730,9 +730,9 @@
       "location": "karhupuisto",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -757,9 +757,9 @@
       "location": "sornainen-docks",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -784,9 +784,9 @@
       "location": "kallio-service-yard",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -811,9 +811,9 @@
       "location": "hakaniemi",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -838,9 +838,9 @@
       "location": "piritori",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -1259,7 +1259,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "abb52e97e6a81d69df1756f291ad1380d2816ff3d0ea61ac5e9a1c7a6f26ef49",
+      "sha256": "f215f9496c68e5fa314e0d91223b1e81c11d03dc23d9cbbd887665fe642b4c3d",
       "note": "Tall, navy quilted work coat with a hi-vis stripe, keys at the belt. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1276,7 +1276,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "296c44a8ed2f20dc4a67d9a02920c68d27ecbe2463746ffe1c32171a4aa69f34",
+      "sha256": "42188c04429cb7ff773dad43d9ce67b606c7c66072789d5f89916dce7b55543c",
       "note": "A long charcoal coat — the only floor-length silhouette in the cast. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1293,7 +1293,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "7e33762e2ae35d81ddc5bc2c65f5f16fd9a30bb37ab8e37249d800fbf0b3df15",
+      "sha256": "4374be2f95db2c9e2ef2a44b796ca99a6e66f6a50574abfdba5e234617e80150",
       "note": "Short and round, maroon quilted coat. The only rounded outline. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1310,7 +1310,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "670a2e22e435273a6c56c4e42ce455c4d8c0410a3fc0d30a753be19902f2d455",
+      "sha256": "d38fdfb8bfdb441a1463024541fda0e1f39e68e6df5a0fe4a20d70f6df8efa17",
       "note": "A wide slab on long legs: black bomber, heavy boots. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1327,7 +1327,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "82c528b3a01c3315e21840b852ae8391d012928014cd36431668b4d01a37463a",
+      "sha256": "6ae09acf9a73b0fa83e335036452946d04ab5a1b0218f0013668ab9b1fb9bf01",
       "note": "Thin vertical, dark tracksuit, white trainers. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1344,7 +1344,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "afc71225e96c44997f9cced2f17db7601123d00deada487d7b4e55ed92593ca8",
+      "sha256": "77b7c67e293ca8889c7a378776d5139556212dbd0d0f9cb315e254a1044a6154",
       "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
@@ -1362,8 +1362,8 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "Hired street muscle: dark red tracksuit bottoms with side stripes, grey hooded sweatshirt, black quilted gilet, trainers. This is the 'Hired' subclass in MODULAR_CHARACTER_SYSTEM.md - planted stance, cheap gear - which was in the design and had no model. 6533 triangles, 24 bones. Arrived rigged rather than through the concept-to-Meshy route in art-library/characters/concepts-3d/SPEC.md, so it costs no credits and skips the T-pose step. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py: 6.2MB becomes 0.8MB.",
-      "sha256": "3465608f952ff912bd9cd0a3d7d9d592cc94e7b64358444f02b697c65593adff",
-      "bytes": null
+      "sha256": "19fc1dde478cdfa2002fba0a57f3c90168ff45b8a84fc9faf6d58a61f739b54f",
+      "bytes": 525512
     },
     {
       "id": "cast3d-hired-clips-v01",
@@ -1413,8 +1413,8 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "A second HIRED body: denim jacket, khaki trousers, white striped shirt, dreadlocks, red-gold-green accents, tan boots. Identified from its UV atlas, not its filename. 10390 triangles, 24 bones - the same rig as hired-v01, which is what makes the clip library shareable. Deliberately a VARIANT rather than a new role: SPEC.md 5 keeps one mesh per specialist because the silhouette IS the role, but 'hired' means somebody off the street, so two ordinary bodies make it more itself. Texture 2048 to 512: 6.1MB becomes 0.9MB.",
-      "sha256": "b369199d2374fbe088b72887d52fa5d994b2cd7f32b538a05cbd4021028685ec",
-      "bytes": null
+      "sha256": "31d1afaa69f97db0e0f81eca732f9d8c3c2fe973cbc96ac6bfff412de6af03e4",
+      "bytes": 605612
     },
     {
       "id": "cast3d-hired-b-clips-v01",
@@ -1448,8 +1448,8 @@
       "baked_text": false,
       "source": "Meshy 'White Suit Enforcer' biped, supplied rigged",
       "note": "Cream-white suit jacket over a black shirt and black trousers. Reads senior and flash rather than street, which is the point: opposition currently wears the same six bodies as the player's crew, so an enemy fixer looks exactly like your fixer. CANON NOTE: MODULAR_CHARACTER_SYSTEM.md gives Enforcer a rain shell, a dark cap and a long silhouette. A white suit is none of those. It is mapped to `enforcer` because that slot had no model and this reads as the thing the slot is for - somebody who does not belong on the street - but either the brief updates or this is re-designated. 16059 triangles, 24 bones. Texture 2048 to 512: 5.1MB to 1.0MB.",
-      "sha256": "b1b9e3ea578b0e99a301402f8359eb638f0ad1b92346e06ac0e031e78c7d79bb",
-      "bytes": null
+      "sha256": "2f4dd9934195ee5d55cb9c9fe55fbd8e569f0297073d1fbfd864a00252da6df6",
+      "bytes": 857856
     },
     {
       "id": "cast3d-enforcer-clips-v01",
@@ -1483,8 +1483,8 @@
       "baked_text": true,
       "source": "Meshy 'Neon Raver Punk' biped, supplied rigged",
       "note": "Black techwear with acid-green trim, studded straps, gloves, boots. A third HIRED body - street people are what that role is. baked_text is TRUE: the garment carries the word RAVE and an acid-house smiley printed into the texture. Diegetic clothing print rather than UI, so it is not a localisation problem, but it cannot be translated and is declared rather than hidden. 20431 triangles, the heaviest of the street cast. Texture 2048 to 512: 6.1MB to 1.4MB.",
-      "sha256": "8689ab792f9389bddbd2cebaec893108151da59c788be8e640968917d2f9f334",
-      "bytes": null
+      "sha256": "c015bcddab9143e5f593ead63202a82af05aa672c7c6569321686c486a5f38a7",
+      "bytes": 1190144
     },
     {
       "id": "cast3d-street-raver-clips-v01",
@@ -1551,7 +1551,7 @@
       "role": "hired",
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
       "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Found unused on the account and rigged for 5 credits. RECAST: he briefly stood in for Toko Slomo and was freed the moment Toko got his own model. He is now one of the `hired` bodies in battle_stage_3d.UNIT_VARIANTS — an ordinary heavy man in work clothes, which is what `hired` means. He is NOT a speaker and NOT in presenter_3d.PLACEHOLDER_SPEAKERS; this note claimed both for a while after the code had moved on, which is how a stale note misreports the cast. 18761 triangles, 24 bones. Texture 2048 to 1024, matching the polycount-is-the-lever finding in ART_BIBLE 9.7 rather than the older 512 target: 7.1MB to 0.77MB.",
-      "sha256": "453f882df7c74c8ff1e4cb1692081f8c306b95d905a46f85d4619af83c0d4471"
+      "sha256": "f6849b66f35b55ebf54170f7b0807d05f097ed9c63d58811423331d3df3a0725"
     },
     {
       "id": "cast3d-toko-v01",
@@ -1568,8 +1568,8 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "Toko Slomo, the noodle chef on Vaasankatu - a named NARRATIVE.md character. White shirt with rolled sleeves, black apron, black trousers, grey hair. The gold smiling mask is CANON. 2026-08-24: remeshed at 12k from the owner T-pose with ALL APRON TEXT REMOVED, rigged, retextured to 1024. 28,765 tris and 2.0 MB down to 12,481 and 0.69 MB. baked_text is now FALSE - the apron carried TOKO SLOMO'S NOODLES over a ramen bowl and a red katakana patch, which could not be translated and had to be declared; a blank apron removes the localisation dead end and spends no polygons on lettering. Walk/run clips staged unregistered at art-library/cast3d/toko-v02-clips.glb.",
-      "sha256": "00787592e5361badae5291c32b08132847fa84eb2867de9656d24970dcebcb21",
-      "bytes": 691960
+      "sha256": "53f6a50e98f9190023ce3dee3c5f9a6e1dc8716c77c8bcaa5db4090e7a90646c",
+      "bytes": 582588
     },
     {
       "id": "scene-scene-club-v01",
@@ -1589,9 +1589,9 @@
       "location": "makelansilta",
       "portrait_safe_bounds": [
         0.22,
-        0.0,
+        0,
         0.78,
-        1.0
+        1
       ],
       "baked_text": false,
       "baked_ui": false,
@@ -1696,7 +1696,7 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "74086ed4923863bed0cc5faf562bf7f5d88438c09ad62bc6dcac9645aa9adf6d",
+      "sha256": "cf09b6fa6e8d11520ce811df8647016708382afcf9befd8602e1a42abdf7cf79",
       "note": "Jaska, Aatami's artist brother and moral counterweight (NARRATIVE.md), built from a likeness photo the owner supplied. 31k tris at 1024, Meshy image-to-3D task 01a03a67, rig task 01a03a69. A-POSE, NOT T-POSE, AND DELIBERATELY: a T-pose puts a narrow dark-on-dark notch between sleeve and torso that Meshy could not resolve - it bridged the gap with torn webbing geometry and baked the grey background into the shoulder seam as a visible stripe. Arms at 45 degrees over a bright cream ground opens the silhouette wide enough to reconstruct cleanly. That failure was in the MESH, not the drawing; the 2D passed every check. Glasses survive as texture rather than geometry - thin wireframe is below what image-to-3D resolves. Ten idle/talking clips staged unregistered at art-library/cast3d/jaska-v01-clips.glb."
     }
   ]
