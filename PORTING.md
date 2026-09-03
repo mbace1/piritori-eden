@@ -118,6 +118,79 @@ simplified geometry at build time, a canvas element, or a pre-rendered layer —
 and the generator is `godot/tools/build-map-geometry.mjs`, which already
 serves one build and should serve both rather than being copied.
 
+### 1.07 PARITY HOLDS — 2026-09-02. The start line has been crossed.
+
+§1.06 left one gap open and named it "the whole remaining gap". It closed the
+same day: `4d3acc9` draws the real OSM geometry — streets, coastline, rail —
+on a canvas in `web/`, out of the same `build-map-geometry.mjs` that feeds
+Godot's L2, which is the "one generator, both builds" form §1.06 asked for.
+
+**All four gaps are now closed, so §1.05's condition is met** — the owner's
+2026-08-28 addendum said the 2026-08-25 ruling "only starts AFTER js has
+feature and asset parity with Godot", and that is now a fact rather than an
+aspiration:
+
+| gap | state |
+|---|---|
+| 3D fighters and stages | closed — real bodies, real arenas, animated |
+| transit-layer map | closed — real HSL GTFS geometry, not a schematic |
+| economy depth | not a parity gap; `CONDITION` is unbuilt in BOTH builds |
+| the map's real geometry | **closed 2026-09-02** (`4d3acc9`) |
+
+**What changes, concretely, from today:**
+
+- **`web/` is where behaviour is defined.** New rules are designed there
+  first. This is the 2026-08-25 ruling, now live.
+- **`godot/` is the port.** The flow reverses: it was Godot → web while this
+  document's §1.05 held; it is **web → Godot** from here. Godot reproduces
+  behaviour and does not invent it.
+- **Every version still carries its `### Port` block**, but the block's job
+  flips with the flow. It now names what the GODOT side must re-port, which
+  is what §2 always said it was for — the last several versions could
+  honestly write "nothing to re-port" only because they were catch-up.
+- **A version that closes a gap the other way is a bug**, not progress: if
+  Godot grows a rule web does not have, that is a lineage starting, and
+  `CLAUDE.md`'s lane table exists to stop it.
+
+**Recorded because it was nearly missed.** Parity arrived and no document
+said so, so sessions kept working in catch-up mode for a day — polishing an
+additive render layer (`render3d.js`'s own header: the 2D board is complete
+and playable without it) while the build's actual gap, a campaign with no
+growth loop, went untouched. A phase that ends without being declared does
+not end.
+
+### 1.08 TURF is a sibling build, and a legitimate source
+
+Owner ruling, 2026-09-02: work here "should use anything from TURF that it
+can". `turf/` lives on **Suds-Jack's `gh-pages` branch**, not in this repo,
+and is at v9.
+
+It is not a port target and nothing syncs between them. It is a **second
+battle tester of the same genre** — grid tactics, Nordic street underworld,
+a persistent named crew of three, lost on a squad wipe — that reached a
+polished look through **sprite** art where this build reaches for 3D. Where
+it has already shipped something this build has not, read its solution
+before writing one:
+
+- **The growth loop.** `awardXp`, `xpToNext`, `crewProgress` and a level-up
+  line on the result screen, live since TURF v6. This build has none, which
+  makes it the reference for the growth-loop work rather than a blank page.
+- **A real feedback loop.** TURF v8 and v9 each came from one annotated
+  screenshot of the live build on a real phone. Nothing here has an
+  equivalent.
+
+**And one difference that must not be papered over:** TURF scopes XP to a
+single run and clears `crewProgress` when a new one starts — it is a
+roguelike. This build's crew persist across a ten-day chapter and into the
+next. Same mechanic, different lifetime, and both the storage and the
+balance follow the lifetime, so its numbers are a starting point and never a
+drop-in.
+
+The debt runs the other way too, and is worth offering: **TURF has no tests
+at all**, while this repo's gates caught a dead asset (`parka-man-v01.glb`,
+no skeleton) that had sat in a live pool for ten days behind a joint count
+nobody had measured.
+
 ### 1.1 `legacy/` really is legacy now, and `web/` is not
 
 The browser build has been moved out of `legacy/` to **`web/`**, because a

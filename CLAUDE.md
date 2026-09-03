@@ -73,15 +73,41 @@ currently in.
 |---|---|
 | **Art** | `art-library/`, `art/v3/`, `art-src/`, `godot/ui/` drawing code, `ART_BIBLE.md` |
 | **Content** | `content/`, `map/`, `godot/locale/`, the authored slice |
-| **Engine** | `godot/autoload/`, `godot/scripts/`, `godot/tools/`, `godot/tests/` |
-| **Design** | `PHASING.md`, `GAME_DESIGN_DOCUMENT.md`, `DESIGN_LOCKS.md`, `UX_SPEC.md` |
+| **Engine** | `godot/autoload/`, `godot/scripts/`, `godot/tools/`, `godot/tests/`, `port/` |
+| **Design** | `PHASING.md`, `GAME_DESIGN_DOCUMENT.md`, `DESIGN_LOCKS.md`, `UX_SPEC.md`, `PORTING.md` |
 
-`godot/scenes/` is shared — it is where a mode's art, content and logic
-meet. Say in the commit message which lane you were wearing when you
-touched it.
+**`web/` was missing from this table entirely until 2026-09-02, and that is
+exactly what it cost.** The table was written when `godot/` was the
+implementation. `web/` then became the primary build (`PORTING.md` §1.07)
+and inherited no lane at all — so every session touching it was, by this
+document's own rule, in no lane and therefore in everybody's. In one day
+that produced **three collisions on `render3d.js`, and one animation port
+written twice in full by two sessions from the same Godot source.** `web/`
+splits the same four ways:
+
+| Lane | Owns, in `web/` |
+|---|---|
+| **Art** | `render3d.js`, `fight-motion.js`, `stage-camera.js`, `map-relief.js`, `v3.css` |
+| **Content** | nothing of its own — `web/` reads `content/` and `map/` |
+| **Engine** | `state.js`, `battle.js`, `grid.js`, `board.js`, `stance.js`, `web/test/`, `web/tools/` |
+| **Design** | — |
+
+`godot/scenes/` and `web/js/v3/app.js` are shared — each is where a mode's
+art, content and logic meet. Say in the commit message which lane you were
+wearing when you touched either.
 
 If a task needs another lane, finish yours and name the handoff. Do not
 reach across.
+
+**Concurrency, because sessions do run at once.** A lane is not a lock, so
+before editing a shared file — `app.js`, `godot/scenes/`, a manifest — run
+`git fetch origin main` and read the recent commits touching it. Finding
+your work already merged under another session's name is the cheap outcome;
+finding it mid-rebase is the expensive one. Where two implementations of the
+same thing exist, **keep the one that measures its own assumption**: that is
+how the duplicated animation port was settled — the copy carrying a rig gate
+stood, the copy verified by screenshot was dropped, and the gate then found
+a defect no screenshot could have shown.
 
 ---
 

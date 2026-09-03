@@ -61,6 +61,41 @@ written. `../hub/shell.js` was checked directly against its real source in
 Suds-Jack and left alone — it is correct once deployed and only 404s
 harmlessly in local dev; it was never the reason the build failed to load.
 
+### Addendum, 2026-09-02 — the start line has been crossed. The ruling is live.
+
+The 2026-08-28 addendum below gated the 2026-08-25 ruling on parity. **Parity
+now holds**, measured rather than felt: `PORTING.md` §1.06 read the four gaps
+out of the code, and `4d3acc9` closed the last one by drawing the real OSM
+geometry in `web/` from the same generator that feeds Godot.
+
+**So the ruling above is in force from today, and the flow reverses.** `web/`
+is where behaviour is designed; `godot/` reproduces it. A `### Port` block now
+names what GODOT must re-port — which is the job §2 of `PORTING.md` always
+gave it, and which the last several versions could only answer "nothing" to
+because they were catch-up work.
+
+**Written down because it was nearly missed.** Parity arrived and no document
+said so, so a full day of work went into an additive rendering layer that
+cannot, by its own design, change whether the game runs, while the build's
+real gap — a campaign whose crew never improve — went untouched. **A phase
+that ends without being declared does not end**, and this file is where the
+declaration belongs.
+
+**Owner ruling the same day, on scope:** the art is "just the assets you have
+for now as far as the fights and arenas go" — so no new mesh or clip spend
+while the growth loop is built. The known-broken fight clips stay worked
+around rather than re-authored, and the fights and arenas ship on what is
+already registered.
+
+**And on lanes:** this session holds the art lane and may raise requests to
+Meshy when one is genuinely needed. `CLAUDE.md` carries the table.
+
+**And on TURF:** `turf/` on Suds-Jack's `gh-pages` is a sibling battle tester
+— same genre, sprite art where this build uses 3D — and work here "should use
+anything from TURF that it can". It has already shipped the growth loop this
+build lacks. `PORTING.md` §1.08 records what crosses and the one thing that
+does not.
+
 ### Addendum, 2026-08-28 — the ruling has a start line, not just a direction
 
 **Owner: "That ruling only starts AFTER js has feature and asset parity with
