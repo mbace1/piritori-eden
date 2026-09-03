@@ -71,9 +71,15 @@ const CLIP_REF = 'art/v3/cast3d/clips/muscle-idle-v01.glb';
 
 /** Known unrigged, and why. Listed rather than silently skipped. */
 const UNRIGGED_KNOWN = {
-  'parka-man': 'no skin/skeleton in the GLB; cannot be animated. In the live ' +
-    'hired variant pool, so ~1 hired crew in 4 gets a body that will not move. ' +
-    'Violates PORTING.md §6 "it is rigged, and the skeleton is measurable".',
+  'parka-man': 'no skin/skeleton in the GLB (0 skins, 0 joints, 0 animations, ' +
+    '1 node); cannot be animated. RETIRED 2026-09-02 and now in NO pool: ' +
+    'battle_stage_3d.UNIT_VARIANTS dropped it, and BOTH manifests have had ' +
+    'their `role` cleared and their false "24 bones / rigged for 5 credits" ' +
+    'claim corrected against a measurement. Kept registered on purpose — a ' +
+    'usable body for ambient or non-combat work, cheap to re-rig if a fighter ' +
+    'is ever wanted. It sat in a live pool for ten days because the ' +
+    'registration asserted a joint count nobody had measured, which is the ' +
+    'reason this gate reads the GLB instead of the manifest.',
 };
 
 function jointNames(relPath) {
