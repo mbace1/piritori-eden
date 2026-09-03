@@ -16,6 +16,22 @@ const ROLE_PARTS = {
 };
 const ENEMY_HEADS = ['head-kallio-03-v03', 'head-kallio-09-v03', 'head-kallio-11-v03'];
 
+/** `battle_builder.gd`'s `ROLE_PROFILES`, ported. An opponent authors only
+ *  role/cell/intent/equipment and never a stat line, so on both sides of the
+ *  port the ROLE is the stat line. `driver` has no entry in Godot's table
+ *  either and takes the default — which is why the default exists. */
+const ROLE_PROFILE = {
+  muscle: { condition: 8, nerve: 6 },
+  runner: { condition: 5, nerve: 5 },
+  watcher: { condition: 5, nerve: 5 },
+  fixer: { condition: 6, nerve: 7 },
+  local: { condition: 6, nerve: 5 },
+};
+const DEFAULT_PROFILE = { condition: 6, nerve: 6 };
+/** Guard has no authored ceiling on either side of the port — unlike
+ *  condition and nerve, which the crew record and the role profile set. */
+const GUARD_CEILING = 3;
+
 /** A unit's `cell` field is a grid.js `slotKey` ("lane,depth") — not the
  *  authored "front-2" vocabulary, which only names a slot inside a SIDE's
  *  own band and cannot name the neutral cells a unit can now stand in (see
@@ -41,11 +57,15 @@ function makePlayer(member, state, index, count) {
     side: 'player',
     role: member.role,
     cell: slotKey(slot.lane, slot.depth),
-    hp: 3,
-    maxHp: 3,
+    // `_crew_to_unit()`: a crew member fights at their OWN condition, wounds
+    // carried in. Flat 3/3 for everyone until 2026-09-02 — so the crew screen
+    // showed the muscle at 10 while the fight gave them 3, and the authored
+    // 7-10 spread did nothing at all.
+    hp: Math.max(1, status?.condition ?? member.condition ?? DEFAULT_PROFILE.condition),
+    maxHp: Math.max(1, status?.maxCondition ?? member.condition ?? DEFAULT_PROFILE.condition),
     guard: member.role === 'muscle' ? 2 : 1,
-    nerve: 3,
-    maxNerve: 3,
+    nerve: Math.max(1, status?.nerve ?? member.nerve ?? DEFAULT_PROFILE.nerve),
+    maxNerve: Math.max(1, member.nerve ?? DEFAULT_PROFILE.nerve),
     alive: status?.status !== 'missing',
     head: member.portrait_asset_id,
     torso,
@@ -65,17 +85,21 @@ function makeEnemy(opponent, index, openingNerve = 0) {
   // BattleBuilder._opponent_to_unit(): parse_cell() always answers for the
   // OPPOSITION band, centred onto the real board width.
   const slot = parseCell(opponent.cell);
+  const profile = ROLE_PROFILE[opponent.role] ?? DEFAULT_PROFILE;
   return {
     id: opponent.id,
     name: opponent.name,
     side: 'enemy',
     role: opponent.role,
     cell: slotKey(slot.lane, slot.depth),
-    hp: 3,
-    maxHp: 3,
+    // `_opponent_to_unit()`: flat 3/3 before 2026-09-02, which made a muscle
+    // and a runner the same fighter wearing different art.
+    hp: profile.condition,
+    maxHp: profile.condition,
     guard: opponent.role === 'muscle' ? 2 : 1,
-    nerve: Math.max(1, 3 + openingNerve),
-    maxNerve: 3,
+    // The scouting advantage applies to the role's own nerve, not a constant.
+    nerve: Math.max(1, profile.nerve + openingNerve),
+    maxNerve: profile.nerve,
     alive: true,
     head: ENEMY_HEADS[index % ENEMY_HEADS.length],
     torso,
@@ -307,7 +331,7 @@ function triggerSyncFire(battle, attacker, target) {
     // this same chain may already have downed the target, and nobody fires a
     // bonus round into a body already on the ground.
     if (!target.alive) return;
-    battle.log.unshift(`${ally.name} syncs fire: ${hit(target)}`);
+    battle.log.unshift(`${ally.name} syncs fire: ${hit(target, rollHarm(battle, ally, target))}`);
   }
 }
 
@@ -316,6 +340,29 @@ function markActed(battle, unit) {
   battle.action = null;
   const next = battle.players.find(item => item.alive && !battle.acted.includes(item.id));
   battle.selectedId = next?.id ?? unit.id;
+}
+
+/** `_roll_range(weapon.harm_min, weapon.harm_max)`, through the house seeded
+ *  `rand01()` rather than a live `Math.random()`: `v3-playthrough` replays a
+ *  whole run and cannot do that against an unseeded roll, so the same battle,
+ *  round and pair always produce the same swing.
+ *
+ *  The band itself was already ported — `equipment.js`'s `HOLD_TUNING`, built
+ *  into `battle.weapons` at creation — and simply never read for damage:
+ *  every blow was a flat 1, so a sawn-off and a folding knife hit identically
+ *  and the whole harm table was decoration. */
+function rollHarm(battle, attacker, target) {
+  const held = weaponFor(battle, attacker);
+  // A support item is not a weapon, and swinging one is not an attack for
+  // ZERO — you hit them with your hands instead. This is what Godot keeps an
+  // `UNARMED` entry for, and skipping it stalls the fight outright: a crew
+  // member holding a feature-phone (`utility-one`, harm 0/0) could never
+  // finish anybody, and `v3-battle`'s 150-round auto-play never resolved.
+  const band = (held.harmMax ?? 0) > 0 ? held : UNARMED;
+  const min = band.harmMin ?? 1;
+  const max = Math.max(min, band.harmMax ?? min);
+  if (max === min) return min;
+  return min + Math.floor(rand01(battle.id, battle.round, attacker.id, target.id, 'harm') * (max - min + 1));
 }
 
 function hit(target, amount = 1) {
@@ -342,7 +389,7 @@ export function playerAttack(battle, targetId) {
     target.guard = Math.max(0, target.guard - 1);
     battle.log.unshift(`${attacker.name} marks ${target.name}'s lane. Guard and nerve drop.`);
   } else {
-    battle.log.unshift(`${attacker.name}: ${hit(target)}`);
+    battle.log.unshift(`${attacker.name}: ${hit(target, rollHarm(battle, attacker, target))}`);
     triggerSyncFire(battle, attacker, target);
   }
   markActed(battle, attacker);
@@ -391,8 +438,15 @@ export function brace(battle) {
   if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
   const unit = selectedUnit(battle);
   if (!unit || battle.action !== 'brace') return { ok: false, message: 'Select a crew member first.' };
-  unit.guard = Math.min(3, unit.guard + 1);
-  unit.nerve = Math.min(3, unit.nerve + 1);
+  // Both ceilings were the literal 3 that every stat used to be. Guard's
+  // still is — nothing authors a guard ceiling — but NERVE is now the
+  // fighter's own, and leaving the literal there capped a nerve-7 muscle at
+  // 3: their nerve could never fill, so `autoCommand()`'s guard weight
+  // (which rises as nerve falls) stayed high and the crew braced forever
+  // without ever attacking. A 150-round auto-play ended with both opponents
+  // untouched at full condition.
+  unit.guard = Math.min(GUARD_CEILING, unit.guard + 1);
+  unit.nerve = Math.min(unit.maxNerve ?? GUARD_CEILING, unit.nerve + 1);
   battle.log.unshift(`${unit.name} braces: guard ${unit.guard}, nerve ${unit.nerve}.`);
   markActed(battle, unit);
   return { ok: true };
@@ -621,7 +675,7 @@ function enemyPhase(battle) {
       .sort((a, b) => (a.guard + a.hp) - (b.guard + b.hp) || a.name.localeCompare(b.name));
     const target = targets.find(item => attackableInBattle(battle, enemy, item)) ?? targets[0];
     if (!target) break;
-    battle.log.unshift(`${enemy.name}: ${hit(target)}`);
+    battle.log.unshift(`${enemy.name}: ${hit(target, rollHarm(battle, enemy, target))}`);
     // Symmetric with the player side (COMBAT.md §9.13): sync fire is a
     // property of standing where a gun already reaches, not a player perk.
     triggerSyncFire(battle, enemy, target);
