@@ -715,20 +715,44 @@ export function endPlayerPhase(battle) {
  * not part of a "minimal scorer" pass. Every role scores as Godot's
  * unlisted roles already do: no bonus, the `_:` default.
  */
+/** `_score_base()`'s `behaviour_package` multipliers, now ported. Godot sets
+ *  a crew member's package to their own ROLE (`battle_builder.gd:212`), so
+ *  the two vocabularies were always meant to be one; `local` is spelled
+ *  `local_pusher` there and is the only word that differs. `driver` and
+ *  `muscle` appear in neither match statement and take the `_:` default of
+ *  1.0, exactly as in Godot.
+ *
+ *  Skipping this was recorded as "its own investigation, not part of a
+ *  minimal scorer pass", and the cost was REPOSITION. Without the package
+ *  every role scores a flat 0.4 to move, which loses to GUARD at every
+ *  nerve level — so nobody ever advanced. A crew that had killed everything
+ *  in reach would stand and brace forever rather than close on the last
+ *  opponent, and the fight could not end. The runner's 1.8 and the
+ *  watcher's 1.2 are what make repositioning a real command at all. */
+const BEHAVIOUR = {
+  ATTACK: { collector: 1.4, veteran: 1.2, watcher: 0.4, fixer: 0.1, runner: 0.7 },
+  GUARD: { local: 1.3, collector: 1.1, runner: 0.4 },
+};
+/** REPOSITION REPLACES the base rather than scaling it — the GDScript
+ *  assigns (`score = 1.8`) where the other two multiply. */
+const REPOSITION_BY_ROLE = { runner: 1.8, watcher: 1.2 };
+
 function scoreBase(battle, type, unit, target) {
   switch (type) {
     case 'ATTACK': {
       if (!target) return 0;
       const targetNerveFraction = target.nerve / (target.maxNerve ?? 3);
       const targetConditionFraction = target.hp / target.maxHp;
-      return 1.0 + (1 - targetNerveFraction) * 1.5 + (1 - targetConditionFraction) * 0.8;
+      const base = 1.0 + (1 - targetNerveFraction) * 1.5 + (1 - targetConditionFraction) * 0.8;
+      return base * (BEHAVIOUR.ATTACK[unit.role] ?? 1.0);
     }
     case 'GUARD': {
       const nerveFraction = unit.nerve / (unit.maxNerve ?? 3);
-      return 0.6 + (1 - nerveFraction) * 1.2;
+      const base = 0.6 + (1 - nerveFraction) * 1.2;
+      return base * (BEHAVIOUR.GUARD[unit.role] ?? 1.0);
     }
     case 'REPOSITION':
-      return 0.4;
+      return REPOSITION_BY_ROLE[unit.role] ?? 0.4;
     default:
       return 0;
   }
