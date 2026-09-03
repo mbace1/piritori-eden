@@ -740,6 +740,61 @@ function scoreCommand(battle, type, unit, target) {
   return Math.max(scoreBase(battle, type, unit, target), 0) * stanceWeight(battle.stance, type);
 }
 
+/**
+ * Where a unit should move to. Ported from TURF's `approachTile`/`planIntent`
+ * (`turf/js/ai.js`, on Suds-Jack's gh-pages — `PORTING.md` §1.08 records it
+ * as a sibling source), because it answers the question this one had wrong:
+ *
+ *   1. prefer a cell you can actually ATTACK FROM, best target first;
+ *   2. failing that, the cell that CLOSES THE MOST DISTANCE.
+ *
+ * What was here before took the most-forward reachable cell instead, and
+ * "most forward" on this board is the opposition's own back row. Measured on
+ * `battle-karhupuisto-2v2`: the runner's first auto-move went from depth 2
+ * straight to depth 7 — PAST both opponents, who stand at 5 and 6 — and
+ * since reach is directional it could then never attack anything. It braced
+ * for the rest of the fight, the muscle never moved at all, and the crew
+ * were beaten to death without landing a single blow.
+ *
+ * That is also why `v3-battle`'s "auto command reaches a battle result"
+ * passed for so long: it resolved as a LOSS every time, with both opponents
+ * finishing at full condition. The assertion was true and proved nothing.
+ * Only real stat lines (which stop the crew dying in three hits) made the
+ * stall long enough to see.
+ *
+ * `unit.cell` is set and restored around the reach test rather than copied:
+ * `attackTargets()` reads position off the unit, and a unit is a live
+ * reference inside `battle.players`, so there is nothing to clone.
+ */
+function approachCell(battle, unit) {
+  const foes = (unit.side === 'player' ? battle.enemies : battle.players).filter(item => item.alive);
+  const cells = validMoveCells(battle, unit).slice().sort(); // stable, so the pick is deterministic
+  if (!cells.length || !foes.length) return cells[0];
+  const origin = unit.cell;
+  const gapFrom = cell => {
+    const { lane, depth } = parseSlotKey(cell);
+    return Math.min(...foes.map(foe => {
+      const at = parseSlotKey(foe.cell);
+      return Math.abs(at.lane - lane) + Math.abs(at.depth - depth);
+    }));
+  };
+  let attackFrom = null;
+  let attackScore = -Infinity;
+  let closest = cells[0];
+  let closestGap = Infinity;
+  for (const cell of cells) {
+    unit.cell = cell;
+    for (const foe of attackTargets(battle, unit)) {
+      const score = scoreBase(battle, 'ATTACK', unit, foe);
+      if (score > attackScore) { attackScore = score; attackFrom = cell; }
+    }
+    const gap = gapFrom(cell);
+    if (gap < closestGap) { closestGap = gap; closest = cell; }
+  }
+  unit.cell = origin;
+  return attackFrom ?? closest;
+}
+
 export function autoCommand(battle) {
   if (battle.status !== 'active' || policeAwaitingPosture(battle)) return false;
   for (const unit of battle.players.filter(item => item.alive && !battle.acted.includes(item.id))) {
@@ -756,19 +811,7 @@ export function autoCommand(battle) {
       if (s > bestTargetScore) { bestTargetScore = s; bestTarget = candidate; }
     }
 
-    // "Forward" is toward the OPPOSITION along the shared depth axis — for
-    // the player that's increasing depth, for the opposition decreasing
-    // depth (grid.js: front sits nearest the middle for both sides).
-    // Candidates prefer the most-forward cell first, then the one closest
-    // to the lane centre, matching the old sort's intent on the wider board.
-    const { depth: fromDepth } = laneDepth(unit);
-    const toward = unit.side === 'player' ? 1 : -1;
-    const centre = laneCentre();
-    const candidates = validMoveCells(battle, unit)
-      .map(cell => ({ cell, ...parseSlotKey(cell) }))
-      .sort((a, b) => (toward * b.depth - toward * a.depth) || Math.abs(a.lane - centre) - Math.abs(b.lane - centre));
-    const forward = candidates.find(item => toward * (item.depth - fromDepth) > 0)?.cell;
-    const reposition = forward ?? candidates[0]?.cell;
+    const reposition = approachCell(battle, unit);
 
     // Pick the highest-scoring TYPE (deterministic top pick — the same
     // choice Godot's own `_ai_select_command(preview=true)` makes; the
