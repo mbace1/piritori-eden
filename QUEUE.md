@@ -2899,3 +2899,52 @@ corresponds to nothing in this repo, including the body it is named after.
 
 **No runtime code fixes this. The clips must be re-authored against a real
 body rig.** Three approaches, all reverted, none shipped.
+
+## The fight screen is 96% black — measured 2026-09-04, and this is the next job
+
+Owner, after the map, motion and scale work all landed: *"I still think the 3d
+isn't working that well."* Measured on the merged `main`, at a real 411px Pixel
+viewport through the fixed `web/tools/capture.mjs`:
+
+| thing | value |
+|---|---|
+| fighter mean luma | 29/255 |
+| board beside him | 21/255 |
+| **contrast** | **1.32 : 1** |
+| panel below 28/255 | **96%** |
+
+Readable text needs 4.5:1. At 1.32:1 you are looking at black shapes on black.
+
+**This is not a 3D problem, and that matters for what gets done next.** A 2D
+sprite would sit on the same plate under the same layers and read exactly as
+badly. The picture is dark because every layer darkens the one beneath it:
+
+1. `art/v3/scenes/karhupuisto-v01.webp` is authored at **mean luma 26/255** —
+   already an almost-black night plate before anything touches it.
+2. `v3.css` line ~556 multiplies it: `.battle-stage > .scene-image { filter:
+   brightness(.66) ... }` → **17/255**.
+3. `.battle-stage::after` then lays two darkening gradients over that.
+4. The fighters are lit by one dim cold ambient (`0x3c5570` at 0.55) plus a
+   key, so they never rise off it.
+
+An earlier entry in this file (2026-08-28, "the night grade eats them") saw the
+symptom and left it as "still an open problem". This is the cause.
+
+**Do this next, in order:**
+
+1. **Legibility pass, gated on a number.** Stop the double-darkening, lift the
+   key/rim on the fighters. Target fighter:ground **>= 3:1** and near-black
+   coverage well under 96%. Both are cheap to measure from a capture, so this
+   gets a real gate rather than an opinion — and it is the honest test of
+   whether 3D works here at all.
+2. **Framing.** 96% of the panel is empty and the board sits in a diagonal
+   band with the player's own crew off to one side. That is the
+   `_fit_board()` / `_measure_ground()` work already queued above — read the
+   two failed attempts recorded there before starting.
+3. **Overlapping nameplates.** "Reijo" and "Lan" sit on top of each other in
+   every capture taken this session.
+4. **Then judge 3D again.** After 1-3 it is a real art-direction verdict rather
+   than a hunch, and if it still does not work, 2D becomes the answer for a
+   reason that can be pointed at.
+
+Do not start at 4.
