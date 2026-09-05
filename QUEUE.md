@@ -2937,6 +2937,11 @@ symptom and left it as "still an open problem". This is the cause.
    coverage well under 96%. Both are cheap to measure from a capture, so this
    gets a real gate rather than an opinion — and it is the honest test of
    whether 3D works here at all.
+
+   **Started 2026-09-05 (`fix/fight-legibility-pass`):** stopped the CSS
+   double-darkening (`brightness(.66)` → `.95`, softer `::after` veil) and
+   lifted web+Godot night key/ambient/rim. Re-measure with `web/tools/capture.mjs`
+   before calling this done — gate is still fighter:ground >= 3:1.
 2. **Framing.** 96% of the panel is empty and the board sits in a diagonal
    band with the player's own crew off to one side. That is the
    `_fit_board()` / `_measure_ground()` work already queued above — read the

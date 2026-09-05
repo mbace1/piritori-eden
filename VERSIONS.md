@@ -10,6 +10,27 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.30 — 2026-09-05
+
+**Fight-screen legibility pass (QUEUE: 96% black).** Measured on main at a
+411px Pixel viewport: fighter:ground contrast was **1.32:1** because the
+night plate was darkened twice in CSS and the fighters sat under a dim cold
+ambient. This is not a 3D-vs-2D problem — the same stack would crush sprites.
+
+- **`web/v3.css`:** `.battle-stage > .scene-image` filter `brightness(.66)` →
+  `.95` (and softer saturate/contrast); `::after` side/bottom veils reduced
+  so they grade the night instead of blacking it out.
+- **`web/js/v3/render3d.js`:** ambient / key / rim energies lifted to match
+  the same intent (`AmbientLight` 1.05, key 2.1, rim 0.85).
+- **`godot/scenes/battle_stage_3d.gd` `_build_night()`:** ambient, moon and
+  lamp energies raised in lockstep so the Godot stage does not stay darker
+  than the web port.
+
+### Port
+Already applied in Godot `_build_night()` in this same version. Re-measure
+with `web/tools/capture.mjs` (and Godot `tools/capture_battle.tscn`) before
+calling the QUEUE gate closed — target fighter:ground **>= 3:1**.
+
 ## v4.29 — 2026-08-31
 
 **The grid tiles themselves were still the wrong shape after v4.28** —
