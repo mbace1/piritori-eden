@@ -50,7 +50,15 @@ export function resetBoardMetric() {
 }
 
 export function boardSpan() { return Math.max(LANES, totalRows()) * CELL_M; }
-export function frustumSize() { return boardSpan() * 1.1; }
+
+/** Ortho height. Portrait keeps the roomy `1.1×` board pad; landscape
+ *  tightens so the grid fills the stage (owner 2026-09-06: closer view).
+ *  Pass the live container aspect — same input `buildStageCamera` already
+ *  takes — so DOM projection and WebGL stay locked. */
+export function frustumSize(aspect = 1) {
+  const pad = aspect >= 1.25 ? 0.78 : 1.1;
+  return boardSpan() * pad;
+}
 
 /** Lane/depth -> world (x, z), fractional values allowed on purpose —
  *  `positionBattleDOM()`'s cell corners sit at `lane ± 0.5` and need the
@@ -75,13 +83,15 @@ export function worldFor(cell) {
  *  point (see `projectFraction`'s own note on why Y does not have this
  *  problem). */
 export function buildStageCamera(aspect) {
-  const size = frustumSize();
+  const size = frustumSize(aspect);
   const camera = new THREE.OrthographicCamera(
     (-size * aspect) / 2, (size * aspect) / 2,
     size / 2, -size / 2,
     0.1, 100,
   );
-  const camBack = boardSpan() * 1.6;
+  // Slightly nearer camera in landscape so fighters read larger without
+  // changing the isometric angles.
+  const camBack = boardSpan() * (aspect >= 1.25 ? 1.35 : 1.6);
   camera.position.set(-camBack, camBack * 0.62, -camBack);
   camera.lookAt(0, 0.9, 0);
   camera.updateMatrixWorld(true);
@@ -90,10 +100,10 @@ export function buildStageCamera(aspect) {
 
 /** World (x, y, z) -> `{ xPct, yPct }`, 0..100 fractions of the stage
  *  container, matching whatever a real WebGL render through the SAME
- *  camera would put there. Note the frustum's *height* (`frustumSize()`)
- *  never depends on `aspect` — only its width does (`buildStageCamera`'s
- *  left/right) — so `yPct` is stable across container sizes and only
- *  `xPct` genuinely needs the caller's live aspect to be exactly right;
+ *  camera would put there. Frustum height pads tighter in landscape (`frustumSize(aspect)`); width
+ *  still scales with `aspect`. Pass the live container aspect so `xPct`/
+ *  `yPct` match the WebGL camera — a stale aspect drifts both axes when
+ *  the landscape pad is active;
  *  a caller with no live measurement yet (see `app.js`'s static
  *  `cellPosition()`) still gets a reasonable `xPct` from a typical
  *  aspect, corrected the moment `positionBattleDOM()` can measure the

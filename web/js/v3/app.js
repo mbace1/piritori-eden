@@ -21,7 +21,7 @@ import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } 
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=3';
-import { positionBattleDOM } from './stage-camera.js?v=3';
+import { positionBattleDOM } from './stage-camera.js?v=4';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({

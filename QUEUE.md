@@ -3052,3 +3052,12 @@ slab. Hermanni/Kattilahalli battles remap to nearby Era I plates
 (`scene-harju-pitch-v01` / `scene-kallio-service-yard-v01`). `?stage=` still
 loads a diorama for art review. Re-enable only after a better floor pass.
 
+
+
+## Landscape closer board — 2026-09-06
+
+Owner: landscape fight should zoom the grid in. Web `frustumSize(aspect)`
+pads `0.78×` when aspect ≥ 1.25 (was flat `1.1×`); camera pulls in a bit;
+CSS gives the stage more row height on wide viewports. Phone portrait pad
+unchanged.
+
