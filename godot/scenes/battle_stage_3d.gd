@@ -26,28 +26,19 @@ extends SubViewportContainer
 ## turned that constant into a lookup — the same shape as UNIT_BY_ROLE, and for
 ## the same reason: content names a place, code resolves it to a file, and
 ## nothing in between gets to guess.
+## Owner 2026-09-06: stage3d dioramas PARKED (awful + bury fighters).
+## Map kept empty on purpose — restore entries when Art has a STAGE_SPEC
+## floor. `?stage=` override still consults this table for art review.
 const STAGE_BY_SCENE := {
-	"scene-kallio-backyard-v01": "res://data/art/stage3d/kallio-backyard-3d-v01.glb",
-	"scene-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
-	# Named by the battle as a 3D stage rather than a 2D scene id. The game is 3D
-	# (PHASING 1.055), so a battle authored today points at the art that exists
-	# instead of at a painting that never will.
-	"stage3d-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
-	"scene-suvilahti-kattilahalli-v01": "res://data/art/stage3d/suvilahti-kattilahalli-v01.glb",
-	# battle-hermanni-training (era1-slice-v1.json, 2026-08-28: the skate park
-	# is placed as a real, repeatable training battle at a new `training`-only
-	# anchor) authors its `scene_asset_id` as the real registered manifest id
-	# directly, the same convention battle-kattilahalli-3v3 already uses,
-	# rather than the `scene-` alias above — without this key the lookup
-	# fell through to STAGE_FALLBACK and the training battle silently showed
-	# the wrong yard.
-	"stage3d-hermanni-skatepark-v01": "res://data/art/stage3d/hermanni-skatepark-v01.glb",
 }
 
 ## Used when a battle names a scene nothing has been built for. Unlike the unit
 ## fallback this one is quiet on purpose: a fight in the wrong yard is still a
 ## fight, where a fighter with no body is a bug you need to see.
-const STAGE_FALLBACK := "res://data/art/stage3d/kallio-backyard-3d-v01.glb"
+## Owner 2026-09-06: stage3d dioramas parked (awful + bury fighters).
+## Empty fallback — `_build_stage` must no-op when path is empty.
+const STAGE_FALLBACK := ""
+const USE_STAGE3D_ARENAS := false
 
 ## Set by DebugEntry from ?stage=, so a new arena can be walked onto without
 ## content having placed it anywhere yet. CLAUDE.md rule 6: a mode you cannot
@@ -61,6 +52,9 @@ var scene_asset_id: String = ""
 
 
 static func stage_path(scene_asset_id: String) -> String:
+	## Owner 2026-09-06: park dioramas unless ?stage= override is set for art review.
+	if not USE_STAGE3D_ARENAS and stage_override == "":
+		return ""
 	if stage_override != "":
 		return String(STAGE_BY_SCENE.get(stage_override, STAGE_FALLBACK))
 	return String(STAGE_BY_SCENE.get(scene_asset_id, STAGE_FALLBACK))
@@ -319,7 +313,11 @@ func _build_night() -> void:
 
 func _build_stage() -> void:
 	var stage := stage_path(scene_asset_id)
-	if not ResourceLoader.exists(stage):
+	if stage == "" or not ResourceLoader.exists(stage):
+		# Parked dioramas: 2D plate stays visible in formation_battle; cast
+		# still stands on the default slab sized from `_arena_half`.
+		_build_ground_fill()
+		_fit_board()
 		return
 	var a := (load(stage) as PackedScene).instantiate()
 	a.scale = Vector3(5.4, 5.4, 5.4)
