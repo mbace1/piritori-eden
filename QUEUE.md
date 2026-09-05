@@ -3036,3 +3036,14 @@ because the fitted value was assigned somewhere nothing re-read. Fix:
 Still open from the framing entry: `_measure_ground()` walkable-surface sample
 (Godot has it; web still uses bbox min Y). Nameplates still next.
 
+
+
+## Capture orientation + stage occlusion — owner 2026-09-06
+
+- **Godot** fight shots: mostly **landscape**.
+- **JS/web** testing: more **vertical** (phone portrait).
+- Hermanni framing phone shot: the 3D stage mesh ("the map" — porch/roof)
+  is **blocking characters**. STAGE_SPEC wants a flat unobstructed floor
+  under the diamond; fighters must stay readable in front of arena props.
+  Next with nameplates: depth/occlusion pass (not Meshy, not new arenas).
+
