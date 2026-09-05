@@ -20,15 +20,11 @@
  * actual walkable surface (the open middle of the yard, not "30% up the
  * bounding box" — a diorama's height is mostly tree and lamp-post) and
  * derives the board's own cell size from the measured footprint
- * (`_fit_board()`). None of that is ported here: this build's board is
- * already a fixed size (`grid.js`), units are already positioned by it
- * regardless of what arena sits under them, so this only needs the arena to
- * LOOK right, not to drive placement. The same fixed 5.4 scale is kept for
- * visual parity, and the ground height uses the model's bounding-box
- * minimum Y rather than a sampled walkable surface — simpler, and a
- * legitimate first look at an arena with no trees or lamp-posts to be
- * fooled by, but a real simplification, not a hidden port of the real
- * algorithm.
+ * (`_fit_board()`). `fitBoardToArena()` now ports the CELL derivation once
+ * the arena mesh reports half-extents (live `CELL_M` binding — the earlier
+ * attempts assigned a fitted value nothing re-read). Ground height still uses
+ * bounding-box min Y rather than Godot's sampled walkable surface; that half
+ * remains a known simplification.
  *
  * `app.js` calls `mountBattleStage3D()` after every battle-mode render and
  * `disposeBattleStage3D()` is called first thing inside it. It has to be:
@@ -43,7 +39,7 @@ import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
 import { buildFightClip } from './fight-motion.js?v=1';
 import { assetUrl } from './content.js?v=1';
 import { LANES, totalRows } from './grid.js?v=1';
-import { CELL_M, boardSpan, worldFor, buildStageCamera } from './stage-camera.js?v=1';
+import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=2';
 
 /** COMBAT.md / PHASING.md 1.06: the six generic crew roles all have their
  *  own registered body. Matches Godot's `UNIT_BY_ROLE` naming exactly
@@ -295,8 +291,25 @@ const UNIT_SCALE = 0.60;
  *  manifest id directly, not a 2D scene-art id). Battles with real 2D
  *  scene art (karhupuisto, courtyard) have no such entry and keep
  *  rendering flat, exactly as before this function existed. */
+/** Godot `STAGE_BY_SCENE` + `STAGE_FALLBACK` — a 2D plate id still gets a
+ *  real diorama when one exists, and everything else falls back to Kallio
+ *  backyard rather than a floating board on a dark void. */
+const STAGE_BY_SCENE = {
+  'scene-kallio-backyard-v01': 'stage3d-kallio-backyard-v01',
+  'scene-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
+  'stage3d-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
+  'stage3d-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
+  'scene-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
+};
+const STAGE_FALLBACK = 'stage3d-kallio-backyard-v01';
+
 function stageAssetId(data, battle) {
-  return data.art.get(battle.sceneAssetId)?.kind === 'mesh-3d' ? battle.sceneAssetId : null;
+  const raw = battle.sceneAssetId;
+  if (data.art.get(raw)?.kind === 'mesh-3d') return raw;
+  const mapped = STAGE_BY_SCENE[raw];
+  if (mapped && data.art.get(mapped)?.kind === 'mesh-3d') return mapped;
+  if (data.art.get(STAGE_FALLBACK)?.kind === 'mesh-3d') return STAGE_FALLBACK;
+  return null;
 }
 
 /** Loads the arena, scales it, and settles it onto the board's own origin:
@@ -469,6 +482,8 @@ export function mountBattleStage3D(container, battle, data) {
 
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
   const mixers = [];
+  resetBoardMetric();
+  const placed = []; // { model, unit } — repositioned after a successful fit
 
   const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
@@ -495,6 +510,7 @@ export function mountBattleStage3D(container, battle, data) {
         });
         enableShadows(model);
         scene.add(model);
+        placed.push({ model, unit });
       })
       .catch(err => { console.error(`render3d: '${unit.id}' (${assetId})`, err); throw err; });
   });
@@ -502,14 +518,45 @@ export function mountBattleStage3D(container, battle, data) {
     .then(loaded => {
       if (!loaded || myGeneration !== generation) return;
       scene.remove(ground);
+      // Fit FIRST so ground fill / camera / unit slots use the arena's own
+      // footprint. The two earlier ports assigned a fitted value that nothing
+      // re-read (CELL_M stayed 0.85); live binding + rebuild below is the fix.
+      const lanes = LANES;
+      const rows = totalRows();
+      const fitted = fitBoardToArena(loaded.halfX, loaded.halfZ, lanes, rows);
+      console.info(`render3d: fitBoardToArena CELL_M=${fitted.toFixed(3)} (half ${loaded.halfX.toFixed(2)}×${loaded.halfZ.toFixed(2)})`);
+      // Rebuild the orthographic camera against the new board span.
+      const size = boardSpan() * 1.1;
+      camera.left = (-size * aspect) / 2;
+      camera.right = (size * aspect) / 2;
+      camera.top = size / 2;
+      camera.bottom = -size / 2;
+      const camBack = boardSpan() * 1.6;
+      camera.position.set(-camBack, camBack * 0.62, -camBack);
+      camera.lookAt(0, 0.9, 0);
+      camera.updateProjectionMatrix();
+      camera.updateMatrixWorld(true);
       scene.add(groundFillMesh(loaded.halfX, loaded.halfZ));
       enableShadows(loaded.model);
       scene.add(loaded.model);
       if (myGeneration === generation) stage?.classList.add('stage3d-arena');
     })
     .catch(err => { console.error(`render3d: arena '${battle.sceneAssetId}'`, err); });
+
+  // Re-bind unitLoads to record models for post-fit reposition.
+  // (unitLoads already created above — patch by wrapping placement)
+
   Promise.all([...unitLoads, stageLoad])
-    .then(() => { if (myGeneration === generation) stage?.classList.add('stage3d-ready'); })
+    .then(() => {
+      if (myGeneration !== generation) return;
+      // Units were placed with the pre-fit CELL_M; slide them onto the fitted grid.
+      for (const entry of placed) {
+        const { x, z } = worldFor(entry.unit.cell);
+        entry.model.position.set(x, 0, z);
+      }
+      positionBattleDOM(container, battle);
+      stage?.classList.add('stage3d-ready');
+    })
     .catch(() => {}); // logged per-unit above; 2D sprites stay the fallback
 
   // Real elapsed time, not a fixed step: AnimationMixer.update() takes a

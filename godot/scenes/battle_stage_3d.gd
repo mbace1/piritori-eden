@@ -606,20 +606,11 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 
 
 ## Every clip in the library, loaded once.
+## SHARED FIGHT CLIPS ARE OFF — see `_animate`. Keep the CLIPS table and this
+## loader for the re-export pass; until then return empty so we never call the
+## deleted `_first` helper (CI parse error on test_battle_ui).
 static func _clips() -> Dictionary:
-	if not _clip_cache.is_empty():
-		return _clip_cache
-	for key in CLIPS:
-		var path: String = CLIPS[key]
-		if not ResourceLoader.exists(path):
-			continue
-		var inst := (load(path) as PackedScene).instantiate()
-		var ap := _first(inst, "AnimationPlayer") as AnimationPlayer
-		if ap != null and not ap.get_animation_list().is_empty():
-			var name: String = ap.get_animation_list()[0]
-			_clip_cache[key] = ap.get_animation(name)
-		inst.free()
-	return _clip_cache
+	return {}
 
 
 ## What a fighter should be seen doing, from its own state. The board already
@@ -636,50 +627,14 @@ static func clip_for(f: Fighter, acting: bool) -> String:
 
 
 func _animate(n: Node, f: Fighter) -> void:
-	var ap := _find(n, "AnimationPlayer") as AnimationPlayer
-	if ap == null:
-		return
-
-	# Lift every clip onto this figure. They ship as separate files, so without
-	# this a unit can only ever play the one it was exported with.
-	var lib := AnimationLibrary.new()
-	for key in _clips():
-		lib.add_animation(key, _clips()[key])
-	if ap.has_animation_library("fight"):
-		ap.remove_animation_library("fight")
-	ap.add_animation_library("fight", lib)
-
-	var want := clip_for(f, _acting_id == f.fighter_id)
-	var full := "fight/" + want
-	if not ap.has_animation(full):
-		# Fall back to whatever the file shipped with rather than freezing.
-		if ap.get_animation_list().is_empty():
-			return
-		full = ap.get_animation_list()[0]
-	ap.play(full)
-
-	# Everyone on one clip in lockstep reads as a single puppet copied six
-	# times, so each starts at its own phase and runs at its own slight speed.
-	var seed_v := float(abs(hash(f.fighter_id)) % 997) / 997.0
-	var a := ap.get_animation(full)
-	if want == "dead":
-		# The dead do not loop. Hold the last frame.
-		ap.seek(a.length, true)
-		ap.speed_scale = 0.0
-	else:
-		ap.seek(a.length * seed_v, true)
-		ap.speed_scale = 0.75 + seed_v * 0.3
-
-
-static func _first(n: Node, cls: String) -> Node:
-	if n.is_class(cls):
-		return n
-	for c in n.get_children():
-		var r := _first(c, cls)
-		if r != null:
-			return r
-	return null
-
+	## SHARED FIGHT CLIPS ARE OFF (QUEUE 2026-09-02 owner option 3).
+	## `clips/muscle-*-v01.glb` are not the muscle body's own rest pose — every
+	## rigged body fails `port/rig-vectors.mjs`. Three retarget attempts failed.
+	## Web already replaced them with `fight-motion.js` (deltas on own rest).
+	## Godot keeps still, correct bodies until clips are re-exported against a
+	## real rig (Meshy after credit refresh + T-pose review). Do not re-enable
+	## the CLIPS table below without that asset fix.
+	return
 
 func _mesh(n: Node) -> MeshInstance3D:
 	if n is MeshInstance3D:

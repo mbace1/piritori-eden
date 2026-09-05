@@ -10,6 +10,21 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.31 — 2026-09-05
+
+**Fight framing: arena-fitted board on web + still Godot bodies.**
+
+- Web ports Godot `_fit_board()` via live `CELL_M` (`fitBoardToArena`); camera
+  and unit slots rebuild after the arena mesh reports half-extents.
+- Web stage id map matches Godot fallback (Kallio backyard when a fight's
+  plate has no diorama).
+- Godot turns off broken shared fight clips until Meshy re-export (web already
+  on `fight-motion.js`). Hub inherits later.
+
+### Port
+Godot clip stub is in `_animate`; web fit is the behaviour definition for
+framing. Hub/Suds-Jack picks this up in a later inherit pass.
+
 ## v4.30 — 2026-09-05
 
 **Fight-screen legibility pass (QUEUE: 96% black).** Measured on main at a

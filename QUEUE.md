@@ -3016,3 +3016,23 @@ This file's own night-legibility entry still owns the next *playable* order:
 contrast → framing → nameplates → then judge 3D. Stage fill-out is parallel
 art pipeline work, not a reason to skip that gate.
 
+
+
+## Fight framing — fitBoardToArena landed 2026-09-05
+
+QUEUE said the two earlier web ports of `_fit_board()` left `CELL_M` at 0.85
+because the fitted value was assigned somewhere nothing re-read. Fix:
+
+- `stage-camera.js`: `export let CELL_M` + `fitBoardToArena()` / `resetBoardMetric()`
+  (Godot `BOARD_COVERAGE` 0.72 formula, live binding).
+- `render3d.js`: after arena load, fit → rebuild ortho camera → reposition units
+  → `positionBattleDOM()`. Logged e.g. Hermanni `CELL_M=0.813`, backyard fallback
+  `0.744`.
+- Stage fallback map mirrors Godot `STAGE_BY_SCENE` / `STAGE_FALLBACK` so
+  courtyard/karhupuisto get Kallio backyard 3D instead of a floating board.
+- Godot `_animate`: shared muscle fight clips **off** (owner option 3) until
+  re-export; web already uses `fight-motion.js`.
+
+Still open from the framing entry: `_measure_ground()` walkable-surface sample
+(Godot has it; web still uses bbox min Y). Nameplates still next.
+
