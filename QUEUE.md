@@ -2953,3 +2953,61 @@ symptom and left it as "still an open problem". This is the cause.
    reason that can be pointed at.
 
 Do not start at 4.
+
+
+## Stage/diamond audit — 2026-09-05 (extent captures + on-disk cast)
+
+Looked at Godot captures with `PIRITORI_SHOT_EXTENT=1` (arena diamond drawn)
+and `PIRITORI_SHOT_NOCHROME=1`, plus `port/rig-vectors.mjs --check`, plus the
+Meshy cloud archive (download only). No new Meshy spend.
+
+### Cast / clips (asset fact, not a code bug)
+
+- 13/14 cast bodies share a 24-joint skin; `parka-man-v01` has no skeleton
+  (already retired from hired fight variants).
+- Shared fight clips (`clips/muscle-{idle,attack,behit,dead}-v01.glb`) do **not**
+  match `muscle-v01.glb` rest orientation, nor any other body. Gate fails on all
+  13. Fix is re-export clips against one real body (after T-pose review), then
+  `glb_make_clips.py` — not retargeting in the player (QUEUE already records
+  two failed retarget attempts).
+- Walk/run packs that *do* match their bodies: `enforcer`, `hired`, `hired-b`,
+  `street-raver`. `hired-clips` also carries `Draw_and_Shoot_Left`,
+  `falling_down`, `Block6` — usable only on that hip family.
+
+### Stage vs arena diamond (captures)
+
+| Battle | scene_asset_id | What renders | Diamond vs set |
+|---|---|---|---|
+| `battle-courtyard-3v3` | `scene-courtyard-prototype-v05` | **STAGE_FALLBACK** backyard | Diamond OK on snow path; wrong *place* |
+| `battle-karhupuisto-2v2` | `scene-karhupuisto-v01` | **STAGE_FALLBACK** backyard | Same — identity wrong (STAGE_SPEC: karhupuisto-v01 is not a battle floor anyway) |
+| `battle-hermanni-training` | `stage3d-hermanni-skatepark-v01` | real Hermanni | Diamond sits on floor; mesh has floaty shard noise |
+| `battle-kattilahalli-3v3` | `stage3d-suvilahti-kattilahalli-v01` | real Kattilahalli | Diamond OK-ish; set feels detached (open sides + slab fill — already named in `battle_stage_3d.gd`) |
+
+AABB before the shared ×5.4 scale (raw glTF units): backyard xz≈1.53×2.00;
+Hermanni ≈1.90×1.67; Kattilahalli ≈1.90×1.47 (shortest Y). Board size follows
+`min(xz)*BOARD_COVERAGE`, so Kattilahalli gets a slightly tighter board than
+backyard — expected, not a bug by itself.
+
+### Stage3d still missing for Era I fight *places*
+
+In priority order once Meshy (or alt) is available, after T-pose/plate review:
+
+1. `courtyard-prototype-v05` (STAGE_SPEC: yes as battle floor)
+2. `piritori-square-v01` (used in encounters)
+3. `kallio-service-yard-v01` (one prop into diamond on 2D — move prop, not redraw)
+4. `karhupuisto-clearing-v01` (edge short on 2D)
+
+Do **not** treat Toko/club plates as fight dioramas (STAGE_SPEC §6).
+
+### Meshy archive (2026-09-05)
+
+Account history is thin: 3 image-to-3d, 3 rigs, 5 anims (Sept 4–5), expiring
+~Sept 7–8. Downloaded under the operator's scratch `meshy-archive/`. None match
+the muscle fight-clip rest pose. Prefer on-disk assets until refresh.
+
+### Do not start here
+
+This file's own night-legibility entry still owns the next *playable* order:
+contrast → framing → nameplates → then judge 3D. Stage fill-out is parallel
+art pipeline work, not a reason to skip that gate.
+
