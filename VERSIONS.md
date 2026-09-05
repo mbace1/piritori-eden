@@ -10,6 +10,13 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.32 — 2026-09-06
+
+**Park stage3d fight arenas.** Owner: current dioramas look awful and block
+fighters. Web + Godot skip arena meshes (`USE_STAGE3D_ARENAS`); 2D plates
+return; cast3d on slab remains. Hermanni/Kattilahalli scene ids remap to
+nearby plates. Hub inherits later.
+
 ## v4.31 — 2026-09-05
 
 **Fight framing: arena-fitted board on web + still Godot bodies.**

@@ -47,7 +47,10 @@ const STAGE_BY_SCENE := {
 ## Used when a battle names a scene nothing has been built for. Unlike the unit
 ## fallback this one is quiet on purpose: a fight in the wrong yard is still a
 ## fight, where a fighter with no body is a bug you need to see.
-const STAGE_FALLBACK := "res://data/art/stage3d/kallio-backyard-3d-v01.glb"
+## Owner 2026-09-06: stage3d dioramas parked (awful + bury fighters).
+## Empty fallback — `_build_stage` must no-op when path is empty.
+const STAGE_FALLBACK := ""
+const USE_STAGE3D_ARENAS := false
 
 ## Set by DebugEntry from ?stage=, so a new arena can be walked onto without
 ## content having placed it anywhere yet. CLAUDE.md rule 6: a mode you cannot
@@ -61,6 +64,9 @@ var scene_asset_id: String = ""
 
 
 static func stage_path(scene_asset_id: String) -> String:
+	## Owner 2026-09-06: park dioramas unless ?stage= override is set for art review.
+	if not USE_STAGE3D_ARENAS and stage_override == "":
+		return ""
 	if stage_override != "":
 		return String(STAGE_BY_SCENE.get(stage_override, STAGE_FALLBACK))
 	return String(STAGE_BY_SCENE.get(scene_asset_id, STAGE_FALLBACK))
