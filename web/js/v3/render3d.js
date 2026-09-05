@@ -379,6 +379,31 @@ export function disposeBattleStage3D() {
 /** Mounts a fresh Three.js scene into `container` for this battle's current
  *  live formation. Safe to call on every render — it tears down whatever it
  *  mounted last time first. */
+/** Live mood knobs for art review — ambient/key/rim intensities + optional
+ *  hex colours + exposure. Used by `debug.setBattleLights` / mood captures.
+ *  Defaults match `_build_night()` port (ambient 1.45, key 2.8, rim 1.15). */
+export function setBattleLights({
+  ambient,
+  key,
+  rim,
+  ambientColor,
+  keyColor,
+  rimColor,
+  exposure,
+  fogDensity,
+} = {}) {
+  if (!current) return false;
+  if (ambient != null && current.ambient) current.ambient.intensity = ambient;
+  if (key != null && current.key) current.key.intensity = key;
+  if (rim != null && current.rim) current.rim.intensity = rim;
+  if (ambientColor != null && current.ambient) current.ambient.color.set(ambientColor);
+  if (keyColor != null && current.key) current.key.color.set(keyColor);
+  if (rimColor != null && current.rim) current.rim.color.set(rimColor);
+  if (exposure != null && current.renderer) current.renderer.toneMappingExposure = exposure;
+  if (fogDensity != null && current.scene?.fog) current.scene.fog.density = fogDensity;
+  return true;
+}
+
 export function mountBattleStage3D(container, battle, data) {
   disposeBattleStage3D();
   if (!container || !battle) return;
@@ -406,7 +431,8 @@ export function mountBattleStage3D(container, battle, data) {
   renderer.toneMappingExposure = 1.0;
   renderer.domElement.className = 'stage3d-canvas';
   container.appendChild(renderer.domElement);
-  current = { renderer, canvas: renderer.domElement, raf: 0 };
+  const ambient = new THREE.AmbientLight(0x6a8aaa, 1.45);
+  current = { renderer, canvas: renderer.domElement, raf: 0, scene: null, ambient, key: null, rim: null, camera: null };
 
   const scene = new THREE.Scene();
   // `_build_night()`'s own values: background/ambient are a single named
@@ -425,7 +451,8 @@ export function mountBattleStage3D(container, battle, data) {
   const aspect = width / height;
   const camera = buildStageCamera(aspect);
 
-  scene.add(new THREE.AmbientLight(0x6a8aaa, 1.45));
+  scene.add(ambient);
+  current.scene = scene;
   // "Cold ambient, one warm practical, and shadows" — `_build_night()`'s
   // own summary of the pattern. The key stands in for that one practical
   // light (Godot uses a warm OmniLight lamp, `#ffcf8f`); the directional
@@ -450,6 +477,9 @@ export function mountBattleStage3D(container, battle, data) {
   const rim = new THREE.DirectionalLight(0x8fb4ff, 1.15);
   rim.position.set(-3, 4, -3);
   scene.add(rim);
+  current.key = key;
+  current.rim = rim;
+  current.camera = camera;
 
   // A flat ground plane is the fallback for a battle with no registered
   // arena mesh (karhupuisto, courtyard) — kept in the scene unconditionally

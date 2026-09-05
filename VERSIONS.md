@@ -23,10 +23,18 @@
 
 ### Port
 Web-only presentation. Hub inherits later.
-**Park stage3d fight arenas.** Owner: current dioramas look awful and block
-fighters. Web + Godot skip arena meshes (`USE_STAGE3D_ARENAS`); 2D plates
-return; cast3d on slab remains. Hermanni/Kattilahalli scene ids remap to
-nearby plates. Hub inherits later.
+
+## v4.33 — 2026-09-06
+
+**Battle light mood knobs + park note.**
+
+- `setBattleLights` on web (`debug.setBattleLights`) for ambient/key/rim /
+  colours / exposure / fog — art-review mood passes without rebuilding.
+- Stage3d arenas remain parked (`USE_STAGE3D_ARENAS`); see QUEUE.
+
+### Port
+Web presentation. Godot already has `_build_night()` energies; mood API is
+web-first for JS landscape reviews.
 
 ## v4.31 — 2026-09-05
 
