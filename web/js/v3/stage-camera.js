@@ -22,11 +22,31 @@
 import * as THREE from 'three';
 import { LANES, totalRows, laneCentre, parseSlotKey, slotKey } from './grid.js?v=1';
 
-/** `worldFor()`'s per-cell spacing, matching `battle_stage_3d.gd`'s own
- *  `CELL` (via `_fit_board()`) closely enough for visual parity — see
- *  `render3d.js`'s header on why this build's board is fixed-size rather
- *  than arena-fitted the way Godot's is. */
-export const CELL_M = 0.85;
+/** `worldFor()`'s per-cell spacing. Starts at Godot's pre-fit default and is
+ *  rewritten by `fitBoardToArena()` once a real stage mesh reports its
+ *  half-extents — the same formula as `battle_stage_3d.gd`'s `_fit_board()`.
+ *  `export let` (not const): importers keep a live binding, so the earlier
+ *  "fitted value came back as the default" failure mode — assigning a local
+ *  copy that nothing else read — cannot happen again. */
+export let CELL_M = 0.85;
+
+/** Godot `BOARD_COVERAGE` — playable board spans this fraction of the
+ *  arena's shorter horizontal half-extent. */
+export const BOARD_COVERAGE = 0.72;
+
+/** Port of `_fit_board()`. Call AFTER the arena is scaled and centred, with
+ *  the mesh's post-scale half-extents. Returns the new CELL_M. */
+export function fitBoardToArena(halfX, halfZ, lanes, rows) {
+  const span = Math.min(halfX, halfZ) * 2 * BOARD_COVERAGE;
+  const across = Math.max(lanes, rows);
+  CELL_M = Math.max(span / across, 0.15);
+  return CELL_M;
+}
+
+/** Reset between mounts so a fitted fight does not leak into the next. */
+export function resetBoardMetric() {
+  CELL_M = 0.85;
+}
 
 export function boardSpan() { return Math.max(LANES, totalRows()) * CELL_M; }
 export function frustumSize() { return boardSpan() * 1.1; }
