@@ -10,6 +10,20 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.32 — 2026-09-06
+
+**Fight nameplates (QUEUE item 3).**
+
+- **Web:** `web/js/v3/nameplates.js` resolves screen-space overlaps after
+  `positionBattleDOM()`. 2v2 centre-lane stacks split vertically; adjacent-lane
+  3v3 splits sideways. Gate: `web/test/v3-nameplates.mjs`. Godot has no
+  on-board nameplates.
+- Arena diorama park is a separate change (owner override / PR #40) — not
+  this version.
+
+### Port
+Web-only presentation. Hub inherits later.
+
 ## v4.31 — 2026-09-05
 
 **Fight framing: arena-fitted board on web + still Godot bodies.**

@@ -2951,8 +2951,12 @@ symptom and left it as "still an open problem". This is the cause.
    band with the player's own crew off to one side. That is the
    `_fit_board()` / `_measure_ground()` work already queued above — read the
    two failed attempts recorded there before starting.
-3. **Overlapping nameplates.** "Reijo" and "Lan" sit on top of each other in
-   every capture taken this session.
+3. **Overlapping nameplates.** ~~"Reijo" and "Lan" sit on top of each other in
+   every capture taken this session.~~ **DONE 2026-09-06 (`fix/fight-nameplates`)**:
+   `web/js/v3/nameplates.js` screen-space resolve after `positionBattleDOM()`.
+   Root cause: 2v2 `defaultPlayerSlot()` stacks both crew in the centre lane;
+   isometric projection maps that onto nearly the same screen Y with one CSS
+   offset and no collision pass. Godot has no on-board plates (console + rim).
 4. **Then judge 3D again.** After 1-3 it is a real art-direction verdict rather
    than a hunch, and if it still does not work, 2D becomes the answer for a
    reason that can be pointed at.
@@ -3034,5 +3038,6 @@ because the fitted value was assigned somewhere nothing re-read. Fix:
   re-export; web already uses `fight-motion.js`.
 
 Still open from the framing entry: `_measure_ground()` walkable-surface sample
-(Godot has it; web still uses bbox min Y). Nameplates still next.
+(Godot has it; web still uses bbox min Y). Nameplates done (item 3).
+Arena dioramas: see park PR — not this branch.
 

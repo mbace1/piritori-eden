@@ -20,8 +20,8 @@ import {
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
-import { mountBattleStage3D, disposeBattleStage3D } from './render3d.js?v=1';
-import { positionBattleDOM } from './stage-camera.js?v=1';
+import { mountBattleStage3D, disposeBattleStage3D } from './render3d.js?v=2';
+import { positionBattleDOM } from './stage-camera.js?v=3';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({

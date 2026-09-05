@@ -21,6 +21,7 @@
  */
 import * as THREE from 'three';
 import { LANES, totalRows, laneCentre, parseSlotKey, slotKey } from './grid.js?v=1';
+import { applyNameplateNudges } from './nameplates.js?v=1';
 
 /** `worldFor()`'s per-cell spacing. Starts at Godot's pre-fit default and is
  *  rewritten by `fitBoardToArena()` once a real stage mesh reports its
@@ -193,4 +194,8 @@ export function positionBattleDOM(container, battle) {
     const { x, z } = worldFor(unit.cell);
     Object.assign(el.style, project(x, z));
   }
+  // Tokens sit on cell centres; labels all hang at the same CSS offset, so
+  // a 2v2 centre-lane pair (or any tight depth stack) lands on top of
+  // itself. Resolve in screen space after the projection — see nameplates.js.
+  applyNameplateNudges(stage, units);
 }
