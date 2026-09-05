@@ -3041,3 +3041,14 @@ Still open from the framing entry: `_measure_ground()` walkable-surface sample
 (Godot has it; web still uses bbox min Y). Nameplates done (item 3).
 Arena dioramas: see park PR — not this branch.
 
+
+
+## Stage3d arenas parked — owner 2026-09-06
+
+Current Hermanni / backyard / Kattilahalli dioramas are **not used** in
+fights until they look right (and stop burying fighters). `USE_STAGE3D_ARENAS`
+is false on web + Godot; 2D plates stay visible; cast3d still mounts on the
+slab. Hermanni/Kattilahalli battles remap to nearby Era I plates
+(`scene-harju-pitch-v01` / `scene-kallio-service-yard-v01`). `?stage=` still
+loads a diorama for art review. Re-enable only after a better floor pass.
+

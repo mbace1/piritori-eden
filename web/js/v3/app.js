@@ -801,6 +801,19 @@ function renderPoliceChoice(battle) {
     </div>`;
 }
 
+/** Owner 2026-09-06: stage3d dioramas parked. Battles that authored a
+ *  mesh-3d as `scene_asset_id` (Hermanni training, Kattilahalli) have no
+ *  usable <img> — map them to the nearest Era I 2D plate until real plates
+ *  or better dioramas exist. */
+const PARKED_ARENA_PLATE = {
+  'stage3d-hermanni-skatepark-v01': 'scene-harju-pitch-v01',
+  'stage3d-suvilahti-kattilahalli-v01': 'scene-kallio-service-yard-v01',
+  'stage3d-kallio-backyard-v01': 'scene-kallio-backyard-v01',
+};
+function plateForBattleScene(id) {
+  return PARKED_ARENA_PLATE[id] || id;
+}
+
 function renderBattle() {
   const battle = state.battle;
   if (!battle) {
@@ -813,7 +826,7 @@ function renderBattle() {
     </section>`;
   }
   const unit = selectedUnit(battle);
-  const scene = assetUrl(data, battle.sceneAssetId);
+  const scene = assetUrl(data, plateForBattleScene(battle.sceneAssetId));
   const negotiationReady = battle.round >= 2 || battle.enemies.filter(item => item.alive).reduce((sum, item) => sum + item.nerve, 0) <= 4;
   return `
     <div class="battle-layout">

@@ -294,21 +294,20 @@ const UNIT_SCALE = 0.60;
 /** Godot `STAGE_BY_SCENE` + `STAGE_FALLBACK` — a 2D plate id still gets a
  *  real diorama when one exists, and everything else falls back to Kallio
  *  backyard rather than a floating board on a dark void. */
-const STAGE_BY_SCENE = {
-  'scene-kallio-backyard-v01': 'stage3d-kallio-backyard-v01',
-  'scene-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
-  'stage3d-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
-  'stage3d-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
-  'scene-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
-};
-const STAGE_FALLBACK = 'stage3d-kallio-backyard-v01';
+/** Owner 2026-09-06: current stage3d dioramas are parked — awful look and
+ *  they bury fighters (Hermanni porch/roof). Keep the maps for a later art
+ *  pass; fights use the 2D scene plate + cast3d on the ground slab. */
+const STAGE_BY_SCENE = {};
+const STAGE_FALLBACK = null;
+const USE_STAGE3D_ARENAS = false;
 
 function stageAssetId(data, battle) {
+  if (!USE_STAGE3D_ARENAS) return null;
   const raw = battle.sceneAssetId;
   if (data.art.get(raw)?.kind === 'mesh-3d') return raw;
   const mapped = STAGE_BY_SCENE[raw];
   if (mapped && data.art.get(mapped)?.kind === 'mesh-3d') return mapped;
-  if (data.art.get(STAGE_FALLBACK)?.kind === 'mesh-3d') return STAGE_FALLBACK;
+  if (STAGE_FALLBACK && data.art.get(STAGE_FALLBACK)?.kind === 'mesh-3d') return STAGE_FALLBACK;
   return null;
 }
 

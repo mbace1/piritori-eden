@@ -23,6 +23,10 @@
 
 ### Port
 Web-only presentation. Hub inherits later.
+**Park stage3d fight arenas.** Owner: current dioramas look awful and block
+fighters. Web + Godot skip arena meshes (`USE_STAGE3D_ARENAS`); 2D plates
+return; cast3d on slab remains. Hermanni/Kattilahalli scene ids remap to
+nearby plates. Hub inherits later.
 
 ## v4.31 — 2026-09-05
 
