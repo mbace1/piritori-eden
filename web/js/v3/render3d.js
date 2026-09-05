@@ -39,7 +39,7 @@ import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
 import { buildFightClip } from './fight-motion.js?v=1';
 import { assetUrl } from './content.js?v=1';
 import { LANES, totalRows } from './grid.js?v=1';
-import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=2';
+import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=3';
 
 /** COMBAT.md / PHASING.md 1.06: the six generic crew roles all have their
  *  own registered body. Matches Godot's `UNIT_BY_ROLE` naming exactly
