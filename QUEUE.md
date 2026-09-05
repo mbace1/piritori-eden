@@ -2938,10 +2938,15 @@ symptom and left it as "still an open problem". This is the cause.
    gets a real gate rather than an opinion — and it is the honest test of
    whether 3D works here at all.
 
-   **Started 2026-09-05 (`fix/fight-legibility-pass`):** stopped the CSS
-   double-darkening (`brightness(.66)` → `.95`, softer `::after` veil) and
-   lifted web+Godot night key/ambient/rim. Re-measure with `web/tools/capture.mjs`
-   before calling this done — gate is still fighter:ground >= 3:1.
+   **Started 2026-09-05 (`fix/fight-legibility-pass`), re-measured 2026-09-05 night:**
+   CSS plate `brightness(.66)` → `1.12`, softer veils; web+Godot ambient/key/rim
+   lifted in two passes. Capture tool now waits for `.stage3d-ready` and launches
+   Chromium with SwiftShader WebGL (headless without that was measuring the 2D
+   grid fallback and lying). Phone 3D shot of `battle-karhupuisto-2v2`: panel
+   `<28` **~85%** (was 96%); fighter pixels above board+5 vs board mean
+   **≈3.0:1** (was 1.32:1). Gate treated as met for this pass; framing and
+   overlapping nameplates remain next per this list. Hub/Suds-Jack JS inherits
+   successful fight advances later — do not block Eden on a hub deploy.
 2. **Framing.** 96% of the panel is empty and the board sits in a diagonal
    band with the player's own crew off to one side. That is the
    `_fit_board()` / `_measure_ground()` work already queued above — read the

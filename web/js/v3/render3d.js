@@ -413,13 +413,13 @@ export function mountBattleStage3D(container, battle, data) {
   const aspect = width / height;
   const camera = buildStageCamera(aspect);
 
-  scene.add(new THREE.AmbientLight(0x5a7a96, 1.05));
+  scene.add(new THREE.AmbientLight(0x6a8aaa, 1.45));
   // "Cold ambient, one warm practical, and shadows" — `_build_night()`'s
   // own summary of the pattern. The key stands in for that one practical
   // light (Godot uses a warm OmniLight lamp, `#ffcf8f`); the directional
   // form is kept rather than porting an omni/point light, since nothing
   // here currently varies per-arena lamp placement.
-  const key = new THREE.DirectionalLight(0xffcf8f, 2.1);
+  const key = new THREE.DirectionalLight(0xffcf8f, 2.8);
   key.position.set(3, 6, 4);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
@@ -435,7 +435,7 @@ export function mountBattleStage3D(container, battle, data) {
   key.shadow.camera.near = 0.1;
   key.shadow.camera.far = 40;
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x8fb4ff, 0.85);
+  const rim = new THREE.DirectionalLight(0x8fb4ff, 1.15);
   rim.position.set(-3, 4, -3);
   scene.add(rim);
 
