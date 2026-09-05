@@ -606,20 +606,11 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 
 
 ## Every clip in the library, loaded once.
+## SHARED FIGHT CLIPS ARE OFF — see `_animate`. Keep the CLIPS table and this
+## loader for the re-export pass; until then return empty so we never call the
+## deleted `_first` helper (CI parse error on test_battle_ui).
 static func _clips() -> Dictionary:
-	if not _clip_cache.is_empty():
-		return _clip_cache
-	for key in CLIPS:
-		var path: String = CLIPS[key]
-		if not ResourceLoader.exists(path):
-			continue
-		var inst := (load(path) as PackedScene).instantiate()
-		var ap := _first(inst, "AnimationPlayer") as AnimationPlayer
-		if ap != null and not ap.get_animation_list().is_empty():
-			var name: String = ap.get_animation_list()[0]
-			_clip_cache[key] = ap.get_animation(name)
-		inst.free()
-	return _clip_cache
+	return {}
 
 
 ## What a fighter should be seen doing, from its own state. The board already
