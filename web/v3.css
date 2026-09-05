@@ -553,8 +553,8 @@ button { -webkit-tap-highlight-color: transparent; }
 /* Battle */
 .battle-layout { min-height: 100%; display: grid; grid-template-rows: minmax(440px, 1fr) auto; }
 .battle-stage { position: relative; min-height: 440px; overflow: hidden; background: #141921; border-bottom: 2px solid #80684b; }
-.battle-stage > .scene-image { position: absolute; inset: 0; filter: brightness(.66) saturate(.72) contrast(1.08); }
-.battle-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6,11,15,.38), transparent 25% 75%, rgba(6,11,15,.38)), linear-gradient(transparent 55%, rgba(4,8,12,.45)); }
+.battle-stage > .scene-image { position: absolute; inset: 0; filter: brightness(1.12) saturate(.9) contrast(1.04); }
+.battle-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6,11,15,.10), transparent 20% 80%, rgba(6,11,15,.10)), linear-gradient(transparent 68%, rgba(4,8,12,.14)); }
 /* First 3D-parity slice (DESIGN_AUTHORITY.md addendum 2026-08-28): the real
    cast3d/stage3d meshes, rendered live, sitting over the flat 2D scene it is
    replacing rather than deleting it — if a model fails to load the 2D plate

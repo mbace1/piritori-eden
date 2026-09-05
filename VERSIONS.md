@@ -10,6 +10,32 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.30 — 2026-09-05
+
+**Fight-screen legibility pass (QUEUE: 96% black).** Measured on main at a
+411px Pixel viewport: fighter:ground contrast was **1.32:1** because the
+night plate was darkened twice in CSS and the fighters sat under a dim cold
+ambient. This is not a 3D-vs-2D problem — the same stack would crush sprites.
+
+- **`web/v3.css`:** `.battle-stage > .scene-image` filter `brightness(.66)` →
+  `1.12` (and softer saturate/contrast); `::after` side/bottom veils reduced
+  so they grade the night instead of blacking it out.
+- **`web/js/v3/render3d.js`:** ambient / key / rim energies lifted
+  (`AmbientLight` 1.45, key 2.8, rim 1.15).
+- **`godot/scenes/battle_stage_3d.gd` `_build_night()`:** ambient, moon and
+  lamp energies raised in lockstep so the Godot stage does not stay darker
+  than the web port.
+- **Gate re-measured** on phone WebGL (SwiftShader) after waiting for
+  `.stage3d-ready`: fighter:ground ≈ **3.0:1**, panel `<28` ≈ **85%** (was
+  1.32:1 / 96%). `web/tools/capture.mjs` now uses SwiftShader + waits for 3D
+  so headless shots stop lying about the 2D fallback. Framing / nameplates
+  still next. Hub JS inherits this fight advance later.
+
+### Port
+Already applied in Godot `_build_night()` in this same version. Re-measure
+with `web/tools/capture.mjs` (and Godot `tools/capture_battle.tscn`) before
+calling the QUEUE gate closed — target fighter:ground **>= 3:1**.
+
 ## v4.29 — 2026-08-31
 
 **The grid tiles themselves were still the wrong shape after v4.28** —

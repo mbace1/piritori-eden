@@ -289,8 +289,8 @@ func _build_night() -> void:
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = Color("#0b0e13")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color("#3c5570")
-	env.ambient_light_energy = 0.55
+	env.ambient_light_color = Color("#6a8aaa")
+	env.ambient_light_energy = 1.45
 	env.fog_enabled = true
 	env.fog_light_color = Color("#12161d")
 	env.fog_density = 0.02
@@ -304,14 +304,14 @@ func _build_night() -> void:
 	var moon := DirectionalLight3D.new()
 	moon.rotation_degrees = Vector3(-56, 34, 0)
 	moon.light_color = Color("#7f9ec4")
-	moon.light_energy = 0.5
+	moon.light_energy = 1.15
 	moon.shadow_enabled = true
 	_world.add_child(moon)
 
 	var lamp := OmniLight3D.new()
 	lamp.position = Vector3(-2.1, 2.4, 0.9)
 	lamp.light_color = Color("#ffcf8f")
-	lamp.light_energy = 6.0
+	lamp.light_energy = 11.0
 	lamp.omni_range = 9.0
 	lamp.shadow_enabled = true
 	_world.add_child(lamp)

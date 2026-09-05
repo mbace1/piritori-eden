@@ -73,7 +73,9 @@ const server = createServer((req, res) => {
 await new Promise(r => server.listen(0, r));
 const port = server.address().port;
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({
+  args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
+});
 const errors = [];
 
 async function shoot(label, width, height, dpr, setup, name) {
@@ -121,7 +123,15 @@ const SCREENS = [
       window.__ptv3.debug.setState(s);
       window.__ptv3.debug.startBattle('battle-karhupuisto-2v2');
     });
-    await page.waitForTimeout(200);
+    // GLBs need real time. Measuring contrast before `stage3d-ready` captures the
+    // 2D grid fallback and lies about the night-grade gate (QUEUE 2026-09-04).
+    try {
+      await page.waitForSelector('.battle-stage.stage3d-ready', { timeout: 20000 });
+      await page.waitForTimeout(300);
+    } catch {
+      // Keep the shot anyway — but the missing class is itself a finding.
+      await page.waitForTimeout(500);
+    }
   }],
 ];
 
