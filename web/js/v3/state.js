@@ -245,10 +245,8 @@ export function ageCrew(state, data, deployedIds) {
 // off `member.initial_equipment` (the crew record's own authored kit), the
 // same way `battle_builder.gd`'s `_crew_to_unit()` reads `initial_equipment`
 // rather than `GameState.equipment` — the owned/looted stash is a fencing
-// economy, not a loadout screen. Godot has no equipment PURCHASE function
-// anywhere either, despite `acquisition: 'market'` existing in content, so
-// none is built here — `isPurchasable()` stays read-only informational, the
-// same way `_add_spoils_lines()` only uses it for a "cannot be bought" tag.
+// economy, not a loadout screen. Buying market gear is `buyEquipment()` —
+// Piritori only, `isPurchasable` at the point of sale (COMBAT.md §8).
 export const CONDITION = { NEW: 0, USED: 1, FAULTY: 2, BROKEN: 3 };
 const CONDITION_WORD = ['New', 'Used', 'Faulty', 'Broken'];
 const CONDITION_RESALE = { 0: 1.0, 1: 0.7, 2: 0.4, 3: 0.15 };
@@ -328,6 +326,36 @@ export function sellLoot(state, data, equipmentId) {
   recordChapterIncome(state, paid);
   addLog(state, `Fenced ${cap(equipmentId)} for €${paid}.`);
   return paid;
+}
+
+
+/** Same corner as the fence — Piritori only. */
+export function canShopHere(state) {
+  return canFenceHere(state);
+}
+
+/** What the shop asks. Content sets `buy_eur` on market items (~2.5–3×
+ *  resale). Fallback max(resale*3, resale+10) is provisional only
+ *  (DESIGN_LOCKS.md §13). */
+export function buyOf(data, equipmentId) {
+  const e = data.equipment.get(equipmentId);
+  if (!e) return 0;
+  if (e.buy_eur != null) return e.buy_eur;
+  const resale = e.resale_eur ?? 0;
+  return Math.max(resale * 3, resale + 10);
+}
+
+/** Buy market gear at Piritori. Refuses taken-only, wrong place, short cash.
+ *  Returns { ok, paid } — paid is 0 on refusal. */
+export function buyEquipment(state, data, equipmentId) {
+  if (!canShopHere(state)) return { ok: false, paid: 0 };
+  if (!isPurchasable(data, equipmentId)) return { ok: false, paid: 0 };
+  const price = buyOf(data, equipmentId);
+  if (price <= 0 || state.cash < price) return { ok: false, paid: 0 };
+  state.cash -= price;
+  addEquipment(state, equipmentId, CONDITION.NEW);
+  addLog(state, `Bought ${cap(equipmentId)} for €${price}.`);
+  return { ok: true, paid: price };
 }
 
 /** What is lying on the ground when a battle ends, for one side —

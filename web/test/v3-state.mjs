@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
+  canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
 } from '../js/v3/state.js';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -65,5 +66,33 @@ assert.equal(full.scheduleIndex, 13, 'ending resolves inside the fourteenth bloc
 assert(full.endingId, 'the final authored choice resolves an ending');
 assert.equal(full.choices['enc-first-firearm'], 'refuse', 'firearm refusal remains viable');
 assert.equal(full.missionStatus['mission-courtyard-receipts'], 'fail', 'non-combat courtyard path remains viable');
+
+
+// Equipment shop (COMBAT.md §8) — market at Piritori; taken-only refused.
+{
+  const shop = createState(content);
+  shop.selectedAnchor = 'hakaniemi';
+  assert.equal(canShopHere(shop), false, 'shop closed away from Piritori');
+  assert.equal(buyEquipment(shop, data, 'pipe').ok, false, 'buy refused off-site');
+
+  shop.selectedAnchor = 'piritori';
+  assert.equal(canShopHere(shop), true, 'shop open at Piritori');
+  assert.equal(isPurchasable(data, 'sawn-off'), false, 'sawn-off taken-only');
+  assert.equal(isPurchasable(data, 'tire-iron'), false, 'tire-iron taken-only');
+  assert.equal(isPurchasable(data, 'lifted-handgun'), false, 'lifted-handgun taken-only');
+  assert.equal(buyEquipment(shop, data, 'sawn-off').ok, false, 'cannot buy taken-only');
+
+  const price = buyOf(data, 'pipe');
+  assert.ok(price > 0, 'pipe has buy_eur');
+  shop.cash = price - 1;
+  assert.equal(buyEquipment(shop, data, 'pipe').ok, false, 'short cash refused');
+  shop.cash = price;
+  const before = countOf(shop, 'pipe');
+  const bought = buyEquipment(shop, data, 'pipe');
+  assert.equal(bought.ok, true, 'pipe buys when rich enough at Piritori');
+  assert.equal(bought.paid, price);
+  assert.equal(shop.cash, 0);
+  assert.equal(countOf(shop, 'pipe'), before + 1);
+}
 
 console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, fixed choices and ending ${full.endingId}.`);

@@ -297,17 +297,10 @@ backwards and is now correctly understood as a port.
 
 ## Sync fire (COMBAT.md §9.13, `VERSIONS.md` v4.11) — two follow-ups left open
 
-- **Desync is not built.** MST makes tough enemies immune to further sync
-  hits after the first one lands each round, so a boss cannot just be
-  zerged. This content has no "tough"/"elite" flag anywhere, and inventing
-  one to gate a mechanic in the same pass it shipped would be exactly the
-  unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Shipped
-  unthrottled instead. **Worth watching in play**: an unthrottled chain may
-  turn out to trivialise any tight formation, player or opposition side
-  alike — the honest way to find out is to read a real fight, not guess a
-  cap now. If it does need one, the flag belongs in content
-  (`content/era1-slice-v1.json`'s opposition entries), Content lane's call,
-  and the throttle itself is Engine's.
+- ~~**Desync is not built.**~~ **Built (`VERSIONS.md` v4.40).** `tough` on
+  Fighter + opposition content; one SYNC hit per tough target per round;
+  forecast empties once desynced. Primary still lands. Worth watching in
+  play whether the cap feels right on denser formations.
 - ~~**No purple-tile range overlay.**~~ **Built 2026-08-28.** Every cell
   `attack_targets_for()` names for the acting unit now paints in
   `_cells_to_reveal()`/`_draw_unit()` — green when picking it would chain an
@@ -636,14 +629,13 @@ directly, not the earlier note's memory of either:
 
 ## Loot (COMBAT.md §8) — what is honestly missing
 
-- **There is no equipment shop.** The unbuyable rule is currently enforced by the
-  *absence* of a buy screen plus a content gate on authored choices. When a shop
-  is built it MUST consult `GameState.is_purchasable`, or §8 is over.
+- ~~**There is no equipment shop.**~~ **Built (`VERSIONS.md` v4.40).** Piritori
+  shop consults `is_purchasable` / `buy_equipment` at the point of sale.
 - ~~**Nothing sells loot in the UI.**~~ Stale — Godot `_add_fence()` and web
   `sell-loot` both call it. Unbuyable tag now also on the web chip.
-- **Two taken-only weapons is a thin tier.** `chain` and `sawn-off` are the whole
-  capability ladder. That is enough to prove the rule and not enough to make
-  pushing into faction ground feel like a reason.
+- ~~**Two taken-only weapons is a thin tier.**~~ **Widened (`VERSIONS.md`
+  v4.40).** `tire-iron` and `lifted-handgun` join `chain` / `sawn-off` (reused
+  art, no Meshy). Still a small ladder — more taken-only later if play asks.
 - **Resale numbers are invented placeholders** (`DESIGN_LOCKS.md` §13: do not
   silently harden these). They were set to be deliberately poor so selling a
   taken weapon feels wasteful, but no playtest has confirmed that.
@@ -1036,9 +1028,9 @@ no preview where a mouse would.
   events; the fence should eventually be subject to that rather than a constant.
 - **The earned fence is not built** (`COMBAT.md` §9.7): no contact who pays
   better, so the Piritori rate is the only price rather than the floor.
-- **You cannot buy anything.** The fence sells only. There is still no equipment
-  shop, which means `is_purchasable` is enforced by the absence of a shop rather
-  than by a check at the point of sale.
+- ~~**You cannot buy anything.**~~ **Shop built (`VERSIONS.md` v4.40).** Fence
+  still sells; shop buys market gear at the same Piritori corner, gated by
+  `is_purchasable`.
 - **Nothing warns you before a fight** that the weapon you are about to lose with
   a fallen crew member is unbuyable. The fence says it at the moment of selling;
   §8 takes kit off the downed silently.

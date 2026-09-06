@@ -345,7 +345,8 @@
       "unlock": "start",
       "effect": "receive calls and SMS; never opens a market app",
       "acquisition": "market",
-      "resale_eur": 20
+      "resale_eur": 20,
+      "buy_eur": 50
     },
     {
       "id": "baseball-bat",
@@ -355,7 +356,8 @@
       "reach_pattern": "front-same-or-adjacent-lane",
       "unlock": "enc-mccormick-yard",
       "acquisition": "market",
-      "resale_eur": 25
+      "resale_eur": 25,
+      "buy_eur": 70
     },
     {
       "id": "baton",
@@ -365,7 +367,8 @@
       "reach_pattern": "front-same-lane",
       "unlock": "enc-karhupuisto-watch",
       "acquisition": "market",
-      "resale_eur": 15
+      "resale_eur": 15,
+      "buy_eur": 40
     },
     {
       "id": "pipe",
@@ -375,7 +378,8 @@
       "reach_pattern": "front-same-lane",
       "unlock": "enc-mccormick-yard",
       "acquisition": "market",
-      "resale_eur": 10
+      "resale_eur": 10,
+      "buy_eur": 28
     },
     {
       "id": "first-handgun",
@@ -386,7 +390,8 @@
       "unlock": "enc-first-firearm",
       "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction.",
       "acquisition": "market",
-      "resale_eur": 120
+      "resale_eur": 120,
+      "buy_eur": 350
     },
     {
       "id": "chain",
@@ -412,6 +417,29 @@
       "resale_eur": 90
     },
     {
+      "id": "tire-iron",
+      "kind": "weapon",
+      "asset_id": "pipe-v03",
+      "hold": "bat-two",
+      "reach_pattern": "front-same-or-adjacent-lane",
+      "unlock": "enc-mccormick-yard",
+      "note": "Leverage over a length of pipe — longer reach across an adjacent lane. Taken off someone who already used it that way.",
+      "acquisition": "taken",
+      "resale_eur": 18
+    },
+    {
+      "id": "lifted-handgun",
+      "kind": "weapon",
+      "asset_id": "handgun-v03",
+      "hold": "firearm-one",
+      "reach_pattern": "clear-same-lane-through-front",
+      "unlock": "enc-jade-window",
+      "presentation_rule": "Abstract category and target pattern only; no handling or evasion instruction.",
+      "note": "Not sold. The same reach as a bought handgun, earned only by taking it.",
+      "acquisition": "taken",
+      "resale_eur": 70
+    },
+    {
       "id": "folding-knife",
       "kind": "weapon",
       "asset_id": "folding-knife-v03",
@@ -420,7 +448,8 @@
       "unlock": "start",
       "note": "A working tool anyone already owns. Close, quiet and lethal, which is what makes carrying it a decision.",
       "acquisition": "market",
-      "resale_eur": 12
+      "resale_eur": 12,
+      "buy_eur": 32
     },
     {
       "id": "signal-flare",
@@ -431,7 +460,8 @@
       "unlock": "enc-bear-path",
       "note": "Does no harm at all and costs nerve from any row. A way to break a formation without hurting anyone.",
       "acquisition": "market",
-      "resale_eur": 8
+      "resale_eur": 8,
+      "buy_eur": 22
     }
   ],
   "missions": [
@@ -760,7 +790,8 @@
           "role": "muscle",
           "cell": "front-2",
           "intent": "block-handover",
-          "equipment": "pipe"
+          "equipment": "pipe",
+          "tough": true
         },
         {
           "id": "opp-pauli-leko",
@@ -838,7 +869,8 @@
           "role": "muscle",
           "cell": "front-2",
           "intent": "pin-front",
-          "equipment": "baseball-bat"
+          "equipment": "tire-iron",
+          "tough": true
         },
         {
           "id": "opp-niina-peltola",
@@ -939,7 +971,7 @@
           "role": "fixer",
           "cell": "middle-2",
           "intent": "keep-the-hall-quiet",
-          "equipment": "baton"
+          "equipment": "lifted-handgun"
         },
         {
           "id": "opp-jouni-rask",
@@ -947,7 +979,8 @@
           "role": "muscle",
           "cell": "front-1",
           "intent": "block-the-doors",
-          "equipment": "chain"
+          "equipment": "chain",
+          "tough": true
         },
         {
           "id": "opp-anniina-koski",
@@ -1033,7 +1066,8 @@
           "role": "muscle",
           "cell": "front-2",
           "intent": "hold-position",
-          "equipment": "baseball-bat"
+          "equipment": "baseball-bat",
+          "tough": true
         },
         {
           "id": "opp-training-runner",

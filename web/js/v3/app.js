@@ -7,8 +7,9 @@ import {
   crewRecord, hiringPoolFor, hireFromPool,
   isNamed, careerLeft, careerIsVisible, ageCrew,
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
+  canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-} from './state.js?v=1';
+} from './state.js?v=2';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
 import {
@@ -17,7 +18,7 @@ import {
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=4';
+} from './battle.js?v=5';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
@@ -639,6 +640,11 @@ function renderLedger() {
             : '<p class="consequence-strip">Nothing fences from here. Piritori is the only corner buying.</p>'}
         </section>
         <section class="paper-panel">
+          <p class="section-label">SHOP / MARKET GEAR</p>
+          <h2 class="section-title">WHAT CAN BE BOUGHT</h2>
+          ${renderShop()}
+        </section>
+        <section class="paper-panel">
           <p class="section-label">OBLIGATIONS</p>
           <p>Debt <strong class="orange">${money(state.debt)}</strong></p>
           <p>Crew wages settle after each night. Short wages become visible debt, never an invisible failure.</p>
@@ -712,6 +718,28 @@ function renderHireCandidate(candidate) {
       <button class="paper-button" data-action="hire-from-pool" data-candidate="${esc(candidate.id)}" ${affordable ? '' : 'disabled'}>${affordable ? 'HIRE' : 'CANNOT AFFORD'}</button>
     </div>
   </article>`;
+}
+
+
+function renderShop() {
+  if (!canShopHere(state)) {
+    return '<p class="consequence-strip">Not here. Market gear is bought at Piritori.</p>';
+  }
+  const market = [...data.equipment.values()].filter(e => isPurchasable(data, e.id) && buyOf(data, e.id) > 0);
+  if (market.length === 0) {
+    return '<p class="consequence-strip">Nothing on offer right now.</p>';
+  }
+  return `<div class="equipment-list">${market.map(equipment => {
+    const price = buyOf(data, equipment.id);
+    const affordable = state.cash >= price;
+    const artId = equipment.asset_id;
+    return `<div class="equipment-chip">
+      ${artId ? `<img src="${assetUrl(data, artId)}" alt="">` : '<span aria-hidden="true">◇</span>'}
+      <span>${esc(cap(equipment.id))}<br><span class="dim">${esc(equipment.hold ?? equipment.kind ?? '')}</span></span>
+      <button class="paper-button" data-action="buy-equipment" data-equipment="${esc(equipment.id)}" ${affordable ? '' : 'disabled'}>BUY · ${money(price)}</button>
+    </div>`;
+  }).join('')}</div>
+  <p class="consequence-strip">Taken-only gear never appears here. Money buys volume; loot buys capability.</p>`;
 }
 
 function renderEquipment(item, index) {
@@ -1188,6 +1216,10 @@ function handleRootClick(event) {
   } else if (action === 'sell-loot') {
     const paid = sellLoot(state, data, target.dataset.equipment);
     logToast(paid > 0 ? `Fenced for ${money(paid)}.` : 'Nothing there to fence.');
+    persist(); render();
+  } else if (action === 'buy-equipment') {
+    const result = buyEquipment(state, data, target.dataset.equipment);
+    logToast(result.ok ? `Bought for ${money(result.paid)}.` : 'Cannot buy — wrong place, taken-only, or short on cash.');
     persist(); render();
   } else if (action === 'attempt-chapter-ending') {
     const reason = attemptChapterEnding(state, data);

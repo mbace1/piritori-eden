@@ -943,14 +943,11 @@ singular — so a sync shot fires whatever the ally currently holds. If a
 two-weapon system is ever built, sync should move to the primary slot then;
 until it exists there is nothing to hold back.
 
-**Deliberately not built here — MST's Desync, which makes tough targets
-immune to further sync hits after the first one each round.** That needs a
-notion of "tough" this content doesn't have a flag for yet, and inventing one
-to gate a brand-new mechanic in the same pass is exactly the kind of
-unrequested infrastructure `CLAUDE.md` rule 1 exists to stop. Recorded in
-`QUEUE.md` as a real follow-up, not assumed away: an unthrottled chain may
-turn out to trivialise anything grouped tightly, and the honest way to find
-out is to ship the mechanic and read a real fight, not to guess a cap now.
+**Desync (shipped `VERSIONS.md` v4.40).** MST's rule: tough targets are
+immune to further sync hits after the first SYNC hit each round. Primary
+attack still lands. Content marks muscle/anchor opposition with `"tough":
+true`; Fighter carries the flag; FightManager / `battle.js` throttle sync
+resolution and empty the forecast once a tough target is desynced this round.
 
 ### What this obliges
 

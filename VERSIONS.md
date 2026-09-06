@@ -10,6 +10,17 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.40 — 2026-09-06
+
+**Phase B — desync + taken-only tier + equipment shop.**
+
+- **Desync (COMBAT.md §9.13 / MST):** `tough` on Fighter and opposition content; after the first SYNC hit on a tough target each round, further sync allies are skipped. Forecast via `_sync_allies_for` / `syncAlliesFor` goes empty once desynced. Primary attack still lands. Muscles + training anchor marked tough.
+- **Taken-only tier:** `tire-iron` (pipe-v03 art) and `lifted-handgun` (handgun-v03 art); equipped on opposition across battles.
+- **Equipment shop:** Piritori only (`can_shop_here` / `canShopHere`). `buy_eur` on market gear (~2.5–3× resale, DESIGN_LOCKS §13 provisional). `GameState.buy_equipment` / web `buyEquipment`; Godot `_add_shop()` next to fence; web ledger shop panel.
+
+### Port
+Mirrored in this version (web + Godot). Hub inherits later.
+
 ## v4.32 — 2026-09-06
 
 **Fight nameplates (QUEUE item 3).**

@@ -259,6 +259,7 @@ static func _opponent_to_unit(opp: Dictionary) -> Dictionary:
 		"role": String(opp.get("role", "")),
 		"nerve_bias": prof["nerve_bias"],
 		"surrender_threshold": prof["surrender"],
+		"tough": bool(opp.get("tough", false)),
 	}
 
 
@@ -318,15 +319,15 @@ static func entry_forecast(battle_id: String) -> String:
 	var withdraw := String((battle.get("withdrawal", {}) as Dictionary)
 		.get("known_cost", "")).strip_edges()
 	if withdraw != "":
-		parts.append("%s: %s" % [tr("battle.withdraw_cost"), withdraw])
+		parts.append("%s: %s" % [TranslationServer.translate("battle.withdraw_cost"), withdraw])
 	var ct: Dictionary = battle.get("casualty_table", {})
 	var tel := String(ct.get("telegraph", "")).strip_edges()
 	if tel != "":
 		parts.append(tel)
 	var death := String(ct.get("death", "")).strip_edges()
 	if death != "" and death != "not-eligible-in-this-battle":
-		parts.append("%s: %s" % [tr("battle.death_risk"), death])
+		parts.append("%s: %s" % [TranslationServer.translate("battle.death_risk"), death])
 	elif death == "not-eligible-in-this-battle":
-		parts.append(tr("battle.death_ineligible"))
+		parts.append(TranslationServer.translate("battle.death_ineligible"))
 	return " ".join(parts)
 

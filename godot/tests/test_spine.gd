@@ -33,6 +33,7 @@ func _ready() -> void:
 	_test_skills()
 	_test_loot()
 	_test_fence()
+	_test_shop()
 	_test_arrest()
 	_test_chapters()
 	_test_chapter_ending()
@@ -518,6 +519,36 @@ func _test_fence() -> void:
 	# §8 is unchanged by having a shop: the door is still one-way.
 	check("selling it does not make it buyable",
 		not GameState.is_purchasable("sawn-off"))
+
+
+
+
+## Equipment shop (COMBAT.md §8) — market gear at Piritori; taken-only refused.
+func _test_shop() -> void:
+	print("\nequipment shop (COMBAT.md §8)")
+	GameState.new_campaign()
+
+	GameState.current_anchor_id = "hakaniemi"
+	check("shop refuses away from Piritori", not GameState.can_shop_here())
+	check("and buy_equipment refuses there", not GameState.buy_equipment("pipe"))
+
+	GameState.current_anchor_id = "piritori"
+	check("shop is open at Piritori", GameState.can_shop_here())
+
+	check("taken-only is not purchasable", not GameState.is_purchasable("sawn-off"))
+	check("taken-only buy is refused", not GameState.buy_equipment("sawn-off"))
+	check("tire-iron is taken-only too", not GameState.is_purchasable("tire-iron"))
+	check("lifted-handgun is taken-only too", not GameState.is_purchasable("lifted-handgun"))
+
+	var price := GameState.buy_of("pipe")
+	check("pipe has a shop price", price > 0)
+	GameState.cash_eur = price - 1
+	check("short cash is refused", not GameState.buy_equipment("pipe"))
+	GameState.cash_eur = price
+	var before_count := GameState.count_of("pipe")
+	check("pipe buys when rich enough", GameState.buy_equipment("pipe"))
+	check("cash is deducted", GameState.cash_eur == 0)
+	check("and a NEW pipe is in the stash", GameState.count_of("pipe") == before_count + 1)
 
 
 ## Loot (COMBAT.md §8). Money buys volume; loot buys capability. The check that

@@ -163,5 +163,50 @@ assert.ok(opened.log[0].includes(opened.entryForecast.slice(0, 12)) || opened.lo
   }
 }
 
-console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, attack reach, entry forecast, cover decision copy.');
+
+// Tough desync (COMBAT.md §9.13 / MST): after the first SYNC hit on a tough
+// target each round, further allies are skipped; forecast goes empty; a
+// second primary still lands without sync.
+{
+  const def = data.battles.get('battle-courtyard-3v3');
+  const b = createBattleState(def, deployedCrew(state, data), state, data);
+  const [a, syncer, third] = b.players;
+  a.cell = playerCell('front-2');
+  syncer.cell = playerCell('front-3');
+  third.cell = playerCell('front-1');
+  // Give all three a bat that reaches adjacent lanes from the front.
+  a.equipment = 'baseball-bat';
+  syncer.equipment = 'baseball-bat';
+  third.equipment = 'baseball-bat';
+  const tough = b.enemies[0];
+  // Content marks Risto (courtyard muscle) tough — makeEnemy must carry it.
+  assert.equal(tough.tough, true, 'content tough flag reaches makeEnemy');
+  tough.cell = enemyCell('front-2');
+  tough.guard = 0;
+  tough.hp = 20;
+  tough.maxHp = 20;
+
+  const beforeForecast = syncAlliesFor(b, a, tough);
+  assert.ok(beforeForecast.length >= 1, 'before desync, at least one ally syncs');
+
+  selectUnit(b, a.id);
+  selectAction(b, 'attack');
+  const hp0 = tough.hp;
+  assert.equal(playerAttack(b, tough.id).ok, true);
+  // Primary 1 + one sync 1. Extra allies in the same chain are desynced.
+  assert.equal(hp0 - tough.hp, 1 + 1,
+    'primary + exactly one sync on tough (desync caps the chain)');
+  assert.ok(b.syncHitsThisRound.has(tough.id), 'tough marked desynced this round');
+  assert.deepEqual(syncAlliesFor(b, syncer, tough), [],
+    'forecast empty once tough already took a sync hit');
+
+  selectUnit(b, syncer.id);
+  selectAction(b, 'attack');
+  const hp1 = tough.hp;
+  assert.equal(playerAttack(b, tough.id).ok, true);
+  assert.equal(hp1 - tough.hp, 1,
+    'second primary still lands; no further sync');
+}
+
+console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, desync, attack reach, entry forecast, cover decision copy.');
 
