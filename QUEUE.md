@@ -2957,9 +2957,8 @@ symptom and left it as "still an open problem". This is the cause.
    Root cause: 2v2 `defaultPlayerSlot()` stacks both crew in the centre lane;
    isometric projection maps that onto nearly the same screen Y with one CSS
    offset and no collision pass. Godot has no on-board plates (console + rim).
-4. **Then judge 3D again.** After 1-3 it is a real art-direction verdict rather
-   than a hunch, and if it still does not work, 2D becomes the answer for a
-   reason that can be pointed at.
+4. **Then judge 3D again.** ~~After 1-3 it is a real art-direction verdict~~
+   **VERDICT 2026-09-06 — cast3d on 2D plates (for now).** See section below.
 
 Do not start at 4.
 
@@ -3060,4 +3059,44 @@ Owner: landscape fight should zoom the grid in. Web `frustumSize(aspect)`
 pads `0.78×` when aspect ≥ 1.25 (was flat `1.1×`); camera pulls in a bit;
 CSS gives the stage more row height on wide viewports. Phone portrait pad
 unchanged.
+
+
+
+## Art verdict — cast3d on 2D plates (2026-09-06)
+
+QUEUE punch-list items 1–3 are met (legibility ≥~3:1, framing/`CELL_M` fit,
+nameplate resolve). Item 4 is no longer a hunch:
+
+### Decision
+**Keep fighting as cast3d bodies on Era I 2D scene plates.** Do **not** put the
+current stage3d dioramas back into the fight path until a floor pass clears
+STAGE_SPEC (§ flat unobstructed diamond) and the meshes stop looking awful /
+burying fighters. `USE_STAGE3D_ARENAS` stays **false**; `?stage=` remains for
+art review only.
+
+### Why this is the answer (pointable)
+- **Dioramas failed the place test:** Hermanni porch/roof occluded cast; owner
+  called the maps awful (2026-09-06). Parking them is the honest fix, not more
+  depth hacks.
+- **Cast still earns its keep:** after legibility + framing + nameplates,
+  fighters read on phone and landscape; rim/team colour and `fight-motion.js`
+  give enough motion on web without shared muscle GLB clips.
+- **2D plates already carry place identity** for courtyard/karhupuisto/etc.;
+  Hermanni/Kattilahalli remap to nearby plates until real floors exist.
+- **Godot stays still** on fight clips (owner option 3) until Meshy re-export —
+  that is a motion debt, not a reason to restore bad arenas.
+
+### What this is NOT
+- Not “3D is dead.” Cast3d + night lights + landscape closer zoom stay.
+- Not “generate four arenas now.” Arena fill-out waits on Meshy window +
+  T-pose review + a compliant floor, in that order (QUEUE stage list).
+- Not hub work. Suds-Jack inherits later.
+
+### Next (bigger)
+1. Land park/mood/landscape zoom (#42).
+2. Meshy fight-clip re-export after credit refresh (~2026-09-11) + T-pose show.
+3. Only then stage3d for courtyard → piritori-square → service-yard →
+   karhupuisto-clearing.
+4. Parallel gameplay (MST feel) is unblocked for docs-led work; art no longer
+   gates “can we read a fight.”
 

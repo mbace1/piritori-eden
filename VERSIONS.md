@@ -24,6 +24,15 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.34 — 2026-09-06
+
+**Art verdict: cast3d on 2D plates.** QUEUE item 4. Stage3d dioramas stay
+parked; fight path is plates + cast + night lights. Motion debt remains
+Meshy clip re-export; arena fill-out after that.
+
+### Port
+Docs/QUEUE. Behaviour already matches `#42` park flag.
+
 ## v4.33 — 2026-09-06
 
 **Battle light mood knobs + park note.**
