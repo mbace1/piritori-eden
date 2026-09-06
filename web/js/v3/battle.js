@@ -82,6 +82,9 @@ function makeEnemy(opponent, index, openingNerve = 0) {
     legs,
     equipment: opponent.equipment,
     intent: opponent.intent,
+    // MST desync (COMBAT.md §9.13): immune to further SYNC hits after the
+    // first sync hit each round. Primary attack still lands.
+    tough: Boolean(opponent.tough),
   };
 }
 
@@ -206,6 +209,8 @@ export function createBattleState(definition, crew, state, data) {
     policeResolved: false,
     policeTaken: [],
     policeSaved: [],
+    // Tough-target desync tracker — cleared each round with acted[].
+    syncHitsThisRound: new Set(),
   };
 }
 
@@ -369,6 +374,10 @@ function attackableInBattle(battle, attacker, target) {
  * sync with the first.
  */
 export function syncAlliesFor(battle, attacker, target) {
+  // Honest forecast for MST desync: if a tough target already took a sync
+  // hit this round, nobody else would fire — list empty. Before that, list
+  // every ally who can reach; resolution stops after the first sync lands.
+  if (target?.tough && battle.syncHitsThisRound?.has(target.id)) return [];
   const side = attacker.side === 'player' ? battle.players : battle.enemies;
   return side.filter(unit => unit.alive && unit.id !== attacker.id
     && attackableInBattle(battle, unit, target));
@@ -386,7 +395,14 @@ function triggerSyncFire(battle, attacker, target) {
     // this same chain may already have downed the target, and nobody fires a
     // bonus round into a body already on the ground.
     if (!target.alive) return;
+    // Desync mid-chain: tough already marked from an earlier primary this
+    // round — stop. Same chain before any sync: first fires, then mark+stop.
+    if (target.tough && battle.syncHitsThisRound?.has(target.id)) return;
     battle.log.unshift(`${ally.name} syncs fire: ${hit(target)}`);
+    if (target.tough) {
+      battle.syncHitsThisRound.add(target.id);
+      return;
+    }
   }
 }
 
@@ -713,6 +729,7 @@ function enemyPhase(battle) {
   battle.round += 1;
   battle.phase = 'player';
   battle.acted = [];
+  battle.syncHitsThisRound = new Set();
   battle.players.filter(item => item.alive).forEach(item => { item.guard = Math.min(item.guard + 1, 2); });
   battle.selectedId = battle.players.find(item => item.alive)?.id ?? null;
   battle.log.unshift(`Round ${battle.round}. Enemy intent is pinned before the next commitment.`);

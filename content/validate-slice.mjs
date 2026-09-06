@@ -235,8 +235,11 @@ for (const { absolute, item, context } of artFiles) {
     (content.equipment ?? [])
       .filter((e) => (e.acquisition ?? "market") === "taken")
       .map((e) => e.id));
-  check(takenOnly.size > 0,
-    "COMBAT.md §8 requires gear that cannot be bought; none is marked taken");
+  check(takenOnly.size >= 4,
+    "COMBAT.md §8 taken-only tier should include chain, sawn-off, tire-iron, lifted-handgun");
+  for (const id of ["chain", "sawn-off", "tire-iron", "lifted-handgun"]) {
+    check(takenOnly.has(id), `taken-only gear missing: ${id}`);
+  }
   for (const enc of content.encounters ?? []) {
     for (const choice of enc.choices ?? []) {
       const effects = choice.effects ?? [];

@@ -1292,6 +1292,47 @@ func sell_loot(equipment_id: String) -> int:
 	return paid
 
 
+
+## Same corner as the fence — Piritori only. Alias so the shop screen and the
+## fence screen share one place-gate rather than inventing a second list.
+func can_shop_here() -> bool:
+	return can_fence_here()
+
+
+## What the shop asks for a type. Content should set `buy_eur` explicitly on
+## every market item (~2.5–3× resale). Fallback is provisional only
+## (DESIGN_LOCKS.md §13 — do not silently harden invented prices):
+## max(resale*3, resale+10).
+func buy_of(equipment_id: String) -> int:
+	var e := _equipment(equipment_id)
+	if e.has("buy_eur"):
+		return int(e.get("buy_eur", 0))
+	var resale := resale_of(equipment_id)
+	return maxi(resale * 3, resale + 10)
+
+
+## Buy market gear at Piritori. Refuses taken-only (§8), wrong place, and
+## short cash. Returns true when paid and stocked; false on any refusal.
+## New instances arrive NEW — you are buying, not fencing worn kit back.
+func buy_equipment(equipment_id: String) -> bool:
+	if not can_shop_here():
+		return false
+	if not is_purchasable(equipment_id):
+		return false
+	var e := _equipment(equipment_id)
+	if e.is_empty():
+		return false
+	var price := buy_of(equipment_id)
+	if price <= 0 or cash_eur < price:
+		return false
+	cash_eur -= price
+	add_equipment(equipment_id, Condition.NEW)
+	# Buying is spending, not earning — no record_chapter_income. Loot/fence
+	# still count toward the chapter money goal the way they always have.
+	state_changed.emit()
+	return true
+
+
 ## What a crew member carried is lost with them (§8): gear is on a person, not
 ## in a warehouse, which is the tactical half of the brake on spending people.
 func lose_kit_of(equipment_ids: PackedStringArray) -> void:

@@ -1123,6 +1123,7 @@ func _refresh_market_rail() -> void:
 	_rail_box.add_child(_make_label(tr("ui.ledger"), 19))
 	_rail_box.add_child(_make_label(tr("ui.ledger_earned"), 13, PiritoriPalette.TEXT_DIM))
 	_add_fence()
+	_add_shop()
 	_add_chapter_ending()
 	_rail_box.add_child(_separator())
 	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
@@ -1261,6 +1262,48 @@ func _add_fence() -> void:
 			var w := _make_label(tr("ui.fence_unbuyable"), 11, PiritoriPalette.INTEL_MUSTARD)
 			w.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(w)
+
+
+
+## THE SHOP — market gear only, Piritori only (COMBAT.md §8).
+##
+## Mirrors `_add_fence()`: same place-gate, the other direction. Taken-only
+## never appears here — `is_purchasable` is the check at the point of sale,
+## not merely the absence of a buy screen.
+func _add_shop() -> void:
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("ui.shop"), 15, MapStyle.TITLE_TEXT))
+
+	if not GameState.can_shop_here():
+		var l := _make_label(tr("ui.shop_elsewhere"), 12, PiritoriPalette.TEXT_DIM)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(l)
+		return
+
+	var listed := 0
+	for e in ContentRegistry.slice.get("equipment", []):
+		var eid := String(e.get("id", ""))
+		if not GameState.is_purchasable(eid):
+			continue
+		# Support kit (feature-phone) and weapons both — anything market.
+		var price := GameState.buy_of(eid)
+		if price <= 0:
+			continue
+		var nm := tr("equipment.%s" % eid)
+		if nm == "equipment.%s" % eid:
+			nm = eid
+		var affordable := GameState.cash_eur >= price
+		var b := _make_button(tr("ui.shop_buy") % [nm, price],
+			PiritoriPalette.PLAYER_CYAN if affordable else PiritoriPalette.TEXT_DIM)
+		b.disabled = not affordable
+		b.pressed.connect(func():
+			if GameState.buy_equipment(eid):
+				_refresh_market_rail())
+		_rail_box.add_child(b)
+		listed += 1
+
+	if listed == 0:
+		_rail_box.add_child(_make_label(tr("ui.shop_nothing"), 12, PiritoriPalette.TEXT_DIM))
 
 
 ## COMBAT.md §8. Two movements, and the order matters: what YOUR side dropped is

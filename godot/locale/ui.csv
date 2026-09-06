@@ -116,6 +116,8 @@ equipment.folding-knife,Folding knife,Linkkuveitsi,折りたたみナイフ
 equipment.signal-flare,Signal flare,Merkkisoihtu,信号炎管
 equipment.feature-phone,Feature phone,Peruspuhelin,携帯電話
 equipment.first-handgun,Handgun,Käsiase,拳銃
+equipment.tire-iron,Tire iron,Renkaanrauta,タイヤレバー
+equipment.lifted-handgun,Lifted handgun,Varastettu käsiase,持ち出した拳銃
 ui.hiring,TAKING ON,PALKKAAMASSA,雇い入れ
 ui.hiring_note,Whoever is around today. Come back tomorrow and it will be somebody else.,Ketä sattuu olemaan tänään. Huomenna on joku muu.,今日その辺にいる者たち。明日になれば別の顔ぶれになる。
 ui.hire,Take them on — €%d,Palkkaa — %d €,雇う — €%d
@@ -164,6 +166,10 @@ ui.fence_elsewhere,Not here. Someone at Piritori will take it off you.,Ei tääl
 ui.fence_nothing,You are carrying nothing worth selling.,Sinulla ei ole mitään myytävää.,売れる物は何も持っていない。
 ui.fence_sell,Sell the %s — €%d,Myy %s — %d €,%sを売る — €%d
 ui.fence_unbuyable,You will not be able to buy another one. Not at any price.,Toista et saa ostettua. Et millään hinnalla.,二度と買うことはできない。いくら積んでも無理だ。
+ui.shop,THE SHOP,KAUPPA,店
+ui.shop_elsewhere,Not here. Market gear is bought at Piritori.,Ei täällä. Markkinatavara ostetaan Piritorilta.,ここでは無理だ。市場の装備はピリトリで買う。
+ui.shop_nothing,Nothing on offer right now.,Ei mitään tarjolla juuri nyt.,今は売り物がない。
+ui.shop_buy,Buy the %s — €%d,Osta %s — %d €,%sを買う — €%d
 police.arrived,SOMEBODY CALLED IT IN,JOKU SOITTI POLIISIT,誰かが通報した
 police.note,"Too loud, too long. They came in behind one of you and started picking people up off the ground.","Liian äänekästä, liian pitkään. He tulivat toisen selustaan ja alkoivat kerätä väkeä maasta.",うるさすぎた、長すぎた。片方の背後から入り、倒れた者から拾い上げていった。
 police.taken_note,"Taken. Not hurt, not dead — gone, along with everything they had learned.","Vietiin. Ei loukkaantunut, ei kuollut — poissa, ja kaikki oppimansa mukana.",連れて行かれた。負傷でも死でもない。学んだ全てごと消えた。

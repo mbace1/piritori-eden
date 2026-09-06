@@ -107,6 +107,8 @@ var held_weapon_id: String = ""   ## Currently active weapon
 var behaviour_package: String = ""
 ## Crew/opponent role — drives which pose set is drawn (runner, muscle, ...).
 var role: String = ""
+## MST desync (COMBAT.md §9.13): immune to further SYNC hits after the first each round.
+var tough: bool = false
 var nerve_bias: float = 0.5
 var loyalty: float = 0.5
 var surrender_threshold: float = 0.3
@@ -246,6 +248,7 @@ func to_dict() -> Dictionary:
 		"held_weapon_id":      held_weapon_id,
 		"behaviour_package":   behaviour_package,
 		"role":                role,
+		"tough":               tough,
 		"nerve_bias":          nerve_bias,
 		"loyalty":             loyalty,
 		"surrender_threshold": surrender_threshold,
@@ -277,6 +280,7 @@ static func from_dict(d: Dictionary) -> Fighter:
 	f.held_weapon_id      = d.get("held_weapon_id", "")
 	f.behaviour_package   = d.get("behaviour_package", "")
 	f.role                = d.get("role", "")
+	f.tough               = bool(d.get("tough", false))
 	f.nerve_bias          = d.get("nerve_bias", 0.5)
 	f.loyalty             = d.get("loyalty", 0.5)
 	f.surrender_threshold = d.get("surrender_threshold", 0.3)

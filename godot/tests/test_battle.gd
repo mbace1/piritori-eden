@@ -68,6 +68,7 @@ func _ready() -> void:
 	_test_withdrawal()
 	_test_board_shape()
 	_test_sync_fire()
+	_test_desync()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1154,10 +1155,10 @@ func _test_every_stage_exists() -> void:
 	var forced := BattleStage3D.stage_path("scene-kallio-backyard-v01")
 	BattleStage3D.stage_override = ""
 	check("?stage= wins over what the battle asked for",
-		forced == String(BattleStage3D.STAGE_BY_SCENE["scene-hermanni-skatepark-v01"]))
+		forced == String(BattleStage3D.STAGE_BY_SCENE.get("scene-hermanni-skatepark-v01", "")))
 	check("and clearing it gives the battle its own yard back",
 		BattleStage3D.stage_path("scene-kallio-backyard-v01")
-			== String(BattleStage3D.STAGE_BY_SCENE["scene-kallio-backyard-v01"]))
+			== String(BattleStage3D.STAGE_BY_SCENE.get("scene-kallio-backyard-v01", "")))
 
 
 ## Every role the game can produce must have a model on disk.
@@ -1603,3 +1604,76 @@ func _test_sync_fire() -> void:
 			sync_hits2 += 1
 	eq("only ONE sync shot lands — the second ally is skipped once the target is down",
 		sync_hits2, 1)
+
+## MST desync (COMBAT.md §9.13): a tough target takes at most one SYNC hit
+## per round. Primary still lands; further allies are skipped; a second
+## primary the same round gets an empty sync forecast.
+func _test_desync() -> void:
+	print("\ntough desync — one sync hit per round, then empty (COMBAT.md §9.13)")
+	GameState.new_campaign()
+
+	var wide_rows: Array = []
+	for r in range(FightBoard.rows):
+		wide_rows.append(r)
+
+	var fm := FightManager.new()
+	fm.register_weapon("test-sync-spread", {
+		"harm_min": 1, "harm_max": 1, "nerve_min": 0, "nerve_max": 0,
+		"allowed_rows": wide_rows, "lane_spread": 2, "piercing": false,
+	})
+	var def := {
+		"battle_id": "test-desync", "stage_id": "test-stage",
+		"player_units": [
+			{"fighter_id": "a", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 1, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "b", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 2, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+			{"fighter_id": "c", "side": int(Fighter.Side.PLAYER),
+				"slot_lane": 3, "slot_row": 0, "held_weapon_id": "test-sync-spread",
+				"condition": 6, "condition_max": 6},
+		],
+		"opposition_units": [
+			{"fighter_id": "t", "side": int(Fighter.Side.OPPOSITION),
+				"slot_lane": 1, "slot_row": FightBoard.rows,
+				"condition": 20, "condition_max": 20, "tough": true},
+		],
+	}
+	var errs := fm.initialise(def, 3)
+	check("desync scenario sets up", errs.is_empty(), str(errs))
+	var tgt: Fighter = fm.get_fighter("t")
+	check("content tough flag lands on the fighter", tgt.tough)
+
+	var cmd := FightManager.Command.new(FightManager.Command.Type.ATTACK, "a")
+	cmd.target_id = "t"
+	var fc := fm.get_command_forecast(cmd)
+	check("before any sync, forecast lists both allies",
+		fc["sync_allies"].has("b") and fc["sync_allies"].has("c"),
+		str(fc["sync_allies"]))
+
+	var before := tgt.condition
+	fm._resolve_attack(cmd)
+	# Primary 1 + exactly one sync 1 = 2 harm. The second ally is desynced.
+	eq("primary plus one sync only (desync caps the chain)", before - tgt.condition, 2)
+	var sync_hits := 0
+	for e in fm._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits += 1
+	eq("exactly one sync shot on a tough target", sync_hits, 1)
+
+	# Second primary same round: forecast empty, no further sync.
+	var cmd2 := FightManager.Command.new(FightManager.Command.Type.ATTACK, "b")
+	cmd2.target_id = "t"
+	var fc2 := fm.get_command_forecast(cmd2)
+	check("after desync, forecast is empty", fc2["sync_allies"].is_empty(),
+		str(fc2["sync_allies"]))
+	var mid := tgt.condition
+	fm._resolve_attack(cmd2)
+	eq("second primary still lands, with no sync", mid - tgt.condition, 1)
+	var sync_hits2 := 0
+	for e in fm._event_log:
+		if int(e["kind"]) == int(FightManager.BattleEvent.Kind.SYNC_ATTACK_HIT):
+			sync_hits2 += 1
+	eq("still only the one sync from the first chain", sync_hits2, 1)
+

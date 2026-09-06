@@ -1273,6 +1273,11 @@ func _apply_attack_harm(src: Fighter, tgt: Fighter, weapon: Dictionary,
 ## (after the hit lands) so the two can never disagree — the forecast IS this
 ## list, not a separate guess at it.
 func _sync_allies_for(src: Fighter, tgt: Fighter) -> Array:
+	# Desync forecast: a tough target that already took a sync hit this round
+	# cannot be zerged — list nobody. Before that first sync lands, list every
+	# ally who would fire; resolution itself stops after the first (§9.13).
+	if tgt != null and tgt.tough and _sync_hits_this_round.has(tgt.fighter_id):
+		return []
 	var result: Array = []
 	for ally_raw in get_fighters(src.side):
 		var ally: Fighter = ally_raw
@@ -1297,12 +1302,20 @@ func _trigger_sync_attacks(src: Fighter, tgt: Fighter) -> void:
 		# before the first shot still holds.
 		if not tgt.is_active():
 			return
+		# Desync: tough already took a sync hit earlier this round (another
+		# primary attack's chain) — stop. Same-chain: first sync marks and
+		# further allies in this list are skipped below.
+		if tgt.tough and _sync_hits_this_round.has(tgt.fighter_id):
+			return
 		var ally: Fighter = _fighters.get(ally_id)
 		if ally == null or not ally.is_active():
 			continue
 		var ally_weapon := _get_weapon_data(ally.held_weapon_id)
 		_apply_attack_harm(ally, tgt, ally_weapon, BattleEvent.Kind.SYNC_ATTACK_HIT)
 		_check_glory(ally, tgt)
+		if tgt.tough:
+			_sync_hits_this_round[tgt.fighter_id] = true
+			return
 
 
 ## GLORY (COMBAT.md §9.11) — worth two perk points, and worth seeing.
@@ -1317,6 +1330,10 @@ const GLORY_NEAR_DEATH_CONDITION := 1
 
 ## Downs credited to each fighter this round, for the double.
 var _downs_this_round: Dictionary = {}
+
+## MST desync (COMBAT.md §9.13): fighter_ids of tough targets that already
+## took a SYNC hit this round. Primary attacks still land; further sync is empty.
+var _sync_hits_this_round: Dictionary = {}
 
 
 func _check_glory(attacker: Fighter, target: Fighter) -> void:
@@ -1469,6 +1486,7 @@ func _do_morale_check() -> void:
 	# A double is two in ONE round. Cleared here, or a second kill three
 	# rounds later would quietly count.
 	_downs_this_round.clear()
+	_sync_hits_this_round.clear()
 
 	round_number += 1
 	round_started.emit(round_number)
