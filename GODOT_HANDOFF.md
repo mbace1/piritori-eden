@@ -1,5 +1,10 @@
 # Piritori → Eden — Godot implementation handoff
 
+> **2026-09-06:** Session pickup lives in [`GODOT_PICKUP.md`](GODOT_PICKUP.md)
+> (baseline `main` `f3e7997` / v4.40). Prefer that file for “what to do next”;
+> this handoff remains the structural port guide. Its baseline commit below is
+> historical.
+
 Status: **ACTIVE implementation guidance**
 Baseline main commit: `53fae45fa868647382ef47244f45a5f8d7cd1eef`
 Target: Godot 4.3+; desktop and mobile-first responsive presentation
