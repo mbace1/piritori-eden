@@ -17,12 +17,14 @@
  * that skeleton's rest with the source's. Same names, same joint count, torn
  * pelvis. Rest orientation is checked, not just joint names.
  *
- * STATUS 2026-09-06: clips were re-exported against the live Meshy muscle
- * archive rig and written over `clips/muscle-*-v01.glb` + `muscle-v01.glb`.
- * Muscle rest drift is ~5 deg (under the 15 deg line). Other cast bodies are
- * still on older Meshy rests (missing `Head1`, ~170 deg at neck/Spine02) —
- * they stay in `SHARED_CLIP_PENDING` until re-rigged (~5 cr each). Godot only
- * plays shared clips on paths containing `muscle-v01` until then.
+ * STATUS 2026-09-06 (corrected same night): the "re-export against live
+ * Meshy muscle archive" that landed in cd64cd2 overwrote `muscle-v01` and
+ * the four fight clips with a foreign untextured 22-joint/`Head1` body.
+ * Owner identified those as **Eeri** assets, not Piritori. Restored the
+ * pre-overwrite Piritori muscle (24-joint, textured bomber) + prior clips.
+ * SHARED_CLIP_COMPATIBLE is empty again; shared playback stays off in Godot
+ * and web until a migrate uses real Piritori Meshy output.
+ *
  *
  * THE ONE EXCEPTION, and it is a real defect rather than a tolerance:
  * `parka-man-v01.glb` has NO SKIN AND NO SKELETON. It cannot be animated at
@@ -42,13 +44,13 @@ const OUT = resolve(here, 'vectors/rigs.json');
 const CLIP_REF = 'art/v3/cast3d/clips/muscle-idle-v01.glb';
 
 /** Bodies whose rest + joints match CLIP_REF and may safely play shared clips. */
-const SHARED_CLIP_COMPATIBLE = new Set(['muscle']);
+const SHARED_CLIP_COMPATIBLE = new Set(); // none — Eeri overwrite restored 2026-09-06
 
 /** Rigged bodies still on a foreign Meshy rest — known, not a regression.
  *  Re-rig onto the muscle archive rest (~5 Meshy credits each) to graduate. */
 const SHARED_CLIP_PENDING = new Set([
   'driver', 'enforcer', 'fixer', 'hired-b', 'hired', 'jaska', 'local',
-  'runner', 'street-raver', 'suited-man', 'toko', 'watcher',
+  'muscle', 'runner', 'street-raver', 'suited-man', 'toko', 'watcher',
 ]);
 
 /** Known unrigged, and why. Listed rather than silently skipped. */

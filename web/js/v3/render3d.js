@@ -196,17 +196,9 @@ function loadUnitModel(data, assetId) {
 
 // ── animation ───────────────────────────────────────────────────────────────
 //
-// STATUS 2026-09-06: shared Meshy fight clips match `muscle-v01` rest (~5 deg;
-// see `port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE). Godot plays them only on
-// muscle paths. Web does the same: GLB pack for muscle, `fight-motion.js` for
-// SHARED_CLIP_PENDING roles (foreign rest — absolute-pose clips would tear).
-//
-// Measured the same day: current Meshy `POST /rigging` on hired + muscle still
-// produces role-to-role rest drift (~110° at RightArm) and a 24-joint/no-Head1
-// family that does NOT take these clips. Do not buy one-off re-rigs expecting
-// shared clips to suddenly lift; that is a cast-wide template problem.
-//
-// The ids are the manifest's flattened FRAME ids (`<group-id>:<pose>`).
+// STATUS 2026-09-06 night: owner identified the Head1/22-joint "muscle"
+// overwrite as Eeri. Piritori muscle restored; SHARED_CLIP_* empty until
+// a real Meshy migrate (art-src/meshy-input/MESHY_CAST_MIGRATE.md).
 const CLIP_SOURCES = {
   idle: 'cast3d-muscle-clips-v01:idle',
   attack: 'cast3d-muscle-clips-v01:attack',
@@ -216,8 +208,8 @@ const CLIP_SOURCES = {
 
 /** Bodies safe to bind CLIP_SOURCES onto — keep in sync with
  *  `port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE / Godot `_animate` gate. */
-const SHARED_CLIP_ROLES = new Set(['muscle']);
-const SHARED_CLIP_ASSETS = new Set(['cast3d-muscle-v01']);
+const SHARED_CLIP_ROLES = new Set(); // empty: Eeri muscle overwrite restored 2026-09-06
+const SHARED_CLIP_ASSETS = new Set();
 
 let clipCache = null;
 

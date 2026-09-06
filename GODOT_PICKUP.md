@@ -117,4 +117,4 @@ Phase B — they are already on `main` in both `web/` and `godot/`.
 - Box has **Blender 5.2.1 LTS** (`blender` on PATH).
 - Runbook: `art-src/meshy-input/MESHY_CAST_MIGRATE.md`
 - Eye audit: `xvfb-run -a blender --background --python art-src/tools/blender_cast_clip_audit.py`
-- Until migrate: shared Idle/Attack/BeHit/Dead stay **muscle-v01 only**.
+- Until migrate: shared Idle/Attack/BeHit/Dead play on **nobody** (Eeri overwrite restored; Piritori muscle is back, clips still unmatched).
