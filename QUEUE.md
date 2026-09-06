@@ -639,9 +639,8 @@ directly, not the earlier note's memory of either:
 - **There is no equipment shop.** The unbuyable rule is currently enforced by the
   *absence* of a buy screen plus a content gate on authored choices. When a shop
   is built it MUST consult `GameState.is_purchasable`, or §8 is over.
-- **Nothing sells loot in the UI.** `GameState.sell_loot()` exists and is tested;
-  no screen calls it, so loot cannot actually be converted down into money in
-  play yet. The economy is half-wired.
+- ~~**Nothing sells loot in the UI.**~~ Stale — Godot `_add_fence()` and web
+  `sell-loot` both call it. Unbuyable tag now also on the web chip.
 - **Two taken-only weapons is a thin tier.** `chain` and `sawn-off` are the whole
   capability ladder. That is enough to prove the rule and not enough to make
   pushing into faction ground feel like a reason.
@@ -944,6 +943,12 @@ pieces and never assembled them. Composer on web + Godot; UI strip / intent
 panel. No invented stakes — only authored objective, withdrawal, casualty
 telegraph, death eligibility (or an optional hand-written `forecast`).
 
+## Cover decision copy on web — 2026-09-06
+
+Godot had `battle.in_cover` + `_cover_warning_for`; web only painted green
+cells. Ported standing line + COVER READ. Struck stale fence note; tagged
+taken-only kit on the web fence chip.
+
 Phase A leftover list cleared (2026-09-06): cover markers, telegraph harm
 numbers, intel explanation, and battle-entry forecast all shipped.
 
@@ -952,11 +957,9 @@ numbers, intel explanation, and battle-entry forecast all shipped.
 `PHASING.md` Phase A wants "telegraphs that make Into the Breach readability
 real". The live read is now on screen. The rest of Phase A is not:
 
-- **Board hazards and cover.** Content authors `cover` per battle (stone bin,
-  bicycle rack, porttikongi edge) and the builder mirrors props onto both
-  half-boards, but nothing in the telegraph or the command bar tells the player
-  what standing behind one does. Cover that is invisible to the decision is
-  scenery.
+- ~~**Board hazards and cover.**~~ Godot already named cover on the selected
+  unit and warned before commit; web lagged. 2026-09-06: web shows standing
+  prop name + COVER READ on attackable targets on props. 3D markers (#47).
 - ~~**Third-party entry.**~~ Police as a third side + posture choice exist
   (`battle.js` / COMBAT §9.5). Rival-crew entry mid-fight is still open.
 - ~~**Forecast before commitment.**~~ Done 2026-09-06: `battleEntryForecast` /

@@ -1036,3 +1036,17 @@ button { -webkit-tap-highlight-color: transparent; }
 /* .game-shell is grid-template-rows: auto minmax(0,1fr) auto — a display:none
    row drops out of grid flow entirely, so .mode-root's 1fr row reclaims the
    space with nothing left to zero out. Checked in the browser, not assumed. */
+
+.cover-standing {
+  margin: 0.25rem 0 0.5rem;
+  color: var(--good, #6a9a5a);
+  font-size: 0.85rem;
+}
+.cover-forecast {
+  margin-top: 0.5rem;
+  color: var(--mustard, #c4a035);
+}
+.fence-unbuyable {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+}

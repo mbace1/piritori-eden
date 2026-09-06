@@ -6,7 +6,7 @@ import {
   transactOffer, applyEffects, commitRoute, sendOnRoute,
   crewRecord, hiringPoolFor, hireFromPool,
   isNamed, careerLeft, careerIsVisible, ageCrew,
-  droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord,
+  droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
 } from './state.js?v=1';
 import { createPauseMenu } from './pause.js?v=1';
@@ -16,8 +16,8 @@ import {
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
-  attackTargets, syncAlliesFor,
-} from './battle.js?v=3';
+  attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
+} from './battle.js?v=4';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
@@ -48,6 +48,10 @@ const UI = {
     police_here: 'POLICE ARE HERE', police_one_down: 'of the crew is on the ground.',
     police_many_down: 'of the crew are on the ground.',
     police_back_off: 'BACK OFF — LEAVE THEM', police_help: 'GO BACK FOR THEM',
+    in_cover: 'Behind the %s',
+    cover_blocks: 'Blocked — nothing gets through that.',
+    cover_intercepts: 'Something is in the way. The swing will be caught.',
+    cover_pierced: 'This weapon goes through it.',
   },
   fi: {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
@@ -61,6 +65,10 @@ const UI = {
     police_here: 'POLIISI ON PAIKALLA', police_one_down: 'jäsen makaa maassa.',
     police_many_down: 'jäsentä makaa maassa.',
     police_back_off: 'PERÄÄNNY — JÄTÄ HEIDÄT', police_help: 'MENE HEIDÄN LUOKSEEN',
+    in_cover: '%s takana',
+    cover_blocks: 'Estetty — mikään ei mene läpi.',
+    cover_intercepts: 'Jotain on tiellä. Isku jää kiinni.',
+    cover_pierced: 'Tämä ase menee siitä läpi.',
   },
 };
 
@@ -710,12 +718,14 @@ function renderEquipment(item, index) {
   const equipment = data.equipment.get(item.id);
   const artId = equipment?.asset_id;
   const canFence = canFenceHere(state);
+  const takenOnly = Boolean(equipment) && !isPurchasable(data, item.id);
   return `<div class="equipment-chip">
     ${artId ? `<img src="${assetUrl(data, artId)}" alt="">` : '<span aria-hidden="true">◇</span>'}
-    <span>${esc(cap(item.id))}<br><span class="dim">${esc(conditionWord(item.cond))}${equipment?.hold ? ` · ${esc(equipment.hold)}` : ''}</span></span>
+    <span>${esc(cap(item.id))}<br><span class="dim">${esc(conditionWord(item.cond))}${equipment?.hold ? ` · ${esc(equipment.hold)}` : ''}${takenOnly ? ' · taken only' : ''}</span></span>
     ${canFence
       ? `<button class="paper-button" data-action="sell-loot" data-equipment="${esc(item.id)}">FENCE · ${money(resaleAt(state, data, index))}</button>`
       : ''}
+    ${canFence && takenOnly ? '<p class="dim fence-unbuyable">You will not be able to buy another one. Not at any price.</p>' : ''}
   </div>`;
 }
 
@@ -835,6 +845,7 @@ function renderSyncForecast(battle, preview) {
   if (battle.action !== 'attack' || !preview.reachableIds.size) return '';
   const attacker = selectedUnit(battle);
   const lines = [];
+  const coverLines = [];
   for (const enemy of battle.enemies) {
     if (!preview.reachableIds.has(enemy.id)) continue;
     const allies = syncAlliesFor(battle, attacker, enemy);
@@ -843,9 +854,22 @@ function renderSyncForecast(battle, preview) {
     } else {
       lines.push(`${enemy.name.split(' ')[0]} — solo`);
     }
+    const verdict = coverAttackLine(battle, attacker, enemy);
+    if (verdict) {
+      let key = 'cover_intercepts';
+      if (verdict.startsWith('Blocked')) key = 'cover_blocks';
+      else if (verdict.startsWith('This weapon')) key = 'cover_pierced';
+      coverLines.push(`${enemy.name.split(' ')[0]} — ${tr(key)}`);
+    }
   }
-  if (!lines.length) return '';
-  return `<p class="sync-forecast section-label">SYNC READ<br>${lines.map(esc).join('<br>')}</p>`;
+  const parts = [];
+  if (lines.length) {
+    parts.push(`<p class="sync-forecast section-label">SYNC READ<br>${lines.map(esc).join('<br>')}</p>`);
+  }
+  if (coverLines.length) {
+    parts.push(`<p class="cover-forecast section-label">COVER READ<br>${coverLines.map(esc).join('<br>')}</p>`);
+  }
+  return parts.join('');
 }
 
 /**
@@ -918,6 +942,15 @@ function renderBattle() {
           <p class="section-label">ROUND ${battle.round} · ${esc(battle.phase.toUpperCase())}</p>
           <h3>${esc(unit?.name ?? 'NO ACTIVE UNIT')}</h3>
           <p>${esc(unit ? `${cap(unit.role)} · ${cap(unit.equipment)}` : 'Choose a standing crew member.')}</p>
+          ${(() => {
+            if (!unit) return '';
+            const line = coverStandingLine(battle, unit);
+            if (!line) return '';
+            const prop = line.replace(/^behind the /i, '');
+            const templ = tr('in_cover');
+            const shown = templ.includes('%s') ? templ.replace('%s', prop) : line;
+            return `<p class="cover-standing">${esc(shown)}</p>`;
+          })()}
           ${unit ? `
             <div class="track-row"><span>CONDITION</span><span class="track danger">${Array.from({ length: unit.maxHp }, (_, i) => `<i class="${i < unit.hp ? 'on' : ''}"></i>`).join('')}</span></div>
             <div class="track-row"><span>GUARD</span><span class="track">${Array.from({ length: 3 }, (_, i) => `<i class="${i < unit.guard ? 'on' : ''}"></i>`).join('')}</span></div>

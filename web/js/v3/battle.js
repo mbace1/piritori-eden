@@ -268,6 +268,53 @@ function weaponFor(battle, unit) {
  * nothing here reads `attacker.role`, which is what makes this the same
  * test for every fighter regardless of which side authored them.
  */
+
+/** Cover under a unit's own cell — same question as FightManager.cover_under.
+ *  Prop name is the place ("bicycle rack"), not a rule ("soft cover"). */
+export function coverUnder(battle, unit) {
+  if (!battle?.cover || !unit?.cell) return null;
+  const prop = battle.cover.get(unit.cell);
+  if (!prop) return null;
+  return {
+    propId: prop.propId || '',
+    softBlock: Boolean(prop.softBlock),
+    hardBlock: Boolean(prop.hardBlock),
+  };
+}
+
+/** Does an attack on this target have to get through something first?
+ *  Mirrors FightManager.attack_would_be_stopped — only meaningful when the
+ *  target is already reachable (e.g. piercing past soft cover on their cell). */
+export function attackWouldBeStopped(battle, attacker, target) {
+  if (!attacker || !target) return '';
+  const cover = coverUnder(battle, target);
+  if (!cover) return '';
+  if (cover.hardBlock) return 'hard';
+  const weapon = weaponFor(battle, attacker);
+  if (cover.softBlock && !(weapon.piercing ?? false)) return 'soft';
+  return 'pierced';
+}
+
+function propWords(cover) {
+  const id = String(cover?.propId || '').trim();
+  if (!id) return 'cover';
+  return id.replaceAll('-', ' ');
+}
+
+export function coverStandingLine(battle, unit) {
+  const cover = coverUnder(battle, unit);
+  if (!cover) return '';
+  return `behind the ${propWords(cover)}`;
+}
+
+export function coverAttackLine(battle, attacker, target) {
+  const verdict = attackWouldBeStopped(battle, attacker, target);
+  if (verdict === 'hard') return 'Blocked — nothing gets through that.';
+  if (verdict === 'soft') return 'Something is in the way. The swing will be caught.';
+  if (verdict === 'pierced') return 'This weapon goes through it.';
+  return '';
+}
+
 export function attackTargets(battle, attacker) {
   const targets = [];
   if (!attacker?.alive) return targets;

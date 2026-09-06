@@ -24,6 +24,16 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.39 — 2026-09-06
+
+**Cover decision copy on web + fence unbuyable tag.**
+
+- Web: standing "behind the …" on the active unit; COVER READ in attack mode.
+- Web fence chip notes taken-only gear. QUEUE: struck stale "nothing sells loot".
+
+### Port
+Web catch-up to Godot. Hub inherits later.
+
 ## v4.38 — 2026-09-06
 
 **Battle-entry forecast (Phase A leftover — list cleared).**
