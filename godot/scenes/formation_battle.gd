@@ -1142,6 +1142,7 @@ func _build_telegraphs() -> void:
 		_intent_box.add_child(_label(tr("battle.no_read_yet"), 12, PiritoriPalette.TEXT_DIM))
 		return
 
+	var any_unclear := false
 	for rec in live:
 		var f := _fighter(String(rec.fighter_id))
 		if f == null:
@@ -1155,6 +1156,33 @@ func _build_telegraphs() -> void:
 
 		_intent_box.add_child(_label("   " + _telegraph_line(rec), 12,
 			_risk_colour(String(rec.risk_band))))
+		if int(rec.target_lane) < 0:
+			any_unclear = true
+
+	# QUEUE Phase A: "aim unclear" was honest but unexplained. When fog hits,
+	# say what raises the read — watcher intent-reading / spotter presence,
+	# and MARK for the top of the ladder. Colour never alone; copy neither.
+	if any_unclear:
+		var hint_key := "battle.intel_hint_raise" if _crew_has_reader() 			else "battle.intel_hint_bring"
+		var hint := _label(tr(hint_key), 11, PiritoriPalette.TEXT_DIM)
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_intent_box.add_child(hint)
+
+
+## Presence of a watcher or spotter is what buys the AIM step (§9.11). Used so
+## the fog footnote tells the truth about THIS crew, not a generic tip.
+func _crew_has_reader() -> bool:
+	if fight == null:
+		return false
+	for f in fight.get_fighters(Fighter.Side.PLAYER):
+		if f == null or not f.is_active():
+			continue
+		var cid := String(f.character_id)
+		if cid == "":
+			continue
+		if GameState.has_aptitude(cid, "spotter") or GameState.has_aptitude(cid, "watcher"):
+			return true
+	return false
 
 
 ## One line: what they will do, where, and how hard. Lane is 1-based for the

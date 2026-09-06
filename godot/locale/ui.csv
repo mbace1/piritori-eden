@@ -149,6 +149,8 @@ battle.intent_stand_down,is backing off,perääntyy,引き下がる
 battle.intent_withdraw,is leaving,lähtee,立ち去る
 battle.aim_lane,at your lane %d,kaistallesi %d,第%dレーンを狙う
 battle.aim_unknown,aim unclear,tähtäys epäselvä,狙いは不明
+battle.intel_hint_bring,"Aim is fog — cover and distance cost the lane. Bring a watcher (intent-reading) or spotter; MARK spends a turn for the full read.","Tähtäys on sumussa — suoja ja etäisyys syövät kaistan. Tuo mukanaan watcher (intent-reading) tai spotter; MARK käyttää vuoron täyteen lukemaan.","狙いは霧の中。遮蔽と距離がレーンを奪う。ウォッチャー（intent-reading）かスポッターを連れて来い。MARKで一手使い、完全に読む。"
+battle.intel_hint_raise,"Aim is fog — cover or distance. Your watcher/spotter already helps; MARK one of them for the full read.","Tähtäys on sumussa — suoja tai etäisyys. Watcher/spotter auttaa jo; MARK lukee yhden heistä kokonaan.","狙いは霧の中。遮蔽か距離。ウォッチャー／スポッターは既に効いている。MARKで一人を完全に読め。"
 battle.in_cover,behind the %s,%s takana,%sの陰
 battle.cover_generic,cover,suoja,遮蔽
 battle.cover_blocks,Blocked — nothing gets through that.,Estetty — mikään ei mene läpi.,阻まれる — 何も通らない。

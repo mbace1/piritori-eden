@@ -503,6 +503,10 @@ func _test_telegraphs() -> void:
 				numbered = false
 	check("every read names a person and a risk band", complete)
 	check("attack telegraphs carry a sane harm range", numbered)
+	# Fog copy must resolve — "aim unclear" without the raise path is the
+	# Phase A leftover this ships against.
+	for key in ["battle.aim_unknown", "battle.intel_hint_bring", "battle.intel_hint_raise"]:
+		check("%s is a real locale key" % key, tr(key) != key, tr(key))
 
 	# -1 means intel is too low to read the aim. It is a real state and must be
 	# preserved rather than clamped to lane 0, which would show the player a
