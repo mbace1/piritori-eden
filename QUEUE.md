@@ -3,6 +3,8 @@
 > **Claude Code / Godot pickup (2026-09-06):** read [`GODOT_PICKUP.md`](GODOT_PICKUP.md) first.
 > Baseline `main` `f3e7997` / **v4.40** — Phase A leftovers + Phase B already in `godot/`. Pull, `sync-data`, smoke shop + tough desync; do not re-port.
 
+> **Blender cast audit (2026-09-06):** Blender 5.2.1 on the bot box; see [`art-src/meshy-input/MESHY_CAST_MIGRATE.md`](art-src/meshy-input/MESHY_CAST_MIGRATE.md) and `art-src/tools/blender_cast_clip_audit.py`. Shared clips still muscle-only until ~Sept 11 cast migrate — do not one-off re-rig.
+
 Things noticed while doing something else. Per `CLAUDE.md` rule 1, they get
 written down here instead of acted on.
 
