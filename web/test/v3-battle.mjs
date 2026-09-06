@@ -210,3 +210,54 @@ assert.ok(opened.log[0].includes(opened.entryForecast.slice(0, 12)) || opened.lo
 
 console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, desync, attack reach, entry forecast, cover decision copy.');
 
+
+// Growth combat hooks — toughness on makePlayer; anchor cover via skills.
+{
+  const { createState, grantLevel, spendPerk, setAptitudes } = await import('../js/v3/state.js');
+  const {
+    createBattleState, anchorCoverCells, crewReadBonus, markDuration, coverAt,
+  } = await import('../js/v3/battle.js');
+
+  const st = createState(content);
+  const who = content.crew.find(c => c.id === 'crew-slot-fixer')?.id
+    ?? content.crew.find(c => !c.named)?.id;
+  assert.ok(who);
+  const other = content.crew.find(c => c.id !== who)?.id;
+  st.recruited = [who, other];
+  st.deployed = [who, other];
+
+  grantLevel(st, who); assert.equal(spendPerk(st, data, who, 'toughness'), true);
+  grantLevel(st, who); assert.equal(spendPerk(st, data, who, 'toughness'), true);
+  grantLevel(st, who); assert.equal(spendPerk(st, data, who, 'wits'), true);
+  grantLevel(st, who); assert.equal(spendPerk(st, data, who, 'wits'), true);
+
+  const def = data.battles.get('battle-karhupuisto-2v2') ?? [...data.battles.values()][0];
+  const crew = st.deployed.map(id => data.crew.get(id)).filter(Boolean);
+  const b = createBattleState(def, crew.slice(0, def.player_deployed), st, data);
+  const unit = b.players.find(p => p.id === who);
+  assert.ok(unit);
+  assert.equal(unit.maxHp, 5, 'toughness raises condition max (+1 per point)');
+  assert.equal(unit.hp, 5, 'and current matches');
+  assert.ok(crewReadBonus(b, st, data) >= 1, 'wits contributes to crew read bonus');
+
+  setAptitudes(st, who, ['anchor']);
+  st.crewSkills[who] = [];
+  const narrow = anchorCoverCells(b, st, data, unit);
+  assert.equal(narrow.length, 1, 'anchor covers one cell');
+  st.crewSkills[who] = ['take-it'];
+  assert.equal(anchorCoverCells(b, st, data, unit).length, 3, 'take-it widens to three');
+  st.crewSkills[who] = ['wall'];
+  const cell = narrow[0];
+  const seen = coverAt(b, st, data, cell.lane, cell.depth, 'player');
+  assert.equal(seen?.hardBlock, true, 'wall makes them hard cover');
+
+  setAptitudes(st, who, ['spotter']);
+  st.crewSkills[who] = [];
+  assert.equal(markDuration(st, who), 1, 'base mark is one round');
+  st.crewSkills[who] = ['call-it'];
+  assert.equal(markDuration(st, who), 3, 'call-it extends mark');
+  st.crewSkills[who] = ['watch-the-hands'];
+  assert.equal(markDuration(st, who), 1 << 30, 'watch-the-hands is whole fight');
+
+  console.log('V3 BATTLE growth hooks OK');
+}

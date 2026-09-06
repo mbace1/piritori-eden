@@ -6,10 +6,12 @@ import {
   transactOffer, applyEffects, commitRoute, sendOnRoute,
   crewRecord, hiringPoolFor, hireFromPool,
   isNamed, careerLeft, careerIsVisible, ageCrew,
+  levelOf, unspentPerkPoints, perkValue, skillsOf, skillOffer, spendPerk,
+  learnSkill, spendPerkPointOnSkill, train,
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-} from './state.js?v=2';
+} from './state.js?v=3';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
 import {
@@ -18,7 +20,7 @@ import {
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=5';
+} from './battle.js?v=6';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
@@ -53,6 +55,16 @@ const UI = {
     cover_blocks: 'Blocked — nothing gets through that.',
     cover_intercepts: 'Something is in the way. The swing will be caught.',
     cover_pierced: 'This weapon goes through it.',
+    'crew.level_n': 'Level %d',
+    'crew.pick_skill': 'Something new:',
+    'crew.pick_perk': 'Or put %d point into:',
+    'crew.train': 'Train with a veteran',
+    'crew.trained': 'Already trained',
+    'perk.strength': 'Strength',
+    'perk.speed': 'Speed',
+    'perk.wits': 'Wits',
+    'perk.nerve': 'Nerve',
+    'perk.toughness': 'Toughness',
   },
   fi: {
     route: 'REITTI', encounter: 'KOHTAAMINEN', ledger: 'KIRJANPITO', battle: 'TAISTELU', news: 'UUTISET',
@@ -70,6 +82,28 @@ const UI = {
     cover_blocks: 'Estetty — mikään ei mene läpi.',
     cover_intercepts: 'Jotain on tiellä. Isku jää kiinni.',
     cover_pierced: 'Tämä ase menee siitä läpi.',
+    'crew.level_n': 'Taso %d',
+    'crew.pick_skill': 'Jotain uutta:',
+    'crew.pick_perk': 'Tai laita %d piste:',
+    'crew.train': 'Harjoittele veteraanin kanssa',
+    'crew.trained': 'Jo harjoiteltu',
+    'perk.strength': 'Voima',
+    'perk.speed': 'Nopeus',
+    'perk.wits': 'Äly',
+    'perk.nerve': 'Hermo',
+    'perk.toughness': 'Sitkeys',
+  },
+  ja: {
+    'crew.level_n': 'レベル%d',
+    'crew.pick_skill': '新しく覚える:',
+    'crew.pick_perk': 'または%dポイントを:',
+    'crew.train': 'ベテランに訓練してもらう',
+    'crew.trained': '訓練済み',
+    'perk.strength': '力',
+    'perk.speed': '速さ',
+    'perk.wits': '知恵',
+    'perk.nerve': '胆力',
+    'perk.toughness': '頑丈さ',
   },
 };
 
@@ -80,7 +114,11 @@ let routeDraft = [];
 let observation = '';
 let toastTimer;
 
-function tr(key) { return UI[state?.locale ?? 'en'][key] ?? UI.en[key] ?? key; }
+function tr(key, ...args) {
+  let s = UI[state?.locale ?? 'en'][key] ?? UI.ja?.[key] ?? UI.en[key] ?? key;
+  for (const a of args) s = String(s).replace('%d', String(a));
+  return s;
+}
 function persist() { saveState(state); }
 function logToast(message) {
   const toast = $('toast');
@@ -661,9 +699,53 @@ function renderLedger() {
     </div>`;
 }
 
+function skillLabel(skillId) {
+  const sk = (data.content.skills ?? []).find(s => s.id === skillId);
+  return sk?.label ?? skillId;
+}
+
+/** Growth spend lines — silent when nothing pending (UX_SPEC §19 / Godot _add_level_lines). */
+function renderGrowth(member) {
+  if (!state.recruited.includes(member.id) && !state.temporaryCrew.includes(member.id)) return '';
+  if (state.retiredCrew.includes(member.id) || state.arrestedCrew.includes(member.id)) return '';
+  const points = unspentPerkPoints(state, member.id);
+  const offer = skillOffer(state, data, member.id);
+  const known = skillsOf(state, member.id);
+  const canTrain = state.retiredCrew.length > 0
+    && !state.trainedCrew.includes(member.id)
+    && !isNamed(state, data, member.id)
+    && state.recruited.includes(member.id);
+  if (points <= 0 && offer.length === 0 && known.length === 0 && !canTrain) {
+    // Still show level once they have fights behind them.
+    if (levelOf(state, member.id) <= 1 && !state.crewFights[member.id]) return '';
+  }
+  const perkIds = data.content.perks ?? [];
+  let html = `<p class="dim">${esc(tr('crew.level_n', levelOf(state, member.id)))}</p>`;
+  if (offer.length && points > 0) {
+    html += `<p class="dim">${esc(tr('crew.pick_skill'))}</p>`;
+    html += offer.map(sk => `<button class="paper-button" data-action="learn-skill" data-crew="${esc(member.id)}" data-skill="${esc(sk.id)}">${esc(sk.label)} — ${esc(sk.note ?? '')}</button>`).join('');
+  }
+  if (points > 0) {
+    html += `<p class="dim">${esc(tr('crew.pick_perk', points))}</p>`;
+    html += `<div class="route-steps">${perkIds.map(pid => {
+      const n = perkValue(state, member.id, pid);
+      return `<button class="paper-button" data-action="spend-perk" data-crew="${esc(member.id)}" data-perk="${esc(pid)}">${esc(tr(`perk.${pid}`))} ${n}</button>`;
+    }).join('')}</div>`;
+  }
+  if (known.length) {
+    html += `<p class="dim">${esc(known.map(skillLabel).join(', '))}</p>`;
+  }
+  if (canTrain) {
+    html += `<button class="paper-button cyan" data-action="train-crew" data-crew="${esc(member.id)}">${esc(tr('crew.train'))}</button>`;
+  } else if (state.trainedCrew.includes(member.id)) {
+    html += `<span class="tag">${esc(tr('crew.trained'))}</span>`;
+  }
+  return html;
+}
+
 function renderCrewCard(member) {
   const hired = state.recruited.includes(member.id) || state.temporaryCrew.includes(member.id);
-  const status = state.crewStatus[member.id];
+  const status = state.crewStatus[member.id] ?? { condition: 0, maxCondition: 0, status: 'available' };
   // Authored crew carry a one-line `strength`; a generated hire
   // (`people/hiring.mjs`) has no such field and leans on its first
   // rolled trait instead — both read as one line of flavour under the role.
@@ -676,14 +758,15 @@ function renderCrewCard(member) {
     </div>
     <div>
       <h3>${esc(member.name)}${member.nick ? ` <span class="dim">"${esc(member.nick)}"</span>` : ''}</h3>
-      <p>${esc(cap(member.role))} · ${hired ? esc(status.status.toUpperCase())
+      <p>${esc(cap(member.role))} · ${hired ? esc(String(status.status ?? 'available').toUpperCase())
         : state.arrestedCrew.includes(member.id) ? 'ARRESTED'
         : state.retiredCrew.includes(member.id) ? 'RETIRED'
         : 'NOT RECRUITED'}</p>
       <p>${esc(flavor)}</p>
-      <div class="status-dots" aria-label="${status.condition} condition">${Array.from({ length: Math.min(8, status.maxCondition) }, (_, index) => `<i class="${index < status.condition ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="status-dots" aria-label="${status.condition} condition">${Array.from({ length: Math.min(8, status.maxCondition || 0) }, (_, index) => `<i class="${index < status.condition ? 'on' : ''}"></i>`).join('')}</div>
       ${hired && careerIsVisible(state, data, member.id)
         ? `<span class="tag warning">${careerLeft(state, data, member.id)} FIGHT${careerLeft(state, data, member.id) === 1 ? '' : 'S'} LEFT</span>` : ''}
+      ${renderGrowth(member)}
     </div>
   </article>`;
 }
@@ -1228,6 +1311,24 @@ function handleRootClick(event) {
   } else if (action === 'hire-from-pool') {
     const ok = hireFromPool(state, data, target.dataset.candidate);
     logToast(ok ? 'Hired on.' : 'Cannot hire — not enough cash, or already on the roster.');
+    persist(); render();
+  } else if (action === 'spend-perk') {
+    const ok = spendPerk(state, data, target.dataset.crew, target.dataset.perk);
+    logToast(ok ? 'Point spent.' : 'Cannot spend that point.');
+    persist(); render();
+  } else if (action === 'learn-skill') {
+    const crewId = target.dataset.crew;
+    const skillId = target.dataset.skill;
+    if (learnSkill(state, data, crewId, skillId)) {
+      spendPerkPointOnSkill(state, crewId);
+      logToast(`Learned ${skillLabel(skillId)}.`);
+    } else {
+      logToast('Cannot learn that.');
+    }
+    persist(); render();
+  } else if (action === 'train-crew') {
+    const ok = train(state, data, target.dataset.crew);
+    logToast(ok ? 'A veteran starts them ahead.' : 'Cannot train — no veteran, already trained, or named.');
     persist(); render();
   } else if (action === 'select-unit') {
     selectUnit(state.battle, target.dataset.unit); persist(); render();

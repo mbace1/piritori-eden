@@ -53,7 +53,7 @@ line, "leveling, chapters, equipment decay, career lifecycle." Reading
 `game_state.gd` in full to scope it turned up something closer to six
 separate systems. Three are done (career/retirement, v4.23; equipment
 instances + loot + fencing, v4.24; the chapter operation ending, v4.25).
-Two remain:
+One remains (growth-loop closed in v4.42):
 
 - **`begin_next_chapter()`/`decay_equipment()`.** The content only
   authors one chapter (`ERA_CHAPTERS = 4` in Godot, one in this slice),
@@ -62,38 +62,16 @@ Two remain:
   stay unported together. Unblocks the moment a second chapter is
   authored; nothing else stands in the way. Independent of everything
   else on this list.
-- **Leveling, perks, skills — and `train()`, which turns out to depend
-  on them too.** `level_of`/`grant_level`/`FIGHTS_PER_LEVEL = 3` (small,
-  and `state.crewFights` already exists to read, v4.23); `crew_perks`/
-  `spend_perk`/`grant_glory` (`content.perks` = `["strength","speed",
-  "wits","nerve","toughness"]`, `GLORY_PERK_POINTS = 2`); `skill_offer`/
-  `learn_skill` (gated by `content.classes` — 12 entries,
-  `content.aptitude_rules`, `content.skills` — 52 entries). **Not
-  decoration on either build** — `fight_manager.gd:760` reads
-  `perk_value(cid, "wits") / 2` as a live bonus mid-fight, and it checks
-  `GameState.skills_of(cid).has(ANCHOR_COVER_WIDE_SKILL)` to change what
-  an anchor-class unit's cover verb does. **`battle.js` does not
-  currently read `content.classes`/`aptitude_rules`/`skills` AT ALL** —
-  porting this is new combat logic, not a port of existing JS behaviour,
-  and is the largest remaining piece of this whole item. Shipping
-  leveling alone would grant an unspendable perk point with no payoff —
-  exactly the half-finished feature this project's own discipline rules
-  out — so the three want doing together, not as three separate passes.
-  `train()` (a retired veteran gives a rookie a head start, §7.4) looked
-  independent at first — it only touches `retired_crew`/`crew_fights`,
-  both of which are real as of v4.23 — but reading it closely shows
-  its ENTIRE payoff is levels: it bumps `crew_fights[id]` by 2 and calls
-  nothing else, not even `grant_level()` (so it skips the perk points
-  those levels would have granted too) — the "head start" is purely
-  `level_of()` reading higher, which only matters for `learn_skill()`'s
-  tier gate. With no leveling/skills ported, `train()` would be a pure
-  cost (two fewer career fights) for zero observable benefit — the same
-  half-finished trap leveling alone would be. Folded in here rather than
-  left as its own bullet.
+- ~~**Leveling, perks, skills — and `train()`.**~~ **Built (`VERSIONS.md`
+  v4.42).** Web catch-up to Godot Phase D: `levelOf`/`grantLevel`/
+  `spendPerk`/`skillOffer`/`learnSkill`/`train`, ledger growth UI, and
+  battle hooks (toughness, wits read bonus, Anchor `take-it`/`wall`,
+  Spotter mark duration). `train()` still does not call `grantLevel`
+  (Godot-exact). Remains playtest-gate numbers (DESIGN_LOCKS §13).
 
-Nothing here blocks `begin_next_chapter()`/`decay_equipment()`, and
-nothing outside this list blocks leveling/perks/skills/`train()` either
-— it is one growth-loop pass, not four separate ones.
+Nothing here blocks `begin_next_chapter()`/`decay_equipment()`. Growth-loop
+pass is done on both builds; chapter chaining is the remaining campaign-
+progression item above.
 
 ---
 

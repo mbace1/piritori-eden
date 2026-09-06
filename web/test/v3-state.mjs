@@ -96,3 +96,102 @@ assert.equal(full.missionStatus['mission-courtyard-receipts'], 'fail', 'non-comb
 }
 
 console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, fixed choices and ending ${full.endingId}.`);
+
+// ── Growth loop (GameState.gd Phase D / COMBAT.md §9.11) ───────────────────
+{
+  const {
+    levelOf, unspentPerkPoints, perkValue, skillsOf, skillOffer, spendPerk,
+    learnSkill, spendPerkPointOnSkill, grantLevel, grantGlory, train, ageCrew,
+    FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
+    fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
+    createState: freshState,
+  } = await import('../js/v3/state.js');
+
+  const CAREER = 10;
+
+  const g = freshState(content);
+  let who = '';
+  for (const c of content.crew) {
+    if (!c.named) { who = c.id; break; }
+  }
+  assert.ok(who, 'slice has a non-named crew member');
+  if (!g.recruited.includes(who)) g.recruited.push(who);
+
+  assert.equal(levelOf(g, who), 1, 'everyone starts at level one');
+  assert.equal(unspentPerkPoints(g, who), 0, 'with nothing to spend');
+
+  for (let i = 0; i < FIGHTS_PER_LEVEL; i += 1) ageCrew(g, data, [who]);
+  assert.equal(levelOf(g, who), 2, 'fights buy a level');
+  assert.ok(unspentPerkPoints(g, who) >= 1, 'and a level gives a point to spend');
+
+  assert.equal(spendPerk(g, data, who, 'speed'), true, 'a point buys a perk');
+  assert.equal(perkValue(g, who, 'speed'), 1, 'and the perk stuck');
+  assert.equal(unspentPerkPoints(g, who), 0, 'spending a point costs it');
+  assert.equal(spendPerk(g, data, who, 'speed'), false, 'cannot spend what you do not have');
+
+  grantLevel(g, who);
+  assert.equal(spendPerk(g, data, who, 'charisma'), false, 'unknown perk refused');
+  assert.equal(unspentPerkPoints(g, who), 1, 'and the point was not eaten');
+
+  const offer = skillOffer(g, data, who);
+  assert.ok(offer.length > 0, 'there is something to learn');
+  assert.ok(offer.length <= SKILL_OFFER_SIZE, 'offer no bigger than three');
+  const learn = offer[0].id;
+  assert.equal(learnSkill(g, data, who, learn), true, 'a skill is learned');
+  assert.equal(learnSkill(g, data, who, learn), false, 'and not learned twice');
+  assert.ok(skillsOf(g, who).includes(learn), 'it is on the person');
+
+  // Aptitude gate: back-door is a driver trick — only refuse if they lack driver.
+  if (!hasAptitude(g, data, who, 'driver')) {
+    assert.equal(learnSkill(g, data, who, 'back-door'), false, "stranger's trick refused");
+  }
+
+  const before = unspentPerkPoints(g, who);
+  grantGlory(g, who);
+  assert.equal(unspentPerkPoints(g, who), before + GLORY_PERK_POINTS, 'glory pays two');
+  assert.ok(g.flags.includes(`memory:glory:${who}`), 'city hears about glory');
+
+  // Stable offer
+  const again = skillOffer(g, data, who);
+  assert.deepEqual(again.map(s => s.id), skillOffer(g, data, who).map(s => s.id), 'same offer comes back');
+
+  // Save/load roundtrip
+  const storage = { _d: null, setItem(_k, v) { this._d = v; }, getItem() { return this._d; } };
+  saveState(g, storage);
+  const blank = freshState(content);
+  assert.equal(perkValue(blank, who, 'speed'), 0, 'a new campaign forgets');
+  const reloaded = loadState(content, storage);
+  assert.equal(perkValue(reloaded, who, 'speed'), 1, 'perk came back');
+  assert.ok(skillsOf(reloaded, who).includes(learn), 'skill came back');
+  assert.ok(Array.isArray(reloaded.trainedCrew), 'trainedCrew persisted shape');
+
+  // train(): needs a retiree; +2 fights; no grantLevel; once only
+  const rookieState = freshState(content);
+  let veteran = '';
+  let rookie = '';
+  for (const c of content.crew) {
+    if (c.named) continue;
+    if (!veteran) veteran = c.id;
+    else if (!rookie) { rookie = c.id; break; }
+  }
+  assert.ok(veteran && rookie, 'two non-named crew for train test');
+  rookieState.recruited.push(veteran, rookie);
+  // Age veteran to retirement
+  for (let i = 0; i < CAREER + 2; i += 1) ageCrew(rookieState, data, [veteran]);
+  assert.ok(rookieState.retiredCrew.includes(veteran), 'veteran retired');
+  const fightsBefore = fightsOf(rookieState, rookie);
+  const levelBefore = levelOf(rookieState, rookie);
+  const pointsBefore = unspentPerkPoints(rookieState, rookie);
+  assert.equal(train(rookieState, data, rookie), true, 'veteran starts the next one ahead');
+  assert.equal(fightsOf(rookieState, rookie), fightsBefore + 2, '+2 fights');
+  // Match Godot: train does NOT call grantLevel even if level boundary crossed.
+  assert.equal(unspentPerkPoints(rookieState, rookie), pointsBefore, 'train does not grantLevel');
+  assert.equal(train(rookieState, data, rookie), false, 'but only once');
+  assert.ok(careerLeft(rookieState, data, rookie) < CAREER, 'shorter career left');
+
+  // Authored crew fall back to role aptitude
+  const authored = content.crew[0].id;
+  assert.ok(aptitudesOf(g, data, authored).length >= 1, 'authored crew answers aptitudes');
+
+  console.log('V3 STATE growth-loop OK');
+}

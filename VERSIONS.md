@@ -10,6 +10,29 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.42 — 2026-09-07
+
+**Phase D growth-loop on web — levels, perks, skills, train (catch-up).**
+
+- **State:** `crewPerks` / `crewSkills` / `crewPerkPoints` / `crewAptitudes` /
+  `trainedCrew` persist through fresh/load/save. `levelOf`, `grantLevel`,
+  `grantGlory`, `spendPerk`, `skillOffer`, `learnSkill`,
+  `spendPerkPointOnSkill`, `aptitudesOf`, `train`. `ageCrew` grants a level
+  on every 3-fight boundary. `train()` bumps +2 fights and does **not** call
+  `grantLevel` (Godot-exact, even though odd). Hires roll aptitudes
+  (`people/hiring.mjs`) and `hireFromPool` stores them.
+- **UI:** Ledger crew cards show level, unspent points, perk spend buttons,
+  skill offer (pick one → learn + spend point), train when a veteran exists.
+  Locale en/fi/ja mirrored from `godot/locale/ui.csv`.
+- **Battle:** toughness → hp/maxHp; wits → `crewReadBonus`; Anchor
+  `take-it` / `wall` via `anchorCoverCells` / `coverAt`; Spotter
+  `markDuration` (`call-it` / `watch-the-hands`). No invented skill effects.
+- **Gates:** `web/test/v3-state.mjs` growth section; `v3-battle.mjs` combat
+  hooks. Cache: `app.js?v=5`, `state.js?v=3`, `battle.js?v=6`.
+
+### Port
+Godot already; web catch-up. Hub inherits later.
+
 ## v4.41 — 2026-09-06
 
 **Restore Piritori muscle after Eeri overwrite.**
