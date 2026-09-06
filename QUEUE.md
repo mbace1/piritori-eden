@@ -3100,3 +3100,11 @@ art review only.
 4. Parallel gameplay (MST feel) is unblocked for docs-led work; art no longer
    gates “can we read a fight.”
 
+
+
+## Meshy spend held — owner 2026-09-06
+
+Balance **39**. Owner: hold spend until credit refresh (~Sept 11). Muscle
+T-pose remains the intended clip-donor; no Meshy API calls that cost credits
+until then. Fight path stays cast3d on 2D plates.
+
