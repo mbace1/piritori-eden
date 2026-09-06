@@ -1131,6 +1131,14 @@ func _refresh() -> void:
 ## Both are shown: the authored line gives the person a motive, the live line
 ## gives the round a threat.
 func _build_telegraphs() -> void:
+	# Battle-entry forecast — the fight's equivalent of encounter choice.forecast.
+	# Shown every refresh so the cost read stays visible while you plan.
+	var entry := BattleBuilder.entry_forecast(battle_id)
+	if entry != "":
+		var el := _label(entry, 11, PiritoriPalette.INTEL_MUSTARD)
+		el.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_intent_box.add_child(el)
+
 	var authored: Dictionary = {}
 	for a in BattleBuilder.opponent_intents(battle_id):
 		authored[String(a["id"])] = String(a["intent"])

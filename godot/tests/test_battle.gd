@@ -508,6 +508,14 @@ func _test_telegraphs() -> void:
 	for key in ["battle.aim_unknown", "battle.intel_hint_bring", "battle.intel_hint_raise"]:
 		check("%s is a real locale key" % key, tr(key) != key, tr(key))
 
+	# Battle-entry forecast assembles authored cost fields (§18.1).
+	for bid in ["battle-karhupuisto-2v2", "battle-courtyard-3v3",
+			"battle-kattilahalli-3v3", "battle-hermanni-training"]:
+		var fc := BattleBuilder.entry_forecast(bid)
+		check("%s has an entry forecast" % bid, fc.length() >= 20, fc)
+	for key in ["battle.withdraw_cost", "battle.death_risk", "battle.death_ineligible"]:
+		check("%s is a real locale key" % key, tr(key) != key, tr(key))
+
 	# -1 means intel is too low to read the aim. It is a real state and must be
 	# preserved rather than clamped to lane 0, which would show the player a
 	# confident lie.

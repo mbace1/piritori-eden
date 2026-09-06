@@ -298,3 +298,35 @@ static func opponent_intents(battle_id: String) -> Array:
 			"cell": String(opp.get("cell", "")),
 		})
 	return out
+
+## One read before the first commitment (§18.1 / Phase A leftover).
+## Encounters already print `choice.forecast`; fights had the pieces
+## (objective, withdrawal cost, casualty telegraph) and never assembled them.
+## Optional authored `forecast` on the battle overrides the compose.
+static func entry_forecast(battle_id: String) -> String:
+	var battle := ContentRegistry.battle(battle_id)
+	var authored := String(battle.get("forecast", "")).strip_edges()
+	if authored != "":
+		return authored
+	var parts: PackedStringArray = []
+	var fmt := String(battle.get("format", "")).strip_edges()
+	if fmt != "":
+		parts.append(fmt)
+	var obj := String(battle.get("objective", "")).strip_edges()
+	if obj != "":
+		parts.append(obj)
+	var withdraw := String((battle.get("withdrawal", {}) as Dictionary)
+		.get("known_cost", "")).strip_edges()
+	if withdraw != "":
+		parts.append("%s: %s" % [tr("battle.withdraw_cost"), withdraw])
+	var ct: Dictionary = battle.get("casualty_table", {})
+	var tel := String(ct.get("telegraph", "")).strip_edges()
+	if tel != "":
+		parts.append(tel)
+	var death := String(ct.get("death", "")).strip_edges()
+	if death != "" and death != "not-eligible-in-this-battle":
+		parts.append("%s: %s" % [tr("battle.death_risk"), death])
+	elif death == "not-eligible-in-this-battle":
+		parts.append(tr("battle.death_ineligible"))
+	return " ".join(parts)
+

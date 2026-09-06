@@ -17,7 +17,7 @@ import {
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor,
-} from './battle.js?v=2';
+} from './battle.js?v=3';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
@@ -905,6 +905,7 @@ function renderBattle() {
         <img class="weather-layer front" src="${assetUrl(data, 'weather-rain-fine-v01')}" alt="">
         <div class="stage3d-mount" id="stage3dMount" aria-hidden="true"></div>
         <p class="battle-objective"><b>${tr('objective')} · ${esc(battle.format)}</b><br>${esc(battle.objective)}</p>
+        ${battle.entryForecast ? `<div class="consequence-strip battle-entry-forecast" role="note">${esc(battle.entryForecast)}</div>` : ''}
         ${rowLabel('BACK', depthOf(ROWS - 1, true))}
         ${rowLabel('FRONT', depthOf(0, true))}
         ${rowLabel('FRONT', depthOf(0, false))}
