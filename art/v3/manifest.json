@@ -1310,8 +1310,9 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "d38fdfb8bfdb441a1463024541fda0e1f39e68e6df5a0fe4a20d70f6df8efa17",
-      "note": "Muscle body matching the 2026-09-06 shared fight-clip rest (Meshy archive rig, texture-stripped). Safe with clips/muscle-*-v01."
+      "sha256": "e805e12f8389c9cbbba23f5853be102f9ca879de2469a5c9a686e8d960c3315a",
+      "note": "Muscle body matching the 2026-09-06 shared fight-clip rest (Meshy archive rig, texture-stripped). Safe with clips/muscle-*-v01.",
+      "bytes": 1227724
     },
     {
       "id": "cast3d-runner-v01",
