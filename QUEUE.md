@@ -2846,6 +2846,20 @@ Still open (do not buy stage3d arenas for this):
 
 The historical write-up below stays as the autopsy of the foreign-rest clips.
 
+## Current Meshy re-rig does NOT unlock shared clips — 2026-09-06
+
+Probed with remaining credits after PR #44:
+
+- `POST /openapi/v1/rigging` on `hired-v01` and `muscle-v01` (GitHub raw) both
+  returned a **24-joint / no-Head1** family.
+- Rest between those two fresh re-rigs still drifts **~110° at RightArm**.
+- So one-off role re-rigs will **not** make `clips/muscle-*-v01` safe to lift.
+  Shared clips stay muscle-only until a cast-wide rest/template strategy exists.
+- Balance left ~17 after the muscle re-rig probe — **hold**; do not burn on
+  more single-role re-rigs expecting shared packs to work.
+- Stage3d arenas still parked. Fight look remains cast3d on 2D plates.
+
+
 ## The fight animation is broken at the ASSET level — 2026-09-02
 
 Reported on sight: *"the models hips are janky... their hips are rotated almost
@@ -3105,7 +3119,7 @@ art review only.
   give enough motion on web without shared muscle GLB clips.
 - **2D plates already carry place identity** for courtyard/karhupuisto/etc.;
   Hermanni/Kattilahalli remap to nearby plates until real floors exist.
-- **Godot stays still** on fight clips (owner option 3) until Meshy re-export —
+- **Godot plays shared fight clips on muscle-v01** (PR #44); other roles stay still until rests match —
   that is a motion debt, not a reason to restore bad arenas.
 
 ### What this is NOT
