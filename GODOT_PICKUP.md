@@ -111,3 +111,10 @@ Phase B — they are already on `main` in both `web/` and `godot/`.
 | `PORTING.md` | web leads behaviour; Godot is landscape/controller port |
 | `CLAUDE.md` | Session rules, lanes, gates |
 | `GODOT_HANDOFF.md` | Older port structure (baseline commit there is stale; use this file’s SHA) |
+
+## Blender / cast migrate (~Sept 11)
+
+- Box has **Blender 5.2.1 LTS** (`blender` on PATH).
+- Runbook: `art-src/meshy-input/MESHY_CAST_MIGRATE.md`
+- Eye audit: `xvfb-run -a blender --background --python art-src/tools/blender_cast_clip_audit.py`
+- Until migrate: shared Idle/Attack/BeHit/Dead stay **muscle-v01 only**.
