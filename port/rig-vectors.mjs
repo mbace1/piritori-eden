@@ -7,27 +7,55 @@
  *
  * WHY THIS EXISTS. `godot/scenes/battle_stage_3d.gd`'s `CLIPS` table plays
  * ONE body's four fight clips — the muscle's idle/attack/behit/dead — on
- * EVERY fighter whose rest matches that source. That is a deliberate choice
- * (Meshy rigs come out near-identical, so buying four clips per role would
- * pay repeatedly for the same motion). `web/js/v3/render3d.js` aims at the
- * same thing once remaining roles are re-rigged onto the clip rest.
+ * EVERY fighter, lifting the animation onto whatever rig was loaded. That is
+ * a deliberate, sound choice (Meshy rigs come out near-identical, so buying
+ * four clips per role would be paying repeatedly for the same motion), and
+ * `web/js/v3/render3d.js` now does the same thing. But it was never checked:
+ * nothing asserted the rigs actually match, it simply worked, and a single
+ * mismatched skeleton would have produced a fighter frozen mid-T-pose while
+ * everyone else moved — the kind of failure that reads as "the 3D is broken"
+ * rather than "one asset regressed".
+ *
+ * Measured 2026-09-02: 13 of 14 cast bodies carry an IDENTICAL 24-joint
+ * skeleton (`Hips`, `LeftUpLeg`, `LeftLeg`, `LeftFoot`, `LeftToeBase`, ...).
+ *
+ * MATCHING NAMES ARE NOT ENOUGH, AND THIS GATE ONCE SAID THEY WERE. It
+ * originally checked joint names only and reported the shared-clip approach
+ * "safe by construction, not by luck". It is not, and the false confidence
+ * cost a session: reported on sight, 2026-09-02, "the models hips are janky...
+ * their hips are rotated almost 180 degrees".
  *
  * A glTF rotation channel is a node's LOCAL rotation, absolute rather than a
  * delta, so playing a clip on a rig whose REST orientation differs overwrites
  * that skeleton's rest with the source's. Same names, same joint count, torn
- * pelvis. Rest orientation is checked, not just joint names.
+ * pelvis. So rest orientation is checked too, and the numbers are damning:
  *
- * STATUS 2026-09-06: clips were re-exported against the live Meshy muscle
- * archive rig and written over `clips/muscle-*-v01.glb` + `muscle-v01.glb`.
- * Muscle rest drift is ~5 deg (under the 15 deg line). Other cast bodies are
- * still on older Meshy rests (missing `Head1`, ~170 deg at neck/Spine02) —
- * they stay in `SHARED_CLIP_PENDING` until re-rigged (~5 cr each). Godot only
- * plays shared clips on paths containing `muscle-v01` until then.
+ *   - `Hips` splits the cast into two families — near-identity (toko, local,
+ *     enforcer, hired) and rotated 105-142 degrees (muscle, runner, fixer,
+ *     watcher, driver).
+ *   - `LeftUpLeg` is worse: the clip source has [0.97, 0.07, -0.09, 0.2]
+ *     where toko has [-1, -0.05, 0.05, 0].
+ *   - Worst, and the actual root cause: `clips/muscle-idle-v01.glb` is NOT
+ *     the same rig as `muscle-v01.glb`, THE BODY IT IS NAMED AFTER. Its Hips
+ *     rest is [0.191, -0.016, -0.016, 0.981] against the body's
+ *     [0.442, -0.261, 0.607, 0.607]. There is no body in this repo whose
+ *     skeleton these clips were authored against, so every fighter — the
+ *     muscle included — is playing foreign motion.
+ *
+ * This gate now FAILS on that rather than certifying it, because a gate that
+ * cannot fail is a finding and not a pass. Fixing it is an asset job, not a
+ * code one: the clips need re-exporting against a real body rig. Retargeting
+ * in the player was tried twice and made it worse — see QUEUE.md before
+ * trying a third time.
  *
  * THE ONE EXCEPTION, and it is a real defect rather than a tolerance:
  * `parka-man-v01.glb` has NO SKIN AND NO SKELETON. It cannot be animated at
- * all. Recorded in `QUEUE.md`; this gate names it explicitly rather than
- * failing on it, so the suite stays green while the fact stays visible.
+ * all. It is in `UNIT_VARIANTS["hired"]`, so roughly one hired crew member in
+ * four currently gets a body that will stand still while the other three
+ * fight. `PORTING.md` §6's intake list already requires "it is rigged, and
+ * the skeleton is measurable" — this asset predates that check being applied.
+ * Recorded in `QUEUE.md`; this gate names it explicitly rather than failing
+ * on it, so the suite stays green while the fact stays visible.
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, resolve, basename } from 'node:path';
@@ -40,16 +68,6 @@ const OUT = resolve(here, 'vectors/rigs.json');
 /** The clip source every fighter borrows from — must match battle_stage_3d.gd's
  *  CLIPS table and render3d.js's CLIP_SOURCES. */
 const CLIP_REF = 'art/v3/cast3d/clips/muscle-idle-v01.glb';
-
-/** Bodies whose rest + joints match CLIP_REF and may safely play shared clips. */
-const SHARED_CLIP_COMPATIBLE = new Set(['muscle']);
-
-/** Rigged bodies still on a foreign Meshy rest — known, not a regression.
- *  Re-rig onto the muscle archive rest (~5 Meshy credits each) to graduate. */
-const SHARED_CLIP_PENDING = new Set([
-  'driver', 'enforcer', 'fixer', 'hired-b', 'hired', 'jaska', 'local',
-  'runner', 'street-raver', 'suited-man', 'toko', 'watcher',
-]);
 
 /** Known unrigged, and why. Listed rather than silently skipped. */
 const UNRIGGED_KNOWN = {
@@ -131,13 +149,11 @@ for (const name of Object.keys(rigs)) {
 
 const doc = {
   generated_by: 'port/rig-vectors.mjs',
-  note: 'Joint names per cast body, sorted. SHARED_CLIP_COMPATIBLE bodies must ' +
-    'match the clip source; SHARED_CLIP_PENDING bodies print but do not fail ' +
-    'until re-rigged. See this file\'s generator for why shared clips are the design.',
+  note: 'Joint names per cast body, sorted. Every rigged body must carry the ' +
+    'SAME set as the shared clip source, or lifting that clip onto it plays ' +
+    'nothing. See this file\'s generator for why shared clips are the design.',
   clip_source: CLIP_REF,
   clip_source_joints: ref.slice().sort(),
-  shared_clip_compatible: [...SHARED_CLIP_COMPATIBLE].sort(),
-  shared_clip_pending: [...SHARED_CLIP_PENDING].sort(),
   unrigged_known: UNRIGGED_KNOWN,
   rest_drift_deg: restDrift,
   rigs,
@@ -153,54 +169,37 @@ const refSet = new Set(ref);
 for (const [name, names] of Object.entries(rigs)) {
   const missing = ref.filter(j => !names.includes(j));
   const extra = names.filter(j => !refSet.has(j));
-  if (!(missing.length || extra.length)) continue;
-  const detail = `  ${name}: ${missing.length} joint(s) the clip needs ` +
-    `and this rig lacks${missing.length ? ` (${missing.slice(0, 4).join(', ')})` : ''}` +
-    `, ${extra.length} extra`;
-  if (SHARED_CLIP_PENDING.has(name)) {
-    console.log(`  pending ${detail.trim()}`);
-  } else {
+  if (missing.length || extra.length) {
     failures += 1;
-    console.error(`  FAIL ${detail.trim()}`);
+    console.error(`  FAIL ${name}: ${missing.length} joint(s) the clip needs ` +
+      `and this rig lacks${missing.length ? ` (${missing.slice(0, 4).join(', ')})` : ''}` +
+      `, ${extra.length} extra`);
   }
 }
-// Pending roles print their rest drift every run (fact stays visible). Compatible
-// bodies must stay under REST_TOLERANCE_DEG. Gate fails on regression vs baseline
-// for any body, and on a compatible body drifting over the line.
+// EVERY rigged body currently fails this, which is the honest result and not
+// a tolerance that wants loosening. Treated the same way UNRIGGED_KNOWN treats
+// parka-man: the numbers are printed in full on every run so the fact cannot
+// go quiet, and the gate fails only if a body gets WORSE than its recorded
+// baseline — so this real, owner-decision-blocked asset defect does not sit
+// red across every unrelated PR, while a NEW regression still stops the line.
 const prior = existsSync(OUT)
   ? (JSON.parse(readFileSync(OUT, 'utf8')).rest_drift_deg ?? {})
   : {};
 const broken = Object.entries(restDrift).filter(([, w]) => w.deg > REST_TOLERANCE_DEG);
-const pendingBroken = broken.filter(([name]) => SHARED_CLIP_PENDING.has(name));
-const badCompatible = broken.filter(([name]) => SHARED_CLIP_COMPATIBLE.has(name));
-if (pendingBroken.length) {
+if (broken.length) {
   console.log(`
-  ${pendingBroken.length} body(s) still PENDING shared clips ` +
-    `(rest over ${REST_TOLERANCE_DEG} deg — re-rig onto muscle rest):`);
-  for (const [name, w] of pendingBroken) console.log(`    ${name}: ${w.deg} deg at '${w.joint}'`);
-}
-if (badCompatible.length) {
-  for (const [name, w] of badCompatible) {
-    failures += 1;
-    console.error(`  FAIL ${name}: compatible body drifted ${w.deg} deg at '${w.joint}' ` +
-      `(limit ${REST_TOLERANCE_DEG}). Shared clips are no longer safe on this body.`);
-  }
-}
-for (const name of SHARED_CLIP_COMPATIBLE) {
-  if (!rigs[name]) {
-    failures += 1;
-    console.error(`  FAIL ${name}: listed SHARED_CLIP_COMPATIBLE but has no skeleton.`);
-  }
+  ${broken.length} body(s) CANNOT safely take the shared clips ` +
+    `(rest orientation over ${REST_TOLERANCE_DEG} deg from the clip source):`);
+  for (const [name, w] of broken) console.log(`    ${name}: ${w.deg} deg at '${w.joint}'`);
+  console.log(`  Root cause: ${CLIP_REF} is not the same rig as ANY body here, ` +
+    `including muscle-v01.glb, the body it is named after. See this file's ` +
+    `header and QUEUE.md. Fixing it is an asset job.`);
 }
 // Only in --check. In generate mode this would make a regression impossible
 // to RECORD: the run that writes the new baseline would abort before writing
 // it, and the only way out would be deleting the fixture by hand.
 for (const [name, worst] of (process.argv.includes('--check') ? Object.entries(restDrift) : [])) {
   const was = prior[name]?.deg;
-  // Pending bodies flipped to a new clip rest family — baseline degrees jump.
-  // Do not treat that as a mesh regression; only compatible (or newly-fixed)
-  // bodies get the worsen check.
-  if (SHARED_CLIP_PENDING.has(name)) continue;
   if (was !== undefined && worst.deg > was + 2) {
     failures += 1;
     console.error(`  FAIL ${name}: rest drift got WORSE — ${was} -> ${worst.deg} deg ` +
@@ -239,7 +238,7 @@ if (isCheck) {
     process.exit(1);
   }
   console.log(`rig vectors: ${Object.keys(rigs).length} rigged bodies all carry ` +
-    `the clip source's ${ref.length} joints; ${SHARED_CLIP_COMPATIBLE.size} compatible, ${SHARED_CLIP_PENDING.size} pending, ${unrigged.length} known unrigged.`);
+    `the clip source's ${ref.length} joints; ${unrigged.length} known unrigged.`);
 } else {
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, json);

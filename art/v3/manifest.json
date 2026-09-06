@@ -204,7 +204,7 @@
         483,
         543
       ],
-      "dimension_variance": "watcher and local canvases are 482\u00d7543",
+      "dimension_variance": "watcher and local canvases are 482×543",
       "format": "webp-alpha",
       "anchor": "root_ground",
       "socket": "waist",
@@ -683,7 +683,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "dcaaa4308b1050a9e3599a521069085a5eca4b9d763e2d71e94e470e5faa6211",
-      "note": "Built to the grid with the floor MARGIN, 2026-08-21. v04 put its ground exactly on the arena, so the back rank clipped off the floor onto the building \u2014 units stand ON the outer cells and a figure draws upward from its feet, so the ground must run past the board on every side. The template now marks a dashed floor edge 1.22x the arena and this is drawn to it. The console band was flattened after generation: the model reproduced the template furniture, text included."
+      "note": "Built to the grid with the floor MARGIN, 2026-08-21. v04 put its ground exactly on the arena, so the back rank clipped off the floor onto the building — units stand ON the outer cells and a figure draws upward from its feet, so the ground must run past the board on every side. The template now marks a dashed floor edge 1.22x the arena and this is drawn to it. The console band was flattened after generation: the model reproduced the template furniture, text included."
     },
     {
       "id": "scene-kallio-backyard-v01",
@@ -710,7 +710,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "1a9f46a12e279b2adcb88aac4fc1db59fe4152aee4305f1c836a906415b40654",
-      "note": "Made to the grid, 2026-08-21 \u2014 the first stage authored FROM the template rather than an existing render restaged to it. Open ground fills the arena and its margin; every prop that gives the yard its character (bin store, chain-link, lamp, pallets, skip, birches) sits outside the playing surface, which is what STAGE_SPEC 3 asks for. The grid landed on it with no per-stage tuning."
+      "note": "Made to the grid, 2026-08-21 — the first stage authored FROM the template rather than an existing render restaged to it. Open ground fills the arena and its margin; every prop that gives the yard its character (bin store, chain-link, lamp, pallets, skip, birches) sits outside the playing surface, which is what STAGE_SPEC 3 asks for. The grid landed on it with no per-stage tuning."
     },
     {
       "id": "scene-karhupuisto-clearing-v01",
@@ -737,7 +737,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "4264a39e78845be9aaf77cb51dcb82a33b1f09945b494676255858593e89fd17",
-      "note": "A bare clearing in Karhupuisto: frozen gravel ringed by benches, railings, lindens and a lit path. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground \u2014 the model copies the guide it is given, see STAGE_SPEC 4."
+      "note": "A bare clearing in Karhupuisto: frozen gravel ringed by benches, railings, lindens and a lit path. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     },
     {
       "id": "scene-sornainen-quay-v01",
@@ -764,7 +764,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "3655f71a41d6616f356b2b629c9c1c0637b2adeda3d7bd2c3a5949796b8d978f",
-      "note": "Concrete quay with flush rail tracks; black water, a moored coaster, warehouse and gantry beyond. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground \u2014 the model copies the guide it is given, see STAGE_SPEC 4."
+      "note": "Concrete quay with flush rail tracks; black water, a moored coaster, warehouse and gantry beyond. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     },
     {
       "id": "scene-kallio-service-yard-v01",
@@ -791,7 +791,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b",
-      "note": "Wet asphalt service yard, brick close on two sides, kegs and crates stacked outside the ground. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground \u2014 the model copies the guide it is given, see STAGE_SPEC 4."
+      "note": "Wet asphalt service yard, brick close on two sides, kegs and crates stacked outside the ground. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     },
     {
       "id": "scene-hakaniemi-square-v01",
@@ -818,7 +818,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
-      "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground \u2014 the model copies the guide it is given, see STAGE_SPEC 4."
+      "note": "An emptied market square, stalls shuttered, tram wires overhead, market hall behind. Generated to tools/stage-template.mjs, 2026-08-21: open ground fills the arena and its margin, every prop sits outside it. Semi-approved prototype. Carries a faint trace of the template diamond on the ground — the model copies the guide it is given, see STAGE_SPEC 4."
     },
     {
       "id": "scene-piritori-square-v01",
@@ -902,7 +902,7 @@
           "source": "approved/cast/driver-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the driver, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the driver, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "cast-fixer-v01",
@@ -959,7 +959,7 @@
           "source": "approved/cast/fixer-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the fixer, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the fixer, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "cast-local-v01",
@@ -1016,7 +1016,7 @@
           "source": "approved/cast/local-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the local, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the local, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "cast-muscle-v01",
@@ -1073,7 +1073,7 @@
           "source": "approved/cast/muscle-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the muscle, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the muscle, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "cast-runner-v01",
@@ -1130,7 +1130,7 @@
           "source": "approved/cast/runner-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the runner, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the runner, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "cast-watcher-v01",
@@ -1187,7 +1187,7 @@
           "source": "approved/cast/watcher-shaken.webp"
         }
       ],
-      "note": "Nine-pose whole-figure set for the watcher, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set \u2014 six identical figures in a 3v3."
+      "note": "Nine-pose whole-figure set for the watcher, generated with the documented Nano Banana pipeline (art-src/gen-pose-set.sh) and approved by the owner. Registered 2026-08-22: the files had existed since the pose-set pass but were never in the manifest, so sync-data never carried them and every unit in a battle fell back to the single canon runner set — six identical figures in a 3v3."
     },
     {
       "id": "stage3d-kallio-backyard-v01",
@@ -1203,7 +1203,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "c31ff141a4c3a71d231c3208566bfa959ff5d371bbfd18627563cda5940013ce",
-      "note": "A Kallio back yard as one diorama mesh: open ground with a brick outbuilding, chain-link and gate, a leaning lamp, pallets, a skip and bare birches. Generated as a single centred object because that is what image-to-3D is good at \u2014 a scene asked for as a scene comes back as soup. Its walkable surface is NOT at y=0; the base has real thickness and the ground must be measured from the AABB."
+      "note": "A Kallio back yard as one diorama mesh: open ground with a brick outbuilding, chain-link and gate, a leaning lamp, pallets, a skip and bare birches. Generated as a single centred object because that is what image-to-3D is good at — a scene asked for as a scene comes back as soup. Its walkable surface is NOT at y=0; the base has real thickness and the ground must be measured from the AABB."
     },
     {
       "id": "cast3d-muscle-clips-v01",
@@ -1243,7 +1243,7 @@
           "note": "going down and staying down"
         }
       ],
-      "note": "Fight clips for the rigged muscle, re-exported 2026-09-06 against the live Meshy muscle archive rig (action ids Idle/Attack/BeHit/Dead). TEXTURES STRIPPED via art-src/meshy-input/glb_make_clips.py --no-mesh. Rest matches cast3d-muscle-v01 (~5 deg). Other roles are SHARED_CLIP_PENDING until re-rigged onto this rest."
+      "note": "Fight clips for the rigged muscle, animation-only (no mesh, no textures). 26-node rig matching cast3d-muscle-v01. NOT PLAYED: these are the pre-2026-09-06 clips whose rest does not match any body rest (port/rig-vectors.mjs fails every role; three retarget attempts failed). The 2026-09-06 re-export that claimed to fix this was built on the wrong model and has been reverted. Do not re-enable without a rig that rig-vectors passes."
     },
     {
       "id": "cast3d-driver-v01",
@@ -1260,7 +1260,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "f215f9496c68e5fa314e0d91223b1e81c11d03dc23d9cbbd887665fe642b4c3d",
-      "note": "Tall, navy quilted work coat with a hi-vis stripe, keys at the belt. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py \u2014 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
+      "note": "Tall, navy quilted work coat with a hi-vis stripe, keys at the belt. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-fixer-v01",
@@ -1277,7 +1277,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "42188c04429cb7ff773dad43d9ce67b606c7c66072789d5f89916dce7b55543c",
-      "note": "A long charcoal coat \u2014 the only floor-length silhouette in the cast. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py \u2014 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
+      "note": "A long charcoal coat — the only floor-length silhouette in the cast. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-local-v01",
@@ -1294,7 +1294,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "4374be2f95db2c9e2ef2a44b796ca99a6e66f6a50574abfdba5e234617e80150",
-      "note": "Short and round, maroon quilted coat. The only rounded outline. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py \u2014 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
+      "note": "Short and round, maroon quilted coat. The only rounded outline. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-muscle-v01",
@@ -1310,9 +1310,9 @@
       "format": "glb",
       "baked_text": false,
       "baked_ui": false,
-      "sha256": "e805e12f8389c9cbbba23f5853be102f9ca879de2469a5c9a686e8d960c3315a",
-      "note": "Muscle body matching the 2026-09-06 shared fight-clip rest (Meshy archive rig, texture-stripped). Safe with clips/muscle-*-v01.",
-      "bytes": 1227724
+      "sha256": "d38fdfb8bfdb441a1463024541fda0e1f39e68e6df5a0fe4a20d70f6df8efa17",
+      "note": "Muscle body: the canon bald man in a black bomber jacket (source muscle-tpose.png), textured, 26-node rig. RESTORED 2026-09-06 after the shared-clip re-export (cd64cd2) overwrote this file with a DIFFERENT, untextured 24-node mesh — it shipped as a white featureless figure in every fight, on both builds. Shared clips are OFF again; motion is procedural (fight-motion.js / Godot keeps still bodies).",
+      "bytes": 906196
     },
     {
       "id": "cast3d-runner-v01",
@@ -1329,7 +1329,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "6ae09acf9a73b0fa83e335036452946d04ab5a1b0218f0013668ab9b1fb9bf01",
-      "note": "Thin vertical, dark tracksuit, white trainers. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py \u2014 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
+      "note": "Thin vertical, dark tracksuit, white trainers. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-watcher-v01",
@@ -1346,7 +1346,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "77b7c67e293ca8889c7a378776d5139556212dbd0d0f9cb315e254a1044a6154",
-      "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py \u2014 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
+      "note": "Lanky, hood up. The hood is a unique outline at any distance. Rigged, 24 bones, carrying the walk clip. Chosen on SILHOUETTE: on a 3D board a role has to be identifiable from its shape rather than a label, so the six are a slab, a round one, a long coat, a thin vertical, a hood and a medium build. Texture downscaled 2048 to 512 by art-src/tools/strip_glb_texture.py — 6-8MB each becomes ~1.6MB, and a figure a hundred pixels tall cannot show 2048. 2026-08-24: remeshed to ~12.4k from the 2M account master (Meshy remesh endpoint), re-rigged, retextured to 1024. Same Meshy skeleton, so the shared fight clips retarget unchanged. Walk/run clips staged unregistered in art-library/cast3d/."
     },
     {
       "id": "cast3d-hired-v01",
@@ -1397,7 +1397,7 @@
       "baked_text": false,
       "baked_ui": false,
       "sha256": "2edef6ffe56acc09fb02efb915f6cd502a8f09d1e3a4703ff57253b19e137ea2",
-      "note": "Concrete skate park: graffitied ramps and a bowl, weeds through the cracks, a road along one edge. 15882 triangles, one material. CANON NOTE (updated 2026-08-28): owner ruling placed this as a real, repeatable no-stakes training battle (era1-slice-v1.json battle-hermanni-training) at a new `training`-sliceState anchor (hermanni_skatepark, map/kallio-era1-2003-v1.json) \u2014 no longer merely reachable through ?stage=. The real district is still outside the locked Era I production boundary (MAP.md 4.1); the anchor's wgs84 is nudged to sit just inside it and marked `representative-inside-production-boundary`, the same compromise already used for the Suvilahti gasworks anchor. Base colour was 2048 and the ORM map 4096; both to 1024 by art-src/tools/strip_glb_texture.py, 16.4MB to 2.8MB."
+      "note": "Concrete skate park: graffitied ramps and a bowl, weeds through the cracks, a road along one edge. 15882 triangles, one material. CANON NOTE (updated 2026-08-28): owner ruling placed this as a real, repeatable no-stakes training battle (era1-slice-v1.json battle-hermanni-training) at a new `training`-sliceState anchor (hermanni_skatepark, map/kallio-era1-2003-v1.json) — no longer merely reachable through ?stage=. The real district is still outside the locked Era I production boundary (MAP.md 4.1); the anchor's wgs84 is nudged to sit just inside it and marked `representative-inside-production-boundary`, the same compromise already used for the Suvilahti gasworks anchor. Base colour was 2048 and the ORM map 4096; both to 1024 by art-src/tools/strip_glb_texture.py, 16.4MB to 2.8MB."
     },
     {
       "id": "cast3d-hired-b-v01",
@@ -1534,7 +1534,7 @@
       "baked_ui": false,
       "role": "speaker",
       "source": "Meshy image-to-3d task 01a022e2, rigged 2026-08-23",
-      "note": "Older man, silver hair, glasses, moustache, navy suit, red tie. FOUND, not commissioned: it was already on the Meshy account, paid for and unused \u2014 an earlier Arvo attempt at 20794 triangles against the 20826 that shipped. Rigged for 5 credits rather than remade. Cast as Sean McCormick, who is a participant in authored encounters and had no model; an established suited man fits a family that runs bars and restaurants. Named for what it IS, not who it plays, so recasting costs nothing. 24 bones, the same skeleton as the rest of the cast. Texture 2048 to 512: 6.3MB to 1.1MB.",
+      "note": "Older man, silver hair, glasses, moustache, navy suit, red tie. FOUND, not commissioned: it was already on the Meshy account, paid for and unused — an earlier Arvo attempt at 20794 triangles against the 20826 that shipped. Rigged for 5 credits rather than remade. Cast as Sean McCormick, who is a participant in authored encounters and had no model; an established suited man fits a family that runs bars and restaurants. Named for what it IS, not who it plays, so recasting costs nothing. 24 bones, the same skeleton as the rest of the cast. Texture 2048 to 512: 6.3MB to 1.1MB.",
       "sha256": "9d2f7cce35c88ccf79747eb45e0ee18bf1b37a83ce47796ded22696953c0d74c"
     },
     {
@@ -1550,7 +1550,7 @@
       "baked_text": false,
       "baked_ui": false,
       "source": "Meshy image-to-3d task 01a028df, rigged 2026-08-23",
-      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Found unused on the account. RECAST: he briefly stood in for Toko Slomo and was freed the moment Toko got his own model. He was one of the `hired` bodies in battle_stage_3d.UNIT_VARIANTS until 2026-09-02 \u2014 an ordinary heavy man in work clothes, which is what `hired` means \u2014 and is in NO pool now. He is NOT a speaker and NOT in presenter_3d.PLACEHOLDER_SPEAKERS; this note claimed both for a while after the code had moved on, which is how a stale note misreports the cast. 18761 triangles and ZERO bones, measured 2026-09-02 straight out of the GLB's JSON chunk: 0 skins, 0 joints, 0 animations, 1 node, against hired-v01's 1/24/1/26. This note read `rigged for 5 credits` and `24 bones` from the day it was written and BOTH WERE FALSE \u2014 being specific is what made them convincing, and a number nobody measured is how an unusable asset stayed in a live pool for ten days. Texture 2048 to 1024, matching the polycount-is-the-lever finding in ART_BIBLE 9.7 rather than the older 512 target: 7.1MB to 0.77MB. RETIRED FROM THE HIRED POOL 2026-09-02: this GLB has no skin and no skeleton, so it cannot play the shared fight clips (port/rig-vectors.mjs measures every rig; 13 of 14 match, this is the one that does not). With animation now wired in both builds it would have stood motionless in a fight. `role` is cleared rather than the asset unregistered -- he is a real, usable body for ambient or non-combat use, and re-rigging him is about 5 credits if a fighter is ever wanted.",
+      "note": "Heavy middle-aged man, cream work parka with orange shoulders, blue cargo trousers, orange boots. Found unused on the account. RECAST: he briefly stood in for Toko Slomo and was freed the moment Toko got his own model. He was one of the `hired` bodies in battle_stage_3d.UNIT_VARIANTS until 2026-09-02 — an ordinary heavy man in work clothes, which is what `hired` means — and is in NO pool now. He is NOT a speaker and NOT in presenter_3d.PLACEHOLDER_SPEAKERS; this note claimed both for a while after the code had moved on, which is how a stale note misreports the cast. 18761 triangles and ZERO bones, measured 2026-09-02 straight out of the GLB's JSON chunk: 0 skins, 0 joints, 0 animations, 1 node, against hired-v01's 1/24/1/26. This note read `rigged for 5 credits` and `24 bones` from the day it was written and BOTH WERE FALSE — being specific is what made them convincing, and a number nobody measured is how an unusable asset stayed in a live pool for ten days. Texture 2048 to 1024, matching the polycount-is-the-lever finding in ART_BIBLE 9.7 rather than the older 512 target: 7.1MB to 0.77MB. RETIRED FROM THE HIRED POOL 2026-09-02: this GLB has no skin and no skeleton, so it cannot play the shared fight clips (port/rig-vectors.mjs measures every rig; 13 of 14 match, this is the one that does not). With animation now wired in both builds it would have stood motionless in a fight. `role` is cleared rather than the asset unregistered -- he is a real, usable body for ambient or non-combat use, and re-rigging him is about 5 credits if a fighter is ever wanted.",
       "sha256": "f6849b66f35b55ebf54170f7b0807d05f097ed9c63d58811423331d3df3a0725"
     },
     {
