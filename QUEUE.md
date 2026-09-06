@@ -930,8 +930,15 @@ Risk band coloured the intent line; Into the Breach shows the number. Godot
 telegraphs now print `harm N-M` (and lethal) from the weapon on each live
 IntentRecord. Web has no live intent strip yet — Port when that panel lands.
 
-Still open from the Phase A leftover list: intel explanation,
-battle-entry forecast. Cover markers and telegraph harm numbers shipped.
+## Intel explanation on fog — 2026-09-06 (Phase A)
+
+"Aim unclear" was honest and silent about the fix. Godot intent panel now
+footnotes the raise path when any live telegraph lacks a lane: watcher /
+spotter presence, MARK for the full read. Two strings — bring vs already
+have a reader.
+
+Still open from the Phase A leftover list: battle-entry forecast.
+Cover markers, telegraph harm numbers, and intel explanation shipped.
 
 ## Telegraphs are live — what Phase A still lacks
 
@@ -952,9 +959,10 @@ real". The live read is now on screen. The rest of Phase A is not:
   IntentRecord carries `harm_min`/`harm_max` from the weapon; `_telegraph_line`
   appends `harm N-M` (and lethal when tagged), same shape as the player
   forecast. Colour still codes the band; the number is what triage needs.
-- **Intel is never explained.** `target_lane == -1` renders as "aim unclear",
-  which is honest, but nothing tells the player what raises intel or that a
-  watcher's `intent-reading` is what buys the read.
+- ~~**Intel is never explained.**~~ Done 2026-09-06: when any telegraph is
+  aim-unclear, the intent panel adds a footnote — bring a watcher
+  (`intent-reading`) / spotter, or MARK if one is already on the crew. Fog
+  stays; the raise path is named.
 
 ## Cover is visible now — and all of it is soft
 

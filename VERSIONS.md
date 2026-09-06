@@ -24,6 +24,18 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.37 — 2026-09-06
+
+**Intel explanation on telegraph fog (Phase A leftover).**
+
+- When any opposition telegraph is aim-unclear, the intent panel footnotes
+  how to raise the read: bring a watcher (`intent-reading`) / spotter, or
+  MARK if one is already deployed.
+- Locale: `battle.intel_hint_bring` / `battle.intel_hint_raise` (en/fi/ja).
+
+### Port
+Godot presentation. Web has no live intent strip yet — port with that panel.
+
 ## v4.36 — 2026-09-06
 
 **Telegraph harm numbers (Phase A leftover).**
