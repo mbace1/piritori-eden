@@ -36,6 +36,8 @@ function describeCell(cell) {
  *  `_apply_perks_to`. Deliberately small per point across a ten-fight career. */
 const PERK_CONDITION_PER_POINT = 1; // toughness → hp/maxHp on this build
 const PERK_NERVE_PER_POINT = 1;
+const PERK_HARM_PER_POINT = 1; // strength → hit amount (FightManager)
+// speed → tempo is Godot-only here: this web battle has no tempo track.
 
 function makePlayer(member, state, index, count) {
   const [torso, legs] = ROLE_PARTS[member.role] ?? ROLE_PARTS.local;
@@ -45,6 +47,7 @@ function makePlayer(member, state, index, count) {
   const status = state.crewStatus[member.id];
   const tough = perkValue(state, member.id, 'toughness') * PERK_CONDITION_PER_POINT;
   const steady = perkValue(state, member.id, 'nerve') * PERK_NERVE_PER_POINT;
+  const muscle = perkValue(state, member.id, 'strength') * PERK_HARM_PER_POINT;
   const baseHp = 3;
   const baseNerve = 3;
   return {
@@ -57,6 +60,7 @@ function makePlayer(member, state, index, count) {
     maxHp: baseHp + tough,
     guard: member.role === 'muscle' ? 2 : 1,
     nerve: baseNerve + steady,
+    harmBonus: muscle,
     maxNerve: baseNerve + steady,
     alive: status?.status !== 'missing',
     head: member.portrait_asset_id,
@@ -511,7 +515,7 @@ function triggerSyncFire(battle, attacker, target) {
     // Desync mid-chain: tough already marked from an earlier primary this
     // round — stop. Same chain before any sync: first fires, then mark+stop.
     if (target.tough && battle.syncHitsThisRound?.has(target.id)) return;
-    battle.log.unshift(`${ally.name} syncs fire: ${hit(target)}`);
+    battle.log.unshift(`${ally.name} syncs fire: ${hit(target, 1 + (ally.harmBonus ?? 0))}`);
     if (target.tough) {
       battle.syncHitsThisRound.add(target.id);
       return;
@@ -550,7 +554,7 @@ export function playerAttack(battle, targetId) {
     target.guard = Math.max(0, target.guard - 1);
     battle.log.unshift(`${attacker.name} marks ${target.name}'s lane. Guard and nerve drop.`);
   } else {
-    battle.log.unshift(`${attacker.name}: ${hit(target)}`);
+    battle.log.unshift(`${attacker.name}: ${hit(target, 1 + (attacker.harmBonus ?? 0))}`);
     triggerSyncFire(battle, attacker, target);
   }
   markActed(battle, attacker);
