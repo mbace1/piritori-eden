@@ -3328,3 +3328,46 @@ Registration. These packs are generated but not yet in `art/v3/manifest.json`,
 not synced to `godot/data/`, and both builds still have their clip gates OFF.
 Wiring them on is the next step and needs the owner's eye on a moving figure
 first — a still, correct body beats a moving wrong one, and that ruling stands.
+
+## The Godot fight screen is BLANK — measured 2026-09-06, and it is two pixels tall
+
+Not the animation, not the arenas, and not new work: **`main` today renders the
+Godot fight as an empty black rectangle** — no ground, no fighters, nothing.
+Verified pixel-identical on clean `main` with no local changes, so it is
+shipped, and it is the most serious thing open on the build that is meant to be
+the shippable one.
+
+Instrumented (`_dbg_state()`, since removed) during `capture_battle`:
+
+```
+DBG CELL=1.08 arena_half=(6,6) ground=0 units=4 cam_size=12.96 vp=(1280, 683)
+DBG CELL=1.08 arena_half=(6,6) ground=0 units=8 cam_size=12.96 vp=(1280, 2)
+```
+
+Everything the fight needs is correct. Units instantiate at sane cell positions
+with the right bodies, the camera is framed, the ground slab is built from the
+`(6,6)` default. **The SubViewport collapses to 2 pixels tall on the second
+refresh**, and a 1280x2 viewport is what gets composited over the screen.
+
+Two further facts, both cheap and both probably part of it:
+
+1. **`units=8` on the second pass, for a 2v2.** `refresh()` frees the old unit
+   nodes with `queue_free()` and adds new ones — and a `queue_free()`'d node is
+   NOT gone in the same frame (`CLAUDE.md` trap list says exactly this). So the
+   count doubles, and whatever recomputes size sees a stale tree.
+2. **`_vp.transparent_bg = false`** with `Environment.BG_COLOR` at `#0b0e13`.
+   The 3D viewport paints an OPAQUE near-black rectangle over the 2D scene
+   plate underneath. While the dioramas filled the frame this was invisible;
+   with `USE_STAGE3D_ARENAS` false (owner, 2026-09-06) there is nothing to fill
+   it, so the plate that was supposed to "stay visible in formation_battle" is
+   covered by black.
+
+The `_notification(NOTIFICATION_RESIZED)` handler sets `_vp.size` from
+`size.x/size.y`, and Godot warns on every run that it "can't change the size of
+a SubViewport with a SubViewportContainer parent that has stretch enabled".
+That warning has been printing for weeks and is almost certainly the thread to
+pull: the container owns the size, the code fights it, and one of the two wins
+at 2 pixels.
+
+**Do this before any more art.** A fight that draws nothing cannot be judged for
+lighting, framing, animation or arenas, and three of those are queued above it.
