@@ -138,6 +138,41 @@ judged the way this whole project judges a look, on a screen, not a
 checklist — the original 2026-08-25 ruling governs everything that comes
 after, exactly as written above.
 
+### Addendum, 2026-09-06 — both builds stay. Godot is what SHIPS.
+
+**Owner, asked directly after a session had proposed dropping the browser
+build entirely: "JS is good to have, especially if others work on the project
+too, Godot is the final shippable goal."**
+
+This settles a question that has now flipped three times in this file, and it
+settles it as BOTH rather than either:
+
+- **`web/` stays, and it is the build others can pick up.** It runs from a
+  static directory with no engine, no export step and no 58MB download, which
+  is what makes it the one a collaborator can open and change on the day they
+  arrive. That is its job, and it is a real one — not a legacy to be retired.
+- **`godot/` is the SHIPPABLE GOAL.** Landscape, controller, and the release
+  build are its and only its. A thing is not finished because it works in the
+  browser; it is finished when it ships from Godot.
+- **So the flow is unchanged from §1.07:** behaviour is designed in `web/`,
+  and Godot reproduces it. The `### Port` block in every `VERSIONS.md` entry
+  keeps its job. What changes is only the *destination* — Godot is not a
+  parallel experiment, it is where the game comes out.
+
+**The 2026-09-04 addendum proposed by a session — "Godot is the build, web/ is
+paused" — is WITHDRAWN, and never applied.** It was written on the strength of
+the fight screen reading as black on a Pixel, and it was overtaken within two
+days by work that fixed that screen in `web/` first and ported it. It is
+recorded here as withdrawn rather than deleted because it is exactly the
+mistake this file exists to prevent: a presentation problem on one device
+argued into a change of which build is real.
+
+**The one part of it that survives, because it is a measured fact:** the Pixel
+10's PowerVR driver draws Godot 3D black (upstream `godotengine/godot#121005`)
+and the same build renders on the M2 iPad. **So Godot 3D is reviewed on the
+iPad, and the Pixel remains the tester for `web/` and for every 2D screen.**
+`godot/tools/capture_battle.gd` takes `PIRITORI_SHOT_SIZE=ipad` (2360x1640).
+
 ## Owner rulings, 2026-08-24 — the counter
 
 Two decisions about conversations that do not happen on a fight board. Detail
