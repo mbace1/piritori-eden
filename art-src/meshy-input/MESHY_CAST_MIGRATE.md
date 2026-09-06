@@ -1,5 +1,12 @@
 # Meshy cast migrate — shared fight clips (target ~2026-09-11)
 
+> **Correction, 2026-09-06 night (owner):** the untextured 22-joint/`Head1`
+> body that landed in `cd64cd2` as "muscle" was **Eeri**, not Piritori. That
+> body and its four fight clips were reverted. Piritori `muscle-v01` (textured
+> bomber, 24 joints) is restored. Shared playback is off again. The migrate
+> below must use **Piritori Meshy** output only — never pull from Eeri.
+
+
 Owner rule: **one Meshy template for the whole cast**, then **one** re-export of
 Idle / Attack / BeHit / Dead. No one-off re-rigs (they land on a foreign
 24-joint / no-`Head1` family and tear at ~110–176°).
@@ -9,13 +16,13 @@ Idle / Attack / BeHit / Dead. No one-off re-rigs (they land on a foreign
 | Check | Result |
 |---|---|
 | Clip source | `art/v3/cast3d/clips/muscle-{idle,attack,behit,dead}-v01.glb` |
-| Compatible body | `muscle` only (`port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE) |
-| Pending (12) | driver, enforcer, fixer, hired, hired-b, jaska, local, runner, street-raver, suited-man, toko, watcher — missing `Head1`, rest drift ~172–179° at neck/Spine02 |
+| Compatible body | **none** (SHARED_CLIP_COMPATIBLE empty after Eeri restore) |
+| Pending (13) | **muscle included** + driver, enforcer, fixer, hired, hired-b, jaska, local, runner, street-raver, suited-man, toko, watcher — shared clips not safe on any current body |
 | Unrigged | `parka-man` (no skin) — ambient only |
 | Blender | 5.2.1 LTS on Grok Bot box; `art-src/tools/blender_cast_clip_audit.py` |
 
-Godot / web play shared clips **only** on paths containing `muscle-v01` until
-this migrate lands.
+Godot / web play shared clips on **no** roles until this migrate lands
+(fight-motion / still bodies meanwhile).
 
 ## Do not do before migrate day
 

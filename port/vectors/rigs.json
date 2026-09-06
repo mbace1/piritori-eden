@@ -4,7 +4,6 @@
   "clip_source": "art/v3/cast3d/clips/muscle-idle-v01.glb",
   "clip_source_joints": [
     "Head",
-    "Head1",
     "Hips",
     "LeftArm",
     "LeftFoot",
@@ -23,12 +22,13 @@
     "RightToeBase",
     "RightUpLeg",
     "Spine",
+    "Spine01",
     "Spine02",
+    "head_end",
+    "headfront",
     "neck"
   ],
-  "shared_clip_compatible": [
-    "muscle"
-  ],
+  "shared_clip_compatible": [],
   "shared_clip_pending": [
     "driver",
     "enforcer",
@@ -37,6 +37,7 @@
     "hired-b",
     "jaska",
     "local",
+    "muscle",
     "runner",
     "street-raver",
     "suited-man",
@@ -48,56 +49,56 @@
   },
   "rest_drift_deg": {
     "driver": {
-      "joint": "neck",
-      "deg": 176
+      "joint": "Spine02",
+      "deg": 159.3
     },
     "enforcer": {
-      "joint": "neck",
-      "deg": 175.9
+      "joint": "RightForeArm",
+      "deg": 24.6
     },
     "fixer": {
-      "joint": "neck",
-      "deg": 176
+      "joint": "LeftUpLeg",
+      "deg": 98.7
     },
     "hired-b": {
-      "joint": "neck",
-      "deg": 174
+      "joint": "RightUpLeg",
+      "deg": 157.6
     },
     "hired": {
-      "joint": "neck",
-      "deg": 176.9
+      "joint": "LeftFoot",
+      "deg": 27.8
     },
     "jaska": {
-      "joint": "neck",
-      "deg": 172.2
+      "joint": "RightArm",
+      "deg": 70.4
     },
     "local": {
-      "joint": "neck",
-      "deg": 172.7
+      "joint": "Spine02",
+      "deg": 39.4
     },
     "muscle": {
-      "joint": "LeftFoot",
-      "deg": 4.8
+      "joint": "LeftUpLeg",
+      "deg": 96.4
     },
     "runner": {
-      "joint": "neck",
-      "deg": 174.5
+      "joint": "Hips",
+      "deg": 108.2
     },
     "street-raver": {
       "joint": "Spine02",
-      "deg": 174.4
+      "deg": 32
     },
     "suited-man": {
-      "joint": "neck",
-      "deg": 172.2
+      "joint": "Spine02",
+      "deg": 69
     },
     "toko": {
       "joint": "Spine02",
-      "deg": 178.9
+      "deg": 27.3
     },
     "watcher": {
-      "joint": "neck",
-      "deg": 176.3
+      "joint": "LeftUpLeg",
+      "deg": 102.6
     }
   },
   "rigs": {
@@ -285,7 +286,6 @@
     ],
     "muscle": [
       "Head",
-      "Head1",
       "Hips",
       "LeftArm",
       "LeftFoot",
@@ -304,7 +304,10 @@
       "RightToeBase",
       "RightUpLeg",
       "Spine",
+      "Spine01",
       "Spine02",
+      "head_end",
+      "headfront",
       "neck"
     ],
     "runner": [

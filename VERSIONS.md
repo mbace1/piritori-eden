@@ -10,6 +10,20 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.41 — 2026-09-06
+
+**Restore Piritori muscle after Eeri overwrite.**
+
+- Owner identified the untextured 22-joint/`Head1` `muscle-v01` + fight clips
+  from `cd64cd2` as **Eeri** assets.
+- Restored pre-overwrite Piritori `muscle-v01` (24-joint textured bomber) and
+  the prior four `clips/muscle-*-v01.glb`.
+- Shared clip playback off again (Godot `_animate` no-op; web
+  `SHARED_CLIP_*` empty). `MESHY_CAST_MIGRATE.md` corrected.
+
+### Port
+Mirrored in this version (assets + both players). Hub inherits later.
+
 ## v4.40 — 2026-09-06
 
 **Phase B — desync + taken-only tier + equipment shop.**
