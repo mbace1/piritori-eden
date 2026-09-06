@@ -3189,3 +3189,48 @@ Do not buy per-role fight packs. Path: Meshy re-export those four against
 **one** real body rest after credit refresh; every 24-bone Meshy biped then
 shares them. Current `clips/muscle-*-v01.glb` fail that gate.
 
+
+## An Eeri asset shipped as Piritori's muscle — 2026-09-06, and the guard that was missing
+
+Owner, on a three-angle render of the body sitting on `main`: *"the bottom
+asset is for Eeri, not your project."*
+
+`cd64cd2` overwrote `art/v3/cast3d/muscle-v01.glb` with a character from a
+different game. It rendered as a flat white silhouette in every fight, on both
+builds, for two days. Restored in the commit that carries this entry.
+
+**The mechanism matters more than the fix.** Both projects pull from the same
+Meshy account, and that commit re-exported "against the live Meshy muscle
+archive rig" — i.e. by task id, off the account. A wrong id there lands a wrong
+character here and NOTHING in this repo objects:
+
+- `sha256` in the manifest is written FROM the file after the fact, so it
+  records whatever arrived. It cannot detect a substitution; it only detects
+  drift from what was recorded.
+- `sync-data --check` compares the copy to the source, and both were wrong.
+- `rig-vectors.mjs` measures rig compatibility, and correctly reported a
+  mismatch — which was then read as "other roles need re-rigging" rather than
+  "this body is not ours".
+- Every Godot gate passed. **A gate certifies WORKS and cannot see LOOKS**, and
+  this is the cleanest example the project has produced.
+
+**What would have caught it, cheapest first:**
+
+1. **A silhouette contact sheet in the art gate.** `glb_render.py` already
+   renders a GLB to PNG in seconds with no engine. Rendering the thirteen cast
+   bodies into one sheet on every art change, and looking at it, is the whole
+   guard. It is also the standing rule — an art change ends in a picture —
+   mechanised.
+2. **Vertex/node count in the manifest, checked.** The muscle went 12,448 →
+   30,932 tris and 26 → 24 nodes in one commit. A check that a body's topology
+   did not change shape without a note would have failed loudly.
+3. **Texture presence.** Every cast body carries exactly one image. Zero images
+   on a body is never correct, and is a one-line assertion.
+
+Not built here — this entry is the finding. (3) is the cheapest and catches the
+exact failure; (1) catches the whole class.
+
+**And a note for whoever next touches the shared Meshy account:** name the task
+id in the commit message. `cd64cd2` said "the live Meshy muscle archive rig"
+and named no id, so there is no way to tell from the history which model was
+actually fetched.
