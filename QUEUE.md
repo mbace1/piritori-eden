@@ -937,8 +937,15 @@ footnotes the raise path when any live telegraph lacks a lane: watcher /
 spotter presence, MARK for the full read. Two strings — bring vs already
 have a reader.
 
-Still open from the Phase A leftover list: battle-entry forecast.
-Cover markers, telegraph harm numbers, and intel explanation shipped.
+## Battle-entry forecast — 2026-09-06 (Phase A)
+
+Encounters already showed `choice.forecast` before the pick. Fights had the
+pieces and never assembled them. Composer on web + Godot; UI strip / intent
+panel. No invented stakes — only authored objective, withdrawal, casualty
+telegraph, death eligibility (or an optional hand-written `forecast`).
+
+Phase A leftover list cleared (2026-09-06): cover markers, telegraph harm
+numbers, intel explanation, and battle-entry forecast all shipped.
 
 ## Telegraphs are live — what Phase A still lacks
 
@@ -952,9 +959,11 @@ real". The live read is now on screen. The rest of Phase A is not:
   scenery.
 - ~~**Third-party entry.**~~ Police as a third side + posture choice exist
   (`battle.js` / COMBAT §9.5). Rival-crew entry mid-fight is still open.
-- **Forecast before commitment.** Encounters have `forecast` strings and show
-  them; the FIGHT has no equivalent. You commit a crew to a battle without a
-  read on what it will cost.
+- ~~**Forecast before commitment.**~~ Done 2026-09-06: `battleEntryForecast` /
+  `BattleBuilder.entry_forecast` compose format + objective + withdrawal cost +
+  casualty telegraph (+ death eligibility) from authored battle fields; optional
+  `forecast` override. Shown on the web board (consequence strip + opening log)
+  and at the top of the Godot intent panel.
 - ~~**The telegraph does not say how hard.**~~ Done 2026-09-06: live
   IntentRecord carries `harm_min`/`harm_max` from the weapon; `_telegraph_line`
   appends `harm N-M` (and lethal when tagged), same shape as the player

@@ -24,6 +24,19 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.38 — 2026-09-06
+
+**Battle-entry forecast (Phase A leftover — list cleared).**
+
+- Compose a cost read from authored battle fields (format, objective,
+  withdrawal `known_cost`, casualty telegraph, death eligibility). Optional
+  `forecast` on the battle overrides.
+- Web: `entryForecast` on battle state, consequence strip on the board,
+  opening log. Godot: intent-panel header via `BattleBuilder.entry_forecast`.
+
+### Port
+Mirrored in this version (web + Godot). Hub inherits later.
+
 ## v4.37 — 2026-09-06
 
 **Intel explanation on telegraph fog (Phase A leftover).**

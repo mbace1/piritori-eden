@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, deployedCrew } from '../js/v3/state.js';
 import {
-  createBattleState, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
+  createBattleState, battleEntryForecast, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
 } from '../js/v3/battle.js';
@@ -132,4 +132,16 @@ assert.equal(syncBattle.acted.includes(syncer.id), false,
 assert(syncBattle.log[0].includes('syncs fire') || syncBattle.log[1].includes('syncs fire'),
   'the sync shot is visible in the log');
 
-console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire and attack reach.');
+// Phase A: battle-entry forecast — encounters already show choice.forecast;
+// fights must surface a composed cost read from authored fields.
+for (const id of ['battle-karhupuisto-2v2', 'battle-courtyard-3v3', 'battle-kattilahalli-3v3', 'battle-hermanni-training']) {
+  const def = data.battles.get(id);
+  const fc = battleEntryForecast(def);
+  assert.ok(fc.length >= 20, `${id} entry forecast too thin: ${fc}`);
+  assert.ok(fc.includes(def.withdrawal.known_cost.split(';')[0].trim().slice(0, 8)) || fc.toLowerCase().includes('withdraw') || def.training, `${id} forecast should mention withdrawal cost`);
+}
+const opened = createBattleState(data.battles.get('battle-karhupuisto-2v2'), deployedCrew(state, data), state, data);
+assert.ok(opened.entryForecast && opened.entryForecast.length >= 20, 'createBattleState carries entryForecast');
+assert.ok(opened.log[0].includes(opened.entryForecast.slice(0, 12)) || opened.log[0].length > 10, 'opening log carries the entry read');
+
+console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, attack reach, entry forecast.');

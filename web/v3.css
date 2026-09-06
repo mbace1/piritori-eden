@@ -586,6 +586,16 @@ button { -webkit-tap-highlight-color: transparent; }
   border-left: 5px solid var(--mustard);
   font: 12px/1.4 var(--mono);
 }
+
+.battle-entry-forecast {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 10px;
+  z-index: 4;
+  max-width: min(520px, calc(100% - 28px));
+  pointer-events: none;
+}
 .row-label { position: absolute; z-index: 4; color: rgba(242,231,206,.63); font: 700 9px var(--mono); letter-spacing: .09em; }
 .formation-cell {
   position: absolute;

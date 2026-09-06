@@ -122,6 +122,36 @@ const BATTLE_MISSION = {
   'battle-kattilahalli-3v3': 'mission-courtyard-receipts',
 };
 
+
+/** Battle-entry forecast (§18.1 / Phase A leftover).
+ *  Encounters already show `choice.forecast` before you pick; fights had
+ *  objective + withdrawal + casualty telegraph as separate fields and never
+ *  assembled them into one read before you were on the board. Compose from
+ *  authored fields — no invented stakes. An optional `definition.forecast`
+ *  overrides the compose when content wants a hand-written line. */
+export function battleEntryForecast(definition) {
+  if (!definition) return '';
+  const authored = String(definition.forecast || '').trim();
+  if (authored) return authored;
+  const parts = [];
+  const fmt = String(definition.format || '').trim();
+  if (fmt) parts.push(fmt);
+  const obj = String(definition.objective || '').trim();
+  if (obj) parts.push(obj);
+  const withdraw = String(definition.withdrawal?.known_cost || '').trim();
+  if (withdraw) parts.push(`Withdraw: ${withdraw}`);
+  const ct = definition.casualty_table || {};
+  const tel = String(ct.telegraph || '').trim();
+  if (tel) parts.push(tel);
+  const death = String(ct.death || '').trim();
+  if (death && death !== 'not-eligible-in-this-battle') {
+    parts.push(`Death risk: ${death}`);
+  } else if (death === 'not-eligible-in-this-battle') {
+    parts.push('Death not eligible in this fight.');
+  }
+  return parts.join(' ');
+}
+
 export function createBattleState(definition, crew, state, data) {
   const required = definition.player_deployed;
   if (crew.length < required) throw new Error(`${definition.id} requires ${required} deployed crew`);
@@ -137,6 +167,8 @@ export function createBattleState(definition, crew, state, data) {
     format: definition.format,
     sceneAssetId: definition.scene_asset_id,
     objective: definition.objective,
+    // One read before the first commitment — same job as encounter forecasts.
+    entryForecast: battleEntryForecast(definition),
     round: 1,
     phase: 'player',
     selectedId: players[0]?.id ?? null,
@@ -159,7 +191,7 @@ export function createBattleState(definition, crew, state, data) {
     negotiation: definition.negotiation,
     status: 'active',
     result: null,
-    log: [`Round 1. ${definition.objective}`],
+    log: [`Round 1. ${battleEntryForecast(definition) || definition.objective}`],
     // Heat and police (COMBAT.md §9.5) — see the block below `enemyPhase()`.
     // `police` is a THIRD side, not battle.players/battle.enemies grown by
     // one: fight_manager.gd's own Fighter.Side.THIRD_PARTY, occupying the
