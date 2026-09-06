@@ -1,9 +1,10 @@
 {
   "generated_by": "port/rig-vectors.mjs",
-  "note": "Joint names per cast body, sorted. Every rigged body must carry the SAME set as the shared clip source, or lifting that clip onto it plays nothing. See this file's generator for why shared clips are the design.",
+  "note": "Joint names per cast body, sorted. SHARED_CLIP_COMPATIBLE bodies must match the clip source; SHARED_CLIP_PENDING bodies print but do not fail until re-rigged. See this file's generator for why shared clips are the design.",
   "clip_source": "art/v3/cast3d/clips/muscle-idle-v01.glb",
   "clip_source_joints": [
     "Head",
+    "Head1",
     "Hips",
     "LeftArm",
     "LeftFoot",
@@ -22,67 +23,81 @@
     "RightToeBase",
     "RightUpLeg",
     "Spine",
-    "Spine01",
     "Spine02",
-    "head_end",
-    "headfront",
     "neck"
+  ],
+  "shared_clip_compatible": [
+    "muscle"
+  ],
+  "shared_clip_pending": [
+    "driver",
+    "enforcer",
+    "fixer",
+    "hired",
+    "hired-b",
+    "jaska",
+    "local",
+    "runner",
+    "street-raver",
+    "suited-man",
+    "toko",
+    "watcher"
   ],
   "unrigged_known": {
     "parka-man": "no skin/skeleton in the GLB (0 skins, 0 joints, 0 animations, 1 node); cannot be animated. RETIRED 2026-09-02 and now in NO pool: battle_stage_3d.UNIT_VARIANTS dropped it, and BOTH manifests have had their `role` cleared and their false \"24 bones / rigged for 5 credits\" claim corrected against a measurement. Kept registered on purpose — a usable body for ambient or non-combat work, cheap to re-rig if a fighter is ever wanted. It sat in a live pool for ten days because the registration asserted a joint count nobody had measured, which is the reason this gate reads the GLB instead of the manifest."
   },
   "rest_drift_deg": {
     "driver": {
-      "joint": "Spine02",
-      "deg": 159.3
+      "joint": "neck",
+      "deg": 176
     },
     "enforcer": {
-      "joint": "RightForeArm",
-      "deg": 24.6
+      "joint": "neck",
+      "deg": 175.9
     },
     "fixer": {
-      "joint": "LeftUpLeg",
-      "deg": 98.7
+      "joint": "neck",
+      "deg": 176
     },
     "hired-b": {
-      "joint": "RightUpLeg",
-      "deg": 157.6
+      "joint": "neck",
+      "deg": 174
     },
     "hired": {
-      "joint": "LeftFoot",
-      "deg": 27.8
+      "joint": "neck",
+      "deg": 176.9
     },
     "jaska": {
-      "joint": "RightArm",
-      "deg": 70.4
+      "joint": "neck",
+      "deg": 172.2
     },
     "local": {
-      "joint": "Spine02",
-      "deg": 39.4
+      "joint": "neck",
+      "deg": 172.7
     },
     "muscle": {
-      "joint": "LeftUpLeg",
-      "deg": 96.4
+      "joint": "LeftFoot",
+      "deg": 4.8
     },
     "runner": {
-      "joint": "Hips",
-      "deg": 108.2
+      "joint": "neck",
+      "deg": 174.5
     },
     "street-raver": {
       "joint": "Spine02",
-      "deg": 32
+      "deg": 174.4
     },
     "suited-man": {
-      "joint": "Spine02",
-      "deg": 69
+      "joint": "neck",
+      "deg": 172.2
     },
     "toko": {
       "joint": "Spine02",
-      "deg": 27.3
+      "deg": 178.9
     },
     "watcher": {
-      "joint": "LeftUpLeg",
-      "deg": 102.6
+      "joint": "neck",
+      "deg": 176.3
     }
   },
   "rigs": {
@@ -270,6 +285,7 @@
     ],
     "muscle": [
       "Head",
+      "Head1",
       "Hips",
       "LeftArm",
       "LeftFoot",
@@ -288,10 +304,7 @@
       "RightToeBase",
       "RightUpLeg",
       "Spine",
-      "Spine01",
       "Spine02",
-      "head_end",
-      "headfront",
       "neck"
     ],
     "runner": [

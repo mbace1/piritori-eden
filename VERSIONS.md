@@ -51,6 +51,7 @@ web-first for JS landscape reviews.
 
 - Web ports Godot `_fit_board()` via live `CELL_M` (`fitBoardToArena`); camera
   and unit slots rebuild after the arena mesh reports half-extents.
+- **2026-09-06:** shared fight clips re-exported vs muscle rest; Godot plays them on `muscle-v01` only; other roles pending re-rig (`port/rig-vectors.mjs`).
 - Web stage id map matches Godot fallback (Kallio backyard when a fight's
   plate has no diorama).
 - Godot turns off broken shared fight clips until Meshy re-export (web already

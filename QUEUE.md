@@ -2824,6 +2824,28 @@ Note also that the board is centred on the arena's bounding-box centre, which
 for the boiler hall is inside the building rather than on the open floor.
 `_measure_ground()` is likely the missing half, not `_fit_board()`.
 
+## Shared fight clips match muscle — 2026-09-06
+
+Owner: spend Meshy credits; ship the shared set.
+
+Done:
+- Re-exported Idle / Attack / BeHit / Dead against Meshy archive rig
+  `01a06fdb-c799-7581-892e-618d6fcb3ee7` (12 credits; balance ~27 after).
+- Stripped with `glb_make_clips.py --no-mesh`; installed over
+  `art/v3/cast3d/clips/muscle-*-v01.glb` and `muscle-v01.glb` (Godot sync under
+  `godot/data/art/cast3d/`).
+- `port/rig-vectors.mjs`: muscle is `SHARED_CLIP_COMPATIBLE` (~5 deg rest drift).
+  Other 12 roles stay `SHARED_CLIP_PENDING` (Head1 / ~170 deg neck) until
+  re-rigged onto this rest (~5 cr each). Gate stays green; pending prints.
+- Godot `_animate` plays shared clips only when `unit_path` contains
+  `muscle-v01` — other roles stay still rather than tear.
+
+Still open (do not buy stage3d arenas for this):
+1. Re-rig fight roles onto the muscle rest so they share the same four clips.
+2. Web `fight-motion.js` still drives most JS motion; wire GLB pack when roles match.
+
+The historical write-up below stays as the autopsy of the foreign-rest clips.
+
 ## The fight animation is broken at the ASSET level — 2026-09-02
 
 Reported on sight: *"the models hips are janky... their hips are rotated almost
