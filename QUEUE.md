@@ -3239,3 +3239,92 @@ exact failure; (1) catches the whole class.
 id in the commit message. `cd64cd2` said "the live Meshy muscle archive rig"
 and named no id, so there is no way to tell from the history which model was
 actually fetched.
+
+## The clips belong to a body that is not in this repo — found 2026-09-06, and FIXED in Blender
+
+Two measurements settle the fight-animation problem that three sessions and
+three reverted retargets could not, and both change the Meshy plan booked for
+~Sept 11.
+
+### 1. The clips are another character's animation
+
+Rendering `clips/muscle-idle-v01.glb` **on its own skeleton, with its own mesh**
+— which nothing had done — shows **a hooded figure in a parka**. Not the bald
+man in a bomber jacket the file is named for.
+
+So the long-standing note that the clips "correspond to nothing in this repo"
+was almost right. They correspond to something *real*: a RIGGED parka body that
+was never committed. Only the unrigged `parka-man-v01.glb` (0 skins, 0 joints)
+is here. That is why every rest comparison failed and why retargeting looked
+impossible — the source skeleton was a stranger.
+
+### 2. The cast does not share a rest, so ONE shared clip set cannot work
+
+`GODOT_PICKUP.md` books the Sept 11 spend on "one shared clip re-export against
+one real body rest — every 24-bone Meshy biped then shares them."
+
+**Measured against the muscle, the intended donor, that premise is false:**
+
+| body | worst rest drift |
+|---|---|
+| driver | **160.8°** at LeftUpLeg |
+| hired-b | 137.0° |
+| suited-man | 131.0° |
+| local / street-raver | ~112° |
+| toko / jaska / hired | 102–105° |
+| enforcer | 94.6° |
+| runner / watcher / fixer | 35° / 20° / 12° |
+
+Ten of thirteen are nowhere near each other. A clip authored against one rest
+will tear on the other nine exactly as today's clips tear on everything. **Buying
+that re-export would not have fixed the fight.**
+
+### The fix, and it costs nothing
+
+`bl_retarget_all.py` (Blender 4.5, headless) transfers the motion properly:
+
+    delta        = src_pose_world * inverse(src_rest_world)
+    target_world = delta * tgt_rest_world
+
+The source's **delta from its own rest**, applied to the target's rest — so each
+body keeps its own rest, bone roll and limb lengths, and only the MOTION
+crosses. Walked parent-first, because a bone's world matrix needs its parents
+posed.
+
+Proven on the extremes: the muscle reads as a real idle/attack/hit/death, and
+**driver — the worst rig at 160.8° — goes from lying back in the air to
+standing upright.** Pictures, not ticks: `.capture4/_three2.png` (ground truth
+vs retargeted vs raw), `_four.png`, `_driver.png`.
+
+Verified across the WHOLE cast, not just the extremes: all thirteen rigged
+bodies render as coherent posed figures — feet planted, no hip inversion, no
+tearing (`.capture4/_cast_sheet.png`). `parka-man` is skipped; it has no skin
+or joints and cannot be animated at all.
+
+**Size, honestly, because rule 9 asks.** One pack per body, four actions each,
+~360 KB — **thirteen of them is 4.6 MB against the 2.9 MB of shared clips they
+replace, so this is +1.7 MB.** An earlier draft of this entry called it smaller;
+that was wrong and is corrected here. The trade is worth naming rather than
+hiding: the 2.9 MB currently ships in both builds and is **switched off**,
+because it tears every body it touches. This is 4.6 MB that works. If the extra
+weight matters on the phone gate, keyframe decimation is the obvious lever and
+has not been tried.
+
+### Two traps this cost a session to find, for whoever automates Blender next
+
+- **Assigning `object.animation_data.action` does NOT evaluate in background
+  mode.** Nor does pushing an NLA strip. Two verification passes rendered every
+  frame identical and looked like a broken retarget; the retarget was fine and
+  the harness was lying. Evaluate fcurves by hand (`fc.evaluate(frame)`) and
+  write pose bones directly — which is also exactly what the runtime does.
+- **The glTF exporter writes EVERY action in the file**, so the body's own rest
+  clip and the source's clip both shipped alongside the baked one and the
+  importer picked the wrong one — a clip frozen at a single frame. Purge
+  `bpy.data.actions` down to what you mean to export.
+
+### What is NOT done here
+
+Registration. These packs are generated but not yet in `art/v3/manifest.json`,
+not synced to `godot/data/`, and both builds still have their clip gates OFF.
+Wiring them on is the next step and needs the owner's eye on a moving figure
+first — a still, correct body beats a moving wrong one, and that ruling stands.
