@@ -8,6 +8,9 @@ A narrative strategy game set in Kallio, Helsinki, 2003. Godot 4.7.2,
 project at `godot/`. Split out of the Suds-Jack monorepo on 2026-08-21
 with its history intact.
 
+**Godot / Claude Code pickup:** [`GODOT_PICKUP.md`](GODOT_PICKUP.md) — pull
+`main` at v4.40, sync data, smoke shop + tough desync. Do not re-port Phase A/B.
+
 ---
 
 ## 1. One part per prompt

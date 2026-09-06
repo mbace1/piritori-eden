@@ -36,6 +36,7 @@ missing content, run `sync-data.mjs` first.
 8. `art/v3/manifest.json` — the only valid runtime-art ids.
 
 `GODOT_HANDOFF.md` is the engine-port guide and sits after the canon stack.
+`GODOT_PICKUP.md` is the current Claude Code / Godot session handoff (pull main, verify v4.40).
 `CLAUDE.md` is the working guide: gates, seams, traps.
 
 Older brief, prompt and exploration files (`ART_BRIEF_CONCEPT.md`,
