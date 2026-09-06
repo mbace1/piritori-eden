@@ -24,6 +24,17 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.36 — 2026-09-06
+
+**Telegraph harm numbers (Phase A leftover).**
+
+- `IntentRecord` carries `harm_min`/`harm_max` from the held weapon.
+- Godot `_telegraph_line` appends `harm N-M` (+ lethal) so colour is never
+  the only carrier. Gate extended in `test_battle.gd`.
+
+### Port
+Godot presentation. Web has no live intent strip yet — port with that panel.
+
 ## v4.35 — 2026-09-06
 
 **Cover markers on the 3D board (Phase A leftover).**

@@ -1157,8 +1157,10 @@ func _build_telegraphs() -> void:
 			_risk_colour(String(rec.risk_band))))
 
 
-## One line: what they will do, and where. Lane is 1-based for the player, who
-## is not counting from zero.
+## One line: what they will do, where, and how hard. Lane is 1-based for the
+## player, who is not counting from zero. Harm numbers mirror the player
+## forecast (`battle.harm N-M`) so colour is never the only carrier — QUEUE
+## Phase A leftover "the telegraph does not say how hard".
 func _telegraph_line(rec) -> String:
 	# The verb is ALWAYS shown. Cover and distance take away precision, never the
 	# warning — see FightManager.Read.
@@ -1168,9 +1170,19 @@ func _telegraph_line(rec) -> String:
 	# target_lane is -1 when intel is too low to read the aim. That is a real
 	# state, not a missing value: not knowing IS the information, and printing
 	# lane -1 would be a lie dressed as data.
+	var line: String
 	if int(rec.target_lane) < 0:
-		return "%s · %s" % [verb, tr("battle.aim_unknown")]
-	var line := "%s · %s" % [verb, tr("battle.aim_lane") % (int(rec.target_lane) + 1)]
+		line = "%s · %s" % [verb, tr("battle.aim_unknown")]
+	else:
+		line = "%s · %s" % [verb, tr("battle.aim_lane") % (int(rec.target_lane) + 1)]
+	# Harm range is known from the weapon even when aim is not — Into the
+	# Breach shows the number on the attack, not only the tile.
+	var hmin := int(rec.harm_min)
+	var hmax := int(rec.harm_max)
+	if hmax > 0 or hmin > 0:
+		line += " · %s %d-%d" % [tr("battle.harm"), hmin, hmax]
+	if bool(rec.lethal_exposure):
+		line += " · " + tr("battle.lethal_risk")
 	# The top of the ladder: you are reading them a round ahead.
 	if int(rec.read_level) >= FightManager.Read.AHEAD:
 		line += " · " + tr("battle.read_ahead")

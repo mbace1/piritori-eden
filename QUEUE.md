@@ -924,9 +924,14 @@ renderers now place low ochre crates on cover cells (taller for walls/stairs,
 wider for racks/benches). Same grid as fighters. No Meshy — markers only so
 cast migrate / clip re-export stays the art unlock, not scenery.
 
-Still open from the Phase A leftover list: telegraph damage numbers,
-intel explanation, battle-entry forecast. Cover markers on the 3D board
-shipped (ochre crates, web + Godot — no Meshy).
+## Telegraph harm numbers — 2026-09-06 (Phase A)
+
+Risk band coloured the intent line; Into the Breach shows the number. Godot
+telegraphs now print `harm N-M` (and lethal) from the weapon on each live
+IntentRecord. Web has no live intent strip yet — Port when that panel lands.
+
+Still open from the Phase A leftover list: intel explanation,
+battle-entry forecast. Cover markers and telegraph harm numbers shipped.
 
 ## Telegraphs are live — what Phase A still lacks
 
@@ -943,9 +948,10 @@ real". The live read is now on screen. The rest of Phase A is not:
 - **Forecast before commitment.** Encounters have `forecast` strings and show
   them; the FIGHT has no equivalent. You commit a crew to a battle without a
   read on what it will cost.
-- **The telegraph does not say how hard.** Risk band drives colour only. "Will
-  swing at your lane 2" in orange is better than nothing and still not Into the
-  Breach, where you see the number.
+- ~~**The telegraph does not say how hard.**~~ Done 2026-09-06: live
+  IntentRecord carries `harm_min`/`harm_max` from the weapon; `_telegraph_line`
+  appends `harm N-M` (and lethal when tagged), same shape as the player
+  forecast. Colour still codes the band; the number is what triage needs.
 - **Intel is never explained.** `target_lane == -1` renders as "aim unclear",
   which is honest, but nothing tells the player what raises intel or that a
   watcher's `intent-reading` is what buys the read.

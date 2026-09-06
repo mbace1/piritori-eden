@@ -103,6 +103,10 @@ class IntentRecord:
 	## How much of this the crew can actually see. See FightManager.Read.
 	var read_level: int        = 2
 	var lethal_exposure: bool  = false
+	## Weapon harm range — the Into the Breach number. Risk band still
+	## colours the line; these are what the colour was standing in for.
+	var harm_min: int          = 0
+	var harm_max: int          = 0
 
 	func to_dict() -> Dictionary:
 		return {
@@ -111,6 +115,8 @@ class IntentRecord:
 			"target_lane":    target_lane,
 			"risk_band":      risk_band,
 			"lethal_exposure": lethal_exposure,
+			"harm_min":       harm_min,
+			"harm_max":       harm_max,
 		}
 
 # ================================================================== #
@@ -308,8 +314,11 @@ func _do_intent_phase() -> void:
 		var read := read_level_of(f)
 		intent.read_level = int(read)
 		intent.target_lane = _ai_preferred_target_lane(f) if read >= Read.AIM else -1
-		intent.risk_band   = _weapon_risk_band(_get_weapon_data(f.held_weapon_id))
-		intent.lethal_exposure = _weapon_is_lethal(_get_weapon_data(f.held_weapon_id))
+		var weapon: Dictionary = _get_weapon_data(f.held_weapon_id)
+		intent.risk_band   = _weapon_risk_band(weapon)
+		intent.lethal_exposure = _weapon_is_lethal(weapon)
+		intent.harm_min = int(weapon.get("harm_min", 0))
+		intent.harm_max = int(weapon.get("harm_max", 0))
 		_opposition_intents.append(intent)
 
 	intent_updated.emit(_opposition_intents)

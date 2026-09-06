@@ -490,12 +490,19 @@ func _test_telegraphs() -> void:
 	check("the opposition declares before acting", not first.is_empty())
 
 	var complete := true
+	var numbered := true
 	for rec in first:
 		if String(rec.fighter_id) == "":
 			complete = false
 		if not ["low", "medium", "high", "lethal"].has(String(rec.risk_band)):
 			complete = false
+		# Attack telegraphs carry a harm range (the Into the Breach number).
+		# Non-attacks may leave it at 0-0.
+		if int(rec.likely_type) == FightManager.Command.Type.ATTACK:
+			if int(rec.harm_max) < int(rec.harm_min) or int(rec.harm_max) < 0:
+				numbered = false
 	check("every read names a person and a risk band", complete)
+	check("attack telegraphs carry a sane harm range", numbered)
 
 	# -1 means intel is too low to read the aim. It is a real state and must be
 	# preserved rather than clamped to lane 0, which would show the player a
