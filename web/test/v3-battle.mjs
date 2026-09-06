@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, deployedCrew } from '../js/v3/state.js';
 import {
-  createBattleState, battleEntryForecast, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
+  createBattleState, battleEntryForecast, coverStandingLine, coverUnder, attackWouldBeStopped, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
 } from '../js/v3/battle.js';
@@ -144,4 +144,24 @@ const opened = createBattleState(data.battles.get('battle-karhupuisto-2v2'), dep
 assert.ok(opened.entryForecast && opened.entryForecast.length >= 20, 'createBattleState carries entryForecast');
 assert.ok(opened.log[0].includes(opened.entryForecast.slice(0, 12)) || opened.log[0].length > 10, 'opening log carries the entry read');
 
-console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, attack reach, entry forecast.');
+
+{
+  const def = data.battles.get('battle-karhupuisto-2v2');
+  const b = createBattleState(def, deployedCrew(state, data), state, data);
+  const coverCell = [...b.cover.keys()][0];
+  assert.ok(coverCell, 'battle has cover cells');
+  const onCover = { id: 'probe', cell: coverCell, side: 'enemy', alive: true };
+  assert.ok(coverUnder(b, onCover), 'coverUnder finds prop');
+  assert.match(coverStandingLine(b, onCover), /behind the /i, 'standing line');
+  const bat = { ...b.players[0], equipment: 'baseball-bat' };
+  if (b.weapons['baseball-bat'] && !b.weapons['baseball-bat'].piercing) {
+    assert.equal(attackWouldBeStopped(b, bat, onCover), 'soft');
+  }
+  if (b.weapons['sawn-off']?.piercing) {
+    const saw = { ...b.players[0], equipment: 'sawn-off' };
+    assert.equal(attackWouldBeStopped(b, saw, onCover), 'pierced');
+  }
+}
+
+console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, attack reach, entry forecast, cover decision copy.');
+
