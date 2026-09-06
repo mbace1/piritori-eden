@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { createState, deployedCrew } from '../js/v3/state.js';
 import {
   createBattleState, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
-  withdrawBattle, resultEffects, playerAttack, syncAlliesFor,
+  withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
 } from '../js/v3/battle.js';
 import { parseCellFor, slotKey } from '../js/v3/grid.js';
@@ -114,6 +114,13 @@ const syncAllies = syncAlliesFor(syncBattle, ally, enemyTarget);
 assert.deepEqual(syncAllies.map(u => u.id).sort(), [syncer.id],
   'only the ally who can also reach the target syncs, not the one who cannot');
 
+
+// Reach list is the same set the board should paint as targetable.
+const reachable = attackTargets(syncBattle, ally);
+assert.deepEqual(reachable.map(u => u.id).sort(), [enemyTarget.id],
+  'attackTargets names only enemies the selected fighter can actually reach');
+assert.equal(syncAlliesFor(syncBattle, ally, enemyTarget).length, 1,
+  'reachable enemy that an ally can also hit is a sync-chain target');
 selectUnit(syncBattle, ally.id);
 selectAction(syncBattle, 'attack');
 const hpBefore = enemyTarget.hp;
@@ -125,4 +132,4 @@ assert.equal(syncBattle.acted.includes(syncer.id), false,
 assert(syncBattle.log[0].includes('syncs fire') || syncBattle.log[1].includes('syncs fire'),
   'the sync shot is visible in the log');
 
-console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal and sync fire.');
+console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire and attack reach.');

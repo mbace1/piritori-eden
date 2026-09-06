@@ -905,6 +905,21 @@ way, at its own new `training`-only anchor rather than at Suvilahti's.
 - **The street cast is three men and the enforcer a fourth.** The generator
   rolls women into `hired`; they will wear one of three male bodies.
 
+
+## Web sync forecast before commit — 2026-09-06 (Phase A)
+
+Godot already painted sync vs solo attack targets (green/red tiles, 2026-08-28).
+Web did not: every enemy lit as `intent` in attack mode, with no reach filter and
+no chain read.
+
+`feat/web-sync-forecast`: when Attack is selected, the board uses
+`attackTargets` + `syncAlliesFor` so only reachable enemies light, cyan =
+would chain, red = solo, and allies who would sync glow green. Console shows
+the same read as text. COMBAT.md §9.13 "forecast before commitment" for sync.
+
+Still open from the Phase A leftover list: cover markers on the 3D board,
+telegraph damage numbers, intel explanation, battle-entry forecast.
+
 ## Telegraphs are live — what Phase A still lacks
 
 `PHASING.md` Phase A wants "telegraphs that make Into the Breach readability
@@ -915,8 +930,8 @@ real". The live read is now on screen. The rest of Phase A is not:
   half-boards, but nothing in the telegraph or the command bar tells the player
   what standing behind one does. Cover that is invisible to the decision is
   scenery.
-- **Third-party entry.** Decision 3c — cops arriving mid-fight, a rival crew
-  turning up. Nothing exists.
+- ~~**Third-party entry.**~~ Police as a third side + posture choice exist
+  (`battle.js` / COMBAT §9.5). Rival-crew entry mid-fight is still open.
 - **Forecast before commitment.** Encounters have `forecast` strings and show
   them; the FIGHT has no equivalent. You commit a crew to a battle without a
   read on what it will cost.

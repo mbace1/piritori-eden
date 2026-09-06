@@ -616,6 +616,18 @@ button { -webkit-tap-highlight-color: transparent; }
 .unit-token:disabled { cursor: default; }
 .unit-token.selected .unit-body { filter: drop-shadow(0 0 6px var(--cyan)); }
 .unit-token.intent .unit-body { filter: drop-shadow(0 0 7px var(--danger)); }
+/* COMBAT.md §9.13 web parity with Godot sync tiles: chain = allies would
+   free-fire; solo = reachable but no chain; ready = this ally would sync. */
+.unit-token.sync-chain .unit-body { filter: drop-shadow(0 0 8px var(--cyan)); }
+.unit-token.sync-solo .unit-body { filter: drop-shadow(0 0 7px var(--danger)); }
+.unit-token.sync-ready .unit-body { filter: drop-shadow(0 0 6px #7dffa3); }
+.unit-token.sync-chain .unit-label { border-color: var(--cyan); }
+.unit-token.sync-solo .unit-label { border-color: var(--danger); }
+.sync-forecast {
+  margin: 0 0 10px;
+  line-height: 1.45;
+  color: var(--muted, #9aa3ad);
+}
 /* COMBAT.md §9.5: a third side, never a valid attack target — visually
    distinct from both crews rather than reading as one more enemy. */
 .unit-token.police .unit-body { filter: drop-shadow(0 0 6px var(--police)) drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }

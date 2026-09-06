@@ -16,7 +16,8 @@ import {
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
-} from './battle.js?v=1';
+  attackTargets, syncAlliesFor,
+} from './battle.js?v=2';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
@@ -760,17 +761,67 @@ function renderFormationCells(battle) {
   return cells.join('');
 }
 
-function renderUnit(unit, battle) {
+/** Attack-mode board read (COMBAT.md §9.13 / Godot purple-tile parity):
+ *  which enemies the selected fighter can actually reach, and which of those
+ *  would pull free sync fire. Built once per render so every token agrees. */
+function attackPreview(battle) {
+  const attacker = selectedUnit(battle);
+  if (battle.action !== 'attack' || !attacker?.alive) {
+    return { reachableIds: new Set(), syncTargetIds: new Set(), syncAllyIds: new Set() };
+  }
+  const reachable = attackTargets(battle, attacker);
+  const syncTargetIds = new Set();
+  const syncAllyIds = new Set();
+  for (const target of reachable) {
+    const allies = syncAlliesFor(battle, attacker, target);
+    if (allies.length) {
+      syncTargetIds.add(target.id);
+      for (const ally of allies) syncAllyIds.add(ally.id);
+    }
+  }
+  return {
+    reachableIds: new Set(reachable.map(u => u.id)),
+    syncTargetIds,
+    syncAllyIds,
+  };
+}
+
+function renderUnit(unit, battle, preview = null) {
   const pos = cellPosition(unit.cell);
   const selected = unit.id === battle.selectedId && unit.side === 'player';
+  const prev = preview ?? attackPreview(battle);
   // Police (COMBAT.md §9.5) are a third side: on the board, never anybody's
   // enemy yet — see attackTargets() in battle.js — so they are never a
   // valid attack target regardless of the current action.
-  const targetable = unit.side === 'enemy' && battle.action === 'attack';
-  const disabled = unit.side === 'player' ? battle.acted.includes(unit.id) || battle.phase !== 'player' : !targetable;
-  return `<button type="button" class="unit-token ${unit.side === 'enemy' ? 'enemy' : ''} ${unit.side === 'police' ? 'police' : ''} ${selected ? 'selected' : ''} ${targetable ? 'intent' : ''} ${unit.alive ? '' : 'down'}"
+  const targetable = unit.side === 'enemy' && prev.reachableIds.has(unit.id);
+  const syncChain = targetable && prev.syncTargetIds.has(unit.id);
+  const syncSolo = targetable && !syncChain;
+  const syncReady = unit.side === 'player' && prev.syncAllyIds.has(unit.id);
+  const classes = [
+    'unit-token',
+    unit.side === 'enemy' ? 'enemy' : '',
+    unit.side === 'police' ? 'police' : '',
+    selected ? 'selected' : '',
+    // Keep `.intent` for any reachable enemy (existing CSS); add sync tint.
+    targetable ? 'intent' : '',
+    syncChain ? 'sync-chain' : '',
+    syncSolo ? 'sync-solo' : '',
+    syncReady ? 'sync-ready' : '',
+    unit.alive ? '' : 'down',
+  ].filter(Boolean).join(' ');
+  const disabled = unit.side === 'player'
+    ? battle.acted.includes(unit.id) || battle.phase !== 'player'
+    : !targetable;
+  const syncHint = syncChain
+    ? ', sync chain'
+    : syncSolo
+      ? ', solo shot'
+      : syncReady
+        ? ', would sync'
+        : '';
+  return `<button type="button" class="${classes}"
     style="left:${pos.x}%;top:${pos.y}%" data-action="${unit.side === 'player' ? 'select-unit' : 'target-unit'}" data-unit="${esc(unit.id)}"
-    aria-label="${esc(unit.name)}, ${unit.role}, condition ${unit.hp}, guard ${unit.guard}" ${disabled ? 'disabled' : ''}>
+    aria-label="${esc(unit.name)}, ${unit.role}, condition ${unit.hp}, guard ${unit.guard}${syncHint}" ${disabled ? 'disabled' : ''}>
     <span class="unit-body">
       <img class="legs" src="${assetUrl(data, unit.legs)}" alt="">
       <img class="torso" src="${assetUrl(data, unit.torso)}" alt="">
@@ -778,6 +829,23 @@ function renderUnit(unit, battle) {
     </span>
     <span class="unit-label">${esc(unit.name.split(' ')[0])}<br><b>${unit.hp}♥ · ${unit.guard}◇ · ${unit.nerve}!</b></span>
   </button>`;
+}
+
+function renderSyncForecast(battle, preview) {
+  if (battle.action !== 'attack' || !preview.reachableIds.size) return '';
+  const attacker = selectedUnit(battle);
+  const lines = [];
+  for (const enemy of battle.enemies) {
+    if (!preview.reachableIds.has(enemy.id)) continue;
+    const allies = syncAlliesFor(battle, attacker, enemy);
+    if (allies.length) {
+      lines.push(`${enemy.name.split(' ')[0]} — sync with ${allies.map(a => a.name.split(' ')[0]).join(', ')}`);
+    } else {
+      lines.push(`${enemy.name.split(' ')[0]} — solo`);
+    }
+  }
+  if (!lines.length) return '';
+  return `<p class="sync-forecast section-label">SYNC READ<br>${lines.map(esc).join('<br>')}</p>`;
 }
 
 /**
@@ -828,6 +896,8 @@ function renderBattle() {
   const unit = selectedUnit(battle);
   const scene = assetUrl(data, plateForBattleScene(battle.sceneAssetId));
   const negotiationReady = battle.round >= 2 || battle.enemies.filter(item => item.alive).reduce((sum, item) => sum + item.nerve, 0) <= 4;
+  const preview = attackPreview(battle);
+  const boardUnits = battle.players.concat(battle.enemies, battle.police ?? []);
   return `
     <div class="battle-layout">
       <section class="battle-stage" aria-label="${esc(battle.format)} isometric formation battle">
@@ -840,7 +910,7 @@ function renderBattle() {
         ${rowLabel('FRONT', depthOf(0, false))}
         ${rowLabel('BACK', depthOf(ROWS - 1, false))}
         ${renderFormationCells(battle)}
-        ${battle.players.concat(battle.enemies, battle.police ?? []).map(item => renderUnit(item, battle)).join('')}
+        ${boardUnits.map(item => renderUnit(item, battle, preview)).join('')}
       </section>
       <section class="battle-console">
         <div class="paper-panel active-unit">
@@ -860,6 +930,7 @@ function renderBattle() {
         <div class="paper-panel battle-log" aria-live="polite">${battle.log.slice(0, 7).map(item => `<p>${esc(item)}</p>`).join('')}</div>
         ${battle.status === 'active' ? (policeAwaitingPosture(battle) ? renderPoliceChoice(battle) : `
           <div class="paper-panel battle-actions">
+            ${renderSyncForecast(battle, preview)}
             <button class="paper-button ${battle.action === 'attack' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="attack" ${unit ? '' : 'disabled'}>${tr('attack')}</button>
             <button class="paper-button ${battle.action === 'move' ? 'cyan' : ''}" data-action="battle-action" data-battle-action="move" ${unit ? '' : 'disabled'}>${tr('move')}</button>
             <button class="paper-button" data-action="brace" ${unit ? '' : 'disabled'}>${tr('brace')}</button>
