@@ -24,6 +24,19 @@
 ### Port
 Web-only presentation. Hub inherits later.
 
+## v4.35 — 2026-09-06
+
+**Cover markers on the 3D board (Phase A leftover).**
+
+- Soft cover was named in copy and drawn on the 2D board; cast3d fights
+  showed empty cells. Web `render3d.js` and Godot `battle_stage_3d.gd` now
+  place ochre geometric markers on `battle.cover` / `cover_props()` cells
+  (taller / wider by prop id). Marker only — no Meshy.
+- Cache: `render3d.js?v=4`.
+
+### Port
+Mirrored in this version (web + Godot). Hub inherits later.
+
 ## v4.34 — 2026-09-06
 
 **Art verdict: cast3d on 2D plates.** QUEUE item 4. Stage3d dioramas stay

@@ -917,8 +917,16 @@ no chain read.
 would chain, red = solo, and allies who would sync glow green. Console shows
 the same read as text. COMBAT.md §9.13 "forecast before commitment" for sync.
 
-Still open from the Phase A leftover list: cover markers on the 3D board,
-telegraph damage numbers, intel explanation, battle-entry forecast.
+## Cover markers on the 3D board — 2026-09-06 (Phase A)
+
+Words already said "behind the bicycle rack"; the 3D picture did not. Both
+renderers now place low ochre crates on cover cells (taller for walls/stairs,
+wider for racks/benches). Same grid as fighters. No Meshy — markers only so
+cast migrate / clip re-export stays the art unlock, not scenery.
+
+Still open from the Phase A leftover list: telegraph damage numbers,
+intel explanation, battle-entry forecast. Cover markers on the 3D board
+shipped (ochre crates, web + Godot — no Meshy).
 
 ## Telegraphs are live — what Phase A still lacks
 
@@ -956,11 +964,11 @@ Two things that follow:
   yet. So the resolver's hard-block branch and the `battle.cover_blocks` copy
   are live code on a dead path. A gate now asserts this is still true, so the
   day hard cover arrives it fails and points at the copy that becomes reachable.
-- **The 3D board does not draw cover at all.** `_draw_cover()` is in the 2D
-  renderer, and the game is 3D. So the *words* are now right and the *picture*
-  still is not: a player is told "behind the bicycle rack" with no rack visible
-  on the board they are looking at. This is the next honest step for cover, and
-  it needs a prop model or a marker, not more text.
+- ~~**The 3D board does not draw cover at all.**~~ Done 2026-09-06: ochre
+  geometric markers (crate / tall / wide by prop id) on both web `render3d.js`
+  and Godot `battle_stage_3d.gd`, placed via the same `worldFor` / `cell_world`
+  grid the fighters use. Marker only — no Meshy spend; real prop models can
+  replace these later without touching the cover Map.
 
 ## Three reports from play, 2026-08-22
 
