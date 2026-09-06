@@ -39,7 +39,7 @@ import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
 import { buildFightClip } from './fight-motion.js?v=1';
 import { assetUrl } from './content.js?v=1';
 import { LANES, totalRows } from './grid.js?v=1';
-import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=3';
+import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=4';
 
 /** COMBAT.md / PHASING.md 1.06: the six generic crew roles all have their
  *  own registered body. Matches Godot's `UNIT_BY_ROLE` naming exactly
@@ -294,21 +294,20 @@ const UNIT_SCALE = 0.60;
 /** Godot `STAGE_BY_SCENE` + `STAGE_FALLBACK` — a 2D plate id still gets a
  *  real diorama when one exists, and everything else falls back to Kallio
  *  backyard rather than a floating board on a dark void. */
-const STAGE_BY_SCENE = {
-  'scene-kallio-backyard-v01': 'stage3d-kallio-backyard-v01',
-  'scene-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
-  'stage3d-hermanni-skatepark-v01': 'stage3d-hermanni-skatepark-v01',
-  'stage3d-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
-  'scene-suvilahti-kattilahalli-v01': 'stage3d-suvilahti-kattilahalli-v01',
-};
-const STAGE_FALLBACK = 'stage3d-kallio-backyard-v01';
+/** Owner 2026-09-06: current stage3d dioramas are parked — awful look and
+ *  they bury fighters (Hermanni porch/roof). Keep the maps for a later art
+ *  pass; fights use the 2D scene plate + cast3d on the ground slab. */
+const STAGE_BY_SCENE = {};
+const STAGE_FALLBACK = null;
+const USE_STAGE3D_ARENAS = false;
 
 function stageAssetId(data, battle) {
+  if (!USE_STAGE3D_ARENAS) return null;
   const raw = battle.sceneAssetId;
   if (data.art.get(raw)?.kind === 'mesh-3d') return raw;
   const mapped = STAGE_BY_SCENE[raw];
   if (mapped && data.art.get(mapped)?.kind === 'mesh-3d') return mapped;
-  if (data.art.get(STAGE_FALLBACK)?.kind === 'mesh-3d') return STAGE_FALLBACK;
+  if (STAGE_FALLBACK && data.art.get(STAGE_FALLBACK)?.kind === 'mesh-3d') return STAGE_FALLBACK;
   return null;
 }
 
@@ -380,6 +379,31 @@ export function disposeBattleStage3D() {
 /** Mounts a fresh Three.js scene into `container` for this battle's current
  *  live formation. Safe to call on every render — it tears down whatever it
  *  mounted last time first. */
+/** Live mood knobs for art review — ambient/key/rim intensities + optional
+ *  hex colours + exposure. Used by `debug.setBattleLights` / mood captures.
+ *  Defaults match `_build_night()` port (ambient 1.45, key 2.8, rim 1.15). */
+export function setBattleLights({
+  ambient,
+  key,
+  rim,
+  ambientColor,
+  keyColor,
+  rimColor,
+  exposure,
+  fogDensity,
+} = {}) {
+  if (!current) return false;
+  if (ambient != null && current.ambient) current.ambient.intensity = ambient;
+  if (key != null && current.key) current.key.intensity = key;
+  if (rim != null && current.rim) current.rim.intensity = rim;
+  if (ambientColor != null && current.ambient) current.ambient.color.set(ambientColor);
+  if (keyColor != null && current.key) current.key.color.set(keyColor);
+  if (rimColor != null && current.rim) current.rim.color.set(rimColor);
+  if (exposure != null && current.renderer) current.renderer.toneMappingExposure = exposure;
+  if (fogDensity != null && current.scene?.fog) current.scene.fog.density = fogDensity;
+  return true;
+}
+
 export function mountBattleStage3D(container, battle, data) {
   disposeBattleStage3D();
   if (!container || !battle) return;
@@ -407,7 +431,8 @@ export function mountBattleStage3D(container, battle, data) {
   renderer.toneMappingExposure = 1.0;
   renderer.domElement.className = 'stage3d-canvas';
   container.appendChild(renderer.domElement);
-  current = { renderer, canvas: renderer.domElement, raf: 0 };
+  const ambient = new THREE.AmbientLight(0x6a8aaa, 1.45);
+  current = { renderer, canvas: renderer.domElement, raf: 0, scene: null, ambient, key: null, rim: null, camera: null };
 
   const scene = new THREE.Scene();
   // `_build_night()`'s own values: background/ambient are a single named
@@ -426,7 +451,8 @@ export function mountBattleStage3D(container, battle, data) {
   const aspect = width / height;
   const camera = buildStageCamera(aspect);
 
-  scene.add(new THREE.AmbientLight(0x6a8aaa, 1.45));
+  scene.add(ambient);
+  current.scene = scene;
   // "Cold ambient, one warm practical, and shadows" — `_build_night()`'s
   // own summary of the pattern. The key stands in for that one practical
   // light (Godot uses a warm OmniLight lamp, `#ffcf8f`); the directional
@@ -451,6 +477,9 @@ export function mountBattleStage3D(container, battle, data) {
   const rim = new THREE.DirectionalLight(0x8fb4ff, 1.15);
   rim.position.set(-3, 4, -3);
   scene.add(rim);
+  current.key = key;
+  current.rim = rim;
+  current.camera = camera;
 
   // A flat ground plane is the fallback for a battle with no registered
   // arena mesh (karhupuisto, courtyard) — kept in the scene unconditionally

@@ -877,6 +877,21 @@ button { -webkit-tap-highlight-color: transparent; }
   .weather-layer.front { transform: none; }
 }
 
+
+/* Landscape fight: give the stage most of the column and let the ortho
+   zoom (stage-camera frustum pad) fill it — owner wanted a closer grid. */
+@media (min-width: 981px) and (min-aspect-ratio: 5/4) {
+  .battle-layout {
+    grid-template-rows: minmax(560px, 1.55fr) auto;
+  }
+  .battle-stage {
+    min-height: 560px;
+  }
+  .battle-console {
+    padding-top: 8px;
+  }
+}
+
 /* ── the pause menu, and THINGS TO TEST ───────────────────────────────────
    THE FIRST CUT OF THIS BLOCK WAS UNREADABLE AND EVERY GATE WAS GREEN.
    It painted a cream card and cream text, because it reached for `--paper`
