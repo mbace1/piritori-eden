@@ -3108,3 +3108,12 @@ Balance **39**. Owner: hold spend until credit refresh (~Sept 11). Muscle
 T-pose remains the intended clip-donor; no Meshy API calls that cost credits
 until then. Fight path stays cast3d on 2D plates.
 
+
+
+## Shared fight animations — owner 2026-09-06
+
+All cast models must wear the **same** fight clips (idle/attack/hit/dead).
+Do not buy per-role fight packs. Path: Meshy re-export those four against
+**one** real body rest after credit refresh; every 24-bone Meshy biped then
+shares them. Current `clips/muscle-*-v01.glb` fail that gate.
+
