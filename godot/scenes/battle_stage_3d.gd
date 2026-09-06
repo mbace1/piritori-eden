@@ -190,6 +190,7 @@ var _world: Node3D
 var _cam: Camera3D
 var _cells: Node3D
 var _units: Node3D
+var _cover_root: Node3D
 var _unit_nodes: Dictionary = {}     ## fighter_id -> Node3D
 var _highlight: Dictionary = {}      ## Vector2i(lane, depth) -> String
 ## Whoever is mid-command, so the board can show the swing rather than a idle.
@@ -270,6 +271,9 @@ func _ready() -> void:
 
 	_units = Node3D.new()
 	_world.add_child(_units)
+	_cover_root = Node3D.new()
+	_cover_root.name = "cover_markers"
+	_world.add_child(_cover_root)
 
 	_build_camera()
 
@@ -532,6 +536,58 @@ func _build_camera() -> void:
 
 
 ## Rebuild the units from the fight's own state. Called whenever the model moves.
+
+## Cover props as low ochre crates on the 3D board (QUEUE Phase A).
+## 2D `_draw_cover()` already paints them on the flat board; with cast3d the
+## words say "bicycle rack" and the picture showed nothing. Marker only —
+## no Meshy spend.
+func _rebuild_cover() -> void:
+	if _cover_root == null or fight == null:
+		return
+	for c in _cover_root.get_children():
+		c.queue_free()
+	var seen := {}
+	for p in fight.cover_props():
+		var lane := int(p.get("lane", 0))
+		# cover_props stores unified DEPTH in "row" (battle_builder.parse_cell).
+		var depth_i := int(p.get("row", 0))
+		var key := "%d:%d" % [lane, depth_i]
+		if seen.has(key):
+			continue
+		seen[key] = true
+		var prop_id := String(p.get("prop_id", ""))
+		var m := _cover_mesh(prop_id)
+		# cell_world puts feet on the ground; keep the mesh's own Y (half-height).
+		var pos := cell_world(lane, depth_i)
+		m.position.x = pos.x
+		m.position.z = pos.z
+		_cover_root.add_child(m)
+
+
+func _cover_mesh(prop_id: String) -> MeshInstance3D:
+	var tall := prop_id.containsn("wall") or prop_id.containsn("stair") \
+		or prop_id.containsn("housing") or prop_id.containsn("porttikongi") \
+		or prop_id.containsn("graffiti")
+	var wide := prop_id.containsn("rack") or prop_id.containsn("bench") \
+		or prop_id.containsn("pallet") or prop_id.containsn("plinth") \
+		or prop_id.containsn("ramp")
+	var box := BoxMesh.new()
+	var h := CELL * (0.55 if tall else 0.28)
+	var w := CELL * (0.72 if wide else 0.48)
+	var d := CELL * (0.38 if wide else 0.48)
+	box.size = Vector3(w, h, d)
+	var m := MeshInstance3D.new()
+	m.mesh = box
+	m.position.y = _ground + h * 0.5
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color("#B08A3C")
+	mat.roughness = 0.88
+	mat.metallic = 0.0
+	m.material_override = mat
+	m.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	return m
+
+
 func refresh(acting_id: String = "") -> void:
 	_acting_id = acting_id
 	if fight == null or _units == null:
@@ -560,6 +616,7 @@ func refresh(acting_id: String = "") -> void:
 			_paint(n, sh, i, f)
 			_animate(n, f)
 			i += 1
+	_rebuild_cover()
 
 
 ## One mesh, many people. The shift is derived from the fighter's own id so a

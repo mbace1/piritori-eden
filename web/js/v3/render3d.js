@@ -407,6 +407,49 @@ export function setBattleLights({
   return true;
 }
 
+
+/** Cover props as low ochre crates on the 3D board (QUEUE Phase A).
+ *  2D already paints `.formation-cell.cover`, but with cast3d up the bodies
+ *  hide and the cell grid is easy to miss — the player hears "behind the
+ *  bicycle rack" with no rack in the picture. No Meshy: a readable marker. */
+function coverMarkerMesh(propId = '') {
+  const id = String(propId || '');
+  const tall = /wall|stair|housing|porttikongi|graffiti/i.test(id);
+  const wide = /rack|bench|pallet|plinth|ramp/i.test(id);
+  const geo = new THREE.BoxGeometry(
+    CELL_M * (wide ? 0.72 : 0.48),
+    CELL_M * (tall ? 0.55 : 0.28),
+    CELL_M * (wide ? 0.38 : 0.48),
+  );
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0xb08a3c,
+    roughness: 0.88,
+    metalness: 0,
+    emissive: 0x3a2a10,
+    emissiveIntensity: 0.15,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.position.y = (CELL_M * (tall ? 0.55 : 0.28)) * 0.5;
+  mesh.name = `cover:${id || 'prop'}`;
+  return mesh;
+}
+
+function addCoverMarkers(scene, battle) {
+  if (!battle?.cover?.size) return;
+  const root = new THREE.Group();
+  root.name = 'cover-markers';
+  for (const [cell, prop] of battle.cover.entries()) {
+    const { x, z } = worldFor(cell);
+    const mesh = coverMarkerMesh(prop.propId);
+    mesh.position.x = x;
+    mesh.position.z = z;
+    root.add(mesh);
+  }
+  scene.add(root);
+}
+
 export function mountBattleStage3D(container, battle, data) {
   disposeBattleStage3D();
   if (!container || !battle) return;
@@ -495,6 +538,7 @@ export function mountBattleStage3D(container, battle, data) {
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
+  addCoverMarkers(scene, battle);
 
   // Additive, not a replacement: renderBattle() in app.js still draws every
   // unit's flat legs/torso/head sprite underneath this canvas, so a battle
@@ -589,6 +633,9 @@ export function mountBattleStage3D(container, battle, data) {
         const { x, z } = worldFor(entry.unit.cell);
         entry.model.position.set(x, 0, z);
       }
+      const oldCover = scene.getObjectByName('cover-markers');
+      if (oldCover) scene.remove(oldCover);
+      addCoverMarkers(scene, battle);
       positionBattleDOM(container, battle);
       stage?.classList.add('stage3d-ready');
     })
