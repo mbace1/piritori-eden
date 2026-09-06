@@ -1,7 +1,7 @@
 # Godot pickup — Claude Code (2026-09-06)
 
 **Audience:** Claude Code on the Godot / landscape build.
-**Baseline:** `main` at `f3e7997` (merge of #52) — `VERSIONS.md` **v4.40**.
+**Baseline:** `main` at `f3e7997` (merge of #52) — `VERSIONS.md` **v4.42** (growth-loop web catch-up; Godot unchanged).
 **Live web:** https://mbace1.github.io/piritori-eden/ (hub / Suds-Jack inherits later).
 
 This is a session handoff, not new canon. Authority order is still
@@ -23,8 +23,8 @@ node tools/check-locale.mjs
 # then headless gates you usually run (spine, battle, shell, …)
 ```
 
-Open the editor on this checkout. Do **not** reinvent Phase A leftovers or
-Phase B — they are already on `main` in both `web/` and `godot/`.
+Open the editor on this checkout. Do **not** reinvent Phase A leftovers,
+Phase B, or Phase D growth-loop — Godot already had D; v4.42 was web catch-up.
 
 ---
 
@@ -38,6 +38,7 @@ Phase B — they are already on `main` in both `web/` and `godot/`.
 | v4.38 | Battle-entry forecast | In (`BattleBuilder.entry_forecast`) |
 | v4.39 | Cover decision copy + fence taken-only tag | Web catch-up; Godot already had cover copy |
 | **v4.40** | **Phase B:** `tough` desync, taken-only tier, equipment shop | **In** (see below) |
+| **v4.42** | **Phase D:** growth-loop web catch-up (levels/perks/skills/train) | **Already in** — web-only this version |
 
 ### Phase B detail (v4.40) — verify in Godot, don’t rebuild
 
@@ -60,6 +61,16 @@ Phase B — they are already on `main` in both `web/` and `godot/`.
    - Refuses taken-only and short cash; gates in `test_spine.gd`.
 
 ---
+
+
+### Phase D detail (v4.42) — web catch-up; Godot already had it
+
+Growth-loop (levels / perks / skills / `train()`) was already live in
+`game_state.gd` + `app_shell.gd` + `fight_manager.gd`. **v4.42 ports it to
+web only** — do not rebuild on Godot. Smoke the crew rail spend/learn and
+a toughness-buffed fight if verifying parity; no new Godot work in this
+version.
+
 
 ## Art / 3D locks (do not burn credits)
 

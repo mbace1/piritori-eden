@@ -68,6 +68,27 @@ const PORTRAITS = [
  *  authored crew member. */
 const SPREAD = 1;
 
+/** Content's twelve aptitudes — same pool CrewGenerator rolls from. Appearance
+ *  follows the FIRST (the art-backed role); extras widen the skill pool. */
+export const CLASS_IDS = [
+  'bruiser', 'anchor', 'blade', 'shooter', 'spotter', 'courier',
+  'muscle', 'runner', 'watcher', 'fixer', 'driver', 'local',
+];
+const THIRD_APTITUDE_ONE_IN = 4;
+
+/** Two aptitudes, sometimes three (§9.12) — first is the body role. */
+function rollAptitudes(first, seed, i) {
+  const pool = CLASS_IDS.filter(id => id !== first);
+  const out = [first];
+  if (!pool.length) return out;
+  out.push(pick(pool, seed, 'hire-apt-2', i));
+  if (Math.floor(rand01(seed, 'hire-apt-3', i) * THIRD_APTITUDE_ONE_IN) === 0) {
+    const third = pick(pool, seed, 'hire-apt-3pick', i);
+    if (!out.includes(third)) out.push(third);
+  }
+  return out;
+}
+
 function pick(arr, ...seed) {
   return arr[Math.floor(rand01(...seed) * arr.length) % arr.length];
 }
@@ -105,6 +126,7 @@ export function hireCandidate(seed, i) {
     torso_asset_id: role === 'hired' ? '' : `torso-${role}-v03`,
     legs_asset_id: role === 'hired' ? '' : `legs-${role}-v03`,
     initial_equipment: [],
+    aptitudes: rollAptitudes(role, seed, i),
     named: false,
     generated: true,
   };
