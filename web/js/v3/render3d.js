@@ -9,7 +9,8 @@
  * resolved through the SAME `assetUrl()` every other screen uses — no second
  * path table to drift from the first).
  *
- * NOT attempted here: idle/attack/behit/dead animation clips (cast3d/clips/*),
+ * Fight clips: GLB pack for muscle (SHARED_CLIP_COMPATIBLE); procedural
+ * fight-motion for other roles until rests match. Still not attempted:
  * the ART_BIBLE presenter posterize treatment, or camera framing tuned past a
  * first honest look. This proves the pipeline — load, place, light, render —
  * which is the part that had to exist before any of that is worth doing.
@@ -195,38 +196,49 @@ function loadUnitModel(data, assetId) {
 
 // ── animation ───────────────────────────────────────────────────────────────
 //
-// THE FOUR FIGHT CLIPS, LIFTED ONTO WHOEVER IS WEARING THE BODY. Exactly what
-// `battle_stage_3d.gd`'s `CLIPS` table does: the clips ship as four separate
-// one-animation GLBs (that is how Meshy delivers them), all four cut from the
-// MUSCLE's rig, and every fighter borrows them. That is a deliberate design
-// choice, not a shortcut — Meshy rigs come out near-identical, so buying four
-// clips per role would be paying repeatedly for the same motion.
+// STATUS 2026-09-06: shared Meshy fight clips match `muscle-v01` rest (~5 deg;
+// see `port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE). Godot plays them only on
+// muscle paths. Web does the same: GLB pack for muscle, `fight-motion.js` for
+// SHARED_CLIP_PENDING roles (foreign rest — absolute-pose clips would tear).
 //
-// It is now checked rather than assumed: `port/rig-vectors.mjs` asserts every
-// rigged cast body carries the SAME 24 joints as the clip source (measured
-// 2026-09-02: 13 of 14 do, exactly). The fourteenth, `parka-man`, has no
-// skeleton at all and cannot animate — it is in the live `hired` variant pool,
-// so roughly one hired crew member in four gets a still body. Named in
-// QUEUE.md; `applyClips()` below degrades to a static figure for it rather
-// than throwing, which is what it already did before animation existed.
-// THE SHARED GLB CLIPS ARE GONE. `cast3d-muscle-clips-v01` is still registered
-// in the manifest and still ships to Godot, but this build no longer loads it.
+// Measured the same day: current Meshy `POST /rigging` on hired + muscle still
+// produces role-to-role rest drift (~110° at RightArm) and a 24-joint/no-Head1
+// family that does NOT take these clips. Do not buy one-off re-rigs expecting
+// shared clips to suddenly lift; that is a cast-wide template problem.
 //
-// It could not be made to work. A glTF rotation channel is a node's LOCAL
-// rotation, ABSOLUTE rather than a delta, so playing one body's clip on
-// another OVERWRITES that skeleton's rest orientation — and
-// `port/rig-vectors.mjs` now measures every one of the 13 rigged bodies as
-// over tolerance against the clip source, because that clip file is not even
-// the same rig as `muscle-v01.glb`, the body it is named after. Reported on
-// sight: "the models hips are janky... their hips are rotated almost 180
-// degrees."
-//
-// Two hand-rolled retargets and then three.js's own
-// `SkeletonUtils.retargetClip()` all failed and were all reverted. See
-// `fight-motion.js`'s header and QUEUE.md before revisiting.
-//
-// `buildFightClip()` composes each pose onto the body's OWN rest, so the
-// mismatch cannot happen. Nothing is fetched; nothing needs a network at all.
+// The ids are the manifest's flattened FRAME ids (`<group-id>:<pose>`).
+const CLIP_SOURCES = {
+  idle: 'cast3d-muscle-clips-v01:idle',
+  attack: 'cast3d-muscle-clips-v01:attack',
+  hit: 'cast3d-muscle-clips-v01:behit',
+  dead: 'cast3d-muscle-clips-v01:dead',
+};
+
+/** Bodies safe to bind CLIP_SOURCES onto — keep in sync with
+ *  `port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE / Godot `_animate` gate. */
+const SHARED_CLIP_ROLES = new Set(['muscle']);
+const SHARED_CLIP_ASSETS = new Set(['cast3d-muscle-v01']);
+
+let clipCache = null;
+
+function loadFightClips(data) {
+  if (clipCache) return clipCache;
+  clipCache = Promise.all(Object.entries(CLIP_SOURCES).map(([key, assetId]) => {
+    const url = assetUrl(data, assetId);
+    if (!url) return Promise.resolve([key, null]);
+    return new Promise(resolve => {
+      loader.load(url,
+        gltf => resolve([key, gltf.animations?.[0] ?? null]),
+        undefined,
+        () => resolve([key, null]));
+    });
+  })).then(pairs => Object.fromEntries(pairs));
+  return clipCache;
+}
+
+function usesSharedGlbClips(assetId, role) {
+  return SHARED_CLIP_ASSETS.has(assetId) || SHARED_CLIP_ROLES.has(role);
+}
 
 /** Which clip a fighter should be playing — mirrors `battle_stage_3d.gd`'s
  *  `_pose_for()` against this build's own unit shape. Godot reads
@@ -240,26 +252,17 @@ function poseFor(unit, battle) {
   return acting ? 'attack' : 'idle';
 }
 
-/** Builds this figure's pose against its own rest and starts it. Returns the
- *  mixer so the render loop can advance it, or null for a body with no
- *  skeleton to bind to (`parka-man-v01.glb`, recorded in rig-vectors.mjs).
- *
- *  Not cached across bodies, and cannot be: the whole correctness argument is
- *  that a clip is built from THIS skeleton's rest. Cheap enough that it does
- *  not matter — a few dozen quaternion multiplies for at most six fighters,
- *  against four GLB fetches per unit per refresh before. */
-function applyClips(model, pose, seed = 0) {
-  const clip = buildFightClip(model, pose);
+/** Shared GLB clip on a compatible body, else procedural fight-motion on the
+ *  body's own rest. Returns the mixer, or null when neither path can bind. */
+function applyClips(model, pose, seed = 0, sharedClips = null, useShared = false) {
+  let clip = null;
+  if (useShared && sharedClips) clip = sharedClips[pose] ?? sharedClips.idle;
+  if (!clip) clip = buildFightClip(model, pose);
   if (!clip) return null;
   const mixer = new THREE.AnimationMixer(model);
   const action = mixer.clipAction(clip);
-  // A downed fighter holds its last frame instead of looping back upright.
   if (pose === 'dead') { action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; }
   action.play();
-  // Six fighters breathing in perfect unison reads as one puppet with six
-  // bodies. A per-unit offset into the loop breaks that for free; `dead` is
-  // excluded because it is played once and clamped, and starting it part-way
-  // through would drop a body onto the floor with no fall.
   if (pose !== 'dead') action.time = (seed % 1000) / 1000 * clip.duration;
   return mixer;
 }
@@ -514,15 +517,18 @@ export function mountBattleStage3D(container, battle, data) {
   resetBoardMetric();
   const placed = []; // { model, unit } — repositioned after a successful fit
 
+  const clipsReady = loadFightClips(data);
   const unitLoads = units.map(unit => {
     const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
     const assetId = ROLE_MODEL[unit.role] ?? fallback;
-    return loadUnitModel(data, assetId)
-      .then(model => {
+    return Promise.all([loadUnitModel(data, assetId), clipsReady])
+      .then(([model, sharedClips]) => {
         // The mount that requested this load may already have been torn
         // down by a later render before the network resolved.
         if (myGeneration !== generation) return;
-        const mixer = applyClips(model, poseFor(unit, battle), seedFromId(unit.id));
+        const mixer = applyClips(
+          model, poseFor(unit, battle), seedFromId(unit.id),
+          sharedClips, usesSharedGlbClips(assetId, unit.role));
         if (mixer) mixers.push(mixer);
         const { x, z } = worldFor(unit.cell);
         model.scale.setScalar(UNIT_SCALE);
