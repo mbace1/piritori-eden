@@ -1752,6 +1752,11 @@ func _score_base(f: Fighter, cmd: Command) -> float:
 			match f.behaviour_package:
 				"runner":  score = 1.8
 				"watcher": score = 1.2
+			# WHERE to move, not just whether. Without this every legal
+			# reposition scored the same flat per-role number, and
+			# `_ai_select_command` picks weighted-random from the top three --
+			# so a fighter who decided to move picked a DIRECTION AT RANDOM.
+			score *= _approach_weight(f, cmd.target_slot)
 
 		Command.Type.STAND_DOWN:
 			# Only when nerve is below personal threshold
@@ -1769,6 +1774,56 @@ func _score_base(f: Fighter, cmd: Command) -> float:
 			score = 0.0
 
 	return maxf(score, 0.0)
+
+
+## How much better a destination is than standing still.
+##
+## Ported from `web/js/v3/battle.js`'s `approachCell()`, which came from TURF
+## (`PORTING.md` §1.08's sibling build): prefer a cell you can ATTACK FROM, and
+## failing that the cell that CLOSES THE MOST DISTANCE.
+##
+## Measured on `battle-karhupuisto-2v2` before the web fix: the runner's first
+## auto-move went depth 2 -> depth 7, straight past both opponents, and since
+## reach is directional it could never attack again. That is what a random
+## direction buys you on a board where forward is the whole point.
+##
+## The fighter is moved, asked, and put back -- the same trick the web version
+## uses. Nothing else reads `slot` in between.
+func _approach_weight(f: Fighter, dest: Vector2i) -> float:
+	var foes: Array = []
+	for other_id in _fighters:
+		var o: Fighter = _fighters[other_id]
+		if o != null and o.side != f.side and o.is_active():
+			foes.append(o)
+	if foes.is_empty():
+		return 1.0
+
+	var here := _gap_to(f.slot, foes)
+	var there := _gap_to(dest, foes)
+
+	var was := f.slot
+	f.slot = dest
+	var can_hit := not _get_attack_targets(f, _get_weapon_data(f.held_weapon_id)).is_empty()
+	f.slot = was
+
+	if can_hit:
+		return 2.5
+	if there < here:
+		return 1.6
+	if there > here:
+		return 0.35
+	return 1.0
+
+
+## Manhattan distance from a slot to the nearest of these fighters.
+func _gap_to(slot: Vector2i, foes: Array) -> int:
+	var best := 1 << 30
+	for o_raw in foes:
+		var o: Fighter = o_raw
+		var d: int = absi(o.slot.x - slot.x) + absi(o.slot.y - slot.y)
+		if d < best:
+			best = d
+	return best
 
 ## Returns all commands that are legal for this fighter right now.
 ## Gate §8: AI selects only from this list.
