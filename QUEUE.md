@@ -3124,6 +3124,14 @@ unchanged.
 
 
 
+## Fight look — plate + night lift (2026-09-07, v4.43)
+
+Web readability follow-up while arenas stay parked: null `scene.background`
+so the Era I plate shows through the alpha canvas; night ambient/key/rim/
+exposure bumped a notch (same cold/warm mood); portrait hides the duplicate
+entry-forecast strip over the board. Eyeball `/web/?battle=battle-courtyard-3v3`.
+No Meshy, arenas still off.
+
 ## Art verdict — cast3d on 2D plates (2026-09-06)
 
 QUEUE punch-list items 1–3 are met (legibility ≥~3:1, framing/`CELL_M` fit,

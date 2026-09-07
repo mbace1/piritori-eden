@@ -866,7 +866,18 @@ button { -webkit-tap-highlight-color: transparent; }
   .battle-layout { display: block; }
   .battle-stage { min-height: 0; height: min(52dvh, 500px); }
   .battle-stage > .scene-image { width: 142%; max-width: none; left: -21%; object-fit: cover; }
-  .battle-objective { max-width: calc(100% - 26px); font-size: 10px; }
+  /* Portrait: stop the board getting smothered by the same objective thrice
+     (top card + entry-forecast strip + console Round-1 log). Compact the
+     top card; hide the bottom strip — log still carries the full forecast. */
+  .battle-objective {
+    max-width: min(62%, calc(100% - 26px));
+    font-size: 9px;
+    line-height: 1.25;
+    padding: 6px 8px;
+    max-height: 4.6em;
+    overflow: hidden;
+  }
+  .battle-entry-forecast { display: none; }
   .formation-cell { width: 48px; min-height: 44px; }
   .unit-token { width: clamp(59px, 18vw, 88px); height: clamp(94px, 29vw, 140px); }
   .unit-label { min-width: 70px; max-width: 94px; white-space: normal; font-size: 7px; --label-rest-bottom: -17px; }

@@ -376,7 +376,8 @@ export function disposeBattleStage3D() {
  *  mounted last time first. */
 /** Live mood knobs for art review — ambient/key/rim intensities + optional
  *  hex colours + exposure. Used by `debug.setBattleLights` / mood captures.
- *  Defaults match `_build_night()` port (ambient 1.45, key 2.8, rim 1.15). */
+ *  Defaults: readable night lift over `_build_night()` (ambient 1.75, key 3.4,
+ *  rim 1.45, exposure 1.15) — same cold-ambient / warm-key mood, less silhouette. */
 export function setBattleLights({
   ambient,
   key,
@@ -466,19 +467,22 @@ export function mountBattleStage3D(container, battle, data) {
   // highlight from blowing out against the cold night the rest of the
   // scene sits in.
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  // Slightly above Godot's filmic default so cast reads on the 2D plate
+  // without blowing the warm key (still ACESFilmic).
+  renderer.toneMappingExposure = 1.15;
   renderer.domElement.className = 'stage3d-canvas';
   container.appendChild(renderer.domElement);
-  const ambient = new THREE.AmbientLight(0x6a8aaa, 1.45);
+  // Cold ambient lifted for plate+cast readability; hue kept from `_build_night()`.
+  const ambient = new THREE.AmbientLight(0x6a8aaa, 1.75);
   current = { renderer, canvas: renderer.domElement, raf: 0, scene: null, ambient, key: null, rim: null, camera: null };
 
   const scene = new THREE.Scene();
-  // `_build_night()`'s own values: background/ambient are a single named
-  // palette there (`Environment`), not scattered magic hex — carried over
-  // literally rather than re-picked, so the two builds read as the same
-  // night rather than merely similar ones.
-  scene.background = new THREE.Color(0x0b0e13);
-  scene.fog = new THREE.FogExp2(0x12161d, 0.05);
+  // When stage3d arenas are parked, do not paint an opaque WebGL clear —
+  // CSS `.scene-image` must show through the alpha canvas. Arenas-on keeps
+  // `_build_night()`'s `#0b0e13` void. Fog stays, but density is kept near
+  // Godot's 0.02 so it does not grey-out the plate or the cast.
+  scene.background = USE_STAGE3D_ARENAS ? new THREE.Color(0x0b0e13) : null;
+  scene.fog = new THREE.FogExp2(0x12161d, 0.018);
   // Orthographic, matching `battle_stage_3d.gd`'s `_build_camera()`: a
   // perspective camera makes the board's far edge read smaller than its
   // near edge, which is exactly what `STAGE_SPEC.md` §2.4 rules out ("true
@@ -496,7 +500,7 @@ export function mountBattleStage3D(container, battle, data) {
   // light (Godot uses a warm OmniLight lamp, `#ffcf8f`); the directional
   // form is kept rather than porting an omni/point light, since nothing
   // here currently varies per-arena lamp placement.
-  const key = new THREE.DirectionalLight(0xffcf8f, 2.8);
+  const key = new THREE.DirectionalLight(0xffcf8f, 3.4);
   key.position.set(3, 6, 4);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
@@ -512,7 +516,7 @@ export function mountBattleStage3D(container, battle, data) {
   key.shadow.camera.near = 0.1;
   key.shadow.camera.far = 40;
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x8fb4ff, 1.15);
+  const rim = new THREE.DirectionalLight(0x8fb4ff, 1.45);
   rim.position.set(-3, 4, -3);
   scene.add(rim);
   current.key = key;
@@ -577,7 +581,8 @@ export function mountBattleStage3D(container, battle, data) {
           // rest of the field — the nearest thing this build has to
           // Godot's `is_active()` dim (that distinguishes downed-but-shown
           // fighters, which this build simply never renders at all).
-          rimGain: unit.id === battle.selectedId ? 0.85 : 0.5,
+          // Stronger team Fresnel so cast is not silhouette-only on the plate.
+          rimGain: unit.id === battle.selectedId ? 1.15 : 0.75,
         });
         enableShadows(model);
         scene.add(model);
