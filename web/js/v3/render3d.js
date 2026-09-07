@@ -186,19 +186,37 @@ function styleUnitMaterial(model, { seed, rimTint, rimGain }) {
  *  per unit is the correct, simple answer at this battle's scale (at most
  *  six bodies); revisit with `SkeletonUtils.clone()` if load time matters
  *  once there is animation to also share. */
+function resetSkeletonBind(model) {
+  // Meshy bodies ship with a baked `clip0` that is NOT a fight pose. Drop any
+  // leftover animation state and snap bones to the skin bind before we author
+  // our own stance — otherwise fight-motion deltas compose onto a torn rest.
+  model.traverse(n => {
+    if (n.isSkinnedMesh && n.skeleton) n.skeleton.pose();
+  });
+}
+
 function loadUnitModel(data, assetId) {
   const url = assetUrl(data, assetId);
   return new Promise((resolve, reject) => {
     if (!url) { reject(new Error(`render3d: no registered asset for '${assetId}'`)); return; }
-    loader.load(url, gltf => { neutralizeMetalness(gltf.scene); resolve(gltf.scene); }, undefined, reject);
+    loader.load(url, gltf => {
+      neutralizeMetalness(gltf.scene);
+      // Discard embedded clips — we never play them (SHARED_CLIP_* empty;
+      // procedural stance only). Leaving them on the scene invites accidental
+      // mixers and confuse rest capture in fight-motion.
+      gltf.animations.length = 0;
+      resetSkeletonBind(gltf.scene);
+      resolve(gltf.scene);
+    }, undefined, reject);
   });
 }
 
 // ── animation ───────────────────────────────────────────────────────────────
 //
-// STATUS 2026-09-06 night: owner identified the Head1/22-joint "muscle"
-// overwrite as Eeri. Piritori muscle restored; SHARED_CLIP_* empty until
-// a real Meshy migrate (art-src/meshy-input/MESHY_CAST_MIGRATE.md).
+// STATUS 2026-09-07: SHARED_CLIP_* empty (Eeri restore). Procedural stance
+// is FROZEN (no looping idle/attack) until Meshy cast migrate — looping
+// read as twisted hips / one body thrashing. Embedded GLB clip0 stripped on
+// load. 2D sprites hidden as soon as 3D mounts (no paper-doll flash).
 const CLIP_SOURCES = {
   idle: 'cast3d-muscle-clips-v01:idle',
   attack: 'cast3d-muscle-clips-v01:attack',
@@ -240,8 +258,10 @@ function usesSharedGlbClips(assetId, role) {
 function poseFor(unit, battle) {
   if (!unit.alive) return 'dead';
   if (unit.nerve === 0) return 'hit';
-  const acting = unit.id === battle.selectedId && !battle.acted?.includes(unit.id);
-  return acting ? 'attack' : 'idle';
+  // 2026-09-07: do NOT put the selected unit on looping `attack` — that made
+  // one fighter thrash while the rest idled, and read as twisted hips on
+  // mismatched rests. Still fight-ready stance for everyone alive.
+  return 'idle';
 }
 
 /** Shared GLB clip on a compatible body, else procedural fight-motion on the
@@ -253,9 +273,18 @@ function applyClips(model, pose, seed = 0, sharedClips = null, useShared = false
   if (!clip) return null;
   const mixer = new THREE.AnimationMixer(model);
   const action = mixer.clipAction(clip);
-  if (pose === 'dead') { action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; }
+  // Still stance until Meshy migrate: apply one frame and pause. Looping idle
+  // / attack read as a mess (owner 2026-09-07). Dead still clamps at the end.
   action.play();
-  if (pose !== 'dead') action.time = (seed % 1000) / 1000 * clip.duration;
+  if (pose === 'dead') {
+    action.setLoop(THREE.LoopOnce, 1);
+    action.clampWhenFinished = true;
+    mixer.update(clip.duration);
+  } else {
+    action.time = 0;
+    mixer.update(0);
+    action.paused = true;
+  }
   return mixer;
 }
 
@@ -551,6 +580,9 @@ export function mountBattleStage3D(container, battle, data) {
   // that class and keeps its real 2D backdrop forever, unchanged.
   const stage = container.closest('.battle-stage');
   stage?.classList.remove('stage3d-ready', 'stage3d-arena');
+  // Hide 2D sprites immediately — do not flash paper dolls, then swap to 3D
+  // when loads finish (owner: "loads with old 2d first... real mess").
+  stage?.classList.add('stage3d-pending');
 
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
   const mixers = [];
@@ -634,9 +666,13 @@ export function mountBattleStage3D(container, battle, data) {
       if (oldCover) scene.remove(oldCover);
       addCoverMarkers(scene, battle);
       positionBattleDOM(container, battle);
+      stage?.classList.remove('stage3d-pending');
       stage?.classList.add('stage3d-ready');
     })
-    .catch(() => {}); // logged per-unit above; 2D sprites stay the fallback
+    .catch(() => {
+      // Total failure — show 2D dolls again rather than an empty board.
+      stage?.classList.remove('stage3d-pending');
+    });
 
   // Real elapsed time, not a fixed step: AnimationMixer.update() takes a
   // DELTA, and feeding it a constant would run every clip at whatever rate

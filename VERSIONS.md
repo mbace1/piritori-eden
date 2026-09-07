@@ -10,6 +10,18 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.44 — 2026-09-07
+
+**Fight cast: no 2D flash, frozen stance.**
+
+- Hide 2D unit sprites as soon as 3D mounts (`stage3d-pending`).
+- Strip baked Meshy `clip0` and reset bind pose on load.
+- Freeze procedural fight stance (no looping idle/attack) until Meshy migrate.
+- Selected unit no longer plays looping attack.
+
+### Port
+Web presentation. Godot shared clips already off post-Eeri restore.
+
 ## v4.43 — 2026-09-07
 
 **Fight readability — plate through canvas, brighter night, portrait objective.**
