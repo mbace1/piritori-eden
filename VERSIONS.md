@@ -10,6 +10,17 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.45 — 2026-09-07
+
+**Fight board: keep plate + 2D until cast is real.**
+
+- `setClearColor(0, 0)` so the WebGL canvas does not paint out the scene plate.
+- Drop `stage3d-pending` (it hid dolls before meshes landed → empty board).
+- `stage3d-ready` only when `placed.length > 0`.
+
+### Port
+Web presentation.
+
 ## v4.44 — 2026-09-07
 
 **Fight cast: no 2D flash, frozen stance.**

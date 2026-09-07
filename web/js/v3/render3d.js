@@ -213,10 +213,9 @@ function loadUnitModel(data, assetId) {
 
 // ── animation ───────────────────────────────────────────────────────────────
 //
-// STATUS 2026-09-07: SHARED_CLIP_* empty (Eeri restore). Procedural stance
-// is FROZEN (no looping idle/attack) until Meshy cast migrate — looping
-// read as twisted hips / one body thrashing. Embedded GLB clip0 stripped on
-// load. 2D sprites hidden as soon as 3D mounts (no paper-doll flash).
+// STATUS 2026-09-07: SHARED_CLIP_* empty; stance frozen; clip0 stripped.
+// Clear color alpha 0 so the plate stays visible. 2D dolls stay until at
+// least one cast mesh is placed (no empty-board "ready").
 const CLIP_SOURCES = {
   idle: 'cast3d-muscle-clips-v01:idle',
   attack: 'cast3d-muscle-clips-v01:attack',
@@ -484,6 +483,9 @@ export function mountBattleStage3D(container, battle, data) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // Without this, alpha:true still clears opaque black and paints out the
+  // CSS scene plate after the first frame (owner: "background disappears").
+  renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   // `battle_stage_3d.gd`'s own comment: "the shadow is what does the
   // work: a stylised figure and a photoreal yard stop arguing the moment
@@ -579,10 +581,7 @@ export function mountBattleStage3D(container, battle, data) {
   // a battle with no registered arena (karhupuisto, courtyard) never gets
   // that class and keeps its real 2D backdrop forever, unchanged.
   const stage = container.closest('.battle-stage');
-  stage?.classList.remove('stage3d-ready', 'stage3d-arena');
-  // Hide 2D sprites immediately — do not flash paper dolls, then swap to 3D
-  // when loads finish (owner: "loads with old 2d first... real mess").
-  stage?.classList.add('stage3d-pending');
+  stage?.classList.remove('stage3d-ready', 'stage3d-arena', 'stage3d-pending');
 
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
   const mixers = [];
@@ -667,11 +666,13 @@ export function mountBattleStage3D(container, battle, data) {
       addCoverMarkers(scene, battle);
       positionBattleDOM(container, battle);
       stage?.classList.remove('stage3d-pending');
-      stage?.classList.add('stage3d-ready');
+      // Only hide 2D dolls when at least one real mesh is on the board.
+      // Ready-with-zero-bodies left an empty stage (owner: "no characters").
+      if (placed.length > 0) stage?.classList.add('stage3d-ready');
+      else stage?.classList.remove('stage3d-ready');
     })
     .catch(() => {
-      // Total failure — show 2D dolls again rather than an empty board.
-      stage?.classList.remove('stage3d-pending');
+      stage?.classList.remove('stage3d-pending', 'stage3d-ready');
     });
 
   // Real elapsed time, not a fixed step: AnimationMixer.update() takes a
