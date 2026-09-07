@@ -10,6 +10,17 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.46 — 2026-09-07
+
+**Plate mode: stop blacking out the fight board.**
+
+- No ACES tone-mapping when arenas are parked (ACES + alpha made the clear opaque black).
+- Opaque ground slab → `ShadowMaterial` only in plate mode.
+- Fog off in plate mode.
+
+### Port
+Web presentation.
+
 ## v4.45 — 2026-09-07
 
 **Fight board: keep plate + 2D until cast is real.**

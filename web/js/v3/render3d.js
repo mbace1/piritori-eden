@@ -214,8 +214,9 @@ function loadUnitModel(data, assetId) {
 // ── animation ───────────────────────────────────────────────────────────────
 //
 // STATUS 2026-09-07: SHARED_CLIP_* empty; stance frozen; clip0 stripped.
-// Clear color alpha 0 so the plate stays visible. 2D dolls stay until at
-// least one cast mesh is placed (no empty-board "ready").
+// Plate mode (arenas parked): transparent clear, NO ACES (it turns alpha
+// opaque black), ShadowMaterial ground only, no fog. Opaque slab was
+// painting out the CSS plate after remount/action.
 const CLIP_SOURCES = {
   idle: 'cast3d-muscle-clips-v01:idle',
   attack: 'cast3d-muscle-clips-v01:attack',
@@ -497,10 +498,16 @@ export function mountBattleStage3D(container, battle, data) {
   // equivalent to three.js's ACES fit, both there to keep the warm lamp's
   // highlight from blowing out against the cold night the rest of the
   // scene sits in.
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  // Slightly above Godot's filmic default so cast reads on the 2D plate
-  // without blowing the warm key (still ACESFilmic).
-  renderer.toneMappingExposure = 1.15;
+  // ACESFilmic + alpha:true paints transparent pixels opaque black after the
+  // first tonemap pass (owner: plate vanishes on/after action). Arenas-on
+  // keeps ACES; plate mode stays linear so the CSS scene shows through.
+  if (USE_STAGE3D_ARENAS) {
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+  } else {
+    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.toneMappingExposure = 1.0;
+  }
   renderer.domElement.className = 'stage3d-canvas';
   container.appendChild(renderer.domElement);
   // Cold ambient lifted for plate+cast readability; hue kept from `_build_night()`.
@@ -513,7 +520,8 @@ export function mountBattleStage3D(container, battle, data) {
   // `_build_night()`'s `#0b0e13` void. Fog stays, but density is kept near
   // Godot's 0.02 so it does not grey-out the plate or the cast.
   scene.background = USE_STAGE3D_ARENAS ? new THREE.Color(0x0b0e13) : null;
-  scene.fog = new THREE.FogExp2(0x12161d, 0.018);
+  // Fog greys the plate-through-canvas look; only with real arenas.
+  scene.fog = USE_STAGE3D_ARENAS ? new THREE.FogExp2(0x12161d, 0.018) : null;
   // Orthographic, matching `battle_stage_3d.gd`'s `_build_camera()`: a
   // perspective camera makes the board's far edge read smaller than its
   // near edge, which is exactly what `STAGE_SPEC.md` §2.4 rules out ("true
@@ -554,13 +562,16 @@ export function mountBattleStage3D(container, battle, data) {
   current.rim = rim;
   current.camera = camera;
 
-  // A flat ground plane is the fallback for a battle with no registered
-  // arena mesh (karhupuisto, courtyard) — kept in the scene unconditionally
-  // and only removed once a real arena actually finishes loading, so a
-  // slow or failed arena fetch never leaves units floating over nothing.
+  // Arenas-on: opaque fallback slab until the diorama loads.
+  // Plate mode: ShadowMaterial only — an opaque slab was painting out the
+  // CSS `.scene-image` through the transparent canvas (owner: background
+  // disappears after action). Cast still gets contact shadows.
+  const groundMat = USE_STAGE3D_ARENAS
+    ? new THREE.MeshStandardMaterial({ color: 0x1b222c, roughness: 0.95 })
+    : new THREE.ShadowMaterial({ opacity: 0.32 });
   const ground = new THREE.Mesh(
     new THREE.PlaneGeometry(LANES * CELL_M + 1.5, totalRows() * CELL_M + 1.5),
-    new THREE.MeshStandardMaterial({ color: 0x1b222c, roughness: 0.95 }),
+    groundMat,
   );
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
