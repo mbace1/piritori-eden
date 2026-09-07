@@ -10,6 +10,28 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.43 — 2026-09-07
+
+**Fight readability — plate through canvas, brighter night, portrait objective.**
+
+- **Plate:** when `USE_STAGE3D_ARENAS` is false, `scene.background = null`
+  (renderer alpha kept) so CSS `.scene-image` shows through the WebGL canvas.
+  Fog density cut toward Godot's night fog so it does not grey-out plate/cast.
+- **Lights:** `mountBattleStage3D` night defaults lifted (ambient 1.75, key 3.4,
+  rim 1.45, exposure 1.15); team Fresnel `rimGain` raised so cast is not
+  silhouette-only. Cold-ambient / warm-key mood kept. `setBattleLights`
+  default comment updated.
+- **Portrait:** `.battle-objective` compacted on narrow viewports; hide
+  `.battle-entry-forecast` on the board (console Round-1 log still has the
+  full forecast) so the same objective is not stacked three times.
+- Cache: `render3d.js?v=6`, `v3.css?v=3`, `app.js?v=6`. Arenas stay parked;
+  no Meshy / shared clips.
+
+### Port
+Web-only presentation. Godot already composites cast over plate with parked
+arenas; no Godot lighting/export change required for this unit. Hub inherits
+later.
+
 ## v4.42 — 2026-09-07
 
 **Phase D growth-loop on web — levels, perks, skills, train (catch-up).**
