@@ -24,7 +24,7 @@ import {
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
 import { boot as bootChrome } from './chrome.js?v=1';
 import { STANCE, STANCES } from './stance.js?v=1';
-import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=6';
+import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=7';
 import { positionBattleDOM } from './stage-camera.js?v=4';
 
 const $ = id => document.getElementById(id);

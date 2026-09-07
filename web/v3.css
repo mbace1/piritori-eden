@@ -569,7 +569,8 @@ button { -webkit-tap-highlight-color: transparent; }
    text and the button itself (the real click target) are untouched, so a
    partially-loaded or WebGL-less browser still gets the complete 2D
    fallback it always had; only the art layer on top of it ever changes. */
-.battle-stage.stage3d-ready .unit-body { visibility: hidden; }
+.battle-stage.stage3d-ready .unit-body,
+.battle-stage.stage3d-pending .unit-body { visibility: hidden; }
 /* render3d.js sets this only once a battle's REAL arena mesh (not the
    fallback flat ground plane) has actually loaded — a battle with no
    registered arena (karhupuisto, courtyard) never gets this class and

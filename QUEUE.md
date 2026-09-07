@@ -3,6 +3,8 @@
 > **Claude Code / Godot pickup (2026-09-06):** read [`GODOT_PICKUP.md`](GODOT_PICKUP.md) first.
 > Baseline `main` `f3e7997` / **v4.40** — Phase A leftovers + Phase B already in `godot/`. Pull, `sync-data`, smoke shop + tough desync; do not re-port.
 
+> **Fight look (2026-09-07):** owner — 2D dolls flash then twisted 3D / one body idling. Fixed in v4.44: no 2D flash, strip clip0, freeze stance until Meshy migrate.
+
 > **Blender cast audit (2026-09-06):** Blender 5.2.1 on the bot box; see [`art-src/meshy-input/MESHY_CAST_MIGRATE.md`](art-src/meshy-input/MESHY_CAST_MIGRATE.md) and `art-src/tools/blender_cast_clip_audit.py`. Shared clips still muscle-only until ~Sept 11 cast migrate — do not one-off re-rig.
 
 > **Eeri contamination (2026-09-06 night):** owner ID’d the clay/`Head1` “muscle” from the Blender audit as **Eeri**. Restored pre-`cd64cd2` Piritori `muscle-v01` + clips; shared playback off. See `MESHY_CAST_MIGRATE.md`.
