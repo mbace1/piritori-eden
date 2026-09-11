@@ -22,6 +22,7 @@ additional frames or true layer extraction before shipping.
 | Battle detail ceiling | Detail target | Reduce environmental texture about 25 percent for production. |
 | Battle simplification floor | Lower bound | Final assets should retain more character detail. |
 | Toko Slomo's Noodles fullscreen screen v02 | Narrative-instance baseline | Corrected eye openings sit inside the white arches. True PNG and normalized hit regions are implementation-ready; separate copy and controls for later dynamic content. |
+| F01 heavy bruiser and F02 wiry skirmisher T-poses | Owner-approved 2D Meshy pilot sources | These are the only current new-pose pilots. Their generated 3D geometry remains unapproved and unregistered; see [Meshy pilot results](../MESHY_PILOT_RESULTS.md). |
 
 ## Semi-approved
 
