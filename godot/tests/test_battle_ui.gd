@@ -149,6 +149,11 @@ func _ready() -> void:
 	check("withdrawal states its cost", wd != null and wd.tooltip_text != "",
 		wd.tooltip_text if wd else "(no button)")
 	if wd:
+		wd.grab_focus()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check("focused withdrawal stays in the visible viewport",
+			wd.global_position.y >= 0.0 and wd.global_position.y + wd.size.y <= vp.y + 1.0)
 		wd.pressed.emit()
 		await get_tree().process_frame
 		var guard := 0
@@ -169,19 +174,8 @@ func _ready() -> void:
 ## block nested inside it (99px), and taking the widest picked up the top strip,
 ## which spans the shell too (56px). It is the bottom band that matters.
 func _console_panel() -> Control:
-	var found: Control = null
-	var best := -1.0
-	for n in _all(_scene):
-		if not (n is PanelContainer):
-			continue
-		var c := n as Control
-		if c.size.x < _scene.size.x * 0.8:
-			continue                       # not a full-width band
-		var bottom := c.global_position.y + c.size.y
-		if bottom > best:
-			best = bottom
-			found = c
-	return found
+	# Name the actual command band; hidden popup panels may extend offscreen.
+	return _scene.get_node_or_null("CommandConsole") as Control
 
 
 func _board_control() -> Control:

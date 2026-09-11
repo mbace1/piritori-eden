@@ -316,6 +316,7 @@ func _build() -> void:
 	var portrait := vp.x < vp.y
 	_console_portrait = portrait
 	_console = PanelContainer.new()
+	_console.name = "CommandConsole"
 	_console.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 0))
 	if portrait:
 		# Measured, not guessed: the single-row CONSOLE_H (168) was sized to
@@ -367,7 +368,16 @@ func _build() -> void:
 	for s in ["left", "right", "top", "bottom"]:
 		cpad.add_theme_constant_override("margin_" + s, 14)
 	cpad.add_child(row)
-	_console.add_child(cpad)
+	# A bottom-anchored PanelContainer otherwise inherits the full minimum
+	# height of wrapped forecasts and pushes its controls below the screen.
+	# Bound that content; focus-follow keeps controller navigation visible.
+	var console_scroll := ScrollContainer.new()
+	console_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	console_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	console_scroll.follow_focus = true
+	cpad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	console_scroll.add_child(cpad)
+	_console.add_child(console_scroll)
 	# NOT col.add_child: it is an overlay on the root, pinned to the bottom.
 	add_child(_console)
 	_console.anchor_left = 0.0

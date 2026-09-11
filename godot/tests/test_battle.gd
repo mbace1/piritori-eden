@@ -1146,8 +1146,11 @@ func _test_every_stage_exists() -> void:
 			missing.append("%s -> %s" % [scene_id, path])
 	check("every mapped arena is a file that exists", missing.is_empty(),
 		" ".join(missing))
-	check("the fallback yard exists too",
-		ResourceLoader.exists(BattleStage3D.STAGE_FALLBACK))
+	if BattleStage3D.USE_STAGE3D_ARENAS:
+		check("the enabled fallback yard exists", ResourceLoader.exists(BattleStage3D.STAGE_FALLBACK))
+	else:
+		eq("parked arenas have no fallback diorama", BattleStage3D.STAGE_FALLBACK, "")
+		eq("ordinary battles do not load a parked diorama", BattleStage3D.stage_path("scene-kallio-backyard-v01"), "")
 
 	# The override is what makes a new arena reachable before content places it,
 	# so it has to actually override.
@@ -1359,9 +1362,17 @@ the boiler hall has a fight in it")
 
 	var stage := String(def["stage_id"])
 	var path := BattleStage3D.stage_path(stage)
-	check("and it reaches the boiler hall, not the default yard",
-		path != BattleStage3D.STAGE_FALLBACK, "%s -> %s" % [stage, path])
-	check("which is a file that exists", ResourceLoader.exists(path))
+	eq("the battle retains its authored boiler hall identity", stage, "stage3d-suvilahti-kattilahalli-v01")
+	var registered_path := ""
+	for asset in ContentRegistry.art.get("assets", []):
+		if String(asset.get("id", "")) == stage:
+			registered_path = "res://data/art/" + String(asset.get("file", ""))
+	check("the registered boiler hall asset still exists", registered_path != "" and ResourceLoader.exists(registered_path))
+	if BattleStage3D.USE_STAGE3D_ARENAS:
+		check("enabled arenas reach the boiler hall, not the fallback", path != BattleStage3D.STAGE_FALLBACK)
+		check("the enabled arena file exists", ResourceLoader.exists(path))
+	else:
+		eq("the parked boiler hall does not load a diorama", path, "")
 
 	# COMBAT.md §9.10: this is the first authored battle whose fiction admits
 	# death. Asserted so that turning it off later is a decision, not a drift.

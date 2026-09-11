@@ -1992,7 +1992,7 @@
       "day": 2,
       "block": "day",
       "encounter_id": "enc-jaska-receipt",
-      "anchor_id": "torkkelinmaki"
+      "anchor_id": "makelansilta"
     },
     {
       "day": 2,
@@ -2059,7 +2059,7 @@
       "day": 7,
       "block": "night",
       "encounter_id": "enc-jaska-last-light",
-      "anchor_id": "torkkelinmaki"
+      "anchor_id": "makelansilta"
     }
   ],
   "news": [
@@ -2149,6 +2149,91 @@
         "brief": "A container comes off a ship at Sörnäinen. Pay for it, move it, and be somewhere else by morning.",
         "stake_eur": 400,
         "grants_upgrade": "stash-house-sornainen"
+      },
+      "act_id": "act-1-kallio-2003",
+      "narrative": {
+        "people": [
+          {
+            "id": "jaska",
+            "name": "Jaska",
+            "location": "Scene Club, Mäkelänsilta",
+            "site_id": "jaska_studio",
+            "role": "scene",
+            "combat_policy": "authored-exceptions-only",
+            "introduction": "Your brother builds a city out of receipts at Scene Club. His corner of the art commune is a place to talk about what your work leaves behind.",
+            "props": [
+              "receipt city",
+              "family photograph",
+              "sealed envelope"
+            ],
+            "beats": [
+              {
+                "kind": "encounter",
+                "id": "enc-jaska-receipt",
+                "teaser": "Visit your brother at Scene Club.",
+                "recollection": "The receipt city and the envelope: your decision is recorded."
+              },
+              {
+                "kind": "encounter",
+                "id": "enc-courtyard-last-call",
+                "teaser": "Pressure reaches the courtyard near his home.",
+                "recollection": "What happened outside his home belongs to the family story.",
+                "presence": "offscreen"
+              },
+              {
+                "kind": "encounter",
+                "id": "enc-jaska-last-light",
+                "teaser": "Return to Scene Club as the week closes.",
+                "recollection": "You and Jaska have named what this week cost."
+              }
+            ]
+          },
+          {
+            "id": "toko",
+            "name": "Toko Slomo",
+            "location": "Noodle bar, Vaasankatu",
+            "site_id": "toko_slomo_noodles",
+            "role": "scene",
+            "combat_policy": "never",
+            "introduction": "Slomo has a shop and a life of his own. A quiet meal can lead to information, a favour or simply a conversation.",
+            "props": [
+              "bowl",
+              "repaired radio",
+              "counter",
+              "rainy tram window"
+            ],
+            "beats": [
+              {
+                "kind": "encounter",
+                "id": "enc-toko-quiet-voice",
+                "teaser": "Call at the noodle bar after dark.",
+                "recollection": "What you asked of Slomo—and what you offered in return—is recorded."
+              }
+            ]
+          },
+          {
+            "id": "arvo",
+            "name": "Arvo Linde",
+            "location": "Evening television",
+            "presentation": "broadcast",
+            "role": "scene",
+            "combat_policy": "never",
+            "introduction": "Arvo reports the public story. His bulletin distinguishes documented facts from the fictional services you encounter.",
+            "props": [
+              "CRT television",
+              "script",
+              "dated source card"
+            ],
+            "beats": [
+              {
+                "kind": "news",
+                "id": "news-markka-afterlife",
+                "teaser": "A scheduled bulletin arrives before the bank visit.",
+                "recollection": "The bulletin explained old money and the staffed-bank lead."
+              }
+            ]
+          }
+        ]
       }
     }
   ],
@@ -2806,5 +2891,84 @@
       "hooks": "heat",
       "tier": 2
     }
+  ],
+  "optional_visits": [
+    {
+      "id": "visit-jaska-room-to-work",
+      "chapter": 1,
+      "requires_encounter": "enc-jaska-receipt",
+      "site_id": "jaska_studio",
+      "scene_asset_id": "scene-scene-club-v01",
+      "source_status": "fiction",
+      "participants": [
+        "aatami",
+        "jaska"
+      ],
+      "title": "ROOM TO WORK",
+      "opening": "Jaska turns a scrap of cardboard over, looking for an unmarked side. \"You can sit for a minute. Just leave that pile where it is.\" He makes room beside the table without stopping work.",
+      "inspectables": [
+        "receipt offcuts",
+        "unfinished cardboard map"
+      ],
+      "choices": [
+        {
+          "id": "jaska-listen",
+          "label": "Sit and ask about the work",
+          "forecast": "Remember that you stayed to listen. No money or time-block cost.",
+          "requirements": [],
+          "effects": [
+            "memory:jaska-listen"
+          ]
+        },
+        {
+          "id": "jaska-give-space",
+          "label": "Give him room to work",
+          "forecast": "Remember that you respected his space. No money or time-block cost.",
+          "requirements": [],
+          "effects": [
+            "memory:jaska-give-space"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visit-toko-after-service",
+      "chapter": 1,
+      "requires_encounter": "enc-toko-quiet-voice",
+      "site_id": "toko_slomo_noodles",
+      "scene_asset_id": "scene-toko-noodles-empty-v01",
+      "source_status": "fiction",
+      "participants": [
+        "aatami",
+        "toko"
+      ],
+      "title": "AFTER SERVICE",
+      "opening": "Slomo sets a dry bowl beside the others. The radio crackles, then finds its station. \"Not every visit has to be business,\" he says. For a moment, the tram outside is the loudest thing in the room.",
+      "inspectables": [
+        "Toko's repaired radio",
+        "night tram through the window"
+      ],
+      "choices": [
+        {
+          "id": "toko-ordinary-evening",
+          "label": "Ask how the evening went",
+          "forecast": "Remember a conversation about his shop. No information or money reward.",
+          "requirements": [],
+          "effects": [
+            "memory:toko-ordinary-evening"
+          ]
+        },
+        {
+          "id": "toko-quiet-company",
+          "label": "Keep him company quietly",
+          "forecast": "Remember sharing a quiet moment. No information or money reward.",
+          "requirements": [],
+          "effects": [
+            "memory:toko-quiet-company"
+          ]
+        }
+      ]
+    }
   ]
 }
+

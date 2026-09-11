@@ -112,3 +112,38 @@ jobs:
       - name: the seven-day slice plays to an ending
         working-directory: godot
         run: godot --headless --path . res://tests/test_playthrough.tscn
+
+  web-state:
+    name: browser campaign state
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: authored chapter, crew growth and trade progress
+        run: |
+          node web/test/v3-contract.mjs
+          node web/test/v3-state.mjs
+          node web/test/chapter-narrative.mjs
+          node web/test/visits.mjs
+          node web/test/scene-content.mjs
+
+  act1-scenes:
+    name: Act I touch scenes and visits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --prefix /tmp/piritori-test playwright
+      - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: scenes, reload and one-time visits through the UI
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          PIRITORI_TEST_URL: http://127.0.0.1:8781/web/
+          PIRITORI_CAPTURE_DIR: /tmp
+        run: |
+          python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
+          node web/test/act1-scenes.cjs

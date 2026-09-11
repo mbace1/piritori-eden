@@ -10,6 +10,20 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.47 — 2026-09-11
+
+**Act I people, places and optional return conversations.**
+
+- Jaska stands in Scene Club, Slomo behind his noodle counter, and Arvo inside the television using the registered models. Restrained breathing/glances respect reduced motion; scene resources are released on navigation.
+- Two optional return visits become available at their locations after the introductions. Choices record a memory once, survive reload, and do not advance a story block or grant repeatable rewards.
+- People and Places tracks authored Chapter 1 appearances. Jaska's two scheduled visits now agree with his existing Mäkelänsilta site.
+- Successful market sales and delivery receipts count toward the chapter goal. The shipment still requires its location, stake and explicit action.
+- Choice headings use dark ink against their actual cream face. Rebuilt the Japanese font subsets for the current interface strings.
+
+### Port
+
+Port the optional visit availability/open/choice/return flow and People and Places panel to Godot using the shared content and existing choices/memory state. Browser scene composition and the choice-heading ink correction require a Godot visual comparison; its existing presenter is retained. Font coverage and chapter receipt accounting are shared/fixed in this release. Later chapters and chapter transitions are not included.
+
 ## v4.46 — 2026-09-07
 
 **Plate mode: stop blacking out the fight board.**

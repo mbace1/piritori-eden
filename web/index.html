@@ -10,6 +10,7 @@
   <script type="importmap">
     { "imports": { "three": "./vendor/three.module.min.js?v=1" } }
   </script>
+  <link rel="stylesheet" href="scene-speaker.css?v=1">
 </head>
 <body>
   <div id="game" class="game-shell" data-mode="route">
@@ -20,7 +21,7 @@
       </div>
       <div class="time-card" aria-live="polite">
         <span id="blockLabel">DAY 1 · DAY</span>
-        <small>VERTICAL SLICE · v3.1</small>
+        <small>ACT I · v4.47</small>
       </div>
       <dl class="resource-strip" aria-label="Campaign resources">
         <div class="res-cash"><dt>€</dt><dd id="cashValue">160</dd></div>
@@ -29,6 +30,7 @@
         <div class="res-intel"><dt>INTEL</dt><dd id="intelValue">0</dd></div>
       </dl>
       <div class="top-actions">
+        <a class="paper-button icon-button" href="https://mbace1.github.io/Suds-Jack/#piritori" aria-label="Return to Suds Jack hub">⌂</a>
         <button class="paper-button icon-button" id="localeButton" type="button" aria-label="Change language">EN</button>
         <button class="paper-button icon-button" id="pauseButton" type="button" aria-label="Pause and things to test">⏸</button>
         <button class="paper-button icon-button" id="resetButton" type="button" aria-label="Reset campaign">↺</button>
@@ -66,7 +68,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  <script type="module" src="js/v3/app.js?v=9"></script>
+  <script type="module" src="js/v3/app.js?v=11"></script>
   <!-- The arcade's HOME button, which lives in the Suds-Jack site root and
        not in this repository. Correct once this deploys to gh-pages/piritori/,
        one level under the arcade hub — ../hub/shell.js then reaches the hub's
@@ -89,3 +91,5 @@
   </script>
 </body>
 </html>
+
+

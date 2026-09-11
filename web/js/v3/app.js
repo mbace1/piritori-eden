@@ -1,3 +1,6 @@
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=1';
+import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=1';
+import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=1';
 import { mountMapRelief } from './map-relief.js?v=1';
 import {
@@ -11,7 +14,7 @@ import {
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-} from './state.js?v=3';
+} from './state.js?v=5';
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
 import {
@@ -20,9 +23,9 @@ import {
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=6';
+} from './battle.js?v=8';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
-import { boot as bootChrome } from './chrome.js?v=1';
+import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=1';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=9';
 import { positionBattleDOM } from './stage-camera.js?v=4';
@@ -157,11 +160,15 @@ function render() {
   const views = {
     route: renderRoute,
     encounter: renderEncounter,
+    visit: renderEncounter,
     ledger: renderLedger,
     battle: renderBattle,
     news: renderNews,
   };
+  disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
+  const speakerHost = root.querySelector('[data-speaker]');
+  if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
 
   // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
   // meshes, is one of the parity gaps this build owes Godot. Mounted here
@@ -400,6 +407,7 @@ function renderRoute() {
           <p>${esc(anchorDescription(selected))}</p>
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
+            ${availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Slomo')}</button>`).join('')}
             ${selected.id === slot.anchor_id ? `<button class="paper-button primary" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
             ${selected.sliceState === 'training'
               ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
@@ -468,21 +476,24 @@ function ambientLayers(encounter) {
 function renderEncounter() {
   if (state.endingId) return renderCampaignEnd();
   const slot = currentSchedule(state, data.content);
-  const encounter = currentEncounter(state, data);
+  const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
   if (!slot || !encounter) return renderCampaignEnd();
   const site = data.sites.get(encounter.site_id);
   const anchorId = encounter.anchor_override_id ?? site?.anchorId ?? slot.anchor_id;
   const anchor = data.anchors.get(anchorId);
   const art = encounter.scene_asset_id ? assetUrl(data, encounter.scene_asset_id) : '';
-  const isToko = encounter.scene_asset_id === 'scene-toko-noodles-prototype-v02';
+  const isToko = encounter.participants?.includes('toko');
+  const isJaska = encounter.participants?.includes('jaska');
   const resolved = state.choices[encounter.id];
   const choice = encounter.choices.find(item => item.id === resolved);
   const pendingBattle = state.battle?.status === 'active';
   return `
     <div class="encounter-layout">
       <section class="paper-panel scene-card">
-        <div class="scene-viewport ${isToko ? 'toko' : ''}">
+        <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
+          ${isToko ? `<div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko Slomo behind the counter"></div><img class="counter-foreground" src="${esc(art)}" alt="" aria-hidden="true">` : ''}
+          ${isJaska ? '<i class="jaska-contact" aria-hidden="true"></i><div class="scene-speaker jaska-standing" data-speaker="jaska" data-asset="cast3d-jaska-v01" aria-label="Jaska"></div>' : ''}
           ${ambientLayers(encounter)}
           <i class="scene-vignette"></i>
           <div class="scene-caption">
@@ -500,11 +511,13 @@ function renderEncounter() {
         </div>
         <p class="observation" aria-live="polite">${esc(observation)}</p>
         ${resolved ? renderEncounterOutcome(choice, pendingBattle) : renderChoices(encounter)}
+        ${state.mode === 'visit' && !resolved ? '<button class="paper-button" data-action="leave-visit">LEAVE WITHOUT CHOOSING</button>' : ''}
       </section>
     </div>`;
 }
 
 function encounterTitle(encounter) {
+  if (encounter.title) return encounter.title;
   const titles = {
     'enc-first-purchase': 'THE FIRST BAG',
     'enc-jaska-receipt': 'DEAD MONEY',
@@ -536,6 +549,7 @@ function renderChoices(encounter) {
 }
 
 function renderEncounterOutcome(choice, pendingBattle) {
+  if (state.mode === 'visit') return `<div class="outcome-card"><h3>${esc(choice?.label)}</h3><p>${esc(choice?.forecast)}</p><button class="paper-button primary" data-action="leave-visit">RETURN TO MAP</button></div>`;
   const messages = state.lastOutcome?.length ? state.lastOutcome : ['The choice is now part of the city’s memory.'];
   return `<div class="outcome-card">
     <h3>${esc(choice?.label ?? 'CHOICE RECORDED')}</h3>
@@ -661,6 +675,7 @@ function renderLedger() {
           <p class="consequence-strip">The slice trades one abstract good. No dosage, preparation, concealment or consumption detail is simulated.</p>
         </section>
         ${renderChapter()}
+        ${renderChapterPeople(state, data.content)}
         ${renderBoard()}
         <section class="paper-panel">
           <p class="section-label">CREW / FRONT THREE DEPLOY AUTOMATICALLY</p>
@@ -998,6 +1013,7 @@ function renderPoliceChoice(battle) {
       <h2 class="section-title">${tr('police_here')}</h2>
       <p>${down} ${down === 1 ? tr('police_one_down') : tr('police_many_down')}</p>
       <div class="node-actions">
+            ${availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Slomo')}</button>`).join('')}
         <button class="paper-button danger" data-action="police-posture" data-posture="${POLICE_POSTURE.BACK_OFF}">${tr('police_back_off')}</button>
         <button class="paper-button primary" data-action="police-posture" data-posture="${POLICE_POSTURE.HELP_FRIENDS}">${tr('police_help')}</button>
       </div>
@@ -1107,7 +1123,7 @@ function renderNews() {
       <section class="tv-shell" aria-label="Television bulletin presented by fictional newscaster Arvo Linde">
         <div class="tv-screen">
           <div class="studio"></div>
-          <div class="arvo" aria-hidden="true"><i class="body"></i><i class="shirt"></i><i class="tie"></i><i class="head"></i><i class="hair"></i><i class="face-line"></i></div>
+          <div class="scene-speaker arvo-speaker" data-speaker="arvo" data-asset="presenter-arvo-linde-v05" aria-label="Arvo Linde"></div><div class="arvo arvo-fallback" aria-hidden="true"><i class="body"></i><i class="shirt"></i><i class="tie"></i><i class="head"></i><i class="hair"></i><i class="face-line"></i></div>
           <div class="news-lower-third">ARVO LINDE · HELSINKI · DOCUMENTED FACT / FICTIONAL SERVICE</div>
         </div>
         <div class="tv-knobs" aria-hidden="true"><i></i><i></i></div>
@@ -1238,7 +1254,11 @@ function handleRootClick(event) {
   const target = event.target.closest('[data-action]');
   if (!target || target.disabled) return;
   const action = target.dataset.action;
-  if (action === 'select-anchor') {
+  if (action === 'open-visit') {
+    if (openVisit(state, data, target.dataset.visit)) { observation = ''; persist(); render(); }
+  } else if (action === 'leave-visit') {
+    leaveVisit(state); persist(); render();
+  } else if (action === 'select-anchor') {
     const id = target.dataset.anchor;
     state.selectedAnchor = id;
     // Standing somewhere is how you learn its price (board.js). Without this
@@ -1270,14 +1290,14 @@ function handleRootClick(event) {
   } else if (action === 'send-route') {
     const result = sendOnRoute(state, data); logToast(result.message); persist(); render();
   } else if (action === 'inspect') {
-    const encounter = currentEncounter(state, data);
+    const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
     const item = encounter.inspectables[Number(target.dataset.index)];
     observation = inspectionCopy(item);
     render();
   } else if (action === 'choose') {
-    const encounter = currentEncounter(state, data);
+    const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
-    const result = chooseEncounter(state, encounter, choice, data);
+    const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
     else if (result.startBattle) startBattle(result.startBattle);
     persist(); render();
@@ -1493,7 +1513,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.1',
+      version: 'v4.47',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
@@ -1562,3 +1582,5 @@ async function boot() {
 }
 
 boot();
+
+
