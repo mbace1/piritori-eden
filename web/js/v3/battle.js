@@ -19,6 +19,22 @@ const ROLE_PARTS = {
 };
 const ENEMY_HEADS = ['head-kallio-03-v03', 'head-kallio-09-v03', 'head-kallio-11-v03'];
 
+/** `battle_builder.gd`'s `ROLE_PROFILES`, ported. An opponent authors only
+ *  role/cell/intent/equipment and never a stat line, so on both sides of the
+ *  port the ROLE is the stat line. `driver` has no entry in Godot's table
+ *  either and takes the default — which is why the default exists. */
+const ROLE_PROFILE = {
+  muscle: { condition: 8, nerve: 6 },
+  runner: { condition: 5, nerve: 5 },
+  watcher: { condition: 5, nerve: 5 },
+  fixer: { condition: 6, nerve: 7 },
+  local: { condition: 6, nerve: 5 },
+};
+const DEFAULT_PROFILE = { condition: 6, nerve: 6 };
+/** Guard has no authored ceiling on either side of the port — unlike
+ *  condition and nerve, which the crew record and the role profile set. */
+const GUARD_CEILING = 3;
+
 /** A unit's `cell` field is a grid.js `slotKey` ("lane,depth") — not the
  *  authored "front-2" vocabulary, which only names a slot inside a SIDE's
  *  own band and cannot name the neutral cells a unit can now stand in (see
@@ -48,8 +64,15 @@ function makePlayer(member, state, index, count) {
   const tough = perkValue(state, member.id, 'toughness') * PERK_CONDITION_PER_POINT;
   const steady = perkValue(state, member.id, 'nerve') * PERK_NERVE_PER_POINT;
   const muscle = perkValue(state, member.id, 'strength') * PERK_HARM_PER_POINT;
-  const baseHp = 3;
-  const baseNerve = 3;
+  // `_crew_to_unit()`: a crew member fights at their OWN condition, wounds
+  // carried in — the authored 7-10 spread, not a flat 3 for everybody. This
+  // was `3` until 2026-09-09, which meant the crew screen read 10 for the
+  // muscle while the fight gave them 3, every role fought identically, and
+  // the perks above landed on a 3-point scale (one toughness point was +33%
+  // health, where Godot's "deliberately SMALL per point" assumes a base of
+  // 6-10). `maxCondition` is the ceiling; `condition` is what they walk in on.
+  const baseHp = Math.max(1, status?.condition ?? member.condition ?? DEFAULT_PROFILE.condition);
+  const baseNerve = Math.max(1, status?.nerve ?? member.nerve ?? DEFAULT_PROFILE.nerve);
   return {
     id: member.id,
     name: member.name,
@@ -81,17 +104,21 @@ function makeEnemy(opponent, index, openingNerve = 0) {
   // BattleBuilder._opponent_to_unit(): parse_cell() always answers for the
   // OPPOSITION band, centred onto the real board width.
   const slot = parseCell(opponent.cell);
+  const profile = ROLE_PROFILE[opponent.role] ?? DEFAULT_PROFILE;
   return {
     id: opponent.id,
     name: opponent.name,
     side: 'enemy',
     role: opponent.role,
     cell: slotKey(slot.lane, slot.depth),
-    hp: 3,
-    maxHp: 3,
+    // `_opponent_to_unit()`: flat 3/3 before 2026-09-02, which made a muscle
+    // and a runner the same fighter wearing different art.
+    hp: profile.condition,
+    maxHp: profile.condition,
     guard: opponent.role === 'muscle' ? 2 : 1,
-    nerve: Math.max(1, 3 + openingNerve),
-    maxNerve: 3,
+    // The scouting advantage applies to the role's own nerve, not a constant.
+    nerve: Math.max(1, profile.nerve + openingNerve),
+    maxNerve: profile.nerve,
     alive: true,
     head: ENEMY_HEADS[index % ENEMY_HEADS.length],
     torso,
@@ -515,7 +542,7 @@ function triggerSyncFire(battle, attacker, target) {
     // Desync mid-chain: tough already marked from an earlier primary this
     // round — stop. Same chain before any sync: first fires, then mark+stop.
     if (target.tough && battle.syncHitsThisRound?.has(target.id)) return;
-    battle.log.unshift(`${ally.name} syncs fire: ${hit(target, 1 + (ally.harmBonus ?? 0))}`);
+    battle.log.unshift(`${ally.name} syncs fire: ${hit(target, rollHarm(battle, ally, target) + (ally.harmBonus ?? 0))}`);
     if (target.tough) {
       battle.syncHitsThisRound.add(target.id);
       return;
@@ -528,6 +555,29 @@ function markActed(battle, unit) {
   battle.action = null;
   const next = battle.players.find(item => item.alive && !battle.acted.includes(item.id));
   battle.selectedId = next?.id ?? unit.id;
+}
+
+/** `_roll_range(weapon.harm_min, weapon.harm_max)`, through the house seeded
+ *  `rand01()` rather than a live `Math.random()`: `v3-playthrough` replays a
+ *  whole run and cannot do that against an unseeded roll, so the same battle,
+ *  round and pair always produce the same swing.
+ *
+ *  The band itself was already ported — `equipment.js`'s `HOLD_TUNING`, built
+ *  into `battle.weapons` at creation — and simply never read for damage:
+ *  every blow was a flat 1, so a sawn-off and a folding knife hit identically
+ *  and the whole harm table was decoration. */
+function rollHarm(battle, attacker, target) {
+  const held = weaponFor(battle, attacker);
+  // A support item is not a weapon, and swinging one is not an attack for
+  // ZERO — you hit them with your hands instead. This is what Godot keeps an
+  // `UNARMED` entry for, and skipping it stalls the fight outright: a crew
+  // member holding a feature-phone (`utility-one`, harm 0/0) could never
+  // finish anybody, and `v3-battle`'s 150-round auto-play never resolved.
+  const band = (held.harmMax ?? 0) > 0 ? held : UNARMED;
+  const min = band.harmMin ?? 1;
+  const max = Math.max(min, band.harmMax ?? min);
+  if (max === min) return min;
+  return min + Math.floor(rand01(battle.id, battle.round, attacker.id, target.id, 'harm') * (max - min + 1));
 }
 
 function hit(target, amount = 1) {
@@ -554,7 +604,7 @@ export function playerAttack(battle, targetId) {
     target.guard = Math.max(0, target.guard - 1);
     battle.log.unshift(`${attacker.name} marks ${target.name}'s lane. Guard and nerve drop.`);
   } else {
-    battle.log.unshift(`${attacker.name}: ${hit(target, 1 + (attacker.harmBonus ?? 0))}`);
+    battle.log.unshift(`${attacker.name}: ${hit(target, rollHarm(battle, attacker, target) + (attacker.harmBonus ?? 0))}`);
     triggerSyncFire(battle, attacker, target);
   }
   markActed(battle, attacker);
@@ -603,8 +653,15 @@ export function brace(battle) {
   if (policeAwaitingPosture(battle)) return { ok: false, message: 'The police are here. Answer them first.' };
   const unit = selectedUnit(battle);
   if (!unit || battle.action !== 'brace') return { ok: false, message: 'Select a crew member first.' };
-  unit.guard = Math.min(3, unit.guard + 1);
-  unit.nerve = Math.min(3, unit.nerve + 1);
+  // Both ceilings were the literal 3 that every stat used to be. Guard's
+  // still is — nothing authors a guard ceiling — but NERVE is now the
+  // fighter's own, and leaving the literal there capped a nerve-7 muscle at
+  // 3: their nerve could never fill, so `autoCommand()`'s guard weight
+  // (which rises as nerve falls) stayed high and the crew braced forever
+  // without ever attacking. A 150-round auto-play ended with both opponents
+  // untouched at full condition.
+  unit.guard = Math.min(GUARD_CEILING, unit.guard + 1);
+  unit.nerve = Math.min(unit.maxNerve ?? GUARD_CEILING, unit.nerve + 1);
   battle.log.unshift(`${unit.name} braces: guard ${unit.guard}, nerve ${unit.nerve}.`);
   markActed(battle, unit);
   return { ok: true };
@@ -833,7 +890,7 @@ function enemyPhase(battle) {
       .sort((a, b) => (a.guard + a.hp) - (b.guard + b.hp) || a.name.localeCompare(b.name));
     const target = targets.find(item => attackableInBattle(battle, enemy, item)) ?? targets[0];
     if (!target) break;
-    battle.log.unshift(`${enemy.name}: ${hit(target)}`);
+    battle.log.unshift(`${enemy.name}: ${hit(target, rollHarm(battle, enemy, target))}`);
     // Symmetric with the player side (COMBAT.md §9.13): sync fire is a
     // property of standing where a gun already reaches, not a player perk.
     triggerSyncFire(battle, enemy, target);
@@ -874,20 +931,44 @@ export function endPlayerPhase(battle) {
  * not part of a "minimal scorer" pass. Every role scores as Godot's
  * unlisted roles already do: no bonus, the `_:` default.
  */
+/** `_score_base()`'s `behaviour_package` multipliers, now ported. Godot sets
+ *  a crew member's package to their own ROLE (`battle_builder.gd:212`), so
+ *  the two vocabularies were always meant to be one; `local` is spelled
+ *  `local_pusher` there and is the only word that differs. `driver` and
+ *  `muscle` appear in neither match statement and take the `_:` default of
+ *  1.0, exactly as in Godot.
+ *
+ *  Skipping this was recorded as "its own investigation, not part of a
+ *  minimal scorer pass", and the cost was REPOSITION. Without the package
+ *  every role scores a flat 0.4 to move, which loses to GUARD at every
+ *  nerve level — so nobody ever advanced. A crew that had killed everything
+ *  in reach would stand and brace forever rather than close on the last
+ *  opponent, and the fight could not end. The runner's 1.8 and the
+ *  watcher's 1.2 are what make repositioning a real command at all. */
+const BEHAVIOUR = {
+  ATTACK: { collector: 1.4, veteran: 1.2, watcher: 0.4, fixer: 0.1, runner: 0.7 },
+  GUARD: { local: 1.3, collector: 1.1, runner: 0.4 },
+};
+/** REPOSITION REPLACES the base rather than scaling it — the GDScript
+ *  assigns (`score = 1.8`) where the other two multiply. */
+const REPOSITION_BY_ROLE = { runner: 1.8, watcher: 1.2 };
+
 function scoreBase(battle, type, unit, target) {
   switch (type) {
     case 'ATTACK': {
       if (!target) return 0;
       const targetNerveFraction = target.nerve / (target.maxNerve ?? 3);
       const targetConditionFraction = target.hp / target.maxHp;
-      return 1.0 + (1 - targetNerveFraction) * 1.5 + (1 - targetConditionFraction) * 0.8;
+      const base = 1.0 + (1 - targetNerveFraction) * 1.5 + (1 - targetConditionFraction) * 0.8;
+      return base * (BEHAVIOUR.ATTACK[unit.role] ?? 1.0);
     }
     case 'GUARD': {
       const nerveFraction = unit.nerve / (unit.maxNerve ?? 3);
-      return 0.6 + (1 - nerveFraction) * 1.2;
+      const base = 0.6 + (1 - nerveFraction) * 1.2;
+      return base * (BEHAVIOUR.GUARD[unit.role] ?? 1.0);
     }
     case 'REPOSITION':
-      return 0.4;
+      return REPOSITION_BY_ROLE[unit.role] ?? 0.4;
     default:
       return 0;
   }
@@ -897,6 +978,61 @@ function scoreBase(battle, type, unit, target) {
  *  `FightManager._score_command()` does for the player side only. */
 function scoreCommand(battle, type, unit, target) {
   return Math.max(scoreBase(battle, type, unit, target), 0) * stanceWeight(battle.stance, type);
+}
+
+/**
+ * Where a unit should move to. Ported from TURF's `approachTile`/`planIntent`
+ * (`turf/js/ai.js`, on Suds-Jack's gh-pages — `PORTING.md` §1.08 records it
+ * as a sibling source), because it answers the question this one had wrong:
+ *
+ *   1. prefer a cell you can actually ATTACK FROM, best target first;
+ *   2. failing that, the cell that CLOSES THE MOST DISTANCE.
+ *
+ * What was here before took the most-forward reachable cell instead, and
+ * "most forward" on this board is the opposition's own back row. Measured on
+ * `battle-karhupuisto-2v2`: the runner's first auto-move went from depth 2
+ * straight to depth 7 — PAST both opponents, who stand at 5 and 6 — and
+ * since reach is directional it could then never attack anything. It braced
+ * for the rest of the fight, the muscle never moved at all, and the crew
+ * were beaten to death without landing a single blow.
+ *
+ * That is also why `v3-battle`'s "auto command reaches a battle result"
+ * passed for so long: it resolved as a LOSS every time, with both opponents
+ * finishing at full condition. The assertion was true and proved nothing.
+ * Only real stat lines (which stop the crew dying in three hits) made the
+ * stall long enough to see.
+ *
+ * `unit.cell` is set and restored around the reach test rather than copied:
+ * `attackTargets()` reads position off the unit, and a unit is a live
+ * reference inside `battle.players`, so there is nothing to clone.
+ */
+function approachCell(battle, unit) {
+  const foes = (unit.side === 'player' ? battle.enemies : battle.players).filter(item => item.alive);
+  const cells = validMoveCells(battle, unit).slice().sort(); // stable, so the pick is deterministic
+  if (!cells.length || !foes.length) return cells[0];
+  const origin = unit.cell;
+  const gapFrom = cell => {
+    const { lane, depth } = parseSlotKey(cell);
+    return Math.min(...foes.map(foe => {
+      const at = parseSlotKey(foe.cell);
+      return Math.abs(at.lane - lane) + Math.abs(at.depth - depth);
+    }));
+  };
+  let attackFrom = null;
+  let attackScore = -Infinity;
+  let closest = cells[0];
+  let closestGap = Infinity;
+  for (const cell of cells) {
+    unit.cell = cell;
+    for (const foe of attackTargets(battle, unit)) {
+      const score = scoreBase(battle, 'ATTACK', unit, foe);
+      if (score > attackScore) { attackScore = score; attackFrom = cell; }
+    }
+    const gap = gapFrom(cell);
+    if (gap < closestGap) { closestGap = gap; closest = cell; }
+  }
+  unit.cell = origin;
+  return attackFrom ?? closest;
 }
 
 export function autoCommand(battle) {
@@ -915,19 +1051,7 @@ export function autoCommand(battle) {
       if (s > bestTargetScore) { bestTargetScore = s; bestTarget = candidate; }
     }
 
-    // "Forward" is toward the OPPOSITION along the shared depth axis — for
-    // the player that's increasing depth, for the opposition decreasing
-    // depth (grid.js: front sits nearest the middle for both sides).
-    // Candidates prefer the most-forward cell first, then the one closest
-    // to the lane centre, matching the old sort's intent on the wider board.
-    const { depth: fromDepth } = laneDepth(unit);
-    const toward = unit.side === 'player' ? 1 : -1;
-    const centre = laneCentre();
-    const candidates = validMoveCells(battle, unit)
-      .map(cell => ({ cell, ...parseSlotKey(cell) }))
-      .sort((a, b) => (toward * b.depth - toward * a.depth) || Math.abs(a.lane - centre) - Math.abs(b.lane - centre));
-    const forward = candidates.find(item => toward * (item.depth - fromDepth) > 0)?.cell;
-    const reposition = forward ?? candidates[0]?.cell;
+    const reposition = approachCell(battle, unit);
 
     // Pick the highest-scoring TYPE (deterministic top pick — the same
     // choice Godot's own `_ai_select_command(preview=true)` makes; the
