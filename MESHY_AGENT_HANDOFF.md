@@ -3,7 +3,7 @@
 Updated: 2026-09-12. Receiving-agent update added; approved source references
 are now included, while generated geometry remains private and unregistered.
 
-The owner requested this repository handoff so agents on other PCs can continue the approved one-character pilot. Do not batch the roster. Coordinate with the art-lane owner before submitting: another agent may have advanced the pilot since this snapshot.
+The owner requested this repository handoff so agents on other PCs can continue the two approved source pilots. Do not batch beyond F01 and F02. Coordinate with the art-lane owner before submitting: another agent may have advanced a pilot since this snapshot.
 
 ## Receiving-agent update — 2026-09-11 PDT
 
@@ -34,12 +34,12 @@ Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASIN
 Explicit approval: "First 2 approved. Scrap 3".
 F01 heavy bruiser: broad adult man, receding hair/stubble, black leather jacket, ochre knit, dark trousers, heavy shoes.
 F02 wiry skirmisher: lean adult woman, short uneven dark hair, black padded vest, grey hoodie, rust two-stripe track pants, offwhite trainers.
-Both are approved front-facing 2D T-pose concepts only. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
+Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; generated 3D geometry and every later production gate remain unapproved. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
 Older poses may be reused ONLY after showing the exact candidate to the owner for approval.
 Fighters only, gritty Piritori street combatants with distinct silhouettes. No civilians/grandmas or narrative cast substitutions. Existing plain/janky 3D originals are not the new style baseline. Kallio 2003, no modern techwear. Preserve the approved ink illustration character identities.
 
 ## Files on the source Windows desktop at handoff
-Source workspace-relative directory: `.private/piritori-asset-drafts/2026-09-11/`. These private files are outside this repository handoff; ask the owner or source agent for the approved PNGs.
+Source workspace-relative directory: `.private/piritori-asset-drafts/2026-09-11/`. The root `/.private/` ignore rule protects this repo-local workspace from Git. Never force-add it. These private files are not part of the repository handoff; ask the owner or source agent for the approved PNGs.
 Approved images:
 concept-review/F01-heavy-bruiser-front-tpose-v01.png
 concept-review/F02-wiry-skirmisher-front-tpose-v01.png
@@ -69,14 +69,26 @@ Preserve image identity. Fingertip margins are tight, but hands and feet are ins
 Record task ID immediately, source hash, parameters and status. If POST outcome is uncertain, reconcile task history before resubmitting to avoid duplicate charges.
 Poll GET /openapi/v1/image-to-3d/{id}, download successful GLB, retain the original master.
 
-## Blender inspection and next gates
+## Blender inspection, required remesh and next gates
 The source PC used Blender 5.2. Locate Blender on the receiving PC; do not assume the source installation path.
 Import master and inspect neutral clay front/side/back/three-quarter views: face likeness, silhouette, hand/finger integrity, armpit separation, leg gap, feet and joint geometry. Save renders and a concrete findings report; repairs go into derivatives.
-Only after geometry is acceptable proceed to texture, rig, one purposeful idle, then walk/stop/turn. Preserve strong colour blocks and ink identity; avoid generic realism, shiny plastic or baked lighting.
-8–15k triangles and 1k atlas are proposed runtime targets, not proven limits. Actual device targets: Pixel 10 Pro and iPad M2. Browser emulation is not physical-device testing.
+After the owner accepts the master geometry, create a remeshed derivative before any rigging. Keep `should_remesh:false` on the initial Image to 3D request so the untouched high-resolution master is retained, then submit its successful task ID to `POST https://api.meshy.ai/openapi/v1/remesh`:
+
+```json
+{
+  "input_task_id": "<successful-image-to-3d-task-id>",
+  "target_formats": ["glb"],
+  "topology": "triangle",
+  "target_polycount": 15000
+}
+```
+
+Meshy's target is approximate, so record the derivative's actual triangle count. The 15k target is the owner-selected pilot budget for facial clarity. Inspect the remeshed GLB again in Blender for likeness, silhouette, hands, joints, manifold defects, UV readiness and deformation-friendly topology. Do not send the raw multi-million-face master to rigging: Meshy's current `input_task_id` rigging limit is 300,000 faces and its API explicitly directs larger inputs through Remesh first. Current references: [Remesh API](https://docs.meshy.ai/en/api/remesh) and [Rigging API](https://docs.meshy.ai/en/api/rigging).
+
+Only after the remeshed derivative passes inspection proceed to texture, rig, one purposeful idle, then walk/stop/turn. Preserve strong colour blocks and ink identity; avoid generic realism, shiny plastic or baked lighting. A 1k atlas is the proposed runtime texture target, not a proven limit. Actual device targets: Pixel 10 Pro and iPad M2. Browser emulation is not physical-device testing.
 Do not claim fully repaired, rigged, animated, device-tested or published without evidence. Keep intermediates/rejected art private. No public deployment is authorized for this pilot.
 Show images directly in chat: plain generated-image output was invisible remotely, but saved PNGs displayed through view_image succeeded. Localhost/file links alone do not work for the remote owner.
 
 ## Receiving agent completion record
 
-Record the source image hash, task ID, model/settings, output paths, actual credit usage, Blender findings, owner review and outstanding gates in a follow-up commit. Do not include secrets or account billing details. Obtain the actual approved image before generation; written descriptions are identifiers, not replacement prompts.
+Record the source image hash, Image to 3D task ID, remesh task ID, model/settings, output paths, actual credit usage, master and derivative triangle counts, Blender findings, owner review and outstanding gates in a follow-up commit. Do not include secrets or account billing details. Obtain the actual approved image before generation; written descriptions are identifiers, not replacement prompts.
