@@ -10,6 +10,15 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.47 — 2026-09-11
+
+**Trade receipts contribute to chapter progress.** Successful market sales and route deliveries now count their received cash toward the authored income objective, matching equipment resale. Purchases and failed actions do not count. Reaching the threshold makes the current ending available; it does not resolve it or force travel.
+
+Regression evidence: the added sale check failed before the fix (0 instead of EUR 68). The existing seven-day state/growth suite and the new sale, delivery, rejection, threshold and reload checks pass afterward. A dedicated browser-state CI job runs these tests. This source milestone awaits browser release verification and physical Pixel 10 Pro/iPad M2 testing.
+
+### Port
+Mirror chapter-income accounting in successful market sales and route deliveries. Count actual gross receipts once; retain existing purchase/failure and resale semantics. See PIRITORI_CHAPTER_EXECUTION.md for owner direction, next steps and port cases. No Godot gameplay change is included here.
+
 ## v4.46 — 2026-09-07
 
 **Plate mode: stop blacking out the fight board.**

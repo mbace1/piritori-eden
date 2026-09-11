@@ -1013,6 +1013,7 @@ export function transactOffer(state, offer, side = offer.side) {
   if ((state.stock.piri ?? 0) < 1) return { ok: false, message: 'No stock to sell.' };
   state.stock.piri -= 1;
   state.cash += price;
+  recordChapterIncome(state, price);
   addLog(state, `Ledger: sold one abstract pack at ${offer.anchor_id} for €${price}.`);
   return { ok: true, message: `One pack moved for €${price}.` };
 }
@@ -1034,10 +1035,12 @@ export function sendOnRoute(state, data) {
   const offer = data.content.market_offers.find(item => item.anchor_id === destination
     && item.side === 'sell' && state.revealedOffers.includes(item.id));
   if (!offer) return { ok: false, message: 'No known buyer at the destination.' };
+  const receipt = offerPrice(offer);
   state.stock.piri -= 1;
-  state.cash += offerPrice(offer);
+  state.cash += receipt;
+  recordChapterIncome(state, receipt);
   route.hidden += 1;
   if (route.ordinary < 2) state.pressure[destination] = clamp((state.pressure[destination] ?? 0) + 1, 0, 3);
   addLog(state, `One hidden load shares ${route.ordinary} ordinary journeys and settles at ${destination}.`);
-  return { ok: true, message: `The route settles one pack for €${offerPrice(offer)}.` };
+  return { ok: true, message: `The route settles one pack for €${receipt}.` };
 }

@@ -195,3 +195,41 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 
   console.log('V3 STATE growth-loop OK');
 }
+
+
+// Chapter income must include the main market loop, not only fenced weapons.
+{
+  const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
+    restoreState } = await import('../js/v3/state.js');
+  const trader = createState(content);
+  const buy = data.offers.get('offer-piritori-buy');
+  const sell = content.market_offers.find(offer => offer.side === 'sell');
+  assert(sell, 'authored buyer exists');
+  const price = sell.quote.kind === 'exact' ? sell.quote.eur :
+    Math.round((sell.quote.min_eur + sell.quote.max_eur) / 2);
+  assert.equal(transactOffer(trader, buy).ok, true);
+  assert.equal(chapterProgress(trader), 0, 'purchases do not count as income');
+  assert.equal(transactOffer(trader, sell).ok, true);
+  assert.equal(chapterProgress(trader), price, 'a successful market sale counts once');
+  const afterSale = JSON.stringify(trader);
+  assert.equal(transactOffer(trader, sell).ok, false);
+  assert.equal(JSON.stringify(trader), afterSale, 'failed sale changes nothing');
+  trader.stock.piri = 1;
+  trader.revealedOffers.push(sell.id);
+  commitRoute(trader, ['piritori', sell.anchor_id]);
+  const beforeDelivery = chapterProgress(trader);
+  assert.equal(sendOnRoute(trader, data).ok, true);
+  assert.equal(chapterProgress(trader), beforeDelivery + price, 'delivery counts its actual receipt once');
+  const afterDelivery = JSON.stringify(trader);
+  assert.equal(sendOnRoute(trader, data).ok, false);
+  assert.equal(JSON.stringify(trader), afterDelivery, 'failed delivery changes nothing');
+  trader.chapterEarned = trader.chapterThreshold - price;
+  trader.stock.piri = 1;
+  assert.equal(chapterEndingAvailable(trader, data), false);
+  assert.equal(transactOffer(trader, sell).ok, true);
+  assert.equal(chapterEndingAvailable(trader, data), true, 'trade unlocks the existing climax');
+  assert.equal(trader.chapterCleared, false, 'earning the threshold does not force an ending');
+  const restored = restoreState(JSON.parse(JSON.stringify(trader)), content);
+  assert.equal(chapterProgress(restored), trader.chapterThreshold, 'progress survives save/load');
+}
+console.log('PASS chapter progress through sales and route deliveries');

@@ -112,3 +112,14 @@ jobs:
       - name: the seven-day slice plays to an ending
         working-directory: godot
         run: godot --headless --path . res://tests/test_playthrough.tscn
+
+  web-state:
+    name: browser campaign state
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: authored chapter, crew growth and trade progress
+        run: node web/test/v3-state.mjs
