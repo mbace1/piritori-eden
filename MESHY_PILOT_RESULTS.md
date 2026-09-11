@@ -23,6 +23,10 @@ Approval currently means:
 - No remesh, texture, rig, animation, runtime registration or deployment is
   approved by this record.
 
+Owner follow-up sets **15,000 triangles** as the remesh target for accepted
+pilots so facial clarity has more room than the earlier 12k target. Fifteen
+thousand is a runtime budget, not permission to publish the raw masters.
+
 ## Source references
 
 | Pilot | Repository source | Received dimensions | SHA-256 |
@@ -97,8 +101,8 @@ must repair it; the source master remains unchanged.
 
 The raw triangle counts are expected from the explicit `should_remesh: false`
 review pass, but they are roughly two million triangles each and therefore fail
-the project's proposed 12k runtime target and phone download gate. Neither file
-belongs in `art/v3/manifest.json` at this stage.
+the owner-set 15k runtime target and phone download gate. Neither file belongs
+in `art/v3/manifest.json` at this stage.
 
 ## Review decision and next gates
 
@@ -113,7 +117,8 @@ Current review disposition:
 
 After owner approval, each accepted pilot still needs:
 
-1. a 12k-target remesh/retopology derivative and a repeat topology/hand check;
+1. a 15k-target remesh/retopology derivative and a repeat face, topology and
+   hand check;
 2. texture generation preserving the approved colour blocks and ink identity;
 3. rigging and joint-deformation inspection;
 4. one purposeful idle, then walk/stop/turn checks;

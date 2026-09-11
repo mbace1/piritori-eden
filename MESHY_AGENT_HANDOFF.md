@@ -23,6 +23,10 @@ credit usage and remaining gates. The generated GLBs and diagnostic files are
 not part of this PR because they are unremeshed review masters, not accepted
 runtime assets.
 
+Owner follow-up: **use a 15,000-triangle target for accepted character
+derivatives to preserve facial clarity.** This replaces 12k as the target for
+these pilots; it does not relax the geometry-review, rigging or device gates.
+
 ## Read first
 Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASING.md](PHASING.md), [ART_BIBLE.md](ART_BIBLE.md), [GAME_DESIGN_DOCUMENT.md](GAME_DESIGN_DOCUMENT.md), and [PORTING.md](PORTING.md) before making design changes. The older scope document is not present at the repository root on main at handoff time. Scope reference originally supplied: https://github.com/mbace1/piritori-eden/blob/fix/godot-approach-cell/PIRITORI_LONG_TERM_SCOPE.md (context commit 3c15a60). Resolve current design authority rather than assuming this older branch is current.
 
