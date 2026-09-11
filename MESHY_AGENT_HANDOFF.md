@@ -56,12 +56,25 @@ After the owner accepts the master geometry, create a remeshed derivative before
 }
 ```
 
-Meshy's target is approximate, so record the derivative's actual triangle count. The 15k target is the owner-selected pilot budget for facial clarity. Inspect the remeshed GLB again in Blender for likeness, silhouette, hands, joints, manifold defects, UV readiness and deformation-friendly topology. Do not send the raw multi-million-face master to rigging: Meshy's current `input_task_id` rigging limit is 300,000 faces and its API explicitly directs larger inputs through Remesh first. Current references: [Remesh API](https://docs.meshy.ai/en/api/remesh) and [Rigging API](https://docs.meshy.ai/en/api/rigging).
+Meshy's target is approximate, so record the derivative's actual triangle count. The 15k target is the owner-selected pilot budget for facial clarity. Inspect the remeshed GLB again in Blender for likeness, silhouette, hands, joints, manifold defects, UV readiness and deformation-friendly topology. Do not send the raw multi-million-face master to rigging: Meshy's current `input_task_id` rigging limit is 300,000 faces and its API explicitly directs larger inputs through Remesh first.
 
-Only after the remeshed derivative passes inspection proceed to texture, rig, one purposeful idle, then walk/stop/turn. Preserve strong colour blocks and ink identity; avoid generic realism, shiny plastic or baked lighting. A 1k atlas is the proposed runtime texture target, not a proven limit. Actual device targets: Pixel 10 Pro and iPad M2. Browser emulation is not physical-device testing.
+Only after the remeshed derivative passes inspection, texture that derivative. For this geometry-only pilot, submit the successful **remesh task ID**, never the original Image to 3D task ID, as `input_task_id` to `POST /openapi/v1/retexture`. Use the approved source image as `image_style_url` so the accepted colour blocks and ink identity remain the reference. Record the retexture task ID and validate its output GLB.
+
+The direct remesh output is untextured and therefore is not a valid rig input. Submit the validated, textured descendant of the 15k remesh to `POST /openapi/v1/rigging` via `model_url`:
+
+```json
+{
+  "model_url": "<successful-retexture-output-model_urls.glb>",
+  "height_meters": 1.7
+}
+```
+
+Replace the example height with the measured character height. Do not run `rig.py --task` with the original Image to 3D task ID. If that helper cannot accept the textured derivative GLB URL, update or bypass it rather than routing the raw master into rigging. Verify the GLB faces toward +Z as Meshy requires for `model_url`, record the rigging task ID, then use that ID as `rig_task_id` for each `POST /openapi/v1/animations` request. Record every animation task ID together with its preset `action_id` or custom `motion_task_id`. Current references: [Remesh API](https://docs.meshy.ai/en/api/remesh), [Retexture API](https://docs.meshy.ai/en/api/retexture), [Rigging API](https://docs.meshy.ai/en/api/rigging), and [Animation API](https://docs.meshy.ai/en/api/animation).
+
+After rigging, inspect one purposeful idle, then walk/stop/turn. Avoid generic realism, shiny plastic or baked lighting. A 1k atlas is the proposed runtime texture target, not a proven limit; Meshy's current Retexture API generates 2k or larger, so create and validate the 1k runtime derivative separately. Actual device targets: Pixel 10 Pro and iPad M2. Browser emulation is not physical-device testing.
 Do not claim fully repaired, rigged, animated, device-tested or published without evidence. Keep intermediates/rejected art private. No public deployment is authorized for this pilot.
 Show images directly in chat: plain generated-image output was invisible remotely, but saved PNGs displayed through view_image succeeded. Localhost/file links alone do not work for the remote owner.
 
 ## Receiving agent completion record
 
-Record the source image hash, Image to 3D task ID, remesh task ID, model/settings, output paths, actual credit usage, master and derivative triangle counts, Blender findings, owner review and outstanding gates in a follow-up commit. Do not include secrets or account billing details. Obtain the actual approved image before generation; written descriptions are identifiers, not replacement prompts.
+Record the source image hash; Image to 3D, remesh, retexture and rigging task IDs; every animation task ID and its `action_id` or `motion_task_id`; model/settings; output paths; actual credit usage; master and derivative triangle counts; Blender findings; owner review; and outstanding gates in a follow-up commit. Do not include secrets or account billing details. Obtain the actual approved image before generation; written descriptions are identifiers, not replacement prompts.
