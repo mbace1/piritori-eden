@@ -122,4 +122,6 @@ jobs:
         with:
           node-version: '22'
       - name: authored chapter, crew growth and trade progress
-        run: node web/test/v3-state.mjs
+        run: |
+          node web/test/v3-contract.mjs
+          node web/test/v3-state.mjs

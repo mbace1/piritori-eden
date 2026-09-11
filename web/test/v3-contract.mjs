@@ -19,7 +19,7 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=9'));
+assert(html.includes('js/v3/app.js?v=10'));
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
 assert(css.includes('min-width: 44px') && css.includes('min-height: 44px'), '44px control floor is declared');
 assert(!/smartphone|app grid/i.test(html), 'shell does not present the market as a smartphone app');
