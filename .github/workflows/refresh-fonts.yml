@@ -1,0 +1,31 @@
+name: refresh bundled font subsets
+on:
+  push:
+    branches: [fix/chapter-trade-progress]
+    paths: [.github/workflows/refresh-fonts.yml]
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/chapter-trade-progress
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install fonttools
+      - name: rebuild and verify existing font subsets
+        working-directory: godot
+        run: |
+          python tools/build-font-subset.py
+          python tools/build-font-subset.py --check
+      - name: commit only refreshed font files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add godot/ui/fonts/NotoSansJP-Subset-Regular.ttf godot/ui/fonts/NotoSansJP-Subset-Bold.ttf
+          git diff --cached --quiet && exit 0
+          git commit -m "fix(fonts): include current Japanese interface glyphs"
+          git push origin HEAD:fix/chapter-trade-progress
