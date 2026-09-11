@@ -149,6 +149,11 @@ func _ready() -> void:
 	check("withdrawal states its cost", wd != null and wd.tooltip_text != "",
 		wd.tooltip_text if wd else "(no button)")
 	if wd:
+		wd.grab_focus()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check("focused withdrawal stays in the visible viewport",
+			wd.global_position.y >= 0.0 and wd.global_position.y + wd.size.y <= vp.y + 1.0)
 		wd.pressed.emit()
 		await get_tree().process_frame
 		var guard := 0
