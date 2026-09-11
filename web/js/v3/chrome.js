@@ -300,7 +300,8 @@ export function boot(root = document.documentElement) {
   apply(root, plate(CARTON), '--chrome-plate');
   apply(root, plateButton(ACCENT_ACT, false), '--chrome-plate-btn');
   apply(root, plateButton(ACCENT_ACT, true), '--chrome-plate-btn-hot');
-  root.style.setProperty('--chrome-plate-ink', plateInk(ACCENT_ACT));
+  // Choice faces are CARTON; ACCENT_ACT only colours their edge.
+  root.style.setProperty('--chrome-plate-ink', plateInk(CARTON));
 
   root.style.setProperty('--chrome-tex', `${TEX}px`);
   root.style.setProperty('--chrome-margin', `${MARGIN}px`);
@@ -313,3 +314,5 @@ export function boot(root = document.documentElement) {
   root.style.setProperty('--chrome-accent-act', ACCENT_ACT);
   root.style.setProperty('--chrome-accent-leave', ACCENT_LEAVE);
 }
+
+

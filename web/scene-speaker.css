@@ -1,0 +1,15 @@
+/* Preserve the plate coordinate system so the counter occludes the speaker. */
+.scene-viewport.speaker-stage { position:relative; aspect-ratio:16/9; height:auto!important; min-height:0!important; overflow:hidden; }
+.speaker-stage > .scene-image { width:100%; height:100%; position:absolute; inset:0; object-fit:fill; }
+.scene-speaker { pointer-events:none; overflow:hidden; }
+.scene-speaker canvas { display:block; width:100%; height:100%; }
+.toko-speaker { position:absolute; left:25%; top:6%; width:44%; height:54%; }
+.counter-foreground { position:absolute; inset:0; width:100%; height:100%; clip-path:inset(48% 0 0 0); pointer-events:none; }
+.speaker-stage .scene-caption { z-index:2; }
+.jaska-contact { position:absolute; left:37%; top:86%; width:26%; height:5%; background:radial-gradient(ellipse,rgba(12,10,8,.48),transparent 68%); pointer-events:none; }
+.jaska-standing { position:absolute; left:15%; top:4%; width:70%; height:88%; }
+.arvo-speaker { position:absolute; inset:0 0 12%; z-index:1; }
+.arvo-speaker[data-status=ready] + .arvo-fallback { display:none; }
+.news-lower-third { z-index:3; }
+.scene-speaker[data-status=unavailable]::after { content:"Portrait unavailable"; position:absolute; bottom:0; font-size:12px; color:#f0dfbb; }
+

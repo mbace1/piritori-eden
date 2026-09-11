@@ -7,7 +7,7 @@ import {
 import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from './equipment.js?v=1';
 import {
   perkValue, skillsOf, hasAptitude,
-} from './state.js?v=4';
+} from './state.js?v=5';
 
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],
@@ -1019,3 +1019,5 @@ export function resultEffects(battle, data) {
 export function injuredPlayers(battle) {
   return battle.players.filter(item => !item.alive).map(item => item.id);
 }
+
+
