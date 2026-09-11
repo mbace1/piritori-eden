@@ -316,6 +316,7 @@ func _build() -> void:
 	var portrait := vp.x < vp.y
 	_console_portrait = portrait
 	_console = PanelContainer.new()
+	_console.name = "CommandConsole"
 	_console.add_theme_stylebox_override("panel", _panel(MapStyle.DARK_TAB, 2, 0))
 	if portrait:
 		# Measured, not guessed: the single-row CONSOLE_H (168) was sized to
