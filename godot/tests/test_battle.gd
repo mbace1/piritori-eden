@@ -1363,7 +1363,11 @@ the boiler hall has a fight in it")
 	var stage := String(def["stage_id"])
 	var path := BattleStage3D.stage_path(stage)
 	eq("the battle retains its authored boiler hall identity", stage, "stage3d-suvilahti-kattilahalli-v01")
-	check("the registered boiler hall asset still exists", ResourceLoader.exists(ContentRegistry.art_path(stage)))
+	var registered_path := ""
+	for asset in ContentRegistry.art.get("assets", []):
+		if String(asset.get("id", "")) == stage:
+			registered_path = "res://data/art/" + String(asset.get("file", ""))
+	check("the registered boiler hall asset still exists", registered_path != "" and ResourceLoader.exists(registered_path))
 	if BattleStage3D.USE_STAGE3D_ARENAS:
 		check("enabled arenas reach the boiler hall, not the fallback", path != BattleStage3D.STAGE_FALLBACK)
 		check("the enabled arena file exists", ResourceLoader.exists(path))
