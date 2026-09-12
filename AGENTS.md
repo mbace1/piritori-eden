@@ -41,3 +41,9 @@ policy exist. The worker is not implemented by this startup contract.
 
 JS/web is the primary game build; Godot is a port. Do not migrate engines or
 change campaign rules as part of asset-pipeline work.
+
+Before scenario or environment design, read `design/SCENARIO_ATLAS.md` and
+`design/scenario-atlas.json`, then the canonical documents and content they
+reference. The atlas separates authored facts, proposed staging and pending
+owner decisions; it does not override the GDD or certify runtime integration.
+Record answers and source changes there so later work can follow the decisions.
