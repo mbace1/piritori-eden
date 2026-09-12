@@ -17,7 +17,7 @@ const base=process.env.FIGHT_MODULE_URL||'http://127.0.0.1:8796/work/piritori-fi
   const restore=async()=>{await page.evaluate(()=>testGpu.restoreContext());await ready();await visibleFrame();};
   await page.goto(base);await ready();await page.waitForTimeout(2400);
   const initial=await metrics();
-  if(spec.touch){assert.equal(initial.profile,'mobile');assert.equal(initial.antialias,false);assert.equal(initial.shadows,false);assert(initial.drawingBuffer[0]*initial.drawingBuffer[1]<=650000);assert(initial.textureSizes.flat().every(s=>s==='1024x1024'));assert(initial.fps<=32);}
+  if(spec.touch){assert.equal(initial.profile,'mobile');assert.equal(initial.antialias,false);assert.equal(initial.edgeSmoothing.method,'fxaa');assert.equal(initial.edgeSmoothing.pixels,initial.drawingBuffer[0]*initial.drawingBuffer[1]);assert(initial.edgeSmoothing.bytes<=2600000);assert.equal(initial.shadows,false);assert(initial.drawingBuffer[0]*initial.drawingBuffer[1]<=650000);assert(initial.textureSizes.flat().every(s=>s==='1024x1024'));assert(initial.fps<=32);}
   // Player input commits once; lose the actual GL context during its walk.
   await tap('[data-action="move"]');await tap('[data-cell="2,3"]');const moved=await snapshot();await lose();
   assert.equal(await page.locator('#end').isDisabled(),true);await page.keyboard.press('Enter');await page.keyboard.press('1');
@@ -28,7 +28,7 @@ const base=process.env.FIGHT_MODULE_URL||'http://127.0.0.1:8796/work/piritori-fi
   await tap('#showcase');await lose();await restore();await page.waitForTimeout(800);assert.deepEqual(await snapshot(),enemy);
   const baseline=await metrics();assert.equal(baseline.models,4);assert.equal(baseline.finite,true);
   for(let i=0;i<2;i++){await lose();await restore();assert.deepEqual(await snapshot(),enemy);}
-  const repeated=await metrics();assert.equal(repeated.textures,baseline.textures);assert.equal(repeated.geometries,baseline.geometries);
+  const repeated=await metrics();assert.equal(repeated.textures,baseline.textures);assert.equal(repeated.geometries,baseline.geometries);assert.equal(repeated.edgeSmoothing.method,'fxaa');assert.equal(repeated.edgeSmoothing.bytes,baseline.edgeSmoothing.bytes);
   if(spec.name==='phone'){
    // Browser refuses to restore: real fallback button reloads the saved turn.
    await lose();await page.locator('#reload-graphics').waitFor({state:'visible',timeout:8000});await tap('#reload-graphics');await ready();assert.deepEqual(await snapshot(),enemy);assert.equal((await metrics()).profile,'mobile');

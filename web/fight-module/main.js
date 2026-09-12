@@ -3,14 +3,15 @@ import {createSession,checkpoint,restoreSession} from './session.js?v=2';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=3';
 import {attackTargets,validMoveCells,coverStandingLine} from './resolver.js?v=1';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
-import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=1';
+import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
+import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
 import {buildNightCourtyard} from './environment.js?v=1';
 import {fitBattleCamera,placeLabels} from './framing.js?v=1';
 
 const $=id=>document.getElementById(id),canvas=$('scene'),area=$('arena');
 let session,templates,content,manifest,busy=true,action='',auto=false,angle=.65,zoom=1,sequence=0,hidden=false;
 let renderer,world,camera,highlight,ray,ground,stage,actors=new Map(),labels=new Map(),fps=0,low=false,frameCount=0,seconds=0;
-let frameInfo,layoutPaused=false,reflowTimer=0,autoTimer=0;
+let frameInfo,edgeSmoothing,layoutPaused=false,reflowTimer=0,autoTimer=0;
 const leaders=new Map();
 const RECOVERY_KEY='piritori-fight-c05-recovery';
 const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;
@@ -30,6 +31,7 @@ function button(text,fn,attrs={}){const b=document.createElement('button');b.tex
 function buildStage(){
   world=new T.Scene();
   renderer=new T.WebGLRenderer({canvas,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  edgeSmoothing=createEdgeSmoothing(renderer);
   camera=new T.OrthographicCamera(-5,5,5,-5,.1,60);ray=new T.Raycaster();ground=new T.Plane(new T.Vector3(0,1,0),0);highlight=new T.Group();world.add(highlight);
   stage=buildNightCourtyard(world,renderer,session.battle.cover,position);
   bindGraphicsRecovery();fit();new ResizeObserver(fit).observe(area);
@@ -125,13 +127,13 @@ function bindGraphicsRecovery(){
 }
 function resumeGraphics(){busy=false;action='';$('labels').hidden=false;$('loading').hidden=true;$('reload-graphics').hidden=true;for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;refresh();clearRecovery();hint('Graphics restored. Your turn is unchanged; lighter rendering is active.');queueFrame();}
 let previous=performance.now();
-function tick(now){raf=0;if(hidden||graphicsLost||!ready)return;queueFrame();const real=Math.max(0,(now-previous)/1000);if(real<1/profile.fps-.001)return;previous=now;const dt=Math.min(.05,real);for(const a of actors.values())updateActor(a,layoutPaused?0:dt);layoutTags();renderer.render(world,camera);controller(now);frameCount++;seconds+=real;if(seconds>2){fps=Math.round(frameCount/seconds);if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}$('perf').textContent=`C.06 · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;frameCount=0;seconds=0;}}
+function tick(now){raf=0;if(hidden||graphicsLost||!ready)return;queueFrame();const real=Math.max(0,(now-previous)/1000);if(real<1/profile.fps-.001)return;previous=now;const dt=Math.min(.05,real);for(const a of actors.values())updateActor(a,layoutPaused?0:dt);layoutTags();renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);controller(now);frameCount++;seconds+=real;if(seconds>2){fps=Math.round(frameCount/seconds);if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}$('perf').textContent=`C.06 · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;frameCount=0;seconds=0;}}
 async function boot(){
   let saved;try{saved=JSON.parse(sessionStorage.getItem(RECOVERY_KEY));}catch{}if(saved)profile=renderProfile({recovered:true});
   [content,manifest]=await Promise.all(['../../content/era1-slice-v1.json','../../art/v3/manifest.json'].map(p=>fetch(p).then(r=>{if(!r.ok)throw Error('Data failed '+r.status);return r.json();})));
   session=createSession(content);let restored=false;if(saved){try{session=restoreSession(content,saved.fight);angle=Number.isFinite(saved.angle)?saved.angle:.65;zoom=T.MathUtils.clamp(Number.isFinite(saved.zoom)?saved.zoom:1,.7,1.7);restored=true;}catch{clearRecovery();}}
   $('loadout').value=session.mode;buildStage();templates=await loadFighters(manifest,profile);for(const template of templates.values())limitTextures(template.scene,profile.textureSize);rebuildActors();ready=true;
-  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({layoutPaused,fps,draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
+  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({layoutPaused,fps,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
   if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;refresh();$('loading').hidden=true;clearRecovery();if(restored)hint('Saved turn restored. Lighter rendering is active.');previous=performance.now();frameCount=seconds=0;queueFrame();
 }
 boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});

@@ -3,7 +3,7 @@ export function renderProfile({touch=false,recovered=false}={}) {
   const light=touch||recovered;
   return {name:light?'mobile':'desktop',fps:light?30:60,pixelRatio:light?1:1.5,
     maxPixels:light?650000:1800000,textureSize:light?1024:2048,
-    shadows:!light,antialias:!light};
+    shadows:!light,antialias:!light,edgeSmoothing:light};
 }
 export function pixelRatioFor(profile,width,height,dpr=1) {
   return Math.min(dpr,profile.pixelRatio,Math.sqrt(profile.maxPixels/Math.max(1,width*height)));

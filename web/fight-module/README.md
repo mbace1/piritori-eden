@@ -1,5 +1,9 @@
 # Piritori fighter module — C.06
 
+Unreleased: [mobile edge smoothing](EDGE_SMOOTHING.md) softens pixel boundaries
+at the existing mobile resolution budget. Browser recovery checks passed;
+physical-device performance and final character acceptance remain pending.
+
 **Rig review:** the owner rejected the v05/C.06 motion presentation. See
 [FIGHTER_MOTION_REVIEW.md](../../assets/FIGHTER_MOTION_REVIEW.md). A private
 Blender correction pass and unreleased baked-motion player are being tested;

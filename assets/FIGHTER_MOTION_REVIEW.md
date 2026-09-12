@@ -5,6 +5,12 @@ Recorded 2026-09-13. This rejects the current rig/motion presentation, not the
 approved F01/F02 concepts. Both production records remain RIGGED, prototype,
 with owner_visual = fail. No production action library is accepted.
 
+Follow-up feedback: **"Seems ok, bit jagged"**. Record this as qualified positive
+feedback on the ongoing iteration; the exact view/device and whether "jagged"
+means movement or edges are not yet specified. It does not retroactively
+approve the rejected v05 presentation. See
+[edge smoothing](../web/fight-module/EDGE_SMOOTHING.md) for the rendering pass.
+
 ## Reproduced defects
 
 - F02 carries spread arms through the source idle and walk; neither source
