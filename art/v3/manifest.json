@@ -1403,7 +1403,7 @@
       ],
       "sample_rate_hz": 30,
       "clip_durations_seconds": {
-        "alert-idle": 4.0,
+        "alert-idle": 4,
         "casual-walk": 4.2
       },
       "mesh_count": 0,
@@ -1466,7 +1466,7 @@
       ],
       "sample_rate_hz": 30,
       "clip_durations_seconds": {
-        "alert-idle": 4.0,
+        "alert-idle": 4,
         "casual-walk": 4.2
       },
       "mesh_count": 0,
@@ -1930,6 +1930,71 @@
       "baked_ui": false,
       "sha256": "cf09b6fa6e8d11520ce811df8647016708382afcf9befd8602e1a42abdf7cf79",
       "note": "Jaska, Aatami's artist brother and moral counterweight (NARRATIVE.md), built from a likeness photo the owner supplied. 31k tris at 1024, Meshy image-to-3D task 01a03a67, rig task 01a03a69. A-POSE, NOT T-POSE, AND DELIBERATELY: a T-pose puts a narrow dark-on-dark notch between sleeve and torso that Meshy could not resolve - it bridged the gap with torn webbing geometry and baked the grey background into the shoulder seam as a visible stripe. Arms at 45 degrees over a bright cream ground opens the silhouette wide enough to reconstruct cleanly. That failure was in the MESH, not the drawing; the 2D passed every check. Glasses survive as texture rather than geometry - thin wireframe is below what image-to-3D resolves. Ten idle/talking clips staged unregistered at art-library/cast3d/jaska-v01-clips.glb."
+    },
+    {
+      "id": "cast3d-f01-heavy-bruiser-v05",
+      "kind": "mesh-3d",
+      "file": "cast3d/f01-heavy-bruiser-v05.glb",
+      "source": "characters/concepts-3d/pilots/blender-v05/f01-repaired-v05.glb",
+      "source_version": "v05",
+      "approval_status": "semi-approved",
+      "production_status": "playable-test-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "fighter-test",
+      "character_id": "F01",
+      "rig_version": "v5",
+      "format": "glb",
+      "triangle_count": 19412,
+      "bone_count": 56,
+      "texture_resolution": [
+        2048,
+        2048
+      ],
+      "animation_count": 3,
+      "clip_names": [
+        "alert-idle",
+        "casual-walk",
+        "hand-open-fist-grip"
+      ],
+      "sha256": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc",
+      "bytes": 8209288,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "Repaired Blender candidate used by the isolated 2v2 fight module. Finger joints and grip attachments included. Combat gestures are runtime prototype poses, not approved imported combat clips; owner and physical-device acceptance remain pending."
+    },
+    {
+      "id": "cast3d-f02-wiry-skirmisher-v05",
+      "kind": "mesh-3d",
+      "file": "cast3d/f02-wiry-skirmisher-v05.glb",
+      "source": "characters/concepts-3d/pilots/blender-v05/f02-repaired-v05.glb",
+      "source_version": "v05",
+      "approval_status": "semi-approved",
+      "production_status": "playable-test-only",
+      "layer": "unit-3d",
+      "era": "2003",
+      "role": "fighter-test",
+      "character_id": "F02",
+      "rig_version": "v5",
+      "format": "glb",
+      "triangle_count": 17254,
+      "bone_count": 56,
+      "texture_resolution": [
+        2048,
+        2048
+      ],
+      "animation_count": 3,
+      "clip_names": [
+        "alert-idle",
+        "casual-walk",
+        "hand-open-fist-grip"
+      ],
+      "sha256": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc",
+      "bytes": 8123900,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "Repaired Blender candidate used by the isolated 2v2 fight module. Finger joints and grip attachments included. Combat gestures are runtime prototype poses, not approved imported combat clips; owner and physical-device acceptance remain pending."
     }
   ]
 }
+
