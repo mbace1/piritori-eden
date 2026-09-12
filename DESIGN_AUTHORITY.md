@@ -2,8 +2,43 @@
 
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-28
+Latest owner rulings: 2026-09-10
 Owner: Mikael Haveri  
+
+## Owner ruling, 2026-09-10 — Piritori owns all three prototype options
+
+Piritori is the parent project. Turf, the Slay-style route structure, Toko Move
+map work and the Dream Loop experiment are not separate products or permission
+to fork canon.
+
+- **Option A — Turf battle base:** the lead integrated direction combines a
+  Toko Move-derived living Helsinki map, Dope Wars / Piritori travel and market
+  pressure, and Turf as the first implementation base for the shared battle
+  mechanic.
+- **Option B — Slay map/run:** prototype a *Slay the Spire*-style branching
+  campaign route using Piritori places, people, economy and consequences. This
+  is a campaign-navigation alternative, not a separate setting or battle rule.
+- **Option C — Dream Loop battle base:** build a fresh implementation of the
+  same battle mechanic as A using the installed Dream Loop workflow. C is a
+  playable battle candidate, not merely a visual skin or production pipeline.
+
+A and C must be tested from the same versioned battle request: identical units,
+starting positions, cover, equipment, seed, actions and rules. They must return
+the same result vocabulary to the campaign. Visual ambition may differ; damage,
+movement, turn order, cover, victory and consequences may not silently differ
+during comparison. Any desirable rules change becomes an explicit proposal for
+both candidates.
+
+The map decision and battle decision are independent. The living Toko/Dope Wars
+map and Option B's branching route can eventually call whichever battle
+candidate wins. Only one navigation structure and one battle resolver controls
+an activity at a time, though both map structures may coexist as clearly
+bounded chapter or contract types if playtests justify the added complexity.
+
+Detailed sequencing, gates and exclusions are in
+`PIRITORI_LONG_TERM_SCOPE.md`. This ruling reprioritizes implementation; it does
+not erase the current build, authorize an immediate full-campaign rewrite or
+make a 2D/3D presentation choice by itself.
 
 This file defines which documents and assets control future work. It exists
 because the playable prototype, several older briefs, an earlier Art Bible and

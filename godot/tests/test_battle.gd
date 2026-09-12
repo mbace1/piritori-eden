@@ -1437,10 +1437,25 @@ attrition alone does not end the handover (§13.10)")
 	while fm.result == FightManager.BattleResult.PENDING and rounds < 25:
 		rounds += 1
 		fm.confirm_commands()
-	check("trading blows does not resolve it", fm.result == FightManager.BattleResult.PENDING,
+	# NARROWED 2026-09-07, and the reason matters more than the change.
+	#
+	# This used to assert the fight is still PENDING after 25 rounds. It passed
+	# for the wrong reason: `_score_base` gave every legal reposition the same
+	# flat per-role number, so a fighter who chose to move picked a DIRECTION AT
+	# RANDOM and neither side ever closed. The stalemate was an AI defect, not
+	# the cover rule above -- and this gate was quietly resting on it.
+	#
+	# With approach scoring ported (fight_manager `_approach_weight`), the
+	# OPPOSITION closes and can win on attrition, so PENDING is no longer true.
+	# What §13.10 actually claims is narrower and is still asserted: the PLAYER
+	# cannot eliminate their way out, because Pauli cannot be reached at all.
+	check("the player never wins this by elimination",
+		fm.result != FightManager.BattleResult.VICTORY_BREAK
+			and fm.result != FightManager.BattleResult.VICTORY_ROUT,
 		"result=%s" % fm.result)
-	check("and the player is never stuck without an exit",
-		fm.phase == FightManager.Phase.COMMAND, "phase=%s" % fm.phase)
+	check("and while it is live the player always has an exit",
+		fm.result != FightManager.BattleResult.PENDING
+			or fm.phase == FightManager.Phase.COMMAND, "phase=%s" % fm.phase)
 
 
 func _test_withdraw_ends_it() -> void:
