@@ -20,11 +20,16 @@ for (const pilot of ['f01', 'f02']) {
 assert.equal([...html.matchAll(/data-motion="(?:alert-idle|casual-walk)"/g)].length, 4,
   'four locomotion controls ship');
 assert(css.includes('min-height: 48px'), 'touch controls declare a 48px floor');
+assert(css.includes('touch-action: pan-y pinch-zoom'), 'the canvas preserves vertical touch scrolling');
 assert(js.includes("new THREE.AnimationMixer(model)"), 'each mixer roots at its own model');
 assert(js.includes("clip.name"), 'clips are selected by explicit names');
 assert(!js.includes('animations?.[0]'), 'the test never guesses clip zero');
 assert(js.includes("body still contains a base clip"), 'base animation removal is asserted');
 assert(js.includes("clip pack duplicates geometry"), 'clip geometry removal is asserted');
+assert(js.includes('setFromObject(model, true)'), 'visibility checks use precise deformed skinned bounds');
+assert(!js.includes('skeleton.pose()'), 'runtime preserves the GLB armature rest locals');
+assert(js.includes("matchMedia('(prefers-reduced-motion: reduce)')"), 'reduced motion controls playback');
+assert(js.includes('event.persisted'), 'page lifecycle distinguishes BFCache suspension from disposal');
 
 const expected = [
   'cast3d-f01-heavy-bruiser-v01',

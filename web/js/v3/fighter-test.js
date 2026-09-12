@@ -65,6 +65,10 @@ const currentMotion = Object.fromEntries(PILOTS.map(pilot => {
   return [pilot.id, allowedMotions.has(requested) ? requested : 'alert-idle'];
 }));
 let paused = false;
+const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+let reducedMotion = reducedMotionQuery.matches;
+let suspended = false;
+let destroyed = false;
 let frameRequest = 0;
 
 globalThis.__fighterTest = {
@@ -104,7 +108,16 @@ globalThis.__fighterTest = {
       f01: currentMotion.f01,
       f02: currentMotion.f02,
       paused,
+      reducedMotion,
+      suspended,
+      destroyed,
+      rendering: frameRequest !== 0,
     };
+  },
+  activeDuration() {
+    return Math.max(0, ...[...players].map(([id, player]) => (
+      player.actions[currentMotion[id]]?.getClip().duration ?? 0
+    )));
   },
 };
 
@@ -136,8 +149,13 @@ function styleModel(model) {
   });
 }
 
+function posedBounds(model) {
+  model.updateMatrixWorld(true);
+  return new THREE.Box3().setFromObject(model, true);
+}
+
 function normalizeModel(model) {
-  const box = new THREE.Box3().setFromObject(model);
+  const box = posedBounds(model);
   const size = box.getSize(new THREE.Vector3());
   const scale = 1.95 / Math.max(size.y, 0.001);
   model.scale.multiplyScalar(scale);
@@ -146,11 +164,12 @@ function normalizeModel(model) {
 
 function anchorPlayer(player) {
   const { holder, model, x } = player;
-  holder.position.set(0, 0, 0);
+  holder.position.set(x, 0, 0);
   holder.updateMatrixWorld(true);
-  const box = new THREE.Box3().setFromObject(model);
+  const box = posedBounds(model);
   const center = box.getCenter(new THREE.Vector3());
-  holder.position.set(x - center.x, -box.min.y, -center.z);
+  holder.position.y = -box.min.y;
+  holder.position.z = -center.z;
   holder.updateMatrixWorld(true);
 }
 
@@ -158,7 +177,7 @@ function combinedPlayerBounds() {
   const combined = new THREE.Box3();
   for (const player of players.values()) {
     player.holder.updateMatrixWorld(true);
-    combined.union(new THREE.Box3().setFromObject(player.model));
+    combined.union(posedBounds(player.model));
   }
   return combined;
 }
@@ -184,7 +203,7 @@ function fitCamera() {
 
 function screenBounds(player) {
   player.holder.updateMatrixWorld(true);
-  const box = new THREE.Box3().setFromObject(player.model);
+  const box = posedBounds(player.model);
   const corners = [];
   for (const x of [box.min.x, box.max.x]) {
     for (const y of [box.min.y, box.max.y]) {
@@ -205,6 +224,9 @@ function screenBounds(player) {
     height: bottom - top,
     canvasWidth: width,
     canvasHeight: height,
+    holderX: player.holder.position.x,
+    worldWidth: box.max.x - box.min.x,
+    worldHeight: box.max.y - box.min.y,
   };
 }
 
@@ -215,6 +237,22 @@ function setLabel(id, value) {
 
 function motionLabel(name) {
   return name === 'casual-walk' ? 'CASUAL WALK' : 'ALERT IDLE';
+}
+
+function syncPlaybackPolicy() {
+  const playing = !paused && !reducedMotion && !suspended && !destroyed;
+  for (const player of players.values()) player.mixer.timeScale = playing ? 1 : 0;
+  if (players.size !== PILOTS.length) return;
+  pauseButton.disabled = reducedMotion || destroyed;
+  pauseButton.classList.toggle('active', paused);
+  pauseButton.setAttribute('aria-pressed', String(paused));
+  pauseButton.textContent = reducedMotion
+    ? 'REDUCED MOTION · STATIC'
+    : paused ? 'RESUME BOTH' : 'PAUSE BOTH';
+  for (const player of players.values()) {
+    const label = motionLabel(currentMotion[player.id]);
+    setLabel(player.id, reducedMotion ? `${label} · STATIC` : paused ? 'PAUSED' : label);
+  }
 }
 
 function syncQuery() {
@@ -228,12 +266,10 @@ function setMotion(pilotId, name, updateQuery = true) {
   if (!player || !allowedMotions.has(name)) return;
   currentMotion[pilotId] = name;
   paused = false;
-  for (const activePlayer of players.values()) activePlayer.mixer.timeScale = 1;
   const next = player.actions[name];
   for (const action of Object.values(player.actions)) action.stop();
   next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).play();
   player.mixer.update(0);
-  anchorPlayer(player);
   fitCamera();
   setLabel(player.id, motionLabel(name));
   for (const button of motionButtons.filter(button => button.dataset.pilot === pilotId)) {
@@ -241,22 +277,17 @@ function setMotion(pilotId, name, updateQuery = true) {
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
   }
-  pauseButton.classList.remove('active');
-  pauseButton.setAttribute('aria-pressed', 'false');
-  pauseButton.textContent = 'PAUSE BOTH';
+  syncPlaybackPolicy();
+  startRendering();
   document.body.dataset[`${pilotId}Motion`] = name;
   if (updateQuery) syncQuery();
 }
 
 function togglePause() {
+  if (reducedMotion || destroyed) return;
   paused = !paused;
-  for (const player of players.values()) player.mixer.timeScale = paused ? 0 : 1;
-  pauseButton.classList.toggle('active', paused);
-  pauseButton.setAttribute('aria-pressed', String(paused));
-  pauseButton.textContent = paused ? 'RESUME BOTH' : 'PAUSE BOTH';
-  for (const player of players.values()) {
-    setLabel(player.id, paused ? 'PAUSED' : motionLabel(currentMotion[player.id]));
-  }
+  syncPlaybackPolicy();
+  if (!paused) startRendering();
 }
 
 function resize() {
@@ -264,13 +295,35 @@ function resize() {
   const height = Math.max(1, stage.clientHeight);
   renderer.setSize(width, height, false);
   fitCamera();
+  startRendering();
 }
 
 function animate() {
-  frameRequest = requestAnimationFrame(animate);
+  frameRequest = 0;
+  if (destroyed || suspended) return;
   const delta = Math.min(clock.getDelta(), 0.05);
-  if (!paused) for (const player of players.values()) player.mixer.update(delta);
+  const playing = !paused && !reducedMotion;
+  if (playing) for (const player of players.values()) player.mixer.update(delta);
   renderer.render(scene, camera);
+  if (playing) frameRequest = requestAnimationFrame(animate);
+}
+
+function startRendering() {
+  if (frameRequest || destroyed || suspended) return;
+  clock.getDelta();
+  frameRequest = requestAnimationFrame(animate);
+}
+
+function stopRendering() {
+  if (frameRequest) cancelAnimationFrame(frameRequest);
+  frameRequest = 0;
+}
+
+function handleReducedMotion(event) {
+  reducedMotion = event.matches;
+  paused = false;
+  syncPlaybackPolicy();
+  startRendering();
 }
 
 async function boot() {
@@ -313,9 +366,6 @@ async function boot() {
         throw new Error(`${pilot.id.toUpperCase()} body has ${skinned[0].skeleton.bones.length} bones, expected 24`);
       }
       styleModel(model);
-      model.traverse(node => {
-        if (node.isSkinnedMesh && node.skeleton) node.skeleton.pose();
-      });
       normalizeModel(model);
       const holder = new THREE.Group();
       holder.name = `${pilot.id}-runtime-holder`;
@@ -342,12 +392,12 @@ async function boot() {
       button.disabled = false;
       button.addEventListener('click', () => setMotion(button.dataset.pilot, button.dataset.motion));
     }
-    pauseButton.disabled = false;
     pauseButton.addEventListener('click', togglePause);
     status.hidden = true;
     runtimeReadout.textContent = `Three.js GLTFLoader accepted 2 clean bodies + 2 own-rig clip packs · ${renderer.capabilities.isWebGL2 ? 'WebGL 2' : 'WebGL 1'}`;
     document.body.dataset.ready = 'true';
     for (const pilot of PILOTS) setMotion(pilot.id, currentMotion[pilot.id], false);
+    syncPlaybackPolicy();
     syncQuery();
   } catch (error) {
     console.error(error);
@@ -357,13 +407,28 @@ async function boot() {
   }
 }
 
-new ResizeObserver(resize).observe(stage);
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(stage);
+reducedMotionQuery.addEventListener('change', handleReducedMotion);
 resize();
-animate();
+startRendering();
 boot();
 
-addEventListener('pagehide', () => {
-  cancelAnimationFrame(frameRequest);
+addEventListener('pagehide', event => {
+  stopRendering();
+  suspended = event.persisted;
+  syncPlaybackPolicy();
+  if (event.persisted || destroyed) return;
+  destroyed = true;
   for (const player of players.values()) player.mixer.stopAllAction();
+  resizeObserver.disconnect();
+  reducedMotionQuery.removeEventListener('change', handleReducedMotion);
   renderer.dispose();
-}, { once: true });
+});
+
+addEventListener('pageshow', event => {
+  if (!event.persisted || destroyed) return;
+  suspended = false;
+  syncPlaybackPolicy();
+  startRendering();
+});
