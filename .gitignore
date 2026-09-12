@@ -16,6 +16,9 @@
 # symlink too.
 node_modules/
 node_modules
+__pycache__/
+*.pyc
+/debug.log
 
 # Generated sheets from godot/tools. Derived from the engine and the plates;
 # regenerate rather than commit.

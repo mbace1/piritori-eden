@@ -1,0 +1,63 @@
+{
+  "version": "v05",
+  "status": "owner-review-candidate",
+  "source_commit": "74e45f15630151a6dbfca2d3ed517cf42d09b1c4",
+  "models": [
+    {
+      "character_id": "F01",
+      "rig_signature": "d783958992a1326b5266154477217521cc758b645edfdf0b0f1fee8f7591271b",
+      "combined_model": {
+        "file": "f01-repaired-v05.glb",
+        "bytes": 8209288,
+        "sha256": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc"
+      },
+      "meshless_clips": {
+        "file": "f01-heavy-bruiser-clips-v05.glb",
+        "bytes": 282752,
+        "sha256": "868af06ff421d75fff6dc86164b322856645614df235f530658175d2d16be725"
+      },
+      "clip_durations_seconds": {
+        "alert-idle": 4,
+        "casual-walk": 4.2,
+        "hand-open-fist-grip": 3.6333333333333333
+      },
+      "triangles": 19412,
+      "joints": 56,
+      "body_deform_joints": 24,
+      "finger_deform_joints": 30,
+      "attachment_joints": 2,
+      "texture_resolution": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "character_id": "F02",
+      "rig_signature": "aa0b958c88b6114b295fac24746eb3bd7c10a07a5012ef58469be6b64924b949",
+      "combined_model": {
+        "file": "f02-repaired-v05.glb",
+        "bytes": 8123900,
+        "sha256": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc"
+      },
+      "meshless_clips": {
+        "file": "f02-wiry-skirmisher-clips-v05.glb",
+        "bytes": 284860,
+        "sha256": "de8f93ad47299ba79e9fa3d325f2e50e9ddffdfe66de5e0a98e0f1967de68a16"
+      },
+      "clip_durations_seconds": {
+        "alert-idle": 4,
+        "casual-walk": 4.2,
+        "hand-open-fist-grip": 3.6333333333333333
+      },
+      "triangles": 17254,
+      "joints": 56,
+      "body_deform_joints": 24,
+      "finger_deform_joints": 30,
+      "attachment_joints": 2,
+      "texture_resolution": [
+        2048,
+        2048
+      ]
+    }
+  ]
+}

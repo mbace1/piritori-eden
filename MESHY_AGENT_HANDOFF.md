@@ -1,8 +1,46 @@
 # Piritori Meshy pilot handoff
 
-Updated: 2026-09-12. Documentation handoff only; no runtime or asset changes.
+Updated: 2026-09-12. Receiving-agent update added; approved source references
+are now included, while generated geometry remains private and unregistered.
 
-The owner requested this repository handoff so agents on other PCs can continue the approved one-character pilot. Do not batch the roster. Coordinate with the art-lane owner before submitting: another agent may have advanced the pilot since this snapshot.
+The owner requested this repository handoff so agents on other PCs can continue the two approved source pilots. Do not batch beyond F01 and F02. Coordinate with the art-lane owner before submitting: another agent may have advanced a pilot since this snapshot.
+
+## Production continuation — 2026-09-11 PDT
+
+Owner authorization recorded on PR #68 advanced both masters through the
+15k-target remesh, approved-source retexture, rigging, and Alert/Casual Walk
+checks. All paid tasks succeeded. Blender 5.2.1 finds complete 24-bone skinning,
+no unweighted vertices, and coherent shoulder/elbow/hip/knee deformation in the
+sampled frames. F01's A-pose was not a functional blocker. F02's original tiny
+boundary loop does not recur after remesh; residual garment/body junction topology
+is documented rather than described as fully manifold.
+
+See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md) for every derivative task
+ID, action ID, actual triangle count, credit total, output fingerprint, visual
+evidence, caveat, and remaining gate. The generated GLBs/FBXs and full QA data
+remain private. No runtime registration, integration, or deployment occurred.
+
+## Receiving-agent update — 2026-09-11 PDT
+
+The owner supplied the two exact chat attachments and clarified: **“These are
+the new poses, all others are the old ones.”** The owner then directly asked to
+order both and make a PR. That newer instruction expands the original F01-only
+authorization below to F01 and F02.
+
+The received JPEG bytes are committed as approved source concepts at:
+
+- `art-library/characters/concepts-3d/pilots/f01-heavy-bruiser-tpose-v01.jpg`
+- `art-library/characters/concepts-3d/pilots/f02-wiry-skirmisher-tpose-v01.jpg`
+
+Both geometry-only Meshy jobs completed. See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md)
+for task IDs, exact input hashes and settings, output hashes, Blender findings,
+credit usage and remaining gates. The generated GLBs and diagnostic files are
+not part of this PR. Raw masters and the later remeshed, textured, rigged
+review candidates remain private; none is accepted runtime art.
+
+Owner follow-up: **use a 15,000-triangle target for accepted character
+derivatives to preserve facial clarity.** This replaces 12k as the target for
+these pilots; it does not relax the geometry-review, rigging or device gates.
 
 ## Read first
 Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASING.md](PHASING.md), [ART_BIBLE.md](ART_BIBLE.md), [GAME_DESIGN_DOCUMENT.md](GAME_DESIGN_DOCUMENT.md), and [PORTING.md](PORTING.md) before making design changes. The older scope document is not present at the repository root on main at handoff time. Scope reference originally supplied: https://github.com/mbace1/piritori-eden/blob/fix/godot-approach-cell/PIRITORI_LONG_TERM_SCOPE.md (context commit 3c15a60). Resolve current design authority rather than assuming this older branch is current.
@@ -11,11 +49,11 @@ Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASIN
 Explicit approval: "First 2 approved. Scrap 3".
 F01 heavy bruiser: broad adult man, receding hair/stubble, black leather jacket, ochre knit, dark trousers, heavy shoes.
 F02 wiry skirmisher: lean adult woman, short uneven dark hair, black padded vest, grey hoodie, rust two-stripe track pants, offwhite trainers.
-Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; generated 3D geometry and every later production gate remain unapproved. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
+Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; the owner subsequently authorized remesh, texture, rigging and motion testing, as recorded above. Final visual acceptance and runtime approval remain outstanding. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
 Older poses may be reused ONLY after showing the exact candidate to the owner for approval.
 Fighters only, gritty Piritori street combatants with distinct silhouettes. No civilians/grandmas or narrative cast substitutions. Existing plain/janky 3D originals are not the new style baseline. Kallio 2003, no modern techwear. Preserve the approved ink illustration character identities.
 
-## Files on the source Windows desktop
+## Files on the source Windows desktop at handoff
 Source workspace-relative directory: `.private/piritori-asset-drafts/2026-09-11/`. The root `/.private/` ignore rule protects this repo-local workspace from Git. Never force-add it. These private files are not part of the repository handoff; ask the owner or source agent for the approved PNGs.
 Approved images:
 concept-review/F01-heavy-bruiser-front-tpose-v01.png
@@ -23,15 +61,19 @@ concept-review/F02-wiry-skirmisher-front-tpose-v01.png
 F01 SHA256: BC02611151B0D7BB255F899741953ACC5C8BA5D88E597B43D9595E46D720C26C
 F02 SHA256 (original PNG): 890E54D58391C7BCB0B332992C643723E81B07298B5AFA86DE7D9BF24D70C212
 Other records: FIGHTER_ROSTER.md, ASSET_BRIEF.md, concept-review/TPOSE_PROMPTS.md, meshy-pilot/F01-pilot.json.
-These paths are local, not remotely downloadable attachments. If unavailable, obtain the actual approved PNGs from the owner/source task; do not substitute approximations.
+These original paths were local and not remotely downloadable attachments. The
+later owner-supplied JPEG attachments above are now the authoritative bytes for
+the completed pilot run. Their hashes differ from the private PNG provenance
+hash because the attachment transport supplied JPEG files; this is recorded,
+not silently treated as the same file.
 
-## State at handoff (source agent only)
+## Historical state at handoff (source agent only)
 NO Meshy generation submitted. No task ID, generated mesh, texture or rig exists for these new references. No generation credits spent by this task.
 A balance GET failed before an HTTP response: Windows socket permission denied to api.meshy.ai:443. Credential validity and balance remain unverified. The source session has managed permissions and cannot request shell escalation. Do not bypass those controls.
 A Meshy key was supplied in the source chat; it is deliberately not copied into this handoff or source files. Use legitimate secret configuration in your own environment, or ask for secure setup. Never echo credentials.
 Do not assume user-side permission configuration advice has been applied or will override managed policy.
 
-## Authorized pilot
+## Original authorized pilot at handoff
 Check current official docs and pricing:
 https://docs.meshy.ai/en/api/image-to-3d
 https://docs.meshy.ai/en/api/balance
@@ -46,7 +88,7 @@ Poll GET /openapi/v1/image-to-3d/{id}, download successful GLB, retain the origi
 ## Blender inspection, required remesh and next gates
 The source PC used Blender 5.2. Locate Blender on the receiving PC; do not assume the source installation path.
 Import master and inspect neutral clay front/side/back/three-quarter views: face likeness, silhouette, hand/finger integrity, armpit separation, leg gap, feet and joint geometry. Save renders and a concrete findings report; repairs go into derivatives.
-After the owner accepts the master geometry, create a remeshed derivative before any rigging. Keep `should_remesh:false` on the initial Image to 3D request so the untouched high-resolution master is retained, then submit its successful task ID to `POST https://api.meshy.ai/openapi/v1/remesh`:
+For these two pilots, continuation was authorized and the following derivative chain has already completed; consult MESHY_PILOT_RESULTS.md rather than submit duplicate jobs. The required workflow is to create a remeshed derivative before any rigging. Keep `should_remesh:false` on the initial Image to 3D request so the untouched high-resolution master is retained, then submit its successful task ID to `POST https://api.meshy.ai/openapi/v1/remesh`:
 
 ```json
 {

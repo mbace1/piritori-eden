@@ -1,0 +1,14 @@
+{
+  "Left": {
+    "removed_old_faces": 1008,
+    "new_vertices": 491,
+    "new_triangles": 978,
+    "depth_center_m": -0.003515470982165425
+  },
+  "Right": {
+    "removed_old_faces": 981,
+    "new_vertices": 491,
+    "new_triangles": 978,
+    "depth_center_m": -0.019136106618680062
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "f01": {
+    "meshlessPackMatchesCombined": true,
+    "sampledPoses": 12,
+    "maxMatrixError": 0
+  },
+  "f02": {
+    "meshlessPackMatchesCombined": true,
+    "sampledPoses": 12,
+    "maxMatrixError": 0
+  }
+}
