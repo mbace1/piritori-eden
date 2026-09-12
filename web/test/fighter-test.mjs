@@ -2,17 +2,22 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
-const [html, css, js, manifest] = await Promise.all([
+const [indexHtml, html, css, js, manifest] = await Promise.all([
+  read('../index.html'),
   read('../fighter-test.html'),
   read('../fighter-test.css'),
   read('../js/v3/fighter-test.js'),
   read('../../art/v3/manifest.json').then(JSON.parse),
 ]);
 
-assert(html.includes('PLAYABLE TEST · v4.48'), 'test is visibly versioned');
+assert(indexHtml.includes('fighter-test.html?v=449'), 'splash link cache-busts the v4.49 fighter page');
+assert(html.includes('PLAYABLE TEST · v4.49'), 'test is visibly versioned');
+assert(html.includes('fighter-test.css?v=2'), 'changed fighter stylesheet has a fresh cache token');
+assert(html.includes('fighter-test.js?v=2'), 'changed fighter runtime has a fresh cache token');
 assert(html.includes('provisional runtime candidates'), 'provisional status is visible');
+assert(html.includes('UPDATED IN v2'), 'the owner-directed proportion/material correction is visible');
 assert(html.includes('NOT FINAL IN THIS TEST'), 'unavailable and non-final work is stated');
-assert(html.includes('current arm proportions'), 'known provisional arm proportions are stated');
+assert(!html.includes('current arm proportions'), 'the corrected v2 arms are no longer listed as unfinished');
 for (const pilot of ['f01', 'f02']) {
   assert.equal([...html.matchAll(new RegExp(`data-pilot="${pilot}"`, 'g'))].length, 2,
     `${pilot} has two independent controls`);
@@ -32,17 +37,17 @@ assert(js.includes("matchMedia('(prefers-reduced-motion: reduce)')"), 'reduced m
 assert(js.includes('event.persisted'), 'page lifecycle distinguishes BFCache suspension from disposal');
 
 const expected = [
-  'cast3d-f01-heavy-bruiser-v01',
-  'cast3d-f01-heavy-bruiser-clips-v01',
-  'cast3d-f02-wiry-skirmisher-v01',
-  'cast3d-f02-wiry-skirmisher-clips-v01',
+  'cast3d-f01-heavy-bruiser-v02',
+  'cast3d-f01-heavy-bruiser-clips-v02',
+  'cast3d-f02-wiry-skirmisher-v02',
+  'cast3d-f02-wiry-skirmisher-clips-v02',
 ];
 const byId = new Map(manifest.assets.map(asset => [asset.id, asset]));
 for (const id of expected) {
   const asset = byId.get(id);
   assert(asset, `${id} is registered`);
   assert.equal(asset.production_status, 'playable-test-only', `${id} stays provisional`);
-  assert.equal(asset.rig_version, 'v1', `${id} records its rig version`);
+  assert.equal(asset.rig_version, 'v2', `${id} records its rig version`);
   assert.equal(typeof asset.bytes, 'number', `${id} records byte size`);
   assert.match(asset.sha256, /^[0-9a-f]{64}$/, `${id} records sha256`);
 }

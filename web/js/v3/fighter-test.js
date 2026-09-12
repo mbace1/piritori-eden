@@ -5,14 +5,14 @@ import { assetUrl, loadGameData } from './content.js?v=1';
 const PILOTS = [
   {
     id: 'f01',
-    body: 'cast3d-f01-heavy-bruiser-v01',
-    clipPack: 'cast3d-f01-heavy-bruiser-clips-v01',
+    body: 'cast3d-f01-heavy-bruiser-v02',
+    clipPack: 'cast3d-f01-heavy-bruiser-clips-v02',
     x: -0.82,
   },
   {
     id: 'f02',
-    body: 'cast3d-f02-wiry-skirmisher-v01',
-    clipPack: 'cast3d-f02-wiry-skirmisher-clips-v01',
+    body: 'cast3d-f02-wiry-skirmisher-v02',
+    clipPack: 'cast3d-f02-wiry-skirmisher-clips-v02',
     x: 0.82,
   },
 ];
@@ -72,7 +72,7 @@ let destroyed = false;
 let frameRequest = 0;
 
 globalThis.__fighterTest = {
-  version: 'v4.48',
+  version: 'v4.49',
   sampleBones(pilotId) {
     const player = players.get(pilotId);
     if (!player) return null;

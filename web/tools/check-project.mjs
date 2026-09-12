@@ -28,6 +28,7 @@ const checks = [
   'web/test/v3-battle.mjs',
   'web/test/v3-nameplates.mjs',
   'web/test/fighter-test.mjs',
+  'web/test/fighter-assets.mjs',
   'missions/test/model.mjs',
   'market/test/model.mjs',
   // Found missing 2026-08-31: people/roster.mjs is wired into the live hiring

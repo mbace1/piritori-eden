@@ -134,10 +134,10 @@ async function runViewport(browser, base, label, viewport, touch = false) {
   }
 
   const expectedGlbs = [
-    'f01-heavy-bruiser-v01.glb',
-    'f01-heavy-bruiser-clips-v01.glb',
-    'f02-wiry-skirmisher-v01.glb',
-    'f02-wiry-skirmisher-clips-v01.glb',
+    'f01-heavy-bruiser-v02.glb',
+    'f01-heavy-bruiser-clips-v02.glb',
+    'f02-wiry-skirmisher-v02.glb',
+    'f02-wiry-skirmisher-clips-v02.glb',
   ];
   ok(`${label}: all four GLBs return 200`, expectedGlbs.every(name => glbs.get(name) === 200), JSON.stringify(Object.fromEntries(glbs)));
 
@@ -189,7 +189,7 @@ async function runViewport(browser, base, label, viewport, touch = false) {
     && material.emissiveIntensity === 0
     && material.hasEmissiveMap === false
   ));
-  ok(`${label}: Meshy white-skin emissive export is neutralised`, neutralEmission, JSON.stringify(appearance));
+  ok(`${label}: v02 materials stay matte and non-emissive`, neutralEmission, JSON.stringify(appearance));
 
   await page.locator('.motion-controls').scrollIntoViewIfNeeded();
   const heights = await page.locator('.motion-controls button').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
