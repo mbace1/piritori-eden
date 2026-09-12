@@ -5,6 +5,21 @@ are now included, while generated geometry remains private and unregistered.
 
 The owner requested this repository handoff so agents on other PCs can continue the two approved source pilots. Do not batch beyond F01 and F02. Coordinate with the art-lane owner before submitting: another agent may have advanced a pilot since this snapshot.
 
+## Production continuation — 2026-09-11 PDT
+
+Owner authorization recorded on PR #68 advanced both masters through the
+15k-target remesh, approved-source retexture, rigging, and Alert/Casual Walk
+checks. All paid tasks succeeded. Blender 5.2.1 finds complete 24-bone skinning,
+no unweighted vertices, and coherent shoulder/elbow/hip/knee deformation in the
+sampled frames. F01's A-pose was not a functional blocker. F02's original tiny
+closed hole does not recur after remesh; residual garment/body junction topology
+is documented rather than described as fully manifold.
+
+See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md) for every derivative task
+ID, action ID, actual triangle count, credit total, output fingerprint, visual
+evidence, caveat, and remaining gate. The generated GLBs/FBXs and full QA data
+remain private. No runtime registration, integration, or deployment occurred.
+
 ## Receiving-agent update — 2026-09-11 PDT
 
 The owner supplied the two exact chat attachments and clarified: **“These are
