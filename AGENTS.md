@@ -19,6 +19,13 @@ Current pilot: CHR_F01 and CHR_F02 only. Their concepts are approved; their v05
 models are playable test candidates. CHR_F03 was rejected and is disabled.
 Do not generate replacements or expand the roster to fix a pipeline defect.
 
+Incoming assets are welcome beyond that pilot. Record received batches in
+`assets/asset_manifest.json` under `incoming_batches` using the intake contract
+in `3D_PIPELINE.md`. Inventory existing deliveries before commissioning more.
+Receipt, design approval and engine acceptance are different facts. Route props,
+scenery and motion to their own checks; do not force them through humanoid rig
+gates. Never overwrite a registered asset merely because a newer file arrived.
+
 Run `python tools/meshy/character.py status`, then `check`. Run `validate` before
 claiming production readiness. These commands are local and read-only. A
 prototype integration does not advance the production lifecycle to INTEGRATED.

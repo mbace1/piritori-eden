@@ -1,7 +1,9 @@
 # Manifest-driven character production
 
-Owner direction, 2026-09-12. F01/F02 are the complete pipeline pilot. Stop
-expanding the roster until the same build process works for both.
+Owner direction, 2026-09-12. F01/F02 are the complete automation pilot. Pause
+commissioning additional characters until the same build process works for both.
+The owner has additional assets coming: receive and inventory those deliveries
+immediately; the pilot is not a reason to discard or duplicate incoming work.
 
 ## Implemented now
 
@@ -24,6 +26,45 @@ pass `check`; `validate` must fail until production gates pass. Exit codes:
 0 success, 1 incomplete/failed validation, 2 malformed input or unknown ID.
 No command generates, spends, downloads, promotes, publishes or edits files.
 There is no running Meshy worker and no `character build` command yet.
+
+## Incoming batches
+
+`assets/asset_manifest.json` has an `incoming_batches` receipt list. It is empty
+until an actual delivery is identified. Do not invent assets, counts, delivery
+dates, approval or availability from an announcement that assets are coming.
+The existing CLI checks character candidates; batch ingestion and batch-field
+validation are not automated yet.
+
+For each received batch record `batch_id`, `received_at`, an immutable
+`source_ref` (repository + commit and optional PR, or a non-sensitive delivery
+reference), and `items`. Each item records:
+
+| Field | Record |
+|---|---|
+| `source_path`, `sha256`, `bytes` | Actual received file and verified fingerprint; private masters stay private. |
+| `kind` | Character, animation, prop, scenery, material/texture or concept reference. |
+| `existing_asset_id` | Existing production/runtime ID where matched; otherwise null until identity is resolved. |
+| `intended_use` | Known character, place, chapter, scene or action; unknown if not supplied. |
+| `design_approval` | Approved, pending, rejected or unknown, with the decision reference. |
+| `model_acceptance` | Evidence-backed acceptance or untested; an approved concept does not approve its derivative. |
+| `dependencies` | Required rig/signature, textures, sockets, related files and source-tool version where relevant. |
+| `supersedes_sha256` | Explicit replacement relationship, or null; never infer it just from a filename. |
+
+These are receipt facts, not new character lifecycle states. A character enters
+the character register after ID/approval matching. Rejected designs remain
+disabled. Unknown approval does not authorize generation or production import.
+Keep preview/rejected art and private locators out of public receipt records.
+
+Deduplicate by hash, preserve original filenames and source provenance, and
+keep any changed candidate version beside its predecessor. Check animations
+against the exact destination rest/bind rig; check props/scenery for scale,
+origin, orientation, materials, collision and intended scene use. They do not
+need humanoid rigging or a character animation library.
+
+Integrate useful validated assets in meaningful batches. Prioritize deliveries
+that unblock the playable fight module and its Kallio scenery, while keeping
+the full incoming inventory available for later chapters. Receiving a batch
+does not automatically merge its PR or replace live assets.
 
 ## State contract
 

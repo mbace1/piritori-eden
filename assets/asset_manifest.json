@@ -9,6 +9,7 @@
     ],
     "new_generation_enabled": false
   },
+  "incoming_batches": [],
   "characters": {
     "CHR_F01": {
       "legacy_id": "F01",
