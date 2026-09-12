@@ -21,3 +21,7 @@ node_modules
 # regenerate rather than commit.
 /stage-template.svg
 /stage-contact.svg
+
+# Repo-local drafts, generated masters, inspection renders and credentials.
+# These are working files, not reviewable source assets.
+/.private/
