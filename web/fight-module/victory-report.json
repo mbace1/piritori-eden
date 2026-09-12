@@ -1,0 +1,222 @@
+{
+  "result": {
+    "round": 9,
+    "status": "resolved",
+    "result": "win",
+    "selectedId": "f02",
+    "acted": [
+      "f01"
+    ],
+    "units": [
+      {
+        "id": "f01",
+        "name": "F01 Heavy · Jade",
+        "side": "player",
+        "role": "muscle",
+        "cell": "2,2",
+        "hp": 5,
+        "maxHp": 5,
+        "guard": 2,
+        "nerve": 3,
+        "harmBonus": 0,
+        "maxNerve": 3,
+        "alive": true,
+        "torso": "torso-muscle-v03",
+        "legs": "legs-muscle-v03",
+        "equipment": "baseball-bat",
+        "itemIds": [
+          "training-bandage"
+        ],
+        "modelId": "cast3d-f01-heavy-bruiser-v05"
+      },
+      {
+        "id": "f02",
+        "name": "F02 Wiry · Jade",
+        "side": "player",
+        "role": "runner",
+        "cell": "3,2",
+        "hp": 2,
+        "maxHp": 5,
+        "guard": 1,
+        "nerve": 0,
+        "harmBonus": 0,
+        "maxNerve": 3,
+        "alive": true,
+        "torso": "torso-runner-v03",
+        "legs": "legs-runner-v03",
+        "equipment": "first-handgun",
+        "itemIds": [
+          "training-bandage"
+        ],
+        "modelId": "cast3d-f02-wiry-skirmisher-v05"
+      },
+      {
+        "id": "op-f01",
+        "name": "F01 Heavy · Rust",
+        "side": "enemy",
+        "role": "muscle",
+        "cell": "2,5",
+        "hp": 0,
+        "maxHp": 5,
+        "guard": 0,
+        "nerve": 3,
+        "maxNerve": 3,
+        "alive": false,
+        "head": "head-kallio-03-v03",
+        "torso": "torso-muscle-v03",
+        "legs": "legs-muscle-v03",
+        "equipment": "baseball-bat",
+        "intent": "attack-in-reach",
+        "tough": false,
+        "itemIds": [
+          "training-bandage"
+        ],
+        "modelId": "cast3d-f01-heavy-bruiser-v05"
+      },
+      {
+        "id": "op-f02",
+        "name": "F02 Wiry · Rust",
+        "side": "enemy",
+        "role": "runner",
+        "cell": "3,5",
+        "hp": 0,
+        "maxHp": 5,
+        "guard": 0,
+        "nerve": 3,
+        "maxNerve": 3,
+        "alive": false,
+        "head": "head-kallio-09-v03",
+        "torso": "torso-runner-v03",
+        "legs": "legs-runner-v03",
+        "equipment": "first-handgun",
+        "intent": "attack-in-reach",
+        "tough": false,
+        "itemIds": [
+          "training-bandage"
+        ],
+        "modelId": "cast3d-f02-wiry-skirmisher-v05"
+      }
+    ],
+    "log": [
+      "F01 Heavy · Jade: F01 Heavy · Rust goes down. The consequence waits for the aftermath.",
+      "Round 9. Enemy intent is pinned before the next commitment.",
+      "F02 Wiry · Jade is shaken; withdrawal stays available.",
+      "F01 Heavy · Rust: F02 Wiry · Jade's guard tears instead of their condition.",
+      "F01 Heavy · Jade: F01 Heavy · Rust loses condition (1/5).",
+      "Round 8. Enemy intent is pinned before the next commitment.",
+      "F02 Wiry · Jade is shaken; withdrawal stays available.",
+      "F01 Heavy · Rust: F02 Wiry · Jade's guard tears instead of their condition.",
+      "F01 Heavy · Jade: F01 Heavy · Rust loses condition (2/5).",
+      "Round 7. Enemy intent is pinned before the next commitment.",
+      "F02 Wiry · Jade is shaken; withdrawal stays available.",
+      "F01 Heavy · Rust: F02 Wiry · Jade's guard tears instead of their condition.",
+      "F01 Heavy · Jade: F01 Heavy · Rust loses condition (3/5).",
+      "Round 6. Enemy intent is pinned before the next commitment.",
+      "F02 Wiry · Jade is shaken; withdrawal stays available.",
+      "F01 Heavy · Rust: F02 Wiry · Jade's guard tears instead of their condition.",
+      "F01 Heavy · Jade: F01 Heavy · Rust loses condition (4/5).",
+      "Round 5. Enemy intent is pinned before the next commitment."
+    ]
+  },
+  "metrics": {
+    "fps": 132,
+    "draws": 42,
+    "geometries": 42,
+    "models": 4,
+    "bones": [
+      56,
+      56,
+      56,
+      56
+    ],
+    "busy": false,
+    "mode": "mixed",
+    "history": [
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f02",
+        "value": "op-f02"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f02"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      },
+      {
+        "type": "end",
+        "actor": "f02"
+      },
+      {
+        "type": "attack",
+        "actor": "f01",
+        "value": "op-f01"
+      }
+    ],
+    "finite": true
+  },
+  "errors": [],
+  "via": "Keyboard selects/actions and real target/end-round buttons"
+}
