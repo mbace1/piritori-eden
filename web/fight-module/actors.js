@@ -1,15 +1,17 @@
 import * as T from 'three';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
+import {limitTextures} from './render-profile.js?v=1';
 
-export async function loadFighters(manifest) {
+export async function loadFighters(manifest,{textureSize=2048}={}) {
   const loader=new GLTFLoader(), templates=new Map();
-  await Promise.all(['cast3d-f01-heavy-bruiser-v05','cast3d-f02-wiry-skirmisher-v05'].map(async id=>{
+  for(const id of ['cast3d-f01-heavy-bruiser-v05','cast3d-f02-wiry-skirmisher-v05']){
     const asset=manifest.assets.find(a=>a.id===id);if(!asset)throw Error('Missing registered fighter '+id);
     const url=new URL(asset.file,new URL('../../art/v3/',import.meta.url)),response=await fetch(url);if(!response.ok)throw Error('Fighter download failed: '+response.status);
     const bytes=await response.arrayBuffer();if(bytes.byteLength!==asset.bytes)throw Error('Incomplete fighter download');
     if(crypto.subtle){const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');if(hash!==asset.sha256)throw Error('Fighter version mismatch');}
-    templates.set(id,await loader.parseAsync(bytes,new URL('.',url).href));
-  }));return templates;
+    const template=await loader.parseAsync(bytes,new URL('.',url).href);
+    limitTextures(template.scene,textureSize);templates.set(id,template);
+  }return templates;
 }
 
 function cloneSkin(source){
@@ -67,5 +69,5 @@ export function updateActor(a,dt){
   a.body.updateMatrixWorld(true);
   if(a.prop.visible){const grip=a.bones.get('grip_right');grip.getWorldPosition(a.prop.position);grip.getWorldQuaternion(a.prop.quaternion);}
 }
-export function disposeActor(a){a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
+export function disposeActor(a){a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
 

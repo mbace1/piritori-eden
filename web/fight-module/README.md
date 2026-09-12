@@ -1,6 +1,8 @@
-# Piritori fighter module — C.04
+# Piritori fighter module — C.05
 
-C.04 adds a night courtyard lighting study based on existing 2D backgrounds.
+C.05 adds conservative touch rendering and graphics-loss recovery that preserves the current training turn. See [GRAPHICS_RECOVERY.md](GRAPHICS_RECOVERY.md) for implementation and device-test limits. The owner reported graphics loss in C.04; physical C.05 retesting remains required.
+
+C.04 added a night courtyard lighting study based on existing 2D backgrounds.
 See [ENVIRONMENT_REFERENCES.md](ENVIRONMENT_REFERENCES.md) for exact references,
 lighting choices and the new owner-defined meeting/doorway direction. Dialogue
 cut-ins, NPC visits, lit-door availability and campaign transitions remain
@@ -85,6 +87,6 @@ thermal behavior, controller hardware or physical touch acceptance.
 
 ### Port
 
-C.04 is a browser test unit. Godot should reproduce the four-actor fixture,
+C.05 is a browser test unit. Godot should reproduce the four-actor fixture,
 commands and result vocabulary after owner playtesting. It has not been ported
 or accepted on a physical controller.

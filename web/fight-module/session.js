@@ -1,6 +1,25 @@
 import { createState } from '../js/v3/state.js?v=5';
 import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle } from './resolver.js?v=1';
 
+// Same-tab emergency recovery only, never a campaign save. Replay committed
+// commands once; a partially shown animation is not a partially applied action.
+export function checkpoint(session) {
+  return {version:1,mode:session.mode,snapshot:session.snapshot(),
+    actions:session.history.map(({type,actor,value})=>({type,actor,value}))};
+}
+export function restoreSession(content,saved) {
+  if(saved?.version!==1||!['mixed','melee','ranged'].includes(saved.mode)||!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid training checkpoint');
+  const session=createSession(content,saved.mode);
+  for(const {type,actor,value} of saved.actions) {
+    if(!['move','attack','brace','item','talk','withdraw','end','auto'].includes(type))throw Error('Unknown checkpoint action');
+    if(actor&&actor!==session.battle.selectedId&&!session.command('select',actor).ok)throw Error('Invalid checkpoint actor');
+    if(!session.command(type,value).ok)throw Error('Invalid checkpoint command');
+  }
+  if(saved.snapshot?.selectedId!==session.battle.selectedId)session.command('select',saved.snapshot?.selectedId);
+  if(JSON.stringify(session.snapshot())!==JSON.stringify(saved.snapshot))throw Error('Checkpoint does not match the current rules');
+  return session;
+}
+
 export function createSession(content, mode='mixed') {
   const data={content,crew:new Map(content.crew.map(v=>[v.id,v])),equipment:new Map(content.equipment.map(v=>[v.id,v])),missions:new Map(content.missions.map(v=>[v.id,v]))};
   const campaign=createState(content);
