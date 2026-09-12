@@ -1,0 +1,282 @@
+[
+  {
+    "name": "compact-portrait",
+    "viewport": {
+      "width": 360,
+      "height": 640
+    },
+    "emulatedDpr": 2,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 14.25,
+          "span": 14.25,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 1.0526315789473684,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 60,
+          "width": 360,
+          "height": 342
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "phone-portrait",
+    "viewport": {
+      "width": 412,
+      "height": 915
+    },
+    "emulatedDpr": 2.625,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 22.46359223300971,
+          "span": 22.46359223300971,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 0.6677471636952999,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 60,
+          "width": 412,
+          "height": 617
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "compact-landscape",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "emulatedDpr": 2,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 12.894482208057006,
+          "span": 12.894482208057006,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 1.6588235294117648,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 50,
+          "width": 564,
+          "height": 340
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "phone-landscape",
+    "viewport": {
+      "width": 915,
+      "height": 412
+    },
+    "emulatedDpr": 2.625,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 12.618410897806653,
+          "span": 12.618410897806653,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 1.7541436464088398,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 50,
+          "width": 635,
+          "height": 362
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "tablet-portrait",
+    "viewport": {
+      "width": 834,
+      "height": 1194
+    },
+    "emulatedDpr": 2,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 16.636690647482013,
+          "span": 16.636690647482013,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 0.9016216216216216,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 68,
+          "width": 834,
+          "height": 925
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "tablet-landscape",
+    "viewport": {
+      "width": 1194,
+      "height": 834
+    },
+    "emulatedDpr": 2,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 11.9,
+          "span": 11.9,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 2.113274336283186,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 68,
+          "width": 1194,
+          "height": 565
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "desktop",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "emulatedDpr": 1,
+    "checks": 22,
+    "samples": [
+      {
+        "view": "overview",
+        "frame": {
+          "overviewSpan": 11.9,
+          "span": 11.9,
+          "zoom": 1,
+          "angle": 0.65,
+          "aspect": 2.7374749498997994,
+          "safeInset": {
+            "top": 66,
+            "bottom": 24,
+            "side": 16
+          }
+        },
+        "arena": {
+          "x": 0,
+          "y": 68,
+          "width": 1366,
+          "height": 499
+        }
+      }
+    ],
+    "tagOverlaps": 0,
+    "hudOverlaps": 0,
+    "fullBoardFits": true,
+    "boardTap": true,
+    "orientationPause": true,
+    "cameraPreservesBattle": true,
+    "errors": [],
+    "physicalDevice": false
+  }
+]

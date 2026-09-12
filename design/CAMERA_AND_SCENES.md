@@ -57,10 +57,14 @@ Private captures and the diagnostic script stay in the workspace. No runtime cha
 | Harbour | Exposed waterfront, industrial depth, isolated floodlights | Existing chapter operation and explicit commitment | Approach/brief/leave before commitment; no invented boss or combat rules |
 | Personal rooms / club / counter | Intimate work, repaired objects, named practical lamps | Optional presence, narrative returns and availability | Retain Jaska/Slomo identities and motifs; Arvo's physical venue remains unassigned |
 
+## C.06 implementation following owner approval
+
+The owner approved applying the wider framing and fixing labels in the existing courtyard. C.06 now implements the full-board/headroom fit, compact condition/guard tags with collision avoidance and leader lines, FIT, and a short orientation reflow pause. See [implementation and reports](../web/fight-module/CAMERA_FRAMING.md). The C.05 findings above remain the before-change record. These changes do not add the four approved concept environments or automatic cinematic focus.
+
 ## Next bounded build
 
 1. D008 records approval of v03 panels 02/03/05/06. Record remaining camera/scene-family/time answers in scenario-atlas.json when received.
-2. Fix combat-label layout and implement a viewport-aware overview in the existing single set; keep manual controls and reduced-motion support.
+2. C.06 implements the four-actor camera/tag correction; evaluate it on the physical devices and expand layout checks before increasing roster density.
 3. Exercise full formations, edge targets, cover, action focus cancellation, context recovery and orientation pause. Use Pixel 10 Pro and iPad M2 for physical acceptance.
 4. Build the chosen authored scenario's six-beat storyboard and one connected encounter. Reuse its physical set through discussion, permitted escalation and aftermath.
 5. Expand scene dressing/asset requests from the tested packet, not from every decorative object in concept art.

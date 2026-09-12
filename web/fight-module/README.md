@@ -1,6 +1,8 @@
-# Piritori fighter module — C.05
+# Piritori fighter module — C.06
 
-C.05 adds conservative touch rendering and graphics-loss recovery that preserves the current training turn. See [GRAPHICS_RECOVERY.md](GRAPHICS_RECOVERY.md) for implementation and device-test limits. The owner reported graphics loss in C.04; physical C.05 retesting remains required.
+C.06 adds a wider full-board overview, compact separated fighter tags, a FIT control and orientation reflow pause. See [CAMERA_FRAMING.md](CAMERA_FRAMING.md) for the implementation, test evidence and port requirements.
+
+C.05 added conservative touch rendering and graphics-loss recovery that preserves the current training turn. See [GRAPHICS_RECOVERY.md](GRAPHICS_RECOVERY.md) for implementation and device-test limits. The owner reported graphics loss in C.04; physical C.05 retesting remains required.
 
 C.04 added a night courtyard lighting study based on existing 2D backgrounds.
 See [ENVIRONMENT_REFERENCES.md](ENVIRONMENT_REFERENCES.md) for exact references,

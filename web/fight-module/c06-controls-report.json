@@ -1,0 +1,255 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "metrics": {
+      "layoutPaused": false,
+      "fps": 47,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 7,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "desktop",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        1180,
+        551
+      ],
+      "shadows": true,
+      "antialias": true,
+      "textureSizes": [
+        [
+          "2048x2048"
+        ],
+        [
+          "2048x2048"
+        ]
+      ],
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 216.453125
+      },
+      {
+        "h": 44,
+        "w": 216.46875
+      },
+      {
+        "h": 44,
+        "w": 216.453125
+      },
+      {
+        "h": 44,
+        "w": 216.46875
+      },
+      {
+        "h": 44,
+        "w": 254.15625
+      }
+    ],
+    "autoResult": "loss"
+  },
+  {
+    "name": "phone",
+    "errors": [],
+    "metrics": {
+      "layoutPaused": false,
+      "fps": 27,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "mobile",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        412,
+        617
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 72.78125
+      },
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 84.921875
+      }
+    ]
+  },
+  {
+    "name": "tablet",
+    "errors": [],
+    "metrics": {
+      "layoutPaused": false,
+      "fps": 26,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "mobile",
+      "pixelRatio": 0.9179156758073853,
+      "drawingBuffer": [
+        765,
+        849
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 174.3125
+      }
+    ]
+  },
+  {
+    "name": "landscape",
+    "errors": [],
+    "metrics": {
+      "layoutPaused": false,
+      "fps": 26,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "mobile",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        635,
+        362
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 83.65625
+      },
+      {
+        "h": 44,
+        "w": 83.671875
+      },
+      {
+        "h": 44,
+        "w": 83.671875
+      },
+      {
+        "h": 44,
+        "w": 119.359375
+      },
+      {
+        "h": 44,
+        "w": 137.640625
+      }
+    ]
+  }
+]

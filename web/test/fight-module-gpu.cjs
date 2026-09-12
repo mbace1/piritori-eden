@@ -1,9 +1,10 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict'),fs=require('node:fs'),sharp=require('sharp');
+const output=process.env.FIGHT_GPU_OUTPUT||'.private/c05',report=process.env.FIGHT_GPU_REPORT||'work/piritori-fight-module/web/fight-module/gpu-recovery-report.json';
 const base=process.env.FIGHT_MODULE_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/fight-module/';
 (async()=>{
  const browser=await chromium.launch({channel:'msedge',headless:true,args:['--enable-unsafe-swiftshader']});
- const reports=[];fs.mkdirSync('.private/c05',{recursive:true});
+ const reports=[];fs.mkdirSync(output,{recursive:true});
  try{for(const spec of [{name:'phone',width:412,height:915,dpr:2.625,touch:true},{name:'tablet',width:834,height:1194,dpr:2,touch:true},{name:'desktop',width:1180,height:820,dpr:1,touch:false}]){
   const context=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:spec.touch,isMobile:spec.touch,deviceScaleFactor:spec.dpr});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
@@ -33,11 +34,11 @@ const base=process.env.FIGHT_MODULE_URL||'http://127.0.0.1:8796/work/piritori-fi
    await lose();await page.locator('#reload-graphics').waitFor({state:'visible',timeout:8000});await tap('#reload-graphics');await ready();assert.deepEqual(await snapshot(),enemy);assert.equal((await metrics()).profile,'mobile');
    // Also test completed battle recovery without restarting it.
    await tap('#withdraw');await ready();const result=await snapshot();await lose();await restore();assert.deepEqual(await snapshot(),result);assert.equal(await page.locator('#result').isVisible(),true);await tap('#again');await ready();
-   await page.setViewportSize({width:915,height:412});await page.waitForTimeout(400);const landscape=await metrics();assert(landscape.drawingBuffer[0]*landscape.drawingBuffer[1]<=650000);await page.screenshot({path:'.private/c05/phone-landscape.png'});await page.setViewportSize({width:412,height:915});
+   await page.setViewportSize({width:915,height:412});await page.waitForTimeout(400);const landscape=await metrics();assert(landscape.drawingBuffer[0]*landscape.drawingBuffer[1]<=650000);await page.screenshot({path:output+'/phone-landscape.png'});await page.setViewportSize({width:412,height:915});
   }else{await tap('#restart');await ready();}
-  await visibleFrame();await page.screenshot({path:`.private/c05/${spec.name}.png`});
+  await visibleFrame();await page.screenshot({path:`${output}/${spec.name}.png`});
   assert.deepEqual(errors,[]);reports.push({name:spec.name,dpr:spec.dpr,initial,after:await metrics(),checks:['real context loss during move','input blocked during loss','enemy turn recovery','rehearsal cancellation','repeated restoration without GPU allocation growth',...(spec.name==='phone'?['reload checkpoint fallback','completed outcome recovery','orientation resize']:[])],errors,physicalDevice:false});await context.close();
  }
- fs.writeFileSync('work/piritori-fight-module/web/fight-module/gpu-recovery-report.json',JSON.stringify(reports,null,2));console.log(JSON.stringify(reports));
+ fs.writeFileSync(report,JSON.stringify(reports,null,2));console.log(JSON.stringify(reports));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1);});

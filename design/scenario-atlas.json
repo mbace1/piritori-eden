@@ -1437,7 +1437,7 @@
       "status": "asked",
       "question": "Battle-start pullback with optional action focus, manual after pullback, or frequent cinematic movement?",
       "recommendation": "Keep planning steady; optional focus must preserve actor, target and intervening cover.",
-      "implementation": "Not implemented; C.05 has manual zoom/orbit."
+      "implementation": "Automatic cinematic motion is not implemented. C.06 has the wider viewport-aware fit, manual zoom/orbit, compact tags and orientation pause."
     },
     {
       "id": "D007",
