@@ -79,3 +79,7 @@ Show images directly in chat: plain generated-image output was invisible remotel
 ## Receiving agent completion record
 
 Record the source image hash; Image to 3D, remesh, retexture and rigging task IDs; every animation task ID and its `action_id` or `motion_task_id`; model/settings; output paths; actual credit usage; master and derivative triangle counts; Blender findings; owner review; and outstanding gates in a follow-up commit. Do not include secrets or account billing details. Obtain the actual approved image before generation; written descriptions are identifiers, not replacement prompts.
+
+## Future animation and finalization gate
+
+Follow [FIGHTER_ANIMATION_CONTINUITY.md](FIGHTER_ANIMATION_CONTINUITY.md) before merging the asset follow-up (#68). It requires verified private backups, versioned rigs, shared-clip compatibility, finger/grip support, and full playback/export checks. Adding the document does not complete those tasks. Final runtime acceptance also needs owner visual approval and actual importer/device evidence. Do not merge #68 merely because documentation checks pass.
