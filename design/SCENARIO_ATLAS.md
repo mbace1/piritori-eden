@@ -1,6 +1,6 @@
 # Act I scenario atlas — Kallio 2003
 
-Owner request, 2026-09-12: develop the game-design connections as well as visuals. This is a living index, not a new GDD, runtime content file, or claim that these scenarios are implemented in 3D. The existing GDD, design authority and authored content control facts; staging below is proposed. The owner approved the v01/v02 environmental visual direction on 2026-09-12 and requested wider battle views, possible dynamic framing, landscape testing and more scene types. Exact layouts, characters and runtime readiness are not implied. See CAMERA_AND_SCENES.md for the next study and its test findings.
+Owner request, 2026-09-12: develop the game-design connections as well as visuals. This is a living index, not a new GDD, runtime content file, or claim that these scenarios are implemented in 3D. The existing GDD, design authority and authored content control facts; staging below is proposed. The owner approved the v01/v02 environmental visual direction on 2026-09-12 and requested wider battle views, possible dynamic framing, landscape testing and more scene types. Exact layouts, characters and runtime readiness are not implied. See CAMERA_AND_SCENES.md for the study and its test findings. The owner subsequently approved v03 panels 02, 03, 05 and 06 (middle/right columns) as realistic environment and framing targets; decision D008 records the source hash and panel IDs.
 
 ## Source pass and scope
 

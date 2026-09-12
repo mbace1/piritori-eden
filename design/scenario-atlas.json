@@ -1464,6 +1464,43 @@
           "sha256": "2e979e0a7fa9228ce323b0b7de06f8b8b7c084502f438a8fb1364e44b92e43f5"
         }
       ]
+    },
+    {
+      "id": "D008",
+      "topic": "wide_scene_approval",
+      "status": "answered",
+      "owner_answer": "All are nice but middle and right ones are realistic for us and approved",
+      "interpretation": "Middle and right columns of the v03 six-panel sheet: panels 02, 03, 05 and 06 are approved environment/framing targets for implementation.",
+      "reference": {
+        "file": "kallio-2003-wide-scenes-v03.png",
+        "sha256": "f575627fdd5f12c0b9b14665ea8cb5ea31504928adeba9555d1b5a3ff96f61e7"
+      },
+      "approved_panels": [
+        {
+          "number": 2,
+          "name": "Courtyard — battle wide"
+        },
+        {
+          "number": 3,
+          "name": "Karhupuisto — open battle"
+        },
+        {
+          "number": 5,
+          "name": "Linjat — McCormick yard"
+        },
+        {
+          "number": 6,
+          "name": "Sörnäinen — harbour commitment"
+        }
+      ],
+      "remaining_panels": {
+        "numbers": [
+          1,
+          4
+        ],
+        "status": "reference_only; not selected for implementation by this approval; not rejected"
+      },
+      "scope": "Use the approved spatial scale, elevated framing, mood and scene types as build targets. Exact generated text/geography, final asset quality and automatic camera policy require their existing checks. This records owner approval, not engine/device acceptance."
     }
   ]
 }

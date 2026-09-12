@@ -6,7 +6,7 @@ Owner direction, 2026-09-12: "All of these are great, but we also need to zoom o
 
 The two earlier six-scene sheets establish the environmental direction: painted underground street noir, warm practical pools against cold night, worn Kallio materials and recognisable entered places. This is environmental direction approval, not approval of incidental sign text, invented geometry, named character designs or a final runtime.
 
-The new v03 sheet has six wide panels on a landscape page. It is a proposal: courtyard meeting; the same courtyard pulled back for battle; open Karhupuisto battle; staffed bank; McCormick yard; Sörnäinen harbour approach. The generated courtyard pair changes details and grouping, so it illustrates framing intent, not a verified continuous camera move. Actual continuity must use one 3D set with stable actors and props.
+The v03 sheet has six wide panels on a landscape page. The owner approved the middle and right columns as realistic implementation targets: **02 courtyard battle wide, 03 Karhupuisto open battle, 05 McCormick yard, and 06 harbour commitment**. Panels 01 (close meeting) and 04 (bank interior) remain references; they were not selected for implementation or rejected. These four approved frames establish spatial scale, elevated framing, mood and scene types. The generated courtyard pair changes details and grouping, so it illustrates framing intent, not a verified continuous camera move. Actual continuity must use one 3D set with stable actors and props.
 
 ## Sources and constraints
 
@@ -59,7 +59,7 @@ Private captures and the diagnostic script stay in the workspace. No runtime cha
 
 ## Next bounded build
 
-1. Record the owner's camera/scene-family/time answers in scenario-atlas.json.
+1. D008 records approval of v03 panels 02/03/05/06. Record remaining camera/scene-family/time answers in scenario-atlas.json when received.
 2. Fix combat-label layout and implement a viewport-aware overview in the existing single set; keep manual controls and reduced-motion support.
 3. Exercise full formations, edge targets, cover, action focus cancellation, context recovery and orientation pause. Use Pixel 10 Pro and iPad M2 for physical acceptance.
 4. Build the chosen authored scenario's six-beat storyboard and one connected encounter. Reuse its physical set through discussion, permitted escalation and aftermath.
@@ -69,4 +69,4 @@ Private captures and the diagnostic script stay in the workspace. No runtime cha
 
 Workspace final: outputs/piritori-concepts/kallio-2003-wide-scenes-v03.png.
 Prompt/source notes: outputs/piritori-concepts/kallio-2003-wide-scenes-v03.md.
-Built-in imagegen was used with kallio-2003-six-angles-v02.png as a style reference. Review art is not loaded by the game. D001 records hashes of the approved earlier sheets; D006 and D007 are pending camera/scene-family questions. D002 time costs and D003 first connected scenario remain unresolved.
+Built-in imagegen was used with kallio-2003-six-angles-v02.png as a style reference. Review art is not loaded by the game. D001 records hashes of the approved earlier sheets; D008 records the v03 hash and four approved panel IDs. D006 and D007 are pending camera/scene-family questions. D002 time costs and D003 first connected scenario remain unresolved.
