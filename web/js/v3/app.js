@@ -1513,7 +1513,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.47',
+      version: 'v4.48',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());

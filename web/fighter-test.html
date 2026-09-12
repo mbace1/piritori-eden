@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121719">
+  <meta name="description" content="A provisional Piritori locomotion test for the F01 and F02 fighter candidates.">
+  <title>Piritori · F01/F02 Fighter Test</title>
+  <link rel="stylesheet" href="fighter-test.css?v=1">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js?v=1" } }
+  </script>
+</head>
+<body>
+  <main class="test-shell">
+    <header class="test-header">
+      <div>
+        <p class="eyebrow">PIRITORI · PLAYABLE TEST · v4.48</p>
+        <h1>F01 / F02 LOCOMOTION</h1>
+        <p class="lede">Two approved-source fighters, shown together as provisional runtime candidates.</p>
+      </div>
+      <a class="paper-button back-link" href="./">BACK TO PIRITORI</a>
+    </header>
+
+    <section class="stage-card" aria-labelledby="testTitle">
+      <h2 id="testTitle" class="sr-only">Interactive fighter animation stage</h2>
+      <div class="stage" id="fighterStage">
+        <canvas id="fighterCanvas" aria-label="3D view of both provisional Piritori fighters"></canvas>
+        <div class="fighter-label fighter-label-f01">
+          <strong>F01</strong>
+          <span>HEAVY BRUISER</span>
+          <small id="f01State">LOADING</small>
+        </div>
+        <div class="fighter-label fighter-label-f02">
+          <strong>F02</strong>
+          <span>WIRY SKIRMISHER</span>
+          <small id="f02State">LOADING</small>
+        </div>
+        <p class="load-status" id="loadStatus" role="status" aria-live="polite">Loading both fighters…</p>
+      </div>
+
+      <div class="motion-controls" aria-label="Fighter animation controls">
+        <fieldset class="fighter-controls">
+          <legend>F01 MOTION</legend>
+          <button class="paper-button active" type="button" data-pilot="f01" data-motion="alert-idle" aria-pressed="true" disabled>ALERT IDLE</button>
+          <button class="paper-button" type="button" data-pilot="f01" data-motion="casual-walk" aria-pressed="false" disabled>CASUAL WALK</button>
+        </fieldset>
+        <fieldset class="fighter-controls">
+          <legend>F02 MOTION</legend>
+          <button class="paper-button active" type="button" data-pilot="f02" data-motion="alert-idle" aria-pressed="true" disabled>ALERT IDLE</button>
+          <button class="paper-button" type="button" data-pilot="f02" data-motion="casual-walk" aria-pressed="false" disabled>CASUAL WALK</button>
+        </fieldset>
+        <button class="paper-button pause-button" type="button" id="pauseMotion" aria-pressed="false" disabled>PAUSE BOTH</button>
+      </div>
+    </section>
+
+    <section class="scope-note" aria-label="Test scope">
+      <p><strong>AVAILABLE NOW</strong> Alert idle and Casual Walk, using each fighter’s own compatible rig clips.</p>
+      <p><strong>NOT FINAL IN THIS TEST</strong> current arm proportions, attacks, hit/death, finger articulation, weapon grips, final optimization, or final-asset approval.</p>
+      <p id="runtimeReadout">Runtime importer check pending.</p>
+    </section>
+  </main>
+
+  <script type="module" src="js/v3/fighter-test.js?v=1"></script>
+  <script type="module">
+    import('../hub/shell.js?v=17').catch(() => {});
+  </script>
+</body>
+</html>

@@ -10,6 +10,21 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.48 — 2026-09-11
+
+**Provisional F01/F02 locomotion test.**
+
+- Adds the two owner-approved-source fighter candidates as runtime test derivatives after removing Meshy's helper Icosphere.
+- A dedicated touch-first screen stages both fighters together and plays each fighter's own Alert idle and Casual Walk clips through the production Three.js GLTFLoader.
+- The runtime neutralises Meshy's duplicated full-strength emissive atlas so skin and clothing display their accepted base colours instead of washing out white.
+- The screen labels the candidates provisional and names the unavailable attack, damage, finger/grip and final-polish work instead of implying those states exist.
+- Current arm proportions remain part of the provisional pilot meshes and are explicitly left for the later body/rig correction pass.
+- The test is linked from the cold-start splash and can also be opened directly on the hub.
+
+### Port
+
+The test page is browser-only. The registered GLBs must still pass Godot's real importer during the shared asset sync, but no Godot scene or gameplay behavior is added in this provisional test release.
+
 ## v4.47 — 2026-09-11
 
 **Act I people, places and optional return conversations.**
