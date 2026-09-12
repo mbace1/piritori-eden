@@ -134,9 +134,14 @@ for (const [re, label] of [
   if (!re.test(contentSrc)) { console.error(`  FAIL ${label}`); bad += 1; }
 }
 
-for (const f of ['index.html', 'js/v3/app.js', 'js/v3/render3d.js', 'art/v3/manifest.json',
+for (const f of ['index.html', 'fighter-test.html', 'fighter-test.css', 'js/v3/app.js',
+  'js/v3/render3d.js', 'js/v3/fighter-test.js', 'art/v3/manifest.json',
   'content/era1-slice-v1.json', 'market/model.mjs', 'people/hiring.mjs',
-  'art/v3/cast3d/clips/muscle-idle-v01.glb']) {
+  'art/v3/cast3d/clips/muscle-idle-v01.glb',
+  'art/v3/cast3d/f01-heavy-bruiser-v01.glb',
+  'art/v3/cast3d/f02-wiry-skirmisher-v01.glb',
+  'art/v3/cast3d/clips/f01-heavy-bruiser-clips-v01.glb',
+  'art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v01.glb']) {
   if (!existsSync(join(out, f))) { console.error(`  FAIL missing ${f}`); bad += 1; }
 }
 if (bad) process.exit(1);

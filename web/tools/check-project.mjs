@@ -27,6 +27,7 @@ const checks = [
   'web/test/v3-state.mjs',
   'web/test/v3-battle.mjs',
   'web/test/v3-nameplates.mjs',
+  'web/test/fighter-test.mjs',
   'missions/test/model.mjs',
   'market/test/model.mjs',
   // Found missing 2026-08-31: people/roster.mjs is wired into the live hiring
@@ -41,7 +42,10 @@ const checks = [
   'port/rig-vectors.mjs --check',
 ];
 
-if (includeBrowser) checks.push('web/test/v3-playthrough.cjs');
+if (includeBrowser) {
+  checks.push('web/test/v3-playthrough.cjs');
+  checks.push('web/test/fighter-test-browser.cjs');
+}
 
 for (const entry of checks) {
   const [script, ...args] = entry.split(' ');
