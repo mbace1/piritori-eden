@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "spec_id": "piritori-character-v1",
+  "updated_at": "2026-09-12",
+  "scope": {
+    "pilot_ids": [
+      "CHR_F01",
+      "CHR_F02"
+    ],
+    "new_generation_enabled": false
+  },
+  "characters": {
+    "CHR_F01": {
+      "legacy_id": "F01",
+      "name": "Heavy Bruiser",
+      "status": "RIGGED",
+      "enabled": true,
+      "concept": {
+        "approval": "approved",
+        "file": "art-library/characters/concepts-3d/pilots/f01-heavy-bruiser-tpose-v01.jpg",
+        "sha256": "75b02cb98746f19aa3acf664a54591d9cdaeadd9b4cd456dbe021117ea029d87"
+      },
+      "candidate": {
+        "version": 5,
+        "file": "art/v3/cast3d/f01-heavy-bruiser-v05.glb",
+        "sha256": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc",
+        "bytes": 8209288,
+        "triangles": 19412,
+        "joints": 56,
+        "clips": [
+          "alert-idle",
+          "casual-walk",
+          "hand-open-fist-grip"
+        ],
+        "production_actions": [],
+        "rig": {
+          "id": "f01-local-v05",
+          "signature": "d783958992a1326b5266154477217521cc758b645edfdf0b0f1fee8f7591271b",
+          "compatible_with": null
+        },
+        "texture_resolution": [
+          2048,
+          2048
+        ]
+      },
+      "job": {
+        "state": "idle",
+        "active_task_id": null,
+        "provenance": {
+          "image_to_3d": "01a0928b-41b6-754b-b075-8024d416e00b",
+          "remesh": "01a0940b-dcfb-74c5-8893-8c30330fb84b",
+          "retexture": "01a09424-95a8-73ba-b4f1-7d9f3bcdd7f9",
+          "rig": "01a09426-1412-70e8-ad48-a521dbd78601"
+        }
+      },
+      "integration": {
+        "mode": "prototype",
+        "runtime_id": "cast3d-f01-heavy-bruiser-v05",
+        "candidate_sha256": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc",
+        "scene": "web/fight-module/",
+        "live_url": "https://mbace1.github.io/Suds-Jack/piritori-fighters/"
+      },
+      "gates": {
+        "normalized_export": {
+          "result": "pending",
+          "reason": "Character heights, ground origin, forward axis and root-motion contract not locked; C.03 rescales at runtime."
+        },
+        "skin_material_fingers": {
+          "result": "pending",
+          "reason": "Numerical v05 roundtrip passed; final deformation and prop-specific grip acceptance remains."
+        },
+        "shared_rig_motion": {
+          "result": "pending",
+          "reason": "No accepted canonical rig or shared body clip proven on both v05 characters."
+        },
+        "action_library": {
+          "result": "pending",
+          "reason": "Own-character idle/walk/hand demonstrations exist; combat gestures are provisional."
+        },
+        "importer_playback": {
+          "result": "pending",
+          "reason": "Own-character playback passed; complete common action library and transitions not yet tested."
+        },
+        "private_archive_off_pc": {
+          "result": "pending",
+          "reason": "Archive restored in a clean local directory; off-PC private storage delivery pending."
+        },
+        "owner_visual": {
+          "result": "pending",
+          "reason": "Repaired proportions, hands and full motion need owner acceptance."
+        },
+        "pixel_10_pro": {
+          "result": "pending",
+          "reason": "Physical Pixel 10 Pro test pending."
+        },
+        "ipad_m2": {
+          "result": "pending",
+          "reason": "Physical iPad M2 test pending."
+        },
+        "production_scene": {
+          "result": "pending",
+          "reason": "C.03 is isolated prototype integration."
+        }
+      },
+      "evidence": {
+        "versioned_rig": "art-library/characters/concepts-3d/pilots/blender-v05/rig-signatures.json",
+        "roundtrip": "art-library/characters/concepts-3d/pilots/blender-v05/roundtrip-report.json",
+        "own_clip_playback": "art-library/characters/concepts-3d/pilots/blender-v05/browser-report.json",
+        "prototype_controls": "web/fight-module/browser-report.json"
+      },
+      "next_step": "Prove one shared body clip and finger layer on both preserved v05 rigs; freeze a repeatable retarget recipe."
+    },
+    "CHR_F02": {
+      "legacy_id": "F02",
+      "name": "Wiry Skirmisher",
+      "status": "RIGGED",
+      "enabled": true,
+      "concept": {
+        "approval": "approved",
+        "file": "art-library/characters/concepts-3d/pilots/f02-wiry-skirmisher-tpose-v01.jpg",
+        "sha256": "e7fbf7c927faf4277757ab6be6458a8adffdbaaaadcc3805ac12cfac42329587"
+      },
+      "candidate": {
+        "version": 5,
+        "file": "art/v3/cast3d/f02-wiry-skirmisher-v05.glb",
+        "sha256": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc",
+        "bytes": 8123900,
+        "triangles": 17254,
+        "joints": 56,
+        "clips": [
+          "alert-idle",
+          "casual-walk",
+          "hand-open-fist-grip"
+        ],
+        "production_actions": [],
+        "rig": {
+          "id": "f02-local-v05",
+          "signature": "aa0b958c88b6114b295fac24746eb3bd7c10a07a5012ef58469be6b64924b949",
+          "compatible_with": null
+        },
+        "texture_resolution": [
+          2048,
+          2048
+        ]
+      },
+      "job": {
+        "state": "idle",
+        "active_task_id": null,
+        "provenance": {
+          "image_to_3d": "01a0928b-4621-73da-8948-b8a8201cfc5e",
+          "remesh": "01a0940c-8947-779c-9178-af19ab6f8ade",
+          "retexture": "01a09425-21f8-7461-af82-bfdc1ad68820",
+          "rig": "01a09426-defb-740f-8ddb-a6a2b50a693c"
+        }
+      },
+      "integration": {
+        "mode": "prototype",
+        "runtime_id": "cast3d-f02-wiry-skirmisher-v05",
+        "candidate_sha256": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc",
+        "scene": "web/fight-module/",
+        "live_url": "https://mbace1.github.io/Suds-Jack/piritori-fighters/"
+      },
+      "gates": {
+        "normalized_export": {
+          "result": "pending",
+          "reason": "Character heights, ground origin, forward axis and root-motion contract not locked; C.03 rescales at runtime."
+        },
+        "skin_material_fingers": {
+          "result": "pending",
+          "reason": "Numerical v05 roundtrip passed; final deformation and prop-specific grip acceptance remains."
+        },
+        "shared_rig_motion": {
+          "result": "pending",
+          "reason": "No accepted canonical rig or shared body clip proven on both v05 characters."
+        },
+        "action_library": {
+          "result": "pending",
+          "reason": "Own-character idle/walk/hand demonstrations exist; combat gestures are provisional."
+        },
+        "importer_playback": {
+          "result": "pending",
+          "reason": "Own-character playback passed; complete common action library and transitions not yet tested."
+        },
+        "private_archive_off_pc": {
+          "result": "pending",
+          "reason": "Archive restored in a clean local directory; off-PC private storage delivery pending."
+        },
+        "owner_visual": {
+          "result": "pending",
+          "reason": "Repaired proportions, hands and full motion need owner acceptance."
+        },
+        "pixel_10_pro": {
+          "result": "pending",
+          "reason": "Physical Pixel 10 Pro test pending."
+        },
+        "ipad_m2": {
+          "result": "pending",
+          "reason": "Physical iPad M2 test pending."
+        },
+        "production_scene": {
+          "result": "pending",
+          "reason": "C.03 is isolated prototype integration."
+        }
+      },
+      "evidence": {
+        "versioned_rig": "art-library/characters/concepts-3d/pilots/blender-v05/rig-signatures.json",
+        "roundtrip": "art-library/characters/concepts-3d/pilots/blender-v05/roundtrip-report.json",
+        "own_clip_playback": "art-library/characters/concepts-3d/pilots/blender-v05/browser-report.json",
+        "prototype_controls": "web/fight-module/browser-report.json"
+      },
+      "next_step": "Prove one shared body clip and finger layer on both preserved v05 rigs; freeze a repeatable retarget recipe."
+    },
+    "CHR_F03": {
+      "legacy_id": "F03",
+      "name": "Rejected third concept",
+      "status": "CONCEPT",
+      "enabled": false,
+      "concept": {
+        "approval": "rejected",
+        "file": null,
+        "sha256": null
+      },
+      "candidate": null,
+      "job": {
+        "state": "idle",
+        "active_task_id": null,
+        "provenance": {}
+      },
+      "integration": {
+        "mode": "none"
+      },
+      "gates": {
+        "normalized_export": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "skin_material_fingers": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "shared_rig_motion": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "action_library": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "importer_playback": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "private_archive_off_pc": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "owner_visual": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "pixel_10_pro": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "ipad_m2": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        },
+        "production_scene": {
+          "result": "pending",
+          "reason": "Disabled rejected concept; no processing."
+        }
+      },
+      "next_step": "None. Do not regenerate or reuse."
+    }
+  }
+}

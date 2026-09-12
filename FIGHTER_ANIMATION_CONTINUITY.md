@@ -1,5 +1,7 @@
 # Fighter animation continuity requirements
 
+> **Status correction (2026-09-12):** v05 has 56 joints per fighter, including fingers and grip attachments, and own-character clips play in C.03. The original 24-joint/no-fingers statements below describe the earlier baseline. The [production manifest](assets/asset_manifest.json) records current evidence and unresolved gates. These continuity requirements remain; this note does not mark shared retargeting, final motion, visual/device acceptance or off-PC storage complete.
+
 Owner direction, 2026-09-12: add future-animation support before merging the Meshy pilot work. This document is an implementation and acceptance checklist, not evidence of completion.
 
 Read DESIGN_AUTHORITY.md, ART_BIBLE.md, the current MESHY_AGENT_HANDOFF.md and MESHY_PILOT_RESULTS.md first. Existing character and animation contracts still apply. Scope: F01/F02; no new character generation or runtime deployment.

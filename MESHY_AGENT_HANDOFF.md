@@ -1,5 +1,7 @@
 # Piritori Meshy pilot handoff
 
+> **Current production pickup (2026-09-12):** [3D_PIPELINE.md](3D_PIPELINE.md) and [assets/asset_manifest.json](assets/asset_manifest.json) supersede the historical status statements below. F01/F02 v05 are rigged, runtime-registered playable test candidates in C.03; common-rig, production-motion, final visual/device and off-PC archive gates remain. No new paid jobs are needed to recover the preserved inputs.
+
 Updated: 2026-09-12. Receiving-agent update added; approved source references
 are now included, while generated geometry remains private and unregistered.
 

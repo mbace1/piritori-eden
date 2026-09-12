@@ -1,5 +1,7 @@
 # Piritori → Eden — start here
 
+> **3D production pickup (2026-09-12):** Read [AGENTS.md](AGENTS.md) and [3D_PIPELINE.md](3D_PIPELINE.md). Current character state is in [assets/asset_manifest.json](assets/asset_manifest.json). The older Godot-only startup below is historical: DESIGN_AUTHORITY.md makes `web/` primary and Godot the port.
+
 A narrative strategy game set in Kallio, Helsinki, 2003: a visible city-flow
 simulation, location-based market management, authored encounters and rare
 isometric formation battles.

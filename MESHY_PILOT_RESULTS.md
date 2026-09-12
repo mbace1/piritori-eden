@@ -1,5 +1,7 @@
 # Meshy fighter pilot results
 
+> **Current status (2026-09-12):** F01/F02 v05 are registered and deployed in the isolated C.03 fight module. Production lifecycle remains RIGGED. See [assets/asset_manifest.json](assets/asset_manifest.json) for exact candidate hashes and outstanding gates, and [3D_PIPELINE.md](3D_PIPELINE.md) for the repeatable service plan. The original run record below is historical; its no-integration/no-public-GLB statements no longer describe the current candidates.
+
 - Pilot run: 2026-09-11–12 (America/Los_Angeles)
 - Lane: Art
 - Current state: **rigged review candidates; not runtime-registered, deployed, or game-ready**
