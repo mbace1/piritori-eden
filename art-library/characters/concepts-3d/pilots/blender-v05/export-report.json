@@ -1,0 +1,58 @@
+{
+  "f01": {
+    "bones": 56,
+    "triangles": 19412,
+    "vertices": 18130,
+    "actions": [
+      [
+        "alert-idle",
+        [
+          1.0,
+          121.0
+        ]
+      ],
+      [
+        "casual-walk",
+        [
+          1.0,
+          127.0
+        ]
+      ],
+      [
+        "hand-open-fist-grip",
+        [
+          1.0,
+          110.0
+        ]
+      ]
+    ]
+  },
+  "f02": {
+    "bones": 56,
+    "triangles": 17254,
+    "vertices": 24179,
+    "actions": [
+      [
+        "alert-idle",
+        [
+          1.0,
+          121.0
+        ]
+      ],
+      [
+        "casual-walk",
+        [
+          1.0,
+          127.0
+        ]
+      ],
+      [
+        "hand-open-fist-grip",
+        [
+          1.0,
+          110.0
+        ]
+      ]
+    ]
+  }
+}

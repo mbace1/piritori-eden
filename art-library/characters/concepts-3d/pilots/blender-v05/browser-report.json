@@ -1,0 +1,57 @@
+{
+  "importer": "Piritori vendored GLTFLoader 27170277e22c0358135feb06678b73153244b354",
+  "models": [
+    {
+      "id": "f01",
+      "bones": 56,
+      "clips": [
+        {
+          "name": "alert-idle",
+          "duration": 4
+        },
+        {
+          "name": "casual-walk",
+          "duration": 4.199999809265137
+        },
+        {
+          "name": "hand-open-fist-grip",
+          "duration": 3.633333444595337
+        }
+      ],
+      "finite": true
+    },
+    {
+      "id": "f02",
+      "bones": 56,
+      "clips": [
+        {
+          "name": "alert-idle",
+          "duration": 4
+        },
+        {
+          "name": "casual-walk",
+          "duration": 4.199999809265137
+        },
+        {
+          "name": "hand-open-fist-grip",
+          "duration": 3.633333444595337
+        }
+      ],
+      "finite": true
+    }
+  ],
+  "clipFramesEach": 180,
+  "transitions": [
+    {
+      "id": "f01",
+      "bodyTransitionFrames": 180
+    },
+    {
+      "id": "f02",
+      "bodyTransitionFrames": 180
+    }
+  ],
+  "warnings": [],
+  "physicalDeviceTest": false,
+  "browserErrors": []
+}
