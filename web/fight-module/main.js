@@ -3,35 +3,24 @@ import {createSession} from './session.js?v=1';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=1';
 import {attackTargets,validMoveCells,coverStandingLine} from './resolver.js?v=1';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
+import {buildNightCourtyard} from './environment.js?v=1';
 
 const $=id=>document.getElementById(id),canvas=$('scene'),area=$('arena');
 let session,templates,content,manifest,busy=true,action='',auto=false,angle=.65,zoom=1,sequence=0,hidden=false;
-let renderer,world,camera,highlight,ray,ground,actors=new Map(),labels=new Map(),fps=0,low=false,frameCount=0,seconds=0;
+let renderer,world,camera,highlight,ray,ground,stage,actors=new Map(),labels=new Map(),fps=0,low=false,frameCount=0,seconds=0;
 const CELL=1.17,position=cell=>{const p=parseSlotKey(cell);return new T.Vector3((p.lane-(LANES-1)/2)*CELL,0,(3.5-p.depth)*CELL);};
 const all=()=>session.battle.players.concat(session.battle.enemies),selected=()=>session.battle.players.find(u=>u.id===session.battle.selectedId);
 const hint=text=>$('hint').textContent=text;
 function activate(el,fn){let last=-1000;for(const name of ['pointerup','touchend','click'])el.addEventListener(name,e=>{if(el.disabled||name==='click'&&e.detail!==0)return;e.preventDefault();if(performance.now()-last<260)return;last=performance.now();fn();});}
 function button(text,fn,attrs={}){const b=document.createElement('button');b.textContent=text;for(const [k,v] of Object.entries(attrs))b.setAttribute(k,v);activate(b,fn);return b;}
-function material(color){return new T.MeshStandardMaterial({color,roughness:.94});}
-function box(w,h,d,x,y,z,mat){const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;world.add(m);return m;}
 function buildStage(){
-  world=new T.Scene();world.background=new T.Color(0x25302b);world.fog=new T.Fog(0x25302b,23,42);
+  world=new T.Scene();
   renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   camera=new T.OrthographicCamera(-5,5,5,-5,.1,60);ray=new T.Raycaster();ground=new T.Plane(new T.Vector3(0,1,0),0);highlight=new T.Group();world.add(highlight);
-  world.add(new T.HemisphereLight(0xd4e6d7,0x484536,2));
-  const sun=new T.DirectionalLight(0xffdab0,2.8);sun.position.set(-4,9,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7,near:.1,far:24});sun.shadow.normalBias=.035;world.add(sun);
-  const fill=new T.DirectionalLight(0xb6d8de,1.2);fill.position.set(5,5,-5);world.add(fill);
-  const concrete=material(0x797b6d),edge=material(0x414a40),metal=material(0x303c36),rust=material(0x755d4b);
-  box(8.5,.3,11,0,-.18,0,concrete);box(8.5,1.9,.25,0,.95,-5.5,edge);box(.25,1.9,2,-4.25,.95,-4.65,edge);
-  for(let i=0;i<7;i++){box(.025,.015,10,i*1.17-3.5,.004,0,edge);}
-  for(let i=0;i<9;i++)box(7,.015,.02,0,.004,i*1.17-4.68,edge);
-  for(const x of [-2.7,2.7]){box(.9,1.45,.12,x,.75,-5.33,metal);box(.9,.12,.18,x,1.55,-5.22,rust);}
-  for(const [cell] of session.battle.cover){const p=position(cell);box(.90,.52,.32,p.x,.26,p.z-.37,edge);box(.96,.07,.36,p.x,.55,p.z-.37,concrete);}
-  // Restraint here is deliberate: scenery gets its own Dream Loop pass.
-  for(const z of [-2,0,2])box(.12,.10,.8,-3.9,.06,z,rust);
+  stage=buildNightCourtyard(world,renderer,session.battle.cover,position);
   fit();new ResizeObserver(fit).observe(area);
 }
-function fit(){if(!renderer)return;const w=area.clientWidth,h=area.clientHeight;renderer.setSize(w,h,false);const aspect=w/h,span=Math.max(10.9,13.8/aspect)/zoom;Object.assign(camera,{left:-span*aspect/2,right:span*aspect/2,top:span/2,bottom:-span/2});camera.position.set(Math.sin(angle)*13,10,Math.cos(angle)*13);camera.lookAt(0,.55,0);camera.updateProjectionMatrix();}
+function fit(){if(!renderer)return;const w=area.clientWidth,h=area.clientHeight;renderer.setSize(w,h,false);const aspect=w/h,span=Math.max(10.9,13.8/aspect)/zoom;Object.assign(camera,{left:-span*aspect/2,right:span*aspect/2,top:span/2,bottom:-span/2});camera.position.set(Math.sin(angle)*13,10,Math.cos(angle)*13);camera.lookAt(0,.55,0);camera.updateProjectionMatrix();stage?.update(camera);}
 function reset(mode=$('loadout').value){sequence++;auto=false;for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();session=createSession(content,mode);for(const u of all()){const a=makeActor(templates.get(u.modelId),u,world);a.group.position.copy(position(u.cell));a.group.rotation.y=u.side==='player'?Math.PI:0;actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;$('labels').append(el);labels.set(u.id,el);}busy=false;action='';$('result').hidden=true;hint('Choose a fighter, then an action. One action each round.');refresh();}
 function clearHighlights(){for(const o of [...highlight.children]){o.geometry.dispose();o.material.dispose();highlight.remove(o);}}
 function tile(cell,color,opacity=.22){const p=position(cell),m=new T.Mesh(new T.PlaneGeometry(CELL*.9,CELL*.9),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:T.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.copy(p).setY(.025);highlight.add(m);}
@@ -85,7 +74,7 @@ let down=null,lastTap=0;canvas.addEventListener('pointerdown',e=>{down={id:e.poi
 window.addEventListener('keydown',e=>{if($('help-dialog').open)return;if(e.key==='Escape'){action='';refresh();return;}if(e.target.matches('select,input')||(e.key==='Enter'&&e.target.matches('button,a,summary')))return;const key=e.key.toLowerCase();if(key==='1'||key==='2')select(session.battle.players[Number(key)-1].id);if({a:'attack',m:'move',b:'brace',i:'item'}[key])choose({a:'attack',m:'move',b:'brace',i:'item'}[key]);if(e.key==='Enter'){e.preventDefault();run('end');}});
 let padPrevious=[],padAt=0;function controller(now){const p=navigator.getGamepads?.()[0];if(!p)return;const fresh=i=>p.buttons[i]?.pressed&&!padPrevious[i];const controls=[...document.querySelectorAll('button,select,summary,a')].filter(e=>!e.disabled&&e.getClientRects().length&&!e.closest('[hidden]')&&(!$('help-dialog').open||e.closest('dialog')));if(now-padAt>170&&(fresh(13)||fresh(15)||fresh(12)||fresh(14))){const step=fresh(13)||fresh(15)?1:-1,index=controls.indexOf(document.activeElement);controls[(index+step+controls.length)%controls.length]?.focus();padAt=now;}if(fresh(0))document.activeElement?.click();if(fresh(1)){if($('help-dialog').open)$('help-dialog').close();else{action='';refresh();}}if(fresh(6)||fresh(7)){zoom=T.MathUtils.clamp(zoom+(fresh(7)?.15:-.15),.7,1.7);fit();}padPrevious=p.buttons.map(v=>v.pressed);}
 document.addEventListener('visibilitychange',()=>{hidden=document.hidden;});canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();sequence++;busy=true;$('loading').hidden=false;$('loading').textContent='Graphics interrupted. Reload to restore the fight.';});
-let previous=performance.now();function tick(now){requestAnimationFrame(tick);const real=Math.max(0,(now-previous)/1000),dt=hidden?0:Math.min(.05,real);previous=now;if(hidden||!renderer)return;for(const a of actors.values())updateActor(a,dt);for(const u of all()){const a=actors.get(u.id),p=a.group.position.clone().add(new T.Vector3(0,a.down?.35:2.04,0)).project(camera),el=labels.get(u.id);el.style.transform=`translate(-50%,-100%) translate(${(p.x+1)*area.clientWidth/2}px,${(1-p.y)*area.clientHeight/2}px)`;}renderer.render(world,camera);controller(now);frameCount++;seconds+=real;if(seconds>2){fps=Math.round(frameCount/seconds);if(fps<22&&!low){low=true;renderer.setPixelRatio(1);renderer.shadowMap.enabled=false;}$('perf').textContent=`C.03 · ${fps} FPS · ${renderer.info.render.calls} draws${low?' · low FX':''}`;frameCount=0;seconds=0;}}
+let previous=performance.now();function tick(now){requestAnimationFrame(tick);const real=Math.max(0,(now-previous)/1000),dt=hidden?0:Math.min(.05,real);previous=now;if(hidden||!renderer)return;for(const a of actors.values())updateActor(a,dt);for(const u of all()){const a=actors.get(u.id),p=a.group.position.clone().add(new T.Vector3(0,a.down?.35:2.04,0)).project(camera),el=labels.get(u.id);el.style.transform=`translate(-50%,-100%) translate(${(p.x+1)*area.clientWidth/2}px,${(1-p.y)*area.clientHeight/2}px)`;}renderer.render(world,camera);controller(now);frameCount++;seconds+=real;if(seconds>2){fps=Math.round(frameCount/seconds);if(fps<22&&!low){low=true;renderer.setPixelRatio(1);renderer.shadowMap.enabled=false;}$('perf').textContent=`C.04 · ${fps} FPS · ${renderer.info.render.calls} draws${low?' · low FX':''}`;frameCount=0;seconds=0;}}
 async function boot(){[content,manifest]=await Promise.all(['../../content/era1-slice-v1.json','../../art/v3/manifest.json'].map(p=>fetch(p).then(r=>{if(!r.ok)throw Error('Data failed '+r.status);return r.json();})));session=createSession(content);buildStage();templates=await loadFighters(manifest);reset();$('loading').hidden=true;requestAnimationFrame(tick);window.fightModule={snapshot:()=>session.snapshot(),metrics:()=>({fps,draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,models:actors.size,bones:[...actors.values()].map(a=>a.bones.size),busy,mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};}
 boot().catch(e=>{$('loading').hidden=false;$('loading').textContent='Unable to load fight: '+e.message;console.error(e);});
 

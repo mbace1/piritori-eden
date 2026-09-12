@@ -1,4 +1,10 @@
-# Piritori fighter module — C.03
+# Piritori fighter module — C.04
+
+C.04 adds a night courtyard lighting study based on existing 2D backgrounds.
+See [ENVIRONMENT_REFERENCES.md](ENVIRONMENT_REFERENCES.md) for exact references,
+lighting choices and the new owner-defined meeting/doorway direction. Dialogue
+cut-ins, NPC visits, lit-door availability and campaign transitions remain
+specified work; the current entry is still a combat training scene.
 
 Owner direction, 12 September 2026: first make a playable fight using both
 repaired characters on both opposing teams, then develop the level and Dream
@@ -65,7 +71,7 @@ thermal behavior, controller hardware or physical touch acceptance.
 
 1. Play this module on Pixel 10 Pro and iPad M2. Capture specific input,
    silhouette, proportions, facing, team-color and motion defects.
-2. Turn the blockout into a deliberate Kallio 2003 location using the Art Bible
+2. Develop the first night-lighting study into a deliberate Kallio 2003 location using the Art Bible
    and existing Piritori reference library. Separate floor, architecture, cover,
    props, practical lights, weather and signage; leave tactical routes readable.
 3. Resume the Dream Loop workflow with an approved in-engine target and bounded
@@ -79,6 +85,6 @@ thermal behavior, controller hardware or physical touch acceptance.
 
 ### Port
 
-C.03 is a browser test unit. Godot should reproduce the four-actor fixture,
+C.04 is a browser test unit. Godot should reproduce the four-actor fixture,
 commands and result vocabulary after owner playtesting. It has not been ported
 or accepted on a physical controller.

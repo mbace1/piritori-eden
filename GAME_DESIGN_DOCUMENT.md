@@ -1,5 +1,84 @@
 # PIRITORI → EDEN
 
+## Owner ruling, 2026-09-12 — places, shared markets and continuous encounters
+
+This supplements §§5.2, 6.5, 7.2 and 9, and controls the Option C environment
+work. It is design authority, not a claim that the test module implements the
+connected location/campaign flow.
+
+- A tram-stop area or central Kallio anchor can contain several nearby sites:
+  a park or park edge, a courtyard, a street corner, a bar and other meeting
+  places. Keep the anchor/site model; do not make every nearby scene a separate
+  distant map destination. Use canonical map/site IDs and documented geography.
+- Nearby sites share broadly similar merchandise prices and local supply/demand
+  conditions. Contact, stock, trust, risk or mission state may alter an offer,
+  but changing to the next nearby scene must not create a fresh unrelated price
+  roll and a trivial arbitrage loop. Meaningful price differences should motivate
+  tram travel to a different market area. This is a balance rule; exact spread,
+  fare and travel-time values remain for implementation and playtesting.
+- Nearby sites remain valuable for finding mission personnel, recruitment,
+  information, negotiations and recurring narrative beats even when their prices
+  are similar. Visiting a person is not only an economy operation.
+- A meeting location can also be its battle arena. Present the actual encounter
+  cast in the isometric environment before dialogue. If a deal escalates, retain
+  that location, its actors, identities, equipment and meaningful positions;
+  activate combat and change the relevant NPCs' allegiance/behavior. Do not swap
+  to an unrelated arena or spawn duplicate replacements for the people present.
+- NPC hostility is authored. A failed deal may still allow refusal, defense,
+  escape or another consequence; it does not automatically turn every bystander
+  or protected narrative character into an enemy. Slomo and Arvo remain narrative
+  characters; Jaska can fight only in his explicitly authored cases.
+- For these meeting/standoff sequences, use face close-up cut-ins and dialogue
+  over the continuing isometric view. The characters remain visibly facing one
+  another behind it. The owner's Metal Slug reference supplies staging and
+  expressive dialogue timing, not copied art. Portraits must match their scene
+  actors and preserve the background relationship on phone and tablet layouts.
+- Recreate the mood and practical light of the repository's existing 2D
+  backgrounds in the 3D environments: warm lamps/windows, cooler night fill,
+  quiet dark edges and clear interaction space. Read the painted stage targets
+  and location references before commissioning or assembling environments.
+
+A shared encounter instance binds site, present cast, conversation state and
+optional battle request/result. Peaceful completion, escape and combat aftermath
+return through the same campaign consequence boundary once implemented. Chapter
+and mission progress remain with the campaign; scene rendering cannot invent
+rewards, price updates, injuries or time costs. Existing dedicated counter and
+TV scenes retain their documented narrative roles.
+
+Acceptance: move between two nearby sites without rerolling an unrelated market;
+travel by tram to a distinct market area; meet visible mission personnel; show
+face cut-ins while the same cast faces off; resolve peacefully or escalate with
+stable actors; return one consequence result. C.04 remains a combat training
+scene and does not yet pass this connected-flow milestone.
+
+### Owner follow-up — named locations and lit entrances
+
+Jaska, Slomo, Arvo and other key narrative characters have their own authored
+locations near the public meeting/arena spaces. The public space and a
+character's room, shop or other venue are related sites. Usually a light at the
+entrance signals that the character is available and the player can enter.
+Exiting returns to the same approach site.
+
+The entrance's light, availability label and Enter action must read the same
+state: character schedule/presence, chapter and mission conditions, relationship
+or access restrictions, completed visits and active combat. Window/streetlamp
+atmosphere is separate from this availability signal. Do not light a narrative
+entrance as available when entering cannot work, or invent a visit reward.
+
+Each entrance binds a canonical character and destination site to its parent
+area and approach site, with a visible door/hotspot and an availability rule.
+Use actual existing assignments first: `ACT_I_NARRATIVE.md` records the current
+Jaska/Scene Club assignment and Slomo's noodle bar. Arvo's current broadcast
+presentation is established; his enterable personal-location/door assignment
+must be authored explicitly rather than invented from a generic courtyard.
+These locations do not change the characters' documented combat restrictions.
+
+Acceptance additionally covers arriving while available/unavailable, entering
+and leaving the correct location, returning to the original public spot, and
+updating the door signal after a completed visit or schedule/chapter change.
+The C.04 training courtyard has no NPC visit binding yet, so its narrative door
+stays unlit and has no misleading Enter prompt.
+
 ## Game Design Document — active baseline
 
 Version: 0.7  
@@ -2261,4 +2340,3 @@ people, because money cannot survive a chapter boundary and so cannot be a cost.
   crew, equipment. That handoff is the mechanic and does not exist.
 - Alliance state needs to exist at all — partners, and whether you kept faith.
 - The ending needs both shapes, with the fight as the common one.
-

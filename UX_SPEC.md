@@ -1,5 +1,35 @@
 # Piritori → Eden — UX specification
 
+## Owner presentation addendum, 2026-09-12 — shared meeting/standoff scene
+
+For locations that can move from a meeting into combat, retain the isometric
+scene and its present actors throughout. Dialogue adds a face close-up cut-in,
+speaker identity, text and choices over or beside that scene. The background
+continues to show who is facing whom. This refines §7.2's subtle-focus rule:
+expressive close-ups are now part of these sequences, while a full-screen
+portrait takeover that erases the meeting is still unsuitable.
+
+Use the owner's Metal Slug reference for expressive face staging and timing,
+with Piritori's own art and identities. On portrait phones, place the dialogue
+and close-up where both sides of the meeting remain visible; on landscape,
+use the side/lower space without hiding the shared scene. Keep choices readable,
+minimum 44 px targets, localized text, controller focus and reduced motion.
+
+On authored escalation, dismiss the dialogue controls, reveal combat actions
+and retain the cast/site state. Hostile participants change behavior/allegiance;
+noncombatants retain their narrative roles. On completion, restore the meeting
+or aftermath presentation and apply consequences once through the campaign.
+The C.04 lighting pass does not implement this presentation/transition yet.
+
+Named-character entrances: a warm door light usually means the person is
+available and Enter is enabled. Pair the light with the destination/person name
+and an availability label, so color, brightness and distant geometry are not
+the only cues. Use the same schedule/chapter/access predicate for the light,
+hotspot and action. Off means unavailable; show the known reason when useful
+without revealing hidden narrative conditions. Keep the door target at least
+44 px, reachable through the location list and controller focus. Leaving the
+interior returns to its original approach scene and preserves encounter state.
+
 Version: 1.0  
 Date: 2026-08-19  
 Status: **ACTIVE — five-mode interaction and responsive-layout authority**  
@@ -1072,4 +1102,3 @@ times from one station to the next**.
 That is the version where `MAP.md` §12 stops being a rule about exposure and
 becomes a thing you read off the board: you can see that the fast way is the
 watched way. Recorded as the target rather than as work in progress.
-

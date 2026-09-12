@@ -1,8 +1,31 @@
 # Piritori → Eden — design authority
 
+## Owner ruling, 2026-09-12 — shared meeting and battle locations
+
+The GDD's new "places, shared markets and continuous encounters" ruling binds
+location work: multiple nearby sites around tram-stop areas and central Kallio
+anchors; broadly similar local merchandise prices; tram travel for meaningful
+market differences; mission and narrative value at the nearby sites.
+
+A meeting can escalate into combat in the same isometric scene with the same
+actors. Dialogue uses matching face close-up cut-ins while the scene and facing
+characters remain visible. Hostility is authored, preserving Jaska/Slomo/Arvo's
+established roles. Use existing 2D backgrounds to guide 3D mood and practical
+lighting. These are owner decisions; implementation status remains separate.
+See GAME_DESIGN_DOCUMENT.md's 2026-09-12 ruling and UX_SPEC.md's shared-scene
+presentation addendum. This does not authorize a new disconnected market per
+background or turn narrative-only people into generic combatants.
+
+Owner follow-up: Jaska, Slomo, Arvo and other key narrative characters also have
+their own nearby locations. A lit entrance usually indicates availability and
+allows entry. Door light and entry UI share authored schedule/chapter/access
+state; leaving returns to the approach site. Preserve existing location
+assignments and explicitly author missing ones. See the GDD's named-locations
+and lit-entrances subsection; this rule is not yet implemented by C.04.
+
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-28
+Latest owner rulings: 2026-09-12
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists
