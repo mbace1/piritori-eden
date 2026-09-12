@@ -57,8 +57,8 @@ function separatelyFramed(left, right) {
     && overlap <= Math.min(left.width, right.width) * 0.08;
 }
 
-async function runViewport(browser, base, label, viewport) {
-  const page = await browser.newPage({ viewport });
+async function runViewport(browser, base, label, viewport, touch = false) {
+  const page = await browser.newPage({ viewport, hasTouch: touch, isMobile: touch });
   const problems = [];
   const glbs = new Map();
   let expectedHub404 = 0;
@@ -93,7 +93,8 @@ async function runViewport(browser, base, label, viewport) {
   ok(`${label}: URL selects independent starting motions`, initial.f01 === 'alert-idle' && initial.f02 === 'casual-walk');
 
   const f01Before = await page.evaluate(() => window.__fighterTest.sampleBones('f01'));
-  await page.locator('[data-pilot="f01"][data-motion="casual-walk"]').click();
+  const f01Walk = page.locator('[data-pilot="f01"][data-motion="casual-walk"]');
+  if (touch) await f01Walk.tap(); else await f01Walk.click();
   await page.waitForTimeout(350);
   const f01After = await page.evaluate(() => window.__fighterTest.sampleBones('f01'));
   const afterF01 = await page.evaluate(() => window.__fighterTest.state());
@@ -101,7 +102,8 @@ async function runViewport(browser, base, label, viewport) {
   ok(`${label}: F01 control leaves F02 unchanged`, afterF01.f01 === 'casual-walk' && afterF01.f02 === 'casual-walk');
 
   const f02Before = await page.evaluate(() => window.__fighterTest.sampleBones('f02'));
-  await page.locator('[data-pilot="f02"][data-motion="alert-idle"]').click();
+  const f02Alert = page.locator('[data-pilot="f02"][data-motion="alert-idle"]');
+  if (touch) await f02Alert.tap(); else await f02Alert.click();
   await page.waitForTimeout(350);
   const f02After = await page.evaluate(() => window.__fighterTest.sampleBones('f02'));
   const afterF02 = await page.evaluate(() => window.__fighterTest.state());
@@ -147,8 +149,9 @@ server.listen(0, '127.0.0.1', async () => {
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
   try {
     await runViewport(browser, base, 'desktop', { width: 1280, height: 820 });
-    await runViewport(browser, base, 'mobile', { width: 390, height: 844 });
-    await runViewport(browser, base, 'pixel-10-pro', { width: 411, height: 923 });
+    await runViewport(browser, base, 'mobile', { width: 390, height: 844 }, true);
+    await runViewport(browser, base, 'pixel-10-pro', { width: 411, height: 923 }, true);
+    await runViewport(browser, base, 'ipad-m2', { width: 1024, height: 1366 }, true);
   } finally {
     await browser.close();
     server.close();
