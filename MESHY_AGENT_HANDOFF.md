@@ -21,6 +21,7 @@ Approved images:
 concept-review/F01-heavy-bruiser-front-tpose-v01.png
 concept-review/F02-wiry-skirmisher-front-tpose-v01.png
 F01 SHA256: BC02611151B0D7BB255F899741953ACC5C8BA5D88E597B43D9595E46D720C26C
+F02 SHA256 (original PNG): 890E54D58391C7BCB0B332992C643723E81B07298B5AFA86DE7D9BF24D70C212
 Other records: FIGHTER_ROSTER.md, ASSET_BRIEF.md, concept-review/TPOSE_PROMPTS.md, meshy-pilot/F01-pilot.json.
 These paths are local, not remotely downloadable attachments. If unavailable, obtain the actual approved PNGs from the owner/source task; do not substitute approximations.
 
