@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-12",
+  "updated_at": "2026-09-13",
   "purpose": "Design index and proposal ledger, not campaign runtime data or production approval",
   "content_sha256": "1e9d0f997f9ffd900b6f29c7319037861e48c190d22fe94ac3b8ad74f993963b",
   "authority": [
     "DESIGN_AUTHORITY.md",
-    "owner directions through 2026-09-12",
+    "owner directions through 2026-09-13",
     "GAME_DESIGN_DOCUMENT.md",
     "DESIGN_LOCKS.md",
     "MAP.md",
@@ -555,7 +555,7 @@
       "id": "enc-bear-path",
       "title": "Bear Path",
       "kind": "scheduled_encounter",
-      "status": "authored_content; 3D staging proposed",
+      "status": "authored_content; C.07 standalone 3D encounter implemented; physical-device and campaign acceptance pending",
       "source": "content/era1-slice-v1.json#encounters/enc-bear-path",
       "site_id": "karhupuisto_bench",
       "anchor_id": "karhupuisto",
@@ -623,7 +623,23 @@
       ],
       "scene_asset_id": "scene-karhupuisto-clearing-v01",
       "spatial_proposal": "Park approach, bench and contact, with the authored bear/plinth, readable withdrawal path and discrete cover when combat starts. The gazebo concept is mood study, not a sufficient Bear Path battle layout.",
-      "owner_visual_approval": "pending"
+      "owner_visual_approval": "pending",
+      "implementation": {
+        "entry": "web/bear-path/",
+        "director_packet": "design/BEAR_PATH_DIRECTOR_PACKET.md",
+        "campaign_applied": false,
+        "runtime_visual_approval": "pending",
+        "concept_target": "D008 panel 03",
+        "features": [
+          "free inspection",
+          "same-scene dialogue and 2v2",
+          "peaceful/withdrawal choices",
+          "single local settlement",
+          "remembered return",
+          "graphics recovery",
+          "police posture response"
+        ]
+      }
     },
     {
       "id": "enc-first-firearm",
@@ -1413,13 +1429,6 @@
       "constraint": "Do not alter existing time costs before this is resolved."
     },
     {
-      "id": "D003",
-      "topic": "first_connected_scenario",
-      "status": "asked",
-      "question": "Bear Path, Paper Bag or Courtyard Receipts for the first connected visual/playable prototype?",
-      "recommendation": "Bear Path; this is development order, not a change to the map-first purchase tutorial."
-    },
-    {
       "id": "D004",
       "topic": "arvo_venue",
       "status": "unassigned",
@@ -1430,14 +1439,6 @@
       "topic": "courtyard_site",
       "status": "data_binding_conflict",
       "question": "enc-courtyard-last-call reuses jaska_studio while its schedule/mission point to Torkkelinmäki. Give the courtyard an appropriate own site before physical door integration; do not move Scene Club."
-    },
-    {
-      "id": "D006",
-      "topic": "camera_motion",
-      "status": "asked",
-      "question": "Battle-start pullback with optional action focus, manual after pullback, or frequent cinematic movement?",
-      "recommendation": "Keep planning steady; optional focus must preserve actor, target and intervening cover.",
-      "implementation": "Automatic cinematic motion is not implemented. C.06 has the wider viewport-aware fit, manual zoom/orbit, compact tags and orientation pause."
     },
     {
       "id": "D007",
@@ -1501,6 +1502,28 @@
         "status": "reference_only; not selected for implementation by this approval; not rejected"
       },
       "scope": "Use the approved spatial scale, elevated framing, mood and scene types as build targets. Exact generated text/geography, final asset quality and automatic camera policy require their existing checks. This records owner approval, not engine/device acceptance."
+    },
+    {
+      "id": "D003",
+      "topic": "first_connected_scenario",
+      "status": "director_selected_under_owner_delegation",
+      "question": "Bear Path, Paper Bag or Courtyard Receipts for the first connected visual/playable prototype?",
+      "recommendation": "Bear Path; this is development order, not a change to the map-first purchase tutorial.",
+      "date": "2026-09-13",
+      "decision": "Select Bear Path as the first connected standalone scene; preserve the existing campaign tutorial order.",
+      "authority": "Owner: Make large leaps astra use the concept art as a director and game director",
+      "implementation": "C.07 web/bear-path; automated browser checks pass; final visual and physical-device acceptance pending"
+    },
+    {
+      "id": "D006",
+      "topic": "camera_motion",
+      "status": "director_selected_under_owner_delegation",
+      "question": "Battle-start pullback with optional action focus, manual after pullback, or frequent cinematic movement?",
+      "recommendation": "Keep planning steady; optional focus must preserve actor, target and intervening cover.",
+      "implementation": "C.07 web/bear-path; automated browser checks pass; final visual and physical-device acceptance pending",
+      "date": "2026-09-13",
+      "decision": "One battle-entry pullback, then manual camera control; reduced motion bypasses the transition.",
+      "authority": "Owner: Make large leaps astra use the concept art as a director and game director"
     }
   ]
 }

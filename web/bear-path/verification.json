@@ -1,0 +1,90 @@
+{
+  "release": "C.07",
+  "date": "2026-09-13",
+  "status": "PASS",
+  "physical_device_acceptance": false,
+  "campaign_applied": false,
+  "runtime_art": "registered v05 F01/F02; private v06 not included",
+  "viewports": [
+    {
+      "name": "desktop",
+      "checks": [
+        "inspection free",
+        "nonoverlapping touch targets",
+        "live-model portrait",
+        "peaceful handover",
+        "single settlement and reload",
+        "withdrawal and closed contact",
+        "same-scene battle",
+        "move interrupted by real GL loss",
+        "repeated recovery allocations",
+        "negotiated battle outcome during graphics loss"
+      ],
+      "browser_errors": [],
+      "max_mobile_pixels": 650000
+    },
+    {
+      "name": "phone",
+      "checks": [
+        "inspection free",
+        "nonoverlapping touch targets",
+        "live-model portrait",
+        "peaceful handover",
+        "single settlement and reload",
+        "withdrawal and closed contact",
+        "same-scene battle",
+        "move interrupted by real GL loss",
+        "repeated recovery allocations",
+        "negotiated battle outcome during graphics loss",
+        "orientation preserves state"
+      ],
+      "browser_errors": [],
+      "max_mobile_pixels": 650000
+    },
+    {
+      "name": "tablet",
+      "checks": [
+        "inspection free",
+        "nonoverlapping touch targets",
+        "live-model portrait",
+        "peaceful handover",
+        "single settlement and reload",
+        "withdrawal and closed contact",
+        "same-scene battle",
+        "move interrupted by real GL loss",
+        "repeated recovery allocations",
+        "negotiated battle outcome during graphics loss"
+      ],
+      "browser_errors": [],
+      "max_mobile_pixels": 650000
+    },
+    {
+      "name": "landscape",
+      "checks": [
+        "inspection free",
+        "nonoverlapping touch targets",
+        "live-model portrait",
+        "peaceful handover",
+        "single settlement and reload",
+        "withdrawal and closed contact",
+        "same-scene battle",
+        "move interrupted by real GL loss",
+        "repeated recovery allocations",
+        "negotiated battle outcome during graphics loss"
+      ],
+      "browser_errors": [],
+      "max_mobile_pixels": 650000
+    }
+  ],
+  "transitions": {
+    "result": "PASS",
+    "checks": [
+      "BACK_OFF real controls and settled reload",
+      "HELP_FRIENDS real controls and settled reload",
+      "corrupt local save resets only preview",
+      "graphics loss during camera pullback resumes playable turn"
+    ],
+    "physicalDevice": false
+  },
+  "legacy_training": "fixture, recovery and three-viewport graphics regression passed; shared rules remain isolated"
+}

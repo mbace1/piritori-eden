@@ -44,7 +44,7 @@ Editable Blender derivatives, rejected attempts, captures and candidate GLBs
 remain private. No new Meshy jobs or character generations were submitted.
 No new candidate is registered in the runtime manifest or deployed to the hub.
 
-Unreleased runtime support selects the complete baked body set only when all
+C.07 runtime support selects the complete baked body set only when all
 required clips are present. One-shot actions clamp at their final frame;
 locomotion loops retain phase and can match travel speed. That path bypasses
 the old procedural gestures instead of layering both systems. Existing v05
@@ -67,4 +67,6 @@ knuckles; proxy geometry still needs weapon-specific visual acceptance.
 5. Keep normalization, triangle budget, full production library, private
    off-PC archive and physical Pixel 10 Pro/iPad M2 gates open until completed.
 
-The hub remains C.06. This document does not claim the rigs are fixed or final.
+C.07 adds the Bear Path encounter and edge smoothing using the registered v05
+models. The private replacement GLBs remain unpublished. This scene milestone
+does not claim the rigs are fixed or final.

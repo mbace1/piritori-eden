@@ -1,12 +1,17 @@
-# Piritori fighter module — C.06
+# Piritori fighter module — courtyard training
 
-Unreleased: [mobile edge smoothing](EDGE_SMOOTHING.md) softens pixel boundaries
+C.07 adds the separate [Bear Path encounter](../bear-path/README.md): inspect,
+talk, resolve peacefully or fight in the same park, then revisit its aftermath.
+The courtyard remains a training fixture. New chapter work is documented in
+[the director packet](../../design/BEAR_PATH_DIRECTOR_PACKET.md).
+
+C.07 shared renderer: [mobile edge smoothing](EDGE_SMOOTHING.md) softens pixel boundaries
 at the existing mobile resolution budget. Browser recovery checks passed;
 physical-device performance and final character acceptance remain pending.
 
 **Rig review:** the owner rejected the v05/C.06 motion presentation. See
 [FIGHTER_MOTION_REVIEW.md](../../assets/FIGHTER_MOTION_REVIEW.md). A private
-Blender correction pass and unreleased baked-motion player are being tested;
+Blender correction pass is being tested; the shared player supports a complete baked-motion set, but
 the new candidate artwork is not registered or live. C.06 camera/control test
 results do not constitute character visual acceptance.
 

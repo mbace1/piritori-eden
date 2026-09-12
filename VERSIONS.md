@@ -10,6 +10,21 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.49 — 2026-09-13
+
+**C.07: Bear Path, a connected 3D encounter.**
+
+- Stages the authored Karhupuisto handover from approach and free inspection through face-cut-in dialogue, peaceful resolution, same-scene 2v2 or withdrawal, then a remembered return.
+- Uses the approved wide-scene panel 03 for warm practical light, cold street depth, bear/plinth and bench cover, open escape space and foliage framing. Geometry remains a prototype, not claimed concept parity.
+- Applies canonical Bear Path opponents, condition, cover and choice/mission effects to an isolated local preview ledger. Reload replays actions and settles the outcome once. The full campaign save is untouched.
+- Adds a reduced-motion-aware battle pullback, explicit police-posture responses for extended fights, and recovery during movement, negotiation and camera transitions. Mobile FXAA stays within the existing 650,000-pixel budget.
+- Keeps the earlier courtyard training route. Registered v05 fighters remain provisional; private v06 GLBs are not included. No Meshy generation or new character approval.
+- Automated Chromium/WebGL tests cover four viewport shapes and both police choices. Physical Pixel 10 Pro/iPad M2 playtesting, final rigs, bespoke package-taking AI and campaign casualty integration remain pending.
+
+### Port
+
+Browser milestone only. Port the authored encounter state/history contract, single time/settlement boundary, canonical battle request/result mapping, dialogue-over-scene composition, phase pullback and recovery behavior. Do not copy the standalone preview ledger into campaign saves or interpret the prototype cast as final named-character models. See `design/BEAR_PATH_DIRECTOR_PACKET.md` and `web/bear-path/README.md`.
+
 ## v4.48 — 2026-09-11
 
 **Provisional F01/F02 locomotion test.**
@@ -2385,3 +2400,4 @@ The first slice on the hub. The night map over real WGS84 Kallio, drawn lines
 carrying consignments at the city's own capacity, six named goods on three
 tiers, the bargain (and the cut bag), rank fights with guns, nerve, terrain
 cover and three exits, seven nights, and an Eden that is never a node.
+
