@@ -12,7 +12,7 @@ Owner authorization recorded on PR #68 advanced both masters through the
 checks. All paid tasks succeeded. Blender 5.2.1 finds complete 24-bone skinning,
 no unweighted vertices, and coherent shoulder/elbow/hip/knee deformation in the
 sampled frames. F01's A-pose was not a functional blocker. F02's original tiny
-closed hole does not recur after remesh; residual garment/body junction topology
+boundary loop does not recur after remesh; residual garment/body junction topology
 is documented rather than described as fully manifold.
 
 See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md) for every derivative task
@@ -35,8 +35,8 @@ The received JPEG bytes are committed as approved source concepts at:
 Both geometry-only Meshy jobs completed. See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md)
 for task IDs, exact input hashes and settings, output hashes, Blender findings,
 credit usage and remaining gates. The generated GLBs and diagnostic files are
-not part of this PR because they are unremeshed review masters, not accepted
-runtime assets.
+not part of this PR. Raw masters and the later remeshed, textured, rigged
+review candidates remain private; none is accepted runtime art.
 
 Owner follow-up: **use a 15,000-triangle target for accepted character
 derivatives to preserve facial clarity.** This replaces 12k as the target for
@@ -49,7 +49,7 @@ Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASIN
 Explicit approval: "First 2 approved. Scrap 3".
 F01 heavy bruiser: broad adult man, receding hair/stubble, black leather jacket, ochre knit, dark trousers, heavy shoes.
 F02 wiry skirmisher: lean adult woman, short uneven dark hair, black padded vest, grey hoodie, rust two-stripe track pants, offwhite trainers.
-Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; generated 3D geometry and every later production gate remain unapproved. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
+Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; the owner subsequently authorized remesh, texture, rigging and motion testing, as recorded above. Final visual acceptance and runtime approval remain outstanding. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
 Older poses may be reused ONLY after showing the exact candidate to the owner for approval.
 Fighters only, gritty Piritori street combatants with distinct silhouettes. No civilians/grandmas or narrative cast substitutions. Existing plain/janky 3D originals are not the new style baseline. Kallio 2003, no modern techwear. Preserve the approved ink illustration character identities.
 
@@ -59,6 +59,7 @@ Approved images:
 concept-review/F01-heavy-bruiser-front-tpose-v01.png
 concept-review/F02-wiry-skirmisher-front-tpose-v01.png
 F01 SHA256: BC02611151B0D7BB255F899741953ACC5C8BA5D88E597B43D9595E46D720C26C
+F02 SHA256 (original PNG): 890E54D58391C7BCB0B332992C643723E81B07298B5AFA86DE7D9BF24D70C212
 Other records: FIGHTER_ROSTER.md, ASSET_BRIEF.md, concept-review/TPOSE_PROMPTS.md, meshy-pilot/F01-pilot.json.
 These original paths were local and not remotely downloadable attachments. The
 later owner-supplied JPEG attachments above are now the authoritative bytes for
@@ -87,7 +88,7 @@ Poll GET /openapi/v1/image-to-3d/{id}, download successful GLB, retain the origi
 ## Blender inspection, required remesh and next gates
 The source PC used Blender 5.2. Locate Blender on the receiving PC; do not assume the source installation path.
 Import master and inspect neutral clay front/side/back/three-quarter views: face likeness, silhouette, hand/finger integrity, armpit separation, leg gap, feet and joint geometry. Save renders and a concrete findings report; repairs go into derivatives.
-After the owner accepts the master geometry, create a remeshed derivative before any rigging. Keep `should_remesh:false` on the initial Image to 3D request so the untouched high-resolution master is retained, then submit its successful task ID to `POST https://api.meshy.ai/openapi/v1/remesh`:
+For these two pilots, continuation was authorized and the following derivative chain has already completed; consult MESHY_PILOT_RESULTS.md rather than submit duplicate jobs. The required workflow is to create a remeshed derivative before any rigging. Keep `should_remesh:false` on the initial Image to 3D request so the untouched high-resolution master is retained, then submit its successful task ID to `POST https://api.meshy.ai/openapi/v1/remesh`:
 
 ```json
 {
