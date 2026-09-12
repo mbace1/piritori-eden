@@ -1406,12 +1406,6 @@
   ],
   "open_decisions": [
     {
-      "id": "D001",
-      "topic": "art",
-      "status": "asked",
-      "question": "Which of the six angle/detail scenes should guide the art, and what should change?"
-    },
-    {
       "id": "D002",
       "topic": "local_visit_time",
       "status": "asked",
@@ -1436,6 +1430,40 @@
       "topic": "courtyard_site",
       "status": "data_binding_conflict",
       "question": "enc-courtyard-last-call reuses jaska_studio while its schedule/mission point to Torkkelinmäki. Give the courtyard an appropriate own site before physical door integration; do not move Scene Club."
+    },
+    {
+      "id": "D006",
+      "topic": "camera_motion",
+      "status": "asked",
+      "question": "Battle-start pullback with optional action focus, manual after pullback, or frequent cinematic movement?",
+      "recommendation": "Keep planning steady; optional focus must preserve actor, target and intervening cover.",
+      "implementation": "Not implemented; C.05 has manual zoom/orbit."
+    },
+    {
+      "id": "D007",
+      "topic": "next_scene_family",
+      "status": "asked",
+      "question": "More interiors/personal spaces, public spaces, or industrial spaces?"
+    }
+  ],
+  "resolved_decisions": [
+    {
+      "id": "D001",
+      "topic": "art",
+      "status": "answered",
+      "question": "Which of the six angle/detail scenes should guide the art, and what should change?",
+      "owner_answer": "All of these are great, but we also need to zoom out for battle a bit, maybe dynamic. Test horizontal as well. Other types of scenes and so on.",
+      "interpretation": "v01/v02 environmental visual direction approved. Wider battle framing and landscape/scene-variety exploration requested. Exact geography, layouts, generated signs, new character identities and runtime implementation are not approved by this answer.",
+      "references": [
+        {
+          "file": "kallio-2003-six-screens-v01.png",
+          "sha256": "37e796174be7f1b77a9cc6acb5776875ed45bf71b25087e800d0273753ab9f4c"
+        },
+        {
+          "file": "kallio-2003-six-angles-v02.png",
+          "sha256": "2e979e0a7fa9228ce323b0b7de06f8b8b7c084502f438a8fb1364e44b92e43f5"
+        }
+      ]
     }
   ]
 }

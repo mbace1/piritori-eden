@@ -1,6 +1,6 @@
 # Act I scenario atlas — Kallio 2003
 
-Owner request, 2026-09-12: develop the game-design connections as well as visuals. This is a living index, not a new GDD, runtime content file, or claim that these scenarios are implemented in 3D. The existing GDD, design authority and authored content control facts; staging below is proposed. The six-angle concept sheet is under owner review, not approved game art.
+Owner request, 2026-09-12: develop the game-design connections as well as visuals. This is a living index, not a new GDD, runtime content file, or claim that these scenarios are implemented in 3D. The existing GDD, design authority and authored content control facts; staging below is proposed. The owner approved the v01/v02 environmental visual direction on 2026-09-12 and requested wider battle views, possible dynamic framing, landscape testing and more scene types. Exact layouts, characters and runtime readiness are not implied. See CAMERA_AND_SCENES.md for the next study and its test findings.
 
 ## Source pass and scope
 
@@ -345,7 +345,7 @@ These are declared content consequences. Integration must verify dispatch, singl
 
 ## Decision ledger and next visual review
 
-Three questions are pending: art direction (D001), nearby-visit time commitment (D002), and first connected scenario to prototype (D003). No answer has been assumed. The development-order choice does not reorder the locked first-purchase tutorial. A later question batch can address Arvo's physical venue, civilian reactions and the desired weight of aftermath.
+Art direction D001 is answered: both prior sheets establish the environmental direction. Current questions cover camera motion (D006), next scene family (D007), and the still-pending time commitment (D002). First connected scenario D003 also remains unresolved; it was not silently selected. The development-order choice does not reorder the locked first-purchase tutorial. A later question batch can address Arvo's physical venue, civilian reactions and the desired weight of aftermath.
 
 Two specific gaps already found: Arvo has no authored enterable venue; `enc-courtyard-last-call` still uses `jaska_studio` despite its Torkkelinmäki schedule and mission anchor, while Jaska's studio visits now belong to Scene Club near Mäkelänsilta. Keep those physically separate until the binding is resolved. Karhupuisto's current concept gazebo cannot substitute for the authored bear/plinth and withdrawal path.
 
