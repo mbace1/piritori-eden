@@ -1,5 +1,11 @@
 # Piritori fighter module — C.06
 
+**Rig review:** the owner rejected the v05/C.06 motion presentation. See
+[FIGHTER_MOTION_REVIEW.md](../../assets/FIGHTER_MOTION_REVIEW.md). A private
+Blender correction pass and unreleased baked-motion player are being tested;
+the new candidate artwork is not registered or live. C.06 camera/control test
+results do not constitute character visual acceptance.
+
 C.06 adds a wider full-board overview, compact separated fighter tags, a FIT control and orientation reflow pause. See [CAMERA_FRAMING.md](CAMERA_FRAMING.md) for the implementation, test evidence and port requirements.
 
 C.05 added conservative touch rendering and graphics-loss recovery that preserves the current training turn. See [GRAPHICS_RECOVERY.md](GRAPHICS_RECOVERY.md) for implementation and device-test limits. The owner reported graphics loss in C.04; physical C.05 retesting remains required.

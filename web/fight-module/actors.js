@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
 import {limitTextures} from './render-profile.js?v=1';
+import {bakedMotionPlayer} from './motion-player.js?v=1';
 
 export async function loadFighters(manifest,{textureSize=2048}={}) {
   const loader=new GLTFLoader(), templates=new Map();
@@ -32,12 +33,18 @@ export function makeActor(template,unit,world){
   const handClip=template.animations.find(c=>c.name==='hand-open-fist-grip');const hands=[];
   for(const t of handClip.tracks){const [name,property]=t.name.split('.');if(/Hand(?:Thumb|Index|Middle|Ring|Pinky)/.test(name)&&property==='quaternion')hands.push({bone:bones.get(name),sample:t.createInterpolant()});}
   const ring=new T.Mesh(new T.RingGeometry(.35,.40,32),new T.MeshBasicMaterial({color:unit.side==='player'?0x8fc5ae:0xe3a18a,side:T.DoubleSide,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;group.add(ring);
-  // Props are world-unit proxies attached through the verified grip joint.
+  // Proxy handles are centered on the palm socket; local +Y points down
+  // through the handle, and +Z follows the knuckles toward the target.
   const prop=new T.Group();world.add(prop);const material=new T.MeshStandardMaterial({color:unit.equipment.includes('handgun')?0x323b3d:0x725b3f,roughness:.88});
-  const shape=unit.equipment.includes('handgun')?new T.BoxGeometry(.055,.14,.18):unit.equipment==='folding-knife'?new T.BoxGeometry(.025,.27,.045):new T.CylinderGeometry(.032,.022,.62,8);
-  const mesh=new T.Mesh(shape,material);mesh.position.y=unit.equipment==='folding-knife'?.08:.17;prop.add(mesh);prop.visible=false;
+  const part=(shape,y,z=0)=>{const mesh=new T.Mesh(shape,material);mesh.position.set(0,y,z);prop.add(mesh);};
+  if(unit.equipment.includes('handgun')){part(new T.BoxGeometry(.045,.105,.065),0);part(new T.BoxGeometry(.052,.05,.19),-.075,.055);}
+  else if(unit.equipment==='folding-knife'){part(new T.BoxGeometry(.026,.10,.036),0);part(new T.BoxGeometry(.014,.16,.034),-.13);}
+  else{part(new T.CylinderGeometry(.021,.033,.62,8),-.20);}
+  prop.visible=false;
   const actor={id:unit.id,group,body,bones,mixer,actions,hands,rootXZ,ring,prop,unit,mode:'idle',motion:null,down:false,elapsed:0};
-  actor.play=(mode,duration=.8)=>{actor.mode=mode;actor.elapsed=0;actor.duration=duration;const name=mode==='walk'?'casual-walk':'alert-idle';for(const [key,a] of Object.entries(actions)){if(key===name)a.reset().fadeIn(.12).play();else a.fadeOut(.12);}actor.prop.visible=['strike','shoot','grip'].includes(mode);};
+  actor.bakedMotion=bakedMotionPlayer(T,actor);
+  actor.play=(mode,duration=.8)=>{actor.mode=mode;actor.elapsed=0;actor.duration=duration;actor.prop.visible=['strike','shoot','grip'].includes(mode);if(actor.bakedMotion){actor.bakedMotion.play(mode,duration);return;}const name=mode==='walk'?'casual-walk':'alert-idle';for(const [key,a] of Object.entries(actions)){if(key===name)a.reset().fadeIn(.12).play();else a.fadeOut(.12);}};
+  if(actor.bakedMotion)actor.play('idle');
   return actor;
 }
 
@@ -52,6 +59,7 @@ function arm(actor,side,target,weight=1){
   aimBone(shoulder,elbow,bent,weight);aimBone(elbow,hand,wrist,weight);
 }
 export function updateActor(a,dt){
+  if(a.bakedMotion){a.elapsed+=dt;a.bakedMotion.update(dt);if(a.prop.visible)attachProp(a);return;}
   a.elapsed+=dt;a.mixer.update(dt);const hips=a.bones.get('Hips');hips.position.x=a.rootXZ.x;hips.position.z=a.rootXZ.z;a.body.updateMatrixWorld(true);
   const t=Math.min(1,a.elapsed/(a.duration||1)),pulse=Math.sin(Math.PI*t),local=(x,y,z)=>a.group.localToWorld(new T.Vector3(x,y,z));
   const fingers=mode=>{const time=mode==='grip'?2.8:1.4;for(const h of a.hands)if(h.bone)h.bone.quaternion.fromArray(h.sample.evaluate(time));};
@@ -67,7 +75,16 @@ export function updateActor(a,dt){
   else a.body.rotation.x=0;
   if(a.mode==='down'||a.down){a.down=true;a.body.rotation.x=-Math.PI/2*Math.min(1,t);a.body.position.y=.10*Math.min(1,t);}
   a.body.updateMatrixWorld(true);
-  if(a.prop.visible){const grip=a.bones.get('grip_right');grip.getWorldPosition(a.prop.position);grip.getWorldQuaternion(a.prop.quaternion);}
+  if(a.prop.visible)attachProp(a);
+}
+function attachProp(a){
+  const grip=a.bones.get('grip_right'),hand=a.bones.get('RightHand'),knuckle=a.bones.get('RightHandMiddle1');
+  grip.getWorldPosition(a.prop.position);
+  const down=new T.Vector3(0,1,0).applyQuaternion(grip.getWorldQuaternion(new T.Quaternion())).normalize();
+  const forward=knuckle.getWorldPosition(v()).sub(hand.getWorldPosition(v()));forward.addScaledVector(down,-forward.dot(down)).normalize();
+  if(forward.lengthSq()<.5){grip.getWorldQuaternion(a.prop.quaternion);return;}
+  const across=v().crossVectors(down,forward).normalize();
+  a.prop.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,down,forward));
 }
 export function disposeActor(a){a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
 

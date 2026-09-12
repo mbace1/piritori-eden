@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "spec_id": "piritori-character-v1",
-  "updated_at": "2026-09-12",
+  "updated_at": "2026-09-13",
   "scope": {
     "pilot_ids": [
       "CHR_F01",
@@ -87,8 +87,8 @@
           "reason": "Archive restored in a clean local directory; off-PC private storage delivery pending."
         },
         "owner_visual": {
-          "result": "pending",
-          "reason": "Repaired proportions, hands and full motion need owner acceptance."
+          "result": "fail",
+          "reason": "Owner rejected the v05/C.06 rig and motion presentation: 'The rigs suck'. Local review confirms spread idle arms, weak foot contact, provisional combat poses and an animated rigid-body down state. Approved concepts remain approved; repair candidates are private and unaccepted."
         },
         "pixel_10_pro": {
           "result": "pending",
@@ -109,7 +109,7 @@
         "own_clip_playback": "art-library/characters/concepts-3d/pilots/blender-v05/browser-report.json",
         "prototype_controls": "web/fight-module/browser-report.json"
       },
-      "next_step": "Prove one shared body clip and finger layer on both preserved v05 rigs; freeze a repeatable retarget recipe."
+      "next_step": "Repair and visually validate stance, foot contact, action transitions, prop grips and a held down pose on both preserved fighters. A private Blender motion candidate exists; do not promote it or the v05 rigs from numerical checks alone."
     },
     "CHR_F02": {
       "legacy_id": "F02",
@@ -187,8 +187,8 @@
           "reason": "Archive restored in a clean local directory; off-PC private storage delivery pending."
         },
         "owner_visual": {
-          "result": "pending",
-          "reason": "Repaired proportions, hands and full motion need owner acceptance."
+          "result": "fail",
+          "reason": "Owner rejected the v05/C.06 rig and motion presentation: 'The rigs suck'. Local review confirms spread idle arms, weak foot contact, provisional combat poses and an animated rigid-body down state. Approved concepts remain approved; repair candidates are private and unaccepted."
         },
         "pixel_10_pro": {
           "result": "pending",
@@ -209,7 +209,7 @@
         "own_clip_playback": "art-library/characters/concepts-3d/pilots/blender-v05/browser-report.json",
         "prototype_controls": "web/fight-module/browser-report.json"
       },
-      "next_step": "Prove one shared body clip and finger layer on both preserved v05 rigs; freeze a repeatable retarget recipe."
+      "next_step": "Repair and visually validate stance, foot contact, action transitions, prop grips and a held down pose on both preserved fighters. A private Blender motion candidate exists; do not promote it or the v05 rigs from numerical checks alone."
     },
     "CHR_F03": {
       "legacy_id": "F03",
