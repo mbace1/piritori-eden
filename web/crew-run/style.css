@@ -40,6 +40,6 @@ dialog{background:#20272a;border:2px solid #aa936c;border-radius:0;box-shadow:6p
 #aim-preview{color:#85d4df;border-color:#609ca5}#aim-preview[aria-pressed=true]{background:#314c52}
 #selected-unit{background:linear-gradient(114deg,#dbcfb5,#c7b798);color:#18252c;border-color:#bca67d;box-shadow:2px 3px 0 #080e12}
 #selected-unit .vitality{color:#25353c}#selected-unit .state-stamp{color:#22383c;border-color:#687476}
-#selected-unit .state-stamp.used{color:#606663;border-color:#96917f}
+#selected-unit .state-stamp.used{color:#37403c;border-color:#96917f}
 #selected-unit .condition-pips i{border-color:#516568}#selected-unit .condition-pips i.filled{background:#32868e}
 @media(min-width:701px) and (min-height:561px){#selected-unit,.command-utility{position:sticky;top:4px;z-index:1}.command-utility{background:#13191c}}
