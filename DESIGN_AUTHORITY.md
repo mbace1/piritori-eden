@@ -1,5 +1,17 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — concept 02 and gun inspection
+
+“2 looks great, let's aim for that. Camera angles can be used for aiming guns
+like zero company.” Concept 02 / After the Rain is the selected implementation
+target for environmental light, material and atmosphere. It does not promote
+character assets or certify runtime parity. An optional temporary gun-inspection
+angle may show shooter/target/cover before committing, returning to the full
+planning overview afterward. This explicitly qualifies the GDD full-board
+composition while inspecting a gun action. Keep real forecasts, resource costs,
+manual override and reduced-motion support. See design/C14_AFTER_THE_RAIN.md.
+
+
 ## Owner continuation, 2026-09-13 — Mewgenics meets XCOM across A and C
 
 The owner explicitly applies the supplied TURF design/pipeline summary to A

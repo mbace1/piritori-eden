@@ -1,5 +1,14 @@
 # Piritori active context
 
+## C.14 target selected — After the Rain
+
+Owner: “2 looks great, let's aim for that. Camera angles can be used for aiming
+guns like zero company”. Use [02](design/concepts/c13-review/02-after-the-rain.png)
+for the current lighting/material/atmosphere target. Read [C.14 implementation](design/C14_AFTER_THE_RAIN.md).
+Gun inspection is reversible and uses the actual forecast. Target selection is
+not pixel-parity, rig or physical-device acceptance. Release facts below remain
+C.13 until the C.14 receipt records successful publication.
+
 Updated 2026-09-13. Read this before designing, resuming 3D work or asking the owner to repeat a decision. This is a retrieval index and current owner brief, not a second asset-status ledger.
 
 ## Read in this order

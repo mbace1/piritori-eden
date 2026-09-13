@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {rainSurface} from './rain-surface.js?v=1';
 
 // C.09 arena laboratory. This is an authored low-cost light probe, not live
 // reflections or the Dream Loop demo's renderer. No external asset service.
@@ -21,24 +22,33 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   }
   const map=new T.CanvasTexture(tile);map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(4,6);map.colorSpace=T.SRGBColorSpace;map.anisotropy=2;
   const bump=map.clone();bump.colorSpace=T.NoColorSpace;bump.needsUpdate=true;
-  const surface=new T.MeshStandardMaterial({map,bumpMap:bump,bumpScale:.022,color:directed?0x7d817b:0x8c9caa,roughness:.45,metalness:directed?.06:.12,envMapIntensity:directed?.75:1.15});
+  let surface=new T.MeshStandardMaterial({map,bumpMap:bump,bumpScale:.022,color:directed?0x7d817b:0x8c9caa,roughness:.45,metalness:directed?.06:.12,envMapIntensity:directed?.75:1.15});
   surface.onBeforeCompile=shader=>{
     shader.vertexShader='varying vec3 pavementWorld;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npavementWorld=(modelMatrix*vec4(position,1.0)).xyz;');
     shader.fragmentShader='varying vec3 pavementWorld;\n'+shader.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nfloat wet=sin(pavementWorld.x*1.7+sin(pavementWorld.z*.8))*sin(pavementWorld.z*1.3);\nroughnessFactor=mix(.20,.74,smoothstep(-.35,.4,wet));');
   };
+  const rain=directed?rainSurface():null;if(rain){surface.dispose();surface=rain.material;}
   const paving=new T.Mesh(new T.PlaneGeometry(8.8,15.8),surface);paving.rotation.x=-Math.PI/2;paving.position.set(0,.006,-.5);paving.receiveShadow=true;group.add(paving);
   for(const key of ['iron','granite','stone']){mats[key].roughness=key==='iron'?.38:.68;mats[key].envMapIntensity=.6;}
 
   // Ortho view-space cutaway around every fighter. Only scenery fragments in
   // front of the figure disappear; cover/raycast/game state remain untouched.
   const people={value:Array.from({length:12},()=>new T.Vector4(0,0,-1000,0))},count={value:0};
+  const focusStart={value:new T.Vector4(0,0,0,0)},focusEnd={value:new T.Vector3()};
   const modified=new Set();
   group.traverse(object=>{if(!object.isMesh||object===paving)return;
     for(const material of [].concat(object.material)){if(modified.has(material)||material===groundMaterial)continue;modified.add(material);
+      const foliage=[mats.bark,mats.scar,mats.goldFoliage,mats.ochreFoliage,mats.oliveFoliage].includes(material);
       const original=material.onBeforeCompile,cache=material.customProgramCacheKey.bind(material);
-      const priorKey=cache();material.onBeforeCompile=(shader,r)=>{original.call(material,shader,r);shader.uniforms.labPeople=people;shader.uniforms.labCount=count;
+      const priorKey=cache();material.onBeforeCompile=(shader,r)=>{original.call(material,shader,r);shader.uniforms.labPeople=people;shader.uniforms.labCount=count;shader.uniforms.labFocusStart=focusStart;shader.uniforms.labFocusEnd=focusEnd;
         shader.vertexShader='varying vec3 labView;\n'+shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nlabView=mvPosition.xyz;');
-        shader.fragmentShader='varying vec3 labView;\nuniform vec4 labPeople[12];\nuniform int labCount;\n'+shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
+        shader.fragmentShader='uniform vec4 labFocusStart;\nuniform vec3 labFocusEnd;\nvarying vec3 labView;\nuniform vec4 labPeople[12];\nuniform int labCount;\n'+shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
+          ${foliage?`if(labFocusStart.w>0.0){
+            vec2 corridor=labFocusEnd.xy-labFocusStart.xy;
+            float t=clamp(dot(labView.xy-labFocusStart.xy,corridor)/max(.001,dot(corridor,corridor)),0.0,1.0);
+            vec3 onLine=mix(labFocusStart.xyz,labFocusEnd,t);
+            if(length(labView.xy-onLine.xy)<1.15 && labView.z>onLine.z-.5)discard;
+          }`:''}
           for(int i=0;i<12;i++){if(i>=labCount)break;vec4 person=labPeople[i];
             vec2 delta=(labView.xy-person.xy)/vec2(.72,person.w);
             float mask=1.0-smoothstep(.78,1.0,length(delta));
@@ -47,10 +57,12 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
             // threshold left near benches covering legs at back-row cells.
             if(labView.z>person.z-.95 && mask>dither)discard;
           }`);
-      };material.customProgramCacheKey=()=>priorKey+'-c091-cutaway';material.needsUpdate=true;
+      };material.customProgramCacheKey=()=>priorKey+'-c14-cutaway-'+(foliage?'foliage':'solid');material.needsUpdate=true;
     }
   });
   const point=new T.Vector3();let tracked=[];
-  function update(camera,actors=tracked){tracked=actors;camera.updateMatrixWorld();count.value=Math.min(12,actors.length);for(let i=0;i<count.value;i++){const a=actors[i];point.copy(a.group.position).add(new T.Vector3(0,a.down?.3:.96,0)).applyMatrix4(camera.matrixWorldInverse);people.value[i].set(point.x,point.y,point.z,a.down?.75:1.14);}}
-  return {update,recover:rebuildProbe,metrics:()=>({lightProbe:'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
+  function update(camera,actors=tracked,focus=null){tracked=actors;camera.updateMatrixWorld();focusStart.value.w=focus?1:0;
+    if(focus){point.copy(focus.from).setY(1.1).applyMatrix4(camera.matrixWorldInverse);focusStart.value.set(point.x,point.y,point.z,1);focusEnd.value.copy(focus.to).setY(1.1).applyMatrix4(camera.matrixWorldInverse);}
+    actors=actors.filter(a=>a.group.visible);camera.updateMatrixWorld();count.value=Math.min(12,actors.length);for(let i=0;i<count.value;i++){const a=actors[i];point.copy(a.group.position).add(new T.Vector3(0,a.down?.3:.96,0)).applyMatrix4(camera.matrixWorldInverse);people.value[i].set(point.x,point.y,point.z,a.down?.75:1.14);}}
+  return {update,recover:rebuildProbe,metrics:()=>({lightProbe:'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:directed?'After the Rain / 512px albedo, roughness, bump; analytic lamp glints':'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){rain?.dispose();probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
 }

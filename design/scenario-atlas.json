@@ -1564,6 +1564,18 @@
         "A/C are battle alternatives; B is the map/run alternative"
       ],
       "handoff": "Use MESHY_AGENT_HANDOFF.md current-production notice, MESHY_PILOT_RESULTS.md, 3D_PIPELINE.md and current manifest; do not reinvent or duplicate paid pilot work."
+    },
+    {
+      "id": "D012",
+      "topic": "after_the_rain_and_gun_inspection",
+      "date": "2026-09-13",
+      "status": "implementation_target_selected; runtime_acceptance_open",
+      "owner_answer": "2 looks great, let's aim for that. Camera angles can be used for aiming guns like zero company",
+      "reference": {
+        "file": "design/concepts/c13-review/02-after-the-rain.png"
+      },
+      "interpretation": "Use concept 02 light/material/atmosphere; optional reversible gun inspection with real forecast and overview return. Not production character approval or pixel-parity acceptance.",
+      "design": "design/C14_AFTER_THE_RAIN.md"
     }
   ],
   "active_context": "ACTIVE_CONTEXT.md",

@@ -28,8 +28,11 @@ light response, not more elaborate character models.
 
 ## Recommendation and next implementation
 
-Working recommendation: explore 02's environmental light with 01's stronger
-command treatment. **Owner selection is pending; neither is final approval.**
+Owner selected **02 / After the Rain** as the implementation target on
+2026-09-13: “2 looks great, let's aim for that.” Preserve its richer wet-night
+light and material depth. The owner also requested gun-aiming camera angles.
+See [C.14](../../C14_AFTER_THE_RAIN.md). This selects a target; runtime parity,
+production characters and physical-device acceptance remain separate.
 
 1. Apply a chosen material/light treatment to the existing arena, preserving
    legal cells and cover. Use painted albedo/roughness masks, restrained probes,
