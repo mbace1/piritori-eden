@@ -5,6 +5,10 @@ import {routes,threats} from '../fight-module/tactics.js';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const start=()=>{const state=newRun(),config=launch(state);return {state,config,s:makeMission(content,config)};};
 {
+ const {state,s}=start(),b=s.battle,target=b.players.at(-1);b.players[0].cell='3,4';assert.ok(s.command('help',target.id).ok);assert.ok(s.command('withdraw').ok);assert.ok(settle(state,s));assert.equal(state.last.success,false,'Help then Retreat cannot bypass extraction');assert.equal(target.extracted,undefined);
+ const r=newRun();for(const p of r.crew)p.missing=false;const t=makeMission(content,launch(r));t.battle.players[0].cell='3,4';assert.ok(t.command('recover').ok);assert.ok(t.command('withdraw').ok);settle(r,t);assert.equal(r.last.success,false,'Recover then Retreat cannot secure the kit');
+}
+{
  const {state,config,s}=start(),before=s.snapshot();assert.equal(s.battle.players.length,4);assert.equal(s.battle.enemies.filter(p=>p.alive).length,2);
  for(let i=0;i<10;i++)threats(s.battle);assert.deepEqual(s.snapshot(),before);
  const p=s.battle.players[0];s.command('move','1,2');s.command('sprint');assert.equal(s.battle.moved.includes(p.id),false);assert.equal(s.battle.acted.includes(p.id),true);assert.ok(s.command('move','2,3').ok);assert.equal(s.command('sprint').ok,false);

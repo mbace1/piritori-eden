@@ -33,12 +33,12 @@ export function makeMission(content,config){
  b.selectedId=b.players[0].id;b.status='active';b.result=null;b.round=1;b.log=[];
  b.objective=config.target?'Bring your colleague home. Rescue, then extract through the south edge.':'Recover the lost kit and bring the crew home.';
  const options={rules:'c12-v1',actions:['help','extract','sprint','aid','recover'],reject:t=>['auto','talk'].includes(t),
- prepare(b){b.mission={id:config.id,objective:config.objective,targetId:config.target?.id||null,targetCell,recovered:false,heat:0,arrival:null,arrived:false,resolved:false};},
- finish(b){if(b.status!=='active')return;if(!b.players.some(p=>p.alive)){b.status='complete';b.result=b.players.some(p=>p.evacuated)?'withdraw':'loss';if(config.target?b.players.find(p=>p.id===config.target.id).evacuated:b.mission.recovered)b.result=b.players.some(p=>p.evacuated)?'win':b.result;}},
+ prepare(b){b.mission={id:config.id,objective:config.objective,targetId:config.target?.id||null,targetCell,recovered:false,carrierId:null,heat:0,arrival:null,arrived:false,resolved:false};},
+ finish(b){if(b.status!=='active')return;if(!b.players.some(p=>p.alive)){b.status='complete';b.result=b.players.some(p=>p.evacuated)?'withdraw':'loss';if(objectiveExtracted(b))b.result='win';}},
  action(b,u,type,value,events){
-  if(type==='extract'&&xy(u.cell)[1]===0){u.evacuated=true;u.alive=false;events.push({type:'extract',id:u.id});b.log.unshift(`${u.name} reached the exit with their kit.`);return true;}
+  if(type==='extract'&&xy(u.cell)[1]===0){u.extracted=true;u.evacuated=true;u.alive=false;events.push({type:'extract',id:u.id});b.log.unshift(`${u.name} reached the exit with their kit.`);return true;}
   if(type==='sprint'&&u.kit==='boots'&&b.moved.includes(u.id)){b.moved=b.moved.filter(id=>id!==u.id);events.push({type:'brace',id:u.id});b.log.unshift(`${u.name} spends Action for a second Move.`);return true;}
-  if(type==='recover'&&!config.target&&!b.mission.recovered&&distance(u.cell,b.mission.targetCell)<=1){b.mission.recovered=true;events.push({type:'item',id:u.id});b.log.unshift(`${u.name} recovered the kit. Get everyone to the south exit.`);return true;}
+  if(type==='recover'&&!config.target&&!b.mission.recovered&&distance(u.cell,b.mission.targetCell)<=1){b.mission.recovered=true;b.mission.carrierId=u.id;events.push({type:'item',id:u.id});b.log.unshift(`${u.name} carries the kit. They must reach the south exit to secure it.`);return true;}
   const t=b.players.find(v=>v.id===value);
   if(!t||t.evacuated||distance(u.cell,t.cell)>1||t.id===u.id)return false;
   if(type==='help'&&!t.alive&&!t.helped&&!b.players.concat(b.enemies).some(v=>v.alive&&v.cell===t.cell)){
@@ -61,6 +61,7 @@ export function makeMission(content,config){
  return s;
 }
 export const missionCheckpoint=s=>({snapshot:s.snapshot(),actions:s.history.map(({type,actor,value})=>({type,actor,value}))});
+export function objectiveExtracted(b){const id=b.mission.targetId||b.mission.carrierId;return !!id&&b.players.some(p=>p.id===id&&p.extracted);}
 export function restoreMission(content,config,saved){const s=makeMission(content,config);if(!saved)return s;if(!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid outing history');for(const {type,actor,value}of saved.actions){if(!['move','attack','brace','item','reload','end','withdraw','help','extract','sprint','aid','recover'].includes(type))throw Error('Unknown outing command');if(actor!==s.battle.selectedId&&!s.command('select',actor).ok)throw Error('Invalid outing actor');if(!s.command(type,value).ok)throw Error('Invalid outing command');}if(saved.snapshot.selectedId!==s.battle.selectedId)s.command('select',saved.snapshot.selectedId);if(JSON.stringify(s.snapshot())!==JSON.stringify(saved.snapshot))throw Error('Outing checkpoint mismatch');return s;}
 export function settle(state,session){
  if(state.phase!=='battle'||session.battle.status==='active'||state.active?.config.id!==session.battle.mission.id)return false;
@@ -69,7 +70,7 @@ export function settle(state,session){
   if(u.evacuated){p.fights++;p.wounds+=u.hp<u.maxHp?1:0;p.readyAt=state.night+(u.hp<u.maxHp?2:1);const msg=u.hp<u.maxHp?'Wounded · rests next outing':'Returned ready';p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);changes.push({id:p.id,name:p.name,state:msg,kit:'Kit returned'});}
   else {p.memories.unshift(`Night ${state.night}: left behind. Recovery needed.`);changes.push({id:p.id,name:p.name,state:'Missing · recover on a later outing',kit:'Kit held with them'});}
  }
- const success=config.target?b.players.find(p=>p.id===config.target.id).evacuated:b.mission.recovered&&b.players.some(p=>p.evacuated);
+ const success=objectiveExtracted(b);
  const receipt={id:config.id,title:success?'Someone came home':'The night left a debt',success,rounds:b.round,heat:b.mission.heat,changes,text:`${changes.filter(c=>!c.state.startsWith('Missing')).length} returned. ${changes.filter(c=>c.state.startsWith('Missing')).length} missing. One outing spent.`};
  state.last=receipt;state.ledger.unshift(receipt);state.ledger=state.ledger.slice(0,30);state.night++;state.phase='aftermath';state.active.checkpoint=missionCheckpoint(session);return true;
 }

@@ -41,6 +41,23 @@ Use the established LOOK/TALK/USE/LEAVE and contextual commitment grammar. Backg
 
 ## Mission packets — first pass
 
+### Proposed gameplay pilot — Night Shift / C.12
+
+`pilot-night-shift` is a repeatable crew/rescue/extraction test in the existing
+Karhupuisto environment. Runtime: `web/crew-run/`; rules and ledger:
+`web/crew-run/run.js`; design/port contract: `design/C12_NIGHT_SHIFT.md`.
+It is not an authored chapter mission, scheduled encounter, or approved new
+location. It uses generated hirelings and a separate browser save; there is no
+dispatch into the canonical campaign ledger. The north/east placements are test
+variations within one park kit. Preserve all authored Bear Path alternatives.
+
+The test connects a chosen 2–3-person crew, helping a stranded colleague,
+individual south-edge extraction, announced rival arrivals and one-time wounds /
+missing-person consequences. Withdrawal brings standing people back but does
+not complete the extraction objective. Gear recovery requires the carrier to
+extract. Canonical chapter integration, economics, full trait behaviour and
+physical-device / final-character acceptance remain open.
+
 | Mission | Space and central choice | Escalation / aftermath |
 |---|---|---|
 | Paper Bag | Piritori collection -> Siltasaari buyer; personal delivery versus delegation, margin versus introduction | No battle in its record. Show the crowd/queue and the new lead; preserve single settlement of the first sale. |

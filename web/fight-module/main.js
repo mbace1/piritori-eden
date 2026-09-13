@@ -1,4 +1,4 @@
-import {mountCrew} from '../crew-run/ui.js?v=1';
+import {mountCrew} from '../crew-run/ui.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=1';
 import * as T from 'three';
 import {createSession,checkpoint,restoreSession} from './session.js?v=10';

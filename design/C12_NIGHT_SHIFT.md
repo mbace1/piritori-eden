@@ -26,6 +26,8 @@ own rules and saves. Jaska, Slomo and Arvo are not generated combatants.
 - Individual extraction, helping a fallen ally once, and a clearly warned
   emergency retreat with everyone standing. Downed people left behind become
   missing; recovery is a future objective, not automatic death.
+  Retreat never substitutes for completing the objective: the rescued person
+  or the recovered kit's carrier must explicitly extract from the south edge.
 - A one-time aftermath. Names, configured equipment, survived outings, wounds
   and memories persist in this browser. Wounded returnees miss the next outing;
   a recovery night restores availability. Missing colleagues become the next
@@ -66,6 +68,8 @@ phone portrait, phone landscape and tablet sizes; reloads after rescue and
 aftermath, forces graphics recovery, then starts/withdraws from the next outing.
 Local browser pass: all four layouts, zero page/console errors. The existing lab,
 cover, camera, recovery and authored campaign CI gates remain required.
+Retreat confirmation uses the same pointerup/touchend/click activation helper as
+the rest of the fight. The crew suite also exercises those separate event paths.
 
 Desktop browser emulation is not Pixel 10 Pro / iPad M2 hardware acceptance.
 Final rig quality, actor overlap, art approval and full city/chapter integration
