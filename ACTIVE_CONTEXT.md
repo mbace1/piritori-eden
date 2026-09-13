@@ -15,10 +15,14 @@ The owner rejected C.12's interface as poorly grounded in the design. Read
 [the C.13 pass](design/C13_ART_AND_UI.md): the actual portrait/landscape UI targets
 and park-night reference were inspected. This batch restores the dark carton /
 cream console, a crew ledger, actual-figure portraits and practical night light.
-C.13 is under release validation here; C.12 below is the last verified deployment
-until the C.13 release receipt is recorded. No new character approval is implied.
+C.13 is live and verified through the public hub and real controls. Source PR #78
+and hub PR #517 are merged. Read [release evidence](design/C13_RELEASE.json) and
+[play C.13](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=13). Owner visual review and physical Pixel/iPad acceptance remain
+open. No new character approval is implied.
 
-## C.12 connected crew pilot
+Next visual review: [two numbered concept directions](design/concepts/c13-review/README.md). These are proposed illustrations, not the shipped graphics or owner approval.
+
+## C.12 foundation (retained in C.13)
 
 C.12 continuation: the owner asked for a bigger leap. `web/crew-run/` now joins
 crew/loadout preparation, a rescue/extraction objective, announced rival arrivals,
@@ -26,7 +30,7 @@ persistent wounds/missing people and a repeat outing. Read
 [Night Shift](design/C12_NIGHT_SHIFT.md). This is a connected gameplay pilot with
 its own save, not a new authored chapter track. The city/meeting bridge is next;
 weapons/replacements are supplied for testing and all Meshy gates remain open.
-C.12 is live on the hub, verified through the public card and actual controls.
+C.12 shipped the connected outing; its rules and saves continue in C.13.
 Source PR #77 / hub PR #516 are merged. Read [release evidence](design/C12_RELEASE.json)
 and the [playable](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=12).
 
@@ -34,7 +38,7 @@ Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route moti
 
 ## Latest owner direction — carry into every design
 
-- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.12 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
+- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.13 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
 
 - Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). C.11 builds on the first combat/camera pass with directional low-wall cover and stand-in crouch/peek. C.12 adds persistent crew and rescue/extraction consequences. Final art and the city bridge remain open.
 
@@ -73,7 +77,7 @@ Next: [Option C vertical-slice design](design/OPTION_C_VERTICAL_SLICE.md). Prove
 
 ## Runtime truth at this update
 
-C.12 is live as the separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=12). Read [release evidence](design/C12_RELEASE.json) and [implementation](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
+C.13 is live as the separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=13). Read [release evidence](design/C13_RELEASE.json), [art/UI direction](design/C13_ART_AND_UI.md) and [crew rules](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77/#78); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
 
 
 ## C.09 source continuation

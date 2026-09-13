@@ -91,3 +91,10 @@ stay accessible alongside Reload; the console fits three to five commands.
 Compact crew records retain outings survived, wounds, aptitudes and the latest
 memory on the planning screen. Browser checks exercise a handgun/light-pack
 self-heal through actual controls and retained history after an outing.
+
+## Delivery receipt
+
+Source PR #78 and hub PR #517 merged after exact-head gates passed. All 49
+cabinet blobs matched staging. The packaged outing passed in four layouts,
+and the public card and actual game controls were checked after Pages succeeded.
+Exact commits, run and test scope: [C13_RELEASE.json](C13_RELEASE.json).

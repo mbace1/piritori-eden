@@ -47,6 +47,9 @@ The chapter addenda define re-playable chapter runs, unlocking the next chapter,
 
 ## Current evidence and sequencing
 
+**Shipped C.13 — art and interface:** the reference-led paper console, equipment cards, actual-figure portraits, practical night lighting, board framing and connected intent paths now wrap the C.12 outing. Read [the reproducible pass](C13_ART_AND_UI.md) and [release evidence](C13_RELEASE.json). A and the Godot port should carry the same information hierarchy and intent semantics. This is implemented presentation, not owner approval of final art; production fighter and physical-device gates remain open.
+
+
 **Shipped C.12 — Night Shift:** a persistent generated crew and supplied support equipment now connect to rescue/extraction, announced rivals, wounds/missing colleagues, and repeat outings. Read [C.12](C12_NIGHT_SHIFT.md) and [release evidence](C12_RELEASE.json). Both A and C should reuse this crew/mission contract. It is a separate pilot; authored city/meeting dispatch is the next integration, not already completed. Final rigs, economics and full trait/career systems remain open.
 
 

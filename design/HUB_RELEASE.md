@@ -13,8 +13,9 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Historical C.09.1 entry: `web/arena-lab/?actors=6&release=9.1`.
 - Historical C.10.1 entry: `web/arena-lab/?actors=6&release=10.1`.
 - Historical C.11 entry: `web/arena-lab/?actors=6&release=11`.
-- Current C.12 entry: `web/crew-run/?release=12`.
-- Current release receipt: [C12_RELEASE.json](C12_RELEASE.json), source PR #77 and hub PR #516. Earlier batches: C11_RELEASE.json and C10_RELEASE.json.
+- Historical C.12 entry: `web/crew-run/?release=12`.
+- Current C.13 entry: `web/crew-run/?release=13`.
+- Current release receipt: [C13_RELEASE.json](C13_RELEASE.json), source PR #78 and hub PR #517. Earlier batches: C12_RELEASE.json and C11_RELEASE.json.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 
