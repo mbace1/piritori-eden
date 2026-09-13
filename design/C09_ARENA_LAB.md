@@ -69,3 +69,7 @@ For PowerShell set `$env:ARENA_LAB_URL` before the browser command. QA-only hook
 
 Read ACTIVE_CONTEXT, DESIGN_AUTHORITY and the existing Meshy pipeline before continuing. Do not promote placeholders or candidates in the asset manifest based on these tests.
 
+## CI metadata correction
+
+The first GitHub run found two inherited invalid `direction-approved` labels on the bear and gravel. They are now honestly `unreviewed-prototype` / `not-owner-approved`, retaining `playable-test-only`. The validator accepts this state only for 3D location-stage prototypes with those explicit restrictions; it rejects attempted production promotion or character use. No art bytes, hashes or F01/F02 production gates change. Run `node web/test/runtime-art-status.mjs` for the negative cases.
+

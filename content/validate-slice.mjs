@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validRuntimeApproval } from "./runtime-art-status.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const contentPath = join(here, "era1-slice-v1.json");
@@ -189,7 +190,7 @@ const addArtFile = (item, inherited, context) => {
 };
 for (const asset of art.assets) {
   addArtId(asset.id, "art asset");
-  check(["approved", "semi-approved"].includes(asset.approval_status), `${asset.id}: invalid approval status`);
+  check(validRuntimeApproval(asset), `${asset.id}: invalid approval status`);
   check(Boolean(asset.production_status), `${asset.id}: production status required`);
   if (asset.file) addArtFile(asset, {}, asset.id);
   for (const member of asset.members ?? []) {
@@ -295,3 +296,5 @@ console.log(
   `${content.battles.map((item) => item.format).join(" + ")}, ${content.crew.length} crew, ` +
   `${artIds.size} registered art ids and ${artFiles.length} runtime files.`
 );
+
+
