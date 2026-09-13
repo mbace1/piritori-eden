@@ -11,6 +11,15 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 
 ## C.11 implementation batch
 
+C.12 continuation: the owner asked for a bigger leap. `web/crew-run/` now joins
+crew/loadout preparation, a rescue/extraction objective, announced rival arrivals,
+persistent wounds/missing people and a repeat outing. Read
+[Night Shift](design/C12_NIGHT_SHIFT.md). This is a connected gameplay pilot with
+its own save, not a new authored chapter track. The city/meeting bridge is next;
+weapons/replacements are supplied for testing and all Meshy gates remain open.
+C.12 is under release validation at this commit; the C.11 live receipt below
+remains the last confirmed public deployment until the C.12 release receipt lands.
+
 Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route motion, visible temporary weapons and optional conservative action focus are implemented in the C laboratory. See [C.10 implementation and test receipt](design/C10_IMPLEMENTATION.md). C.11 adds directional low walls, flanking, route detours, crouch/rise/fire/return and resolved HP/guard/wall/miss feedback. See [C.11](design/C11_COMBAT_PASS.md) and its release receipt. Campaign/Bear Path keep their authored resolver. No fighter asset gate changed.
 
 ## Latest owner direction — carry into every design
