@@ -1,3 +1,4 @@
+import {EDGES} from '../fight-module/cover-edges.js?v=1';
 import * as T from 'three';
 import {developmentLook} from './development-look.js?v=2';
 
@@ -122,7 +123,7 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
   box('parcel',bb.x-.3,.64,bb.z-.51,.42,.28,.27);box('wood',bb.x-.3,.785,bb.z-.51,.035,.013,.28);box('wood',bb.x-.3,.65,bb.z-.365,.035,.27,.008);
   if(development)for(const [cell,v] of cover){const p=position(cell);
     if(v.hardBlock){box('granite',p.x,.68,p.z,.91,1.36,.91);box('stone',p.x,1.38,p.z,1.0,.07,1.0);box('iron',p.x,.32,p.z+.46,.40,.08,.02);}
-    else{box('granite',p.x,.24,p.z-.42,.97,.48,.22);box('stone',p.x,.5,p.z-.42,1.02,.06,.26);}
+    else{const [dx,dy]=EDGES[v.edge],x=p.x+dx*.585,z=p.z-dy*.585;box('granite',x,.34,z,dx?.22:1.17,.68,dx?1.17:.22);box('stone',x,.71,z,dx?.26:1.20,.06,dx?1.20:.26);}
   }
   // Graded cross-path edges, patched apron and drain stay outside actor cells.
   for(const side of [-1,1])for(let i=0;i<14;i++)box('stone',side*4.48,.027,-8+i*1.12,.14,.055,1.08);

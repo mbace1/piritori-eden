@@ -1,17 +1,17 @@
-import {createTacticalSession} from './tactics.js?v=3';
+import {createTacticalSession} from './tactics.js?v=4';
 import { createState } from '../js/v3/state.js?v=5';
 import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=2';
 
 // Same-tab emergency recovery only, never a campaign save. Replay committed
 // commands once; a partially shown animation is not a partially applied action.
 export function checkpoint(session) {
-  return {version:session.battle.tactical?3:2,mode:session.mode,scenario:session.scenario,snapshot:session.snapshot(),
+  return {version:session.battle.tactical?4:2,mode:session.mode,scenario:session.scenario,snapshot:session.snapshot(),
     actions:session.history.map(({type,actor,value})=>({type,actor,value}))};
 }
 export function restoreSession(content,saved) {
-  if(![1,2,3].includes(saved?.version)||!['mixed','melee','ranged'].includes(saved.mode)||!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid training checkpoint');
+  if(![1,2,3,4].includes(saved?.version)||!['mixed','melee','ranged'].includes(saved.mode)||!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid training checkpoint');
   const scenario=saved.version===1?'training':saved.scenario;if(!['training','bear-path','lab-2','lab-6','lab-12'].includes(scenario))throw Error('Unknown checkpoint scenario');
-  if(scenario.startsWith('lab-')&&saved.version!==3)throw Error('Older laboratory rules require a fresh test');
+  if(scenario.startsWith('lab-')&&saved.version!==4)throw Error('Older laboratory rules require a fresh test');
   const session=createSession(content,saved.mode,scenario);
   for(const {type,actor,value} of saved.actions) {
     if(!['move','attack','brace','item','talk','withdraw','end','auto','police','reload'].includes(type))throw Error('Unknown checkpoint action');
@@ -30,7 +30,7 @@ export function createSession(content, mode='mixed', scenario='training') {
   const equipment=mode==='melee'?['baseball-bat','folding-knife']:mode==='ranged'?['first-handgun','first-handgun']:['baseball-bat','first-handgun'];
   const lab=scenario.startsWith('lab-'),count=lab?Number(scenario.slice(4))/2:2;
   const crew=Array.from({length:count},(_,i)=>'f0'+(i+1)).map((id,i)=>({id,name:`${i?'F02 Wiry':'F01 Heavy'} · Jade`,role:i%2?'runner':'muscle',initial_equipment:[equipment[i%2]],named:false}));
-  const definition=authored?structuredClone(content.battles.find(b=>b.id==='battle-karhupuisto-2v2')):{id:lab?scenario+'-'+mode:'fighter-module-v1-'+mode,format:count+'v'+count,player_deployed:count,training:true,objective:'Practice the repaired fighters. No campaign costs.',opponents:crew.map((v,i)=>({id:'op-'+v.id,name:`${i?'F02 Wiry':'F01 Heavy'} · Rust`,role:v.role,equipment:equipment[i%2],cell:i?'front-3':'front-2',intent:'attack-in-reach'})),cover:lab?structuredClone(content.battles.find(b=>b.id==='battle-karhupuisto-2v2').cover):[],negotiation:{available:true},withdrawal:{available_from_round:1,known_cost:'no campaign cost'},casualty_table:{death:'not-eligible-in-this-battle'}};
+  const definition=authored?structuredClone(content.battles.find(b=>b.id==='battle-karhupuisto-2v2')):{id:lab?scenario+'-'+mode:'fighter-module-v1-'+mode,format:count+'v'+count,player_deployed:count,training:true,objective:lab?'Practice tactics with neutral stand-ins. No campaign costs.':'Practice the prototype fighters. No campaign costs.',opponents:crew.map((v,i)=>({id:'op-'+v.id,name:`${i?'F02 Wiry':'F01 Heavy'} · Rust`,role:v.role,equipment:equipment[i%2],cell:i?'front-3':'front-2',intent:'attack-in-reach'})),cover:lab?structuredClone(content.battles.find(b=>b.id==='battle-karhupuisto-2v2').cover):[],negotiation:{available:true},withdrawal:{available_from_round:1,known_cost:'no campaign cost'},casualty_table:{death:'not-eligible-in-this-battle'}};
   const battle=createBattleState(definition,crew,campaign,data);
   // Explicit test fixture only: same two bodies and loadouts on both sides.
   if(!authored){battle.players[0].cell='2,2';if(battle.players[1])battle.players[1].cell='3,2';

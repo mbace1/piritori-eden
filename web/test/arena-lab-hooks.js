@@ -2,8 +2,8 @@
 window.labAudit={
   motion(){
     ready=false;cancelAnimationFrame(raf);raf=0;const results=[];
-    try{for(const role of ['muscle','runner'])for(const mode of ['idle','walk','strike','shoot','brace','item','talk','hit','grip','down']){
-      const actor=makeActor({placeholder:true},{id:'qa',role,side:'player',equipment:mode==='shoot'?'first-handgun':'baseball-bat'},world);actor.play(mode,1.15);
+    try{for(const role of ['muscle','runner'])for(const mode of ['idle','walk','strike','shoot','brace','item','talk','hit','grip','down','cover-idle','cover-shoot','cover-reload']){
+      const actor=makeActor({placeholder:true},{id:'qa',role,side:'player',equipment:mode==='shoot'?'first-handgun':'baseball-bat'},world);actor.covered=mode.startsWith('cover-');actor.coverBlend=actor.covered?1:0;actor.play(mode.replace('cover-',''),1.15);
       let minimum=Infinity,maximumContact=-Infinity;
       for(let frame=0;frame<36;frame++){updateActor(actor,frame?1/30:0);actor.group.updateMatrixWorld(true);let frameMin=Infinity;
         const matrix=new T.Matrix4(),point=new T.Vector3();for(let n=0;n<actor.mesh.count;n++){actor.mesh.getMatrixAt(n,matrix);matrix.premultiply(actor.mesh.matrixWorld);for(let i=0;i<actor.mesh.geometry.attributes.position.count;i++){point.fromBufferAttribute(actor.mesh.geometry.attributes.position,i).applyMatrix4(matrix);if(!point.toArray().every(Number.isFinite))throw Error('Nonfinite stand-in vertex');frameMin=Math.min(frameMin,point.y);}}
