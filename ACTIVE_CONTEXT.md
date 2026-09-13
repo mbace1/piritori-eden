@@ -11,6 +11,8 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 
 ## Latest owner direction — carry into every design
 
+- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.09.1 is still the live old-rule lab.
+
 - Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). This is direction for the next batch, not a claim those features shipped or final art was approved.
 
 - Owner continuation, 2026-09-13: minimize defects; use temporary placeholder characters until F01/F02 fit and look good. These are development stand-ins, not redesigns or asset promotions.
