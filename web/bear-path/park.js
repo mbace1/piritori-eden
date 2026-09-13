@@ -1,11 +1,11 @@
 import {EDGES} from '../fight-module/cover-edges.js?v=1';
 import * as T from 'three';
-import {developmentLook} from './development-look.js?v=2';
+import {developmentLook} from './development-look.js?v=3';
 
 // D009: Ink & Stone and Cold Street are compared prototypes, not final approval.
 // They share geometry and encounter anchors; switching only changes art state.
 // Physical staging is compressed fiction, not a survey of the real park.
-export function buildKarhupuisto(world,renderer,cover,position,assets,initialStyle='ink',development=false){
+export function buildKarhupuisto(world,renderer,cover,position,assets,initialStyle='ink',development=false,directed=false){
   if(!assets?.bear||!assets?.ground)throw Error('The park assets did not load.');
   world.background=new T.Color('#101d25');world.fog=new T.Fog('#172832',19,45);
   renderer.toneMappingExposure=1;
@@ -190,7 +190,27 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     bear.traverse(o=>{if(!o.isMesh)return;o.material.flatShading=!cold;o.material.roughness=cold?.84:1;o.material.color.setHex(cold?0x9cabb7:0xacb1b5);o.material.needsUpdate=true;});
   }
   setStyle(initialStyle);
-  const lab=development?developmentLook(world,renderer,group,groundMaterial,mats):null;
+  if(directed){
+    // C.13: painted-night stage / cut-card command deck. One sodium key,
+    // cool sky fill, quiet dark perimeter, warm windows: Art Bible 6 / 8 / 12.
+    hemisphere.color.setHex(0x789db7);hemisphere.groundColor.setHex(0x17232b);hemisphere.intensity=.68;
+    sky.color.setHex(0x9cb9cf);sky.intensity=1.15;sky.position.set(-3,9,5);
+    world.background.set('#0d1820');world.fog.color.set('#102737');world.fog.near=19;world.fog.far=46;
+    renderer.toneMappingExposure=1.03;
+    mats.plaster.color.setHex(0x717775);mats.brick.color.setHex(0x746356);mats.trim.color.setHex(0x3c5157);
+    mats.stone.color.setHex(0x9e9480);mats.granite.color.setHex(0x69554c);mats.wood.color.setHex(0x9c723e);
+    mats.lit.emissive.setHex(0xd09535);mats.lit.emissiveIntensity=1.05;
+    mats.goldFoliage.color.setHex(0xd4a252);mats.ochreFoliage.color.setHex(0x947946);mats.oliveFoliage.color.setHex(0x64806c);
+    for(const name of ['goldFoliage','ochreFoliage','oliveFoliage'])mats[name].emissiveIntensity=.04;
+    lamps[0].color.setHex(0xffcd85);lamps[0].intensity=128;lamps[0].angle=.86;
+    lamps[1].color.setHex(0x8bbccf);lamps[1].intensity=72;
+    // No new shadow maps: a restrained window spill and ground wash describe
+    // the visible practicals even on the mobile profile.
+    const rim=new T.PointLight(0xffc476,15,10,2);rim.position.set(2,3,-6.5);world.add(rim);
+    groundMaterial.color.setHex(0x54615e);grainStrength.value=.36;
+    points.material.opacity=.24;
+  }
+  const lab=development?developmentLook(world,renderer,group,groundMaterial,mats,directed):null;
   return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({lights:lamps.map(l=>({color:l.color.getHex(),intensity:l.intensity})),development:lab?.metrics(),style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
     recover:()=>lab?.recover(),update:(camera,actors)=>lab?.update(camera,actors),tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
     aftermath(outcome){points.material.opacity=outcome==='peaceful'?.25:.45;}

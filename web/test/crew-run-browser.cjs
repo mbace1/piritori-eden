@@ -7,8 +7,24 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
   p.on('pageerror',e=>{errors.push(e.stack);console.error(e.stack)});p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
   await p.route('**/fight-module/main.js*',async r=>{const response=await r.fetch();await r.fulfill({response,body:await response.text()+"\nlet crewGL;window.crewAudit={lose:()=>{crewGL=renderer.getContext().getExtension('WEBGL_lose_context');crewGL.loseContext();},restore:()=>crewGL.restoreContext()};"});});
   const tap=async el=>{await el.scrollIntoViewIfNeeded();await el[spec.touch?'tap':'click']();},idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy,{},{timeout:120000});
-  await p.goto(base);await idle();assert.equal(await p.locator('.crew-card').count(),6);await p.screenshot({path:`${out}/${spec.name}-crew.png`});
+  await p.goto(base);await idle();assert.equal(await p.locator('.crew-card').count(),6);
+  await p.evaluate(()=>document.fonts.ready);
+  await p.waitForFunction(()=>[...document.querySelectorAll('.crew-card img')].length===6&&[...document.querySelectorAll('.crew-card img')].every(i=>i.complete&&i.naturalWidth>0));
+  assert.ok(await p.evaluate(()=>document.fonts.check('600 24px "Barlow Condensed"')),'bundled display face loaded');
+  await tap(p.getByRole('button',{name:'Equip Sanna Heikkilä',exact:true}));
+  await tap(p.getByRole('button',{name:'Sanna Heikkilä Knife',exact:true}));
+  assert.equal(await p.evaluate(()=>crewRun.snapshot().crew.find(c=>c.id==='crew-1').equipment),'folding-knife');
+  await tap(p.getByRole('button',{name:'Sanna Heikkilä Handgun',exact:true}));
+  assert.equal(await p.evaluate(()=>crewRun.snapshot().crew.find(c=>c.id==='crew-1').equipment),'first-handgun');
+  await p.screenshot({path:`${out}/${spec.name}-equipment.png`});await tap(p.getByRole('button',{name:'Done',exact:true}));
+  await p.locator('#crew-screen').evaluate(el=>el.scrollTop=0);
+  assert.ok(await p.evaluate(()=>document.body.scrollWidth<=innerWidth),'no horizontal page overflow');
+  await p.screenshot({path:`${out}/${spec.name}-crew.png`});
   await tap(p.locator('#crew-deploy'));await idle();assert.equal(await p.evaluate(()=>crewRun.snapshot().phase),'battle');
+  assert.ok(await p.locator('#selected-unit').innerText().then(t=>t.includes('Ivana Savić')),'identity and condition share the console');
+  const layout=await p.evaluate(()=>({world:document.getElementById('arena').getBoundingClientRect().toJSON(),end:document.getElementById('end').getBoundingClientRect().toJSON(),height:innerHeight}));
+  assert.ok(layout.world.height>=layout.height*.5,'world remains at least half the viewport');
+  assert.ok(layout.end.bottom<=layout.height+1,'end round visible without panel scrolling');
   await p.screenshot({path:`${out}/${spec.name}-battle.png`});
   for(const [index,[type,value]]of route.entries()){
    if(type==='select')await tap(p.locator(`[data-unitid="${value}"]`));

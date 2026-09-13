@@ -1,3 +1,15 @@
+# C.13 — Night Shift art and UI
+
+Owner-requested pass against the Art Bible, UX specification and actual visual targets.
+Crew ledger and equipment cards; selected-person command console; real stand-in
+portraits; visible costs and contextual actions; practical night light and dashed
+intent paths. C.12 rules/save retained. See design/C13_ART_AND_UI.md.
+
+### Port
+
+Godot: reproduce C.13 presentation and framing; retain C.12 action vectors.
+Physical device and final character-art acceptance remain open.
+
 # Piritori → Eden — versions
 
 > **Numbers are `vMAJOR.MINOR` from v4.** The integer is a milestone, the

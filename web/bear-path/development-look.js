@@ -2,10 +2,10 @@ import * as T from 'three';
 
 // C.09 arena laboratory. This is an authored low-cost light probe, not live
 // reflections or the Dream Loop demo's renderer. No external asset service.
-export function developmentLook(world,renderer,group,groundMaterial,mats){
+export function developmentLook(world,renderer,group,groundMaterial,mats,directed=false){
   const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
   const cx=canvas.getContext('2d'),sky=cx.createLinearGradient(0,0,0,128);
-  sky.addColorStop(0,'#7797bb');sky.addColorStop(.48,'#516b80');sky.addColorStop(.55,'#1c282b');sky.addColorStop(1,'#182320');cx.fillStyle=sky;cx.fillRect(0,0,256,128);
+  sky.addColorStop(0,directed?'#41647b':'#7797bb');sky.addColorStop(.48,directed?'#314b59':'#516b80');sky.addColorStop(.55,'#1c282b');sky.addColorStop(1,'#182320');cx.fillStyle=sky;cx.fillRect(0,0,256,128);
   for(const [x,y,w,h] of [[38,42,10,17],[172,43,14,14],[112,53,5,7]]){cx.fillStyle='#ffde9c';cx.fillRect(x,y,w,h);}
   const source=new T.CanvasTexture(canvas);source.mapping=T.EquirectangularReflectionMapping;source.colorSpace=T.SRGBColorSpace;
   let probe;
@@ -21,7 +21,7 @@ export function developmentLook(world,renderer,group,groundMaterial,mats){
   }
   const map=new T.CanvasTexture(tile);map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(4,6);map.colorSpace=T.SRGBColorSpace;map.anisotropy=2;
   const bump=map.clone();bump.colorSpace=T.NoColorSpace;bump.needsUpdate=true;
-  const surface=new T.MeshStandardMaterial({map,bumpMap:bump,bumpScale:.022,color:0x8c9caa,roughness:.35,metalness:.12,envMapIntensity:1.15});
+  const surface=new T.MeshStandardMaterial({map,bumpMap:bump,bumpScale:.022,color:directed?0x7d817b:0x8c9caa,roughness:.45,metalness:directed?.06:.12,envMapIntensity:directed?.75:1.15});
   surface.onBeforeCompile=shader=>{
     shader.vertexShader='varying vec3 pavementWorld;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npavementWorld=(modelMatrix*vec4(position,1.0)).xyz;');
     shader.fragmentShader='varying vec3 pavementWorld;\n'+shader.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nfloat wet=sin(pavementWorld.x*1.7+sin(pavementWorld.z*.8))*sin(pavementWorld.z*1.3);\nroughnessFactor=mix(.20,.74,smoothstep(-.35,.4,wet));');

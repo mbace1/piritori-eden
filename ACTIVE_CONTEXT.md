@@ -9,6 +9,15 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 3. For asset work: [MESHY_AGENT_HANDOFF.md](MESHY_AGENT_HANDOFF.md), its current-production notice, [3D_PIPELINE.md](3D_PIPELINE.md), [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md), [CHARACTER_SPEC](assets/CHARACTER_SPEC.md), and [asset_manifest.json](assets/asset_manifest.json).
 4. Current PR/manifest state before deciding that something is missing. This desktop has a partial checkout; a missing local file is not evidence it is absent from GitHub.
 
+## C.13 art and UI continuation
+
+The owner rejected C.12's interface as poorly grounded in the design. Read
+[the C.13 pass](design/C13_ART_AND_UI.md): the actual portrait/landscape UI targets
+and park-night reference were inspected. This batch restores the dark carton /
+cream console, a crew ledger, actual-figure portraits and practical night light.
+C.13 is under release validation here; C.12 below is the last verified deployment
+until the C.13 release receipt is recorded. No new character approval is implied.
+
 ## C.12 connected crew pilot
 
 C.12 continuation: the owner asked for a bigger leap. `web/crew-run/` now joins
