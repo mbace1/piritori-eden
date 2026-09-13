@@ -1,7 +1,7 @@
 import {coverEdges,coverDescription} from './cover-edges.js?v=1';
 import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=5';
 
-export function tacticalUI({getSession,button,tile,edgeMark,run,hint,refresh}){
+export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,refresh}){
   let preview=null;
   const $=id=>document.getElementById(id);
   function pick(type,value){preview={type,value};refresh();$('commit-preview')?.focus({preventScroll:true});}
@@ -21,7 +21,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,run,hint,refresh}){
     if(preview&&enabled){let text,valid=false;
       if(preview.type==='move'){
         const path=routes(b,u).get(preview.value);valid=moveReady&&!!path?.length;
-        if(valid){destination={id:u.id,cell:preview.value};for(const c of path)tile(c,0xe8e6ad,.48);
+        if(valid){destination={id:u.id,cell:preview.value};for(const [i,c] of path.entries()){tile(c,0x81c8d0,.25);intentLine?.(i?path[i-1]:u.cell,c,0x79cdd5);}
           const shots=b.enemies.filter(v=>v.alive).map(t=>({t,f:forecast(b,u,t,preview.value)})).filter(v=>v.f.valid);
           text=`${coordinate(u.cell)} → ${path.map(coordinate).join(' → ')} · ${path.length}/4 steps. ${coverDescription(b,preview.value)} ${actReady?`Action remains. Attacks here: ${shots.map(({t,f})=>`${t.label} ${f.chance}%`).join(', ')||'none'}.`:'Action already used.'}`;}
       }else{const t=b.enemies.find(v=>v.id===preview.value),f=forecast(b,u,t);valid=actReady&&f.valid;if(valid){tile(t.cell,0xf9b870,.6);text=`${u.label} → ${t.label}: ${f.chance}% to hit; ${f.hpDamage} HP + ${f.guardDamage} guard if hit. ${f.cover==='partial'?`${f.coverEdge.toUpperCase()} wall: −25 points. `:f.flanked?'FLANKED: wall gives no protection. ':''}${moveReady?'Movement remains available.':'Movement used.'}`;}}
@@ -31,11 +31,12 @@ export function tacticalUI({getSession,button,tile,edgeMark,run,hint,refresh}){
     const danger=threats(b,destination),panel=$('enemy-plans');panel.replaceChildren();
     const summary=document.createElement('p'),total=danger.totals[u?.id];
     summary.textContent=`ENEMY PLANS · ${destination?'AFTER PREVIEWED MOVE':'CURRENT POSITIONS'} · ${u?.label}: ${total?`${total.attacks} attacks, up to ${total.hp} HP + ${total.guard} guard damage${total.hp>=u.hp?' · POTENTIALLY LETHAL':''}`:'no planned hits'}`;
+    if(intentLine)summary.textContent=total?`${u.name}: up to ${total.hp} HP / ${total.guard} guard at risk${total.hp>=u.hp?' · MAY FALL':''}`:'ENEMY PLANS · '+(destination?'AFTER THIS MOVE':'THIS ROUND');
     panel.append(summary);
     for(const v of danger.views){const enemy=b.enemies.find(p=>p.id===v.id);if(!enemy.alive)continue;const t=b.players.find(p=>p.id===v.target);
       const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard${v.cover==='partial'?' · WALL':v.flanked?' · FLANKED':''}`:v.reason+' — CANCELLED'}`:v.reason}`;
-      const p=document.createElement('div');p.className='enemy-plan '+(!v.valid?'cancelled':'');p.textContent=text;panel.append(p);
-      if(v.valid){tile(v.to,0xdb946f,.19);if(v.type==='attack')tile(destination?.id===t.id?destination.cell:t.cell,0xf07862,.30);}
+      const p=document.createElement('div');p.className='enemy-plan '+(!v.valid?'cancelled':'');p.textContent=intentLine?`${enemy.label} → ${v.type==='attack'?t?.name.split(' ')[0]||'—':coordinate(v.to)} · ${v.valid&&v.type==='attack'?`${v.chance}% · ${v.hpDamage} HP / ${v.guardDamage} guard`:v.reason}`:text;panel.append(p);
+      if(v.valid){tile(v.to,0xdb946f,.19);if(v.type==='attack'){const targetCell=destination?.id===t.id?destination.cell:t.cell;tile(targetCell,0xf07862,.20);intentLine?.(v.to,targetCell,0xce765c);}}
     }
     for(const [c,cover] of b.cover){if(cover.hardBlock)tile(c,0x8dacc6,.18);else edgeMark(c,cover.edge,0xe4ce92,.65);}
     $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold edge: wall / −25 points across it; sides exposed; walk around · Red: planned danger';

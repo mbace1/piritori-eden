@@ -1,4 +1,4 @@
-"""Stage the C.12 public cabinet from an exact, clean source checkout.
+"""Stage the C.13 public cabinet from an exact, clean source checkout.
 
 No network/upload. Only the explicit runtime allowlist is copied. Signed URLs,
 raw masters and art review sheets cannot enter through a directory-wide copy.
@@ -35,20 +35,20 @@ def stage(source, deployed_manifest, output, commit):
                 raise ValueError('Split module cache token: '+rel)
             versions[module] = token
     data['art/v3/manifest.json'] = (json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
-    entry = 'web/crew-run/?release=12'
-    release = {'build':'C.12','source_repository':'mbace1/piritori-eden',
+    entry = 'web/crew-run/?release=13'
+    release = {'build':'C.13','source_repository':'mbace1/piritori-eden',
                'source_commit':commit,'entry':entry,'status':'connected-crew-pilot',
                'character_provider':'neutral stand-ins','physical_devices_verified':False,
                'transforms':['Scope runtime art register; preserve immutable fighter URLs'],
                'sha256':{name:hashlib.sha256(raw).hexdigest() for name,raw in sorted(data.items())}}
     data['release.json'] = (json.dumps(release,indent=2)+'\n').encode()
-    data['index.html'] = ('<!doctype html><meta charset="utf-8"><title>Piritori C.12</title>'
+    data['index.html'] = ('<!doctype html><meta charset="utf-8"><title>Piritori C.13</title>'
                           f'<meta http-equiv="refresh" content="0;url={entry}"><a href="{entry}">Open arena</a>\n').encode()
-    data['VERSIONS.md'] = (f'# C.12 — Night Shift crew pilot\n\nSource: {commit}.\n\n'
-        'Persistent crew, loadouts, rescue and extraction, announced arrivals, wounds and repeat outings. '
+    data['VERSIONS.md'] = (f'# C.13 — Night Shift crew pilot\n\nSource: {commit}.\n\n'
+        'Art Bible console, crew ledger, actual-figure portraits, practical night light, directed framing and dashed intent paths. Persistent C.12 rules and saves retained. '
         '2/6/12-person neutral fixtures; campaign rules and character gates unchanged. '
         'Pixel/iPad acceptance remains pending.\n\n'
-        '## Port\n\nGodot: port crew-run/run.js, crew-run.mjs and the lab tactics tests before claiming rules parity; invalidate projected labels '
+        '## Port\n\nGodot: reproduce the C.13 display hierarchy, labelled action costs, contextual mission commands, paper palette and world framing. Preserve C.12 vectors; invalidate projected labels '
         'on camera, actor, text or viewport changes. Campaign keeps its authored resolver.\n').encode()
     # A new directory prevents stale files from an older, broader cabinet leaking.
     output.mkdir(parents=True,exist_ok=False)
