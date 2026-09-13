@@ -1,0 +1,1027 @@
+{
+  "release": "C.08 r2",
+  "runtime_source": "0b465132c90236052bf626d665180a4e26b74b28",
+  "date": "2026-09-13",
+  "result": "visual_blockers_detected",
+  "physical_devices_tested": false,
+  "instrumentation": "local exact v05 production actor/scene code; temporary diagnostic hooks, no model or game-state replacement",
+  "visibility_method": "white skinned silhouette, black depth occluders; foliage alpha test retained; HUD excluded",
+  "visibility_views": [
+    {
+      "viewport": "desktop",
+      "size": [
+        1280,
+        850
+      ],
+      "worst": {
+        "step": 5,
+        "degrees": 262,
+        "id": "opp-mikko-rinne",
+        "visiblePixels": 0,
+        "fullPixels": 242,
+        "visibleFraction": 0
+      },
+      "rows": [
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f01",
+          "visiblePixels": 276,
+          "fullPixels": 276,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f02",
+          "visiblePixels": 197,
+          "fullPixels": 197,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 286,
+          "fullPixels": 286,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 155,
+          "fullPixels": 198,
+          "visibleFraction": 0.7828282828282829
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f01",
+          "visiblePixels": 178,
+          "fullPixels": 233,
+          "visibleFraction": 0.7639484978540773
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f02",
+          "visiblePixels": 174,
+          "fullPixels": 174,
+          "visibleFraction": 1
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 263,
+          "fullPixels": 270,
+          "visibleFraction": 0.9740740740740741
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 185,
+          "fullPixels": 185,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f01",
+          "visiblePixels": 313,
+          "fullPixels": 316,
+          "visibleFraction": 0.990506329113924
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f02",
+          "visiblePixels": 221,
+          "fullPixels": 221,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 269,
+          "fullPixels": 269,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 92,
+          "fullPixels": 214,
+          "visibleFraction": 0.42990654205607476
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f01",
+          "visiblePixels": 327,
+          "fullPixels": 327,
+          "visibleFraction": 1
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f02",
+          "visiblePixels": 147,
+          "fullPixels": 231,
+          "visibleFraction": 0.6363636363636364
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 217,
+          "fullPixels": 307,
+          "visibleFraction": 0.7068403908794788
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 170,
+          "fullPixels": 228,
+          "visibleFraction": 0.7456140350877193
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f01",
+          "visiblePixels": 274,
+          "fullPixels": 274,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f02",
+          "visiblePixels": 199,
+          "fullPixels": 199,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 238,
+          "fullPixels": 287,
+          "visibleFraction": 0.8292682926829268
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 150,
+          "fullPixels": 196,
+          "visibleFraction": 0.7653061224489796
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f01",
+          "visiblePixels": 253,
+          "fullPixels": 256,
+          "visibleFraction": 0.98828125
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f02",
+          "visiblePixels": 184,
+          "fullPixels": 184,
+          "visibleFraction": 1
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 0,
+          "fullPixels": 242,
+          "visibleFraction": 0
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 67,
+          "fullPixels": 178,
+          "visibleFraction": 0.37640449438202245
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f01",
+          "visiblePixels": 282,
+          "fullPixels": 282,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f02",
+          "visiblePixels": 210,
+          "fullPixels": 210,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 9,
+          "fullPixels": 282,
+          "visibleFraction": 0.031914893617021274
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 201,
+          "fullPixels": 221,
+          "visibleFraction": 0.9095022624434389
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f01",
+          "visiblePixels": 238,
+          "fullPixels": 322,
+          "visibleFraction": 0.7391304347826086
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f02",
+          "visiblePixels": 232,
+          "fullPixels": 232,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 317,
+          "fullPixels": 317,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 228,
+          "fullPixels": 228,
+          "visibleFraction": 1
+        }
+      ],
+      "errors": []
+    },
+    {
+      "viewport": "phone-portrait",
+      "size": [
+        412,
+        915
+      ],
+      "worst": {
+        "step": 5,
+        "degrees": 262,
+        "id": "opp-mikko-rinne",
+        "visiblePixels": 2,
+        "fullPixels": 752,
+        "visibleFraction": 0.0026595744680851063
+      },
+      "rows": [
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f01",
+          "visiblePixels": 886,
+          "fullPixels": 887,
+          "visibleFraction": 0.9988726042841037
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f02",
+          "visiblePixels": 621,
+          "fullPixels": 621,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 907,
+          "fullPixels": 907,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 494,
+          "fullPixels": 626,
+          "visibleFraction": 0.7891373801916933
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f01",
+          "visiblePixels": 575,
+          "fullPixels": 736,
+          "visibleFraction": 0.78125
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f02",
+          "visiblePixels": 551,
+          "fullPixels": 551,
+          "visibleFraction": 1
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 821,
+          "fullPixels": 844,
+          "visibleFraction": 0.9727488151658767
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 565,
+          "fullPixels": 565,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f01",
+          "visiblePixels": 985,
+          "fullPixels": 996,
+          "visibleFraction": 0.9889558232931727
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f02",
+          "visiblePixels": 702,
+          "fullPixels": 702,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 843,
+          "fullPixels": 844,
+          "visibleFraction": 0.9988151658767772
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 280,
+          "fullPixels": 657,
+          "visibleFraction": 0.426179604261796
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f01",
+          "visiblePixels": 1029,
+          "fullPixels": 1029,
+          "visibleFraction": 1
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f02",
+          "visiblePixels": 465,
+          "fullPixels": 720,
+          "visibleFraction": 0.6458333333333334
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 690,
+          "fullPixels": 967,
+          "visibleFraction": 0.7135470527404343
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 532,
+          "fullPixels": 717,
+          "visibleFraction": 0.7419804741980475
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f01",
+          "visiblePixels": 871,
+          "fullPixels": 871,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f02",
+          "visiblePixels": 623,
+          "fullPixels": 623,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 731,
+          "fullPixels": 899,
+          "visibleFraction": 0.8131256952169077
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 478,
+          "fullPixels": 622,
+          "visibleFraction": 0.7684887459807074
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f01",
+          "visiblePixels": 784,
+          "fullPixels": 799,
+          "visibleFraction": 0.981226533166458
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f02",
+          "visiblePixels": 577,
+          "fullPixels": 577,
+          "visibleFraction": 1
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 2,
+          "fullPixels": 752,
+          "visibleFraction": 0.0026595744680851063
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 225,
+          "fullPixels": 549,
+          "visibleFraction": 0.4098360655737705
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f01",
+          "visiblePixels": 883,
+          "fullPixels": 883,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f02",
+          "visiblePixels": 653,
+          "fullPixels": 653,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 43,
+          "fullPixels": 890,
+          "visibleFraction": 0.048314606741573035
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 640,
+          "fullPixels": 708,
+          "visibleFraction": 0.903954802259887
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f01",
+          "visiblePixels": 741,
+          "fullPixels": 1003,
+          "visibleFraction": 0.7387836490528414
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f02",
+          "visiblePixels": 715,
+          "fullPixels": 715,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 993,
+          "fullPixels": 993,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 726,
+          "fullPixels": 726,
+          "visibleFraction": 1
+        }
+      ],
+      "errors": []
+    },
+    {
+      "viewport": "tablet-landscape",
+      "size": [
+        1194,
+        834
+      ],
+      "worst": {
+        "step": 5,
+        "degrees": 262,
+        "id": "opp-mikko-rinne",
+        "visiblePixels": 0,
+        "fullPixels": 261,
+        "visibleFraction": 0
+      },
+      "rows": [
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f01",
+          "visiblePixels": 306,
+          "fullPixels": 306,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "f02",
+          "visiblePixels": 214,
+          "fullPixels": 214,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 319,
+          "fullPixels": 319,
+          "visibleFraction": 1
+        },
+        {
+          "step": 0,
+          "degrees": 37,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 170,
+          "fullPixels": 219,
+          "visibleFraction": 0.776255707762557
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f01",
+          "visiblePixels": 192,
+          "fullPixels": 255,
+          "visibleFraction": 0.7529411764705882
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "f02",
+          "visiblePixels": 196,
+          "fullPixels": 196,
+          "visibleFraction": 1
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 289,
+          "fullPixels": 297,
+          "visibleFraction": 0.9730639730639731
+        },
+        {
+          "step": 1,
+          "degrees": 82,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 202,
+          "fullPixels": 202,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f01",
+          "visiblePixels": 347,
+          "fullPixels": 352,
+          "visibleFraction": 0.9857954545454546
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "f02",
+          "visiblePixels": 247,
+          "fullPixels": 247,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 302,
+          "fullPixels": 302,
+          "visibleFraction": 1
+        },
+        {
+          "step": 2,
+          "degrees": 127,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 100,
+          "fullPixels": 229,
+          "visibleFraction": 0.4366812227074236
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f01",
+          "visiblePixels": 355,
+          "fullPixels": 355,
+          "visibleFraction": 1
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "f02",
+          "visiblePixels": 167,
+          "fullPixels": 256,
+          "visibleFraction": 0.65234375
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 237,
+          "fullPixels": 334,
+          "visibleFraction": 0.7095808383233533
+        },
+        {
+          "step": 3,
+          "degrees": 172,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 184,
+          "fullPixels": 246,
+          "visibleFraction": 0.7479674796747967
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f01",
+          "visiblePixels": 306,
+          "fullPixels": 306,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "f02",
+          "visiblePixels": 215,
+          "fullPixels": 215,
+          "visibleFraction": 1
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 258,
+          "fullPixels": 314,
+          "visibleFraction": 0.821656050955414
+        },
+        {
+          "step": 4,
+          "degrees": 217,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 167,
+          "fullPixels": 219,
+          "visibleFraction": 0.7625570776255708
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f01",
+          "visiblePixels": 276,
+          "fullPixels": 281,
+          "visibleFraction": 0.9822064056939501
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "f02",
+          "visiblePixels": 198,
+          "fullPixels": 198,
+          "visibleFraction": 1
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 0,
+          "fullPixels": 261,
+          "visibleFraction": 0
+        },
+        {
+          "step": 5,
+          "degrees": 262,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 75,
+          "fullPixels": 192,
+          "visibleFraction": 0.390625
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f01",
+          "visiblePixels": 315,
+          "fullPixels": 315,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "f02",
+          "visiblePixels": 226,
+          "fullPixels": 226,
+          "visibleFraction": 1
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 11,
+          "fullPixels": 313,
+          "visibleFraction": 0.03514376996805112
+        },
+        {
+          "step": 6,
+          "degrees": 307,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 222,
+          "fullPixels": 244,
+          "visibleFraction": 0.9098360655737705
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f01",
+          "visiblePixels": 258,
+          "fullPixels": 349,
+          "visibleFraction": 0.7392550143266475
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "f02",
+          "visiblePixels": 247,
+          "fullPixels": 247,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-mikko-rinne",
+          "visiblePixels": 342,
+          "fullPixels": 342,
+          "visibleFraction": 1
+        },
+        {
+          "step": 7,
+          "degrees": 352,
+          "id": "opp-pauli-leko",
+          "visiblePixels": 252,
+          "fullPixels": 252,
+          "visibleFraction": 1
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "ground_probe": {
+    "method": "all deformed skinned vertices at 24 samples/sec, 1.25 sec per action, production v05 actor code; penetration threshold -0.02m",
+    "characters": [
+      {
+        "id": "cast3d-f01-heavy-bruiser-v05",
+        "actions": [
+          {
+            "mode": "idle",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "walk",
+            "minY": -0.009339670131283142,
+            "maxLowestVertexY": 0.0674240058157637,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "strike",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "shoot",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "brace",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "item",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "talk",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "hit",
+            "minY": -0.021391111114895174,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0.0001540041067761807,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "grip",
+            "minY": -0.00751775251101069,
+            "maxLowestVertexY": 1.7250778882899487e-17,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 19480,
+            "samples": 31
+          },
+          {
+            "mode": "down",
+            "minY": -0.1817213742968584,
+            "maxLowestVertexY": 0.0019413103618165974,
+            "maxFractionBelowMinus2cm": 0.13783367556468173,
+            "sampledVertices": 19480,
+            "samples": 31
+          }
+        ]
+      },
+      {
+        "id": "cast3d-f02-wiry-skirmisher-v05",
+        "actions": [
+          {
+            "mode": "idle",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "walk",
+            "minY": 0.022602015633016285,
+            "maxLowestVertexY": 0.10990057174150564,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "strike",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "shoot",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "brace",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "item",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "talk",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "hit",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "grip",
+            "minY": 5.464987066043512e-15,
+            "maxLowestVertexY": 0.02742466716957519,
+            "maxFractionBelowMinus2cm": 0,
+            "sampledVertices": 24190,
+            "samples": 31
+          },
+          {
+            "mode": "down",
+            "minY": -0.15919318126023765,
+            "maxLowestVertexY": 0.021059230482229435,
+            "maxFractionBelowMinus2cm": 0.11306324927656056,
+            "sampledVertices": 24190,
+            "samples": 31
+          }
+        ]
+      }
+    ]
+  },
+  "live_ui_checks": [
+    "heavy move to C5",
+    "heavy attack reduces Mikko guard 2 to 1",
+    "wiry move to D5",
+    "wiry attack and team follow-up reduce Pauli to HP2/3, guard0",
+    "out-of-reach opponent disabled",
+    "enemy rounds resolve",
+    "both art profiles switch during the same turn",
+    "reload retains round 3, opponent conditions, art preference and spent wiry action"
+  ],
+  "new_runtime_deployed": false,
+  "host": {
+    "gpu": {
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "vendor": "Google Inc. (AMD)"
+    },
+    "webkitInstalled": false,
+    "firefoxInstalled": false
+  }
+}
