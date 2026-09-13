@@ -57,4 +57,3 @@ export function makeStandIn(unit, world) {
   a.dispose=()=>{geometry.dispose();material.dispose();ring.geometry.dispose();ring.material.dispose();shadow.geometry.dispose();shadow.material.dispose();weapon.geometry.dispose();pm.dispose();group.removeFromParent();};
   a.update(0);return a;
 }
-

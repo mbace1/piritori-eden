@@ -411,4 +411,3 @@ merge.
 The current published prototype is v2. The next playable milestone is v3; Art
 Bible and design commits before it remain source milestones rather than false
 playable releases.
-

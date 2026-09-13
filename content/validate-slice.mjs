@@ -297,4 +297,3 @@ console.log(
   `${artIds.size} registered art ids and ${artFiles.length} runtime files.`
 );
 
-

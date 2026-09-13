@@ -8,4 +8,3 @@ export function validRuntimeApproval(asset){
     && asset.layer==='location-stage'
     && ['mesh-3d','texture-3d'].includes(asset.kind);
 }
-

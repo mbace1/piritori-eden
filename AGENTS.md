@@ -63,4 +63,3 @@ They do not replace approved concepts or change production-manifest status.
 Push each reviewable slice batch and its tests/handoff to the Piritori GitHub
 repository so other PCs can continue. Distinguish source pushed, PR open,
 merged and live hub deployment; never claim one from another.
-

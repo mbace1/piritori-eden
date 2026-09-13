@@ -177,4 +177,3 @@ async function boot(){
   if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');previous=performance.now();frameCount=seconds=0;queueFrame();
 }
 boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});
-

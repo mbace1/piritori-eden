@@ -2,4 +2,3 @@
 body[data-lab-count="12"] .actor-label{min-width:25px;min-height:24px;padding:3px}body[data-lab-count="12"] .actor-label:not(.active) small{display:none}#roster button{min-width:0}.identity{overflow-wrap:anywhere}
 
 @media(max-height:560px) and (orientation:landscape){#panel{min-height:0;height:100%;overflow-y:auto;padding-bottom:24px;scrollbar-gutter:stable}}
-

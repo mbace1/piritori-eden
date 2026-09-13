@@ -67,4 +67,3 @@ export function createSession(content, mode='mixed', scenario='training') {
   return {battle,data,mode,scenario,history,command,snapshot,result:()=>({schema_version:1,encounter:definition.id,result:battle.result,training:!authored,survivors:battle.players.concat(battle.enemies).filter(u=>u.alive).map(u=>u.id),downed:battle.players.concat(battle.enemies).filter(u=>!u.alive).map(u=>u.id),campaign_effects:authored?resultEffects(battle,data):[],police:authored?{taken:battle.policeTaken,saved:battle.policeSaved}:null,actions:history.map(({type,value})=>({type,value}))})};
 }
 
-

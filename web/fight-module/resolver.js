@@ -1055,4 +1055,3 @@ export function injuredPlayers(battle) {
 }
 
 
-

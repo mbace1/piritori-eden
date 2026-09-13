@@ -52,4 +52,3 @@ export function developmentLook(world,renderer,group,groundMaterial,mats){
   function update(camera,actors=tracked){tracked=actors;camera.updateMatrixWorld();count.value=Math.min(12,actors.length);for(let i=0;i<count.value;i++){const a=actors[i];point.copy(a.group.position).add(new T.Vector3(0,a.down?.3:.96,0)).applyMatrix4(camera.matrixWorldInverse);people.value[i].set(point.x,point.y,point.z,a.down?.75:1.14);}}
   return {update,recover:rebuildProbe,metrics:()=>({lightProbe:'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
 }
-

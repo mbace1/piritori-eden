@@ -191,4 +191,3 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     aftermath(outcome){points.material.opacity=outcome==='peaceful'?.25:.45;}
   };
 }
-

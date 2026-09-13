@@ -13,4 +13,3 @@ for(const count of [2,6,12])for(const mode of ['mixed','melee','ranged']){
 }
 assert.throws(()=>createSession(content,'mixed','lab-100'));
 console.log('PASS: 2/6/12 people × 3 loadouts, unique slots/labels, matching cover, deterministic replay, terminal outcomes, zero campaign effects');
-

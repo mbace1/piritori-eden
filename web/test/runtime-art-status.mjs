@@ -9,4 +9,3 @@ assert.equal(validRuntimeApproval({...prototype,layer:'unit-3d'}),false);
 assert.equal(validRuntimeApproval({...prototype,approval_status:'direction-approved'}),false);
 assert.equal(validRuntimeApproval({approval_status:'semi-approved'}),true);
 console.log('PASS: unreviewed environment prototypes cannot silently become approved or production-ready');
-

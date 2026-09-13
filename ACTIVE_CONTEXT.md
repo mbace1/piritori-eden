@@ -52,4 +52,3 @@ C.08 r2 is live; this context/design update does not deploy a new build. [3D aud
 ## C.09 source continuation
 
 `feat/dream-loop-c09-arena-lab` adds `web/arena-lab/` with grounded stand-ins, 2/6/12-person fixtures, wet paving/light probe and scenery cutaway. Read [C.09 handoff](design/C09_ARENA_LAB.md) for entry points, tests and remaining gates. C.08 r2 is still the live hub baseline; this source branch does not deploy or repair the Meshy models.
-

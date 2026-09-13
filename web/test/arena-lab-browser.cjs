@@ -20,4 +20,3 @@ const base=process.env.ARENA_LAB_URL||'http://127.0.0.1:8796/work/piritori-fight
     assert.deepEqual(errors,[]);report.views.push({...spec,metrics,errors,move:true,enemyRound:true,replay:true,contextRestore:true,restart:true});fs.writeFileSync(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify({view:spec.name,fps:metrics.fps,draws:metrics.draws,models:metrics.models,errors}));await context.close();
   }
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
-

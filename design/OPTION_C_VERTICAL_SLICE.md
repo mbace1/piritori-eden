@@ -88,4 +88,3 @@ Choose C only when visual preference, actual-device play and repeatable asset pr
 ### Port
 
 This is a design/evidence update. No gameplay or rendering change has shipped. A later JS slice exports the canonical request/result and effect/quality contracts for Godot; no new campaign rules originate in the port.
-

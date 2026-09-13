@@ -91,4 +91,3 @@ function attachProp(a){
 }
 export function disposeActor(a){if(a.placeholder){a.dispose();return;}a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
 
-

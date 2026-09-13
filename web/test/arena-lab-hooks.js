@@ -34,4 +34,3 @@ window.labAudit={
     }}finally{for(const item of objects){item.o.material=item.material;item.o.visible=item.visible;item.o.instanceColor=item.instanceColor;}for(const [o,v] of decor)o.visible=v;for(const m of masks.values())m.dispose();white.dispose();target.dispose();renderer.setRenderTarget(saved.target);renderer.toneMapping=saved.tone;renderer.shadowMap.enabled=saved.shadow;world.background=saved.background;world.fog=saved.fog;angle=saved.angle;zoom=saved.zoom;fit();stage.update(camera,[...actors.values()]);ready=true;queueFrame();}return rows;
   }
 };
-
