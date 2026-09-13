@@ -1,0 +1,64 @@
+{
+  "release": "C.08",
+  "date": "2026-09-13",
+  "status": "local_checks_passed_publication_pending",
+  "decision": "D009",
+  "approved_directions": [
+    "Ink & Stone",
+    "Cold Street"
+  ],
+  "runtime_acceptance": "prototype; owner/device review pending",
+  "assets": [
+    {
+      "id": "prop-karhupuisto-bear-v01",
+      "kind": "mesh-3d",
+      "file": "environment3d/bear-landmark-v01.glb",
+      "source": "Blender procedural sculpt",
+      "source_version": "1",
+      "approval_status": "direction-approved",
+      "production_status": "playable-test-only",
+      "layer": "location-stage",
+      "era": "2003",
+      "role": "Karhupuisto landmark",
+      "format": "glb",
+      "sha256": "fc3fc41681d5c7dbcec7a7471d75b248597412ffd8664cee2489db4a9b7240f1",
+      "bytes": 302460,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md.",
+      "triangle_count": 8610
+    },
+    {
+      "id": "surface-karhupuisto-gravel-v01",
+      "kind": "texture-3d",
+      "file": "environment3d/park-ground-study-v01.png",
+      "source": "Built-in Image Generation",
+      "source_version": "1",
+      "approval_status": "direction-approved",
+      "production_status": "playable-test-only",
+      "layer": "location-stage",
+      "era": "2003",
+      "role": "Karhupuisto ground surface",
+      "format": "png",
+      "sha256": "ee1dfc3c2794a18bf48c15be1eef36aed48be7f9c999720f91b3e8ba1239e0e3",
+      "bytes": 3483080,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md."
+    }
+  ],
+  "checks": [
+    "bear-path-art.cjs: 4 viewports, both styles, stable camera/turn/story and resource counts, reload, real GL recovery, corrupt asset error",
+    "bear-path-browser.cjs: 4 viewports, approach/dialogue/peace/withdraw/fight/return, once-only ledger, orientation and repeated GL recovery",
+    "bear-path-transitions.cjs: both police controls, corrupt save, GL loss during pullback",
+    "bear-path.mjs and bear-path-police.mjs: canonical encounter/session/effects",
+    "fight-module-gpu.cjs: legacy training real context-loss/recovery regression",
+    "character.py check: records/files consistent; readiness remains blocked"
+  ],
+  "physical_device_tests": {
+    "pixel_10_pro": "pending",
+    "ipad_m2": "pending"
+  },
+  "character_state": "registered v05 prototypes; rejected rig/motion gate unchanged; private v06 excluded",
+  "campaign_applied": false
+}

@@ -10,6 +10,20 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.50 — 2026-09-13
+
+**C.08: two approved Bear Path art directions in one playable scene.**
+
+- D009 records the owner's choice of v04 columns 2 **Ink & Stone** and 3 **Cold Street** as two alternatives. The art button switches materials, foliage palette, surface treatment and lighting while preserving camera, turn and story. `?look=ink` / `?look=cold` share a specific look; the last choice is remembered separately from the encounter save.
+- Replaces the primitive bear with an 8,610-triangle locally sculpted Blender derivative, adds a generated gravel surface with controlled contrast, and improves municipal benches, planting edges, lamp bases, package, drain, worn materials and street context. Both environments are prototypes, not final concept parity.
+- Loads environment assets by ID, byte length and SHA-256; uploads the ground at no more than 1024². Environment downloads add 3,785,540 bytes. Missing or corrupt assets show a clear loading error. Switching reuses existing scene assets.
+- Checks cover four viewport shapes, both looks, stable camera/turn/reload, input locking, repeated switches, real context recovery and existing encounter/legacy training regressions. Physical Pixel 10 Pro/iPad M2 acceptance remains pending.
+- F01/F02 remain the registered v05 prototypes with rejected rig/motion acceptance. Private v06 characters and Blender masters are not shipped. No Meshy work, campaign rule changes or asset-lifecycle promotion.
+
+### Port
+
+Browser milestone only. Port the shared-layout art profiles, explicit look selection and independent preference persistence, environment integrity checks and bounded surface upload. Preserve the existing encounter and recovery contracts. The static GLB is Y-up, long axis X, scaled by its bounds to 1.72 m length in this park. Read `design/BEAR_PATH_C08_VERIFICATION.md` and D009 before treating either style as final.
+
 ## v4.49 — 2026-09-13
 
 **C.07: Bear Path, a connected 3D encounter.**

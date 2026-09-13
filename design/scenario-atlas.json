@@ -1524,6 +1524,20 @@
       "date": "2026-09-13",
       "decision": "One battle-entry pullback, then manual camera control; reduced motion bypasses the transition.",
       "authority": "Owner: Make large leaps astra use the concept art as a director and game director"
+    },
+    {
+      "id": "D009",
+      "topic": "bear_path_art_alternatives",
+      "status": "answered",
+      "date": "2026-09-13",
+      "owner_answer": "Middle and right. Seems like good 2 alt",
+      "interpretation": "Keep v04 columns 2 Ink & Stone and 3 Cold Street as distinct approved environment art directions on a shared Bear Path layout. Neither is selected over the other. Amber Autumn is not selected, not rejected.",
+      "reference": {
+        "file": "bear-path-art-directions-v04.png",
+        "sha256": "b120f703000527858552087073a43d9d01d4252647a309425f21993d15841512"
+      },
+      "implementation": "C.08 A/B art switch; same camera and encounter state. Runtime/device acceptance remains separate.",
+      "scope": "Direction only. No character-rig promotion, generated geographic/signage canon, campaign or combat-rule changes."
     }
   ]
 }

@@ -101,7 +101,8 @@ export function mountBearPath(api,saved){
    if(hotspots.hidden)return;const width=$('arena').clientWidth,height=$('arena').clientHeight;
    const items=[...hotspots.children].map(b=>({id:b.dataset.hotspot,anchor:api.project(api.stage.landmarks[b.dataset.hotspot]),width:b.offsetWidth,height:b.offsetHeight}));
    const bodies=[...api.actors().values()].filter(a=>a.group.visible).map(a=>{const feet=api.project(a.group.position),head=api.project(a.group.position.clone().add(new T.Vector3(0,1.95,0))),w=Math.max(18,(feet.y-head.y)*.42);return {x:head.x-w/2,y:head.y,width:w,height:Math.max(20,feet.y-head.y)};});
-   for(const placed of placeLabels(items,width,height,[{x:0,y:0,width,height:62},...bodies])){const b=hotspots.querySelector(`[data-hotspot="${placed.id}"]`);b.style.left=placed.x+'px';b.style.top=placed.y+'px';}
+   const arena=$('arena').getBoundingClientRect(),art=$('art-toggle').getBoundingClientRect(),artBox={x:art.x-arena.x-5,y:art.y-arena.y-5,width:art.width+10,height:art.height+10};
+   for(const placed of placeLabels(items,width,height,[{x:0,y:0,width,height:62},artBox,...bodies])){const b=hotspots.querySelector(`[data-hotspot="${placed.id}"]`);b.style.left=placed.x+'px';b.style.top=placed.y+'px';}
  }
  return {model,isBattle:()=>model.state.phase==='battle',render,layout,
    checkpoint:()=>model.checkpoint(),result:()=>model.result(),

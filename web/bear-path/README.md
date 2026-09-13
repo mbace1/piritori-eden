@@ -1,4 +1,4 @@
-# Bear Path — C.07
+# Bear Path — C.08
 
 A playable Karhupuisto handover: inspect, talk, finish peacefully, hold the path for the authored 2v2, or leave. The same space, actors and cover carry the encounter through its outcome and remembered return. The approved park concept directs the prototype environment; see [director packet](../../design/BEAR_PATH_DIRECTOR_PACKET.md).
 
@@ -17,10 +17,16 @@ Four desktop-host viewport shapes pass mouse/touch UI, once-only outcomes, portr
 ## Current limits
 
 - Existing v05 fighters remain provisional, including temporary combat gestures. Private v06 animation GLBs are not registered or included. Named opponents use prototype casting.
-- Scenery is a directed blockout with cut-leaf trees and rough props, not final concept parity.
+- Scenery now includes a Blender bear, generated gravel and detailed municipal furniture. Tree cards, sculpture anatomy and building depth still need work; this is not final concept parity.
 - Bespoke package-taking AI, full campaign dispatch/casualty settlement, travel, nearby doors and interiors remain unfinished.
 - The legacy training resolver is reused with canonical Bear Path configuration; no global campaign rules or content changed.
 
 ### Port
 
 Browser only. Port the encounter command/history and canonical result contract before matching the staging. Keep standalone local progress isolated until campaign dispatch is explicitly connected and tested.
+
+## Art comparison
+
+Use the 44px **Ink & Stone / Cold Street** control at the lower left of the scene. It preserves the camera and current turn. `?look=ink` or `?look=cold` selects one directly; last choice persists separately from chapter progress. D009 records both as approved directions, not accepted final runtime art. The switch locks during actions, rotation reflow and graphics loss.
+
+`node web/test/bear-path-art.cjs` exercises both looks, six repeated switches, unchanged camera/story/turn, reload, real graphics loss, invalid preferences and truncated environment data in four desktop-host viewports. Evidence: [C.08 verification](../../design/BEAR_PATH_C08_VERIFICATION.md). Ground albedo and the static sculpture are versioned under `art/v3/environment3d/`; Blender masters and interim renders remain private.

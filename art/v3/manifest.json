@@ -1994,7 +1994,43 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "Repaired Blender candidate used by the isolated 2v2 fight module. Finger joints and grip attachments included. Combat gestures are runtime prototype poses, not approved imported combat clips; owner and physical-device acceptance remain pending."
+    },
+    {
+      "id": "prop-karhupuisto-bear-v01",
+      "kind": "mesh-3d",
+      "file": "environment3d/bear-landmark-v01.glb",
+      "source": "Blender procedural sculpt",
+      "source_version": "1",
+      "approval_status": "direction-approved",
+      "production_status": "playable-test-only",
+      "layer": "location-stage",
+      "era": "2003",
+      "role": "Karhupuisto landmark",
+      "format": "glb",
+      "sha256": "fc3fc41681d5c7dbcec7a7471d75b248597412ffd8664cee2489db4a9b7240f1",
+      "bytes": 302460,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md.",
+      "triangle_count": 8610
+    },
+    {
+      "id": "surface-karhupuisto-gravel-v01",
+      "kind": "texture-3d",
+      "file": "environment3d/park-ground-study-v01.png",
+      "source": "Built-in Image Generation",
+      "source_version": "1",
+      "approval_status": "direction-approved",
+      "production_status": "playable-test-only",
+      "layer": "location-stage",
+      "era": "2003",
+      "role": "Karhupuisto ground surface",
+      "format": "png",
+      "sha256": "ee1dfc3c2794a18bf48c15be1eef36aed48be7f9c999720f91b3e8ba1239e0e3",
+      "bytes": 3483080,
+      "baked_text": false,
+      "baked_ui": false,
+      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md."
     }
   ]
 }
-
