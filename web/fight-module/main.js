@@ -94,7 +94,9 @@ function rebuildActors(){tagsDirty=true;tagPositions.clear();for(const a of acto
 function reset(mode=$('loadout').value){if(isCrew)return;if(isBear&&story){restartChapter();return;}if(graphicsLost||!ready)return;sequence++;cancelFocus();fit();auto=false;clearRecovery();session=createSession(content,mode,scenario);rebuildActors();busy=false;action='';labUI?.cancel();$('result').hidden=true;hint(isLab?'Move + Act in either order. Inspect a destination or attack before confirming.':'Choose a fighter, then an action. One action each round.');refresh();}
 
 function clearHighlights(){for(const o of [...highlight.children]){o.geometry.dispose();o.material.dispose();highlight.remove(o);}}
-function tile(cell,color,opacity=.22){const p=position(cell),m=new T.Mesh(new T.PlaneGeometry(CELL*.9,CELL*.9),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:T.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.copy(p).setY(isCrew?.065:.025);highlight.add(m);}
+function tile(cell,color,opacity=.22){const p=position(cell),m=new T.Mesh(new T.PlaneGeometry(CELL*.9,CELL*.9),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:T.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.copy(p).setY(isCrew?.065:.025);highlight.add(m);
+  if(isCrew){const h=CELL*.45,outline=new T.LineLoop(new T.BufferGeometry().setFromPoints([new T.Vector3(-h,0,-h),new T.Vector3(h,0,-h),new T.Vector3(h,0,h),new T.Vector3(-h,0,h)]),new T.LineBasicMaterial({color,transparent:true,opacity:.95,depthWrite:false,fog:false,toneMapped:false}));outline.position.copy(m.position).y+=.008;highlight.add(outline);}
+}
 function refresh(){
   tagsDirty=true;
   if(!session||!ready)return;if(graphicsLost||layoutPaused){lockInput();return;}for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;if(isBear)$('art-toggle').disabled=busy;if(story){story.render();if(!story.isBattle())return;}const b=session.battle,u=selected(),ended=b.status!=='active',canAct=!busy&&!ended&&u?.alive&&!b.acted.includes(u.id);
