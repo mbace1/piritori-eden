@@ -1,16 +1,17 @@
 import * as T from 'three';
 import {createSession,checkpoint,restoreSession} from './session.js?v=5';
-import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=4';
+import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=5';
 import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=2';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
 import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
 import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
 import {buildNightCourtyard} from './environment.js?v=1';
-import {buildKarhupuisto} from '../bear-path/park.js?v=3';
+import {buildKarhupuisto} from '../bear-path/park.js?v=4';
 import {loadParkAssets} from '../bear-path/assets.js?v=1';
 import {createEncounter} from '../bear-path/encounter.js?v=1';
 import {mountBearPath} from '../bear-path/presentation.js?v=2';
 import {fitBattleCamera,placeLabels} from './framing.js?v=1';
+import {createFrameClock} from './frame-clock.js?v=1';
 
 const isLab=document.body.dataset.scenario==='arena-lab',isBear=document.body.dataset.scenario==='bear-path',isPark=isBear||isLab;
 const labCount=[2,6,12].includes(Number(new URLSearchParams(location.search).get('actors')))?Number(new URLSearchParams(location.search).get('actors')):6;
@@ -26,6 +27,9 @@ let session,templates,content,manifest,busy=true,action='',auto=false,angle=.65,
 let renderer,world,camera,highlight,ray,ground,stage,actors=new Map(),labels=new Map(),fps=0,low=false,frameCount=0,seconds=0;
 let frameInfo,edgeSmoothing,layoutPaused=false,reflowTimer=0,autoTimer=0;
 const leaders=new Map();
+const frameClock=createFrameClock(performance.now()),tagPositions=new Map();
+let tagsDirty=true,labelLayouts=0,renderedFrames=0,actorList=[];
+document.fonts?.addEventListener('loadingdone',()=>{tagsDirty=true;});
 const RECOVERY_KEY=isLab?'piritori-arena-lab-c09-'+labCount:isBear?'piritori-bear-path-graphics-v1':'piritori-fight-c05-recovery';
 const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;
 let profile=renderProfile({touch}),graphicsLost=false,ready=false,raf=0,losses=0,recoveries=0,recoveryTimer=0;
@@ -53,6 +57,7 @@ function buildStage(){
   bindGraphicsRecovery();fit();new ResizeObserver(fit).observe(area);
 }
 function fit(){
+  tagsDirty=true;
   if(!renderer)return;const w=Math.max(1,area.clientWidth),h=Math.max(1,area.clientHeight);
   if(!graphicsLost){const ratio=pixelRatioFor(profile,w,h,devicePixelRatio);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);if(canvas.width!==Math.floor(w*ratio)||canvas.height!==Math.floor(h*ratio))renderer.setSize(w,h,false);}
   frameInfo=fitBattleCamera(camera,{width:w,height:h,angle,zoom,lanes:LANES,rows:totalRows(),cell:CELL});stage?.update(camera);
@@ -60,17 +65,29 @@ function fit(){
 const unitTag=u=>u.label||((u.side==='player'?'J':'R')+(u.modelId.includes('f02')||u.id.includes('f02')?'2':'1'));
 function project(at){const p=at.clone().project(camera);return {x:(p.x+1)*area.clientWidth/2,y:(1-p.y)*area.clientHeight/2};}
 function layoutTags(){
+  // Standing bodies keep the same tag anchors. Avoid DOM measurements and the
+  // collision search until camera/layout, label content or an actor changes.
+  let changed=tagsDirty;
+  for(const a of actorList){const p=a.group.position,old=tagPositions.get(a.id);
+    if(!old||old.x!==p.x||old.y!==p.y||old.z!==p.z||old.down!==a.down)changed=true;
+  }
+  if(!changed)return;
+  tagsDirty=false;labelLayouts++;
+  for(const a of actorList){const p=a.group.position;let old=tagPositions.get(a.id);
+    if(!old){old={};tagPositions.set(a.id,old);}Object.assign(old,{x:p.x,y:p.y,z:p.z,down:a.down});
+  }
   const rect=area.getBoundingClientRect(),w=rect.width,h=rect.height;
   const obstacles=['roundbar','camera-tools','perf',...(isBear?['art-toggle']:[])].map(id=>{const b=$(id).getBoundingClientRect();return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};});
   const items=all().map(u=>{const a=actors.get(u.id),el=labels.get(u.id),head=project(a.group.position.clone().add(new T.Vector3(0,a.down?.45:2.15,0))),feet=project(a.group.position),radius=Math.max(8,h/frameInfo.span*.32);return {id:u.id,anchor:head,width:el.offsetWidth,height:el.offsetHeight,body:isLab&&labCount>6?null:{x:feet.x-radius,y:head.y+4,width:radius*2,height:Math.max(0,feet.y-head.y-4)}};});
   for(const item of placeLabels(items,w,h,obstacles)){const el=labels.get(item.id),line=leaders.get(item.id);el.style.transform=`translate(${item.x}px,${item.y}px)`;const lx=Math.max(item.x+4,Math.min(item.x+item.width-4,item.anchor.x)),ly=item.y+item.height;line.setAttribute('x1',lx);line.setAttribute('y1',ly);line.setAttribute('x2',Math.max(2,Math.min(w-2,item.anchor.x)));line.setAttribute('y2',Math.max(2,Math.min(h-2,item.anchor.y)));line.setAttribute('opacity',Math.hypot(lx-item.anchor.x,ly-item.anchor.y)>11?'.72':'.35');}
 }
-function rebuildActors(){for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();leaders.clear();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('label-leaders');svg.setAttribute('aria-hidden','true');$('labels').append(svg);for(const u of all()){const a=makeActor(isLab?{placeholder:true}:templates.get(u.modelId),u,world);a.group.position.copy(position(u.cell));a.group.rotation.y=u.side==='player'?Math.PI:0;if(!u.alive){a.play('down');a.elapsed=1;updateActor(a,0);}actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;el.setAttribute('role','img');const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke',u.side==='enemy'?'#e3a18a':'#8fc5ae');line.setAttribute('stroke-width','1');svg.append(line);leaders.set(u.id,line);$('labels').append(el);labels.set(u.id,el);}}
+function rebuildActors(){tagsDirty=true;tagPositions.clear();for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();leaders.clear();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('label-leaders');svg.setAttribute('aria-hidden','true');$('labels').append(svg);for(const u of all()){const a=makeActor(isLab?{placeholder:true}:templates.get(u.modelId),u,world);a.group.position.copy(position(u.cell));a.group.rotation.y=u.side==='player'?Math.PI:0;if(!u.alive){a.play('down');a.elapsed=1;updateActor(a,0);}actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;el.setAttribute('role','img');const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke',u.side==='enemy'?'#e3a18a':'#8fc5ae');line.setAttribute('stroke-width','1');svg.append(line);leaders.set(u.id,line);$('labels').append(el);labels.set(u.id,el);}actorList=[...actors.values()];}
 function reset(mode=$('loadout').value){if(isBear&&story){restartChapter();return;}if(graphicsLost||!ready)return;sequence++;auto=false;clearRecovery();session=createSession(content,mode,scenario);rebuildActors();busy=false;action='';$('result').hidden=true;hint('Choose a fighter, then an action. One action each round.');refresh();}
 
 function clearHighlights(){for(const o of [...highlight.children]){o.geometry.dispose();o.material.dispose();highlight.remove(o);}}
 function tile(cell,color,opacity=.22){const p=position(cell),m=new T.Mesh(new T.PlaneGeometry(CELL*.9,CELL*.9),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:T.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.copy(p).setY(.025);highlight.add(m);}
 function refresh(){
+  tagsDirty=true;
   if(!session||!ready)return;if(graphicsLost||layoutPaused){lockInput();return;}for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;if(isBear)$('art-toggle').disabled=busy;if(story){story.render();if(!story.isBattle())return;}const b=session.battle,u=selected(),ended=b.status!=='active',canAct=!busy&&!ended&&u?.alive&&!b.acted.includes(u.id);
   $('round').textContent='ROUND '+String(b.round).padStart(2,'0');$('phase').textContent=busy?'RESOLVING':ended?'COMPLETE':'JADE · YOUR TURN';
   const focused=document.activeElement?.dataset.unitid;$('roster').replaceChildren();
@@ -136,9 +153,9 @@ window.addEventListener('keydown',e=>{if(graphicsLost||layoutPaused||!ready)retu
 let padPrevious=[],padAt=0;function controller(now){if(layoutPaused)return;const p=navigator.getGamepads?.()[0];if(!p)return;const fresh=i=>p.buttons[i]?.pressed&&!padPrevious[i];const controls=[...document.querySelectorAll('button,select,summary,a')].filter(e=>!e.disabled&&e.getClientRects().length&&!e.closest('[hidden]')&&(!$('help-dialog').open||e.closest('dialog')));if(now-padAt>170&&(fresh(13)||fresh(15)||fresh(12)||fresh(14))){const step=fresh(13)||fresh(15)?1:-1,index=controls.indexOf(document.activeElement);controls[(index+step+controls.length)%controls.length]?.focus();padAt=now;}if(fresh(0))document.activeElement?.click();if(fresh(1)){if($('help-dialog').open)$('help-dialog').close();else{story?.key('Escape');action='';refresh();}}if(fresh(6)||fresh(7)){zoom=T.MathUtils.clamp(zoom+(fresh(7)?.15:-.15),.7,1.7);fit();}padPrevious=p.buttons.map(v=>v.pressed);}
 matchMedia('(orientation:landscape)').addEventListener('change',()=>{
   if(!ready)return;layoutPaused=true;down=null;clearTimeout(reflowTimer);clearTimeout(autoTimer);refresh();
-  reflowTimer=setTimeout(()=>{layoutPaused=false;fit();previous=performance.now();refresh();if(auto&&!busy&&!graphicsLost)run('auto');},280);
+  reflowTimer=setTimeout(()=>{layoutPaused=false;fit();frameClock.reset(performance.now());refresh();if(auto&&!busy&&!graphicsLost)run('auto');},280);
 });
-document.addEventListener('visibilitychange',()=>{hidden=document.hidden;previous=performance.now();frameCount=seconds=0;if(hidden){cancelAnimationFrame(raf);raf=0;}else queueFrame();});
+document.addEventListener('visibilitychange',()=>{hidden=document.hidden;frameClock.reset(performance.now());frameCount=seconds=0;if(hidden){cancelAnimationFrame(raf);raf=0;}else queueFrame();});
 activate($('reload-graphics'),()=>{if(graphicsLost){const stored=saveRecovery();$('loading-detail').textContent=stored?'Reloading the saved turn…':'This browser cannot retain the turn across a reload.';location.reload();}});
 function bindGraphicsRecovery(){
   // Registered AFTER Three's listeners: Three rebuilds its GL resources first.
@@ -151,13 +168,30 @@ function bindGraphicsRecovery(){
   canvas.addEventListener('webglcontextrestored',()=>{
     clearTimeout(recoveryTimer);graphicsLost=false;recoveries++;profile=renderProfile({touch,recovered:true});low=true;
     if(templates)for(const template of templates.values())limitTextures(template.scene,profile.textureSize);
-    if(cameraPullback){zoom=1;cameraPullback=false;}applyProfile();stage?.recover?.();previous=performance.now();frameCount=seconds=0;
+    if(cameraPullback){zoom=1;cameraPullback=false;}applyProfile();stage?.recover?.();frameClock.reset(performance.now());frameCount=seconds=0;
     if(ready){rebuildActors();resumeGraphics();}
   });
 }
 function resumeGraphics(){busy=false;action='';if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());saveStory();$('labels').hidden=false;$('loading').hidden=true;$('reload-graphics').hidden=true;for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;refresh();clearRecovery();hint('Graphics restored. Your turn is unchanged; lighter rendering is active.');queueFrame();}
-let warmupFrames=30,previous=performance.now();
-function tick(now){raf=0;if(hidden||graphicsLost||!ready)return;queueFrame();const real=Math.max(0,(now-previous)/1000);if(real<1/profile.fps-.001)return;previous=now;const dt=Math.min(.05,real);for(const a of actors.values())updateActor(a,layoutPaused?0:dt);if(!story||story.isBattle())layoutTags();story?.layout();stage?.tick?.(layoutPaused||matchMedia('(prefers-reduced-motion: reduce)').matches?0:dt);stage?.update(camera,[...actors.values()]);renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);controller(now);if(warmupFrames>0){warmupFrames--;previous=performance.now();return;}frameCount++;seconds+=real;if(seconds>2){fps=Math.round(frameCount/seconds);if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}$('perf').textContent=`${isLab?'C.09 · STAND-INS':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;frameCount=0;seconds=0;}}
+let warmupFrames=30;
+function tick(now){
+  raf=0;if(hidden||graphicsLost||!ready)return;queueFrame();
+  const sample=frameClock.take(now,profile.fps);if(!sample)return;
+  const {real,dt}=sample;
+  for(const a of actorList)updateActor(a,layoutPaused?0:dt);
+  if(!story||story.isBattle())layoutTags();story?.layout();
+  stage?.tick?.(layoutPaused||matchMedia('(prefers-reduced-motion: reduce)').matches?0:dt);
+  stage?.update(camera,actorList);renderer.render(world,camera);
+  edgeSmoothing.render(profile.edgeSmoothing);controller(now);renderedFrames++;
+  if(warmupFrames>0){warmupFrames--;return;}
+  frameCount++;seconds+=real;
+  if(seconds>2){
+    fps=Math.round(frameCount/seconds);
+    if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
+    $('perf').textContent=`${isLab?'C.09.1 · STAND-INS':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    tagsDirty=true;frameCount=0;seconds=0;
+  }
+}
 async function boot(){
   let saved;try{saved=JSON.parse(sessionStorage.getItem(RECOVERY_KEY));}catch{}if(!saved&&isBear){try{saved=JSON.parse(localStorage.getItem(STORY_SAVE));}catch{}}if(saved)profile=renderProfile({recovered:true});
   [content,manifest]=await Promise.all(['../../content/era1-slice-v1.json','../../art/v3/manifest.json?v=9'].map(p=>fetch(p).then(r=>{if(!r.ok)throw Error('Data failed '+r.status);return r.json();})));
@@ -173,7 +207,7 @@ async function boot(){
     window.bearPath={snapshot:()=>story.checkpoint(),result:()=>story.result()};
     if(!saved){zoom=1.22;fit();}
   }
-  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,environment:stage.metrics?.(),story:story?.checkpoint().state,layoutPaused,fps,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
-  if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');previous=performance.now();frameCount=seconds=0;queueFrame();
+  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,environment:stage.metrics?.(),story:story?.checkpoint().state,layoutPaused,fps,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
+  if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');frameClock.reset(performance.now());frameCount=seconds=0;queueFrame();
 }
 boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});

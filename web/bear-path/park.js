@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {developmentLook} from './development-look.js?v=1';
+import {developmentLook} from './development-look.js?v=2';
 
 // D009: Ink & Stone and Cold Street are compared prototypes, not final approval.
 // They share geometry and encounter anchors; switching only changes art state.

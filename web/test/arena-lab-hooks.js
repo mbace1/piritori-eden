@@ -14,7 +14,7 @@ window.labAudit={
   replay(){const saved=checkpoint(session);return JSON.stringify(restoreSession(content,saved).snapshot())===JSON.stringify(session.snapshot());},
   lose(){this.lossExtension=renderer.getContext().getExtension('WEBGL_lose_context');this.lossExtension.loseContext();},
   restore(){this.lossExtension.restoreContext();},
-  visibility(){
+  visibility({sweepCells=false}={}){
     ready=false;cancelAnimationFrame(raf);raf=0;const saved={angle,zoom,target:renderer.getRenderTarget(),tone:renderer.toneMapping,shadow:renderer.shadowMap.enabled,background:world.background,fog:world.fog};
     const objects=[],decor=[];world.traverse(o=>{if(o.isMesh)objects.push({o,material:o.material,visible:o.visible,instanceColor:o.instanceColor});else if(o.isSprite||o.isPoints){decor.push([o,o.visible]);o.visible=false;}});
     const masks=new Map(),white=new T.MeshBasicMaterial({color:0xffffff,side:T.DoubleSide});
@@ -22,15 +22,18 @@ window.labAudit={
     const w=512,h=Math.round(w*area.clientHeight/area.clientWidth),target=new T.WebGLRenderTarget(w,h),pixels=new Uint8Array(w*h*4),rows=[];
     renderer.toneMapping=T.NoToneMapping;renderer.shadowMap.enabled=false;world.background=new T.Color(0);world.fog=null;
     function count(){renderer.setRenderTarget(target);renderer.render(world,camera);renderer.readRenderTargetPixels(target,0,0,w,h,pixels);let n=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i]>240&&pixels[i+1]>240&&pixels[i+2]>240)n++;return n;}
-    try{zoom=1;for(let step=0;step<8;step++){angle=.65+step*Math.PI/4;fit();stage.update(camera,[...actors.values()]);world.updateMatrixWorld(true);
-      for(const actor of actors.values()){
+    const probe=actors.values().next().value,probePosition=probe.group.position.clone();
+    const cells=sweepCells?validMoveCells(session.battle,selected()):[null];
+    try{zoom=1;for(const cell of cells){if(cell)probe.group.position.copy(position(cell));
+      for(let step=0;step<8;step++){angle=.65+step*Math.PI/4;fit();stage.update(camera,[...actors.values()]);world.updateMatrixWorld(true);
+      for(const actor of (sweepCells?[probe]:actors.values())){
         const own=new Set();actor.body.traverse(o=>{if(o.isMesh)own.add(o);});
         for(const item of objects){item.o.instanceColor=null;item.o.material=own.has(item.o)?white:mask(item.material);item.o.visible=item.visible&&(!item.material.transparent||item.material.alphaTest>0||own.has(item.o));}
         const seen=count();
         for(const other of actors.values())if(other!==actor)other.group.visible=false;
         const scenerySeen=count();for(const other of actors.values())other.group.visible=true;
-        for(const item of objects)item.o.visible=item.visible&&own.has(item.o);const full=count();rows.push({step,id:actor.id,seen,full,fraction:full?seen/full:0,sceneryFraction:full?scenerySeen/full:0});
+        for(const item of objects)item.o.visible=item.visible&&own.has(item.o);const full=count();rows.push({step,cell,id:actor.id,seen,full,fraction:full?seen/full:0,sceneryFraction:full?scenerySeen/full:0});
       }
-    }}finally{for(const item of objects){item.o.material=item.material;item.o.visible=item.visible;item.o.instanceColor=item.instanceColor;}for(const [o,v] of decor)o.visible=v;for(const m of masks.values())m.dispose();white.dispose();target.dispose();renderer.setRenderTarget(saved.target);renderer.toneMapping=saved.tone;renderer.shadowMap.enabled=saved.shadow;world.background=saved.background;world.fog=saved.fog;angle=saved.angle;zoom=saved.zoom;fit();stage.update(camera,[...actors.values()]);ready=true;queueFrame();}return rows;
+    }}}finally{probe.group.position.copy(probePosition);for(const item of objects){item.o.material=item.material;item.o.visible=item.visible;item.o.instanceColor=item.instanceColor;}for(const [o,v] of decor)o.visible=v;for(const m of masks.values())m.dispose();white.dispose();target.dispose();renderer.setRenderTarget(saved.target);renderer.toneMapping=saved.tone;renderer.shadowMap.enabled=saved.shadow;world.background=saved.background;world.fog=saved.fog;angle=saved.angle;zoom=saved.zoom;fit();stage.update(camera,[...actors.values()]);ready=true;frameClock.reset(performance.now());queueFrame();}return rows;
   }
 };

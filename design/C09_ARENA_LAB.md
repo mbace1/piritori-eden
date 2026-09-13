@@ -14,7 +14,7 @@ From a complete checkout, serve the repository root with `python -m http.server 
 
 The existing `web/bear-path/` remains the authored encounter. The laboratory has no mission costs, campaign effects, narrative NPCs or automatic save into Bear Path. Changing participant fixture starts fresh. Graphics recovery retains committed commands using its separate session key.
 
-**Hub status:** C.08 r2 remains the public hub baseline. Publishing this source branch/PR is not a hub deployment. The lab can be run by other PCs from this branch now; a separately versioned hub release remains to be made.
+**Hub status:** C.09 was published in hub commit `7eaf6ab3b100d49295dc0d2d9d80e59bbce8aaf5`; Pages run `34747147037` succeeded. The public `optionc-lab` card launches `piritori-c09/web/arena-lab/?actors=6&release=9`. Public UI movement, ranged damage and restart were verified. C.08 r2 remains the separate authored Bear Path card. See [C.09.1](C091_PERFORMANCE.md) and [release procedure](HUB_RELEASE.md) for continuation.
 
 ## What changed
 

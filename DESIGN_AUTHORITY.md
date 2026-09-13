@@ -1,5 +1,15 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — delivery includes the live hub
+
+The owner explicitly authorizes Astra to merge and publish tested changes:
+"You are the merger so go ahead and merge" and "So always publish so it's on
+the hub as well." Each playable slice batch must reach both the Piritori source
+repository and a verified public Suds Jack route. A PR or source merge alone is
+incomplete delivery. Labs retain separate labelled cards; they do not replace
+the authored campaign entry. Keep recording testing, remaining gates and exact
+release provenance. Document-only updates do not invent a playable release.
+
 ## Owner continuation, 2026-09-13 — placeholders and shared source
 
 The owner authorizes temporary placeholder characters until the approved models fit and look good, to minimize defects while the vertical slice develops. Neutral stand-ins are development equipment, not newly approved roster designs. F01/F02 retain their existing production gates. Each reviewable slice batch must be pushed to the Piritori GitHub repository with tests and handoff so other PCs/agents can continue directly. A source push is not a live deployment.
