@@ -1,6 +1,6 @@
 # C.10 proposal — readable, directed combat
 
-Status: implementation plan; not shipped. Recorded 2026-09-13 after the owner tested C.09.1.
+Status: implemented as the C.10 laboratory batch; validation/publication recorded in [C10_IMPLEMENTATION.md](C10_IMPLEMENTATION.md). The plan below is retained to distinguish implemented scope from later production targets.
 
 The owner reports that the playable is good and asks for attack animations, guns, cover, progress toward concept-art parity, Star Wars Zero Company camera features and Metal Slug Tactics telegraphing/movement. This accepts the usefulness of the playable baseline; it does not promote placeholder art or approve final rigs. C.09.1 remains the live build.
 
@@ -45,3 +45,4 @@ Compare real runtime captures with existing preferred concepts from matched view
 C.10 must demonstrate a route preview -> move to useful cover -> inspect threat -> fire/strike -> correct impact/reaction -> camera return sequence. Test both sides, legal/blocked targets, guard versus condition damage, downed units, 2/6/12 participants, portrait/landscape, keyboard/touch/controller pathways, manual camera interruption, reduced motion and graphics loss during attacks. Replay must resolve each command once and previews must leave the snapshot/RNG unchanged.
 
 Retain measured quality tiers and the C.09.1 performance baseline. Desktop emulation is not Pixel 10 Pro/iPad M2 acceptance. Publish the tested source batch, merge, publish the hub cabinet and verify its actual public route under HUB_RELEASE.md. Each playable release includes Godot port notes/vectors for changed rules. This document-only plan creates no new playable version.
+

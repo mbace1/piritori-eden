@@ -1,18 +1,20 @@
+import {createTacticalSession} from './tactics.js?v=2';
 import { createState } from '../js/v3/state.js?v=5';
 import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=2';
 
 // Same-tab emergency recovery only, never a campaign save. Replay committed
 // commands once; a partially shown animation is not a partially applied action.
 export function checkpoint(session) {
-  return {version:2,mode:session.mode,scenario:session.scenario,snapshot:session.snapshot(),
+  return {version:session.battle.tactical?3:2,mode:session.mode,scenario:session.scenario,snapshot:session.snapshot(),
     actions:session.history.map(({type,actor,value})=>({type,actor,value}))};
 }
 export function restoreSession(content,saved) {
-  if(![1,2].includes(saved?.version)||!['mixed','melee','ranged'].includes(saved.mode)||!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid training checkpoint');
+  if(![1,2,3].includes(saved?.version)||!['mixed','melee','ranged'].includes(saved.mode)||!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid training checkpoint');
   const scenario=saved.version===1?'training':saved.scenario;if(!['training','bear-path','lab-2','lab-6','lab-12'].includes(scenario))throw Error('Unknown checkpoint scenario');
+  if(scenario.startsWith('lab-')&&saved.version!==3)throw Error('Older laboratory rules require a fresh test');
   const session=createSession(content,saved.mode,scenario);
   for(const {type,actor,value} of saved.actions) {
-    if(!['move','attack','brace','item','talk','withdraw','end','auto','police'].includes(type))throw Error('Unknown checkpoint action');
+    if(!['move','attack','brace','item','talk','withdraw','end','auto','police','reload'].includes(type))throw Error('Unknown checkpoint action');
     if(actor&&actor!==session.battle.selectedId&&!session.command('select',actor).ok)throw Error('Invalid checkpoint actor');
     if(!session.command(type,value).ok)throw Error('Invalid checkpoint command');
   }
@@ -44,6 +46,7 @@ export function createSession(content, mode='mixed', scenario='training') {
     battle.repositionPolicy='legal-attack';
     for(const side of [battle.players,battle.enemies])side.forEach((u,i)=>{u.cell=`${count===1?2:count===3?i+1:i},${u.side==='player'?2:5}`;u.label=(u.side==='player'?'J':'R')+(i+1);u.name=`Stand-in ${i+1} · ${u.side==='player'?'Jade':'Rust'}`;u.role=i%2?'runner':'muscle';});
   }
+  if(lab)return createTacticalSession(battle,mode,scenario,data);
   const history=[];
   const snapshot=()=>structuredClone({round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,acted:battle.acted,units:battle.players.concat(battle.enemies),log:battle.log.slice(0,18),...(authored?{heat:battle.heat,police:battle.police,policeResolved:battle.policeResolved,policeTaken:battle.policeTaken,policeSaved:battle.policeSaved}:{})});
   function command(type,value){

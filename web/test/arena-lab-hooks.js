@@ -23,7 +23,7 @@ window.labAudit={
     renderer.toneMapping=T.NoToneMapping;renderer.shadowMap.enabled=false;world.background=new T.Color(0);world.fog=null;
     function count(){renderer.setRenderTarget(target);renderer.render(world,camera);renderer.readRenderTargetPixels(target,0,0,w,h,pixels);let n=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i]>240&&pixels[i+1]>240&&pixels[i+2]>240)n++;return n;}
     const probe=actors.values().next().value,probePosition=probe.group.position.clone();
-    const cells=sweepCells?validMoveCells(session.battle,selected()):[null];
+    const cells=sweepCells?Array.from({length:LANES*totalRows()},(_,i)=>`${i%LANES},${Math.floor(i/LANES)}`).filter(c=>!session.battle.cover.get(c)?.hardBlock&&!all().some(u=>u.alive&&u.id!==probe.id&&u.cell===c)):[null];
     try{zoom=1;for(const cell of cells){if(cell)probe.group.position.copy(position(cell));
       for(let step=0;step<8;step++){angle=.65+step*Math.PI/4;fit();stage.update(camera,[...actors.values()]);world.updateMatrixWorld(true);
       for(const actor of (sweepCells?[probe]:actors.values())){

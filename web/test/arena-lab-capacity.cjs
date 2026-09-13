@@ -1,6 +1,6 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const base=process.env.ARENA_LAB_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/arena-lab/';
-const out=process.env.ARENA_LAB_OUTPUT||'.private/c091-capacity';fs.mkdirSync(out,{recursive:true});
+const out=process.env.ARENA_LAB_OUTPUT||'.private/c10-capacity';fs.mkdirSync(out,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({channel:'msedge',headless:true,args:['--enable-unsafe-swiftshader']});
  try{
@@ -16,7 +16,7 @@ const out=process.env.ARENA_LAB_OUTPUT||'.private/c091-capacity';fs.mkdirSync(ou
   const tag=page.locator('.actor-label').first(),before=await tag.getAttribute('style');
   await page.locator('#rotate').click();await page.waitForTimeout(150);assert.notEqual(await tag.getAttribute('style'),before,'rotate updates label anchors');
   await page.locator('#resetcam').click();
-  await page.locator('[data-action="move"]').click();await page.locator('[data-cell]').first().click();
+  await page.locator('[data-action="move"]').click();await page.locator('[data-cell]').first().click();await page.locator('#commit-preview').click();
   // Resize while the actual presentation is running; committed action survives.
   await page.setViewportSize({width:412,height:915});await page.waitForFunction(()=>!fightModule.metrics().busy&&!fightModule.metrics().layoutPaused);
   assert.equal(await page.evaluate(()=>fightModule.metrics().history[0].type),'move');
