@@ -2,6 +2,20 @@
 
 ## C.16 candidate — finalize art before mechanics
 
+2026-09-14: C.15 remains the verified public release. C.16 PR #81 has failed
+`night-places-browser` and `wet-environment` CI checks; do not merge or deploy
+until resolved. The former timed out scrolling to Equip; the latter did not
+obtain an FPS sample after a fixed delay. The cause is not yet established.
+Local passing suites do not override those failures. A source audit also caught
+an omitted `crew-run/ui.js` cache-token update; include it with the corrected
+main entry tokens and verify all 55 runtime blobs against the new source tree.
+
+The owner asks for stronger stylization while mechanics are developing well.
+Six separate numbered [concepts](design/concepts/c16-stylized/README.md) now
+explore material and shading directions, with 04–06 pushing painted shapes,
+graphic two-tone and ink. They are illustrations, not runtime captures or
+approved art. Keep neutral figures and mechanics intact pending a style choice.
+
 Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
 Read [C.16 art finish](design/C16_ART_FINISH.md). Recessed windows, passage depth,
 cavity shading, wear, smaller wet paving and bounded planar reflections refine

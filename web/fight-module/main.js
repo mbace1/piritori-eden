@@ -1,6 +1,6 @@
 import {gunView,blendGunView} from './aim-camera.js?v=1';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=2';
-import {mountCrew} from '../crew-run/ui.js?v=5';
+import {mountCrew} from '../crew-run/ui.js?v=6';
 import {portraitStudio} from '../crew-run/portraits.js?v=1';
 import {EDGES,coverEdges} from './cover-edges.js?v=1';
 import * as T from 'three';

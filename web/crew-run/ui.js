@@ -1,4 +1,4 @@
-import {LOCATIONS,locationId} from './locations.js?v=1';
+import {LOCATIONS,locationId} from './locations.js?v=2';
 import {SAVE_KEY,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=2';
 import {icon} from './icons.js?v=1';
 import {coordinate} from '../fight-module/tactics.js?v=5';

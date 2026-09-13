@@ -82,6 +82,14 @@ Final local suite: 36 views, gun preview/confirm/cancel and complete outings pas
 in all four layouts. A repeated desktop recovery sample reported 0–1 FPS during
 the initial shader-warmup window, then two consecutive 30 FPS windows. Treat
 that recovery hitch as an open profiling item; do not call recovery hitch-free.
-The owner has now requested stronger stylization: see the three numbered
+The owner has now requested stronger stylization: see the six numbered
 [finish concepts](concepts/c16-stylized/README.md). Await a direction choice before
 claiming the art finish is locked. Current verified public build remains C.15.
+
+2026-09-14 CI follow-up: PR #81's night-places check timed out scrolling to
+Equip; wet-environment failed its FPS-sampled assertion after a fixed wait.
+Both remain unresolved release blockers. Local Edge results are not Linux CI
+or physical-device acceptance. The 55-file source audit found `crew-run/ui.js`
+still using an older locations import in the published subset; the follow-up
+includes that file and advances the importing entry tokens. Do not describe
+the earlier local test suite as verification of byte-identical published code.
