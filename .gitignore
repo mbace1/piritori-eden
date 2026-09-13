@@ -28,3 +28,5 @@ __pycache__/
 # Repo-local drafts, generated masters, inspection renders and credentials.
 # These are working files, not reviewable source assets.
 /.private/
+
+.dream-loop/

@@ -1,16 +1,27 @@
 import * as T from 'three';
-import {rainSurface} from './rain-surface.js?v=1';
+import {rainSurface} from './rain-surface.js?v=2';
 
 // C.09 arena laboratory. This is an authored low-cost light probe, not live
 // reflections or the Dream Loop demo's renderer. No external asset service.
-export function developmentLook(world,renderer,group,groundMaterial,mats,directed=false){
+export function developmentLook(world,renderer,group,groundMaterial,mats,directed=false,surfaceOptions={}){
   const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
   const cx=canvas.getContext('2d'),sky=cx.createLinearGradient(0,0,0,128);
   sky.addColorStop(0,directed?'#41647b':'#7797bb');sky.addColorStop(.48,directed?'#314b59':'#516b80');sky.addColorStop(.55,'#1c282b');sky.addColorStop(1,'#182320');cx.fillStyle=sky;cx.fillRect(0,0,256,128);
   for(const [x,y,w,h] of [[38,42,10,17],[172,43,14,14],[112,53,5,7]]){cx.fillStyle='#ffde9c';cx.fillRect(x,y,w,h);}
   const source=new T.CanvasTexture(canvas);source.mapping=T.EquirectangularReflectionMapping;source.colorSpace=T.SRGBColorSpace;
-  let probe;
-  function rebuildProbe(){probe?.dispose();const generator=new T.PMREMGenerator(renderer);probe=generator.fromEquirectangular(source);world.environment=probe.texture;generator.dispose();}
+  let probe,beforeCapture=()=>()=>{};
+  function rebuildProbe(){
+    probe?.dispose();const generator=new T.PMREMGenerator(renderer);
+    if(surfaceOptions.courtyard){
+      // Capture only this static stage, once. No actors, floor feedback or
+      // per-frame reflector. Rebuilt only after graphics-context restoration.
+      const hidden=[];world.traverse(o=>{if(o.visible&&((o.parent===world&&o.isGroup&&o!==group)||(o.isMesh&&(o.material===groundMaterial||o.name==='wet-paving')))){hidden.push(o);o.visible=false;}});
+      const oldEnvironment=world.environment;world.environment=null;const restoreCutaways=beforeCapture();
+      const cube=new T.WebGLCubeRenderTarget(128,{type:T.HalfFloatType});const eye=new T.CubeCamera(.1,55,cube);eye.position.set(0,1.4,-1.4);
+      try{eye.update(renderer,world);probe=generator.fromCubemap(cube.texture);}finally{cube.dispose();for(const o of hidden)o.visible=true;world.environment=oldEnvironment;restoreCutaways();}
+    }else probe=generator.fromEquirectangular(source);
+    world.environment=probe.texture;generator.dispose();
+  }
   rebuildProbe();
   const tile=document.createElement('canvas');tile.width=tile.height=256;const tx=tile.getContext('2d');
   let seed=71;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
@@ -27,14 +38,15 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
     shader.vertexShader='varying vec3 pavementWorld;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npavementWorld=(modelMatrix*vec4(position,1.0)).xyz;');
     shader.fragmentShader='varying vec3 pavementWorld;\n'+shader.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nfloat wet=sin(pavementWorld.x*1.7+sin(pavementWorld.z*.8))*sin(pavementWorld.z*1.3);\nroughnessFactor=mix(.20,.74,smoothstep(-.35,.4,wet));');
   };
-  const rain=directed?rainSurface():null;if(rain){surface.dispose();surface=rain.material;}
-  const paving=new T.Mesh(new T.PlaneGeometry(8.8,15.8),surface);paving.rotation.x=-Math.PI/2;paving.position.set(0,.006,-.5);paving.receiveShadow=true;group.add(paving);
+  const rain=directed?rainSurface(surfaceOptions):null;if(rain){surface.dispose();surface=rain.material;}
+  const paving=new T.Mesh(new T.PlaneGeometry(surfaceOptions.courtyard?20:8.8,surfaceOptions.courtyard?26:15.8),surface);paving.name='wet-paving';paving.rotation.x=-Math.PI/2;paving.position.set(0,.006,-.5);paving.receiveShadow=true;group.add(paving);
   for(const key of ['iron','granite','stone']){mats[key].roughness=key==='iron'?.38:.68;mats[key].envMapIntensity=.6;}
 
   // Ortho view-space cutaway around every fighter. Only scenery fragments in
   // front of the figure disappear; cover/raycast/game state remain untouched.
   const people={value:Array.from({length:12},()=>new T.Vector4(0,0,-1000,0))},count={value:0};
   const focusStart={value:new T.Vector4(0,0,0,0)},focusEnd={value:new T.Vector3()};
+  beforeCapture=()=>{const previousCount=count.value,previousFocus=focusStart.value.w;count.value=0;focusStart.value.w=0;return()=>{count.value=previousCount;focusStart.value.w=previousFocus;};};
   const modified=new Set();
   group.traverse(object=>{if(!object.isMesh||object===paving)return;
     for(const material of [].concat(object.material)){if(modified.has(material)||material===groundMaterial)continue;modified.add(material);
@@ -64,5 +76,5 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   function update(camera,actors=tracked,focus=null){tracked=actors;camera.updateMatrixWorld();focusStart.value.w=focus?1:0;
     if(focus){point.copy(focus.from).setY(1.1).applyMatrix4(camera.matrixWorldInverse);focusStart.value.set(point.x,point.y,point.z,1);focusEnd.value.copy(focus.to).setY(1.1).applyMatrix4(camera.matrixWorldInverse);}
     actors=actors.filter(a=>a.group.visible);camera.updateMatrixWorld();count.value=Math.min(12,actors.length);for(let i=0;i<count.value;i++){const a=actors[i];point.copy(a.group.position).add(new T.Vector3(0,a.down?.3:.96,0)).applyMatrix4(camera.matrixWorldInverse);people.value[i].set(point.x,point.y,point.z,a.down?.75:1.14);}}
-  return {update,recover:rebuildProbe,metrics:()=>({lightProbe:'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:directed?'After the Rain / 512px albedo, roughness, bump; analytic lamp glints':'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){rain?.dispose();probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
+  return {update,recover:rebuildProbe,metrics:()=>({lightProbe:surfaceOptions.courtyard?'static scenery 128px cubemap / once at load and context recovery':'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:surfaceOptions.courtyard?'generated painted setts / coherent wet roughness + static scene probe':directed?'After the Rain / 512px albedo, roughness, bump; analytic lamp glints':'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){rain?.dispose();probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
 }

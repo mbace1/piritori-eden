@@ -1,6 +1,6 @@
 import {EDGES} from '../fight-module/cover-edges.js?v=1';
 import * as T from 'three';
-import {developmentLook} from './development-look.js?v=4';
+import {developmentLook} from './development-look.js?v=5';
 
 // D009: Ink & Stone and Cold Street are compared prototypes, not final approval.
 // They share geometry and encounter anchors; switching only changes art state.

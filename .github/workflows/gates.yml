@@ -202,3 +202,4 @@ jobs:
           python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c12-server.log 2>&1 &
           node web/test/crew-run-browser.cjs
           node web/test/gun-aim-camera.cjs
+          node web/test/night-places-browser.cjs

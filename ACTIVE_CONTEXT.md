@@ -1,6 +1,17 @@
 # Piritori active context
 
-## C.14 live — After the Rain art and gun aiming
+## C.15 candidate — Night Places
+
+Owner wants new arenas, minimalist rain-concept UI, mood lights and varied cameras.
+Read [C.15](design/C15_NIGHT_PLACES.md) and [GitHub resources](design/C15_GITHUB_RESOURCES.md).
+Courtyard/service-yard/park selection uses the existing separate Night Shift rules.
+Twelve Blender motifs and two painted textures, static scene reflection probe,
+compact crew drawer and three camera presets are implemented. Publication state
+is recorded in C15_RELEASE.json after public verification. Until then C.14 below
+is the verified public release. No concept parity or physical-device approval.
+
+
+## C.14 previous public release — After the Rain art and gun aiming
 
 Owner: “2 looks great, let's aim for that. Camera angles can be used for aiming
 guns like zero company”. Use [02](design/concepts/c13-review/02-after-the-rain.png)
@@ -90,7 +101,7 @@ Next: [Option C vertical-slice design](design/OPTION_C_VERTICAL_SLICE.md). Prove
 
 ## Runtime truth at this update
 
-C.13 is live as the separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=13). Read [release evidence](design/C13_RELEASE.json), [art/UI direction](design/C13_ART_AND_UI.md) and [crew rules](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77/#78); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
+C.14 is the last verified live separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=14). Read [release evidence](design/C14_RELEASE.json), [art/UI direction](design/C13_ART_AND_UI.md) and [crew rules](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77/#78); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
 
 
 ## C.09 source continuation

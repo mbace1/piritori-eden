@@ -1,4 +1,4 @@
-"""Stage the C.14 public cabinet from an exact, clean source checkout.
+"""Stage the C.15 public cabinet from an exact, clean source checkout.
 
 No network/upload. Only the explicit runtime allowlist is copied. Signed URLs,
 raw masters and art review sheets cannot enter through a directory-wide copy.
@@ -18,6 +18,11 @@ def stage(source, deployed_manifest, output, commit):
     manifest = build(json.loads((source/'art/v3/manifest.json').read_text(encoding='utf-8')),
                      json.loads(deployed_manifest.read_text(encoding='utf-8')))
     data = {name: (source/name).read_bytes() for name in files}
+    kit = json.loads(data['web/crew-run/assets/kallio-kit-v01.manifest.json'])
+    for asset in kit['files']:
+        raw = data['web/crew-run/assets/'+asset['file']]
+        if len(raw) != asset['bytes'] or hashlib.sha256(raw).hexdigest() != asset['sha256']:
+            raise ValueError('Scenery integrity mismatch: '+asset['file'])
     for asset in manifest['assets']:
         if asset['file'].startswith('https:'):
             continue
@@ -35,20 +40,20 @@ def stage(source, deployed_manifest, output, commit):
                 raise ValueError('Split module cache token: '+rel)
             versions[module] = token
     data['art/v3/manifest.json'] = (json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
-    entry = 'web/crew-run/?release=14'
-    release = {'build':'C.14','source_repository':'mbace1/piritori-eden',
+    entry = 'web/crew-run/?release=15'
+    release = {'build':'C.15','source_repository':'mbace1/piritori-eden',
                'source_commit':commit,'entry':entry,'status':'connected-crew-pilot',
                'character_provider':'neutral stand-ins','physical_devices_verified':False,
                'transforms':['Scope runtime art register; preserve immutable fighter URLs'],
                'sha256':{name:hashlib.sha256(raw).hexdigest() for name,raw in sorted(data.items())}}
     data['release.json'] = (json.dumps(release,indent=2)+'\n').encode()
-    data['index.html'] = ('<!doctype html><meta charset="utf-8"><title>Piritori C.14</title>'
+    data['index.html'] = ('<!doctype html><meta charset="utf-8"><title>Piritori C.15</title>'
                           f'<meta http-equiv="refresh" content="0;url={entry}"><a href="{entry}">Open arena</a>\n').encode()
-    data['VERSIONS.md'] = (f'# C.14 — Night Shift crew pilot\n\nSource: {commit}.\n\n'
-        'After the Rain wet paving and practical reflections, reversible gun aiming view, action focus and exact overview return. Persistent C.12 rules and saves retained. '
+    data['VERSIONS.md'] = (f'# C.15 — Night Shift crew pilot\n\nSource: {commit}.\n\n'
+        'Night Places courtyard and service-yard Blender kit, painted textures, compact command strip, three camera presets; reversible gun aiming and exact return. Persistent C.12 rules and saves retained. '
         '2/6/12-person neutral fixtures; campaign rules and character gates unchanged. '
         'Pixel/iPad acceptance remains pending.\n\n'
-        '## Port\n\nGodot: reproduce C.14 wet surfaces, shoulder-side gun composition, preview/confirm/cancel, reduced-motion behavior and exact planning-view return. Preserve C.12 vectors; invalidate projected labels '
+        '## Port\n\nGodot: reproduce C.15 wet surfaces, shoulder-side gun composition, preview/confirm/cancel, reduced-motion behavior and exact planning-view return. Preserve C.12 vectors; invalidate projected labels '
         'on camera, actor, text or viewport changes. Campaign keeps its authored resolver.\n').encode()
     # A new directory prevents stale files from an older, broader cabinet leaking.
     output.mkdir(parents=True,exist_ok=False)

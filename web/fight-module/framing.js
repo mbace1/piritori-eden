@@ -2,9 +2,9 @@ import * as T from 'three';
 
 // Frame the whole legal board, including empty edge cells and headroom. The
 // active fighters never determine the fit, so casualties don't move the camera.
-export function fitBattleCamera(camera,{width,height,angle,zoom,lanes,rows,cell,tight=false}) {
+export function fitBattleCamera(camera,{width,height,angle,zoom,lanes,rows,cell,tight=false,elevation=10}) {
   const aspect=width/height,top=Math.min(66,height*.22),bottom=24,side=16;
-  camera.position.set(Math.sin(angle)*13,10,Math.cos(angle)*13);
+  camera.position.set(Math.sin(angle)*13,elevation,Math.cos(angle)*13);
   camera.lookAt(0,.55,0);camera.updateMatrixWorld(true);
   const corners=[];
   for(const x of [-1,1])for(const z of [-1,1])for(const y of [0,2.3])
@@ -16,7 +16,7 @@ export function fitBattleCamera(camera,{width,height,angle,zoom,lanes,rows,cell,
   const span=overviewSpan/zoom,cx=(minX+maxX)/2,cy=(minY+maxY)/2+(top-bottom)*span/(2*height);
   Object.assign(camera,{left:cx-span*aspect/2,right:cx+span*aspect/2,top:cy+span/2,bottom:cy-span/2});
   camera.updateProjectionMatrix();
-  return {overviewSpan,span,zoom,angle,aspect,safeInset:{top,bottom,side}};
+  return {overviewSpan,span,zoom,angle,elevation,aspect,safeInset:{top,bottom,side}};
 }
 
 export const intersects=(a,b,gap=0)=>a.x<b.x+b.width+gap&&a.x+a.width+gap>b.x&&a.y<b.y+b.height+gap&&a.y+a.height+gap>b.y;

@@ -1,0 +1,42 @@
+/* C.15: shallow command strip, one selected person, optional crew/camera drawers. */
+body:not(.crew-menu){grid-template-columns:minmax(0,1fr);grid-template-rows:48px minmax(0,1fr) 136px}
+body:not(.crew-menu) header{grid-row:1;padding:2px 16px;background:#11191de8}
+body:not(.crew-menu) #arena{grid-row:2}
+body:not(.crew-menu) #mission-bar{position:absolute;top:52px;left:12px;z-index:3;max-width:calc(100% - 120px);padding:5px 9px;display:flex;flex-wrap:wrap;gap:3px 12px;background:#111a20de;border:1px solid #736b55;font-size:13px;pointer-events:none}
+#mission-bar #mission-pressure,#mission-bar #mission-count{font-size:14px}
+body:not(.crew-menu) #panel{grid-row:3;padding:5px 12px;overflow:auto;border-top-width:1px;position:relative}
+#crew-picker{position:absolute;left:12px;top:5px;z-index:3;min-height:44px;min-width:55px;font:600 16px var(--display);padding:4px 7px;background:#273437}
+#roster[hidden],#camera-panel[hidden]{display:none!important}
+#roster:not([hidden]){padding-left:65px;min-height:44px;margin-bottom:5px}
+.command-console{grid-template-columns:216px minmax(0,1fr) 180px;gap:9px;margin:0}
+#selected-unit{min-height:78px;padding:4px 6px 4px 62px;gap:7px;position:static}
+#selected-unit>.unit-portrait{display:none}.selected-info h2{font-size:18px;margin:0 0 3px}
+.vitality{font-size:10px}.condition-pips{display:none}.action-budget{gap:3px;margin-top:5px}.state-stamp{font-size:11px;padding:3px 4px}
+#actions button{min-height:56px;font-size:18px;padding:5px 5px 17px;gap:5px}#actions .paper-icon{width:24px;height:24px}#actions .command-cost{font-size:9px;bottom:6px}
+#actions button{min-width:0}body:not(.crew-menu) #panel{grid-column:1}body:not(.crew-menu) header{grid-column:1}
+#hint{min-height:16px;font-size:12px;margin-bottom:3px}
+.command-utility{position:static}#mission-actions{margin:0 0 3px}#mission-actions:empty{display:none}
+#mission-actions button{min-height:44px;font-size:14px}#utility-actions button{font-size:16px}
+#enemy-plans{margin-top:5px;padding-top:5px;font-size:12px;gap:5px}#enemy-plans>p{flex:1 1 210px}
+#roundbar{top:58px;left:12px;padding:5px 8px;font-size:18px}
+#camera-tools{display:block;right:12px;top:6px;max-width:260px}#camera-tools #camera-menu{width:56px;float:right;font:600 16px var(--display)}
+#camera-panel{clear:both;padding:7px;background:#111b21f5;border:1px solid #89795b;max-width:260px;display:flex;flex-wrap:wrap;gap:4px}
+.camera-presets{display:flex;gap:4px;width:100%}#camera-tools .camera-presets button{width:auto;flex:1;font:600 16px var(--display);padding:5px}
+.location-choice{display:grid;gap:7px;margin-top:18px;max-width:390px;background:#152027ed;padding:12px;border-left:2px solid #997e57}.location-choice span{font:11px monospace;color:#ccb991}.location-choice small{font:12px/1.4 Arial,sans-serif}.location-choice select{min-width:0;width:100%;font-size:16px}
+body.crew-menu #crew-picker{display:none}
+@media(max-width:700px) and (orientation:portrait){
+ body:not(.crew-menu){grid-template-rows:48px minmax(0,1fr) 231px}
+ body:not(.crew-menu) header{padding:2px 10px}header small{display:none}header>div{display:block}
+ body:not(.crew-menu) #mission-bar{max-width:calc(100% - 92px);font-size:12px;top:51px;left:8px;gap:2px 7px}#mission-bar #mission-count,#mission-bar #mission-pressure{font-size:12px;padding-left:0;border:0}
+ body:not(.crew-menu) #panel{padding:4px 8px}#crew-picker{left:8px;top:4px;width:55px}
+ .command-console{grid-template-columns:minmax(0,1fr);gap:4px}.command-centre{grid-column:1;grid-row:2}#selected-unit{min-height:48px;height:auto;padding-left:65px}#selected-unit .selected-info{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}.selected-info h2{font-size:18px}.vitality{font-size:10px}.action-budget{margin:0}
+ #actions{gap:4px}#actions button{min-height:48px;font-size:16px;gap:3px;padding:4px 3px 15px}#actions .paper-icon{width:19px;height:19px}#actions kbd{display:none}#hint{font-size:12px}
+ .command-utility{display:flex;gap:5px;grid-row:3}#mission-actions{flex:1;margin:0}#utility-actions{flex:1}#mission-actions:has(button:not([hidden])){display:flex}#mission-actions:not(:has(button:not([hidden]))){display:none}#utility-actions button{min-height:44px}
+ #enemy-plans{display:flex;margin-top:4px;padding-top:3px}.enemy-plan{max-width:none;font-size:11px;padding:1px 5px}#enemy-plans>p{flex-basis:100%;font-size:11px}#roundbar{top:68px;left:8px;font-size:16px}#camera-tools{right:8px}
+}
+@media(max-height:560px) and (orientation:landscape){
+ body:not(.crew-menu){grid-template-rows:44px minmax(0,1fr) 118px}body:not(.crew-menu) header{height:44px;padding:0 8px}header small{display:none}
+ body:not(.crew-menu) #mission-bar{top:48px;font-size:11px;padding:3px 7px;max-width:calc(100% - 100px)}#mission-count,#mission-pressure{font-size:12px!important}#roundbar{top:41px;left:8px;font-size:15px}
+ .command-console{grid-template-columns:180px minmax(0,1fr) 158px;gap:5px}#selected-unit{min-height:63px;padding-left:58px}.selected-info h2{font-size:16px}.vitality{font-size:9px}.state-stamp{font-size:10px;padding:2px 3px}
+ #actions button{min-height:48px;font-size:15px;gap:3px}#actions .paper-icon{width:19px;height:19px}#actions kbd{display:none}#hint{font-size:11px}#actions .command-cost{font-size:8px}#utility-actions button{font-size:14px}#enemy-plans{margin-top:4px;font-size:11px}#enemy-plans>p,.enemy-plan{font-size:11px}#mission-actions button{min-height:44px;font-size:13px}
+}
