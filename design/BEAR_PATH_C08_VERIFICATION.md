@@ -1,6 +1,6 @@
 # Bear Path C.08 — art comparison and verification
 
-Local verification complete; publication is recorded separately in the hub release receipt and PR #68. This milestone implements two owner-approved directions from D009, **Ink & Stone** and **Cold Street**, on the same park. It does not claim concept parity or final character acceptance.
+Local verification complete; publication is recorded separately in the hub release receipt and PR #68. This milestone implements two comparison looks from D009, **Ink & Stone** and **Cold Street**, on the same park. The owner subsequently clarified that these were relative preferences among limited options, not approved art directions. It does not claim concept parity or final character acceptance.
 
 ## What is included
 

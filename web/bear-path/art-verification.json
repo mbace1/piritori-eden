@@ -3,10 +3,6 @@
   "date": "2026-09-13",
   "status": "local_checks_passed_publication_pending",
   "decision": "D009",
-  "approved_directions": [
-    "Ink & Stone",
-    "Cold Street"
-  ],
   "runtime_acceptance": "prototype; owner/device review pending",
   "assets": [
     {
@@ -60,5 +56,10 @@
     "ipad_m2": "pending"
   },
   "character_state": "registered v05 prototypes; rejected rig/motion gate unchanged; private v06 excluded",
-  "campaign_applied": false
+  "campaign_applied": false,
+  "compared_looks": [
+    "Ink & Stone",
+    "Cold Street"
+  ],
+  "owner_review": "relative preference among v04 alternatives; no locked art-direction approval; clarified 2026-09-13"
 }

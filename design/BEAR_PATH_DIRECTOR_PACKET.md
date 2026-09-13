@@ -41,6 +41,6 @@ Reproduce the encounter command/history contract and canonical request/result ID
 
 ## D009 — two art alternatives
 
-Owner, 2026-09-13: “Middle and right. Seems like good 2 alt”. Keep [v04](concepts/bear-path-art-directions-v04.png) columns 2 **Ink & Stone** and 3 **Cold Street** as distinct environment directions. Neither is selected over the other; column 1 is not selected, not rejected. Ink is merely the initial comparison default. Exact generated signage, layout and people are not new canon.
+Owner, 2026-09-13: “Middle and right. Seems like good 2 alt”. Keep [v04](concepts/bear-path-art-directions-v04.png) columns 2 **Ink & Stone** and 3 **Cold Street** as distinct reference candidates. Owner clarification: these are relative preferences among limited options, not approved/locked directions; broader visual exploration remains open. Neither is selected over the other; column 1 is not selected, not rejected. Ink is merely the initial comparison default. Exact generated signage, layout and people are not new canon.
 
 The C.08 button swaps the shared scene's art profile without moving its camera or resetting an encounter. Ink uses warmer ochre, stronger painted/chiseled planes and reduced gravel contrast. Cold uses grey-blue gravel, muted timber/foliage and narrower warm practical lights. Both share the authored cover anchors and retain an open exit. The environment and character acceptance gates remain separate. See [C.08 verification](BEAR_PATH_C08_VERIFICATION.md).

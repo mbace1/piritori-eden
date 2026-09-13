@@ -1,5 +1,18 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — active design and production memory
+
+Read [ACTIVE_CONTEXT.md](ACTIVE_CONTEXT.md) before resuming. It links the existing Meshy handoff, completed paid pilot, pipeline and current manifest rather than replacing them. Preserve the Art Bible while pursuing substantial Dream Loop lighting/material/depth improvements. Wear is roughly 3–4/10; the world should still be beautiful. Encounter framing supports 2 to 10+ participants, not a four-person game limit. Use separate numbered, materially different arena screen targets with attainable character fidelity; park UI and other scene exploration separately. The next Option C slice must prove a reproducible Meshy/Blender production route as well as visual quality. A/C are battle alternatives; B is a separate map/run axis. See [the slice design](design/OPTION_C_VERTICAL_SLICE.md). These are owner directions and a design brief, not a new live-build or production-readiness claim.
+
+## Owner clarification, 2026-09-13 — preference is not approval
+
+The owner clarified the v04 comparison: "And remember I'm not approving necessarily but choosing out of options what is better. There in that art i had very little variation to choose from".
+
+Treat "middle and right" for v04 as relative preference among limited options. The earlier D009 interpretation overstated this as approved art direction; it is corrected. Ink & Stone and Cold Street remain useful reference candidates and implemented C.08 comparison prototypes, not a locked art direction or accepted asset quality. Broader visual exploration is requested. Compare shape construction, edge language, materials, character readability and spatial staging, not just colour grading.
+
+Record comparative preference, explicit concept acceptance and engine/device acceptance separately. A ranking does not close the exploration or authorize promotion of a production asset. Preserve earlier explicit approvals within their actual scope; this correction does not silently revoke or broaden them.
+
+
 ## Owner ruling, 2026-09-12 — shared meeting and battle locations
 
 The GDD's new "places, shared markets and continuous encounters" ruling binds

@@ -351,4 +351,8 @@ Two specific gaps already found: Arvo has no authored enterable venue; `enc-cour
 
 The Bear Path director packet now binds six beats to the playable scene: arrival, readable situation, information, commitment, resolution and remembered return. Automated browser checks cover these beats. Physical Pixel 10 Pro/iPad M2 playtesting, final rigs and campaign integration remain pending. Do not commission every mission's assets before this packet proves the process.
 
-D009 (2026-09-13): the owner selected **Ink & Stone** and **Cold Street**, columns 2 and 3 of the v04 Bear Path art-direction sheet, as two alternatives. C.08 compares them on one layout without changing the camera or encounter. Amber Autumn is not selected. This direction approval does not accept final runtime assets or rigs.
+D009 corrected (2026-09-13): v04 columns 2 **Ink & Stone** and 3 **Cold Street** are relative preferences among the shown options, not approved or locked art directions. The owner said the sheet offered too little variation and requested broader, more detailed exploration. C.08 remains a comparison prototype on one layout; its existence does not establish acceptance. Amber Autumn is less preferred in that comparison, not rejected.
+
+D010 records the review distinction: ranking an option, accepting a concept and accepting an in-engine asset are separate statements. New studies should expose materially different shape, edge, surface and staging choices. Earlier explicit approvals retain their original scope.
+
+D011 (2026-09-13): [ACTIVE_CONTEXT](../ACTIVE_CONTEXT.md) records the current arena, visual-quality, variable-participant and production directives. The [Option C slice design](OPTION_C_VERTICAL_SLICE.md) applies the existing Meshy handoffs and treats production reproducibility as part of the A/C decision. It is a design brief, not a new live build.

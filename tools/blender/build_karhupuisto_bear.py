@@ -78,5 +78,5 @@ master=OUT/'bear-landmark-v01.blend';bpy.ops.wm.save_as_mainfile(filepath=str(ma
 target=OUT/'bear-landmark-v01.glb'
 bpy.ops.export_scene.gltf(filepath=str(target),export_format='GLB',use_selection=True,export_animations=False,export_yup=True,export_extras=True)
 triangles=sum(len(o.data.loop_triangles) if len(o.data.loop_triangles) else sum(len(p.vertices)-2 for p in o.data.polygons) for o in [bear,detail])
-report={'asset':'prop-karhupuisto-bear-v01','producer':'Blender 5.2 local deterministic sculpt','triangles':triangles,'objects':2,'textures':0,'bytes':target.stat().st_size,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'concept_approval':'v04 columns 2 and 3','runtime_acceptance':'pending visual check','forward':'X','export_up':'Y','master_private':True}
+report={'asset':'prop-karhupuisto-bear-v01','producer':'Blender 5.2 local deterministic sculpt','triangles':triangles,'objects':2,'textures':0,'bytes':target.stat().st_size,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'concept_preference':'v04 columns 2 and 3; relative preference only, direction remains open','runtime_acceptance':'pending visual check','forward':'X','export_up':'Y','master_private':True}
 (OUT/'bear-landmark-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

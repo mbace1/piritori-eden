@@ -1,9 +1,9 @@
 # Bear Path art directions — v04
 
 Date: 2026-09-13
-Status: **Columns 2 and 3 approved as two alternatives. Concept art only; not an engine screenshot.**
+Status: **Columns 2 and 3 comparatively preferred; exploration remains open. No art-direction approval implied. Concept art only; not an engine screenshot.**
 
-Owner answer, 2026-09-13: “Middle and right. Seems like good 2 alt”. D009 records Ink & Stone and Cold Street as separate implementation targets. Amber Autumn is not selected, not rejected. Approval applies to direction, not final runtime quality or character rigs. Sheet SHA-256: `b120f703000527858552087073a43d9d01d4252647a309425f21993d15841512`.
+Owner answer, 2026-09-13: “Middle and right. Seems like good 2 alt”. D009 originally overstated this as approval and is now corrected following the owner clarification. Ink & Stone and Cold Street are relatively preferred candidates from a sheet with insufficient variation, not locked implementation targets. Amber Autumn is not rejected. No direction, runtime-quality or rig approval follows from this ranking. Sheet SHA-256: `b120f703000527858552087073a43d9d01d4252647a309425f21993d15841512`.
 
 Owner steering: "Make more detailed concept art and I will choose a direction."
 
@@ -16,7 +16,7 @@ Three columns, each with a wide tactical view above and environmental/material c
 2. **Ink & Stone**: stronger authored planes, selective ink, broad paint marks and readable sculpted silhouettes.
 3. **Cold Street**: cooler restrained palette, weathered municipal materials, smaller warm accents.
 
-The generated viewpoints illustrate direction; exact top/bottom spatial continuity, signs, tram route numbers and incidental character appearances are not canon or approved assets. All four fighters are supporting scale/pose references. The nearby tram implies city context, not an authored route placement. Columns 2 and 3 are owner-selected alternatives; do not merge them silently into one direction.
+The generated viewpoints illustrate direction; exact top/bottom spatial continuity, signs, tram route numbers and incidental character appearances are not canon or approved assets. All four fighters are supporting scale/pose references. The nearby tram implies city context, not an authored route placement. Columns 2 and 3 are relatively preferred references; keep their differences visible while exploring beyond this narrow comparison.
 
 C.08 implements these as two selectable looks on one layout. Its Blender bear, ground surface and scenery remain prototype environment assets until visual/device acceptance; see the repository C.08 verification record for actual release status. Character rigs remain provisional v05. No Meshy jobs were submitted.
 

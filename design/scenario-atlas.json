@@ -1528,16 +1528,43 @@
     {
       "id": "D009",
       "topic": "bear_path_art_alternatives",
-      "status": "answered",
+      "status": "relative_preference_recorded; exploration_open",
       "date": "2026-09-13",
       "owner_answer": "Middle and right. Seems like good 2 alt",
-      "interpretation": "Keep v04 columns 2 Ink & Stone and 3 Cold Street as distinct approved environment art directions on a shared Bear Path layout. Neither is selected over the other. Amber Autumn is not selected, not rejected.",
+      "interpretation": "v04 Ink & Stone and Cold Street are preferred among the limited options shown. They are not approved or locked art directions. C.08 compares them as prototypes. Broader variation and detailed exploration are requested.",
       "reference": {
         "file": "bear-path-art-directions-v04.png",
         "sha256": "b120f703000527858552087073a43d9d01d4252647a309425f21993d15841512"
       },
       "implementation": "C.08 A/B art switch; same camera and encounter state. Runtime/device acceptance remains separate.",
-      "scope": "Direction only. No character-rig promotion, generated geographic/signage canon, campaign or combat-rule changes."
+      "scope": "Relative preference only; no final direction acceptance, character-rig promotion, generated geographic/signage canon, campaign or combat-rule change.",
+      "owner_clarification": "And remember I'm not approving necessarily but choosing out of options what is better. There in that art i had very little variation to choose from"
+    },
+    {
+      "id": "D010",
+      "topic": "review_preference_vs_approval",
+      "status": "owner_clarified",
+      "date": "2026-09-13",
+      "owner_answer": "And remember I'm not approving necessarily but choosing out of options what is better. There in that art i had very little variation to choose from",
+      "interpretation": "Record rankings, explicit concept acceptance and engine/device acceptance separately. Preserve the scope of prior explicit approvals. Offer materially different visual grammars and detailed studies; do not infer approval from selecting a better option."
+    },
+    {
+      "id": "D011",
+      "topic": "dream_loop_slice_and_production_context",
+      "status": "owner_directed; implementation_not_complete",
+      "date": "2026-09-13",
+      "brief": "ACTIVE_CONTEXT.md",
+      "design": "design/OPTION_C_VERTICAL_SLICE.md",
+      "directions": [
+        "Art Bible remains active; beautiful dimensional lighting/material response, wear 3–4/10",
+        "Separate numbered full-size arena targets; no six-panel comparison limit; UI and other scenes separate",
+        "2 to 10+ participants; four is a fixture only",
+        "Attainable character fidelity; existing Meshy/Blender handoffs and production reproducibility are part of the C decision",
+        "Comparative preference is not approval; preserve explicit prior approvals within scope",
+        "A/C are battle alternatives; B is the map/run alternative"
+      ],
+      "handoff": "Use MESHY_AGENT_HANDOFF.md current-production notice, MESHY_PILOT_RESULTS.md, 3D_PIPELINE.md and current manifest; do not reinvent or duplicate paid pilot work."
     }
-  ]
+  ],
+  "active_context": "ACTIVE_CONTEXT.md"
 }

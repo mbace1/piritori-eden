@@ -1,5 +1,10 @@
 # Piritori agent startup
 
+Read `ACTIVE_CONTEXT.md` first, before planning or asking the owner to repeat
+decisions. For Meshy work, read `MESHY_AGENT_HANDOFF.md` and its current-production
+notice, `3D_PIPELINE.md`, `MESHY_PILOT_RESULTS.md` and the manifest before inferring
+status. A partial local checkout is not evidence that a GitHub handoff is absent.
+
 Before 3D work, read `DESIGN_AUTHORITY.md`, `3D_PIPELINE.md`,
 `assets/CHARACTER_SPEC.md` and `assets/asset_manifest.json`. Read the relevant
 Art Bible and character references before designing or altering an asset.
@@ -30,6 +35,10 @@ Run `python tools/meshy/character.py status`, then `check`. Run `validate` befor
 claiming production readiness. These commands are local and read-only. A
 prototype integration does not advance the production lifecycle to INTEGRATED.
 Matching joint counts do not establish shared animation compatibility.
+
+Owner clarification, 2026-09-13: a preferred concept option is not automatically
+approved. D009's v04 middle/right choice records relative preference, not a
+locked direction. Keep exploration open and read the corrected design authority.
 
 Keep raw masters, credentials, signed URLs, intermediate and rejected art
 private. Preserve versioned rollback files. Existing candidate/continuity
