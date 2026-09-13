@@ -6,7 +6,7 @@ const base=process.env.ARENA_LAB_URL||'http://127.0.0.1:8796/work/piritori-fight
  await page.goto(base+'?actors=6');await page.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy);
  const ready=()=>page.waitForFunction(()=>!fightModule.metrics().busy),view=()=>page.evaluate(()=>fightModule.view().points),snap=()=>page.evaluate(()=>fightModule.snapshot());
  async function setup(){await page.selectOption('#loadout','ranged');await page.locator('#restart').click();await ready();await page.locator('#roster button').nth(1).click();}
- async function preview(){await page.locator('[data-action=attack]').click();await page.locator('[data-target]:enabled').first().click();}
+ async function preview(){await page.waitForTimeout(280);if(await page.locator('[data-action=attack]').getAttribute('aria-pressed')!=='true')await page.locator('[data-action=attack]').click();await page.locator('[data-target]:enabled').first().click();}
  await setup();const before=await snap();await preview();await page.getByRole('button',{name:'Cancel',exact:true}).click();assert.deepEqual(await snap(),before);
  await preview();await page.evaluate(()=>testPad.buttons[1].pressed=true);await page.waitForFunction(()=>document.querySelector('#tactical-preview').hidden);await page.evaluate(()=>testPad.buttons[1].pressed=false);assert.deepEqual(await snap(),before,'controller B cancels without committing');
  const lights=await page.evaluate(()=>fightModule.metrics().environment.lights);assert.notEqual(lights[0].color,lights[1].color,'styling retains warm/cool roles');assert.ok(lights.every(l=>l.intensity===77));
