@@ -11,6 +11,8 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 
 ## Latest owner direction — carry into every design
 
+- Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). This is direction for the next batch, not a claim those features shipped or final art was approved.
+
 - Owner continuation, 2026-09-13: minimize defects; use temporary placeholder characters until F01/F02 fit and look good. These are development stand-ins, not redesigns or asset promotions.
 - Push each reviewable vertical-slice batch to **mbace1/piritori-eden on GitHub**, with its tests and handoff, so agents on other PCs can continue from the same source. Local work alone is not delivery. The owner also authorizes merging and requires each tested playable batch on the **Suds Jack hub**; finish with the public route verified. See [release procedure](design/HUB_RELEASE.md).
 
