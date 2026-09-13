@@ -33,3 +33,13 @@ dialog{background:#20272a;border:2px solid #aa936c;border-radius:0;box-shadow:6p
 
 .crew-card{display:grid;grid-template-columns:minmax(0,1fr) auto}.crew-record{grid-column:1/-1;border-top:1px solid #c7aa7926;padding:5px 4px 2px;color:#c7bead;font:13px/1.35 Arial,sans-serif}.crew-record p{margin:0 0 2px}.crew-record .aptitudes{color:#88b8bf}.crew-record .crew-memory{color:#d7c197;margin-top:4px}
 @media(max-height:560px) and (orientation:landscape){#actions:has([data-action=reload]:not([hidden])):has([data-action=item]:not([hidden])) button{font-size:14px}}
+
+/* C.14: inspection keeps its forecast and controls together on every device. */
+#tactical-preview{border-left:3px solid var(--cyan);background:#1c292d}
+#tactical-preview p{margin:0 0 7px}#tactical-preview button{margin:0 5px 5px 0;min-height:44px}
+#aim-preview{color:#85d4df;border-color:#609ca5}#aim-preview[aria-pressed=true]{background:#314c52}
+#selected-unit{background:linear-gradient(114deg,#dbcfb5,#c7b798);color:#18252c;border-color:#bca67d;box-shadow:2px 3px 0 #080e12}
+#selected-unit .vitality{color:#25353c}#selected-unit .state-stamp{color:#22383c;border-color:#687476}
+#selected-unit .state-stamp.used{color:#606663;border-color:#96917f}
+#selected-unit .condition-pips i{border-color:#516568}#selected-unit .condition-pips i.filled{background:#32868e}
+@media(min-width:701px) and (min-height:561px){#selected-unit,.command-utility{position:sticky;top:4px;z-index:1}.command-utility{background:#13191c}}

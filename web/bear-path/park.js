@@ -1,6 +1,6 @@
 import {EDGES} from '../fight-module/cover-edges.js?v=1';
 import * as T from 'three';
-import {developmentLook} from './development-look.js?v=3';
+import {developmentLook} from './development-look.js?v=4';
 
 // D009: Ink & Stone and Cold Street are compared prototypes, not final approval.
 // They share geometry and encounter anchors; switching only changes art state.
@@ -53,6 +53,17 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
   const fc=foliageCanvas.getContext('2d');
   for(let i=0;i<125;i++){const a=rand()*Math.PI*2,r=Math.sqrt(rand())*108,x=128+Math.cos(a)*r,y=128+Math.sin(a)*r*.82,s=6+rand()*13;
     fc.fillStyle=['#87916b','#c7c499','#dfce91','#63774f'][i%4];fc.save();fc.translate(x,y);fc.rotate(rand()*6.28);fc.beginPath();fc.moveTo(-s,0);fc.lineTo(-s*.3,-s*.7);fc.lineTo(s*.55,-s*.46);fc.lineTo(s,0);fc.lineTo(0,s*.62);fc.closePath();fc.fill();fc.restore();}
+  if(directed){
+    // Larger asymmetric leaf clusters read as painted masses from overview;
+    // sparse warm top edges, dark undersides, rather than evenly scattered dots.
+    fc.clearRect(0,0,256,256);
+    for(let i=0;i<94;i++){const angle=rand()*Math.PI*2,radius=Math.sqrt(rand())*100;
+      const x=128+Math.cos(angle)*radius,y=128+Math.sin(angle)*radius*.80,size=11+rand()*13;
+      const lit=y<110&&i%3!==0;fc.fillStyle=lit?['#dcc792','#c7b878','#b5b679'][i%3]:['#758665','#607563','#8b9567'][i%3];
+      fc.save();fc.translate(x,y);fc.rotate(angle*.3);fc.beginPath();fc.moveTo(-size,0);fc.lineTo(-size*.7,-size*.4);fc.lineTo(-size*.08,-size*.65);fc.lineTo(size*.6,-size*.3);fc.lineTo(size,.16*size);fc.lineTo(size*.2,size*.62);fc.lineTo(-size*.4,size*.5);fc.closePath();fc.fill();
+      if(lit){fc.strokeStyle='#e1d39b';fc.globalAlpha=.30;fc.lineWidth=1.5;fc.beginPath();fc.moveTo(-size*.7,-size*.3);fc.lineTo(-size*.08,-size*.53);fc.lineTo(size*.55,-size*.25);fc.stroke();fc.globalAlpha=1;}fc.restore();
+    }
+  }
   const foliageTexture=new T.CanvasTexture(foliageCanvas);foliageTexture.colorSpace=T.SRGBColorSpace;
   for(const name of ['gold','ochre','olive'])mats[name+'Foliage']=new T.MeshLambertMaterial({color:name==='gold'?0xe4c38a:name==='ochre'?0xc2b294:0xd3e0cf,map:foliageTexture,alphaTest:.45,side:T.DoubleSide,emissive:0x4c5634,emissiveIntensity:.15});
   mats.wet.transparent=true;mats.wet.opacity=.22;mats.wet.depthWrite=false;mats.wet.roughness=.85;
@@ -149,14 +160,14 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     shape('leaf',i%3?'leaf':'ochre',x,.035,z,.08+rand()*.12,.014,.04+rand()*.06,0,rand()*6.28);
   }
   const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=64;const glowCtx=glowCanvas.getContext('2d'),grad=glowCtx.createRadialGradient(32,32,1,32,32,32);
-  grad.addColorStop(0,'rgba(255,210,126,.5)');grad.addColorStop(.25,'rgba(245,187,88,.18)');grad.addColorStop(1,'rgba(255,190,84,0)');glowCtx.fillStyle=grad;glowCtx.fillRect(0,0,64,64);
+  grad.addColorStop(0,directed?'rgba(255,226,159,.9)':'rgba(255,210,126,.5)');grad.addColorStop(.25,directed?'rgba(245,184,78,.28)':'rgba(245,187,88,.18)');grad.addColorStop(1,'rgba(255,190,84,0)');glowCtx.fillStyle=grad;glowCtx.fillRect(0,0,64,64);
   const glowTexture=new T.CanvasTexture(glowCanvas),glowMaterial=new T.SpriteMaterial({map:glowTexture,transparent:true,depthWrite:false,blending:T.AdditiveBlending,color:0xffdc9a});
   for(const [i,[x,z]] of [[-4.7,1.2],[4.8,-2.1],[-5.5,-6.7],[5.9,5.8]].entries()){
     shape('rod','iron',x,1.8,z,.055,3.6,.055);shape('trunk','iron',x,.27,z,.15,.54,.15);shape('rod','iron',x,.05,z,.21,.1,.21);box('iron',x,3.64,z,.34,.12,.34);
     shape('trunk','iron',x,3.78,z,.14,.23,.14);shape('rod','iron',x,3.94,z,.027,.17,.027);
     box('glow',x,3.46,z,.19,.28,.19);box('iron',x,3.3,z,.31,.075,.31);
     for(const dx of [-.12,.12])for(const dz of [-.12,.12])box('iron',x+dx,3.46,z+dz,.025,.30,.025);
-    const glow=new T.Sprite(glowMaterial);glow.position.set(x,3.47,z);glow.scale.set(1.4,1.4,1);group.add(glow);
+    const glow=new T.Sprite(glowMaterial);glow.position.set(x,3.47,z);glow.scale.set(directed?2.2:1.4,directed?2.2:1.4,1);group.add(glow);
     if(i<2){const light=new T.SpotLight(development&&i===1?0x8bc5db:0xffd3a0,development?77:63,17,1.0,.86,1.45);light.position.set(x,3.65,z);light.target.position.set(x*.18,0,z*.3);
       light.castShadow=i===0;light.shadow.mapSize.set(1024,1024);light.shadow.normalBias=.04;world.add(light,light.target);lamps.push(light);}
     if(i===3)for(let n=0;n<4;n++){box(n%2?'poster':'cream',x,.65+n*.20,z+.06,.14,.16,.015);box('night',x,.65+n*.20,z+.072,.07,.013,.003);}
@@ -193,26 +204,26 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
   if(directed){
     // C.13: painted-night stage / cut-card command deck. One sodium key,
     // cool sky fill, quiet dark perimeter, warm windows: Art Bible 6 / 8 / 12.
-    hemisphere.color.setHex(0x789db7);hemisphere.groundColor.setHex(0x17232b);hemisphere.intensity=.68;
-    sky.color.setHex(0x9cb9cf);sky.intensity=1.15;sky.position.set(-3,9,5);
+    hemisphere.color.setHex(0x789db7);hemisphere.groundColor.setHex(0x17232b);hemisphere.intensity=.54;
+    sky.color.setHex(0x9cb9cf);sky.intensity=.9;sky.position.set(-3,9,5);
     world.background.set('#0d1820');world.fog.color.set('#102737');world.fog.near=19;world.fog.far=46;
     renderer.toneMappingExposure=1.03;
     mats.plaster.color.setHex(0x717775);mats.brick.color.setHex(0x746356);mats.trim.color.setHex(0x3c5157);
-    mats.stone.color.setHex(0x9e9480);mats.granite.color.setHex(0x69554c);mats.wood.color.setHex(0x9c723e);
+    mats.stone.color.setHex(0x9e9480);mats.granite.color.setHex(0x69554c);mats.wood.color.setHex(0xae7540);mats.wood.roughness=.66;
     mats.lit.emissive.setHex(0xd09535);mats.lit.emissiveIntensity=1.05;
     mats.goldFoliage.color.setHex(0xd4a252);mats.ochreFoliage.color.setHex(0x947946);mats.oliveFoliage.color.setHex(0x64806c);
-    for(const name of ['goldFoliage','ochreFoliage','oliveFoliage'])mats[name].emissiveIntensity=.04;
-    lamps[0].color.setHex(0xffcd85);lamps[0].intensity=128;lamps[0].angle=.86;
-    lamps[1].color.setHex(0x8bbccf);lamps[1].intensity=72;
+    for(const name of ['goldFoliage','ochreFoliage','oliveFoliage']){mats[name].emissiveIntensity=.065;mats[name].emissive.setHex(name==='goldFoliage'?0x6d4820:0x233b34);}
+    lamps[0].color.setHex(0xffcd85);lamps[0].intensity=168;lamps[0].angle=.86;
+    lamps[1].color.setHex(0x8bbccf);lamps[1].intensity=83;
     // No new shadow maps: a restrained window spill and ground wash describe
     // the visible practicals even on the mobile profile.
-    const rim=new T.PointLight(0xffc476,15,10,2);rim.position.set(2,3,-6.5);world.add(rim);
+    const rim=new T.PointLight(0xffbf68,95,14,2);rim.position.set(-5.5,3.47,-6.7);world.add(rim);
     groundMaterial.color.setHex(0x54615e);grainStrength.value=.36;
     points.material.opacity=.24;
   }
   const lab=development?developmentLook(world,renderer,group,groundMaterial,mats,directed):null;
   return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({lights:lamps.map(l=>({color:l.color.getHex(),intensity:l.intensity})),development:lab?.metrics(),style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
-    recover:()=>lab?.recover(),update:(camera,actors)=>lab?.update(camera,actors),tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
+    recover:()=>lab?.recover(),update:(camera,actors,focus)=>lab?.update(camera,actors,focus),tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
     aftermath(outcome){points.material.opacity=outcome==='peaceful'?.25:.45;}
   };
 }

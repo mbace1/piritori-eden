@@ -1,3 +1,16 @@
+# C.14 — After the Rain / gun aiming
+
+Concept 02 selected as the light/material target. Wet paving and fixed practical
+glints; lighter paper identity; Attack → target → Aim view → confirm → overview.
+Foliage clears the shot corridor. Actual forecasts, crew saves and rules stay
+intact. Read design/C14_AFTER_THE_RAIN.md for reproduction and verification.
+Publication and physical-device acceptance require separate release evidence.
+
+### Port
+
+Godot reproduces shoulder-side framing, presentation-only pose, foliage corridor,
+wet surfaces and camera interruption. Existing C.12 vectors are unchanged.
+
 # C.13 — Night Shift art and UI
 
 Owner-requested pass against the Art Bible, UX specification and actual visual targets.

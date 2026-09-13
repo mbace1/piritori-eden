@@ -1,3 +1,4 @@
+import {gunView,blendGunView} from './aim-camera.js?v=1';
 import {mountCrew} from '../crew-run/ui.js?v=4';
 import {portraitStudio} from '../crew-run/portraits.js?v=1';
 import {EDGES,coverEdges} from './cover-edges.js?v=1';
@@ -9,12 +10,12 @@ import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
 import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
 import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
 import {buildNightCourtyard} from './environment.js?v=1';
-import {buildKarhupuisto} from '../bear-path/park.js?v=8';
+import {buildKarhupuisto} from '../bear-path/park.js?v=9';
 import {loadParkAssets} from '../bear-path/assets.js?v=1';
 import {createEncounter} from '../bear-path/encounter.js?v=1';
 import {mountBearPath} from '../bear-path/presentation.js?v=3';
 import {fitBattleCamera,placeLabels} from './framing.js?v=2';
-import {tacticalUI} from './tactical-ui.js?v=6';
+import {tacticalUI} from './tactical-ui.js?v=7';
 import {routes} from './tactics.js?v=5';
 import {createFrameClock} from './frame-clock.js?v=1';
 
@@ -52,7 +53,7 @@ function applyProfile(){renderer.shadowMap.enabled=profile.shadows;if(templates)
 const CELL=1.17,position=cell=>{const p=parseSlotKey(cell);return new T.Vector3((p.lane-(LANES-1)/2)*CELL,0,(3.5-p.depth)*CELL);};
 const all=()=>session.battle.players.concat(session.battle.enemies),selected=()=>session.battle.players.find(u=>u.id===session.battle.selectedId);
 const hint=text=>$('hint').textContent=text;
-const labUI=isLab?tacticalUI({getSession:()=>session,button,tile,edgeMark,intentLine:isCrew?intentLine:null,run,hint,refresh}):null;
+const labUI=isLab?tacticalUI({getSession:()=>session,button,tile,edgeMark,intentLine:isCrew?intentLine:null,run,hint,refresh,aim:toggleAim,isAiming:()=>actionFocus?.kind==='gun',cancelAim:()=>{cancelFocus();fit();}}):null;
 function activate(el,fn){let last=-1000;for(const name of ['pointerup','touchend','click'])el.addEventListener(name,e=>{if(el.disabled||name==='click'&&e.detail!==0)return;e.preventDefault();if(performance.now()-last<260)return;last=performance.now();fn();});}
 function button(text,fn,attrs={}){const b=document.createElement('button');b.textContent=text;for(const [k,v] of Object.entries(attrs))b.setAttribute(k,v);activate(b,fn);return b;}
 function buildStage(){
@@ -69,8 +70,9 @@ function fit(){
   tagsDirty=true;
   if(!renderer)return;const w=Math.max(1,area.clientWidth),h=Math.max(1,area.clientHeight);
   if(!graphicsLost){const ratio=pixelRatioFor(profile,w,h,devicePixelRatio);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);if(canvas.width!==Math.floor(w*ratio)||canvas.height!==Math.floor(h*ratio))renderer.setSize(w,h,false);}
-  frameInfo=fitBattleCamera(camera,{width:w,height:h,angle,zoom:zoom*(1+(actionFocus?.strength||0)*.12),lanes:LANES,rows:totalRows(),cell:CELL,tight:isCrew});
-  if(actionFocus){const shift=actionFocus.center.clone().multiplyScalar(actionFocus.strength*.18);camera.position.add(shift);camera.lookAt(shift.clone().setY(.55));camera.updateMatrixWorld();}stage?.update(camera);
+  frameInfo=fitBattleCamera(camera,{width:w,height:h,angle,zoom:zoom*(1+(actionFocus?.kind==='gun'?0:actionFocus?.strength||0)*.12),lanes:LANES,rows:totalRows(),cell:CELL,tight:isCrew});
+  if(actionFocus?.kind==='gun'){const shot=gunView(camera,{...actionFocus,width:w,height:h,angle});blendGunView(camera,shot,actionFocus.strength);frameInfo.span=camera.top-camera.bottom;}
+  else if(actionFocus){const shift=actionFocus.center.clone().multiplyScalar(actionFocus.strength*.18);camera.position.add(shift);camera.lookAt(shift.clone().setY(.55));camera.updateMatrixWorld();}stage?.update(camera,actorList,actionFocus?.kind==='gun'?actionFocus:null);updateFocusButton();
 }
 const unitTag=u=>u.label||((u.side==='player'?'J':'R')+(u.modelId.includes('f02')||u.id.includes('f02')?'2':'1'));
 function project(at){const p=at.clone().project(camera);return {x:(p.x+1)*area.clientWidth/2,y:(1-p.y)*area.clientHeight/2};}
@@ -88,7 +90,9 @@ function layoutTags(){
   }
   const rect=area.getBoundingClientRect(),w=rect.width,h=rect.height;
   const obstacles=['roundbar','camera-tools','perf',...(isBear?['art-toggle']:[])].map(id=>{const b=$(id).getBoundingClientRect();return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};});
-  const items=all().filter(u=>!u.waiting&&!u.evacuated).map(u=>{const a=actors.get(u.id),el=labels.get(u.id),head=project(a.group.position.clone().add(new T.Vector3(0,a.down?.45:2.15,0))),feet=project(a.group.position),radius=Math.max(8,h/frameInfo.span*.32);return {id:u.id,anchor:head,width:el.offsetWidth,height:el.offsetHeight,body:isLab&&labCount>6?null:{x:feet.x-radius,y:head.y+4,width:radius*2,height:Math.max(0,feet.y-head.y-4)}};});
+  const focusIds=actionFocus?.kind==='gun'&&actionFocus.strength>.9?[actionFocus.id,actionFocus.target]:null;
+  for(const u of all()){const visible=!focusIds||focusIds.includes(u.id);labels.get(u.id).style.visibility=visible?'':'hidden';leaders.get(u.id).style.visibility=visible?'':'hidden';}
+  const items=all().filter(u=>!u.waiting&&!u.evacuated&&(!focusIds||focusIds.includes(u.id))).map(u=>{const a=actors.get(u.id),el=labels.get(u.id),head=project(a.group.position.clone().add(new T.Vector3(0,a.down?.45:2.15,0))),feet=project(a.group.position),radius=Math.max(8,h/frameInfo.span*.32);return {id:u.id,anchor:head,width:el.offsetWidth,height:el.offsetHeight,body:isLab&&labCount>6?null:{x:feet.x-radius,y:head.y+4,width:radius*2,height:Math.max(0,feet.y-head.y-4)}};});
   for(const item of placeLabels(items,w,h,obstacles)){const el=labels.get(item.id),line=leaders.get(item.id);el.style.transform=`translate(${item.x}px,${item.y}px)`;const lx=Math.max(item.x+4,Math.min(item.x+item.width-4,item.anchor.x)),ly=item.y+item.height;line.setAttribute('x1',lx);line.setAttribute('y1',ly);line.setAttribute('x2',Math.max(2,Math.min(w-2,item.anchor.x)));line.setAttribute('y2',Math.max(2,Math.min(h-2,item.anchor.y)));line.setAttribute('opacity',Math.hypot(lx-item.anchor.x,ly-item.anchor.y)>11?'.72':'.35');}
 }
 function replaceCrewSession(next){sequence++;cancelFocus();auto=false;session=next;busy=false;action='';hint('');labUI?.cancel();if(ready){rebuildActors();fit();refresh();}}
@@ -148,19 +152,37 @@ async function attackVisual(id,targetId){const a=actors.get(id),target=actors.ge
   a.play(ranged?'shoot':'strike',.85);await tween(.4,()=>{});spark(goal.clone().setY(1.15));target.play('hit',.45);await tween(.45,()=>{});target.play('idle');a.play('idle');
   if(!ranged&&a.group.position.distanceTo(home)>.01)await moveVisual(id,home);
 }
-let actionFocus=null,focusEnabled=false,focusSerial=0;
+let actionFocus=null,focusEnabled=false,focusSerial=0,aimPose=null;
 try{focusEnabled=localStorage.getItem('piritori-c10-focus')==='on';}catch{}
-function cancelFocus(){focusSerial++;actionFocus=null;}
-function updateFocusButton(){if($('actioncam')){$('actioncam').textContent='FOCUS '+(focusEnabled?'ON':'OFF');$('actioncam').setAttribute('aria-pressed',String(focusEnabled));}}
+function cancelFocus(){if(aimPose){const a=actors.get(aimPose.id);if(a){a.group.rotation.y=aimPose.rotation;a.peek=0;a.play('idle');}aimPose=null;}focusSerial++;actionFocus=null;tagsDirty=true;updateFocusButton();}
+function updateFocusButton(){if($('aim-preview')){$('aim-preview').textContent=actionFocus?.kind==='gun'?'Overview':'Aim view';$('aim-preview').setAttribute('aria-pressed',String(actionFocus?.kind==='gun'));}area.dataset.camera=actionFocus?.kind==='gun'?'aim':'overview';if($('actioncam')){$('actioncam').textContent='FOCUS '+(focusEnabled?'ON':'OFF');$('actioncam').setAttribute('aria-pressed',String(focusEnabled));}}
 if(isLab){updateFocusButton();activate($('actioncam'),()=>{cancelFocus();focusEnabled=!focusEnabled;try{localStorage.setItem('piritori-c10-focus',focusEnabled?'on':'off');}catch{}updateFocusButton();fit();});}
-async function focusAction(id,target){
+function aimState(id,target){
+  const a=actors.get(id),b=actors.get(target);if(!a||!b||!a.unit.equipment.includes('handgun'))return null;
+  return {kind:'gun',id,target,from:a.group.position.clone(),to:b.group.position.clone(),strength:0};
+}
+async function animateFocus(to,token,duration=.30){
+  if(!actionFocus)return;const from=actionFocus.strength;
+  const step=t=>{if(token===focusSerial&&actionFocus){actionFocus.strength=T.MathUtils.lerp(from,to,t);fit();}};
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)step(1);else await tween(duration,step);
+}
+function toggleAim(target){
+  if(busy||graphicsLost||layoutPaused)return;
   const token=++focusSerial;
-  if(!focusEnabled||matchMedia('(prefers-reduced-motion: reduce)').matches||area.clientWidth<600||area.clientHeight<400)return ()=>{};
+  if(actionFocus?.kind==='gun'){cancelFocus();fit();return;}
+  actionFocus=aimState(selected()?.id,target);if(!actionFocus)return;
+  const a=actors.get(actionFocus.id),direction=actionFocus.to.clone().sub(actionFocus.from);aimPose={id:a.id,rotation:a.group.rotation.y};a.group.rotation.y=Math.atan2(direction.x,direction.z);a.peek=1;a.play('grip');
+  animateFocus(1,token).catch(e=>{if(!(e instanceof Interrupted))console.error(e);});updateFocusButton();
+}
+async function focusAction(id,target){
+  const held=actionFocus?.kind==='gun'&&actionFocus.id===id&&actionFocus.target===target;
+  const token=++focusSerial;
+  if(!held&&(!focusEnabled||matchMedia('(prefers-reduced-motion: reduce)').matches||area.clientWidth<600||area.clientHeight<280))return ()=>{};
   const a=actors.get(id),b=actors.get(target);if(!a||!b)return ()=>{};
-  const center=a.group.position.clone().add(b.group.position).multiplyScalar(.5);center.y=0;
-  // Conservative focus preserves the planning axis and most arena context.
-  actionFocus={center,strength:0};await tween(.22,t=>{if(token===focusSerial&&actionFocus){actionFocus.strength=t;fit();}});
-  return async()=>{if(token!==focusSerial||!actionFocus)return;await tween(.24,t=>{if(token===focusSerial&&actionFocus){actionFocus.strength=1-t;fit();}});if(token===focusSerial){actionFocus=null;fit();}};
+  if(!held)actionFocus=isCrew?aimState(id,target):null;
+  if(!actionFocus){const center=a.group.position.clone().add(b.group.position).multiplyScalar(.5);center.y=0;actionFocus={center,strength:0};}
+  await animateFocus(1,token);
+  return async()=>{if(token!==focusSerial||!actionFocus)return;await animateFocus(0,token,.28);if(token===focusSerial){cancelFocus();fit();}};
 }
 async function routeVisual(id,path){
   if(!path?.length)return;const a=actors.get(id),points=[a.group.position.clone(),...path.map(position)],lengths=points.slice(1).map((p,i)=>p.distanceTo(points[i])),length=lengths.reduce((a,b)=>a+b,0);
@@ -231,7 +253,7 @@ async function present(record){
   for(const next of after.units){const old=before.units.find(v=>v.id===next.id);if(old.alive&&!next.alive)await gesture(next.id,'down',.7);}
   for(const u of all()){if(!u.alive)continue;const a=actors.get(u.id);if(type!=='withdraw')a.group.position.copy(position(u.cell));a.group.visible=!u.waiting&&!u.evacuated;a.group.rotation.y=u.side==='player'?Math.PI:0;if(isLab)coverStance(a,u.cell);}
 }
-async function run(type,value){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready)return;if(type==='police')auto=false;const result=session.command(type,value);if(!result.ok){hint(result.message||'That action is not available yet.');return;}const ticket=sequence;crew?.commit(session);saveStory();busy=true;action='';labUI?.cancel();refresh();try{await present(result.record);}catch(e){if(!(e instanceof Interrupted))throw e;}if(ticket!==sequence||graphicsLost)return;busy=false;if(story&&session.battle.status!=='active')story.complete(session.result());saveStory();hint(session.battle.log[0]);refresh();if(auto&&session.battle.status==='active')autoTimer=setTimeout(()=>{if(auto&&!busy&&ticket===sequence)run('auto');},600);}
+async function run(type,value){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready)return;if(type==='police')auto=false;const result=session.command(type,value);if(!result.ok){hint(result.message||'That action is not available yet.');return;}const ticket=sequence;crew?.commit(session);saveStory();busy=true;action='';labUI?.cancel(type==='attack');refresh();try{await present(result.record);}catch(e){if(!(e instanceof Interrupted))throw e;}if(ticket!==sequence||graphicsLost)return;busy=false;if(story&&session.battle.status!=='active')story.complete(session.result());saveStory();hint(session.battle.log[0]);refresh();if(auto&&session.battle.status==='active')autoTimer=setTimeout(()=>{if(auto&&!busy&&ticket===sequence)run('auto');},600);}
 async function showcase(){if(busy||graphicsLost||layoutPaused||!ready)return;const ticket=sequence;auto=false;busy=true;action='';refresh();const starts=new Map([...actors].map(([id,a])=>[id,a.group.position.clone()])),baked=[...actors.values()].every(a=>a.bakedMotion);try{for(const mode of ['idle','walk','strike','shoot','brace','item','talk','hit','grip','down']){hint(`ACTION REHEARSAL · ${mode.toUpperCase()} · ${isLab?'stand-in motion':baked?'Blender motion candidate':['idle','walk'].includes(mode)?'own-character clip':'prototype gesture'}`);if(mode==='walk'&&(baked||isLab)){const headings=new Map([...actors].map(([id,a])=>[id,a.group.rotation.y]));await Promise.all([...actors].map(([id,a])=>moveVisual(id,starts.get(id).clone().add(new T.Vector3(0,0,1).applyQuaternion(a.group.quaternion).multiplyScalar(.9)))));await Promise.all([...actors].map(([id])=>moveVisual(id,starts.get(id))));for(const [id,a] of actors)a.group.rotation.y=headings.get(id);continue;}for(const a of actors.values()){a.down=false;a.play(mode,1.15);}await tween(1.15,t=>{if(mode==='walk')for(const [id,a] of actors)a.group.position.copy(starts.get(id)).add(new T.Vector3(.45*Math.sin(t*Math.PI),0,0));});}}catch(e){if(!(e instanceof Interrupted))throw e;}if(ticket!==sequence||graphicsLost)return;reset();hint('Rehearsal complete. Fresh battle ready.');}
 
 for(const el of document.querySelectorAll('[data-action]'))activate(el,()=>choose(el.dataset.action));
@@ -274,7 +296,7 @@ function tick(now){
   for(const a of actorList)updateActor(a,layoutPaused?0:dt);
   if(!story||story.isBattle())layoutTags();story?.layout();
   stage?.tick?.(layoutPaused||matchMedia('(prefers-reduced-motion: reduce)').matches?0:dt);
-  stage?.update(camera,actorList);
+  stage?.update(camera,actorList,actionFocus?.kind==='gun'?actionFocus:null);
   // Context loss can precede the DOM event while a shader is being linked.
   // Three then receives null driver info logs. Only suppress that lost-context
   // race; normal shader/render faults still surface. The recovery event rebuilds.
@@ -286,7 +308,7 @@ function tick(now){
   if(seconds>2){
     fps=Math.round(frameCount/seconds);
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isCrew?'C.13 · NIGHT SHIFT':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isCrew?'C.14 · AFTER THE RAIN':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }
@@ -307,7 +329,7 @@ async function boot(){
     if(!saved){zoom=1.22;fit();}
   }
   if(crew)window.crewRun={snapshot:()=>crew.state()};
-  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,environment:stage.metrics?.(),story:story?.checkpoint().state,layoutPaused,fps,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
+  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,environment:stage.metrics?.(),camera:{mode:actionFocus?.kind||'overview',strength:actionFocus?.strength||0,ids:actionFocus?.kind==='gun'?[actionFocus.id,actionFocus.target]:[],enabled:focusEnabled},story:story?.checkpoint().state,layoutPaused,fps,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
   if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');frameClock.reset(performance.now());frameCount=seconds=0;queueFrame();
 }
 boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});

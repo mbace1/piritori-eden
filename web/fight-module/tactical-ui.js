@@ -1,11 +1,11 @@
 import {coverEdges,coverDescription} from './cover-edges.js?v=1';
 import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=5';
 
-export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,refresh}){
+export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,refresh,aim,isAiming,cancelAim}){
   let preview=null;
   const $=id=>document.getElementById(id);
-  function pick(type,value){preview={type,value};refresh();$('commit-preview')?.focus({preventScroll:true});}
-  function cancel(){preview=null;}
+  function pick(type,value){cancelAim?.();preview={type,value};refresh();$('commit-preview')?.focus({preventScroll:true});}
+  function cancel(retainAim=false){preview=null;if(!retainAim)cancelAim?.();}
   function render(action,busy){
     const b=getSession().battle,u=b.players.find(v=>v.id===b.selectedId),enabled=!busy&&b.status==='active'&&u?.alive;
     const moveReady=enabled&&!b.moved.includes(u.id),actReady=enabled&&!b.acted.includes(u.id);
@@ -25,7 +25,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
           const shots=b.enemies.filter(v=>v.alive).map(t=>({t,f:forecast(b,u,t,preview.value)})).filter(v=>v.f.valid);
           text=`${coordinate(u.cell)} → ${path.map(coordinate).join(' → ')} · ${path.length}/4 steps. ${coverDescription(b,preview.value)} ${actReady?`Action remains. Attacks here: ${shots.map(({t,f})=>`${t.label} ${f.chance}%`).join(', ')||'none'}.`:'Action already used.'}`;}
       }else{const t=b.enemies.find(v=>v.id===preview.value),f=forecast(b,u,t);valid=actReady&&f.valid;if(valid){tile(t.cell,0xf9b870,.6);text=`${u.label} → ${t.label}: ${f.chance}% to hit; ${f.hpDamage} HP + ${f.guardDamage} guard if hit. ${f.cover==='partial'?`${f.coverEdge.toUpperCase()} wall: −25 points. `:f.flanked?'FLANKED: wall gives no protection. ':''}${moveReady?'Movement remains available.':'Movement used.'}`;}}
-      if(valid){const p=document.createElement('p');p.textContent=text;card.append(p,button(preview.type==='move'?'Confirm move':'Confirm attack',()=>{const p=preview;cancel();run(p.type,p.value);},{id:'commit-preview'}),button('Cancel',()=>{cancel();refresh();}));}
+      if(valid){const p=document.createElement('p');p.textContent=text;card.append(p);if(preview.type==='attack'&&u.equipment.includes('handgun')&&aim)card.append(button(isAiming()?'Overview':'Aim view',()=>aim(preview.value),{id:'aim-preview','aria-pressed':String(isAiming()),'aria-label':'Toggle gun aiming view'}));card.append(button(preview.type==='move'?'Confirm move':'Confirm attack',()=>{const p=preview;cancel(p.type==='attack');run(p.type,p.value);},{id:'commit-preview'}),button('Cancel',()=>{cancel();refresh();}));}
       else {cancel();card.hidden=true;}
     }
     const danger=threats(b,destination),panel=$('enemy-plans');panel.replaceChildren();
