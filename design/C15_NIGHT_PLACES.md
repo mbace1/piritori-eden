@@ -24,7 +24,7 @@ lamp, bicycle, rack, drain, pallets and vent. Export is metres / Y-up / +Z front
 The whole kit is 20,428 triangles and 1,431,032 bytes; engine placement shares
 geometry/materials with instancing. It is prototype scenery, not accepted art.
 
-Two image-generated 1024px painted albedos accompany it. Total new downloaded
+Two image-generated 1254px source albedos (runtime uploads capped at 1024px) accompany it. Total new downloaded
 kit + textures: 6,974,837 bytes. `web/crew-run/assets/kallio-kit-v01.manifest.json`
 pins exact bytes/hashes. The loader verifies both before use. No Meshy jobs or
 character promotions. F01/F02 remain at their existing gates; stand-ins remain.
@@ -57,6 +57,10 @@ context restore and one-shot resource consumption. Scene/camera suite exercises
 3 locations × 3 presets × 4 layouts, including legal-board framing, actual
 hit tests, preserved save and no browser errors. Final packaged checks are
 recorded in the release receipt, not inferred from local source tests.
+
+The independent private visual reviews progressed 4.3 → 5.5 → 6.1/10. The
+last review still found a significant material/window-detail gap; this delivery
+is an experimental new-arena build, not a completed Dream Loop parity result.
 
 Physical Pixel 10 Pro and iPad M2, final character rigs, concept parity and
 campaign integration remain open. New architecture creates useful variation;

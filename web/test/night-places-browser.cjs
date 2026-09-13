@@ -12,6 +12,7 @@ const base=process.env.CREW_RUN_URL||'http://127.0.0.1:8796/work/piritori-fight-
    await p.screenshot({path:`${out}/${spec.name}-${arena}-${preset}.png`});
   }
   await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));await tap(p.locator('#crew-picker'));const hitboxes=await p.locator('#actions button:not([hidden])').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{action:e.dataset.action,width:r.width,height:r.height,hit:hit===e||e.contains(hit)};}));for(const q of hitboxes){assert.ok(q.width>=44&&q.height>=44,JSON.stringify(q));assert.ok(q.hit,'unobstructed '+JSON.stringify(q));}
+  await tap(p.locator('#camera-menu'));await tap(p.locator('#resetcam'));assert.equal(await p.locator('[data-camera-preset=tactical]').getAttribute('aria-pressed'),'true');await tap(p.locator('#camera-menu'));const textures=await p.evaluate(()=>fightModule.metrics().environment.textureSizes||[]);for(const size of textures)assert.ok(size.every(n=>n<=1024),'bounded scenery textures');
   const saved=await p.evaluate(()=>fightModule.snapshot());await p.reload();await idle();assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),saved,'location reload preserves mission');assert.deepEqual(errors,[]);console.log(JSON.stringify({layout:spec.name,arena,presets:3,hitboxes,errors}));await ctx.close();
  }
 }}finally{await b.close();}})().catch(e=>{console.error(e);process.exit(1)});

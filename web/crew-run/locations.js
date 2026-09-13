@@ -2,17 +2,20 @@ import * as T from 'three';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
 import {EDGES} from '../fight-module/cover-edges.js?v=1';
 import {developmentLook} from '../bear-path/development-look.js?v=5';
+import {limitTextures} from '../fight-module/render-profile.js?v=2';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
-export async function loadLocationAssets(){
+export async function loadLocationAssets(profile){
  const base=new URL('./assets/',import.meta.url),manifest=await fetch(new URL('kallio-kit-v01.manifest.json',base)).then(r=>{if(!r.ok)throw Error('Scenery register unavailable');return r.json();});
  async function bytes(file){const e=manifest.files.find(e=>e.file===file);if(!e)throw Error('Unregistered scenery');const r=await fetch(new URL(file,base));if(!r.ok)throw Error('Scenery download failed');const b=await r.arrayBuffer();if(b.byteLength!==e.bytes)throw Error('Scenery download incomplete');if(crypto.subtle){const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',b)),n=>n.toString(16).padStart(2,'0')).join('');if(hash!==e.sha256)throw Error('Scenery version mismatch');}return b;}
  const [glb,png,paving]=await Promise.all([bytes('kallio-kit-v01.glb'),bytes('painted-plaster-v01.png'),bytes('painted-setts-v01.png')]);
  const model=await new GLTFLoader().parseAsync(glb,base.href),url=URL.createObjectURL(new Blob([png],{type:'image/png'}));let texture;
  try{texture=await new T.TextureLoader().loadAsync(url);}finally{URL.revokeObjectURL(url);}
  texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=2;
- const pavingURL=URL.createObjectURL(new Blob([paving],{type:'image/png'}));let pavingTexture;try{pavingTexture=await new T.TextureLoader().loadAsync(pavingURL);}finally{URL.revokeObjectURL(pavingURL);}pavingTexture.colorSpace=T.SRGBColorSpace;pavingTexture.wrapS=pavingTexture.wrapT=T.RepeatWrapping;pavingTexture.repeat.set(2.7,3.6);pavingTexture.anisotropy=2;return {model:model.scene,texture,pavingTexture,bytes:glb.byteLength+png.byteLength+paving.byteLength,manifest};
+ const pavingURL=URL.createObjectURL(new Blob([paving],{type:'image/png'}));let pavingTexture;try{pavingTexture=await new T.TextureLoader().loadAsync(pavingURL);}finally{URL.revokeObjectURL(pavingURL);}pavingTexture.colorSpace=T.SRGBColorSpace;pavingTexture.wrapS=pavingTexture.wrapT=T.RepeatWrapping;pavingTexture.repeat.set(2.7,3.6);pavingTexture.anisotropy=2;
+ const proxy=new T.Mesh(new T.PlaneGeometry(1,1),new T.MeshStandardMaterial({map:texture,bumpMap:pavingTexture}));limitTextures(proxy,Math.min(1024,profile.textureSize));proxy.geometry.dispose();proxy.material.dispose();
+ return {model:model.scene,texture,pavingTexture,bytes:glb.byteLength+png.byteLength+paving.byteLength,manifest};
 }
 
 // Fictional visual pilots grounded in the atlas, not campaign site dispatch.
@@ -58,5 +61,5 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  // Local wisps at the far service passage, never a full-screen white wash.
  const wisps=[];for(let i=0;i<5;i++){const m=new T.SpriteMaterial({map:glowMap,color:0x77949d,transparent:true,opacity:.055,depthWrite:false});const s=new T.Sprite(m);s.position.set((yard?1:0)+(i-2)*.7,.4,yard?-6.8:-6.5);s.scale.set(2.5,.65,1);group.add(s);wisps.push(s);}
  const lab=developmentLook(world,renderer,group,floorMat,mats,true,{courtyard:true,pavingTexture:assets.pavingTexture,lights:lamps.map(([x,y,z])=>[x,y,z])});let clock=0;
- return {name:LOCATIONS[id],setStyle(){},update:lab.update,recover:lab.recover,tick(dt){clock+=dt;wisps.forEach((s,i)=>{s.position.x=(yard?1:0)+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false}),aftermath(){}};
+ return {name:LOCATIONS[id],setStyle(){},update:lab.update,recover:lab.recover,tick(dt){clock+=dt;wisps.forEach((s,i)=>{s.position.x=(yard?1:0)+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false}),aftermath(){}};
 }
