@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {makeStandIn} from './stand-in.js?v=1';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
 import {limitTextures} from './render-profile.js?v=1';
 import {bakedMotionPlayer} from './motion-player.js?v=1';
@@ -22,6 +23,7 @@ function cloneSkin(source){
 }
 const v=()=>new T.Vector3();
 export function makeActor(template,unit,world){
+  if(template?.placeholder)return makeStandIn(unit,world);
   const group=new T.Group(),body=cloneSkin(template.scene);group.add(body);world.add(group);group.userData.unitId=unit.id;
   const bones=new Map();body.traverse(n=>{if(n.isBone)bones.set(n.name,n);if(n.isMesh){n.castShadow=n.receiveShadow=true;n.frustumCulled=false;}});
   body.updateMatrixWorld(true);const bounds=new T.Box3().setFromObject(body,true);body.scale.multiplyScalar(1.88/bounds.getSize(v()).y);body.updateMatrixWorld(true);const box=new T.Box3().setFromObject(body,true);body.position.y-=box.min.y;body.position.x-=box.getCenter(v()).x;body.position.z-=box.getCenter(v()).z;
@@ -59,6 +61,7 @@ function arm(actor,side,target,weight=1){
   aimBone(shoulder,elbow,bent,weight);aimBone(elbow,hand,wrist,weight);
 }
 export function updateActor(a,dt){
+  if(a.placeholder){a.update(dt);return;}
   if(a.bakedMotion){a.elapsed+=dt;a.bakedMotion.update(dt);if(a.prop.visible)attachProp(a);return;}
   a.elapsed+=dt;a.mixer.update(dt);const hips=a.bones.get('Hips');hips.position.x=a.rootXZ.x;hips.position.z=a.rootXZ.z;a.body.updateMatrixWorld(true);
   const t=Math.min(1,a.elapsed/(a.duration||1)),pulse=Math.sin(Math.PI*t),local=(x,y,z)=>a.group.localToWorld(new T.Vector3(x,y,z));
@@ -86,5 +89,6 @@ function attachProp(a){
   const across=v().crossVectors(down,forward).normalize();
   a.prop.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,down,forward));
 }
-export function disposeActor(a){a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
+export function disposeActor(a){if(a.placeholder){a.dispose();return;}a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
+
 

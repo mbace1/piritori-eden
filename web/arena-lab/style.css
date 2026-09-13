@@ -1,0 +1,5 @@
+#roster{overflow-x:auto}#roster button{flex:1 0 145px}#fixtures{display:flex;align-items:center;gap:12px;font-size:11px;margin-top:8px}#fixtures span{font:10px monospace;color:#a8beb5}#fixtures a{display:flex;align-items:center;min-height:44px;color:#c4d7ca;text-underline-offset:4px}#perf{background:#14222acd;padding:4px}#roster .identity{font-size:11px}@media(max-height:560px) and (orientation:landscape){#roster{flex-direction:row}#roster button{flex-basis:140px}#fixtures{gap:10px}}
+body[data-lab-count="12"] .actor-label{min-width:25px;min-height:24px;padding:3px}body[data-lab-count="12"] .actor-label:not(.active) small{display:none}#roster button{min-width:0}.identity{overflow-wrap:anywhere}
+
+@media(max-height:560px) and (orientation:landscape){#panel{min-height:0;height:100%;overflow-y:auto;padding-bottom:24px;scrollbar-gutter:stable}}
+
