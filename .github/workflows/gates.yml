@@ -183,6 +183,7 @@ jobs:
           node web/test/cover-presentation.cjs
 
   c-crew-outing:
+    timeout-minutes: 25
     name: C crew outing and persistence
     runs-on: ubuntu-latest
     steps:
@@ -201,5 +202,30 @@ jobs:
         run: |
           python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c12-server.log 2>&1 &
           node web/test/crew-run-browser.cjs
-          node web/test/gun-aim-camera.cjs
-          node web/test/night-places-browser.cjs
+
+
+  c-art-and-camera:
+    name: C art and camera / ${{ matrix.script }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        script: [gun-aim-camera, night-places-browser, wet-environment]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --prefix /tmp/piritori-test playwright
+      - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise actual controls and bounded graphics recovery
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          CREW_RUN_URL: http://127.0.0.1:8783/web/crew-run/
+          PLACES_OUTPUT: /tmp/c16-art
+          WET_OUTPUT: /tmp/c16-wet
+          ARENA_LAB_DPR: '0.5'
+        run: |
+          python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c16-server.log 2>&1 &
+          node web/test/${{ matrix.script }}.cjs

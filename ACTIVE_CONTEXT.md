@@ -1,5 +1,14 @@
 # Piritori active context
 
+## C.16 candidate — finalize art before mechanics
+
+Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
+Read [C.16 art finish](design/C16_ART_FINISH.md). Recessed windows, passage depth,
+cavity shading, wear, smaller wet paving and bounded planar reflections refine
+the C.15 scene kit. This is a candidate until its source/hub/Pages receipt exists.
+Preserve the current mechanics and stand-ins. Concept parity and physical-device
+acceptance are still open; the first corrected art review reached 7.1/10.
+
 ## C.15 live — Night Places
 
 Owner wants new arenas, minimalist rain-concept UI, mood lights and varied cameras.

@@ -1,5 +1,5 @@
 import {gunView,blendGunView} from './aim-camera.js?v=1';
-import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=1';
+import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=2';
 import {mountCrew} from '../crew-run/ui.js?v=5';
 import {portraitStudio} from '../crew-run/portraits.js?v=1';
 import {EDGES,coverEdges} from './cover-edges.js?v=1';
@@ -11,7 +11,7 @@ import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
 import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
 import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
 import {buildNightCourtyard} from './environment.js?v=1';
-import {buildKarhupuisto} from '../bear-path/park.js?v=10';
+import {buildKarhupuisto} from '../bear-path/park.js?v=11';
 import {loadParkAssets} from '../bear-path/assets.js?v=1';
 import {createEncounter} from '../bear-path/encounter.js?v=1';
 import {mountBearPath} from '../bear-path/presentation.js?v=4';
@@ -306,7 +306,7 @@ function tick(now){
   // Context loss can precede the DOM event while a shader is being linked.
   // Three then receives null driver info logs. Only suppress that lost-context
   // race; normal shader/render faults still surface. The recovery event rebuilds.
-  try{if(renderer.getContext().isContextLost())return;renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);}
+  try{if(renderer.getContext().isContextLost())return;stage?.beforeRender?.(camera);renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);}
   catch(e){if(!renderer.getContext().isContextLost())throw e;return;}
   controller(now);renderedFrames++;
   if(warmupFrames>0){warmupFrames--;return;}
@@ -314,7 +314,7 @@ function tick(now){
   if(seconds>2){
     fps=Math.round(frameCount/seconds);
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isCrew?'C.15 · NIGHT PLACES':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isCrew?'C.16 · WET COURTYARD':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }

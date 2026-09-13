@@ -1,5 +1,12 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — art first
+
+“Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish
+the environment/material/light/camera pass toward concept 02 before changing
+combat rules. Continue repository and hub delivery with explicit art/device
+acceptance gaps. Temporary fighters remain until their existing gates pass.
+
 ## Owner continuation, 2026-09-13 — concept 02 and gun inspection
 
 “2 looks great, let's aim for that. Camera angles can be used for aiming guns

@@ -1,0 +1,43 @@
+{
+  "generator": "build_kallio_courtyard.py",
+  "blender": "5.2.1 LTS",
+  "units": "metres",
+  "forward": "+Z",
+  "triangles": 41800,
+  "bytes": 3586560,
+  "motifs": [
+    "archway",
+    "balcony",
+    "bicycle",
+    "bike_rack",
+    "container",
+    "drain",
+    "facade_bay",
+    "facade_bay_b",
+    "ground_litter",
+    "lamp",
+    "low_wall",
+    "pallets",
+    "planter",
+    "service_bay",
+    "vent"
+  ],
+  "status": "prototype scenery; not owner-accepted",
+  "files": [
+    {
+      "file": "kallio-kit-v02.glb",
+      "bytes": 3586560,
+      "sha256": "a807548d7941b1acdfd728dafc94d654236aacd9723fce5e7a1f7177e30b3e7f"
+    },
+    {
+      "file": "painted-plaster-v01.png",
+      "bytes": 2762075,
+      "sha256": "ad8eebdd04e322912e35a9f6fe72e510ba81d6c6e38e6d7cc639d2004bd31282"
+    },
+    {
+      "file": "painted-setts-v01.png",
+      "bytes": 2781730,
+      "sha256": "ba37ce50317a95803a54423a468eb0ffa013fc960d6636f555210d14bd89a8be"
+    }
+  ]
+}
