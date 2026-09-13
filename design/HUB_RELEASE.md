@@ -60,3 +60,22 @@ art-library, intermediate concepts, credentials, raw masters or signed URLs.
 Document-only follow-ups do not require a new game version. A source push, merge,
 Pages build and public play check are separate facts. Physical Pixel/iPad and
 final F01/F02 motion acceptance remain separate gates.
+
+## C.09.1 delivery and staging lesson
+
+Source PR #70 is merged at `daddf4808bf3470170be5d89bee193741461204a`.
+The public C.09.1 card, movement, damage and 12-person fixture were verified.
+All 38 cabinet Git blobs were compared against staging. See
+[C091_RELEASE.json](C091_RELEASE.json) for current hub/merge evidence and limits.
+
+For byte-exact Windows staging, export the named commit with `git archive` and
+pass that exported root as `--source`. A clean working tree can still have
+checkout line-ending conversion. Do not normalize all files: several scripts
+are LF while the shared stylesheet is deliberately CRLF in Git. Preserve each
+Git blob's bytes before calculating the release receipt.
+
+The lab owns its header HOME link and native controller (`hubHome: native` in
+the hub catalogue). The common-shell key-bridge test must use a common-shell
+host; all cabinets, including this one, still undergo HOME/link/44px checks.
+
+Hub source reconciliation PR #511 merged at `801c95a8702f7e77e618dbf7dd4c8bb17c19cd76` after both current-head hub gates passed. Pages run `34748673795` succeeded on attempt 2 after a transient deployment HTTP 500; C.09.1 was reopened from the public hub card after that deployment. The hub smoke server must serve `.mjs` as JavaScript, matching Pages, so shared market/people imports execute during all-cabinet checks.
