@@ -86,3 +86,61 @@ fill, warmer timber and rear spill located at the existing rear-left lantern.
 Wet reflections break into small irregular marks instead of smooth white pools.
 Judge overview and gun framing together; the scene remains beautiful with
 limited wear, rather than adding undirected grime. No new mission/cover layout.
+
+## Director's assessment and next art pass
+
+The actual C.14 captures improve warm/cool separation, wet-ground response and
+gun-shot composition. They still show simple geometry and neutral articulated
+figures. The concept's foliage softness, prop specificity and character identity
+have not been reproduced. More bloom alone will not close those gaps.
+
+Next priorities, in order:
+
+1. Refine the large silhouettes: distinguish canopy layers and tree species,
+   reduce repeated leaf fans, and preserve open space around legal destinations
+   and the aiming corridor. Judge at the normal wide camera as well as close-up.
+2. Build a small reusable Helsinki park kit from existing references. The repo
+   already contains `art-library/props/era1/park-bench-v01.png`,
+   `street-green-rubbish-bin-v01.png`, `street-granite-bollard-v01.png`,
+   `street-bicycle-rack-v01.png` and `cover-concrete-barrier-v01.png`.
+   These are source references, not evidence of finished 3D props. Inspect their
+   approval records before authoring; retain the existing bear landmark GLB.
+   Use Blender for repeatable mesh/UV/material exports, and the engine for
+   practical lighting, wet response, cutaway and composition. This pass does
+   not authorize a paid Meshy generation job or a new gameplay cover layout.
+3. Give each material a readable response: warm timber, cool iron, rough stone,
+   and broken wet paving. Keep wear near the owner's 3–4/10 direction. Preserve
+   the painted-night backdrop and handmade shape language of the Art Bible.
+4. Replace stand-ins only after the registered character fit/motion gates pass.
+   Do not compensate for a poor rig with a camera angle that hides the defect.
+
+Completion means an improvement in actual overview and gun-view captures at
+phone portrait, short landscape and tablet layouts, with legal cells, intent
+and target figures readable. Physical Pixel 10 Pro/iPad M2 performance and
+owner visual acceptance remain separate checks. Keep intermediate art private.
+
+Reference inspection for the next batch: `art-library/APPROVALS.md` calls the
+street/park/dock props **semi-approved**, not finished assets. The inspected
+bench has broad timber slats and curved green cast-iron ends; the litter bin
+is a narrow green post-mounted box with an overhanging lid and dark opening.
+Those distinctive profiles matter more than tiny scratches. The existing
+`art-library/references/stages/stage-park-night-v01.jpg` uses tall irregular
+canopies, warm lamps grazing the leaves, a dark fine-picket boundary and a
+quiet open clearing. Borrow that light hierarchy; its raised platform and
+stairs do not silently change this arena's authored traversable geometry.
+
+Against concept 02, the next environment batch should also replace empty
+peripheral space with a restrained Helsinki perimeter-block silhouette and
+a few lit window/door bays, placed beyond the unchanged playable boundary.
+Author it from the canonical location references, not a generic new district.
+Keep warm amber glass and leaf edges, cool dark iron, and open sightlines as
+shared checks across overview and gun framing. These are proposed next-work
+criteria, not claims that C.14 already contains the new kit or facade.
+
+## Delivery
+
+C.14 is merged in Piritori PR #79 and Suds Jack PR #518 and verified on the
+public hub. See [the exact release receipt](C14_RELEASE.json) for commit pins,
+CI, staging, Pages and public-control evidence. Review corrected the foliage
+shader key, used-label contrast, shortcut entry and catalogue version.
+This delivery leaves the director assessment and physical/art gates above open.

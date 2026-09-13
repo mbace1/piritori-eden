@@ -1,13 +1,17 @@
 # Piritori active context
 
-## C.14 target selected — After the Rain
+## C.14 live — After the Rain art and gun aiming
 
 Owner: “2 looks great, let's aim for that. Camera angles can be used for aiming
 guns like zero company”. Use [02](design/concepts/c13-review/02-after-the-rain.png)
 for the current lighting/material/atmosphere target. Read [C.14 implementation](design/C14_AFTER_THE_RAIN.md).
 Gun inspection is reversible and uses the actual forecast. Target selection is
-not pixel-parity, rig or physical-device acceptance. Release facts below remain
-C.13 until the C.14 receipt records successful publication.
+not pixel-parity, rig or physical-device acceptance. Source PR #79 and hub PR #518 are merged. C.14 is deployed and verified through
+the public hub and real Aim view / cancel / confirm controls. Read
+[release evidence](design/C14_RELEASE.json) and
+[play C.14](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=14).
+The next art pass is scoped in the C.14 director assessment; final characters,
+concept parity and physical Pixel/iPad acceptance remain open.
 
 Updated 2026-09-13. Read this before designing, resuming 3D work or asking the owner to repeat a decision. This is a retrieval index and current owner brief, not a second asset-status ledger.
 
@@ -18,18 +22,18 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 3. For asset work: [MESHY_AGENT_HANDOFF.md](MESHY_AGENT_HANDOFF.md), its current-production notice, [3D_PIPELINE.md](3D_PIPELINE.md), [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md), [CHARACTER_SPEC](assets/CHARACTER_SPEC.md), and [asset_manifest.json](assets/asset_manifest.json).
 4. Current PR/manifest state before deciding that something is missing. This desktop has a partial checkout; a missing local file is not evidence it is absent from GitHub.
 
-## C.13 art and UI continuation
+## C.13 art and UI foundation (historical)
 
 The owner rejected C.12's interface as poorly grounded in the design. Read
 [the C.13 pass](design/C13_ART_AND_UI.md): the actual portrait/landscape UI targets
 and park-night reference were inspected. This batch restores the dark carton /
 cream console, a crew ledger, actual-figure portraits and practical night light.
-C.13 is live and verified through the public hub and real controls. Source PR #78
+C.13 was verified through the public hub and real controls; C.14 above is current. Source PR #78
 and hub PR #517 are merged. Read [release evidence](design/C13_RELEASE.json) and
 [play C.13](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=13). Owner visual review and physical Pixel/iPad acceptance remain
 open. No new character approval is implied.
 
-Next visual review: [two numbered concept directions](design/concepts/c13-review/README.md). These are proposed illustrations, not the shipped graphics or owner approval.
+Concept history: [two numbered concept directions](design/concepts/c13-review/README.md). These are illustrations, not shipped graphics. The owner selected 02 as the current implementation target; parity remains open.
 
 ## C.12 foundation (retained in C.13)
 
@@ -47,7 +51,7 @@ Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route moti
 
 ## Latest owner direction — carry into every design
 
-- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.13 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
+- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.14 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
 
 - Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). C.11 builds on the first combat/camera pass with directional low-wall cover and stand-in crouch/peek. C.12 adds persistent crew and rescue/extraction consequences. Final art and the city bridge remain open.
 

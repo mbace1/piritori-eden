@@ -1,0 +1,327 @@
+{
+  "build": "C.14",
+  "direction": "02 / After the Rain",
+  "source_repository": "mbace1/piritori-eden",
+  "source_commit": "22ac6861f4118b311b4fa18c0faa27e16155a8d0",
+  "source_pr": 79,
+  "source_branch": "art/meshy-approved-pilots-2026-09-11",
+  "hub_tested_head": "ffadb28be3ab34e945146408b591b276bbbfea8e",
+  "hub_pr": 518,
+  "local_checks": {
+    "deterministic_suites": [
+      "tactics",
+      "directional-cover",
+      "crew-run",
+      "fight-module-recovery",
+      "frame-clock"
+    ],
+    "four_layouts": [
+      "desktop",
+      "phone portrait",
+      "short landscape",
+      "tablet"
+    ],
+    "gun_camera_shader_recovery_commit": "1e1697522bd6731e3f84576403038618511fc388",
+    "full_staged_outing_commit": "7d15e37e83f2100633845e931b27740e8ae96e35",
+    "final_staged_control_contrast_commit": "22ac6861f4118b311b4fa18c0faa27e16155a8d0",
+    "final_change_since_shader_gate": "Used-action foreground only: #606663 -> #37403c",
+    "final_staged_action_contrast_minimum": 5.43,
+    "actual_mouse_and_touch": true,
+    "one_ammo_action_and_overview_return": true,
+    "source_runtime_blob_count": 47,
+    "hub_cabinet_blob_count": 51,
+    "main_and_live_shortcut_root_equivalence": true,
+    "other_game_version_entries_preserved": true,
+    "errors": [],
+    "derived_scoped_manifest_count": 1
+  },
+  "review_corrections": [
+    "Distinct compiled shader programs for foliage and solid cutaway variants",
+    "Used-action label contrast above 4.5:1",
+    "Hub version badge 14/14000",
+    "AnotherHUB shortcut regenerated with the correct module token"
+  ],
+  "physical_devices_verified": false,
+  "owner_runtime_visual_approval": false,
+  "production_character_approval": false,
+  "character_provider": "neutral stand-ins",
+  "limitations": [
+    "Concept parity remains incomplete",
+    "No new Meshy generation or rig promotion",
+    "Physical Pixel 10 Pro and iPad M2 acceptance pending"
+  ],
+  "next_art_pass": [
+    "Canopy silhouette and layering",
+    "Reusable Helsinki props from existing art-library references",
+    "Street-backdrop specificity and material separation",
+    "Registered character fit and motion before replacement"
+  ],
+  "entry": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=14",
+  "hub": "https://mbace1.github.io/Suds-Jack/#optionc-lab",
+  "source_merged": true,
+  "hub_merged": true,
+  "pages_success": true,
+  "public_verified": true,
+  "source_merge": "c259a9a5dc516926a63de803c578ad66aab66950",
+  "hub_merge": "0b08c48ed5156bf2ff39e4df9d050ac5150cc71e",
+  "live_commit": "3244c91bcfe15e1e63511ea81da403de6f92d157",
+  "pages": {
+    "id": 34772864909,
+    "name": "pages build and deployment",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34772864909",
+    "head_sha": "3244c91bcfe15e1e63511ea81da403de6f92d157"
+  },
+  "checks": {
+    "source": [
+      {
+        "id": 103760398532,
+        "name": "C laboratory tactics and touch",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770978133/job/103760398532",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760398515,
+        "name": "the Godot build",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770978133/job/103760398515",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760398508,
+        "name": "C crew outing and persistence",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770978133/job/103760398508",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760398494,
+        "name": "Act I touch scenes and visits",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770978133/job/103760398494",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760398379,
+        "name": "browser campaign state",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770978133/job/103760398379",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760389776,
+        "name": "C crew outing and persistence",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770975455/job/103760389776",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760389768,
+        "name": "C laboratory tactics and touch",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770975455/job/103760389768",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760389762,
+        "name": "the Godot build",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770975455/job/103760389762",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760389743,
+        "name": "browser campaign state",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770975455/job/103760389743",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      },
+      {
+        "id": 103760389675,
+        "name": "Act I touch scenes and visits",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/piritori-eden/actions/runs/34770975455/job/103760389675",
+        "head_sha": "22ac6861f4118b311b4fa18c0faa27e16155a8d0"
+      }
+    ],
+    "hub": [
+      {
+        "id": 103760676614,
+        "name": "piritori · the Godot port",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760676614",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760676580,
+        "name": "toko-move",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760676580",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760676556,
+        "name": "flow-core · piritori",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760676556",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760676529,
+        "name": "concrete skating slice",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760676529",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760676240,
+        "name": "turf",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760676240",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760675842,
+        "name": "the arcade floor",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760675842",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760650493,
+        "name": "piritori · the Godot port",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760650493",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760650373,
+        "name": "concrete skating slice",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760650373",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760650299,
+        "name": "toko-move",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760650299",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760650220,
+        "name": "flow-core · piritori",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760650220",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760650201,
+        "name": "turf",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760650201",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760649676,
+        "name": "the arcade floor",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760649676",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760579537,
+        "name": "ask",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045591/job/103760579537",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760579166,
+        "name": "toko-live browser runtime",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045694/job/103760579166",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760578878,
+        "name": "what changed",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771045500/job/103760578878",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760571735,
+        "name": "what changed",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042822/job/103760571735",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      },
+      {
+        "id": 103760571707,
+        "name": "toko-live browser runtime",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/mbace1/Suds-Jack/actions/runs/34771042844/job/103760571707",
+        "head_sha": "ffadb28be3ab34e945146408b591b276bbbfea8e"
+      }
+    ]
+  },
+  "public_checks": {
+    "hub_card": "PIRITORI · NIGHT SHIFT C.14",
+    "hub_badge": "v14",
+    "route_opened_via_hub": true,
+    "existing_c13_save_loaded": true,
+    "aim_changed_camera": true,
+    "forecast_preserved": "90% · 2 HP + 1 guard; flanked",
+    "cancel": {
+      "ammo": "4/4",
+      "move": "READY",
+      "action": "READY"
+    },
+    "confirmed_shot": {
+      "ammo": "3/4",
+      "move": "READY",
+      "action": "USED",
+      "target_hp": "2/4",
+      "target_guard": 0,
+      "overview_return": true
+    },
+    "release_json_source": "22ac6861f4118b311b4fa18c0faa27e16155a8d0",
+    "gameplay_console_errors": [],
+    "incidental_hub_observation": {
+      "message": "Cannot set properties of undefined (setting 'chat')",
+      "url": "https://mbace1.github.io/Suds-Jack/",
+      "time": "2026-09-13T17:53:57.137Z",
+      "scope": "Existing unchanged root inline chat assignment; hub catalogue and C.14 route worked. Not a claim of an error-free whole-hub audit; separate hub startup follow-up."
+    }
+  }
+}

@@ -14,8 +14,9 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Historical C.10.1 entry: `web/arena-lab/?actors=6&release=10.1`.
 - Historical C.11 entry: `web/arena-lab/?actors=6&release=11`.
 - Historical C.12 entry: `web/crew-run/?release=12`.
-- Current C.13 entry: `web/crew-run/?release=13`.
-- Current release receipt: [C13_RELEASE.json](C13_RELEASE.json), source PR #78 and hub PR #517. Earlier batches: C12_RELEASE.json and C11_RELEASE.json.
+- Historical C.13 entry: `web/crew-run/?release=13`.
+- Current C.14 entry: `web/crew-run/?release=14`.
+- Current release receipt: [C14_RELEASE.json](C14_RELEASE.json), source PR #79 and hub PR #518. Earlier batches: C13_RELEASE.json, C12_RELEASE.json and C11_RELEASE.json.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 
@@ -53,7 +54,9 @@ art-library, intermediate concepts, credentials, raw masters or signed URLs.
 2. Read the latest hub branches. Apply only this cabinet and its catalogue/cache
    entries. Same-repository Git blob SHAs may reuse already-published binaries.
 3. Update the visible build, game metadata, catalogue module and transitive hub
-   entry cache tokens; update the service worker shell entries to match. Preserve
+   entry cache tokens; update the service worker shell entries to match. Regenerate
+   `AnotherHUB/index.html` from that branch’s root with its relative base and
+   update only this cabinet in `hub/versions.json`. Verify both. Preserve
    other games and their concurrent changes. Never force-update the live branch.
 4. Reconcile a direct `gh-pages` deployment back to `main` with a game-scoped PR.
    Do not copy the whole live root over a newer/different development root.
