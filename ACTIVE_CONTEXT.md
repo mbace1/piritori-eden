@@ -11,6 +11,9 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 
 ## Latest owner direction — carry into every design
 
+- Owner continuation, 2026-09-13: minimize defects; use temporary placeholder characters until F01/F02 fit and look good. These are development stand-ins, not redesigns or asset promotions.
+- Push each reviewable vertical-slice batch to **mbace1/piritori-eden on GitHub**, with its tests and handoff, so agents on other PCs can continue from the same source. Local work alone is not delivery.
+
 - Prefer substantial, visible progress using the Dream Loop workflow. The request is for Astra Extra High; do not claim an app/model setting was changed without evidence.
 - Art Bible controls visual identity. Dream Loop improves dimensional light, materials, reflections and atmosphere; it does not replace Piritori with generic realistic humans or fantasy art.
 - Wear/neglect roughly **3–4/10**. Underground themes can still be beautiful. Lighting and style matter more than blanket grime.
@@ -44,3 +47,8 @@ Next: [Option C vertical-slice design](design/OPTION_C_VERTICAL_SLICE.md). Prove
 ## Runtime truth at this update
 
 C.08 r2 is live; this context/design update does not deploy a new build. [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
+
+
+## C.09 source continuation
+
+`feat/dream-loop-c09-arena-lab` adds `web/arena-lab/` with grounded stand-ins, 2/6/12-person fixtures, wet paving/light probe and scenery cutaway. Read [C.09 handoff](design/C09_ARENA_LAB.md) for entry points, tests and remaining gates. C.08 r2 is still the live hub baseline; this source branch does not deploy or repair the Meshy models.

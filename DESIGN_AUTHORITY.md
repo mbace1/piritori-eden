@@ -1,5 +1,9 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — placeholders and shared source
+
+The owner authorizes temporary placeholder characters until the approved models fit and look good, to minimize defects while the vertical slice develops. Neutral stand-ins are development equipment, not newly approved roster designs. F01/F02 retain their existing production gates. Each reviewable slice batch must be pushed to the Piritori GitHub repository with tests and handoff so other PCs/agents can continue directly. A source push is not a live deployment.
+
 ## Owner continuation, 2026-09-13 — active design and production memory
 
 Read [ACTIVE_CONTEXT.md](ACTIVE_CONTEXT.md) before resuming. It links the existing Meshy handoff, completed paid pilot, pipeline and current manifest rather than replacing them. Preserve the Art Bible while pursuing substantial Dream Loop lighting/material/depth improvements. Wear is roughly 3–4/10; the world should still be beautiful. Encounter framing supports 2 to 10+ participants, not a four-person game limit. Use separate numbered, materially different arena screen targets with attainable character fidelity; park UI and other scene exploration separately. The next Option C slice must prove a reproducible Meshy/Blender production route as well as visual quality. A/C are battle alternatives; B is a separate map/run axis. See [the slice design](design/OPTION_C_VERTICAL_SLICE.md). These are owner directions and a design brief, not a new live-build or production-readiness claim.

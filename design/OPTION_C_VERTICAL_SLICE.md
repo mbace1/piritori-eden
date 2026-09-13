@@ -12,9 +12,11 @@ Use one existing public meeting/battle location as the visual benchmark. Bear Pa
 
 Preserve the canonical request/result boundary and existing inspection, conversation, peaceful result, escalation, retreat and aftermath behavior. Campaign settlement remains separate until integrated; never charge another block for the battle. Keep authored NPC combat restrictions.
 
-Add clearly labeled development fixtures with **2, 6 and 12 participants**, using the existing two character types and garment variations. They test framing, animation cost, selection, intent, cover and effects. They do not recast Aatami/Jaska/Slomo/Arvo, rewrite Bear Path's authored encounter, or turn the whole game into fixed-size squads. Formation front/middle/back and mostly hidden cells remain.
+Add clearly labeled development fixtures with **2, 6 and 12 participants**, using temporary neutral stand-ins (owner authorization, 2026-09-13) until the existing two approved character types pass their motion/visual gates. They test framing, animation cost, selection, intent, cover and effects. They do not recast Aatami/Jaska/Slomo/Arvo, rewrite Bear Path's authored encounter, or turn the whole game into fixed-size squads. Formation front/middle/back and mostly hidden cells remain.
 
 Retain practical battle-wide, closer inspection and manually rotated views, with camera-side cutaway and visible withdrawal space. Reflow for phone/tablet portrait and landscape. Do not hide density failures by removing participants or replacing everyone with a beautiful still image.
+
+C.09 implements the first additive test arena at `web/arena-lab/`; see [its handoff](C09_ARENA_LAB.md). The source is shared through `feat/dream-loop-c09-arena-lab`. This is a working prototype, not completion of the production or device gates.
 
 ## Visual target
 

@@ -950,7 +950,15 @@ export function autoCommand(battle, onEvent = () => {}) {
       .map(cell => ({ cell, ...parseSlotKey(cell) }))
       .sort((a, b) => (toward * b.depth - toward * a.depth) || Math.abs(a.lane - centre) - Math.abs(b.lane - centre));
     const forward = candidates.find(item => toward * (item.depth - fromDepth) > 0)?.cell;
-    const reposition = forward ?? candidates[0]?.cell;
+    // Passing every opponent can strand a crew at the far edge because reach
+    // scans in its facing direction. Prefer a free cell with a legal attack
+    // on the next turn; movement still spends the action and cover still blocks.
+    const from=laneDepth(unit);
+    // Opt-in laboratory policy; existing C.08 command-replay saves retain
+    // their original seeded automatic choices until a versioned migration.
+    const useful=battle.repositionPolicy==='legal-attack'?candidates.filter(p=>attackTargets(battle,{...unit,cell:p.cell}).length)
+      .sort((a,b)=>(Math.abs(a.lane-from.lane)+Math.abs(a.depth-from.depth))-(Math.abs(b.lane-from.lane)+Math.abs(b.depth-from.depth))||a.cell.localeCompare(b.cell)):[];
+    const reposition = useful[0]?.cell ?? forward ?? candidates[0]?.cell;
 
     // Pick the highest-scoring TYPE (deterministic top pick — the same
     // choice Godot's own `_ai_select_command(preview=true)` makes; the

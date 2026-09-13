@@ -1,0 +1,441 @@
+{
+  "build": "C.09 arena lab",
+  "date": "2026-09-13",
+  "physical_device": false,
+  "views": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "count": 6,
+      "metrics": {
+        "scenario": "lab-6",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 6,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 46,
+        "edgeSmoothing": {
+          "method": "none",
+          "pixels": 0,
+          "bytes": 0
+        },
+        "draws": 68,
+        "geometries": 35,
+        "textures": 10,
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "desktop",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          1440,
+          680
+        ],
+        "shadows": true,
+        "antialias": true,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "phone",
+      "width": 412,
+      "height": 915,
+      "count": 12,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-12",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 12,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 27,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 227012,
+          "bytes": 908048
+        },
+        "draws": 92,
+        "geometries": 54,
+        "textures": 10,
+        "models": 12,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          412,
+          551
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "phone-landscape",
+      "width": 915,
+      "height": 412,
+      "count": 2,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-2",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 2,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 27,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 229870,
+          "bytes": 919480
+        },
+        "draws": 53,
+        "geometries": 24,
+        "textures": 10,
+        "models": 2,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          635,
+          362
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "tablet",
+      "width": 1194,
+      "height": 834,
+      "count": 12,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-12",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 12,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 26,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 613716,
+          "bytes": 2454864
+        },
+        "draws": 93,
+        "geometries": 54,
+        "textures": 10,
+        "models": 12,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          1194,
+          514
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    }
+  ],
+  "motion": {
+    "samples": 720,
+    "minimum_y_m": 0.014999998479817603,
+    "maximum_lowest_vertex_m": 0.025544507527670235,
+    "actions": [
+      {
+        "role": "muscle",
+        "mode": "idle",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "walk",
+        "minY": 0.014999998479817603,
+        "maxLowestVertex": 0.015000005193712598
+      },
+      {
+        "role": "muscle",
+        "mode": "strike",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "shoot",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "brace",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "item",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "talk",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "hit",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "grip",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "muscle",
+        "mode": "down",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.025544507527670235
+      },
+      {
+        "role": "runner",
+        "mode": "idle",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "walk",
+        "minY": 0.014999998479817603,
+        "maxLowestVertex": 0.015000005193712598
+      },
+      {
+        "role": "runner",
+        "mode": "strike",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "shoot",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "brace",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "item",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "talk",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "hit",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "grip",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.01500000202655806
+      },
+      {
+        "role": "runner",
+        "mode": "down",
+        "minY": 0.01500000202655806,
+        "maxLowestVertex": 0.025544507527670235
+      }
+    ]
+  },
+  "visibility": {
+    "comparisons": 48,
+    "minimum_scenery_fraction": 0.9961977186311787,
+    "minimum_with_other_fighters": 0.6080402010050251,
+    "scope": "standing six-person desktop fixture; eight angles; not all movement cells"
+  },
+  "production_character_gate": "UNCHANGED: v05 not accepted",
+  "live_hub": "C.08 r2; lab source only"
+}

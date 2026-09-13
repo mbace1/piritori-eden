@@ -56,3 +56,10 @@ Before scenario or environment design, read `design/SCENARIO_ATLAS.md` and
 reference. The atlas separates authored facts, proposed staging and pending
 owner decisions; it does not override the GDD or certify runtime integration.
 Record answers and source changes there so later work can follow the decisions.
+
+Owner continuation, 2026-09-13: temporary neutral characters are authorized
+for the Option C laboratory until the approved fighters fit and look good.
+They do not replace approved concepts or change production-manifest status.
+Push each reviewable slice batch and its tests/handoff to the Piritori GitHub
+repository so other PCs can continue. Distinguish source pushed, PR open,
+merged and live hub deployment; never claim one from another.

@@ -1,9 +1,10 @@
 import * as T from 'three';
+import {developmentLook} from './development-look.js?v=1';
 
-// D009: Ink & Stone and Cold Street are two approved directions, not one blend.
+// D009: Ink & Stone and Cold Street are compared prototypes, not final approval.
 // They share geometry and encounter anchors; switching only changes art state.
 // Physical staging is compressed fiction, not a survey of the real park.
-export function buildKarhupuisto(world,renderer,cover,position,assets,initialStyle='ink'){
+export function buildKarhupuisto(world,renderer,cover,position,assets,initialStyle='ink',development=false){
   if(!assets?.bear||!assets?.ground)throw Error('The park assets did not load.');
   world.background=new T.Color('#101d25');world.fog=new T.Fog('#172832',19,45);
   renderer.toneMappingExposure=1;
@@ -184,8 +185,9 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     bear.traverse(o=>{if(!o.isMesh)return;o.material.flatShading=!cold;o.material.roughness=cold?.84:1;o.material.color.setHex(cold?0x9cabb7:0xacb1b5);o.material.needsUpdate=true;});
   }
   setStyle(initialStyle);
-  return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
-    update(){},tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
+  const lab=development?developmentLook(world,renderer,group,groundMaterial,mats):null;
+  return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({development:lab?.metrics(),style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
+    recover:()=>lab?.recover(),update:(camera,actors)=>lab?.update(camera,actors),tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
     aftermath(outcome){points.material.opacity=outcome==='peaceful'?.25:.45;}
   };
 }

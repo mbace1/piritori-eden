@@ -2001,7 +2001,8 @@
       "file": "environment3d/bear-landmark-v01.glb",
       "source": "Blender procedural sculpt",
       "source_version": "1",
-      "approval_status": "direction-approved",
+      "approval_status": "unreviewed-prototype",
+      "review_status": "not-owner-approved",
       "production_status": "playable-test-only",
       "layer": "location-stage",
       "era": "2003",
@@ -2011,7 +2012,7 @@
       "bytes": 302460,
       "baked_text": false,
       "baked_ui": false,
-      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md.",
+      "note": "C.08 environment prototype. D009 records relative preference, not owner approval of this derivative. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md.",
       "triangle_count": 8610
     },
     {
@@ -2020,7 +2021,8 @@
       "file": "environment3d/park-ground-study-v01.png",
       "source": "Built-in Image Generation",
       "source_version": "1",
-      "approval_status": "direction-approved",
+      "approval_status": "unreviewed-prototype",
+      "review_status": "not-owner-approved",
       "production_status": "playable-test-only",
       "layer": "location-stage",
       "era": "2003",
@@ -2030,7 +2032,7 @@
       "bytes": 3483080,
       "baked_text": false,
       "baked_ui": false,
-      "note": "C.08 environment prototype under D009. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md."
+      "note": "C.08 environment prototype. D009 records relative preference, not owner approval of this derivative. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md."
     }
   ]
 }
