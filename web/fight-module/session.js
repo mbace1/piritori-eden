@@ -1,4 +1,4 @@
-import {createTacticalSession} from './tactics.js?v=2';
+import {createTacticalSession} from './tactics.js?v=3';
 import { createState } from '../js/v3/state.js?v=5';
 import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=2';
 

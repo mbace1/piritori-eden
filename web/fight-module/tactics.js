@@ -60,7 +60,7 @@ export function planView(b,plan){
   if(!u?.alive)return {...plan,valid:false,reason:'Attacker down'};
   if(!legalPath(b,u,plan.path))return {...plan,valid:false,reason:'Planned route blocked'};
   if(plan.type!=='attack')return {...plan,valid:true,reason:plan.type==='reload'?'Reloads':plan.type==='advance'?'Moves; no attack planned':'Holds'};
-  return {...plan,...forecast(b,u,target,plan.to),target:plan.target};
+  return {...plan,...forecast(b,u,target,plan.to),to:plan.to,aim:target?.cell,target:plan.target};
 }
 export function threats(b,preview=null){
   const sim=copyBattle(b),totals={},views=[];
