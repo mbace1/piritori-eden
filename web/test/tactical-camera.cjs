@@ -1,7 +1,7 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict');
 const base=process.env.ARENA_LAB_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/arena-lab/';
 (async()=>{const browser=await chromium.launch({...process.platform==='win32'?{channel:'msedge'}:{},headless:true,args:['--enable-unsafe-swiftshader']});try{
- const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const page=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:Number(process.env.ARENA_LAB_DPR||1)}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(base+'?actors=6');await page.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy);
  const ready=()=>page.waitForFunction(()=>!fightModule.metrics().busy),view=()=>page.evaluate(()=>fightModule.view().points),snap=()=>page.evaluate(()=>fightModule.snapshot());
  async function setup(){await page.selectOption('#loadout','ranged');await page.locator('#restart').click();await ready();await page.locator('#roster button').nth(1).click();}

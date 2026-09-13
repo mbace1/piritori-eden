@@ -58,6 +58,8 @@ state after GPU loss. Fighter models/production manifest status are unchanged.
   peaceful handover, settlement once, return memory, battle, interrupted movement
   and repeated recovery. Desktop automation is not physical-device acceptance.
 - C rules, legacy regression, touch/browser and camera tests are wired into CI.
+  Software-only CI uses DPR 0.5 at unchanged CSS/touch layouts; local visual QA
+  uses DPR 1. CI rendering is not a physical-device performance measurement.
 
 Private captures and intermediate/rejected art stay private. Pixel 10 Pro and
 iPad M2 physical acceptance is pending. Next: owner playtest, directional cover

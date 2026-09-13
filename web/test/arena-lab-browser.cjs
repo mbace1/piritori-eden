@@ -2,7 +2,9 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
 const base=process.env.ARENA_LAB_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/arena-lab/',out=process.env.ARENA_LAB_OUTPUT||'.private/c10-qa';fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await chromium.launch({...(process.platform==='win32'?{channel:'msedge'}:{}),headless:true,args:['--enable-unsafe-swiftshader']});const report={physicalDevice:false,views:[]};try{
   for(const spec of [{name:'desktop',width:1440,height:1000,count:6},{name:'phone',width:412,height:915,count:12,touch:true},{name:'phone-landscape',width:915,height:412,count:2,touch:true},{name:'tablet',width:1194,height:834,count:12,touch:true}]){
-    const context=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:!!spec.touch,isMobile:!!spec.touch}),page=await context.newPage(),errors=[];
+    // CPU-only CI uses fewer drawing-buffer pixels; CSS/touch layouts and all
+    // gameplay assertions stay identical. Local visual QA defaults to DPR 1.
+    const context=await browser.newContext({viewport:{width:spec.width,height:spec.height},deviceScaleFactor:Number(process.env.ARENA_LAB_DPR||1),hasTouch:!!spec.touch,isMobile:!!spec.touch}),page=await context.newPage(),errors=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
     await page.route('**/fight-module/main.js*',async route=>{const response=await route.fetch();await route.fulfill({response,body:await response.text()+'\n'+fs.readFileSync(path.join(__dirname,'arena-lab-hooks.js'),'utf8')});});
     const tap=async locator=>locator[spec.touch?'tap':'click']();
