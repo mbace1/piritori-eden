@@ -2,15 +2,15 @@
 
 Status: implemented as the C.10 laboratory batch; validation/publication recorded in [C10_IMPLEMENTATION.md](C10_IMPLEMENTATION.md). The plan below is retained to distinguish implemented scope from later production targets.
 
-The owner reports that the playable is good and asks for attack animations, guns, cover, progress toward concept-art parity, Star Wars Zero Company camera features and Metal Slug Tactics telegraphing/movement. This accepts the usefulness of the playable baseline; it does not promote placeholder art or approve final rigs. C.09.1 remains the live build.
+The owner reports that the playable is good and asks for attack animations, guns, cover, progress toward concept-art parity, Star Wars Zero Company camera features and Metal Slug Tactics telegraphing/movement. This accepts the usefulness of the playable baseline; it does not promote placeholder art or approve final rigs. C.10.1 is now the live first implementation; its receipt distinguishes the completed pass from later targets.
 
 ## Updated direction after the TURF summary
 
 The owner applies the Turf summary to both A and C and names **Mewgenics meets XCOM** as the central reference. Read [shared tactical direction](A_C_TACTICAL_DIRECTION.md). The following C.10 work now starts with one Move plus one Action in either order, full intent by default, and both cover classes. This corrects the earlier deferral of the action economy as a later experiment. Preserve authored campaign rules/saves until their explicit migration.
 
-## Grounded starting point
+## Grounded starting point (before C.10)
 
-Read ACTIVE_CONTEXT, DESIGN_AUTHORITY, ART_BIBLE, OPTION_C_VERTICAL_SLICE and CAMERA_AND_SCENES first. The current controller already plays basic strike/shoot/hit/down gestures and shows legal move/attack targets. Stand-ins have simple temporary weapons, currently visible only during selected actions. Impact presentation is a generic target spark. Manual orbit/zoom/FIT and scenery cutaway exist. These systems need richer presentation and clearer tactical information, not a claim that all combat animation is absent.
+Read ACTIVE_CONTEXT, DESIGN_AUTHORITY, ART_BIBLE, OPTION_C_VERTICAL_SLICE and CAMERA_AND_SCENES first. At the C.09.1 baseline, the controller already played basic strike/shoot/hit/down gestures and shows legal move/attack targets. Stand-ins have simple temporary weapons, currently visible only during selected actions. Impact presentation is a generic target spark. Manual orbit/zoom/FIT and scenery cutaway exist. These systems need richer presentation and clearer tactical information, not a claim that all combat animation is absent.
 
 Use the current arena and existing bat, knife and handgun equipment first. Keep the approved F01/F02 identities and production gates. No new paid Meshy jobs, roster expansion, campaign mission or engine migration follows from this plan.
 
@@ -45,4 +45,3 @@ Compare real runtime captures with existing preferred concepts from matched view
 C.10 must demonstrate a route preview -> move to useful cover -> inspect threat -> fire/strike -> correct impact/reaction -> camera return sequence. Test both sides, legal/blocked targets, guard versus condition damage, downed units, 2/6/12 participants, portrait/landscape, keyboard/touch/controller pathways, manual camera interruption, reduced motion and graphics loss during attacks. Replay must resolve each command once and previews must leave the snapshot/RNG unchanged.
 
 Retain measured quality tiers and the C.09.1 performance baseline. Desktop emulation is not Pixel 10 Pro/iPad M2 acceptance. Publish the tested source batch, merge, publish the hub cabinet and verify its actual public route under HUB_RELEASE.md. Each playable release includes Godot port notes/vectors for changed rules. This document-only plan creates no new playable version.
-

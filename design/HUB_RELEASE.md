@@ -10,7 +10,9 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Hub repository: `mbace1/Suds-Jack`, live branch `gh-pages`, source mirror `main`.
 - Lab cabinet: `piritori-c09/`; hub card ID `optionc-lab`.
 - C.09 entry: `web/arena-lab/?actors=6&release=9`.
-- C.09.1 entry: `web/arena-lab/?actors=6&release=9.1`.
+- Historical C.09.1 entry: `web/arena-lab/?actors=6&release=9.1`.
+- Current C.10.1 entry: `web/arena-lab/?actors=6&release=10.1`.
+- Current release receipt: [C10_RELEASE.json](C10_RELEASE.json), source PRs #73/#74 and hub PRs #513/#514.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 
@@ -20,7 +22,7 @@ C.09 source PR #69 merged at `d74f966adb6f47322e46c554d898c719bf2bdf52` into
 The public hub card → arena, movement, ranged damage and restart were verified.
 Do not merge the entire older stacked PR #68 as a deployment shortcut.
 
-## Stage C.09.1 from a clean, tested source commit
+## Stage the current laboratory from a clean, tested source commit
 
 Fetch the current hub cabinet's `art/v3/manifest.json` to a local file. Preserve
 its pinned fighter URLs and identities. The laboratory downloads no fighter
