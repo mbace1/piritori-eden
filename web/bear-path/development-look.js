@@ -57,7 +57,7 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
             // threshold left near benches covering legs at back-row cells.
             if(labView.z>person.z-.95 && mask>dither)discard;
           }`);
-      };material.customProgramCacheKey=()=>priorKey+'-c14-cutaway';material.needsUpdate=true;
+      };material.customProgramCacheKey=()=>priorKey+'-c14-cutaway-'+(foliage?'foliage':'solid');material.needsUpdate=true;
     }
   });
   const point=new T.Vector3();let tracked=[];

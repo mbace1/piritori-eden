@@ -7,7 +7,7 @@ const out=process.env.AIM_OUTPUT||'.private/c14-aim-qa';fs.mkdirSync(out,{recurs
   p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await p.addInitScript(()=>{window.testPad={buttons:Array.from({length:16},()=>({pressed:false})),axes:[]};Object.defineProperty(navigator,'getGamepads',{value:()=>[testPad]});});
   // Inject context-loss handles for setup only; all aiming/shots use UI.
-  await p.route('**/fight-module/main.js*',async route=>{const response=await route.fetch();await route.fulfill({response,body:await response.text()+"\nlet gl;window.aimAudit={lose:()=>{gl=renderer.getContext().getExtension('WEBGL_lose_context');gl.loseContext();},restore:()=>gl.restoreContext()};"});});
+  await p.route('**/fight-module/main.js*',async route=>{const response=await route.fetch();await route.fulfill({response,body:await response.text()+"\nlet gl;window.aimAudit={lose:()=>{gl=renderer.getContext().getExtension('WEBGL_lose_context');gl.loseContext();},restore:()=>gl.restoreContext(),programs:()=>{const seen=new Set(),out=[],gl=renderer.getContext();world.traverse(o=>{for(const m of [].concat(o.material||[])){if(seen.has(m))continue;seen.add(m);const key=m.customProgramCacheKey();if(!key.includes('-c14-cutaway'))continue;for(const program of renderer.properties.get(m).programs?.values()||[]){const shaders=gl.getAttachedShaders(program.program)||[];const fragment=shaders.find(s=>gl.getShaderParameter(s,gl.SHADER_TYPE)===gl.FRAGMENT_SHADER);out.push({key,corridor:(fragment?gl.getShaderSource(fragment):'').includes('labFocusStart.w>0.0')});}}});return out;}};"});});
   const tap=async q=>{await p.waitForTimeout(280);await q.scrollIntoViewIfNeeded();await q[spec.touch?'tap':'click']();};
   const idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy,{},{timeout:120000});
   const snap=()=>p.evaluate(()=>fightModule.snapshot()),view=()=>p.evaluate(()=>fightModule.view().points);
@@ -19,6 +19,7 @@ const out=process.env.AIM_OUTPUT||'.private/c14-aim-qa';fs.mkdirSync(out,{recurs
   assert.equal(await p.locator('#tactical-preview p').innerText(),forecast,'camera preserves true forecast');
   const bounds=await p.evaluate(()=>{const m=fightModule.metrics(),v=fightModule.view(),r=document.getElementById('arena').getBoundingClientRect();return {width:r.width,height:r.height,points:v.points.filter(p=>m.camera.ids.includes(p.id))};});
   for(const unit of bounds.points)for(const point of [unit.head,unit.feet]){assert.ok(point.x>=0&&point.x<=bounds.width&&point.y>=0&&point.y<=bounds.height,`${spec.name} ${unit.id} visible`);}
+  const programs=await p.evaluate(()=>aimAudit.programs());assert.ok(programs.some(v=>v.key.endsWith('-foliage'))&&programs.some(v=>v.key.endsWith('-solid')),'both material families compiled');for(const v of programs)assert.equal(v.corridor,v.key.endsWith('-foliage'),'linked foliage corridor must never leak into solid scenery');
   assert.equal(bounds.points.length,2);assert.ok(await p.evaluate(()=>document.body.scrollWidth<=innerWidth));
   await p.screenshot({path:`${out}/${spec.name}-aim.png`});
   await tap(p.locator('#aim-preview'));assert.deepEqual(await view(),overview,'Overview restores exact view');
