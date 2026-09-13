@@ -110,16 +110,20 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
       box('scar',x+side*.48,.505,z+.06,.23,.009,.035);}
   }
   bench(-5.7,3.5);bench(5.6,3.8);bench(3.6,-6.6);
-  const bearCell=[...cover].find(([,v])=>v.propId==='bear-plinth')?.[0]||'2,6';
+  const bearCell=[...cover].find(([,v])=>v.propId==='bear-plinth')?.[0]||(development?'2,9':'2,6');
   const bp=position(bearCell),bx=bp.x,bz=bp.z-.66;
   box('granite',bx,.43,bz,1.67,.78,.94);box('stone',bx,.85,bz,1.78,.08,1.02);
   box('stone',bx,.045,bz,1.85,.09,1.10);box('iron',bx,.39,bz+.475,.61,.16,.012);
   const bear=assets.bear,bounds=new T.Box3().setFromObject(bear),size=bounds.getSize(new T.Vector3()),center=bounds.getCenter(new T.Vector3()),scale=1.72/size.x;
   bear.scale.setScalar(scale);bear.position.set(bx-center.x*scale,.89-bounds.min.y*scale,bz-center.z*scale);bear.name='Karhupuisto carved bear';group.add(bear);
   bear.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;o.material=o.material.clone();}});
-  const benchCell=[...cover].find(([,v])=>v.propId==='park-bench')?.[0]||'1,6',bb=position(benchCell);
+  const benchCell=[...cover].find(([,v])=>v.propId==='park-bench')?.[0]||(development?'0,9':'1,6'),bb=position(benchCell);
   bench(bb.x-.3,bb.z-.55);
   box('parcel',bb.x-.3,.64,bb.z-.51,.42,.28,.27);box('wood',bb.x-.3,.785,bb.z-.51,.035,.013,.28);box('wood',bb.x-.3,.65,bb.z-.365,.035,.27,.008);
+  if(development)for(const [cell,v] of cover){const p=position(cell);
+    if(v.hardBlock){box('granite',p.x,.68,p.z,.91,1.36,.91);box('stone',p.x,1.38,p.z,1.0,.07,1.0);box('iron',p.x,.32,p.z+.46,.40,.08,.02);}
+    else{box('granite',p.x,.24,p.z-.42,.97,.48,.22);box('stone',p.x,.5,p.z-.42,1.02,.06,.26);}
+  }
   // Graded cross-path edges, patched apron and drain stay outside actor cells.
   for(const side of [-1,1])for(let i=0;i<14;i++)box('stone',side*4.48,.027,-8+i*1.12,.14,.055,1.08);
   box('stone',.9,.02,6.15,3.25,.035,1.7);box('night',1.8,.045,6.04,.87,.035,.49);
@@ -152,7 +156,7 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     box('glow',x,3.46,z,.19,.28,.19);box('iron',x,3.3,z,.31,.075,.31);
     for(const dx of [-.12,.12])for(const dz of [-.12,.12])box('iron',x+dx,3.46,z+dz,.025,.30,.025);
     const glow=new T.Sprite(glowMaterial);glow.position.set(x,3.47,z);glow.scale.set(1.4,1.4,1);group.add(glow);
-    if(i<2){const light=new T.SpotLight(0xffd3a0,63,17,1.0,.86,1.45);light.position.set(x,3.65,z);light.target.position.set(x*.18,0,z*.3);
+    if(i<2){const light=new T.SpotLight(development&&i===1?0x8bc5db:0xffd3a0,development?77:63,17,1.0,.86,1.45);light.position.set(x,3.65,z);light.target.position.set(x*.18,0,z*.3);
       light.castShadow=i===0;light.shadow.mapSize.set(1024,1024);light.shadow.normalBias=.04;world.add(light,light.target);lamps.push(light);}
     if(i===3)for(let n=0;n<4;n++){box(n%2?'poster':'cream',x,.65+n*.20,z+.06,.14,.16,.015);box('night',x,.65+n*.20,z+.072,.07,.013,.003);}
   }

@@ -23,6 +23,8 @@
   "web/fight-module/resolver.js",
   "web/fight-module/session.js",
   "web/fight-module/stand-in.js",
+  "web/fight-module/tactics.js",
+  "web/fight-module/tactical-ui.js",
   "web/fight-module/style.css",
   "web/js/v3/equipment.js",
   "web/js/v3/grid.js",

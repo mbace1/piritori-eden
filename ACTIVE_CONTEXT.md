@@ -9,6 +9,10 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 3. For asset work: [MESHY_AGENT_HANDOFF.md](MESHY_AGENT_HANDOFF.md), its current-production notice, [3D_PIPELINE.md](3D_PIPELINE.md), [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md), [CHARACTER_SPEC](assets/CHARACTER_SPEC.md), and [asset_manifest.json](assets/asset_manifest.json).
 4. Current PR/manifest state before deciding that something is missing. This desktop has a partial checkout; a missing local file is not evidence it is absent from GitHub.
 
+## C.10 implementation batch
+
+Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route motion, visible temporary weapons and optional conservative action focus are implemented in the C laboratory. See [C.10 implementation and test receipt](design/C10_IMPLEMENTATION.md). Publication is recorded separately: until that receipt has a successful hub deployment, C.09.1 remains live. Campaign/Bear Path keep their authored resolver. No fighter asset gate changed.
+
 ## Latest owner direction — carry into every design
 
 - Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.09.1 is still the live old-rule lab.
@@ -56,3 +60,4 @@ C.09.1 is live as a separate [arena laboratory](https://mbace1.github.io/Suds-Ja
 ## C.09 source continuation
 
 `feat/dream-loop-c09-arena-lab` adds `web/arena-lab/` with grounded stand-ins, 2/6/12-person fixtures, wet paving/light probe and scenery cutaway. Read [C.09 handoff](design/C09_ARENA_LAB.md) for entry points, tests and remaining gates. PR #69 was merged into `art/meshy-approved-pilots-2026-09-11` and published on the hub as C.09. The stand-ins do not repair or promote Meshy models. C.09.1's performance/visibility batch is merged and public. Read its handoff and `piritori-c09/release.json` for the current public source commit. Next: physical Pixel/iPad tests, deliberate practical lighting, and a second reproducible environment arrangement; actor overlap and final rigs remain open.
+
