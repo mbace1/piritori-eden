@@ -173,6 +173,7 @@ jobs:
           ARENA_LAB_URL: http://127.0.0.1:8782/web/arena-lab/
           ARENA_LAB_OUTPUT: /tmp/c10-qa
           ARENA_LAB_DPR: '0.5'
+          ARENA_LAB_TURN_TIMEOUT: '120000'
         run: |
           python3 -m http.server 8782 --bind 127.0.0.1 > /tmp/c10-server.log 2>&1 &
           node web/test/arena-lab-browser.cjs

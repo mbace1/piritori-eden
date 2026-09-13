@@ -1,4 +1,4 @@
-import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=1';
+import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=2';
 
 export function tacticalUI({getSession,button,tile,run,hint,refresh}){
   let preview=null;
@@ -37,7 +37,7 @@ export function tacticalUI({getSession,button,tile,run,hint,refresh}){
       if(v.valid){tile(v.to,0xdb946f,.19);if(v.type==='attack')tile(destination?.id===t.id?destination.cell:t.cell,0xf07862,.30);}
     }
     for(const [c,cover] of b.cover)tile(c,cover.hardBlock?0x8dacc6:0xe4ce92,.18);
-    $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold: partial cover / −25 gun hit points · Red: planned danger';
+    $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold: partial cover / −25 percentage points gun accuracy · Red: planned danger';
   }
   return {pick,cancel,render,confirm:()=>{if(preview)$('commit-preview')?.click();}};
 }

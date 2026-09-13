@@ -1,18 +1,18 @@
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=6';
+import {createSession,checkpoint,restoreSession} from './session.js?v=7';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=6';
 import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=2';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
 import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
 import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
 import {buildNightCourtyard} from './environment.js?v=1';
-import {buildKarhupuisto} from '../bear-path/park.js?v=5';
+import {buildKarhupuisto} from '../bear-path/park.js?v=6';
 import {loadParkAssets} from '../bear-path/assets.js?v=1';
 import {createEncounter} from '../bear-path/encounter.js?v=1';
 import {mountBearPath} from '../bear-path/presentation.js?v=2';
 import {fitBattleCamera,placeLabels} from './framing.js?v=1';
-import {tacticalUI} from './tactical-ui.js?v=1';
-import {routes} from './tactics.js?v=1';
+import {tacticalUI} from './tactical-ui.js?v=2';
+import {routes} from './tactics.js?v=2';
 import {createFrameClock} from './frame-clock.js?v=1';
 
 const isLab=document.body.dataset.scenario==='arena-lab',isBear=document.body.dataset.scenario==='bear-path',isPark=isBear||isLab;
@@ -152,7 +152,7 @@ async function routeVisual(id,path){
 }
 async function shotEffect(a,target,event){
   const from=new T.Vector3();a.prop.getWorldPosition(from);from.y+=.06;
-  const to=target.group.position.clone().setY(event.hit?1.2:event.forecast.cover==='partial'?.47:1.0);if(!event.hit)to.x+=.42;
+  const to=target.group.position.clone().setY(event.hit?(event.forecast.hpDamage?1.2:1.45):event.forecast.cover==='partial'?.47:1.0);if(!event.hit)to.x+=.42;
   const geometry=new T.BufferGeometry().setFromPoints([from,to]),material=new T.LineBasicMaterial({color:0xffdf99,transparent:true,opacity:.9,depthWrite:false}),line=new T.Line(geometry,material);world.add(line);
   const flash=new T.Mesh(new T.OctahedronGeometry(.095),new T.MeshBasicMaterial({color:0xffedb5,transparent:true,depthWrite:false}));flash.position.copy(from);world.add(flash);
   spark(to);try{await tween(.16,t=>{material.opacity=1-t;flash.scale.setScalar(1-t);});}finally{geometry.dispose();material.dispose();line.removeFromParent();flash.geometry.dispose();flash.material.dispose();flash.removeFromParent();}
@@ -161,9 +161,9 @@ async function tacticalAttack(e){
   const a=actors.get(e.id),target=actors.get(e.target),d=target.group.position.clone().sub(a.group.position);a.group.rotation.y=Math.atan2(d.x,d.z);
   const returnCamera=await focusAction(e.id,e.target),ranged=a.unit.equipment.includes('handgun');
   try{a.play(ranged?'shoot':'strike',.9);await tween(ranged?.32:.46,()=>{});
-    if(ranged)await shotEffect(a,target,e);else if(e.hit)spark(target.group.position.clone().setY(1.1));
+    if(ranged)await shotEffect(a,target,e);else if(e.hit)spark(target.group.position.clone().add(new T.Vector3(0,e.forecast.hpDamage?1.1:1.45,e.forecast.hpDamage?0:.28).applyQuaternion(target.group.quaternion)));
     hint(`${a.unit.label} â†’ ${target.unit.label}: ${e.hit?`${e.forecast.hpDamage} HP / ${e.forecast.guardDamage} guard`:e.forecast.cover==='partial'?'COVER / MISS':'MISS'}`);
-    if(e.hit)target.play('hit',.3);await tween(.32,()=>{});a.play('idle');
+    if(e.hit)target.play(e.forecast.hpDamage?'hit':'brace',.3);await tween(.32,()=>{});a.play('idle');
     if(e.down)await gesture(e.target,'down',.7);else target.play('idle');
   }finally{await returnCamera();}
 }
@@ -198,7 +198,7 @@ activate($('rotate'),()=>{cancelFocus();angle+=Math.PI/4;fit();});activate($('zo
 function boardTap(x,y){if(busy||graphicsLost||layoutPaused||!ready)return;const rect=canvas.getBoundingClientRect(),p=new T.Vector2((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1);ray.setFromCamera(p,camera);if(action==='move'){const at=new T.Vector3();if(ray.ray.intersectPlane(ground,at)){const cell=`${Math.round(at.x/CELL+(LANES-1)/2)},${Math.round(3.5-at.z/CELL)}`;if(isLab){if(routes(session.battle,selected()).has(cell))labUI.pick('move',cell);}else run('move',cell);}return;}const hit=ray.intersectObjects([...actors.values()].map(a=>a.body),true)[0];if(!hit)return;let node=hit.object;while(node&&!node.userData.unitId)node=node.parent;if(!node)return;const u=all().find(v=>v.id===node.userData.unitId);if(story&&!story.isBattle()){story.tapActor(u.id);return;}if(u.side==='player')select(u.id);else if(action==='attack'){if(isLab)labUI.pick('attack',u.id);else run('attack',u.id);}else hint('Choose Attack first, then a highlighted opponent.');}
 let down=null,lastTap=0;canvas.addEventListener('pointerdown',e=>{if(graphicsLost||layoutPaused||!ready)return;down={id:e.pointerId,x:e.clientX,y:e.clientY,angle};canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(down&&down.id===e.pointerId&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>9){cancelFocus();angle=down.angle+(e.clientX-down.x)*.006;fit();}});canvas.addEventListener('pointerup',e=>{if(!down)return;const tap=Math.hypot(e.clientX-down.x,e.clientY-down.y)<9;down=null;lastTap=performance.now();if(tap)boardTap(e.clientX,e.clientY);});canvas.addEventListener('pointercancel',()=>{down=null;});canvas.addEventListener('touchend',e=>{if(performance.now()-lastTap<300)return;const t=e.changedTouches[0];if(t&&!down){e.preventDefault();boardTap(t.clientX,t.clientY);}},{passive:false});canvas.addEventListener('wheel',e=>{e.preventDefault();if(graphicsLost||layoutPaused||!ready)return;cancelFocus();zoom=T.MathUtils.clamp(zoom-e.deltaY*.001,.7,1.7);fit();},{passive:false});
 window.addEventListener('keydown',e=>{if(graphicsLost||layoutPaused||!ready)return;if($('help-dialog').open)return;if(story?.key(e.key))return;if(e.key==='Escape'){action='';labUI?.cancel();refresh();return;}if(e.target.matches('select,input')||(e.key==='Enter'&&e.target.matches('button,a,summary')))return;const key=e.key.toLowerCase();if(/^[1-6]$/.test(key)&&session.battle.players[Number(key)-1])select(session.battle.players[Number(key)-1].id);if({a:'attack',m:'move',b:'brace',i:'item',r:'reload'}[key])choose({a:'attack',m:'move',b:'brace',i:'item',r:'reload'}[key]);if(e.key==='Enter'){e.preventDefault();run('end');}});
-let padPrevious=[],padAt=0;function controller(now){if(layoutPaused)return;const p=navigator.getGamepads?.()[0];if(!p)return;const fresh=i=>p.buttons[i]?.pressed&&!padPrevious[i];const controls=[...document.querySelectorAll('button,select,summary,a')].filter(e=>!e.disabled&&e.getClientRects().length&&!e.closest('[hidden]')&&(!$('help-dialog').open||e.closest('dialog')));if(now-padAt>170&&(fresh(13)||fresh(15)||fresh(12)||fresh(14))){const step=fresh(13)||fresh(15)?1:-1,index=controls.indexOf(document.activeElement);controls[(index+step+controls.length)%controls.length]?.focus();padAt=now;}if(fresh(0))document.activeElement?.click();if(fresh(1)){if($('help-dialog').open)$('help-dialog').close();else{story?.key('Escape');action='';refresh();}}if(fresh(6)||fresh(7)){cancelFocus();zoom=T.MathUtils.clamp(zoom+(fresh(7)?.15:-.15),.7,1.7);fit();}padPrevious=p.buttons.map(v=>v.pressed);}
+let padPrevious=[],padAt=0;function controller(now){if(layoutPaused)return;const p=navigator.getGamepads?.()[0];if(!p)return;const fresh=i=>p.buttons[i]?.pressed&&!padPrevious[i];const controls=[...document.querySelectorAll('button,select,summary,a')].filter(e=>!e.disabled&&e.getClientRects().length&&!e.closest('[hidden]')&&(!$('help-dialog').open||e.closest('dialog')));if(now-padAt>170&&(fresh(13)||fresh(15)||fresh(12)||fresh(14))){const step=fresh(13)||fresh(15)?1:-1,index=controls.indexOf(document.activeElement);controls[(index+step+controls.length)%controls.length]?.focus();padAt=now;}if(fresh(0))document.activeElement?.click();if(fresh(1)){if($('help-dialog').open)$('help-dialog').close();else{story?.key('Escape');action='';labUI?.cancel();refresh();}}if(fresh(6)||fresh(7)){cancelFocus();zoom=T.MathUtils.clamp(zoom+(fresh(7)?.15:-.15),.7,1.7);fit();}padPrevious=p.buttons.map(v=>v.pressed);}
 matchMedia('(orientation:landscape)').addEventListener('change',()=>{
   if(!ready)return;cancelFocus();layoutPaused=true;down=null;clearTimeout(reflowTimer);clearTimeout(autoTimer);refresh();
   reflowTimer=setTimeout(()=>{layoutPaused=false;fit();frameClock.reset(performance.now());refresh();if(auto&&!busy&&!graphicsLost)run('auto');},280);

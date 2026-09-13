@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createSession,checkpoint,restoreSession} from '../fight-module/session.js';
-import {routes,forecast,threats,planView,sightCells} from '../fight-module/tactics.js';
+import {routes,forecast,threats,planView,sightCells,choosePlan} from '../fight-module/tactics.js';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const make=()=>createSession(content,'ranged','lab-2');
 for(const order of ['move-first','attack-first']){
@@ -41,4 +41,11 @@ for(const order of ['move-first','attack-first']){
  b.plans=b.enemies.map(t=>({id:t.id,type:'attack',target:u.id,path:[],to:t.cell}));
  const v=threats(b);assert.equal(v.totals[u.id].attacks,3);assert.equal(v.totals[u.id].hp,5);assert.equal(v.totals[u.id].guard,u.guard);
 }
-console.log('PASS: action order, independent budgets, reload, pure previews, obstacle routes, LOS corners, partial cover, fixed intent, forecast/resolution, combined threats and replay');
+{
+ const s=createSession(content,'melee','lab-2'),b=s.battle,u=b.players[0];
+ assert.ok(s.command('move','2,1').ok);const remaining=choosePlan(b,u,{canMove:false});assert.equal(remaining.type,'hold');assert.equal(remaining.path.length,0);
+ const result=s.command('auto');assert.ok(result.record.events.some(e=>e.id===u.id&&e.type==='brace'),'Auto spends remaining Action on a real legal action');
+ assert.ok(!result.record.events.some(e=>e.id===u.id&&e.type==='move'),'Auto does not spend Move twice');
+ assert.deepEqual(restoreSession(content,checkpoint(s)).snapshot(),s.snapshot());
+}
+console.log('PASS: action order, independent budgets, reload, pure previews, obstacle routes, LOS corners, partial cover, fixed intent, forecast/resolution, combined threats, remaining-budget Auto and replay');

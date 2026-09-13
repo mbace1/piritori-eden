@@ -183,14 +183,14 @@ export function buildKarhupuisto(world,renderer,cover,position,assets,initialSty
     world.background.set(cold?'#17252f':'#12252b');world.fog.color.set(cold?'#293d49':'#17353e');world.fog.near=cold?23:19;
     hemisphere.color.setHex(cold?0xadcae2:0x93b9c3);hemisphere.groundColor.setHex(cold?0x3e4c51:0x343d30);hemisphere.intensity=cold?1.4:1.1;
     sky.color.setHex(cold?0xb7d0e7:0xa9c7cc);sky.intensity=cold?1.5:1.3;renderer.toneMappingExposure=cold?.97:1.05;
-    for(const light of lamps){light.color.setHex(cold?0xffd9aa:0xffbd6d);light.intensity=cold?46:73;}
+    for(const [i,light] of lamps.entries()){light.color.setHex(development?(i===1?0x8bc5db:0xffd3a0):cold?0xffd9aa:0xffbd6d);light.intensity=development?77:cold?46:73;}
     for(const [i,name] of ['gold','ochre','olive'].entries()){mats[name+'Foliage'].color.setHex((cold?[0x929879,0x777e64,0x5e7864]:[0xf4b953,0xc8a661,0x8ca267])[i]);mats[name+'Foliage'].emissiveIntensity=cold?.05:.13;}
     mats.wet.opacity=cold?.25:.09;points.material.color.setHex(cold?0x9b9274:0xddad55);
     bear.traverse(o=>{if(!o.isMesh)return;o.material.flatShading=!cold;o.material.roughness=cold?.84:1;o.material.color.setHex(cold?0x9cabb7:0xacb1b5);o.material.needsUpdate=true;});
   }
   setStyle(initialStyle);
   const lab=development?developmentLook(world,renderer,group,groundMaterial,mats):null;
-  return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({development:lab?.metrics(),style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
+  return {name:'Karhupuisto · Bear Path',setStyle,metrics:()=>({lights:lamps.map(l=>({color:l.color.getHex(),intensity:l.intensity})),development:lab?.metrics(),style:currentStyle,bearTriangles:assets.triangles,assetBytes:assets.bytes,groundSize:[assets.ground.image.width,assets.ground.image.height],bearBounds:new T.Box3().setFromObject(bear).getSize(new T.Vector3()).toArray()}),landmarks:{bear:new T.Vector3(bx,1.8,bz),exit:new T.Vector3(1.2,.1,6.1),contact:new T.Vector3(.4,1.8,-1.8),note:new T.Vector3(-5.6,1,3.5)},
     recover:()=>lab?.recover(),update:(camera,actors)=>lab?.update(camera,actors),tick(dt=0){clock+=dt;for(let i=0;i<bases.length;i++){const [x,y,z]=bases[i];particles[i*3]=x+Math.sin(clock*.23+i)*.45;particles[i*3+1]=(y-clock*.10+100)%5;particles[i*3+2]=z+Math.sin(clock*.18+i)*.3;}pg.attributes.position.needsUpdate=true;},
     aftermath(outcome){points.material.opacity=outcome==='peaceful'?.25:.45;}
   };

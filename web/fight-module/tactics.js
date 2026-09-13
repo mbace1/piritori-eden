@@ -43,13 +43,13 @@ export function forecast(b,u,target,from=u?.cell){
 export const targets=(b,u,from=u.cell)=>b.enemies.filter(v=>forecast(b,u,v,from).valid);
 function copyBattle(b){return {...structuredClone({...b,cover:undefined}),cover:b.cover};}
 function legalPath(b,u,path){let at=u.cell;for(const c of path){if(distance(at,c)!==1||b.cover.get(c)?.hardBlock||alive(b).some(v=>v.id!==u.id&&v.cell===c))return false;at=c;}return path.length<=4;}
-export function choosePlan(b,u){
+export function choosePlan(b,u,{canMove=true}={}){
   const opponents=alive(b).filter(v=>v.side!==u.side),w=weapon(u);
   if(w.magazine&&!u.ammo)return {id:u.id,type:'reload',path:[],to:u.cell};
   let best=null;
-  for(const [to,path] of routes(b,u))for(const target of opponents){const f=forecast(b,u,target,to),d=distance(to,target.cell);
+  for(const [to,path] of (canMove?routes(b,u):new Map([[u.cell,[]]])))for(const target of opponents){const f=forecast(b,u,target,to),d=distance(to,target.cell);
     const score=(f.valid?100+f.hpDamage*3+f.chance/10:0)-d*.6-path.length*.8+(b.cover.get(to)?.softBlock&&w.magazine?4:0);
-    if(!best||score>best.score)best={id:u.id,type:f.valid?'attack':'advance',target:target.id,aim:target.cell,path,to,score};
+    if(!best||score>best.score)best={id:u.id,type:f.valid?'attack':path.length?'advance':'hold',target:target.id,aim:target.cell,path,to,score};
   }return best||{id:u.id,type:'hold',path:[],to:u.cell};
 }
 function planRound(b){const projected=copyBattle(b);b.plans=[];for(const u of projected.enemies.filter(v=>v.alive)){const plan=choosePlan(projected,u);b.plans.push(plan);u.cell=plan.to;}}
@@ -94,6 +94,7 @@ export function createTacticalSession(battle,mode,scenario,data){
       move(u,plan.path,events);
       if(plan.type==='attack')attack(u,battle.players.find(t=>t.id===plan.target),events);
       if(plan.type==='reload'){u.ammo=u.maxAmmo;events.push({type:'reload',id:u.id});log(`${u.label} reloads.`);}
+      if(plan.type==='hold'){events.push({type:'hold',id:u.id,reason:'Holds position'});log(`${u.label} holds position.`);}
     }
     if(battle.status==='active'){battle.round++;battle.acted=[];battle.moved=[];planRound(battle);log(`Round ${battle.round}: new enemy plans revealed.`);}
   }
@@ -108,7 +109,7 @@ export function createTacticalSession(battle,mode,scenario,data){
     else if(type==='reload'&&u.maxAmmo&&u.ammo<u.maxAmmo){u.ammo=u.maxAmmo;ok=true;events.push({type:'reload',id:u.id});log(`${u.label} reloads. Movement stays available.`);}
     else if(type==='item'&&u.itemIds.includes('training-bandage')&&u.hp<u.maxHp){u.hp=Math.min(u.maxHp,u.hp+2);u.itemIds=[];ok=true;events.push({type:'item',id:u.id});log(`${u.label} bandages +2 HP.`);}
     else if(type==='end'){enemyTurn(events);ok=true;}
-    else if(type==='auto'){for(const actor of battle.players.filter(v=>v.alive)){if(battle.status!=='active')break;const p=choosePlan(battle,actor);
+    else if(type==='auto'){for(const actor of battle.players.filter(v=>v.alive)){if(battle.status!=='active')break;const p=choosePlan(battle,actor,{canMove:!battle.moved.includes(actor.id)});
       if(!battle.moved.includes(actor.id)&&move(actor,p.path,events))battle.moved.push(actor.id);
       if(!battle.acted.includes(actor.id)){if(p.type==='attack')attack(actor,battle.enemies.find(v=>v.id===p.target),events);else if(p.type==='reload'){actor.ammo=actor.maxAmmo;events.push({type:'reload',id:actor.id});}else{actor.guard=Math.min(4,actor.guard+2);events.push({type:'brace',id:actor.id});}battle.acted.push(actor.id);}}
       if(battle.status==='active')enemyTurn(events);ok=true;
