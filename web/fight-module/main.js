@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=7';
+import {createSession,checkpoint,restoreSession} from './session.js?v=8';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=6';
 import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=2';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
@@ -11,8 +11,8 @@ import {loadParkAssets} from '../bear-path/assets.js?v=1';
 import {createEncounter} from '../bear-path/encounter.js?v=1';
 import {mountBearPath} from '../bear-path/presentation.js?v=2';
 import {fitBattleCamera,placeLabels} from './framing.js?v=1';
-import {tacticalUI} from './tactical-ui.js?v=2';
-import {routes} from './tactics.js?v=2';
+import {tacticalUI} from './tactical-ui.js?v=3';
+import {routes} from './tactics.js?v=3';
 import {createFrameClock} from './frame-clock.js?v=1';
 
 const isLab=document.body.dataset.scenario==='arena-lab',isBear=document.body.dataset.scenario==='bear-path',isPark=isBear||isLab;
@@ -236,7 +236,7 @@ function tick(now){
   if(seconds>2){
     fps=Math.round(frameCount/seconds);
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isLab?'C.10 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isLab?'C.10.1 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }

@@ -1,4 +1,4 @@
-import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=2';
+import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=3';
 
 export function tacticalUI({getSession,button,tile,run,hint,refresh}){
   let preview=null;

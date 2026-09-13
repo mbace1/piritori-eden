@@ -26,6 +26,8 @@ for(const order of ['move-first','attack-first']){
 }
 {
  const s=make(),b=s.battle,u=b.players[0],t=b.enemies[0],plan=structuredClone(b.plans[0]);
+ assert.equal(planView(b,plan).to,plan.to,'intent destination is the firing position, not the target cell');
+ const moved=threats(b,{id:u.id,cell:'1,2'}).views[0];assert.equal(moved.to,plan.to,'previewing a target move cannot relabel the committed destination');assert.equal(moved.aim,'1,2');
  assert.equal(plan.type,'attack');u.cell='5,0';const view=planView(b,plan);assert.equal(view.valid,false);assert.deepEqual(b.plans[0],plan,'no hidden replanning');
  s.command('end');assert.equal(u.hp,5,'invalid plan does not retarget');
 }
