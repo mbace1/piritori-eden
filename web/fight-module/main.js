@@ -1,4 +1,4 @@
-import {mountCrew} from '../crew-run/ui.js?v=3';
+import {mountCrew} from '../crew-run/ui.js?v=4';
 import {portraitStudio} from '../crew-run/portraits.js?v=1';
 import {EDGES,coverEdges} from './cover-edges.js?v=1';
 import * as T from 'three';

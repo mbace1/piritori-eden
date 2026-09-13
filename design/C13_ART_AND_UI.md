@@ -85,3 +85,9 @@ asset lifecycle gate based on this pass.
 Reproduce the command/ledger hierarchy, contextual commands, intent arrows,
 selected-unit information, night palette and bounded framing in Godot. Preserve
 the C.12 action vectors and saved crew behavior. No new economy/chapter rules.
+
+Review corrections: weapon and support remain independent. Equipped bandages
+stay accessible alongside Reload; the console fits three to five commands.
+Compact crew records retain outings survived, wounds, aptitudes and the latest
+memory on the planning screen. Browser checks exercise a handgun/light-pack
+self-heal through actual controls and retained history after an outing.

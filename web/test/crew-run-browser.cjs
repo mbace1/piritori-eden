@@ -39,8 +39,18 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
   }
   const result=await p.evaluate(()=>crewRun.snapshot());assert.equal(result.phase,'aftermath');assert.equal(result.last.success,true);assert.equal(result.last.changes.length,4);assert.equal(result.last.changes.filter(c=>c.state.includes('Wounded')).length,2);
   await p.screenshot({path:`${out}/${spec.name}-aftermath.png`});await p.reload();await idle();assert.equal(await p.evaluate(()=>JSON.stringify(crewRun.snapshot())),JSON.stringify(result),'no duplicate aftermath');
-  await tap(p.locator('#crew-next'));assert.equal(await p.locator('[data-crew="crew-1"]').count(),0,'wounded cannot deploy');await tap(p.locator('#crew-deploy'));await idle();assert.equal(await p.evaluate(()=>fightModule.snapshot().mission.objective),'recovery');
+  await tap(p.locator('#crew-next'));const history=await p.evaluate(()=>crewRun.snapshot().crew);for(const person of history){const record=await p.locator(`[data-person="${person.id}"] .crew-record`).innerText();assert.ok(record.includes(`${person.fights} outings survived · ${person.wounds} wounds`));assert.ok(record.includes(person.aptitudes.slice(0,2).join(' / ')));if(person.memories[0])assert.ok(record.includes(person.memories[0]));}assert.equal(await p.locator('[data-crew="crew-1"]').count(),0,'wounded cannot deploy');await tap(p.locator('#crew-deploy'));await idle();assert.equal(await p.evaluate(()=>fightModule.snapshot().mission.objective),'recovery');
   await tap(p.getByRole('button',{name:'Retreat with standing crew',exact:true}));if(spec.name==='phone')await p.locator('#confirm-retreat').dispatchEvent('pointerup',{pointerType:'touch'});else if(spec.name==='phone-landscape')await p.locator('#confirm-retreat').dispatchEvent('touchend');else await tap(p.locator('#confirm-retreat'));await idle();assert.equal(await p.evaluate(()=>crewRun.snapshot().night),3);assert.equal(await p.evaluate(()=>crewRun.snapshot().ledger.length),2);
+  if(['desktop','phone'].includes(spec.name)){
+   // Fresh browser save is setup; every equipment and healing action uses UI.
+   await p.evaluate(()=>localStorage.removeItem('piritori-c12-crew-v1'));await p.reload();await idle();
+   await tap(p.getByRole('button',{name:'Equip Sanna Heikkilä',exact:true}));await tap(p.getByRole('button',{name:'Sanna Heikkilä Light pack',exact:true}));await tap(p.getByRole('button',{name:'Done',exact:true}));await tap(p.locator('#crew-deploy'));await idle();
+   await tap(p.locator('#end'));await idle();await tap(p.locator('[data-unitid="crew-1"]'));
+   const hurt=await p.evaluate(()=>fightModule.snapshot().units.find(u=>u.id==='crew-1'));assert.ok(hurt.hp<hurt.maxHp,'enemy turn wounded the handgun user');
+   assert.ok(await p.locator('[data-action="reload"]').isVisible());assert.ok(await p.locator('[data-action="item"]').isVisible(),'light-pack bandage coexists with reload');
+   await p.screenshot({path:`${out}/${spec.name}-handgun-bandage.png`});await tap(p.locator('[data-action="item"]'));await idle();
+   const healed=await p.evaluate(()=>fightModule.snapshot().units.find(u=>u.id==='crew-1'));assert.equal(healed.hp,Math.min(hurt.maxHp,hurt.hp+2));assert.equal(healed.itemIds.length,0,'bandage consumed through the interface');
+  }
   assert.ok(await p.evaluate(()=>fightModule.metrics().finite));assert.deepEqual(errors,[]);console.log(JSON.stringify({view:spec.name,success:true,rescue:true,individualExtraction:true,reload:true,contextRecovery:true,aftermathOnce:true,nextOuting:true,errors}));await ctx.close();
  }
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
