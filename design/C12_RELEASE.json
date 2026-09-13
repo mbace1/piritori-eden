@@ -1,0 +1,271 @@
+{
+  "source_merged": true,
+  "hub_merged": true,
+  "pages_success": true,
+  "public_verified": true,
+  "source_commit": "80003698eed2cc606d098897afe547de65af16ea",
+  "source_merge": "b4a3b0af9a21a44deb232636b0cccfd75d2dc80b",
+  "source_pr": 77,
+  "hub_tested_head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+  "hub_merge": "b2a7c4e06ec56c14725d94b862d827c17ca71a2e",
+  "hub_pr": 516,
+  "live_commit": "cd9e093e9af84d773a2d160c7435f5e7f4a61116",
+  "pages": {
+    "run": 34760640066,
+    "conclusion": "success",
+    "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34760640066"
+  },
+  "checks": {
+    "source": [
+      {
+        "name": "Act I touch scenes and visits",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759800122/job/103730514572"
+      },
+      {
+        "name": "C crew outing and persistence",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759800122/job/103730514546"
+      },
+      {
+        "name": "the Godot build",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759800122/job/103730514542"
+      },
+      {
+        "name": "C laboratory tactics and touch",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759800122/job/103730514489"
+      },
+      {
+        "name": "browser campaign state",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759800122/job/103730514376"
+      },
+      {
+        "name": "Act I touch scenes and visits",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759798314/job/103730509881"
+      },
+      {
+        "name": "browser campaign state",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759798314/job/103730509773"
+      },
+      {
+        "name": "C laboratory tactics and touch",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759798314/job/103730509761"
+      },
+      {
+        "name": "C crew outing and persistence",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759798314/job/103730509759"
+      },
+      {
+        "name": "the Godot build",
+        "head": "80003698eed2cc606d098897afe547de65af16ea",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/piritori-eden/actions/runs/34759798314/job/103730509647"
+      }
+    ],
+    "hub": [
+      {
+        "name": "flow-core \u00c2\u00b7 piritori",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730752730"
+      },
+      {
+        "name": "turf",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730752689"
+      },
+      {
+        "name": "concrete skating slice",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730752673"
+      },
+      {
+        "name": "piritori \u00c2\u00b7 the Godot port",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730752615"
+      },
+      {
+        "name": "toko-move",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730752406"
+      },
+      {
+        "name": "the arcade floor",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730751987"
+      },
+      {
+        "name": "the arcade floor",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749539"
+      },
+      {
+        "name": "turf",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749505"
+      },
+      {
+        "name": "concrete skating slice",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749491"
+      },
+      {
+        "name": "toko-move",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749466"
+      },
+      {
+        "name": "piritori \u00c2\u00b7 the Godot port",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749385"
+      },
+      {
+        "name": "flow-core \u00c2\u00b7 piritori",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730749353"
+      },
+      {
+        "name": "ask",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "skipped",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874103/job/103730705805"
+      },
+      {
+        "name": "toko-live browser runtime",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874141/job/103730705559"
+      },
+      {
+        "name": "what changed",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759874119/job/103730705414"
+      },
+      {
+        "name": "what changed",
+        "head": "04b4236d06064944c40c76d9e8687ee76a1f967c",
+        "conclusion": "success",
+        "url": "https://github.com/mbace1/Suds-Jack/actions/runs/34759872176/job/103730700133"
+      }
+    ]
+  },
+  "staged_browser_tests": {
+    "source": "80003698eed2cc606d098897afe547de65af16ea",
+    "desktop": true,
+    "phonePortrait": true,
+    "phoneLandscape": true,
+    "tablet": true,
+    "rescue": true,
+    "extraction": true,
+    "reload": true,
+    "graphicsRecovery": true,
+    "aftermathOnce": true,
+    "nextOuting": true,
+    "touchPointerUp": true,
+    "touchEnd": true,
+    "withdrawCannotCompleteObjective": true,
+    "physicalDevices": false,
+    "errors": []
+  },
+  "staged_layouts": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "name": "phone-portrait",
+      "width": 412,
+      "height": 915
+    },
+    {
+      "name": "phone-landscape",
+      "width": 915,
+      "height": 412
+    },
+    {
+      "name": "tablet",
+      "width": 1194,
+      "height": 834
+    }
+  ],
+  "node_suites": [
+    "crew-run",
+    "tactics",
+    "directional-cover",
+    "arena-lab",
+    "fight-module",
+    "fight-module-recovery",
+    "bear-path",
+    "bear-path-police",
+    "frame-clock"
+  ],
+  "public_test": {
+    "date": "2026-09-13",
+    "method": "Real browser UI through the public hub card",
+    "checks": [
+      "Hub card opens C.12 crew preparation",
+      "Live release.json pins tested source 80003698",
+      "Medical Help raises Priit to 3 HP; Move available, Action spent",
+      "Full nonlethal rescue: all four individually extracted with both rivals alive",
+      "Aftermath: four returned, zero missing, two wounded",
+      "Next outing replaces resting crew and offers kit recovery",
+      "Second outing retreat confirms and returns standing crew without objective success"
+    ],
+    "physical_hardware": false
+  },
+  "provenance": {
+    "cabinet_files_matching_staging": 45,
+    "source_runtime_blobs_matching": 41,
+    "scoped_art_register_transform": true
+  },
+  "review_fixes": [
+    "Retreat cannot complete rescue or kit objectives; explicit extraction required",
+    "Retreat confirmation supports shared pointerup/touchend activation",
+    "Night Shift registered as proposed noncanonical Scenario Atlas pilot"
+  ],
+  "limitations": [
+    "Neutral stand-ins; F01/F02 rig and art acceptance remain open",
+    "Separate crew save; no canonical city or chapter migration",
+    "Supplied equipment and reserve recovery are prototype policies, not final scarcity/economy",
+    "Physical Pixel 10 Pro and iPad M2 acceptance pending"
+  ],
+  "next": "Bridge an authored city meeting/escalation into the crew mission contract with explicit return consequences.",
+  "build": "C.12",
+  "entry": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=12",
+  "source_repository": "mbace1/piritori-eden",
+  "source_branch": "art/meshy-approved-pilots-2026-09-11",
+  "hub_repository": "mbace1/Suds-Jack",
+  "hub_card": "optionc-lab",
+  "character_provider": "neutral development stand-ins",
+  "physical_devices_verified": false,
+  "campaign_migration": false
+}

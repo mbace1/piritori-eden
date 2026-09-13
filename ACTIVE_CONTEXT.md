@@ -9,7 +9,7 @@ Updated 2026-09-13. Read this before designing, resuming 3D work or asking the o
 3. For asset work: [MESHY_AGENT_HANDOFF.md](MESHY_AGENT_HANDOFF.md), its current-production notice, [3D_PIPELINE.md](3D_PIPELINE.md), [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md), [CHARACTER_SPEC](assets/CHARACTER_SPEC.md), and [asset_manifest.json](assets/asset_manifest.json).
 4. Current PR/manifest state before deciding that something is missing. This desktop has a partial checkout; a missing local file is not evidence it is absent from GitHub.
 
-## C.11 implementation batch
+## C.12 connected crew pilot
 
 C.12 continuation: the owner asked for a bigger leap. `web/crew-run/` now joins
 crew/loadout preparation, a rescue/extraction objective, announced rival arrivals,
@@ -17,16 +17,17 @@ persistent wounds/missing people and a repeat outing. Read
 [Night Shift](design/C12_NIGHT_SHIFT.md). This is a connected gameplay pilot with
 its own save, not a new authored chapter track. The city/meeting bridge is next;
 weapons/replacements are supplied for testing and all Meshy gates remain open.
-C.12 is under release validation at this commit; the C.11 live receipt below
-remains the last confirmed public deployment until the C.12 release receipt lands.
+C.12 is live on the hub, verified through the public card and actual controls.
+Source PR #77 / hub PR #516 are merged. Read [release evidence](design/C12_RELEASE.json)
+and the [playable](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=12).
 
 Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route motion, visible temporary weapons and optional conservative action focus are implemented in the C laboratory. See [C.10 implementation and test receipt](design/C10_IMPLEMENTATION.md). C.11 adds directional low walls, flanking, route detours, crouch/rise/fire/return and resolved HP/guard/wall/miss feedback. See [C.11](design/C11_COMBAT_PASS.md) and its release receipt. Campaign/Bear Path keep their authored resolver. No fighter asset gate changed.
 
 ## Latest owner direction — carry into every design
 
-- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.11 is the live Move + Act and directional-cover laboratory.
+- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.12 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
 
-- Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). C.11 builds on the first combat/camera pass with directional low-wall cover and stand-in crouch/peek. Persistent crew and final art remain later work.
+- Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). C.11 builds on the first combat/camera pass with directional low-wall cover and stand-in crouch/peek. C.12 adds persistent crew and rescue/extraction consequences. Final art and the city bridge remain open.
 
 - Owner continuation, 2026-09-13: minimize defects; use temporary placeholder characters until F01/F02 fit and look good. These are development stand-ins, not redesigns or asset promotions.
 - Push each reviewable vertical-slice batch to **mbace1/piritori-eden on GitHub**, with its tests and handoff, so agents on other PCs can continue from the same source. Local work alone is not delivery. The owner also authorizes merging and requires each tested playable batch on the **Suds Jack hub**; finish with the public route verified. See [release procedure](design/HUB_RELEASE.md).
@@ -63,9 +64,9 @@ Next: [Option C vertical-slice design](design/OPTION_C_VERTICAL_SLICE.md). Prove
 
 ## Runtime truth at this update
 
-C.11 is live as the separate [arena laboratory](https://mbace1.github.io/Suds-Jack/piritori-c09/web/arena-lab/?actors=6&release=11). Read [release evidence](design/C11_RELEASE.json) and [implementation](design/C11_COMBAT_PASS.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
+C.12 is live as the separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=12). Read [release evidence](design/C12_RELEASE.json) and [implementation](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
 
 
 ## C.09 source continuation
 
-`feat/dream-loop-c09-arena-lab` adds `web/arena-lab/` with grounded stand-ins, 2/6/12-person fixtures, wet paving/light probe and scenery cutaway. Read [C.09 handoff](design/C09_ARENA_LAB.md) for entry points, tests and remaining gates. PR #69 was merged into `art/meshy-approved-pilots-2026-09-11` and published on the hub as C.09. The stand-ins do not repair or promote Meshy models. C.11 builds on the C.09.1/C.10.1 performance and visibility work. The current laboratory adds Move + Act, full stored intent, cover/route/attack previews, ammo/reload, temporary weapon motion and conservative optional action focus. Read `piritori-c09/release.json` for the current pinned source. C.11 adds oriented low walls, flank previews, detours and crouch/peek/impact feedback. Next: physical Pixel/iPad tests, persistent crew/builds and the chapter/city bridge. Actor overlap and final rigs remain open.
+`feat/dream-loop-c09-arena-lab` adds `web/arena-lab/` with grounded stand-ins, 2/6/12-person fixtures, wet paving/light probe and scenery cutaway. Read [C.09 handoff](design/C09_ARENA_LAB.md) for entry points, tests and remaining gates. PR #69 was merged into `art/meshy-approved-pilots-2026-09-11` and published on the hub as C.09. The stand-ins do not repair or promote Meshy models. C.11 builds on the C.09.1/C.10.1 performance and visibility work. The current laboratory adds Move + Act, full stored intent, cover/route/attack previews, ammo/reload, temporary weapon motion and conservative optional action focus. Read `piritori-c09/release.json` for the current pinned source. C.11 adds oriented low walls, flank previews, detours and crouch/peek/impact feedback. C.12 now adds crew/loadout preparation, rescue, extraction, announced arrivals and persistent wounds/missing people. Next: physical Pixel/iPad tests and the authored chapter/city bridge. Actor overlap and final rigs remain open.

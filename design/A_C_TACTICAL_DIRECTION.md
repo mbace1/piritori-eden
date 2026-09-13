@@ -47,6 +47,9 @@ The chapter addenda define re-playable chapter runs, unlocking the next chapter,
 
 ## Current evidence and sequencing
 
+**Shipped C.12 — Night Shift:** a persistent generated crew and supplied support equipment now connect to rescue/extraction, announced rivals, wounds/missing colleagues, and repeat outings. Read [C.12](C12_NIGHT_SHIFT.md) and [release evidence](C12_RELEASE.json). Both A and C should reuse this crew/mission contract. It is a separate pilot; authored city/meeting dispatch is the next integration, not already completed. Final rigs, economics and full trait/career systems remain open.
+
+
 Turf GDD and PRODUCTION_PIPELINE contain early milestone text that predates v36. Read VERSIONS and code/tests before declaring a feature missing. MST_PARITY records later lessons: momentum is damage **or** evasion, not both; universal sync was measured and cut; arrivals are announced and stage pressure instead of simply piling onto a roster. Its old API-key and sprite-status notes are historical, not current production state.
 
 **Shipped C.11 laboratory:** Move + Act, stored intents/forecasts, legal movement and both cover classes, temporary weapon motion, optional action focus and warm/cool practical lighting. Rules, browser/touch layouts, camera and graphics recovery gates passed. C.11 low walls protect only across explicit edges, work from either side and require movement detours. Stand-ins crouch and rise to shoot; flanks remain exposed. Final character motion remains future work. See [C.11 pass](C11_COMBAT_PASS.md). The C.10 plan is retained alongside the implementation receipt.

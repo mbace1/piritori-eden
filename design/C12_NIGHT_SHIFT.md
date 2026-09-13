@@ -91,3 +91,9 @@ its exact effect dispatch to the existing city. Then add meaningful bounded gear
 ownership and crew abilities, and replace stand-ins only after the character
 pipeline's visual/device gates pass. Reuse the same mission/crew contract for A;
 do not create another roster generator or silently author a new chapter track.
+
+## Delivery receipt
+
+Source PR #77 and hub PR #516 merged after current-head gates passed. The public
+hub card, crew entry and actual action flow were verified after a successful Pages
+deployment. Exact commits, run and test scope: [C12_RELEASE.json](C12_RELEASE.json).
