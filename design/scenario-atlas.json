@@ -1566,5 +1566,27 @@
       "handoff": "Use MESHY_AGENT_HANDOFF.md current-production notice, MESHY_PILOT_RESULTS.md, 3D_PIPELINE.md and current manifest; do not reinvent or duplicate paid pilot work."
     }
   ],
-  "active_context": "ACTIVE_CONTEXT.md"
+  "active_context": "ACTIVE_CONTEXT.md",
+  "proposed_pilots": [
+    {
+      "id": "pilot-night-shift",
+      "title": "Night Shift / C.12",
+      "status": "implemented_gameplay_pilot; non_canonical; not_art_approval",
+      "anchor_id": "karhupuisto",
+      "runtime": "web/crew-run/index.html",
+      "rules": "web/crew-run/run.js",
+      "design": "design/C12_NIGHT_SHIFT.md",
+      "participants": "2–3 selected generated hirelings, a stranded colleague and 2–4 rivals",
+      "objective": "Help then individually extract the colleague through the south edge, or recover kit and extract its carrier. Retreat is not objective completion.",
+      "persistence": "Separate browser ledger: equipment, wounds, missing crew, memories; one settlement per outing. No canonical campaign dispatch.",
+      "staging": "North/east variations within one park kit, not additional authored locations",
+      "remaining": [
+        "authored meeting/city bridge",
+        "campaign economics and bounded gear",
+        "full trait and career mechanics",
+        "physical Pixel 10 Pro / iPad M2 acceptance",
+        "final character acceptance"
+      ]
+    }
+  ]
 }

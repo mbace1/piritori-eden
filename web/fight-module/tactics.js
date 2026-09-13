@@ -49,7 +49,7 @@ export function choosePlan(b,u,{canMove=true}={}){
   if(w.magazine&&!u.ammo)return {id:u.id,type:'reload',path:[],to:u.cell};
   let best=null;
   for(const [to,path] of (canMove?routes(b,u):new Map([[u.cell,[]]])))for(const target of opponents){const f=forecast(b,u,target,to),d=distance(to,target.cell);
-    const score=(f.valid?100+f.hpDamage*3+f.chance/10:0)-d*.6-path.length*.8+(w.magazine&&coverProtection(b,target.cell,to)?4:0);
+    const score=(f.valid?100+f.hpDamage*3+f.chance/10:0)-d*(b.mission&&!f.valid?1.3:.6)-path.length*.8+(w.magazine&&coverProtection(b,target.cell,to)?4:0);
     if(!best||score>best.score)best={id:u.id,type:f.valid?'attack':path.length?'advance':'hold',target:target.id,aim:target.cell,path,to,score};
   }return best||{id:u.id,type:'hold',path:[],to:u.cell};
 }
@@ -74,14 +74,15 @@ export function threats(b,preview=null){
     }
   }return {views,totals};
 }
-export function createTacticalSession(battle,mode,scenario,data){
+export function createTacticalSession(battle,mode,scenario,data,options={}){
   Object.assign(battle,{tactical:true,moved:[],acted:[],plans:[],rng:104729,cover:new Map()});
   for(const c of ['0,3','5,4','2,6'])battle.cover.set(c,{hardBlock:true,softBlock:false,propId:'lab-full',effect:'blocks movement and sight'});
   for(const [c,edge] of [['1,3','north'],['4,4','south'],['3,1','east'],['1,6','west']])battle.cover.set(c,{softBlock:true,hardBlock:false,edge,propId:'lab-partial',effect:'Facing edge: -25 percentage points gun accuracy; walk around'});
   for(const u of units(battle)){u.ammo=weapon(u).magazine??null;u.maxAmmo=u.ammo;}
+  options.prepare?.(battle);
   const history=[];
-  const snapshot=()=>structuredClone({rules:'c11-v1',round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,moved:battle.moved,acted:battle.acted,plans:battle.plans,rng:battle.rng,units:units(battle),log:battle.log.slice(0,18)});
-  const log=s=>battle.log.unshift(s),finish=()=>{if(!battle.enemies.some(u=>u.alive)||!battle.players.some(u=>u.alive)){battle.status='complete';battle.result=battle.players.some(u=>u.alive)?'win':'loss';}};
+  const snapshot=()=>structuredClone({rules:options.rules||'c11-v1',...(battle.mission?{mission:battle.mission}:{}),round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,moved:battle.moved,acted:battle.acted,plans:battle.plans,rng:battle.rng,units:units(battle),log:battle.log.slice(0,18)});
+  const log=s=>battle.log.unshift(s),finish=()=>{if(options.finish){options.finish(battle);return;}if(!battle.enemies.some(u=>u.alive)||!battle.players.some(u=>u.alive)){battle.status='complete';battle.result=battle.players.some(u=>u.alive)?'win':'loss';}};
   function attack(u,target,events){const f=forecast(battle,u,target);if(!f.valid)return false;
     battle.rng=(Math.imul(battle.rng,1664525)+1013904223)>>>0;const roll=battle.rng/4294967296*100,hit=roll<f.chance,impact=hit?(f.hpDamage?'body':'guard'):f.cover==='partial'&&roll<weapon(u).accuracy?'cover':'miss';
     if(weapon(u).magazine)u.ammo--;if(hit){target.hp-=f.hpDamage;target.guard-=f.guardDamage;target.alive=target.hp>0;}
@@ -101,10 +102,13 @@ export function createTacticalSession(battle,mode,scenario,data){
   }
   function command(type,value){
     if(battle.status!=='active')return {ok:false};const u=battle.players.find(v=>v.id===battle.selectedId);
+    if(options.reject?.(type))return {ok:false};
     if(type==='select'){const next=battle.players.find(v=>v.id===value&&v.alive);if(!next)return {ok:false};battle.selectedId=value;return {ok:true};}
     const before=snapshot(),events=[],actionUsed=battle.acted.includes(u?.id);let ok=false;
-    if(['attack','brace','item','reload'].includes(type)&&(!u?.alive||actionUsed))return {ok:false,message:'Action already used. Movement is separate.'};
-    if(type==='move'&&u?.alive&&!battle.moved.includes(u.id)){const path=routes(battle,u).get(value);ok=!!path&&move(u,path,events);if(ok){battle.moved.push(u.id);log(`${u.label} moved to ${coordinate(value)}. ${actionUsed?'Action used.':'Action ready.'}`);}}
+    const isAction=['attack','brace','item','reload',...(options.actions||[])].includes(type);
+    if(isAction&&(!u?.alive||actionUsed))return {ok:false,message:'Action already used. Movement is separate.'};
+    if(options.actions?.includes(type))ok=options.action(battle,u,type,value,events);
+    else if(type==='move'&&u?.alive&&!battle.moved.includes(u.id)){const path=routes(battle,u).get(value);ok=!!path&&move(u,path,events);if(ok){battle.moved.push(u.id);log(`${u.label} moved to ${coordinate(value)}. ${actionUsed?'Action used.':'Action ready.'}`);}}
     else if(type==='attack')ok=attack(u,battle.enemies.find(v=>v.id===value),events);
     else if(type==='brace'){ok=true;u.guard=Math.min(4,u.guard+2);events.push({type:'brace',id:u.id});log(`${u.label} braces: guard ${u.guard}.`);}
     else if(type==='reload'&&u.maxAmmo&&u.ammo<u.maxAmmo){u.ammo=u.maxAmmo;ok=true;events.push({type:'reload',id:u.id});log(`${u.label} reloads. Movement stays available.`);}
@@ -116,7 +120,9 @@ export function createTacticalSession(battle,mode,scenario,data){
       if(battle.status==='active')enemyTurn(events);ok=true;
     }else if(type==='withdraw'||type==='talk'&&battle.round>=2){battle.status='complete';battle.result=type==='withdraw'?'withdraw':'partial';ok=true;log(type==='withdraw'?'Crew withdrew. No campaign cost.':'Training truce.');}
     if(!ok)return {ok:false,message:'Unavailable: check route, range, ammo and action budget.'};
-    if(['attack','brace','item','reload'].includes(type))battle.acted.push(u.id);
+    if(isAction)battle.acted.push(u.id);
+    options.after?.(battle,type,events);finish();
+    if(options.replan?.(battle,type,events)&&battle.status==='active')planRound(battle);
     const record={type,value,actor:u?.id,before,after:snapshot(),events};history.push(record);return {ok:true,record};
   }
   planRound(battle);log('Move + Act in either order. Rust plans are visible; breaking a plan cancels it.');

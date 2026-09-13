@@ -1,5 +1,5 @@
 import {coverEdges,coverDescription} from './cover-edges.js?v=1';
-import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=4';
+import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=5';
 
 export function tacticalUI({getSession,button,tile,edgeMark,run,hint,refresh}){
   let preview=null;

@@ -8,7 +8,7 @@ export function makeStandIn(unit, world) {
   const broad=unit.role==='muscle',width=broad?1.12:.9;
   const geometry=new T.SphereGeometry(1,10,8),material=new T.MeshStandardMaterial({roughness:.64,metalness:.03});
   const mesh=new T.InstancedMesh(geometry,material,20);mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.castShadow=mesh.receiveShadow=true;mesh.frustumCulled=false;body.add(mesh);
-  const colors={coat:unit.side==='player'?0x458c81:0xb86343,dark:0x222e35,skin:0xc0a787,sole:0x8f958b};
+  const colors={coat:unit.color??(unit.side==='player'?0x458c81:0xb86343),dark:0x222e35,skin:0xc0a787,sole:0x8f958b};
   const ring=new T.Mesh(new T.RingGeometry(.34,.39,32),new T.MeshBasicMaterial({color:unit.side==='player'?0x8fc5ae:0xe3a18a,side:T.DoubleSide,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;group.add(ring);
   const shadow=new T.Mesh(new T.CircleGeometry(.46,24),new T.MeshBasicMaterial({color:0x071119,transparent:true,opacity:.32,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.014;group.add(shadow);
   const prop=new T.Group();body.add(prop);const gun=unit.equipment.includes('handgun'),knife=unit.equipment==='folding-knife';
@@ -49,7 +49,7 @@ export function makeStandIn(unit, world) {
       if(side===-1){prop.position.copy(hand);prop.rotation.set(a.mode==='strike'?(knife?Math.PI*.5:-.65+pulse*2.0):gun&&a.mode==='idle'?.85:0,0,a.mode==='strike'&&!knife?-1.3+pulse*2.1:gun?0:-.16);}
     }
     mesh.count=index;mesh.instanceMatrix.needsUpdate=true;mesh.instanceColor.needsUpdate=true;
-    body.rotation.x=a.down?-Math.PI*.5*(t*t*(3-2*t)):0;body.position.y=0;
+    body.rotation.x=a.mode==='rise'?-Math.PI*.5*(1-t*t*(3-2*t)):a.down?-Math.PI*.5*(t*t*(3-2*t)):0;body.position.y=0;
     // Exact lower support of each transformed ellipsoid, including a rotated
     // segment. Keeps the knockdown on the surface rather than tilting into it.
     const bodyQ=body.quaternion;let floor=Infinity;

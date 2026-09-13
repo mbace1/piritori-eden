@@ -158,6 +158,7 @@ jobs:
           node-version: '22'
       - name: laboratory rules and legacy regression
         run: |
+          node web/test/crew-run.mjs
           node web/test/tactics.mjs
           node web/test/directional-cover.mjs
           node web/test/arena-lab.mjs
@@ -180,3 +181,23 @@ jobs:
           node web/test/arena-lab-browser.cjs
           node web/test/tactical-camera.cjs
           node web/test/cover-presentation.cjs
+
+  c-crew-outing:
+    name: C crew outing and persistence
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --prefix /tmp/piritori-test playwright
+      - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: rescue, extraction, recovery and the next outing in four layouts
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          CREW_RUN_URL: http://127.0.0.1:8783/web/crew-run/
+          CREW_RUN_OUTPUT: /tmp/c12-qa
+          ARENA_LAB_DPR: '0.5'
+        run: |
+          python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c12-server.log 2>&1 &
+          node web/test/crew-run-browser.cjs

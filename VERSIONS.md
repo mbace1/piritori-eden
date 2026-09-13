@@ -10,6 +10,19 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## C.12 connected crew pilot — 2026-09-13
+
+Night Shift links crew/loadout preparation to rescue and individual extraction,
+announced rival arrivals, persistent wounds/missing colleagues, and repeat outings.
+See `design/C12_NIGHT_SHIFT.md`. Existing authored campaign and Bear Path remain
+separate; no character acceptance or full campaign parity is claimed.
+
+### Port
+
+Port `web/crew-run/run.js`, `web/test/crew-run.mjs` and its legal rescue route.
+Rules c12-v1 / separate crew save v1. Apply settlement once; retain Move + Act,
+entry warning, equipment permissions, wound availability and reload replay checks.
+
 ## C.11 laboratory — 2026-09-13
 
 Directional low-wall cover and flanking, route detours, grounded crouch/rise/fire/return,
