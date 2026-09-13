@@ -9,16 +9,16 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   sky.addColorStop(0,directed?'#41647b':'#7797bb');sky.addColorStop(.48,directed?'#314b59':'#516b80');sky.addColorStop(.55,'#1c282b');sky.addColorStop(1,'#182320');cx.fillStyle=sky;cx.fillRect(0,0,256,128);
   for(const [x,y,w,h] of [[38,42,10,17],[172,43,14,14],[112,53,5,7]]){cx.fillStyle='#ffde9c';cx.fillRect(x,y,w,h);}
   const source=new T.CanvasTexture(canvas);source.mapping=T.EquirectangularReflectionMapping;source.colorSpace=T.SRGBColorSpace;
-  let probe;
+  let probe,beforeCapture=()=>()=>{};
   function rebuildProbe(){
     probe?.dispose();const generator=new T.PMREMGenerator(renderer);
     if(surfaceOptions.courtyard){
       // Capture only this static stage, once. No actors, floor feedback or
       // per-frame reflector. Rebuilt only after graphics-context restoration.
       const hidden=[];world.traverse(o=>{if(o.visible&&((o.parent===world&&o.isGroup&&o!==group)||(o.isMesh&&(o.material===groundMaterial||o.name==='wet-paving')))){hidden.push(o);o.visible=false;}});
-      const oldEnvironment=world.environment;world.environment=null;
+      const oldEnvironment=world.environment;world.environment=null;const restoreCutaways=beforeCapture();
       const cube=new T.WebGLCubeRenderTarget(128,{type:T.HalfFloatType});const eye=new T.CubeCamera(.1,55,cube);eye.position.set(0,1.4,-1.4);
-      try{eye.update(renderer,world);probe=generator.fromCubemap(cube.texture);}finally{cube.dispose();for(const o of hidden)o.visible=true;world.environment=oldEnvironment;}
+      try{eye.update(renderer,world);probe=generator.fromCubemap(cube.texture);}finally{cube.dispose();for(const o of hidden)o.visible=true;world.environment=oldEnvironment;restoreCutaways();}
     }else probe=generator.fromEquirectangular(source);
     world.environment=probe.texture;generator.dispose();
   }
@@ -46,6 +46,7 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   // front of the figure disappear; cover/raycast/game state remain untouched.
   const people={value:Array.from({length:12},()=>new T.Vector4(0,0,-1000,0))},count={value:0};
   const focusStart={value:new T.Vector4(0,0,0,0)},focusEnd={value:new T.Vector3()};
+  beforeCapture=()=>{const previousCount=count.value,previousFocus=focusStart.value.w;count.value=0;focusStart.value.w=0;return()=>{count.value=previousCount;focusStart.value.w=previousFocus;};};
   const modified=new Set();
   group.traverse(object=>{if(!object.isMesh||object===paving)return;
     for(const material of [].concat(object.material)){if(modified.has(material)||material===groundMaterial)continue;modified.add(material);
