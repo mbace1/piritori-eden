@@ -1,5 +1,21 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — Mewgenics meets XCOM across A and C
+
+The owner explicitly applies the supplied TURF design/pipeline summary to A
+(2D Turf) and C (the active 3D track), then clarifies: "it's Mewgenics meets Xcom."
+Use [the shared direction](design/A_C_TACTICAL_DIRECTION.md) before resuming
+combat work. Persistent people/builds and deliberate squad tactics are the
+central references; MST informs action/readability and Zero Company camera
+presentation. Move + Act in either order, full intent by default and distinct
+cover classes are the A/C target. The earlier formation-only/single-action
+paragraphs describe the previous target and must not silently constrain this
+track. Preserve existing authored campaign/save behavior until a tested
+migration. Variable encounter size, Kallio 2003, narrative/city consequences,
+the approved asset pipeline and current art/device gates remain. This is a
+direction update, not a claim that C.09.1 implements the new combat contract.
+
+
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
 Latest owner rulings: 2026-08-28
