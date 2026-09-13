@@ -11,8 +11,9 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Lab cabinet: `piritori-c09/`; hub card ID `optionc-lab`.
 - C.09 entry: `web/arena-lab/?actors=6&release=9`.
 - Historical C.09.1 entry: `web/arena-lab/?actors=6&release=9.1`.
-- Current C.10.1 entry: `web/arena-lab/?actors=6&release=10.1`.
-- Current release receipt: [C10_RELEASE.json](C10_RELEASE.json), source PRs #73/#74 and hub PRs #513/#514.
+- Historical C.10.1 entry: `web/arena-lab/?actors=6&release=10.1`.
+- Current C.11 entry: `web/arena-lab/?actors=6&release=11`.
+- Current release receipt: [C11_RELEASE.json](C11_RELEASE.json), source PR #76 and hub PR #515. Earlier batch: C10_RELEASE.json.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 

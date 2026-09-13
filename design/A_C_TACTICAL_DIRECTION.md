@@ -1,6 +1,6 @@
 # Shared direction for A and C — Mewgenics meets XCOM
 
-Owner direction, 2026-09-13: the TURF summary applies to **A (2D Turf)** and **C (the active 3D route)**. Follow-up: **"it's Mewgenics meets Xcom."** This defines the shared design target, not complete reference-game parity. C.10.1 is the active public lab; see [implementation](C10_IMPLEMENTATION.md) and [release evidence](C10_RELEASE.json).
+Owner direction, 2026-09-13: the TURF summary applies to **A (2D Turf)** and **C (the active 3D route)**. Follow-up: **"it's Mewgenics meets Xcom."** This defines the shared design target, not complete reference-game parity. C.11 is the active public lab; see [implementation](C10_IMPLEMENTATION.md) and [release evidence](C10_RELEASE.json).
 
 ## Reference hierarchy
 
@@ -49,7 +49,7 @@ The chapter addenda define re-playable chapter runs, unlocking the next chapter,
 
 Turf GDD and PRODUCTION_PIPELINE contain early milestone text that predates v36. Read VERSIONS and code/tests before declaring a feature missing. MST_PARITY records later lessons: momentum is damage **or** evasion, not both; universal sync was measured and cut; arrivals are announced and stage pressure instead of simply piling onto a roster. Its old API-key and sprite-status notes are historical, not current production state.
 
-**Shipped C.10.1 laboratory:** Move + Act, stored intents/forecasts, legal movement and both cover classes, temporary weapon motion, optional action focus and warm/cool practical lighting. Rules, browser/touch layouts, camera and graphics recovery gates passed. Partial cover is currently a protected cell from all directions; directional cover/peek and final character motion remain future work. The C.10 plan is retained alongside the implementation receipt.
+**Shipped C.11 laboratory:** Move + Act, stored intents/forecasts, legal movement and both cover classes, temporary weapon motion, optional action focus and warm/cool practical lighting. Rules, browser/touch layouts, camera and graphics recovery gates passed. C.11 low walls protect only across explicit edges, work from either side and require movement detours. Stand-ins crouch and rise to shoot; flanks remain exposed. Final character motion remains future work. See [C.11 pass](C11_COMBAT_PASS.md). The C.10 plan is retained alongside the implementation receipt.
 
 After that, deepen board-changing mechanics (cover degradation, pushes/hazards, ammo and authored arrivals as appropriate), then a repeatable objective variation and crew/build consequences. Bosses and additional run-map screens come after turn depth. Do not restart the parked mass-sprite production line or commission new paid characters from this summary.
 

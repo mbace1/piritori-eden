@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "build": "C.11",
+  "date": "2026-09-13",
+  "status": "live-development-laboratory",
+  "play_url": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/arena-lab/?actors=6&release=11",
+  "hub_url": "https://mbace1.github.io/Suds-Jack/#optionc-lab",
+  "source": {
+    "repository": "mbace1/piritori-eden",
+    "integration_branch": "art/meshy-approved-pilots-2026-09-11",
+    "pull_request": 76,
+    "tested_head": "e528563c981a9e8a0bd2f7504f8c79249d7d1a27",
+    "merge_commit": "d6b9b9563a2c8ff9e3217045895cad76175decf6"
+  },
+  "hub": {
+    "repository": "mbace1/Suds-Jack",
+    "pull_request": 515,
+    "tested_head": "5449f322aa2b169216a3c929d1756f05d22ecfb8",
+    "main_merge": "682919ace5656a387526bda42a5ac3b7b5d987c5",
+    "live_commit": "edf078da8da6a3e378706a7ffa5445419347000b",
+    "cabinet_tree": "7534b7dd5929e580918963989a5e2a1be45504c9",
+    "pages_run": 34756137913,
+    "pages_conclusion": "success"
+  },
+  "verification": {
+    "source_ci": "all eight checks passed on final head",
+    "hub_ci": "all relevant checks passed on final head",
+    "staged_git_blob_hashes_matched": 41,
+    "untransformed_runtime_files_matched_source": 37,
+    "runtime_sha256_entries": 38,
+    "layouts": [
+      "1440x1000 desktop / 6",
+      "412x915 touch / 12",
+      "915x412 touch / 2",
+      "1194x834 touch / 12"
+    ],
+    "rules": [
+      "four orientations, either side, flanks and corners",
+      "edge detours, occupancy, stored-plan invalidation",
+      "melee, cover interception versus natural miss",
+      "Move + Act, independent budgets, deterministic replay",
+      "legacy training, Bear Path, police and recovery"
+    ],
+    "presentation": [
+      "grounded base and covered motion",
+      "UI cover route, crouch, rise/fire/return",
+      "distinct event-driven impact feedback and cleanup",
+      "camera focus/return, manual override, reduced motion",
+      "graphics loss during attack and during visible impact"
+    ],
+    "ci_timing_fix": "Wait for the observed crouch threshold >0.24 instead of a fixed 500ms delay; inspect current settled pose rather than previous RAF sample. No gameplay change or threshold waiver.",
+    "public": "Hub card and C.11 marker verified. J2 preview C3-C4-B4 names NORTH wall and exposed flanks. Move then attack R2: 2 HP + 1 guard, ammo 4 to 3. Enemy round resolves; round 2 budgets reset and R2 planned gunfire across wall shows 65%. Public release.json build, source and entry verified.",
+    "every_public_http_asset_independently_rehashed": false,
+    "physical_pixel_10_pro": false,
+    "physical_ipad_m2": false
+  },
+  "limitations": [
+    "Neutral stand-ins; no F01/F02 production promotion",
+    "Low walls have edge protection; no vaulting or destruction",
+    "Crouch/peek is stand-in procedural motion, not accepted shared production animation",
+    "Actor overlap and concept-art parity remain open",
+    "Lab checkpoint v4 / c11-v1; authored campaign and Bear Path retain their rules"
+  ],
+  "next_steps": [
+    "Physical Pixel 10 Pro/iPad M2 playtest in both orientations",
+    "Use existing roster/aptitude/trait documentation for persistent crew builds, without inventing rigid classes",
+    "Connect equipment, wounds and aftermath to authored chapters and city/tram layer"
+  ],
+  "runtime_release": {
+    "build": "C.11",
+    "source_repository": "mbace1/piritori-eden",
+    "source_commit": "e528563c981a9e8a0bd2f7504f8c79249d7d1a27",
+    "entry": "web/arena-lab/?actors=6&release=11",
+    "status": "development-laboratory",
+    "character_provider": "neutral stand-ins",
+    "physical_devices_verified": false,
+    "transforms": [
+      "Scope runtime art register; preserve immutable fighter URLs"
+    ],
+    "sha256": {
+      "art/v3/environment3d/bear-landmark-v01.glb": "fc3fc41681d5c7dbcec7a7471d75b248597412ffd8664cee2489db4a9b7240f1",
+      "art/v3/environment3d/park-ground-study-v01.png": "ee1dfc3c2794a18bf48c15be1eef36aed48be7f9c999720f91b3e8ba1239e0e3",
+      "art/v3/manifest.json": "dfce58c98aa133530d534d9d35cc259b6468e28a2fd1601c2fedd5abd9c11361",
+      "content/era1-slice-v1.json": "a1d94ef8c6561be062ec96b53559a6fa633b3e4e1a2f159d944f59206a3fbdee",
+      "market/model.mjs": "6d367dbefb38a8a5667ba0d57d557b2722b9ff6aaa198aabcebc0a2b274ba563",
+      "people/hiring.mjs": "0f8014c84177fda2dc8f69ae21c685f07a7667fa0ac5c7441263f43f5c6cf0ce",
+      "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
+      "web/arena-lab/index.html": "d538cacc49c8b62a1a26aac54b26437baa307aa86f3d9d4641ddf14cad51ffc2",
+      "web/arena-lab/style.css": "c97ee99822a4b9cecf009dfa4ba2e53399d37fd0538765f9d647468d605088a1",
+      "web/bear-path/assets.js": "a66302aa9d8072d25f3315abb8311a3a596a049498d593cb410644532dce3e19",
+      "web/bear-path/development-look.js": "305feb2ef9303a9e57e6e01927c7476188b02636b2b4ef34f9cdc2aaf42b461b",
+      "web/bear-path/encounter.js": "87df33f188cc47441bff0117c311dcb3ef0538767e0f539776b32f4e4c75b33f",
+      "web/bear-path/park.js": "dd607717c60cc55ee36dbcca1b8bbb5fea75f2f047479abe6570201d68173701",
+      "web/bear-path/presentation.js": "6437e362b00e17220df8d1759794e4087f231e443787637eed33ed9d08eef5cf",
+      "web/fight-module/actors.js": "01192e88edd381a01c7dce97b4f7666e42cb15ad544cf4b38182ce85bbb2464f",
+      "web/fight-module/cover-edges.js": "4b7cfaec7fb76225565b57197cc1777814b3e3ea4be4254810b81b2a0273cddd",
+      "web/fight-module/edge-smoothing.js": "43a67fd76e1a9494c26d4344dd686407f95507e9c443bb68104cd792d6ff3ba8",
+      "web/fight-module/environment.js": "4e5ca335c56dbc0ead128b132b91f3b737c80eea37778e168b461e843757b823",
+      "web/fight-module/frame-clock.js": "4baa498b7ea4f809ad81f1ccf7fb581c4788c5fb3a0db16d4b32102419bf11bc",
+      "web/fight-module/framing.js": "bcb6007ca10b9dcb1996c7629789252684a5f6e56c7eddb25286e4c5dbf8aa8f",
+      "web/fight-module/main.js": "6a3ba79575ec06c0cc206a3a5b07c7068bf62b19edc4b7486dcb4c86f96e4ffa",
+      "web/fight-module/motion-player.js": "9fce68032cfb4ffe710eba331131fe76adb849b408772f921743dca338d5959d",
+      "web/fight-module/render-profile.js": "3a90ca6e0066d6566ba4e0eccbc18c0236f29b201586dc3ea76f45f9e7dd752d",
+      "web/fight-module/resolver.js": "9800774715bfb41406ebbf3f6f04d82830fc5f3f0b8be916a3df638054780260",
+      "web/fight-module/session.js": "3ee0c736f810753958dfc6736b485520e02c1fefc8c097835dee0e8c925f06bb",
+      "web/fight-module/stand-in.js": "49622d1f4df2cc9eac5e759cebf13267801ed68c4886bc924bf4ca89ef676816",
+      "web/fight-module/style.css": "7794dcd2c9531dd8715e3144763c3a2eca5d2a5776053a0b4cf607a9d6656c1d",
+      "web/fight-module/tactical-ui.js": "051329ba96b5eac053e5f1fdff5752b5ca8ceb9484327843785f1c0359774bc5",
+      "web/fight-module/tactics.js": "3704f0550a7b4782d927cfeddc346323040df04dbcd727c1e98b2a423b348c88",
+      "web/js/v3/equipment.js": "fb93d4401f186900975ef98f7dccf0f67061e142034dcaf9fb6f971394169d85",
+      "web/js/v3/grid.js": "6645840d1715f7bc6fa146b4a57ac10193f3a4e0324ca68c3b978c4d30f073f3",
+      "web/js/v3/stance.js": "5e215ecc68d1eaeb47ac72acb79b365ccde4bbccdbc641919d1a325023dfd07d",
+      "web/js/v3/state.js": "92fd908455dbf97a173cd7f20bc8e46bd0f53d959bb6da0ae63b902526d540e7",
+      "web/vendor/THREE-LICENSE.txt": "c149c691ccddabd529ef1b96f9142fe5af0da9064961fb62294521bf77c88eb6",
+      "web/vendor/jsm/loaders/GLTFLoader.js": "11ea6cf692882d7a2770f2cbb485724def0aa4e623abcfe45fbf74aa0ea5bc55",
+      "web/vendor/jsm/shaders/FXAAShader.js": "33dfba55320397897590f334ac85656c65c92368afba399d66d7272dce6cb88e",
+      "web/vendor/jsm/utils/BufferGeometryUtils.js": "c25b7930e570e9ec56173cd3b866ec8d2e10016630db3937efb439daf1cedbf6",
+      "web/vendor/three.module.min.js": "54a7a52ddce0ad06fbd1d021fd03b1e1812d946114a2111e1260bcd490c6b840"
+    }
+  }
+}
