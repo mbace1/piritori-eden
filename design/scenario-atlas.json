@@ -1600,5 +1600,18 @@
         "final character acceptance"
       ]
     }
-  ]
+  ],
+  "night_shift_scenery_pilot": {
+    "build": "C.15",
+    "default": "courtyard",
+    "variants": [
+      "courtyard",
+      "yard",
+      "park"
+    ],
+    "campaign_bound": false,
+    "rules": "existing C.12 separate-save pilot",
+    "source": "design/C15_NIGHT_PLACES.md",
+    "owner_direction": "New arena spots; park is boring; minimalist rain UI, mood lighting, varied cameras"
+  }
 }

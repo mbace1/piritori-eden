@@ -373,3 +373,12 @@ D009 corrected (2026-09-13): v04 columns 2 **Ink & Stone** and 3 **Cold Street**
 D010 records the review distinction: ranking an option, accepting a concept and accepting an in-engine asset are separate statements. New studies should expose materially different shape, edge, surface and staging choices. Earlier explicit approvals retain their original scope.
 
 D011 (2026-09-13): [ACTIVE_CONTEXT](../ACTIVE_CONTEXT.md) records the current arena, visual-quality, variable-participant and production directives. The [Option C slice design](OPTION_C_VERTICAL_SLICE.md) applies the existing Meshy handoffs and treats production reproducibility as part of the A/C decision. It is a design brief, not a new live build.
+
+
+### C.15 scenery comparison for Night Shift
+
+The owner requested new arena settings beyond the park. The courtyard and Linjat
+service-yard assemblies in `web/crew-run/locations.js` are fictional visual
+pilots using the same C.12 battle mission and separate save. They are not new
+campaign sites, market hops or a fix for the courtyard/Jaska binding. See
+[C.15](C15_NIGHT_PLACES.md). Karhupuisto remains an optional comparison.

@@ -1,5 +1,6 @@
 const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('node:assert/strict');
 const base=process.env.CREW_RUN_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/crew-run/',out=process.env.CREW_RUN_OUTPUT||'.private/c12-qa';fs.mkdirSync(out,{recursive:true});
+async function selectCrew(p,tap,id){if(await p.locator('#crew-picker').count()&&!await p.locator('#roster').isVisible())await tap(p.locator('#crew-picker'));await tap(p.locator(`[data-unitid="${id}"]`));if(await p.locator('#crew-picker').count()&&await p.locator('#roster').isVisible())await tap(p.locator('#crew-picker'));}
 const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','crew-5'],['move','3,2'],['select','crew-0'],['move','1,0'],['extract'],['select','crew-2'],['move','3,0'],['extract'],['end'],['select','crew-5'],['move','3,0'],['extract'],['select','crew-1'],['move','2,1'],['brace'],['end'],['move','2,0'],['extract']];
 (async()=>{const browser=await chromium.launch({...(process.platform==='win32'?{channel:'msedge'}:{}),headless:true,args:['--enable-unsafe-swiftshader']});try{
  for(const spec of [{name:'desktop',width:1440,height:1000},{name:'phone',width:412,height:915,touch:true},{name:'phone-landscape',width:915,height:412,touch:true},{name:'tablet',width:1194,height:834,touch:true}]){
@@ -27,7 +28,7 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
   assert.ok(layout.end.bottom<=layout.height+1,'end round visible without panel scrolling');
   await p.screenshot({path:`${out}/${spec.name}-battle.png`});
   for(const [index,[type,value]]of route.entries()){
-   if(type==='select')await tap(p.locator(`[data-unitid="${value}"]`));
+   if(type==='select')await selectCrew(p,tap,value);
    else if(type==='move'){await tap(p.locator('[data-action="move"]'));await tap(p.locator(`[data-cell="${value}"]`));await tap(p.locator('#commit-preview'));}
    else if(type==='end')await tap(p.locator('#end'));
    else if(type==='brace')await tap(p.locator('[data-action="brace"]'));
@@ -45,7 +46,7 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
    // Fresh browser save is setup; every equipment and healing action uses UI.
    await p.evaluate(()=>localStorage.removeItem('piritori-c12-crew-v1'));await p.reload();await idle();
    await tap(p.getByRole('button',{name:'Equip Sanna Heikkilä',exact:true}));await tap(p.getByRole('button',{name:'Sanna Heikkilä Light pack',exact:true}));await tap(p.getByRole('button',{name:'Done',exact:true}));await tap(p.locator('#crew-deploy'));await idle();
-   await tap(p.locator('#end'));await idle();await tap(p.locator('[data-unitid="crew-1"]'));
+   await tap(p.locator('#end'));await idle();await selectCrew(p,tap,'crew-1');
    const hurt=await p.evaluate(()=>fightModule.snapshot().units.find(u=>u.id==='crew-1'));assert.ok(hurt.hp<hurt.maxHp,'enemy turn wounded the handgun user');
    assert.ok(await p.locator('[data-action="reload"]').isVisible());assert.ok(await p.locator('[data-action="item"]').isVisible(),'light-pack bandage coexists with reload');
    await p.screenshot({path:`${out}/${spec.name}-handgun-bandage.png`});await tap(p.locator('[data-action="item"]'));await idle();
