@@ -1,5 +1,31 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — Mewgenics meets XCOM across A and C
+
+The owner explicitly applies the supplied TURF design/pipeline summary to A
+(2D Turf) and C (the active 3D track), then clarifies: "it's Mewgenics meets Xcom."
+Use [the shared direction](design/A_C_TACTICAL_DIRECTION.md) before resuming
+combat work. Persistent people/builds and deliberate squad tactics are the
+central references; MST informs action/readability and Zero Company camera
+presentation. Move + Act in either order, full intent by default and distinct
+cover classes are the A/C target. The earlier formation-only/single-action
+paragraphs describe the previous target and must not silently constrain this
+track. Preserve existing authored campaign/save behavior until a tested
+migration. Variable encounter size, Kallio 2003, narrative/city consequences,
+the approved asset pipeline and current art/device gates remain. This is a
+direction update, not a claim that C.09.1 implements the new combat contract.
+
+
+## Owner continuation, 2026-09-13 — delivery includes the live hub
+
+The owner explicitly authorizes Astra to merge and publish tested changes:
+"You are the merger so go ahead and merge" and "So always publish so it's on
+the hub as well." Each playable slice batch must reach both the Piritori source
+repository and a verified public Suds Jack route. A PR or source merge alone is
+incomplete delivery. Labs retain separate labelled cards; they do not replace
+the authored campaign entry. Keep recording testing, remaining gates and exact
+release provenance. Document-only updates do not invent a playable release.
+
 ## Owner continuation, 2026-09-13 — placeholders and shared source
 
 The owner authorizes temporary placeholder characters until the approved models fit and look good, to minimize defects while the vertical slice develops. Neutral stand-ins are development equipment, not newly approved roster designs. F01/F02 retain their existing production gates. Each reviewable slice batch must be pushed to the Piritori GitHub repository with tests and handoff so other PCs/agents can continue directly. A source push is not a live deployment.

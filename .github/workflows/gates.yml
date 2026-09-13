@@ -147,3 +147,34 @@ jobs:
         run: |
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
+
+  c-laboratory:
+    name: C laboratory tactics and touch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: laboratory rules and legacy regression
+        run: |
+          node web/test/tactics.mjs
+          node web/test/arena-lab.mjs
+          node web/test/fight-module.mjs
+          node web/test/fight-module-recovery.mjs
+          node web/test/bear-path.mjs
+          node web/test/bear-path-police.mjs
+          node web/test/frame-clock.mjs
+      - run: npm install --prefix /tmp/piritori-test playwright
+      - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: desktop and touch fight, replay, graphics recovery and motion
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          ARENA_LAB_URL: http://127.0.0.1:8782/web/arena-lab/
+          ARENA_LAB_OUTPUT: /tmp/c10-qa
+          ARENA_LAB_DPR: '0.5'
+          ARENA_LAB_TURN_TIMEOUT: '120000'
+        run: |
+          python3 -m http.server 8782 --bind 127.0.0.1 > /tmp/c10-server.log 2>&1 &
+          node web/test/arena-lab-browser.cjs
+          node web/test/tactical-camera.cjs

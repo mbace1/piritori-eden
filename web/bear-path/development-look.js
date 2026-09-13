@@ -43,9 +43,11 @@ export function developmentLook(world,renderer,group,groundMaterial,mats){
             vec2 delta=(labView.xy-person.xy)/vec2(.72,person.w);
             float mask=1.0-smoothstep(.78,1.0,length(delta));
             float dither=fract(dot(floor(gl_FragCoord.xy),vec2(.75487766,.56984029)));
-            if(labView.z>person.z+.24 && mask>dither)discard;
+            // Include the figure's full view-depth extent. A centre-only
+            // threshold left near benches covering legs at back-row cells.
+            if(labView.z>person.z-.95 && mask>dither)discard;
           }`);
-      };material.customProgramCacheKey=()=>priorKey+'-c09-cutaway';material.needsUpdate=true;
+      };material.customProgramCacheKey=()=>priorKey+'-c091-cutaway';material.needsUpdate=true;
     }
   });
   const point=new T.Vector3();let tracked=[];

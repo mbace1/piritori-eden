@@ -63,3 +63,11 @@ They do not replace approved concepts or change production-manifest status.
 Push each reviewable slice batch and its tests/handoff to the Piritori GitHub
 repository so other PCs can continue. Distinguish source pushed, PR open,
 merged and live hub deployment; never claim one from another.
+
+Owner continuation, 2026-09-13: Astra is authorized to merge and publish tested
+slice batches. Delivery includes the Piritori source repository AND the Suds
+Jack hub. Do not stop at an open PR or source-only merge. Verify the public hub
+card and actual playable route; record source commit, release and any remaining
+hardware/art gates. Use a separate labelled cabinet for laboratories. A
+document-only update needs no invented playable version. See
+`design/HUB_RELEASE.md` for the allowlisted staging and publication procedure.

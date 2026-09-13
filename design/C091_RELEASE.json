@@ -1,0 +1,77 @@
+{
+  "build": "C.09.1",
+  "date": "2026-09-13",
+  "status": "published-development-lab",
+  "source": {
+    "repository": "mbace1/piritori-eden",
+    "pr": 70,
+    "tested_head": "adeda053a231801d31fe27008d7a363c01eca353",
+    "merge": "daddf4808bf3470170be5d89bee193741461204a",
+    "integration_branch": "art/meshy-approved-pilots-2026-09-11",
+    "ci_run": 34747926691
+  },
+  "hub": {
+    "repository": "mbace1/Suds-Jack",
+    "branch": "gh-pages",
+    "runtime_commit": "dde785a88863087daa25410da956b55d1ffde5b6",
+    "fingerprint_commit": "e863e2f43afd7f93853f925df2da44e5e4c62d9f",
+    "metadata_commit": "5e8fe17215fe93656d3a5b2b1ea03448f99c1697",
+    "source_pr": 511,
+    "url": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/arena-lab/?actors=6&release=9.1",
+    "pages_run": 34748673795,
+    "pages_attempt": 2,
+    "pages_result": "success",
+    "source_merge": "801c95a8702f7e77e618dbf7dd4c8bb17c19cd76",
+    "tested_head": "b39a2f00b0ae4f44ddfba4a0726b6213db10cdf9",
+    "ci_runs": [
+      34749694995,
+      34749692855
+    ],
+    "ci_result": "success"
+  },
+  "verification": {
+    "public_hub_launch": true,
+    "public_move": true,
+    "public_ranged_damage": true,
+    "public_twelve_person_fixture": true,
+    "public_arena_console_errors": 0,
+    "exact_cabinet_git_blobs": 38,
+    "unexpected_cabinet_files": 0,
+    "per_file_public_http_hash_audit": false,
+    "reason": "Canonical staging was compared with all deployed cabinet Git blobs. Pages deployment and public UI were checked separately. A full public HTTP hash download was not completed.",
+    "physical_pixel_10_pro": false,
+    "physical_ipad_m2": false,
+    "desktop_touch_emulation_fps": {
+      "desktop": 60,
+      "phone_portrait": 30,
+      "phone_landscape": 30,
+      "tablet": 30
+    },
+    "capacity_idle": {
+      "actors": 12,
+      "seconds": 45,
+      "rendered_frames": 1350,
+      "label_layouts": 23,
+      "renderer_geometry_texture_counts_stable": true
+    },
+    "visibility": {
+      "fixture_views": 96,
+      "empty_cell_views": 288,
+      "scenery_visibility_minimum": 1,
+      "actor_overlap_visibility_minimum": 0.6257668711656442,
+      "scope": "12 fixture actors x 8 angles plus one broad standing probe in 36 empty legal cells x 8 angles. Not every motion pose or occupied-cell combination."
+    }
+  },
+  "remaining": [
+    "Physical Pixel 10 Pro and iPad M2 acceptance",
+    "Crowded actor-on-actor overlap",
+    "Final F01/F02 rig, shared actions and visual acceptance",
+    "Deliberate practical lighting and second reproducible arena arrangement",
+    "Campaign integration after laboratory acceptance"
+  ],
+  "boundaries": [
+    "Temporary stand-ins do not repair or promote the imported Meshy models.",
+    "Wet-surface lighting uses a prefiltered authored environment; no real-time screen-space reflections or reflected moving fighters.",
+    "Existing authored Bear Path C.08 r2 and campaign cards are preserved."
+  ]
+}
