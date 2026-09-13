@@ -1,6 +1,7 @@
-import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=3';
+import {coverEdges,coverDescription} from './cover-edges.js?v=1';
+import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=4';
 
-export function tacticalUI({getSession,button,tile,run,hint,refresh}){
+export function tacticalUI({getSession,button,tile,edgeMark,run,hint,refresh}){
   let preview=null;
   const $=id=>document.getElementById(id);
   function pick(type,value){preview={type,value};refresh();$('commit-preview')?.focus({preventScroll:true});}
@@ -22,8 +23,8 @@ export function tacticalUI({getSession,button,tile,run,hint,refresh}){
         const path=routes(b,u).get(preview.value);valid=moveReady&&!!path?.length;
         if(valid){destination={id:u.id,cell:preview.value};for(const c of path)tile(c,0xe8e6ad,.48);
           const shots=b.enemies.filter(v=>v.alive).map(t=>({t,f:forecast(b,u,t,preview.value)})).filter(v=>v.f.valid);
-          text=`${coordinate(u.cell)} → ${path.map(coordinate).join(' → ')} · ${path.length}/4 steps. ${coverName(b,preview.value)}. ${actReady?`Action remains. Attacks here: ${shots.map(({t,f})=>`${t.label} ${f.chance}%`).join(', ')||'none'}.`:'Action already used.'}`;}
-      }else{const t=b.enemies.find(v=>v.id===preview.value),f=forecast(b,u,t);valid=actReady&&f.valid;if(valid){tile(t.cell,0xf9b870,.6);text=`${u.label} → ${t.label}: ${f.chance}% to hit; ${f.hpDamage} HP + ${f.guardDamage} guard if hit. ${f.cover==='partial'?'Partial cover: −25 points. ':''}${moveReady?'Movement remains available.':'Movement used.'}`;}}
+          text=`${coordinate(u.cell)} → ${path.map(coordinate).join(' → ')} · ${path.length}/4 steps. ${coverDescription(b,preview.value)} ${actReady?`Action remains. Attacks here: ${shots.map(({t,f})=>`${t.label} ${f.chance}%`).join(', ')||'none'}.`:'Action already used.'}`;}
+      }else{const t=b.enemies.find(v=>v.id===preview.value),f=forecast(b,u,t);valid=actReady&&f.valid;if(valid){tile(t.cell,0xf9b870,.6);text=`${u.label} → ${t.label}: ${f.chance}% to hit; ${f.hpDamage} HP + ${f.guardDamage} guard if hit. ${f.cover==='partial'?`${f.coverEdge.toUpperCase()} wall: −25 points. `:f.flanked?'FLANKED: wall gives no protection. ':''}${moveReady?'Movement remains available.':'Movement used.'}`;}}
       if(valid){const p=document.createElement('p');p.textContent=text;card.append(p,button(preview.type==='move'?'Confirm move':'Confirm attack',()=>{const p=preview;cancel();run(p.type,p.value);},{id:'commit-preview'}),button('Cancel',()=>{cancel();refresh();}));}
       else {cancel();card.hidden=true;}
     }
@@ -32,12 +33,12 @@ export function tacticalUI({getSession,button,tile,run,hint,refresh}){
     summary.textContent=`ENEMY PLANS · ${destination?'AFTER PREVIEWED MOVE':'CURRENT POSITIONS'} · ${u?.label}: ${total?`${total.attacks} attacks, up to ${total.hp} HP + ${total.guard} guard damage${total.hp>=u.hp?' · POTENTIALLY LETHAL':''}`:'no planned hits'}`;
     panel.append(summary);
     for(const v of danger.views){const enemy=b.enemies.find(p=>p.id===v.id);if(!enemy.alive)continue;const t=b.players.find(p=>p.id===v.target);
-      const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard`:v.reason+' — CANCELLED'}`:v.reason}`;
+      const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard${v.cover==='partial'?' · WALL':v.flanked?' · FLANKED':''}`:v.reason+' — CANCELLED'}`:v.reason}`;
       const p=document.createElement('div');p.className='enemy-plan '+(!v.valid?'cancelled':'');p.textContent=text;panel.append(p);
       if(v.valid){tile(v.to,0xdb946f,.19);if(v.type==='attack')tile(destination?.id===t.id?destination.cell:t.cell,0xf07862,.30);}
     }
-    for(const [c,cover] of b.cover)tile(c,cover.hardBlock?0x8dacc6:0xe4ce92,.18);
-    $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold: partial cover / −25 percentage points gun accuracy · Red: planned danger';
+    for(const [c,cover] of b.cover){if(cover.hardBlock)tile(c,0x8dacc6,.18);else edgeMark(c,cover.edge,0xe4ce92,.65);}
+    $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold edge: wall / −25 points across it; sides exposed; walk around · Red: planned danger';
   }
   return {pick,cancel,render,confirm:()=>{if(preview)$('commit-preview')?.click();}};
 }

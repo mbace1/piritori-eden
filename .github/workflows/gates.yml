@@ -159,6 +159,7 @@ jobs:
       - name: laboratory rules and legacy regression
         run: |
           node web/test/tactics.mjs
+          node web/test/directional-cover.mjs
           node web/test/arena-lab.mjs
           node web/test/fight-module.mjs
           node web/test/fight-module-recovery.mjs
@@ -178,3 +179,4 @@ jobs:
           python3 -m http.server 8782 --bind 127.0.0.1 > /tmp/c10-server.log 2>&1 &
           node web/test/arena-lab-browser.cjs
           node web/test/tactical-camera.cjs
+          node web/test/cover-presentation.cjs

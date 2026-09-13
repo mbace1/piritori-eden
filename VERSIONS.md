@@ -10,6 +10,19 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## C.11 laboratory — 2026-09-13
+
+Directional low-wall cover and flanking, route detours, grounded crouch/rise/fire/return,
+barrel-aligned shots and distinct HP/guard/wall/miss feedback. Separate lab release;
+the authored campaign version and production character gates do not advance.
+See `design/C11_COMBAT_PASS.md` for scope, evidence and remaining device gates.
+
+### Port
+
+Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json`.
+New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
+Use resolved impact classifications for presentation; never reapply damage on recovery.
+
 ## v4.50 — 2026-09-13
 
 **C.08: two approved Bear Path art directions in one playable scene.**

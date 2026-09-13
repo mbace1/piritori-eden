@@ -21,7 +21,7 @@ for(const order of ['move-first','attack-first']){
  const path=routes(b,u).get('0,4');assert.ok(path?.length<=4);assert.ok(!path.includes('0,3'),'route goes around full cover');
  assert.ok(!routes(b,u).has(t.cell),'cannot walk through occupied cell');
  u.cell='0,2';t.cell='0,4';assert.equal(forecast(b,u,t).reason,'Line blocked');
- u.cell='1,2';t.cell='1,3';assert.equal(forecast(b,u,t).chance,65);b.cover.delete(t.cell);assert.equal(forecast(b,u,t).chance,90);
+ u.cell='1,2';t.cell='1,3';assert.equal(forecast(b,u,t).chance,90,'rear approach flanks north wall');u.cell='1,4';assert.equal(forecast(b,u,t).chance,65);b.cover.delete(t.cell);assert.equal(forecast(b,u,t).chance,90);
  assert.deepEqual(sightCells('0,0','1,1'),['1,0','0,1'],'touching walls cannot be shot through');
 }
 {

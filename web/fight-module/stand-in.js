@@ -13,8 +13,8 @@ export function makeStandIn(unit, world) {
   const shadow=new T.Mesh(new T.CircleGeometry(.46,24),new T.MeshBasicMaterial({color:0x071119,transparent:true,opacity:.32,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.014;group.add(shadow);
   const prop=new T.Group();body.add(prop);const gun=unit.equipment.includes('handgun'),knife=unit.equipment==='folding-knife';
   const pm=new T.MeshStandardMaterial({color:gun?0x292f32:knife?0xa4b0b5:0x796348,roughness:.58,metalness:gun?.6:0});
-  const weapon=new T.Mesh(gun?new T.BoxGeometry(.075,.10,.29):knife?new T.BoxGeometry(.028,.20,.07):new T.CylinderGeometry(.046,.025,.69,10),pm);weapon.position.set(0,gun?.05:knife?.13:.25,gun?.13:.06);prop.add(weapon);const grip=new T.Mesh(new T.BoxGeometry(.06,gun?.15:.12,.075),new T.MeshStandardMaterial({color:0x252b2c,roughness:.8}));grip.position.set(0,-.02,0);prop.add(grip);prop.visible=true;
-  const a={id:unit.id,unit,group,body,ring,shadow,prop,bones:new Map(),placeholder:true,mode:'idle',elapsed:0,duration:1,down:false,mesh,parts:[],walkSpeed:1.45};
+  const weapon=new T.Mesh(gun?new T.BoxGeometry(.075,.10,.29):knife?new T.BoxGeometry(.028,.20,.07):new T.CylinderGeometry(.046,.025,.69,10),pm);weapon.position.set(0,gun?.05:knife?.13:.25,gun?.13:.06);prop.add(weapon);const grip=new T.Mesh(new T.BoxGeometry(.06,gun?.15:.12,.075),new T.MeshStandardMaterial({color:0x252b2c,roughness:.8}));grip.position.set(0,-.02,0);prop.add(grip);prop.visible=true;const muzzle=new T.Object3D();muzzle.position.set(0,.05,.29);prop.add(muzzle);
+  const a={id:unit.id,unit,group,body,ring,shadow,prop,bones:new Map(),placeholder:true,mode:'idle',elapsed:0,duration:1,down:false,mesh,muzzle,coverBlend:0,peek:0,parts:[],walkSpeed:1.45};
   a.play=(mode,duration=.8)=>{a.mode=mode;a.elapsed=0;a.duration=duration;a.down=mode==='down';prop.visible=!['item','talk','down'].includes(mode);};
   a.setWalkSpeed=speed=>{a.walkSpeed=speed;};
   const dummy=new T.Object3D(),up=new T.Vector3(0,1,0),temp=new T.Vector3();let index=0;
@@ -23,23 +23,24 @@ export function makeStandIn(unit, world) {
   function segment(from,to,r,color){const d=to.clone().sub(from);ellipsoid(from.clone().add(to).multiplyScalar(.5),[r,d.length()*.5+r*.18,r],color,new T.Quaternion().setFromUnitVectors(up,d.normalize()));}
   function elbow(root,end,upper,lower,pole){const delta=end.clone().sub(root),distance=T.MathUtils.clamp(delta.length(),.02,upper+lower-.002),axis=delta.normalize();end.copy(root).addScaledVector(axis,distance);const side=pole.clone().addScaledVector(axis,-pole.dot(axis)).normalize(),along=(upper*upper-lower*lower+distance*distance)/(2*distance);return root.clone().addScaledVector(axis,along).addScaledVector(side,Math.sqrt(Math.max(0,upper*upper-along*along)));}
   a.update=dt=>{
-    a.elapsed+=dt;index=0;a.parts=[];
+    a.elapsed+=dt;a.coverBlend=T.MathUtils.damp(a.coverBlend,a.covered&&a.mode!=='walk'&&!a.down?1:0,18,dt);index=0;a.parts=[];
     const t=Math.min(1,a.elapsed/a.duration),pulse=Math.sin(Math.PI*t),walking=a.mode==='walk',cycle=a.elapsed*Math.PI*2*a.walkSpeed/.68;
     const lean=a.mode==='strike'?pulse*.18:a.mode==='hit'?-pulse*.16:a.covered&&a.mode==='idle'?.06:0;
-    const chest=p(0,1.20,.02+lean),hips=p(0,.90,0);
+    const duck=.26*a.coverBlend*(1-a.peek);a.duck=duck;const chest=p(0,1.20-duck,.02+lean),hips=p(0,.90-duck,-duck*.26);
     ellipsoid(chest,[.255*width,.34,.17],'coat');ellipsoid(hips,[.20*width,.16,.15],'dark');
-    ellipsoid(p(0,1.65,.03+lean),[.166,.20,.165],'skin');
-    ellipsoid(p(0,1.77,.007+lean),[.17,.105,.16],'dark');
-    ellipsoid(p(0,1.66,.19+lean),[.06,.05,.05],'skin');
+    ellipsoid(p(0,1.65-duck,.03+lean),[.166,.20,.165],'skin');
+    ellipsoid(p(0,1.77-duck,.007+lean),[.17,.105,.16],'dark');
+    ellipsoid(p(0,1.66-duck,.19+lean),[.06,.05,.05],'skin');
     for(const side of [-1,1]){
       const phase=cycle+(side<0?Math.PI:0),swing=walking?Math.sin(phase):0;
       const foot=p(side*.135,.105+Math.max(0,swing)*.14,walking?Math.cos(phase)*.22:.04),hip=hips.clone().add(p(side*.125,0,0));
       const knee=elbow(hip,foot,.42,.40,p(0,0,1));
       segment(hip,knee,.105*width,'dark');segment(knee,foot,.083,'dark');ellipsoid(foot.clone().add(p(0,-.035,.055)),[.105,.069,.18],'sole');
-      const shoulder=p(side*.245*width,1.43,.01+lean),hand=p(side*.32,1.00,.09+(walking?-swing*.17:0));
-      if(a.mode==='brace'){hand.set(side*.19,1.48,.28);}
-      if(['shoot','grip'].includes(a.mode)){const recoil=a.mode==='shoot'?Math.max(0,1-Math.abs(t-.38)*9):0;hand.set(side*.075,1.36+recoil*.055,.52-recoil*.10);}
-      if(a.mode==='reload'){hand.set(side*.08,1.14,.27+(side===1?pulse*.12:0));}
+      const shoulder=p(side*.245*width,1.43-duck,.01+lean),hand=p(side*.32,1.00-duck,.09+(walking?-swing*.17:0));
+      if(a.mode==='idle'&&gun&&a.coverBlend>.01)hand.set(side*.08,1.12-duck,.30);
+      if(a.mode==='brace'){hand.set(side*.19,1.48-duck,.28);}
+      if(['shoot','grip'].includes(a.mode)){const recoil=a.mode==='shoot'?Math.max(0,1-Math.abs(t-.38)*9):0;hand.set(side*.075,1.36-duck+recoil*.055,.52-recoil*.10);}
+      if(a.mode==='reload'){hand.set(side*.08,1.14-duck,.27+(side===1?pulse*.12:0));}
       if(a.mode==='strike'&&side===-1){if(knife)hand.set(-.15,1.15,.06+pulse*.48);else{const swing=t<.3?t/.3*.3:.3+(t-.3)/.7;hand.set(-.34+Math.sin(swing*Math.PI)*.43,1.20+Math.sin(swing*Math.PI)*.25,.10+Math.sin(swing*Math.PI)*.32);}}
       if(a.mode==='item'){hand.set(side*.07,1.10,.28);}
       if(a.mode==='talk'&&side===-1){hand.set(-.36,1.23,.22+pulse*.10);}

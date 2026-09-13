@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "rules": "c11-v1",
+  "coordinate_convention": "north = row + 1, world -Z",
+  "wall": {"cell": "2,3", "edge": "north"},
+  "shots": [
+    {"from":"2,5","to":"2,3","edge":"north","point":[2,3.5],"chance":65},
+    {"from":"4,3","to":"2,3","edge":null,"point":null,"chance":90},
+    {"from":"2,1","to":"2,3","edge":null,"point":null,"chance":90},
+    {"from":"3,4","to":"2,3","edge":"north","point":[2.5,3.5],"chance":65},
+    {"from":"2,2","to":"2,4","edge":"south","point":[2,3.5],"chance":65}
+  ],
+  "movement": {"from":"2,3","to":"2,4","direct_crossing":false,"shortest_unoccupied_path_steps":3},
+  "handgun_rolls": [
+    {"roll":64.99,"chance":65,"impact":"body_or_guard"},
+    {"roll":65,"chance":65,"impact":"cover"},
+    {"roll":89.99,"chance":65,"impact":"cover"},
+    {"roll":90,"chance":65,"impact":"miss"}
+  ],
+  "lab_checkpoint_version":4,
+  "legacy_campaign_checkpoint_version":2
+}

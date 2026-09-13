@@ -1,3 +1,4 @@
+import {coverEdges,coverProtection,crossesCoverEdge} from './cover-edges.js?v=1';
 // C laboratory rules. Campaign resolver and saves deliberately stay separate.
 export const WEAPONS={
   'baseball-bat':{name:'Bat',range:1,damage:3,accuracy:100},
@@ -9,12 +10,12 @@ const distance=(a,b)=>{const [x,y]=xy(a),[u,v]=xy(b);return Math.abs(x-u)+Math.a
 const units=b=>b.players.concat(b.enemies),alive=b=>units(b).filter(u=>u.alive);
 export const weapon=u=>WEAPONS[u.equipment];
 export const coordinate=c=>{const [x,y]=xy(c);return String.fromCharCode(65+x)+(y+1);};
-export const coverName=(b,c)=>b.cover.get(c)?.hardBlock?'Full cover':b.cover.get(c)?.softBlock?'Partial cover':'Exposed';
+export const coverName=(b,c)=>b.cover.get(c)?.hardBlock?'Full cover':coverEdges(b,c).length?'Partial cover':'Exposed';
 export function routes(b,u,origin=u.cell){
   const occupied=new Set(alive(b).filter(v=>v.id!==u.id).map(v=>v.cell)),found=new Map([[origin,[]]]),queue=[origin];
   for(const cell of queue){const path=found.get(cell);if(path.length>=4)continue;const [x,y]=xy(cell);
     for(const [dx,dy] of [[0,1],[1,0],[-1,0],[0,-1]]){const nx=x+dx,ny=y+dy,n=key(nx,ny);
-      if(nx<0||nx>=6||ny<0||ny>=8||found.has(n)||occupied.has(n)||b.cover.get(n)?.hardBlock)continue;
+      if(nx<0||nx>=6||ny<0||ny>=8||found.has(n)||occupied.has(n)||b.cover.get(n)?.hardBlock||crossesCoverEdge(b,cell,n))continue;
       found.set(n,[...path,n]);queue.push(n);
     }
   }return found;
@@ -37,18 +38,18 @@ export function forecast(b,u,target,from=u?.cell){
   const blockers=new Set(alive(b).filter(v=>v.id!==u.id&&v.id!==target.id).map(v=>v.cell));
   const blocked=sightCells(from,target.cell).find(c=>b.cover.get(c)?.hardBlock||blockers.has(c));
   if(blocked)return {...fail('Line blocked'),blocked};
-  const partial=!!w.magazine&&!!b.cover.get(target.cell)?.softBlock,guardDamage=Math.min(target.guard,Math.max(0,w.damage-(w.pierce||0)));
-  return {valid:true,reason:'Clear',from,to:target.cell,chance:w.accuracy-(partial?25:0),damage:w.damage,guardDamage,hpDamage:Math.min(target.hp,w.damage-guardDamage),cover:partial?'partial':'exposed'};
+  const wall=w.magazine?coverProtection(b,from,target.cell):null,partial=!!wall,guardDamage=Math.min(target.guard,Math.max(0,w.damage-(w.pierce||0)));
+  return {valid:true,reason:'Clear',from,to:target.cell,chance:w.accuracy-(partial?25:0),damage:w.damage,guardDamage,hpDamage:Math.min(target.hp,w.damage-guardDamage),cover:partial?'partial':'exposed',coverEdge:wall?.edge??null,coverPoint:wall?.point??null,flanked:!!w.magazine&&!partial&&coverEdges(b,target.cell).length>0};
 }
 export const targets=(b,u,from=u.cell)=>b.enemies.filter(v=>forecast(b,u,v,from).valid);
 function copyBattle(b){return {...structuredClone({...b,cover:undefined}),cover:b.cover};}
-function legalPath(b,u,path){let at=u.cell;for(const c of path){if(distance(at,c)!==1||b.cover.get(c)?.hardBlock||alive(b).some(v=>v.id!==u.id&&v.cell===c))return false;at=c;}return path.length<=4;}
+function legalPath(b,u,path){let at=u.cell;for(const c of path){if(distance(at,c)!==1||b.cover.get(c)?.hardBlock||crossesCoverEdge(b,at,c)||alive(b).some(v=>v.id!==u.id&&v.cell===c))return false;at=c;}return path.length<=4;}
 export function choosePlan(b,u,{canMove=true}={}){
   const opponents=alive(b).filter(v=>v.side!==u.side),w=weapon(u);
   if(w.magazine&&!u.ammo)return {id:u.id,type:'reload',path:[],to:u.cell};
   let best=null;
   for(const [to,path] of (canMove?routes(b,u):new Map([[u.cell,[]]])))for(const target of opponents){const f=forecast(b,u,target,to),d=distance(to,target.cell);
-    const score=(f.valid?100+f.hpDamage*3+f.chance/10:0)-d*.6-path.length*.8+(b.cover.get(to)?.softBlock&&w.magazine?4:0);
+    const score=(f.valid?100+f.hpDamage*3+f.chance/10:0)-d*.6-path.length*.8+(w.magazine&&coverProtection(b,target.cell,to)?4:0);
     if(!best||score>best.score)best={id:u.id,type:f.valid?'attack':path.length?'advance':'hold',target:target.id,aim:target.cell,path,to,score};
   }return best||{id:u.id,type:'hold',path:[],to:u.cell};
 }
@@ -76,16 +77,16 @@ export function threats(b,preview=null){
 export function createTacticalSession(battle,mode,scenario,data){
   Object.assign(battle,{tactical:true,moved:[],acted:[],plans:[],rng:104729,cover:new Map()});
   for(const c of ['0,3','5,4','2,6'])battle.cover.set(c,{hardBlock:true,softBlock:false,propId:'lab-full',effect:'blocks movement and sight'});
-  for(const c of ['1,3','4,4','3,1','1,6'])battle.cover.set(c,{softBlock:true,hardBlock:false,propId:'lab-partial',effect:'25 percentage points protection from gunfire'});
+  for(const [c,edge] of [['1,3','north'],['4,4','south'],['3,1','east'],['1,6','west']])battle.cover.set(c,{softBlock:true,hardBlock:false,edge,propId:'lab-partial',effect:'Facing edge: -25 percentage points gun accuracy; walk around'});
   for(const u of units(battle)){u.ammo=weapon(u).magazine??null;u.maxAmmo=u.ammo;}
   const history=[];
-  const snapshot=()=>structuredClone({rules:'c10-v1',round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,moved:battle.moved,acted:battle.acted,plans:battle.plans,rng:battle.rng,units:units(battle),log:battle.log.slice(0,18)});
+  const snapshot=()=>structuredClone({rules:'c11-v1',round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,moved:battle.moved,acted:battle.acted,plans:battle.plans,rng:battle.rng,units:units(battle),log:battle.log.slice(0,18)});
   const log=s=>battle.log.unshift(s),finish=()=>{if(!battle.enemies.some(u=>u.alive)||!battle.players.some(u=>u.alive)){battle.status='complete';battle.result=battle.players.some(u=>u.alive)?'win':'loss';}};
   function attack(u,target,events){const f=forecast(battle,u,target);if(!f.valid)return false;
-    battle.rng=(Math.imul(battle.rng,1664525)+1013904223)>>>0;const hit=battle.rng/4294967296*100<f.chance;
+    battle.rng=(Math.imul(battle.rng,1664525)+1013904223)>>>0;const roll=battle.rng/4294967296*100,hit=roll<f.chance,impact=hit?(f.hpDamage?'body':'guard'):f.cover==='partial'&&roll<weapon(u).accuracy?'cover':'miss';
     if(weapon(u).magazine)u.ammo--;if(hit){target.hp-=f.hpDamage;target.guard-=f.guardDamage;target.alive=target.hp>0;}
-    events.push({type:'attack',id:u.id,target:target.id,hit,forecast:f,down:!target.alive});
-    log(`${u.label} → ${target.label}: ${hit?`${f.hpDamage} HP, ${f.guardDamage} guard`:f.cover==='partial'?'cover impact / miss':'miss'} (${f.chance}%).`);finish();return true;
+    events.push({type:'attack',id:u.id,target:target.id,hit,impact,forecast:f,down:!target.alive});
+    log(`${u.label} → ${target.label}: ${hit?`${f.hpDamage} HP, ${f.guardDamage} guard`:impact==='cover'?'wall stopped the shot':'miss'} (${f.chance}%).`);finish();return true;
   }
   function move(u,path,events){if(!path.length||!legalPath(battle,u,path))return false;u.cell=path.at(-1);events.push({type:'move',id:u.id,to:u.cell,path:[...path]});return true;}
   function enemyTurn(events){
