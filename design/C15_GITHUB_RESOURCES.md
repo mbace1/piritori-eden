@@ -27,3 +27,29 @@ stack to compensate for unfinished assets.
 Generic procedural-city/asset-kit repositories were considered during discovery.
 Their generic building styles and uncertain local fit offer less immediate value
 than our reproducible Kallio motif kit. No third-party art was downloaded.
+
+## Follow-up checked during release validation
+
+Two additional primary-source options fit the current vanilla Three.js lane:
+
+- [Three.js r167 GTAOPass](https://github.com/mrdoob/three.js/blob/r167/examples/jsm/postprocessing/GTAOPass.js)
+  exists in the exact engine release we ship. Its shader distinguishes perspective
+  and orthographic cameras, and it provides sized AO/denoise targets. This is an
+  alternative contact-shading experiment that avoids changing Three or adopting
+  the latest postprocessing package. It still needs its matched Pass/shader/noise
+  dependencies, a compatible normal/depth treatment for our cutaway materials,
+  and phone performance/recovery checks. It is not a zero-cost effect. Not bundled.
+- [drei-vanilla](https://github.com/pmndrs/drei-vanilla) supplies MIT-licensed vanilla
+  helpers for blurred surface reflections, volumetric spotlight materials and
+  accumulated static shadows. These are closer to the desired wet-night lighting
+  than a generic asset pack. The inspected package declares Three >=0.137 but
+  develops against ^0.179.1: that declaration alone does not prove our r167
+  compatibility. Use only a selected, pinned helper and its necessary dependencies
+  in an isolated experiment; no React migration or build-system change is proposed.
+  Accumulated static shadows must exclude moving crew; reflections need an explicit
+  update/resolution budget. Not installed or bundled in C.15.
+
+Priority: compare existing light/shadow rendering against matched r167 GTAO and
+N8AO independently, then test a small planar-reflection or spotlight treatment.
+Keep the current low-cost path as fallback. The new courtyard and service yard
+provide repeatable geometry and camera positions for these comparisons.
