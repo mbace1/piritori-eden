@@ -30,7 +30,8 @@ export function rainSurface(options={}){
   for(let i=0;i<600;i++){r.fillStyle=i%3?'#707070':'#ababab';r.globalAlpha=.55;r.fillRect(random()*512,random()*512,3+random()*12,1+random()*2);}r.globalAlpha=1;
   const texture=(c,colorSpace)=>{const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(options.courtyard?4.2:2.8,options.courtyard?6.5:4.6);t.colorSpace=colorSpace;t.anisotropy=2;return t;};
   const map=texture(albedo,T.SRGBColorSpace),roughnessMap=texture(rough,T.NoColorSpace),bumpMap=texture(height,T.NoColorSpace);
-  const material=new T.MeshStandardMaterial({map:options.pavingTexture||map,roughnessMap,bumpMap:options.pavingTexture||bumpMap,bumpScale:options.courtyard?.018:.004,color:options.courtyard?0x5d727e:0x999a91,roughness:options.courtyard?.7:1,metalness:options.courtyard?.12:0,envMapIntensity:options.courtyard?.85:.25});
+  const pavingBump=options.pavingTexture?.clone();if(pavingBump){pavingBump.colorSpace=T.NoColorSpace;pavingBump.needsUpdate=true;roughnessMap.repeat.copy(options.pavingTexture.repeat);}
+  const material=new T.MeshStandardMaterial({map:options.pavingTexture||map,roughnessMap,bumpMap:pavingBump||bumpMap,bumpScale:options.courtyard?.009:.004,color:options.courtyard?0x5d727e:0x999a91,roughness:options.courtyard?.7:1,metalness:options.courtyard?.12:0,envMapIntensity:options.courtyard?.85:.25});
   material.onBeforeCompile=shader=>{
     const lights=options.lights||[[-4.7,3.47,1.2],[5.9,3.47,5.8],[4.8,3.47,-2.1]];const vec=v=>'vec3('+v.map(n=>Number(n).toFixed(3)).join(',')+')';
     shader.vertexShader='varying vec3 rainWorld;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nrainWorld=(modelMatrix*vec4(position,1.0)).xyz;');
@@ -45,7 +46,23 @@ export function rainSurface(options={}){
         totalEmissiveRadiance+=wet*fracture*(vec3(1.0,.58,.22)*warm*${options.courtyard?.16:1.3}+vec3(.20,.50,.72)*cool*${options.courtyard?.1:.6});
       `);
   };
-  if(options.courtyard){material.onBeforeCompile=()=>{};material.roughnessMap=null;material.roughness=.46;material.metalness=0;material.envMapIntensity=.55;}
-  material.customProgramCacheKey=()=>'c15-rain-practicals-'+JSON.stringify({courtyard:!!options.courtyard,lights:options.lights});
-  return {material,dispose(){map.dispose();roughnessMap.dispose();bumpMap.dispose();material.dispose();}};
+  if(options.courtyard){
+    // Coherent puddles use the actual paving image for joints and breakup.
+    // A disconnected roughness atlas made the old ground look like a mirror.
+    material.roughnessMap=null;material.roughness=.58;material.metalness=0;material.envMapIntensity=.30;
+    material.onBeforeCompile=shader=>{
+      shader.vertexShader='varying vec3 rainWorld;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nrainWorld=(modelMatrix*vec4(position,1.0)).xyz;');
+      shader.fragmentShader=`varying vec3 rainWorld;
+       float wetHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+       float wetNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(wetHash(i),wetHash(i+vec2(1,0)),f.x),mix(wetHash(i+vec2(0,1)),wetHash(i+vec2(1,1)),f.x),f.y);}
+       `+shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+        float basin=.65*wetNoise(rainWorld.xz*.78)+.35*wetNoise(rainWorld.xz*2.7);
+        float stone=texture2D(bumpMap,vBumpMapUv).r;
+        float puddle=smoothstep(.45,.69,basin)*smoothstep(.15,.39,stone);
+        roughnessFactor=mix(.76,.29,puddle);
+       `);
+    };
+  }
+  material.customProgramCacheKey=()=>'c16-rain-practicals-'+JSON.stringify({courtyard:!!options.courtyard,lights:options.lights});
+  return {material,dispose(){pavingBump?.dispose();map.dispose();roughnessMap.dispose();bumpMap.dispose();material.dispose();}};
 }

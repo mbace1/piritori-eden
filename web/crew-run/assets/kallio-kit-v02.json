@@ -1,0 +1,25 @@
+{
+  "generator": "build_kallio_courtyard.py",
+  "blender": "5.2.1 LTS",
+  "units": "metres",
+  "forward": "+Z",
+  "triangles": 41800,
+  "bytes": 3586560,
+  "motifs": [
+    "archway",
+    "balcony",
+    "bicycle",
+    "bike_rack",
+    "container",
+    "drain",
+    "facade_bay",
+    "facade_bay_b",
+    "ground_litter",
+    "lamp",
+    "low_wall",
+    "pallets",
+    "planter",
+    "service_bay",
+    "vent"
+  ]
+}

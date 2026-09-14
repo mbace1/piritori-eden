@@ -1,5 +1,39 @@
 # Piritori active context
 
+## C.16 candidate — finalize art before mechanics
+
+2026-09-14 takeover: the latest failed head is `2ffdec09`; crew outings timed
+out during presentation and wet-environment sampled FPS before rendering was
+measured. Software rendering reproduced the 30-frame warmup delay (about 18s)
+and exposed the 50ms-per-RAF presentation clamp. The continuation removes that
+slow-motion lock while preserving visibility/orientation pauses, prepares
+restored shaders before unlocking controls, and waits for real rendered-frame
+windows in the wet gate. Four-layout software wet/recovery and complete crew
+outings pass locally. Final-head CI, aiming/scenery regression and publication
+are still required. C.15 stays public until those checks pass. Keep the existing
+After the Rain target; the six newer style studies remain unapproved proposals.
+
+2026-09-14: C.15 remains the verified public release. C.16 PR #81 has failed
+`night-places-browser` and `wet-environment` CI checks; do not merge or deploy
+until resolved. The former timed out scrolling to Equip; the latter did not
+obtain an FPS sample after a fixed delay. The cause is not yet established.
+Local passing suites do not override those failures. A source audit also caught
+an omitted `crew-run/ui.js` cache-token update; include it with the corrected
+main entry tokens and verify all 55 runtime blobs against the new source tree.
+
+The owner asks for stronger stylization while mechanics are developing well.
+Six separate numbered [concepts](design/concepts/c16-stylized/README.md) now
+explore material and shading directions, with 04–06 pushing painted shapes,
+graphic two-tone and ink. They are illustrations, not runtime captures or
+approved art. Keep neutral figures and mechanics intact pending a style choice.
+
+Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
+Read [C.16 art finish](design/C16_ART_FINISH.md). Recessed windows, passage depth,
+cavity shading, wear, smaller wet paving and bounded planar reflections refine
+the C.15 scene kit. This is a candidate until its source/hub/Pages receipt exists.
+Preserve the current mechanics and stand-ins. Concept parity and physical-device
+acceptance are still open; the first corrected art review reached 7.1/10.
+
 ## C.15 live — Night Places
 
 Owner wants new arenas, minimalist rain-concept UI, mood lights and varied cameras.

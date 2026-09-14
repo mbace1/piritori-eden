@@ -2,13 +2,16 @@ const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('nod
 const base=process.env.CREW_RUN_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/crew-run/',out=process.env.CREW_RUN_OUTPUT||'.private/c12-qa';fs.mkdirSync(out,{recursive:true});
 async function selectCrew(p,tap,id){if(await p.locator('#crew-picker').count()&&!await p.locator('#roster').isVisible())await tap(p.locator('#crew-picker'));await tap(p.locator(`[data-unitid="${id}"]`));if(await p.locator('#crew-picker').count()&&await p.locator('#roster').isVisible())await tap(p.locator('#crew-picker'));}
 const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','crew-5'],['move','3,2'],['select','crew-0'],['move','1,0'],['extract'],['select','crew-2'],['move','3,0'],['extract'],['end'],['select','crew-5'],['move','3,0'],['extract'],['select','crew-1'],['move','2,1'],['brace'],['end'],['move','2,0'],['extract']];
-(async()=>{const browser=await chromium.launch({...(process.platform==='win32'?{channel:'msedge'}:{}),headless:true,args:['--enable-unsafe-swiftshader']});try{
+(async()=>{const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':'chromium',headless:true,args:['--enable-unsafe-swiftshader',...(process.env.PIRITORI_SOFTWARE_RENDERER==='1'?['--use-angle=swiftshader']:[])]});try{
  for(const spec of [{name:'desktop',width:1440,height:1000},{name:'phone',width:412,height:915,touch:true},{name:'phone-landscape',width:915,height:412,touch:true},{name:'tablet',width:1194,height:834,touch:true}]){
   const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},deviceScaleFactor:Number(process.env.ARENA_LAB_DPR||1),hasTouch:!!spec.touch,isMobile:!!spec.touch}),p=await ctx.newPage(),errors=[];
   p.on('pageerror',e=>{errors.push(e.stack);console.error(e.stack)});p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
   await p.route('**/fight-module/main.js*',async r=>{const response=await r.fetch();await r.fulfill({response,body:await response.text()+"\nlet crewGL;window.crewAudit={lose:()=>{crewGL=renderer.getContext().getExtension('WEBGL_lose_context');crewGL.loseContext();},restore:()=>crewGL.restoreContext()};"});});
   const tap=async el=>{await el.scrollIntoViewIfNeeded();await el[spec.touch?'tap':'click']();},idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy,{},{timeout:120000});
   await p.goto(base);await idle();assert.equal(await p.locator('.crew-card').count(),6);
+  await p.waitForFunction(()=>fightModule.metrics().renderedFrames>0);
+  await p.waitForTimeout(1000);const menuFrames=await p.evaluate(()=>fightModule.metrics().renderedFrames);
+  await p.waitForTimeout(1000);assert.equal(await p.evaluate(()=>fightModule.metrics().renderedFrames),menuFrames,'planning keeps a static scene behind scrolling controls');
   await p.evaluate(()=>document.fonts.ready);
   await p.waitForFunction(()=>[...document.querySelectorAll('.crew-card img')].length===6&&[...document.querySelectorAll('.crew-card img')].every(i=>i.complete&&i.naturalWidth>0));
   assert.ok(await p.evaluate(()=>document.fonts.check('600 24px "Barlow Condensed"')),'bundled display face loaded');
@@ -28,12 +31,15 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
   assert.ok(layout.end.bottom<=layout.height+1,'end round visible without panel scrolling');
   await p.screenshot({path:`${out}/${spec.name}-battle.png`});
   for(const [index,[type,value]]of route.entries()){
+   const actionStarted=Date.now();console.log(JSON.stringify({view:spec.name,step:index,action:type,value}));
    if(type==='select')await selectCrew(p,tap,value);
    else if(type==='move'){await tap(p.locator('[data-action="move"]'));await tap(p.locator(`[data-cell="${value}"]`));await tap(p.locator('#commit-preview'));}
    else if(type==='end')await tap(p.locator('#end'));
    else if(type==='brace')await tap(p.locator('[data-action="brace"]'));
    else await tap(p.locator(`[data-mission-action="${type}"]`).first());
    await idle();
+   assert.ok(Date.now()-actionStarted<30000,`bounded ${spec.name} ${type} presentation`);
+   console.log(JSON.stringify({view:spec.name,step:index,elapsedMs:Date.now()-actionStarted,metrics:await p.evaluate(()=>{const m=fightModule.metrics();return {fps:m.fps,renderedFrames:m.renderedFrames,drawingBuffer:m.drawingBuffer,profile:m.profile};})}));
    if(index===2){const before=await p.evaluate(()=>fightModule.snapshot());assert.equal(before.units.find(v=>v.id==='crew-5').hp,3);await p.reload();await idle();assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'rescue restored exactly');
     await p.evaluate(()=>crewAudit.lose());await p.waitForFunction(()=>fightModule.metrics().graphicsLost);await p.waitForTimeout(300);await p.evaluate(()=>crewAudit.restore());await idle();assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'graphics restore preserves rescue');
    }

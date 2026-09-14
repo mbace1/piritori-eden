@@ -1,5 +1,6 @@
 import * as T from 'three';
-import {rainSurface} from './rain-surface.js?v=2';
+import {planarReflection} from './planar-reflection.js?v=1';
+import {rainSurface} from './rain-surface.js?v=3';
 
 // C.09 arena laboratory. This is an authored low-cost light probe, not live
 // reflections or the Dream Loop demo's renderer. No external asset service.
@@ -47,6 +48,7 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   const people={value:Array.from({length:12},()=>new T.Vector4(0,0,-1000,0))},count={value:0};
   const focusStart={value:new T.Vector4(0,0,0,0)},focusEnd={value:new T.Vector3()};
   beforeCapture=()=>{const previousCount=count.value,previousFocus=focusStart.value.w;count.value=0;focusStart.value.w=0;return()=>{count.value=previousCount;focusStart.value.w=previousFocus;};};
+  const reflection=surfaceOptions.courtyard?planarReflection(renderer,world,group,paving,groundMaterial,()=>beforeCapture()):null;
   const modified=new Set();
   group.traverse(object=>{if(!object.isMesh||object===paving)return;
     for(const material of [].concat(object.material)){if(modified.has(material)||material===groundMaterial)continue;modified.add(material);
@@ -67,7 +69,7 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
             float dither=fract(dot(floor(gl_FragCoord.xy),vec2(.75487766,.56984029)));
             // Include the figure's full view-depth extent. A centre-only
             // threshold left near benches covering legs at back-row cells.
-            if(labView.z>person.z-.95 && mask>dither)discard;
+            if(labView.z>person.z-.95 && ${surfaceOptions.courtyard?'mask>.5':'mask>dither'})discard;
           }`);
       };material.customProgramCacheKey=()=>priorKey+'-c14-cutaway-'+(foliage?'foliage':'solid');material.needsUpdate=true;
     }
@@ -76,5 +78,5 @@ export function developmentLook(world,renderer,group,groundMaterial,mats,directe
   function update(camera,actors=tracked,focus=null){tracked=actors;camera.updateMatrixWorld();focusStart.value.w=focus?1:0;
     if(focus){point.copy(focus.from).setY(1.1).applyMatrix4(camera.matrixWorldInverse);focusStart.value.set(point.x,point.y,point.z,1);focusEnd.value.copy(focus.to).setY(1.1).applyMatrix4(camera.matrixWorldInverse);}
     actors=actors.filter(a=>a.group.visible);camera.updateMatrixWorld();count.value=Math.min(12,actors.length);for(let i=0;i<count.value;i++){const a=actors[i];point.copy(a.group.position).add(new T.Vector3(0,a.down?.3:.96,0)).applyMatrix4(camera.matrixWorldInverse);people.value[i].set(point.x,point.y,point.z,a.down?.75:1.14);}}
-  return {update,recover:rebuildProbe,metrics:()=>({lightProbe:surfaceOptions.courtyard?'static scenery 128px cubemap / once at load and context recovery':'authored 256x128 sky/practical PMREM',liveReflections:false,pavement:surfaceOptions.courtyard?'generated painted setts / coherent wet roughness + static scene probe':directed?'After the Rain / 512px albedo, roughness, bump; analytic lamp glints':'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){rain?.dispose();probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
+  return {update,beforeRender:camera=>reflection?.render(camera),recover(){rebuildProbe();reflection?.reset();},metrics:()=>({lightProbe:surfaceOptions.courtyard?'static scenery 128px cubemap / once at load and context recovery':'authored 256x128 sky/practical PMREM',liveReflections:false,planarReflection:reflection?.metrics(),pavement:surfaceOptions.courtyard?'painted setts / joint-aware puddles + static-scene planar reflection':directed?'After the Rain / 512px albedo, roughness, bump; analytic lamp glints':'shared albedo/bump + variable wet roughness',cutawayActors:count.value,cutawayMaterials:modified.size}),dispose(){reflection?.dispose();rain?.dispose();probe.dispose();source.dispose();map.dispose();bump.dispose();surface.dispose();paving.geometry.dispose();}};
 }

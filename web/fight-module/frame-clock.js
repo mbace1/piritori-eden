@@ -17,3 +17,18 @@ export function createFrameClock(now=0) {
     }
   };
 }
+
+// Presentation follows visible elapsed time, even on a slow renderer. Capping
+// each RAF to 50 ms turns a two-second route into forty seconds at 1 FPS.
+// Pause boundaries reset the epoch, so hidden time never finishes an action.
+export function createPresentationClock(now=0) {
+  let previous=now,elapsed=0,paused=false;
+  return {
+    pause(value,time) { if(!paused)elapsed+=Math.max(0,time-previous)/1000;previous=time;paused=value; },
+    take(time) {
+      if(!paused)elapsed+=Math.max(0,time-previous)/1000;
+      previous=time;
+      return elapsed;
+    },
+  };
+}
