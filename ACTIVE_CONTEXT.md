@@ -2,6 +2,17 @@
 
 ## C.16 candidate — finalize art before mechanics
 
+2026-09-14 takeover: the latest failed head is `2ffdec09`; crew outings timed
+out during presentation and wet-environment sampled FPS before rendering was
+measured. Software rendering reproduced the 30-frame warmup delay (about 18s)
+and exposed the 50ms-per-RAF presentation clamp. The continuation removes that
+slow-motion lock while preserving visibility/orientation pauses, prepares
+restored shaders before unlocking controls, and waits for real rendered-frame
+windows in the wet gate. Four-layout software wet/recovery and complete crew
+outings pass locally. Final-head CI, aiming/scenery regression and publication
+are still required. C.15 stays public until those checks pass. Keep the existing
+After the Rain target; the six newer style studies remain unapproved proposals.
+
 2026-09-14: C.15 remains the verified public release. C.16 PR #81 has failed
 `night-places-browser` and `wet-environment` CI checks; do not merge or deploy
 until resolved. The former timed out scrolling to Equip; the latter did not

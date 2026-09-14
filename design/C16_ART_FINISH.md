@@ -1,5 +1,33 @@
 # C.16 — Wet Courtyard art pass
 
+## Release repair — 2026-09-14
+
+The CPU/software-rendered browser reproduced an approximately 18-second gap
+before the first FPS reading: the runtime discarded 30 rendered frames. It
+now excludes only the initial two frames and reports fresh sampling windows.
+The wet gate waits for actual completed frames and new measurements, checks
+the active reflection budget after automatic quality adaptation, and still
+requires camera invalidation, stationary capture reuse, stable allocations and
+unchanged game state across context loss/restoration.
+
+Presentation no longer limits each animation RAF to 50ms. Movement and actions
+follow visible elapsed time at low frame rates; hiding or rotating the page
+pauses their clock. This changes presentation timing only, not the resolver,
+turn costs or saved outcomes. Pure clock tests cover 1–60 FPS and pause/resume.
+The complete rescue/extraction/aftermath/recovery loop passed through actual
+mouse/touch controls in four layouts with forced SwiftShader. Each route action
+must complete within a finite 30-second test bound.
+
+Context restoration prepares the reflection and compiles the main scene shaders
+before controls unlock; the metrics record that preparation time separately.
+This uses the existing Three renderer's `compileAsync`, with no new dependency.
+Four software-rendered wet/recovery layouts passed. The final source head and
+public cabinet still need their complete release receipt; local CPU correctness
+is not physical Pixel/iPad performance or final art approval.
+
+No newer concept choice was inferred. The existing After the Rain direction,
+neutral fighters, camera presets and tactics remain the release scope.
+
 Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
 This batch refines the C.15 courtyard and service yard toward concept 02 / After
 the Rain. It changes environment presentation, not Move + Act, intent, costs,
