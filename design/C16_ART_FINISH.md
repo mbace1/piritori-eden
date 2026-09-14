@@ -123,3 +123,5 @@ includes that file and advances the importing entry tokens. Do not describe
 the earlier local test suite as verification of byte-identical published code.
 
 The follow-up repair holds the last scene behind crew planning, the open roster and modal dialogs, redrawing on selection/resize. This avoids continuous GPU work while scrolling UI. The browser gate asserts a stationary planning scene and logs each real route action duration. CI explicitly selects the same SwiftShader backend used for local software-renderer verification; scenery storage checks now honor the configured DPR. The first repaired-head CI passed wet reflections but stalled during UI scrolling, so publication is still pending the new exact-head gate.
+
+CI now passes the formerly blocked equipment menu and wet-state assertions, then times out taking screenshots in the legacy Chrome headless shell. The four C.16 browser gates use the regular Chromium channel in headless mode, matching the browser architecture used by local Edge checks (Playwright browser documentation: https://playwright.dev/docs/browsers). No gameplay assertion, action deadline or screenshot is removed.
