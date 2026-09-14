@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import * as T from '../vendor/three.module.min.js';
-import {bakedMotionPlayer} from '../fight-module/motion-player.js';
+import * as T from '../vendor/three.module.min.js?v=2';
+import {bakedMotionPlayer} from '../fight-module/motion-player.js?v=2';
 
 const names=['stance-idle','grounded-walk','guard-brace','recoil-hit','settle-down','melee-swing','pistol-aim','use-bandage','talk-gesture'];
 const body=new T.Group(),bone=new T.Bone();bone.name='test-root';body.add(bone);

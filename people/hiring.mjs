@@ -23,8 +23,8 @@
  * as (input, output) pairs and a fixed data shape, not as an RNG
  * implementation neither build needs to share bit-for-bit.
  */
-import { hireling } from './roster.mjs';
-import { rand01 } from '../market/model.mjs';
+import { hireling } from './roster.mjs?v=1';
+import { rand01 } from '../market/model.mjs?v=1';
 
 /** CrewGenerator.ROLES — the six the art has bodies for, plus the
  *  cheap generic "hired" body (`cast3d-hired-v01`, `render3d.js`'s own

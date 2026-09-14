@@ -29,7 +29,7 @@
  * buyers, and a sim that lets them make one trip cannot see it.
  */
 import { readFileSync } from 'node:fs';
-import { offer, GOODS, nodeProfile } from '../model.mjs';
+import { offer, GOODS, nodeProfile } from '../model.mjs?v=1';
 
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const anchors = board.anchors.filter(a => a.sliceState !== 'locked');

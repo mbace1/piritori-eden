@@ -35,7 +35,8 @@ models, but the shared loader still needs its scoped runtime register.
 
 ```sh
 python tools/publish/arena_lab_release.py --commit <tested-40-character-SHA> \
-  --deployed-manifest <current-hub-manifest.json> --output <new-empty-directory>
+  --deployed-manifest <current-hub-manifest.json> --output <new-empty-directory> \
+  --previous-cabinet <exact-current-live-cabinet>
 ```
 
 `arena_lab_files.json` is the explicit runtime allowlist. The script validates

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
+import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 
 // IDs, byte lengths and hashes bind this scene to versioned runtime derivatives.

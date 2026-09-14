@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createEncounter} from '../bear-path/encounter.js';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js';
+import {createEncounter} from '../bear-path/encounter.js?v=2';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=11';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 for(const choice of ['name-empty-van','withdraw','hold-path']){
  const m=createEncounter(content);for(const id of ['bear','exit','note','contact'])assert(m.command('look',id).ok);

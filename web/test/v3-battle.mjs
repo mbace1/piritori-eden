@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, deployedCrew } from '../js/v3/state.js';
+import { createState, deployedCrew } from '../js/v3/state.js?v=6';
 import {
   createBattleState, battleEntryForecast, coverStandingLine, coverUnder, attackWouldBeStopped, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
-} from '../js/v3/battle.js';
-import { parseCellFor, slotKey } from '../js/v3/grid.js';
+} from '../js/v3/battle.js?v=9';
+import { parseCellFor, slotKey } from '../js/v3/grid.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const data = {
@@ -213,10 +213,10 @@ console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command
 
 // Growth combat hooks — toughness on makePlayer; anchor cover via skills.
 {
-  const { createState, grantLevel, spendPerk, setAptitudes } = await import('../js/v3/state.js');
+  const { createState, grantLevel, spendPerk, setAptitudes } = await import('../js/v3/state.js?v=6');
   const {
     createBattleState, anchorCoverCells, crewReadBonus, markDuration, coverAt,
-  } = await import('../js/v3/battle.js');
+  } = await import('../js/v3/battle.js?v=9');
 
   const st = createState(content);
   const who = content.crew.find(c => c.id === 'crew-slot-fixer')?.id

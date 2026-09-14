@@ -36,9 +36,9 @@
  * a few actions in without this.
  */
 import * as THREE from 'three';
-import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import { buildFightClip } from './fight-motion.js?v=1';
-import { assetUrl } from './content.js?v=1';
+import { assetUrl } from './content.js?v=2';
 import { LANES, totalRows } from './grid.js?v=2';
 import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=5';
 

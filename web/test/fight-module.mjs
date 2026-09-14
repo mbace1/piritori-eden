@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession} from '../fight-module/session.js';
+import {createSession} from '../fight-module/session.js?v=11';
 import {endPlayerPhase,attackTargets,selectAction,playerAttack,validMoveCells} from '../fight-module/resolver.js?v=3';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 for(const mode of ['mixed','melee','ranged']){

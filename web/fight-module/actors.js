@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {makeStandIn} from './stand-in.js?v=7';
-import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
+import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import {limitTextures} from './render-profile.js?v=3';
 import {bakedMotionPlayer} from './motion-player.js?v=2';
 

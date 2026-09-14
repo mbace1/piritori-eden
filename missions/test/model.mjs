@@ -11,7 +11,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { cost, validate, fire, VERBS, TRIGGERS, BLOCK_MINUTES, REAL_BUDGET } from '../model.mjs';
-import { exposure } from '../../market/model.mjs';
+import { exposure } from '../../market/model.mjs?v=1';
 
 const slice = JSON.parse(readFileSync(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));

@@ -1,5 +1,7 @@
 import unittest
-from arena_lab_release import validate_cache_transition
+import tempfile
+from pathlib import Path
+from arena_lab_release import validate_cache_transition, read_previous_cabinet
 
 
 class CacheTransitionTest(unittest.TestCase):
@@ -31,6 +33,24 @@ class CacheTransitionTest(unittest.TestCase):
         current['web/other.html'] = b'<script src="./main.js?v=2"></script>'
         with self.assertRaisesRegex(ValueError, 'Split module cache token'):
             validate_cache_transition(current, self.previous)
+
+    def test_changed_unversioned_dependency_fails(self):
+        previous = dict(self.previous)
+        previous['web/main.js'] = b'import "./shared.mjs";'
+        previous['web/shared.mjs'] = b'export const value=1;'
+        current = dict(previous)
+        current['web/shared.mjs'] = b'export const value=2;'
+        with self.assertRaisesRegex(ValueError, 'web/shared.mjs'):
+            validate_cache_transition(current, previous)
+        current['web/main.js'] = b'import "./shared.mjs?v=1";'
+        current['web/index.html'] = b'<script src="./main.js?v=2"></script>'
+        validate_cache_transition(current, previous)
+
+    def test_missing_or_empty_baseline_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for path in [Path(tmp), Path(tmp)/'missing']:
+                with self.assertRaisesRegex(ValueError, 'Previous cabinet'):
+                    read_previous_cabinet(path)
 
 
 if __name__ == '__main__':

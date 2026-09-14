@@ -1,4 +1,4 @@
-import { nameFrom } from '../../../people/roster.mjs';
+import { nameFrom } from '../../../people/roster.mjs?v=1';
 
 const CONTENT_URL = '../../../content/era1-slice-v1.json';
 const MAP_URL = '../../../map/kallio-era1-2003-v1.json';

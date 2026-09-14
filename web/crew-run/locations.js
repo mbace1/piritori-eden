@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
+import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';

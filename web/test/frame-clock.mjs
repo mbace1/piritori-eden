@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {createFrameClock,createPresentationClock} from '../fight-module/frame-clock.js';
+import {createFrameClock,createPresentationClock} from '../fight-module/frame-clock.js?v=2';
 
 for(const refresh of [60,90,120,144])for(const fps of [30,60]){
   const clock=createFrameClock();let count=0,elapsed=0;

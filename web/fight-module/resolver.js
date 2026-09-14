@@ -1,5 +1,5 @@
 import { stanceWeight, STANCE } from '../js/v3/stance.js?v=2';
-import { rand01 } from '../../market/model.mjs';
+import { rand01 } from '../../market/model.mjs?v=1';
 import {
   LANES, totalRows, rowOf, laneCentre,
   parseCell, defaultPlayerSlot, slotKey, parseSlotKey, describeSlot,

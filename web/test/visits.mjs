@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {createState,restoreState} from '../js/v3/state.js';
-import {availableVisits,openVisit,chooseVisit,leaveVisit} from '../js/v3/visits.js';
+import {createState,restoreState} from '../js/v3/state.js?v=6';
+import {availableVisits,openVisit,chooseVisit,leaveVisit} from '../js/v3/visits.js?v=2';
 const content=JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const map=JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json',import.meta.url)));
 const data={content,sites:new Map(map.sites.map(s=>[s.id,s]))};

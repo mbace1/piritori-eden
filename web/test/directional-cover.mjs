@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {coverEdges,coverProtection,crossesCoverEdge,EDGES} from '../fight-module/cover-edges.js';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js';
-import {forecast,routes,planView} from '../fight-module/tactics.js';
+import {coverEdges,coverProtection,crossesCoverEdge,EDGES} from '../fight-module/cover-edges.js?v=2';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=11';
+import {forecast,routes,planView} from '../fight-module/tactics.js?v=6';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const vectors=JSON.parse(fs.readFileSync(new URL('../../design/C11_PORT_VECTORS.json',import.meta.url)));
 for(const v of vectors.shots){const b={cover:new Map([[vectors.wall.cell,{softBlock:true,edge:vectors.wall.edge}]])},p=coverProtection(b,v.from,v.to);assert.equal(p?.edge??null,v.edge);assert.deepEqual(p?.point??null,v.point);}

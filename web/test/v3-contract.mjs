@@ -8,8 +8,8 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, content, map, art] = await Promise.all([
   read('../index.html'),
-  read('../v3.css'),
-  read('../js/v3/app.js'),
+  read('../v3.css?v=5'),
+  read('../js/v3/app.js?v=13'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
   read('../../art/v3/manifest.json').then(JSON.parse),
@@ -28,7 +28,7 @@ assert(app.includes('era1-slice-v1.json') === false, 'the app loads content thro
 // than the module's own fetches. Missing it produced ~40 silent 404s — every
 // unit drew its fallback and nothing threw — which is exactly the kind of
 // failure a gate has to catch because a person will not.
-const contentModule = await read('../js/v3/content.js');
+const contentModule = await read('../js/v3/content.js?v=2');
 assert(/ART_BASE\s*=\s*'\.\.\/art\/v3'/.test(contentModule), 'asset URLs step out of web/');
 assert(!/url:\s*`art\/v3\//.test(contentModule), 'no asset URL is page-relative');
 assert(app.includes('ordinary journeys'), 'ordinary and hidden route capacity is visible');

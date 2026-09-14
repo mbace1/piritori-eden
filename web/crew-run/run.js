@@ -1,4 +1,4 @@
-import {hireling} from '../../people/roster.mjs';
+import {hireling} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=11';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=6';
 

@@ -11,7 +11,7 @@
  * a render says *looks*.
  */
 import { readFileSync } from 'node:fs';
-import { offer, nodeProfile, GOODS } from '../model.mjs';
+import { offer, nodeProfile, GOODS } from '../model.mjs?v=1';
 
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const args = process.argv.slice(2);

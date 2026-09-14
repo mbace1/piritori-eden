@@ -17,7 +17,7 @@ def cache_versions(data):
     for name, raw in data.items():
         if not name.endswith(('.js', '.mjs', '.html', '.css')):
             continue
-        for rel, token in re.findall(r'[\x27\"]([^\x27\"\s]+\.(?:js|mjs|css))\?v=(\d+)[\x27\"]', raw.decode('utf-8')):
+        for rel, token in re.findall(r'[\x27\"]([^\x27\"\s]+\.(?:js|mjs|css))(?:\?v=(\d+))?[\x27\"]', raw.decode('utf-8')):
             module = posixpath.normpath(posixpath.join(posixpath.dirname(name), rel))
             if module in versions and versions[module] != token:
                 raise ValueError('Split module cache token: '+module)
@@ -27,13 +27,32 @@ def cache_versions(data):
 
 def validate_cache_transition(data, previous):
     versions, old_versions = cache_versions(data), cache_versions(previous)
-    for module, old_token in old_versions.items():
-        if module in data and module in previous and data[module] != previous[module]:
-            if module not in versions or versions[module] == old_token:
+    for module, raw in data.items():
+        if module.endswith(('.js', '.mjs', '.css')) and module in previous and raw != previous[module]:
+            if not versions.get(module) or versions[module] == old_versions.get(module):
                 raise ValueError('Changed module needs a fresh cache token: '+module)
 
 
-def stage(source, deployed_manifest, output, commit, previous_cabinet=None):
+def read_previous_cabinet(previous_cabinet):
+    if not previous_cabinet.is_dir() or not (previous_cabinet/'release.json').is_file():
+        raise ValueError('Previous cabinet must contain its published release.json')
+    receipt = json.loads((previous_cabinet/'release.json').read_text(encoding='utf-8'))
+    hashes = receipt.get('sha256', {})
+    if not hashes or 'web/crew-run/index.html' not in hashes or 'web/fight-module/main.js' not in hashes:
+        raise ValueError('Previous cabinet receipt is missing the crew runtime')
+    previous = {}
+    for name, expected in hashes.items():
+        path = (previous_cabinet/name).resolve()
+        if not path.is_relative_to(previous_cabinet.resolve()) or not path.is_file():
+            raise ValueError('Missing previous cabinet file: '+name)
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != expected:
+            raise ValueError('Previous cabinet hash mismatch: '+name)
+        previous[name] = raw
+    return previous
+
+
+def stage(source, deployed_manifest, output, commit, previous_cabinet):
     if not re.fullmatch(r'[a-f0-9]{40}', commit):
         raise ValueError('Pin the tested source commit, not a branch name')
     files = json.loads((Path(__file__).with_name('arena_lab_files.json')).read_text())
@@ -54,10 +73,7 @@ def stage(source, deployed_manifest, output, commit, previous_cabinet=None):
     # Check one token per module, then compare actual published bytes so a
     # line-ending-only change cannot silently reuse an immutable cached URL.
     cache_versions(data)
-    if previous_cabinet is not None:
-        previous = {p.relative_to(previous_cabinet).as_posix(): p.read_bytes()
-                    for p in previous_cabinet.rglob('*') if p.is_file()}
-        validate_cache_transition(data, previous)
+    validate_cache_transition(data, read_previous_cabinet(previous_cabinet))
     data['art/v3/manifest.json'] = (json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
     entry = 'web/crew-run/?release=16.1'
     release = {'build':'C.16.1','source_repository':'mbace1/piritori-eden',
@@ -87,6 +103,6 @@ if __name__ == '__main__':
     p.add_argument('--deployed-manifest',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--commit',required=True)
-    p.add_argument('--previous-cabinet',type=Path,help='Current published cabinet for the cache-transition gate')
+    p.add_argument('--previous-cabinet',type=Path,required=True,help='Current published cabinet for the cache-transition gate')
     a=p.parse_args();r=stage(a.source.resolve(),a.deployed_manifest,a.output,a.commit,a.previous_cabinet)
     print(json.dumps({'build':r['build'],'files':len(r['sha256']),'source_commit':r['source_commit']}))

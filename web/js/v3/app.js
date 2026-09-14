@@ -1,7 +1,7 @@
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=2';
-import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=1';
+import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
-import { loadGameData, shortestPath, assetUrl } from './content.js?v=1';
+import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
 import {
   SAVE_KEY, createState, loadState, saveState, currentSchedule, currentEncounter,
@@ -16,7 +16,7 @@ import {
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
 } from './state.js?v=6';
 import { createPauseMenu } from './pause.js?v=1';
-import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
+import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
 import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
