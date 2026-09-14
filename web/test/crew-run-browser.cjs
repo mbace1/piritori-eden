@@ -9,6 +9,9 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
   await p.route('**/fight-module/main.js*',async r=>{const response=await r.fetch();await r.fulfill({response,body:await response.text()+"\nlet crewGL;window.crewAudit={lose:()=>{crewGL=renderer.getContext().getExtension('WEBGL_lose_context');crewGL.loseContext();},restore:()=>crewGL.restoreContext()};"});});
   const tap=async el=>{await el.scrollIntoViewIfNeeded();await el[spec.touch?'tap':'click']();},idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy,{},{timeout:120000});
   await p.goto(base);await idle();assert.equal(await p.locator('.crew-card').count(),6);
+  await p.waitForFunction(()=>fightModule.metrics().renderedFrames>0);
+  await p.waitForTimeout(1000);const menuFrames=await p.evaluate(()=>fightModule.metrics().renderedFrames);
+  await p.waitForTimeout(1000);assert.equal(await p.evaluate(()=>fightModule.metrics().renderedFrames),menuFrames,'planning keeps a static scene behind scrolling controls');
   await p.evaluate(()=>document.fonts.ready);
   await p.waitForFunction(()=>[...document.querySelectorAll('.crew-card img')].length===6&&[...document.querySelectorAll('.crew-card img')].every(i=>i.complete&&i.naturalWidth>0));
   assert.ok(await p.evaluate(()=>document.fonts.check('600 24px "Barlow Condensed"')),'bundled display face loaded');
@@ -36,6 +39,7 @@ const route=[['select','crew-1'],['move','2,5'],['help','crew-5'],['select','cre
    else await tap(p.locator(`[data-mission-action="${type}"]`).first());
    await idle();
    assert.ok(Date.now()-actionStarted<30000,`bounded ${spec.name} ${type} presentation`);
+   console.log(JSON.stringify({view:spec.name,step:index,elapsedMs:Date.now()-actionStarted,metrics:await p.evaluate(()=>{const m=fightModule.metrics();return {fps:m.fps,renderedFrames:m.renderedFrames,drawingBuffer:m.drawingBuffer,profile:m.profile};})}));
    if(index===2){const before=await p.evaluate(()=>fightModule.snapshot());assert.equal(before.units.find(v=>v.id==='crew-5').hp,3);await p.reload();await idle();assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'rescue restored exactly');
     await p.evaluate(()=>crewAudit.lose());await p.waitForFunction(()=>fightModule.metrics().graphicsLost);await p.waitForTimeout(300);await p.evaluate(()=>crewAudit.restore());await idle();assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'graphics restore preserves rescue');
    }

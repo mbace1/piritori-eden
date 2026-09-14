@@ -196,6 +196,7 @@ jobs:
       - name: rescue, extraction, recovery and the next outing in four layouts
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
+          PIRITORI_SOFTWARE_RENDERER: '1'
           CREW_RUN_URL: http://127.0.0.1:8783/web/crew-run/
           CREW_RUN_OUTPUT: /tmp/c12-qa
           ARENA_LAB_DPR: '0.5'
@@ -222,6 +223,7 @@ jobs:
       - name: Exercise actual controls and bounded graphics recovery
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
+          PIRITORI_SOFTWARE_RENDERER: '1'
           CREW_RUN_URL: http://127.0.0.1:8783/web/crew-run/
           PLACES_OUTPUT: /tmp/c16-art
           WET_OUTPUT: /tmp/c16-wet

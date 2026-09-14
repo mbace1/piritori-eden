@@ -37,7 +37,7 @@ let renderer,world,camera,highlight,ray,ground,stage,actors=new Map(),labels=new
 let frameInfo,edgeSmoothing,layoutPaused=false,reflowTimer=0,autoTimer=0;
 const leaders=new Map();
 const frameClock=createFrameClock(performance.now()),tagPositions=new Map();
-let tagsDirty=true,labelLayouts=0,renderedFrames=0,actorList=[];
+let tagsDirty=true,sceneDirty=true,labelLayouts=0,renderedFrames=0,actorList=[];
 document.fonts?.addEventListener('loadingdone',()=>{tagsDirty=true;});
 const RECOVERY_KEY=isCrew?'piritori-c12-graphics':isLab?'piritori-arena-lab-c11-'+labCount:isBear?'piritori-bear-path-graphics-v1':'piritori-fight-c05-recovery';
 const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;
@@ -70,7 +70,7 @@ function buildStage(){
   bindGraphicsRecovery();fit();new ResizeObserver(fit).observe(area);
 }
 function fit(){
-  tagsDirty=true;
+  tagsDirty=true;sceneDirty=true;
   if(!renderer)return;const w=Math.max(1,area.clientWidth),h=Math.max(1,area.clientHeight);
   if(!graphicsLost){const ratio=pixelRatioFor(profile,w,h,devicePixelRatio);if(renderer.getPixelRatio()!==ratio)renderer.setPixelRatio(ratio);if(canvas.width!==Math.floor(w*ratio)||canvas.height!==Math.floor(h*ratio))renderer.setSize(w,h,false);}
   frameInfo=fitBattleCamera(camera,{width:w,height:h,angle,zoom:zoom*(1+(actionFocus?.kind==='gun'?0:actionFocus?.strength||0)*.12),lanes:LANES,rows:totalRows(),cell:CELL,tight:isCrew,elevation:cameraPreset==='overhead'?30:cameraPreset==='oblique'?7:10});
@@ -114,7 +114,7 @@ function intentLine(from,to,color=0xc87563){
   const geometry=new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(v.flatMap(p=>p.toArray()),3));highlight.add(new T.Mesh(geometry,new T.MeshBasicMaterial({color,side:T.DoubleSide,transparent:true,opacity:.9,depthWrite:false,toneMapped:false})));
 }
 function refresh(){
-  tagsDirty=true;document.body.classList.toggle('resolving',busy);
+  tagsDirty=true;sceneDirty=true;document.body.classList.toggle('resolving',busy);
   if(!session||!ready)return;if(isCrew)$('crew-picker').disabled=busy||graphicsLost||layoutPaused;if(graphicsLost||graphicsPreparing||layoutPaused){lockInput();return;}for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;if(isBear)$('art-toggle').disabled=busy;if(story){story.render();if(!story.isBattle())return;}const b=session.battle,u=selected(),ended=b.status!=='active',canAct=!busy&&!ended&&u?.alive&&!b.acted.includes(u.id);
   $('round').textContent='ROUND '+String(b.round).padStart(2,'0');$('phase').textContent=busy?'RESOLVING':ended?'COMPLETE':'JADE · YOUR TURN';
   const focused=document.activeElement?.dataset.unitid;$('roster').replaceChildren();
@@ -312,7 +312,13 @@ async function prepareGraphics(start=performance.now()){
 let warmupFrames=2,fpsSamples=0;
 function tick(now){
   raf=0;if(hidden||graphicsLost||graphicsPreparing||!ready)return;queueFrame();
+  // Keep the last scene behind crew planning, the roster and modal dialogs.
+  // Redraw on a selection or resize, but leave scrolling and input free of
+  // continuous GPU work while the player is reading these controls.
+  const stillMenu=crew&&!busy&&(!crew.inBattle()||!$('roster').hidden||document.querySelector('dialog[open]'));
+  if(stillMenu&&!sceneDirty){frameClock.reset(now);frameCount=seconds=0;return;}
   const sample=frameClock.take(now,profile.fps);if(!sample)return;
+  sceneDirty=false;
   const {real,dt}=sample;
   for(const a of actorList)updateActor(a,layoutPaused?0:dt);
   if(!story||story.isBattle())layoutTags();story?.layout();
