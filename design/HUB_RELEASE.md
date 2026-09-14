@@ -17,7 +17,9 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Historical C.13 entry: `web/crew-run/?release=13`.
 - Historical C.14 entry: `web/crew-run/?release=14`.
 - Historical C.15 entry: `web/crew-run/?release=15`.
-- Last publicly verified release receipt: [C15_RELEASE.json](C15_RELEASE.json), source PR #80 and hub PR #519. Earlier batches: C14_RELEASE.json (PR #79 / #518), C13_RELEASE.json, C12_RELEASE.json and C11_RELEASE.json.
+- Current C.16.1 entry: `web/crew-run/?release=16.1`.
+- Current release receipt: [C161_RELEASE.json](C161_RELEASE.json), source PR #82 and hub PR #523.
+- Previous release receipt: [C15_RELEASE.json](C15_RELEASE.json), source PR #80 and hub PR #519. Earlier batches: C14_RELEASE.json (PR #79 / #518), C13_RELEASE.json, C12_RELEASE.json and C11_RELEASE.json.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 
@@ -95,7 +97,8 @@ import closure: editing an import also changes the importing module's bytes.
 C.16 source PR #81 and hub PR #522 merged on 2026-09-14. The live branch moved
 to b274dc692e7df6b58bc92cc72cb70d8ffe97f378; public verification was interrupted.
 C.16.1 repairs controller polling during static menus and the converted-byte
-cache transition. Its public deployment remains unverified until recorded.
+cache transition. C.16.1 is now merged, deployed and publicly verified; see
+[C161_RELEASE.json](C161_RELEASE.json) for exact commits, Pages and browser evidence.
 
 The lab owns its header HOME link and native controller (`hubHome: native` in
 the hub catalogue). The common-shell key-bridge test must use a common-shell

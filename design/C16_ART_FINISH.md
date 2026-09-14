@@ -1,5 +1,10 @@
 # C.16 — Wet Courtyard art pass
 
+Published as C.16.1 with controller, timing/recovery and cache corrections.
+Source/hub checks, Pages and public gameplay are verified; read
+[C161_RELEASE.json](C161_RELEASE.json). Concept parity and physical-device
+acceptance remain open. The implementation notes below retain their chronology.
+
 ## Release repair — 2026-09-14
 
 The CPU/software-rendered browser reproduced an approximately 18-second gap
@@ -112,7 +117,7 @@ the initial shader-warmup window, then two consecutive 30 FPS windows. Treat
 that recovery hitch as an open profiling item; do not call recovery hitch-free.
 The owner has now requested stronger stylization: see the six numbered
 [finish concepts](concepts/c16-stylized/README.md). Await a direction choice before
-claiming the art finish is locked. Current verified public build remains C.15.
+claiming the art finish is locked. At that checkpoint the verified public build was C.15; C.16.1 is now published.
 
 2026-09-14 CI follow-up: PR #81's night-places check timed out scrolling to
 Equip; wet-environment failed its FPS-sampled assertion after a fixed wait.
@@ -122,6 +127,6 @@ still using an older locations import in the published subset; the follow-up
 includes that file and advances the importing entry tokens. Do not describe
 the earlier local test suite as verification of byte-identical published code.
 
-The follow-up repair holds the last scene behind crew planning, the open roster and modal dialogs, redrawing on selection/resize. This avoids continuous GPU work while scrolling UI. The browser gate asserts a stationary planning scene and logs each real route action duration. CI explicitly selects the same SwiftShader backend used for local software-renderer verification; scenery storage checks now honor the configured DPR. The first repaired-head CI passed wet reflections but stalled during UI scrolling, so publication is still pending the new exact-head gate.
+The follow-up repair holds the last scene behind crew planning, the open roster and modal dialogs, redrawing on selection/resize. This avoids continuous GPU work while scrolling UI. The browser gate asserts a stationary planning scene and logs each real route action duration. CI explicitly selects the same SwiftShader backend used for local software-renderer verification; scenery storage checks now honor the configured DPR. The first repaired-head CI passed wet reflections but stalled during UI scrolling, so publication waited for the new exact-head gate. Those checks subsequently passed.
 
 CI now passes the formerly blocked equipment menu and wet-state assertions, then times out taking screenshots in the legacy Chrome headless shell. The four C.16 browser gates use the regular Chromium channel in headless mode, matching the browser architecture used by local Edge checks (Playwright browser documentation: https://playwright.dev/docs/browsers). No gameplay assertion, action deadline or screenshot is removed.

@@ -1,48 +1,36 @@
-## C.16.1 corrective release in progress — 2026-09-14
-
-C.16 source PR #81 and hub PR #522 are merged. C.16.1 keeps controller polling
-alive while menus reuse the last GPU frame, restores exact source bytes in
-publication and renews affected module URLs. See design/HUB_RELEASE.md for the
-Windows export correction. Publication and public verification remain pending.
-After the Rain remains the target; newer studies and final rigs are unapproved.
-
 # Piritori active context
 
-## C.16 candidate — finalize art before mechanics
+## C.16.1 current public release — Night Shift
 
-2026-09-14 takeover: the latest failed head is `2ffdec09`; crew outings timed
-out during presentation and wet-environment sampled FPS before rendering was
-measured. Software rendering reproduced the 30-frame warmup delay (about 18s)
-and exposed the 50ms-per-RAF presentation clamp. The continuation removes that
-slow-motion lock while preserving visibility/orientation pauses, prepares
-restored shaders before unlocking controls, and waits for real rendered-frame
-windows in the wet gate. Four-layout software wet/recovery and complete crew
-outings pass locally. Final-head CI, aiming/scenery regression and publication
-are still required. C.15 stays public until those checks pass. Keep the existing
-After the Rain target; the six newer style studies remain unapproved proposals.
+2026-09-14: source PR #82 and hub PR #523 are merged; Pages and the public hub
+card, equipment, deployment, movement, save reload, HOME return, all 56 hashes
+and controller navigation are verified. Read [release evidence](design/C161_RELEASE.json)
+and [play C.16.1](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=16.1).
+All eight source CI jobs and the final hub checks passed. The failed Slay lighting
+pixel check was rerun at the same hub head; its final result is in the receipt.
 
-2026-09-14: C.15 remains the verified public release. C.16 PR #81 has failed
-`night-places-browser` and `wet-environment` CI checks; do not merge or deploy
-until resolved. The former timed out scrolling to Equip; the latter did not
-obtain an FPS sample after a fixed delay. The cause is not yet established.
-Local passing suites do not override those failures. A source audit also caught
-an omitted `crew-run/ui.js` cache-token update; include it with the corrected
-main entry tokens and verify all 55 runtime blobs against the new source tree.
+C.16 adds recessed windows, passage depth, cavity shading, wear and bounded wet
+reflections. Timing/recovery fixes preserve real action duration on slow renderers
+and prepare graphics before controls unlock. C.16.1 restores gamepad polling in
+static menus and repairs the complete cache transition. Windows exports now use
+`git -c core.autocrlf=false archive` plus raw blob verification. See
+[delivery procedure](design/HUB_RELEASE.md).
 
-The owner asks for stronger stylization while mechanics are developing well.
-Six separate numbered [concepts](design/concepts/c16-stylized/README.md) now
-explore material and shading directions, with 04–06 pushing painted shapes,
-graphic two-tone and ink. They are illustrations, not runtime captures or
-approved art. Keep neutral figures and mechanics intact pending a style choice.
+## Current direction and next work
 
 Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
-Read [C.16 art finish](design/C16_ART_FINISH.md). Recessed windows, passage depth,
-cavity shading, wear, smaller wet paving and bounded planar reflections refine
-the C.15 scene kit. This is a candidate until its source/hub/Pages receipt exists.
-Preserve the current mechanics and stand-ins. Concept parity and physical-device
-acceptance are still open; the first corrected art review reached 7.1/10.
+The target remains [02 / After the Rain](design/concepts/c13-review/02-after-the-rain.png).
+The six newer [numbered studies](design/concepts/c16-stylized/README.md) are
+illustrations and unapproved proposals. Read [C.16 art finish](design/C16_ART_FINISH.md).
+The first corrected private art review reached 7.1/10; that is not owner acceptance.
 
-## C.15 live — Night Places
+Next: actual Pixel 10 Pro and iPad M2 checks in both orientations, concept parity
+and final fighter/motion acceptance. Then continue the mechanics/gameplay pass
+and authored city/chapter bridge under the existing direction. Keep neutral
+stand-ins until F01/F02 fit and look good; F03 remains rejected. No asset lifecycle
+promotion, paid generation or new art approval occurred in this release.
+
+## C.15 previous release — Night Places
 
 Owner wants new arenas, minimalist rain-concept UI, mood lights and varied cameras.
 Read [C.15](design/C15_NIGHT_PLACES.md) and [GitHub resources](design/C15_GITHUB_RESOURCES.md).
@@ -84,7 +72,7 @@ The owner rejected C.12's interface as poorly grounded in the design. Read
 [the C.13 pass](design/C13_ART_AND_UI.md): the actual portrait/landscape UI targets
 and park-night reference were inspected. This batch restores the dark carton /
 cream console, a crew ledger, actual-figure portraits and practical night light.
-C.13 was verified through the public hub and real controls; C.15 above is current. Source PR #78
+C.13 was verified through the public hub and real controls; C.16.1 above is current. Source PR #78
 and hub PR #517 are merged. Read [release evidence](design/C13_RELEASE.json) and
 [play C.13](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=13). Owner visual review and physical Pixel/iPad acceptance remain
 open. No new character approval is implied.
@@ -107,7 +95,7 @@ Move + Act, full stored intent, cover/LOS/path previews, ammo/reload, route moti
 
 ## Latest owner direction — carry into every design
 
-- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.15 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
+- Latest owner clarification: **Mewgenics meets XCOM**; the TURF summary guides both A (2D) and C (active 3D). Read [shared tactical direction](design/A_C_TACTICAL_DIRECTION.md). Move + Act and full intent are core targets now, not a deferred optional experiment. Persistent crew/builds tie combat back into chapters and the living city. C.16.1 Night Shift is the live connected crew pilot; C.11 capacity fixtures remain linked.
 
 - Owner playtest, 2026-09-13: C.09.1 playable is good. Next requests: richer attack/gun/cover animation and presentation, concept-art parity, Star Wars Zero Company camera reference and Metal Slug Tactics telegraphing/movement. See [C.10 combat plan](design/C10_COMBAT_DIRECTION.md). C.11 builds on the first combat/camera pass with directional low-wall cover and stand-in crouch/peek. C.12 adds persistent crew and rescue/extraction consequences. Final art and the city bridge remain open.
 
@@ -146,7 +134,7 @@ Next: [Option C vertical-slice design](design/OPTION_C_VERTICAL_SLICE.md). Prove
 
 ## Runtime truth at this update
 
-C.15 is the verified live separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=15). Read [release evidence](design/C15_RELEASE.json), [art/UI direction](design/C13_ART_AND_UI.md) and [crew rules](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77/#78); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
+C.16.1 is the verified live separate [Night Shift crew pilot](https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=16.1). Read [release evidence](design/C161_RELEASE.json), [art/UI direction](design/C13_ART_AND_UI.md) and [crew rules](design/C12_NIGHT_SHIFT.md). Source integration is `art/meshy-approved-pilots-2026-09-11` (PRs #73/#74/#76/#77/#78); do not assume the older stacked #68 was merged into main. C.08 r2 remains the authored Bear Path card. The following old-model audit applies to those imported prototypes: [3D audit](design/BEAR_PATH_3D_AUDIT.md): severe tree occlusion at some angles, weak walk contact, down poses below ground. Do not describe these as fixed. Movement, attacks and resume worked in the desktop tests. Asset status comes from the manifest and current evidence, never this prose alone.
 
 
 ## C.09 source continuation
