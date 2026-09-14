@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
-import {limitTextures} from '../fight-module/render-profile.js?v=2';
+import {limitTextures} from '../fight-module/render-profile.js?v=3';
 
 // IDs, byte lengths and hashes bind this scene to versioned runtime derivatives.
 export async function loadParkAssets(manifest,profile){

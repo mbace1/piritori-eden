@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {createEncounter} from './encounter.js?v=1';
+import {createEncounter} from './encounter.js?v=2';
 import {placeLabels} from '../fight-module/framing.js?v=3';
 
 const inspect={

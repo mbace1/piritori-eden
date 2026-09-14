@@ -1,9 +1,9 @@
 import * as T from 'three';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
-import {EDGES} from '../fight-module/cover-edges.js?v=1';
+import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
-import {limitTextures} from '../fight-module/render-profile.js?v=2';
-import {weatheredMaterial} from './weathered-material.js?v=1';
+import {limitTextures} from '../fight-module/render-profile.js?v=3';
+import {weatheredMaterial} from './weathered-material.js?v=2';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}

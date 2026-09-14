@@ -1,13 +1,13 @@
-import { stanceWeight, STANCE } from '../js/v3/stance.js?v=1';
+import { stanceWeight, STANCE } from '../js/v3/stance.js?v=2';
 import { rand01 } from '../../market/model.mjs';
 import {
   LANES, totalRows, rowOf, laneCentre,
   parseCell, defaultPlayerSlot, slotKey, parseSlotKey, describeSlot,
-} from '../js/v3/grid.js?v=1';
-import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from '../js/v3/equipment.js?v=1';
+} from '../js/v3/grid.js?v=2';
+import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from '../js/v3/equipment.js?v=2';
 import {
   perkValue, skillsOf, hasAptitude,
-} from '../js/v3/state.js?v=5';
+} from '../js/v3/state.js?v=6';
 
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],

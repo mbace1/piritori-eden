@@ -1,6 +1,6 @@
 import {hireling} from '../../people/roster.mjs';
-import {createSession} from '../fight-module/session.js?v=10';
-import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=5';
+import {createSession} from '../fight-module/session.js?v=11';
+import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=6';
 
 // Connected C pilot, deliberately separate from the authored campaign save.
 // Tuning below is a playtest, not a new canonical mission or economy.

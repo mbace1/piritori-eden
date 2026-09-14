@@ -16,8 +16,8 @@ Read AGENTS, ACTIVE_CONTEXT and DESIGN_AUTHORITY first. Follow Suds Jack's
 - Historical C.12 entry: `web/crew-run/?release=12`.
 - Historical C.13 entry: `web/crew-run/?release=13`.
 - Historical C.14 entry: `web/crew-run/?release=14`.
-- Current C.15 entry: `web/crew-run/?release=15`.
-- Current release receipt: [C15_RELEASE.json](C15_RELEASE.json), source PR #80 and hub PR #519. Earlier batches: C14_RELEASE.json (PR #79 / #518), C13_RELEASE.json, C12_RELEASE.json and C11_RELEASE.json.
+- Historical C.15 entry: `web/crew-run/?release=15`.
+- Last publicly verified release receipt: [C15_RELEASE.json](C15_RELEASE.json), source PR #80 and hub PR #519. Earlier batches: C14_RELEASE.json (PR #79 / #518), C13_RELEASE.json, C12_RELEASE.json and C11_RELEASE.json.
 - `piritori-c09/release.json` records the deployed source commit and build.
 - Preserve the `optionc` authored Bear Path card and the `piritori` campaign card.
 
@@ -77,11 +77,24 @@ The public C.09.1 card, movement, damage and 12-person fixture were verified.
 All 38 cabinet Git blobs were compared against staging. See
 [C091_RELEASE.json](C091_RELEASE.json) for current hub/merge evidence and limits.
 
-For byte-exact Windows staging, export the named commit with `git archive` and
+For byte-exact Windows staging, export the named commit with
+`git -c core.autocrlf=false archive <commit>` and
 pass that exported root as `--source`. A clean working tree can still have
 checkout line-ending conversion. Do not normalize all files: several scripts
 are LF while the shared stylesheet is deliberately CRLF in Git. Preserve each
 Git blob's bytes before calculating the release receipt.
+
+`git archive` can itself convert line endings when `core.autocrlf=true`.
+Compare each exported file's raw Git blob SHA-1 against `git ls-tree -r`; use
+`git hash-object --no-filters` (default hash-object also applies filters).
+Stage releases with `--previous-cabinet <exact-current-live-cabinet>` so changed
+module bytes, including line endings, require new cache URLs. Check the whole
+import closure: editing an import also changes the importing module's bytes.
+
+C.16 source PR #81 and hub PR #522 merged on 2026-09-14. The live branch moved
+to b274dc692e7df6b58bc92cc72cb70d8ffe97f378; public verification was interrupted.
+C.16.1 repairs controller polling during static menus and the converted-byte
+cache transition. Its public deployment remains unverified until recorded.
 
 The lab owns its header HOME link and native controller (`hubHome: native` in
 the hub catalogue). The common-shell key-bridge test must use a common-shell

@@ -1,4 +1,4 @@
-import {EDGES} from '../fight-module/cover-edges.js?v=1';
+import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import * as T from 'three';
 import {developmentLook} from './development-look.js?v=6';
 

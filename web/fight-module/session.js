@@ -1,6 +1,6 @@
-import {createTacticalSession} from './tactics.js?v=5';
-import { createState } from '../js/v3/state.js?v=5';
-import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=2';
+import {createTacticalSession} from './tactics.js?v=6';
+import { createState } from '../js/v3/state.js?v=6';
+import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=3';
 
 // Same-tab emergency recovery only, never a campaign save. Replay committed
 // commands once; a partially shown animation is not a partially applied action.

@@ -167,6 +167,7 @@ jobs:
           node web/test/bear-path.mjs
           node web/test/bear-path-police.mjs
           node web/test/frame-clock.mjs
+          python3 tools/publish/test_release_cache.py
       - run: npm install --prefix /tmp/piritori-test playwright
       - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
       - name: desktop and touch fight, replay, graphics recovery and motion
@@ -202,6 +203,7 @@ jobs:
           ARENA_LAB_DPR: '0.5'
         run: |
           python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c12-server.log 2>&1 &
+          node web/test/crew-gamepad.cjs
           node web/test/crew-run-browser.cjs
 
 
