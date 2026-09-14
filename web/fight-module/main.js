@@ -1,23 +1,23 @@
-import {gunView,blendGunView} from './aim-camera.js?v=1';
-import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=2';
-import {mountCrew} from '../crew-run/ui.js?v=6';
-import {portraitStudio} from '../crew-run/portraits.js?v=1';
-import {EDGES,coverEdges} from './cover-edges.js?v=1';
+import {gunView,blendGunView} from './aim-camera.js?v=2';
+import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=3';
+import {mountCrew} from '../crew-run/ui.js?v=7';
+import {portraitStudio} from '../crew-run/portraits.js?v=2';
+import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=10';
-import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=8';
-import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=2';
-import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=1';
-import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=2';
-import {createEdgeSmoothing} from './edge-smoothing.js?v=1';
-import {buildNightCourtyard} from './environment.js?v=1';
-import {buildKarhupuisto} from '../bear-path/park.js?v=11';
-import {loadParkAssets} from '../bear-path/assets.js?v=1';
-import {createEncounter} from '../bear-path/encounter.js?v=1';
-import {mountBearPath} from '../bear-path/presentation.js?v=4';
+import {createSession,checkpoint,restoreSession} from './session.js?v=11';
+import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=9';
+import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=3';
+import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=2';
+import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=3';
+import {createEdgeSmoothing} from './edge-smoothing.js?v=2';
+import {buildNightCourtyard} from './environment.js?v=2';
+import {buildKarhupuisto} from '../bear-path/park.js?v=12';
+import {loadParkAssets} from '../bear-path/assets.js?v=2';
+import {createEncounter} from '../bear-path/encounter.js?v=2';
+import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
-import {tacticalUI} from './tactical-ui.js?v=7';
-import {routes} from './tactics.js?v=5';
+import {tacticalUI} from './tactical-ui.js?v=8';
+import {routes} from './tactics.js?v=6';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
 const isCrew=document.body.dataset.scenario==='crew-run';
@@ -312,6 +312,8 @@ async function prepareGraphics(start=performance.now()){
 let warmupFrames=2,fpsSamples=0;
 function tick(now){
   raf=0;if(hidden||graphicsLost||graphicsPreparing||!ready)return;queueFrame();
+  // Native input keeps polling even while a menu reuses its last GPU frame.
+  controller(now);
   // Keep the last scene behind crew planning, the roster and modal dialogs.
   // Redraw on a selection or resize, but leave scrolling and input free of
   // continuous GPU work while the player is reading these controls.
@@ -329,13 +331,13 @@ function tick(now){
   // race; normal shader/render faults still surface. The recovery event rebuilds.
   try{if(renderer.getContext().isContextLost())return;stage?.beforeRender?.(camera);renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);}
   catch(e){if(!renderer.getContext().isContextLost())throw e;return;}
-  controller(now);renderedFrames++;
+  renderedFrames++;
   if(warmupFrames>0){warmupFrames--;return;}
   frameCount++;seconds+=real;
   if(seconds>2){
     fps=Math.round(frameCount/seconds*10)/10;fpsSamples++;
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isCrew?'C.16 · WET COURTYARD':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isCrew?'C.16.1 · WET COURTYARD':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }

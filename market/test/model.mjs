@@ -10,7 +10,7 @@
  * promise nobody checks drifts.
  */
 import { readFileSync } from 'node:fs';
-import { GOODS, nodeProfile, offer, present, decay, INFO, exposure, CONDITION, BLOCKS as CANON_BLOCKS, SLICE_BLOCKS } from '../model.mjs';
+import { GOODS, nodeProfile, offer, present, decay, INFO, exposure, CONDITION, BLOCKS as CANON_BLOCKS, SLICE_BLOCKS } from '../model.mjs?v=1';
 
 const board = JSON.parse(readFileSync(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
 const anchors = board.anchors;

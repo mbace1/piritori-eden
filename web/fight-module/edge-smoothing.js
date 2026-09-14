@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {FXAAShader} from '../vendor/jsm/shaders/FXAAShader.js';
+import {FXAAShader} from '../vendor/jsm/shaders/FXAAShader.js?v=1';
 
 // Run after the opaque scene has been tone-mapped into the default framebuffer.
 // Copy its encoded pixels once; do not add HDR/depth targets or supersampling.

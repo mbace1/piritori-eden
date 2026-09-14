@@ -9,7 +9,7 @@
  * which is how COMBAT.md §10.2 gets answered: not by argument but by reading
  * them and seeing where a person stops being a person and becomes a list.
  */
-import { roster, APTITUDES } from '../roster.mjs';
+import { roster, APTITUDES } from '../roster.mjs?v=1';
 
 const a = process.argv.slice(2);
 const flag = (n, d) => { const i = a.indexOf(n); return i < 0 ? d : a[i + 1]; };

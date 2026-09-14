@@ -1,3 +1,11 @@
+## C.16.1 corrective release in progress — 2026-09-14
+
+C.16 source PR #81 and hub PR #522 are merged. C.16.1 keeps controller polling
+alive while menus reuse the last GPU frame, restores exact source bytes in
+publication and renews affected module URLs. See design/HUB_RELEASE.md for the
+Windows export correction. Publication and public verification remain pending.
+After the Rain remains the target; newer studies and final rigs are unapproved.
+
 # Piritori active context
 
 ## C.16 candidate — finalize art before mechanics

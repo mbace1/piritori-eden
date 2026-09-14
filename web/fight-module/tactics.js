@@ -1,4 +1,4 @@
-import {coverEdges,coverProtection,crossesCoverEdge} from './cover-edges.js?v=1';
+import {coverEdges,coverProtection,crossesCoverEdge} from './cover-edges.js?v=2';
 // C laboratory rules. Campaign resolver and saves deliberately stay separate.
 export const WEAPONS={
   'baseball-bat':{name:'Bat',range:1,damage:3,accuracy:100},

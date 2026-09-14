@@ -23,7 +23,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { paintPixels } from '../web/js/v3/chrome.js';
+import { paintPixels } from '../web/js/v3/chrome.js?v=2';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixturePath = join(here, 'vectors', 'chrome.json');

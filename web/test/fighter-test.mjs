@@ -5,15 +5,15 @@ const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [indexHtml, html, css, js, manifest] = await Promise.all([
   read('../index.html'),
   read('../fighter-test.html'),
-  read('../fighter-test.css'),
-  read('../js/v3/fighter-test.js'),
+  read('../fighter-test.css?v=2'),
+  read('../js/v3/fighter-test.js?v=3'),
   read('../../art/v3/manifest.json').then(JSON.parse),
 ]);
 
 assert(indexHtml.includes('fighter-test.html?v=449'), 'splash link cache-busts the v4.49 fighter page');
 assert(html.includes('PLAYABLE TEST · v4.49'), 'test is visibly versioned');
 assert(html.includes('fighter-test.css?v=2'), 'changed fighter stylesheet has a fresh cache token');
-assert(html.includes('fighter-test.js?v=2'), 'changed fighter runtime has a fresh cache token');
+assert(html.includes('fighter-test.js?v=3'), 'changed fighter runtime has a fresh cache token');
 assert(html.includes('provisional runtime candidates'), 'provisional status is visible');
 assert(html.includes('UPDATED IN v2'), 'the owner-directed proportion/material correction is visible');
 assert(html.includes('NOT FINAL IN THIS TEST'), 'unavailable and non-final work is stated');

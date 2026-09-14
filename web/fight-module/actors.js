@@ -1,8 +1,8 @@
 import * as T from 'three';
-import {makeStandIn} from './stand-in.js?v=6';
-import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js';
-import {limitTextures} from './render-profile.js?v=2';
-import {bakedMotionPlayer} from './motion-player.js?v=1';
+import {makeStandIn} from './stand-in.js?v=7';
+import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js?v=1';
+import {limitTextures} from './render-profile.js?v=3';
+import {bakedMotionPlayer} from './motion-player.js?v=2';
 
 export async function loadFighters(manifest,{textureSize=2048}={}) {
   const loader=new GLTFLoader(), templates=new Map();

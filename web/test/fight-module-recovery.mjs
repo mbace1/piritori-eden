@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js';
-import {renderProfile,pixelRatioFor} from '../fight-module/render-profile.js';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=11';
+import {renderProfile,pixelRatioFor} from '../fight-module/render-profile.js?v=3';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 for(const mode of ['mixed','melee','ranged']){
   const s=createSession(content,mode);

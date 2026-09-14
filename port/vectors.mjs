@@ -25,11 +25,11 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 
-import { offer, exposure, nodeProfile, decay, INFO, BLOCKS } from '../market/model.mjs';
+import { offer, exposure, nodeProfile, decay, INFO, BLOCKS } from '../market/model.mjs?v=1';
 import { cost, validate, fire } from '../missions/model.mjs';
-import { hireling } from '../people/roster.mjs';
-import { createBattleState, syncAlliesFor } from '../web/js/v3/battle.js';
-import { parseCellFor, slotKey, ROWS } from '../web/js/v3/grid.js';
+import { hireling } from '../people/roster.mjs?v=1';
+import { createBattleState, syncAlliesFor } from '../web/js/v3/battle.js?v=9';
+import { parseCellFor, slotKey, ROWS } from '../web/js/v3/grid.js?v=2';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = resolve(here, '..');

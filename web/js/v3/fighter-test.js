@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js';
-import { assetUrl, loadGameData } from './content.js?v=1';
+import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js?v=1';
+import { assetUrl, loadGameData } from './content.js?v=2';
 
 const PILOTS = [
   {

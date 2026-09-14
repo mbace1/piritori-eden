@@ -24,7 +24,7 @@
  * `market/model.mjs` beside it; `web/test/v3-contract.mjs` asserts the import
  * so nobody discovers that by shipping a blank panel.
  */
-import { offer, present, decay, exposure, INFO, GOODS } from '../../../market/model.mjs';
+import { offer, present, decay, exposure, INFO, GOODS } from '../../../market/model.mjs?v=1';
 
 export { INFO, GOODS };
 
