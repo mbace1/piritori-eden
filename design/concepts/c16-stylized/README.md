@@ -1,5 +1,18 @@
 # Stylized finishes — numbered exploration
 
+## Latest owner feedback — 2026-09-15
+
+Current shortlist: **03 — Lantern Noir** and **06 — Ink After Dark**.
+The owner first wrote “3 is best, 3 is second best”, clarified “6 second”,
+then sent “6”. The last explicit ranking is 03 first / 06 second; the final
+standalone number does not establish whether the ranking changed. Keep the
+ranking open until clarified. These are relative preferences, not final approval.
+
+The earlier 05 + 04 recommendation below is historical assistant advice, not
+the owner’s selection. See [the complete art handoff](../../C16_ART_HANDOFF.md).
+All six full-size studies and both prompt files are already in the shared
+source branch. Current release: [C.16.1 evidence](../../C161_RELEASE.json).
+
 Owner asked for more stylized concepts while mechanics are developing well.
 These are generated art-direction illustrations based on the current C.16
 courtyard footprint, modular geometry and deliberately simple stand-in figures.
@@ -45,7 +58,7 @@ The 2–10+ participant brief, Kallio 2003, restrained wear and minimal UI remai
 ![05 — Graphic Two-Tone](05-graphic-two-tone.png)
 ![06 — Ink After Dark](06-ink-after-dark.png)
 
-Art-director recommendation, **not an owner decision**: explore 05's value and
+Earlier art-director recommendation, **not an owner decision**: explore 05's value and
 shape clarity with some of 04's broad painted marks. The figure fidelity is
 deliberately the present stand-in level. The illustration's reflections, edge
 quality and texture are targets to test, not promises of runtime parity.
@@ -62,8 +75,10 @@ quality and texture are targets to test, not promises of runtime parity.
 Next: collect relative style preference; prove the chosen finish on one arena
 in actual tactical, oblique, overhead and gun views; validate on Pixel 10 Pro
 and iPad M2; extend the reusable treatment; then take the mechanics pass.
-Fix PR #81's rendering/CI blockers before shipping C.16. C.15 stays public.
+PR #81 and the C.16.1 follow-up #82 are now merged; the former CI blockers were
+resolved. C.16.1 is the published build; physical-device and final art acceptance
+remain open. See the release evidence linked above.
 
 Exact additional prompts: [prompts-04-06.json](prompts-04-06.json). These are
-generated illustrations, excluded from the runtime allowlist. No owner choice
-or final approval has been recorded for 01–06.
+generated illustrations, excluded from the runtime allowlist. The latest owner
+preferences are recorded above; final approval remains open.

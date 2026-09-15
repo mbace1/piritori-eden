@@ -1,5 +1,17 @@
 # Piritori active context
 
+## Owner art feedback — 2026-09-15
+
+The owner named **03 — Lantern Noir** and **06 — Ink After Dark** after the six
+numbered studies. The last explicit ranking was 03 first / 06 second, followed
+by a standalone “6”; whether that changes the ranking is unresolved. Preserve
+both as the current shortlist, with final direction and art approval still open.
+The earlier assistant recommendation of 05 + 04 is not the owner’s selection.
+
+All six concepts, prompts, the Blender generator, scenery kit, textures, tests
+and runtime work are in this repository. See [the art handoff](design/C16_ART_HANDOFF.md).
+This update records feedback and submission status; it does not change C.16.1.
+
 ## C.16.1 current public release — Night Shift
 
 2026-09-14: source PR #82 and hub PR #523 are merged; Pages and the public hub
@@ -19,7 +31,8 @@ static menus and repairs the complete cache transition. Windows exports now use
 ## Current direction and next work
 
 Owner: “Let's start finalizing the art pass. Mechanics and gameplay pass next.”
-The target remains [02 / After the Rain](design/concepts/c13-review/02-after-the-rain.png).
+The released C.16.1 look follows [02 / After the Rain](design/concepts/c13-review/02-after-the-rain.png).
+For the next stylization study, use the owner’s 03 / 06 shortlist above.
 The six newer [numbered studies](design/concepts/c16-stylized/README.md) are
 illustrations and unapproved proposals. Read [C.16 art finish](design/C16_ART_FINISH.md).
 The first corrected private art review reached 7.1/10; that is not owner acceptance.
