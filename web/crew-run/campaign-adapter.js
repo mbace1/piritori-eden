@@ -10,6 +10,7 @@ import {nameFrom} from '../../people/roster.mjs?v=1';
 export {CAMPAIGN_SAVE_KEY};
 
 const C_WEAPONS=new Set(['baseball-bat','folding-knife','first-handgun']);
+const C_KITS=new Set(['boots','medical','light']);
 const COLORS=[0x4d8f85,0x778ba9,0xa99164,0x877697,0x76966d,0xb69272,0x8f7468,0x66838b];
 const copy=value=>structuredClone(value);
 
@@ -28,11 +29,11 @@ function weaponFor(record,aptitudes){
   if(aptitudes.includes('blade'))return 'folding-knife';
   return 'baseball-bat';
 }
-function kitFor(record,aptitudes){
-  const traits=(record?.traits||[]).map(textOfTrait).join(' ').toLowerCase();
-  if(traits.includes('nurse'))return 'medical';
-  if(aptitudes.some(a=>['runner','courier'].includes(a)))return 'boots';
-  return 'light';
+function kitFor(record){
+  // C.16's boots/medical/light are supplied prototype support. Only carry one
+  // through when campaign content explicitly authors that id; never turn an
+  // aptitude or a flavour trait into free equipment behind the player's back.
+  return (record?.initial_equipment||[]).find(id=>C_KITS.has(id))||'light';
 }
 function memoriesFor(state,id){
   return (state.flags||[]).filter(flag=>String(flag).includes(`:${id}`)).slice(-3).reverse().map(flag=>String(flag).replace(/^memory:/,'').replaceAll(':',' · '));
@@ -60,7 +61,8 @@ export function campaignCrew(state,content){
       aptitudes:copy(aptitudes),
       traits:(record.traits||[]).map(textOfTrait).filter(Boolean),
       equipment:weaponFor(record,aptitudes),
-      kit:kitFor(record,aptitudes),
+      kit:kitFor(record),
+      prototypeSupport:true,
       color:COLORS[hash(id)%COLORS.length],
       role:roleFor(record,aptitudes),
       fights:fightsOf(state,id),
