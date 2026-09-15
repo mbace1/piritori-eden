@@ -26,11 +26,12 @@ function weaponRead(record){
   const authored=(record?.initial_equipment||[]).find(id=>C_WEAPONS.has(id));
   return {equipment:authored||'baseball-bat',prototypeWeapon:!authored};
 }
-function kitFor(record){
+function kitRead(record){
   // C.16's boots/medical/light are supplied prototype support. Only carry one
   // through when campaign content explicitly authors that id; never turn an
   // aptitude or a flavour trait into free equipment behind the player's back.
-  return (record?.initial_equipment||[]).find(id=>C_KITS.has(id))||'light';
+  const authored=(record?.initial_equipment||[]).find(id=>C_KITS.has(id));
+  return {kit:authored||'light',prototypeSupport:!authored};
 }
 function memoriesFor(state,id){
   return (state.flags||[]).filter(flag=>String(flag).includes(`:${id}`)).slice(-3).reverse().map(flag=>String(flag).replace(/^memory:/,'').replaceAll(':',' · '));
@@ -49,7 +50,7 @@ export function campaignCrew(state,content){
   return (state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)).map(id=>{
     const record=crewRecord(state,data,id),status=state.crewStatus?.[id];
     if(!record||status?.status==='missing')return null;
-    const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id)),weapon=weaponRead(record);
+    const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id)),weapon=weaponRead(record),kit=kitRead(record);
     const maxCondition=Math.max(1,Number(status?.maxCondition??record.condition??5));
     const condition=Math.max(0,Number(status?.condition??maxCondition));
     return {
@@ -59,8 +60,8 @@ export function campaignCrew(state,content){
       traits:(record.traits||[]).map(textOfTrait).filter(Boolean),
       equipment:weapon.equipment,
       prototypeWeapon:weapon.prototypeWeapon,
-      kit:kitFor(record),
-      prototypeSupport:true,
+      kit:kit.kit,
+      prototypeSupport:kit.prototypeSupport,
       color:COLORS[hash(id)%COLORS.length],
       role:roleFor(record,aptitudes),
       fights:fightsOf(state,id),
