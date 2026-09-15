@@ -3189,3 +3189,180 @@ Do not buy per-role fight packs. Path: Meshy re-export those four against
 **one** real body rest after credit refresh; every 24-bone Meshy biped then
 shares them. Current `clips/muscle-*-v01.glb` fail that gate.
 
+
+## An Eeri asset shipped as Piritori's muscle — 2026-09-06, and the guard that was missing
+
+Owner, on a three-angle render of the body sitting on `main`: *"the bottom
+asset is for Eeri, not your project."*
+
+`cd64cd2` overwrote `art/v3/cast3d/muscle-v01.glb` with a character from a
+different game. It rendered as a flat white silhouette in every fight, on both
+builds, for two days. Restored in the commit that carries this entry.
+
+**The mechanism matters more than the fix.** Both projects pull from the same
+Meshy account, and that commit re-exported "against the live Meshy muscle
+archive rig" — i.e. by task id, off the account. A wrong id there lands a wrong
+character here and NOTHING in this repo objects:
+
+- `sha256` in the manifest is written FROM the file after the fact, so it
+  records whatever arrived. It cannot detect a substitution; it only detects
+  drift from what was recorded.
+- `sync-data --check` compares the copy to the source, and both were wrong.
+- `rig-vectors.mjs` measures rig compatibility, and correctly reported a
+  mismatch — which was then read as "other roles need re-rigging" rather than
+  "this body is not ours".
+- Every Godot gate passed. **A gate certifies WORKS and cannot see LOOKS**, and
+  this is the cleanest example the project has produced.
+
+**What would have caught it, cheapest first:**
+
+1. **A silhouette contact sheet in the art gate.** `glb_render.py` already
+   renders a GLB to PNG in seconds with no engine. Rendering the thirteen cast
+   bodies into one sheet on every art change, and looking at it, is the whole
+   guard. It is also the standing rule — an art change ends in a picture —
+   mechanised.
+2. **Vertex/node count in the manifest, checked.** The muscle went 12,448 →
+   30,932 tris and 26 → 24 nodes in one commit. A check that a body's topology
+   did not change shape without a note would have failed loudly.
+3. **Texture presence.** Every cast body carries exactly one image. Zero images
+   on a body is never correct, and is a one-line assertion.
+
+Not built here — this entry is the finding. (3) is the cheapest and catches the
+exact failure; (1) catches the whole class.
+
+**And a note for whoever next touches the shared Meshy account:** name the task
+id in the commit message. `cd64cd2` said "the live Meshy muscle archive rig"
+and named no id, so there is no way to tell from the history which model was
+actually fetched.
+
+## The clips belong to a body that is not in this repo — found 2026-09-06, and FIXED in Blender
+
+Two measurements settle the fight-animation problem that three sessions and
+three reverted retargets could not, and both change the Meshy plan booked for
+~Sept 11.
+
+### 1. The clips are another character's animation
+
+Rendering `clips/muscle-idle-v01.glb` **on its own skeleton, with its own mesh**
+— which nothing had done — shows **a hooded figure in a parka**. Not the bald
+man in a bomber jacket the file is named for.
+
+So the long-standing note that the clips "correspond to nothing in this repo"
+was almost right. They correspond to something *real*: a RIGGED parka body that
+was never committed. Only the unrigged `parka-man-v01.glb` (0 skins, 0 joints)
+is here. That is why every rest comparison failed and why retargeting looked
+impossible — the source skeleton was a stranger.
+
+### 2. The cast does not share a rest, so ONE shared clip set cannot work
+
+`GODOT_PICKUP.md` books the Sept 11 spend on "one shared clip re-export against
+one real body rest — every 24-bone Meshy biped then shares them."
+
+**Measured against the muscle, the intended donor, that premise is false:**
+
+| body | worst rest drift |
+|---|---|
+| driver | **160.8°** at LeftUpLeg |
+| hired-b | 137.0° |
+| suited-man | 131.0° |
+| local / street-raver | ~112° |
+| toko / jaska / hired | 102–105° |
+| enforcer | 94.6° |
+| runner / watcher / fixer | 35° / 20° / 12° |
+
+Ten of thirteen are nowhere near each other. A clip authored against one rest
+will tear on the other nine exactly as today's clips tear on everything. **Buying
+that re-export would not have fixed the fight.**
+
+### The fix, and it costs nothing
+
+`bl_retarget_all.py` (Blender 4.5, headless) transfers the motion properly:
+
+    delta        = src_pose_world * inverse(src_rest_world)
+    target_world = delta * tgt_rest_world
+
+The source's **delta from its own rest**, applied to the target's rest — so each
+body keeps its own rest, bone roll and limb lengths, and only the MOTION
+crosses. Walked parent-first, because a bone's world matrix needs its parents
+posed.
+
+Proven on the extremes: the muscle reads as a real idle/attack/hit/death, and
+**driver — the worst rig at 160.8° — goes from lying back in the air to
+standing upright.** Pictures, not ticks: `.capture4/_three2.png` (ground truth
+vs retargeted vs raw), `_four.png`, `_driver.png`.
+
+Verified across the WHOLE cast, not just the extremes: all thirteen rigged
+bodies render as coherent posed figures — feet planted, no hip inversion, no
+tearing (`.capture4/_cast_sheet.png`). `parka-man` is skipped; it has no skin
+or joints and cannot be animated at all.
+
+**Size, honestly, because rule 9 asks.** One pack per body, four actions each,
+~360 KB — **thirteen of them is 4.6 MB against the 2.9 MB of shared clips they
+replace, so this is +1.7 MB.** An earlier draft of this entry called it smaller;
+that was wrong and is corrected here. The trade is worth naming rather than
+hiding: the 2.9 MB currently ships in both builds and is **switched off**,
+because it tears every body it touches. This is 4.6 MB that works. If the extra
+weight matters on the phone gate, keyframe decimation is the obvious lever and
+has not been tried.
+
+### Two traps this cost a session to find, for whoever automates Blender next
+
+- **Assigning `object.animation_data.action` does NOT evaluate in background
+  mode.** Nor does pushing an NLA strip. Two verification passes rendered every
+  frame identical and looked like a broken retarget; the retarget was fine and
+  the harness was lying. Evaluate fcurves by hand (`fc.evaluate(frame)`) and
+  write pose bones directly — which is also exactly what the runtime does.
+- **The glTF exporter writes EVERY action in the file**, so the body's own rest
+  clip and the source's clip both shipped alongside the baked one and the
+  importer picked the wrong one — a clip frozen at a single frame. Purge
+  `bpy.data.actions` down to what you mean to export.
+
+### What is NOT done here
+
+Registration. These packs are generated but not yet in `art/v3/manifest.json`,
+not synced to `godot/data/`, and both builds still have their clip gates OFF.
+Wiring them on is the next step and needs the owner's eye on a moving figure
+first — a still, correct body beats a moving wrong one, and that ruling stands.
+
+## The Godot fight screen is BLANK — measured 2026-09-06, and it is two pixels tall
+
+Not the animation, not the arenas, and not new work: **`main` today renders the
+Godot fight as an empty black rectangle** — no ground, no fighters, nothing.
+Verified pixel-identical on clean `main` with no local changes, so it is
+shipped, and it is the most serious thing open on the build that is meant to be
+the shippable one.
+
+Instrumented (`_dbg_state()`, since removed) during `capture_battle`:
+
+```
+DBG CELL=1.08 arena_half=(6,6) ground=0 units=4 cam_size=12.96 vp=(1280, 683)
+DBG CELL=1.08 arena_half=(6,6) ground=0 units=8 cam_size=12.96 vp=(1280, 2)
+```
+
+Everything the fight needs is correct. Units instantiate at sane cell positions
+with the right bodies, the camera is framed, the ground slab is built from the
+`(6,6)` default. **The SubViewport collapses to 2 pixels tall on the second
+refresh**, and a 1280x2 viewport is what gets composited over the screen.
+
+Two further facts, both cheap and both probably part of it:
+
+1. **`units=8` on the second pass, for a 2v2.** `refresh()` frees the old unit
+   nodes with `queue_free()` and adds new ones — and a `queue_free()`'d node is
+   NOT gone in the same frame (`CLAUDE.md` trap list says exactly this). So the
+   count doubles, and whatever recomputes size sees a stale tree.
+2. **`_vp.transparent_bg = false`** with `Environment.BG_COLOR` at `#0b0e13`.
+   The 3D viewport paints an OPAQUE near-black rectangle over the 2D scene
+   plate underneath. While the dioramas filled the frame this was invisible;
+   with `USE_STAGE3D_ARENAS` false (owner, 2026-09-06) there is nothing to fill
+   it, so the plate that was supposed to "stay visible in formation_battle" is
+   covered by black.
+
+The `_notification(NOTIFICATION_RESIZED)` handler sets `_vp.size` from
+`size.x/size.y`, and Godot warns on every run that it "can't change the size of
+a SubViewport with a SubViewportContainer parent that has stretch enabled".
+That warning has been printing for weeks and is almost certainly the thread to
+pull: the container owns the size, the code fights it, and one of the two wins
+at 2 pixels.
+
+**Do this before any more art.** A fight that draws nothing cannot be judged for
+lighting, framing, animation or arenas, and three of those are queued above it.

@@ -502,3 +502,84 @@ patch; flagged there rather than done piecemeal here.
 4. **Does anything actually reproduce on the Pixel 10?** §9 narrowed the
    texture-budget theory without confirming it. The device (or its PowerVR
    driver family) is the only thing that can settle this now.
+
+## 13. What pausing `web/` would have stranded — checked 2026-09-04, still true
+
+Owner asked before any pause: *"check JS for parity though, there could be lots
+of mechanical work."* The right question. Measured rather than assumed, and the
+answer decided part of the 2026-09-06 ruling that both builds stay.
+
+### The direction of every version so far was Godot → web
+
+| | lines |
+|---|---|
+| `godot/` GDScript | 18,346 |
+| `web/js/v3/` | 5,484 |
+
+`fight_manager.gd` alone (2,299) is larger than `battle.js` and `state.js`
+together, and `VERSIONS.md` says it out loud — v4.19 to v4.25 are each titled
+"ported from `fight_manager.gd`", "from `crew_generator.gd`", "from
+`age_crew()`/`retire()`". The catch-up phase ran one way.
+
+### The exception: `origin/web/real-stat-lines`, still unmerged
+
+Three WIP commits, 150 lines in `battle.js`, and one is a mechanic Godot does
+not have.
+
+**`approachCell()` — ported from TURF (§1.08's sibling source), not from here.**
+Where should a repositioning fighter go? Prefer a cell you can ATTACK FROM, and
+failing that the cell that CLOSES THE MOST DISTANCE.
+
+**Godot has no equivalent, and carries the defect underneath it.**
+`_get_legal_commands()` (`fight_manager.gd`:1766) offers reposition to the four
+orthogonal adjacents, and `_score_base()` scores REPOSITION as one flat number
+per role — 0.4, or 1.8 for a runner, 1.2 for a watcher — **identical for all
+four cells**. `_ai_select_command()` then picks weighted-random from the top
+three. So a Godot crew member who decides to move **picks a direction at
+random**, and nothing scores closing on the enemy.
+
+Measured on `battle-karhupuisto-2v2` before the fix: the runner's first
+auto-move went depth 2 → depth 7, straight past both opponents, and reach being
+directional it could never attack again.
+
+**Owner, asked whether to port it: "not sure."** So it is recorded and not
+acted on. It is small — a scoring function, not a system — and it is the one
+piece of mechanical work that lives only in `web/`.
+
+### And one design question that outlives the branch
+
+On `battle-karhupuisto-2v2` an opponent stands at depth 6, the middle row, and
+**no player weapon's reach covers it** (a bat is front-same-or-adjacent-lane →
+ROW_FRONT). Auto-play cannot finish that battle by force — and its own
+objective never asked it to: *"Complete or abandon the handover; defeating
+every opponent is unnecessary."*
+
+Three ways out, all owner calls, none picked: auto-play learns to WITHDRAW
+(already in Godot's `_score_base`, absent from web's auto options); the gate
+uses an elimination battle; or weapon reach covers deeper rows.
+
+### Everything else is even, or unbuilt in both
+
+- `market/model.mjs` is JS-canonical by ruling; Godot re-implements it.
+- `MARKET.md` §7e's seller `CONDITION` table is unbuilt in BOTH builds (§1.06).
+- `port/vectors.mjs` and `port/rig-vectors.mjs` remain the objective pass
+  condition for anything that does cross.
+
+## 14. Blender is available now — 2026-09-06
+
+Owner: *"you can now use blender for all 3d."* Installed at
+`~/tools/blender/blender-4.5.13-windows-x64/blender.exe` (4.5.13, and a
+`blender-launcher.exe` beside it). It runs headless with `-b -P script.py`.
+
+**This changes what "an asset job" means.** `rig-vectors.mjs` has failed every
+role against the shared fight clips for weeks, three retarget attempts were
+reverted, and the standing conclusion was that only a Meshy re-rig could fix it
+— which then produced the 2026-09-06 Eeri-asset leak (QUEUE, same date). A real
+rig pass — matching rests, retargeting joints, exporting one clean animation
+set — is now a local, free, repeatable operation instead of a paid remote one.
+
+The existing `art-src/meshy-input/` tools stay useful and are NOT superseded:
+`glb_render.py` (engine-free PNG of any GLB), `glb_inspect.py`, `glb_retex.py`,
+`glb_decimate.py`, `glb_make_clips.py`. They are faster than Blender for
+looking and for byte-level surgery. Blender is for the thing they cannot do:
+change a rig.

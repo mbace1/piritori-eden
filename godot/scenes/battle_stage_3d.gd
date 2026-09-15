@@ -139,15 +139,25 @@ static func unit_path(role: String, fighter_id: String = "") -> String:
 		return String(options[absi(fighter_id.hash()) % options.size()])
 	return String(UNIT_BY_ROLE.get(role, UNIT_FALLBACK))
 
-## Fight clips, keyed by what a fighter is DOING. They arrive as separate glbs
-## because that is how Meshy delivers them; their animations are lifted onto the
-## unit at load so one figure can play any of them.
-const CLIPS := {
-	"idle":   "res://data/art/cast3d/clips/muscle-idle-v01.glb",
-	"attack": "res://data/art/cast3d/clips/muscle-attack-v01.glb",
-	"hit":    "res://data/art/cast3d/clips/muscle-behit-v01.glb",
-	"dead":   "res://data/art/cast3d/clips/muscle-dead-v01.glb",
+## Fight motion, PER BODY, retargeted offline in Blender (2026-09-06).
+##
+## There is no shared pack and there cannot be one. The cast does not share a
+## rest -- `driver` sits 160.8 degrees from `muscle` at LeftUpLeg, ten of the
+## thirteen are over 94 -- so a clip authored against any single rest tears on
+## the others. That is measurable with `art-src/blender/rest_drift.py` and it is
+## why the old shared `clips/muscle-*-v01.glb` could never be switched on.
+##
+## Each body now carries its own four-action pack built from the SAME source
+## motion, so the cast still moves alike without pretending the rigs match.
+## Derived from the body path rather than a second table, because two tables
+## keyed by role is how a body and its motion drift apart.
+const CLIP_ACTION := {
+	"idle": "Idle", "attack": "Attack", "hit": "BeHit", "dead": "Dead",
 }
+
+static func fight_pack_path(body_path: String) -> String:
+	var file := body_path.get_file().replace("-v01.glb", "-fight-v02.glb")
+	return "res://data/art/cast3d/clips/" + file
 
 ## Loaded once and shared: four clips fetched per unit per refresh would reload
 ## the same files six times a round.
@@ -614,7 +624,7 @@ func refresh(acting_id: String = "") -> void:
 			_units.add_child(n)
 			_unit_nodes[f.fighter_id] = n
 			_paint(n, sh, i, f)
-			_animate(n, f)
+			_animate(n, f, String(f.fighter_id) == _acting_id)
 			i += 1
 	_rebuild_cover()
 
@@ -660,15 +670,39 @@ func _paint(n: Node, sh: Shader, index: int, f: Fighter) -> void:
 	mi.set_surface_override_material(0, mat)
 
 
-## Every clip in the library, loaded once.
-## Every clip in the library, loaded once — currently empty (see _clips).
-static func _clips() -> Dictionary:
-	## SHARED FIGHT CLIPS ARE OFF — 2026-09-06 Eeri contamination restored.
-	## `muscle-v01` + clips were overwritten with a foreign 22-joint/Head1 body
-	## (owner: Eeri). Piritori muscle (24-joint) is restored; clips still do not
-	## match that rest (pre-existing). Keep loader empty until a real Meshy
-	## migrate against Piritori muscle. See MESHY_CAST_MIGRATE.md.
-	return {}
+## One body's pack, loaded once and shared. Keyed by PATH, so two roles that
+## resolve to the same body do not load it twice.
+##
+## This is what `MESHY_CAST_MIGRATE.md` was written to buy, done offline
+## instead: its plan is to re-rig all thirteen bodies onto one Meshy template
+## so a single shared pack fits them. That works, but it costs ~65 credits
+## against a balance of 39 -- and it is unnecessary, because a clip does not
+## need the rigs to match if the MOTION is transferred onto each body's own
+## rest. `art-src/blender/retarget_clips.py` does that for free.
+static func _clips(pack_path: String) -> Dictionary:
+	if _clip_cache.has(pack_path):
+		return _clip_cache[pack_path]
+	var out: Dictionary = {}
+	if ResourceLoader.exists(pack_path):
+		var inst := (load(pack_path) as PackedScene).instantiate()
+		var ap := _first_of(inst, "AnimationPlayer") as AnimationPlayer
+		if ap != null:
+			for anim_name in ap.get_animation_list():
+				out[anim_name] = ap.get_animation(anim_name)
+		inst.free()
+	_clip_cache[pack_path] = out
+	return out
+
+
+## Static twin of `_find`, so the loader above can run without an instance.
+static func _first_of(n: Node, cls: String) -> Node:
+	if n.is_class(cls):
+		return n
+	for c in n.get_children():
+		var r := _first_of(c, cls)
+		if r != null:
+			return r
+	return null
 
 
 ## What a fighter should be seen doing, from its own state. The board already
@@ -684,11 +718,36 @@ static func clip_for(f: Fighter, acting: bool) -> String:
 			return "attack" if acting else "idle"
 
 
-func _animate(n: Node, f: Fighter) -> void:
-	## SHARED FIGHT CLIPS ARE OFF (2026-09-06). Eeri body+clips removed;
-	## Piritori muscle restored; shared pack still not authored on that rest.
-	## Web uses fight-motion.js. Do not re-enable without MESHY_CAST_MIGRATE.
-	return
+## Play this fighter's own retargeted motion.
+##
+## Quiet on every failure: a body with no pack, no AnimationPlayer or no
+## skeleton (`parka-man-v01.glb` has none) keeps standing still, which is
+## correct and was the shipped behaviour until today.
+func _animate(n: Node, f: Fighter, acting: bool = false) -> void:
+	var pack := fight_pack_path(unit_path(String(f.role), String(f.fighter_id)))
+	var lib := _clips(pack)
+	if lib.is_empty():
+		return
+	var ap := _find(n, "AnimationPlayer") as AnimationPlayer
+	if ap == null:
+		return
+	var want: String = String(CLIP_ACTION.get(clip_for(f, acting), "Idle"))
+	if not lib.has(want):
+		return
+	var al := AnimationLibrary.new()
+	for key in lib:
+		al.add_animation(String(key), lib[key])
+	if ap.has_animation_library("fight"):
+		ap.remove_animation_library("fight")
+	ap.add_animation_library("fight", al)
+	var anim: Animation = lib[want]
+	# A downed body holds its last frame instead of standing back up.
+	anim.loop_mode = Animation.LOOP_NONE if want == "Dead" else Animation.LOOP_LINEAR
+	ap.play("fight/" + want)
+	# Six fighters breathing in unison read as one puppet with six bodies, the
+	# same reason `render3d.js` offsets its mixers.
+	if want != "Dead":
+		ap.seek(fmod(float(hash(f.fighter_id) % 1000) / 1000.0 * anim.length, anim.length), true)
 
 
 func _mesh(n: Node) -> MeshInstance3D:
