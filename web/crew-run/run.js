@@ -1,7 +1,7 @@
 import {hireling} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=12';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=7';
-import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=2';
+import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=3';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -72,14 +72,25 @@ export function objectiveExtracted(b){const id=b.mission.targetId||b.mission.car
 export function restoreMission(content,config,saved){const s=makeMission(content,config);if(!saved)return s;if(!Array.isArray(saved.actions)||saved.actions.length>1000)throw Error('Invalid outing history');for(const {type,actor,value}of saved.actions){if(!['move','attack','brace','item','reload','end','withdraw','help','extract','sprint','aid','recover'].includes(type))throw Error('Unknown outing command');if(actor!==s.battle.selectedId&&!s.command('select',actor).ok)throw Error('Invalid outing actor');if(!s.command(type,value).ok)throw Error('Invalid outing command');}if(saved.snapshot.selectedId!==s.battle.selectedId)s.command('select',saved.snapshot.selectedId);if(JSON.stringify(s.snapshot())!==JSON.stringify(saved.snapshot))throw Error('Outing checkpoint mismatch');return s;}
 export function settle(state,session){
  if(state.phase!=='battle'||session.battle.status==='active'||state.active?.config.id!==session.battle.mission.id)return false;
- const config=state.active.config,b=session.battle,changes=[];
- for(const u of b.players){const p=state.crew.find(v=>v.id===u.id);p.missing=!u.evacuated;
-  if(u.evacuated){p.fights++;p.wounds+=u.hp<u.maxHp?1:0;p.readyAt=state.night+(u.hp<u.maxHp?2:1);const msg=u.hp<u.maxHp?'Wounded · rests next outing':'Returned ready';p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);changes.push({id:p.id,name:p.name,state:msg,kit:'Kit returned',hp:u.hp,maxHp:u.maxHp,equipment:u.equipment});}
-  else {p.memories.unshift(`Night ${state.night}: left behind. Recovery needed.`);changes.push({id:p.id,name:p.name,state:'Missing · recover on a later outing',kit:'Kit held with them',hp:0,maxHp:u.maxHp,equipment:u.equipment});}
+ const config=state.active.config,b=session.battle,changes=[],bridged=state.bridge?.mode==='campaign-v3';
+ for(const u of b.players){
+  const p=state.crew.find(v=>v.id===u.id),wasMissing=!!p.missing,deployed=config.crew.some(v=>v.id===p.id);p.missing=!u.evacuated;
+  if(u.evacuated){
+   if(!bridged){p.fights++;p.wounds+=u.hp<u.maxHp?1:0;p.readyAt=state.night+(u.hp<u.maxHp?2:1);const msg=u.hp<u.maxHp?'Wounded · rests next outing':'Returned ready';p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);changes.push({id:p.id,name:p.name,state:msg,kit:'Kit returned',hp:u.hp,maxHp:u.maxHp,equipment:u.equipment});continue;}
+   if(deployed)p.fights++;
+   const tookDamage=u.hp<u.maxHp;let campaignEffect='unchanged',msg=p.campaignStatus==='available'?'Returned ready':`Returned · ${p.campaignStatus} unchanged`;
+   if(wasMissing){campaignEffect='recovered';msg='Recovered · needs treatment';p.wounds=Math.max(1,p.wounds);}
+   else if(tookDamage){campaignEffect='damage';msg='Wounded · campaign condition worsened';p.wounds++;}
+   p.readyAt=state.night+(['damage','recovered'].includes(campaignEffect)?2:1);
+   p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);
+   changes.push({id:p.id,name:p.name,state:msg,campaignEffect,kit:'Kit returned',hp:u.hp,maxHp:u.maxHp,equipment:u.equipment});
+  }else{
+   const campaignEffect=bridged?'missing':undefined;p.memories.unshift(`Night ${state.night}: left behind. Recovery needed.`);changes.push({id:p.id,name:p.name,state:'Missing · recover on a later outing',campaignEffect,kit:'Kit held with them',hp:0,maxHp:u.maxHp,equipment:u.equipment});
+  }
  }
  const success=objectiveExtracted(b);
  const receipt={id:config.id,bridgeReceiptId:config.bridgeReceiptId||null,deployedIds:config.crew.map(p=>p.id),title:success?'Someone came home':'The night left a debt',success,rounds:b.round,heat:b.mission.heat,changes,text:`${changes.filter(c=>!c.state.startsWith('Missing')).length} returned. ${changes.filter(c=>c.state.startsWith('Missing')).length} missing. One outing spent.`};
- if(state.bridge?.mode==='campaign-v3'&&receipt.bridgeReceiptId&&globalThis.localStorage){
+ if(bridged&&receipt.bridgeReceiptId&&globalThis.localStorage){
   const campaign=readCampaignSave(globalThis.localStorage,session.data.content);
   if(campaign){const applied=applyCampaignReceipt(campaign,session.data.content,receipt),marker=`memory:c17-receipt:${receipt.bridgeReceiptId}`;receipt.campaignApplied=applied||campaign.flags?.includes(marker)||false;if(receipt.campaignApplied)globalThis.localStorage.setItem(CAMPAIGN_SAVE_KEY,JSON.stringify(campaign));}
  }
