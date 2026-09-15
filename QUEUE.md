@@ -3189,3 +3189,52 @@ Do not buy per-role fight packs. Path: Meshy re-export those four against
 **one** real body rest after credit refresh; every 24-bone Meshy biped then
 shares them. Current `clips/muscle-*-v01.glb` fail that gate.
 
+
+## A Godot fighter who moved picked a random direction — fixed 2026-09-07, and it moved the 2v2
+
+Owner, asked whether to port `approachCell` and told it was theirs to weigh:
+*"I just don't know what it is, so you do the call."* So: what it is, what it
+cost, and what porting it broke.
+
+**What it is.** When a fighter decides to REPOSITION, which cell do they go to?
+`web/js/v3/battle.js`'s `approachCell()` — itself a port from TURF
+(`PORTING.md` §1.08) — answers: prefer a cell you can ATTACK FROM, and failing
+that the cell that CLOSES THE MOST DISTANCE.
+
+**What Godot did instead.** `_get_legal_commands()` offers the four orthogonal
+adjacents, and `_score_base()` scored REPOSITION as one flat number per role —
+0.4, or 1.8 for a runner, 1.2 for a watcher — **identical for all four**.
+`_ai_select_command()` then picks weighted-random from the top three. So a
+fighter who decided to move **picked a direction at random**, and nothing in the
+scorer valued closing on the enemy. Measured on the web side before its fix: the
+runner's first auto-move went depth 2 → depth 7, past both opponents, and reach
+being directional it could never attack again.
+
+**The call: ported.** A fighter wandering at random is not a design, and both
+builds now score the destination.
+
+### It broke a gate, and the gate was resting on the defect
+
+`_test_attrition_is_not_the_exit` asserted `battle-karhupuisto-2v2` is still
+PENDING after 25 rounds of auto-play. With approach scoring it is not: the
+result comes back **DEFEAT**. The OPPOSITION closes and wipes the crew.
+
+**That test was passing because neither side could advance.** Its own comment
+credits the cover rule — Pauli behind a bench in the middle row, unreachable by
+day-one non-piercing weapons — but that rule only ever explained why the PLAYER
+cannot win by elimination. It never said the fight could not END. The stalemate
+was the random-walk defect, and the gate had quietly come to depend on it.
+
+So the check is **narrowed to what §13.10 actually claims** — the player cannot
+eliminate their way out — and no longer asserts the fight is unresolvable.
+`test_battle` is back to 287/3 (the three are the pre-existing parked-arena
+failures) and `test_playthrough` is 31/0.
+
+### The part that is the owner's, not mine
+
+**A competent opposition beats an unattended crew on this map.** That is now
+measurable and was not before. It may be correct — auto-play is not skilled play
+and the fight has WITHDRAW and an authored objective — or the 2v2 may need
+re-tuning now that both sides can actually reach each other. Nothing here tunes
+it, because that is a balance decision and this entry is the evidence for making
+one.

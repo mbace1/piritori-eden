@@ -20,6 +20,30 @@ finding and a recorded one stays a decision.
 
 ---
 
+## 2026-09-10 — one Piritori project, three prototype options
+
+> "These all are a part of Piritori the project."
+
+> "C and A are two different approaches to one battle mechanic. Try C as the
+> dream loop base."
+
+The options are now separated along two design axes rather than treated as
+three incompatible games:
+
+- A uses Turf as the first battle-mechanic implementation and pairs it with the
+  Toko Move-derived living map played through Piritori / Dope Wars travel and
+  market pressure.
+- B tests a *Slay the Spire*-style branching campaign map inside Piritori.
+- C builds the same battle role as A from a fresh Dream Loop base.
+
+A and C receive matched battle fixtures and obey one rules/result contract.
+B may later call the selected battle resolver. The current build remains a
+comparison baseline while the prototypes are evaluated. Full sequencing is in
+`PIRITORI_LONG_TERM_SCOPE.md`; `DESIGN_AUTHORITY.md` records the binding form of
+this ruling.
+
+---
+
 ## 2026-08-20 — tragedy, conflict and the complete map frame
 
 ### 9. Aaro's death is inevitable
