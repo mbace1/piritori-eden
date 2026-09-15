@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=3';
-import {routes,threats} from '../fight-module/tactics.js?v=6';
+import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=4';
+import {routes,threats} from '../fight-module/tactics.js?v=7';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const start=()=>{const state=newRun(),config=launch(state);return {state,config,s:makeMission(content,config)};};
 {
@@ -40,3 +40,4 @@ console.log('C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/re
  for(const [type,value]of route)assert.ok(s.command(type,value).ok,type);
  assert.equal(s.battle.result,'win');assert.ok(s.battle.enemies.some(p=>p.alive));assert.deepEqual(restoreMission(content,config,missionCheckpoint(s)).snapshot(),s.snapshot());assert.ok(settle(state,s));assert.equal(state.last.changes.filter(p=>p.state.startsWith('Wounded')).length,2);
 }
+await import('./c17-campaign-bridge.mjs');
