@@ -22,12 +22,9 @@ function roleFor(record,aptitudes){
   if(aptitudes.some(a=>['runner','courier','spotter','shooter'].includes(a)))return 'runner';
   return 'muscle';
 }
-function weaponFor(record,aptitudes){
+function weaponRead(record){
   const authored=(record?.initial_equipment||[]).find(id=>C_WEAPONS.has(id));
-  if(authored)return authored;
-  if(aptitudes.includes('shooter'))return 'first-handgun';
-  if(aptitudes.includes('blade'))return 'folding-knife';
-  return 'baseball-bat';
+  return {equipment:authored||'baseball-bat',prototypeWeapon:!authored};
 }
 function kitFor(record){
   // C.16's boots/medical/light are supplied prototype support. Only carry one
@@ -52,7 +49,7 @@ export function campaignCrew(state,content){
   return (state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)).map(id=>{
     const record=crewRecord(state,data,id),status=state.crewStatus?.[id];
     if(!record||status?.status==='missing')return null;
-    const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id));
+    const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id)),weapon=weaponRead(record);
     const maxCondition=Math.max(1,Number(status?.maxCondition??record.condition??5));
     const condition=Math.max(0,Number(status?.condition??maxCondition));
     return {
@@ -60,7 +57,8 @@ export function campaignCrew(state,content){
       name:record.name||nameFrom(id),
       aptitudes:copy(aptitudes),
       traits:(record.traits||[]).map(textOfTrait).filter(Boolean),
-      equipment:weaponFor(record,aptitudes),
+      equipment:weapon.equipment,
+      prototypeWeapon:weapon.prototypeWeapon,
       kit:kitFor(record),
       prototypeSupport:true,
       color:COLORS[hash(id)%COLORS.length],
