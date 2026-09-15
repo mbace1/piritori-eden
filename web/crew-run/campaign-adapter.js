@@ -47,9 +47,12 @@ export function readCampaignSave(storage,content){
 
 export function campaignCrew(state,content){
   const data=dataFor(content),retired=new Set(state.retiredCrew||[]),arrested=new Set(state.arrestedCrew||[]);
-  return (state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)).map(id=>{
+  const available=(state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)&&state.crewStatus?.[id]?.status!=='missing');
+  const preferred=(state.deployed||[]).filter(id=>available.includes(id));
+  const ordered=[...preferred,...available.filter(id=>!preferred.includes(id))];
+  return ordered.map(id=>{
     const record=crewRecord(state,data,id),status=state.crewStatus?.[id];
-    if(!record||status?.status==='missing')return null;
+    if(!record)return null;
     const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id)),weapon=weaponRead(record),kit=kitRead(record);
     const maxCondition=Math.max(1,Number(status?.maxCondition??record.condition??5));
     const condition=Math.max(0,Number(status?.condition??maxCondition));
