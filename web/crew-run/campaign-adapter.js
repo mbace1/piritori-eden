@@ -47,9 +47,11 @@ export function readCampaignSave(storage,content){
 
 export function campaignCrew(state,content){
   const data=dataFor(content),retired=new Set(state.retiredCrew||[]),arrested=new Set(state.arrestedCrew||[]);
-  const available=(state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)&&state.crewStatus?.[id]?.status!=='missing');
-  const preferred=(state.deployed||[]).filter(id=>available.includes(id));
-  const ordered=[...preferred,...available.filter(id=>!preferred.includes(id))];
+  const roster=(state.recruited||[]).filter(id=>!retired.has(id)&&!arrested.has(id)&&state.crewStatus?.[id]?.status!=='dead');
+  const ready=roster.filter(id=>state.crewStatus?.[id]?.status!=='missing');
+  const missing=roster.filter(id=>state.crewStatus?.[id]?.status==='missing');
+  const preferred=(state.deployed||[]).filter(id=>ready.includes(id));
+  const ordered=[...preferred,...ready.filter(id=>!preferred.includes(id)),...missing];
   return ordered.map(id=>{
     const record=crewRecord(state,data,id),status=state.crewStatus?.[id];
     if(!record)return null;
@@ -70,10 +72,12 @@ export function campaignCrew(state,content){
       fights:fightsOf(state,id),
       wounds:Math.max(0,maxCondition-condition),
       readyAt:1,
-      missing:false,
+      missing:status?.status==='missing',
       memories:memoriesFor(state,id),
       perks,
       skills,
+      campaignStatus:status?.status||'available',
+      campaignCritical:Boolean(status?.critical),
       campaignCondition:condition,
       campaignMaxCondition:maxCondition,
       appearanceSeed:hash(`c17:${id}`),
@@ -82,9 +86,9 @@ export function campaignCrew(state,content){
 }
 
 export function campaignRun(state,content,{now=Date.now}={}){
-  const crew=campaignCrew(state,content);
-  if(crew.length<2)throw Error('Campaign needs at least two available crew for this outing.');
-  const chosen=crew.slice(0,Math.min(3,crew.length)).map(p=>p.id);
+  const crew=campaignCrew(state,content),ready=crew.filter(p=>!p.missing);
+  if(ready.length<2)throw Error('Campaign needs at least two available crew for this outing.');
+  const chosen=ready.slice(0,Math.min(3,ready.length)).map(p=>p.id);
   return {
     version:1,
     night:Math.max(1,Number(state.scheduleIndex||0)+1),
@@ -119,16 +123,26 @@ export function applyCampaignReceipt(state,content,receipt){
   for(const change of receipt.changes||[]){
     const status=state.crewStatus?.[change.id];
     if(!status)continue;
-    if(String(change.state).startsWith('Missing')){
+    const effect=change.campaignEffect||(
+      String(change.state).startsWith('Missing')?'missing':
+      String(change.state).startsWith('Wounded')?'damage':'unchanged'
+    );
+    if(effect==='missing'){
       status.status='missing';status.condition=0;status.critical=false;
       pushUnique(state.flags,`memory:missing:${change.id}`);
       log(state,`${crewRecord(state,data,change.id)?.name||change.name||change.id} did not make it home from the outing.`);
-    }else if(String(change.state).startsWith('Wounded')){
-      status.status='wounded';status.condition=Math.max(1,Math.min(status.maxCondition??status.condition??1,(status.condition??1)-1));status.critical=false;
+    }else if(effect==='recovered'){
+      status.status='wounded';status.condition=Math.max(1,status.condition||0);status.critical=false;
+      pushUnique(state.flags,`memory:recovered:${change.id}`);
+      log(state,`${crewRecord(state,data,change.id)?.name||change.name||change.id} came home from a recovery outing and still needs treatment.`);
+    }else if(effect==='damage'){
+      status.condition=Math.max(1,Math.min(status.maxCondition??status.condition??1,(status.condition??1)-1));
+      if(status.critical){status.status='critical';}
+      else {status.status='wounded';status.critical=false;}
       pushUnique(state.flags,`memory:wounded:${change.id}`);
-    }else{
-      status.status='available';status.critical=false;
     }
+    // `unchanged` deliberately does nothing: a person who entered C.17 already
+    // wounded/critical cannot be healed merely by surviving the prototype.
   }
 
   // Same campaign currency as every other survived fight: one deployed outing
