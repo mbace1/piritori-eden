@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=3';
-import {routes,threats} from '../fight-module/tactics.js?v=6';
+import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=5';
+import {routes,threats} from '../fight-module/tactics.js?v=7';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const start=()=>{const state=newRun(),config=launch(state);return {state,config,s:makeMission(content,config)};};
 {
@@ -15,6 +15,14 @@ const start=()=>{const state=newRun(),config=launch(state);return {state,config,
  assert.deepEqual(restoreMission(content,config,missionCheckpoint(s)).snapshot(),s.snapshot());
  state.active.checkpoint=missionCheckpoint(s);assert.equal(JSON.stringify(loadRun(JSON.stringify(state),content)),JSON.stringify(state));
  assert.equal(configure(state,p.id,{equipment:'first-handgun'}),false,'cannot change committed loadout');
+}
+{
+ // A C.16 browser can have a perfectly good roster plus an in-progress c12-v1
+ // checkpoint. C.17 may invalidate that one replay shape, but must not turn the
+ // entire Night Shift save into a fresh roster.
+ const {state,s}=start();state.ledger.push({id:'kept','title':'Older outing','text':'Keep me.'});state.active.checkpoint=missionCheckpoint(s);state.active.checkpoint.snapshot.rules='c12-v1';
+ const roster=structuredClone(state.crew),night=state.night,migrated=loadRun(JSON.stringify(state),content);
+ assert.equal(migrated.phase,'prep');assert.equal(migrated.active,null);assert.equal(migrated.night,night);assert.deepEqual(migrated.crew,roster,'C16 roster survives checkpoint migration');assert.ok(migrated.ledger.some(v=>v.id==='kept'),'existing ledger survives checkpoint migration');assert.equal(migrated.ledger[0].title,'Outing reset after rules update');
 }
 {
  const {state,s}=start(),b=s.battle,u=b.players[1],target=b.players.at(-1);u.cell='3,4';s.command('select',u.id);assert.ok(s.command('help',target.id).ok);assert.equal(target.hp,3);assert.ok(target.alive);assert.ok(b.acted.includes(target.id));assert.ok(!b.moved.includes(target.id));
@@ -32,7 +40,7 @@ const start=()=>{const state=newRun(),config=launch(state);return {state,config,
 {
  const {s,config}=start();s.command('withdraw');const cp=missionCheckpoint(s);assert.deepEqual(restoreMission(content,config,cp).snapshot(),s.snapshot());cp.snapshot.mission.heat++;assert.throws(()=>restoreMission(content,config,cp));
 }
-console.log('C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/rest, exact-once settlement, arrivals and roster fallback passed.');
+console.log('C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/rest, exact-once settlement, arrivals, C16 checkpoint migration and roster fallback passed.');
 {
  // A real, unmodified opening is winnable without a single player attack.
  const {state,s,config}=start();
@@ -40,3 +48,4 @@ console.log('C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/re
  for(const [type,value]of route)assert.ok(s.command(type,value).ok,type);
  assert.equal(s.battle.result,'win');assert.ok(s.battle.enemies.some(p=>p.alive));assert.deepEqual(restoreMission(content,config,missionCheckpoint(s)).snapshot(),s.snapshot());assert.ok(settle(state,s));assert.equal(state.last.changes.filter(p=>p.state.startsWith('Wounded')).length,2);
 }
+await import('./c17-campaign-bridge.mjs');
