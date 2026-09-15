@@ -15,7 +15,7 @@ function recruit(i){const p=hireling('kallio-c12',i);return {id:'crew-'+i,name:p
 export function newRun(){const crew=Array.from({length:6},(_,i)=>recruit(i));crew[5].missing=true;return {version:1,night:1,phase:'prep',crew,selected:crew.slice(0,3).map(p=>p.id),active:null,ledger:[],last:null};}
 export const available=state=>state.crew.filter(p=>!p.missing&&p.readyAt<=state.night);
 export const rescueTarget=state=>state.crew.find(p=>p.missing)||null;
-export function configure(state,id,changes){if(state.phase!=='prep')return false;const p=state.crew.find(p=>p.id===id);if(!p)return false;if(changes.equipment&&eq.includes(changes.equipment))p.equipment=changes.equipment;if(changes.kit&&Object.hasOwn(KITS,changes.kit))p.kit=changes.kit;return true;}
+export function configure(state,id,changes){if(state.phase!=='prep')return false;const p=state.crew.find(p=>p.id===id);if(!p)return false;if(changes.equipment){if(state.bridge?.mode==='campaign-v3')return false;if(eq.includes(changes.equipment))p.equipment=changes.equipment;}if(changes.kit&&Object.hasOwn(KITS,changes.kit))p.kit=changes.kit;return true;}
 export function toggleCrew(state,id){if(state.phase!=='prep'||!available(state).some(p=>p.id===id))return false;state.selected=state.selected.includes(id)?state.selected.filter(v=>v!==id):state.selected.length<3?[...state.selected,id]:state.selected;return true;}
 export function launchConfig(state){
  const selected=available(state).filter(p=>state.selected.includes(p.id));if(selected.length<2||selected.length>3)throw Error('Choose two or three ready crew.');
@@ -92,6 +92,6 @@ export function loadRun(raw,content){
  if(wantsCampaign()&&parsed?.bridge?.mode!=='campaign-v3'){
   const campaign=readCampaignSave(globalThis.localStorage,content);if(campaign)return campaignRun(campaign,content);
  }
- if(!parsed)return wantsCampaign()?campaignRun(readCampaignSave(globalThis.localStorage,content),content):newRun();
+ if(!parsed){if(wantsCampaign()){const campaign=readCampaignSave(globalThis.localStorage,content);if(campaign)return campaignRun(campaign,content);}return newRun();}
  const s=parsed;if(s.version!==1||!['prep','battle','aftermath'].includes(s.phase)||!Number.isInteger(s.night)||s.night<1||!Array.isArray(s.crew)||s.crew.length>100||!Array.isArray(s.selected)||!Array.isArray(s.ledger))throw Error('Unsupported crew save');if(new Set(s.crew.map(p=>p.id)).size!==s.crew.length||s.crew.some(p=>!eq.includes(p.equipment)||!Object.hasOwn(KITS,p.kit)||typeof p.name!=='string'||!Number.isInteger(p.readyAt)))throw Error('Invalid crew');if(s.active)restoreMission(content,s.active.config,s.active.checkpoint);return s;
 }
