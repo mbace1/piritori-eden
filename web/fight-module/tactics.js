@@ -1,5 +1,6 @@
 import {coverEdges,coverProtection,crossesCoverEdge} from './cover-edges.js?v=2';
-// C laboratory rules. Campaign resolver and saves deliberately stay separate.
+// C laboratory rules. The C.17 campaign adapter supplies build fields, while
+// this resolver remains deterministic and separate from the authored resolver.
 export const WEAPONS={
   'baseball-bat':{name:'Bat',range:1,damage:3,accuracy:100},
   'folding-knife':{name:'Knife',range:1,damage:2,accuracy:100,pierce:1},
@@ -38,8 +39,8 @@ export function forecast(b,u,target,from=u?.cell){
   const blockers=new Set(alive(b).filter(v=>v.id!==u.id&&v.id!==target.id).map(v=>v.cell));
   const blocked=sightCells(from,target.cell).find(c=>b.cover.get(c)?.hardBlock||blockers.has(c));
   if(blocked)return {...fail('Line blocked'),blocked};
-  const wall=w.magazine?coverProtection(b,from,target.cell):null,partial=!!wall,guardDamage=Math.min(target.guard,Math.max(0,w.damage-(w.pierce||0)));
-  return {valid:true,reason:'Clear',from,to:target.cell,chance:w.accuracy-(partial?25:0),damage:w.damage,guardDamage,hpDamage:Math.min(target.hp,w.damage-guardDamage),cover:partial?'partial':'exposed',coverEdge:wall?.edge??null,coverPoint:wall?.point??null,flanked:!!w.magazine&&!partial&&coverEdges(b,target.cell).length>0};
+  const wall=w.magazine?coverProtection(b,from,target.cell):null,partial=!!wall,damage=w.damage+Math.max(0,Number(u.harmBonus)||0),guardDamage=Math.min(target.guard,Math.max(0,damage-(w.pierce||0)));
+  return {valid:true,reason:'Clear',from,to:target.cell,chance:w.accuracy-(partial?25:0),damage,guardDamage,hpDamage:Math.min(target.hp,damage-guardDamage),cover:partial?'partial':'exposed',coverEdge:wall?.edge??null,coverPoint:wall?.point??null,flanked:!!w.magazine&&!partial&&coverEdges(b,target.cell).length>0};
 }
 export const targets=(b,u,from=u.cell)=>b.enemies.filter(v=>forecast(b,u,v,from).valid);
 function copyBattle(b){return {...structuredClone({...b,cover:undefined}),cover:b.cover};}
