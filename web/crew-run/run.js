@@ -1,7 +1,7 @@
 import {hireling} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=11';
-import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=6';
-import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=1';
+import {createSession} from '../fight-module/session.js?v=12';
+import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=7';
+import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=2';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -93,5 +93,16 @@ export function loadRun(raw,content){
   const campaign=readCampaignSave(globalThis.localStorage,content);if(campaign)return campaignRun(campaign,content);
  }
  if(!parsed){if(wantsCampaign()){const campaign=readCampaignSave(globalThis.localStorage,content);if(campaign)return campaignRun(campaign,content);}return newRun();}
- const s=parsed;if(s.version!==1||!['prep','battle','aftermath'].includes(s.phase)||!Number.isInteger(s.night)||s.night<1||!Array.isArray(s.crew)||s.crew.length>100||!Array.isArray(s.selected)||!Array.isArray(s.ledger))throw Error('Unsupported crew save');if(new Set(s.crew.map(p=>p.id)).size!==s.crew.length||s.crew.some(p=>!eq.includes(p.equipment)||!Object.hasOwn(KITS,p.kit)||typeof p.name!=='string'||!Number.isInteger(p.readyAt)))throw Error('Invalid crew');if(s.active)restoreMission(content,s.active.config,s.active.checkpoint);return s;
+ const s=parsed;if(s.version!==1||!['prep','battle','aftermath'].includes(s.phase)||!Number.isInteger(s.night)||s.night<1||!Array.isArray(s.crew)||s.crew.length>100||!Array.isArray(s.selected)||!Array.isArray(s.ledger))throw Error('Unsupported crew save');if(new Set(s.crew.map(p=>p.id)).size!==s.crew.length||s.crew.some(p=>!eq.includes(p.equipment)||!Object.hasOwn(KITS,p.kit)||typeof p.name!=='string'||!Number.isInteger(p.readyAt)))throw Error('Invalid crew');
+ if(s.active){
+  try{restoreMission(content,s.active.config,s.active.checkpoint);}
+  catch(error){
+   const oldRules=s.active?.checkpoint?.snapshot?.rules;
+   if(!s.bridge&&oldRules==='c12-v1'){
+    s.phase='prep';s.active=null;s.selected=available(s).slice(0,3).map(p=>p.id);
+    s.ledger.unshift({id:`migration-${s.night}`,title:'Outing reset after rules update',text:'Crew records kept. The in-progress C.16 outing returned to preparation for the C.17 rules.'});s.ledger=s.ledger.slice(0,30);
+   }else throw error;
+  }
+ }
+ return s;
 }
