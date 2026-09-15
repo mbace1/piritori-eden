@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js';
+import {forecast} from '../fight-module/tactics.js';
 
 const content={
   id:'era1-test',
@@ -36,6 +37,14 @@ assert.equal(run.bridge.mode,'campaign-v3');
 assert.equal(run.night,3,'outing label follows the campaign position');
 assert.equal(run.selected.length,3);
 assert.equal(run.crew[0].appearanceSeed,projected[0].appearanceSeed,'procedural identity is stable');
+
+const attacker={id:'a',side:'player',alive:true,cell:'1,1',equipment:'baseball-bat',harmBonus:2,ammo:null};
+const target={id:'r',side:'enemy',alive:true,cell:'1,2',equipment:'baseball-bat',hp:10,guard:1};
+const tactical={players:[attacker],enemies:[target],cover:new Map()};
+const read=forecast(tactical,attacker,target);
+assert.equal(read.damage,5,'Strength adds to the weapon damage before the forecast is shown');
+assert.equal(read.guardDamage,1);
+assert.equal(read.hpDamage,4,'the same strengthened amount flows through guard into HP');
 
 const receipt={
   bridgeReceiptId:`${run.bridge.id}:night-3`,
