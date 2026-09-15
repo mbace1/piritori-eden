@@ -28,11 +28,15 @@ const state={
 const projected=campaignCrew(state,content);
 assert.equal(projected.length,3,'all non-missing campaign crew project into the outing');
 assert.equal(projected[0].equipment,'baseball-bat','authored campaign weapon survives the projection');
+assert.equal(projected[0].prototypeWeapon,false,'supported authored weapon remains authored');
 assert.deepEqual(projected[0].perks,{toughness:1,strength:2},'perks cross the boundary');
 assert.deepEqual(projected[0].skills,['wall'],'skills cross the boundary');
+assert.equal(projected[1].equipment,'baseball-bat','unsupported campaign loadout receives a neutral C test weapon');
+assert.equal(projected[1].prototypeWeapon,true,'fallback weapon is explicitly prototype supply, never aptitude-derived ownership');
 assert.equal(projected[1].kit,'light','an aptitude never invents free support equipment');
 assert.equal(projected[1].prototypeSupport,true,'un-authored Night Shift support stays marked as prototype supply');
 assert.equal(projected[2].equipment,'folding-knife','authored knife survives the projection');
+assert.equal(projected[2].prototypeWeapon,false);
 
 const run=campaignRun(state,content,{now:()=>12345});
 assert.equal(run.bridge.mode,'campaign-v3');
