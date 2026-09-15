@@ -2,14 +2,15 @@ import {hireling} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=11';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=6';
 
-// Connected C pilot, deliberately separate from the authored campaign save.
-// Tuning below is a playtest, not a new canonical mission or economy.
+// Connected C pilot. C.17 can opt into the authored campaign through the
+// narrow receipt adapter; the ordinary Night Shift save remains independent.
 export const SAVE_KEY='piritori-c12-crew-v1';
 export const KITS={boots:'Escape boots · Sprint spends Action for a second Move',medical:'Field kit · Help restores 3 HP; one adjacent ally treatment',light:'Light pack · one self bandage'};
 const palettes=[0x4d8f85,0x778ba9,0xa99164,0x877697,0x76966d,0xb69272];
 const eq=['baseball-bat','first-handgun','folding-knife'];
 const copy=structuredClone,xy=c=>c.split(',').map(Number),distance=(a,b)=>{const[x,y]=xy(a),[u,v]=xy(b);return Math.abs(x-u)+Math.abs(y-v);};
-function recruit(i){const p=hireling('kallio-c12',i);return {id:'crew-'+i,name:p.name,aptitudes:p.aptitudes,traits:p.traits.map(t=>t.text||t.label||t.id),equipment:eq[i%3],kit:['boots','medical','light'][i%3],color:palettes[i%6],role:i%2?'runner':'muscle',fights:0,wounds:0,readyAt:1,missing:false,memories:[]};}
+const perk=(p,id)=>Math.max(0,Number(p?.perks?.[id]||0)|0);
+function recruit(i){const p=hireling('kallio-c12',i);return {id:'crew-'+i,name:p.name,aptitudes:p.aptitudes,traits:p.traits.map(t=>t.text||t.label||t.id),equipment:eq[i%3],kit:['boots','medical','light'][i%3],color:palettes[i%6],role:i%2?'runner':'muscle',fights:0,wounds:0,readyAt:1,missing:false,memories:[],perks:{},skills:[],appearanceSeed:i+1};}
 export function newRun(){const crew=Array.from({length:6},(_,i)=>recruit(i));crew[5].missing=true;return {version:1,night:1,phase:'prep',crew,selected:crew.slice(0,3).map(p=>p.id),active:null,ledger:[],last:null};}
 export const available=state=>state.crew.filter(p=>!p.missing&&p.readyAt<=state.night);
 export const rescueTarget=state=>state.crew.find(p=>p.missing)||null;
@@ -17,22 +18,27 @@ export function configure(state,id,changes){if(state.phase!=='prep')return false
 export function toggleCrew(state,id){if(state.phase!=='prep'||!available(state).some(p=>p.id===id))return false;state.selected=state.selected.includes(id)?state.selected.filter(v=>v!==id):state.selected.length<3?[...state.selected,id]:state.selected;return true;}
 export function launchConfig(state){
  const selected=available(state).filter(p=>state.selected.includes(p.id));if(selected.length<2||selected.length>3)throw Error('Choose two or three ready crew.');
- const target=rescueTarget(state),objective=target?'rescue':'recovery';
- return {id:`night-${state.night}`,night:state.night,objective,crew:copy(selected),target:copy(target),site:state.night%2?'north':'east'};
+ const target=rescueTarget(state),objective=target?'rescue':'recovery',id=`night-${state.night}`;
+ return {id,night:state.night,objective,crew:copy(selected),target:copy(target),site:state.night%2?'north':'east',bridgeReceiptId:state.bridge?.id?`${state.bridge.id}:${id}`:null};
 }
 export function launch(state){if(state.phase!=='prep')throw Error('Outing already started');state.active={config:launchConfig(state),checkpoint:null};state.phase='battle';return copy(state.active.config);}
 export function waitNight(state){if(state.phase!=='prep')return false;state.ledger.unshift({id:`rest-${state.night}`,title:'A quiet night',text:'Ready crew stayed home. Wounded colleagues rested. Missing people still need help.'});state.night++;state.selected=available(state).slice(0,3).map(p=>p.id);return true;}
 export function callReserve(state){if(state.phase!=='prep'||available(state).length>=2)return false;const p=recruit(state.crew.length);p.equipment='baseball-bat';p.readyAt=state.night;state.crew.push(p);state.selected=available(state).slice(0,3).map(v=>v.id);state.ledger.unshift({id:`reserve-${p.id}`,title:`${p.name} joined`,text:'Replacement hireling supplied for this prototype; no campaign money spent.'});return true;}
 
+function tacticalPerson(p,base,extra={}){
+ const maxHp=5+perk(p,'toughness');
+ return {...copy(base),id:p.id,name:p.name,role:p.role,equipment:p.equipment,kit:p.kit,color:p.color,hp:maxHp,maxHp,guard:p.equipment==='baseball-bat'?2:1,harmBonus:perk(p,'strength'),skills:copy(p.skills||[]),aptitudes:copy(p.aptitudes||[]),perks:copy(p.perks||{}),appearanceSeed:p.appearanceSeed,...extra};
+}
+
 export function makeMission(content,config){
  const base=createSession(content,'mixed','lab-6'),b=base.battle,template=copy(b.players[0]),enemyTemplate=copy(b.enemies[0]);
- b.players=config.crew.map((p,i)=>({...copy(template),id:p.id,name:p.name,label:String(i+1),role:p.role,equipment:p.equipment,kit:p.kit,color:p.color,cell:`${i+1},1`,hp:5,maxHp:5,guard:p.equipment==='baseball-bat'?2:1,alive:true,itemIds:p.kit==='light'?['training-bandage']:[],evacuated:false,helped:false}));
+ b.players=config.crew.map((p,i)=>tacticalPerson(p,template,{label:String(i+1),cell:`${i+1},1`,alive:true,itemIds:p.kit==='light'?['training-bandage']:[],evacuated:false,helped:false}));
  const targetCell=config.site==='north'?'3,5':'5,3';
- if(config.target)b.players.push({...copy(template),id:config.target.id,name:config.target.name,label:'SOS',role:config.target.role,color:config.target.color,equipment:config.target.equipment,kit:config.target.kit,cell:targetCell,hp:0,maxHp:5,guard:0,alive:false,stranded:true,helped:false,evacuated:false,itemIds:[]});
- b.enemies=Array.from({length:4},(_,i)=>({...copy(enemyTemplate),id:`rival-${i}`,name:['Lookout','Enforcer','North arrival','East arrival'][i],label:'R'+(i+1),equipment:i===0?'first-handgun':'baseball-bat',role:i%2?'muscle':'runner',cell:['1,6','4,6','0,7','5,7'][i],hp:4,maxHp:4,guard:1,alive:i<2,waiting:i>=2,itemIds:[]}));
+ if(config.target){const t=tacticalPerson(config.target,template,{label:'SOS',cell:targetCell,hp:0,guard:0,alive:false,stranded:true,helped:false,evacuated:false,itemIds:[]});b.players.push(t);}
+ b.enemies=Array.from({length:4},(_,i)=>({...copy(enemyTemplate),id:`rival-${i}`,name:['Lookout','Enforcer','North arrival','East arrival'][i],label:'R'+(i+1),equipment:i===0?'first-handgun':'baseball-bat',role:i%2?'muscle':'runner',cell:['1,6','4,6','0,7','5,7'][i],hp:4,maxHp:4,guard:1,harmBonus:0,skills:[],aptitudes:[],perks:{},appearanceSeed:100+i,alive:i<2,waiting:i>=2,itemIds:[]}));
  b.selectedId=b.players[0].id;b.status='active';b.result=null;b.round=1;b.log=[];
  b.objective=config.target?'Bring your colleague home. Rescue, then extract through the south edge.':'Recover the lost kit and bring the crew home.';
- const options={rules:'c12-v1',actions:['help','extract','sprint','aid','recover'],reject:t=>['auto','talk'].includes(t),
+ const options={rules:'c17-v1',actions:['help','extract','sprint','aid','recover'],reject:t=>['auto','talk'].includes(t),
  prepare(b){b.mission={id:config.id,objective:config.objective,targetId:config.target?.id||null,targetCell,recovered:false,carrierId:null,heat:0,arrival:null,arrived:false,resolved:false};},
  finish(b){if(b.status!=='active')return;if(!b.players.some(p=>p.alive)){b.status='complete';b.result=b.players.some(p=>p.evacuated)?'withdraw':'loss';if(objectiveExtracted(b))b.result='win';}},
  action(b,u,type,value,events){
@@ -42,7 +48,7 @@ export function makeMission(content,config){
   const t=b.players.find(v=>v.id===value);
   if(!t||t.evacuated||distance(u.cell,t.cell)>1||t.id===u.id)return false;
   if(type==='help'&&!t.alive&&!t.helped&&!b.players.concat(b.enemies).some(v=>v.alive&&v.cell===t.cell)){
-   t.hp=u.kit==='medical'?3:1;t.alive=true;t.helped=true;t.stranded=false;b.acted.push(t.id);events.push({type:'help',id:u.id,target:t.id});b.log.unshift(`${u.name} got ${t.name} up at ${t.hp} HP. They can Move now; Action returns next round.`);return true;}
+   t.hp=Math.min(t.maxHp,u.kit==='medical'?3:1);t.alive=true;t.helped=true;t.stranded=false;b.acted.push(t.id);events.push({type:'help',id:u.id,target:t.id});b.log.unshift(`${u.name} got ${t.name} up at ${t.hp} HP. They can Move now; Action returns next round.`);return true;}
   if(type==='aid'&&u.kit==='medical'&&!u.medicalUsed&&t.alive&&t.hp<t.maxHp){u.medicalUsed=true;t.hp=Math.min(t.maxHp,t.hp+3);events.push({type:'item',id:u.id});b.log.unshift(`${u.name} treats ${t.name}: +3 HP. Field treatment spent.`);return true;}
   return false;
  },
@@ -57,7 +63,7 @@ export function makeMission(content,config){
   }
  },replan:(b,t,events)=>events.some(e=>e.type==='arrive')};
  const s=createTacticalSession(b,'mixed','crew-run',base.data,options);
- const result=s.result;s.result=()=>({...result(),training:false,scope:'connected-crew-pilot',campaign_applied:false,mission:copy(b.mission),units:copy(b.players)});
+ const result=s.result;s.result=()=>({...result(),training:false,scope:config.bridgeReceiptId?'campaign-crew-pilot':'connected-crew-pilot',campaign_applied:false,mission:copy(b.mission),units:copy(b.players)});
  return s;
 }
 export const missionCheckpoint=s=>({snapshot:s.snapshot(),actions:s.history.map(({type,actor,value})=>({type,actor,value}))});
@@ -67,11 +73,11 @@ export function settle(state,session){
  if(state.phase!=='battle'||session.battle.status==='active'||state.active?.config.id!==session.battle.mission.id)return false;
  const config=state.active.config,b=session.battle,changes=[];
  for(const u of b.players){const p=state.crew.find(v=>v.id===u.id);p.missing=!u.evacuated;
-  if(u.evacuated){p.fights++;p.wounds+=u.hp<u.maxHp?1:0;p.readyAt=state.night+(u.hp<u.maxHp?2:1);const msg=u.hp<u.maxHp?'Wounded · rests next outing':'Returned ready';p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);changes.push({id:p.id,name:p.name,state:msg,kit:'Kit returned'});}
-  else {p.memories.unshift(`Night ${state.night}: left behind. Recovery needed.`);changes.push({id:p.id,name:p.name,state:'Missing · recover on a later outing',kit:'Kit held with them'});}
+  if(u.evacuated){p.fights++;p.wounds+=u.hp<u.maxHp?1:0;p.readyAt=state.night+(u.hp<u.maxHp?2:1);const msg=u.hp<u.maxHp?'Wounded · rests next outing':'Returned ready';p.memories.unshift(`Night ${state.night}: ${msg.toLowerCase()}.`);changes.push({id:p.id,name:p.name,state:msg,kit:'Kit returned',hp:u.hp,maxHp:u.maxHp,equipment:u.equipment});}
+  else {p.memories.unshift(`Night ${state.night}: left behind. Recovery needed.`);changes.push({id:p.id,name:p.name,state:'Missing · recover on a later outing',kit:'Kit held with them',hp:0,maxHp:u.maxHp,equipment:u.equipment});}
  }
  const success=objectiveExtracted(b);
- const receipt={id:config.id,title:success?'Someone came home':'The night left a debt',success,rounds:b.round,heat:b.mission.heat,changes,text:`${changes.filter(c=>!c.state.startsWith('Missing')).length} returned. ${changes.filter(c=>c.state.startsWith('Missing')).length} missing. One outing spent.`};
+ const receipt={id:config.id,bridgeReceiptId:config.bridgeReceiptId||null,deployedIds:config.crew.map(p=>p.id),title:success?'Someone came home':'The night left a debt',success,rounds:b.round,heat:b.mission.heat,changes,text:`${changes.filter(c=>!c.state.startsWith('Missing')).length} returned. ${changes.filter(c=>c.state.startsWith('Missing')).length} missing. One outing spent.`};
  state.last=receipt;state.ledger.unshift(receipt);state.ledger=state.ledger.slice(0,30);state.night++;state.phase='aftermath';state.active.checkpoint=missionCheckpoint(session);return true;
 }
 export function continueRun(state){if(state.phase!=='aftermath')return false;state.phase='prep';state.active=null;state.selected=available(state).slice(0,3).map(p=>p.id);return true;}
