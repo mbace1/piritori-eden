@@ -13,7 +13,7 @@ const content={
 };
 const state={
   version:3,contentId:content.id,scheduleIndex:2,
-  recruited:['a','b','c'],hiredCrew:{},
+  recruited:['a','b','c'],deployed:['c','a'],hiredCrew:{},
   crewStatus:{
     a:{condition:7,maxCondition:7,nerve:4,status:'available',critical:false},
     b:{condition:5,maxCondition:6,nerve:5,status:'wounded',critical:false},
@@ -25,26 +25,27 @@ const state={
   flags:[],logs:[],battleHistory:[],
 };
 
-const projected=campaignCrew(state,content);
+const projected=campaignCrew(state,content),byId=id=>projected.find(p=>p.id===id);
 assert.equal(projected.length,3,'all non-missing campaign crew project into the outing');
-assert.equal(projected[0].equipment,'baseball-bat','authored campaign weapon survives the projection');
-assert.equal(projected[0].prototypeWeapon,false,'supported authored weapon remains authored');
-assert.deepEqual(projected[0].perks,{toughness:1,strength:2},'perks cross the boundary');
-assert.deepEqual(projected[0].skills,['wall'],'skills cross the boundary');
-assert.equal(projected[1].equipment,'baseball-bat','unsupported campaign loadout receives a neutral C test weapon');
-assert.equal(projected[1].prototypeWeapon,true,'fallback weapon is explicitly prototype supply, never aptitude-derived ownership');
-assert.equal(projected[1].kit,'light','an aptitude never invents free support equipment');
-assert.equal(projected[1].prototypeSupport,true,'un-authored Night Shift support stays marked as prototype supply');
-assert.equal(projected[2].equipment,'folding-knife','authored knife survives the projection');
-assert.equal(projected[2].prototypeWeapon,false);
+assert.deepEqual(projected.map(p=>p.id),['c','a','b'],'campaign deployment preference leads the C roster');
+assert.equal(byId('a').equipment,'baseball-bat','authored campaign weapon survives the projection');
+assert.equal(byId('a').prototypeWeapon,false,'supported authored weapon remains authored');
+assert.deepEqual(byId('a').perks,{toughness:1,strength:2},'perks cross the boundary');
+assert.deepEqual(byId('a').skills,['wall'],'skills cross the boundary');
+assert.equal(byId('b').equipment,'baseball-bat','unsupported campaign loadout receives a neutral C test weapon');
+assert.equal(byId('b').prototypeWeapon,true,'fallback weapon is explicitly prototype supply, never aptitude-derived ownership');
+assert.equal(byId('b').kit,'light','an aptitude never invents free support equipment');
+assert.equal(byId('b').prototypeSupport,true,'un-authored Night Shift support stays marked as prototype supply');
+assert.equal(byId('c').equipment,'folding-knife','authored knife survives the projection');
+assert.equal(byId('c').prototypeWeapon,false);
 
 const run=campaignRun(state,content,{now:()=>12345});
 assert.equal(run.bridge.mode,'campaign-v3');
 assert.equal(run.night,3,'outing label follows the campaign position');
-assert.equal(run.selected.length,3);
-assert.equal(run.crew[0].appearanceSeed,projected[0].appearanceSeed,'procedural identity is stable');
+assert.deepEqual(run.selected,['c','a','b'],'selected crew follows the campaign deployment preference first');
+assert.equal(run.crew.find(p=>p.id==='a').appearanceSeed,byId('a').appearanceSeed,'procedural identity is stable');
 assert.equal(configure(run,'a',{equipment:'first-handgun'}),false,'campaign weapon cannot be swapped for prototype gear in C prep');
-assert.equal(run.crew[0].equipment,'baseball-bat');
+assert.equal(run.crew.find(p=>p.id==='a').equipment,'baseball-bat');
 assert.equal(configure(run,'a',{kit:'boots'}),true,'prototype support can still be configured without claiming campaign ownership');
 
 const attacker={id:'a',side:'player',alive:true,cell:'1,1',equipment:'baseball-bat',harmBonus:2,ammo:null};
