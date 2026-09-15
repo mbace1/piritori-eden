@@ -1,6 +1,7 @@
 import {hireling} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=11';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=6';
+import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=1';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -78,7 +79,19 @@ export function settle(state,session){
  }
  const success=objectiveExtracted(b);
  const receipt={id:config.id,bridgeReceiptId:config.bridgeReceiptId||null,deployedIds:config.crew.map(p=>p.id),title:success?'Someone came home':'The night left a debt',success,rounds:b.round,heat:b.mission.heat,changes,text:`${changes.filter(c=>!c.state.startsWith('Missing')).length} returned. ${changes.filter(c=>c.state.startsWith('Missing')).length} missing. One outing spent.`};
+ if(state.bridge?.mode==='campaign-v3'&&receipt.bridgeReceiptId&&globalThis.localStorage){
+  const campaign=readCampaignSave(globalThis.localStorage,session.data.content);
+  if(campaign){const applied=applyCampaignReceipt(campaign,session.data.content,receipt),marker=`memory:c17-receipt:${receipt.bridgeReceiptId}`;receipt.campaignApplied=applied||campaign.flags?.includes(marker)||false;if(receipt.campaignApplied)globalThis.localStorage.setItem(CAMPAIGN_SAVE_KEY,JSON.stringify(campaign));}
+ }
  state.last=receipt;state.ledger.unshift(receipt);state.ledger=state.ledger.slice(0,30);state.night++;state.phase='aftermath';state.active.checkpoint=missionCheckpoint(session);return true;
 }
 export function continueRun(state){if(state.phase!=='aftermath')return false;state.phase='prep';state.active=null;state.selected=available(state).slice(0,3).map(p=>p.id);return true;}
-export function loadRun(raw,content){if(!raw)return newRun();const s=JSON.parse(raw);if(s.version!==1||!['prep','battle','aftermath'].includes(s.phase)||!Number.isInteger(s.night)||s.night<1||!Array.isArray(s.crew)||s.crew.length>100||!Array.isArray(s.selected)||!Array.isArray(s.ledger))throw Error('Unsupported crew save');if(new Set(s.crew.map(p=>p.id)).size!==s.crew.length||s.crew.some(p=>!eq.includes(p.equipment)||!Object.hasOwn(KITS,p.kit)||typeof p.name!=='string'||!Number.isInteger(p.readyAt)))throw Error('Invalid crew');if(s.active)restoreMission(content,s.active.config,s.active.checkpoint);return s;}
+function wantsCampaign(){try{return new URLSearchParams(globalThis.location?.search||'').get('campaign')==='1';}catch{return false;}}
+export function loadRun(raw,content){
+ let parsed=null;if(raw){try{parsed=JSON.parse(raw);}catch(e){if(!wantsCampaign())throw e;}}
+ if(wantsCampaign()&&parsed?.bridge?.mode!=='campaign-v3'){
+  const campaign=readCampaignSave(globalThis.localStorage,content);if(campaign)return campaignRun(campaign,content);
+ }
+ if(!parsed)return wantsCampaign()?campaignRun(readCampaignSave(globalThis.localStorage,content),content):newRun();
+ const s=parsed;if(s.version!==1||!['prep','battle','aftermath'].includes(s.phase)||!Number.isInteger(s.night)||s.night<1||!Array.isArray(s.crew)||s.crew.length>100||!Array.isArray(s.selected)||!Array.isArray(s.ledger))throw Error('Unsupported crew save');if(new Set(s.crew.map(p=>p.id)).size!==s.crew.length||s.crew.some(p=>!eq.includes(p.equipment)||!Object.hasOwn(KITS,p.kit)||typeof p.name!=='string'||!Number.isInteger(p.readyAt)))throw Error('Invalid crew');if(s.active)restoreMission(content,s.active.config,s.active.checkpoint);return s;
+}
