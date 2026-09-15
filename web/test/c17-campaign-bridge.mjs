@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js';
+import {configure} from '../crew-run/run.js';
 import {forecast} from '../fight-module/tactics.js';
 
 const content={
@@ -38,6 +39,9 @@ assert.equal(run.bridge.mode,'campaign-v3');
 assert.equal(run.night,3,'outing label follows the campaign position');
 assert.equal(run.selected.length,3);
 assert.equal(run.crew[0].appearanceSeed,projected[0].appearanceSeed,'procedural identity is stable');
+assert.equal(configure(run,'a',{equipment:'first-handgun'}),false,'campaign weapon cannot be swapped for prototype gear in C prep');
+assert.equal(run.crew[0].equipment,'baseball-bat');
+assert.equal(configure(run,'a',{kit:'boots'}),true,'prototype support can still be configured without claiming campaign ownership');
 
 const attacker={id:'a',side:'player',alive:true,cell:'1,1',equipment:'baseball-bat',harmBonus:2,ammo:null};
 const target={id:'r',side:'enemy',alive:true,cell:'1,2',equipment:'baseball-bat',hp:10,guard:1};
