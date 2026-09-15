@@ -3189,3 +3189,14 @@ Do not buy per-role fight packs. Path: Meshy re-export those four against
 **one** real body rest after credit refresh; every 24-bone Meshy biped then
 shares them. Current `clips/muscle-*-v01.glb` fail that gate.
 
+
+
+## Capture orientation + stage occlusion — owner 2026-09-06
+
+- **Godot** fight shots: mostly **landscape**.
+- **JS/web** testing: more **vertical** (phone portrait).
+- Hermanni framing phone shot: the 3D stage mesh ("the map" — porch/roof)
+  is **blocking characters**. STAGE_SPEC wants a flat unobstructed floor
+  under the diamond; fighters must stay readable in front of arena props.
+  Next with nameplates: depth/occlusion pass (not Meshy, not new arenas).
+
