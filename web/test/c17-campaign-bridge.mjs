@@ -29,7 +29,8 @@ assert.equal(projected.length,3,'all non-missing campaign crew project into the 
 assert.equal(projected[0].equipment,'baseball-bat','authored campaign weapon survives the projection');
 assert.deepEqual(projected[0].perks,{toughness:1,strength:2},'perks cross the boundary');
 assert.deepEqual(projected[0].skills,['wall'],'skills cross the boundary');
-assert.equal(projected[1].kit,'boots','runner/courier receives the existing mobility support in the pilot');
+assert.equal(projected[1].kit,'light','an aptitude never invents free support equipment');
+assert.equal(projected[1].prototypeSupport,true,'un-authored Night Shift support stays marked as prototype supply');
 assert.equal(projected[2].equipment,'folding-knife','authored knife survives the projection');
 
 const run=campaignRun(state,content,{now:()=>12345});
