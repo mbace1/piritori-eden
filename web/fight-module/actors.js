@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {makeStandIn} from './stand-in.js?v=7';
+import {makeStandIn} from './stand-in.js?v=8';
 import {GLTFLoader} from '../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import {limitTextures} from './render-profile.js?v=3';
 import {bakedMotionPlayer} from './motion-player.js?v=2';
@@ -90,4 +90,3 @@ function attachProp(a){
   a.prop.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,down,forward));
 }
 export function disposeActor(a){if(a.placeholder){a.dispose();return;}a.mixer.stopAllAction();a.mixer.uncacheRoot(a.body);const skins=new Set();a.body.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}if(n.skeleton)skins.add(n.skeleton);});for(const skin of skins)skin.dispose();a.ring.geometry.dispose();a.ring.material.dispose();a.prop.traverse(n=>{if(n.isMesh){n.geometry.dispose();n.material.dispose();}});a.group.removeFromParent();a.prop.removeFromParent();}
-
