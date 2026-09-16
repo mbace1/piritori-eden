@@ -1,6 +1,6 @@
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=3';
-import {mountCrew} from '../crew-run/ui.js?v=7';
+import {mountCrew} from '../crew-run/ui.js?v=8';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
@@ -16,7 +16,7 @@ import {loadParkAssets} from '../bear-path/assets.js?v=2';
 import {createEncounter} from '../bear-path/encounter.js?v=2';
 import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
-import {tacticalUI} from './tactical-ui.js?v=8';
+import {tacticalUI} from './tactical-ui.js?v=9';
 import {routes} from './tactics.js?v=6';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
@@ -41,6 +41,9 @@ let tagsDirty=true,sceneDirty=true,labelLayouts=0,renderedFrames=0,actorList=[];
 document.fonts?.addEventListener('loadingdone',()=>{tagsDirty=true;});
 const RECOVERY_KEY=isCrew?'piritori-c12-graphics':isLab?'piritori-arena-lab-c11-'+labCount:isBear?'piritori-bear-path-graphics-v1':'piritori-fight-c05-recovery';
 const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;
+const safeGraphics=isCrew&&new URLSearchParams(location.search).get('graphics')==='safe';
+let renderError='';
+const frameSize=new T.Vector2();
 let profile=renderProfile({touch}),graphicsLost=false,graphicsPreparing=false,preparationMs=0,ready=false,raf=0,losses=0,recoveries=0,recoveryTimer=0;
 const presentationClocks=new Set();
 function pausePresentations(){const now=performance.now();for(const clock of presentationClocks)clock.pause(hidden||layoutPaused,now);}
@@ -61,13 +64,21 @@ function activate(el,fn){let last=-1000;for(const name of ['pointerup','touchend
 function button(text,fn,attrs={}){const b=document.createElement('button');b.textContent=text;for(const [k,v] of Object.entries(attrs))b.setAttribute(k,v);activate(b,fn);return b;}
 function buildStage(){
   world=new T.Scene();
-  renderer=new T.WebGLRenderer({canvas,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;
+  renderer=new T.WebGLRenderer({canvas,context:canvas.__piritoriGL||undefined,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;
   edgeSmoothing=createEdgeSmoothing(renderer);
   camera=new T.OrthographicCamera(-5,5,5,-5,.1,60);ray=new T.Raycaster();ground=new T.Plane(new T.Vector3(0,1,0),0);highlight=new T.Group();world.add(highlight);
   stage=isCrew&&arenaId!=='park'?buildLocation(world,renderer,session.battle.cover,position,locationAssets,arenaId):isPark?buildKarhupuisto(world,renderer,session.battle.cover,position,parkAssets,artStyle,isLab,isCrew):buildNightCourtyard(world,renderer,session.battle.cover,position);
   if(isCrew)crew.setPortraitSource(portraitStudio(renderer));
   if(isBear)showArtStyle();
   bindGraphicsRecovery();fit();new ResizeObserver(fit).observe(area);
+}
+function drawScene(){
+  if(!(isCrew&&safeGraphics))stage?.beforeRender?.(camera);
+  renderer.setRenderTarget(null);renderer.setScissorTest(false);renderer.getSize(frameSize);renderer.setViewport(0,0,frameSize.x,frameSize.y);
+  renderer.render(world,camera);
+  // Avoid the default-framebuffer copy on the crew track. Its failure can
+  // replace a valid scene with black without producing a JavaScript exception.
+  edgeSmoothing.render(profile.edgeSmoothing&&!isCrew);
 }
 function fit(){
   tagsDirty=true;sceneDirty=true;
@@ -92,7 +103,7 @@ function layoutTags(){
     if(!old){old={};tagPositions.set(a.id,old);}Object.assign(old,{x:p.x,y:p.y,z:p.z,down:a.down});
   }
   const rect=area.getBoundingClientRect(),w=rect.width,h=rect.height;
-  const obstacles=['roundbar','camera-tools','perf',...(isBear?['art-toggle']:[])].map(id=>{const b=$(id).getBoundingClientRect();return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};});
+  const obstacles=['roundbar','camera-tools','perf',...(isBear?['art-toggle']:[])].map(id=>{const b=$(id).getBoundingClientRect();return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};}).filter(b=>b.y+b.height>0&&b.y<h&&b.x+b.width>0&&b.x<w);
   const focusIds=actionFocus?.kind==='gun'&&actionFocus.strength>.9?[actionFocus.id,actionFocus.target]:null;
   for(const u of all()){const visible=!focusIds||focusIds.includes(u.id);labels.get(u.id).style.visibility=visible?'':'hidden';leaders.get(u.id).style.visibility=visible?'':'hidden';}
   const items=all().filter(u=>!u.waiting&&!u.evacuated&&(!focusIds||focusIds.includes(u.id))).map(u=>{const a=actors.get(u.id),el=labels.get(u.id),head=project(a.group.position.clone().add(new T.Vector3(0,a.down?.45:2.15,0))),feet=project(a.group.position),radius=Math.max(8,h/frameInfo.span*.32);return {id:u.id,anchor:head,width:el.offsetWidth,height:el.offsetHeight,body:isLab&&labCount>6?null:{x:feet.x-radius,y:head.y+4,width:radius*2,height:Math.max(0,feet.y-head.y-4)}};});
@@ -301,10 +312,10 @@ async function prepareGraphics(start=performance.now()){
   const ticket=sequence;graphicsPreparing=true;busy=true;lockInput();
   loading('Preparing restored graphics…');
   try{
-    stage?.beforeRender?.(camera);
+    if(!(isCrew&&safeGraphics))stage?.beforeRender?.(camera);
     await renderer.compileAsync(world,camera);
     if(ticket!==sequence||graphicsLost)return false;
-    renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);
+    drawScene();
     preparationMs=performance.now()-start;warmupFrames=2;frameCount=seconds=0;fps=0;frameClock.reset(performance.now());
     return true;
   }finally{if(ticket===sequence)graphicsPreparing=false;}
@@ -329,15 +340,15 @@ function tick(now){
   // Context loss can precede the DOM event while a shader is being linked.
   // Three then receives null driver info logs. Only suppress that lost-context
   // race; normal shader/render faults still surface. The recovery event rebuilds.
-  try{if(renderer.getContext().isContextLost())return;stage?.beforeRender?.(camera);renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);}
-  catch(e){if(!renderer.getContext().isContextLost())throw e;return;}
+  try{if(renderer.getContext().isContextLost())return;drawScene();}
+  catch(e){if(!renderer.getContext().isContextLost()){renderError=e.message;busy=true;graphicsPreparing=true;lockInput();loading('The scene could not be drawn.');$('loading-detail').textContent=renderError;$('reload-graphics').textContent='Retry graphics';$('reload-graphics').hidden=false;console.error(e);}return;}
   renderedFrames++;
   if(warmupFrames>0){warmupFrames--;return;}
   frameCount++;seconds+=real;
   if(seconds>2){
     fps=Math.round(frameCount/seconds*10)/10;fpsSamples++;
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isCrew?'C.16.1 · WET COURTYARD':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isCrew?'C.18 · UNIFIED UI':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }
@@ -357,8 +368,12 @@ async function boot(){
     window.bearPath={snapshot:()=>story.checkpoint(),result:()=>story.result()};
     if(!saved){zoom=1.22;fit();}
   }
-  if(crew)window.crewRun={snapshot:()=>crew.state()};
-  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,environment:stage.metrics?.(),camera:{preset:cameraPreset,mode:actionFocus?.kind||'overview',strength:actionFocus?.strength||0,ids:actionFocus?.kind==='gun'?[actionFocus.id,actionFocus.target]:[],enabled:focusEnabled},story:story?.checkpoint().state,layoutPaused,fps,fpsSamples,graphicsPreparing,preparationMs,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
+  if(crew){
+  window.crewRun={snapshot:()=>crew.state()};
+  for(const [id,value]of [['graphics-safe','safe'],['graphics-auto','auto']])activate($(id),()=>{crew.persist();const url=new URL(location.href);if(value==='safe')url.searchParams.set('graphics','safe');else url.searchParams.delete('graphics');location.assign(url.href);});
+  $('help-dialog').addEventListener('toggle',()=>{if($('help-dialog').open)$('graphics-status').textContent=`C.18 · ${safeGraphics?'safe':'direct'} rendering · ${canvas.width} × ${canvas.height} · ${renderedFrames} frames\nWebGL ${graphicsLost?'lost':'active'}${renderError?'\n'+renderError:''}`;});
+}
+  window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,graphicsMode:safeGraphics?'safe':isCrew?'direct':'standard',renderError,environment:stage.metrics?.(),camera:{preset:cameraPreset,mode:actionFocus?.kind||'overview',strength:actionFocus?.strength||0,ids:actionFocus?.kind==='gun'?[actionFocus.id,actionFocus.target]:[],enabled:focusEnabled},story:story?.checkpoint().state,layoutPaused,fps,fpsSamples,graphicsPreparing,preparationMs,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
   if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');frameClock.reset(performance.now());frameCount=seconds=0;queueFrame();
 }
 boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});

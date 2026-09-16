@@ -22,7 +22,7 @@ let gl=null;
 for(const delay of [0,350,900]){
   if(delay){
     message.textContent='Graphics busy. Retrying with a lighter renderer…';
-    detail.textContent='C.17.1 mobile startup recovery';
+    detail.textContent='C.18 mobile startup recovery';
     await wait(delay);
   }
   try{gl=canvas.getContext('webgl2',attrs);}catch{}
@@ -39,4 +39,5 @@ if(!gl){
   throw new Error(status||'WebGL2 context unavailable after retry');
 }
 
-await import('../fight-module/main.js?v=27');
+canvas.__piritoriGL=gl;
+await import('../fight-module/main.js?v=28');
