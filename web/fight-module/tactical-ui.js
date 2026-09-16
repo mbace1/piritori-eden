@@ -13,7 +13,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     for(const el of document.querySelectorAll('#roster button')){const p=b.players.find(v=>v.id===el.dataset.unitid);el.disabled=busy||b.status!=='active'||!p.alive;
       el.querySelector('small').textContent=`${weapon(p).name}${p.maxAmmo?` ${p.ammo}/${p.maxAmmo}`:''} · ${p.alive?`MOVE ${b.moved.includes(p.id)?'—':'✓'}  ACT ${b.acted.includes(p.id)?'—':'✓'}`:'DOWN'}`;
     }
-    const choices=$('choices');choices.replaceChildren();choices.hidden=!enabled||!['move','attack'].includes(action);
+    const choices=$('choices');choices.replaceChildren();choices.hidden=!enabled||!['move','attack'].includes(action)||(document.body.dataset.scenario==='crew-run'&&!!preview);
     if(enabled&&action==='move'&&moveReady)for(const [cell,path] of routes(b,u)){if(!path.length)continue;tile(cell,0x77b9ba,.15);choices.append(button(coordinate(cell),()=>pick('move',cell),{'data-cell':cell,'aria-label':`Preview move to ${coordinate(cell)} · ${coverName(b,cell)}`}));}
     if(enabled&&action==='attack'&&actReady)for(const t of b.enemies.filter(v=>v.alive)){const f=forecast(b,u,t),el=button(`${t.label} · ${f.valid?`${f.chance}% · ${f.hpDamage} HP + ${f.guardDamage} guard`:f.reason}`,()=>pick('attack',t.id),{'data-target':t.id});el.disabled=!f.valid;choices.append(el);}
     const card=$('tactical-preview');card.replaceChildren();card.hidden=!preview||!enabled;
@@ -32,7 +32,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     const summary=document.createElement('p'),total=danger.totals[u?.id];
     summary.textContent=`ENEMY PLANS · ${destination?'AFTER PREVIEWED MOVE':'CURRENT POSITIONS'} · ${u?.label}: ${total?`${total.attacks} attacks, up to ${total.hp} HP + ${total.guard} guard damage${total.hp>=u.hp?' · POTENTIALLY LETHAL':''}`:'no planned hits'}`;
     if(intentLine)summary.textContent=total?`${u.name}: up to ${total.hp} HP / ${total.guard} guard at risk${total.hp>=u.hp?' · MAY FALL':''}`:'ENEMY PLANS · '+(destination?'AFTER THIS MOVE':'THIS ROUND');
-    panel.append(summary);
+    summary.hidden=!!intentLine&&!total&&!destination;panel.append(summary);
     for(const v of danger.views){const enemy=b.enemies.find(p=>p.id===v.id);if(!enemy.alive)continue;const t=b.players.find(p=>p.id===v.target);
       const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard${v.cover==='partial'?' · WALL':v.flanked?' · FLANKED':''}`:v.reason+' — CANCELLED'}`:v.reason}`;
       const p=document.createElement('div');p.className='enemy-plan '+(!v.valid?'cancelled':'');p.textContent=intentLine?`${enemy.label} → ${v.type==='attack'?t?.name.split(' ')[0]||'—':coordinate(v.to)} · ${v.valid&&v.type==='attack'?`${v.chance}% · ${v.hpDamage} HP / ${v.guardDamage} guard`:v.reason}`:text;panel.append(p);

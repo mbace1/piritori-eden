@@ -1,3 +1,11 @@
+# C.18 — Unified interface / direct rendering
+
+One crew stylesheet and command ribbon; restored procedural portrait; combined mission/turn strip; Menu-based withdrawal. Costs, enemy intent, crew history and equipment remain. Crew rendering bypasses framebuffer-copy FXAA, restores the canvas target and exposes a safe reflection-bypass option. Physical phone retest remains required. See design/C18_UNIFIED_UI.md.
+
+### Port
+
+Reproduce the simplified hierarchy while retaining C.17 rules and vectors. The browser renderer mitigation is not a claim about Godot rendering.
+
 # C.14 — After the Rain / gun aiming
 
 Concept 02 selected as the light/material target. Wet paving and fixed practical

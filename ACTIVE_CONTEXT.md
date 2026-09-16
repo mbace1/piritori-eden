@@ -1,3 +1,7 @@
+## C.18 owner feedback / UI consolidation — 2026-09-16
+
+C.17.1 loads UI on the owner phone but leaves the arena black. Simplify the current visual target: less clutter and less patchwork. External character models remain on hold. See design/C18_UNIFIED_UI.md. Menus and green logic checks do not prove visible mobile 3D. Physical-device acceptance remains open.
+
 # Piritori active context
 
 ## Owner art feedback — 2026-09-15

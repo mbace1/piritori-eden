@@ -1,7 +1,7 @@
 import {LOCATIONS,locationId} from './locations.js?v=3';
 import {SAVE_KEY,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=3';
 import {icon} from './icons.js?v=2';
-import {coordinate} from '../fight-module/tactics.js?v=6';
+import {coordinate} from '../fight-module/tactics.js?v=7';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};
 const dist=(a,b)=>{const[x,y]=a.split(',').map(Number),[u,v]=b.split(',').map(Number);return Math.abs(x-u)+Math.abs(y-v);};
 export function mountCrew({content,button,replaceSession,getSession,refresh,run,tile}){
@@ -24,7 +24,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
  function paintBattle(b,u){
   const selected=$('selected-unit');selected.replaceChildren();if(!u)return;selected.append(face(u));const info=document.createElement('div');info.className='selected-info';info.append(text('h2',u.name));const vitality=text('p',`HP ${u.hp}/${u.maxHp} · GUARD ${u.guard}${u.maxAmmo?' · AMMO '+u.ammo+'/'+u.maxAmmo:''}`,'vitality');const segments=document.createElement('span');segments.className='condition-pips';segments.setAttribute('aria-hidden','true');for(let i=0;i<u.maxHp;i++)segments.append(text('i','',i<u.hp?'filled':''));vitality.append(segments);info.append(vitality);const budget=document.createElement('p');budget.className='action-budget';budget.append(stamp(u.evacuated?'HOME':!u.alive?'DOWN':b.moved.includes(u.id)?'MOVE USED':'MOVE READY',b.moved.includes(u.id)?'used':''),stamp(!u.alive?'':b.acted.includes(u.id)?'ACTION USED':'ACTION READY',b.acted.includes(u.id)?'used':''));info.append(budget);selected.append(info);
   for(const el of document.querySelectorAll('#roster button')){const p=b.players.find(p=>p.id===el.dataset.unitid);el.setAttribute('aria-label',`${p.label} · ${p.name} · HP ${p.hp}/${p.maxHp} · ${p.evacuated?'home':p.alive?'select crew':'down'}`);el.replaceChildren(face(p),text('span',p.name.split(' ')[0],'roster-name'),text('small',p.evacuated?'HOME':!p.alive?'DOWN':`${p.hp}/${p.maxHp}`));el.classList.toggle('home',!!p.evacuated);}
-  for(const el of document.querySelectorAll('#actions [data-action]')){const type=el.dataset.action;el.hidden=type==='reload'&&!u.maxAmmo||type==='item'&&!u.itemIds?.length;if(!el.querySelector('svg')){el.prepend(icon(type==='attack'?u.equipment:type==='item'?'medical':type));el.append(text('small',type==='move'?'1 MOVE':'1 ACTION','command-cost'));}}
+  for(const el of document.querySelectorAll('#actions [data-action]')){const type=el.dataset.action;el.hidden=type==='reload'&&!u.maxAmmo||type==='item'&&!u.itemIds?.length;if(!el.querySelector('svg')){el.prepend(icon(type==='attack'?u.equipment:type==='item'?'medical':type));el.append(text('small','','command-cost'));}const spent=type==='move'?b.moved.includes(u.id):b.acted.includes(u.id);el.querySelector('.command-cost').textContent=spent?'USED':type==='move'?'1 MOVE':'1 ACTION';}
   $('actions').querySelector('[data-action=attack] svg')?.replaceWith(icon(u.equipment));$('actions').style.setProperty('--command-count',document.querySelectorAll('#actions [data-action]:not([hidden])').length);
   $('phase').textContent=b.status!=='active'?'COMPLETE':document.body.classList.contains('resolving')?'RESOLVING':'YOUR TURN';
  }
@@ -37,6 +37,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
   const b=getSession().battle,menu=state.phase!=='battle'&&!busy;document.body.classList.toggle('crew-menu',menu);$('crew-screen').hidden=!menu;$('mission-bar').hidden=menu;
   for(const id of ['fixtures','secondary','result'])$(id).hidden=true;
   if(menu){
+   $('outing-options').replaceChildren();
    const screen=$('crew-content'),scroll=$('crew-screen').scrollTop;screen.replaceChildren();$('crew-message').textContent=loadError||(!storageOK?'Saving unavailable · keep this tab open':'Saved on this browser');
    $('crew-night').textContent=`KALLIO 2003 / NIGHT ${String(state.night).padStart(2,'0')}`;
    const left=document.createElement('section');left.className='mission-copy';const ledger=document.createElement('section');ledger.className='crew-ledger';
@@ -68,7 +69,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
    if(!p.alive&&!p.helped)cmd(`Help ${p.name}`,'help',p.id,u&&dist(u.cell,p.cell)<=1);
    if(u?.kit==='medical'&&p.alive&&p.hp<p.maxHp)cmd(`Treat ${p.name} +3 HP`,'aid',p.id,!u.medicalUsed&&dist(u.cell,p.cell)<=1);
   }
-  const retreat=button('Withdraw',()=>{$('retreat-dialog').showModal();});retreat.setAttribute('aria-label','Retreat with standing crew');retreat.className='withdraw-command';retreat.disabled=busy||b.status!=='active';const end=$('end');$('utility-actions').replaceChildren(retreat,end);
+  const retreat=button('Withdraw from outing…',()=>{$('help-dialog').close();$('retreat-dialog').showModal();});retreat.setAttribute('aria-label','Retreat with standing crew');retreat.className='withdraw-command';retreat.disabled=busy||b.status!=='active';const end=$('end');$('outing-options').replaceChildren(retreat);$('utility-actions').replaceChildren(end);
 
  }
  $('confirm-retreat').replaceWith(button('Retreat now',()=>{$('retreat-dialog').close();run('withdraw');},{id:'confirm-retreat'}));
