@@ -20,6 +20,7 @@ jobs:
           source=Path('.github/workflows/c18-apply-readable.yml').read_text()
           body=source.split('        run: |\n',1)[1]
           script='\n'.join(line[10:] if line.startswith(' '*10) else line for line in body.splitlines())+'\n'
+          # The new test workflow is already registered by the connector.
           Path('.github/workflows/c18-integrate.yml').unlink()
           subprocess.run(['bash','-e','-o','pipefail'],input=script,text=True,check=True)
           PY
