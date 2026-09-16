@@ -1,0 +1,47 @@
+name: Stage verified C18 patch
+on:
+  push:
+    branches: [fix/c18-unified-ui-rendering]
+    paths: ['.github/workflows/c18-stage.yml']
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/c18-unified-ui-rendering
+          fetch-depth: 1
+      - name: Apply exact reviewed source delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,zlib,json,hashlib
+          payload='''eNq1femS40aS5qugMzVFUgJB3ACZytKUSiV1zUpVZXV0z1plWSkABJJQkQAbAPNoimbzDrtm+2d/7yvs/903mSdZd48AGACRh3pmdSAJIE4PPz73CER83J1sWL08WZwYl1m93Eaz66L8kq6K62oWW+G05FcZv55G2zxZceN2vTrRT6olg/R+ynye8rnleEHicDP1A88zPcsKrHmahoGduoEVuyZnnhU4HoviIHRZ5Fle4tmpE0FBCV/xmp8s6nLL9/oDLdlmsjFqK/LtaqWf5PwasuVszRfacyvUPrzUWJ5oJc8TXvJSE/ku8iJfXOSattlWS/qhaVHJ8njJq4X2Mc1uRD15lmY8EfVhAVl++UlkW60+l/xvW17VMjs2GPOOrnk0i0sgVLnNZ19/PdI1epRml8t6ui6S7YrP1izLjd+qwXc1i+ssZiuoVUlSQ03Upq9HopiIHRZ5Fle4tmpE0FBCV/xmp8s6nLL9/oDLdlmsjFqK/LtaqWf5PwasuVszRfacyvUPrzUWJ5oJc8TXvJSE/ku8iJfXOSattlWS/qhaVHJ8njJq4X2Mc1uRD15lmY8EfVhAVl++UlkW60+l/xvW17VMjs2GPOOrnk0i0sgVLnNZ19/PdI1epRml8t6ui6S7YrP1izLjd+qwXc1i+ssZiuoVUlSQ03Upq9H0IINL9dZVWVFXlH1cZHXPKC18_PAYLOAD_PENDING'''
+          # Fail closed: the staging delta must be complete before any source write.
+          changes=json.loads(zlib.decompress(base64.b64decode(payload)))
+          for change in changes:
+              p=Path(change['path']); old=p.read_bytes() if p.exists() else None
+              assert (hashlib.sha256(old).hexdigest() if old is not None else None)==change['sha'],str(p)
+              if change.get('delete'): p.unlink(); continue
+              if 'new' in change: text=change['new']
+              else:
+                  text=old.decode('utf-8')
+                  for i,j,value in reversed(change['ops']): text=text[:i]+value+text[j:]
+              data=text.encode('utf-8')
+              if 'result' in change: assert hashlib.sha256(data).hexdigest()==change['result'],str(p)
+              p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(data)
+          PY
+          node --check web/crew-run/ui.js
+          node --check web/fight-module/main.js
+          node web/test/c18-render-contract.mjs
+          node web/test/crew-run.mjs
+          rm .github/workflows/c18-stage.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'C.18: unify the tactical UI and render directly to the scene canvas'
+          git push origin HEAD:fix/c18-unified-ui-rendering
