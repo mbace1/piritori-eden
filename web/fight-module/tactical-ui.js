@@ -32,7 +32,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     const summary=document.createElement('p'),total=danger.totals[u?.id];
     summary.textContent=`ENEMY PLANS · ${destination?'AFTER PREVIEWED MOVE':'CURRENT POSITIONS'} · ${u?.label}: ${total?`${total.attacks} attacks, up to ${total.hp} HP + ${total.guard} guard damage${total.hp>=u.hp?' · POTENTIALLY LETHAL':''}`:'no planned hits'}`;
     if(intentLine)summary.textContent=total?`${u.name}: up to ${total.hp} HP / ${total.guard} guard at risk${total.hp>=u.hp?' · MAY FALL':''}`:'ENEMY PLANS · '+(destination?'AFTER THIS MOVE':'THIS ROUND');
-    panel.append(summary);
+    summary.hidden=!!intentLine&&!total&&!destination;panel.append(summary);
     for(const v of danger.views){const enemy=b.enemies.find(p=>p.id===v.id);if(!enemy.alive)continue;const t=b.players.find(p=>p.id===v.target);
       const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard${v.cover==='partial'?' · WALL':v.flanked?' · FLANKED':''}`:v.reason+' — CANCELLED'}`:v.reason}`;
       const p=document.createElement('div');p.className='enemy-plan '+(!v.valid?'cancelled':'');p.textContent=intentLine?`${enemy.label} → ${v.type==='attack'?t?.name.split(' ')[0]||'—':coordinate(v.to)} · ${v.valid&&v.type==='attack'?`${v.chance}% · ${v.hpDamage} HP / ${v.guardDamage} guard`:v.reason}`:text;panel.append(p);

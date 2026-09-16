@@ -4,7 +4,7 @@ import {mountCrew} from '../crew-run/ui.js?v=8';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=11';
+import {createSession,checkpoint,restoreSession} from './session.js?v=12';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=9';
 import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=3';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=2';
@@ -17,7 +17,7 @@ import {createEncounter} from '../bear-path/encounter.js?v=2';
 import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
 import {tacticalUI} from './tactical-ui.js?v=9';
-import {routes} from './tactics.js?v=6';
+import {routes} from './tactics.js?v=7';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
 const isCrew=document.body.dataset.scenario==='crew-run';

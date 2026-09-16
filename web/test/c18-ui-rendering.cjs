@@ -11,7 +11,8 @@ const out=process.env.C18_OUTPUT||'/tmp/c18-review';fs.mkdirSync(out,{recursive:
   await p.goto(base+'?campaign=1&release=18'+(spec.safe?'&graphics=safe':''));await idle();
   await p.screenshot({path:`${out}/${spec.name}-prep.png`});await tap(p.locator('#crew-deploy'));await idle();
   await p.waitForFunction(()=>fightModule.metrics().renderedFrames>2);await p.screenshot({path:`${out}/${spec.name}-battle.png`});
-  const png=PNG.sync.read(await p.locator('#scene').screenshot());let lit=0,bright=0,n=0;const colors=new Set();
+  const dataURL=await p.evaluate(()=>new Promise((resolve,reject)=>{const start=fightModule.metrics().renderedFrames,until=performance.now()+15000;function sample(){if(fightModule.metrics().renderedFrames>start){resolve(document.getElementById('scene').toDataURL());return;}if(performance.now()>until){reject(Error('No new scene frame'));return;}requestAnimationFrame(sample);}requestAnimationFrame(sample);}));
+            const png=PNG.sync.read(Buffer.from(dataURL.split(',')[1],'base64'));let lit=0,bright=0,n=0;const colors=new Set();
   for(let i=0;i<png.data.length;i+=64){const r=png.data[i],g=png.data[i+1],b=png.data[i+2],v=(r+g+b)/3;if(v>12)lit++;if(v>32)bright++;colors.add([r>>4,g>>4,b>>4].join(','));n++;}
   assert.ok(lit/n>.15&&bright/n>.03&&colors.size>32,`nonblank ${spec.name} arena: ${lit/n}, ${bright/n}, ${colors.size}`);
   const layout=await p.evaluate(()=>{const box=id=>document.getElementById(id).getBoundingClientRect().toJSON();return {world:box('arena'),end:box('end'),overflow:document.body.scrollWidth>innerWidth,styles:document.querySelectorAll('link[rel=stylesheet]').length,portrait:!!document.querySelector('#selected-unit img'),targets:[...document.querySelectorAll('#actions button:not([hidden]),#end,#crew-picker,header button,header a')].filter(e=>e.getBoundingClientRect().width>0).map(e=>({text:e.textContent,rect:e.getBoundingClientRect().toJSON()}))};});
@@ -19,11 +20,13 @@ const out=process.env.C18_OUTPUT||'/tmp/c18-review';fs.mkdirSync(out,{recursive:
   for(const t of layout.targets)assert.ok(t.rect.width>=44&&t.rect.height>=44,`44px target: ${t.text}`);
   assert.equal(await p.getByRole('button',{name:'Retreat with standing crew',exact:true}).isVisible(),false,'withdraw is secondary');
   assert.ok(await p.locator('.enemy-plan').count()>0,'enemy intentions visible by default');
+            assert.ok(await p.locator('#enemy-plans').evaluate(e=>e.getBoundingClientRect().bottom<=innerHeight+1),'intent scroll area remains inside viewport');
   const before=await p.evaluate(()=>fightModule.snapshot());await tap(p.locator('[data-action=move]'));await tap(p.locator('#choices [data-cell]').first());
-  assert.equal(await p.locator('#choices').isVisible(),false,'no coordinate grid under the confirmation sheet');assert.ok(await p.locator('#commit-preview').isVisible());await p.screenshot({path:`${out}/${spec.name}-move.png`});await tap(p.locator('#tactical-preview').getByRole('button',{name:'Cancel',exact:true}));assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'preview and cancel are free');
+  assert.equal(await p.locator('#choices').isVisible(),false,'no coordinate grid under the confirmation sheet');
+            if(spec.name==='landscape')assert.ok(await p.evaluate(()=>document.getElementById('tactical-preview').getBoundingClientRect().top>=document.getElementById('arena').getBoundingClientRect().bottom),'short landscape forecast stays below the scene');assert.ok(await p.locator('#commit-preview').isVisible());await p.screenshot({path:`${out}/${spec.name}-move.png`});await tap(p.locator('#tactical-preview').getByRole('button',{name:'Cancel',exact:true}));assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'preview and cancel are free');
   await tap(p.locator('#help'));assert.ok(await p.getByRole('button',{name:'Retreat with standing crew',exact:true}).isVisible());await tap(p.getByRole('button',{name:'Retreat with standing crew',exact:true}));assert.equal(await p.locator('dialog[open]').count(),1,'no stacked dialogs');await tap(p.getByRole('button',{name:'Stay here',exact:true}));assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before);
   const metrics=await p.evaluate(()=>fightModule.metrics());assert.equal(metrics.edgeSmoothing.method,'none');assert.equal(metrics.graphicsMode,spec.safe?'safe':'direct');assert.deepEqual(errors,[]);assert.deepEqual(externalModels,[]);
-  results.push({view:spec.name,worldHeight:layout.world.height,lit:lit/n,bright:bright/n,colors:colors.size,frames:metrics.renderedFrames,draws:metrics.draws,graphics:metrics.graphicsMode,errors});console.log(JSON.stringify(results.at(-1)));await ctx.close();
+  results.push({canvasPixels:true,view:spec.name,worldHeight:layout.world.height,lit:lit/n,bright:bright/n,colors:colors.size,frames:metrics.renderedFrames,draws:metrics.draws,graphics:metrics.graphicsMode,errors});console.log(JSON.stringify(results.at(-1)));await ctx.close();
  }
  fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});

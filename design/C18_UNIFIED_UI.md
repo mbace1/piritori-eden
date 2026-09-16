@@ -29,3 +29,7 @@ The C18 renderer contract checks target/viewport/scissor ordering and legacy beh
 ### Port
 
 Reproduce the continuous dock, portrait, combined status strip, attached forecast and secondary withdrawal. Preserve C.17 rule vectors and exact-once aftermath. Reproduce behavior and costs rather than obsolete formation layouts. The WebGL workaround is browser-specific.
+
+## Browser review corrections
+
+First six-layout screenshots rendered correctly, but full regression caught short-landscape forecast interception and an extraction button overlapping the crew drawer. The forecast now replaces the central command ribbon in short landscape instead of covering the arena, and the roster owns the top input layer. Grid columns are explicit during menu transitions. Enemy intent stays within a bounded scroll area; only its redundant no-danger heading is omitted. Pixel tests now read the canvas image after a naturally rendered frame, excluding DOM labels. No failing regression assertion was removed.
