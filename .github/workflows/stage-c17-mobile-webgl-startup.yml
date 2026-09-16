@@ -1,0 +1,81 @@
+name: Stage C17.1 mobile WebGL startup recovery
+
+on:
+  push:
+    branches: [fix/c17-mobile-webgl-startup]
+    paths: ['.github/workflows/stage-c17-mobile-webgl-startup.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  stage:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/c17-mobile-webgl-startup
+          fetch-depth: 0
+      - name: Patch C.17 startup recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('web/fight-module/main.js')
+          s=p.read_text(encoding='utf-8')
+          anchor="function buildStage(){\n  world=new T.Scene();\n  renderer=new T.WebGLRenderer({canvas,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;"
+          replacement="""async function createRenderer(){
+  const attempts=[
+    {canvas,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false,failIfMajorPerformanceCaveat:false},
+    {canvas,antialias:false,powerPreference:'low-power',alpha:false,stencil:false,failIfMajorPerformanceCaveat:false},
+    {canvas,antialias:false,powerPreference:'default',alpha:false,stencil:false,failIfMajorPerformanceCaveat:false},
+  ];
+  let last=null;
+  for(let i=0;i<attempts.length;i++){
+    try{return new T.WebGLRenderer(attempts[i]);}
+    catch(e){
+      last=e;
+      if(i===0){profile=renderProfile({touch:true,recovered:true});low=true;loading('Graphics busy. Retrying with a lighter renderer…');}
+      if(i<attempts.length-1)await new Promise(resolve=>setTimeout(resolve,i?900:350));
+    }
+  }
+  throw last||Error('WebGL context unavailable');
+}
+async function buildStage(){
+  world=new T.Scene();
+  renderer=await createRenderer();renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;"""
+          if anchor not in s: raise SystemExit('renderer anchor not found')
+          s=s.replace(anchor,replacement,1)
+          s=s.replace(";buildStage();for(const template of templates.values())limitTextures", ";await buildStage();for(const template of templates.values())limitTextures",1)
+          s=s.replace("${isCrew?'C.16.1 · WET COURTYARD'", "${isCrew?'C.17.1 · MOBILE STARTUP RETRY'",1)
+          old="boot().catch(e=>{loading('Unable to load fight: '+e.message);lockInput();console.error(e);});"
+          new="boot().catch(e=>{loading('Unable to load fight: '+e.message);$('loading-detail').textContent='The browser could not create a 3D graphics context. Close other 3D tabs if needed, then retry.';$('reload-graphics').textContent='Retry graphics';$('reload-graphics').hidden=false;lockInput();console.error(e);});"
+          if old not in s: raise SystemExit('boot catch anchor not found')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('web/crew-run/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('Night Shift C.17','Night Shift C.17.1')
+          s=s.replace('<span>C.17</span>','<span>C.17.1</span>')
+          s=s.replace('C.17 keeps character production','C.17.1 keeps character production')
+          s=s.replace('C.17 — The Crew Matters.','C.17.1 — Mobile WebGL startup recovery. The Crew Matters.')
+          s=s.replace('../fight-module/main.js?v=27','../fight-module/main.js?v=28')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('VERSIONS.md')
+          s=p.read_text(encoding='utf-8')
+          if not s.startswith('# C.17.1'):
+            s="# C.17.1 — Mobile WebGL startup recovery\n\nOwner Pixel test exposed WebGL context creation failure before gameplay. C.17.1 retries renderer creation with conservative context preferences and exposes a visible Retry graphics action if the browser still refuses a context. No gameplay or campaign rules changed.\n\n"+s
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          rm .github/workflows/stage-c17-mobile-webgl-startup.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'C.17.1: recover from mobile WebGL startup failure'
+          git push origin HEAD:fix/c17-mobile-webgl-startup
