@@ -1,0 +1,214 @@
+name: Apply C18 source integration
+on:
+  push:
+    branches: [fix/c18-unified-ui-rendering]
+    paths: ['.github/workflows/c18-apply-readable.yml']
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/c18-unified-ui-rendering
+      - name: Apply bounded source changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,json,difflib
+          def edit(rel,fn):
+              p=Path(rel); old=p.read_bytes(); a=old.decode().replace('\r\n','\n'); b=fn(a)
+              al=old.splitlines(keepends=True); bl=b.encode().splitlines(keepends=True); out=[]
+              for tag,i,j,k,l in difflib.SequenceMatcher(None,[x.rstrip(b'\r\n') for x in al],[x.rstrip(b'\r\n') for x in bl],autojunk=False).get_opcodes():
+                  out.extend(al[i:j] if tag=='equal' else bl[k:l])
+              p.write_bytes(b''.join(out))
+          def once(s,a,b):
+              assert s.count(a)==1,(a[:80],s.count(a)); return s.replace(a,b,1)
+          def html(s):
+              s=re.sub(r'<link rel="stylesheet" href="(?:\.\./fight-module/style.css\?v=3|\.\./arena-lab/style.css\?v=4|\./style.css\?v=4|\./compact.css\?v=1)">','',s)
+              s=s.replace('<script type="importmap">','<link rel="stylesheet" href="./style.css?v=5"><script type="importmap">',1)
+              s=s.replace('Night Shift C.17.1','Night Shift C.18').replace('<span>C.17.1</span>','<span>C.18</span>')
+              start=s.index('<div id="camera-tools">'); end=s.index('<div id="loading"',start); cameras=s[start:end]; s=s[:start]+s[end:]
+              s=once(s,'<button id="help" aria-label="Help and controls">?</button>',cameras+'<button id="help" aria-label="Menu and field notes">Menu</button>')
+              roundbar='<div id="roundbar"><b id="round">ROUND 01</b><span id="phase">LOADING</span></div>'
+              s=once(s,roundbar,'')
+              s=once(s,'<b id="mission-goal"></b><p id="mission-count"></p><small id="mission-pressure"></small>','<b id="mission-goal"></b><div class="mission-meta"><p id="mission-count"></p><small id="mission-pressure"></small></div>'+roundbar)
+              s=once(s,'<h2>Night Shift · field notes</h2>','<h2>Night Shift</h2><div id="outing-options"></div><details><summary>Graphics</summary><p>Night Shift renders directly without the full-screen smoothing pass. Safe graphics also skips planar reflection rendering; it keeps the same crew, board and rules.</p><div id="graphics-options"><button id="graphics-safe">Use safe graphics</button><button id="graphics-auto">Use normal graphics</button></div><p id="graphics-status"></p></details>')
+              s=s.replace('./startup.js?v=1','./startup.js?v=2').replace('C.17.1 keeps character production','C.18 keeps character production')
+              s=s.replace('C.17.1 — Mobile WebGL startup recovery. The Crew Matters.','C.18 — Unified command bar and direct rendering. The Crew Matters.')
+              return s
+          edit('web/crew-run/index.html',html)
+          def ui(s):
+              s=once(s,"const retreat=button('Withdraw',()=>{$('retreat-dialog').showModal();});","const retreat=button('Withdraw from outing…',()=>{$('help-dialog').close();$('retreat-dialog').showModal();});")
+              s=once(s,"const end=$('end');$('utility-actions').replaceChildren(retreat,end);","const end=$('end');$('outing-options').replaceChildren(retreat);$('utility-actions').replaceChildren(end);")
+              s=once(s,"if(menu){\n   const screen=","if(menu){\n   $('outing-options').replaceChildren();\n   const screen=")
+              s=once(s,"el.append(text('small',type==='move'?'1 MOVE':'1 ACTION','command-cost'));}","el.append(text('small','','command-cost'));}const spent=type==='move'?b.moved.includes(u.id):b.acted.includes(u.id);el.querySelector('.command-cost').textContent=spent?'USED':type==='move'?'1 MOVE':'1 ACTION';")
+              return s
+          edit('web/crew-run/ui.js',ui)
+          edit('web/fight-module/tactical-ui.js',lambda s:once(s,"choices.hidden=!enabled||!['move','attack'].includes(action);","choices.hidden=!enabled||!['move','attack'].includes(action)||(document.body.dataset.scenario==='crew-run'&&!!preview);"))
+          def main(s):
+              s=s.replace('../crew-run/ui.js?v=7','../crew-run/ui.js?v=8').replace('./tactical-ui.js?v=8','./tactical-ui.js?v=9')
+              s=once(s,"const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;","const touch=navigator.maxTouchPoints>0||matchMedia('(pointer:coarse)').matches;\nconst safeGraphics=isCrew&&new URLSearchParams(location.search).get('graphics')==='safe';\nlet renderError='';\nconst frameSize=new T.Vector2();")
+              s=once(s,"new T.WebGLRenderer({canvas,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false})","new T.WebGLRenderer({canvas,context:canvas.__piritoriGL||undefined,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false})")
+              s=once(s,'function fit(){',"function drawScene(){\n  if(!(isCrew&&safeGraphics))stage?.beforeRender?.(camera);\n  renderer.setRenderTarget(null);renderer.setScissorTest(false);renderer.getSize(frameSize);renderer.setViewport(0,0,frameSize.x,frameSize.y);\n  renderer.render(world,camera);\n  // Avoid the default-framebuffer copy on the crew track. Its failure can\n  // replace a valid scene with black without producing a JavaScript exception.\n  edgeSmoothing.render(profile.edgeSmoothing&&!isCrew);\n}\nfunction fit(){")
+              s=s.replace('renderer.render(world,camera);edgeSmoothing.render(profile.edgeSmoothing);','drawScene();')
+              s=once(s,'stage?.beforeRender?.(camera);drawScene();','drawScene();')
+              s=s.replace('    stage?.beforeRender?.(camera);','    if(!(isCrew&&safeGraphics))stage?.beforeRender?.(camera);')
+              s=once(s,"catch(e){if(!renderer.getContext().isContextLost())throw e;return;}","catch(e){if(!renderer.getContext().isContextLost()){renderError=e.message;busy=true;graphicsPreparing=true;lockInput();loading('The scene could not be drawn.');$('loading-detail').textContent=renderError;$('reload-graphics').textContent='Retry graphics';$('reload-graphics').hidden=false;console.error(e);}return;}")
+              s=s.replace("${isCrew?'C.16.1 · WET COURTYARD'","${isCrew?'C.18 · UNIFIED UI'")
+              s=once(s,'scenario,environment:stage.metrics?.(),',"scenario,graphicsMode:safeGraphics?'safe':isCrew?'direct':'standard',renderError,environment:stage.metrics?.(),")
+              s=once(s,'return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};});','return {x:b.x-rect.x,y:b.y-rect.y,width:b.width,height:b.height};}).filter(b=>b.y+b.height>0&&b.y<h&&b.x+b.width>0&&b.x<w);')
+              extra="""if(crew){
+            window.crewRun={snapshot:()=>crew.state()};
+            for(const [id,value]of [['graphics-safe','safe'],['graphics-auto','auto']])activate($(id),()=>{crew.persist();const url=new URL(location.href);if(value==='safe')url.searchParams.set('graphics','safe');else url.searchParams.delete('graphics');location.assign(url.href);});
+            $('help-dialog').addEventListener('toggle',()=>{if($('help-dialog').open)$('graphics-status').textContent=`C.18 · ${safeGraphics?'safe':'direct'} rendering · ${canvas.width} × ${canvas.height} · ${renderedFrames} frames\\nWebGL ${graphicsLost?'lost':'active'}${renderError?'\\n'+renderError:''}`;});
+          }"""
+              return once(s,'if(crew)window.crewRun={snapshot:()=>crew.state()};',extra)
+          edit('web/fight-module/main.js',main)
+          edit('web/crew-run/startup.js',lambda s:s.replace('C.17.1','C.18').replace("await import('../fight-module/main.js?v=27');","canvas.__piritoriGL=gl;\nawait import('../fight-module/main.js?v=28');"))
+          for path in ['web/arena-lab/index.html','web/bear-path/index.html','web/fight-module/index.html']:
+              edit(path,lambda s:s.replace('main.js?v=27','main.js?v=28'))
+          edit('web/test/crew-run-browser.cjs',lambda s:once(s,"await tap(p.getByRole('button',{name:'Retreat with standing crew',exact:true}));","await tap(p.locator('#help'));await tap(p.getByRole('button',{name:'Retreat with standing crew',exact:true}));"))
+          def allow(s):
+              items=json.loads(s)
+              for f in ['web/crew-run/startup.js','web/crew-run/campaign-adapter.js']:
+                  if f not in items:items.append(f)
+              return json.dumps(sorted(items),indent=2)+'\n'
+          edit('tools/publish/arena_lab_files.json',allow)
+          edit('ACTIVE_CONTEXT.md',lambda s:'## C.18 owner feedback / UI consolidation — 2026-09-16\n\nC.17.1 loads UI on the owner phone but leaves the arena black. Simplify the current visual target: less clutter and less patchwork. External character models remain on hold. See design/C18_UNIFIED_UI.md. Menus and green logic checks do not prove visible mobile 3D. Physical-device acceptance remains open.\n\n'+s)
+          edit('VERSIONS.md',lambda s:'# C.18 — Unified interface / direct rendering\n\nOne crew stylesheet and command ribbon; restored procedural portrait; combined mission/turn strip; Menu-based withdrawal. Costs, enemy intent, crew history and equipment remain. Crew rendering bypasses framebuffer-copy FXAA, restores the canvas target and exposes a safe reflection-bypass option. Physical phone retest remains required. See design/C18_UNIFIED_UI.md.\n\n### Port\n\nReproduce the simplified hierarchy while retaining C.17 rules and vectors. The browser renderer mitigation is not a claim about Godot rendering.\n\n'+s)
+          Path('design/C18_UNIFIED_UI.md').write_text('''# C.18 — One command surface
+
+## Owner request and evidence
+
+The owner reports that C.17.1 loads menus and labels, but the 3D arena remains black on the phone. The visual direction is close, but the UI is cluttered and looks like patchwork. This batch changes presentation, not combat rules or campaign consequences. External character models remain on hold.
+
+Inspected authority: DESIGN_AUTHORITY.md, ART_BIBLE.md, UX_SPEC.md, GAME_DESIGN_DOCUMENT.md, ACTIVE_CONTEXT.md, C13_ART_AND_UI.md, C14_AFTER_THE_RAIN.md and HUB_RELEASE.md. PIRITORI_LONG_TERM_SCOPE.md is not on this source branch; no long-term game scope is redefined here.
+
+Inspected images: art-library/references/ui/ui-target-battle-landscape-v02.jpg; art-library/references/ui/ui-target-battle-portrait-v01.jpg; design/concepts/c13-review/02-after-the-rain.png; design/concepts/c16-stylized/03-lantern-noir.png and 06-ink-after-dark.png. Concept 02 is the established environmental target. 03/06 are a shortlist, not final art acceptance. The newer Move + Act and full-intent rules supersede old formation-only illustrations.
+
+## Visual implementation
+
+A single crew-run/style.css replaces four competing stylesheet generations on this entry. Old shared sheets remain for other prototypes. The selected person, real procedural portrait, commands and End round share one continuous dark-card surface. Plain dividers replace nested bevels and double frames. Cream marks the committed primary action rather than filling the whole identity panel. The mission, progress, pressure and turn share a single top strip. View and Menu move into the header.
+
+Withdrawal is secondary inside Menu, retaining its existing confirmation and consequences. The field-notes dialog closes before the retreat dialog opens. Enemy plans and aggregate danger remain visible by default, in unboxed text. Coordinate choices occupy the attached action sheet only until a concrete forecast is open; Cancel restores choices without cost. Equipment, support items, reload, help, extraction and separate Move/Action availability remain functional. No external character files, generated portraits or new rigs are introduced.
+
+Portrait and short-landscape layouts reserve at least half of the tested viewport for the scene and keep End round reachable. Command/header targets retain a 44px minimum. The crew menu, loadout and aftermath use the same restrained type, spacing and separators.
+
+## Rendering mitigation, not an invented root cause
+
+The screenshot proves DOM/tactical state is active; it does not prove a successful visible GPU frame. The mobile profile alone enabled a full-screen default-framebuffer copy/FXAA pass. Crew rendering now ends with the real scene, without that copy. Each draw explicitly restores the default target, full viewport and disabled scissor after shared portrait/reflection work. The already-created preflight WebGL2 context is passed explicitly to Three.js, keeping one context.
+
+Menu > Graphics exposes diagnostics and a safe option that also skips planar reflection capture. It persists the current outing before reloading and preserves other URL parameters. It does not replace the arena with fake graphics, change tactics or claim to cure every driver problem. Other prototypes retain their existing FXAA behavior. The physical phone cause remains unverified, and owner retesting is required even after browser automation passes.
+
+## Verification
+
+The C18 renderer contract checks target/viewport/scissor ordering and legacy behavior. The C18 browser gate checks actual nonblank canvas pixels, not just DOM or frame counters; it covers phone, compact portrait, short landscape, tablet, desktop and the safe path. It checks a single stylesheet, touch dimensions, viewport bounds, visible portraits and intentions, reversible movement preview, one modal at a time, no external fighter downloads and console errors. Existing crew/campaign/outing/recovery gates remain required. Record exact CI, merge, package and Pages receipts separately; this document is not evidence of a completed deployment.
+
+### Port
+
+Reproduce the continuous dock, portrait, combined status strip, attached forecast and secondary withdrawal. Preserve C.17 rule vectors and exact-once aftermath. Reproduce behavior and costs rather than obsolete formation layouts. The WebGL workaround is browser-specific.
+''',encoding='utf-8')
+          Path('.github/workflows/c18-review-bundle.yml').unlink(missing_ok=True)
+          PY
+          cat > web/test/c18-render-contract.mjs <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          import vm from 'node:vm';
+          const main=readFileSync(new URL('../fight-module/main.js',import.meta.url),'utf8');
+          const draw=main.slice(main.indexOf('function drawScene(){'),main.indexOf('function fit(){'));
+          for(const [isCrew,safeGraphics,smoothing,expected] of [[true,false,true,false],[true,true,true,false],[false,false,true,true]]){
+           const calls=[],frameSize={x:0,y:0};
+           const renderer={setRenderTarget:v=>calls.push(['target',v]),setScissorTest:v=>calls.push(['scissor',v]),getSize:v=>Object.assign(v,{x:412,y:600}),setViewport:(...v)=>calls.push(['viewport',...v]),render:()=>calls.push(['scene'])};
+           vm.runInNewContext(draw+'drawScene();',{renderer,frameSize,isCrew,safeGraphics,profile:{edgeSmoothing:smoothing},stage:{beforeRender:()=>calls.push(['reflection'])},camera:{},world:{},edgeSmoothing:{render:v=>calls.push(['smoothing',v])}});
+           assert.deepEqual(calls.slice(safeGraphics?0:1),[['target',null],['scissor',false],['viewport',0,0,412,600],['scene'],['smoothing',expected]]);
+          }
+          const html=readFileSync(new URL('../crew-run/index.html',import.meta.url),'utf8');
+          assert.equal((html.match(/rel="stylesheet"/g)||[]).length,1);
+          assert.equal((html.match(/id="roundbar"/g)||[]).length,1);
+          assert.equal((html.match(/id="camera-tools"/g)||[]).length,1);
+          assert.ok(html.includes('style.css?v=5')&&html.includes('startup.js?v=2'));
+          console.log('C18 renderer and UI ownership contract passed');
+          JS
+          cat > web/test/c18-ui-rendering.cjs <<'JS'
+          const {chromium}=require('playwright'),{PNG}=require('pngjs'),assert=require('node:assert/strict'),fs=require('node:fs');
+          const base=process.env.CREW_RUN_URL||'http://127.0.0.1:8781/web/crew-run/';
+          const out=process.env.C18_OUTPUT||'/tmp/c18-review';fs.mkdirSync(out,{recursive:true});
+          (async()=>{const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader','--use-angle=swiftshader']});try{
+           const results=[];
+           for(const spec of [{name:'phone',width:412,height:915,touch:true},{name:'compact',width:360,height:640,touch:true},{name:'landscape',width:844,height:390,touch:true},{name:'tablet',width:1194,height:834,touch:true},{name:'desktop',width:1366,height:768},{name:'phone-safe',width:412,height:915,touch:true,safe:true}]){
+            const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:!!spec.touch,isMobile:!!spec.touch}),p=await ctx.newPage(),errors=[],externalModels=[];
+            p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});p.on('request',r=>{if(/(?:cast3d|fighters|meshy).*\.glb/i.test(r.url()))externalModels.push(r.url());});
+            const tap=async locator=>{await locator.scrollIntoViewIfNeeded();await locator[spec.touch?'tap':'click']();};
+            const idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy&&!fightModule.metrics().layoutPaused,null,{timeout:90000});
+            await p.goto(base+'?campaign=1&release=18'+(spec.safe?'&graphics=safe':''));await idle();
+            await p.screenshot({path:`${out}/${spec.name}-prep.png`});await tap(p.locator('#crew-deploy'));await idle();
+            await p.waitForFunction(()=>fightModule.metrics().renderedFrames>2);await p.screenshot({path:`${out}/${spec.name}-battle.png`});
+            const png=PNG.sync.read(await p.locator('#scene').screenshot());let lit=0,bright=0,n=0;const colors=new Set();
+            for(let i=0;i<png.data.length;i+=64){const r=png.data[i],g=png.data[i+1],b=png.data[i+2],v=(r+g+b)/3;if(v>12)lit++;if(v>32)bright++;colors.add([r>>4,g>>4,b>>4].join(','));n++;}
+            assert.ok(lit/n>.15&&bright/n>.03&&colors.size>32,`nonblank ${spec.name} arena: ${lit/n}, ${bright/n}, ${colors.size}`);
+            const layout=await p.evaluate(()=>{const box=id=>document.getElementById(id).getBoundingClientRect().toJSON();return {world:box('arena'),end:box('end'),overflow:document.body.scrollWidth>innerWidth,styles:document.querySelectorAll('link[rel=stylesheet]').length,portrait:!!document.querySelector('#selected-unit img'),targets:[...document.querySelectorAll('#actions button:not([hidden]),#end,#crew-picker,header button,header a')].filter(e=>e.getBoundingClientRect().width>0).map(e=>({text:e.textContent,rect:e.getBoundingClientRect().toJSON()}))};});
+            assert.equal(layout.styles,1);assert.equal(layout.overflow,false);assert.ok(layout.world.height>=spec.height*.5,'at least half of viewport remains arena');assert.ok(layout.end.bottom<=spec.height+1,'End round visible');assert.ok(layout.portrait,'actual character portrait restored');
+            for(const t of layout.targets)assert.ok(t.rect.width>=44&&t.rect.height>=44,`44px target: ${t.text}`);
+            assert.equal(await p.getByRole('button',{name:'Retreat with standing crew',exact:true}).isVisible(),false,'withdraw is secondary');
+            assert.ok(await p.locator('.enemy-plan').count()>0,'enemy intentions visible by default');
+            const before=await p.evaluate(()=>fightModule.snapshot());await tap(p.locator('[data-action=move]'));await tap(p.locator('#choices [data-cell]').first());
+            assert.equal(await p.locator('#choices').isVisible(),false,'no coordinate grid under the confirmation sheet');assert.ok(await p.locator('#commit-preview').isVisible());await p.screenshot({path:`${out}/${spec.name}-move.png`});await tap(p.locator('#tactical-preview').getByRole('button',{name:'Cancel',exact:true}));assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before,'preview and cancel are free');
+            await tap(p.locator('#help'));assert.ok(await p.getByRole('button',{name:'Retreat with standing crew',exact:true}).isVisible());await tap(p.getByRole('button',{name:'Retreat with standing crew',exact:true}));assert.equal(await p.locator('dialog[open]').count(),1,'no stacked dialogs');await tap(p.getByRole('button',{name:'Stay here',exact:true}));assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before);
+            const metrics=await p.evaluate(()=>fightModule.metrics());assert.equal(metrics.edgeSmoothing.method,'none');assert.equal(metrics.graphicsMode,spec.safe?'safe':'direct');assert.deepEqual(errors,[]);assert.deepEqual(externalModels,[]);
+            results.push({view:spec.name,worldHeight:layout.world.height,lit:lit/n,bright:bright/n,colors:colors.size,frames:metrics.renderedFrames,draws:metrics.draws,graphics:metrics.graphicsMode,errors});console.log(JSON.stringify(results.at(-1)));await ctx.close();
+           }
+           fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));
+          }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          cat > .github/workflows/c18-ui-review.yml <<'YAML'
+          name: C18 UI and renderer review
+          on:
+            push:
+              branches: [fix/c18-unified-ui-rendering]
+            pull_request:
+              paths: ['web/crew-run/**', 'web/fight-module/main.js', 'web/fight-module/tactical-ui.js', 'web/test/c18-*']
+          permissions:
+            contents: read
+          jobs:
+            ui-rendering:
+              runs-on: ubuntu-latest
+              timeout-minutes: 12
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-node@v4
+                  with:
+                    node-version: '22'
+                - run: node web/test/c18-render-contract.mjs && node web/test/crew-run.mjs
+                - run: npm install --prefix /tmp/piritori-test playwright pngjs
+                - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+                - name: Real browser UI and nonblank arena checks
+                  env:
+                    NODE_PATH: /tmp/piritori-test/node_modules
+                    CREW_RUN_URL: http://127.0.0.1:8781/web/crew-run/
+                    C18_OUTPUT: /tmp/c18-review
+                  run: |
+                    python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/c18-server.log 2>&1 &
+                    node web/test/c18-ui-rendering.cjs
+                - uses: actions/upload-artifact@v4
+                  if: always()
+                  with:
+                    name: c18-ui-rendering
+                    path: /tmp/c18-review
+                    retention-days: 3
+          YAML
+          node --check web/crew-run/ui.js
+          node --check web/fight-module/main.js
+          node --check web/fight-module/tactical-ui.js
+          node --check web/test/c18-ui-rendering.cjs
+          node web/test/c18-render-contract.mjs
+          node web/test/crew-run.mjs
+          rm .github/workflows/c18-apply-readable.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'C.18: integrate unified command UI, direct rendering and pixel regression checks'
+          git push origin HEAD:fix/c18-unified-ui-rendering
