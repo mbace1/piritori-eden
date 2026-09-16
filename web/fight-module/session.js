@@ -1,4 +1,4 @@
-import {createTacticalSession} from './tactics.js?v=6';
+import {createTacticalSession} from './tactics.js?v=7';
 import { createState } from '../js/v3/state.js?v=6';
 import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=3';
 
@@ -69,4 +69,3 @@ export function createSession(content, mode='mixed', scenario='training') {
   }
   return {battle,data,mode,scenario,history,command,snapshot,result:()=>({schema_version:1,encounter:definition.id,result:battle.result,training:!authored,survivors:battle.players.concat(battle.enemies).filter(u=>u.alive).map(u=>u.id),downed:battle.players.concat(battle.enemies).filter(u=>!u.alive).map(u=>u.id),campaign_effects:authored?resultEffects(battle,data):[],police:authored?{taken:battle.policeTaken,saved:battle.policeSaved}:null,actions:history.map(({type,value})=>({type,value}))})};
 }
-

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {makeStandIn} from '../fight-module/stand-in.js?v=7';
+import {makeStandIn} from '../fight-module/stand-in.js?v=8';
 
 // Identification portraits use the actual development figure, never an
 // unrelated approved face or a generated promise of higher character fidelity.
