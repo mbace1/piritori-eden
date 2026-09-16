@@ -9,6 +9,7 @@ for(const [isCrew,safeGraphics,smoothing,expected] of [[true,false,true,false],[
  vm.runInNewContext(draw+'drawScene();',{renderer,frameSize,isCrew,safeGraphics,profile:{edgeSmoothing:smoothing},stage:{beforeRender:()=>calls.push(['reflection'])},camera:{},world:{},edgeSmoothing:{render:v=>calls.push(['smoothing',v])}});
  assert.deepEqual(calls.slice(safeGraphics?0:1),[['target',null],['scissor',false],['viewport',0,0,412,600],['scene'],['smoothing',expected]]);
 }
+assert.ok(main.includes("function resumeGraphics(){busy=false;action='';labUI?.cancel();"),'recovery clears the interrupted preview with its action');
 const html=readFileSync(new URL('../crew-run/index.html',import.meta.url),'utf8');
 assert.equal((html.match(/rel="stylesheet"/g)||[]).length,1);
 assert.equal((html.match(/id="roundbar"/g)||[]).length,1);

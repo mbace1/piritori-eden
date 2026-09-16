@@ -33,3 +33,5 @@ Reproduce the continuous dock, portrait, combined status strip, attached forecas
 ## Browser review corrections
 
 First six-layout screenshots rendered correctly, but full regression caught short-landscape forecast interception and an extraction button overlapping the crew drawer. The forecast now replaces the central command ribbon in short landscape instead of covering the arena, and the roster owns the top input layer. Grid columns are explicit during menu transitions. Enemy intent stays within a bounded scroll area; only its redundant no-danger heading is omitted. Pixel tests now read the canvas image after a naturally rendered frame, excluding DOM labels. No failing regression assertion was removed.
+
+Graphics recovery also clears the interrupted, uncommitted forecast when resetting the selected action. Otherwise the short-landscape dock can retain a stale confirmation sheet over the reset commands. This resets presentation only; the existing recovery-state and exact-once shot assertions remain unchanged.

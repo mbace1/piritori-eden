@@ -307,7 +307,7 @@ function bindGraphicsRecovery(){
     if(ready){rebuildActors();prepareGraphics(restorationStarted).then(ok=>{if(ok)resumeGraphics();}).catch(e=>{if(!graphicsLost){loading('Graphics could not be prepared. Reload the saved fight.');$('reload-graphics').hidden=false;console.error(e);}});}
   });
 }
-function resumeGraphics(){busy=false;action='';if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());saveStory();$('labels').hidden=false;$('loading').hidden=true;$('reload-graphics').hidden=true;for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;refresh();clearRecovery();hint('Graphics restored. Your turn is unchanged; lighter rendering is active.');queueFrame();}
+function resumeGraphics(){busy=false;action='';labUI?.cancel();if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());saveStory();$('labels').hidden=false;$('loading').hidden=true;$('reload-graphics').hidden=true;for(const el of document.querySelectorAll('#camera-tools button,#again'))el.disabled=false;refresh();clearRecovery();hint('Graphics restored. Your turn is unchanged; lighter rendering is active.');queueFrame();}
 async function prepareGraphics(start=performance.now()){
   const ticket=sequence;graphicsPreparing=true;busy=true;lockInput();
   loading('Preparing restored graphics…');
