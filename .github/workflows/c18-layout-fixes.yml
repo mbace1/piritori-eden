@@ -1,0 +1,61 @@
+name: Apply C18 viewport fixes
+on:
+  push:
+    branches: [fix/c18-unified-ui-rendering]
+    paths: ['.github/workflows/c18-layout-fixes.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/c18-unified-ui-rendering
+      - name: Resolve browser-tested collisions
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          def replace(path,old,new,count=1):
+              p=Path(path); data=p.read_bytes(); old=old.encode(); new=new.encode()
+              assert data.count(old)==count,(path,old[:80],data.count(old))
+              p.write_bytes(data.replace(old,new))
+          css='web/crew-run/style.css'
+          replace(css,'header{grid-row:1;','header,#arena,#mission-bar,#panel{grid-column:1}\nheader{grid-row:1;')
+          replace(css,'#panel{grid-row:4;position:relative;','#panel{grid-row:4;position:relative;display:grid;grid-template-rows:auto minmax(0,1fr);')
+          replace(css,'#roster:not([hidden]){position:absolute;','#roster:not([hidden]){position:absolute;z-index:10;')
+          replace(css,'#enemy-plans{display:flex;','#enemy-plans{min-height:0;display:flex;')
+          replace(css,'#enemy-plans>p{margin:0;','#enemy-plans>p{margin:0;')
+          replace(css,"@media(prefers-reduced-motion:reduce){",'@media(max-height:560px) and (orientation:landscape){\n .command-centre:has(#tactical-preview:not([hidden]))>#actions,.command-centre:has(#tactical-preview:not([hidden]))>#hint{display:none}\n #tactical-preview:not([hidden]){position:static;max-width:none;padding:0;border:0;background:transparent;box-shadow:none;font-size:12px;line-height:1.25}\n #tactical-preview p{margin:0 0 4px}#tactical-preview button{min-height:44px;padding:5px 8px;font-size:17px}\n .command-console:has(#tactical-preview:not([hidden])){align-items:start}\n #enemy-plans{margin-top:3px;padding-top:3px}\n}\n@media(prefers-reduced-motion:reduce){')
+          # Avoid forcing a new implicit column when the menu arena spans rows 2–4.
+          # Announced reinforcements must still fit the mission strip on a phone.
+          replace(css,'.mission-meta{display:flex;align-items:center;gap:16px}', '.mission-meta{display:flex;align-items:center;gap:16px;min-width:0}')
+          replace(css,'#mission-pressure{color:var(--cream)}','#mission-pressure{color:var(--cream);white-space:normal;overflow-wrap:anywhere}')
+          replace(css,'#hint{font-size:13px;margin:0 0 4px;', '#hint{font-size:13px;line-height:16px;margin:0 0 2px;')
+          # Keep one cache identity for each shared simulation module.
+          replace('web/fight-module/main.js','./session.js?v=11','./session.js?v=12')
+          replace('web/fight-module/main.js','./tactics.js?v=6','./tactics.js?v=7')
+          replace('web/crew-run/ui.js','../fight-module/tactics.js?v=6','../fight-module/tactics.js?v=7')
+          # Hide only the redundant heading, never a risk warning or an enemy plan.
+          replace('web/fight-module/tactical-ui.js','    panel.append(summary);','    summary.hidden=!!intentLine&&!total&&!destination;panel.append(summary);')
+          # Measure the actual WebGL canvas after a naturally rendered frame.
+          # A screenshot of its bounding box could include DOM labels on top.
+          test='web/test/c18-ui-rendering.cjs'
+          replace(test,"const png=PNG.sync.read(await p.locator('#scene').screenshot());", "const dataURL=await p.evaluate(()=>new Promise((resolve,reject)=>{const start=fightModule.metrics().renderedFrames,until=performance.now()+15000;function sample(){if(fightModule.metrics().renderedFrames>start){resolve(document.getElementById('scene').toDataURL());return;}if(performance.now()>until){reject(Error('No new scene frame'));return;}requestAnimationFrame(sample);}requestAnimationFrame(sample);}));\n            const png=PNG.sync.read(Buffer.from(dataURL.split(',')[1],'base64'));")
+          replace(test,"assert.ok(await p.locator('.enemy-plan').count()>0,'enemy intentions visible by default');", "assert.ok(await p.locator('.enemy-plan').count()>0,'enemy intentions visible by default');\n            assert.ok(await p.locator('#enemy-plans').evaluate(e=>e.getBoundingClientRect().bottom<=innerHeight+1),'intent scroll area remains inside viewport');")
+          replace(test,"assert.equal(await p.locator('#choices').isVisible(),false,'no coordinate grid under the confirmation sheet');", "assert.equal(await p.locator('#choices').isVisible(),false,'no coordinate grid under the confirmation sheet');\n            if(spec.name==='landscape')assert.ok(await p.evaluate(()=>document.getElementById('tactical-preview').getBoundingClientRect().top>=document.getElementById('arena').getBoundingClientRect().bottom),'short landscape forecast stays below the scene');")
+          replace(test,"results.push({view:spec.name,worldHeight:","results.push({canvasPixels:true,view:spec.name,worldHeight:")
+          # Scope the new height treatment to this test's real source changes.
+          p=Path('design/C18_UNIFIED_UI.md'); p.write_bytes(p.read_bytes()+b'\n## Browser review corrections\n\nFirst six-layout screenshots rendered correctly, but full regression caught short-landscape forecast interception and an extraction button overlapping the crew drawer. The forecast now replaces the central command ribbon in short landscape instead of covering the arena, and the roster owns the top input layer. Grid columns are explicit during menu transitions. Enemy intent stays within a bounded scroll area; only its redundant no-danger heading is omitted. Pixel tests now read the canvas image after a naturally rendered frame, excluding DOM labels. No failing regression assertion was removed.\n')
+          PY
+          node --check web/fight-module/main.js
+          node --check web/test/c18-ui-rendering.cjs
+          node web/test/c18-render-contract.mjs
+          node web/test/crew-run.mjs
+          rm .github/workflows/c18-layout-fixes.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'C.18: keep forecasts and crew controls clear on short screens'
+          git push origin HEAD:fix/c18-unified-ui-rendering
