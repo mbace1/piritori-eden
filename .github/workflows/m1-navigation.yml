@@ -3,8 +3,8 @@ on:
   pull_request:
     paths:
       - 'web/index.html'
-      - 'web/v3.css'
-      - 'web/js/v3/app.js'
+      - 'web/m1-navigation.css'
+      - 'web/js/v3/m1-navigation.js'
       - 'web/test/m1-navigation.cjs'
       - 'web/test/v3-playthrough.cjs'
       - 'design/M1_NAVIGATION_ORIENTATION.md'
@@ -32,6 +32,7 @@ jobs:
           node web/test/visits.mjs
           node web/test/v3-contract.mjs
           node --check web/js/v3/app.js
+          node --check web/js/v3/m1-navigation.js
       - run: npm install --prefix /tmp/m1-test playwright
       - run: /tmp/m1-test/node_modules/.bin/playwright install --with-deps chromium
       - name: Existing playthrough plus M1 portrait/landscape acceptance
