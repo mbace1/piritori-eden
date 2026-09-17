@@ -1,4 +1,4 @@
-"""Stage the C.16.1 public cabinet from an exact, clean source checkout.
+"""Stage the current Night Shift public cabinet from an exact, clean source checkout.
 
 No network/upload. Only the explicit runtime allowlist is copied. Signed URLs,
 raw masters and art review sheets cannot enter through a directory-wide copy.
@@ -52,6 +52,36 @@ def read_previous_cabinet(previous_cabinet):
     return previous
 
 
+def build_identity(data):
+    html = data['web/crew-run/index.html'].decode('utf-8')
+    patterns = [r'<title>Piritori · Night Shift (C\.\d+(?:\.\d+)*)</title>',
+                r'<h1>NIGHT SHIFT <span>(C\.\d+(?:\.\d+)*)</span></h1>',
+                r'<summary>About this build / test fixtures</summary><p>(C\.\d+(?:\.\d+)*) —']
+    markers = [re.search(pattern, html) for pattern in patterns]
+    if not all(markers) or len({m.group(1) for m in markers}) != 1:
+        raise ValueError('Title, header and About must agree on release identity')
+    return markers[0].group(1)
+
+
+def compatibility_redirect(identity):
+    """Keep the published C.17 bookmark on the current canonical crew entry."""
+    if not re.fullmatch(r'C\.\d+(?:\.\d+)*', identity):
+        raise ValueError('Invalid compatibility build identity')
+    target = '../?campaign=1&release='+identity.removeprefix('C.')
+    return (f'<!doctype html><meta charset="utf-8"><title>Piritori {identity}</title>'
+            f'<meta http-equiv="refresh" content="0;url={target}">'
+            f'<a href="{target}">Open Night Shift {identity}</a>\n').encode()
+
+
+def finalize_receipt(data, release):
+    """Cover generated index and VERSIONS too; never hash the receipt itself."""
+    if 'release.json' in data:
+        raise ValueError('Receipt must be finalized exactly once')
+    release['tested_source_head'] = release['source_commit']
+    release['sha256'] = {name: hashlib.sha256(raw).hexdigest() for name, raw in sorted(data.items())}
+    data['release.json'] = (json.dumps(release, indent=2)+'\n').encode()
+
+
 def stage(source, deployed_manifest, output, commit, previous_cabinet):
     if not re.fullmatch(r'[a-f0-9]{40}', commit):
         raise ValueError('Pin the tested source commit, not a branch name')
@@ -75,21 +105,25 @@ def stage(source, deployed_manifest, output, commit, previous_cabinet):
     cache_versions(data)
     validate_cache_transition(data, read_previous_cabinet(previous_cabinet))
     data['art/v3/manifest.json'] = (json.dumps(manifest,ensure_ascii=False,indent=2)+'\n').encode()
-    entry = 'web/crew-run/?release=16.1'
-    release = {'build':'C.16.1','source_repository':'mbace1/piritori-eden',
+    identity = build_identity(data)
+    entry = 'web/crew-run/?campaign=1&release='+identity.removeprefix('C.')
+    release = {'build':identity,'source_repository':'mbace1/piritori-eden',
                'source_commit':commit,'entry':entry,'status':'connected-crew-pilot',
                'character_provider':'neutral stand-ins','physical_devices_verified':False,
                'transforms':['Scope runtime art register; preserve immutable fighter URLs'],
                'sha256':{name:hashlib.sha256(raw).hexdigest() for name,raw in sorted(data.items())}}
-    data['release.json'] = (json.dumps(release,indent=2)+'\n').encode()
-    data['index.html'] = ('<!doctype html><meta charset="utf-8"><title>Piritori C.16.1</title>'
+
+    data['index.html'] = (f'<!doctype html><meta charset="utf-8"><title>Piritori {identity}</title>'
                           f'<meta http-equiv="refresh" content="0;url={entry}"><a href="{entry}">Open arena</a>\n').encode()
-    data['VERSIONS.md'] = (f'# C.16.1 — Night Shift crew pilot\n\nSource: {commit}.\n\n'
-        'Controller navigation continues in static planning screens, equipment dialogs and the crew drawer. Exact source bytes and renewed module URLs repair the C.16 cache transition. Wet Courtyard surfaces, reflections and gun camera retained. '
-        '2/6/12-person neutral fixtures; campaign rules and character gates unchanged. '
-        'Pixel/iPad acceptance remains pending.\n\n'
-        '## Port\n\nGodot: reproduce C.16.1 wet surfaces, shoulder-side gun composition, preview/confirm/cancel, reduced-motion behavior and exact planning-view return. Preserve C.12 vectors; invalidate projected labels '
-        'on camera, actor, text or viewport changes. Campaign keeps its authored resolver.\n').encode()
+    data['VERSIONS.md'] = (f'# {identity} — Night Shift\n\nSource head: {commit}.\nTested source head: {commit}.\n\n'
+        'Focused fighter labels, full statistics in VIEW, selected/target rings, labelled south exit, and honest rescue guidance. '
+        'Enemy plans, action costs, rules, campaign settlement and procedural characters remain unchanged. '
+        'Physical Pixel/iPad and owner visual acceptance remain pending.\n\n'
+        '## Port\n\nGodot: reproduce focused/full label inspection without state changes; selected/target rings, '
+        'rescue state and south-edge extraction cue. Invalidate projected labels after text, camera or viewport changes. '
+        'Preserve all existing mission/result vectors. This release does not implement the Godot presentation port.\n').encode()
+    data['web/crew-run/c17/index.html'] = compatibility_redirect(identity)
+    finalize_receipt(data, release)
     # A new directory prevents stale files from an older, broader cabinet leaking.
     output.mkdir(parents=True,exist_ok=False)
     for name, raw in data.items():

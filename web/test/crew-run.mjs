@@ -49,3 +49,5 @@ console.log('C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/re
  assert.equal(s.battle.result,'win');assert.ok(s.battle.enemies.some(p=>p.alive));assert.deepEqual(restoreMission(content,config,missionCheckpoint(s)).snapshot(),s.snapshot());assert.ok(settle(state,s));assert.equal(state.last.changes.filter(p=>p.state.startsWith('Wounded')).length,2);
 }
 await import('./c17-campaign-bridge.mjs');
+
+await import('./c19-readability.mjs');

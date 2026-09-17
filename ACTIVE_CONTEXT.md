@@ -1,3 +1,20 @@
+# C.19 implementation and release record — 2026-09-17
+
+The approved acceptance/readability implementation is in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89).
+The matching hub records are [development #546](https://github.com/mbace1/Suds-Jack/pull/546)
+and [Pages #547](https://github.com/mbace1/Suds-Jack/pull/547). Read their latest
+acceptance/publication receipts rather than inferring publication from this
+document or a source merge. The shipping `piritori-c17/release.json` records
+exact source/tested heads, file hashes and the public build identity.
+
+Read [C.19 behavior and Godot port boundary](design/C19_READABILITY.md).
+Focused/full fighter labels, selected/target cues, rescue/recovery guidance,
+automatic crew-picker closure and a labelled exit preserve existing rules.
+Tests add defeat, checkpoint replay and onward recovery. Physical Pixel/iPad
+and owner visual/play acceptance remain OPEN; Godot presentation is unported.
+External character models remain parked. Map/mission work follows the approved
+small-iteration programme below, not an automatic new mission or map layout.
+
 # Piritori active context
 
 ## Owner-approved continuation — 2026-09-17
@@ -24,7 +41,7 @@ persistent consequences and repeat visits. Each checkpoint may take several
 builds and can be revisited. The 6–8-anchor / 20–30-minute chapter remains a later
 prototype target, not a quota or a claim that its map/missions are designed.
 
-## C.18 current public release — Night Shift
+## Historical C.18 public release — Night Shift
 
 The release record in [source PR #87](https://github.com/mbace1/piritori-eden/pull/87)
 identifies integration commit `48c9e2950c921521c6f5f0ef084d1eb89ad216a9` on

@@ -1,6 +1,7 @@
+import {fighterLabel} from './readability.js?v=1';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=3';
-import {mountCrew} from '../crew-run/ui.js?v=8';
+import {mountCrew} from '../crew-run/ui.js?v=9';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
@@ -16,7 +17,7 @@ import {loadParkAssets} from '../bear-path/assets.js?v=2';
 import {createEncounter} from '../bear-path/encounter.js?v=2';
 import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
-import {tacticalUI} from './tactical-ui.js?v=9';
+import {tacticalUI} from './tactical-ui.js?v=10';
 import {routes} from './tactics.js?v=7';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
@@ -36,6 +37,8 @@ let session,templates,content,manifest,busy=true,action='',auto=false,angle=.65,
 let renderer,world,camera,highlight,ray,ground,stage,actors=new Map(),labels=new Map(),fps=0,low=false,frameCount=0,seconds=0;
 let frameInfo,edgeSmoothing,layoutPaused=false,reflowTimer=0,autoTimer=0;
 const leaders=new Map();
+let fullLabels=false;
+try{fullLabels=localStorage.getItem('piritori-c19-labels')==='full';}catch{}
 const frameClock=createFrameClock(performance.now()),tagPositions=new Map();
 let tagsDirty=true,sceneDirty=true,labelLayouts=0,renderedFrames=0,actorList=[];
 document.fonts?.addEventListener('loadingdone',()=>{tagsDirty=true;});
@@ -107,10 +110,13 @@ function layoutTags(){
   const focusIds=actionFocus?.kind==='gun'&&actionFocus.strength>.9?[actionFocus.id,actionFocus.target]:null;
   for(const u of all()){const visible=!focusIds||focusIds.includes(u.id);labels.get(u.id).style.visibility=visible?'':'hidden';leaders.get(u.id).style.visibility=visible?'':'hidden';}
   const items=all().filter(u=>!u.waiting&&!u.evacuated&&(!focusIds||focusIds.includes(u.id))).map(u=>{const a=actors.get(u.id),el=labels.get(u.id),head=project(a.group.position.clone().add(new T.Vector3(0,a.down?.45:2.15,0))),feet=project(a.group.position),radius=Math.max(8,h/frameInfo.span*.32);return {id:u.id,anchor:head,width:el.offsetWidth,height:el.offsetHeight,body:isLab&&labCount>6?null:{x:feet.x-radius,y:head.y+4,width:radius*2,height:Math.max(0,feet.y-head.y-4)}};});
+  if(isCrew){const el=labels.get('@exit'),line=leaders.get('@exit');el.hidden=!!focusIds;line.style.display=focusIds?'none':'';if(!focusIds){const anchor=project(position('2,0').lerp(position('3,0'),.5).setY(.12));items.push({id:'@exit',anchor,width:el.offsetWidth,height:el.offsetHeight,body:null});}}
   for(const item of placeLabels(items,w,h,obstacles)){const el=labels.get(item.id),line=leaders.get(item.id);el.style.transform=`translate(${item.x}px,${item.y}px)`;const lx=Math.max(item.x+4,Math.min(item.x+item.width-4,item.anchor.x)),ly=item.y+item.height;line.setAttribute('x1',lx);line.setAttribute('y1',ly);line.setAttribute('x2',Math.max(2,Math.min(w-2,item.anchor.x)));line.setAttribute('y2',Math.max(2,Math.min(h-2,item.anchor.y)));line.setAttribute('opacity',Math.hypot(lx-item.anchor.x,ly-item.anchor.y)>11?'.72':'.35');}
 }
 function replaceCrewSession(next){sequence++;cancelFocus();auto=false;session=next;busy=false;action='';hint('');labUI?.cancel();if(ready){rebuildActors();fit();refresh();}}
-function rebuildActors(){tagsDirty=true;tagPositions.clear();for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();leaders.clear();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('label-leaders');svg.setAttribute('aria-hidden','true');$('labels').append(svg);for(const u of all()){const a=makeActor(isLab?{placeholder:true}:templates.get(u.modelId),u,world);a.group.position.copy(position(u.cell));a.group.visible=!u.waiting&&!u.evacuated;a.group.rotation.y=u.side==='player'?Math.PI:0;if(isLab)coverStance(a,u.cell);if(!u.alive){a.play('down');a.elapsed=1;updateActor(a,0);}actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;el.hidden=!!(u.waiting||u.evacuated);el.setAttribute('role','img');const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke',u.side==='enemy'?'#e3a18a':'#8fc5ae');line.setAttribute('stroke-width','1');svg.append(line);leaders.set(u.id,line);$('labels').append(el);labels.set(u.id,el);}actorList=[...actors.values()];}
+function rebuildActors(){tagsDirty=true;tagPositions.clear();for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();leaders.clear();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('label-leaders');svg.setAttribute('aria-hidden','true');$('labels').append(svg);for(const u of all()){const a=makeActor(isLab?{placeholder:true}:templates.get(u.modelId),u,world);a.group.position.copy(position(u.cell));a.group.visible=!u.waiting&&!u.evacuated;a.group.rotation.y=u.side==='player'?Math.PI:0;if(isLab)coverStance(a,u.cell);if(!u.alive){a.play('down');a.elapsed=1;updateActor(a,0);}actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;el.hidden=!!(u.waiting||u.evacuated);el.setAttribute('role','img');const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke',u.side==='enemy'?'#e3a18a':'#8fc5ae');line.setAttribute('stroke-width','1');svg.append(line);leaders.set(u.id,line);$('labels').append(el);labels.set(u.id,el);}
+  if(isCrew){const el=document.createElement('div');el.id='exit-marker';el.className='exit-marker';el.setAttribute('role','img');el.textContent='EXIT · A1–F1';const cost=document.createElement('small');cost.textContent='EXTRACT · 1 ACTION';el.append(cost);el.setAttribute('aria-label','South exit A1 to F1. Extract each fighter here for one Action.');$('labels').append(el);labels.set('@exit',el);const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke','#b6e1d9');line.setAttribute('stroke-width','1.5');svg.append(line);leaders.set('@exit',line);}
+  actorList=[...actors.values()];}
 function reset(mode=$('loadout').value){if(isCrew)return;if(isBear&&story){restartChapter();return;}if(graphicsLost||graphicsPreparing||!ready)return;sequence++;cancelFocus();fit();auto=false;clearRecovery();session=createSession(content,mode,scenario);rebuildActors();busy=false;action='';labUI?.cancel();$('result').hidden=true;hint(isLab?'Move + Act in either order. Inspect a destination or attack before confirming.':'Choose a fighter, then an action. One action each round.');refresh();}
 
 function clearHighlights(){for(const o of [...highlight.children]){o.geometry.dispose();o.material.dispose();highlight.remove(o);}}
@@ -137,9 +143,18 @@ function refresh(){
   $('choices').replaceChildren();$('choices').hidden=!canAct||!['move','attack'].includes(action);clearHighlights();
   if(!isLab&&canAct&&action==='move')for(const cell of validMoveCells(b,u)){tile(cell,0x8ecbaf);const p=parseSlotKey(cell);$('choices').append(button(`${String.fromCharCode(65+p.lane)}${p.depth+1}`,()=>run('move',cell),{'data-cell':cell,'aria-label':`Move to ${String.fromCharCode(65+p.lane)}${p.depth+1}`}));}
   if(!isLab&&canAct&&action==='attack'){const targets=attackTargets(b,u);for(const target of b.enemies.filter(v=>v.alive)){const valid=targets.some(v=>v.id===target.id),el=button(`${unitTag(target)} · ${target.name} · HP ${target.hp}/${target.maxHp} · G ${target.guard} · ${valid?(target.guard?'break guard':'hit condition'):'out of reach / blocked'}`,()=>run('attack',target.id),{'data-target':target.id});el.disabled=!valid;$('choices').append(el);if(valid)tile(target.cell,0xe9a38b,.30);}}
-  for(const p of all()){const el=labels.get(p.id),a=actors.get(p.id);el.classList.toggle('active',p.id===u?.id);el.classList.toggle('down',!p.alive);el.setAttribute('aria-label',`${unitTag(p)} · ${p.name} · ${p.alive?`HP ${p.hp}/${p.maxHp}, guard ${p.guard}`:'down'}`);el.title=el.getAttribute('aria-label');el.hidden=!!(p.waiting||p.evacuated);leaders.get(p.id).style.display=el.hidden?'none':'';a.group.visible=!p.waiting&&!p.evacuated;el.innerHTML=`<b>${unitTag(p)}</b><small>${p.alive?`<span>${p.hp}/${p.maxHp}</span><span>G${p.guard}</span>`:'DOWN'}</small>`;a.ring.material.opacity=p.alive?1:.25;a.ring.material.transparent=true;}
-  $('log').replaceChildren(...b.log.slice(0,12).map(s=>{const li=document.createElement('li');li.textContent=s;return li;}));
   if(isLab)labUI.render(action,busy);
+  for(const p of all()){
+    const el=labels.get(p.id),a=actors.get(p.id),view=fighterLabel(b,p,{targetId:labUI?.targetId(),full:!isLab||fullLabels});
+    el.classList.toggle('active',view.selected);el.classList.toggle('targeted',view.targeted);el.classList.toggle('objective',isCrew&&view.objective);el.classList.toggle('down',!p.alive);el.dataset.detail=view.detail;
+    el.setAttribute('aria-label',view.description);el.title=view.description;el.hidden=!!(p.waiting||p.evacuated);leaders.get(p.id).style.display=el.hidden?'none':'';a.group.visible=!p.waiting&&!p.evacuated;
+    el.replaceChildren();const identity=document.createElement('b');identity.textContent=unitTag(p);el.append(identity);
+    if(isCrew&&view.badge){const badge=document.createElement('em');badge.className='objective-badge';badge.textContent=view.badge;el.append(badge);}
+    const stats=document.createElement('small');if(p.alive){for(const value of [`${p.hp}/${p.maxHp}`,`G${p.guard}`]){const span=document.createElement('span');span.textContent=value;stats.append(span);}}else stats.textContent='DOWN';el.append(stats);
+    a.ring.material.opacity=p.alive?1:.25;a.ring.material.transparent=true;
+    if(isLab){a.ring.scale.setScalar(view.selected||view.targeted?1.18:1);a.ring.material.color.setHex(view.targeted?0xffd28a:view.selected?0xe7f3d0:p.side==='enemy'?0xe3a18a:0x8fc5ae);}
+  }
+  $('log').replaceChildren(...b.log.slice(0,12).map(s=>{const li=document.createElement('li');li.textContent=s;return li;}));
   refreshPolice();
   if(crew){crew.render(busy);if(!crew.inBattle())lockInput();}
   if(ended&&!busy&&!story&&!crew){$('result').hidden=false;$('result-title').textContent=({win:'JADE HOLDS THE YARD',loss:'RUST HOLDS THE YARD',withdraw:'CREW WITHDREW',partial:'TRUCE REACHED'})[b.result];$('result-text').textContent=`${b.round} rounds. ${all().filter(v=>!v.alive).length} downed. Training only: no campaign changes.`;}
@@ -155,8 +170,12 @@ function refreshPolice(){
   $('choices').hidden=true;clearHighlights();
 }
 
-function select(id){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready)return;session.command('select',id);crew?.persist();action='';labUI?.cancel();hint(isCrew?'':isLab?'Move + Act in either order. Rust plans are shown below.':'Choose Attack, Move, Brace or Bandage.');refresh();}
-function choose(name){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready||session.battle.status!=='active')return;labUI?.cancel();if(['brace','item','reload'].includes(name)){run(name);return;}action=action===name?'':name;hint(isLab?'Choose a destination or target to inspect, then confirm.':name==='move'?'Tap a green cell, or choose its coordinate below. Reposition spends this action.':'Choose a highlighted opponent. Cover and weapon lanes determine reach.');refresh();}
+function closeCrewPicker(){
+  if(!isCrew)return;const roster=$('roster'),picker=$('crew-picker'),hadFocus=roster.contains(document.activeElement);
+  roster.hidden=true;picker.setAttribute('aria-expanded','false');if(hadFocus)picker.focus({preventScroll:true});
+}
+function select(id){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready)return;session.command('select',id);crew?.persist();closeCrewPicker();action='';labUI?.cancel();hint(isCrew?'':isLab?'Move + Act in either order. Rust plans are shown below.':'Choose Attack, Move, Brace or Bandage.');refresh();}
+function choose(name){if(crew&&!crew.inBattle())return;if(story&&!story.isBattle())return;if(busy||graphicsLost||layoutPaused||!ready||session.battle.status!=='active')return;closeCrewPicker();labUI?.cancel();if(['brace','item','reload'].includes(name)){run(name);return;}action=action===name?'':name;hint(isLab?'Choose a destination or target to inspect, then confirm.':name==='move'?'Tap a green cell, or choose its coordinate below. Reposition spends this action.':'Choose a highlighted opponent. Cover and weapon lanes determine reach.');refresh();}
 function tween(seconds,fn){const ticket=sequence,clock=createPresentationClock(performance.now());clock.pause(hidden||layoutPaused,performance.now());presentationClocks.add(clock);return new Promise((resolve,reject)=>{function tick(now){if(ticket!==sequence||graphicsLost){presentationClocks.delete(clock);reject(new Interrupted());return;}const elapsed=clock.take(now);fn(Math.min(1,elapsed/seconds));if(elapsed<seconds)requestAnimationFrame(tick);else{presentationClocks.delete(clock);resolve();}}requestAnimationFrame(tick);});}
 async function moveVisual(id,to){const a=actors.get(id),from=a.group.position.clone(),dest=typeof to==='string'?position(to):to;const d=dest.clone().sub(from);if(d.length()<.01)return;a.group.rotation.y=Math.atan2(d.x,d.z);a.play('walk');const duration=(a.bakedMotion||a.placeholder)?Math.max(.5,d.length()/1.45):Math.min(1.3,Math.max(.5,d.length()*.2));a.bakedMotion?.setWalkSpeed(d.length()/duration);a.setWalkSpeed?.(d.length()/duration);await tween(duration,t=>a.group.position.lerpVectors(from,dest,t));a.play('idle');}
 async function gesture(id,mode,duration=.75){const a=actors.get(id);a.play(mode,duration);await tween(duration,()=>{});if(mode!=='down')a.play('idle');}
@@ -170,7 +189,7 @@ let actionFocus=null,focusEnabled=false,focusSerial=0,aimPose=null;
 try{focusEnabled=localStorage.getItem('piritori-c10-focus')==='on';}catch{}
 function cancelFocus(){if(aimPose){const a=actors.get(aimPose.id);if(a){a.group.rotation.y=aimPose.rotation;a.peek=0;a.play('idle');}aimPose=null;}focusSerial++;actionFocus=null;tagsDirty=true;updateFocusButton();}
 function updateFocusButton(){if($('aim-preview')){$('aim-preview').textContent=actionFocus?.kind==='gun'?'Overview':'Aim view';$('aim-preview').setAttribute('aria-pressed',String(actionFocus?.kind==='gun'));}area.dataset.camera=actionFocus?.kind==='gun'?'aim':'overview';if($('actioncam')){$('actioncam').textContent='FOCUS '+(focusEnabled?'ON':'OFF');$('actioncam').setAttribute('aria-pressed',String(focusEnabled));}}
-if(isLab){updateFocusButton();activate($('actioncam'),()=>{cancelFocus();focusEnabled=!focusEnabled;try{localStorage.setItem('piritori-c10-focus',focusEnabled?'on':'off');}catch{}updateFocusButton();fit();});}
+if(isLab){const control=button('',()=>{fullLabels=!fullLabels;try{localStorage.setItem('piritori-c19-labels',fullLabels?'full':'focused');}catch{}paintLabelControl();refresh();},{id:'label-mode','aria-label':'Show all fighter statistics','aria-pressed':String(fullLabels)});function paintLabelControl(){control.textContent='Labels: '+(fullLabels?'all stats':'focused');control.setAttribute('aria-pressed',String(fullLabels));}paintLabelControl();($('camera-panel')||$('camera-tools')).append(control);updateFocusButton();activate($('actioncam'),()=>{cancelFocus();focusEnabled=!focusEnabled;try{localStorage.setItem('piritori-c10-focus',focusEnabled?'on':'off');}catch{}updateFocusButton();fit();});}
 function aimState(id,target){
   const a=actors.get(id),b=actors.get(target);if(!a||!b||!a.unit.equipment.includes('handgun'))return null;
   return {kind:'gun',id,target,from:a.group.position.clone(),to:b.group.position.clone(),strength:0};
@@ -348,7 +367,7 @@ function tick(now){
   if(seconds>2){
     fps=Math.round(frameCount/seconds*10)/10;fpsSamples++;
     if(fps<22&&!low){low=true;profile=renderProfile({touch:true});applyProfile();}
-    $('perf').textContent=`${isCrew?'C.18 · UNIFIED UI':isLab?'C.11 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
+    $('perf').textContent=`${isCrew?'C.19 · FIELD CLARITY':isLab?'C.19 · MOVE + ACT':isBear?'C.08':'C.06'} · ${fps} FPS · ${renderer.info.render.calls} draws · ${profile.name}`;
     tagsDirty=true;frameCount=0;seconds=0;
   }
 }
@@ -371,7 +390,7 @@ async function boot(){
   if(crew){
   window.crewRun={snapshot:()=>crew.state()};
   for(const [id,value]of [['graphics-safe','safe'],['graphics-auto','auto']])activate($(id),()=>{crew.persist();const url=new URL(location.href);if(value==='safe')url.searchParams.set('graphics','safe');else url.searchParams.delete('graphics');location.assign(url.href);});
-  $('help-dialog').addEventListener('toggle',()=>{if($('help-dialog').open)$('graphics-status').textContent=`C.18 · ${safeGraphics?'safe':'direct'} rendering · ${canvas.width} × ${canvas.height} · ${renderedFrames} frames\nWebGL ${graphicsLost?'lost':'active'}${renderError?'\n'+renderError:''}`;});
+  $('help-dialog').addEventListener('toggle',()=>{if($('help-dialog').open)$('graphics-status').textContent=`C.19 · ${safeGraphics?'safe':'direct'} rendering · ${canvas.width} × ${canvas.height} · ${renderedFrames} frames\nWebGL ${graphicsLost?'lost':'active'}${renderError?'\n'+renderError:''}`;});
 }
   window.fightModule={snapshot:()=>session.snapshot(),view:()=>({frame:frameInfo,points:all().map(u=>({id:u.id,head:project(actors.get(u.id).group.position.clone().add(new T.Vector3(0,2.15,0))),feet:project(actors.get(u.id).group.position)})),cells:Array.from({length:LANES*totalRows()},(_,i)=>{const cell=`${i%LANES},${Math.floor(i/LANES)}`;return {cell,...project(position(cell)),head:project(position(cell).setY(2.3))};})}),metrics:()=>({scenario,graphicsMode:safeGraphics?'safe':isCrew?'direct':'standard',renderError,environment:stage.metrics?.(),camera:{preset:cameraPreset,mode:actionFocus?.kind||'overview',strength:actionFocus?.strength||0,ids:actionFocus?.kind==='gun'?[actionFocus.id,actionFocus.target]:[],enabled:focusEnabled},story:story?.checkpoint().state,layoutPaused,fps,fpsSamples,graphicsPreparing,preparationMs,renderedFrames,labelLayouts,edgeSmoothing:edgeSmoothing.metrics(),draws:renderer.info.render.calls,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,models:actors.size,characterProvider:isLab?'development stand-ins':'v05 imported prototypes',bones:[...actors.values()].map(a=>a.bones.size),busy,graphicsLost,losses,recoveries,profile:profile.name,pixelRatio:renderer.getPixelRatio(),drawingBuffer:[canvas.width,canvas.height],shadows:renderer.shadowMap.enabled,antialias:renderer.getContextAttributes()?.antialias,textureSizes:[...templates.values()].map(t=>{const sizes=new Set();t.scene.traverse(n=>{for(const mat of [].concat(n.material||[]))for(const v of Object.values(mat))if(v?.isTexture)sizes.add(v.image?.width+'x'+v.image?.height);});return [...sizes];}),mode:session.mode,history:session.history.map(r=>({type:r.type,actor:r.actor,value:r.value})),finite:[...actors.values()].every(a=>a.placeholder?Array.from(a.mesh.instanceMatrix.array).every(Number.isFinite):[...a.bones.values()].every(b=>b.matrixWorld.elements.every(Number.isFinite)))})};
   if(graphicsLost){lockInput();return;}if(recoveries){resumeGraphics();return;}busy=false;if(story?.isBattle()&&session.battle.status!=='active')story.complete(session.result());refresh();$('loading').hidden=true;clearRecovery();saveStory();if(restored)hint('Saved turn restored. Lighter rendering is active.');frameClock.reset(performance.now());frameCount=seconds=0;queueFrame();

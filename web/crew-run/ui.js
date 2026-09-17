@@ -1,3 +1,4 @@
+import {missionCue} from '../fight-module/readability.js?v=1';
 import {LOCATIONS,locationId} from './locations.js?v=3';
 import {SAVE_KEY,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=3';
 import {icon} from './icons.js?v=2';
@@ -56,7 +57,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
   }
   paintBattle(b,b.players.find(p=>p.id===b.selectedId));
 
-  const m=b.mission,u=b.players.find(p=>p.id===b.selectedId),target=b.players.find(p=>p.id===m.targetId),carrier=b.players.find(p=>p.id===m.carrierId),goal=target?(target.extracted?'Colleague extracted':target.alive?`Get ${target.name} to the south exit`:`Help ${target.name} at ${coordinate(target.cell)}`):carrier?`${carrier.name} carries the kit · extract them`:`Recover the kit at ${coordinate(m.targetCell)}`;
+  const m=b.mission,u=b.players.find(p=>p.id===b.selectedId),target=b.players.find(p=>p.id===m.targetId),carrier=b.players.find(p=>p.id===m.carrierId),goal=missionCue(b,coordinate).goal;
   $('mission-goal').textContent=goal;$('mission-pressure').textContent=m.arrived?'RIVALS ENTERED':m.arrival?`ARRIVALS: AFTER TURN ${m.arrival.afterRound} · A8 / F8`:`PRESSURE ${m.heat}/5`; $('mission-pressure').dataset.hot=String(!!m.arrival);
   $('mission-count').textContent=`${b.players.filter(p=>p.evacuated).length}/${b.players.length} HOME${storageOK?'':' · SAVING UNAVAILABLE'}`;
   for(let x=0;x<6;x++)tile(`${x},0`,0x38b8c8,.08);if(target&&!target.evacuated)tile(target.cell,0xffdb80,.5);if(!target&&!m.recovered)tile(m.targetCell,0xffdb80,.5);if(m.arrival&&!m.arrived)for(const c of m.arrival.cells)tile(c,0xee8f74,.48);
