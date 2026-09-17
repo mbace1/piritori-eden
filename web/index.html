@@ -74,7 +74,14 @@
   <script>
     (function bootM1() {
       if (window.__ptv3?.data && document.getElementById('splash')?.hidden) {
-        import('./js/v3/m1-navigation.js?v=1').catch(error => console.error('M1 navigation failed to load', error));
+        if (!document.querySelector('script[data-m1-navigation]')) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = 'js/v3/m1-navigation.js?v=1';
+          script.dataset.m1Navigation = '1';
+          script.addEventListener('error', () => console.error('M1 navigation module failed to load'));
+          document.body.append(script);
+        }
         return;
       }
       setTimeout(bootM1, 25);
