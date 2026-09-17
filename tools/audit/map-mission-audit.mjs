@@ -57,6 +57,11 @@ export function auditMapMissions(map, content) {
       // Declared success/partial/failure packets are not proof that a runner executes them.
       declaredEffects:{success:mission.success_effects ?? [], partial:mission.partial_effects ?? [], failure:mission.failure_effects ?? []}};
   });
+  const battleRows = [...battles.values()].map(battle => {
+    requireId(anchors, battle.location_anchor_id, battle.id, 'location_anchor_id');
+    return {id:battle.id, anchor:battle.location_anchor_id, training:Boolean(battle.training),
+      missions:[...missions.values()].filter(mission => mission.battle_id === battle.id).map(mission => mission.id)};
+  });
   const visitRows = [...visits.values()].map(visit => {
     requireId(encounters, visit.requires_encounter, visit.id, 'requires_encounter');
     requireId(sites, visit.site_id, visit.id, 'site_id');
@@ -94,7 +99,7 @@ export function auditMapMissions(map, content) {
     edges:(map.edges ?? []).map(edge => ({id:edge.id, from:edge.from, to:edge.to, corridor:edge.corridor, modes:edge.modes})),
     services:(map.periodServices ?? []).map(service => ({id:service.id, mode:service.mode, anchors:service.anchorSequence})),
     graphCaveat:'Undirected declared-edge reachability is not available travel, timing, a fare, or a period-service simulation.',
-    schedule, contacts, missions:missionRows, visits:visitRows, operations, findings,
+    schedule, contacts, missions:missionRows, battles:battleRows, visits:visitRows, operations, findings,
   };
 }
 
@@ -109,7 +114,7 @@ export function readAudit(root) {
   const content = JSON.parse(read('content/era1-slice-v1.json'));
   // These fingerprints identify the manually reviewed implementation, not an inferred coverage score.
   for (const path of ['web/js/v3/app.js','web/js/v3/state.js','web/js/v3/content.js',
-    'web/js/v3/board.js','web/js/v3/visits.js','missions/model.mjs']) read(path);
+    'web/js/v3/board.js','web/js/v3/visits.js','market/model.mjs','missions/model.mjs']) read(path);
   return {inputs, ...auditMapMissions(map, content)};
 }
 

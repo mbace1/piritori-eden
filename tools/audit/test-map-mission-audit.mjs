@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {auditMapMissions, readAudit} from './map-mission-audit.mjs';
 import {createState, currentEncounter, chooseEncounter, advanceSchedule} from '../../web/js/v3/state.js?v=6';
@@ -28,6 +30,28 @@ const duplicate = structuredClone(map);duplicate.anchors.push({...duplicate.anch
 assert.ok(auditMapMissions(duplicate,content).findings.some(f => f.kind === 'invalid-or-duplicate-id'));
 const missing = structuredClone(content);missing.schedule[0].encounter_id='missing-scene';
 assert.ok(auditMapMissions(map,missing).findings.some(f => f.kind === 'missing-reference' && f.id === 'missing-scene'));
+const brokenBattle = structuredClone(content);
+brokenBattle.battles[0].location_anchor_id = 'missing-battle-anchor';
+assert.ok(auditMapMissions(map,brokenBattle).findings.some(f => f.kind === 'missing-reference'
+  && f.owner === brokenBattle.battles[0].id && f.field === 'location_anchor_id' && f.id === 'missing-battle-anchor'));
+assert.equal(report.battles.find(b => b.id === 'battle-hermanni-training').anchor,'hermanni_skatepark');
+assert.equal(report.battles.find(b => b.id === 'battle-hermanni-training').training,true);
+assert.match(report.inputs['market/model.mjs'],/^[0-9a-f]{64}$/);
+// Changing only a transitive market dependency must change the audit identity.
+// All synthetic writes are confined to a new temporary directory, never the checkout.
+const temp=mkdtempSync(join(tmpdir(),'piritori-m0-fingerprint-'));
+try {
+  for (const path of Object.keys(report.inputs)) {
+    const target=join(temp,path);mkdirSync(dirname(target),{recursive:true});
+    writeFileSync(target,readFileSync(join(root,path)));
+  }
+  assert.deepEqual(readAudit(temp),report);
+  writeFileSync(join(temp,'market/model.mjs'),readFileSync(join(temp,'market/model.mjs'),'utf8')+'\n// synthetic fingerprint probe\n');
+  const changed=readAudit(temp);
+  assert.notEqual(changed.inputs['market/model.mjs'],report.inputs['market/model.mjs']);
+  for (const path of Object.keys(report.inputs).filter(path=>path!=='market/model.mjs'))
+    assert.equal(changed.inputs[path],report.inputs[path]);
+} finally {rmSync(temp,{recursive:true,force:true});}
 assert.deepEqual({map,content},before,'valid and invalid catalogue inspection never edits source data');
 const data = {content, map};
 for (const [key,items] of Object.entries({anchors:map.anchors,sites:map.sites,encounters:content.encounters,
@@ -36,9 +60,13 @@ for (const [key,items] of Object.entries({anchors:map.anchors,sites:map.sites,en
 }
 // Pure-model evidence only; these calls are NOT a browser or travel playthrough.
 const state = createState(content);
-for (const id of ['buy','complete']) {
+assert.equal(state.cash,160,'documented starting cash');
+assert.equal(state.stock.piri,0,'no opening stock');
+for (const [id,expectedCash,expectedStock] of [['buy',115,1],['complete',183,0]]) {
   const encounter = currentEncounter(state,data),choice=encounter.choices.find(choice => choice.id === id);
   assert.ok(chooseEncounter(state,encounter,choice,data).ok);
+  assert.equal(state.cash,expectedCash,`${id}: documented cash transition`);
+  assert.equal(state.stock.piri,expectedStock,`${id}: stock changes exactly once`);
   const after=structuredClone(state);
   assert.equal(chooseEncounter(state,encounter,choice,data).reason,'already-resolved');
   assert.deepEqual(state,after,'repeated choice cannot settle twice');

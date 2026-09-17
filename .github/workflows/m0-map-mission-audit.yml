@@ -8,6 +8,7 @@ on:
       - 'content/era1-slice-v1.json'
       - 'web/js/v3/**'
       - 'missions/model.mjs'
+      - 'market/**'
       - 'tools/audit/**'
       - 'design/M0_MAP_MISSION_AUDIT.md'
       - 'AGENTS.md'
