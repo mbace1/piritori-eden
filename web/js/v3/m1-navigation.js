@@ -10,6 +10,7 @@ let routeDraft = [];
 let routeMessage = '';
 let applying = false;
 let queued = false;
+let lastScheduleIndex = null;
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -92,6 +93,11 @@ function orientationMarkup() {
     ${routeCopy}`;
 }
 
+function findAreaCard(side) {
+  return [...side.querySelectorAll(':scope > section.paper-panel')]
+    .find(section => !section.classList.contains('m1-orientation-card') && section.querySelector('[data-action="plan-route"]')) ?? null;
+}
+
 function apply() {
   if (applying) return;
   const g = game();
@@ -100,6 +106,13 @@ function apply() {
   try {
     const schedule = slot();
     if (!schedule) return;
+    if (lastScheduleIndex !== null && g.state.scheduleIndex !== lastScheduleIndex) {
+      inspectionFocus = null;
+      routePlanning = false;
+      routeDraft = [];
+      routeMessage = '';
+    }
+    lastScheduleIndex = g.state.scheduleIndex;
     const present = g.state.selectedAnchor;
     const inspected = inspectedId();
 
@@ -115,7 +128,9 @@ function apply() {
         if (dot && point) {
           const ring = document.createElementNS(SVG, 'circle');
           ring.setAttribute('class', 'map-presence-ring');
-          ring.setAttribute('cx', String(point.x)); ring.setAttribute('cy', String(point.y)); ring.setAttribute('r', '30');
+          ring.setAttribute('cx', String(point.x));
+          ring.setAttribute('cy', String(point.y));
+          ring.setAttribute('r', '30');
           group.insertBefore(ring, dot);
         }
       }
@@ -131,9 +146,12 @@ function apply() {
       side.prepend(card);
     }
     const markup = orientationMarkup();
-    if (card.dataset.markup !== markup) { card.innerHTML = markup; card.dataset.markup = markup; }
+    if (card.dataset.markup !== markup) {
+      card.innerHTML = markup;
+      card.dataset.markup = markup;
+    }
 
-    const areaCard = side.querySelector('.node-actions')?.closest('section.paper-panel');
+    const areaCard = findAreaCard(side);
     const areaLabel = areaCard?.querySelector('.section-label');
     if (areaLabel) {
       const desired = `YOU ARE HERE · ${anchor(present)?.sliceState ?? 'active'} · PUBLIC ANCHOR`;
@@ -151,7 +169,11 @@ function queueApply() {
   queueMicrotask(() => { queued = false; apply(); });
 }
 
-function stop(event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
+function stop(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+}
 
 root.addEventListener('click', event => {
   const target = event.target.closest('[data-action]');
@@ -160,11 +182,15 @@ root.addEventListener('click', event => {
   if (action === 'select-anchor') {
     stop(event);
     inspectionFocus = target.dataset.anchor;
-    if (routePlanning && !sealed(inspectionFocus)) routeDraft = [game().state.selectedAnchor, inspectionFocus].filter((id, i, a) => i === 0 || id !== a[0]);
+    if (routePlanning && !sealed(inspectionFocus)) {
+      routeDraft = [game().state.selectedAnchor, inspectionFocus].filter((id, index, ids) => index === 0 || id !== ids[0]);
+    }
     routeMessage = sealed(inspectionFocus) ? `${label(inspectionFocus)} is visible but sealed.` : '';
     apply();
   } else if (action === 'm1-show-lead') {
-    stop(event); inspectionFocus = slot()?.anchor_id ?? game().state.selectedAnchor; apply();
+    stop(event);
+    inspectionFocus = slot()?.anchor_id ?? game().state.selectedAnchor;
+    apply();
   } else if (action === 'm1-use-area') {
     stop(event);
     const id = target.dataset.anchor;
@@ -173,7 +199,9 @@ root.addEventListener('click', event => {
     state.selectedAnchor = id;
     markSeen(state, id);
     inspectionFocus = id;
-    routePlanning = false; routeDraft = []; routeMessage = '';
+    routePlanning = false;
+    routeDraft = [];
+    routeMessage = '';
     game().debug.setState(state);
   } else if (action === 'plan-route') {
     stop(event);
@@ -182,14 +210,21 @@ root.addEventListener('click', event => {
     routeMessage = '';
     apply();
   } else if (action === 'm1-route-cancel') {
-    stop(event); routePlanning = false; routeDraft = []; routeMessage = ''; apply();
+    stop(event);
+    routePlanning = false;
+    routeDraft = [];
+    routeMessage = '';
+    apply();
   } else if (action === 'm1-route-commit') {
     stop(event);
     const path = routePreview();
     const result = commitRoute(game().state, path);
     routeMessage = result.message;
-    if (result.ok) { routePlanning = false; routeDraft = []; game().debug.setState(game().state); }
-    else apply();
+    if (result.ok) {
+      routePlanning = false;
+      routeDraft = [];
+      game().debug.setState(game().state);
+    } else apply();
   }
 }, true);
 
