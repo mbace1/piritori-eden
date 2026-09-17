@@ -73,7 +73,7 @@
   <script type="module" src="js/v3/app.js?v=13"></script>
   <script>
     (function bootM1() {
-      if (window.__ptv3?.data) {
+      if (window.__ptv3?.data && document.getElementById('splash')?.hidden) {
         import('./js/v3/m1-navigation.js?v=1').catch(error => console.error('M1 navigation failed to load', error));
         return;
       }
