@@ -63,6 +63,15 @@ def build_identity(data):
     return markers[0].group(1)
 
 
+def finalize_receipt(data, release):
+    """Cover generated index and VERSIONS too; never hash the receipt itself."""
+    if 'release.json' in data:
+        raise ValueError('Receipt must be finalized exactly once')
+    release['tested_source_head'] = release['source_commit']
+    release['sha256'] = {name: hashlib.sha256(raw).hexdigest() for name, raw in sorted(data.items())}
+    data['release.json'] = (json.dumps(release, indent=2)+'\n').encode()
+
+
 def stage(source, deployed_manifest, output, commit, previous_cabinet):
     if not re.fullmatch(r'[a-f0-9]{40}', commit):
         raise ValueError('Pin the tested source commit, not a branch name')
@@ -93,16 +102,17 @@ def stage(source, deployed_manifest, output, commit, previous_cabinet):
                'character_provider':'neutral stand-ins','physical_devices_verified':False,
                'transforms':['Scope runtime art register; preserve immutable fighter URLs'],
                'sha256':{name:hashlib.sha256(raw).hexdigest() for name,raw in sorted(data.items())}}
-    data['release.json'] = (json.dumps(release,indent=2)+'\n').encode()
+
     data['index.html'] = (f'<!doctype html><meta charset="utf-8"><title>Piritori {identity}</title>'
                           f'<meta http-equiv="refresh" content="0;url={entry}"><a href="{entry}">Open arena</a>\n').encode()
-    data['VERSIONS.md'] = (f'# {identity} — Night Shift\n\nSource: {commit}.\n\n'
+    data['VERSIONS.md'] = (f'# {identity} — Night Shift\n\nSource head: {commit}.\nTested source head: {commit}.\n\n'
         'Focused fighter labels, full statistics in VIEW, selected/target rings, labelled south exit, and honest rescue guidance. '
         'Enemy plans, action costs, rules, campaign settlement and procedural characters remain unchanged. '
         'Physical Pixel/iPad and owner visual acceptance remain pending.\n\n'
         '## Port\n\nGodot: reproduce focused/full label inspection without state changes; selected/target rings, '
         'rescue state and south-edge extraction cue. Invalidate projected labels after text, camera or viewport changes. '
         'Preserve all existing mission/result vectors. This release does not implement the Godot presentation port.\n').encode()
+    finalize_receipt(data, release)
     # A new directory prevents stale files from an older, broader cabinet leaking.
     output.mkdir(parents=True,exist_ok=False)
     for name, raw in data.items():
