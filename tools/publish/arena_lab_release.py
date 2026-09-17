@@ -1,4 +1,4 @@
-"""Stage the C.16.1 public cabinet from an exact, clean source checkout.
+"""Stage the current Night Shift public cabinet from an exact, clean source checkout.
 
 No network/upload. Only the explicit runtime allowlist is copied. Signed URLs,
 raw masters and art review sheets cannot enter through a directory-wide copy.
@@ -63,6 +63,16 @@ def build_identity(data):
     return markers[0].group(1)
 
 
+def compatibility_redirect(identity):
+    """Keep the published C.17 bookmark on the current canonical crew entry."""
+    if not re.fullmatch(r'C\.\d+(?:\.\d+)*', identity):
+        raise ValueError('Invalid compatibility build identity')
+    target = '../?campaign=1&release='+identity.removeprefix('C.')
+    return (f'<!doctype html><meta charset="utf-8"><title>Piritori {identity}</title>'
+            f'<meta http-equiv="refresh" content="0;url={target}">'
+            f'<a href="{target}">Open Night Shift {identity}</a>\n').encode()
+
+
 def finalize_receipt(data, release):
     """Cover generated index and VERSIONS too; never hash the receipt itself."""
     if 'release.json' in data:
@@ -112,6 +122,7 @@ def stage(source, deployed_manifest, output, commit, previous_cabinet):
         '## Port\n\nGodot: reproduce focused/full label inspection without state changes; selected/target rings, '
         'rescue state and south-edge extraction cue. Invalidate projected labels after text, camera or viewport changes. '
         'Preserve all existing mission/result vectors. This release does not implement the Godot presentation port.\n').encode()
+    data['web/crew-run/c17/index.html'] = compatibility_redirect(identity)
     finalize_receipt(data, release)
     # A new directory prevents stale files from an older, broader cabinet leaking.
     output.mkdir(parents=True,exist_ok=False)
