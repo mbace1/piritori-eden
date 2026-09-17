@@ -16,22 +16,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Apply bounded byte delta
+      - name: Apply bounded drawer and cache correction
         run: |
           git checkout -b c19-drawer-work 595d380d8e495120f4cb8b4926860900d3a97aca
           python3 - <<'PY'
-          import base64,hashlib,json,pathlib,zlib
-          payload='eNq9V21vG7kR/isbtcjKqKzwndz4fMHl0AIFrsDh+vIlzochObS2kbS63VV8Rpz/3mcl+6y8XYAWPUMGtStyyHmemWeG72Y3HJ+V9no1nm+6vF/zsw212+W/h9nzd7PIpet59nwWm6hYRM45sLOsjNVWZXbJGmEbH5VskjBNTs670hgXkhBWR2q0it4GMVvMqIzcw1SQRgbnffClYeGFkNo0OrJxMfsgWGhB2SdfiinCwLwoURJl442JgRqY6nY43atXSmL+IgS5mJX9No1tt63Suhv4+55vfmzTG+7nZ++utlXVlvmTdphen/U87vvtReq2w1j13YBDXf5xXh+/1WeL3WHd9Cph+vnxEe9XlP/Spf1weZy5hIERQA3zjLcb3o5Lwgne8p/XPD2dXUz73s9dtTnz9nLs93xxNLgcePxuHPs27kee19S3dM6/7GibOdeLutB64PrsAud+2PfsfmGZHubvdj2/xTZ/T323Xj+fLL+ftnx/tf0VioHXnMZ5m8/ewc7kzdOnT6Zh2W5f0jiueX72AAcmDGPX32LGYVy2w2emxP1we3d33dVu1abhBzh3d7em224//kj7gfPd3ZOeKd8+LBl4GHASYLXZwLV5fTxSvcCZLqaTvFjuuB/aYZzj+WPmLujgx2VdX6wp/vOvL5aJtonX+GXVbuHYgdAXdf28HX6g+KL+W/eWqz9V36WxarcVt+OK+6rrM1CrftqD7t2atkNFPVfDqrvZVpHX3c2yfl5/v+qweQVGKL1ZVJOhRfWyp8RYX73E2emalyCk59LzsMIR3l/1J1ing4H5ljb8u6N9d/eAczwYWQ4jjfvhyeVlfQzJ+teg/wTij4HFtq/qODmOKGxH3mDogRLl+jUcSet95uHo5tm7fr89fr24t//+nrH74fJy+nUiaBofSDtQdQ84VTA3tls6gAioR+qveazGDgwOO8TKogKLwLfblrbfLI+mYLnegKP6Rf0P2sHKdc/TJF6vF5OVIxtVOw5YiACYNuB7tqufeNcN7TFDdrzNA3ZoERWHM58EA1UrqOJ6UkbOVbfbddspy6vvsXFfISSqGya8rBBUPMARZPqm3XIFUtLqM8Eye/36/eIgtwdlAXrPwFQ/7ncfq61pIpEXlBrjlZVsObEuNqkAhSXjjEnaWSdclExOk3BWF2Viw03wnPKJ2spImGS9zEpaQRLqLRw32spYUvE6sZQEHc7eBG58wEtZmKWVhSQV86i2Unu5MA6mb6hFhm12XT/O6+Xys9XjxdtLLepJkh7dRuJt6Rwh96yFzv2yXI2b9Qd+S5ZCMqQfYh+C4lKUyl7r7FWKsUj2TgqfrbJwAK+ajENl7xJ7EkL7E7+zDtkmEg3+A1wvjXM2KC0kqlORIYuIQhWKK66RAaUlKZVQqKwrKhjWj37jKHYx1ZhvhtS3OwTn7Y4vr2ZHf69m1dAnPP4WDlezb795dlyNL7HLtxgm7789heeD5V9AKGTdqBJcLCWYYlyKYKWkCMYMKRTllKRLkoUjTTJam40FtaRQdbP36gQhZUKSIofoS4TDMQu2WqK4AxIEkwpeZMekigQfluwUHbZEQtUnq7U8QUg7v8Dnawj9F5hEpv58R+PqS4A0WQX2LIITIZc8tRCKo9LEjMNb3UhuMgLcoalw7Fy2CAl9YN9JJd0JIMBQuhikbEgby7LRTkXpkWG26GAlWhsEnfUMID2Wxuy0RECFJnmlOJ2GjG1+l5D5VUi+gA4SRhUEhYxKlAZpkJ1Et0YhY9DM2eWk0WKBbxbKoc1ik40JREFrF/QJOmjLio+msdJrU1ixdC4Roc+TJkxJ60sIZAB7QjgKKSzSj40NWsSABH1EJyDMFi58PVwe1RGQmC8j8ojHiGryLMlwDqVB2T+fmjQUs3G5+UhhUy5sfCNyEtnErKbEIbSTxIF1MAbKoFyWWQRvIUBSkwOCcJAmWMRpPysbkXLWRUZIqlca2uVzQIoiQYvW1roglHFQ5mRyhqhpB4HNkkx0vmnUicJapRZ+Uthh4H5cdm/mk3+PdbcexlvU9zRMgLj67OnTT34/Raw++1B/79Fpzqe2gWK7bsfb89h3N8PUz36EEDrwRN4qgfKCRMoCnX4RzqBkNNI4FRLQEyyhxvAOdQWAIcegtoai0Keh41NTXDApS9/kLAFFMDFhpUOLT0E0FvoD3AtLjZuF8zFl5W0C3IVUE046fqC5kAoQVfg7FqKRdvPdct0lQis1r//wQduOJvJzk15lGul8v0UbkBFqhyXyavb6sOAIPv+8p/X8uPrU/MNFAT3bv9qhjVPTtjj064v79vZ4DYFwTZ0FP7Q0KH5Uf9X6B4dfXv/GJeHs8ZbwKceTlWs0SjvKnxBrPcUgogaHTlgVXUDlk8y2EBjFzYwl7ncCSsdGZeEgbdZ7ksVnIbJMJ8SmorhpUBcoRB3RqmRIoUPpSEFCQShqSTATcMOTUJ+YPFllMkoV9KOx+YRYj7hHbQex/wP+h3THfQj92SkV6OaOVOSebqa1/0cW3v8HoTvubw=='
-          raw=zlib.decompress(base64.b64decode(payload,validate=True))
-          assert hashlib.sha256(raw).hexdigest()=='7e8ef76e17157602ac409fd39d4a81abffeb76e506f9443078ab4e24c5bd533e'
-          changes=json.loads(raw)
-          for name,c in changes.items():
-              p=pathlib.Path(name);assert name.startswith('web/') and '..' not in p.parts
-              b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==c['before'],name
-              for offset,length,text in reversed(c['ops']):b=b[:offset]+text.encode()+b[offset+length:]
-              assert hashlib.sha256(b).hexdigest()==c['after'],name
-              p.write_bytes(b)
-          pathlib.Path('/tmp/c19-fix-paths').write_text('\n'.join(changes)+'\n')
+          from pathlib import Path
+          paths=set()
+          def edit(name,old,new):
+              p=Path(name);b=p.read_bytes();assert b.count(old.encode())==1,name
+              p.write_bytes(b.replace(old.encode(),new.encode()));paths.add(name)
+          edit('web/fight-module/main.js','function select(id){',"function closeCrewPicker(){\n  if(!isCrew)return;const roster=$('roster'),picker=$('crew-picker'),hadFocus=roster.contains(document.activeElement);\n  roster.hidden=true;picker.setAttribute('aria-expanded','false');if(hadFocus)picker.focus({preventScroll:true});\n}\nfunction select(id){")
+          edit('web/fight-module/main.js',"session.command('select',id);crew?.persist();action='';", "session.command('select',id);crew?.persist();closeCrewPicker();action='';")
+          edit('web/fight-module/main.js',"session.battle.status!=='active')return;labUI?.cancel();if(['brace'", "session.battle.status!=='active')return;closeCrewPicker();labUI?.cancel();if(['brace'")
+          for name in ['web/crew-run/startup.js','web/arena-lab/index.html','web/fight-module/index.html','web/bear-path/index.html']:
+              edit(name,'main.js?v=29','main.js?v=30')
+          edit('web/crew-run/index.html','startup.js?v=3','startup.js?v=4')
+          edit('web/test/c18-render-contract.mjs','startup.js?v=3','startup.js?v=4')
+          edit('web/test/c19-readability-browser.cjs',"await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid=\"crew-1\"]'));await tap(p.locator('#crew-picker'));", "await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid=\"crew-1\"]'));assert.equal(await p.locator('#roster').isVisible(),false,'selection clears the target area');assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');")
+          edit('web/test/crew-gamepad.cjs',"await navigate('#crew-picker');await press(0);assert.equal(await p.locator('#roster').isVisible(),false);", "assert.equal(await p.locator('#roster').isVisible(),false,'controller selection closes the drawer');assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');")
+          Path('/tmp/c19-fix-paths').write_text('\n'.join(sorted(paths))+'\n')
           PY
           node web/test/crew-run.mjs
           node web/test/c18-render-contract.mjs
