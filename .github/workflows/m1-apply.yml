@@ -1,0 +1,163 @@
+name: Apply M1 navigation orientation candidate
+on:
+  push:
+    branches: [qa/m1-navigation-apply]
+    paths: [.github/workflows/m1-apply.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply M1 as a bounded delta to the audited M0 base
+        run: |
+          git checkout -B m1-work f5ba93457f5aeba98eaefa172ee867391dfd7998
+          python3 - <<'PY'
+          from pathlib import Path
+          changed=set()
+          def replace(path,old,new):
+              p=Path(path);text=p.read_text();count=text.count(old)
+              assert count==1,(path,count,old[:80])
+              p.write_text(text.replace(old,new));changed.add(path)
+
+          app='web/js/v3/app.js'
+          replace(app,"let observation = '';\nlet toastTimer;","let observation = '';\n// Presentation-only map cursor. Never persisted and never used for access, prices, visits or encounters.\nlet inspectionFocus = null;\nlet toastTimer;")
+          replace(app,"function anchorSvg(anchor, current, selected) {\n  const point = anchor.board;\n  const locked = ['locked', 'teaser'].includes(anchor.sliceState);\n  const stateClass = [current ? 'current' : '', selected ? 'selected' : '', locked ? 'locked' : '', anchor.sliceState === 'landmark' ? 'landmark' : ''].join(' ');","function anchorSvg(anchor, current, inspected, present) {\n  const point = anchor.board;\n  const locked = ['locked', 'teaser'].includes(anchor.sliceState);\n  const stateClass = [current ? 'current' : '', inspected ? 'selected' : '', present ? 'present' : '', locked ? 'locked' : '', anchor.sliceState === 'landmark' ? 'landmark' : ''].join(' ');")
+          replace(app,"      ${mission}\n      <circle class=\"map-node-dot\" cx=\"${point.x}\" cy=\"${point.y}\" r=\"${locked ? 14 : 18}\"/>","      ${mission}\n      ${present ? `<circle class=\"map-presence-ring\" cx=\"${point.x}\" cy=\"${point.y}\" r=\"30\"/>` : ''}\n      <circle class=\"map-node-dot\" cx=\"${point.x}\" cy=\"${point.y}\" r=\"${locked ? 14 : 18}\"/>")
+          replace(app,"  const selected = data.anchors.get(state.selectedAnchor) ?? data.anchors.get(slot.anchor_id);\n  const draftPath = routeDraft.length === 2 ? shortestPath(data.map, routeDraft[0], routeDraft[1]) : routeDraft;","  const lead = data.anchors.get(slot.anchor_id);\n  const present = data.anchors.get(state.selectedAnchor) ?? lead;\n  const selected = data.anchors.get(inspectionFocus) ?? present;\n  const here = selected.id === state.selectedAnchor;\n  const lockedArea = ['locked', 'teaser'].includes(selected.sliceState);\n  const visitsHere = here ? availableVisits(state, data) : [];\n  const draftPath = routeDraft.length === 2 ? shortestPath(data.map, routeDraft[0], routeDraft[1]) : routeDraft;")
+          replace(app,"<desc id=\"mapDesc\">Twelve accurate public anchors compressed into one relief map. The next encounter is at ${esc(data.anchors.get(slot.anchor_id)?.label)}.</desc>","<desc id=\"mapDesc\">Fifteen public anchors compressed into one relief map. Orange marks today's story lead, cyan is the area being inspected, and the ring marks Aatami's active area. The next encounter is at ${esc(lead?.label)}.</desc>")
+          replace(app,"${data.map.anchors.map(anchor => anchorSvg(anchor, anchor.id === slot.anchor_id, anchor.id === selected.id)).join('')}","${data.map.anchors.map(anchor => anchorSvg(anchor, anchor.id === slot.anchor_id, anchor.id === selected.id, anchor.id === state.selectedAnchor)).join('')}")
+          replace(app,"      <aside class=\"map-side\">\n        ${progressionCard(slot)}","      <aside class=\"map-side\">\n        <section class=\"paper-panel orientation-card\" aria-label=\"Map orientation\">\n          <p class=\"section-label\">TODAY'S LEAD</p>\n          <h2>${esc(lead?.label ?? slot.anchor_id)}</h2>\n          <p class=\"dim\">${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' ') ?? 'story lead')} · ${esc(formatBlock(state, data.content))}</p>\n          <div class=\"orientation-tags\">\n            <span class=\"tag present-tag\">YOU ARE HERE · ${esc(present.label)}</span>\n            <span class=\"tag active\">INSPECTING · ${esc(selected.label)}</span>\n          </div>\n          <button class=\"paper-button cyan\" data-action=\"show-lead\" ${selected.id === lead?.id ? 'disabled' : ''}>SHOW LEAD</button>\n        </section>\n        ${progressionCard(slot)}")
+          old='''          <p class="section-label">${esc(selected.sliceState)} · PUBLIC ANCHOR</p>
+          <h2>${esc(selected.label)}</h2>
+          <p>${esc(anchorDescription(selected))}</p>
+          <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
+          <div class="node-actions">
+            ${availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Slomo')}</button>`).join('')}
+            ${selected.id === slot.anchor_id ? `<button class="paper-button primary" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
+            ${selected.sliceState === 'training'
+              ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
+              : `<button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>`}
+          </div>
+          ${routePlanning ? renderRoutePlanner(draftPath) : ''}'''
+          new='''          <p class="section-label">INSPECTING · ${esc(selected.sliceState)} · PUBLIC ANCHOR</p>
+          <h2>${esc(selected.label)}</h2>
+          <p>${esc(anchorDescription(selected))}</p>
+          <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
+          <div class="node-actions">
+            ${visitsHere.map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Slomo')}</button>`).join('')}
+            ${here && selected.id === slot.anchor_id ? `<button class="paper-button primary" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
+            ${!here && !lockedArea ? `<button class="paper-button primary" data-action="use-area" data-anchor="${esc(selected.id)}">USE AREA · ${esc(selected.label)}</button>` : ''}
+            ${here && selected.sliceState === 'training' ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>` : ''}
+            ${selected.sliceState !== 'training' ? `<button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>` : ''}
+          </div>
+          <p class="dim location-rule">${lockedArea ? 'Visible, but sealed in this slice.' : here ? 'Area access is active here. Looking elsewhere does not move Aatami.' : 'Inspection is free. USE AREA deliberately changes the active area; this orientation slice does not spend travel time.'}</p>
+          ${routePlanning ? renderRoutePlanner(draftPath) : ''}'''
+          replace(app,old,new)
+          old='''  } else if (action === 'select-anchor') {
+    const id = target.dataset.anchor;
+    state.selectedAnchor = id;
+    // Standing somewhere is how you learn its price (board.js). Without this
+    // line the board is permanently blank and looks broken rather than unearned.
+    markSeen(state, id);
+    if (routePlanning) {
+      const anchor = data.anchors.get(id);
+      if (['locked', 'teaser'].includes(anchor?.sliceState)) {
+        logToast(`${anchor.label} is visible but sealed in this slice.`);
+      } else if (routeDraft.length >= 2) routeDraft = [id];
+      else if (!routeDraft.includes(id)) routeDraft.push(id);
+    }
+    persist(); render();
+  } else if (action === 'open-encounter') openEncounter();'''
+          new='''  } else if (action === 'select-anchor') {
+    const id = target.dataset.anchor;
+    // M1: inspection is a UI cursor only. It cannot grant access, refresh a quote,
+    // open a visit or silently move Aatami. Those still key off selectedAnchor.
+    inspectionFocus = id;
+    if (routePlanning) {
+      const anchor = data.anchors.get(id);
+      if (['locked', 'teaser'].includes(anchor?.sliceState)) {
+        logToast(`${anchor.label} is visible but sealed in this slice.`);
+      } else if (routeDraft.length >= 2) routeDraft = [id];
+      else if (!routeDraft.includes(id)) routeDraft.push(id);
+    }
+    render();
+  } else if (action === 'show-lead') {
+    inspectionFocus = currentSchedule(state, data.content)?.anchor_id ?? state.selectedAnchor;
+    render();
+  } else if (action === 'use-area') {
+    const id = target.dataset.anchor;
+    const anchor = data.anchors.get(id);
+    if (!anchor || ['locked', 'teaser'].includes(anchor.sliceState)) {
+      logToast(`${anchor?.label ?? id} is visible but sealed in this slice.`);
+      return;
+    }
+    state.selectedAnchor = id;
+    inspectionFocus = id;
+    // This is the deliberate equivalent of the old click-to-stand behavior.
+    // M2 replaces this no-time-cost activation with preview/cancel/commit travel.
+    markSeen(state, id);
+    persist(); render();
+  } else if (action === 'open-encounter') openEncounter();'''
+          replace(app,old,new)
+          replace(app,"  if (!battle.training) advanceSchedule(state, data);\n  state.mode = 'route';","  if (!battle.training) { advanceSchedule(state, data); inspectionFocus = null; }\n  state.mode = 'route';")
+          replace(app,"  } else if (action === 'advance') {\n    advanceSchedule(state, data); persist(); render();","  } else if (action === 'advance') {\n    advanceSchedule(state, data); inspectionFocus = null; persist(); render();")
+          replace(app,"  routeDraft = [];\n  observation = '';\n  persist();","  routeDraft = [];\n  observation = '';\n  inspectionFocus = null;\n  persist();")
+          replace(app,"    function jumpTo(target) {\n      if (!target) return;","    function jumpTo(target) {\n      if (!target) return;\n      inspectionFocus = null;")
+          replace(app,"      version: 'v4.48',","      version: 'v4.49',")
+
+          css='web/v3.css'
+          replace(css,".map-node.selected .map-node-dot { fill: var(--cyan); stroke: #c8fbff; }\n.map-node.locked", ".map-node.selected .map-node-dot { fill: var(--cyan); stroke: #c8fbff; }\n.map-presence-ring { fill: none; stroke: var(--green); stroke-width: 5; stroke-dasharray: 11 7; pointer-events: none; }\n.map-node.present .map-node-label { paint-order: stroke fill; }\n.map-node.locked")
+          replace(css,".progression-card { border-color: #a8753e; background: linear-gradient(135deg, rgba(202,111,52,.15), transparent 52%), #1a242c; }", ".orientation-card { border-color: #527a6b; background: linear-gradient(135deg, rgba(98,183,151,.12), transparent 55%), #172129; }\n.orientation-card .paper-button { margin-top: 10px; width: 100%; }\n.orientation-tags { display: grid; gap: 6px; margin-top: 10px; }\n.orientation-tags .tag { justify-content: flex-start; white-space: normal; }\n.present-tag { color: #d9f5e7; border-color: #527a6b; }\n.location-rule { padding-top: 8px; border-top: 1px dashed #4c473f; }\n.progression-card { border-color: #a8753e; background: linear-gradient(135deg, rgba(202,111,52,.15), transparent 52%), #1a242c; }")
+
+          index='web/index.html'
+          replace(index,'v3.css?v=5','v3.css?v=6')
+          replace(index,'<small>ACT I · v4.48</small>','<small>ACT I · v4.49</small>')
+          replace(index,'js/v3/app.js?v=13','js/v3/app.js?v=14')
+
+          Path('design/M1_NAVIGATION_ORIENTATION.md').write_text('''# M1 — navigation orientation\n\nM1 answers one question from the M0 audit: can the player inspect the city without the inspection itself becoming a journey?\n\n## Player contract\n\n- **Today’s lead** is the authored scheduled encounter and stays orange.\n- **You are here** is the existing `state.selectedAnchor` access/market position and gets a separate green ring.\n- **Inspecting** is a presentation-only cursor. It is cyan, is not saved, and never calls `markSeen`.\n- **Show lead** returns the inspection cursor to the authored lead without moving Aatami.\n- **Use area** is the explicit compatibility action for the old location/access behavior. It changes `selectedAnchor` and market observation on purpose. It spends no travel time; M2 replaces it with preview/cancel/commit travel after D002 time semantics are kept explicit.\n\nLocked/teaser anchors can be inspected but cannot be activated. Existing encounters, visits, shops/fences and route planning remain keyed to the active area, not the inspection cursor. No geography, prices, mission rewards, combat resolver or save schema changes.\n\n## Acceptance\n\nBrowser acceptance covers active, locked and landmark inspection with byte-equivalent campaign state; Show lead; deliberate area activation; first purchase and first sale (€160→€115→€183, stock 0→1→0); reload; and a Jaska return visit reached through the actual map/Use area controls. Both portrait and landscape are exercised.\n\nNext: M2 makes the Paper Bag Piritori→Siltasaari movement a real preview/cancel/commit journey while retaining one settlement owner and not inventing a second schedule-time cost.\n''')
+          changed.add('design/M1_NAVIGATION_ORIENTATION.md')
+
+          Path('web/test/m1-navigation.cjs').write_text(r'''const {chromium}=require('playwright');
+const http=require('http'),fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const ROOT=path.resolve(__dirname,'..','..');
+const MIME={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.webp':'image/webp','.png':'image/png'};
+const server=http.createServer((req,res)=>{const requestPath=decodeURIComponent(req.url.split('?')[0]);let file=path.resolve(ROOT,`.${requestPath}`);if(!file.startsWith(`${ROOT}${path.sep}`)&&file!==ROOT){res.writeHead(403);res.end('forbidden');return;}if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');if(!fs.existsSync(file)){res.writeHead(404);res.end('missing');return;}res.writeHead(200,{'Content-Type':MIME[path.extname(file)]||'application/octet-stream'});fs.createReadStream(file).pipe(res);});
+const OUT=process.env.M1_OUTPUT||'/tmp/m1-navigation';fs.mkdirSync(OUT,{recursive:true});
+const snap=p=>p.evaluate(()=>JSON.stringify(window.__ptv3.state));
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;const browser=await chromium.launch();const results=[];
+try{for(const spec of [{name:'phone',width:412,height:915},{name:'landscape',width:915,height:412}]){const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:true,isMobile:true});const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));let shell404=0;p.on('response',r=>{if(r.status()===404&&new URL(r.url()).pathname.endsWith('/hub/shell.js'))shell404++;});p.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
+try{await p.goto(`${base}/web/`);await p.waitForFunction(()=>window.__ptv3?.data);await p.locator('#beginButton').click();await p.waitForSelector('.city-map');assert.equal(await p.locator('.time-card small').textContent(),'ACT I · v4.49');
+const initial=await snap(p);assert.equal(await p.locator('[data-anchor-group="piritori"].current.selected.present').count(),1);
+for(const id of ['hakaniemi','alppiharju','kallio_church']){const hit=p.locator(`[data-anchor-group="${id}"] .map-anchor-hit`);await hit.focus();await hit.press('Enter');assert.equal(await snap(p),initial,`inspection of ${id} must not change campaign state`);assert.equal(await p.locator(`[data-anchor-group="${id}"].selected`).count(),1);assert.equal(await p.evaluate(x=>window.__ptv3.state.seen?.[x]??null,id),null,`inspection of ${id} must not create market knowledge`);}
+assert.match(await p.locator('.orientation-card').innerText(),/YOU ARE HERE · Piritori/i);assert.match(await p.locator('.orientation-card').innerText(),/INSPECTING · Kallio Church/i);await p.locator('[data-action="show-lead"]').click();assert.equal(await snap(p),initial);assert.equal(await p.locator('[data-anchor-group="piritori"].selected').count(),1);
+await p.locator('[data-anchor-group="hakaniemi"] .map-anchor-hit').click();assert.equal(await snap(p),initial);await p.locator('[data-action="use-area"]').click();assert.equal(await p.evaluate(()=>window.__ptv3.state.selectedAnchor),'hakaniemi');assert.equal(await p.evaluate(()=>window.__ptv3.state.seen.hakaniemi),0);await p.locator('[data-action="show-lead"]').click();assert.equal(await p.evaluate(()=>window.__ptv3.state.selectedAnchor),'hakaniemi','Show lead cannot teleport');assert.equal(await p.locator('[data-action="open-encounter"]').count(),0,'lead encounter unavailable while operating elsewhere');await p.locator('[data-action="use-area"]').click();assert.equal(await p.evaluate(()=>window.__ptv3.state.selectedAnchor),'piritori');assert.ok(await p.locator('[data-action="open-encounter"]').isVisible());
+await p.locator('[data-action="open-encounter"]').click();await p.locator('[data-choice="buy"]').click();assert.deepEqual(await p.evaluate(()=>[window.__ptv3.state.cash,window.__ptv3.state.stock.piri]),[115,1]);await p.locator('[data-action="advance"]').click();assert.equal(await p.locator('[data-anchor-group="siltasaari"].current.selected.present').count(),1,'new lead resets inspection to the new active area');await p.reload();await p.waitForFunction(()=>window.__ptv3?.data);await p.locator('#resumeButton').click();assert.equal(await p.locator('[data-anchor-group="siltasaari"].current.selected.present').count(),1,'reload restores presence but not a stale inspection cursor');await p.locator('[data-action="open-encounter"]').click();await p.locator('[data-choice="complete"]').click();assert.deepEqual(await p.evaluate(()=>[window.__ptv3.state.cash,window.__ptv3.state.stock.piri]),[183,0]);
+// Set up an authored Jaska return; setup is direct, but all navigation/entry under test is visible UI.
+await p.evaluate(()=>{const s=structuredClone(window.__ptv3.state);s.mode='route';s.scheduleIndex=3;s.selectedAnchor='piritori';s.choices['enc-jaska-receipt']='acknowledge';s.battle=null;window.__ptv3.debug.setState(s);});await p.waitForSelector('.city-map');const beforeVisit=await snap(p);await p.locator('[data-anchor-group="makelansilta"] .map-anchor-hit').click();assert.equal(await snap(p),beforeVisit,'inspecting Jaska area remains free');assert.equal(await p.locator('[data-action="open-visit"]').count(),0,'visit cannot open from inspection');await p.locator('[data-action="use-area"]').click();const visit=p.locator('[data-action="open-visit"]');assert.ok(await visit.isVisible(),'Jaska return appears only after deliberate area activation');await visit.click();assert.equal(await p.locator('#game').getAttribute('data-mode'),'visit');await p.screenshot({path:`${OUT}/${spec.name}-jaska-visit.png`,fullPage:true});assert.deepEqual(errors,[]);results.push({view:spec.name,inspectionStateFree:true,showLeadFree:true,explicitPresence:true,paperBag:[160,115,183],jaskaVisit:true,shell404});}finally{await ctx.close();}}
+fs.writeFileSync(`${OUT}/results.json`,JSON.stringify(results,null,2));console.log('M1 navigation orientation passed',results);}finally{await browser.close();server.close();}})().catch(e=>{console.error(e);server.close();process.exit(1)});
+''')
+          changed.add('web/test/m1-navigation.cjs')
+
+          Path('.github/workflows/m1-navigation.yml').write_text('''name: M1 navigation orientation\non:\n  pull_request:\n    paths:\n      - 'web/index.html'\n      - 'web/v3.css'\n      - 'web/js/v3/app.js'\n      - 'web/test/m1-navigation.cjs'\n      - 'web/test/v3-playthrough.cjs'\n      - 'design/M1_NAVIGATION_ORIENTATION.md'\n      - '.github/workflows/m1-navigation.yml'\npermissions:\n  contents: read\nconcurrency:\n  group: m1-navigation-${{ github.head_ref || github.ref }}\n  cancel-in-progress: true\njobs:\n  acceptance:\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          ref: ${{ github.event.pull_request.head.sha || github.sha }}\n          persist-credentials: false\n      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n      - name: Existing model and contract boundaries\n        run: |\n          node web/test/v3-state.mjs\n          node web/test/visits.mjs\n          node web/test/v3-contract.mjs\n          node --check web/js/v3/app.js\n      - run: npm install --prefix /tmp/m1-test playwright\n      - run: /tmp/m1-test/node_modules/.bin/playwright install --with-deps chromium\n      - name: Existing playthrough plus M1 portrait/landscape acceptance\n        env:\n          NODE_PATH: /tmp/m1-test/node_modules\n          M1_OUTPUT: /tmp/m1-navigation\n        run: |\n          node web/test/v3-playthrough.cjs\n          node web/test/m1-navigation.cjs\n      - uses: actions/upload-artifact@v4\n        if: always()\n        with:\n          name: m1-navigation-evidence\n          path: /tmp/m1-navigation\n          retention-days: 7\n''')
+          changed.add('.github/workflows/m1-navigation.yml')
+
+          Path('/tmp/m1-paths').write_text('\n'.join(sorted(changed))+'\n')
+          PY
+          node --check web/js/v3/app.js
+          node web/test/v3-state.mjs
+          node web/test/visits.mjs
+          node web/test/v3-contract.mjs
+          git config user.name 'Piritori navigation worker'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add --pathspec-from-file=/tmp/m1-paths
+          git -c core.whitespace=cr-at-eol diff --cached --check
+          git commit -m 'M1: separate map inspection from active area and story lead'
+          git push origin HEAD:refs/heads/feat/m1-navigation-orientation
