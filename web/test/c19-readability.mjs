@@ -41,4 +41,16 @@ for(const [name,route,result,success]of cases){
  target.helped=true;target.alive=false;assert.match(missionCue(s.battle,coordinate).goal,/rescue unavailable/);assert.equal(fighterLabel(s.battle,target).badge,'DOWN');
  // This is a presentation fixture, not an authored or played mission outcome.
 }
-console.log('C19 focused/full/target labels: 2/6/12 fixtures and honest rescue guidance passed');
+{
+ // Explicit presentation-only recovery fixture; no claim this is a played outcome.
+ const carrier={id:'kit-carrier',name:'Carrier',cell:'2,2',alive:false,helped:false};
+ const battle={players:[carrier],mission:{carrierId:carrier.id,targetCell:'2,2'}};
+ assert.match(missionCue(battle,coordinate).goal,/check Help/,'a first down can still be helped');
+ carrier.helped=true;
+ const before=structuredClone(battle),cue=missionCue(battle,coordinate).goal;
+ assert.match(cue,/rescue unavailable this outing/);assert.doesNotMatch(cue,/check Help/);
+ assert.deepEqual(battle,before,'carrier guidance never changes the rules/state');
+ carrier.alive=true;assert.match(missionCue(battle,coordinate).goal,/has the kit.*EXIT/);
+ carrier.extracted=true;assert.match(missionCue(battle,coordinate).goal,/Kit secured/);
+}
+console.log('C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed');
