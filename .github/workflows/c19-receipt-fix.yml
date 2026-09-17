@@ -1,0 +1,71 @@
+name: Complete C19 release receipt
+on:
+  push:
+    branches: [qa/post-c18-acceptance-workspace]
+    paths: [.github/workflows/c19-receipt-fix.yml]
+permissions:
+  contents: write
+jobs:
+  correction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Complete source publisher receipt
+        run: |
+          git checkout -b c19-receipt-work f0b21ffe14ec55244a788ed9c0b5a676df4c6190
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tools/publish/arena_lab_release.py');b=p.read_bytes()
+          old=b'def stage(source, deployed_manifest, output, commit, previous_cabinet):'
+          new=b'''def finalize_receipt(data, release):
+              """Cover generated index and VERSIONS too; never hash the receipt itself."""
+              if 'release.json' in data:
+                  raise ValueError('Receipt must be finalized exactly once')
+              release['tested_source_head'] = release['source_commit']
+              release['sha256'] = {name: hashlib.sha256(raw).hexdigest() for name, raw in sorted(data.items())}
+              data['release.json'] = (json.dumps(release, indent=2)+'\\n').encode()
+          
+          
+          def stage(source, deployed_manifest, output, commit, previous_cabinet):'''
+          assert b.count(old)==1;b=b.replace(old,new)
+          old=b"    data['release.json'] = (json.dumps(release,indent=2)+'\\n').encode()"
+          assert b.count(old)==1;b=b.replace(old,b'')
+          old=b'Source: {commit}.\\n\\n';new=b'Source head: {commit}.\\nTested source head: {commit}.\\n\\n'
+          assert b.count(old)==1;b=b.replace(old,new)
+          old=b'    # A new directory prevents stale files from an older, broader cabinet leaking.'
+          assert b.count(old)==1;b=b.replace(old,b'    finalize_receipt(data, release)\n'+old)
+          p.write_bytes(b)
+          Path('tools/publish/test_release_receipt.py').write_text('''import hashlib
+          import json
+          import unittest
+          from arena_lab_release import finalize_receipt
+          
+          class Receipt(unittest.TestCase):
+              def test_generated_files_and_provenance(self):
+                  data={'web/crew-run/index.html':b'game', 'index.html':b'entry', 'VERSIONS.md':b'version'}
+                  release={'source_commit':'a'*40}
+                  finalize_receipt(data,release)
+                  actual=json.loads(data['release.json'])
+                  self.assertEqual(actual['tested_source_head'],'a'*40)
+                  self.assertEqual(set(actual['sha256']),set(data)-{'release.json'})
+                  for name,digest in actual['sha256'].items():
+                      self.assertEqual(digest,hashlib.sha256(data[name]).hexdigest())
+              def test_refinalization_is_rejected(self):
+                  with self.assertRaises(ValueError):
+                      finalize_receipt({'release.json':b'old'}, {'source_commit':'a'*40})
+          ''')
+          PY
+          python3 -m unittest discover -s tools/publish -v
+          node web/test/crew-run.mjs
+          git config user.name 'Piritori acceptance worker'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/publish/arena_lab_release.py tools/publish/test_release_receipt.py
+          git -c core.whitespace=cr-at-eol diff --cached --check
+          git commit -m 'C19: include generated files and tested provenance in release receipt'
+          git push origin HEAD:refs/heads/feat/c19-battlefield-clarity
