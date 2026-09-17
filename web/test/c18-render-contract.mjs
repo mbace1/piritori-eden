@@ -1,3 +1,4 @@
+import './c18-build-identity.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
