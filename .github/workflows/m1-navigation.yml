@@ -1,0 +1,49 @@
+name: M1 navigation orientation
+on:
+  pull_request:
+    paths:
+      - 'web/index.html'
+      - 'web/v3.css'
+      - 'web/js/v3/app.js'
+      - 'web/test/m1-navigation.cjs'
+      - 'web/test/v3-playthrough.cjs'
+      - 'design/M1_NAVIGATION_ORIENTATION.md'
+      - '.github/workflows/m1-navigation.yml'
+permissions:
+  contents: read
+concurrency:
+  group: m1-navigation-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing model and contract boundaries
+        run: |
+          node web/test/v3-state.mjs
+          node web/test/visits.mjs
+          node web/test/v3-contract.mjs
+          node --check web/js/v3/app.js
+      - run: npm install --prefix /tmp/m1-test playwright
+      - run: /tmp/m1-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: Existing playthrough plus M1 portrait/landscape acceptance
+        env:
+          NODE_PATH: /tmp/m1-test/node_modules
+          M1_OUTPUT: /tmp/m1-navigation
+        run: |
+          node web/test/v3-playthrough.cjs
+          node web/test/m1-navigation.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m1-navigation-evidence
+          path: /tmp/m1-navigation
+          retention-days: 7
