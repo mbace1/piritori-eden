@@ -41,5 +41,5 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     for(const [c,cover] of b.cover){if(cover.hardBlock)tile(c,0x8dacc6,.18);else edgeMark(c,cover.edge,0xe4ce92,.65);}
     $('tactical-legend').textContent='Blue: full cover / blocks route & sight · Gold edge: wall / −25 points across it; sides exposed; walk around · Red: planned danger';
   }
-  return {pick,cancel,render,confirm:()=>{if(preview)$('commit-preview')?.click();}};
+  return {pick,cancel,render,targetId:()=>preview?.type==='attack'?preview.value:null,confirm:()=>{if(preview)$('commit-preview')?.click();}};
 }

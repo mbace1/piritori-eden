@@ -33,7 +33,7 @@ fs.mkdirSync(out,{recursive:true});
     await p.screenshot({path:`${out}/${spec.name}-${state}.png`,timeout:90000});
    };
    try{
-    await p.goto(base+'?campaign=1&release=18'+(spec.safe?'&graphics=safe':''));await idle();
+    await p.goto(base+'?campaign=1&release=19'+(spec.safe?'&graphics=safe':''));await idle();
     await shot('prep');await tap(p.locator('#crew-deploy'));await idle();
     await p.waitForFunction(()=>fightModule.metrics().renderedFrames>2);await shot('battle');
     const layout=await p.evaluate(()=>{

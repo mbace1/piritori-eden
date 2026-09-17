@@ -1,3 +1,14 @@
+# C.19 candidate — 2026-09-17
+
+The authorized next acceptance/readability batch is implemented in the feature
+branch, not yet a verified public release. Read [C.19](design/C19_READABILITY.md).
+Focused/full fighter labels, selected/target cues, rescue state and a labelled
+south exit preserve existing rules. Tests add real defeat, checkpoint replay and
+onward recovery. Source merge, live publication, physical Pixel/iPad and owner
+acceptance must be recorded separately; the C.18 release record below remains
+the public baseline until the C.19 receipt is verified. External models and
+map/mission expansion remain parked for this batch.
+
 # Piritori active context
 
 ## Owner-approved continuation — 2026-09-17

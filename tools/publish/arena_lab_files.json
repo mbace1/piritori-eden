@@ -40,6 +40,7 @@
   "web/fight-module/framing.js",
   "web/fight-module/main.js",
   "web/fight-module/motion-player.js",
+  "web/fight-module/readability.js",
   "web/fight-module/render-profile.js",
   "web/fight-module/resolver.js",
   "web/fight-module/session.js",
