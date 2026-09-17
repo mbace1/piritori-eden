@@ -20,7 +20,9 @@ export function missionCue(battle, coordinate) {
   else if (target?.helped) goal = `${target.name} is down again · rescue unavailable this outing`;
   else if (target) goal = `Help ${target.name} at ${coordinate(target.cell)} → EXIT A1–F1`;
   else if (carrier?.extracted) goal = 'Kit secured · extract the remaining crew';
-  else if (carrier) goal = carrier.alive ? `${carrier.name} has the kit → EXIT A1–F1` : `${carrier.name} is down with the kit · check Help`;
+  else if (carrier?.alive) goal = `${carrier.name} has the kit → EXIT A1–F1`;
+  else if (carrier?.helped) goal = `${carrier.name} is down again with the kit · rescue unavailable this outing`;
+  else if (carrier) goal = `${carrier.name} is down with the kit · check Help`;
   else goal = `Recover kit at ${coordinate(m.targetCell)} → EXIT A1–F1`;
   return {goal, exit: 'EXIT · A1–F1', cost: 'EXTRACT · 1 ACTION'};
 }
