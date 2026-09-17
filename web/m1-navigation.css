@@ -1,0 +1,40 @@
+.map-presence-ring {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 5;
+  stroke-dasharray: 11 7;
+  pointer-events: none;
+}
+.map-node.present .map-node-label { fill: #d9f5e7; }
+.m1-route-preview {
+  stroke-dasharray: 22 12;
+  opacity: .88;
+  pointer-events: none;
+}
+.m1-orientation-card {
+  border-color: #527a6b;
+  background: linear-gradient(135deg, rgba(98,183,151,.12), transparent 55%), #172129;
+}
+.m1-orientation-card .paper-button { width: 100%; }
+.orientation-tags {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+.orientation-tags .tag {
+  justify-content: flex-start;
+  white-space: normal;
+}
+.present-tag {
+  color: #d9f5e7;
+  border-color: #527a6b;
+}
+.location-rule {
+  padding-top: 8px;
+  border-top: 1px dashed #4c473f;
+}
+.m1-route-box {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #4c473f;
+}
