@@ -1,0 +1,67 @@
+name: Correct C19 arena identity
+on:
+  push:
+    branches: [qa/post-c18-acceptance-workspace]
+    paths: [.github/workflows/c19-arena-identity.yml]
+permissions:
+  contents: write
+jobs:
+  correction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Separate build identity from unchanged resolver version
+        run: |
+          git checkout --detach c4cef33799d2296fa29fe2fc75d00a8b315cf9dd
+          python3 - <<'PY'
+          from pathlib import Path
+          def replace(name,old,new):
+              p=Path(name);b=p.read_bytes();assert b.count(old.encode())==1,name
+              p.write_bytes(b.replace(old.encode(),new.encode()))
+          replace('web/arena-lab/index.html','<title>Piritori · Arena Laboratory</title>','<title>Piritori · Arena Laboratory C.19</title>')
+          replace('web/arena-lab/index.html','<h2>Arena laboratory · C.11</h2>','<h2>Arena laboratory · C.19</h2>')
+          replace('web/arena-lab/index.html','Development stand-ins keep the environment playable while the approved fighters undergo rig and motion repair. These are neutral test bodies, not new character designs.','Procedural stand-ins keep this development arena playable. External character-model work is on hold. These are neutral test bodies, not approved character designs.')
+          p=Path('web/test/c18-render-contract.mjs')
+          p.write_bytes(p.read_bytes()+b'''\nconst arena=readFileSync(new URL('../arena-lab/index.html',import.meta.url),'utf8');
+          assert.ok(arena.includes('<title>Piritori \\u00b7 Arena Laboratory C.19</title>'));
+          assert.ok(arena.includes('<h1>BEAR PARK <span>C.19</span></h1>'));
+          assert.ok(arena.includes('<h2>Arena laboratory \\u00b7 C.19</h2>'));
+          assert.ok(arena.includes('C.11 tactical resolver'),'resolver version is explicitly separate from build identity');
+          console.log('C19 arena title/header/help agree; unchanged C11 resolver is labelled separately');
+          ''')
+          p=Path('ACTIVE_CONTEXT.md');s=p.read_text();end=s.index('# Piritori active context')
+          p.write_text('''# C.19 implementation and release record — 2026-09-17
+
+          The approved acceptance/readability implementation is in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89).
+          The matching hub records are [development #546](https://github.com/mbace1/Suds-Jack/pull/546)
+          and [Pages #547](https://github.com/mbace1/Suds-Jack/pull/547). Read their latest
+          acceptance/publication receipts rather than inferring publication from this
+          document or a source merge. The shipping `piritori-c17/release.json` records
+          exact source/tested heads, file hashes and the public build identity.
+
+          Read [C.19 behavior and Godot port boundary](design/C19_READABILITY.md).
+          Focused/full fighter labels, selected/target cues, rescue/recovery guidance,
+          automatic crew-picker closure and a labelled exit preserve existing rules.
+          Tests add defeat, checkpoint replay and onward recovery. Physical Pixel/iPad
+          and owner visual/play acceptance remain OPEN; Godot presentation is unported.
+          External character models remain parked. Map/mission work follows the approved
+          small-iteration programme below, not an automatic new mission or map layout.
+
+          '''.replace('\n          ','\n')+s[end:])
+          replace('ACTIVE_CONTEXT.md','## C.18 current public release — Night Shift','## Historical C.18 public release — Night Shift')
+          PY
+          node web/test/crew-run.mjs
+          node web/test/c18-render-contract.mjs
+          python3 -m unittest discover -s tools/publish -v
+          git config user.name 'Piritori acceptance worker'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ACTIVE_CONTEXT.md web/arena-lab/index.html web/test/c18-render-contract.mjs
+          git -c core.whitespace=cr-at-eol diff --cached --check
+          git commit -m 'C19: align arena title/help, distinguish resolver and preserve release handoff'
+          git push origin HEAD:refs/heads/feat/c19-battlefield-clarity
