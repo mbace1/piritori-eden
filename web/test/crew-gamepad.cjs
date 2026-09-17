@@ -34,6 +34,6 @@ const url=process.env.CREW_RUN_URL||'http://127.0.0.1:8788/web/crew-run/';
  await navigate('#crew-picker');await press(0);assert.ok(await p.locator('#roster').isVisible());
  await navigate('[data-unitid="crew-1"]');await press(0);
  assert.equal(await p.evaluate(()=>fightModule.snapshot().selectedId),'crew-1');
- await navigate('#crew-picker');await press(0);assert.equal(await p.locator('#roster').isVisible(),false);
+ assert.equal(await p.locator('#roster').isVisible(),false,'controller selection closes the drawer');assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');
  assert.deepEqual(errors,[]);console.log(JSON.stringify({controller:true,staticPlanning:true,equipment:true,modalCancel:true,deployment:true,roster:true,errors}));
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});

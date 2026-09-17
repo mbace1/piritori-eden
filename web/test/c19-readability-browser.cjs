@@ -28,7 +28,7 @@ const results=[];
     await same(before);assert.equal(await p.locator('#enemy-plans').innerText(),intents);await shot('all-stats');
     await p.reload();await idle();await same(before);assert.equal(await p.locator('#label-mode').getAttribute('aria-pressed'),'true','label preference survives independently');
     await tap(p.locator('#camera-menu'));await tap(p.locator('#label-mode'));await tap(p.locator('#camera-menu'));await same(before);
-    await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));await tap(p.locator('#crew-picker'));
+    await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));assert.equal(await p.locator('#roster').isVisible(),false,'selection clears the target area');assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');
     const previewBefore=await p.evaluate(()=>fightModule.snapshot());await tap(p.locator('[data-action="attack"]'));
     const target=p.locator('#choices [data-target]:not([disabled])').first();assert.ok(await target.count(),'opening handgun has a target');const id=await target.getAttribute('data-target');await tap(target);
     assert.equal(await p.locator('.actor-label.targeted').getAttribute('data-unit'),id);assert.equal(await p.locator('.actor-label.targeted').getAttribute('data-detail'),'full');

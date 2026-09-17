@@ -15,5 +15,5 @@ const html=readFileSync(new URL('../crew-run/index.html',import.meta.url),'utf8'
 assert.equal((html.match(/rel="stylesheet"/g)||[]).length,1);
 assert.equal((html.match(/id="roundbar"/g)||[]).length,1);
 assert.equal((html.match(/id="camera-tools"/g)||[]).length,1);
-assert.ok(html.includes('style.css?v=6')&&html.includes('startup.js?v=3'));
+assert.ok(html.includes('style.css?v=6')&&html.includes('startup.js?v=4'));
 console.log('C18 renderer and UI ownership contract passed');
