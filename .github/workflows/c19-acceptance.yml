@@ -52,6 +52,7 @@ jobs:
                       target=out/folder/p;target.parent.mkdir(parents=True,exist_ok=True)
                       target.write_bytes(subprocess.check_output(['git','-C','/tmp/c19-hub','show',ref+':'+name]))
           PY
+          node /tmp/c19-delivery/main-text/test/piritori-c18-package.mjs /tmp/c19-site/piritori-c17
       - name: Browser dependencies
         run: |
           npm install --prefix /tmp/c19-test playwright pngjs
