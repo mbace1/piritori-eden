@@ -17,3 +17,10 @@ assert.equal((html.match(/id="roundbar"/g)||[]).length,1);
 assert.equal((html.match(/id="camera-tools"/g)||[]).length,1);
 assert.ok(html.includes('style.css?v=6')&&html.includes('startup.js?v=4'));
 console.log('C18 renderer and UI ownership contract passed');
+
+const arena=readFileSync(new URL('../arena-lab/index.html',import.meta.url),'utf8');
+assert.ok(arena.includes('<title>Piritori \u00b7 Arena Laboratory C.19</title>'));
+assert.ok(arena.includes('<h1>BEAR PARK <span>C.19</span></h1>'));
+assert.ok(arena.includes('<h2>Arena laboratory \u00b7 C.19</h2>'));
+assert.ok(arena.includes('C.11 tactical resolver'),'resolver version is explicitly separate from build identity');
+console.log('C19 arena title/header/help agree; unchanged C11 resolver is labelled separately');
