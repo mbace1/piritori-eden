@@ -1,0 +1,42 @@
+name: M0 map and mission audit
+on:
+  push:
+    branches: [docs/m0-map-mission-audit]
+  pull_request:
+    paths:
+      - 'map/kallio-era1-2003-v1.json'
+      - 'content/era1-slice-v1.json'
+      - 'web/js/v3/**'
+      - 'missions/model.mjs'
+      - 'market/**'
+      - 'tools/audit/**'
+      - 'design/M0_MAP_MISSION_AUDIT.md'
+      - 'AGENTS.md'
+      - '.github/workflows/m0-map-mission-audit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: m0-audit-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pure audit and existing campaign boundaries
+        run: |
+          node tools/audit/test-map-mission-audit.mjs
+          node web/test/v3-state.mjs
+          node tools/audit/map-mission-audit.mjs > /tmp/piritori-m0.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m0-map-mission-inventory
+          path: /tmp/piritori-m0.json
+          retention-days: 7

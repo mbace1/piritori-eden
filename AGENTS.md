@@ -5,6 +5,12 @@ decisions. For Meshy work, read `MESHY_AGENT_HANDOFF.md` and its current-product
 notice, `3D_PIPELINE.md`, `MESHY_PILOT_RESULTS.md` and the manifest before inferring
 status. A partial local checkout is not evidence that a GitHub handoff is absent.
 
+Before city, map or mission work, read `design/M0_MAP_MISSION_AUDIT.md`.
+It inventories the actual campaign and its source/Pages differences. Run
+`node tools/audit/map-mission-audit.mjs` to refresh the catalogue; do not treat
+map selection as side-effect-free inspection or the mission-step model as
+live integration. M0 makes no runtime, resolver-selection or release change.
+
 Before 3D work, read `DESIGN_AUTHORITY.md`, `3D_PIPELINE.md`,
 `assets/CHARACTER_SPEC.md` and `assets/asset_manifest.json`. Read the relevant
 Art Bible and character references before designing or altering an asset.
