@@ -1,0 +1,74 @@
+name: Preserve Night Shift compatibility entry
+on:
+  push:
+    branches: [qa/post-c18-acceptance-workspace]
+    paths: [.github/workflows/c19-compat-route.yml]
+permissions:
+  contents: write
+jobs:
+  correction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate and fingerprint the existing public compatibility route
+        run: |
+          git checkout --detach 2230697571eec90cc6aaf4ba7a0bf7106f586b75
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tools/publish/arena_lab_release.py');b=p.read_bytes()
+          old=b'def finalize_receipt(data, release):'
+          new=b'''def compatibility_redirect(identity):
+              """Keep the published C.17 bookmark on the current canonical crew entry."""
+              if not re.fullmatch(r'C\\.\\d+(?:\\.\\d+)*', identity):
+                  raise ValueError('Invalid compatibility build identity')
+              target = '../?campaign=1&release='+identity.removeprefix('C.')
+              return (f'<!doctype html><meta charset="utf-8"><title>Piritori {identity}</title>'
+                      f'<meta http-equiv="refresh" content="0;url={target}">'
+                      f'<a href="{target}">Open Night Shift {identity}</a>\\n').encode()
+          
+          
+          def finalize_receipt(data, release):'''
+          assert b.count(old)==1;b=b.replace(old,new)
+          old=b'    finalize_receipt(data, release)';assert b.count(old)==1
+          b=b.replace(old,b"    data['web/crew-run/c17/index.html'] = compatibility_redirect(identity)\n"+old)
+          b=b.replace(b'Stage the C.16.1 public cabinet',b'Stage the current Night Shift public cabinet')
+          p.write_bytes(b)
+          Path('tools/publish/test_compatibility_route.py').write_text('''import hashlib
+          import json
+          import unittest
+          from urllib.parse import urljoin, urlparse, parse_qs
+          from arena_lab_release import compatibility_redirect, finalize_receipt
+          
+          class CompatibilityRoute(unittest.TestCase):
+              def test_bookmark_stays_in_campaign_on_current_build(self):
+                  raw=compatibility_redirect('C.19')
+                  text=raw.decode()
+                  target='../?campaign=1&release=19'
+                  self.assertIn('content="0;url='+target+'"',text)
+                  self.assertIn('href="'+target+'"',text)
+                  destination=urlparse(urljoin('https://example.invalid/piritori-c17/web/crew-run/c17/',target))
+                  self.assertEqual(destination.path,'/piritori-c17/web/crew-run/')
+                  self.assertEqual(parse_qs(destination.query),{'campaign':['1'],'release':['19']})
+                  data={'web/crew-run/c17/index.html':raw}
+                  finalize_receipt(data,{'source_commit':'a'*40})
+                  self.assertEqual(json.loads(data['release.json'])['sha256']['web/crew-run/c17/index.html'],hashlib.sha256(raw).hexdigest())
+              def test_rejects_non_version_destination(self):
+                  for identity in ['C.19?url=https://elsewhere.invalid','19','C.19/../../']:
+                      with self.assertRaises(ValueError):compatibility_redirect(identity)
+          ''')
+          PY
+          python3 -m unittest discover -s tools/publish -v
+          node web/test/crew-run.mjs
+          node web/test/c18-render-contract.mjs
+          git config user.name 'Piritori acceptance worker'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/publish/arena_lab_release.py tools/publish/test_compatibility_route.py
+          git -c core.whitespace=cr-at-eol diff --cached --check
+          git commit -m 'C19: preserve existing public C17 bookmarks in the release receipt'
+          git push origin HEAD:refs/heads/feat/c19-battlefield-clarity
