@@ -15,6 +15,7 @@ let lastScheduleIndex = null;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[character]);
+const cap = value => String(value ?? '').replaceAll('-', ' ').replaceAll('_', ' ').toUpperCase();
 
 function game() { return window.__ptv3; }
 function anchor(id) { return game()?.data?.anchors?.get(id) ?? null; }
@@ -60,9 +61,11 @@ function orientationMarkup() {
   if (!g || !schedule) return '';
   const present = g.state.selectedAnchor;
   const inspected = inspectedId();
+  const inspectedAnchor = anchor(inspected);
   const lead = schedule.anchor_id;
   const destination = routeDraft.at(-1);
   const preview = routePreview();
+  const roles = (inspectedAnchor?.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('');
   const routeCopy = routePlanning ? `
     <div class="m1-route-box">
       <p class="section-label">ROUTE PREVIEW</p>
@@ -81,6 +84,8 @@ function orientationMarkup() {
       <span class="tag present-tag">YOU ARE HERE · ${esc(label(present))}</span>
       <span class="tag active">INSPECTING · ${esc(label(inspected))}</span>
     </div>
+    <p class="dim inspection-summary">${esc(cap(inspectedAnchor?.sliceState ?? 'public'))} AREA · inspection only</p>
+    ${roles ? `<div class="route-steps inspection-roles">${roles}</div>` : ''}
     <div class="node-actions">
       <button class="paper-button cyan" data-action="m1-show-lead" ${inspected === lead ? 'disabled' : ''}>SHOW LEAD</button>
       ${inspected !== present && !sealed(inspected) ? `<button class="paper-button primary" data-action="m1-use-area" data-anchor="${esc(inspected)}">USE AREA · ${esc(label(inspected))}</button>` : ''}
