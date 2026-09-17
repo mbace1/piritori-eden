@@ -1,0 +1,36 @@
+name: Acceptance workspace snapshot
+on:
+  push:
+    branches: [qa/post-c18-acceptance-workspace]
+    paths: [.github/workflows/acceptance-workspace.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Export tracked source text, without models, masters or credentials
+        run: |
+          python3 - <<'PY'
+          import pathlib, shutil, subprocess
+          out = pathlib.Path('/tmp/acceptance-workspace')
+          suffixes = {'.js', '.mjs', '.cjs', '.ts', '.html', '.css', '.json', '.md', '.py', '.yaml', '.yml', '.gd', '.godot', '.toml', '.sh'}
+          for name in subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0'):
+              p = pathlib.Path(name)
+              if not name or p.suffix not in suffixes or not p.is_file() or p.is_symlink():
+                  continue
+              target = out / p
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(p, target)
+          (out / 'SNAPSHOT_COMMIT').write_text(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: post-c18-source-workspace
+          path: /tmp/acceptance-workspace
+          include-hidden-files: true
+          retention-days: 1
