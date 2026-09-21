@@ -10,6 +10,23 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.48 — 2026-09-21
+
+**Fight cast: restore the existing six role bodies at runtime.**
+
+- Keep stripping the unused embedded Meshy clip, but stop calling
+  `Skeleton.pose()` after import. Those GLBs carry a 100× armature/unit
+  conversion; resetting the skeleton collapsed each roughly 1.7 m fighter to
+  about 1 cm while still reporting the 3D stage ready.
+- Verified Driver, Fixer, Local, Muscle, Runner and Watcher together in a real
+  3v3 browser battle, including the 390 px phone layout.
+- Cache: `render3d.js?v=10`, `app.js?v=12`.
+
+### Port
+
+Web presentation only. The Godot runtime does not call Three.js
+`Skeleton.pose()` and needs no matching change.
+
 ## v4.47 — 2026-09-11
 
 **Act I people, places and optional return conversations.**
