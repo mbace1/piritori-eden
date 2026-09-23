@@ -1,0 +1,247 @@
+{
+ "request_version": 1,
+ "id": "lab-6-mixed",
+ "rules": {
+  "id": "c11-v1",
+  "grid": {
+   "cols": 6,
+   "rows": 8
+  },
+  "movement": {
+   "steps": 4,
+   "adjacency": "orthogonal",
+   "blockedBy": [
+    "full-cover",
+    "partial-cover-edge",
+    "fighter"
+   ]
+  },
+  "turn": {
+   "order": "player-then-rivals",
+   "budget": "one-move-and-one-action-any-order",
+   "rivals": "frozen-visible-plans; an invalid plan holds, never retargets"
+  },
+  "sight": {
+   "algorithm": "supercover-dda",
+   "blockers": [
+    "full-cover",
+    "fighter"
+   ],
+   "exact_corner": "both-side-cells-block"
+  },
+  "cover": {
+   "full": "blocks movement and sight",
+   "partial": "one edge; blocks crossing that edge; -25 percentage points to GUN accuracy through it"
+  },
+  "brace": {
+   "guard": 2,
+   "cap": 4
+  },
+  "damage": "guard absorbs first (pierce ignores that much guard), remainder is hp; down at hp <= 0",
+  "dice": {
+   "kind": "lcg",
+   "a": 1664525,
+   "c": 1013904223,
+   "modulus": 4294967296,
+   "roll": "state/2^32*100 < chance"
+  },
+  "victory": {
+   "mode": "eliminate",
+   "withdraw_from_round": 1,
+   "talk_from_round": 2
+  }
+ },
+ "seed": 104729,
+ "round": 1,
+ "selected": "f01",
+ "cover": [
+  {
+   "cell": "0,3",
+   "kind": "full",
+   "prop": "lab-full"
+  },
+  {
+   "cell": "5,4",
+   "kind": "full",
+   "prop": "lab-full"
+  },
+  {
+   "cell": "2,6",
+   "kind": "full",
+   "prop": "lab-full"
+  },
+  {
+   "cell": "1,3",
+   "kind": "partial",
+   "edge": "north",
+   "prop": "lab-partial"
+  },
+  {
+   "cell": "4,4",
+   "kind": "partial",
+   "edge": "south",
+   "prop": "lab-partial"
+  },
+  {
+   "cell": "3,1",
+   "kind": "partial",
+   "edge": "east",
+   "prop": "lab-partial"
+  },
+  {
+   "cell": "1,6",
+   "kind": "partial",
+   "edge": "west",
+   "prop": "lab-partial"
+  }
+ ],
+ "weapons": {
+  "baseball-bat": {
+   "name": "Bat",
+   "range": 1,
+   "damage": 3,
+   "accuracy": 100
+  },
+  "first-handgun": {
+   "name": "Handgun",
+   "range": 6,
+   "damage": 3,
+   "accuracy": 90,
+   "magazine": 4
+  }
+ },
+ "items": {
+  "training-bandage": {
+   "effectType": "restore_condition",
+   "magnitude": 2,
+   "singleUse": true
+  }
+ },
+ "units": [
+  {
+   "id": "f01",
+   "side": "player",
+   "label": "J1",
+   "name": "Stand-in 1 · Jade",
+   "role": "muscle",
+   "cell": "1,2",
+   "weapon": "baseball-bat",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 2,
+   "harmBonus": 0,
+   "ammo": null,
+   "maxAmmo": null,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  },
+  {
+   "id": "f02",
+   "side": "player",
+   "label": "J2",
+   "name": "Stand-in 2 · Jade",
+   "role": "runner",
+   "cell": "2,2",
+   "weapon": "first-handgun",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 1,
+   "harmBonus": 0,
+   "ammo": 4,
+   "maxAmmo": 4,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  },
+  {
+   "id": "f03",
+   "side": "player",
+   "label": "J3",
+   "name": "Stand-in 3 · Jade",
+   "role": "muscle",
+   "cell": "3,2",
+   "weapon": "baseball-bat",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 2,
+   "harmBonus": 0,
+   "ammo": null,
+   "maxAmmo": null,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  },
+  {
+   "id": "op-f01",
+   "side": "enemy",
+   "label": "R1",
+   "name": "Stand-in 1 · Rust",
+   "role": "muscle",
+   "cell": "1,5",
+   "weapon": "baseball-bat",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 2,
+   "harmBonus": 0,
+   "ammo": null,
+   "maxAmmo": null,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  },
+  {
+   "id": "op-f02",
+   "side": "enemy",
+   "label": "R2",
+   "name": "Stand-in 2 · Rust",
+   "role": "runner",
+   "cell": "2,5",
+   "weapon": "first-handgun",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 1,
+   "harmBonus": 0,
+   "ammo": 4,
+   "maxAmmo": 4,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  },
+  {
+   "id": "op-f03",
+   "side": "enemy",
+   "label": "R3",
+   "name": "Stand-in 3 · Rust",
+   "role": "muscle",
+   "cell": "3,5",
+   "weapon": "baseball-bat",
+   "hp": 5,
+   "maxHp": 5,
+   "guard": 2,
+   "harmBonus": 0,
+   "ammo": null,
+   "maxAmmo": null,
+   "items": [
+    "training-bandage"
+   ],
+   "alive": true
+  }
+ ],
+ "commands": [
+  "move",
+  "attack",
+  "brace",
+  "reload",
+  "item",
+  "end",
+  "withdraw",
+  "talk"
+ ],
+ "campaign": null
+}

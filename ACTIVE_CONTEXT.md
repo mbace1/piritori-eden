@@ -1,3 +1,21 @@
+# Owner direction — 2026-09-23
+
+> C.19 is the main active, Godot is alive and should catch up with that. A.1
+> should be started. B.1 is Slay and separate game mode worked in different
+> instance. Likely still a part of the bigger Piritori, like the map
+> mini-game (also separate) and the dope wars mini-game that needs
+> integration to map and narrative side here.
+
+- **C.19 is the active build.** Night Shift / `web/crew-run/` is what ships.
+- **Godot is alive** and catches up with C.19, not with the older v4.x line.
+- **A.1 started** — [design/A1_TURF_BASE.md](design/A1_TURF_BASE.md): the
+  battle request/result contract, TURF's engine run against it, and the
+  measured distance between the two rule sets. Source only; not playable.
+- **B.1 is Slay the Spire-style routing, built in another instance.** B, the
+  map mini-game and the Dope Wars mini-game are all parts of Piritori that
+  still need integrating with the map and narrative here; none is owned by
+  this line of work.
+
 # C.19 implementation and release record — 2026-09-17
 
 The approved acceptance/readability implementation is in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89).

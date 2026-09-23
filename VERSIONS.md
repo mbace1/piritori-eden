@@ -1,3 +1,11 @@
+# A.1 — Turf base: one battle request, two engines
+
+Option A's first step (owner, 2026-09-23: "A.1 should be started"). Freezes battle request/result v1 from C.19's own lab-6 3v3 (`port/battle-contract.mjs`, `fixtures/battle-request-lab6-v1.json`), runs TURF v42's engine from a pinned copy against that request (`web/vendor/turf/`, `web/turf-base/adapter.mjs`) and measures the two rule sets on the same boards (`web/test/a1-parity.mjs --report`). C rebuilt from the request alone matches native C over 175 commands. Partial-cover edges are the whole reach and odds gap; guard is the whole damage gap; bodies blocking shots is most of the sight gap. C's rules, UI, saves and public package are unchanged. Not playable, not published. See design/A1_TURF_BASE.md.
+
+### Port
+
+No behaviour to port. When Godot catches up with C.19, its battle should accept and return the pair in `port/battle-contract.mjs`; the lab-6 request is a ready input and `RULES_C11_V1` lists the numbers to match.
+
 # C.18 — Unified interface / direct rendering
 
 One crew stylesheet and command ribbon; restored procedural portrait; combined mission/turn strip; Menu-based withdrawal. Costs, enemy intent, crew history and equipment remain. Crew rendering bypasses framebuffer-copy FXAA, restores the canvas target and exposes a safe reflection-bypass option. Physical phone retest remains required. See design/C18_UNIFIED_UI.md.

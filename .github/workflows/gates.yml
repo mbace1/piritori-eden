@@ -183,6 +183,20 @@ jobs:
           node web/test/tactical-camera.cjs
           node web/test/cover-presentation.cjs
 
+  a-turf-base:
+    name: A.1 Turf base — one request, two engines
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: battle request frozen, TURF pinned, A and C held to one contract
+        run: |
+          node port/battle-fixture.mjs --check
+          node web/tools/vendor-turf.mjs --check
+          node web/test/a1-parity.mjs --report
+
   c-crew-outing:
     timeout-minutes: 25
     name: C crew outing and persistence
