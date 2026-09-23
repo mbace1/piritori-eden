@@ -1,3 +1,11 @@
+# C.19 — Night Shift battlefield clarity
+
+Focused fighter labels, full statistics in VIEW, selected/target rings, labelled south exit, and honest rescue guidance. Enemy plans, action costs, rules, campaign settlement and procedural characters remain unchanged. Physical Pixel/iPad and owner visual acceptance remain pending. Source and tested head `69b23168`; live on the hub as `piritori-c17/web/crew-run/?campaign=1&release=19` (its `release.json` holds the file hashes). This entry was written into the source log at the C.19 → main merge (2026-09-23): until then only the generated copy inside the deployed package said C.19, and this file stopped at C.18. See design/C19_READABILITY.md and design/C19_ACCEPTANCE.md.
+
+### Port
+
+Godot: reproduce focused/full label inspection without state changes; selected/target rings, rescue state and south-edge extraction cue. Invalidate projected labels after text, camera or viewport changes. Preserve all existing mission/result vectors. This release does not implement the Godot presentation port.
+
 # C.18 — Unified interface / direct rendering
 
 One crew stylesheet and command ribbon; restored procedural portrait; combined mission/turn strip; Menu-based withdrawal. Costs, enemy intent, crew history and equipment remain. Crew rendering bypasses framebuffer-copy FXAA, restores the canvas target and exposes a safe reflection-bypass option. Physical phone retest remains required. See design/C18_UNIFIED_UI.md.
