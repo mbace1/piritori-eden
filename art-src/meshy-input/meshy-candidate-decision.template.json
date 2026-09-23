@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "asset_id": "replace-me",
+  "source": {
+    "reference": "relative/path/to/approved-source.jpg",
+    "sha256": "replace-with-64-character-sha256",
+    "approval_record": "art-library/APPROVALS.md entry or owner review"
+  },
+  "generation": {
+    "channel": "workspace",
+    "plan": "premium",
+    "model": "meshy-7",
+    "settings_sha256": "sha256-of-canonical-input-and-settings-record",
+    "live_free_retries_shown": 12,
+    "attempts": [
+      {
+        "attempt": 0,
+        "kind": "initial",
+        "parent_attempt": null,
+        "outcome": "completed",
+        "result_sha256": "sha256-of-first-master",
+        "decision": "redo",
+        "failure_codes": [
+          "fused-fingers"
+        ]
+      },
+      {
+        "attempt": 1,
+        "kind": "free-retry",
+        "parent_attempt": 0,
+        "settings_sha256": "same-sha256-of-canonical-input-and-settings-record",
+        "outcome": "completed",
+        "result_sha256": "sha256-of-selected-master",
+        "decision": "accept",
+        "failure_codes": []
+      }
+    ],
+    "selected_attempt": 1
+  },
+  "artifacts": {
+    "generation_master": {
+      "path": "relative/private/path/to/selected-master.glb",
+      "sha256": "sha256-of-selected-master"
+    },
+    "production_input": {
+      "path": "relative/private/path/to/remeshed-textured-input.glb",
+      "sha256": "sha256-of-remeshed-textured-input",
+      "triangles": 15000
+    }
+  },
+  "gates": {
+    "generation": {
+      "decision": "pass",
+      "reviewed_by": "reviewer name",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ",
+      "notes": "Why this master is worth downstream work.",
+      "evidence": {
+        "front": "evidence/master-front.png",
+        "back": "evidence/master-back.png",
+        "left": "evidence/master-left.png",
+        "right": "evidence/master-right.png",
+        "three_quarter": "evidence/master-three-quarter.png",
+        "face": "evidence/master-face.png",
+        "left_hand": "evidence/master-left-hand.png",
+        "right_hand": "evidence/master-right-hand.png"
+      },
+      "checks": {
+        "approved_source_and_identity": "pass",
+        "rest_pose_matches_request": "pass",
+        "arm_proportions_and_symmetry": "pass",
+        "five_digits_each_hand": "pass",
+        "finger_gaps_and_thumb_opposition": "pass",
+        "clean_limb_and_wrist_attachment": "pass",
+        "no_holes_floaters_or_intersections": "pass",
+        "face_and_silhouette_readable": "pass"
+      }
+    },
+    "production_input": {
+      "decision": "pass",
+      "reviewed_by": "reviewer name",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ",
+      "notes": "Why the 15k textured derivative is safe to rig.",
+      "evidence": {
+        "front": "evidence/production-front.png",
+        "back": "evidence/production-back.png",
+        "three_quarter": "evidence/production-three-quarter.png",
+        "gameplay_scale": "evidence/production-gameplay-scale.png",
+        "face": "evidence/production-face.png",
+        "left_hand": "evidence/production-left-hand.png",
+        "right_hand": "evidence/production-right-hand.png"
+      },
+      "checks": {
+        "actual_triangles_within_14500_16500": "pass",
+        "face_readable_at_gameplay_size": "pass",
+        "all_digits_survive_remesh": "pass",
+        "clean_wrist_and_cuff": "pass",
+        "skin_is_natural_not_white": "pass",
+        "face_and_hands_match": "pass",
+        "hair_and_clothing_unchanged": "pass",
+        "no_uv_bleed_or_seams": "pass"
+      }
+    },
+    "rig": {
+      "decision": "pass",
+      "reviewed_by": "reviewer name",
+      "reviewed_at": "YYYY-MM-DDTHH:MM:SSZ",
+      "notes": "Why this rig can proceed to animation and integration.",
+      "evidence": {
+        "bind_front": "evidence/rig-bind-front.png",
+        "idle": "evidence/rig-idle.png",
+        "walk": "evidence/rig-walk.png",
+        "hands_open": "evidence/rig-hands-open.png",
+        "hands_relaxed": "evidence/rig-hands-relaxed.png",
+        "hands_fist": "evidence/rig-hands-fist.png",
+        "hands_grip_contact": "evidence/rig-hands-grip-contact.png"
+      },
+      "checks": {
+        "required_joint_contract": "pass",
+        "independent_finger_controls": "pass",
+        "arm_length_stable_in_motion": "pass",
+        "clean_deformation": "pass",
+        "open_relaxed_fist_and_grip": "pass",
+        "prop_contact": "pass",
+        "no_skin_or_material_regression": "pass"
+      }
+    }
+  },
+  "downstream": {
+    "remesh": {
+      "status": "succeeded"
+    },
+    "texture": {
+      "status": "succeeded"
+    },
+    "rig": {
+      "status": "succeeded"
+    },
+    "animate": {
+      "status": "succeeded"
+    }
+  }
+}

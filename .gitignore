@@ -16,8 +16,17 @@
 # symlink too.
 node_modules/
 node_modules
+__pycache__/
+*.pyc
+/debug.log
 
 # Generated sheets from godot/tools. Derived from the engine and the plates;
 # regenerate rather than commit.
 /stage-template.svg
 /stage-contact.svg
+
+# Repo-local drafts, generated masters, inspection renders and credentials.
+# These are working files, not reviewable source assets.
+/.private/
+
+.dream-loop/

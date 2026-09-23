@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "piritori-character-v1",
+  "maturity": "draft",
+  "triangle_target": 15000,
+  "triangle_min": 14500,
+  "triangle_max": 16500,
+  "texture_max": 2048,
+  "skin_influences_max": 4,
+  "canonical_rig": null,
+  "required_actions": ["IDLE_A", "WALK", "RUN", "MELEE_LIGHT", "MELEE_HEAVY", "PISTOL_FIRE", "HIT_FRONT", "HIT_BACK", "DEATH_A", "BRACE", "ITEM_USE", "TALK", "HAND_OPEN", "HAND_FIST", "HAND_GRIP"],
+  "validation_gates": ["normalized_export", "skin_material_fingers", "shared_rig_motion", "action_library", "importer_playback", "private_archive_off_pc"],
+  "game_ready_gates": ["owner_visual", "pixel_10_pro", "ipad_m2"],
+  "integration_gates": ["production_scene"]
+}

@@ -1,5 +1,26 @@
 # Piritori → Eden — Era I Kallio map specification
 
+## Owner clarification, 2026-09-12 — local meeting sites and market distance
+
+The anchor/site model in §3 supports several close meeting locations around a
+tram-stop area or central Kallio spot, including nearby parks, courtyards and
+street corners. These are places to meet mission personnel and experience local
+narrative, not necessarily separate price markets. Nearby sites share broadly
+similar price conditions; meaningful market differences motivate tram travel.
+A site visit must not independently reroll prices simply because its background
+changed. Use existing geographic anchors and site IDs; add authored sites with
+explicit parents rather than duplicate overlapping map nodes. Detailed ruling
+and connected-encounter acceptance are in GAME_DESIGN_DOCUMENT.md (2026-09-12).
+
+Named narrative venues sit near these public spaces and have an authored
+approach-site-to-destination-site link. Usually a lit entrance indicates that
+the character is available and the player can enter. Store availability with
+the character/site schedule and chapter state; do not derive it from a texture
+or a decorative streetlight. Reuse the current location assignments recorded
+in ACT_I_NARRATIVE.md before adding or relocating doors. Missing mappings,
+including Arvo's enterable venue, remain content work rather than guessed map
+coordinates. Entering and leaving retains the surrounding area's market state.
+
 Version: 1.0  
 Date: 2026-08-19  
 Status: **ACTIVE — geographic, node-graph and map-layer authority**  

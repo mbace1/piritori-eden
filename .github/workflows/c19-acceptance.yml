@@ -1,0 +1,89 @@
+name: C19 acceptance
+on:
+  push:
+    branches: [feat/c19-battlefield-clarity]
+  pull_request:
+    paths:
+      - 'web/crew-run/**'
+      - 'web/fight-module/**'
+      - 'web/arena-lab/**'
+      - 'web/test/c19-*'
+      - 'tools/publish/**'
+      - '.github/workflows/c19-acceptance.yml'
+permissions:
+  contents: read
+concurrency:
+  group: c19-acceptance-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rule, presentation and release identity contracts
+        run: |
+          node web/test/crew-run.mjs
+          node web/test/c18-render-contract.mjs
+          python3 -m unittest discover -s tools/publish -v
+      - name: Stage exact source against the published cabinet
+        run: |
+          git clone --depth=1 --branch gh-pages https://github.com/mbace1/Suds-Jack.git /tmp/c19-hub
+          mkdir -p /tmp/c19-site /tmp/c19-review /tmp/c19-delivery
+          SOURCE=$(git rev-parse HEAD)
+          python3 tools/publish/arena_lab_release.py --source . --deployed-manifest /tmp/c19-hub/piritori-c17/art/v3/manifest.json --previous-cabinet /tmp/c19-hub/piritori-c17 --commit "$SOURCE" --output /tmp/c19-site/piritori-c17
+          git -C /tmp/c19-hub rev-parse HEAD > /tmp/c19-delivery/hub-pages-commit.txt
+          git -C /tmp/c19-hub fetch --depth=1 origin main:refs/remotes/origin/main
+          git -C /tmp/c19-hub rev-parse origin/main > /tmp/c19-delivery/hub-main-commit.txt
+          python3 - <<'PY'
+          import pathlib, subprocess
+          out=pathlib.Path('/tmp/c19-delivery')
+          for ref,folder in [('HEAD','pages-text'),('origin/main','main-text')]:
+              names=subprocess.check_output(['git','-C','/tmp/c19-hub','ls-tree','-r','--name-only',ref]).decode().splitlines()
+              for name in names:
+                  p=pathlib.Path(name)
+                  if (len(p.parts)==1 or p.parts[0] in ('hub','test','.github','tools')) and p.suffix in ('.js','.mjs','.cjs','.json','.html','.md','.yml','.py'):
+                      target=out/folder/p;target.parent.mkdir(parents=True,exist_ok=True)
+                      target.write_bytes(subprocess.check_output(['git','-C','/tmp/c19-hub','show',ref+':'+name]))
+          PY
+          node /tmp/c19-delivery/main-text/test/piritori-c18-package.mjs /tmp/c19-site/piritori-c17
+      - name: Browser dependencies
+        run: |
+          npm install --prefix /tmp/c19-test playwright pngjs
+          /tmp/c19-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: Packaged touch outcome and battlefield inspection
+        env:
+          NODE_PATH: /tmp/c19-test/node_modules
+          CREW_RUN_URL: http://127.0.0.1:8781/piritori-c17/web/crew-run/
+          C19_OUTPUT: /tmp/c19-review
+        run: |
+          python3 -m http.server 8781 --directory /tmp/c19-site >/tmp/c19-review/server.log 2>&1 &
+          SERVER=$!
+          trap 'kill "$SERVER"' EXIT
+          node web/test/c19-readability-browser.cjs
+      - name: Record tested source
+        if: always()
+        run: |
+          mkdir -p /tmp/c19-review
+          git rev-parse HEAD > /tmp/c19-review/source-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c19-acceptance-evidence
+          path: /tmp/c19-review
+          retention-days: 3
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: c19-tested-delivery
+          path: |
+            /tmp/c19-site
+            /tmp/c19-delivery
+          include-hidden-files: true
+          retention-days: 3

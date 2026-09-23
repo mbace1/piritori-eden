@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {chapterPeople, renderChapterPeople} from '../js/v3/chapter-narrative.js';
+import {chapterPeople, renderChapterPeople} from '../js/v3/chapter-narrative.js?v=1';
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const state = {chapter:1,scheduleIndex:0,choices:{},newsSeen:[]};
 const people = chapterPeople(state, content);

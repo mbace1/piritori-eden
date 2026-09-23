@@ -1,5 +1,24 @@
 # Piritori → Eden — design authority
 
+## Owner continuation, 2026-09-13 — art first
+
+“Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish
+the environment/material/light/camera pass toward concept 02 before changing
+combat rules. Continue repository and hub delivery with explicit art/device
+acceptance gaps. Temporary fighters remain until their existing gates pass.
+
+## Owner continuation, 2026-09-13 — concept 02 and gun inspection
+
+“2 looks great, let's aim for that. Camera angles can be used for aiming guns
+like zero company.” Concept 02 / After the Rain is the selected implementation
+target for environmental light, material and atmosphere. It does not promote
+character assets or certify runtime parity. An optional temporary gun-inspection
+angle may show shooter/target/cover before committing, returning to the full
+planning overview afterward. This explicitly qualifies the GDD full-board
+composition while inspecting a gun action. Keep real forecasts, resource costs,
+manual override and reduced-motion support. See design/C14_AFTER_THE_RAIN.md.
+
+
 ## Owner continuation, 2026-09-13 — Mewgenics meets XCOM across A and C
 
 The owner explicitly applies the supplied TURF design/pipeline summary to A
@@ -16,9 +35,59 @@ the approved asset pipeline and current art/device gates remain. This is a
 direction update, not a claim that C.09.1 implements the new combat contract.
 
 
+## Owner continuation, 2026-09-13 — delivery includes the live hub
+
+The owner explicitly authorizes Astra to merge and publish tested changes:
+"You are the merger so go ahead and merge" and "So always publish so it's on
+the hub as well." Each playable slice batch must reach both the Piritori source
+repository and a verified public Suds Jack route. A PR or source merge alone is
+incomplete delivery. Labs retain separate labelled cards; they do not replace
+the authored campaign entry. Keep recording testing, remaining gates and exact
+release provenance. Document-only updates do not invent a playable release.
+
+## Owner continuation, 2026-09-13 — placeholders and shared source
+
+The owner authorizes temporary placeholder characters until the approved models fit and look good, to minimize defects while the vertical slice develops. Neutral stand-ins are development equipment, not newly approved roster designs. F01/F02 retain their existing production gates. Each reviewable slice batch must be pushed to the Piritori GitHub repository with tests and handoff so other PCs/agents can continue directly. A source push is not a live deployment.
+
+## Owner continuation, 2026-09-13 — active design and production memory
+
+Read [ACTIVE_CONTEXT.md](ACTIVE_CONTEXT.md) before resuming. It links the existing Meshy handoff, completed paid pilot, pipeline and current manifest rather than replacing them. Preserve the Art Bible while pursuing substantial Dream Loop lighting/material/depth improvements. Wear is roughly 3–4/10; the world should still be beautiful. Encounter framing supports 2 to 10+ participants, not a four-person game limit. Use separate numbered, materially different arena screen targets with attainable character fidelity; park UI and other scene exploration separately. The next Option C slice must prove a reproducible Meshy/Blender production route as well as visual quality. A/C are battle alternatives; B is a separate map/run axis. See [the slice design](design/OPTION_C_VERTICAL_SLICE.md). These are owner directions and a design brief, not a new live-build or production-readiness claim.
+
+## Owner clarification, 2026-09-13 — preference is not approval
+
+The owner clarified the v04 comparison: "And remember I'm not approving necessarily but choosing out of options what is better. There in that art i had very little variation to choose from".
+
+Treat "middle and right" for v04 as relative preference among limited options. The earlier D009 interpretation overstated this as approved art direction; it is corrected. Ink & Stone and Cold Street remain useful reference candidates and implemented C.08 comparison prototypes, not a locked art direction or accepted asset quality. Broader visual exploration is requested. Compare shape construction, edge language, materials, character readability and spatial staging, not just colour grading.
+
+Record comparative preference, explicit concept acceptance and engine/device acceptance separately. A ranking does not close the exploration or authorize promotion of a production asset. Preserve earlier explicit approvals within their actual scope; this correction does not silently revoke or broaden them.
+
+
+## Owner ruling, 2026-09-12 — shared meeting and battle locations
+
+The GDD's new "places, shared markets and continuous encounters" ruling binds
+location work: multiple nearby sites around tram-stop areas and central Kallio
+anchors; broadly similar local merchandise prices; tram travel for meaningful
+market differences; mission and narrative value at the nearby sites.
+
+A meeting can escalate into combat in the same isometric scene with the same
+actors. Dialogue uses matching face close-up cut-ins while the scene and facing
+characters remain visible. Hostility is authored, preserving Jaska/Slomo/Arvo's
+established roles. Use existing 2D backgrounds to guide 3D mood and practical
+lighting. These are owner decisions; implementation status remains separate.
+See GAME_DESIGN_DOCUMENT.md's 2026-09-12 ruling and UX_SPEC.md's shared-scene
+presentation addendum. This does not authorize a new disconnected market per
+background or turn narrative-only people into generic combatants.
+
+Owner follow-up: Jaska, Slomo, Arvo and other key narrative characters also have
+their own nearby locations. A lit entrance usually indicates availability and
+allows entry. Door light and entry UI share authored schedule/chapter/access
+state; leaving returns to the approach site. Preserve existing location
+assignments and explicitly author missing ones. See the GDD's named-locations
+and lit-entrances subsection; this rule is not yet implemented by C.04.
+
 Status: **ACTIVE**  
 Authority reset: 2026-08-19  
-Latest owner rulings: 2026-08-28
+Latest owner rulings: 2026-09-12
 Owner: Mikael Haveri  
 
 This file defines which documents and assets control future work. It exists

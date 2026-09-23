@@ -1,0 +1,8 @@
+{
+  "build": "C.06",
+  "completedOutcomePreserved": true,
+  "fightAgainEnabledAfterReflow": true,
+  "autoContinuesAfterReflow": true,
+  "errors": [],
+  "physicalDevice": false
+}

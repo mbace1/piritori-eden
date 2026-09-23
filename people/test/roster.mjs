@@ -9,7 +9,7 @@
  * is a behaviour, never a number) and DESIGN_LOCKS §9.2 (no name touches any
  * aptitude, trait or stat).
  */
-import { hireling, roster, APTITUDES, TRAITS, GIVEN } from '../roster.mjs';
+import { hireling, roster, APTITUDES, TRAITS, GIVEN } from '../roster.mjs?v=1';
 
 let pass = 0, fail = 0;
 const ok = (c, w) => { if (c) pass++; else { fail++; console.log('  FAIL  ' + w); } };

@@ -20,7 +20,7 @@
  * two disagree.
  */
 import * as THREE from 'three';
-import { LANES, totalRows, laneCentre, parseSlotKey, slotKey } from './grid.js?v=1';
+import { LANES, totalRows, laneCentre, parseSlotKey, slotKey } from './grid.js?v=2';
 import { applyNameplateNudges } from './nameplates.js?v=1';
 
 /** `worldFor()`'s per-cell spacing. Starts at Godot's pre-fit default and is

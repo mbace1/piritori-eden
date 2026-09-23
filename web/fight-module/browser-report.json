@@ -1,0 +1,171 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "metrics": {
+      "fps": 131,
+      "draws": 42,
+      "geometries": 38,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 216.453125
+      },
+      {
+        "h": 44,
+        "w": 216.46875
+      },
+      {
+        "h": 44,
+        "w": 216.453125
+      },
+      {
+        "h": 44,
+        "w": 216.46875
+      },
+      {
+        "h": 44,
+        "w": 254.15625
+      }
+    ],
+    "autoResult": "loss"
+  },
+  {
+    "name": "phone",
+    "errors": [],
+    "metrics": {
+      "fps": 133,
+      "draws": 42,
+      "geometries": 38,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 72.78125
+      },
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 72.765625
+      },
+      {
+        "h": 44,
+        "w": 84.921875
+      }
+    ]
+  },
+  {
+    "name": "tablet",
+    "errors": [],
+    "metrics": {
+      "fps": 127,
+      "draws": 42,
+      "geometries": 38,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 149.921875
+      },
+      {
+        "h": 44,
+        "w": 174.3125
+      }
+    ]
+  },
+  {
+    "name": "landscape",
+    "errors": [],
+    "metrics": {
+      "fps": 126,
+      "draws": 42,
+      "geometries": 38,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "ranged",
+      "history": [],
+      "finite": true
+    },
+    "touchTargets": [
+      {
+        "h": 44,
+        "w": 90.328125
+      },
+      {
+        "h": 44,
+        "w": 90.34375
+      },
+      {
+        "h": 44,
+        "w": 90.328125
+      },
+      {
+        "h": 44,
+        "w": 128.453125
+      },
+      {
+        "h": 44,
+        "w": 148.546875
+      }
+    ]
+  }
+]

@@ -1,0 +1,333 @@
+{
+  "build": "C.09.1",
+  "physical_devices_verified": false,
+  "layouts": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "count": 6,
+      "metrics": {
+        "scenario": "lab-6",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 6,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 60,
+        "renderedFrames": 373,
+        "labelLayouts": 3,
+        "edgeSmoothing": {
+          "method": "none",
+          "pixels": 0,
+          "bytes": 0
+        },
+        "draws": 68,
+        "geometries": 35,
+        "textures": 10,
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "desktop",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          1440,
+          680
+        ],
+        "shadows": true,
+        "antialias": true,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "phone",
+      "width": 412,
+      "height": 915,
+      "count": 12,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-12",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 12,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 30,
+        "renderedFrames": 235,
+        "labelLayouts": 4,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 227012,
+          "bytes": 908048
+        },
+        "draws": 92,
+        "geometries": 54,
+        "textures": 10,
+        "models": 12,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          412,
+          551
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "phone-landscape",
+      "width": 915,
+      "height": 412,
+      "count": 2,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-2",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 2,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 30,
+        "renderedFrames": 235,
+        "labelLayouts": 4,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 229870,
+          "bytes": 919480
+        },
+        "draws": 53,
+        "geometries": 24,
+        "textures": 10,
+        "models": 2,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          635,
+          362
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    },
+    {
+      "name": "tablet",
+      "width": 1194,
+      "height": 834,
+      "count": 12,
+      "touch": true,
+      "metrics": {
+        "scenario": "lab-12",
+        "environment": {
+          "development": {
+            "lightProbe": "authored 256x128 sky/practical PMREM",
+            "liveReflections": false,
+            "pavement": "shared albedo/bump + variable wet roughness",
+            "cutawayActors": 12,
+            "cutawayMaterials": 28
+          },
+          "style": "ink",
+          "bearTriangles": 8610,
+          "assetBytes": 3785540,
+          "groundSize": [
+            1024,
+            1024
+          ],
+          "bearBounds": [
+            1.72,
+            1.0291593806229606,
+            0.6299385416769168
+          ]
+        },
+        "layoutPaused": false,
+        "fps": 30,
+        "renderedFrames": 234,
+        "labelLayouts": 4,
+        "edgeSmoothing": {
+          "method": "fxaa",
+          "pixels": 613716,
+          "bytes": 2454864
+        },
+        "draws": 93,
+        "geometries": 54,
+        "textures": 10,
+        "models": 12,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          1194,
+          514
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "errors": [],
+      "move": true,
+      "enemyRound": true,
+      "replay": true,
+      "contextRestore": true,
+      "restart": true
+    }
+  ],
+  "motion_samples": 720,
+  "capacity": {
+    "seconds": 45,
+    "frames": 1350,
+    "label_layouts": 23,
+    "fps": 30,
+    "stable_geometry_and_texture_counts": true,
+    "rotation_labels": true,
+    "resize_during_move": true,
+    "fixture_views": 96,
+    "move_cell_views": 288,
+    "min_scenery_visibility": 1,
+    "min_actor_visibility": 0.6257668711656442
+  },
+  "limitations": [
+    "Desktop Chromium touch emulation, not Pixel/iPad acceptance",
+    "Cell sweep uses standing broad proxy and 36 currently empty move cells; not every pose in every occupied cell",
+    "Other fighters can occlude each other in side views",
+    "45-second stable GPU resource counts do not prove absence of long-session CPU or GPU leaks"
+  ]
+}

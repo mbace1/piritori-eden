@@ -1,0 +1,157 @@
+{
+  "build": "C.15",
+  "direction": "Night Places / courtyard and service yard; minimalist rain-concept UI",
+  "source_repository": "mbace1/piritori-eden",
+  "source_commit": "94d3f4d04167d1993464504766fa54ca23f7fea1",
+  "source_pr": 80,
+  "source_branch": "art/meshy-approved-pilots-2026-09-11",
+  "hub_tested_head": "f1ba39c10341de19876b682d16ac0acf79d5bd82",
+  "hub_pr": 519,
+  "hub_merge": "206842a7ad9e2b639786fa7d283705ec03c88ad9",
+  "local_checks": {
+    "full_packaged_outing_commit": "94d3f4d04167d1993464504766fa54ca23f7fea1",
+    "packaged_36_views_and_save_failure_commit": "94d3f4d04167d1993464504766fa54ca23f7fea1",
+    "packaged_gun_camera_context_recovery_commit": "d79d32bdfa89aa4b4c5ad70e5958dc1a2c5a997b",
+    "change_after_gun_gate": "Save-before-navigation in the scenery preparation selector only; no camera or combat change.",
+    "layouts": [
+      "desktop",
+      "phone portrait",
+      "phone landscape",
+      "tablet"
+    ],
+    "source_runtime_blobs": 53,
+    "derived_scoped_art_manifests": 1,
+    "cabinet_git_blobs_verified": 57,
+    "locations": 3,
+    "camera_presets": 3,
+    "actual_mouse_touch_controls": true,
+    "minimum_command_target_px": 44,
+    "source_and_hub_asset_hashes_match": true,
+    "main_and_live_cabinet_identical": true,
+    "other_game_version_entries_preserved": true,
+    "shortcut_root_equivalence": true,
+    "errors": []
+  },
+  "assets": {
+    "blender_version": "5.2.1 LTS",
+    "motifs": 12,
+    "triangles": 20428,
+    "glb_bytes": 1431032,
+    "total_new_asset_bytes": 6974837,
+    "texture_upload_max_px": 1024,
+    "static_probe_px": 128,
+    "no_paid_generation": true
+  },
+  "review_corrections": [
+    "Consistent shared framing cache token",
+    "FIT synchronizes selected preset",
+    "Location textures obey 1024px cap",
+    "Active context release link corrected",
+    "Scenery change requires successful persistence",
+    "Shared hub catalogue consumers use the current token"
+  ],
+  "physical_devices_verified": false,
+  "owner_runtime_visual_approval": false,
+  "production_character_approval": false,
+  "character_provider": "neutral stand-ins",
+  "limitations": [
+    "Independent private visual reviews 4.3, 5.5 and 6.1/10; significant material/window-detail gap remains",
+    "Not completed Dream Loop target parity",
+    "Physical Pixel 10 Pro and iPad M2 acceptance pending",
+    "Scenery pilots share existing outing rules; no authored campaign site/economy integration",
+    "Static scenery reflections only; no every-frame or character reflections",
+    "No Meshy generation or character lifecycle promotion"
+  ],
+  "next_art_pass": [
+    "Window recess/interior variation and material wear",
+    "Controlled contact-shading comparison; then restrained bloom with compatible pinned dependencies",
+    "Camera-specific perimeter framing and physical-device acceptance"
+  ],
+  "entry": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=15",
+  "hub": "https://mbace1.github.io/Suds-Jack/#optionc-lab",
+  "source_merge": "c5b7566cb9df9e4023ada188be1081fbfeee45db",
+  "source_merged": true,
+  "hub_merged": true,
+  "live_commit": "645167f8619bd5d0d10c184560d74235e960ea18",
+  "pages_success": true,
+  "public_verified": true,
+  "pages_run": 34781611142,
+  "ci_note": "Eight exact-head source checks passed; the two duplicate hosted crew-outing jobs were still in progress after over an hour at merge/publication. The equivalent full outing and 36-view checks passed locally against exact packaged source94d. Hub exact-head checks passed. No unresolved review findings.",
+  "source_checks_at_publication": [
+    {
+      "name": "C crew outing and persistence",
+      "id": 103779549321,
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "the Godot build",
+      "id": 103779549264,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "C laboratory tactics and touch",
+      "id": 103779549257,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "browser campaign state",
+      "id": 103779549221,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Act I touch scenes and visits",
+      "id": 103779549107,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "C laboratory tactics and touch",
+      "id": 103779543510,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "the Godot build",
+      "id": 103779543503,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "browser campaign state",
+      "id": 103779543490,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "C crew outing and persistence",
+      "id": 103779543489,
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "name": "Act I touch scenes and visits",
+      "id": 103779543469,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "public_browser": {
+    "hub_card": "C.15 / v15",
+    "entry": "web/crew-run/?release=15",
+    "source_pin": "94d3f4d04167d1993464504766fa54ca23f7fea1",
+    "controls": [
+      "Oblique preset",
+      "FIT",
+      "Crew drawer",
+      "Move to B2 preview",
+      "Cancel"
+    ],
+    "save_preserved": "Night03 kit recovery; Sanna HP5/5, guard1, ammo3/4, Move ready / Action used remained",
+    "graphics_visible": true
+  },
+  "concurrent_release_preserved": "Toko Move2.35 and1946 other live files"
+}

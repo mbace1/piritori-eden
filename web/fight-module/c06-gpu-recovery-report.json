@@ -1,0 +1,266 @@
+[
+  {
+    "name": "phone",
+    "dpr": 2.625,
+    "initial": {
+      "layoutPaused": false,
+      "fps": 21,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "mobile",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        412,
+        617
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "after": {
+      "layoutPaused": false,
+      "fps": 0,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 1,
+      "recoveries": 1,
+      "profile": "mobile",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        412,
+        617
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checks": [
+      "real context loss during move",
+      "input blocked during loss",
+      "enemy turn recovery",
+      "rehearsal cancellation",
+      "repeated restoration without GPU allocation growth",
+      "reload checkpoint fallback",
+      "completed outcome recovery",
+      "orientation resize"
+    ],
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "tablet",
+    "dpr": 2,
+    "initial": {
+      "layoutPaused": false,
+      "fps": 25,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "mobile",
+      "pixelRatio": 0.9179156758073853,
+      "drawingBuffer": [
+        765,
+        849
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "after": {
+      "layoutPaused": false,
+      "fps": 25,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 5,
+      "recoveries": 5,
+      "profile": "mobile",
+      "pixelRatio": 0.9179156758073853,
+      "drawingBuffer": [
+        765,
+        849
+      ],
+      "shadows": false,
+      "antialias": false,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checks": [
+      "real context loss during move",
+      "input blocked during loss",
+      "enemy turn recovery",
+      "rehearsal cancellation",
+      "repeated restoration without GPU allocation growth"
+    ],
+    "errors": [],
+    "physicalDevice": false
+  },
+  {
+    "name": "desktop",
+    "dpr": 1,
+    "initial": {
+      "layoutPaused": false,
+      "fps": 30,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 7,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 0,
+      "recoveries": 0,
+      "profile": "desktop",
+      "pixelRatio": 1,
+      "drawingBuffer": [
+        1180,
+        551
+      ],
+      "shadows": true,
+      "antialias": true,
+      "textureSizes": [
+        [
+          "2048x2048"
+        ],
+        [
+          "2048x2048"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "after": {
+      "layoutPaused": false,
+      "fps": 30,
+      "draws": 41,
+      "geometries": 11,
+      "textures": 6,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "graphicsLost": false,
+      "losses": 5,
+      "recoveries": 5,
+      "profile": "mobile",
+      "pixelRatio": 0.9998615672123002,
+      "drawingBuffer": [
+        1179,
+        550
+      ],
+      "shadows": false,
+      "antialias": true,
+      "textureSizes": [
+        [
+          "1024x1024"
+        ],
+        [
+          "1024x1024"
+        ]
+      ],
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checks": [
+      "real context loss during move",
+      "input blocked during loss",
+      "enemy turn recovery",
+      "rehearsal cancellation",
+      "repeated restoration without GPU allocation growth"
+    ],
+    "errors": [],
+    "physicalDevice": false
+  }
+]

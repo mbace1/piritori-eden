@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { resolveNameplateNudges } from '../js/v3/nameplates.js';
+import { resolveNameplateNudges } from '../js/v3/nameplates.js?v=1';
 
 function moved(boxes, bounds) {
   const rest = new Map(boxes.map(b => [b.id, b]));

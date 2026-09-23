@@ -1,3 +1,36 @@
+# C.18 — Unified interface / direct rendering
+
+One crew stylesheet and command ribbon; restored procedural portrait; combined mission/turn strip; Menu-based withdrawal. Costs, enemy intent, crew history and equipment remain. Crew rendering bypasses framebuffer-copy FXAA, restores the canvas target and exposes a safe reflection-bypass option. Physical phone retest remains required. See design/C18_UNIFIED_UI.md.
+
+### Port
+
+Reproduce the simplified hierarchy while retaining C.17 rules and vectors. The browser renderer mitigation is not a claim about Godot rendering.
+
+# C.14 — After the Rain / gun aiming
+
+Concept 02 selected as the light/material target. Wet paving and fixed practical
+glints; lighter paper identity; Attack → target → Aim view → confirm → overview.
+Foliage clears the shot corridor. Actual forecasts, crew saves and rules stay
+intact. Read design/C14_AFTER_THE_RAIN.md for reproduction and verification.
+Publication and physical-device acceptance require separate release evidence.
+
+### Port
+
+Godot reproduces shoulder-side framing, presentation-only pose, foliage corridor,
+wet surfaces and camera interruption. Existing C.12 vectors are unchanged.
+
+# C.13 — Night Shift art and UI
+
+Owner-requested pass against the Art Bible, UX specification and actual visual targets.
+Crew ledger and equipment cards; selected-person command console; real stand-in
+portraits; visible costs and contextual actions; practical night light and dashed
+intent paths. C.12 rules/save retained. See design/C13_ART_AND_UI.md.
+
+### Port
+
+Godot: reproduce C.13 presentation and framing; retain C.12 action vectors.
+Physical device and final character-art acceptance remain open.
+
 # Piritori → Eden — versions
 
 > **Numbers are `vMAJOR.MINOR` from v4.** The integer is a milestone, the
@@ -10,7 +43,33 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
-## v4.48 — 2026-09-21
+## C.12 connected crew pilot — 2026-09-13
+
+Night Shift links crew/loadout preparation to rescue and individual extraction,
+announced rival arrivals, persistent wounds/missing colleagues, and repeat outings.
+See `design/C12_NIGHT_SHIFT.md`. Existing authored campaign and Bear Path remain
+separate; no character acceptance or full campaign parity is claimed.
+
+### Port
+
+Port `web/crew-run/run.js`, `web/test/crew-run.mjs` and its legal rescue route.
+Rules c12-v1 / separate crew save v1. Apply settlement once; retain Move + Act,
+entry warning, equipment permissions, wound availability and reload replay checks.
+
+## C.11 laboratory — 2026-09-13
+
+Directional low-wall cover and flanking, route detours, grounded crouch/rise/fire/return,
+barrel-aligned shots and distinct HP/guard/wall/miss feedback. Separate lab release;
+the authored campaign version and production character gates do not advance.
+See `design/C11_COMBAT_PASS.md` for scope, evidence and remaining device gates.
+
+### Port
+
+Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json`.
+New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
+Use resolved impact classifications for presentation; never reapply damage on recovery.
+
+## v4.51 — 2026-09-21
 
 **Fight cast: restore the existing six role bodies at runtime.**
 
@@ -22,10 +81,56 @@
   3v3 browser battle, including the 390 px phone layout.
 - Cache: `render3d.js?v=10`, `app.js?v=12`.
 
+Numbered v4.48 on `main` when it shipped; renumbered at the C.19 → main merge (2026-09-23) because the C line had already used v4.48 (F01/F02 fighter test, 2026-09-11, the build live in the hub's `piritori/` cabinet), v4.49 (C.07 Bear Path) and v4.50; v4.51 is the first number no branch holds. Cache: `render3d.js?v=11`, `app.js?v=14` after the merge, since both lines had moved `render3d.js` to v10 with different bytes.
+
 ### Port
 
 Web presentation only. The Godot runtime does not call Three.js
 `Skeleton.pose()` and needs no matching change.
+
+## v4.50 — 2026-09-13
+
+**C.08: two approved Bear Path art directions in one playable scene.**
+
+- D009 records the owner's choice of v04 columns 2 **Ink & Stone** and 3 **Cold Street** as two alternatives. The art button switches materials, foliage palette, surface treatment and lighting while preserving camera, turn and story. `?look=ink` / `?look=cold` share a specific look; the last choice is remembered separately from the encounter save.
+- Replaces the primitive bear with an 8,610-triangle locally sculpted Blender derivative, adds a generated gravel surface with controlled contrast, and improves municipal benches, planting edges, lamp bases, package, drain, worn materials and street context. Both environments are prototypes, not final concept parity.
+- Loads environment assets by ID, byte length and SHA-256; uploads the ground at no more than 1024². Environment downloads add 3,785,540 bytes. Missing or corrupt assets show a clear loading error. Switching reuses existing scene assets.
+- Checks cover four viewport shapes, both looks, stable camera/turn/reload, input locking, repeated switches, real context recovery and existing encounter/legacy training regressions. Physical Pixel 10 Pro/iPad M2 acceptance remains pending.
+- F01/F02 remain the registered v05 prototypes with rejected rig/motion acceptance. Private v06 characters and Blender masters are not shipped. No Meshy work, campaign rule changes or asset-lifecycle promotion.
+
+### Port
+
+Browser milestone only. Port the shared-layout art profiles, explicit look selection and independent preference persistence, environment integrity checks and bounded surface upload. Preserve the existing encounter and recovery contracts. The static GLB is Y-up, long axis X, scaled by its bounds to 1.72 m length in this park. Read `design/BEAR_PATH_C08_VERIFICATION.md` and D009 before treating either style as final.
+
+## v4.49 — 2026-09-13
+
+**C.07: Bear Path, a connected 3D encounter.**
+
+- Stages the authored Karhupuisto handover from approach and free inspection through face-cut-in dialogue, peaceful resolution, same-scene 2v2 or withdrawal, then a remembered return.
+- Uses the approved wide-scene panel 03 for warm practical light, cold street depth, bear/plinth and bench cover, open escape space and foliage framing. Geometry remains a prototype, not claimed concept parity.
+- Applies canonical Bear Path opponents, condition, cover and choice/mission effects to an isolated local preview ledger. Reload replays actions and settles the outcome once. The full campaign save is untouched.
+- Adds a reduced-motion-aware battle pullback, explicit police-posture responses for extended fights, and recovery during movement, negotiation and camera transitions. Mobile FXAA stays within the existing 650,000-pixel budget.
+- Keeps the earlier courtyard training route. Registered v05 fighters remain provisional; private v06 GLBs are not included. No Meshy generation or new character approval.
+- Automated Chromium/WebGL tests cover four viewport shapes and both police choices. Physical Pixel 10 Pro/iPad M2 playtesting, final rigs, bespoke package-taking AI and campaign casualty integration remain pending.
+
+### Port
+
+Browser milestone only. Port the authored encounter state/history contract, single time/settlement boundary, canonical battle request/result mapping, dialogue-over-scene composition, phase pullback and recovery behavior. Do not copy the standalone preview ledger into campaign saves or interpret the prototype cast as final named-character models. See `design/BEAR_PATH_DIRECTOR_PACKET.md` and `web/bear-path/README.md`.
+
+## v4.48 — 2026-09-11
+
+**Provisional F01/F02 locomotion test.**
+
+- Adds the two owner-approved-source fighter candidates as runtime test derivatives after removing Meshy's helper Icosphere.
+- A dedicated touch-first screen stages both fighters together and plays each fighter's own Alert idle and Casual Walk clips through the production Three.js GLTFLoader.
+- The runtime neutralises Meshy's duplicated full-strength emissive atlas so skin and clothing display their accepted base colours instead of washing out white.
+- The screen labels the candidates provisional and names the unavailable attack, damage, finger/grip and final-polish work instead of implying those states exist.
+- Current arm proportions remain part of the provisional pilot meshes and are explicitly left for the later body/rig correction pass.
+- The test is linked from the cold-start splash and can also be opened directly on the hub.
+
+### Port
+
+The test page is browser-only. The registered GLBs must still pass Godot's real importer during the shared asset sync, but no Godot scene or gameplay behavior is added in this provisional test release.
 
 ## v4.47 — 2026-09-11
 
@@ -2387,3 +2492,4 @@ The first slice on the hub. The night map over real WGS84 Kallio, drawn lines
 carrying consignments at the city's own capacity, six named goods on three
 tiers, the bargain (and the cut bag), rank fights with guns, nerve, terrain
 cover and three exits, seven nights, and an Eden that is never a node.
+

@@ -20,7 +20,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { offer, present, decay, INFO, GOODS, nodeProfile } from '../model.mjs';
+import { offer, present, decay, INFO, GOODS, nodeProfile } from '../model.mjs?v=1';
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const root = path.resolve(here, '..', '..');

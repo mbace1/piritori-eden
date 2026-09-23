@@ -23,6 +23,13 @@ stable ids and does not load review sheets directly.
 
 Individual transparent assets sit beside each review sheet.
 
+## Approved Meshy pilot sources
+
+- [Current F01/F02 fighter T-poses](characters/concepts-3d/pilots/README.md)
+
+These two 2D concepts are owner-approved inputs but remain inactive source
+pilots. Their generated geometry is not yet approved or registered for runtime.
+
 ## Approved equipment and animation
 
 - [Weapon manifest](weapons/manifest.json)

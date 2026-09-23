@@ -1,7 +1,7 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=1';
-import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=1';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=2';
+import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
-import { loadGameData, shortestPath, assetUrl } from './content.js?v=1';
+import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
 import {
   SAVE_KEY, createState, loadState, saveState, currentSchedule, currentEncounter,
@@ -14,21 +14,21 @@ import {
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-} from './state.js?v=5';
+} from './state.js?v=6';
 import { createPauseMenu } from './pause.js?v=1';
-import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=1';
+import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
 import {
   createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=8';
-import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=1';
+} from './battle.js?v=9';
+import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
-import { STANCE, STANCES } from './stance.js?v=1';
-import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=10';
-import { positionBattleDOM } from './stage-camera.js?v=4';
+import { STANCE, STANCES } from './stance.js?v=2';
+import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=11';
+import { positionBattleDOM } from './stage-camera.js?v=5';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -1513,7 +1513,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.48',
+      version: 'v4.51',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());

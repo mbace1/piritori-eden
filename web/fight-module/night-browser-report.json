@@ -1,0 +1,122 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "metrics": {
+      "fps": 133,
+      "draws": 41,
+      "geometries": 11,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checked": [
+      "move",
+      "brace",
+      "enemy turn",
+      "withdraw",
+      "restart",
+      "eight camera angles",
+      "visible move cells"
+    ],
+    "physicalDevice": false
+  },
+  {
+    "name": "phone",
+    "errors": [],
+    "metrics": {
+      "fps": 127,
+      "draws": 41,
+      "geometries": 11,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checked": [
+      "move",
+      "brace",
+      "enemy turn",
+      "withdraw",
+      "restart",
+      "eight camera angles",
+      "visible move cells"
+    ],
+    "physicalDevice": false
+  },
+  {
+    "name": "tablet",
+    "errors": [],
+    "metrics": {
+      "fps": 126,
+      "draws": 41,
+      "geometries": 11,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checked": [
+      "move",
+      "brace",
+      "enemy turn",
+      "withdraw",
+      "restart",
+      "eight camera angles",
+      "visible move cells"
+    ],
+    "physicalDevice": false
+  },
+  {
+    "name": "landscape",
+    "errors": [],
+    "metrics": {
+      "fps": 125,
+      "draws": 41,
+      "geometries": 11,
+      "models": 4,
+      "bones": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "busy": false,
+      "mode": "mixed",
+      "history": [],
+      "finite": true
+    },
+    "checked": [
+      "move",
+      "brace",
+      "enemy turn",
+      "withdraw",
+      "restart",
+      "eight camera angles",
+      "visible move cells"
+    ],
+    "physicalDevice": false
+  }
+]

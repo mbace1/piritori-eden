@@ -1,0 +1,122 @@
+{
+  "build": "C.16.1",
+  "direction": "After the Rain / Wet Courtyard; temporary neutral crew",
+  "source_repository": "mbace1/piritori-eden",
+  "source_commit": "b3e028147094e5d47cc36c472201f633fcadc1e0",
+  "source_pr": 82,
+  "source_branch": "art/meshy-approved-pilots-2026-09-11",
+  "source_merge": "625fe5c1ad49a1138a21c491843b6a3ca93d4a96",
+  "source_ci_run": 34857170863,
+  "source_ci_jobs_passed": 8,
+  "hub_repository": "mbace1/Suds-Jack",
+  "hub_pr": 523,
+  "hub_tested_head": "8ee13197569b3ac1d7da11163f3110931a605bb5",
+  "cabinet_tree": "3169a1ada33e4a02834fa361e2db875f3bb95a15",
+  "entry": "https://mbace1.github.io/Suds-Jack/piritori-c09/web/crew-run/?release=16.1",
+  "hub": "https://mbace1.github.io/Suds-Jack/#optionc-lab",
+  "changes": [
+    "Controller polling runs before the static-menu render shortcut",
+    "Visible elapsed presentation time; hidden/orientation pauses and prepared graphics restoration retained from C.16",
+    "Exact source Git bytes; renewed cache URLs for changed modules and all importers",
+    "Required hash-verified previous cabinet and complete cache-transition gate",
+    "Consistent Toko catalogue identity; Radio Free offline cache refreshes shared shell"
+  ],
+  "local_checks": {
+    "raw_source_blobs_verified": 1256,
+    "hashed_runtime_files": 56,
+    "cabinet_files": 59,
+    "pure_web_tests_pass": true,
+    "release_cache_regressions_pass": 5,
+    "controller_regression_fails_before_fix": true,
+    "controller_equipment_deploy_roster_pass": true,
+    "staged_hub_movement_reload_hashes_pass": true,
+    "main_live_offline_worker_upgrade_pass": true,
+    "main_live_toko_single_catalogue_pass": true,
+    "main_live_cabinet_identical": true
+  },
+  "physical_devices_verified": false,
+  "owner_runtime_visual_approval": false,
+  "production_character_approval": false,
+  "character_provider": "neutral stand-ins",
+  "limitations": [
+    "Physical Pixel 10 Pro and iPad M2 acceptance pending",
+    "Final concept parity, fighter rigs and motion acceptance pending",
+    "Scenery locations reuse the existing Night Shift rules; authored city/chapter bridge remains open",
+    "Bounded static-scenery reflections; no every-frame character reflection",
+    "No paid asset generation or character lifecycle promotion"
+  ],
+  "prior_release": {
+    "build": "C.16",
+    "source_pr": 81,
+    "hub_pr": 522,
+    "live_commit": "b274dc692e7df6b58bc92cc72cb70d8ffe97f378",
+    "public_verification_interrupted": true
+  },
+  "hub_merge": "ea6f5dc5fb6ba4ca31b8e908c28f45ab0c1a1361",
+  "live_commit": "7812cc5ca80f9a852e24d83dbf2a30b58a948e3f",
+  "pages_run": 34864639646,
+  "pages_success": true,
+  "public_verified": true,
+  "hub_ci_runs": [
+    {
+      "id": 34859040198,
+      "name": "flashprince",
+      "conclusion": "success"
+    },
+    {
+      "id": 34859040115,
+      "name": "TURF field guide",
+      "conclusion": "success"
+    },
+    {
+      "id": 34859040257,
+      "name": "request codex review",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 34859040279,
+      "name": "toko-live",
+      "conclusion": "success"
+    },
+    {
+      "id": 34859040306,
+      "name": "gates",
+      "conclusion": "success"
+    },
+    {
+      "id": 34859040116,
+      "name": "Slay Kallio player flow",
+      "conclusion": "success"
+    }
+  ],
+  "ci_note": "All eight source jobs and required exact-head hub checks passed. Slay's initial lighting pixel assertion failed while its other 138 scene checks passed; rerunning the same head passed scene and actual desktop/touch flows.",
+  "public_browser": {
+    "source_pin": "b3e028147094e5d47cc36c472201f633fcadc1e0",
+    "runtime_hashes_matched": 56,
+    "equipment": true,
+    "deployment": true,
+    "movement": true,
+    "reload": true,
+    "home": true,
+    "controller": true,
+    "chat_reloads": 3,
+    "shortcut_chat_verified": true,
+    "errors": []
+  },
+  "hub_chat_followup": {
+    "pr": 524,
+    "head": "ec51688451e5438b8f3e24bfbdf2b03b41940d48",
+    "local_delayed_load_and_reload_verified": true,
+    "published": true,
+    "merge": "364dcc4d46de0d6916bfffa42c72c4455615fe63",
+    "ci_run": 34864268331,
+    "ci_passed": true,
+    "review_findings": 0,
+    "public_reload_and_shortcut_verified": true
+  },
+  "first_public_deployment": {
+    "live_commit": "f347ce331c408a130fbf1bfb663dcf6b6a5b4eaf",
+    "pages_run": 34862816045
+  },
+  "hub_final_merge": "364dcc4d46de0d6916bfffa42c72c4455615fe63"
+}

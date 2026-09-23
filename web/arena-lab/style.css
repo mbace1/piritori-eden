@@ -1,0 +1,23 @@
+#roster{overflow-x:auto}#roster button{flex:1 0 145px}#fixtures{display:flex;align-items:center;gap:12px;font-size:11px;margin-top:8px}#fixtures span{font:10px monospace;color:#a8beb5}#fixtures a{display:flex;align-items:center;min-height:44px;color:#c4d7ca;text-underline-offset:4px}#perf{background:#14222acd;padding:4px}#roster .identity{font-size:11px}@media(max-height:560px) and (orientation:landscape){#roster{flex-direction:row}#roster button{flex-basis:140px}#fixtures{gap:10px}}
+body[data-lab-count="12"] .actor-label{min-width:25px;min-height:24px;padding:3px}#roster button{min-width:0}.identity{overflow-wrap:anywhere}
+
+/* Commands may grow, but the planning camera's viewport must stay stable. */
+#panel{height:40dvh;max-height:none!important}@media(max-width:600px){#panel{height:52dvh}}@media(max-height:560px) and (orientation:landscape){#panel{height:100%}}
+
+@media(max-height:560px) and (orientation:landscape){#panel{min-height:0;height:100%;overflow-y:auto;padding-bottom:24px;scrollbar-gutter:stable}}
+
+#actions{grid-template-columns:repeat(3,minmax(0,1fr))}#choices{max-height:145px;overflow:auto}#tactical-preview{border:1px solid #bcd3bb;background:#243b3b;padding:9px;margin-top:8px;font-size:12px}#tactical-preview p{margin:0 0 8px;line-height:1.45}#tactical-preview button{min-height:44px;margin-right:6px}#commit-preview{background:#c6d3ae;color:#162420;font-weight:bold}#enemy-plans{font-size:11px;margin-top:10px;line-height:1.4}#enemy-plans p{color:#f1bc95;margin:0 0 5px}.enemy-plan{border-left:2px solid #c78e6e;padding:4px 8px;background:#243431;margin:3px 0}.enemy-plan.cancelled{color:#aebeb4;border-color:#668778}#tactical-legend{font-size:10px;color:#bdcabc;margin:7px 0}#camera-tools{gap:3px}#actioncam{font:9px monospace;min-width:52px}#panel{max-height:52dvh;overflow:auto}#arena{min-height:38dvh}@media(orientation:landscape) and (max-height:560px){#panel{max-height:none}#actions{grid-template-columns:repeat(3,minmax(0,1fr))}#arena{min-height:0}#enemy-plans{font-size:10px}}
+
+.combat-callout{position:absolute;z-index:8;pointer-events:none;transform:translate(-50%,-100%);padding:4px 8px;border:1px solid currentColor;background:#142321ed;color:#efd0b3;font:700 12px system-ui;white-space:nowrap;box-shadow:0 2px 9px #08161480}.combat-callout.guard{color:#aae5e6}.combat-callout.cover{color:#dfc99c}.combat-callout.miss{color:#b3c4ca}
+
+/* C.19: scene identity first; full statistics remain in VIEW and inspection. */
+.actor-label[data-detail="compact"] small{display:none}
+.actor-label[data-detail="compact"]{min-width:24px;padding:3px 4px;gap:4px}
+.actor-label.targeted{border-color:#ffd28a;background:#493c2cec;outline:1px solid #ffd28a}
+.actor-label.objective{border-color:#e1c287}
+.actor-label .objective-badge{font:600 10px/1.1 Arial,sans-serif;font-style:normal;letter-spacing:.03em;color:#efd2a1}
+.actor-label.active{outline:1px solid #dce9ca}
+.exit-marker{position:absolute;top:0;left:0;display:flex;flex-direction:column;gap:2px;padding:4px 7px;border-left:3px solid #acd7cf;background:#14272ae8;color:#e3ece1;font:600 13px/1.1 Arial,sans-serif;white-space:nowrap;pointer-events:none}
+.exit-marker small{font:9px/1.1 Arial,sans-serif;letter-spacing:.03em}
+#label-mode{min-height:44px;min-width:44px;font:12px/1.2 Arial,sans-serif}
+#camera-panel #label-mode{width:100%}

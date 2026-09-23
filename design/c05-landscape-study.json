@@ -1,0 +1,340 @@
+{
+  "build": "C.05 unchanged",
+  "source_commit": "0e38feb4c7f632f43f116c26861c7f6356b12030",
+  "kind": "Desktop-host touch/viewport simulation; not physical device acceptance",
+  "visual_acceptance": false,
+  "findings": [
+    "Two pairs of fighter labels overlap in every sampled view, including default and one zoom-out.",
+    "A fixed zoom-out shrinks bodies without reducing fixed-size label boxes. Camera fit and label layout must be designed together.",
+    "Controls and state checks pass; this is not a passed visual gate or physical-device benchmark."
+  ],
+  "runs": [
+    {
+      "name": "phone-landscape",
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "emulatedDeviceScaleFactor": 2.625,
+      "samples": [
+        {
+          "view": "default",
+          "world_css_size": [
+            615,
+            362
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            90.328125,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide",
+          "world_css_size": [
+            615,
+            362
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            90.328125,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide-rotated",
+          "world_css_size": [
+            615,
+            362
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            90.328125,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "reset",
+          "world_css_size": [
+            615,
+            362
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            90.328125,
+            44
+          ],
+          "finite_rigs": true
+        }
+      ],
+      "orientationStatePreserved": true,
+      "attackAfterCameraPassed": true,
+      "errors": []
+    },
+    {
+      "name": "ipad-landscape",
+      "viewport": {
+        "width": 1194,
+        "height": 834
+      },
+      "emulatedDeviceScaleFactor": 2,
+      "samples": [
+        {
+          "view": "default",
+          "world_css_size": [
+            1194,
+            565
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            219.140625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide",
+          "world_css_size": [
+            1194,
+            565
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            219.140625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide-rotated",
+          "world_css_size": [
+            1194,
+            565
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            219.140625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "reset",
+          "world_css_size": [
+            1194,
+            565
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            219.140625,
+            44
+          ],
+          "finite_rigs": true
+        }
+      ],
+      "orientationStatePreserved": true,
+      "attackAfterCameraPassed": true,
+      "errors": []
+    },
+    {
+      "name": "phone-portrait",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "emulatedDeviceScaleFactor": 2.625,
+      "samples": [
+        {
+          "view": "default",
+          "world_css_size": [
+            412,
+            617
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            72.765625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide",
+          "world_css_size": [
+            412,
+            617
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            72.765625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "wide-rotated",
+          "world_css_size": [
+            412,
+            617
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            72.765625,
+            44
+          ],
+          "finite_rigs": true
+        },
+        {
+          "view": "reset",
+          "world_css_size": [
+            412,
+            617
+          ],
+          "allLabelsInside": true,
+          "labelOverlaps": [
+            [
+              "f01",
+              "f02"
+            ],
+            [
+              "op-f01",
+              "op-f02"
+            ]
+          ],
+          "horizontalOverflow": false,
+          "minimum_action_target": [
+            72.765625,
+            44
+          ],
+          "finite_rigs": true
+        }
+      ],
+      "orientationStatePreserved": true,
+      "attackAfterCameraPassed": true,
+      "errors": []
+    }
+  ]
+}
