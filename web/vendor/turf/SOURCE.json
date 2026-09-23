@@ -1,16 +1,17 @@
 {
  "repository": "mbace1/Suds-Jack",
  "path": "turf/js",
- "commit": "b455359b21bc86f784a7fdd153ca1c427dadf71c",
- "turf_version": "42",
+ "commit": "14aff39476069e916db80922ec0c4ba610783371",
+ "turf_version": "43",
  "note": "Pinned copy for Option A. Do not edit; see web/tools/vendor-turf.mjs.",
  "sha256": {
-  "combat.js": "f0c1dfdf25a95ea01d363b19e4f5fc2af77da77fd96b03fd73459b9130d0936e",
-  "grid.js": "755e80eeacce5d10034291afc9464b0de4b1e706c22b80b187a31d0e93a5a988",
+  "combat.js": "ba5fb31081fcab80a8dbcce8c29cd377d9ad7d037c119a2af64f004b7138893d",
+  "grid.js": "583c72fe67a9ed6bd9d995faa95c9e6211166b666f3cccafe9663c70cebc2357",
+  "rules.js": "d862626ee26268a921ec04dfbc0ed4b7ee3791b34b0c0876c5d629c707ad5ab3",
   "rng.js": "f7617ae5927cdd74bfb721196bd8e16b7b9c624672a095557d6ca56200e8b56d",
   "momentum.js": "8efd27d4a4d12c9a48808042a41a04230b71edd5ca60e16b2452cf906994d02a",
-  "abilities.js": "8c051c9febf46b6a3398db688ca89445ff20c9c2ed5c24aebdb307399020525f",
+  "abilities.js": "6d552d2d8f30bc58064365ecf1314eea7c82c125a1005474986567a96a86d6e8",
   "ammo.js": "9adc6cdeffcb21d7e5af72adf6d2e0eabd81b0453531d5cbb17a51a340d09b75",
-  "autoplay.js": "22cd57a236deb00dc30639241fbb202f584dcf026d782a52dffd1ced4e8ba327"
+  "autoplay.js": "b8fa277d54e3927ce8043131db0e2037d17cce443db48306ea2089bf5fb900bf"
  }
 }

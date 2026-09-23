@@ -1,3 +1,11 @@
+# A.2 — TURF held to Piritori's rules
+
+TURF v43 (Suds-Jack) gains rule profiles; `'piritori-c11'` switches armour, brace and bandage, edge cover, supercover sight with bodies blocking, C's LCG dice and frozen plans, with momentum and drops off. TURF's own game is bit-identical. Re-pinned here at v43 (`web/vendor/turf`, eight modules), and A plays `c11-v1` requests on the profile by default. The parity gate now enforces A.2's claim: on 200 boards, 1,054 seeded player commands leave the whole board identical in A and C after every one, dice included (0.0% under TURF's own rules). Reach, sight, odds and HP lost all read 100%. Only the rival brain still differs (43.7% identical plans), deliberately. TURF's momentum is written up as a proposal for both candidates, not implemented. See design/A2_TURF_RULES.md.
+
+### Port
+
+No behaviour to port. The Godot battle should match `RULES_C11_V1`; the command-parity harness in `web/test/a1-parity.mjs` is the shape its own parity test can take.
+
 # A.1 — Turf base: one battle request, two engines
 
 Option A's first step (owner, 2026-09-23: "A.1 should be started"). Freezes battle request/result v1 from C.19's own lab-6 3v3 (`port/battle-contract.mjs`, `fixtures/battle-request-lab6-v1.json`), runs TURF v42's engine from a pinned copy against that request (`web/vendor/turf/`, `web/turf-base/adapter.mjs`) and measures the two rule sets on the same boards (`web/test/a1-parity.mjs --report`). C rebuilt from the request alone matches native C over 175 commands. Partial-cover edges are the whole reach and odds gap; guard is the whole damage gap; bodies blocking shots is most of the sight gap. C's rules, UI, saves and public package are unchanged. Not playable, not published. See design/A1_TURF_BASE.md.

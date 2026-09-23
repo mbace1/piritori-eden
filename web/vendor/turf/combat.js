@@ -49,16 +49,18 @@
 import {
   key, inBounds, unitAt, moveRange, manhattan, hasLOS, coverSoftens, approachTile,
   firingTiles, firingTileScore,
-} from './grid.js?v=6';
+} from './grid.js?v=7';
 // The rule-of-sight switch is re-exported from HERE, not read off grid.js by
 // a test: a test imports `../js/grid.js` bare while every engine module
 // imports `./grid.js?v=N`, and to the module loader those are two modules —
 // a switch flipped on the bare copy leaves the engine on its default, and
 // four balance columns come back bit-identical while looking like a finding.
-export { setLOSMode, getLOSMode, LOS_MODES } from './grid.js?v=6';
+export { setLOSMode, getLOSMode, LOS_MODES } from './grid.js?v=7';
 import { makeRng } from './rng.js?v=2';
+// Which rules this board is played under (rules.js). Absent = TURF's own.
+import { TURF, resolveRules, makeLcg } from './rules.js?v=1';
 import { addMomentum, clearMomentum, evasionOf, momentumDamage, EVADE_PER } from './momentum.js?v=1';
-import { abilityTargets, canAfford, findAbility, isFlanked } from './abilities.js?v=4';
+import { abilityTargets, canAfford, findAbility, isFlanked } from './abilities.js?v=5';
 import { magOf, needsReload, roundsLeft } from './ammo.js?v=3';
 
 export { magOf, needsReload, roundsLeft };
@@ -68,6 +70,10 @@ export function createEncounterState(encounter, unitDefs, weaponDefs, enemyDefs,
   const weaponById = id => weaponDefs.find(w => w.id === id);
   const fullCover = new Set(encounter.cover.full.map(([x, y]) => key(x, y)));
   const partialCover = new Set(encounter.cover.partial.map(([x, y]) => key(x, y)));
+  const rules = resolveRules(encounter.rules);
+  // Edge cover names the walled face as a third element, [x, y, 'north'].
+  const partialEdges = rules.partialCover === 'edge'
+    ? new Map(encounter.cover.partial.map(([x, y, edge]) => [key(x, y), edge])) : null;
   // tileKey -> hazard def. A hazard never blocks movement (that is cover's
   // job) — it makes a tile cost something, so the board asks a question
   // instead of drawing a wall.
@@ -80,11 +86,11 @@ export function createEncounterState(encounter, unitDefs, weaponDefs, enemyDefs,
   const units = [];
   encounter.playerSpawns.forEach((spawn, i) => {
     const def = unitDefs.find(u => u.id === spawn.unit);
-    units.push(makeUnit(`p${i}`, def, weaponById(def.weapon), 'player', spawn));
+    units.push(makeUnit(`p${i}`, def, weaponById(def.weapon), 'player', spawn, rules));
   });
   encounter.enemySpawns.forEach((spawn, i) => {
     const def = enemyDefs.find(e => e.id === spawn.enemy);
-    units.push(makeUnit(`e${i}`, def, weaponById(def.weapon), 'enemy', spawn));
+    units.push(makeUnit(`e${i}`, def, weaponById(def.weapon), 'enemy', spawn, rules));
   });
   // Objective units — the thing a `destroy` mission is about. A third
   // faction rather than a new entity type, because "a thing on a tile with
@@ -118,6 +124,9 @@ export function createEncounterState(encounter, unitDefs, weaponDefs, enemyDefs,
     // turn — a posture for one enemy phase, never a standing order.
     overwatch: new Set(),
     win: encounter.win || { mode: 'eliminate' },
+    // Only a board that opted into a profile carries these, so TURF's own
+    // state is the shape it always was.
+    ...(encounter.rules != null ? { rules, partialEdges, items: { ...(encounter.items || {}) } } : {}),
     units,
     turn: 'player',
     round: 1,
@@ -127,7 +136,7 @@ export function createEncounterState(encounter, unitDefs, weaponDefs, enemyDefs,
     enemyQueue: [],
     log: [],
     result: null,
-    rng: makeRng(seed),
+    rng: rules.dice === 'lcg' ? makeLcg(seed) : makeRng(seed),
     weaponDefs, enemyDefs, trinketDefs,
     drops: [], // { x, y, weaponId | trinketId }
   };
@@ -187,8 +196,12 @@ function applyTrinket(unit, def) {
   recomputeWeapon(unit);
 }
 
-function makeUnit(uid, def, weapon, faction, spawn) {
+function makeUnit(uid, def, weapon, faction, spawn, rules = TURF) {
   return {
+    // Profile-only stats (rules.js): armour absorbs a blow before hp, items
+    // are single-use kit. Never added under TURF's own rules.
+    ...(rules.armour ? { armour: def.armour || 0 } : {}),
+    ...(rules.items ? { items: [...(def.items || [])] } : {}),
     uid, defId: def.id, name: def.name, faction, role: def.role, weapon,
     baseWeapon: weapon,
     // Starts loaded. Null for melee; every ammo check goes through
@@ -257,25 +270,33 @@ export const COVER_PENALTY = 0.3;
 // the resolver instead, which has ALREADY stepped there and banked the
 // step's momentum — the difference is exactly the +1 the badge used to miss.
 export function forecastAttack(state, attacker, target, weapon, opts = {}, from = attacker) {
+  const rules = state.rules || TURF;
   let chance = opts.accuracy != null ? opts.accuracy : weapon.hitChance;
   if (opts.accuracyMod) chance += opts.accuracyMod;
   const cover = weapon.archetype === 'ranged' && coverSoftens(state, from, target);
-  if (cover) chance -= COVER_PENALTY;
-  // A moving target is harder to shoot (momentum.js).
-  const evade = weapon.archetype === 'ranged' ? evasionOf(target, weapon) : 0;
+  if (cover) chance -= rules.coverPenalty;
+  // A moving target is harder to shoot (momentum.js) — where the rules
+  // have momentum at all.
+  const evade = weapon.archetype === 'ranged' && rules.momentum ? evasionOf(target, weapon) : 0;
   chance -= evade;
   // Planted (Anchor line), read off the BOARD so it stops the moment the
   // anchor moves.
   const guard = guardAt(state, target);
   chance -= guard;
   chance = Math.max(0.05, Math.min(1, chance));
-  const bonus = opts.flatDamage != null ? 0 : momentumDamage(attacker) + (opts.damageBonus || 0);
+  const bonus = opts.flatDamage != null ? 0 : (rules.momentum ? momentumDamage(attacker) : 0) + (opts.damageBonus || 0);
   const base = opts.flatDamage != null ? opts.flatDamage : weapon.damage;
   const damage = opts.flatDamage != null ? opts.flatDamage : base + bonus;
   const shots = opts.shots || 1;
+  // Armour takes the blow first; a weapon's pierce ignores that much of it.
+  const armour = rules.armour ? (() => {
+    const armourDamage = Math.min(target.armour || 0, Math.max(0, damage - (weapon.pierce || 0)));
+    return { armourDamage, hpDamage: Math.min(target.hp, damage - armourDamage) };
+  })() : null;
   return {
     chance, cover, evade, guard, base, bonus, damage, shots,
-    lethal: damage >= target.hp,
+    ...(armour || {}),
+    lethal: armour ? armour.hpDamage >= target.hp : damage >= target.hp,
     knockback: opts.knockback != null ? opts.knockback : weapon.knockback,
   };
 }
@@ -292,6 +313,8 @@ function resolve(state, cmd) {
     case 'ability': return resolveAbility(state, cmd);
     case 'reload': return resolveReload(state, cmd);
     case 'rival': return resolveRival(state, cmd);
+    case 'brace': return resolveBrace(state, cmd);
+    case 'item': return resolveItem(state, cmd);
     default: throw new Error(`resolve: unknown command '${cmd.type}'`);
   }
 }
@@ -344,6 +367,27 @@ function resolveReload(state, { uid }) {
   unit.ammo = magOf(unit.weapon);
   unit.actedAction = true;
   state.log.push({ type: 'reload', uid, name: unit.name, ammo: unit.ammo });
+  return {};
+}
+
+// Profile verbs (rules.js). Each spends the ACTION and never the move, like
+// a reload, and each writes what it did to the log like everything else.
+function resolveBrace(state, { uid }) {
+  const unit = getUnit(state, uid), { armour, cap } = state.rules.brace;
+  unit.armour = Math.min(cap, (unit.armour || 0) + armour);
+  unit.actedAction = true;
+  state.log.push({ type: 'brace', uid, name: unit.name, armour: unit.armour });
+  return {};
+}
+
+function resolveItem(state, { uid, itemId }) {
+  const unit = getUnit(state, uid), def = state.items[itemId];
+  const before = unit.hp;
+  if (def.effectType === 'restore_condition') unit.hp = Math.min(unit.maxHp, unit.hp + def.magnitude);
+  // A NEW array: a preview's copy shares this unit's list by reference.
+  if (def.singleUse) { const i = unit.items.indexOf(itemId); unit.items = unit.items.filter((_, j) => j !== i); }
+  unit.actedAction = true;
+  state.log.push({ type: 'item', uid, name: unit.name, itemId, healed: unit.hp - before });
   return {};
 }
 
@@ -405,6 +449,16 @@ function abilityOpts(ability, state, unit, target) {
 function resolveRival(state, { uid, plan }) {
   const enemy = getUnit(state, uid);
   let moved = null, attacked = null, reloaded = false, note = null;
+  // FROZEN plans (rules.js): a plan the board has broken is cancelled WHOLE
+  // — no step, no swing — because a rival that walked somewhere and then
+  // found nothing to hit would be doing half of something it never showed.
+  if (state.rules && state.rules.plans === 'frozen') {
+    const broken = frozenPlanBroken(state, enemy, plan);
+    if (broken) {
+      state.log.push({ type: 'enemy-turn', uid, name: enemy.name, moved, attacked, reloaded, note: broken });
+      return { moved, attacked, reloaded, note: broken };
+    }
+  }
   if (plan.moveTo && (plan.moveTo.x !== enemy.x || plan.moveTo.y !== enemy.y)) {
     const { x, y } = plan.moveTo;
     // Independent plans can collide: an earlier rival this phase may have
@@ -448,6 +502,22 @@ function resolveRival(state, { uid, plan }) {
   return { moved, attacked, reloaded, note };
 }
 
+// Why a frozen plan no longer holds, or null. Checked against the board as it
+// is when the rival's turn comes: its step must still be a legal move from
+// where it stands, and an attack must still be legal from where it would end.
+function frozenPlanBroken(state, enemy, plan) {
+  const to = plan.moveTo && (plan.moveTo.x !== enemy.x || plan.moveTo.y !== enemy.y) ? plan.moveTo : null;
+  if (to && !moveRange(state, enemy).has(key(to.x, to.y))) return 'blocked';
+  if (plan.type !== 'attack') return null;
+  const target = getUnit(state, plan.targetUid);
+  if (!target || target.hp <= 0) return 'target-gone';
+  const at = { x: enemy.x, y: enemy.y };
+  if (to) { enemy.x = to.x; enemy.y = to.y; }
+  const legal = manhattan(enemy, target) <= enemy.weapon.range && hasLOS(state, enemy, target) && !needsReload(enemy);
+  enemy.x = at.x; enemy.y = at.y;
+  return legal ? null : 'out-of-position';
+}
+
 // GDD §5's found gear: a dead rival has a flat chance to leave ONE thing —
 // sometimes its gun, sometimes what was in its pockets.
 export const DROP_CHANCE = 0.5;
@@ -462,16 +532,22 @@ function resolveStrike(state, attacker, target, weapon, opts = {}) {
   const f = forecastAttack(state, attacker, target, weapon, opts);
   // The round is spent HERE and nowhere else, so every firing path pays.
   if (magOf(weapon) != null) attacker.ammo = Math.max(0, roundsLeft(attacker) - 1);
+  const rules = state.rules || TURF;
   const roll = state.roll('hit', attacker);
-  const hit = roll < f.chance;
+  // Piritori's dice compare in whole percentage points, exactly as it does,
+  // so one seed lands the same hit in both engines.
+  const hit = rules.dice === 'lcg' ? roll * 100 < Math.round(f.chance * 100) : roll < f.chance;
   let damage = 0, killed = false, knockback = null, dropped = null;
   if (hit) {
-    damage = f.damage;
+    if (rules.armour) {
+      target.armour = (target.armour || 0) - f.armourDamage;
+      damage = f.hpDamage;
+    } else damage = f.damage;
     target.hp = Math.max(0, target.hp - damage);
     killed = target.hp <= 0;
     if (killed) {
       attacker.kills += 1;
-      if (target.faction === 'enemy' && state.roll('drop', attacker) < DROP_CHANCE) {
+      if (rules.drops && target.faction === 'enemy' && state.roll('drop', attacker) < DROP_CHANCE) {
         const pool = state.trinketDefs || [];
         const asTrinket = pool.length && state.roll('kind', attacker) < TRINKET_SHARE;
         dropped = asTrinket
@@ -911,7 +987,9 @@ export function planAllIntents(state) {
 function commit(state, cmd) {
   const out = resolve(state, cmd);
   checkWinLoss(state);
-  planAllIntents(state);
+  // Live plans are re-read after every command; frozen ones (rules.js) were
+  // shown once at the top of the round and stand until the round turns.
+  if (!state.rules || state.rules.plans !== 'frozen') planAllIntents(state);
   return out;
 }
 
@@ -987,6 +1065,32 @@ export function attackFrom(state, attackerUid, targetUid, tile) {
   const legal = firingOptions(state, attackerUid, targetUid);
   if (!legal.some(t => t.x === tile.x && t.y === tile.y)) return { ok: false, reason: 'bad-tile' };
   return stepAndStrike(state, attackerUid, targetUid, tile);
+}
+
+// Profile verbs (rules.js). Refused outright under rules that do not have
+// them, so a TURF board can never be offered a brace it would then ignore.
+export function braceUnit(state, uid) {
+  const unit = getUnit(state, uid);
+  if (!state.rules || !state.rules.brace) return { ok: false, reason: 'no-brace-in-these-rules' };
+  if (!unit || unit.hp <= 0) return { ok: false, reason: 'dead' };
+  if (state.turn !== 'player' || unit.faction !== 'player') return { ok: false, reason: 'not-your-turn' };
+  if (unit.actedAction) return { ok: false, reason: 'already-acted' };
+  commit(state, { type: 'brace', uid });
+  maybeDeselect(state, unit);
+  return { ok: true, armour: unit.armour };
+}
+
+export function useItem(state, uid, itemId) {
+  const unit = getUnit(state, uid);
+  if (!state.rules || !state.rules.items) return { ok: false, reason: 'no-items-in-these-rules' };
+  if (!unit || unit.hp <= 0) return { ok: false, reason: 'dead' };
+  if (state.turn !== 'player' || unit.faction !== 'player') return { ok: false, reason: 'not-your-turn' };
+  if (unit.actedAction) return { ok: false, reason: 'already-acted' };
+  if (!(unit.items || []).includes(itemId) || !state.items[itemId]) return { ok: false, reason: 'no-such-item' };
+  if (state.items[itemId].effectType === 'restore_condition' && unit.hp >= unit.maxHp) return { ok: false, reason: 'already-full' };
+  commit(state, { type: 'item', uid, itemId });
+  maybeDeselect(state, unit);
+  return { ok: true, hp: unit.hp };
 }
 
 // RELOADING IS YOUR ACTION and never your move.

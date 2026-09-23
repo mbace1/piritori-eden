@@ -5,6 +5,8 @@
 // either. All game logic below works in plain (x,y) grid space; the iso
 // *look* is a render-time projection only (render.js), never fed back in.
 
+import { crossesEdge, supercoverTiles, edgeProtects } from './rules.js?v=1';
+
 export const key = (x, y) => `${x},${y}`;
 
 export const inBounds = (grid, x, y) => x >= 0 && y >= 0 && x < grid.cols && y < grid.rows;
@@ -52,6 +54,9 @@ export function moveRange(state, unit) {
         if (seen.has(k)) continue;
         if (fullCover.has(k)) continue;
         if (unitAt(state, nx, ny, unit)) continue;
+        // A low wall on one edge (rules.js 'edge' cover) is walked AROUND:
+        // the step across that edge is refused, the tile itself is not.
+        if (state.partialEdges && crossesEdge(state.partialEdges, { x, y }, { x: nx, y: ny })) continue;
         seen.set(k, { x: nx, y: ny, cost });
         next.push({ x: nx, y: ny });
       }
@@ -133,6 +138,7 @@ export const getLOSMode = () => losMode;
 // since it also blocks movement). Adjacent tiles always see each other.
 export function hasLOS(state, a, b) {
   if (manhattan(a, b) <= 1) return true;
+  if (state.rules && state.rules.sight === 'supercover') return supercoverLOS(state, a, b);
   switch (losMode) {
     case 'line': return lineLOS(state, a, b);
     case 'fov': return fovSees(state, a, b);
@@ -140,6 +146,18 @@ export function hasLOS(state, a, b) {
     case 'either': return fovSees(state, a, b) || fovSees(state, b, a);
     default: return fovSees(state, a, b);
   }
+}
+
+// A rules profile's sight (rules.js): the supercover line, blocked by full
+// cover and, where the profile says bodies block, by any living unit that is
+// not standing on either end. Ends are compared by TILE, since a caller may
+// be asking about a tile the shooter has not reached yet.
+function supercoverLOS(state, a, b) {
+  for (const t of supercoverTiles(a, b)) {
+    if (state.fullCover.has(key(t.x, t.y))) return false;
+    if (state.rules.bodiesBlock && unitAt(state, t.x, t.y)) return false;
+  }
+  return true;
 }
 
 // The v1-v36 rule, kept as the control column.
@@ -228,6 +246,8 @@ function castLight(grid, cx, cy, row, start, end, radius, xx, xy, yx, yy, passes
 // Partial cover softens a ranged hit rather than blocking it: true if the
 // shot's path crosses a partial-cover tile, or the target is standing on one.
 export function coverSoftens(state, a, b) {
+  // Edge cover protects only a shot coming in through the walled face.
+  if (state.partialEdges) return edgeProtects(state.partialEdges, a, b);
   if (state.partialCover.has(key(b.x, b.y))) return true;
   for (const t of lineTiles(a, b)) {
     if (state.partialCover.has(key(t.x, t.y))) return true;

@@ -16,10 +16,10 @@
 // It is NOT the enemy brain. The rival brain (combat.js's planIntent) plans one unit at a time against a
 // telegraph the player has to be able to read; this plans a turn to win it.
 // Sharing them would make one of the two worse.
-import { manhattan, hasLOS, coverSoftens, key } from './grid.js?v=6';
-import { movableTiles, attackableTargets, moveUnit, orderAttack, endUnitTurn, useAbility, reloadUnit } from './combat.js?v=22';
+import { manhattan, hasLOS, coverSoftens, key } from './grid.js?v=7';
+import { movableTiles, attackableTargets, moveUnit, orderAttack, endUnitTurn, useAbility, reloadUnit } from './combat.js?v=23';
 import { needsReload } from './ammo.js?v=3';
-import { abilitiesFor, canAfford, abilityTargets } from './abilities.js?v=4';
+import { abilitiesFor, canAfford, abilityTargets } from './abilities.js?v=5';
 
 // What a tile is worth to stand on and shoot from. Positive is good. The
 // weights are the ones the v24 experiment settled on; the only addition is

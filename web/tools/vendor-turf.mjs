@@ -8,7 +8,7 @@
  * Option A is "Turf as the first implementation base" (DESIGN_AUTHORITY.md,
  * 2026-09-10). TURF lives in mbace1/Suds-Jack at turf/js and is an active
  * game with its own gates, so this is a PINNED COPY, like web/vendor/three:
- * the seven pure modules (no DOM, no canvas) that make up its rules, brain
+ * the eight pure modules (no DOM, no canvas) that make up its rules, brain
  * and phase. Nothing in web/vendor/turf is edited here. A rule A needs that
  * TURF does not have goes into web/turf-base/ as an adapter, or upstream into
  * TURF — never into these files, or the next refresh silently deletes it.
@@ -21,7 +21,7 @@ import { execFileSync } from 'node:child_process';
 
 const DIR = new URL('../vendor/turf/', import.meta.url);
 const SOURCE = new URL('SOURCE.json', DIR);
-export const MODULES = ['combat', 'grid', 'rng', 'momentum', 'abilities', 'ammo', 'autoplay'];
+export const MODULES = ['combat', 'grid', 'rules', 'rng', 'momentum', 'abilities', 'ammo', 'autoplay'];
 const sha = buf => crypto.createHash('sha256').update(buf).digest('hex');
 
 function check() {
