@@ -186,15 +186,6 @@ function styleUnitMaterial(model, { seed, rimTint, rimGain }) {
  *  per unit is the correct, simple answer at this battle's scale (at most
  *  six bodies); revisit with `SkeletonUtils.clone()` if load time matters
  *  once there is animation to also share. */
-function resetSkeletonBind(model) {
-  // Meshy bodies ship with a baked `clip0` that is NOT a fight pose. Drop any
-  // leftover animation state and snap bones to the skin bind before we author
-  // our own stance — otherwise fight-motion deltas compose onto a torn rest.
-  model.traverse(n => {
-    if (n.isSkinnedMesh && n.skeleton) n.skeleton.pose();
-  });
-}
-
 function loadUnitModel(data, assetId) {
   const url = assetUrl(data, assetId);
   return new Promise((resolve, reject) => {
@@ -202,10 +193,10 @@ function loadUnitModel(data, assetId) {
     loader.load(url, gltf => {
       neutralizeMetalness(gltf.scene);
       // Discard embedded clips — we never play them (SHARED_CLIP_* empty;
-      // procedural stance only). Leaving them on the scene invites accidental
-      // mixers and confuse rest capture in fight-motion.
+      // procedural stance only). Preserve the imported skeleton transform:
+      // these Meshy GLBs carry a 100x armature/unit conversion, and calling
+      // skeleton.pose() collapses a roughly 1.7 m body to about 1 cm.
       gltf.animations.length = 0;
-      resetSkeletonBind(gltf.scene);
       resolve(gltf.scene);
     }, undefined, reject);
   });

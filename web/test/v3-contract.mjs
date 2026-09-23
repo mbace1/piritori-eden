@@ -6,10 +6,11 @@ import { readFile } from 'node:fs/promises';
 // bug as legacy/js/v3/content.js, left over from this file moving one
 // directory shallower when the repo split out of Suds-Jack on 2026-08-21.
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
-const [html, css, app, content, map, art] = await Promise.all([
+const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
   read('../v3.css?v=5'),
-  read('../js/v3/app.js?v=13'),
+  read('../js/v3/app.js?v=14'),
+  read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
   read('../../art/v3/manifest.json').then(JSON.parse),
@@ -19,8 +20,12 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=13'));
+assert(html.includes('js/v3/app.js?v=14'));
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
+// v11: main's fighter-scale fix and C.19's import-token pass each moved
+// render3d.js to "v10" with different bytes; the merge is a third file.
+assert(app.includes("./render3d.js?v=11"), 'fight renderer cache token advances with the fix');
+assert(!/\.skeleton\.pose\s*\(/.test(render3d), 'Meshy unit conversion is not collapsed by a bind reset');
 assert(css.includes('min-width: 44px') && css.includes('min-height: 44px'), '44px control floor is declared');
 assert(!/smartphone|app grid/i.test(html), 'shell does not present the market as a smartphone app');
 assert(app.includes('era1-slice-v1.json') === false, 'the app loads content through the content adapter');

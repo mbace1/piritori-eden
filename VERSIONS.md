@@ -5,6 +5,13 @@ Option A's first step (owner, 2026-09-23: "A.1 should be started"). Freezes batt
 ### Port
 
 No behaviour to port. When Godot catches up with C.19, its battle should accept and return the pair in `port/battle-contract.mjs`; the lab-6 request is a ready input and `RULES_C11_V1` lists the numbers to match.
+# C.19 — Night Shift battlefield clarity
+
+Focused fighter labels, full statistics in VIEW, selected/target rings, labelled south exit, and honest rescue guidance. Enemy plans, action costs, rules, campaign settlement and procedural characters remain unchanged. Physical Pixel/iPad and owner visual acceptance remain pending. Source and tested head `69b23168`; live on the hub as `piritori-c17/web/crew-run/?campaign=1&release=19` (its `release.json` holds the file hashes). This entry was written into the source log at the C.19 → main merge (2026-09-23): until then only the generated copy inside the deployed package said C.19, and this file stopped at C.18. See design/C19_READABILITY.md and design/C19_ACCEPTANCE.md.
+
+### Port
+
+Godot: reproduce focused/full label inspection without state changes; selected/target rings, rescue state and south-edge extraction cue. Invalidate projected labels after text, camera or viewport changes. Preserve all existing mission/result vectors. This release does not implement the Godot presentation port.
 
 # C.18 — Unified interface / direct rendering
 
@@ -76,6 +83,25 @@ See `design/C11_COMBAT_PASS.md` for scope, evidence and remaining device gates.
 Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json`.
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
+
+## v4.51 — 2026-09-21
+
+**Fight cast: restore the existing six role bodies at runtime.**
+
+- Keep stripping the unused embedded Meshy clip, but stop calling
+  `Skeleton.pose()` after import. Those GLBs carry a 100× armature/unit
+  conversion; resetting the skeleton collapsed each roughly 1.7 m fighter to
+  about 1 cm while still reporting the 3D stage ready.
+- Verified Driver, Fixer, Local, Muscle, Runner and Watcher together in a real
+  3v3 browser battle, including the 390 px phone layout.
+- Cache: `render3d.js?v=10`, `app.js?v=12`.
+
+Numbered v4.48 on `main` when it shipped; renumbered at the C.19 → main merge (2026-09-23) because the C line had already used v4.48 (F01/F02 fighter test, 2026-09-11, the build live in the hub's `piritori/` cabinet), v4.49 (C.07 Bear Path) and v4.50; v4.51 is the first number no branch holds. Cache: `render3d.js?v=11`, `app.js?v=14` after the merge, since both lines had moved `render3d.js` to v10 with different bytes.
+
+### Port
+
+Web presentation only. The Godot runtime does not call Three.js
+`Skeleton.pose()` and needs no matching change.
 
 ## v4.50 — 2026-09-13
 

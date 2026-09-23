@@ -27,7 +27,7 @@ import {
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
-import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=10';
+import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=11';
 import { positionBattleDOM } from './stage-camera.js?v=5';
 
 const $ = id => document.getElementById(id);
@@ -1513,7 +1513,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.48',
+      version: 'v4.51',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
