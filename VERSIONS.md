@@ -77,6 +77,21 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.52 — 2026-09-24
+
+**M1: looking is not being there.**
+
+- Tapping, clicking or keyboard-activating a map area now only INSPECTS it. The cursor is local, never saved, and resets on a new campaign, Resume, a reload, a schedule change or a debug jump. Inspecting an active, locked or landmark area leaves the whole campaign and the persisted save byte-identical (it used to move Aatami there and record its prices, even for a sealed area).
+- **USE AREA** is the one deliberate move: it validates an active area, changes presence, records that one observation, spends no time and says so. **SHOW LEAD** points the cursor at the story lead without changing anything.
+- The side panel and every map node say which is which in words (`AATAMI · …`, `STORY LEAD · …`, `inspecting`); presence is a dashed diamond, the lead the orange pulse, inspection the cyan ring.
+- The story encounter, visits, ledger trades, fencing and the chapter operation answer only where Aatami stands. The ENCOUNTER tab from elsewhere shows where the lead is and offers no choice, LOOK or quote — it used to let the Piritori purchase be bought from Hakaniemi. Ledger rows elsewhere read `AT <place>` (MARKET.md §5/§8: you trade where you stand).
+- Unchanged on purpose: the schedule still moves Aatami to the next lead after a story beat (M2 separates that), boot still seeds past schedule observations (M2's audit), route preview/pin/send, the isolated Hermanni training fixture, PR #92's fighter repair.
+- Cache: `app.js?v=15`, `v3.css?v=6`. New gate `web/test/m1-inspection.cjs` (63 checks), run in CI's Act I job.
+
+### Port
+
+Godot: keep a non-persisted inspection cursor separate from `selected_anchor`; map input moves only the cursor; add Use area / Show lead; gate the encounter entry, choices, visits, trades and fencing on presence at the lead. No save-format change. Schedule relocation stays until M2.
+
 ## v4.51 — 2026-09-21
 
 **Fight cast: restore the existing six role bodies at runtime.**

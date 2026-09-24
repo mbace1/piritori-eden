@@ -389,6 +389,12 @@ button { -webkit-tap-highlight-color: transparent; }
 .map-node.landmark .map-node-dot { fill: var(--mustard); stroke: #f5dda4; }
 .map-anchor-hit { cursor: pointer; }
 .mission-pulse { fill: var(--orange); stroke: #ffe1b0; stroke-width: 3; }
+/* M1: presence is a SHAPE as well as a word — a hollow diamond around the
+   node Aatami stands at, so it reads apart from the orange lead and the cyan
+   inspection ring even without colour. */
+.presence-mark { fill: none; stroke: #f3ead8; stroke-width: 4; stroke-dasharray: 10 6; pointer-events: none; }
+.presence-line { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 8px; font-size: .82rem; letter-spacing: .06em; color: var(--ink-dim); }
+.presence-line b { color: var(--ink); font-weight: 700; }
 .map-side {
   min-height: 0;
   display: flex;

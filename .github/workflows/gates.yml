@@ -147,6 +147,11 @@ jobs:
         run: |
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
+      - name: M1 inspection is not presence (map, encounter tab, routes, sale, visit, touch)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          M1_CAPTURE_DIR: /tmp
+        run: node web/test/m1-inspection.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch
