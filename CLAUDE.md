@@ -1,5 +1,15 @@
 # Working rules — Piritori → Eden
 
+## Current Claude takeover — 2026-09-24
+
+For the current city/map/mission continuation, read
+[CLAUDE_TAKEOVER.md](CLAUDE_TAKEOVER.md) and
+[the M1/M2 execution brief](design/CLAUDE_MAP_MISSION_NEXT_STEPS.md) first.
+C.19 is now on main, the city header is v4.51, and M1 PR #91 is still unmerged.
+The v4.40 pickup and older branch-only status below are historical, not this
+task's starting point. Preserve all working rules below and later main fixes.
+This update adds documentation only; it does not start a worker or release M1.
+
 Read this before every session. These rules outrank convenience, speed,
 and your own judgment about what would be tidier. If a rule blocks you,
 stop and ask — do not route around it.
@@ -268,7 +278,7 @@ of the work. Run it twice; CI does.
 - A child `Control` draws **over** its parent's `_draw()`.
 - Godot **regenerates `.import` files** with a full default `[params]`
   block on reimport, discarding appended keys. Edit the existing key.
-- `String(null)` crashes. Authored JSON fields are genuinely null.
+- **`String(null)` crashes.** Authored JSON fields are genuinely null.
 - **A negative-width `Rect2` mirrors a texture but does NOT mirror it in
   place** — it lands a full width to the side. Every opposition figure stood
   about a tile off its own cell for a long time because of this, invisible
