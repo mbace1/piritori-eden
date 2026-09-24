@@ -1,8 +1,15 @@
 # Piritori agent startup
 
-Read `ACTIVE_CONTEXT.md` first, before planning or asking the owner to repeat
-decisions. For Meshy work, read `MESHY_AGENT_HANDOFF.md` and its current-production
-notice, `3D_PIPELINE.md`, `MESHY_PILOT_RESULTS.md` and the manifest before inferring
+For the current Claude city/map/mission continuation, read `CLAUDE_TAKEOVER.md`
+and `design/CLAUDE_MAP_MISSION_NEXT_STEPS.md` first (2026-09-24). They distinguish
+current main/C.19/Act I v4.51 from the unmerged M1 overlay and link the M0 audit
+on its verified older ref. Start clean M1 from current main; preserve PR #92.
+This is a documentation handoff, not a new playable release or worker dispatch.
+
+Then read `ACTIVE_CONTEXT.md`, keeping historical release sections separate
+from current status, before asking the owner to repeat decisions. For Meshy
+work, read `MESHY_AGENT_HANDOFF.md` and its current-production notice,
+`3D_PIPELINE.md`, `MESHY_PILOT_RESULTS.md` and the manifest before inferring
 status. A partial local checkout is not evidence that a GitHub handoff is absent.
 
 Before 3D work, read `DESIGN_AUTHORITY.md`, `3D_PIPELINE.md`,
