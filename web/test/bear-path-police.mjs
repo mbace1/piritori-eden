@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createEncounter} from '../bear-path/encounter.js?v=2';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=11';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=13';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 function reachPolice(){const s=createSession(content,'melee','bear-path');for(let n=0;n<20&&!s.battle.policeArrived&&s.battle.status==='active';n++){
  for(const u of s.battle.players.filter(u=>u.alive)){s.command('select',u.id);assert(s.command('brace').ok);}assert(s.command('end').ok);

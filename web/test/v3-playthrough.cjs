@@ -127,7 +127,16 @@ server.listen(0, '127.0.0.1', async () => {
     )));
     await page.locator('[data-action="advance"]').click();
     ok('the next map highlight is the profitable Siltasaari lead',
-      await page.locator('[data-anchor-group="siltasaari"].current.selected').count() === 1);
+      await page.locator('[data-anchor-group="siltasaari"].current').count() === 1);
+    // M2: the story moves the lead, not Aatami — he travels there himself.
+    ok('Aatami is still at Piritori until he travels',
+      await page.evaluate(() => window.__ptv3.state.selectedAnchor === 'piritori'));
+    await page.locator('[data-anchor-group="siltasaari"] .map-anchor-hit').click({ force: true });
+    await page.locator('[data-action="plan-journey"]').click();
+    await page.locator('[data-action="commit-journey"]').click();
+    ok('travelling there makes the Siltasaari lead enterable',
+      await page.locator('[data-anchor-group="siltasaari"].current.selected').count() === 1
+        && await page.locator('[data-action="open-encounter"]').isVisible());
     const openingLadder = await page.locator('.progression-card').textContent();
     ok('the opening names the full €45 → €68 spread',
       openingLadder.includes('€45') && openingLadder.includes('€68') && openingLadder.includes('+€23'), openingLadder);

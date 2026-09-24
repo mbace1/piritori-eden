@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=5';
+import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,available,waitNight,loadRun,configure,callReserve} from '../crew-run/run.js?v=7';
 import {routes,threats} from '../fight-module/tactics.js?v=7';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const start=()=>{const state=newRun(),config=launch(state);return {state,config,s:makeMission(content,config)};};

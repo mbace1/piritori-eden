@@ -988,10 +988,10 @@ export function advanceSchedule(state, data) {
   state.lastOutcome = null;
   state.mode = 'route';
   const next = currentSchedule(state, data.content);
-  if (next) {
-    state.selectedAnchor = next.anchor_id;
-    addUnique(state.revealedEncounters, next.encounter_id);
-  }
+  // M2: the story moving on moves the LEAD, not Aatami. Presence changes only
+  // through an explicit journey (journey.js) — the schedule used to teleport
+  // him to the next lead, which made the map's travel meaningless.
+  if (next) addUnique(state.revealedEncounters, next.encounter_id);
   return next;
 }
 

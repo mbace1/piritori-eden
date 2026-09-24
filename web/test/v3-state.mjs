@@ -4,7 +4,8 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=6';
+} from '../js/v3/state.js?v=7';
+import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=1';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
@@ -17,6 +18,7 @@ const data = {
   offers: new Map(content.market_offers.map(item => [item.id, item])),
   equipment: new Map(content.equipment.map(item => [item.id, item])),
   anchors: new Map(map.anchors.map(item => [item.id, item])),
+  map,
 };
 
 const state = createState(content);
@@ -40,6 +42,56 @@ assert.equal(state.cash, 115);
 advanceSchedule(state, data);
 assert.equal(currentSchedule(state, content).encounter_id, 'enc-first-sale',
   'the first highlighted destination after Piritori is the profit tutorial');
+assert.equal(state.selectedAnchor, 'piritori', 'M2: the story moves the lead, not Aatami');
+assert.equal(currentSchedule(state, content).anchor_id, 'siltasaari');
+
+// M2 journey contract (design/CLAUDE_MAP_MISSION_NEXT_STEPS.md §2).
+{
+  const j = JSON.parse(JSON.stringify(state));
+  const snapshot = JSON.stringify(j);
+  const plan = previewJourney(j, data, 'siltasaari');
+  assert.equal(plan.ok, true);
+  assert.equal(plan.path[0], 'piritori');
+  assert.equal(plan.path.at(-1), 'siltasaari');
+  assert.equal(plan.extraBlocks, 0);
+  assert.equal(JOURNEY_EXTRA_BLOCKS, 0, 'D002 unresolved: no invented travel time');
+  assert.equal(JSON.stringify(j), snapshot, 'a preview changes nothing');
+  for (const [dest, reason] of [['piritori', 'already-here'], ['nowhere', 'unknown']]) {
+    assert.equal(previewJourney(j, data, dest).reason, reason);
+  }
+  const sealed = map.anchors.find(a => ['locked', 'teaser'].includes(a.sliceState));
+  const landmark = map.anchors.find(a => a.sliceState === 'landmark');
+  for (const a of [sealed, landmark]) if (a) assert.equal(previewJourney(j, data, a.id).reason, 'sealed', a.id);
+  assert.equal(JSON.stringify(j), snapshot, 'refused previews change nothing');
+  assert.equal(commitJourney(j, data, null).reason, 'no-preview');
+  // Stale: the story turned a block under the plan.
+  const turned = JSON.parse(snapshot);
+  turned.scheduleIndex += 1;
+  assert.equal(commitJourney(turned, data, plan).reason, 'stale');
+  assert.equal(turned.selectedAnchor, 'piritori');
+  // Commit once; the same plan again (a double tap) is stale and moves nothing.
+  const seenBefore = j.seen?.siltasaari;
+  const cash = j.cash, stock = JSON.stringify(j.stock), index = j.scheduleIndex, logs = j.logs.length;
+  assert.equal(commitJourney(j, data, plan).ok, true);
+  assert.equal(j.selectedAnchor, 'siltasaari');
+  assert.notEqual(j.seen?.siltasaari, undefined, 'arrival observes the destination');
+  assert.equal(seenBefore, undefined, 'and nothing before arrival did');
+  assert.deepEqual([j.cash, JSON.stringify(j.stock), j.scheduleIndex], [cash, stock, index], 'no money, stock or clock');
+  assert.deepEqual(j.route, state.route, 'personal travel never touches the delivery route');
+  assert.equal(j.logs.length, Math.min(24, logs + 1));
+  const afterOnce = JSON.stringify(j);
+  assert.equal(commitJourney(j, data, plan).reason, 'stale');
+  assert.equal(JSON.stringify(j), afterOnce, 'a replayed plan changes nothing');
+  // Disconnected: the same place with every street to it removed.
+  const cut = { ...data, map: { ...map, edges: map.edges.filter(e => e.from !== 'makelansilta' && e.to !== 'makelansilta') } };
+  assert.equal(previewJourney(j, cut, 'makelansilta').reason, 'disconnected');
+  // Nothing incompatible going on: not mid-visit, not mid-fight.
+  assert.equal(previewJourney({ ...j, activeVisit: 'x' }, data, 'hakaniemi').reason, 'in-visit');
+  assert.equal(previewJourney({ ...j, battle: { status: 'active' } }, data, 'hakaniemi').reason, 'in-battle');
+  assert.equal(previewJourney({ ...j, endingId: 'x' }, data, 'hakaniemi').reason, 'campaign-over');
+  // Arrival survives a save round trip.
+  assert.equal(JSON.parse(JSON.stringify(j)).selectedAnchor, 'siltasaari');
+}
 
 assert.equal(requirementStatus('cash>=100', state, data).ok, true);
 assert.equal(requirementStatus('stock:piri>=1', state, data).ok, true);
@@ -51,11 +103,24 @@ const choicePlan = [
   'hire-watcher', 'hire-rauno', 'withdraw', 'refuse', 'push-door',
   'leave-receipts', 'ask-jaska', 'name-the-cost',
 ];
+let journeys = 0;
 for (const choiceId of choicePlan) {
   const encounter = currentEncounter(full, data);
   assert(encounter, `encounter exists at schedule ${full.scheduleIndex}`);
   const choice = encounter.choices.find(item => item.id === choiceId);
   assert(choice, `${choiceId} exists in ${encounter.id}`);
+  // M2: the schedule no longer carries Aatami — he walks to every lead.
+  const lead = currentSchedule(full, content).anchor_id;
+  if (full.selectedAnchor !== lead) {
+    const plan = previewJourney(full, data, lead);
+    assert.equal(plan.ok, true, `${lead} is reachable from ${full.selectedAnchor}: ${plan.reason}`);
+    const before = { cash: full.cash, index: full.scheduleIndex, stock: JSON.stringify(full.stock) };
+    assert.equal(commitJourney(full, data, plan).ok, true);
+    assert.deepEqual({ cash: full.cash, index: full.scheduleIndex, stock: JSON.stringify(full.stock) }, before,
+      'a journey costs no money, stock or block');
+    journeys += 1;
+  }
+  assert.equal(full.selectedAnchor, lead, `Aatami stands at ${lead} for ${encounter.id}`);
   const status = choiceStatus(choice, full, data);
   assert.equal(status.ok, true, `${choiceId} is available: ${status.reasons.join(', ')}`);
   const result = chooseEncounter(full, encounter, choice, data);
@@ -63,6 +128,7 @@ for (const choiceId of choicePlan) {
   if (!full.endingId) advanceSchedule(full, data);
 }
 assert.equal(full.scheduleIndex, 13, 'ending resolves inside the fourteenth block');
+assert(journeys >= 8, `the full route travels explicitly (${journeys} journeys)`);
 assert(full.endingId, 'the final authored choice resolves an ending');
 assert.equal(full.choices['enc-first-firearm'], 'refuse', 'firearm refusal remains viable');
 assert.equal(full.missionStatus['mission-courtyard-receipts'], 'fail', 'non-combat courtyard path remains viable');
@@ -105,7 +171,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=6');
+  } = await import('../js/v3/state.js?v=7');
 
   const CAREER = 10;
 
@@ -200,7 +266,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=6');
+    restoreState } = await import('../js/v3/state.js?v=7');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');

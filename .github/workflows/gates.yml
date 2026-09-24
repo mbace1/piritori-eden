@@ -152,6 +152,11 @@ jobs:
           NODE_PATH: /tmp/piritori-test/node_modules
           M1_CAPTURE_DIR: /tmp
         run: node web/test/m1-inspection.cjs
+      - name: M2 Paper Bag travel (preview, cancel, commit once, sale, reload, decline)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          M2_CAPTURE_DIR: /tmp
+        run: node web/test/m2-journey.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

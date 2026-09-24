@@ -77,6 +77,22 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.53 — 2026-09-24
+
+**M2: Paper Bag travel — the story moves the lead, not Aatami.**
+
+- `advanceSchedule` no longer puts Aatami at the next lead. After the first purchase the lead is Siltasaari while he stays at Piritori, and the panel says both.
+- Moving is a **journey** (`web/js/v3/journey.js`): inspect an active area, **TRAVEL HERE** draws the connected public path (a thin dashed line, distinct from a pinned delivery route) and states the cost; **TRAVEL** commits, **CANCEL** throws it away. A preview is local data: making it, cancelling it or reloading before commit changes nothing in the campaign or the save.
+- Commit revalidates the origin, the block, the destination and the path, then applies arrival once: presence, one observation of the destination, one log line. A replayed or stale plan (a double tap, the clock moving, the cursor moving) is refused and moves nobody.
+- **Time:** D002 is unresolved, so a journey costs no extra block, fare or complication, and the preview says so in words. The story clock still advances only when a story beat ends. Money has one owner: the opening still reads €160 → €115 → €183, one €23 profit.
+- **USE AREA is gone**; TRAVEL replaces it. Sealed, teaser and landmark areas can be looked at, never travelled to. Personal travel never touches `state.route`; pinning or sending a delivery route never moves Aatami.
+- Boot no longer re-stamps every past schedule anchor as freshly seen (that also rewrote the age of old observations). It records presence only if it has never been seen; old saves keep their `seen` exactly.
+- Cache: `state.js?v=7`, `app.js?v=16`, `v3.css?v=7`, `journey.js?v=1`, and the importers of `state.js` in `battle`, `visits`, `fight-module` and `crew-run`, one token per module. Gates: new `web/test/m2-journey.cjs` (47 checks) in CI's Act I job; `m1-inspection.cjs` now travels (70); `v3-state.mjs` walks the full played route with an explicit journey to every lead and holds the journey contract; `v3-playthrough.cjs` travels to Siltasaari.
+
+### Port
+
+Godot: stop `advance_schedule` relocating `selected_anchor`. Add a journey preview (pure: origin, destination, block, shortest path; refusal reasons unknown/sealed/already-here/campaign-over/in-battle/in-visit/disconnected) and a commit that revalidates origin, block and path, then sets presence and marks the destination seen once. No extra block or fare (D002). Replace Use area with Travel here → Travel / Cancel. No save-format change.
+
 ## v4.52 — 2026-09-24
 
 **M1: looking is not being there.**

@@ -7,7 +7,7 @@ import {
 import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from '../js/v3/equipment.js?v=2';
 import {
   perkValue, skillsOf, hasAptitude,
-} from '../js/v3/state.js?v=6';
+} from '../js/v3/state.js?v=7';
 
 const ROLE_PARTS = {
   runner: ['torso-runner-v03', 'legs-runner-v03'],

@@ -67,6 +67,12 @@ async function boot(page, base, { resume = false } = {}) {
   await page.locator(resume ? '#resumeButton' : '#beginButton').click();
   await page.waitForSelector('.city-map');
 }
+// M2: moving is a JOURNEY — plan it, then TRAVEL. USE AREA is gone.
+async function travel(page, id) {
+  await tapAnchor(page, id);
+  await page.locator('[data-action="plan-journey"]').click();
+  await page.locator('[data-action="commit-journey"]').click();
+}
 async function tapAnchor(page, id, how = 'click') {
   const hit = page.locator(`[data-anchor-group="${id}"] .map-anchor-hit`);
   if (how === 'key') { await hit.focus(); await page.keyboard.press('Enter'); }
@@ -117,11 +123,11 @@ server.listen(0, '127.0.0.1', async () => {
         await attr(page, 'data-inspected') === id && await attr(page, 'data-present') === 'piritori');
     }
     await tapAnchor(page, locked);
-    ok('2 a locked area offers no Use area', await page.locator('[data-action="use-area"]').count() === 0);
+    ok('2 a locked area offers no Travel', await page.locator('[data-action="plan-journey"]').count() === 0);
     await tapAnchor(page, landmark);
-    ok('2 a landmark offers no Use area', await page.locator('[data-action="use-area"]').count() === 0);
+    ok('2 a landmark offers no Travel', await page.locator('[data-action="plan-journey"]').count() === 0);
 
-    // ── 3. Show lead is a look; Use area is the one deliberate move ─
+    // ── 3. Show lead is a look; a journey is the one deliberate move ─
     await tapAnchor(page, remoteActive);
     let before = await snap(page);
     await page.locator('[data-action="show-lead"]').click();
@@ -129,17 +135,18 @@ server.listen(0, '127.0.0.1', async () => {
     ok('3 Show lead points the inspection at the lead', await attr(page, 'data-inspected') === 'piritori');
     ok('3 Show lead changes neither campaign nor save', after.state === before.state && after.save === before.save);
 
-    await tapAnchor(page, remoteActive);
     before = await S(page);
-    await page.locator('[data-action="use-area"]').click();
+    await travel(page, remoteActive);
     after = await S(page);
-    ok('3 Use area moves presence', after.selectedAnchor === remoteActive, after.selectedAnchor);
-    ok('3 Use area observes the area it moves to', after.seen?.[remoteActive] === after.scheduleIndex);
-    ok('3 Use area spends no time and no money', after.scheduleIndex === before.scheduleIndex && after.cash === before.cash
+    ok('3 a journey moves presence', after.selectedAnchor === remoteActive, after.selectedAnchor);
+    ok('3 a journey observes the area it arrives at', after.seen?.[remoteActive] === after.scheduleIndex);
+    ok('3 a journey spends no time and no money', after.scheduleIndex === before.scheduleIndex && after.cash === before.cash
       && JSON.stringify(after.stock) === JSON.stringify(before.stock));
-    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; return JSON.stringify(c); };
-    ok('3 Use area changes nothing but presence and that one observation', strip(after) === strip(before));
-    ok('3 Use area was persisted', await page.evaluate(k => JSON.parse(Object.values(localStorage).find(v => v.includes('"selectedAnchor"')) || '{}').selectedAnchor === k, remoteActive));
+    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; delete c.logs; return JSON.stringify(c); };
+    ok('3 a journey changes nothing but presence, that one observation and one log line', strip(after) === strip(before)
+      && JSON.stringify(after.logs.slice(1)) === JSON.stringify(before.logs.slice(0, after.logs.length - 1))
+      && after.logs[0].startsWith('Aatami walks'), after.logs[0]);
+    ok('3 the journey was persisted', await page.evaluate(k => JSON.parse(Object.values(localStorage).find(v => v.includes('"selectedAnchor"')) || '{}').selectedAnchor === k, remoteActive));
 
     // ── 4. away from the lead: no remote encounter ──────────────────
     await tapAnchor(page, 'piritori');
@@ -152,8 +159,7 @@ server.listen(0, '127.0.0.1', async () => {
     const noMode = s => { const c = JSON.parse(s); delete c.mode; delete c.newsReturnMode; return JSON.stringify(c); };
     ok('4 the ENCOUNTER tab from elsewhere learns nothing and changes nothing but the tab', noMode(after.state) === noMode(before.state));
     await toRoute(page);
-    await tapAnchor(page, 'piritori');
-    await page.locator('[data-action="use-area"]').click();
+    await travel(page, 'piritori');
     ok('4 returning explicitly puts Aatami back at the lead', (await S(page)).selectedAnchor === 'piritori');
     ok('4 and the lead can be entered again', await page.locator('[data-action="open-encounter"]').isVisible());
 
@@ -192,8 +198,9 @@ server.listen(0, '127.0.0.1', async () => {
     await page.locator('[data-action="advance"]').click();
     const moved = await S(page);
     ok('6 the story moves the lead to Siltasaari', await attr(page, 'data-lead') === 'siltasaari');
-    ok('6 M1 keeps the existing schedule move (M2 separates it)', moved.selectedAnchor === 'siltasaari');
-    ok('6 inspection resets with the schedule', await attr(page, 'data-inspected') === 'siltasaari');
+    ok('6 M2: the story moves the lead, not Aatami', moved.selectedAnchor === 'piritori');
+    ok('6 inspection resets with the schedule', await attr(page, 'data-inspected') === 'piritori');
+    await travel(page, 'siltasaari');
     await page.locator('[data-action="open-encounter"]').click();
     await page.locator('[data-choice="complete"]').click();
     const sold = await S(page);
@@ -216,7 +223,9 @@ server.listen(0, '127.0.0.1', async () => {
     await toRoute(page);
     await tapAnchor(page, 'vaasankatu');
     ok('7 inspecting Vaasankatu from elsewhere offers no visit', await page.locator('[data-action="open-visit"]').count() === 0);
-    await page.locator('[data-action="use-area"]').click();
+    await page.locator('[data-action="plan-journey"]').click();
+    ok('7 a planned journey is not yet arrival: no visit', await page.locator('[data-action="open-visit"]').count() === 0);
+    await page.locator('[data-action="commit-journey"]').click();
     ok('7 being at Vaasankatu offers the visit', await page.locator('[data-action="open-visit"]').count() === 1);
     await page.locator('[data-action="open-visit"]').click();
     ok('7 the visit opens', await page.locator('#game').getAttribute('data-mode') === 'visit');
@@ -252,13 +261,20 @@ server.listen(0, '127.0.0.1', async () => {
       await tapAnchor(tp, 'hakaniemi', 'tap');
       const a = await snap(tp);
       ok(`8 ${name} touch: a tap inspects without moving`, await attr(tp, 'data-inspected') === 'hakaniemi' && a.state === b.state);
-      for (const sel of ['[data-action="use-area"]', '[data-action="show-lead"]']) {
+      for (const sel of ['[data-action="plan-journey"]', '[data-action="show-lead"]']) {
         const box = await tp.locator(sel).boundingBox();
         ok(`8 ${name} touch: ${sel} is reachable and at least 44px`, Boolean(box) && box.height >= 44 && box.width >= 44, JSON.stringify(box));
       }
-      await tp.locator('[data-action="use-area"]').scrollIntoViewIfNeeded();
-      await tp.locator('[data-action="use-area"]').tap();
-      ok(`8 ${name} touch: Use area moves Aatami`, (await S(tp)).selectedAnchor === 'hakaniemi');
+      await tp.locator('[data-action="plan-journey"]').scrollIntoViewIfNeeded();
+      await tp.locator('[data-action="plan-journey"]').tap();
+      for (const sel of ['[data-action="commit-journey"]', '[data-action="cancel-journey"]']) {
+        const box = await tp.locator(sel).boundingBox();
+        ok(`8 ${name} touch: ${sel} is reachable and at least 44px`, Boolean(box) && box.height >= 44 && box.width >= 44, JSON.stringify(box));
+      }
+      ok(`8 ${name} touch: a planned journey has not moved Aatami`, (await S(tp)).selectedAnchor === 'piritori');
+      await tp.locator('[data-action="commit-journey"]').scrollIntoViewIfNeeded();
+      await tp.locator('[data-action="commit-journey"]').tap();
+      ok(`8 ${name} touch: Travel moves Aatami`, (await S(tp)).selectedAnchor === 'hakaniemi');
       await tp.screenshot({ path: path.join(process.env.M1_CAPTURE_DIR || '/tmp', `m1-${name}.png`) });
       // Begin again over the save: a new campaign starts at Piritori with no
       // leftover cursor.

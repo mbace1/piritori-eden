@@ -370,6 +370,10 @@ button { -webkit-tap-highlight-color: transparent; }
   stroke-linecap: round;
   filter: drop-shadow(0 2px 1px #000);
 }
+/* M2: a JOURNEY is Aatami walking himself, not a pinned delivery route, so it
+   is drawn apart from .map-route: thin, cream, dashed (a shape, not a colour). */
+.map-journey { fill: none; stroke: #f3ead8; stroke-width: 7; stroke-dasharray: 4 14; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 1px #000); }
+.journey-preview { margin-top: 12px; padding-top: 10px; border-top: 2px dashed #6b604f; }
 .map-flow { fill: #d7c89e; stroke: #252824; stroke-width: 2; }
 .map-hidden-flow { fill: var(--magenta); stroke: #2c101e; stroke-width: 2; }
 .map-node-card { fill: #22282d; stroke: #ad9572; stroke-width: 2; }
