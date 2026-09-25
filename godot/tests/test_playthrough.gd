@@ -100,6 +100,7 @@ func _test_every_effect_is_understood() -> void:
 func _test_walk_the_slice() -> void:
 	print("\nwalking all fourteen blocks")
 	var played := 0
+	var journeys := 0
 	var skipped: Array = []
 
 	for i in range(GameState.total_blocks):
@@ -120,6 +121,20 @@ func _test_walk_the_slice() -> void:
 			GameState.day, GameState.current_block(), eid],
 			GameState.is_encounter_available(eid))
 
+		# M2: the schedule moves the LEAD; Aatami walks there himself.
+		var lead := GameState.story_lead_id()
+		if GameState.current_anchor_id != lead:
+			var plan := GameState.preview_journey(lead)
+			check("  %s is reachable from %s" % [lead, GameState.current_anchor_id],
+				bool(plan.get("ok", false)), str(plan))
+			var cash := GameState.cash_eur
+			var block := GameState.block_index
+			var went := GameState.commit_journey(plan)
+			check("  and the journey costs no money or block",
+				bool(went.get("ok", false)) and GameState.cash_eur == cash and GameState.block_index == block)
+			journeys += 1
+		eq("  Aatami stands at the lead", GameState.current_anchor_id, lead)
+
 		var took := ""
 		for ch in enc.get("choices", []):
 			if GameState.meets_all(ch.get("requirements", [])):
@@ -137,6 +152,7 @@ func _test_walk_the_slice() -> void:
 
 	check("no block was unplayable", skipped.is_empty(), str(skipped))
 	eq("every scheduled block resolved", played, 14)
+	check("the walk travelled explicitly (%d journeys)" % journeys, journeys >= 8)
 	check("the slice reports itself complete", GameState.is_slice_complete())
 	print("        cash €%d · debt €%d · crew %d · missions %d · memories %d" % [
 		GameState.cash_eur, GameState.debt_eur, GameState.surviving_crew(),

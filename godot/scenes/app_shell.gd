@@ -845,11 +845,52 @@ func _show_city() -> void:
 	_clear_world()
 	_world_host.add_child(_city_map)
 	_city_map.call_deferred("_rebuild_layout")
+	# Coming back to the city looks where Aatami stands (M1): a cursor left on
+	# some other place, or a half-planned journey, does not survive a scene.
+	_journey = {}
+	_city_map.reset_inspection()
 	_build_city_rail(GameState.current_anchor_id)
 
 
 func _on_anchor_selected(anchor_id: String) -> void:
+	# Looking somewhere else throws a planned journey away.
+	if String(_journey.get("destination", "")) != anchor_id:
+		_journey = {}
+		_city_map.show_journey(PackedStringArray())
 	_build_city_rail(anchor_id)
+
+
+## A planned journey (GameState.preview_journey) — local to the shell, never
+## saved, so Cancel, a scene change or a reload leaves the campaign untouched.
+var _journey: Dictionary = {}
+
+func _plan_journey(anchor_id: String) -> void:
+	_journey = GameState.preview_journey(anchor_id)
+	_city_map.show_journey(PackedStringArray(_journey.get("path", [])) if bool(_journey.get("ok", false)) else PackedStringArray())
+	_build_city_rail(anchor_id)
+
+
+func _cancel_journey() -> void:
+	var at := String(_journey.get("destination", GameState.current_anchor_id))
+	_journey = {}
+	_city_map.show_journey(PackedStringArray())
+	_build_city_rail(at)
+
+
+func _commit_journey() -> void:
+	# Taken, then cleared BEFORE the commit: a second press finds no plan and
+	# does nothing at all.
+	if _journey.is_empty():
+		return
+	var plan := _journey
+	_journey = {}
+	_city_map.show_journey(PackedStringArray())
+	var result := GameState.commit_journey(plan)
+	if not bool(result.get("ok", false)):
+		_build_city_rail(String(plan.get("destination", GameState.current_anchor_id)))
+		_rail_box.add_child(_make_label(tr("ui.journey_refused"), 14, PiritoriPalette.TEXT_DIM))
+		return
+	_city_map.select(String(result["destination"]))
 
 
 func _build_city_rail(anchor_id: String) -> void:
@@ -881,6 +922,22 @@ func _build_city_rail(anchor_id: String) -> void:
 		var note := _make_label(tr("ui.content_en_only"), 11, PiritoriPalette.TEXT_DIM)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(note)
+
+	# Looking is not being there (M1): who stands where, and where the story is.
+	var present := ContentRegistry.anchor(GameState.current_anchor_id)
+	var lead_id := GameState.story_lead_id()
+	var lead := ContentRegistry.anchor(lead_id)
+	var here := anchor_id == GameState.current_anchor_id
+	_rail_box.add_child(_make_label(tr("ui.you_are_here") if here else tr("ui.inspecting"),
+		13, PiritoriPalette.PLAYER_CYAN if here else PiritoriPalette.TEXT_DIM))
+	var who := _make_label(tr("ui.presence_line") % [
+		String(present.get("label", GameState.current_anchor_id)),
+		String(lead.get("label", "—")) if lead_id != "" else "—"], 13, PiritoriPalette.TEXT_DIM)
+	who.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(who)
+	if not here:
+		_build_away_rail(anchor_id, state, lead_id)
+		return
 
 	# Encounters playable in THIS block. The slice schedules one per block, so
 	# a site hosting several (piritori_first_buy hosts day 1 and day 5) offers
@@ -916,6 +973,41 @@ func _build_city_rail(anchor_id: String) -> void:
 	if not any:
 		_rail_box.add_child(_make_label(
 			tr("ui.nothing_here") if state != "locked" else tr("ui.closed_era"),
+			14, PiritoriPalette.TEXT_DIM))
+
+
+## The rail for a place Aatami is only LOOKING at: no encounter, no market —
+## a journey there, or why not.
+func _build_away_rail(anchor_id: String, state: String, lead_id: String) -> void:
+	if anchor_id == lead_id:
+		_rail_box.add_child(_make_label(tr("ui.travel_first"), 14, PiritoriPalette.TEXT_DIM))
+	if bool(_journey.get("ok", false)) and String(_journey.get("destination", "")) == anchor_id:
+		var names: Array = []
+		for id in _journey["path"]:
+			names.append(String(ContentRegistry.anchor(String(id)).get("label", id)))
+		_rail_box.add_child(_make_label(tr("ui.journey_legs") % (names.size() - 1), 14, PiritoriPalette.PLAYER_CYAN))
+		var route := _make_label(" → ".join(names), 14)
+		route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(route)
+		var cost := _make_label(tr("ui.journey_cost"), 12, PiritoriPalette.TEXT_DIM)
+		cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(cost)
+		var go := _make_button(tr("ui.travel"), PiritoriPalette.PLAYER_CYAN)
+		go.pressed.connect(_commit_journey)
+		_rail_box.add_child(go)
+		var stop := _make_button(tr("ui.cancel_journey"), PiritoriPalette.TEXT_DIM)
+		stop.pressed.connect(_cancel_journey)
+		_rail_box.add_child(stop)
+		return
+	var plan := GameState.preview_journey(anchor_id)
+	if bool(plan.get("ok", false)):
+		var b := _make_button(tr("ui.travel_here") % String(ContentRegistry.anchor(anchor_id).get("label", anchor_id)),
+			PiritoriPalette.PLAYER_CYAN)
+		b.pressed.connect(func(): _plan_journey(anchor_id))
+		_rail_box.add_child(b)
+	else:
+		_rail_box.add_child(_make_label(
+			tr("ui.closed_era") if state == "locked" else tr("ui.look_not_go"),
 			14, PiritoriPalette.TEXT_DIM))
 
 

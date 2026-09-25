@@ -94,6 +94,7 @@ const LANDMARK_EDGE := Color("#191d1f")
 
 # ── paper tabs and chrome ─────────────────────────────────────────────────
 const TAB := Color("#b79b70")            ## labelTab: tan paper
+const PRESENCE := Color("#f3ead8")       ## where Aatami stands, and a planned journey: cream, dashed
 const TAB_EDGE := Color("#16191b")
 const TAB_TEXT := Color("#16191b")
 const DARK_TAB := Color("#151b1e")

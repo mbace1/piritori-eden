@@ -903,6 +903,109 @@ func available_encounters_at(anchor_id: String) -> Array:
 	return out
 
 
+# ── presence, the lead, and journeys (web Act I v4.52 M1 / v4.53 M2) ─────
+#
+# `current_anchor_id` is PRESENCE: where Aatami stands. It is saved, and it
+# changes in exactly one way, a committed journey. Looking at the map moves
+# only the map's own cursor (city_map.gd `_selected`, never saved). The story
+# LEAD is where the current block's scheduled encounter is, derived rather
+# than stored. The block clock moves only when a story beat ends; D002 (travel
+# time, fare, risk) is unresolved, so a journey costs no block and no money
+# and the rail says so.
+
+const JOURNEY_EXTRA_BLOCKS := 0
+
+## The authored story lead for this block: the anchor of its encounter.
+func story_lead_id() -> String:
+	if is_slice_complete():
+		return ""
+	var entry := ContentRegistry.scheduled_for(day, current_block())
+	var aid := String(entry.get("anchor_id", ""))
+	if aid != "":
+		return aid
+	var enc := ContentRegistry.encounter(String(entry.get("encounter_id", "")))
+	var site := ContentRegistry.site(String(enc.get("site_id", "")))
+	return String(site.get("anchor_id", ""))
+
+
+## Breadth-first over the public map's edges; empty when unreachable.
+func shortest_path(from: String, to: String) -> PackedStringArray:
+	if from == to:
+		return PackedStringArray([from])
+	var links := {}
+	for e in ContentRegistry.edges():
+		var a := String(e.get("from", ""))
+		var b := String(e.get("to", ""))
+		links[a] = links.get(a, []) + [b]
+		links[b] = links.get(b, []) + [a]
+	var previous := {from: ""}
+	var queue: Array = [from]
+	while not queue.is_empty():
+		var node: String = queue.pop_front()
+		for nxt in links.get(node, []):
+			if previous.has(nxt):
+				continue
+			previous[nxt] = node
+			if nxt == to:
+				var path: Array = [to]
+				var at: String = node
+				while at != "":
+					path.push_front(at)
+					at = previous[at]
+				return PackedStringArray(path)
+			queue.append(nxt)
+	return PackedStringArray()
+
+
+## Why a journey to `destination` cannot be planned right now, or "".
+func journey_blocker(destination: String) -> String:
+	var a := ContentRegistry.anchor(destination)
+	if a.is_empty():
+		return "unknown"
+	if String(a.get("sliceState", "")) != "active":
+		return "sealed"
+	if destination == current_anchor_id:
+		return "already-here"
+	if ending_id != "" or is_slice_complete():
+		return "campaign-over"
+	return ""
+
+
+## A proposed journey. Plain data: making one, or dropping it, changes nothing.
+func preview_journey(destination: String) -> Dictionary:
+	var base := {"origin": current_anchor_id, "destination": destination, "block_index": block_index}
+	var reason := journey_blocker(destination)
+	if reason == "":
+		var path := shortest_path(current_anchor_id, destination)
+		if path.size() < 2:
+			reason = "disconnected"
+		else:
+			base.merge({"ok": true, "path": path, "extra_blocks": JOURNEY_EXTRA_BLOCKS})
+			return base
+	base.merge({"ok": false, "reason": reason})
+	return base
+
+
+## Arrive, once. A stale or replayed preview (a double press, the block
+## turned, presence already moved) is refused and moves nobody.
+func commit_journey(preview: Dictionary) -> Dictionary:
+	if preview.is_empty():
+		return {"ok": false, "reason": "no-preview"}
+	if not bool(preview.get("ok", false)):
+		return {"ok": false, "reason": String(preview.get("reason", ""))}
+	if String(preview.get("origin", "")) != current_anchor_id \
+			or int(preview.get("block_index", -1)) != block_index:
+		return {"ok": false, "reason": "stale"}
+	var fresh := preview_journey(String(preview.get("destination", "")))
+	if not bool(fresh.get("ok", false)):
+		return {"ok": false, "reason": String(fresh.get("reason", ""))}
+	if fresh["path"] != preview["path"]:
+		return {"ok": false, "reason": "stale"}
+	current_anchor_id = String(preview["destination"])
+	state_changed.emit()
+	return {"ok": true, "destination": current_anchor_id, "path": preview["path"]}
+
+
 # ── requirements and effects: the canonical grammar ───────────────────────
 
 ## Evaluate a requirement string from the slice, e.g. "cash>=45".
@@ -1496,9 +1599,15 @@ func visible_offers() -> Array:
 	return out
 
 
+## You trade where you stand (MARKET.md §5/§8): the ledger records, it does
+## not reach across the city.
+func at_offer(offer: Dictionary) -> bool:
+	return String(offer.get("anchor_id", "")) == current_anchor_id
+
+
 func can_sell(offer: Dictionary) -> bool:
 	var pid: String = offer.get("product_id", "")
-	return offer.get("side", "") == "sell" and int(stock.get(pid, 0)) > 0
+	return offer.get("side", "") == "sell" and int(stock.get(pid, 0)) > 0 and at_offer(offer)
 
 
 func can_buy(offer: Dictionary) -> bool:
@@ -1506,7 +1615,8 @@ func can_buy(offer: Dictionary) -> bool:
 	var pid: String = offer.get("product_id", "")
 	return offer.get("side", "") == "buy" \
 		and cash_eur >= price \
-		and _total_stock() < capacity
+		and _total_stock() < capacity \
+		and at_offer(offer)
 
 
 func _total_stock() -> int:

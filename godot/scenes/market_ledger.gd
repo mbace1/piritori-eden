@@ -109,6 +109,10 @@ func _offer_row(o: Dictionary) -> Control:
 
 func _why_not(o: Dictionary, side: String) -> String:
 	var pid := String(o.get("product_id", ""))
+	# You trade where you stand; the ledger only records (M1).
+	if not GameState.at_offer(o):
+		var anchor := ContentRegistry.anchor(String(o.get("anchor_id", "")))
+		return tr("ui.at_place") % String(anchor.get("label", o.get("anchor_id", "")))
 	if side == "sell":
 		return tr("ui.nothing_in_stock")
 	var price := int(o.get("quote", {}).get("eur", 0))

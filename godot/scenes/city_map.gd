@@ -148,6 +148,7 @@ func _draw() -> void:
 	_draw_ordinary_flow()       # 7
 	_draw_crew_and_goods()      # 8
 	_draw_edge_mask()           # 9, the frame the city continues past
+	_draw_journey()             # a planned journey, over the flows and under the pins
 	_draw_anchors()             # 10 + 11
 	_draw_labels()              # 12
 	_draw_legend()              # 13
@@ -577,6 +578,13 @@ func _draw_anchor(a: Dictionary) -> void:
 	if live:
 		var pulse: float = 1.0 if _reduced_motion() else 1.0 + 0.07 * sin(_t * 2.6)
 		draw_arc(pos, r * 1.55 * pulse, 0, TAU, 44, MapStyle.ROUTE, _w(3.5), true)
+	# Presence is a SHAPE as well as a word: a dashed diamond where Aatami
+	# stands, apart from the lead's pulse and the inspection ring.
+	if id == GameState.current_anchor_id:
+		var d := r * 1.45
+		var diamond := PackedVector2Array([pos + Vector2(0, -d), pos + Vector2(d, 0),
+			pos + Vector2(0, d), pos + Vector2(-d, 0), pos + Vector2(0, -d)])
+		_draw_dashed(diamond, MapStyle.PRESENCE, _w(3.5), Vector2(9.0, 6.0) * _scale)
 	if id == _selected:
 		draw_arc(pos, r * 1.32, 0, TAU, 40, MapStyle.TAB, _w(4.0), true)
 	elif id == _hovered:
@@ -809,11 +817,44 @@ func _gui_input(event: InputEvent) -> void:
 			select(hit)
 
 
+## INSPECT a place. Looking is not being there (web Act I v4.52, M1): this
+## moves only the map's own cursor, never `GameState.current_anchor_id`,
+## which changes only through a committed journey (GameState.commit_journey).
 func select(anchor_id: String) -> void:
 	_selected = anchor_id
-	GameState.current_anchor_id = anchor_id
 	anchor_selected.emit(anchor_id)
 	queue_redraw()
+
+
+## Back to "looking where you stand": a new campaign, a load, a block change.
+func reset_inspection() -> void:
+	_selected = ""
+	journey_path = PackedStringArray()
+	queue_redraw()
+
+
+## The inspected place, or where Aatami stands when nothing is inspected.
+func inspected() -> String:
+	return _selected if _selected != "" else GameState.current_anchor_id
+
+
+## A planned journey drawn on the board (cleared with an empty array).
+var journey_path: PackedStringArray = PackedStringArray()
+
+func show_journey(path: PackedStringArray) -> void:
+	journey_path = path
+	queue_redraw()
+
+
+func _draw_journey() -> void:
+	if journey_path.size() < 2:
+		return
+	var pts := PackedVector2Array()
+	for id in journey_path:
+		if _layout.has(id):
+			pts.append(_layout[id])
+	if pts.size() >= 2:
+		_draw_dashed(pts, MapStyle.PRESENCE, _w(6.0), Vector2(8.0, 14.0) * _scale)
 
 
 ## Rectangular hit targets, at least 44px, even though the paper pin is round.

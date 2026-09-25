@@ -653,8 +653,42 @@ func _test_market_through_ui() -> void:
 		func(n): return n.get_script() != null \
 			and String(n.get_script().resource_path).ends_with("city_map.gd"))
 	if maps.size() == 1:
+		# M1: looking at Siltasaari does not put Aatami there.
+		var snapshot := JSON.stringify(GameState.to_dict())
 		maps[0].select("siltasaari")
 		await get_tree().process_frame
+		check("inspecting Siltasaari leaves Aatami at Piritori", GameState.current_anchor_id == "piritori")
+		check("  and changes nothing in the campaign", JSON.stringify(GameState.to_dict()) == snapshot)
+		check("  the rail says INSPECTING and names both places",
+			"INSPECTING" in _labels_text() and "AATAMI · PIRITORI" in _labels_text().to_upper()
+			and "STORY LEAD · SILTASAARI" in _labels_text().to_upper(), _labels_text().substr(0, 200))
+		check("  no market from over here", _find_button("Market ledger") == null)
+
+		# M2: plan, cancel, plan, travel — pressed as buttons.
+		var travel_here := _find_button("TRAVEL HERE")
+		check("TRAVEL HERE is offered", travel_here != null,
+			"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
+		if travel_here == null:
+			return
+		await _press(travel_here)
+		check("the plan names the path and its cost",
+			"PIRITORI" in _labels_text().to_upper() and "no extra time or money" in _labels_text(),
+			_labels_text().substr(0, 240))
+		check("  and the map draws it", maps[0].journey_path.size() >= 2)
+		check("  planning changed nothing", JSON.stringify(GameState.to_dict()) == snapshot)
+		await _press(_find_button("CANCEL"))
+		check("cancel drops the plan and moves nobody",
+			maps[0].journey_path.is_empty() and JSON.stringify(GameState.to_dict()) == snapshot)
+		await _press(_find_button("TRAVEL HERE"))
+		var go := _find_button("TRAVEL")
+		var block := GameState.block_index
+		var cash := GameState.cash_eur
+		go.pressed.emit()
+		go.pressed.emit()   # a double press
+		await get_tree().process_frame
+		check("TRAVEL arrives at Siltasaari", GameState.current_anchor_id == "siltasaari")
+		check("  once, with no fare and no block", GameState.cash_eur == cash and GameState.block_index == block)
+		check("  and the rail now says YOU ARE HERE", "YOU ARE HERE" in _labels_text())
 
 	var ledger_btn := _find_button("Market ledger")
 	check("earned ledger is offered at Siltasaari", ledger_btn != null,

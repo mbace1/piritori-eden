@@ -105,6 +105,8 @@ Godot: nothing to port. Its battle state holds no reference back to the campaign
 
 Godot: stop `advance_schedule` relocating `selected_anchor`. Add a journey preview (pure: origin, destination, block, shortest path; refusal reasons unknown/sealed/already-here/campaign-over/in-battle/in-visit/disconnected) and a commit that revalidates origin, block and path, then sets presence and marks the destination seen once. No extra block or fare (D002). Replace Use area with Travel here → Travel / Cancel. No save-format change.
 
+**Status: landed in Godot 2026-09-25.** Godot's `advance_block` never relocated Aatami, but its map tap did, so M1 was the half it lacked. `GameState.preview_journey`/`commit_journey`/`story_lead_id`/`shortest_path` hold the same contract; the rail offers TRAVEL HERE, then TRAVEL / CANCEL with the cost line; the map draws the path dashed. Gates: `test_spine` holds the journey contract (264), `test_shell` presses plan → cancel → plan → a double TRAVEL (117; restoring the old `select()` fails 4 checks), and `test_playthrough` walks all 14 blocks with 13 explicit journeys (72). The Japanese strings were written within the shipped font subset, because its source font cannot be downloaded from this environment.
+
 ## v4.52 — 2026-09-24
 
 **M1: looking is not being there.**
@@ -119,6 +121,8 @@ Godot: stop `advance_schedule` relocating `selected_anchor`. Add a journey previ
 ### Port
 
 Godot: keep a non-persisted inspection cursor separate from `selected_anchor`; map input moves only the cursor; add Use area / Show lead; gate the encounter entry, choices, visits, trades and fencing on presence at the lead. No save-format change. Schedule relocation stays until M2.
+
+**Status: landed in Godot 2026-09-25.** Map input only inspects: `city_map.select()` no longer writes `GameState.current_anchor_id`. The rail says YOU ARE HERE / INSPECTING with `AATAMI · … STORY LEAD · …`; presence is a dashed diamond. Encounters and the market are offered only where Aatami stands, and ledger trades are refused elsewhere (`at_offer`). SHOW LEAD was not ported: the lead already pulses on the map. Godot has no `seen` observations, so there is nothing to gate there.
 
 ## v4.51 — 2026-09-21
 

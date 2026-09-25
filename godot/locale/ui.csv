@@ -214,3 +214,15 @@ perk.nerve,Nerve,Hermo,胆力
 perk.toughness,Toughness,Sitkeys,頑丈さ
 chapter.level_ups,Somebody has %d to spend,Jollakulla on %d käytettävänä,%d ポイント未使用
 battle.levelled,LEVEL %d,TASO %d,レベル%d
+ui.you_are_here,YOU ARE HERE,OLET TÄSSÄ,現在地
+ui.inspecting,INSPECTING,KATSELET,確認中
+ui.presence_line,AATAMI · %s    STORY LEAD · %s,AATAMI · %s    JUONEN VIHJE · %s,アータミ · %s    物語の手がかり · %s
+ui.travel_first,The story lead is here. Travel there first.,Juonen vihje on täällä. Kulje ensin sinne.,物語の手がかりはここだ。まずそこへ移動しろ。
+ui.travel_here,TRAVEL HERE · %s,KULJE TÄNNE · %s,ここへ移動 · %s
+ui.journey_legs,JOURNEY · %d LEG(S),MATKA · %d OSUUS(TA),移動 · %d段階
+ui.journey_cost,"Aatami walks there himself. In this build a journey costs no extra time or money: the clock moves only when a story beat ends. Travel time and risk are not balanced yet.","Aatami kävelee sinne itse. Tässä versiossa matka ei maksa lisäaikaa eikä rahaa: kello liikkuu vain, kun tarinan hetki päättyy. Matka-aikaa ja riskiä ei ole vielä tasapainotettu.",アータミは自分で行く。今は移動に時間も金もかからない。時が動くのは物語の一場が終わる時だけだ。移動の時間とリスクはまだ決まっていない。
+ui.travel,TRAVEL,KULJE,移動する
+ui.cancel_journey,CANCEL,PERU,やめる
+ui.look_not_go,"You can look here, not go.","Tänne voi katsoa, ei mennä.",ここは見るだけで、行けない。
+ui.journey_refused,That journey can't be made now — plan it again.,Matkaa ei voi tehdä nyt — suunnittele se uudelleen.,その移動は今はできない。もう一度選べ。
+ui.at_place,at %s,paikassa %s,%sで

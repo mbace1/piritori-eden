@@ -179,6 +179,12 @@ func _test_profitable_first_sale() -> void:
 
 	if sale.size() == 1:
 		var before := GameState.cash_eur
+		# M1/M2: you trade where you stand, and you get there by a journey.
+		eq("still at Piritori after the purchase", GameState.current_anchor_id, "piritori")
+		check("no sale from Piritori", not GameState.can_sell(sale[0]))
+		check("and a remote sale is refused", not GameState.execute_offer("offer-siltasaari-sell"))
+		eq("  so nothing moved", GameState.cash_eur, before)
+		_test_journey_to_siltasaari()
 		check("can sell with stock in hand", GameState.can_sell(sale[0]))
 		var ok := GameState.execute_offer("offer-siltasaari-sell")
 		check("sale executes", ok)
@@ -186,6 +192,42 @@ func _test_profitable_first_sale() -> void:
 		eq("stock spent", int(GameState.stock.get("piri", 0)), 0)
 		check("sale is profitable against the 45 buy", 68 > 45)
 		check("market history records siltasaari", GameState.market_history.has("siltasaari"))
+
+
+## The journey contract (web Act I v4.53 / M2), held in the port.
+func _test_journey_to_siltasaari() -> void:
+	print("\njourney: preview is pure, commit arrives once")
+	eq("the story lead is Siltasaari", GameState.story_lead_id(), "siltasaari")
+	var snapshot := JSON.stringify(GameState.to_dict())
+	var plan := GameState.preview_journey("siltasaari")
+	check("a connected path is offered", bool(plan.get("ok", false)), str(plan))
+	eq("  from Piritori", String(Array(plan.get("path", []))[0]) if plan.has("path") else "", "piritori")
+	eq("  to Siltasaari", String(Array(plan.get("path", [""])).back()), "siltasaari")
+	eq("  costing no extra block (D002 unresolved)", int(plan.get("extra_blocks", -1)), 0)
+	for d in [["piritori", "already-here"], ["nowhere", "unknown"]]:
+		eq("  refused: %s" % d[1], String(GameState.preview_journey(d[0]).get("reason", "")), d[1])
+	for a in ContentRegistry.anchors():
+		if String(a.get("sliceState", "")) != "active":
+			eq("  refused: %s is %s" % [a["id"], a.get("sliceState", "")],
+				String(GameState.preview_journey(String(a["id"])).get("reason", "")), "sealed")
+			break
+	eq("previewing changed nothing", JSON.stringify(GameState.to_dict()), snapshot)
+	eq("no plan, no journey", String(GameState.commit_journey({}).get("reason", "")), "no-preview")
+	var turned := plan.duplicate(true)
+	turned["block_index"] = int(turned["block_index"]) - 1
+	eq("a plan from another block is stale", String(GameState.commit_journey(turned).get("reason", "")), "stale")
+	eq("  and moved nobody", GameState.current_anchor_id, "piritori")
+	var cash := GameState.cash_eur
+	var block := GameState.block_index
+	check("commit arrives", bool(GameState.commit_journey(plan).get("ok", false)))
+	eq("  at Siltasaari", GameState.current_anchor_id, "siltasaari")
+	eq("  no fare", GameState.cash_eur, cash)
+	eq("  no block", GameState.block_index, block)
+	var after := JSON.stringify(GameState.to_dict())
+	eq("the same plan again is stale (a double press)", String(GameState.commit_journey(plan).get("reason", "")), "stale")
+	eq("  and changes nothing", JSON.stringify(GameState.to_dict()), after)
+	var cut := GameState.shortest_path("piritori", "siltasaari")
+	check("the path the preview drew is the shortest public path", Array(cut) == Array(plan["path"]))
 
 
 func _test_block_clock() -> void:
