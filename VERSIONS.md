@@ -77,6 +77,18 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.54 — 2026-09-25
+
+**Saving during a fight no longer crashes.**
+
+- `createBattleState` gave the battle an enumerable `growth: {state, data}` link to the live campaign while the battle itself lives in the campaign (`state.battle`), so every save during a fight threw *Converting circular structure to JSON*. The link is now non-enumerable (`attachGrowth` in `battle.js` and its `fight-module/resolver.js` twin): it is never saved, and the app re-attaches it to the restored campaign on load and on `debug.setState`, so perk, skill and aptitude hooks survive a reload mid-fight.
+- `v3-battle.mjs` holds the round trip: the save no longer throws, `growth` is neither saved nor enumerable, a restore re-attaches to the restored campaign, and the round trip is byte-identical. `v3-playthrough.cjs` now reaches its AUTO-battle, news and portrait checks (28 pass). The only failures left are the two Toko-viewport checks from `QUEUE.md`.
+- Cache: `battle.js?v=11`, `resolver.js?v=5`, `app.js?v=17`, and their importers.
+
+### Port
+
+Godot: nothing to port. Its battle state holds no reference back to the campaign.
+
 ## v4.53 — 2026-09-24
 
 **M2: Paper Bag travel — the story moves the lead, not Aatami.**

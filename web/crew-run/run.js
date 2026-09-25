@@ -1,5 +1,5 @@
 import {hireling} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=13';
+import {createSession} from '../fight-module/session.js?v=14';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=7';
 import {readCampaignSave,campaignRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=4';
 

@@ -19,12 +19,12 @@ import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
 import { previewJourney, commitJourney } from './journey.js?v=1';
 import {
-  createBattleState, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
+  createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=10';
+} from './battle.js?v=11';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -1571,6 +1571,7 @@ async function boot() {
     data = await loadGameData();
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
+    attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     $('resumeButton').hidden = !hasSave;
     $('beginButton').addEventListener('click', () => {
       if (hasSave) state = createState(data.content);
@@ -1671,7 +1672,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.53',
+      version: 'v4.54',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
@@ -1723,7 +1724,7 @@ async function boot() {
       get data() { return data; },
       get state() { return state; },
       debug: {
-        setState(next) { state = next; persist(); render(); },
+        setState(next) { state = next; attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id) { startBattle(id); persist(); render(); },
         setBattleLights,
         openEncounter,

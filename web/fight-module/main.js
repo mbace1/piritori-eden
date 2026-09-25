@@ -1,13 +1,13 @@
 import {fighterLabel} from './readability.js?v=1';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=3';
-import {mountCrew} from '../crew-run/ui.js?v=10';
+import {mountCrew} from '../crew-run/ui.js?v=11';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=13';
+import {createSession,checkpoint,restoreSession} from './session.js?v=14';
 import {loadFighters,makeActor,updateActor,disposeActor} from './actors.js?v=9';
-import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=4';
+import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=5';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=2';
 import {renderProfile,pixelRatioFor,limitTextures} from './render-profile.js?v=3';
 import {createEdgeSmoothing} from './edge-smoothing.js?v=2';

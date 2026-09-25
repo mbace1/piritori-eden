@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=13';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=14';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const park=createSession(content,'mixed','bear-path');
 for(const count of [2,6,12])for(const mode of ['mixed','melee','ranged']){

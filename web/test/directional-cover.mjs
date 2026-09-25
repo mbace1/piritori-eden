@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {coverEdges,coverProtection,crossesCoverEdge,EDGES} from '../fight-module/cover-edges.js?v=2';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=13';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=14';
 import {forecast,routes,planView} from '../fight-module/tactics.js?v=6';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const vectors=JSON.parse(fs.readFileSync(new URL('../../design/C11_PORT_VECTORS.json',import.meta.url)));

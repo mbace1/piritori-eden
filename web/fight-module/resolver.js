@@ -176,7 +176,7 @@ export function createBattleState(definition, crew, state, data) {
   if (crew.length < required) throw new Error(`${definition.id} requires ${required} deployed crew`);
   const players = crew.slice(0, required).map((member, index) => makePlayer(member, state, index, required));
   const enemies = definition.opponents.map((opponent, index) => makeEnemy(opponent, index, state.battleOpeningNerve ?? 0));
-  return {
+  const battle = {
     id: definition.id,
     missionId: BATTLE_MISSION[definition.id] ?? null,
     // content's own field, on battle-hermanni-training: no mission, no
@@ -206,8 +206,6 @@ export function createBattleState(definition, crew, state, data) {
     // the shape `useItem()` reads.
     items: itemsFrom(data ? [...data.equipment.values()] : []),
     cover: buildCover(definition),
-    // Growth hooks (perks/skills/aptitudes) need campaign state during resolve.
-    growth: state && data ? { state, data } : null,
     marks: {},
     withdrawal: definition.withdrawal,
     negotiation: definition.negotiation,
@@ -231,6 +229,21 @@ export function createBattleState(definition, crew, state, data) {
     // Tough-target desync tracker — cleared each round with acted[].
     syncHitsThisRound: new Set(),
   };
+  return attachGrowth(battle, state, data);
+}
+
+/** Growth hooks (perks/skills/aptitudes) need the live campaign during
+ *  resolve. That link is NON-ENUMERABLE: the battle lives inside the campaign
+ *  (`state.battle`), so an enumerable `{state, data}` made every save during a
+ *  fight a circular structure `JSON.stringify` refuses. A reload rebuilds it
+ *  with this same call, against the restored campaign. */
+export function attachGrowth(battle, state, data) {
+  if (!battle) return battle;
+  Object.defineProperty(battle, 'growth', {
+    value: state && data ? { state, data } : null,
+    enumerable: false, writable: true, configurable: true,
+  });
+  return battle;
 }
 
 export function units(battle, side) {

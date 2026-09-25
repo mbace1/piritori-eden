@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, deployedCrew } from '../js/v3/state.js?v=7';
+import { createState, deployedCrew, restoreState } from '../js/v3/state.js?v=7';
 import {
-  createBattleState, battleEntryForecast, coverStandingLine, coverUnder, attackWouldBeStopped, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
+  createBattleState, attachGrowth, battleEntryForecast, coverStandingLine, coverUnder, attackWouldBeStopped, selectAction, selectUnit, validMoveCells, moveUnit, autoCommand,
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
-} from '../js/v3/battle.js?v=10';
+} from '../js/v3/battle.js?v=11';
 import { parseCellFor, slotKey } from '../js/v3/grid.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -216,7 +216,7 @@ console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command
   const { createState, grantLevel, spendPerk, setAptitudes } = await import('../js/v3/state.js?v=7');
   const {
     createBattleState, anchorCoverCells, crewReadBonus, markDuration, coverAt,
-  } = await import('../js/v3/battle.js?v=10');
+  } = await import('../js/v3/battle.js?v=11');
 
   const st = createState(content);
   const who = content.crew.find(c => c.id === 'crew-slot-fixer')?.id
@@ -260,4 +260,25 @@ console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command
   assert.equal(markDuration(st, who), 1 << 30, 'watch-the-hands is whole fight');
 
   console.log('V3 BATTLE growth hooks OK');
+
+// A save DURING a fight. The battle lives inside the campaign, so the growth
+// link back to the campaign must not be serialized (it made every mid-battle
+// save throw "Converting circular structure to JSON").
+{
+  const campaign = createState(content);
+  campaign.recruited = content.crew.slice(0, 3).map(item => item.id);
+  campaign.deployed = [...campaign.recruited];
+  campaign.battle = createBattleState(definition2, deployedCrew(campaign, data), campaign, data);
+  assert.equal(campaign.battle.growth?.state, campaign, 'growth reaches the live campaign');
+  const saved = JSON.stringify(campaign); // threw before the fix
+  assert(!('growth' in JSON.parse(saved).battle), 'the growth link is not saved');
+  assert.deepEqual(Object.keys(campaign.battle).includes('growth'), false, 'and is not enumerable');
+  const restored = restoreState(JSON.parse(saved), content);
+  assert.equal(restored.battle.growth, undefined, 'a restored fight has no stale link');
+  attachGrowth(restored.battle, restored, data);
+  assert.equal(restored.battle.growth.state, restored, 'reattached to the RESTORED campaign');
+  assert.equal(JSON.stringify(restored), saved, 'a round trip is byte-identical');
+  assert.equal(attachGrowth(null, restored, data), null, 'no fight, nothing to attach');
+  console.log('V3 BATTLE mid-fight save round trip OK');
+}
 }
