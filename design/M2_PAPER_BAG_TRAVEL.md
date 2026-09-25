@@ -1,7 +1,7 @@
 # M2 — Paper Bag travel: checkpoint receipt
 
 Date: 2026-09-24
-Status: **source implemented and tested on a feature branch; not merged, not published.**
+Status: **source implemented, tested and merged to `main`; not published to the hub.**
 Brief: [CLAUDE_MAP_MISSION_NEXT_STEPS.md](CLAUDE_MAP_MISSION_NEXT_STEPS.md) §2 ·
 previous checkpoint: [M1_CLEAN_INSPECTION.md](M1_CLEAN_INSPECTION.md)
 
