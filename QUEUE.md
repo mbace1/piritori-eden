@@ -17,6 +17,20 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## The two builds charge different time for a trade (found filming v4.54, 2026-09-26)
+
+- **Godot spends a block on every ledger trade** (`execute_offer` →
+  `advance_block`, labelled "— costs one block"). **The web build spends none**
+  (`transactOffer` never touches the schedule). So selling the first pack via
+  the ledger puts Godot on day 2 while the web build stays on day 1 night.
+  Predates M1/M2: it is in Godot's first port (`4744706`, 2026-08-20).
+- `MISSIONS.md` §2's table says the side hustle costs **a block per stop**, so
+  Godot is nearer the written design — but neither build has a "stop" yet,
+  because that is personal travel's time cost, which is **D002**, still open
+  (M2 deliberately made journeys free rather than invent it).
+- **Not changed in either build.** Whoever settles D002 should settle this in
+  the same decision, in the web build first, then port it.
+
 ## The hiring pool (`VERSIONS.md` v4.21) — what it left open
 
 - **No VOLUNTARY release path for a hired crew member.** `VERSIONS.md`
