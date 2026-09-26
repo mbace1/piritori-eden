@@ -8,8 +8,8 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
-  read('../v3.css?v=7'),
-  read('../js/v3/app.js?v=17'),
+  read('../v3.css?v=8'),
+  read('../js/v3/app.js?v=18'),
   read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
@@ -20,7 +20,7 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=17'));
+assert(html.includes('js/v3/app.js?v=18'));
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
 // v11: main's fighter-scale fix and C.19's import-token pass each moved
 // render3d.js to "v10" with different bytes; the merge is a third file.

@@ -15,10 +15,10 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=17');
+const app=await read('../js/v3/app.js?v=18');
 for(const id of ['cast3d-jaska-v01','cast3d-toko-v01','presenter-arvo-linde-v05']){
  assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
 }
-assert((await read('../index.html')).includes('ACT I · v4.54'));
+assert((await read('../index.html')).includes('ACT I · v4.55'));
 console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers and release marker');
 

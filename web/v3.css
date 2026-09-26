@@ -121,6 +121,13 @@ button { -webkit-tap-highlight-color: transparent; }
 .resource-strip div:nth-child(3) dd { color: var(--orange); }
 .resource-strip div:nth-child(4) dd { color: var(--cyan); }
 .top-actions { display: flex; align-items: center; gap: 5px; }
+/* The arcade's shared shell (../hub/shell.js) pins a floating HUB button at
+   the top-left of every game. Here it sat on the "2003 · AATAMI · ERA I"
+   eyebrow at every width, and the header already carries its own ⌂ link to
+   the hub (46×44, in .top-actions) — so on this page the floating one is the
+   duplicate. `html body` outranks the shell's single-class rule, which is
+   injected after this sheet. Scoped to this page; other games keep theirs. */
+html body .arcade-home { display: none; }
 .paper-button,
 .mode-nav button,
 .choice-card,
@@ -843,8 +850,11 @@ button { -webkit-tap-highlight-color: transparent; }
      reservation is whatever the buttons actually measure and stays correct if
      one is ever added or removed. */
   .resource-strip { grid-column: 1; grid-row: 2; grid-template-columns: repeat(4, 1fr); gap: 3px; padding-right: 0; }
-  .resource-strip div { padding: 5px 5px; }
-  .resource-strip dt { font-size: 10px; }
+  /* `min-width: 0` or a 1fr cell will not shrink below its text and the
+     label paints past the card: at 390px INTEL read as "INTE" and at 360px
+     every label spilled. The eyebrow tracking goes too — it costs a letter. */
+  .resource-strip div { padding: 5px 4px; min-width: 0; }
+  .resource-strip dt { font-size: 10px; letter-spacing: 0; }
   .resource-strip dd { font-size: 13px; margin-top: 2px; }
   .top-actions { position: static; grid-column: 2; grid-row: 2; align-self: stretch; }
   .mode-nav { gap: 2px; padding: 4px 4px calc(5px + var(--safe-bottom)); }
@@ -911,8 +921,26 @@ button { -webkit-tap-highlight-color: transparent; }
      which really measures 148px, and it is why INTEL was invisible on a phone.
      `.top-actions` holds a real grid cell now, so nothing needs reserving. */
   .brand-lockup .eyebrow { max-width: 170px; }
+  /* FOUR CARDS DO NOT FIT BESIDE FOUR BUTTONS HERE. The 44px floor makes
+     `.top-actions` ~190px, leaving the strip ~150px — 34px a card, so values
+     were cut ("16" for 160) at 360px whatever the spacing. On a narrow phone
+     the strip takes its own full-width row, and the wordmark (tall here
+     anyway) spans the two rows beside the day card and the buttons. */
+  .topbar { grid-template-rows: auto auto auto; }
+  .brand-lockup { grid-column: 1; grid-row: 1 / span 2; }
+  .time-card { grid-column: 2; grid-row: 1; }
+  .top-actions { grid-column: 2; grid-row: 2; }
+  .resource-strip { grid-column: 1 / -1; grid-row: 3; }
+  .brand-lockup h1 { font-size: clamp(20px, 6vw, 30px); }
   .map-node-label { font-size: 15px; }
   .map-node-label.small { font-size: 12px; }
+}
+
+@media (max-width: 340px) {
+  /* A 320px screen (first-generation iPhone SE): four buttons in a row leave
+     the wordmark ~85px and it ran under the day card. Two by two keeps every
+     button at the 44px floor and gives the wordmark its width back. */
+  .top-actions { display: grid; grid-template-columns: repeat(2, minmax(44px, auto)); gap: 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

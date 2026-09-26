@@ -157,6 +157,10 @@ jobs:
           NODE_PATH: /tmp/piritori-test/node_modules
           M2_CAPTURE_DIR: /tmp
         run: node web/test/m2-journey.cjs
+      - name: the city header fits from 320px to desktop, with the arcade shell over it
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/header-fit.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch
