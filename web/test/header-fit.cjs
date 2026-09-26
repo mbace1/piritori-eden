@@ -99,6 +99,22 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${w}px: no browser errors`, errs().length === 0, errs().join(' | '));
       await page.close();
     }
+    // A phone held sideways: the page must fit, or the command bar is cut
+    // off (body overflow is hidden) and cannot be reached by a thumb.
+    for (const vp of [{ width: 844, height: 390 }, { width: 915, height: 412 }]) {
+      const page = await browser.newPage({ viewport: vp, hasTouch: true, isMobile: true });
+      await page.goto(`${base}/web/`);
+      await page.waitForFunction(() => Boolean(window.__ptv3?.data));
+      await page.locator('#beginButton').tap();
+      await page.waitForSelector('.city-map');
+      const r = await page.evaluate(() => ({ docH: document.scrollingElement.scrollHeight, vh: innerHeight,
+        nav: document.querySelector('.mode-nav').getBoundingClientRect().bottom }));
+      ok(`${vp.width}x${vp.height}: the page fits the screen`, r.docH <= r.vh + 1, JSON.stringify(r));
+      ok(`${vp.width}x${vp.height}: the command bar is fully on screen`, r.nav <= r.vh + 1, JSON.stringify(r));
+      await page.locator('[data-mode-target="ledger"]').tap();
+      ok(`${vp.width}x${vp.height}: and answers a tap`, await page.locator('#game').getAttribute('data-mode') === 'ledger');
+      await page.close();
+    }
   } catch (error) {
     ok('unhandled header gate error', false, error.stack || error.message);
   } finally {

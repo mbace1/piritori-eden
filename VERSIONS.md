@@ -77,6 +77,23 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.56 — 2026-09-26
+
+**Lantern Noir: the city interface, lit.** The owner asked for a leap in art and readability. The direction is the owner's own shortlist of the C.16 stylized studies, 03 Lantern Noir first and 06 Ink After Dark second (`design/concepts/c16-stylized`), applied to the city interface: a dark, quiet ground, warm light only where the eye should go, one cool accent for what is yours, and large plain type. See `design/UI_LANTERN_NOIR.md`.
+
+- **Type** follows ART_BIBLE §5.1's three roles, now bundled (OFL, `web/fonts/`, 332 KB): Barlow Condensed for display, Barlow for labels, prices and body (tabular numerals), and IBM Plex Mono only for the ledger voice (dialogue, quotes, observations, battle log). Before, 65% of all text was a system monospace; the display face fell back to a thin generic sans; the narration was a default serif.
+- **Chrome** follows §5.3: panels become quiet dark backing (the torn frames are gone from them); paper faces stay on what you read and act on (choices, the day slip, tags); primary actions are lit lantern-amber. LOOK hotspots are readable objects rather than purple monospace in ornate boxes; news sources are real 44px links.
+- **Colour:** cyan means *you* (presence, your journey, focus); amber means *the way forward* (the lead, the primary action).
+- **Measured across 20 screen captures (desktop + phone):** text under 12px 329 → **0**; monospace 699 → 4 (all dialogue); mean text size 14.6 → 16.2px. The fight's name labels went from 7–9px to 12px.
+- **A phone held sideways could not reach the command bar.** `.game-shell { min-height: 540px }` is taller than a landscape phone, and with `body { overflow: hidden }` the bottom of the page, the command bar included, was cut off. Short screens now drop the floor. `header-fit.cjs` checks 844×390 and 915×412 (48 checks).
+- **New gate `web/test/readability.cjs`** (50 checks, in CI): a 12px floor; monospace only in the ledger voice; WCAG AA for every enabled text, **measured against the pixels behind it**. The page is shot again with all text transparent, because panels are gradients and paper textures and a computed background colour is a guess. The first cut read transparent ancestors as the background and reported cream paper as 1.1:1: the ruler, not the page. The control `READABILITY_QUERY=?look=classic` fails 37 checks.
+- **`?look=classic`** turns the new layer off for a side-by-side comparison. It is URL-only and never stored. `v3.css` is untouched underneath; everything new is in `web/lantern.css`.
+- Cache: `lantern.css?v=1` (new), `app.js?v=19`.
+
+### Port
+
+Godot: a presentation handoff, not a rule. Its chrome is `PiritoriChrome`, and the same moves apply: quiet panels with paper faces only on actionable things, a lit primary, cyan for presence, amber for the lead, a 12px floor, and mono only for dialogue. The fonts are already OFL and can be bundled the same way (JA keeps Noto Sans JP).
+
 ## v4.55 — 2026-09-26
 
 **The header fits, from a 320px phone to a desktop.** Three faults found by filming v4.54, none of which any gate could see:

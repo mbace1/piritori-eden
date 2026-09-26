@@ -161,6 +161,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/header-fit.cjs
+      - name: every city screen reads (12px floor, mono only for dialogue, AA against the real pixels)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/readability.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch
