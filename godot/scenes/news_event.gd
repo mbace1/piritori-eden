@@ -132,9 +132,9 @@ func _draw_presenter_placeholder(screen: Rect2) -> void:
 	draw_colored_polygon(shoulders, Color("#2b3d49"))
 
 	var note := tr("news.presenter_placeholder")
-	var nw := _font.get_string_size(note, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x
+	var nw := _font.get_string_size(note, HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX).x
 	draw_string(_font, Vector2(cx - nw * 0.5, screen.position.y + 16), note,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color("#6f8c9c"))
+		HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX, Color("#8fa9b6"))
 
 
 ## The lower third: presenter, channel and a dated source tag (§13.1).
@@ -160,7 +160,7 @@ func _draw_lower_third(ci: CanvasItem, screen: Rect2) -> void:
 		String(_news.get("channel", "")).replace("-", " ").to_upper(),
 		tr("ui.block.day"), int(_news.get("day", 0))]
 	ci.draw_string(_font, band.position + Vector2(14, 38), tag,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("#c8a24a"))
+		HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX, Color("#c8a24a"))
 
 
 ## Scanline roll and analogue softness — restrained, over the screen only.
@@ -211,7 +211,9 @@ func _build() -> void:
 	# What Arvo says on air, in his own authored words.
 	var copy := String(_news.get("arvo_copy", ""))
 	if copy != "":
-		var l := _label("“%s”" % copy, 17, MapStyle.TITLE_TEXT)
+		# A quote is the ledger voice (web v4.56 `.news-copy blockquote`).
+		var l := _label("“%s”" % copy, 16, MapStyle.TITLE_TEXT)
+		l.theme_type_variation = PiritoriChrome.LEDGER
 		col.add_child(l)
 
 	# §13.3: each status is WRITTEN, not merely coloured.
@@ -230,6 +232,8 @@ func _build() -> void:
 	btn.text = tr("news.continue")
 	btn.custom_minimum_size = Vector2(0, 48)
 	btn.add_theme_font_size_override("font_size", 15)
+	# The one way on from a bulletin, so it is the lit primary.
+	btn.theme_type_variation = PiritoriChrome.LIT
 	btn.pressed.connect(_dismiss)
 	col.add_child(btn)
 
@@ -263,7 +267,7 @@ func _dismiss() -> void:
 func _label(text: String, px: int, col: Color) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", px)
-	l.add_theme_color_override("font_color", col)
+	l.add_theme_font_size_override("font_size", maxi(px, PiritoriFonts.FLOOR_PX))
+	l.add_theme_color_override("font_color", PiritoriChrome.readable(col, PiritoriPalette.PANEL))
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	return l

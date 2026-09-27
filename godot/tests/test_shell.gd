@@ -43,7 +43,9 @@ func _ready() -> void:
 
 	await _test_opens_on_map()
 	await _test_reflow()
+	await _test_next_step_opening()
 	await _test_first_purchase_through_ui()
+	await _test_next_step_through_ui()
 	await _test_market_through_ui()
 	await _test_language_switch()
 	_test_debug_entry_parsing()
@@ -524,7 +526,137 @@ func _press(b: Button) -> void:
 	await get_tree().process_frame
 
 
+## The rail's lit primaries (PiritoriChrome.LIT), live ones only.
+func _rail_lit() -> Array:
+	return _all_nodes(_shell._rail).filter(func(n): return n is Button \
+		and n.is_visible_in_tree() and not n.is_queued_for_deletion() and PiritoriChrome.is_lit(n))
+
+
+## Exactly one lit action on the rail, it is the step named, and it is actually
+## PAINTED lit — the theme resolves the variation to the lantern face, which is
+## the thing a player sees. Returns the button, or null.
+func _one_lit(step: String, fragment: String) -> Button:
+	var lit := _rail_lit()
+	var names := lit.map(func(b): return b.text)
+	check("  exactly one lit action on the rail", lit.size() == 1, str(names))
+	if lit.size() != 1:
+		return null
+	var b: Button = lit[0]
+	check("  it is %s (%s)" % [step, fragment],
+		String(b.get_meta("next_step", "")) == step and fragment.to_lower() in b.text.to_lower(), b.text)
+	check("  and it wears the lantern face",
+		b.get_theme_stylebox("normal") == PiritoriChrome.lit()
+		and b.get_theme_color("font_color") == PiritoriPalette.LANTERN_INK)
+	check("  and it is the LAST thing on the rail", _rail_last_button() == b)
+	return b
+
+
+func _rail_last_button() -> Button:
+	var last: Button = null
+	for n in _all_nodes(_shell._rail):
+		if n is Button and n.is_visible_in_tree() and not n.is_queued_for_deletion():
+			last = n
+	return last
+
+
+func _cash_delta_text() -> String:
+	for n in _all_nodes(_shell._status):
+		if n is Label and n.name == "CashDelta" and not n.is_queued_for_deletion():
+			return n.text
+	return ""
+
+
+## ART_BIBLE §17's contrast test has a size half: nothing under 12px at the
+## 1280x720 design size (web v4.56 took 329 such texts to 0).
+func _check_type_floor(where: String) -> void:
+	var small: Array = []
+	for n in _all_nodes(_shell):
+		if (n is Label or n is Button) and n.is_visible_in_tree() and not n.is_queued_for_deletion():
+			var t: String = n.text
+			if t.strip_edges() == "":
+				continue
+			var px: int = n.get_theme_font_size("font_size")
+			if px < PiritoriFonts.FLOOR_PX:
+				small.append("%s@%d" % [t.substr(0, 24), px])
+	check("%s: no text under %dpx" % [where, PiritoriFonts.FLOOR_PX], small.is_empty(), str(small))
+
+
 # ── tests ──────────────────────────────────────────────────────────────────
+
+## Web v4.57: the city rail ENDS with exactly one lit action derived from state.
+## At the lead on day one, that is ENTER.
+func _test_next_step_opening() -> void:
+	print("\nnext step: the opening (web v4.57)")
+	var maps := _all_nodes(_shell).filter(
+		func(n): return n.get_script() != null \
+			and String(n.get_script().resource_path).ends_with("city_map.gd"))
+	if maps.size() == 1:
+		maps[0].select("piritori")
+		await get_tree().process_frame
+	_one_lit("enter", "ENTER · FIRST PURCHASE")
+	var unlit := _find_button("▶ First purchase")
+	check("  the rail's own entry stays, unlit", unlit != null and not PiritoriChrome.is_lit(unlit))
+	_check_type_floor("the map")
+
+
+## buy → TRAVEL TO SILTASAARI → TRAVEL · SILTASAARI → ENTER, pressed as the lit
+## button each time, the way web/test/next-step.cjs walks it.
+func _test_next_step_through_ui() -> void:
+	print("\nnext step: buy → travel to → travel → enter (web v4.57)")
+	var maps := _all_nodes(_shell).filter(
+		func(n): return n.get_script() != null \
+			and String(n.get_script().resource_path).ends_with("city_map.gd"))
+	if maps.size() != 1:
+		check("city map is mounted", false)
+		return
+	var saved := GameState.to_dict()
+	await _next_step_walk(maps[0])
+	# Setup, not action (AGENTS.md §4): put the campaign back where the next
+	# gate expects it, with Aatami at Piritori — even if the walk stopped early.
+	GameState.from_dict(saved)
+	_shell._show_city()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check("restored for the next gate", GameState.current_anchor_id == "piritori")
+
+
+func _next_step_walk(map: Node) -> void:
+	var maps := [map]
+	var snapshot := JSON.stringify(GameState.to_dict())
+	check("after the buy, Aatami is at Piritori and the lead is Siltasaari",
+		GameState.current_anchor_id == "piritori" and GameState.story_lead_id() == "siltasaari")
+
+	var plan := _one_lit("plan", "TRAVEL TO SILTASAARI")
+	if plan == null:
+		return
+	await _press(plan)
+	check("TRAVEL TO plans the journey on the map", maps[0].journey_path.size() >= 2)
+	check("  and looks at the lead", maps[0].inspected() == "siltasaari")
+	check("  and planning through the bar changes nothing",
+		JSON.stringify(GameState.to_dict()) == snapshot)
+	var go := _one_lit("commit", "TRAVEL · SILTASAARI")
+	var side := _find_button("TRAVEL")
+	check("  the rail's own TRAVEL stays, unlit", side != null and side != go and not PiritoriChrome.is_lit(side),
+		side.text if side else "none")
+	if go == null:
+		return
+	var cash := GameState.cash_eur
+	var block := GameState.block_index
+	go.pressed.emit()
+	go.pressed.emit()   # a double press: the second finds a stale step, does nothing
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check("TRAVEL arrives at Siltasaari, once", GameState.current_anchor_id == "siltasaari")
+	check("  arriving is free (D002): same cash, same block",
+		GameState.cash_eur == cash and GameState.block_index == block)
+	var enter := _one_lit("enter", "ENTER · STAFFED BANK")
+	if enter == null:
+		return
+	await _press(enter)
+	check("ENTER opens the encounter at the lead",
+		_find_button(tr("ui.leave_to_map")) != null and _rail_lit().is_empty(),
+		"buttons: " + str(_buttons().map(func(b): return _button_text(b))))
+	_check_type_floor("the encounter")
 
 func _test_opens_on_map() -> void:
 	print("\nopens on the Kallio map (§9 item 1)")
@@ -603,6 +735,8 @@ func _test_first_purchase_through_ui() -> void:
 
 	check("cash fell by the authored €45", GameState.cash_eur == before - 45,
 		"(%d -> %d)" % [before, GameState.cash_eur])
+	check("  and the header names the change: −€45", _cash_delta_text() == "−€45",
+		"got '%s'" % _cash_delta_text())
 	check("a pack is in stock", int(GameState.stock.get("piri", 0)) == 1)
 	check("returned to the map after committing",
 		_find_button("Back to the map") == null)
@@ -708,4 +842,13 @@ func _test_market_through_ui() -> void:
 	await _press(sell)
 	check("cash rose by the authored €68", GameState.cash_eur == before + 68,
 		"(%d -> %d)" % [before, GameState.cash_eur])
+	# Web v4.57's gate: "€183 and +€68 at the sale". The count is a tween, so
+	# wait it out; at rest the chip must read exactly the state.
+	check("  and the header names the change: +€68", _cash_delta_text() == "+€68",
+		"got '%s'" % _cash_delta_text())
+	await get_tree().create_timer(0.9).timeout
+	check("  and at rest the chip reads the state's €183",
+		_shell._cash_label != null and _shell._cash_label.text == "€ %s" % _shell._thousands(GameState.cash_eur)
+		and GameState.cash_eur == 183, _shell._cash_label.text if _shell._cash_label else "no chip")
+	_check_type_floor("the ledger")
 	check("the run is profitable against the €45 buy", GameState.cash_eur > 160 - 45)

@@ -91,10 +91,13 @@ func _build_text_layer() -> void:
 	card_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_card.add_child(card_col)
 
-	_copy = _make_label(17, PiritoriChrome.plate_ink())
+	# Narration in the body voice (web v4.56 `.encounter-opening`, 18px).
+	_copy = _make_label(18, PiritoriChrome.plate_ink())
 	card_col.add_child(_copy)
 
 	_inspect = _make_label(15, Color("#8a3d12"))  ## warm rust ink, matches the ring
+	# An observation is the ledger voice: mono, and only here (ART_BIBLE §5.1).
+	_inspect.theme_type_variation = PiritoriChrome.LEDGER
 	_inspect.visible = false
 	card_col.add_child(_inspect)
 
@@ -183,8 +186,8 @@ func _refit_card() -> void:
 	var h := font.get_multiline_string_size(_copy.text, HORIZONTAL_ALIGNMENT_LEFT,
 		_copy.size.x, font_size).y
 	if _inspect.visible and _inspect.text != "":
-		h += 8.0 + font.get_multiline_string_size(_inspect.text, HORIZONTAL_ALIGNMENT_LEFT,
-			_inspect.size.x, _copy.get_theme_font_size("font_size")).y
+		h += 8.0 + _inspect.get_theme_font("font").get_multiline_string_size(_inspect.text,
+			HORIZONTAL_ALIGNMENT_LEFT, _inspect.size.x, _inspect.get_theme_font_size("font_size")).y
 	_copy.custom_minimum_size.y = h
 
 

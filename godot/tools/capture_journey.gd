@@ -1,7 +1,7 @@
 extends Node
 ## Films the M1/M2 journey in the port, through the shell's own buttons:
 ## first purchase -> the lead moves -> inspect Siltasaari -> TRAVEL HERE ->
-## CANCEL -> TRAVEL HERE -> TRAVEL -> the ledger -> sell.
+## CANCEL -> the lit next step (TRAVEL TO) -> the lit TRAVEL -> the ledger -> sell.
 ## Stills at each step go to PIRITORI_SHOT_DIR. For a video, run it under the
 ## movie writer (fixed fps keeps every wait the same length on any machine):
 ##   xvfb-run godot --path . --rendering-driver opengl3 --fixed-fps 30 \
@@ -43,21 +43,22 @@ func _ready() -> void:
 	await _say("The first bag: buy one pack for €45.", 60, "first-bag")
 	_press("Buy one pack")
 	await _frames(20)
-	await _say("€160 → €115. The story's lead moves to Siltasaari; Aatami stays at Piritori.", 90, "lead-moved")
+	await _say("€160 → €115. The lead moves to Siltasaari; Aatami stays. The rail ends with one lit step: TRAVEL TO SILTASAARI.", 105, "lead-moved")
 	_map.select("siltasaari")
-	await _say("Tapping Siltasaari only INSPECTS it: no market from over here.", 90, "inspecting")
+	await _say("Tapping Siltasaari only INSPECTS it: no market from over here. TRAVEL HERE is the same act, unlit.", 90, "inspecting")
 	_press("TRAVEL HERE")
 	await _say("TRAVEL HERE: the path is drawn and the cost is stated (none yet — D002 is open).", 105, "journey-plan")
 	_press("CANCEL")
 	await _say("CANCEL throws the plan away; the campaign is untouched.", 60, "")
-	_press("TRAVEL HERE")
-	await _frames(20)
-	_press("TRAVEL")
-	await _say("TRAVEL: Aatami arrives at Siltasaari — same block, same €115.", 90, "arrived")
+	_press_lit()
+	await _say("The lit step plans the same journey. Now it reads TRAVEL · SILTASAARI.", 90, "next-step-plan")
+	_press_lit()
+	await _say("TRAVEL: Aatami arrives — same block, same €115. The lit step is now ENTER.", 90, "arrived")
 	_press("Market ledger")
 	await _say("Standing there, the ledger's sale is live.", 75, "ledger")
 	_press("Sell for")
-	await _say("€115 → €183: one €23 profit.", 90, "sold")
+	await _say("€115 → €183: the header names the change, +€68.", 40, "sold")
+	await _say("At rest the number is exactly the state's.", 80, "sold-rest")
 	get_tree().quit(0)
 
 
@@ -106,6 +107,16 @@ func _press(fragment: String) -> void:
 			n.pressed.emit()
 			return
 	push_error("capture_journey: no button '%s'" % fragment)
+	get_tree().quit(1)
+
+
+## The one lit primary on screen (PiritoriChrome.LIT) — the next step.
+func _press_lit() -> void:
+	for n in _all(_shell):
+		if n is Button and n.is_visible_in_tree() and PiritoriChrome.is_lit(n):
+			n.pressed.emit()
+			return
+	push_error("capture_journey: no lit button")
 	get_tree().quit(1)
 
 

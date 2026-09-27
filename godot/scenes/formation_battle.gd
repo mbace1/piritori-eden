@@ -1073,11 +1073,11 @@ func _draw_unit(f: Fighter) -> void:
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 12, MapStyle.TITLE_TEXT)
 	if f.guard > 0:
 		_board.draw_string(_font, Vector2(pos.x + 8, name_y), "G%d" % f.guard,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.PARK)
+			HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX, MapStyle.PARK)
 	var st := _status_word(f)
 	if st != "":
 		_board.draw_string(_font, Vector2(pos.x - bw * 0.5, name_y + 13), st,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.METRO)
+			HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX, MapStyle.METRO)
 
 
 func _initials(name: String) -> String:
@@ -1893,8 +1893,9 @@ func _label(text: String, px: int, col: Color, scale: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
 	var s := _text_scale() if scale else 1.0
-	l.add_theme_font_size_override("font_size", int(round(float(px) * s)))
-	l.add_theme_color_override("font_color", col)
+	# The 12px floor (web v4.56 raised the fight's labels from 7–9px to 12).
+	l.add_theme_font_size_override("font_size", maxi(int(round(float(px) * s)), PiritoriFonts.FLOOR_PX))
+	l.add_theme_color_override("font_color", PiritoriChrome.readable(col, PiritoriPalette.PANEL))
 	return l
 
 
@@ -1920,6 +1921,6 @@ func _action_btn(text: String, accent: Color, handler: Callable) -> Button:
 ## the chrome's default margins pushed the console 13px off the bottom of a
 ## 720-high viewport — caught by the battle_ui gate, which is exactly the kind
 ## of thing it is for.
-func _panel(_bg: Color, top: int, bottom: int) -> StyleBoxTexture:
+func _panel(_bg: Color, top: int, bottom: int) -> StyleBox:
 	return PiritoriChrome.margins(
 		PiritoriChrome.panel(PiritoriChrome.RULE, top > 0, bottom > 0), 0, 0)
