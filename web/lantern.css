@@ -403,6 +403,9 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
 /* Money moves (v4.57): the cash card pulses and names the change. */
 .res-cash { position: relative; }
 .res-cash.cash-moved { animation: cashPulse .9s ease-out; }
+/* The pill names the currency itself, and on a phone it sits over the "€"
+   label, so the label steps aside while the pill is up (readability, CI). */
+.res-cash:has(.cash-delta) dt { visibility: hidden; }
 @keyframes cashPulse { 0% { box-shadow: 0 0 0 0 rgba(242, 164, 76, .55); } 100% { box-shadow: 0 0 0 10px rgba(242, 164, 76, 0); } }
 .cash-delta {
   position: absolute; right: 6px; top: 4px;

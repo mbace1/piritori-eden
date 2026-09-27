@@ -204,6 +204,10 @@ function renderCash() {
   card.insertAdjacentHTML('beforeend', `<span class="cash-delta ${delta > 0 ? 'up' : 'down'}" aria-hidden="true">${delta > 0 ? '+' : '−'}€${fmt(Math.abs(delta))}</span>`);
   card.classList.remove('cash-moved'); void card.offsetWidth; card.classList.add('cash-moved');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pill = card.querySelector('.cash-delta');
+  const drop = () => pill.remove();
+  pill.addEventListener('animationend', drop, { once: true });
+  if (reduce) setTimeout(drop, 2400);
   if (reduce) { el.textContent = Number(to).toLocaleString('fi-FI', { maximumFractionDigits: 2 }); return; }
   const t0 = performance.now(), dur = 650;
   const step = now => {
