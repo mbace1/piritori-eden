@@ -90,7 +90,7 @@ async function shoot(label, width, height, dpr, setup, name) {
     if (/Failed to load resource/.test(m.text())) return;
     errors.push(`${name}: ${m.text().slice(0, 160)}`);
   });
-  await page.goto(`http://127.0.0.1:${port}/web/index.html`, { waitUntil: 'load' });
+  await page.goto(`http://127.0.0.1:${port}/web/index.html?skip`, { waitUntil: 'load' });
   await page.locator('#beginButton').click();
   await page.waitForTimeout(300);
   if (setup) await setup(page);
