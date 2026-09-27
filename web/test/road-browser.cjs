@@ -68,7 +68,7 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const page = await browser.newPage({ viewport: vp, hasTouch: touch, isMobile: touch });
       const errors = watchErrors(page);
-      await page.goto(`${base}/web/`);
+      await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.road?.events?.length));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
       // FIXTURE: story block 2, three journeys since the last event — the

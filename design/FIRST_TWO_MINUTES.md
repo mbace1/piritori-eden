@@ -69,12 +69,10 @@ through the bar changes nothing and arriving is free (D002).
 
 ## Still open against the target
 
-- **Sound.** The first two minutes are silent. A tram bell, the till and
-  street rain would do more for "a real place at night" than any pixel. There
-  is no audio system in the city build yet.
-- **The opening beat.** Begin drops you straight on the map. A 5–10 second
-  arrival (the tram pulling into Piritori, Aatami stepping off) would sell
-  both the place and "you are here" before the first tap.
+- ~~**Sound.**~~ Shipped in v4.59 (`sound.js`): rain, the hum, a far tram
+  bell, the till, steps and the road's sting, with one mute.
+- ~~**The opening beat.**~~ Shipped in v4.59: the 3 pulls into Piritori
+  and Aatami steps off, skippable from frame one.
 - ~~**Arrival and transit events**~~ — shipped in v4.58 (`road.js`): every
   third or fourth journey from story block 2, a surprise, a bit of time on
   the clock, low-end hustle first.

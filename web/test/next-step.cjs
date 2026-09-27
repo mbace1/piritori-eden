@@ -78,7 +78,7 @@ server.listen(0, '127.0.0.1', async () => {
         ok(`${name} ${label}: exactly one lit action in view`, lit.length === 1, JSON.stringify(lit));
         ok(`${name} ${label}: and it is the next step`, await page.locator('[data-action="next-step"]').isVisible() && lit[0] === (await page.locator('[data-action="next-step"]').textContent()).trim(), JSON.stringify(lit));
       };
-      await page.goto(`${base}/web/`);
+      await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data));
       await page.locator('#beginButton').click();
       await onlyNext('day 1, at the lead');

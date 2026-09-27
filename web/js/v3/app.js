@@ -15,7 +15,8 @@ import {
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
 } from './state.js?v=7';
-import { createPauseMenu } from './pause.js?v=1';
+import { createPauseMenu } from './pause.js?v=2';
+import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
 import { previewJourney, commitJourney } from './journey.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
@@ -182,6 +183,55 @@ function presentAtLead() { const lead = storyLeadId(); return Boolean(lead) && s
 /** Areas Aatami can travel to. Sealed, landmark and the isolated training
  *  fixture are for looking at (training keeps its own button). */
 function canTravelTo(anchor) { return anchor?.sliceState === 'active'; }
+/**
+ * The arrival (v4.59, owner answer 8: "sure, setting up"). A new run opens on
+ * the number 3 pulling into Piritori in the rain and Aatami stepping off,
+ * before the first tap on the map. Skippable from frame one by any tap or
+ * key, and it goes when it is done either way. Under reduced motion it is
+ * one still frame with the same lines. It never touches state.
+ */
+function playOpening() {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lines = [
+    'Kallio, 2003. Night, and raining.',
+    'The 3 comes down Helsinginkatu and stops at Piritori.',
+    `Aatami steps off with €${Math.round(state.cash)}, ${Math.round(state.markka)} mk and a debt of €${Math.round(state.debt)}.`,
+  ];
+  const veil = document.createElement('div');
+  veil.className = `opening${reduce ? ' still' : ''}`;
+  veil.id = 'opening';
+  veil.setAttribute('role', 'dialog');
+  veil.setAttribute('aria-label', 'Arrival');
+  veil.innerHTML = `<div class="opening-scene" aria-hidden="true">
+      <i class="op-sky"></i><i class="op-block a"></i><i class="op-block b"></i><i class="op-block c"></i>
+      <i class="op-rain"></i><i class="op-wire"></i>
+      <div class="op-stop"><b>PIRITORI</b><span>3</span></div>
+      <div class="op-tram"><i class="op-window"></i><i class="op-window"></i><i class="op-window"></i><i class="op-door"></i><b>3</b></div>
+      <i class="op-figure"></i><i class="op-street"></i>
+    </div>
+    <div class="opening-lines" aria-live="polite">${lines.map((l, i) => `<p style="--i:${i}">${esc(l)}</p>`).join('')}</div>
+    <button class="paper-button opening-skip" type="button">SKIP ›</button>`;
+  document.body.append(veil);
+  // Focus leaves the Begin button, or the Space that skips (keydown) would
+  // press Begin again on its keyup and start a second arrival.
+  veil.querySelector('.opening-skip').focus();
+  arrival();
+  return new Promise(resolve => {
+    let done = false;
+    const finish = event => {
+      if (done) return; done = true;
+      event?.preventDefault?.();
+      clearTimeout(timer);
+      window.removeEventListener('keydown', finish, true);
+      veil.classList.add('leaving');
+      setTimeout(() => { veil.remove(); resolve(); }, reduce ? 0 : 450);
+    };
+    const timer = setTimeout(finish, reduce ? 5000 : 8200);
+    veil.addEventListener('pointerup', finish);
+    window.addEventListener('keydown', finish, true);
+  });
+}
+
 function logToast(message) {
   const toast = $('toast');
   clearTimeout(toastTimer);
@@ -204,6 +254,7 @@ function renderCash() {
   if (from === null || from === to) { el.textContent = Number(to).toLocaleString('fi-FI', { maximumFractionDigits: 2 }); return; }
   const card = el.closest('.res-cash');
   const delta = to - from;
+  till(delta);
   card.querySelector('.cash-delta')?.remove();
   card.insertAdjacentHTML('beforeend', `<span class="cash-delta ${delta > 0 ? 'up' : 'down'}" aria-hidden="true">${delta > 0 ? '+' : '−'}€${fmt(Math.abs(delta))}</span>`);
   card.classList.remove('cash-moved'); void card.offsetWidth; card.classList.add('cash-moved');
@@ -482,7 +533,8 @@ function commitPlannedJourney() {
   if (!result.ok) { logToast(JOURNEY_REFUSAL[result.reason] ?? result.reason); render(); return; }
   inspectAnchor(result.destination);
   // A surprise (owner, answer 6): the preview never forecasts it.
-  if (rollRoad(state, data, roadEvents, result)) state.mode = 'road';
+  steps();
+  if (rollRoad(state, data, roadEvents, result)) { state.mode = 'road'; setTimeout(sting, 900); }
   else logToast(`Aatami arrives at ${data.anchors.get(result.destination)?.label}.`);
   persist(); render();
 }
@@ -1725,14 +1777,19 @@ async function boot() {
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     $('resumeButton').hidden = !hasSave;
     $('beginButton').addEventListener('click', () => {
+      wakeSound();
       if (hasSave) state = createState(data.content);
       resetInspection();
       persist();
       $('splash').hidden = true;
       render();
-      $('modeRoot').focus();
+      // The arrival (owner, answer 8): a new run opens on the tram pulling in.
+      // A deep link or a gate asks for `?skip`, the house convention.
+      if (new URLSearchParams(location.search).has('skip')) $('modeRoot').focus();
+      else playOpening().then(() => $('modeRoot').focus());
     });
     $('resumeButton').addEventListener('click', () => {
+      wakeSound();
       resetInspection();
       $('splash').hidden = true;
       render();
@@ -1823,8 +1880,9 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.58',
+      version: 'v4.59',
       jump: jumpTo,
+      sound: { get: soundOn, set: setSound },
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
     // Esc pauses from anywhere. The menu handles Esc itself once it is open,
@@ -1875,6 +1933,7 @@ async function boot() {
       get data() { return data; },
       get state() { return state; },
       get road() { return roadEvents; },
+      get sound() { return soundState(); },
       debug: {
         setState(next) { state = next; attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id) { startBattle(id); persist(); render(); },

@@ -430,3 +430,82 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
   padding: 3px 6px; border: 1px solid rgba(107, 50, 8, .45); border-radius: 3px;
 }
 .choice-card:disabled .road-time { color: inherit; }
+
+/* The arrival (v4.59): the 3 pulls into Piritori in the rain. Drawn in CSS,
+   no image, in the city's own lantern-and-cyan night. */
+.opening { position: fixed; inset: 0; z-index: 60; background: #07090c; overflow: hidden; cursor: pointer;
+  display: grid; grid-template-rows: 1fr auto; animation: opIn .5s ease-out; }
+.opening.leaving { opacity: 0; transition: opacity .45s ease; }
+@keyframes opIn { from { opacity: 0; } }
+.opening-scene { position: relative; overflow: hidden; }
+.opening-scene i, .opening-scene div { position: absolute; display: block; }
+.op-sky { inset: 0; background: radial-gradient(ellipse at 70% 110%, rgba(242,164,76,.22), transparent 55%), linear-gradient(#0a0e14, #111820 70%, #1a1a18); }
+.op-block { bottom: 22%; background: #0d1116; box-shadow: inset 0 0 0 1px rgba(98,212,223,.06); }
+.op-block.a { left: -2%; width: 34%; height: 58%; }
+.op-block.b { left: 30%; width: 22%; height: 44%; background: #10151b; }
+.op-block.c { right: -3%; width: 38%; height: 64%; }
+.op-block::after { content: ''; position: absolute; inset: 12% 10% 30%; background:
+  radial-gradient(circle, rgba(242,164,76,.75) 0 2px, transparent 3px) 0 0 / 26px 30px; opacity: .55; }
+.op-wire { left: 0; right: 0; top: 30%; height: 1px; background: rgba(160,180,190,.35); }
+.op-street { left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(#1c1f22, #0b0d10);
+  box-shadow: 0 -1px 0 rgba(242,164,76,.25); }
+.op-street::after { content: ''; position: absolute; left: 0; right: 0; top: 28%; height: 3px;
+  background: repeating-linear-gradient(90deg, rgba(200,205,210,.35) 0 40px, transparent 40px 70px); }
+.op-rain { inset: -20% 0 0; background: repeating-linear-gradient(104deg, transparent 0 11px, rgba(170,200,215,.13) 11px 12px);
+  animation: opRain .6s linear infinite; }
+@keyframes opRain { to { transform: translate(-12px, 60px); } }
+.op-stop { left: 18%; bottom: 22%; width: 6px; height: 34%; background: #5d646a; }
+.op-stop b { position: absolute; top: -2px; left: -44px; width: 94px; padding: 5px 0; text-align: center;
+  font: 700 13px/1 var(--display); letter-spacing: .12em; color: #10151b; background: #e8e2d0; border-radius: 2px; }
+.op-stop span { position: absolute; top: 26px; left: -9px; width: 24px; height: 24px; border-radius: 50%;
+  font: 700 14px/24px var(--display); text-align: center; color: #fff; background: #1f7a3f; }
+.op-tram { bottom: 17%; left: 34%; width: min(58vw, 520px); height: 26%; min-height: 90px;
+  background: linear-gradient(#2c8a4a 0 62%, #e3dcc6 62% 70%, #2c8a4a 70%); border-radius: 14px 14px 4px 4px;
+  box-shadow: 0 0 60px rgba(242,164,76,.25); animation: opTram 3.2s cubic-bezier(.12,.7,.25,1) both; }
+@keyframes opTram { from { transform: translateX(110vw); } }
+.op-tram b { position: absolute; top: 8px; right: 14px; font: 700 20px/1 var(--display); color: #f2a44c; }
+.op-window { top: 16%; width: 16%; height: 36%; background: linear-gradient(#f2c27a, #d98f3a); opacity: .85; border-radius: 3px; }
+.op-window:nth-child(1) { left: 6%; } .op-window:nth-child(2) { left: 26%; } .op-window:nth-child(3) { left: 66%; }
+.op-door { left: 46%; top: 12%; width: 13%; height: 82%; background: #121416; border-radius: 2px;
+  box-shadow: inset 0 0 0 2px #1a5c30; animation: opDoor .5s ease-out 3.3s both; }
+@keyframes opDoor { from { background: #2c8a4a; } }
+/* Aatami: in FRONT of the street, feet on the pavement, lit by the tram's
+   windows on one side and rimmed cold on the other — a black figure on a
+   dark scene is not there at all (the arcade's cover rule). */
+.op-figure { z-index: 2; bottom: 12%; left: calc(34% + min(58vw, 520px) * .5); width: clamp(20px, 2.4vw, 30px); height: clamp(62px, 8vw, 92px);
+  background: linear-gradient(90deg, #2a2320 0 45%, #14181c 45%); border-radius: 40% 40% 3px 3px;
+  box-shadow: -2px 0 0 #f2a44c, 2px 0 0 rgba(98,212,223,.8), 0 10px 18px -6px rgba(0,0,0,.9);
+  animation: opStep 1.6s ease-out 3.8s both; }
+.op-figure::before { content: ''; position: absolute; top: -34%; left: 12%; width: 76%; aspect-ratio: 1; border-radius: 50%;
+  background: linear-gradient(90deg, #6b4a36 0 45%, #2a2320 45%);
+  box-shadow: -2px 0 0 #f2a44c, 2px 0 0 rgba(98,212,223,.8); }
+.op-figure::after { content: ''; position: absolute; left: -40%; right: -40%; bottom: -6px; height: 8px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(242,164,76,.35), transparent 70%); }
+@keyframes opStep { from { opacity: 0; transform: translateX(0); } 20% { opacity: 1; } to { opacity: 1; transform: translateX(-9vw); } }
+.opening-lines { padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); max-width: 760px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.opening-lines p { margin: 0 0 8px; font: 500 17px/1.45 var(--body); color: #efe7d4;
+  animation: opLine .8s ease-out both; animation-delay: calc(.6s + var(--i) * 2.1s); }
+.opening-lines p:first-child { font: 700 22px/1.2 var(--display); letter-spacing: .04em; color: var(--lantern); }
+@keyframes opLine { from { opacity: 0; transform: translateY(6px); } }
+.opening-skip { position: absolute; top: calc(12px + env(safe-area-inset-top)); right: 12px; min-height: 44px; }
+.opening.still *, .opening.still *::before, .opening.still *::after { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .opening *, .opening *::before, .opening *::after { animation: none !important; } }
+@media (max-height: 560px) {
+  .opening-lines { padding: 8px 20px calc(8px + env(safe-area-inset-bottom)); }
+  .opening-lines p { font-size: 14px; margin-bottom: 3px; }
+  .opening-lines p:first-child { font-size: 18px; }
+}
+
+/* A landscape phone (761-980px wide) had a 920px header: v3.css's column
+   floors (220 + 300) plus the day card and four 44px buttons do not fit in
+   844px, so the whole page scrolled sideways and a phone zoomed it out. The
+   floors go; the wordmark and the cards shrink instead (v4.59). */
+@media (min-width: 761px) and (max-width: 980px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.35fr) auto; gap: 8px; padding: 8px 10px; }
+  .brand-lockup h1 { font-size: clamp(20px, 2.9vw, 28px); white-space: nowrap; }
+  .brand-lockup .eyebrow { white-space: nowrap; overflow: hidden; text-overflow: clip; }
+  .resource-strip { min-width: 0; }
+  .resource-strip div { min-width: 0; padding: 5px 6px; }
+  .resource-strip dd { font-size: 16px; }
+  .time-card { padding: 6px 9px; }
+}

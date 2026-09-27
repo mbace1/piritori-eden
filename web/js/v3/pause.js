@@ -21,7 +21,7 @@ const BUILD_LABEL = {
   both: { tag: 'BOTH', hint: 'jump here, then check the same screen in the port' },
 };
 
-export function createPauseMenu({ root, version, jump, onClose }) {
+export function createPauseMenu({ root, version, jump, onClose, sound }) {
   let view = 'menu';        // 'menu' | 'tests'
   let showDone = false;
   let lastFocus = null;
@@ -50,6 +50,7 @@ export function createPauseMenu({ root, version, jump, onClose }) {
       <h2 class="section-title">PIRITORI <span aria-hidden="true">→</span> EDEN</h2>
       <div class="pause-actions">
         <button class="paper-button primary" data-pause="resume" type="button">RESUME</button>
+        ${sound ? `<button class="paper-button" data-pause="sound" type="button" aria-pressed="${sound.get()}">SOUND · ${sound.get() ? 'ON' : 'OFF'}</button>` : ''}
         <button class="paper-button" data-pause="tests" type="button">
           THINGS TO TEST <span class="pause-count">${open.length}</span>
         </button>
@@ -142,6 +143,7 @@ export function createPauseMenu({ root, version, jump, onClose }) {
     const id = button.dataset.test;
     if (what === 'resume') close();
     else if (what === 'tests') { view = 'tests'; render(); }
+    else if (what === 'sound') { sound?.set(!sound.get()); render(); }
     else if (what === 'menu') { view = 'menu'; render(); }
     else if (what === 'toggle-done') { showDone = !showDone; render(); }
     else if (what === 'approve') { approve(id, version); render(); }

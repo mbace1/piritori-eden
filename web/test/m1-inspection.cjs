@@ -62,7 +62,7 @@ const S = page => page.evaluate(() => structuredClone(window.__ptv3.state));
 const panel = page => page.locator('.inspect-panel');
 const attr = async (page, name) => (await panel(page).count()) ? panel(page).getAttribute(name) : null;
 async function boot(page, base, { resume = false } = {}) {
-  await page.goto(`${base}/web/`);
+  await page.goto(`${base}/web/?skip`);
   await page.waitForFunction(() => Boolean(window.__ptv3?.data));
   await page.locator(resume ? '#resumeButton' : '#beginButton').click();
   await page.waitForSelector('.city-map');
@@ -281,7 +281,7 @@ server.listen(0, '127.0.0.1', async () => {
       await tp.screenshot({ path: path.join(process.env.M1_CAPTURE_DIR || '/tmp', `m1-${name}.png`) });
       // Begin again over the save: a new campaign starts at Piritori with no
       // leftover cursor.
-      await tp.goto(`${base}/web/`); await tp.waitForFunction(() => Boolean(window.__ptv3?.data));
+      await tp.goto(`${base}/web/?skip`); await tp.waitForFunction(() => Boolean(window.__ptv3?.data));
       await tp.locator('#beginButton').tap(); await tp.waitForSelector('.city-map');
       ok(`8 ${name}: Begin over a save starts clean at Piritori`, (await S(tp)).selectedAnchor === 'piritori'
         && await attr(tp, 'data-inspected') === 'piritori');

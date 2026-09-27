@@ -77,6 +77,19 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.59 — 2026-09-27
+
+**Sound, and the arrival.** Owner, 2026-09-27: answer 7, "yes" to sound (a tram bell, the till, street rain); answer 8, "sure, setting up" for an arrival when a run begins.
+
+- `web/js/v3/sound.js`. Everything is synthesised; there are no audio files. Every voice goes through one master gain. The bed is rain and the city's low hum, with a distant tram bell every 22–48 s. There are four sounds on top of it: the till when cash moves (a bright ring when money comes in, a lower one when it goes out), footsteps on a journey, a low sting when the road stops Aatami, and brakes then the bell for the arrival. Sound wakes on Begin or Resume; nothing plays before a tap. The pause menu has a **SOUND · ON/OFF** switch. It is remembered, and OFF closes the whole audio graph rather than turning it down. A browser without WebAudio gets silence, never an error.
+- **The arrival.** A new run opens on the 3 tram pulling into Piritori in the rain, drawn in CSS with no image. The doors open and Aatami steps off, lit by the tram windows on one side with a cold rim on the other. Three lines read "Kallio, 2003. Night, and raining." / "The 3 comes down Helsinginkatu and stops at Piritori." / "Aatami steps off with €160, 300 mk and a debt of €350" (read from the save). SKIP, any tap or any key ends it at once, and it ends by itself after about 8 s. It plays neither on Resume nor with `?skip` (Eeri's convention, which the gates use). Under reduced motion it is one still frame. It never changes the save. Afterwards the next step is lit.
+- **Landscape phones no longer scroll sideways.** The header was 920 px wide at 844×390 and 915×412: v3.css's 220 px and 300 px column floors, the day card and four 44 px buttons did not fit, so a phone zoomed the whole page out. Between 761 and 980 px the floors are gone and the wordmark and cards shrink instead. The header-fit gate now covers 844 and 915 (62 checks).
+- Gates: new `web/test/opening.cjs` (34 checks). It covers desktop and phone, button, tap and key skips, ending by itself, Resume and `?skip`, the save unchanged, one lit step afterwards, sound on through the master gain, OFF stops everything and is remembered, and the reduced-motion still. Every other browser gate now loads `?skip`.
+
+### Port
+
+Godot: an arrival scene on New Game (not Continue), skippable by any input, ending by itself, with the same three lines built from the save. Add a synthesised or bus-routed ambient bed plus the till, steps, sting and bell cues on the same triggers, a single master bus, and a persisted SOUND switch in the pause menu.
+
 ## v4.58 — 2026-09-27
 
 **The road.** Owner, 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10): travel should feel natural; things happen in transit and on arriving; about every third or fourth journey; a surprise for now; each costs a bit of time; the first ones are Aatami meeting dealers and doing low-end gigs, and bigger contacts and money come later.

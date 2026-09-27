@@ -122,7 +122,7 @@ server.listen(0, '127.0.0.1', async () => {
       const settle = () => page.waitForTimeout(700);
       const fixture = async fn => { await page.evaluate(fn); await settle(); };
       // READABILITY_QUERY=?look=classic runs the control: the old interface must FAIL.
-      await page.goto(`${base}/web/${process.env.READABILITY_QUERY || ''}`);
+      await page.goto(`${base}/web/?skip${(process.env.READABILITY_QUERY || '').replace(/^\?/, "&")}`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data));
       await page.evaluate(() => document.fonts.ready);
       await judge(page, `${name} splash`);

@@ -60,7 +60,7 @@ const S = page => page.evaluate(() => structuredClone(window.__ptv3.state));
 const panel = page => page.locator('.inspect-panel');
 const attr = async (page, name) => (await panel(page).count()) ? panel(page).getAttribute(name) : null;
 async function boot(page, base, { resume = false } = {}) {
-  await page.goto(`${base}/web/`);
+  await page.goto(`${base}/web/?skip`);
   await page.waitForFunction(() => Boolean(window.__ptv3?.data));
   await page.locator(resume ? '#resumeButton' : '#beginButton').click();
   await page.waitForSelector('.city-map');

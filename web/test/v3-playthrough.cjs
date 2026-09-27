@@ -94,7 +94,7 @@ server.listen(0, '127.0.0.1', async () => {
     // (later legacy/) on 2026-08-25 (legacy/README.md); this was still
     // pointed at the old name, so the gate has been 404ing and timing out
     // on window.__ptv3 rather than actually testing anything since then.
-    await page.goto(`${base}/web/`);
+    await page.goto(`${base}/web/?skip`);
     await page.waitForFunction(() => Boolean(window.__ptv3?.data));
     ok('boots with no browser errors', unexpectedErrors().length === 0, unexpectedErrors().join(' | '));
     ok('content warning is the first interaction', await page.locator('#splash').isVisible());

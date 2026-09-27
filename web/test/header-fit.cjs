@@ -63,11 +63,13 @@ server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch();
   try {
-    for (const w of [320, 360, 390, 430, 760, 1280]) {
-      const touch = w < 760;
+    // 844 and 915: a phone held sideways. Its header was 920px wide until
+    // v4.59 and the whole page scrolled sideways.
+    for (const w of [320, 360, 390, 430, 760, 844, 915, 1280]) {
+      const touch = w < 760 || w === 844 || w === 915;
       const page = await browser.newPage({ viewport: { width: w, height: touch ? 780 : 800 }, hasTouch: touch, isMobile: touch });
       const errs = watchErrors(page);
-      await page.goto(`${base}/web/`);
+      await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data));
       await page.locator('#beginButton').click();
       await page.waitForSelector('.city-map');
@@ -103,7 +105,7 @@ server.listen(0, '127.0.0.1', async () => {
     // off (body overflow is hidden) and cannot be reached by a thumb.
     for (const vp of [{ width: 844, height: 390 }, { width: 915, height: 412 }]) {
       const page = await browser.newPage({ viewport: vp, hasTouch: true, isMobile: true });
-      await page.goto(`${base}/web/`);
+      await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data));
       await page.locator('#beginButton').tap();
       await page.waitForSelector('.city-map');
