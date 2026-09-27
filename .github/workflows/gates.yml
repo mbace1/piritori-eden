@@ -165,6 +165,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/readability.cjs
+      - name: the first two minutes always offer one next step
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/next-step.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

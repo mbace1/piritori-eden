@@ -186,8 +186,37 @@ function logToast(message) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 3200);
 }
 
+// Money you can FEEL: the cash card counts to its new value and says the
+// change (+€68 / −€45) beside it. Presentation only — the number shown at the
+// end is always state.cash, and the first render after a load or a new
+// campaign shows no change (there is nothing to have changed from).
+let shownCash = null, shownCashOwner = null;
+function renderCash() {
+  const el = $('cashValue');
+  const to = Number(state.cash);
+  const fmt = v => Math.round(v).toLocaleString('fi-FI');
+  const from = shownCashOwner === state ? shownCash : null;
+  shownCash = to; shownCashOwner = state;
+  if (from === null || from === to) { el.textContent = Number(to).toLocaleString('fi-FI', { maximumFractionDigits: 2 }); return; }
+  const card = el.closest('.res-cash');
+  const delta = to - from;
+  card.querySelector('.cash-delta')?.remove();
+  card.insertAdjacentHTML('beforeend', `<span class="cash-delta ${delta > 0 ? 'up' : 'down'}" aria-hidden="true">${delta > 0 ? '+' : '−'}€${fmt(Math.abs(delta))}</span>`);
+  card.classList.remove('cash-moved'); void card.offsetWidth; card.classList.add('cash-moved');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { el.textContent = Number(to).toLocaleString('fi-FI', { maximumFractionDigits: 2 }); return; }
+  const t0 = performance.now(), dur = 650;
+  const step = now => {
+    if (shownCash !== to) return; // a newer change took over
+    const k = Math.min(1, (now - t0) / dur), e = 1 - (1 - k) ** 3;
+    el.textContent = k < 1 ? fmt(from + (to - from) * e) : Number(to).toLocaleString('fi-FI', { maximumFractionDigits: 2 });
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
 function renderHud() {
-  $('cashValue').textContent = Number(state.cash).toLocaleString('fi-FI', { maximumFractionDigits: 2 });
+  renderCash();
   $('markkaValue').textContent = Math.round(state.markka).toLocaleString('fi-FI');
   $('debtValue').textContent = Math.round(state.debt).toLocaleString('fi-FI');
   $('intelValue').textContent = state.intel;
@@ -222,6 +251,10 @@ function render() {
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
+  // A new screen starts at its top. The scroller is shared by every mode, so
+  // coming back to the map after an encounter used to land mid-panel with the
+  // map scrolled away. Same-mode re-renders keep their place.
+  if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
 
@@ -382,7 +415,7 @@ function progressionCard(slot) {
     phase = 'FIRST ARBITRAGE';
     title = 'DEMAND AT SILTASAARI';
     body = (state.stock.piri ?? 0) > 0
-      ? 'A known buyer across the map will pay more tonight. Go to the newly highlighted anchor and make the first profit.'
+      ? 'A known buyer across the map will pay more tonight. Travel to Siltasaari and make the first profit.'
       : 'The demand lead is live, but Aatami still needs the one abstract pack offered at Piritori.';
     ladder = '<span>PIRITORI €45</span><i>→</i><strong>SILTASAARI €68 · +€23</strong>';
   } else if (firstSale && permanentCrew === 0) {
@@ -408,6 +441,45 @@ function progressionCard(slot) {
     <p>${body}</p>
     <div class="demand-ladder">${ladder}</div>
   </section>`;
+}
+
+/** THE next action on the route screen — exactly one, derived from state, so
+ *  the first two minutes never leave a player on a map with nothing lit.
+ *  Measured before this (design/FIRST_TWO_MINUTES.md): 3 of 11 opening steps
+ *  on desktop and 5 on a phone had no lit action in view. */
+function nextStep(slot) {
+  if (!slot || state.endingId) return null;
+  const journey = currentJourney();
+  const leadId = slot.anchor_id;
+  const lead = data.anchors.get(leadId);
+  if (journey?.ok) return { step: 'commit', label: `TRAVEL · ${data.anchors.get(journey.destination)?.label ?? journey.destination}`, hint: 'Walk there now. Nothing is spent until you arrive.' };
+  if (state.selectedAnchor === leadId) {
+    const encounter = data.encounters.get(slot.encounter_id);
+    if (!encounter || state.choices[encounter.id]) return null;
+    return { step: 'enter', label: `ENTER · ${encounterTitle(encounter)}`, hint: `Aatami is at ${lead?.label ?? leadId}. The story is here.` };
+  }
+  if (lead?.sliceState !== 'active') return null;
+  return { step: 'plan', label: `TRAVEL TO ${lead.label}`, hint: 'The story has moved on. Aatami is still where you left him.' };
+}
+
+/** Taken, then cleared BEFORE the commit: a second tap finds no plan. */
+function commitPlannedJourney() {
+  const preview = currentJourney();
+  journeyDraft = null;
+  const result = commitJourney(state, data, preview);
+  if (!result.ok) { logToast(JOURNEY_REFUSAL[result.reason] ?? result.reason); render(); return; }
+  inspectAnchor(result.destination);
+  logToast(`Aatami arrives at ${data.anchors.get(result.destination)?.label}.`);
+  persist(); render();
+}
+
+function renderNextStep(slot) {
+  const next = nextStep(slot);
+  if (!next) return '';
+  return `<div class="next-step" data-step="${next.step}">
+    <p>${esc(next.hint)}</p>
+    <button class="paper-button primary" data-action="next-step" data-step="${next.step}">${esc(next.label)}</button>
+  </div>`;
 }
 
 function renderRoute() {
@@ -464,15 +536,15 @@ function renderRoute() {
       <aside class="map-side">
         ${progressionCard(slot)}
         <section class="paper-panel inspect-panel" data-inspected="${esc(selected.id)}" data-present="${esc(present.id)}" data-lead="${esc(lead?.id ?? '')}">
-          <p class="section-label">${here ? 'YOU ARE HERE' : 'INSPECTING'} · ${esc(selected.sliceState)} · PUBLIC ANCHOR</p>
+          <p class="section-label">${here ? 'YOU ARE HERE' : 'INSPECTING'}${selected.sliceState === 'active' ? '' : ` · ${esc(selected.sliceState === 'landmark' ? 'LANDMARK' : 'SEALED')}`}</p>
           <h2>${esc(selected.label)}</h2>
           <p class="presence-line"><span>AATAMI · <b>${esc(present.label)}</b></span><span>STORY LEAD · <b>${esc(lead?.label ?? '—')}</b></span></p>
           <p>${esc(anchorDescription(selected))}</p>
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
             ${here ? availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Slomo')}</button>`).join('') : ''}
-            ${here && selected.id === slot.anchor_id ? `<button class="paper-button primary" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
-            ${!here && canTravelTo(selected) && !journey ? `<button class="paper-button primary" data-action="plan-journey" data-anchor="${esc(selected.id)}">TRAVEL HERE · ${esc(selected.label)}</button>` : ''}
+            ${here && selected.id === slot.anchor_id ? `<button class="paper-button" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
+            ${!here && canTravelTo(selected) && !journey ? `<button class="paper-button" data-action="plan-journey" data-anchor="${esc(selected.id)}">TRAVEL HERE · ${esc(selected.label)}</button>` : ''}
             ${selected.id !== slot.anchor_id ? `<button class="paper-button" data-action="show-lead">SHOW LEAD · ${esc(lead?.label ?? '')}</button>` : ''}
             ${selected.sliceState === 'training'
               ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
@@ -487,6 +559,7 @@ function renderRoute() {
           <ul class="log-list">${state.logs.slice(0, 5).map(item => `<li>${esc(item)}</li>`).join('')}</ul>
         </section>
       </aside>
+      ${renderNextStep(slot)}
     </div>`;
 }
 
@@ -500,7 +573,7 @@ function renderJourneyPreview(journey) {
     <div class="route-steps">${names.map(name => `<span class="tag">${esc(name)}</span>`).join('')}</div>
     <p class="consequence-strip">Aatami walks there himself. In this build a journey costs no extra time or money: the story clock moves only when a story beat ends, as before. Travel time and risk are not balanced yet.</p>
     <div class="route-actions">
-      <button class="paper-button primary" data-action="commit-journey">TRAVEL</button>
+      <button class="paper-button" data-action="commit-journey">TRAVEL</button>
       <button class="paper-button" data-action="cancel-journey">CANCEL</button>
     </div>
   </div>`;
@@ -1395,14 +1468,7 @@ function handleRootClick(event) {
     journeyDraft = null;
     render();
   } else if (action === 'commit-journey') {
-    // Taken, then cleared BEFORE the commit: a second tap finds no plan.
-    const preview = currentJourney();
-    journeyDraft = null;
-    const result = commitJourney(state, data, preview);
-    if (!result.ok) { logToast(JOURNEY_REFUSAL[result.reason] ?? result.reason); render(); return; }
-    inspectAnchor(result.destination);
-    logToast(`Aatami arrives at ${data.anchors.get(result.destination)?.label}.`);
-    persist(); render();
+    commitPlannedJourney();
   } else if (action === 'go-lead') {
     const lead = storyLeadId();
     state.mode = 'route';
@@ -1412,6 +1478,20 @@ function handleRootClick(event) {
     const lead = storyLeadId();
     if (lead) inspectAnchor(lead);
     render();
+  } else if (action === 'next-step') {
+    // The pinned bar only ROUTES to the ordinary actions; it never has rules
+    // of its own. A stale step (the state moved under it) does nothing.
+    const slot = currentSchedule(state, data.content);
+    const next = nextStep(slot);
+    if (!next || next.step !== target.dataset.step) { render(); return; }
+    if (next.step === 'enter') openEncounter();
+    else if (next.step === 'plan') {
+      inspectAnchor(slot.anchor_id);
+      journeyDraft = { owner: state, preview: previewJourney(state, data, slot.anchor_id) };
+      render();
+    } else if (next.step === 'commit') {
+      commitPlannedJourney();
+    }
   } else if (action === 'open-encounter') openEncounter();
   else if (action === 'start-training') {
     if (!startBattle('battle-hermanni-training')) { render(); return; }
@@ -1672,7 +1752,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.56',
+      version: 'v4.57',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());

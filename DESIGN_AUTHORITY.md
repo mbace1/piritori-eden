@@ -11,6 +11,11 @@ Asked as numbered questions after the Lantern Noir interface (Act I v4.56):
 
 Implementation stays web-first, then a Port block, as always. Events must stay readable before commitment (the full-intent rule) and deterministic from the campaign seed.
 
+**Follow-up, same day.**
+
+5. **The first two minutes:** "You tell me and let's see how far we are." The target is delegated. It is written and measured in `design/FIRST_TWO_MINUTES.md`.
+6. **Travel-event warnings:** "Surprise until we may add indicators." Events are **not** forecast on the journey preview. This supersedes the "readable before commitment" line above for travel events only; a fight that follows still shows full intent once it starts. Indicators may come later.
+
 ## Owner continuation, 2026-09-13 — art first
 
 “Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish

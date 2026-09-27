@@ -77,6 +77,26 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.57 — 2026-09-27
+
+**The first two minutes always offer one next step.** The owner delegated the target ("You tell me and let's see how far we are"). It is written and measured in `design/FIRST_TWO_MINUTES.md`.
+
+- **Measured on v4.56:** 3 of 11 opening steps on desktop and 5 on a phone had no lit action in view. Every time the story moved the lead, the copy said "go to the newly highlighted anchor" and offered no button.
+- **The next-step bar** is pinned above the command bar on the route screen and holds exactly one lit action derived from the state: ENTER the encounter at the lead, TRAVEL TO the lead when away (this plans the journey), TRAVEL when a journey is planned. It only routes to the ordinary actions (`nextStep()` in `app.js`), and a stale step does nothing. The side panel's own buttons stay, unlit. The opening is one step shorter.
+- **A new screen starts at its top.** Coming back to the map used to land mid-page. The phone encounter's scene takes a third of the screen, not half, so the choice arrives by the first scroll. The phone header is lighter.
+- **Money moves:** the cash card counts to the new value, pulses, and names the change (+€68 / −€45). It shows a still value under reduced motion. This is presentation only; the value shown at rest is always `state.cash`.
+- **Plain words:** "Travel to Siltasaari"; "PUBLIC ANCHOR" is gone from the panel.
+- New gate `web/test/next-step.cjs` (57 checks, in CI) at phone, landscape phone and desktop:
+  - exactly one lit action in view at every route step, and it is the next step;
+  - planning through the bar changes nothing;
+  - arriving is free (D002);
+  - €183 and "+€68" at the sale.
+- Cache: `app.js?v=20`, `lantern.css?v=2`.
+
+### Port
+
+Godot: a presentation handoff. Its rail should end with one lit action derived the same way: ENTER at the lead, TRAVEL TO the lead when away, TRAVEL when a journey is planned. Plus a cash change readout. No rule changes.
+
 ## v4.56 — 2026-09-26
 
 **Lantern Noir: the city interface, lit.** The owner asked for a leap in art and readability. The direction is the owner's own shortlist of the C.16 stylized studies, 03 Lantern Noir first and 06 Ink After Dark second (`design/concepts/c16-stylized`), applied to the city interface: a dark, quiet ground, warm light only where the eye should go, one cool accent for what is yours, and large plain type. See `design/UI_LANTERN_NOIR.md`.
