@@ -15,6 +15,12 @@ Implementation stays web-first, then a Port block, as always. Events must stay r
 
 5. **The first two minutes:** "You tell me and let's see how far we are." The target is delegated. It is written and measured in `design/FIRST_TWO_MINUTES.md`.
 6. **Travel-event warnings:** "Surprise until we may add indicators." Events are **not** forecast on the journey preview. This supersedes the "readable before commitment" line above for travel events only; a fight that follows still shows full intent once it starts. Indicators may come later.
+7. **Sound:** "yes". The city gets ambient sound and small effects on buying, selling and travel.
+8. **Opening:** "sure, setting up". A short arrival moment on Begin that sets up the place before the map.
+9. **Event time:** "a bit of time". A travel event costs some time, not a whole block.
+10. **The first events:** "Aatami meets dealers, does first gigs. Very low end hustling. Then eventually meet others and gain money." The first things met on the road are dealers and small gigs for small money; wider contacts and bigger money come later.
+
+Owner: "1–4 yes go ahead". Ship v4.57; build travel events; add sound and the arrival opening; bring the Godot port up to the new look and the next-step bar.
 
 ## Owner continuation, 2026-09-13 — art first
 
