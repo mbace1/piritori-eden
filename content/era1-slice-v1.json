@@ -719,11 +719,13 @@
       "battle_avoidance": null,
       "success_effects": [
         "exit-fund:+120",
-        "flag:courtyard-account-settled"
+        "flag:courtyard-account-settled",
+        "flag:kello-receipts"
       ],
       "partial_effects": [
         "exit-fund:+60",
-        "relationship:jaska:-1"
+        "relationship:jaska:-1",
+        "flag:kello-receipts"
       ],
       "failure_effects": [
         "crew-outcome:critical-wound-possible",
@@ -1159,10 +1161,11 @@
           "id": "ask-control",
           "label": "Ask who keeps watching",
           "requirements": [],
-          "forecast": "Keep cash, gain a faction lead, spend the block.",
+          "forecast": "Keep cash, gain a faction lead, spend the block. The seller names the man who stays after two trams: Kello.",
           "effects": [
             "intel:+1",
             "flag:asked-before-buying",
+            "flag:kello-named",
             "reveal:enc-jaska-receipt"
           ]
         },
@@ -1601,7 +1604,7 @@
       ],
       "source_status": "fiction",
       "mission_id": "mission-bear-path",
-      "opening": "Two men wait on the wrong side of the granite bear. One keeps glancing toward a van that is not coming.",
+      "opening": "Two McCormick buyers wait on the wrong side of the granite bear. They paid for a Thursday load. One keeps glancing toward a van that is not coming.",
       "inspectables": [
         "open withdrawal path",
         "bear plinth cover",
@@ -1614,10 +1617,11 @@
           "requirements": [
             "flag:toko-van-pattern"
           ],
-          "forecast": "Avoid battle and complete a controlled handover.",
+          "forecast": "Avoid battle and complete a controlled handover. The McCormicks learn they were sold air.",
           "effects": [
             "complete:mission-bear-path",
             "battle:avoided",
+            "flag:mccormicks-know-skim",
             "relationship:toko:+1"
           ]
         },
@@ -1729,7 +1733,7 @@
       "opening": "Mei Lan serves the lunch queue before acknowledging Aatami. The restaurant is a workplace first and a faction door only if she opens it.",
       "inspectables": [
         "ordinary lunch rush",
-        "delivery invoice",
+        "the same invoice, twice",
         "closed back-room door"
       ],
       "choices": [
@@ -1743,7 +1747,8 @@
           "effects": [
             "reveal:mission-courtyard-receipts",
             "relationship:jade_lantern_network:+1",
-            "reveal:offer-hakaniemi-sell"
+            "reveal:offer-hakaniemi-sell",
+            "flag:duplicate-invoice"
           ]
         },
         {
@@ -1767,7 +1772,8 @@
           "effects": [
             "reveal:mission-courtyard-receipts",
             "relationship:jade_lantern_network:-2",
-            "pressure:linjat_yard:+1"
+            "pressure:hakaniemi:+1",
+            "flag:duplicate-invoice"
           ]
         },
         {
@@ -1794,11 +1800,11 @@
       ],
       "source_status": "fiction",
       "mission_id": "mission-courtyard-receipts",
-      "opening": "The receipt envelope lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+      "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
       "inspectables": [
         "porttikongi withdrawal lane",
         "lit residential windows",
-        "receipt envelope"
+        "receipts in Kello's handwriting"
       ],
       "choices": [
         {
@@ -2041,7 +2047,7 @@
       "day": 6,
       "block": "day",
       "encounter_id": "enc-jade-window",
-      "anchor_id": "linjat_yard"
+      "anchor_id": "hakaniemi"
     },
     {
       "day": 6,
@@ -2965,6 +2971,46 @@
           "requirements": [],
           "effects": [
             "memory:toko-quiet-company"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visit-harju-thursday",
+      "chapter": 1,
+      "requires_encounter": "enc-toko-quiet-voice",
+      "site_id": "harju_pitch",
+      "scene_asset_id": "scene-harju-pitch-v01",
+      "source_status": "fiction",
+      "participants": [
+        "aatami"
+      ],
+      "title": "BRAHENKENTTÄ, THURSDAY",
+      "opening": "Toko's three vans turn where they always turn, at the corner of the pitch. The empty one never opens its doors. Behind them the 3 grinds past: a man in a fur hat in the second car, and a woman lifting a pram full of radios on board as if it weighed more than a pram should.",
+      "inspectables": [
+        "the empty van's closed doors",
+        "car 41 of the 3",
+        "the pram, heavier than a pram"
+      ],
+      "choices": [
+        {
+          "id": "count-the-vans",
+          "label": "Count the vans, as Toko does",
+          "forecast": "Remember which van stayed shut. No information or money reward.",
+          "requirements": [],
+          "effects": [
+            "memory:counted-the-vans"
+          ]
+        },
+        {
+          "id": "watch-the-tram",
+          "label": "Send someone after the vans; watch the tram yourself",
+          "forecast": "Needs one crew member with you. You see where the load really goes: onto the 3. A clue for the case board.",
+          "requirements": [
+            "deployed-crew>=1"
+          ],
+          "effects": [
+            "memory:saw-the-tram"
           ]
         }
       ]

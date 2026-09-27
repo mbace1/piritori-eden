@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "act1-story-v1",
+  "authority": "Owner 2026-09-27: answer 14 (missions need the same depth as the case files), answer 15 (Claude weaves the narrative, the owner greenlights), 'Go ahead' on The Thursday Load G1-G7.",
+  "fiction_boundary": "Composite people and situations. The good is abstract (DESIGN_LOCKS §9.1). Families keep their own ground: the McCormicks at Siltanen and Linjat, the Jade Lantern front at Hakaniemi; Piritori belongs to nobody.",
+  "thread": {
+    "id": "thursday-load",
+    "title": "The Thursday Load",
+    "premise": "Somebody on Piritori is selling the same Thursday load to both families. The vans are theatre; the load rides the 3.",
+    "culprit": "Kello, the Piritori watcher who times the square by the trams"
+  },
+  "missions": [
+    {
+      "id": "mission-paper-bag",
+      "title": "The Paper Bag",
+      "premise": "The first pack, bought on Piritori and sold at the bank queue. The cleanest job of the week. While Aatami waits, one man stays on the square through two trams.",
+      "plants": "Ask who keeps watching and the seller names him: Kello."
+    },
+    {
+      "id": "mission-three-vans",
+      "title": "Three Vans",
+      "premise": "Toko counts vans and never asks. Three every Thursday, one always empty. At Brahenkenttä the vans turn where they always turn, and the empty one never opens its doors.",
+      "plants": "Watch the tram instead of the vans, and you see where the load really goes: onto the 3, in a pram full of radios."
+    },
+    {
+      "id": "mission-bear-path",
+      "title": "The Bear Path",
+      "premise": "Two McCormick buyers wait at the granite bear for a Thursday load that is not coming. They think Aatami is the delivery, or the robbery.",
+      "plants": "Name the empty van and they understand: somebody sold them air. The fight is avoided, and the McCormicks start looking for the seller."
+    },
+    {
+      "id": "mission-courtyard-receipts",
+      "title": "The Courtyard Receipts",
+      "premise": "Mei Lan at the Hakaniemi front holds a duplicate invoice: both families paid for one load. The receipts that prove it lie in a Torkkelinmäki courtyard, and the Jade Lantern's people have come for them.",
+      "plants": "The receipts are in Kello's handwriting, the same torn-card hand as the first price on Piritori."
+    }
+  ],
+  "clues": [
+    { "id": "kello-named", "flag": "kello-named", "title": "The man who stays", "found": "Day 1, Piritori: the seller names the watcher. Kello.", "hint": "Ask who keeps watching, on the first day." },
+    { "id": "three-vans", "flag": "toko-van-pattern", "title": "Three vans, one empty", "found": "Toko: three vans on Thursdays, and one of them is always empty.", "hint": "Buy what Toko knows about the vans." },
+    { "id": "saw-the-tram", "flag": "memory:saw-the-tram", "key": true, "title": "The load rides the 3", "found": "Brahenkenttä: the load goes onto the 3, in a pram full of radios. Car 41.", "hint": "Watch the tram at Brahenkenttä, with someone to watch the vans." },
+    { "id": "sold-air", "flag": "mccormicks-know-skim", "key": true, "title": "Sold air", "found": "Karhupuisto: the McCormick buyers paid for a load that never came.", "hint": "Name the empty van at the bear." },
+    { "id": "duplicate-invoice", "flag": "duplicate-invoice", "title": "One load, two invoices", "found": "Hakaniemi: Mei Lan's invoice matches the McCormicks'. Same date, same load.", "hint": "Ask Mei Lan about the invoice." },
+    { "id": "kello-receipts", "flag": "kello-receipts", "key": true, "title": "Kello's handwriting", "found": "Torkkelinmäki: the receipts are in Kello's hand. Proof for either family.", "hint": "Settle the courtyard account, even partly." },
+    { "id": "forty-one", "flag": "road-fur-hat-41", "title": "\"Forty-one\"", "found": "On the 3: the man in the fur hat says a number. The car he rides.", "hint": "Something on the road." },
+    { "id": "the-plate", "flag": "road-empty-van-plate", "title": "The plate", "found": "Hämeentie: the empty van, engine running. You noted the plate.", "hint": "Something on the road." }
+  ],
+  "case": {
+    "id": "case-thursday-tram",
+    "title": "The Thursday Tram",
+    "anchor_id": "piritori",
+    "unlock": { "key_clues": 2 },
+    "scene_asset_id": "scene-piritori-square-v01",
+    "opening": "Thursday. Aatami rides car 41 of the 3 with the man in the fur hat, who nods as if they had always been colleagues. At Kurvi the pram gets on, heavier than a pram. At Piritori, Kello is waiting on his square with his cheap watch, and a very good excuse.",
+    "inspectables": ["Kello's watch, five minutes fast", "the pram's weight", "the fur hat counting the load in"],
+    "choices": [
+      { "id": "sell-kello", "label": "Sell Kello to the McCormicks", "detail": "A large payment and a friend in the family. The Jade Lantern will treat you as the leak, and Kello leaves the square.", "effects": ["cash:+250", "relationship:mccormick_family:+2", "relationship:jade_lantern_network:-2", "pressure:piritori:+1", "flag:kello-sold"] },
+      { "id": "take-a-cut", "label": "Take a cut and keep quiet", "detail": "Money now and a Thursday arrangement with Kello. Either family can find out.", "effects": ["cash:+60", "obligation:kello:+1", "flag:thursday-cut"] },
+      { "id": "take-the-route", "label": "Take the tram route over", "detail": "The pram and car 41 carry for you now. The first load is yours; the route is a risk from here on.", "effects": ["stock:piri:+2", "pressure:piritori:+1", "flag:thursday-route"] },
+      { "id": "tell-toko", "label": "Give it to Toko", "detail": "No money. He never asks, but now he knows, and he trusts you with what he hears.", "effects": ["relationship:toko:+2", "intel:+2", "flag:kello-told-toko"] }
+    ]
+  }
+}

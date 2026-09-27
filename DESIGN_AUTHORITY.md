@@ -32,6 +32,7 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 15. **Writing the story:** "McCormicks are in Siltanen and Jade Mob a bit further. They can still go to Piritori if it makes sense but just weave the narrative and ask me to greenlight rather than write the stories." Claude weaves the narrative and brings it for a greenlight; the owner does not pick culprits or write plots.
 16. **Where Tokon Ramen stands:** "Vaasankatu." This keeps the DESIGN_LOCKS §9.2 lock. It stays open from day one.
 17. **Toko's stock:** "Slo-mo can sell early weapons as well." Toko sells melee gear (bat, baton, pipe, knife) as well as information. The first handgun stays at Piritori.
+18. **The Thursday Load:** "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md). The Jade front moves to Hakaniemi. Kello, the Piritori watcher, sells the Thursday load to both families. The four missions carry the thread, the Thursday Tram settles it, and the game gets mission briefings and a case board.
 
 ## Owner continuation, 2026-09-13 — art first
 

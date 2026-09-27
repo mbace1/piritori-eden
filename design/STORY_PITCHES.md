@@ -1,4 +1,6 @@
-# Story pitches awaiting greenlight (2026-09-27)
+# Story pitches (2026-09-27)
+
+**The Thursday Load was greenlit ("Go ahead") and shipped in Act I v4.62.** The Kallio Case Files are still pitches: Dead Money is held for a later chapter, and the network already carries clues through the road events.
 
 Owner, answer 15: "weave the narrative and ask me to greenlight rather than write the stories". So Claude writes the story and the owner approves it by number. Nothing on these pages is built until the owner greenlights it.
 

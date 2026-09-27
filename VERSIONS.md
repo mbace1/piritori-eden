@@ -77,6 +77,24 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.62 — 2026-09-27
+
+**The Thursday Load.** Owner, 2026-09-27: "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md, pitch page *The Thursday Load*). Somebody on Piritori is selling the same Thursday load to both families. The vans are theatre; the load rides the 3.
+
+- **G1, the ground.** The Jade Lantern front moves from the McCormick yard's anchor (Linjat) to Hakaniemi, so the families no longer share a doorway. Mei Lan's lunch is at Hakaniemi, and pushing her back door heats Hakaniemi. The McCormicks stay at Siltanen / Linjat, Toko on Vaasankatu, and Piritori belongs to nobody.
+- **G2.** On day 1, "Ask who keeps watching" names the man who stays through two trams: Kello (`flag:kello-named`).
+- **G3.** A new visit, *Brahenkenttä, Thursday*, opens at Harju after Toko's night. Count the vans, as Toko does, or send someone after the vans and watch the tram yourself: the load goes onto the 3 in a pram full of radios, car 41 (`memory:saw-the-tram`, which needs one crew member with you). It follows the visit rule and records only memories.
+- **G4.** The two men at the bear are McCormick buyers who paid for a Thursday load. Naming the empty van tells them they were sold air (`flag:mccormicks-know-skim`).
+- **G5.** Mei Lan's invoice is the same invoice twice (`flag:duplicate-invoice`). The courtyard envelope is in Kello's handwriting, and settling the account, even partly, keeps it (`flag:kello-receipts`).
+- **G6, the Thursday Tram.** It opens at Piritori once 2 of the 3 key clues are found (the tram, sold air, Kello's receipts) and is answered once. Sell Kello to the McCormicks (+€250, McCormick +2, Jade −2). Take a cut (+€60 and an obligation to Kello). Take the tram route (+2 packs). Or give it to Toko (Toko +2, intel +2). It never turns the block.
+- **G7, briefings and the board.** The ledger's one-line mission memory becomes **What the week asks**: every mission as a briefing with its premise, its real steps (verb, place, the other way), its stakes in words (clean / partly / lost, read from the mission's own effects), whether it can become a fight, and what it plants. A mission is briefed once its opening scene is next, revealed or played; until then it is a title. The **case board** lists all 8 clues: found ones on paper, missing ones as a "?" with a hint, the key ones marked, and where the case is waiting.
+- `content/act1-story-v1.json` holds the woven words. `web/js/v3/story.js` is pure: a clue is found when its flag is in the save, so the board can never claim what the player did not do.
+- Gates: new `web/test/story.mjs` (49: every clue is earned by some real effect, every mission has a briefing with its real steps, and a play-through earns the clues through real choices and resolves each ending once without turning the block) and `web/test/story-browser.cjs` (30: briefings, the board, the Harju visit, the case at Piritori unlit, selling Kello). Readability 86 (the case screen too). M1 71, M2 47, next-step 57, header 62, road 38, opening 56. Godot spine 264, locale 21, shell 149, playthrough 72.
+
+### Port
+
+Godot: the canon moves on its own (the Jade front at Hakaniemi, the new visit, the new flags). Web-only for now: load `content/act1-story-v1.json`; mission briefings and the case board in the ledger (clue = flag in the save); the Thursday Tram at Piritori, answered once, with no block advance.
+
 ## v4.61 — 2026-09-27
 
 **Toko Slomo per the GDD, on Vaasankatu.** Owner, 2026-09-27: answer 13, "Toko Slomo at the restaurant? Check the GDD for him"; answer 16, "Vaasankatu".

@@ -20,6 +20,7 @@ import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=2';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing } from './story.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -120,6 +121,8 @@ let state;
 // and a failed load leaves the city exactly as it was, with no events.
 // What Toko said at the last bowl ('' = nothing new, null = no bowl yet).
 let tokoTold = null;
+// The Thursday Load (story.js). Empty until loaded; a failed load hides it.
+let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
 let routePlanning = false;
 let routeDraft = [];
@@ -322,6 +325,7 @@ function render() {
     road: renderRoad,
     shop: renderStreet,
     ramen: renderRamen,
+    case: renderCase,
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
@@ -663,6 +667,7 @@ function renderRoute() {
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
             ${here && canShopHere(state) ? '<button class="paper-button" data-action="open-shop">STREET SELLER · GEAR</button>' : ''}
+            ${here && story.case && selected.id === story.case.anchor_id && caseKnown(state, story) && !state.choices[story.case.id] ? `<button class="paper-button case-button" data-action="open-case">CASE · ${esc(story.case.title.toUpperCase())}</button>` : ''}
             ${here && selected.id === TOKO_ANCHOR ? '<button class="paper-button" data-action="open-ramen">TOKON RAMEN · A BOWL AND WHAT HE HEARD</button>' : ''}
             ${here ? availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Toko')}</button>`).join('') : ''}
             ${here && selected.id === slot.anchor_id ? `<button class="paper-button" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
@@ -979,6 +984,7 @@ function renderLedger() {
         </section>
         ${renderChapter()}
         ${renderChapterPeople(state, data.content)}
+        ${renderMissions()}
         ${renderBoard()}
         <section class="paper-panel">
           <p class="section-label">CREW / FRONT THREE DEPLOY AUTOMATICALLY</p>
@@ -1009,10 +1015,7 @@ function renderLedger() {
             ${critical ? `<span class="tag warning">${critical} CRITICAL WOUND${critical === 1 ? '' : 'S'}</span>` : ''}
           </div>
         </section>
-        <section class="paper-panel">
-          <p class="section-label">ACTIVE MISSION MEMORY</p>
-          <ul class="log-list">${data.content.missions.map(mission => `<li><b>${esc(cap(mission.family))}</b><br>${esc(state.missionStatus[mission.id] ?? (state.revealedMissions.includes(mission.id) ? 'available' : 'not yet open'))}</li>`).join('')}</ul>
-        </section>
+        ${renderCaseBoard()}
       </aside>
     </div>`;
 }
@@ -1211,6 +1214,116 @@ function renderStreet() {
       <div class="equipment-list">${state.equipment.map((item, index) => renderEquipment(item, index)).join('')}</div>
       <p class="consequence-strip">He pays best for the best condition and worst for broken. Loot turns into money here, never the other way.</p>
       <button class="paper-button primary" data-action="leave-shop">BACK TO THE STREET</button>
+    </section>
+  </div>`;
+}
+
+/** Effects in words, for briefings and the case (never a rule of its own). */
+function effectWords(effects) {
+  const out = [];
+  for (const fx of effects ?? []) {
+    let m;
+    if ((m = fx.match(/^cash:([+-]\d+)$/))) out.push(`${m[1].startsWith('-') ? '−' : '+'}€${Math.abs(Number(m[1]))}`);
+    else if ((m = fx.match(/^exit-fund:([+-]\d+)$/))) out.push(`+€${Math.abs(Number(m[1]))} to the exit fund`);
+    else if ((m = fx.match(/^intel:([+-]\d+)$/))) out.push(`intel ${m[1]}`);
+    else if ((m = fx.match(/^stock:([^:]+):([+-]\d+)$/))) out.push(`${m[2].replace('+', '+')} pack${Math.abs(Number(m[2])) === 1 ? '' : 's'}`);
+    else if ((m = fx.match(/^relationship:([^:]+):([+-]\d+)$/))) out.push(`${cap(m[1].replaceAll('_', ' '))} ${m[2]}`);
+    else if ((m = fx.match(/^obligation:([^:]+):([+-]\d+)$/))) out.push(`owes ${cap(m[1].replaceAll('_', ' '))}`);
+    else if ((m = fx.match(/^pressure:([^:]+):([+-]\d+)$/))) out.push(`${cap(data.anchors.get(m[1])?.label ?? m[1])} heat ${m[2]}`);
+    else if (fx.startsWith('reveal:offer-')) out.push('a price revealed');
+    else if (fx.startsWith('crew-outcome:')) out.push(fx.includes('critical') ? 'a critical wound possible' : 'a wound possible');
+    else if (fx.startsWith('service:')) out.push('a contact closed for a day');
+    else if (fx.startsWith('debt-holder-memory:')) out.push('the debt holder remembers');
+    else if (fx.startsWith('flag:') && /pattern/.test(fx)) out.push(fx.includes('incomplete') ? 'half the pattern' : 'the van pattern');
+    else if (fx.endsWith(':advantage')) out.push('a rival gains ground');
+  }
+  return out.join(' · ') || '—';
+}
+
+/** THE MISSIONS (G7): each authored mission as a briefing, not a status word. */
+function renderMissions() {
+  // Briefed as soon as its opening scene is the next thing to do, or it was
+  // revealed, or that scene has been played.
+  const nextEnc = currentSchedule(state, data.content)?.encounter_id;
+  const status = id => {
+    const m = data.missions.get(id);
+    if (state.missionStatus[id]) return state.missionStatus[id];
+    const told = state.revealedMissions.includes(id) || m?.signal_encounter_id === nextEnc || Boolean(state.choices[m?.signal_encounter_id]);
+    return told ? 'open' : 'not yet';
+  };
+  const statusWord = { complete: 'DONE', partial: 'PARTLY', fail: 'LOST', open: 'OPEN', 'not yet': 'NOT YET' };
+  return `<section class="paper-panel missions-panel">
+    <p class="section-label">MISSIONS · ${esc(story.thread?.title?.toUpperCase() ?? 'ACT I')}</p>
+    <h2 class="section-title">WHAT THE WEEK ASKS</h2>
+    <div class="mission-list">${data.content.missions.map(m => {
+      const b = briefing(data, story, m.id); if (!b) return '';
+      const st = status(m.id); const open = st !== 'not yet';
+      return `<article class="mission-card" data-mission="${esc(m.id)}" data-status="${esc(st)}">
+        <header><h3>${esc(b.title)}</h3><span class="mission-state ${esc(st.replace(' ', '-'))}">${statusWord[st] ?? esc(st)}</span></header>
+        <p class="mission-meta">${esc(cap(b.family))} · by day ${b.deadline?.day ?? '?'} ${esc(b.deadline?.block ?? '')}${b.battleId ? ` · can become a fight${b.avoidable ? ' (a way round exists)' : ' (no way round)'}` : ''}</p>
+        ${open ? `<p>${esc(b.premise)}</p>
+        <ol class="mission-steps">${b.steps.map(step => `<li><b>${esc(step.verb)}</b> <span class="dim">${esc(data.anchors.get(step.anchor)?.label ?? step.anchor)}</span>${step.alternatives?.length ? `<br><span class="dim">or ${esc(step.alternatives[0])}</span>` : ''}</li>`).join('')}</ol>
+        <dl class="mission-stakes">
+          <div><dt>CLEAN</dt><dd>${esc(effectWords(b.success))}</dd></div>
+          <div><dt>PARTLY</dt><dd>${esc(effectWords(b.partial))}</dd></div>
+          <div><dt>LOST</dt><dd>${esc(effectWords(b.failure))}</dd></div>
+        </dl>
+        ${b.plants ? `<p class="mission-plant">${esc(b.plants)}</p>` : ''}`
+        : '<p class="dim">Someone has not told you about this yet.</p>'}
+      </article>`;
+    }).join('')}</div>
+  </section>`;
+}
+
+/** THE CASE BOARD (G7): every clue the week can give, found or not. */
+function renderCaseBoard() {
+  if (!story.case) return '';
+  const board = caseBoard(state, story);
+  const found = board.filter(c => c.isFound).length;
+  const keys = keyCluesFound(state, story); const need = story.case.unlock?.key_clues ?? 0;
+  const resolved = state.choices[story.case.id];
+  const choice = resolved ? story.case.choices.find(c => c.id === resolved) : null;
+  return `<section class="paper-panel case-board">
+    <p class="section-label">CASE BOARD · ${found}/${board.length}</p>
+    <h2 class="section-title">${esc(story.thread.title.toUpperCase())}</h2>
+    <p class="dim">${esc(story.thread.premise)}</p>
+    <ul class="clue-list">${board.map(c => `<li class="clue ${c.isFound ? 'found' : 'missing'}${c.key ? ' key' : ''}">
+      <b>${c.isFound ? esc(c.title) : '?'}</b>${c.key ? ' <span class="clue-key">KEY</span>' : ''}<br>
+      <span>${esc(c.isFound ? c.found : c.hint)}</span></li>`).join('')}</ul>
+    <p class="consequence-strip">${resolved
+      ? `Settled: ${esc(choice?.label ?? resolved)}.`
+      : keys >= need ? `Enough to act. ${esc(story.case.title)} is waiting at ${esc(data.anchors.get(story.case.anchor_id)?.label)}.`
+        : `${keys} of ${need} key clues. The week has more to show you.`}</p>
+  </section>`;
+}
+
+/** THE CASE (G6): the Thursday Tram, answered once, at Piritori. */
+function renderCase() {
+  const c = story.case;
+  if (!c) { state.mode = 'route'; return renderRoute(); }
+  const resolved = state.choices[c.id];
+  if (!resolved && caseBlocker(state, story)) { state.mode = 'route'; return renderRoute(); }
+  const art = assetUrl(data, c.scene_asset_id);
+  const choice = resolved ? c.choices.find(ch => ch.id === resolved) : null;
+  return `<div class="encounter-layout case-layout">
+    <section class="paper-panel scene-card">
+      <div class="scene-viewport">
+        ${art ? `<img class="scene-image" src="${esc(art)}" alt="Piritori on a Thursday night">` : genericScene('piritori_first_buy')}
+        <i class="scene-vignette"></i>
+        <div class="scene-caption"><h2>${esc(c.title.toUpperCase())}</h2><p>CAR 41 → PIRITORI · ${esc(formatBlock(state, data.content))}</p></div>
+      </div>
+    </section>
+    <section class="paper-panel encounter-copy">
+      <p class="section-label">CASE · ${esc(story.thread.title.toUpperCase())}</p>
+      <h2 class="section-title">${esc(c.title)}</h2>
+      <p class="encounter-opening">${esc(c.opening)}</p>
+      ${choice
+        ? `<div class="outcome-card"><h3>${esc(choice.label)}</h3><p>${esc(choice.detail)}</p>
+            <div class="consequence-strip">${esc(effectWords(choice.effects))}</div>
+            <button class="paper-button primary" data-action="leave-case">BACK TO THE STREET</button></div>`
+        : `<div class="choice-list">${c.choices.map(ch => `<button class="choice-card" type="button" data-action="case-choose" data-choice="${esc(ch.id)}">
+            <strong>${esc(ch.label)}</strong><span>${esc(ch.detail)}</span><small class="road-time">${esc(effectWords(ch.effects))}</small></button>`).join('')}</div>
+          <button class="paper-button" data-action="leave-case">NOT YET · BACK TO THE STREET</button>`}
     </section>
   </div>`;
 }
@@ -1781,6 +1894,15 @@ function handleRootClick(event) {
     state.mode = 'shop'; persist(); render();
   } else if (action === 'leave-shop') {
     state.mode = 'route'; persist(); render();
+  } else if (action === 'open-case') {
+    if (caseBlocker(state, story)) { render(); return; }
+    state.mode = 'case'; persist(); render();
+  } else if (action === 'case-choose') {
+    const result = resolveCase(state, data, story, target.dataset.choice);
+    if (!result.ok) logToast(result.reason);
+    persist(); render();
+  } else if (action === 'leave-case') {
+    state.mode = 'route'; persist(); render();
   } else if (action === 'open-ramen') {
     if (state.selectedAnchor !== TOKO_ANCHOR) { render(); return; }
     state.mode = 'ramen'; persist(); render();
@@ -1896,6 +2018,7 @@ async function boot() {
     bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
+    story = await loadStory().catch(() => story);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
@@ -2004,7 +2127,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.61',
+      version: 'v4.62',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });
@@ -2057,6 +2180,7 @@ async function boot() {
       get data() { return data; },
       get state() { return state; },
       get road() { return roadEvents; },
+      get story() { return story; },
       get sound() { return soundState(); },
       debug: {
         setState(next) { state = next; attachGrowth(state.battle, state, data); persist(); render(); },

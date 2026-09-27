@@ -155,6 +155,12 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('.toko-line').first().scrollIntoViewIfNeeded(); await settle();
       await judge(page, `${name} tokon ramen, after a bowl`);
       await page.locator('[data-action="leave-shop"]').click(); await settle();
+      // FIXTURE: the Thursday Tram, to look at it (v4.62).
+      await fixture(() => { const s = structuredClone(window.__ptv3.state); s.flags.push('memory:saw-the-tram', 'mccormicks-know-skim'); s.selectedAnchor = 'piritori'; s.mode = 'case'; window.__ptv3.debug.setState(s); });
+      await judge(page, `${name} the thursday tram`);
+      await page.locator('[data-action="case-choose"]').first().scrollIntoViewIfNeeded(); await settle();
+      await judge(page, `${name} the thursday tram choices`);
+      await fixture(() => { const s = structuredClone(window.__ptv3.state); s.mode = 'route'; window.__ptv3.debug.setState(s); });
       // FIXTURE: a road event, to look at it (v4.58).
       await fixture(() => { const s = structuredClone(window.__ptv3.state); s.mode = 'road'; s.road = { journeys: 4, since: 0, seen: [], pending: { id: 'road-underpass', phase: 'transit', from: 'kurvi', to: s.selectedAnchor }, minutes: 0, minutesBlock: -1, last: null }; window.__ptv3.debug.setState(s); });
       await judge(page, `${name} road event`);
