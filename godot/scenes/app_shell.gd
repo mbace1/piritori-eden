@@ -66,6 +66,7 @@ var _body: BoxContainer
 var _world_host: PanelContainer
 var _rail: PanelContainer
 var _rail_box: VBoxContainer
+var _rail_foot: VBoxContainer    ## the pinned next step, below the scroll
 var _city_map: Control
 var _is_portrait := false
 var _stage_has_speaker := false   ## drives the portrait stage/rail split
@@ -208,7 +209,7 @@ func _show_fatal(errors: PackedStringArray) -> void:
 
 func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = PiritoriPalette.INK
+	bg.color = PiritoriPalette.NIGHT
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -236,10 +237,12 @@ func _build() -> void:
 
 	var titles := VBoxContainer.new()
 	titles.add_theme_constant_override("separation", 0)
-	_title = _make_label("PIRITORI → EDEN", 27, MapStyle.TITLE_TEXT)
+	_title = _make_label("PIRITORI → EDEN", 30, PiritoriPalette.TEXT)
+	_title.theme_type_variation = PiritoriChrome.TITLE
 	_title.add_theme_constant_override("outline_size", 0)
 	titles.add_child(_title)
-	_status_line2 = _make_label("", 12, MapStyle.SUB_TEXT)
+	# An eyebrow, not cyan: cyan means YOU now (Lantern Noir, v4.56).
+	_status_line2 = _make_label("", 12, PiritoriPalette.TEXT_FAINT)
 	titles.add_child(_status_line2)
 	_head_row.add_child(titles)
 
@@ -318,7 +321,24 @@ func _build() -> void:
 	rpad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	rpad.add_child(_rail_box)
 	scroll.add_child(rpad)
-	_rail.add_child(scroll)
+	# THE FOOT (web v4.57's next-step bar, "pinned above the command bar"):
+	# the rail's one lit action lives below the scroll, so a long rail — a
+	# planned journey states its path and its cost — can never push the way
+	# forward below the fold. It is still the last thing on the rail.
+	var rail_col := VBoxContainer.new()
+	rail_col.add_theme_constant_override("separation", 0)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	rail_col.add_child(scroll)
+	_rail_foot = VBoxContainer.new()
+	_rail_foot.add_theme_constant_override("separation", 6)
+	var fpad := MarginContainer.new()
+	for side in ["left", "right"]:
+		fpad.add_theme_constant_override("margin_" + side, 12)
+	fpad.add_theme_constant_override("margin_top", 0)
+	fpad.add_theme_constant_override("margin_bottom", 10)
+	fpad.add_child(_rail_foot)
+	rail_col.add_child(fpad)
+	_rail.add_child(rail_col)
 	_body.add_child(_rail)
 
 	# ── command bar (UX chrome, layer 12) ──
@@ -460,7 +480,13 @@ func _size_commands(vp: Vector2) -> void:
 	# shared so the bar stays even. This also stops the same bug happening
 	# again in Finnish or Japanese, where the words are not the same length.
 	var icon_w := h * COMMAND_ICON_FRACTION
-	var room := per - icon_w - COMMAND_BAR_SEPARATION - 14.0
+	# Room is what a button really gets: they EXPAND to share the bar, so a
+	# landscape window gives each ~300 units while `per` (the minimum) stays
+	# 96 — measuring against the minimum dropped every word on a desktop.
+	var avail := per
+	if count > 0:
+		avail = maxf(per, (vp.x - COMMAND_BAR_SEPARATION * float(count - 1) - COMMAND_BAR_PADDING) / float(count))
+	var room := avail - icon_w - COMMAND_BAR_SEPARATION - 14.0
 	var size_px := int(maxf(h * COMMAND_LABEL_FRACTION, 13.0))
 	if not icons_only and room > 0.0:
 		var font: Font = null
@@ -472,7 +498,7 @@ func _size_commands(vp: Vector2) -> void:
 				font = l.get_theme_font("font")
 				break
 		if font != null:
-			while size_px > 11:
+			while size_px > PiritoriFonts.FLOOR_PX:
 				var widest := 0.0
 				for b in _commands:
 					if b == null:
@@ -486,7 +512,7 @@ func _size_commands(vp: Vector2) -> void:
 					break
 				size_px -= 1
 			# Still too wide at the floor: the word cannot share the button.
-			if size_px <= 11:
+			if size_px <= PiritoriFonts.FLOOR_PX:
 				icons_only = true
 
 	for b in _commands:
@@ -636,7 +662,7 @@ func _rebuild_language_buttons() -> void:
 	dev.custom_minimum_size = Vector2(MIN_TARGET, MIN_TARGET)
 	dev.tooltip_text = "Developer overlay (F3)"
 	dev.focus_mode = Control.FOCUS_ALL
-	dev.add_theme_font_size_override("font_size", 11)
+	dev.add_theme_font_size_override("font_size", PiritoriFonts.FLOOR_PX)
 	dev.add_theme_color_override("font_color", MapStyle.TINY_TEXT)
 	var dsb := PiritoriChrome.button()
 	dev.add_theme_stylebox_override("normal", dsb)
@@ -665,8 +691,7 @@ func _refresh_status() -> void:
 	# it is a City action (§3.3), and ending the day out from under a battle
 	# is not a decision the player should be able to make by mistake.
 	if _is_committed():
-		_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE,
-			"€ %s" % _thousands(GameState.cash_eur))
+		_add_cash_stat()
 		return
 
 	_add_end_day_button()
@@ -676,7 +701,85 @@ func _refresh_status() -> void:
 		packs += int(v)
 	_add_stat(PiritoriIcon.Kind.STOCK, MapStyle.GOODS, "%d" % packs)
 	_add_stat(PiritoriIcon.Kind.MISSION, MapStyle.METRO, "%d" % _live_leads())
-	_add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, "€ %s" % _thousands(GameState.cash_eur))
+	_add_cash_stat()
+
+
+# ── money you can feel (web Act I v4.57, `renderCash()`) ───────────────────
+#
+# The cash chip counts to its new value and names the change beside it
+# (+€68 / −€45). PRESENTATION ONLY: the value at rest is always
+# GameState.cash_eur, and a new campaign or a load (a new `campaign_epoch`)
+# reports no change, because there is nothing to have changed from. Under a
+# still preference (`?still`) the number jumps and the change still shows,
+# held rather than faded, so no information lives only in motion.
+const CASH_COUNT_SEC := 0.65
+const CASH_DELTA_SEC := 3.2
+
+var _cash_shown := 0            ## GameState.cash_eur at the last refresh
+var _cash_epoch := -1
+var _cash_display := 0.0        ## what the chip reads right now (mid-count)
+var _cash_delta := 0            ## the change being named, or 0
+var _cash_delta_until := 0      ## msec; the delta is dropped after this
+var _cash_label: Label
+var _cash_tween: Tween
+
+func _still() -> bool:
+	return DebugEntry.has("still")
+
+
+func _add_cash_stat() -> void:
+	var to := GameState.cash_eur
+	var now := Time.get_ticks_msec()
+	if _cash_epoch != GameState.campaign_epoch:
+		_cash_display = float(to)
+		_cash_delta = 0
+		if _cash_tween:
+			_cash_tween.kill()
+	elif to != _cash_shown:
+		_cash_delta = to - _cash_shown
+		_cash_delta_until = now + int(CASH_DELTA_SEC * 1000.0)
+		if _cash_tween:
+			_cash_tween.kill()
+		if _still():
+			_cash_display = float(to)
+		else:
+			_cash_tween = create_tween()
+			_cash_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			_cash_tween.tween_method(_set_cash_display, _cash_display, float(to), CASH_COUNT_SEC)
+	_cash_shown = to
+	_cash_epoch = GameState.campaign_epoch
+
+	_cash_label = _add_stat(PiritoriIcon.Kind.CASH, MapStyle.ROUTE, _cash_text(_cash_display))
+	if _cash_delta == 0 or now >= _cash_delta_until:
+		_cash_delta = 0
+		return
+	var up := _cash_delta > 0
+	var d := _make_label("%s€%s" % ["+" if up else "−", _thousands(absi(_cash_delta))],
+		int(_cash_label.get_theme_font_size("font_size")) - 2,
+		PiritoriPalette.CASH_UP if up else PiritoriPalette.CASH_DOWN, false)
+	d.name = "CashDelta"
+	d.set_meta("cash_delta", _cash_delta)
+	_cash_label.get_parent().add_child(d)
+	var left := float(_cash_delta_until - now) / 1000.0
+	var fade := create_tween().bind_node(d)
+	if _still():
+		fade.tween_interval(left)
+		fade.tween_callback(d.hide)
+	else:
+		fade.tween_interval(maxf(left - 0.6, 0.0))
+		fade.tween_property(d, "modulate:a", 0.0, minf(0.6, left))
+
+
+func _set_cash_display(v: float) -> void:
+	_cash_display = v
+	if is_instance_valid(_cash_label):
+		_cash_label.text = _cash_text(v)
+
+
+## Mid-count the number is rounded; at rest it is exactly the state's.
+func _cash_text(v: float) -> String:
+	var n := GameState.cash_eur if absf(v - float(GameState.cash_eur)) < 0.5 else int(round(v))
+	return "€ %s" % _thousands(n)
 
 
 ## UX_SPEC.md §3.3 ("Navigation model"): "`WAIT / CLOSE BLOCK` is an explicit
@@ -750,7 +853,7 @@ func _thousands(n: int) -> String:
 ## icon and 16px text these were about 5 CSS pixels on a phone — present, and
 ## unreadable, which is worse than absent because it occupies the space where a
 ## readable version would go.
-func _add_stat(kind: int, col: Color, text: String) -> void:
+func _add_stat(kind: int, col: Color, text: String) -> Label:
 	var vp := get_viewport_rect().size
 	var basis: float = vp.y if vp.y > vp.x else vp.x
 	var icon_px := clampf(basis * STAT_ICON_FRACTION, 17.0, 64.0)
@@ -763,6 +866,7 @@ func _add_stat(kind: int, col: Color, text: String) -> void:
 	var l := _make_label(text, text_px, MapStyle.TITLE_TEXT, false)
 	row.add_child(l)
 	_stats.add_child(row)
+	return l
 
 
 # ── modes ──────────────────────────────────────────────────────────────────
@@ -831,6 +935,8 @@ func _clear_world() -> void:
 func _clear_rail() -> void:
 	for c in _rail_box.get_children():
 		c.queue_free()
+	for c in _rail_foot.get_children():
+		c.queue_free()
 
 
 func _show_city() -> void:
@@ -895,6 +1001,11 @@ func _commit_journey() -> void:
 
 func _build_city_rail(anchor_id: String) -> void:
 	_clear_rail()
+	_build_city_rail_body(anchor_id)
+	_add_next_step()
+
+
+func _build_city_rail_body(anchor_id: String) -> void:
 	if anchor_id == "":
 		_rail_box.add_child(_make_label(tr("ui.select_place"), 15, PiritoriPalette.TEXT_DIM))
 		return
@@ -904,10 +1015,13 @@ func _build_city_rail(anchor_id: String) -> void:
 		return
 	var state: String = a.get("sliceState", "locked")
 
-	_rail_box.add_child(_make_label(String(a.get("label", anchor_id)), 19))
+	var place := _make_label(String(a.get("label", anchor_id)).to_upper(), 28)
+	place.theme_type_variation = PiritoriChrome.TITLE
+	_rail_box.add_child(place)
+	# The glyph carries the state; the word stays ink. Cyan is spent on YOU now.
 	_rail_box.add_child(_make_label("%s  %s" % [
 		PiritoriPalette.state_glyph(state), tr(PiritoriPalette.state_key(state))],
-		13, PiritoriPalette.anchor_color(state)))
+		13, PiritoriPalette.TEXT_DIM))
 
 	var roles: Array = a.get("roles", [])
 	if roles.size() > 0:
@@ -919,7 +1033,7 @@ func _build_city_rail(anchor_id: String) -> void:
 	# Say so plainly rather than letting English prose under a Finnish or
 	# Japanese interface read as a bug.
 	if not Loc.content_is_translated():
-		var note := _make_label(tr("ui.content_en_only"), 11, PiritoriPalette.TEXT_DIM)
+		var note := _make_label(tr("ui.content_en_only"), 12, PiritoriPalette.TEXT_DIM)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(note)
 
@@ -929,7 +1043,7 @@ func _build_city_rail(anchor_id: String) -> void:
 	var lead := ContentRegistry.anchor(lead_id)
 	var here := anchor_id == GameState.current_anchor_id
 	_rail_box.add_child(_make_label(tr("ui.you_are_here") if here else tr("ui.inspecting"),
-		13, PiritoriPalette.PLAYER_CYAN if here else PiritoriPalette.TEXT_DIM))
+		13, PiritoriPalette.YOU if here else PiritoriPalette.TEXT_DIM))
 	var who := _make_label(tr("ui.presence_line") % [
 		String(present.get("label", GameState.current_anchor_id)),
 		String(lead.get("label", "—")) if lead_id != "" else "—"], 13, PiritoriPalette.TEXT_DIM)
@@ -955,8 +1069,9 @@ func _build_city_rail(anchor_id: String) -> void:
 				tr("ui.day_n") % int(entry.get("day", 0)),
 				tr("ui.block.night") if blk == "night" else tr("ui.block.day"),
 			]
+		# Unlit: the same action is the lit next step at the foot of the rail.
 		var b := _make_button("▶ " + String(site.get("label", enc["id"])) + when,
-			PiritoriPalette.PLAYER_CYAN)
+			PiritoriPalette.TEXT)
 		var eid: String = enc["id"]
 		b.pressed.connect(func(): _show_location(eid))
 		_rail_box.add_child(b)
@@ -985,14 +1100,14 @@ func _build_away_rail(anchor_id: String, state: String, lead_id: String) -> void
 		var names: Array = []
 		for id in _journey["path"]:
 			names.append(String(ContentRegistry.anchor(String(id)).get("label", id)))
-		_rail_box.add_child(_make_label(tr("ui.journey_legs") % (names.size() - 1), 14, PiritoriPalette.PLAYER_CYAN))
+		_rail_box.add_child(_make_label(tr("ui.journey_legs") % (names.size() - 1), 14, PiritoriPalette.YOU))
 		var route := _make_label(" → ".join(names), 14)
 		route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(route)
 		var cost := _make_label(tr("ui.journey_cost"), 12, PiritoriPalette.TEXT_DIM)
 		cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(cost)
-		var go := _make_button(tr("ui.travel"), PiritoriPalette.PLAYER_CYAN)
+		var go := _make_button(tr("ui.travel"), PiritoriPalette.YOU)
 		go.pressed.connect(_commit_journey)
 		_rail_box.add_child(go)
 		var stop := _make_button(tr("ui.cancel_journey"), PiritoriPalette.TEXT_DIM)
@@ -1002,13 +1117,105 @@ func _build_away_rail(anchor_id: String, state: String, lead_id: String) -> void
 	var plan := GameState.preview_journey(anchor_id)
 	if bool(plan.get("ok", false)):
 		var b := _make_button(tr("ui.travel_here") % String(ContentRegistry.anchor(anchor_id).get("label", anchor_id)),
-			PiritoriPalette.PLAYER_CYAN)
+			PiritoriPalette.YOU)
 		b.pressed.connect(func(): _plan_journey(anchor_id))
 		_rail_box.add_child(b)
 	else:
 		_rail_box.add_child(_make_label(
 			tr("ui.closed_era") if state == "locked" else tr("ui.look_not_go"),
 			14, PiritoriPalette.TEXT_DIM))
+
+
+# ── the next step (web Act I v4.57, `nextStep()` in web/js/v3/app.js) ──────
+#
+# Measured on the browser build before v4.57: 3 of 11 opening steps on a desktop
+# had no lit action in view. Every time the story moved the lead the copy said
+# "go to the newly highlighted anchor" and offered no button. So the city rail
+# ENDS with exactly one lit action, derived from state and nothing else:
+#
+#   a journey is planned            → TRAVEL · <destination>   (commits it)
+#   Aatami is at the lead, its      → ENTER · <encounter>      (opens it)
+#     encounter still available
+#   the lead is somewhere else      → TRAVEL TO <lead>         (PLANS it)
+#
+# It only routes to the ordinary actions the rail already has — it has no
+# rules of its own — and a stale step (the state moved under it) does nothing.
+# The rail's own buttons for the same actions stay, unlit.
+
+## The step, or {} when the story offers none (the campaign is over, the
+## beat here is spent, the lead cannot be walked to).
+func _next_step() -> Dictionary:
+	if GameState.ending_id != "" or GameState.is_slice_complete():
+		return {}
+	var lead_id := GameState.story_lead_id()
+	if lead_id == "":
+		return {}
+	if bool(_journey.get("ok", false)):
+		var dest := String(_journey.get("destination", ""))
+		return {"step": "commit", "label": tr("ui.next_travel") % _anchor_label(dest),
+			"hint": tr("ui.next_hint_commit")}
+	if GameState.current_anchor_id == lead_id:
+		var entry := ContentRegistry.scheduled_for(GameState.day, GameState.current_block())
+		var eid := String(entry.get("encounter_id", ""))
+		if eid == "" or not GameState.is_encounter_available(eid):
+			return {}
+		var enc := ContentRegistry.encounter(eid)
+		var site := ContentRegistry.site(String(enc.get("site_id", "")))
+		return {"step": "enter", "encounter": eid,
+			"label": tr("ui.next_enter") % String(site.get("label", eid)).to_upper(),
+			"hint": tr("ui.next_hint_enter") % String(ContentRegistry.anchor(lead_id).get("label", lead_id))}
+	if not bool(GameState.preview_journey(lead_id).get("ok", false)):
+		return {}
+	return {"step": "plan", "lead": lead_id,
+		"label": tr("ui.next_travel_to") % _anchor_label(lead_id),
+		"hint": tr("ui.next_hint_plan")}
+
+
+func _add_next_step() -> void:
+	var next := _next_step()
+	if next.is_empty():
+		return
+	_rail_foot.add_child(_separator())
+	var hint := _make_label(String(next["hint"]), 13, PiritoriPalette.TEXT_DIM)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_foot.add_child(hint)
+	var step := String(next["step"])
+	var b := _make_lit(String(next["label"]))
+	b.set_meta("next_step", step)
+	b.pressed.connect(func(): _on_next_step(step))
+	_rail_foot.add_child(b)
+
+
+func _on_next_step(step: String) -> void:
+	var next := _next_step()
+	if next.is_empty() or String(next["step"]) != step:
+		_build_city_rail(_city_map.inspected())
+		return
+	match step:
+		"enter":
+			_show_location(String(next["encounter"]))
+		"plan":
+			# Look at the lead, then plan the walk there — the same two things
+			# a thumb would do on the map and then on TRAVEL HERE.
+			var lead := String(next["lead"])
+			_city_map.select(lead)
+			_plan_journey(lead)
+		"commit":
+			_commit_journey()
+
+
+## THE lit primary (PiritoriChrome.LIT): lantern amber, dark ink. One per rail.
+func _make_lit(text: String) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.theme_type_variation = PiritoriChrome.LIT
+	var s := _text_scale()
+	b.custom_minimum_size = Vector2(0, maxf(MIN_TARGET + 4.0, (MIN_TARGET + 4.0) * s * 0.8))
+	b.add_theme_font_size_override("font_size", int(round(16.0 * s)))
+	b.focus_mode = Control.FOCUS_ALL
+	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	b.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	return b
 
 
 func _show_location(encounter_id: String) -> void:
@@ -1473,7 +1680,9 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var icon := PiritoriIcon.new(kind, accent, 22.0)
 	row.add_child(icon)
-	var l := _make_label(text, 15, accent)
+	# Ink, not the accent: the icon carries the command's colour, and a row of
+	# four coloured words was four things competing to be lit (v4.56).
+	var l := _make_label(text, 15, PiritoriPalette.TEXT)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(l)
 	b.add_child(row)
@@ -1980,9 +2189,17 @@ func _make_label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT,
 		scale: bool = true) -> Label:
 	var l := Label.new()
 	l.text = text
-	var px := float(size_px) * (_text_scale() if scale else 1.0)
+	# The 12px floor (web v4.56: 329 texts under 12px became 0), and AA against
+	# the dark panel for whatever accent the caller asked for.
+	# A rail heading (authored at 19 and up) is the display voice: condensed,
+	# and big enough to lead (web v4.56 `.map-side h2`, 30px).
+	if scale and size_px >= 19:
+		l.theme_type_variation = PiritoriChrome.TITLE
+		size_px = maxi(size_px, 26)
+		l.uppercase = true
+	var px := maxf(float(size_px) * (_text_scale() if scale else 1.0), PiritoriFonts.FLOOR_PX)
 	l.add_theme_font_size_override("font_size", int(round(px)))
-	l.add_theme_color_override("font_color", col)
+	l.add_theme_color_override("font_color", PiritoriChrome.readable(col, PiritoriPalette.PANEL))
 	return l
 
 
@@ -1996,8 +2213,11 @@ func _make_button(text: String, accent: Color) -> Button:
 	# rows — the ones a player is meant to press — and they were rendering
 	# smaller than the labels above them.
 	b.add_theme_font_size_override("font_size", int(round(15.0 * s)))
-	b.add_theme_color_override("font_color", accent)
-	b.add_theme_color_override("font_disabled_color", PiritoriPalette.LOCKED_GREY)
+	# A quiet dark control from the theme (Lantern Noir); the accent only tints
+	# its word, lifted to AA. The ONE lit action on a screen is `_make_lit()`.
+	var ink := PiritoriChrome.readable(accent)
+	for c in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		b.add_theme_color_override(c, ink)
 	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	return b

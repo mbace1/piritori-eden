@@ -357,8 +357,15 @@ func _ready() -> void:
 		new_campaign()
 
 
+## Bumped by a new campaign and by a load — never saved, never a rule. The
+## header's cash readout (web v4.57) names a CHANGE only within one epoch, so
+## starting over or loading a save is not reported as money moving.
+var campaign_epoch: int = 0
+
+
 ## Reset to the slice's authored starting state.
 func new_campaign(with_seed: int = 0) -> void:
+	campaign_epoch += 1
 	var campaign: Dictionary = ContentRegistry.campaign()
 	var start: Dictionary = campaign.get("starting_state", {})
 
@@ -1716,6 +1723,7 @@ func to_dict() -> Dictionary:
 
 
 func from_dict(d: Dictionary) -> bool:
+	campaign_epoch += 1
 	if int(d.get("schema_version", -1)) != SCHEMA_VERSION:
 		push_error("GameState: save schema %s does not match %s" % [d.get("schema_version"), SCHEMA_VERSION])
 		return false

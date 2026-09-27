@@ -94,7 +94,12 @@ const LANDMARK_EDGE := Color("#191d1f")
 
 # ── paper tabs and chrome ─────────────────────────────────────────────────
 const TAB := Color("#b79b70")            ## labelTab: tan paper
-const PRESENCE := Color("#f3ead8")       ## where Aatami stands, and a planned journey: cream, dashed
+## Lantern Noir (web v4.56): cyan means YOU — where Aatami stands and the
+## journey you planned; amber means THE WAY FORWARD — the story lead and the
+## line toward it. Both are also shapes (a dashed diamond, a dashed path, a
+## pulsing ring), so colour never carries the meaning alone (ART_BIBLE §4.2).
+const PRESENCE := PiritoriPalette.YOU    ## where Aatami stands, and a planned journey: dashed
+const LEAD := PiritoriPalette.LANTERN    ## the story lead's pulse and the way to it
 const TAB_EDGE := Color("#16191b")
 const TAB_TEXT := Color("#16191b")
 const DARK_TAB := Color("#151b1e")

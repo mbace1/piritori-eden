@@ -1,6 +1,11 @@
 class_name PiritoriChrome
 extends RefCounted
-## The UI's material: worn dark card with a broken bone rule, drawn in code.
+## The UI's material, drawn in code.
+##
+## SINCE THE LANTERN NOIR PORT (web v4.56): structural boxes are quiet flat
+## backing, the one primary action is lit amber, and the torn card below makes
+## only the PAPER faces — see "public" for the split. What follows is the
+## history of the card, which the paper faces still use.
 ##
 ## THE PROBLEM THIS SOLVES. Every panel, bar and button in the game was a
 ## `StyleBoxFlat` — a flat fill with a two-pixel border. Owner, on seeing the
@@ -51,22 +56,201 @@ static var _cache: Dictionary = {}
 
 
 # ── public ────────────────────────────────────────────────────────────────
+#
+# LANTERN NOIR (web Act I v4.56; ART_BIBLE §5.3, design/UI_LANTERN_NOIR.md).
+# The torn dark card above was on EVERY panel, bar and button, on the same
+# navy, so nothing was lit and nothing led. §5.3 names three layers — a dark
+# structural backing, a lighter paper face, an optional lift — and the change
+# is WHICH things get the paper: the things you read and act on (a choice, a
+# narration plate, a label tab), never the structure holding them. So:
+#
+#   panel() / bar()   the structural backing: quiet, flat, one hairline edge
+#   button()          a raised dark face — a control, not a card
+#   lit()             THE primary action: a lantern-amber face, dark text
+#   plate*()          paper, unchanged, for what you read and act on
+#
+# The procedural card painter below stays: plates are still made by it, and
+# `tools/chrome-dump.gd` still dumps it.
 
-## A framed dark card. `accent` tints the bone rule toward an action colour.
-static func panel(accent: Color = RULE, torn_top: bool = false,
-		torn_bottom: bool = false) -> StyleBoxTexture:
-	return _box("panel", CARD, accent, torn_top, torn_bottom, 14, 10)
+## Type variations the theme defines (see `theme()`); set one on a Control with
+## `theme_type_variation` instead of retyping a style at the call site.
+const LIT := &"LitButton"          ## THE primary action — one per screen
+const TITLE := &"TitleLabel"       ## display condensed: titles, places
+const LEDGER := &"LedgerLabel"     ## ledger mono: dialogue, quotes, battle log
 
 
-## A command tab. Same card, tighter margins, brighter when `hot`.
-static func button(accent: Color = RULE, hot: bool = false) -> StyleBoxTexture:
-	return _box("btn" + ("H" if hot else ""), CARD_HOT if hot else CARD,
-		accent, false, false, 12, 8)
+## A structural panel: quiet dark backing with a hairline edge. `accent` and the
+## torn flags are accepted for old call sites and deliberately ignored — a
+## structural box does not get a torn frame any more.
+static func panel(_accent: Color = RULE, _torn_top: bool = false,
+		_torn_bottom: bool = false) -> StyleBox:
+	var key := "q|panel"
+	if not _cache.has(key):
+		var sb := _flat(PiritoriPalette.PANEL, PiritoriPalette.LINE, 1, 3, 14, 10)
+		_cache[key] = sb
+	return _cache[key]
 
 
-## A full-width bar that meets the world. Torn on the side the world is on.
-static func bar(torn_top: bool = true) -> StyleBoxTexture:
-	return _box("bar", CARD, RULE, torn_top, not torn_top, 10, 8)
+## A command button: a raised dark face, its edge leaning toward the command's
+## own accent so a row of tabs stays tellable apart in the dark.
+static func button(accent: Color = RULE, hot: bool = false) -> StyleBox:
+	var key := "q|btn|%s|%d" % [accent.to_html(), int(hot)]
+	if not _cache.has(key):
+		var face := PiritoriPalette.PANEL_2.lightened(0.07) if hot else PiritoriPalette.PANEL_2
+		var edge := PiritoriPalette.LINE_STRONG.lerp(Color(accent, 1.0), 0.55 if hot else 0.30)
+		var sb := _flat(face, edge, 1, 4, 12, 8)
+		sb.shadow_color = Color(0, 0, 0, 0.45)
+		sb.shadow_size = 1
+		sb.shadow_offset = Vector2(0, 2)
+		_cache[key] = sb
+	return _cache[key]
+
+
+## THE LIT PRIMARY. One per screen: the next step. A lantern-amber face with
+## dark ink, the one warm thing the eye is meant to land on.
+static func lit(hot: bool = false) -> StyleBox:
+	var key := "q|lit|%d" % int(hot)
+	if not _cache.has(key):
+		var sb := _flat(PiritoriPalette.LANTERN_HOT if hot else PiritoriPalette.LANTERN,
+			PiritoriPalette.LANTERN_EDGE, 1, 4, 14, 10)
+		sb.shadow_color = Color(PiritoriPalette.LANTERN, 0.30)
+		sb.shadow_size = 10
+		_cache[key] = sb
+	return _cache[key]
+
+
+## A full-width bar (the header, the command dock): flat, one hairline on the
+## side the world is on.
+static func bar(torn_top: bool = true) -> StyleBox:
+	var key := "q|bar|%d" % int(torn_top)
+	if not _cache.has(key):
+		var sb := _flat(PiritoriPalette.NIGHT_2, PiritoriPalette.LINE, 0, 0, 10, 8)
+		if torn_top:
+			sb.border_width_top = 1
+		else:
+			sb.border_width_bottom = 1
+		sb.shadow_color = Color(0, 0, 0, 0.40)
+		sb.shadow_size = 6
+		_cache[key] = sb
+	return _cache[key]
+
+
+## `col`, lifted toward the ink until it reads on `bg` at WCAG AA (4.5:1).
+## The accents were chosen for a map, not for 14px text on a dark panel —
+## magenta on the rail read 3.3:1 — so text asks for a readable version of its
+## accent instead of the accent itself. Hue survives; only lightness moves.
+static func readable(col: Color, bg: Color = PiritoriPalette.PANEL_2) -> Color:
+	var c := Color(col, 1.0)
+	for i in 12:
+		if contrast(c, bg) >= 4.5:
+			break
+		c = c.lerp(PiritoriPalette.TEXT, 0.12)
+	return Color(c, col.a)
+
+
+static func contrast(a: Color, b: Color) -> float:
+	# WCAG relative luminance is taken on LINEAR light; Color.get_luminance()
+	# weights the raw sRGB channels, which flatters every dark pair.
+	var la := _rel_lum(a)
+	var lb := _rel_lum(b)
+	return (maxf(la, lb) + 0.05) / (minf(la, lb) + 0.05)
+
+
+static func _rel_lum(c: Color) -> float:
+	var l := c.srgb_to_linear()
+	return 0.2126 * l.r + 0.7152 * l.g + 0.0722 * l.b
+
+
+## True when a button wears the lit primary — the gate's question, asked the
+## way the theme answers it rather than by comparing colours.
+static func is_lit(c: Control) -> bool:
+	return c != null and c.theme_type_variation == LIT
+
+
+## The whole interface's material in one Theme: the Lantern type roles, the
+## quiet default button, and the three variations above. The shell installs it
+## once at its root, so every Control and every draw_string inherits it.
+static func theme() -> Theme:
+	var t := Theme.new()
+	t.default_font = PiritoriFonts.body(400)
+	t.default_font_size = 15
+
+	t.set_color("font_color", "Label", PiritoriPalette.TEXT)
+
+	# The ordinary button. A rail button that never asked for a style used to
+	# fall through to Godot's grey default; now it is a quiet dark control.
+	t.set_font("font", "Button", PiritoriFonts.body(600))
+	t.set_stylebox("normal", "Button", button())
+	t.set_stylebox("hover", "Button", button(RULE, true))
+	t.set_stylebox("pressed", "Button", button(RULE, true))
+	t.set_stylebox("focus", "Button", _focus_ring(PiritoriPalette.YOU))
+	t.set_stylebox("disabled", "Button", _flat(PiritoriPalette.PANEL, PiritoriPalette.LINE, 1, 4, 12, 8))
+	t.set_color("font_color", "Button", PiritoriPalette.TEXT)
+	t.set_color("font_hover_color", "Button", PiritoriPalette.TEXT)
+	t.set_color("font_pressed_color", "Button", PiritoriPalette.TEXT)
+	t.set_color("font_focus_color", "Button", PiritoriPalette.TEXT)
+	t.set_color("font_disabled_color", "Button", PiritoriPalette.LOCKED_GREY.lightened(0.25))
+
+	# The lit primary. Colours are set for EVERY state so a hover, a focus or
+	# a per-button override elsewhere cannot leave pale text on amber.
+	t.set_type_variation(LIT, &"Button")
+	t.set_font("font", LIT, PiritoriFonts.body(700))
+	t.set_stylebox("normal", LIT, lit())
+	t.set_stylebox("hover", LIT, lit(true))
+	t.set_stylebox("pressed", LIT, lit(true))
+	t.set_stylebox("focus", LIT, _focus_ring(PiritoriPalette.LANTERN_INK))
+	for c in ["font_color", "font_hover_color", "font_pressed_color",
+			"font_focus_color", "font_hover_pressed_color"]:
+		t.set_color(c, LIT, PiritoriPalette.LANTERN_INK)
+
+	t.set_type_variation(TITLE, &"Label")
+	t.set_font("font", TITLE, PiritoriFonts.display(700))
+
+	t.set_type_variation(LEDGER, &"Label")
+	t.set_font("font", LEDGER, PiritoriFonts.mono(400))
+
+	var sep := StyleBoxLine.new()
+	sep.color = PiritoriPalette.LINE_STRONG
+	sep.thickness = 1
+	t.set_stylebox("separator", "HSeparator", sep)
+	return t
+
+
+## A copy with different padding. The cache hands out SHARED StyleBoxes, so
+## anything that needs its own margins must take a duplicate — writing to the
+## cached one would silently repad every other control using that kind.
+static func margins(sb: StyleBox, mx: int, my: int) -> StyleBox:
+	var d: StyleBox = sb.duplicate()
+	d.content_margin_left = mx
+	d.content_margin_right = mx
+	d.content_margin_top = my
+	d.content_margin_bottom = my
+	return d
+
+
+static func _flat(face: Color, edge: Color, border: int, radius: int,
+		mx: int, my: int) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = face
+	sb.border_color = edge
+	sb.set_border_width_all(border)
+	sb.set_corner_radius_all(radius)
+	sb.content_margin_left = mx
+	sb.content_margin_right = mx
+	sb.content_margin_top = my
+	sb.content_margin_bottom = my
+	sb.anti_aliasing = true
+	return sb
+
+
+static func _focus_ring(col: Color) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.draw_center = false
+	sb.border_color = col
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(5)
+	sb.set_expand_margin_all(2)
+	return sb
 
 
 ## A cream carton label plate — torn top and bottom, ink lettering over it.
@@ -90,18 +274,6 @@ static func plate(accent: Color = CARTON) -> StyleBoxTexture:
 static func plate_button(accent: Color = CARTON, hot: bool = false) -> StyleBoxTexture:
 	var face := CARTON.lightened(0.10) if hot else CARTON
 	return _box("plateBtn" + ("H" if hot else ""), face, accent, false, true, 12, 9)
-
-
-## A copy with different padding. The cache hands out SHARED StyleBoxes, so
-## anything that needs its own margins must take a duplicate — writing to the
-## cached one would silently repad every other control using that kind.
-static func margins(sb: StyleBoxTexture, mx: int, my: int) -> StyleBoxTexture:
-	var d: StyleBoxTexture = sb.duplicate()
-	d.content_margin_left = mx
-	d.content_margin_right = mx
-	d.content_margin_top = my
-	d.content_margin_bottom = my
-	return d
 
 
 ## The ink colour that stays legible on `plate(accent)`.

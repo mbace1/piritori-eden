@@ -34,11 +34,13 @@ var _mx := Vector2.ONE      ## board-space frame, used by _draw_edge_mask()
 var _selected: String = ""
 var _hovered: String = ""
 var _font: Font
+var _place_font: Font
 var _t := 0.0
 
 
 func _ready() -> void:
 	_font = PiritoriFonts.ui()
+	_place_font = PiritoriFonts.display(700)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
 	_load_geometry()
@@ -379,7 +381,7 @@ func _draw_transit_chips(item: Dictionary) -> void:
 	# The count is cut at the source (`chipsFor()` in build-map-geometry.mjs);
 	# this is the other half — a rounded badge, the shape a transit map
 	# actually uses, with no keyline to draw a square with.
-	var font_px := int(clampf(14.0 * _scale, 10.0, 14.0))
+	var font_px := int(clampf(14.0 * _scale, PiritoriFonts.FLOOR_PX, 14.0))
 	var ink := Color("#16191b") if col.get_luminance() > 0.45 else Color("#f0e9d8")
 	var padx := maxf(6.0 * _scale, 4.0)
 	for c in raw:
@@ -447,8 +449,8 @@ func _draw_crew_and_goods() -> void:
 			continue
 		var path := _corridor(here, aid)
 		if path.size() >= 2:
-			draw_polyline(path, MapStyle.ROUTE, _w(MapStyle.ROUTE_W), true)
-			_draw_arrow_head(path, MapStyle.ROUTE)
+			draw_polyline(path, MapStyle.LEAD, _w(MapStyle.ROUTE_W), true)
+			_draw_arrow_head(path, MapStyle.LEAD)
 
 
 ## Routes follow graph edges and never cut through buildings or water (§5).
@@ -577,7 +579,7 @@ func _draw_anchor(a: Dictionary) -> void:
 
 	if live:
 		var pulse: float = 1.0 if _reduced_motion() else 1.0 + 0.07 * sin(_t * 2.6)
-		draw_arc(pos, r * 1.55 * pulse, 0, TAU, 44, MapStyle.ROUTE, _w(3.5), true)
+		draw_arc(pos, r * 1.55 * pulse, 0, TAU, 44, MapStyle.LEAD, _w(3.5), true)
 	# Presence is a SHAPE as well as a word: a dashed diamond where Aatami
 	# stands, apart from the lead's pulse and the inspection ring.
 	if id == GameState.current_anchor_id:
@@ -657,7 +659,7 @@ func _draw_legend() -> void:
 	var row := clampf(basis * LEGEND_FRACTION, 16.0, 52.0)
 	var pad := row * 0.55
 	var dot := row * 0.34
-	var font_px := int(clampf(row * 0.62, 11.0, 30.0))
+	var font_px := int(clampf(row * 0.62, PiritoriFonts.FLOOR_PX, 30.0))
 
 	var rows := [
 		["active", tr("map.legend_open")],
@@ -693,7 +695,7 @@ func _draw_legend() -> void:
 					maxf(2.0 * _scale, 1.2), true)
 			"lead":
 				draw_circle(Vector2(c, y), dot * 0.55, MapStyle.anchor_fill("active"))
-				draw_arc(Vector2(c, y), dot * 1.25, 0, TAU, 28, MapStyle.ROUTE,
+				draw_arc(Vector2(c, y), dot * 1.25, 0, TAU, 28, MapStyle.LEAD,
 					maxf(2.5 * _scale, 1.4), true)
 			_:
 				draw_circle(Vector2(c, y), dot * 0.62, MapStyle.anchor_fill("active"))
@@ -734,11 +736,12 @@ func _draw_labels() -> void:
 			continue
 
 		var text := String(a.get("label", id)).to_upper()
-		var font_px := int(clampf(19.0 * _scale, 10.0, 18.0))
+		# Places are the display voice (web v4.56 `.map-node-label`, condensed).
+		var font_px := int(clampf(22.0 * _scale, PiritoriFonts.FLOOR_PX, 21.0))
 		var off: Array = a.get("labelOffset", [0, 0])
 		var centre: Vector2 = _layout[id] + Vector2(float(off[0]), float(off[1])) * _scale
 
-		var tw := _font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px).x
+		var tw := _place_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px).x
 		var pad := Vector2(maxf(7.0 * _scale, 4.0), maxf(5.0 * _scale, 3.0))
 		var box := Rect2(centre - Vector2(tw, float(font_px)) * 0.5 - pad,
 			Vector2(tw, float(font_px)) + pad * 2.0)
@@ -765,7 +768,7 @@ func _draw_labels() -> void:
 		draw_circle(stalk, maxf(3.0 * _scale, 1.6), MapStyle.NODE_RIM)
 
 		_label_tab(box, bg, edge)
-		draw_string(_font, box.position + pad + Vector2(0, float(font_px) * 0.82), text,
+		draw_string(_place_font, box.position + pad + Vector2(0, float(font_px) * 0.82), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, font_px, fg)
 
 
@@ -791,7 +794,7 @@ func _label_tab(box: Rect2, bg: Color, edge: Color) -> void:
 
 func _draw_placeholder_note() -> void:
 	draw_string(_font, Vector2(10, size.y - 8), tr("ui.prototype_relief"),
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 11, MapStyle.TINY_TEXT)
+		HORIZONTAL_ALIGNMENT_LEFT, -1, PiritoriFonts.FLOOR_PX, MapStyle.TINY_TEXT)
 
 
 # ── interaction ───────────────────────────────────────────────────────────
