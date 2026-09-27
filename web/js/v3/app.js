@@ -19,7 +19,7 @@ import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR } from './toko.js?v=1';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=2';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -1173,7 +1173,16 @@ function renderRamen() {
       <p class="section-label">A BOWL AND WHAT HE HEARD · ${money(BOWL_EUR)}</p>
       <p>He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.</p>
       <button class="paper-button" data-action="buy-bowl" ${blocked ? 'disabled' : ''}>${blocked === 'already-this-block' ? 'YOU HAVE EATEN THIS BLOCK' : blocked === 'cash' ? `A BOWL IS ${money(BOWL_EUR)}` : `BUY A BOWL · ${money(BOWL_EUR)}`}</button>
-      <p class="consequence-strip">Toko is a friend and a source, not a shop for everything. Gear is the street seller's, on Piritori.</p>
+      <p class="section-label">UNDER THE COUNTER · EARLY WEAPONS</p>
+      <div class="equipment-list">${tokoWeapons(data).map(id => {
+        const equipment = data.equipment.get(id); const price = buyOf(data, id);
+        return `<div class="equipment-chip">
+          ${equipment?.asset_id ? `<img src="${assetUrl(data, equipment.asset_id)}" alt="">` : '<span aria-hidden="true">◇</span>'}
+          <span>${esc(cap(id))}<br><span class="dim">${esc(equipment?.hold ?? '')}</span></span>
+          <button class="paper-button" data-action="buy-toko-weapon" data-equipment="${esc(id)}" ${state.cash >= price ? '' : 'disabled'}>BUY · ${money(price)}</button>
+        </div>`;
+      }).join('')}</div>
+      <p class="consequence-strip">Toko sells a friend's weapons, nothing that goes bang. The first handgun, the fence and the rest of the gear are the street seller's, on Piritori.</p>
       <button class="paper-button primary" data-action="leave-shop">BACK TO THE STREET</button>
     </section>
   </div>`;
@@ -1775,6 +1784,10 @@ function handleRootClick(event) {
   } else if (action === 'open-ramen') {
     if (state.selectedAnchor !== TOKO_ANCHOR) { render(); return; }
     state.mode = 'ramen'; persist(); render();
+  } else if (action === 'buy-toko-weapon') {
+    const result = buyFromToko(state, data, target.dataset.equipment);
+    logToast(result.ok ? `Bought from Toko for ${money(result.paid)}.` : ({ cash: 'Not enough cash.', 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? 'He does not sell that.'));
+    persist(); render();
   } else if (action === 'buy-bowl') {
     const result = buyBowl(state, data);
     if (!result.ok) logToast({ 'already-this-block': 'One bowl a block. He has other customers.', cash: `A bowl is ${money(BOWL_EUR)}.`, 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? result.reason);

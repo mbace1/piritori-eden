@@ -5,11 +5,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, restoreState } from '../js/v3/state.js?v=7';
 import { board, INFO, markSeen } from '../js/v3/board.js?v=3';
-import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR } from '../js/v3/toko.js?v=1';
+import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from '../js/v3/toko.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
-const data = { content, anchors: new Map(map.anchors.map(a => [a.id, a])), sites: new Map(map.sites.map(s => [s.id, s])) };
+const data = { content, equipment: new Map(content.equipment.map(e => [e.id, e])), anchors: new Map(map.anchors.map(a => [a.id, a])), sites: new Map(map.sites.map(s => [s.id, s])) };
 let n = 0; const ok = (c, m) => { assert(c, m); n += 1; };
 
 ok(data.sites.get('toko_slomo_noodles').anchorId === TOKO_ANCHOR && TOKO_ANCHOR === 'vaasankatu', 'Tokon Ramen is on Vaasankatu (answer 16, DESIGN_LOCKS §9.2)');
@@ -50,4 +50,15 @@ ok(board(saved, data).rows.find(x => x.id === tip.id).shown.level === INFO.NONE,
 // Cash
 const poor = createState(content); poor.selectedAnchor = TOKO_ANCHOR; poor.cash = 5;
 ok(bowlBlocker(poor) === 'cash' && buyBowl(poor, data).ok === false && poor.cash === 5, 'no money, no bowl, nothing spent');
+// Early weapons (owner: "Slo-mo can sell early weapons as well").
+const w = tokoWeapons(data);
+ok(w.length >= 3 && w.every(id => data.equipment.get(id).kind === 'weapon'), `Toko sells early weapons (${w.join(', ')})`);
+ok(!w.some(id => /firearm/.test(data.equipment.get(id).hold)), 'never a gun: the first handgun is the street seller\'s');
+const buyer = createState(content);
+ok(buyFromToko(buyer, data, w[0]).reason === 'not-here', 'not from Piritori');
+buyer.selectedAnchor = TOKO_ANCHOR; const c0 = buyer.cash; const e0 = buyer.equipment.length;
+const got = buyFromToko(buyer, data, w[0]);
+ok(got.ok && buyer.cash === c0 - got.paid && buyer.equipment.length === e0 + 1, 'at Vaasankatu, a weapon costs its price and is carried');
+ok(buyFromToko(buyer, data, 'first-handgun').reason === 'not-sold-here', 'he will not sell the handgun');
+buyer.cash = 1; ok(buyFromToko(buyer, data, w[0]).reason === 'cash', 'no money, no weapon');
 console.log(`toko: ${n} checks passed`);

@@ -31,6 +31,7 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 14. **The case files:** "Good looking side quests. We also need similar details in missions." The missions get the same depth: premise, steps, people, pay, risk and art.
 15. **Writing the story:** "McCormicks are in Siltanen and Jade Mob a bit further. They can still go to Piritori if it makes sense but just weave the narrative and ask me to greenlight rather than write the stories." Claude weaves the narrative and brings it for a greenlight; the owner does not pick culprits or write plots.
 16. **Where Tokon Ramen stands:** "Vaasankatu." This keeps the DESIGN_LOCKS §9.2 lock. It stays open from day one.
+17. **Toko's stock:** "Slo-mo can sell early weapons as well." Toko sells melee gear (bat, baton, pipe, knife) as well as information. The first handgun stays at Piritori.
 
 ## Owner continuation, 2026-09-13 — art first
 

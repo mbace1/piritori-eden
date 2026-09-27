@@ -102,8 +102,9 @@ server.listen(0, '127.0.0.1', async () => {
       const ramenBtn = page.locator('[data-action="open-ramen"]');
       ok(`${name}: at Vaasankatu, Tokon Ramen is open on day one, unlit`, await ramenBtn.count() === 1 && !(await ramenBtn.evaluate(el => el.classList.contains('primary'))));
       await ramenBtn.click();
-      ok(`${name}: inside, Toko Slomo speaks, and the counter sells a bowl, not gear`, await page.locator('.ramen-layout .toko-line').count() >= 1
-        && await page.locator('[data-action="buy-bowl"]').count() === 1 && await page.locator('.ramen-layout [data-action="buy-equipment"]').count() === 0);
+      ok(`${name}: inside, Toko Slomo speaks; the counter sells a bowl and early weapons, no gun`, await page.locator('.ramen-layout .toko-line').count() >= 1
+        && await page.locator('[data-action="buy-bowl"]').count() === 1 && await page.locator('[data-action="buy-toko-weapon"]').count() >= 3
+        && await page.locator('[data-action="buy-toko-weapon"][data-equipment="first-handgun"]').count() === 0);
       const cash0 = await page.evaluate(() => window.__ptv3.state.cash);
       await page.locator('[data-action="buy-bowl"]').click();
       const after = await page.evaluate(() => ({ cash: window.__ptv3.state.cash, heard: window.__ptv3.state.heard }));

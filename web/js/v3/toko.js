@@ -8,11 +8,16 @@
 //
 // A BOWL is the purchase: it buys what he heard, which is a RANGE (never a
 // quote) for the best place to sell that you have no range or quote for right
-// now. One bowl a block — he has other customers. The street seller at
-// Piritori keeps the gear, the fence and the first weapon (GDD §10.2).
+// now. One bowl a block — he has other customers.
+//
+// EARLY WEAPONS (owner, 2026-09-27: "Slo-mo can sell early weapons as well"):
+// the purchasable melee gear, at the street price. The first handgun stays
+// with the Piritori street seller and its day-5 scene (GDD §10.2's weapon
+// gate); so do the fence and the rest of the gear.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { board, INFO } from './board.js?v=3';
+import { addEquipment, buyOf, isPurchasable, CONDITION } from './state.js?v=7';
 
 export const BOWL_EUR = 6;
 export const TOKO_ANCHOR = 'vaasankatu';
@@ -46,4 +51,25 @@ export function buyBowl(state, data) {
   state.heard = state.heard ?? {};
   state.heard[tip.id] = state.scheduleIndex;
   return { ok: true, anchorId: tip.id };
+}
+
+/** The early weapons under Toko's counter: purchasable, a weapon, not a gun. */
+export function tokoWeapons(data) {
+  return [...data.equipment.values()]
+    .filter(e => e.kind === 'weapon' && !/firearm/.test(e.hold ?? '') && isPurchasable(data, e.id) && buyOf(data, e.id) > 0)
+    .map(e => e.id);
+}
+
+/** Buy one early weapon from Toko. Returns { ok, paid, reason }. */
+export function buyFromToko(state, data, equipmentId) {
+  if (state.selectedAnchor !== TOKO_ANCHOR) return { ok: false, paid: 0, reason: 'not-here' };
+  if (!tokoWeapons(data).includes(equipmentId)) return { ok: false, paid: 0, reason: 'not-sold-here' };
+  const price = buyOf(data, equipmentId);
+  if ((state.cash ?? 0) < price) return { ok: false, paid: 0, reason: 'cash' };
+  state.cash -= price;
+  addEquipment(state, equipmentId, CONDITION.NEW);
+  state.logs = Array.isArray(state.logs) ? state.logs : [];
+  state.logs.unshift(`Bought a ${equipmentId.replaceAll('-', ' ')} from Toko for €${price}.`);
+  state.logs.length = Math.min(24, state.logs.length);
+  return { ok: true, paid: price };
 }
