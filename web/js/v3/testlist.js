@@ -44,10 +44,10 @@ export const APPROVAL_KEY = 'piritori-to-eden:approvals:v1';
 export const TESTS = [
   {
     id: 'counter-toko',
-    rev: 3,
+    rev: 4,
     build: 'both',
     title: 'The counter — Tokon Ramen',
-    where: 'Day 3 · night · Piritori (moved from Vaasankatu in v4.60)',
+    where: 'Day 3 · night · Vaasankatu',
     note: 'The goal reference for every conversation staged off the fight board (STAGE_SPEC §6). Check the speaker sits BEHIND the counter rather than pasted on it, that nothing draws below the band at 0.647, and that the room reads as one picture rather than a figure over a painting.',
     jump: { kind: 'encounter', id: 'enc-toko-quiet-voice' },
   },

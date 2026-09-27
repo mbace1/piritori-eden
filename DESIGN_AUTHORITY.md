@@ -27,6 +27,11 @@ Owner: "1–4 yes go ahead". Ship v4.57; build travel events; add sound and the 
 
 Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a similar spot near. Toko can be the first shop area." Toko's shop is Tokon Ramen. It stands at Piritori (the Vaasanpuistikko corner of Vaasankatu, which the Piritori anchor already covers), is open from day one, and is where Aatami first buys gear and hears things. Toko's day 3 story beat happens there.
 
+13. **Toko at the counter:** "Toko Slomo at the restaurant? Check the GDD for him." Yes. Per GDD §14.3 and §7.4, Toko sells information (a bowl buys a price range), introductions and uncertain wagers. He is a contact, not a gear shop. The gear and the fence stay with the Piritori street seller (GDD §10.2).
+14. **The case files:** "Good looking side quests. We also need similar details in missions." The missions get the same depth: premise, steps, people, pay, risk and art.
+15. **Writing the story:** "McCormicks are in Siltanen and Jade Mob a bit further. They can still go to Piritori if it makes sense but just weave the narrative and ask me to greenlight rather than write the stories." Claude weaves the narrative and brings it for a greenlight; the owner does not pick culprits or write plots.
+16. **Where Tokon Ramen stands:** "Vaasankatu." This keeps the DESIGN_LOCKS §9.2 lock. It stays open from day one.
+
 ## Owner continuation, 2026-09-13 — art first
 
 “Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish

@@ -19,7 +19,7 @@
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { shortestPath } from './content.js?v=2';
-import { markSeen } from './board.js?v=2';
+import { markSeen } from './board.js?v=3';
 
 export const JOURNEY_EXTRA_BLOCKS = 0;
 

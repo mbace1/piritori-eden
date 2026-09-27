@@ -168,7 +168,7 @@ server.listen(0, '127.0.0.1', async () => {
       const next = structuredClone(window.__ptv3.state);
       next.scheduleIndex = 5;
       next.mode = 'route';
-      next.selectedAnchor = 'piritori'; // Tokon Ramen (v4.60)
+      next.selectedAnchor = 'vaasankatu'; // Tokon Ramen
       delete next.choices['enc-toko-quiet-voice'];
       next.battle = null;
       next.endingId = null;

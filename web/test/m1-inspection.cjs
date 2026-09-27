@@ -215,8 +215,8 @@ server.listen(0, '127.0.0.1', async () => {
 
     // ── 7. a return visit through the map ───────────────────────────
     // FIXTURE (setup only): Toko's quiet-voice encounter already answered, so
-    // his after-service visit is available at Tokon Ramen, Piritori (v4.60).
-    // Presence is left at Siltasaari: reaching Piritori is the action under test.
+    // his after-service visit is available at Tokon Ramen, Vaasankatu. Presence
+    // is left at Siltasaari: reaching Vaasankatu is the action under test.
     await page.evaluate(() => {
       const next = structuredClone(window.__ptv3.state);
       next.choices['enc-toko-quiet-voice'] = next.choices['enc-toko-quiet-voice'] ?? 'fixture';
@@ -224,12 +224,12 @@ server.listen(0, '127.0.0.1', async () => {
       window.__ptv3.debug.setState(next);
     });
     await toRoute(page);
-    await tapAnchor(page, 'piritori');
-    ok('7 inspecting Piritori from elsewhere offers no visit', await page.locator('[data-action="open-visit"]').count() === 0);
+    await tapAnchor(page, 'vaasankatu');
+    ok('7 inspecting Vaasankatu from elsewhere offers no visit', await page.locator('[data-action="open-visit"]').count() === 0);
     await page.locator('[data-action="plan-journey"]').click();
     ok('7 a planned journey is not yet arrival: no visit', await page.locator('[data-action="open-visit"]').count() === 0);
     await page.locator('[data-action="commit-journey"]').click();
-    ok('7 being at Piritori offers the visit', await page.locator('[data-action="open-visit"]').count() === 1);
+    ok('7 being at Vaasankatu offers the visit', await page.locator('[data-action="open-visit"]').count() === 1);
     await page.locator('[data-action="open-visit"]').click();
     ok('7 the visit opens', await page.locator('#game').getAttribute('data-mode') === 'visit');
     await page.locator('[data-action="leave-visit"]').click();

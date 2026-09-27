@@ -15,10 +15,11 @@ import {
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
 } from './state.js?v=7';
-import { createPauseMenu } from './pause.js?v=3';
+import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
-import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
-import { previewJourney, commitJourney } from './journey.js?v=1';
+import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
+import { previewJourney, commitJourney } from './journey.js?v=2';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR } from './toko.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -117,6 +118,8 @@ let data;
 let state;
 // The road (road.js): events in transit and on arrival. Empty until loaded,
 // and a failed load leaves the city exactly as it was, with no events.
+// What Toko said at the last bowl ('' = nothing new, null = no bowl yet).
+let tokoTold = null;
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
 let routePlanning = false;
 let routeDraft = [];
@@ -198,8 +201,8 @@ function playOpening() {
   const due = data.content.campaign.settlement?.required_payments?.[0];
   const lines = [
     'Kallio, 2003. It has rained for a week and the gutters have given up.',
-    `Aatami steps off the 3 with €${Math.round(state.cash)}, ${Math.round(state.markka)} mk and a debt of €${Math.round(state.debt)}${due ? `. €${due.amount_eur} of it is due on day ${due.day}` : ''}.`,
-    'Across Piritori the Tokon Ramen sign flickers. The man in the fur hat is at the tram stop again. He was there yesterday. Nobody gets on with him.',
+    `Aatami steps off the 3 at Piritori with €${Math.round(state.cash)}, ${Math.round(state.markka)} mk and a debt of €${Math.round(state.debt)}${due ? `. €${due.amount_eur} of it is due on day ${due.day}` : ''}.`,
+    'Up Vaasankatu the Tokon Ramen sign flickers. The man in the fur hat is at the tram stop again. He was there yesterday. Nobody gets on with him.',
   ];
   const veil = document.createElement('div');
   veil.className = `opening${reduce ? ' still' : ''}`;
@@ -317,7 +320,8 @@ function render() {
     battle: renderBattle,
     news: renderNews,
     road: renderRoad,
-    shop: renderRamen,
+    shop: renderStreet,
+    ramen: renderRamen,
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
@@ -658,7 +662,8 @@ function renderRoute() {
           <p>${esc(anchorDescription(selected))}</p>
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
-            ${here && canShopHere(state) ? '<button class="paper-button" data-action="open-shop">TOKON RAMEN · GEAR & GOSSIP</button>' : ''}
+            ${here && canShopHere(state) ? '<button class="paper-button" data-action="open-shop">STREET SELLER · GEAR</button>' : ''}
+            ${here && selected.id === TOKO_ANCHOR ? '<button class="paper-button" data-action="open-ramen">TOKON RAMEN · A BOWL AND WHAT HE HEARD</button>' : ''}
             ${here ? availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Toko')}</button>`).join('') : ''}
             ${here && selected.id === slot.anchor_id ? `<button class="paper-button" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
             ${!here && canTravelTo(selected) && !journey ? `<button class="paper-button" data-action="plan-journey" data-anchor="${esc(selected.id)}">TRAVEL HERE · ${esc(selected.label)}</button>` : ''}
@@ -708,8 +713,8 @@ function inspectionNote(anchor, slot) {
 
 function anchorDescription(anchor) {
   const descriptions = {
-    piritori: 'Vaasanpuistikko, Kurvi and the western Sörnäinen metro entrance share one readable cluster. On the corner of Vaasankatu, the Tokon Ramen sign never quite goes out.',
-    vaasankatu: 'Warm counters, cold pavements and the information that moves between them.',
+    piritori: 'Vaasanpuistikko, Kurvi and the western Sörnäinen metro entrance share one readable cluster. The street seller works the square; up Vaasankatu, the Tokon Ramen sign never quite goes out.',
+    vaasankatu: 'Warm counters, cold pavements and the information that moves between them. Tokon Ramen is here: Toko Slomo sells a bowl and what he heard.',
     harju: 'Brahenkenttä, tram-facing streets and the first people willing to work.',
     karhupuisto: 'Lime trees, gravel paths and a park porous enough to reveal repeated movement.',
     torkkelinmaki: 'Residential hill, courtyards and Jaska’s unfinished cardboard city.',
@@ -929,7 +934,7 @@ function renderBoard() {
         <td><b>${esc(row.label)}</b>${row.here ? ' <span class="board-tag">HERE</span>' : ''}</td>
         <td class="quote">${priceCell(row)}</td>
         <td><span class="dim">${esc(row.shown.level === INFO.NONE ? '—' : (row.shown.causeText ?? row.shown.cause ?? 'ordinary'))}</span></td>
-        <td><span class="dim">${row.visited ? `${row.age} block${row.age === 1 ? '' : 's'} ago` : '—'}</span></td>
+        <td><span class="dim">${row.heard ? `Toko, ${row.age} block${row.age === 1 ? '' : 's'} ago` : row.visited ? `${row.age} block${row.age === 1 ? '' : 's'} ago` : '—'}</span></td>
       </tr>`).join('')}</tbody>
     </table>
     ${known.length === 0
@@ -988,7 +993,7 @@ function renderLedger() {
           <div class="equipment-list">${state.equipment.map((item, index) => renderEquipment(item, index)).join('')}</div>
           ${canFenceHere(state)
             ? '<p class="consequence-strip">Fencing pays best on the best condition, worst on broken. Loot converts down into money — never the other way.</p>'
-            : '<p class="consequence-strip">Nothing fences from here. Toko buys, at Tokon Ramen, Piritori.</p>'}
+            : '<p class="consequence-strip">Nothing fences from here. The street seller on Piritori buys.</p>'}
         </section>
         <section class="paper-panel">
           <p class="section-label">SHOP / MARKET GEAR</p>
@@ -1118,11 +1123,11 @@ function renderHireCandidate(candidate) {
 
 
 /**
- * TOKON RAMEN (v4.60). Owner, 2026-09-27: "Make the Tokon Ramen shop appear
- * at the Piritori area ... Toko can be the first shop area." The gear shop and
- * the fence were already at Piritori with no face; now they are Toko's
- * counter, open from day one. Toko says one thing a block: a line, never a
- * rule. Nothing is sold here that the ledger does not already sell.
+ * TOKON RAMEN, Vaasankatu (v4.60, moved and corrected in v4.61). Owner,
+ * 2026-09-27: Toko can be the first shop area; Tokon Ramen is on Vaasankatu
+ * (answer 16). Per the GDD (§14.3, §7.4) Toko sells information, so the
+ * counter sells a bowl and a price range (toko.js), and the gear went back
+ * to the Piritori street seller. He says one line a block: a line, never a rule.
  */
 const TOKO_LINES = [
   'Broth has been on since Tuesday. It gets better. Everything else in Kallio gets worse.',
@@ -1138,28 +1143,62 @@ const TOKO_LINES = [
 ];
 
 function renderRamen() {
-  if (!canShopHere(state)) { state.mode = 'route'; return renderRoute(); }
+  if (state.selectedAnchor !== TOKO_ANCHOR) { state.mode = 'route'; return renderRoute(); }
   const art = assetUrl(data, 'scene-toko-noodles-empty-v01');
   const line = TOKO_LINES[state.scheduleIndex % TOKO_LINES.length];
+  const blocked = bowlBlocker(state);
+  const told = tokoTold ? data.anchors.get(tokoTold) : null;
+  const row = told ? board(state, data).rows.find(r => r.id === told.id) : null;
+  const band = row?.shown.level === INFO.RANGE
+    ? `${money(row.shown.lowSell)}–${money(row.shown.highSell)}` : '';
   return `<div class="encounter-layout ramen-layout">
     <section class="paper-panel scene-card">
       <div class="scene-viewport speaker-stage">
         ${art ? `<img class="scene-image" src="${esc(art)}" alt="Tokon Ramen, the counter">` : genericScene('toko_slomo_noodles')}
-        <div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko behind the counter"></div>
+        <div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko Slomo behind the counter"></div>
         ${art ? `<img class="counter-foreground" src="${esc(art)}" alt="" aria-hidden="true">` : ''}
         <i class="scene-vignette"></i>
         <div class="scene-caption">
           <h2>TOKON RAMEN</h2>
-          <p>PIRITORI · VAASANKATU CORNER · ${esc(formatBlock(state, data.content))}</p>
+          <p>VAASANKATU · TOKO SLOMO · ${esc(formatBlock(state, data.content))}</p>
         </div>
       </div>
     </section>
     <section class="paper-panel encounter-copy ramen-copy">
       <p class="section-label">TOKO, BEHIND THE COUNTER</p>
       <blockquote class="toko-line">“${esc(line)}”</blockquote>
-      <p class="section-label">UNDER THE COUNTER · GEAR</p>
+      ${told && band
+        ? `<blockquote class="toko-line toko-told">“${esc(told.label)}. They are paying ${esc(band)} for a pack, if you get there soon. That is all I heard.”</blockquote>`
+        : told === null && tokoTold === '' ? '<blockquote class="toko-line toko-told">“Nothing new tonight. Eat.”</blockquote>' : ''}
+      <p class="section-label">A BOWL AND WHAT HE HEARD · ${money(BOWL_EUR)}</p>
+      <p>He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.</p>
+      <button class="paper-button" data-action="buy-bowl" ${blocked ? 'disabled' : ''}>${blocked === 'already-this-block' ? 'YOU HAVE EATEN THIS BLOCK' : blocked === 'cash' ? `A BOWL IS ${money(BOWL_EUR)}` : `BUY A BOWL · ${money(BOWL_EUR)}`}</button>
+      <p class="consequence-strip">Toko is a friend and a source, not a shop for everything. Gear is the street seller's, on Piritori.</p>
+      <button class="paper-button primary" data-action="leave-shop">BACK TO THE STREET</button>
+    </section>
+  </div>`;
+}
+
+/** The Piritori street seller (GDD §10.2: first stock, cheap recruits, the
+ *  first weapon gate): the gear shop and the fence, with a face now. */
+function renderStreet() {
+  if (!canShopHere(state)) { state.mode = 'route'; return renderRoute(); }
+  const art = assetUrl(data, 'scene-piritori-square-v01');
+  return `<div class="encounter-layout ramen-layout street-layout">
+    <section class="paper-panel scene-card">
+      <div class="scene-viewport">
+        ${art ? `<img class="scene-image" src="${esc(art)}" alt="Piritori square at night">` : genericScene('piritori_first_buy')}
+        <i class="scene-vignette"></i>
+        <div class="scene-caption">
+          <h2>THE STREET SELLER</h2>
+          <p>PIRITORI · VAASANPUISTIKKO · ${esc(formatBlock(state, data.content))}</p>
+        </div>
+      </div>
+    </section>
+    <section class="paper-panel encounter-copy ramen-copy">
+      <p class="section-label">UNDER THE COAT · GEAR</p>
       ${renderShop()}
-      <p class="section-label">WHAT YOU CARRY · TOKO BUYS</p>
+      <p class="section-label">WHAT YOU CARRY · HE BUYS</p>
       <div class="equipment-list">${state.equipment.map((item, index) => renderEquipment(item, index)).join('')}</div>
       <p class="consequence-strip">He pays best for the best condition and worst for broken. Loot turns into money here, never the other way.</p>
       <button class="paper-button primary" data-action="leave-shop">BACK TO THE STREET</button>
@@ -1169,7 +1208,7 @@ function renderRamen() {
 
 function renderShop() {
   if (!canShopHere(state)) {
-    return '<p class="consequence-strip">Not here. Gear is bought at Tokon Ramen, Piritori.</p>';
+    return '<p class="consequence-strip">Not here. Gear is bought from the street seller on Piritori.</p>';
   }
   const market = [...data.equipment.values()].filter(e => isPurchasable(data, e.id) && buyOf(data, e.id) > 0);
   if (market.length === 0) {
@@ -1733,6 +1772,15 @@ function handleRootClick(event) {
     state.mode = 'shop'; persist(); render();
   } else if (action === 'leave-shop') {
     state.mode = 'route'; persist(); render();
+  } else if (action === 'open-ramen') {
+    if (state.selectedAnchor !== TOKO_ANCHOR) { render(); return; }
+    state.mode = 'ramen'; persist(); render();
+  } else if (action === 'buy-bowl') {
+    const result = buyBowl(state, data);
+    if (!result.ok) logToast({ 'already-this-block': 'One bowl a block. He has other customers.', cash: `A bowl is ${money(BOWL_EUR)}.`, 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? result.reason);
+    else logToast(result.anchorId ? `Toko on ${data.anchors.get(result.anchorId)?.label}: a price range, on the board.` : 'Toko has nothing new tonight. The broth is good.');
+    tokoTold = result.ok ? (result.anchorId ?? '') : tokoTold;
+    persist(); render();
   } else if (action === 'buy-equipment') {
     const result = buyEquipment(state, data, target.dataset.equipment);
     logToast(result.ok ? `Bought for ${money(result.paid)}.` : 'Cannot buy — wrong place, taken-only, or short on cash.');
@@ -1943,7 +1991,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.60',
+      version: 'v4.61',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

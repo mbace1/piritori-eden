@@ -152,9 +152,9 @@ static func anchor_rim(slice_state: String) -> Color:
 ## to a real address. A site pin would mean inventing coordinates, and MAP.md
 ## does not allow the board to grow geography that the survey does not have.
 ##
-## So a site lends its shape to the anchor that holds it. Tokon Ramen stands
-## at Piritori since v4.60 (owner: "Toko can be the first shop area"), so
-## Piritori wears the bowl; Vaasankatu keeps its counters and its gossip.
+## So a site lends its shape to the anchor that holds it. Tokon Ramen, Toko
+## Slomo's shop, is on Vaasankatu (owner, 2026-09-27, answer 16; DESIGN_LOCKS
+## §9.2), so Vaasankatu wears a bowl of noodles.
 ##
 ## Two anchors have no authored site. Alppiharju takes the tram — the rail cut
 ## and the Helsinginkatu line are its western edge — and Vallila takes the
@@ -164,8 +164,8 @@ static func anchor_rim(slice_state: String) -> Color:
 ## the legend all still say what a pin is.
 static func anchor_glyph(anchor_id: String) -> int:
 	match anchor_id:
-		"piritori": return PiritoriIcon.Kind.NOODLES       ## Tokon Ramen: the first shop, the first buy
-		"vaasankatu": return PiritoriIcon.Kind.INFO        ## warm counters, information
+		"piritori": return PiritoriIcon.Kind.CREW          ## the plaza: people, the street seller, the first buy
+		"vaasankatu": return PiritoriIcon.Kind.NOODLES     ## Tokon Ramen, Toko Slomo
 		"torkkelinmaki": return PiritoriIcon.Kind.HOME     ## Jaska's studio
 		"linjat_yard": return PiritoriIcon.Kind.BAR        ## McCormick's
 		"siltasaari": return PiritoriIcon.Kind.BANK        ## the staffed bank

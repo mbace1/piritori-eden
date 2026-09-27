@@ -77,6 +77,21 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.61 — 2026-09-27
+
+**Toko Slomo per the GDD, on Vaasankatu.** Owner, 2026-09-27: answer 13, "Toko Slomo at the restaurant? Check the GDD for him"; answer 16, "Vaasankatu".
+
+- **Tokon Ramen is on Vaasankatu again** (DESIGN_LOCKS §9.2). The map site, Toko's day 3 schedule entry and the scenario atlas all moved back, and the Godot map puts the noodle bowl on Vaasankatu again. It is still open from day one, one stop from Piritori.
+- **The counter sells information, not gear** (GDD §14.3: "insider fragments, introductions and uncertain sabotage wagers"; §7.4: "Toko Slomo unlocks price ranges and information purchases"). A bowl (€6, one per block) buys a price range for the best place to sell that you have no range or quote for. It shows on the board as "Toko, N blocks ago". It is a range, never a quote. It ages like anything you saw yourself, and it never counts as having been there, so it fades to nothing after 12 blocks. Toko says it aloud with the band. `web/js/v3/toko.js` is pure; the board (`board.js` v3) learned "heard".
+- **The Piritori street seller keeps the gear and the fence** (GDD §10.2), now with a face: STREET SELLER · GEAR opens the square's own screen. Neither button is ever lit, so the next step stays the one lit thing.
+- The arrival now reads "steps off the 3 at Piritori … Up Vaasankatu the Tokon Ramen sign flickers."
+- **Locked-progression note:** GDD §7.4 orders Toko's ranges after the first recruit mission. The owner's newer direction ("Toko can be the first shop area") opens the bowl on day one. The first stock and first weapon still come from the Piritori street seller.
+- Gates: new `web/test/toko.mjs` (19). `opening.cjs` 56 (the street seller on day one, travel to Vaasankatu, a bowl, the board marks it). `readability.cjs` 74 (the street seller and the counter before and after a bowl). M1 71 (the Toko visit is back at Vaasankatu). Next-step 57, M2 47, header 62, road 38. Godot spine 264, shell 149, playthrough 72.
+
+### Port
+
+Godot: Tokon Ramen at Vaasankatu (from canon). A bowl buys a range: save `heard[anchor] = block` and `tokoBowlAt`, show "heard" on the board at RANGE with the same decay (visited floor rules), and never mark the place seen. The street seller at Piritori keeps gear and fence.
+
 ## v4.60 — 2026-09-27
 
 **Tokon Ramen, a noir arrival, and more of the road.** Owner, 2026-09-27: answer 11, "Yes keep making more" (road events); answer 12, "Kallio Noir mystery and need to make some profits. Dirty and dingy setting with some weird NPCs" (the arrival); and "Make the Tokon Ramen shop appear at the Piritori area or a similar spot near. Toko can be the first shop area."

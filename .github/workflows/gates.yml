@@ -126,6 +126,7 @@ jobs:
           node web/test/v3-contract.mjs
           node web/test/v3-state.mjs
           node web/test/road.mjs
+          node web/test/toko.mjs
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs

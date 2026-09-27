@@ -61,11 +61,26 @@ export function board(state, data, good = 'piri') {
 
     // A place you have never been is NONE, not a stale rumour: `decay` floors
     // at RUMOUR only for somewhere you have actually stood (§5's `visited`).
-    const level = visited ? decay(INFO.QUOTE, age, { visited: true }) : INFO.NONE;
-    const shown = level === INFO.NONE
+    let level = visited ? decay(INFO.QUOTE, age, { visited: true }) : INFO.NONE;
+    let shown = level === INFO.NONE
       ? { level }
       : present(truth, INFO.QUOTE, age, state.contentId ?? 'piritori', anchor.id, good,
         { visited: true });
+
+    // HEARD, not seen (v4.61): a range Toko told you over a bowl (GDD §7.3–7.4,
+    // "Toko Slomo unlocks price ranges and information purchases"). It is a
+    // RANGE at best and ages like any other observation; it never makes a
+    // place count as visited, and it only shows when it beats what you saw.
+    const heardAt = state.heard?.[anchor.id];
+    const heard = Number.isInteger(heardAt);
+    const heardAge = heard ? Math.max(0, now - heardAt) : Infinity;
+    const heardLevel = heard ? decay(INFO.RANGE, heardAge, { visited }) : INFO.NONE;
+    const rank = [INFO.QUOTE, INFO.RANGE, INFO.RUMOUR, INFO.NONE];
+    const fromToko = heard && rank.indexOf(heardLevel) < rank.indexOf(level);
+    if (fromToko) {
+      level = heardLevel;
+      shown = present(truth, INFO.RANGE, heardAge, state.contentId ?? 'piritori', anchor.id, good, { visited });
+    }
 
     rows.push({
       id: anchor.id,
@@ -73,7 +88,8 @@ export function board(state, data, good = 'piri') {
       roles: anchor.roles ?? [],
       here: state.selectedAnchor === anchor.id,
       visited,
-      age: visited ? age : null,
+      heard: fromToko,
+      age: fromToko ? heardAge : visited ? age : null,
       shown,
       truth,
     });

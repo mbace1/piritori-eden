@@ -142,16 +142,19 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="advance"]').click(); await page.waitForSelector('.city-map');
       await page.locator('[data-mode-target="ledger"]').click(); await settle();
       await judge(page, `${name} ledger`);
-      // Tokon Ramen (v4.60): reached through its own button at Piritori.
+      // The Piritori street seller, through its own button.
       await page.locator('[data-mode-target="route"]').click(); await settle();
       await page.locator('[data-anchor-group="piritori"] .map-anchor-hit').click({ force: true }).catch(() => {});
-      if (await page.locator('[data-action="open-shop"]').count()) {
-        await page.locator('[data-action="open-shop"]').click(); await settle();
-        await judge(page, `${name} tokon ramen`);
-        await page.locator('.toko-line').scrollIntoViewIfNeeded(); await settle();
-        await judge(page, `${name} tokon ramen counter`);
-        await page.locator('[data-action="leave-shop"]').click(); await settle();
-      } else ok(`${name}: Tokon Ramen reachable`, false, 'no open-shop at Piritori');
+      await page.locator('[data-action="open-shop"]').click(); await settle();
+      await judge(page, `${name} street seller`);
+      await page.locator('[data-action="leave-shop"]').click(); await settle();
+      // FIXTURE: Aatami at Vaasankatu, to look at Tokon Ramen (v4.61).
+      await fixture(() => { const s = structuredClone(window.__ptv3.state); s.selectedAnchor = 'vaasankatu'; s.mode = 'ramen'; window.__ptv3.debug.setState(s); });
+      await judge(page, `${name} tokon ramen`);
+      await page.locator('[data-action="buy-bowl"]').click(); await settle();
+      await page.locator('.toko-line').first().scrollIntoViewIfNeeded(); await settle();
+      await judge(page, `${name} tokon ramen, after a bowl`);
+      await page.locator('[data-action="leave-shop"]').click(); await settle();
       // FIXTURE: a road event, to look at it (v4.58).
       await fixture(() => { const s = structuredClone(window.__ptv3.state); s.mode = 'road'; s.road = { journeys: 4, since: 0, seen: [], pending: { id: 'road-underpass', phase: 'transit', from: 'kurvi', to: s.selectedAnchor }, minutes: 0, minutesBlock: -1, last: null }; window.__ptv3.debug.setState(s); });
       await judge(page, `${name} road event`);
