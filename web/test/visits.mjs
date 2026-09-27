@@ -9,7 +9,7 @@ for(const v of content.optional_visits){
  let s=createState(content);s.selectedAnchor=data.sites.get(v.site_id).anchorId;
  assert.equal(openVisit(s,data,v.id),false,'Introduction is required');
  s.choices[v.requires_encounter]='already-met';
- s.selectedAnchor='piritori';assert.equal(openVisit(s,data,v.id),false,'Must be at the site');
+ s.selectedAnchor='siltasaari';assert.equal(openVisit(s,data,v.id),false,'Must be at the site');
  s.selectedAnchor=data.sites.get(v.site_id).anchorId;
  s.battle={status:'active'};assert.equal(openVisit(s,data,v.id),false);s.battle=null;
  assert(openVisit(s,data,v.id));

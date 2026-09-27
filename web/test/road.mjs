@@ -20,7 +20,7 @@ let checks = 0;
 const ok = (c, m) => { assert(c, m); checks += 1; };
 
 // Content: every effect and requirement is one the engine understands.
-const known = /^(cash|intel|debt|markka):[+-]\d+$|^stock:[^:]+:[+-]\d+$|^relationship:[^:]+:[+-]\d+$|^pressure:[^:]+:[+-]\d+$|^flag:|^start-battle:/;
+const known = /^(cash|intel|debt|markka):[+-]\d+$|^obligation:[^:]+:[+-]\d+$|^stock:[^:]+:[+-]\d+$|^relationship:[^:]+:[+-]\d+$|^pressure:[^:]+:[+-]\d+$|^flag:|^start-battle:/;
 const ids = new Set();
 for (const e of roadEvents.events) {
   ok(!ids.has(e.id), `unique id ${e.id}`); ids.add(e.id);

@@ -77,6 +77,19 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.60 — 2026-09-27
+
+**Tokon Ramen, a noir arrival, and more of the road.** Owner, 2026-09-27: answer 11, "Yes keep making more" (road events); answer 12, "Kallio Noir mystery and need to make some profits. Dirty and dingy setting with some weird NPCs" (the arrival); and "Make the Tokon Ramen shop appear at the Piritori area or a similar spot near. Toko can be the first shop area."
+
+- **Tokon Ramen is the first shop, at Piritori, open from day one.** Toko's shop moved from Vaasankatu to the Piritori anchor, the Vaasanpuistikko corner of Vaasankatu. It is renamed Tokon Ramen and opens at the start. His day 3 night beat and his after-service visit happen there now. Piritori's gear shop and fence were already there with no face; now they are Toko's counter. The counter shows the scene with Toko behind it, one line from him per block, gear under the counter, what he buys from you, and BACK TO THE STREET. The TOKON RAMEN · GEAR & GOSSIP button at Piritori is never lit, so the next step stays the one lit thing. This is canon: the map site, the schedule entry and the scenario atlas all moved together.
+- **The arrival is Kallio noir.** The street is grimier: a sodium-brown sky, a grime film, a bin bag at the stop, and a puddle holding the tram's light. The TOKON RAMEN sign flickers across the square. The man in the fur hat waits at the stop, rimmed in the sign's red so he reads. The lines are "It has rained for a week and the gutters have given up.", then the money, the debt and the first payment (€75 on day 4, read from the settlement rather than typed), then the man at the stop. A full-screen `mix-blend-mode` grime layer was tried and removed: under a software renderer it made every frame so slow that the SKIP button never read as stable.
+- **Ten more road events (19 in all), in the same register.** Tier 0: the pram full of radios, the man in the fur hat on the tram ("Forty-one."), the bottle collector, steam from a basement sauna, and a kiosk that never pays out. Tier 1: a van idling with nobody in it (Toko counts vans; now so do you), four bars on an accordion (a lookout), someone asking for Aatami in markka, a buyer in a good coat paying a €30 deposit (an obligation), and the last night bus. None repeat. The pool is topped up as the story grows.
+- Gates: `road.mjs` 214 (it now also understands `obligation:`), `opening.cjs` 46 (the noir lines, and Tokon Ramen open on day one, unlit, buying costs money, back to the street), `readability.cjs` 68 (the ramen screen is judged too), M1 71 (the Toko visit is reached by travelling to Piritori), visits (the "elsewhere" check uses Siltasaari), playthrough (Toko's night is at Piritori). Next-step 57, M2 47, header 62 and road-browser 38 are unchanged.
+
+### Port
+
+Godot: the canon moves on its own (the site and schedule anchor are `piritori`), but `map_style.gd` still gives Vaasankatu the NOODLES icon; move it to Piritori. Add a Tokon Ramen counter at Piritori (the shop and fence Godot already has there) with Toko's per-block line (`TOKO_LINES` in app.js). Rewrite the arrival lines and add the sign and the man in the fur hat. Road events: 19 now, and the grammar gains `obligation:`.
+
 ## v4.59 — 2026-09-27
 
 **Sound, and the arrival.** Owner, 2026-09-27: answer 7, "yes" to sound (a tram bell, the till, street rain); answer 8, "sure, setting up" for an arrival when a run begins.

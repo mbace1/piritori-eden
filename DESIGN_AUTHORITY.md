@@ -22,6 +22,11 @@ Implementation stays web-first, then a Port block, as always. Events must stay r
 
 Owner: "1–4 yes go ahead". Ship v4.57; build travel events; add sound and the arrival opening; bring the Godot port up to the new look and the next-step bar.
 
+11. **When the road runs out:** "Yes keep making more." Road events are written continuously as the story grows. None repeat; the pool is topped up.
+12. **What the arrival must say:** "Kallio Noir mystery and need to make some profits. Dirty and dingy setting with some weird NPCs." The opening sells a mystery and money pressure in a grimy Kallio, with odd people in it. The road's writing follows the same register.
+
+Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a similar spot near. Toko can be the first shop area." Toko's shop is Tokon Ramen. It stands at Piritori (the Vaasanpuistikko corner of Vaasankatu, which the Piritori anchor already covers), is open from day one, and is where Aatami first buys gear and hears things. Toko's day 3 story beat happens there.
+
 ## Owner continuation, 2026-09-13 — art first
 
 “Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish

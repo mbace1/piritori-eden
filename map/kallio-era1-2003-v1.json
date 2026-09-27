@@ -404,12 +404,12 @@
     },
     {
       "id": "toko_slomo_noodles",
-      "anchorId": "vaasankatu",
-      "label": "Toko Slomo's Noodles",
+      "anchorId": "piritori",
+      "label": "Tokon Ramen",
       "kind": "narrative-service",
       "fictional": true,
       "addressPrecision": "anchor-only",
-      "sliceState": "mission-unlock"
+      "sliceState": "open"
     },
     {
       "id": "jaska_studio",

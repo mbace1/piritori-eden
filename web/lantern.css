@@ -509,3 +509,38 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
   .resource-strip dd { font-size: 16px; }
   .time-card { padding: 6px 9px; }
 }
+
+/* Kallio noir (v4.60, owner answer 12): dirtier, dingier, one weird man.
+   The sky goes sodium-brown, a grime film sits over everything, the Tokon
+   Ramen sign flickers on the left, a bin bag slumps by the stop, the street
+   holds a puddle of the tram's light, and the man in the fur hat waits under
+   the sign for a tram he never takes, rimmed in the sign's red so he reads. */
+.op-sky { background: radial-gradient(ellipse at 20% 45%, rgba(214,58,58,.16), transparent 40%),
+  radial-gradient(ellipse at 70% 110%, rgba(242,164,76,.22), transparent 55%), linear-gradient(#0b0c0d, #16150f 70%, #1d1a14); }
+.opening-scene::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  /* No blend mode: a full-screen multiply layer made every frame so slow
+     under a software renderer that nothing on the page ever read as stable. */
+  background: radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(0,0,0,.55)),
+    repeating-linear-gradient(0deg, rgba(40,34,24,.10) 0 1px, transparent 1px 5px); }
+.op-sign { left: 4%; top: 36%; padding: 6px 10px; border: 2px solid #d63a3a; border-radius: 4px; background: rgba(20,6,6,.8);
+  box-shadow: 0 0 18px rgba(214,58,58,.55), inset 0 0 10px rgba(214,58,58,.35); animation: opFlicker 3.7s steps(1) infinite; }
+.op-sign b { display: block; font: 700 clamp(14px, 1.8vw, 22px)/1.05 var(--display); letter-spacing: .18em; color: #ff7a6b;
+  text-shadow: 0 0 8px rgba(255,90,80,.9); }
+.op-sign b + b { color: #f2c27a; text-shadow: 0 0 8px rgba(242,164,76,.9); }
+@keyframes opFlicker { 0%, 100% { opacity: 1; } 41% { opacity: .35; } 43% { opacity: 1; } 44% { opacity: .5; } 46% { opacity: 1; } 78% { opacity: .75; } 80% { opacity: 1; } }
+.op-npc { z-index: 2; left: calc(18% - 34px); bottom: 12%; width: clamp(18px, 2.2vw, 26px); height: clamp(60px, 7.5vw, 86px);
+  background: #0e0d0c; border-radius: 30% 30% 4px 4px; box-shadow: -2px 0 0 rgba(255,122,107,.85), 0 10px 16px -6px #000; }
+.op-npc::before { content: ''; position: absolute; left: -12%; top: -38%; width: 124%; height: 34%; border-radius: 45% 45% 20% 20%;
+  background: repeating-linear-gradient(90deg, #3a2e25 0 2px, #2a211b 2px 4px); box-shadow: -2px 0 0 rgba(255,122,107,.7); }
+.op-npc::after { content: ''; position: absolute; left: 20%; top: -8%; width: 60%; height: 14%; border-radius: 50%; background: #5a4636; }
+.op-bag { z-index: 2; left: calc(18% + 12px); bottom: 12%; width: 34px; height: 26px; border-radius: 45% 50% 20% 20%;
+  background: radial-gradient(ellipse at 35% 30%, #2d3033, #141618 70%); box-shadow: 0 6px 10px -4px #000; }
+.op-puddle { z-index: 1; left: 30%; right: 18%; bottom: 3%; height: 7%; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(242,194,122,.28), rgba(214,58,58,.10) 45%, transparent 70%); filter: blur(1px); }
+@media (prefers-reduced-motion: reduce) { .op-sign { animation: none; } }
+
+/* Tokon Ramen, the counter (v4.60). */
+.toko-line { margin: 4px 0 14px; padding: 10px 14px; border-left: 3px solid #d63a3a; background: rgba(214, 58, 58, .08);
+  font: 500 16px/1.5 var(--ledger); color: #efe7d4; }
+.ramen-copy .equipment-list { margin-bottom: 10px; }
+.ramen-copy > .paper-button.primary { margin-top: 12px; }

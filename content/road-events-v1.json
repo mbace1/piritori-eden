@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "road-events-v1",
-  "authority": "Owner 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10): events on the road and on arrival, about one journey in three or four, a surprise, a bit of time, the first ones low-end hustling; later, bigger contacts and money; any can become a fight.",
+  "authority": "Owner 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10, 11, 12): events on the road and on arrival, about one journey in three or four, a surprise, a bit of time, the first ones low-end hustling; later, bigger contacts and money; any can become a fight. Answer 11: keep writing more, none repeat. Answer 12: Kallio noir, dirty and dingy, weird people, and the money always short.",
   "fiction_boundary": "Composite people and situations. The good is abstract (DESIGN_LOCKS §9.1): no dosage, preparation, concealment or consumption detail.",
   "rules": {
     "first_story_block": 2,
@@ -112,6 +112,118 @@
         { "id": "pay", "label": "Pay them off — €20", "detail": "Cheap, humiliating, over.", "minutes": 10, "effects": ["cash:-20"] },
         { "id": "go-round", "label": "Go the long way round", "detail": "An hour on foot through the back streets.", "minutes": 60, "effects": [] },
         { "id": "stand", "label": "Stand your ground with the crew", "detail": "It becomes a fight. You will see their intent before you commit.", "minutes": 30, "requires": ["deployed-crew>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"] }
+      ]
+    },
+    {
+      "id": "road-pram-radios",
+      "tier": 0,
+      "phase": "arrival",
+      "title": "The pram full of radios",
+      "text": "A woman pushes a pram with no baby in it, only transistor radios, all of them on, all on different stations. She stops beside Aatami as if they had arranged it.",
+      "choices": [
+        { "id": "tune", "label": "Pay her to tune one — €5", "detail": "She finds the police band in four seconds and hands it to you. It hisses about Kurvi.", "minutes": 15, "effects": ["cash:-5", "intel:+1"] },
+        { "id": "listen", "label": "Just listen for a minute", "detail": "Six stations, one of them saying your street's name. Probably.", "minutes": 10, "effects": [] },
+        { "id": "walk-on", "label": "Walk on", "detail": "The radios follow you for half a block.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-fur-hat",
+      "tier": 0,
+      "phase": "transit",
+      "title": "The man in the fur hat",
+      "text": "He gets on at Kurvi, sits facing Aatami though the tram is empty, and says one word as if it were a password: \"Forty-one.\"",
+      "choices": [
+        { "id": "ask", "label": "Ask him what it means", "detail": "He smiles as if you had got it right, and gets off without answering. You remember the number.", "minutes": 20, "effects": ["intel:+1", "flag:road-fur-hat-41"] },
+        { "id": "move", "label": "Change carriages", "detail": "He watches you go. He is at the next stop anyway.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-bottle-cart",
+      "tier": 0,
+      "phase": "arrival",
+      "title": "The bottle collector",
+      "text": "An old man with a supermarket trolley of empties knows every back door in Kallio and which ones are open after midnight.",
+      "choices": [
+        { "id": "load", "label": "Help him load the cart — €4", "detail": "Four euros in deposit coins and a nod from the doors he trusts.", "minutes": 30, "effects": ["cash:+4", "relationship:piritori_independents:+1"] },
+        { "id": "doors", "label": "Ask which doors", "detail": "He names two and makes you promise not to use the third.", "minutes": 15, "effects": ["intel:+1"] },
+        { "id": "walk-on", "label": "Walk on", "detail": "The trolley rattles away over the tramlines.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-sauna-vent",
+      "tier": 0,
+      "phase": "transit",
+      "title": "Steam from the basement",
+      "text": "Steam pours out of a basement sauna vent onto the pavement. A man in nothing but a towel stands in it, smoking, and says the Hakaniemi buyers were short tonight.",
+      "choices": [
+        { "id": "stop", "label": "Stop and hear the rest", "detail": "Who was short, who paid, who did not come. The towel man has a very good memory.", "minutes": 20, "effects": ["intel:+1"] },
+        { "id": "pass", "label": "Keep walking", "detail": "Your coat smells of birch smoke for an hour.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-scratch-card",
+      "tier": 0,
+      "phase": "arrival",
+      "title": "The kiosk that never pays out",
+      "text": "The late kiosk sells scratch cards from a roll so old the colours have faded. The clerk swears somebody won once, in 1994.",
+      "choices": [
+        { "id": "scratch", "label": "Scratch one — €2", "detail": "It says TRY AGAIN in Estonian. The clerk says that counts as a sign.", "minutes": 5, "effects": ["cash:-2", "flag:road-scratch-card"] },
+        { "id": "leave", "label": "Leave it", "detail": "The roll stays where it is, waiting for 1994 to happen again.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-empty-van",
+      "tier": 1,
+      "phase": "transit",
+      "title": "A van with its engine running",
+      "text": "A white van idles on Hämeentie with its engine running and nobody in it. The back doors are open. It is empty except for a single rubber boot.",
+      "choices": [
+        { "id": "plate", "label": "Note the plate and walk on", "detail": "Toko counts vans. Now so do you.", "minutes": 10, "effects": ["intel:+1", "flag:road-empty-van-plate"] },
+        { "id": "away", "label": "Cross the street and do not look", "detail": "Whatever it is, it is not yours tonight.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-accordion",
+      "tier": 1,
+      "phase": "arrival",
+      "title": "Four bars on an accordion",
+      "text": "A busker plays the same four bars of a tango over and over. When a patrol car turns the corner, he changes key.",
+      "choices": [
+        { "id": "pay", "label": "Pay him to keep watch — €5", "detail": "He will change key for you too.", "minutes": 10, "effects": ["cash:-5", "relationship:piritori_independents:+1", "flag:road-accordion-lookout"] },
+        { "id": "walk-on", "label": "Walk on", "detail": "The tango goes on without you.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-someone-asking",
+      "tier": 1,
+      "phase": "arrival",
+      "title": "Someone has been asking",
+      "text": "The barman on Helsinginkatu says Aatami's name before Aatami can say it. Somebody was in last night asking for him, and paid for their beer in markka.",
+      "choices": [
+        { "id": "ask", "label": "Ask who it was", "detail": "A coat, a moustache, a Tampere accent, a very clean ten-markka note. It is not much. It is something.", "minutes": 30, "effects": ["intel:+1", "flag:road-someone-asking"] },
+        { "id": "leave", "label": "Finish nothing and leave", "detail": "Knowing less is also a choice.", "minutes": 5, "effects": ["pressure:piritori:+1"] }
+      ]
+    },
+    {
+      "id": "road-deposit",
+      "tier": 1,
+      "phase": "arrival",
+      "title": "A buyer in a good coat",
+      "text": "A buyer in a coat too good for Kallio wants three packs next week and offers thirty euros now, as a deposit, to make sure Aatami remembers him.",
+      "choices": [
+        { "id": "take", "label": "Take the deposit — €30", "detail": "Money now, a promise later. He writes your name on a napkin and keeps it.", "minutes": 20, "effects": ["cash:+30", "obligation:coat_buyer:+1", "flag:road-deposit-taken"] },
+        { "id": "refuse", "label": "No promises", "detail": "He shrugs, and folds the thirty back into the good coat.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-night-bus",
+      "tier": 1,
+      "phase": "transit",
+      "title": "The last night bus",
+      "text": "The trams have stopped. The night bus driver says Aatami can ride free if he helps get the man asleep across the back seat off at Sörnäinen.",
+      "choices": [
+        { "id": "help", "label": "Help, and ride free", "detail": "The sleeper wakes, thanks you in Swedish and gives you a lighter with a stranger's name on it.", "minutes": 20, "effects": ["relationship:piritori_independents:+1", "flag:road-night-bus-lighter"] },
+        { "id": "walk", "label": "Walk instead", "detail": "Forty minutes on wet streets. At least nobody asks you anything.", "minutes": 40, "effects": [] }
       ]
     }
   ]

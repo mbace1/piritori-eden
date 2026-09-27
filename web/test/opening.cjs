@@ -85,6 +85,23 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: skipping ends it at once`, await page.locator('#opening').count() === 0);
       ok(`${name}: the arrival never changed the save`, await save(page) === s0);
       ok(`${name}: after it, one lit next step`, await page.locator('.next-step .primary').count() === 1);
+      ok(`${name}: the arrival is noir: rain, the debt due, the ramen sign, the man in the fur hat`,
+        /rained for a week/.test(text) && /due on day 4/.test(text) && /Tokon Ramen/.test(text) && /fur hat/.test(text), text);
+      // Tokon Ramen (v4.60): the first shop, at Piritori, open on day one.
+      const shopBtn = page.locator('[data-action="open-shop"]');
+      ok(`${name}: Tokon Ramen is open at Piritori on day one`, await shopBtn.count() === 1 && /TOKON RAMEN/.test(await shopBtn.innerText()));
+      ok(`${name}: and it is not lit (the next step stays the one lit thing)`, !(await shopBtn.evaluate(el => el.classList.contains('primary'))));
+      await shopBtn.click();
+      ok(`${name}: inside, Toko speaks and the counter sells gear`, await page.locator('.ramen-layout .toko-line').count() === 1
+        && await page.locator('.ramen-layout [data-action="buy-equipment"]').count() > 0
+        && /TOKON RAMEN/.test(await page.locator('.ramen-layout .scene-caption h2').innerText()));
+      const buy = page.locator('.ramen-layout [data-action="buy-equipment"]:not([disabled])').first();
+      const cash0 = (await page.evaluate(() => window.__ptv3.state.cash));
+      if (await buy.count()) { await buy.click(); }
+      const cash1 = (await page.evaluate(() => window.__ptv3.state.cash));
+      ok(`${name}: buying at Toko's costs money`, cash1 < cash0, `${cash0} → ${cash1}`);
+      await page.locator('[data-action="leave-shop"]').click();
+      ok(`${name}: BACK TO THE STREET returns to the map`, await page.locator('.city-map').count() === 1);
       // A key skips too, and it goes on its own.
       await page.goto(`${base}/web/`); await ready(page);
       await page.locator('#beginButton').click();
