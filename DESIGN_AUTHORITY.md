@@ -1,5 +1,16 @@
 # Piritori → Eden — design authority
 
+## Owner answers, 2026-09-27 — the city look, travel time and travel events
+
+Asked as numbered questions after the Lantern Noir interface (Act I v4.56):
+
+1. **The look:** "looks good for now." Lantern Noir stays as the city interface. This is a preference, not final art acceptance.
+2. **Travel time (D002, partly answered):** "Not sure but should feel natural, and random events can happen during transit and when arriving at a location." The exact cost model (per trip, per stop, by distance or by line) is still open. The direction is that it should feel natural, not arithmetic the player has to do.
+3. **Release:** "Yes and continue to polish the high level experience." v4.56 ships; polishing the overall experience continues.
+4. **Travel events:** "yes to all and every 3rd or 4th travel can have some." Police, a rival crew, a chance meeting, a lost pack and a tip-off are all in scope, and one can become a fight. The frequency target is roughly one journey in three or four, both in transit and on arrival.
+
+Implementation stays web-first, then a Port block, as always. Events must stay readable before commitment (the full-intent rule) and deterministic from the campaign seed.
+
 ## Owner continuation, 2026-09-13 — art first
 
 “Let's start finalizing the art pass. Mechanics and gameplay pass next.” Finish
