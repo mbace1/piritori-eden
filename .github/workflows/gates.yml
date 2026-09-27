@@ -125,6 +125,7 @@ jobs:
         run: |
           node web/test/v3-contract.mjs
           node web/test/v3-state.mjs
+          node web/test/road.mjs
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
@@ -169,6 +170,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/next-step.cjs
+      - name: the road (an event every third or fourth journey, a surprise, a bit of time)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/road-browser.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

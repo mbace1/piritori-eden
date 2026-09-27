@@ -77,6 +77,23 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.58 — 2026-09-27
+
+**The road.** Owner, 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10): travel should feel natural; things happen in transit and on arriving; about every third or fourth journey; a surprise for now; each costs a bit of time; the first ones are Aatami meeting dealers and doing low-end gigs, and bigger contacts and money come later.
+
+- `content/road-events-v1.json` holds nine events. Tier 0 is low-end hustle: a kid selling badly on Hämeentie, a €15 bag carried three stops, a ticket inspection, the kiosk regular, another seller on the corner. Tier 1 opens with a recruit or at story block 6: a torn pocket, an old classmate behind a bar, a €40 McCormick job, and the underpass. The underpass can become a fight.
+- `web/js/v3/road.js` holds the rules, and they are pure. Nothing fires before story block 2. Then the third journey since the last event fires on a coin flip and the fourth always does. The roll is deterministic from the save, so a reload replays the same road. Each event is seen once, and higher tiers come first once they open.
+- **A surprise:** the journey preview says nothing about the road. Its copy now promises only what still holds: the walk costs no money and does not turn the block.
+- **A bit of time:** every choice shows its minutes (+10 MIN … +60 MIN, or NO TIME). The day card's clock reads later (DAY 2 · NIGHT · 21:00). D002 is still open, so minutes never turn a block; a new block starts on the hour.
+- **Refused, never hidden:** a choice you cannot take is shown and says why ("needs 2 crew with you", "needs a pack on you"). Every event has an open way out.
+- **A road fight** is the ordinary battle marked `road`. It reports to no mission and does not turn the block. Injuries, arrests, loot and careers apply as in any fight. For now it borrows the Karhupuisto 2v2 scene; the underpass needs its own art.
+- A pending event survives a reload and blocks nothing but itself: the ledger waits until it is answered.
+- Gates: new `web/test/road.mjs` (119 checks, bare node: content grammar, gaps of 3 or 4 with a mean between 3 and 4, determinism, no repeats, tiers, requirements, pay, minutes, reload, the fight) and `web/test/road-browser.cjs` (38 checks, desktop and phone, real taps). The readability gate also judges the road screen now (56 checks). M1 now expects the journey counter and no event on day one (71 checks); M2's copy check follows the new preview line.
+
+### Port
+
+Godot: load `content/road-events-v1.json` and apply the same rules: gap of 3 or 4 after story block 2; a deterministic roll from contentId|block|journey count (FNV-1a, the same as `deterministicRoll`); once each; highest open tier first. The rolled phase is `transit` or `arrival`, and `any` fits either. Show a road screen with each choice's minutes and any refusal reason. Add minutes to the current block's clock only; they never turn the block. A road fight has no mission and no block advance. Save `road: {journeys, since, seen, pending, minutes, minutesBlock, last}`.
+
 ## v4.57 — 2026-09-27
 
 **The first two minutes always offer one next step.** The owner delegated the target ("You tell me and let's see how far we are"). It is written and measured in `design/FIRST_TWO_MINUTES.md`.

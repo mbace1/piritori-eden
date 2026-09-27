@@ -418,3 +418,15 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
 .cash-delta.down { color: #fff4ec; background: #b8452f; }
 @keyframes cashDelta { 0% { opacity: 0; transform: translateY(6px); } 12% { opacity: 1; transform: none; } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { .cash-delta { animation: none; opacity: 1; } .res-cash.cash-moved { animation: none; } }
+
+/* The road (v4.58): an event on the way, or on arriving. One column, the
+   choices are the only lit things, and each says what it costs in time. */
+.road-layout { max-width: 760px; margin: 0 auto; padding: 8px 0 24px; }
+.road-card .section-label { color: var(--cyan); }
+.road-card .choice-card { position: relative; }
+.road-time {
+  display: inline-block; margin-top: 6px;
+  font: 700 12px/1 var(--body); letter-spacing: .1em; color: #6b3208;
+  padding: 3px 6px; border: 1px solid rgba(107, 50, 8, .45); border-radius: 3px;
+}
+.choice-card:disabled .road-time { color: inherit; }

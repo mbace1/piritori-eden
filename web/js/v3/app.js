@@ -18,6 +18,7 @@ import {
 import { createPauseMenu } from './pause.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=2';
 import { previewJourney, commitJourney } from './journey.js?v=1';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
@@ -113,6 +114,9 @@ const UI = {
 
 let data;
 let state;
+// The road (road.js): events in transit and on arrival. Empty until loaded,
+// and a failed load leaves the city exactly as it was, with no events.
+let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
 let routePlanning = false;
 let routeDraft = [];
 let observation = '';
@@ -224,7 +228,8 @@ function renderHud() {
   $('markkaValue').textContent = Math.round(state.markka).toLocaleString('fi-FI');
   $('debtValue').textContent = Math.round(state.debt).toLocaleString('fi-FI');
   $('intelValue').textContent = state.intel;
-  $('blockLabel').textContent = formatBlock(state, data.content);
+  const clock = clockLabel(state, currentSchedule(state, data.content), roadEvents);
+  $('blockLabel').textContent = formatBlock(state, data.content) + (clock ? ` · ${clock}` : '');
   $('localeButton').textContent = state.locale.toUpperCase();
   $('eraLabel').textContent = state.locale === 'fi'
     ? '2003 · AATAMI · ERA I · UI FI / TARINA EN (ALFA)'
@@ -245,6 +250,8 @@ function render() {
   renderHud();
   renderNav();
   const root = $('modeRoot');
+  // A pending road event waits for an answer; nothing else opens past it.
+  if (state.road?.pending && state.mode !== 'battle') state.mode = 'road';
   const views = {
     route: renderRoute,
     encounter: renderEncounter,
@@ -252,6 +259,7 @@ function render() {
     ledger: renderLedger,
     battle: renderBattle,
     news: renderNews,
+    road: renderRoad,
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
@@ -473,8 +481,53 @@ function commitPlannedJourney() {
   const result = commitJourney(state, data, preview);
   if (!result.ok) { logToast(JOURNEY_REFUSAL[result.reason] ?? result.reason); render(); return; }
   inspectAnchor(result.destination);
-  logToast(`Aatami arrives at ${data.anchors.get(result.destination)?.label}.`);
+  // A surprise (owner, answer 6): the preview never forecasts it.
+  if (rollRoad(state, data, roadEvents, result)) state.mode = 'road';
+  else logToast(`Aatami arrives at ${data.anchors.get(result.destination)?.label}.`);
   persist(); render();
+}
+
+/** The road: an event on the way, or on arriving (road.js). */
+function renderRoad() {
+  const r = state.road ?? {};
+  const event = pendingRoad(state, roadEvents);
+  const last = !event && r.last ? roadEvents.events.find(e => e.id === r.last.id) : null;
+  const shown = event ?? last;
+  if (!shown) return renderRoute();
+  const phase = event ? r.pending.phase : (r.last.phase ?? 'transit');
+  const leg = r.pending ?? r.last ?? {};
+  const from = data.anchors.get(leg.from)?.label, to = data.anchors.get(leg.to ?? state.selectedAnchor)?.label;
+  const where = phase === 'arrival' ? `ARRIVING · ${esc(to ?? '')}` : `ON THE WAY${from && to ? ` · ${esc(from)} → ${esc(to)}` : ''}`;
+  const minutes = m => (m ? `+${m} MIN` : 'NO TIME');
+  const body = event
+    ? `<div class="choice-list">${event.choices.map(choice => {
+        const open = choiceOpen(choice, state, data);
+        return `<button class="choice-card" type="button" data-action="road-choose" data-choice="${esc(choice.id)}" ${open.ok ? '' : 'disabled'}>
+          <strong>${esc(choice.label)}</strong>
+          <span>${esc(choice.detail)}</span>
+          <small class="road-time">${minutes(choice.minutes)}</small>
+          ${open.ok ? '' : `<em>${esc(open.reasons.join(' · ').replace(/deployed-crew >= (\d+)/, 'needs $1 crew with you').replace(/stock piri >= 1/, 'needs a pack on you'))}</em>`}
+        </button>`;
+      }).join('')}</div>`
+    : (() => {
+        const choice = last.choices.find(c => c.id === r.last.choice);
+        const messages = state.lastOutcome?.length ? state.lastOutcome : [];
+        return `<div class="outcome-card">
+          <h3>${esc(choice?.label ?? '')}</h3>
+          <p>${esc(choice?.detail ?? '')}</p>
+          ${messages.map(item => `<p>${esc(item)}</p>`).join('')}
+          <div class="consequence-strip">${esc(minutes(r.last.minutes))}${clockLabel(state, currentSchedule(state, data.content), roadEvents) ? ` · NOW ${clockLabel(state, currentSchedule(state, data.content), roadEvents)}` : ''}</div>
+          <button class="paper-button primary" data-action="road-continue">${tr('continue')}</button>
+        </div>`;
+      })();
+  return `<div class="road-layout">
+    <section class="paper-panel encounter-copy road-card" data-road="${esc(shown.id)}" data-phase="${esc(phase)}">
+      <p class="section-label">${where}</p>
+      <h2 class="section-title">${esc(shown.title)}</h2>
+      <p class="encounter-opening">${esc(shown.text)}</p>
+      ${body}
+    </section>
+  </div>`;
 }
 
 function renderNextStep(slot) {
@@ -575,7 +628,7 @@ function renderJourneyPreview(journey) {
   return `<div class="journey-preview" data-journey="${esc(journey.origin)}>${esc(journey.destination)}">
     <p class="section-label">JOURNEY · ${journey.path.length - 1} LEG${journey.path.length === 2 ? '' : 'S'}</p>
     <div class="route-steps">${names.map(name => `<span class="tag">${esc(name)}</span>`).join('')}</div>
-    <p class="consequence-strip">Aatami walks there himself. In this build a journey costs no extra time or money: the story clock moves only when a story beat ends, as before. Travel time and risk are not balanced yet.</p>
+    <p class="consequence-strip">Aatami walks there himself. The walk costs no money and does not turn the block: the story clock moves only when a story beat ends.</p>
     <div class="route-actions">
       <button class="paper-button" data-action="commit-journey">TRAVEL</button>
       <button class="paper-button" data-action="cancel-journey">CANCEL</button>
@@ -1437,7 +1490,8 @@ function recordBattleConsequences() {
   state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round });
   state.battle = null;
   state.battleOpeningNerve = 0;
-  if (!battle.training) advanceSchedule(state, data);
+  // A road fight has no mission behind it and does not turn the block.
+  if (!battle.training && !battle.road) advanceSchedule(state, data);
   state.mode = 'route';
 }
 
@@ -1528,6 +1582,18 @@ function handleRootClick(event) {
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
     else if (result.startBattle) startBattle(result.startBattle);
+    persist(); render();
+  } else if (action === 'road-choose') {
+    const result = resolveRoad(state, data, roadEvents, target.dataset.choice);
+    if (!result.ok) { logToast(result.reason); render(); return; }
+    if (result.startBattle && startBattle(result.startBattle)) {
+      state.battle.missionId = null;
+      state.battle.road = result.event.id;
+    }
+    persist(); render();
+  } else if (action === 'road-continue') {
+    state.mode = 'route'; state.lastOutcome = null;
+    if (state.road) state.road.last = null;
     persist(); render();
   } else if (action === 'advance') {
     advanceSchedule(state, data); persist(); render();
@@ -1653,6 +1719,7 @@ async function boot() {
   try {
     bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
+    roadEvents = await loadRoadEvents().catch(() => roadEvents);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
@@ -1756,7 +1823,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.57',
+      version: 'v4.58',
       jump: jumpTo,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
@@ -1807,6 +1874,7 @@ async function boot() {
     window.__ptv3 = {
       get data() { return data; },
       get state() { return state; },
+      get road() { return roadEvents; },
       debug: {
         setState(next) { state = next; attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id) { startBattle(id); persist(); render(); },

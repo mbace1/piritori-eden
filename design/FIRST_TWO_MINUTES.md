@@ -75,7 +75,7 @@ through the bar changes nothing and arriving is free (D002).
 - **The opening beat.** Begin drops you straight on the map. A 5–10 second
   arrival (the tram pulling into Piritori, Aatami stepping off) would sell
   both the place and "you are here" before the first tap.
-- **Arrival and transit events** (owner: every third or fourth journey;
-  surprise for now) are the next mechanic, and the first thing that makes
-  travel feel like the city rather than a menu.
+- ~~**Arrival and transit events**~~ — shipped in v4.58 (`road.js`): every
+  third or fourth journey from story block 2, a surprise, a bit of time on
+  the clock, low-end hustle first.
 - **Owner and device acceptance.**

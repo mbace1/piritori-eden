@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "road-events-v1",
+  "authority": "Owner 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10): events on the road and on arrival, about one journey in three or four, a surprise, a bit of time, the first ones low-end hustling; later, bigger contacts and money; any can become a fight.",
+  "fiction_boundary": "Composite people and situations. The good is abstract (DESIGN_LOCKS §9.1): no dosage, preparation, concealment or consumption detail.",
+  "rules": {
+    "first_story_block": 2,
+    "earliest_journey_gap": 3,
+    "guaranteed_by_gap": 4,
+    "chance_at_earliest": 0.5,
+    "tier_1_when": "recruited>=1 or schedule_index>=6",
+    "block_start_minutes": { "day": 600, "night": 1200 }
+  },
+  "events": [
+    {
+      "id": "road-corner-kid",
+      "tier": 0,
+      "phase": "transit",
+      "title": "A kid on Hämeentie",
+      "text": "A teenager in a borrowed parka falls into step beside Aatami and asks, too loudly, if he is holding. He is selling too — badly, to the wrong people.",
+      "choices": [
+        { "id": "trade-tips", "label": "Trade a few words", "detail": "He knows which kiosk is watched. You learn something; you lose a little time.", "minutes": 20, "effects": ["intel:+1"] },
+        { "id": "warn-off", "label": "Tell him to go home", "detail": "He won't. But the corner remembers who said it.", "minutes": 10, "effects": ["relationship:piritori_independents:+1"] },
+        { "id": "walk-on", "label": "Walk on", "detail": "Nothing gained, nothing spent.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-first-gig",
+      "tier": 0,
+      "phase": "any",
+      "title": "Three stops, fifteen euros",
+      "text": "A dealer Aatami half-knows from Piritori needs a bag carried three tram stops. Fifteen euros, no questions, and he will not ask twice.",
+      "choices": [
+        { "id": "carry", "label": "Carry it — €15", "detail": "Small money, a small favour owed to you, and the tram takes its time.", "minutes": 40, "effects": ["cash:+15", "relationship:piritori_independents:+1", "flag:road-first-gig"] },
+        { "id": "refuse", "label": "Not today", "detail": "He shrugs. Somebody else will.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-ticket-check",
+      "tier": 0,
+      "phase": "transit",
+      "title": "Ticket inspection",
+      "text": "Two inspectors board at the Kurvi stop and work down the tram, checking tickets and faces.",
+      "choices": [
+        { "id": "stay-seated", "label": "Stay seated, ticket ready", "detail": "Slow, boring and safe.", "minutes": 20, "effects": [] },
+        { "id": "step-off", "label": "Get off at the next stop and walk", "detail": "Nobody looks twice at a walker. It takes longer.", "minutes": 35, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-kiosk-tip",
+      "tier": 0,
+      "phase": "arrival",
+      "title": "The kiosk regular",
+      "text": "The man who is always at the kiosk says the buyers here were asking for more tonight, and paying for it.",
+      "choices": [
+        { "id": "listen", "label": "Buy him a coffee and listen", "detail": "Two euros for a better read on the street.", "minutes": 15, "effects": ["cash:-2", "intel:+1"] },
+        { "id": "nod", "label": "Nod and move on", "detail": "Free, and forgotten.", "minutes": 0, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-dealer-sampler",
+      "tier": 0,
+      "phase": "arrival",
+      "title": "Another seller",
+      "text": "Someone else is working this corner — older, tired, in no hurry. He sizes Aatami up and offers to split the evening instead of fighting over it.",
+      "choices": [
+        { "id": "split", "label": "Agree to split the corner", "detail": "Less for you here, but one less enemy.", "minutes": 25, "effects": ["relationship:piritori_independents:+1", "flag:road-shared-corner"] },
+        { "id": "leave", "label": "Leave it to him", "detail": "Walk away and keep your own counsel.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-torn-pocket",
+      "tier": 1,
+      "phase": "transit",
+      "requires": ["stock:piri>=1"],
+      "title": "A torn pocket",
+      "text": "Somewhere between stops the lining of Aatami's jacket gave way. One pack is not where it was.",
+      "choices": [
+        { "id": "retrace", "label": "Retrace the route", "detail": "Walk it back, slowly. You find it in the gutter by the stop.", "minutes": 50, "effects": [] },
+        { "id": "let-go", "label": "Let it go", "detail": "Keep your time; lose the pack.", "minutes": 0, "effects": ["stock:piri:-1"] }
+      ]
+    },
+    {
+      "id": "road-old-classmate",
+      "tier": 1,
+      "phase": "any",
+      "title": "Someone from school",
+      "text": "A face from Aatami's old class, now working the bar at a place on Vaasankatu. She remembers him, and she hears things.",
+      "choices": [
+        { "id": "catch-up", "label": "Have a drink and catch up", "detail": "An hour gone, a contact made.", "minutes": 60, "effects": ["intel:+1", "flag:road-classmate-contact"] },
+        { "id": "later", "label": "Promise to call her", "detail": "You will not. She knows it.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-bigger-gig",
+      "tier": 1,
+      "phase": "arrival",
+      "title": "A bigger ask",
+      "text": "A man with McCormick friends has heard Aatami is reliable. He wants a package moved across the district tonight. Forty euros, and the kind of attention that comes with it.",
+      "choices": [
+        { "id": "take-it", "label": "Take the job — €40", "detail": "Real money. The McCormick people will remember the name.", "minutes": 60, "effects": ["cash:+40", "relationship:mccormick_family:+1", "pressure:piritori:+1"] },
+        { "id": "pass", "label": "Pass, politely", "detail": "No money, no attention.", "minutes": 5, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-underpass",
+      "tier": 1,
+      "phase": "transit",
+      "title": "The underpass",
+      "text": "Two Kurvi regulars block the underpass and want to know whose corner Aatami thinks he is working.",
+      "choices": [
+        { "id": "pay", "label": "Pay them off — €20", "detail": "Cheap, humiliating, over.", "minutes": 10, "effects": ["cash:-20"] },
+        { "id": "go-round", "label": "Go the long way round", "detail": "An hour on foot through the back streets.", "minutes": 60, "effects": [] },
+        { "id": "stand", "label": "Stand your ground with the crew", "detail": "It becomes a fight. You will see their intent before you commit.", "minutes": 30, "requires": ["deployed-crew>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"] }
+      ]
+    }
+  ]
+}

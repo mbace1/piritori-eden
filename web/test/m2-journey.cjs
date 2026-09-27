@@ -132,8 +132,9 @@ server.listen(0, '127.0.0.1', async () => {
     await page.locator('[data-action="plan-journey"]').click();
     ok('A the preview names a connected path from Piritori to Siltasaari',
       await J(page).getAttribute('data-journey') === 'piritori>siltasaari' && await page.locator('.map-journey').count() === 1);
-    ok('A the preview says what it costs: no extra time or money, not balanced',
-      /no extra time or money/i.test(await J(page).innerText()) && /not balanced/i.test(await J(page).innerText()));
+    // v4.58: the road can cost minutes, so the copy promises only what holds.
+    ok('A the preview says what it costs: no money, and the block does not turn',
+      /costs no money/i.test(await J(page).innerText()) && /does not turn the block/i.test(await J(page).innerText()));
     ok('A the preview is drawn apart from the delivery route', await page.locator('.map-route').count() === 0);
     let after = await snap(page);
     ok('A previewing changes neither campaign nor save', after.state === before.state && after.save === before.save);

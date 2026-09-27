@@ -142,7 +142,10 @@ server.listen(0, '127.0.0.1', async () => {
     ok('3 a journey observes the area it arrives at', after.seen?.[remoteActive] === after.scheduleIndex);
     ok('3 a journey spends no time and no money', after.scheduleIndex === before.scheduleIndex && after.cash === before.cash
       && JSON.stringify(after.stock) === JSON.stringify(before.stock));
-    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; delete c.logs; return JSON.stringify(c); };
+    // v4.58: the road counts journeys (road.js); before the first story block
+    // it counts and nothing else happens.
+    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; delete c.logs; delete c.road; return JSON.stringify(c); };
+    ok('3 the road counts the journey and nothing fires on day one', (after.road?.journeys ?? 0) === (before.road?.journeys ?? 0) + 1 && !after.road?.pending);
     ok('3 a journey changes nothing but presence, that one observation and one log line', strip(after) === strip(before)
       && JSON.stringify(after.logs.slice(1)) === JSON.stringify(before.logs.slice(0, after.logs.length - 1))
       && after.logs[0].startsWith('Aatami walks'), after.logs[0]);

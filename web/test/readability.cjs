@@ -142,6 +142,10 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="advance"]').click(); await page.waitForSelector('.city-map');
       await page.locator('[data-mode-target="ledger"]').click(); await settle();
       await judge(page, `${name} ledger`);
+      // FIXTURE: a road event, to look at it (v4.58).
+      await fixture(() => { const s = structuredClone(window.__ptv3.state); s.mode = 'road'; s.road = { journeys: 4, since: 0, seen: [], pending: { id: 'road-underpass', phase: 'transit', from: 'kurvi', to: s.selectedAnchor }, minutes: 0, minutesBlock: -1, last: null }; window.__ptv3.debug.setState(s); });
+      await judge(page, `${name} road event`);
+      await fixture(() => { const s = structuredClone(window.__ptv3.state); s.road = null; s.mode = 'route'; window.__ptv3.debug.setState(s); });
       // FIXTURES: the scheduled bulletin and a fight, to look at them.
       await fixture(() => { const s = structuredClone(window.__ptv3.state); s.scheduleIndex = 4; s.mode = 'news'; window.__ptv3.debug.setState(s); });
       await judge(page, `${name} news`);
