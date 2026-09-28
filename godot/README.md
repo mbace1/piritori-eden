@@ -53,6 +53,8 @@ godot --headless --path . res://tests/test_locale.tscn       # en/fi/ja
 godot --headless --path . res://tests/test_battle.tscn       # combat model
 godot --headless --path . res://tests/test_battle_ui.tscn    # battle screen
 godot --headless --path . res://tests/test_playthrough.tscn  # 7-day slice
+godot --headless --path . res://tests/test_story.tscn        # road, board, story vs the web
+node tools/web-reference.mjs --check                        # the web numbers test_story holds to
 godot --path . res://tools/capture_battle.tscn   # battle screenshot; PIRITORI_SHOT_BATTLE picks the battle id
 godot --path . res://tools/capture.tscn          # write screenshots (needs a GPU)
 ```
@@ -96,12 +98,21 @@ scenes/
   location_stage.gd     stage art + LOOK/ACT/LEAVE, copy as live UI
   market_ledger.gd      only earned offers, commitment shown first
 scenes/news_event.gd    the TV bulletin: CRT shell, lower third, source tiers
+scenes/kallio_street.gd the drawn street at night: the arrival and the road stand on it
+scenes/arrival.gd       the New-Game arrival (web v4.59/v4.61): any input skips it
+scenes/road_stage.gd    what happened on the road, on its card (web v4.58)
+scenes/story_ledger.gd  MISSIONS: briefings and the case board (web v4.62)
+scripts/city/           road, market_model + board, toko, story, visits — the rules
+                        the web keeps in web/js/v3/{road,board,toko,story,visits}.js
+autoload/sound.gd       synthesised sound on one master bus, SOUND on/off (web v4.59)
 ui/
   palette.gd            ART_BIBLE §4.2 accents, each paired with a glyph
   map_style.gd          the map's authored treatment, from the SVG <style>
   icon.gd               command and stat icons, drawn in code
 tests/                  spine + interface gates
-tools/                  sync-data.mjs, build-map-geometry.mjs, capture.tscn
+tools/                  sync-data.mjs, build-map-geometry.mjs, capture.tscn,
+                        web-reference.mjs (runs the web modules for test_story),
+                        capture_city_story.tscn (stills of the v4.58-v4.62 screens)
 ```
 
 ## Rules worth knowing before editing

@@ -34,6 +34,7 @@ func _ready() -> void:
 		var dim: Vector2i = shot[1]
 		get_window().size = dim
 
+		GameState.arrival_due = false   # the arrival is a New-Game veil; these shots are of the city
 		var shell := preload("res://scenes/app_shell.tscn").instantiate()
 		add_child(shell)
 		for i in range(12):

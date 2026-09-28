@@ -35,6 +35,9 @@ func _ready() -> void:
 	Loc.set_language("en")
 	GameState.new_campaign()
 	SaveService.clear_save()
+	# Setup: the arrival is a New-Game veil and has its own gate below; the
+	# older gates start on the city behind it.
+	GameState.arrival_due = false
 
 	_shell = preload("res://scenes/app_shell.tscn").instantiate()
 	add_child(_shell)
@@ -57,6 +60,13 @@ func _ready() -> void:
 	_test_speaking_character()
 	_test_location_speaker()
 	await _test_debug_hud()
+	# Act I v4.58-v4.62, through the interface.
+	await _test_road_through_ui()
+	await _test_toko_through_ui()
+	await _test_street_seller_through_ui()
+	await _test_story_through_ui()
+	await _test_sound_switch()
+	await _test_arrival()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -852,3 +862,393 @@ func _test_market_through_ui() -> void:
 		and GameState.cash_eur == 183, _shell._cash_label.text if _shell._cash_label else "no chip")
 	_check_type_floor("the ledger")
 	check("the run is profitable against the €45 buy", GameState.cash_eur > 160 - 45)
+
+
+# ── Act I v4.58-v4.62 through the interface ───────────────────────────────
+#
+# Fixtures are set in the model (a block, a pending event, a flag, where
+# Aatami stands); every action under test is a real button's pressed signal.
+
+func _world_has(script_tail: String) -> Node:
+	for n in _all_nodes(_shell._world_host):
+		if n.get_script() != null and String(n.get_script().resource_path).ends_with(script_tail) \
+				and not n.is_queued_for_deletion():
+			return n
+	return null
+
+
+func _rail_text() -> String:
+	var parts: PackedStringArray = []
+	for n in _all_nodes(_shell._rail):
+		if n is Label and n.is_visible_in_tree() and not n.is_queued_for_deletion():
+			parts.append(n.text)
+	return "\n".join(parts)
+
+
+func _live_button(fragment: String) -> Button:
+	for b in _buttons():
+		if b.is_visible_in_tree() and not b.is_queued_for_deletion() \
+				and fragment.to_lower() in _button_text(b).to_lower():
+			return b
+	return null
+
+
+func _fresh_city(anchor: String = "") -> void:
+	GameState.new_campaign()
+	GameState.arrival_due = false
+	if anchor != "":
+		GameState.current_anchor_id = anchor
+		GameState.mark_seen(anchor)
+	_shell._show_city()
+	await get_tree().process_frame
+	if anchor != "":
+		_shell._city_map.select(anchor)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+
+## web v4.58: a journey can stop on the road; the road shows where it happened,
+## each choice's minutes and any refusal; it never turns the block.
+func _test_road_through_ui() -> void:
+	print("\nthe road (web v4.58), through the interface")
+	await _fresh_city()
+	GameState.resolve_encounter("enc-first-purchase", "buy")
+	GameState.advance_block()
+	# Setup: the story is at block 2 and this is the fourth journey since the
+	# last event, so the next journey is on the road.
+	GameState.road = {"journeys": 3, "since": 3, "seen": [], "pending": null,
+		"minutes": 0, "minutesBlock": -1, "last": null}
+	_shell._show_city()
+	await get_tree().process_frame
+	var block := GameState.block_index
+	var cash := GameState.cash_eur
+	var plan := _one_lit("plan", "TRAVEL TO")
+	if plan == null:
+		return
+	await _press(plan)
+	var go := _one_lit("commit", "TRAVEL ·")
+	if go == null:
+		return
+	await _press(go)
+	check("a journey that fires opens the road screen", _world_has("road_stage.gd") != null)
+	var ev := PiritoriRoad.pending_event()
+	check("  with the event waiting", not ev.is_empty())
+	check("  the preview never said so: the journey cost nothing and turned no block",
+		GameState.block_index == block and GameState.cash_eur == cash)
+	var choices := _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("road_choice"))
+	eq_("  every choice is on the rail", choices.size(), (ev.get("choices", []) as Array).size())
+	var mins := _all_nodes(_shell._rail).filter(func(n): return n is Label and n.has_meta("minutes"))
+	check("  and each states its minutes", mins.size() == choices.size()
+		and mins.all(func(l): return l.text.contains("MIN") or l.text.contains("NO TIME")))
+	check("  nothing on the rail is lit while the road waits", _rail_lit().is_empty())
+	var card := _world_has("road_stage.gd")
+	check("  the card says where it happened", String(card.get_meta("phase", "")) != ""
+		and (_labels_text().contains("ON THE WAY") or _labels_text().contains("ARRIVING")))
+
+	# Nothing else opens past it.
+	await _press(_shell._commands[0])
+	check("the city waits behind it (CITY opens the road again)", _world_has("road_stage.gd") != null)
+	_shell._end_block()
+	await get_tree().process_frame
+	eq_("  and END DAY does not turn the block past it", GameState.block_index, block)
+
+	# The road was built again behind the guard: find its buttons afresh.
+	choices = _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("road_choice") \
+		and not n.is_queued_for_deletion())
+	var first: Button = null
+	for b in choices:
+		if not (b as Button).disabled:
+			first = b
+			break
+	var picked := String(first.get_meta("road_choice"))
+	var minutes := 0
+	for c in ev["choices"]:
+		if String(c["id"]) == picked:
+			minutes = int(c.get("minutes", 0))
+	await _press(first)
+	check("answering it shows what came of it", _rail_text().contains("MIN") or _rail_text().contains("NO TIME"))
+	eq_("  the block does not turn", GameState.block_index, block)
+	if minutes > 0:
+		check("  the header's clock reads later", _labels_text().contains(PiritoriRoad.clock_label())
+			and PiritoriRoad.clock_label() != "", PiritoriRoad.clock_label())
+	var cont := _rail_lit()
+	check("  one lit CONTINUE", cont.size() == 1 and "CONTINUE" in (cont[0] as Button).text.to_upper())
+	if cont.size() == 1:
+		await _press(cont[0])
+	check("CONTINUE returns to the city", _world_has("road_stage.gd") == null
+		and _shell._city_map.is_inside_tree())
+
+	# Refused, never hidden: the underpass with nobody to stand with.
+	GameState.road["pending"] = {"id": "road-underpass", "phase": "transit", "from": "piritori", "to": "harju"}
+	(GameState.road["seen"] as Array).erase("road-underpass")
+	_shell._show_city()
+	await get_tree().process_frame
+	var stand := _live_button("Stand your ground")
+	check("a choice you cannot take is shown", stand != null)
+	check("  and refused", stand != null and stand.disabled)
+	check("  and says why in words", _rail_text().contains("needs 2 crew with you"))
+	# With two crew it becomes a fight: the ordinary battle, no mission, no block.
+	GameState.apply_effect("recruit:crew-slot-runner")
+	GameState.apply_effect("recruit:crew-slot-watcher")
+	_shell._show_road()
+	await get_tree().process_frame
+	stand = _live_button("Stand your ground")
+	check("with two crew it can be taken", stand != null and not stand.disabled)
+	if stand != null:
+		block = GameState.block_index
+		await _press(stand)
+		check("  and it is a fight", _shell.mode == _shell.Mode.BATTLE)
+		check("  a ROAD fight: no mission behind it", _shell._road_battle)
+		eq_("  and the block does not turn", GameState.block_index, block)
+	_shell._show_city()
+	await get_tree().process_frame
+
+
+func eq_(label: String, a: Variant, b: Variant) -> void:
+	check(label, a == b, "(got %s, want %s)" % [a, b])
+
+
+## web v4.60/v4.61: Tokon Ramen on Vaasankatu — a bowl buys a range, heard on
+## the board; early weapons under the counter; BACK is the one lit thing.
+func _test_toko_through_ui() -> void:
+	print("\nTokon Ramen (web v4.60/v4.61), through the interface")
+	await _fresh_city("vaasankatu")
+	var door := _live_button("TOKON RAMEN")
+	check("at Vaasankatu the counter is on the rail", door != null)
+	check("  unlit: the next step stays the one lit thing", door != null and not PiritoriChrome.is_lit(door)
+		and _rail_lit().size() == 1 and _rail_last_button() == _rail_lit()[0])
+	if door == null:
+		return
+	await _press(door)
+	check("the counter opens with Toko behind it", _shell._stage_has_speaker
+		and _world_has("location_stage.gd") != null)
+	var lit := _rail_lit()
+	check("  BACK TO THE STREET is the one lit thing, and last",
+		lit.size() == 1 and "STREET" in (lit[0] as Button).text.to_upper() and _rail_last_button() == lit[0])
+	check("  Toko says his line for the block", _labels_text().contains(tr("toko.line_%s" % str(GameState.block_index % 10))))
+	var cash := GameState.cash_eur
+	var tip := String(PiritoriToko.tip().get("id", ""))
+	var bowl := _live_button("BUY A BOWL")
+	check("a bowl is on the counter", bowl != null and not bowl.disabled)
+	await _press(bowl)
+	eq_("  it costs €6", GameState.cash_eur, cash - 6)
+	check("  he names the best place you do not know, with a range",
+		GameState.heard.has(tip) and _labels_text().contains("They are paying"))
+	var eaten := _live_button("YOU HAVE EATEN")
+	check("  one bowl a block", eaten != null and eaten.disabled)
+	var weapon := _live_button("Buy the Baton")
+	check("early weapons under the counter", weapon != null)
+	check("  never a gun", _live_button("Handgun") == null)
+	var kit := GameState.equipment.size()
+	cash = GameState.cash_eur
+	await _press(weapon)
+	check("  a weapon at the street price", GameState.equipment.size() == kit + 1
+		and GameState.cash_eur == cash - GameState.buy_of("baton"))
+	# The board: heard, not seen.
+	await _press(_shell._commands[3])
+	var board := _live_button("THE BOARD")
+	check("MISSIONS offers the board", board != null)
+	await _press(board)
+	var row: Node = null
+	for n in _all_nodes(_shell._world_host):
+		if n.name == "BoardRow_" + tip:
+			row = n
+	check("the board shows the place he named", row != null)
+	check("  as a RANGE heard from Toko", row != null and String(row.get_meta("level")) == "range"
+		and bool(row.get_meta("heard")))
+	check("  and says so", row != null and _all_nodes(row).any(func(n): return n is Label and n.text.begins_with("Toko")))
+	check("  it is not a visit", not GameState.seen.has(tip))
+	_check_type_floor("the board")
+
+
+## web v4.61: the Piritori street seller keeps the gear and the fence.
+func _test_street_seller_through_ui() -> void:
+	print("\nthe street seller (web v4.61), through the interface")
+	await _fresh_city("piritori")
+	var door := _live_button("STREET SELLER")
+	check("at Piritori the street seller is on the rail, unlit", door != null and not PiritoriChrome.is_lit(door))
+	if door == null:
+		return
+	await _press(door)
+	check("  his screen sells gear", _live_button("Buy the Handgun") != null and _rail_text().contains(tr("ui.shop")))
+	check("  and has the fence", _rail_text().contains(tr("ui.fence")))
+	var lit := _rail_lit()
+	check("  BACK TO THE STREET is the one lit thing", lit.size() == 1)
+	if lit.size() == 1:
+		await _press(lit[0])
+	check("  and it goes back", _shell._city_map.is_inside_tree())
+
+
+## web v4.62: briefings and the case board in the ledger; a visit earns a key
+## clue; the Thursday Tram opens at Piritori on two, answered once.
+func _test_story_through_ui() -> void:
+	print("\nthe Thursday Load (web v4.62), through the interface")
+	await _fresh_city()
+	GameState.resolve_encounter("enc-first-purchase", "ask-control")
+	GameState.apply_effect("flag:mccormicks-know-skim")
+	await _press(_shell._commands[3])
+	var ledger := _world_has("story_ledger.gd")
+	check("MISSIONS opens the week's ledger", ledger != null)
+	var cards := _all_nodes(_shell._world_host).filter(func(n): return String(n.name).begins_with("Mission_"))
+	eq_("  every mission is briefed", cards.size(), (ContentRegistry.slice["missions"] as Array).size())
+	var clues := _all_nodes(_shell._world_host).filter(func(n): return String(n.name).begins_with("Clue_"))
+	eq_("  the case board lists all eight clues", clues.size(), 8)
+	eq_("  two found, on paper", clues.filter(func(n): return bool(n.get_meta("found"))).size(), 2)
+	eq_("  three marked KEY", clues.filter(func(n): return bool(n.get_meta("key"))).size(), 3)
+	check("  and says how far the case is", _labels_text().contains("1 of 2 key clues"))
+	_check_type_floor("the ledger")
+
+	# Brahenkenttä: a visit, with someone to watch the vans.
+	GameState.resolved_encounters["enc-toko-quiet-voice"] = "eat-and-listen"
+	GameState.apply_effect("recruit:crew-slot-runner")
+	GameState.current_anchor_id = "harju"
+	_shell._show_city()
+	await get_tree().process_frame
+	_shell._city_map.select("harju")
+	await get_tree().process_frame
+	var visit := _live_button("VISIT")
+	check("after Toko's night, Harju has a visit", visit != null and not PiritoriChrome.is_lit(visit))
+	if visit == null:
+		return
+	await _press(visit)
+	var block := GameState.block_index
+	var watch := _live_button("watch the tram yourself")
+	check("  watching the tram can be taken with one crew", watch != null and not watch.disabled)
+	await _press(watch)
+	check("  the load rides the 3: a KEY clue", GameState.has_flag("memory:saw-the-tram"))
+	eq_("  a visit turns no block", GameState.block_index, block)
+
+	# Two key clues: the case at Piritori.
+	GameState.current_anchor_id = "piritori"
+	_shell._show_city()
+	await get_tree().process_frame
+	_shell._city_map.select("piritori")
+	await get_tree().process_frame
+	var case_b := _live_button("THE THURSDAY TRAM")
+	check("two key clues: the case waits at Piritori", case_b != null)
+	check("  unlit, and the next step is still the one lit thing, last",
+		case_b != null and not PiritoriChrome.is_lit(case_b) and _rail_lit().size() <= 1)
+	if case_b == null:
+		return
+	await _press(case_b)
+	var toko := int(GameState.relationships.get("toko", 0))
+	var intel := GameState.intel
+	block = GameState.block_index
+	var give := _live_button("Give it to Toko")
+	check("  its four answers are offered", _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("case_choice")).size() == 4)
+	await _press(give)
+	check("giving it to Toko: Toko +2, intel +2",
+		int(GameState.relationships.get("toko", 0)) == toko + 2 and GameState.intel == intel + 2)
+	eq_("  the case turns no block", GameState.block_index, block)
+	eq_("  answered once", PiritoriStory.case_blocker(), "resolved")
+	check("  one lit way back", _rail_lit().size() == 1)
+	_shell._show_city()
+	await get_tree().process_frame
+	_shell._city_map.select("piritori")
+	await get_tree().process_frame
+	check("the case is gone from Piritori", _live_button("THE THURSDAY TRAM") == null)
+	await _press(_shell._commands[3])
+	check("the board says it is settled", _labels_text().contains("Settled: Give it to Toko."))
+	_shell._show_city()
+	await get_tree().process_frame
+
+
+## web v4.59: SOUND · ON/OFF in the menu, remembered; OFF closes the graph.
+func _test_sound_switch() -> void:
+	print("\nsound (web v4.59) in the menu")
+	var was := Sound.on
+	Sound.set_sound(true)
+	_shell._rebuild_language_buttons()
+	await get_tree().process_frame
+	_shell._menu_button.emit_signal("pressed")
+	await get_tree().process_frame
+	var sw := _live_button("SOUND")
+	check("the menu has a SOUND switch", sw != null and "ON" in sw.text)
+	check("  a real touch target", sw != null and sw.custom_minimum_size.y >= _shell.MIN_TARGET)
+	if sw != null:
+		await _press(sw)
+		check("  pressing it turns sound off", not Sound.on and not bool(Sound.state()["running"]))
+		sw = _live_button("SOUND")
+		check("  and it says so", sw != null and "OFF" in sw.text)
+		await _press(sw)
+		check("  pressing again turns it back on", Sound.on and bool(Sound.state()["running"]))
+	_shell._menu_button.emit_signal("pressed")
+	await get_tree().process_frame
+	Sound.set_sound(was)
+
+
+## web v4.59/v4.61: the arrival — New Game only, any input skips it, it ends by
+## itself, it changes nothing, and afterwards the next step is lit.
+func _test_arrival() -> void:
+	print("\nthe arrival (web v4.59/v4.61)")
+	GameState.new_campaign()
+	var snapshot := JSON.stringify(GameState.to_dict())
+	var shell := preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var arrival: Node = shell.get_node_or_null("Arrival")
+	check("a new game opens on the arrival", arrival != null)
+	if arrival == null:
+		shell.queue_free()
+		return
+	var text := "\n".join(_all_nodes(arrival).filter(func(n): return n is Label).map(func(l): return l.text))
+	check("  its lines read the save: €160, 300 mk, a debt of €350",
+		text.contains("€160") and text.contains("300 mk") and text.contains("€350"), text)
+	check("  and the first payment from the content: €75 on day 4",
+		text.contains("€75") and text.contains("day 4"))
+	check("  the tram comes in with its sound", Sound.played.has("arrival") or not Sound.on)
+	var skip: Button = null
+	for n in _all_nodes(arrival):
+		if n is Button and "SKIP" in n.text:
+			skip = n
+	check("  SKIP is there from frame one", skip != null)
+	skip.pressed.emit()
+	await get_tree().create_timer(0.7).timeout
+	check("SKIP ends it", shell.get_node_or_null("Arrival") == null)
+	check("  it never changed the save", JSON.stringify(GameState.to_dict()) == snapshot)
+	var lit := _all_nodes(shell._rail).filter(func(n): return n is Button and n.is_visible_in_tree() \
+		and not n.is_queued_for_deletion() and PiritoriChrome.is_lit(n))
+	check("  afterwards the next step is lit: ENTER", lit.size() == 1 and "ENTER" in (lit[0] as Button).text)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# Any key.
+	GameState.new_campaign()
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var key := InputEventKey.new()
+	key.keycode = KEY_SPACE
+	key.pressed = true
+	Input.parse_input_event(key)
+	await get_tree().create_timer(0.7).timeout
+	check("any key ends it", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# By itself.
+	GameState.new_campaign()
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	arrival = shell.get_node_or_null("Arrival")
+	for i in 100:
+		if arrival == null or not is_instance_valid(arrival):
+			break
+		arrival._process(0.1)
+	await get_tree().create_timer(0.7).timeout
+	check("left alone, it ends by itself (about 9.5 s)", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# Continue: a loaded campaign opens on the city.
+	GameState.new_campaign()
+	GameState.from_dict(JSON.parse_string(snapshot))
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	check("a loaded campaign never sees it", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
+	await get_tree().process_frame

@@ -38,17 +38,123 @@ func _ready() -> void:
 	_rebuild()
 
 
+var _scale := 1.0
+
+
 func _rebuild() -> void:
+	_scale = PiritoriFonts.text_scale(get_viewport_rect().size)
 	for c in _list.get_children():
 		c.queue_free()
 
 	var offers := GameState.visible_offers()
 	if offers.is_empty():
 		_list.add_child(_label(tr("ui.no_contacts"), 15, PiritoriPalette.TEXT_DIM))
-		return
 
 	for o in offers:
 		_list.add_child(_offer_row(o))
+
+	_add_board()
+
+
+# ── THE BOARD (web `renderBoard()`, `board.js`) ────────────────────────────
+#
+# What you know about every open place's price, in the knowledge you actually
+# have: a quote where you stood this block, a range for four, a rumour for
+# twelve, then nothing — and what Toko told you over a bowl, marked as HEARD
+# rather than seen (v4.61). The authored offers above are leads someone gave
+# you; this is what you read to decide whether a lead is worth the trip.
+func _add_board() -> void:
+	var c := PiritoriBoard.clock()
+	var panel := PanelContainer.new()
+	panel.name = "Board"
+	panel.add_theme_stylebox_override("panel", PiritoriChrome.margins(PiritoriChrome.panel(), 16, 12))
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	panel.add_child(col)
+	col.add_child(_label(tr("board.eyebrow") % [tr("ui.day_n") % int(c["day"]),
+		tr("ui.block.night") if String(c["block"]) == "night" else tr("ui.block.day")],
+		13, PiritoriPalette.TEXT_FAINT))
+	var head := _label(tr("board.title"), 24, PiritoriPalette.TEXT)
+	head.theme_type_variation = PiritoriChrome.TITLE
+	col.add_child(head)
+	col.add_child(_label(tr("board.note"), 13, PiritoriPalette.TEXT_DIM))
+	var known := 0
+	for r in PiritoriBoard.rows():
+		var row: Dictionary = r
+		var shown: Dictionary = row["shown"]
+		var lv := String(shown["level"])
+		if lv != PiritoriMarket.INFO_NONE:
+			known += 1
+		col.add_child(_board_row(row, shown, lv))
+	if known == 0:
+		col.add_child(_label(tr("board.go"), 13, PiritoriPalette.TEXT_DIM))
+	_list.add_child(panel)
+
+
+func _board_row(row: Dictionary, shown: Dictionary, lv: String) -> Control:
+	var upright := get_viewport_rect().size.y > get_viewport_rect().size.x
+	# Four columns in a row on a wide screen; upright, place and price on one
+	# line and why and when underneath, so nothing is squeezed to a sliver.
+	var line: BoxContainer = VBoxContainer.new() if upright else HBoxContainer.new()
+	line.name = "BoardRow_" + String(row["id"])
+	line.set_meta("level", lv)
+	line.set_meta("heard", bool(row["heard"]))
+	line.add_theme_constant_override("separation", 2 if upright else 12)
+	var top := HBoxContainer.new() if upright else line
+	var bottom := HBoxContainer.new() if upright else line
+	if upright:
+		top.add_theme_constant_override("separation", 12)
+		bottom.add_theme_constant_override("separation", 12)
+		line.add_child(top)
+		line.add_child(bottom)
+	var place := String(row["label"]) + ("  · " + tr("board.here") if bool(row["here"]) else "")
+	var dark := lv == PiritoriMarket.INFO_NONE
+	var name_l := _label(place, 15, PiritoriPalette.TEXT_DIM if dark else PiritoriPalette.TEXT)
+	name_l.custom_minimum_size.x = 170 * _scale
+	if upright:
+		name_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(name_l)
+	var price := ""
+	match lv:
+		PiritoriMarket.INFO_QUOTE:
+			price = "€%s / €%s" % [_eur(shown["buy"]), _eur(shown["sell"])]
+		PiritoriMarket.INFO_RANGE:
+			price = "€%s–%s / €%s–%s" % [_eur(shown["low_buy"]), _eur(shown["high_buy"]),
+				_eur(shown["low_sell"]), _eur(shown["high_sell"])]
+		PiritoriMarket.INFO_RUMOUR:
+			price = tr("board.rumour_%s" % String(shown.get("direction", "ordinary")))
+		_:
+			price = tr("board.never")
+	var price_l := _label(price, 15, PiritoriPalette.TEXT_DIM if dark else PiritoriPalette.TEXT)
+	price_l.name = "Price"
+	if upright:
+		price_l.autowrap_mode = TextServer.AUTOWRAP_OFF
+	else:
+		price_l.custom_minimum_size.x = 170
+		price_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(price_l)
+	if dark and upright:
+		return line
+	var why := "—" if dark else tr(String(shown.get("cause_key", "board.why_ordinary")))
+	var why_l := _label(why, 13, PiritoriPalette.TEXT_DIM)
+	why_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom.add_child(why_l)
+	var age := int(row["age"])
+	var known := "—"
+	if bool(row["heard"]):
+		known = tr("board.heard_now") if age == 0 else tr("board.heard") % age
+	elif bool(row["visited"]):
+		known = tr("board.now") if age == 0 else tr("board.ago") % age
+	var known_l := _label(known, 13, PiritoriPalette.LANTERN if bool(row["heard"]) else PiritoriPalette.TEXT_DIM)
+	known_l.name = "Known"
+	known_l.custom_minimum_size.x = 120 * _scale
+	bottom.add_child(known_l)
+	return line
+
+
+## Prices are balance values to the cent; the board reads them to the euro.
+func _eur(v: Variant) -> String:
+	return str(int(round(float(v))))
 
 
 func _offer_row(o: Dictionary) -> Control:
@@ -90,8 +196,8 @@ func _offer_row(o: Dictionary) -> Control:
 
 	var can := GameState.can_sell(o) if side == "sell" else GameState.can_buy(o)
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(0, ROW_H * 0.7)
-	btn.add_theme_font_size_override("font_size", 15)
+	btn.custom_minimum_size = Vector2(0, ROW_H * 0.7 * _scale)
+	btn.add_theme_font_size_override("font_size", int(round(15 * _scale)))
 	btn.disabled = not can
 	var verb_word := tr("ui.sell_verb") if side == "sell" else tr("ui.buy_verb")
 	btn.text = tr("ui.costs_block") % [verb_word, price]
@@ -124,7 +230,7 @@ func _why_not(o: Dictionary, side: String) -> String:
 func _label(text: String, size_px: int, col: Color = PiritoriPalette.TEXT) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", size_px)
-	l.add_theme_color_override("font_color", col)
+	l.add_theme_font_size_override("font_size", maxi(int(round(size_px * _scale)), PiritoriFonts.FLOOR_PX))
+	l.add_theme_color_override("font_color", PiritoriChrome.readable(col, PiritoriPalette.PANEL))
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	return l

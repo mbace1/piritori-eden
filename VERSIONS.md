@@ -114,6 +114,8 @@ Godot: the cut (`thursday-cut` / `cut-ended`, `state.cut.payments`, €30 per ni
 
 Godot: the canon moves on its own (the Jade front at Hakaniemi, the new visit, the new flags). Web-only for now: load `content/act1-story-v1.json`; mission briefings and the case board in the ledger (clue = flag in the save); the Thursday Tram at Piritori, answered once, with no block advance.
 
+**Status: landed in Godot 2026-09-28** (branch `godot/road-sound-story`). `content/act1-story-v1.json` is synced; `scripts/city/story.gd` is `story.js` (a clue is its flag in the save; `memory:` flags read the memories). MISSIONS opens the week's ledger (`scenes/story_ledger.gd`): every mission as a briefing with its premise, real steps (verb, place, the other way), stakes in words read from its own effects, whether it can become a fight, and its plant; beside it the case board, all 8 clues (found on paper, missing as "?" with the hint, KEY marked) and where the case waits. The Thursday Tram is an unlit CASE button at Piritori once 2 key clues are found, answered once, never turning the block. Two gaps had to close for the canon to "move on its own": the port had no optional visits (now `scripts/city/visits.gd`, so the Brahenkenttä visit earns `memory:saw-the-tram`), and its battles never applied their mission's effects (now `GameState.settle_mission_battle`, once per mission, so the courtyard earns `flag:kello-receipts`). The requirement grammar fix under v4.58 makes Name the empty van (`flag:mccormicks-know-skim`) takeable. Briefing and clue words are content and read in English, like all prose; the ledger's own words are en/fi/ja.
+
 ## v4.61 — 2026-09-27
 
 **Toko Slomo per the GDD, on Vaasankatu.** Owner, 2026-09-27: answer 13, "Toko Slomo at the restaurant? Check the GDD for him"; answer 16, "Vaasankatu".
@@ -130,6 +132,8 @@ Godot: the canon moves on its own (the Jade front at Hakaniemi, the new visit, t
 
 Godot: Tokon Ramen at Vaasankatu (from canon). A bowl buys a range: save `heard[anchor] = block` and `tokoBowlAt`, show "heard" on the board at RANGE with the same decay (visited floor rules), and never mark the place seen. The street seller at Piritori keeps gear and fence.
 
+**Status: landed in Godot 2026-09-28.** The port had no board, so it got one: `scripts/city/market_model.gd` is `market/model.mjs`'s offer, decay and present (xmur3 + mulberry32 in unsigned 32-bit, so prices match the web to the cent) and `scripts/city/board.gd` is `board.js` v3 with "heard"; `seen` is recorded on a journey, an encounter and a trade, and `footprint` on a trade. The board is in the market ledger (MISSIONS → THE BOARD · WHAT YOU KNOW): a heard row reads RANGE, "Toko, N blocks ago", ages like a sighting and is never a visit. `scripts/city/toko.gd`: a bowl is €6, one a block, and buys the best sell price you have no range or quote for (Mäkelänsilta on day one, as on the web), saved as `heard[anchor]` and `tokoBowlAt`; the early weapons (bat, baton, pipe, folding knife, signal flare) sell at the street price, never a gun. The counter is an unlit TOKON RAMEN door on Vaasankatu with Toko behind it; the Piritori STREET SELLER · GEAR screen keeps the shop and the fence. BACK TO THE STREET is the one lit action on both.
+
 ## v4.60 — 2026-09-27
 
 **Tokon Ramen, a noir arrival, and more of the road.** Owner, 2026-09-27: answer 11, "Yes keep making more" (road events); answer 12, "Kallio Noir mystery and need to make some profits. Dirty and dingy setting with some weird NPCs" (the arrival); and "Make the Tokon Ramen shop appear at the Piritori area or a similar spot near. Toko can be the first shop area."
@@ -143,6 +147,8 @@ Godot: Tokon Ramen at Vaasankatu (from canon). A bowl buys a range: save `heard[
 
 Godot: the canon moves on its own (the site and schedule anchor are `piritori`), but `map_style.gd` still gives Vaasankatu the NOODLES icon; move it to Piritori. Add a Tokon Ramen counter at Piritori (the shop and fence Godot already has there) with Toko's per-block line (`TOKO_LINES` in app.js). Rewrite the arrival lines and add the sign and the man in the fur hat. Road events: 19 now, and the grammar gains `obligation:`.
 
+**Status: landed in Godot 2026-09-28**, as v4.61 left it: the bowl is on Vaasankatu again. Toko says one line a block (`toko.line_0`-`9`, en/fi/ja); the arrival has the sign, the man in the fur hat, the bin bag and the puddle; all 19 road events load and `obligation:` is understood.
+
 ## v4.59 — 2026-09-27
 
 **Sound, and the arrival.** Owner, 2026-09-27: answer 7, "yes" to sound (a tram bell, the till, street rain); answer 8, "sure, setting up" for an arrival when a run begins.
@@ -155,6 +161,8 @@ Godot: the canon moves on its own (the site and schedule anchor are `piritori`),
 ### Port
 
 Godot: an arrival scene on New Game (not Continue), skippable by any input, ending by itself, with the same three lines built from the save. Add a synthesised or bus-routed ambient bed plus the till, steps, sting and bell cues on the same triggers, a single master bus, and a persisted SOUND switch in the pause menu.
+
+**Status: landed in Godot 2026-09-28.** `autoload/sound.gd`: every sound is computed into an in-memory `AudioStreamWAV` (seeded noise, no audio files) and plays on the Master bus: the rain-and-hum bed with a far bell every 22-48 s, the till (bright in, low out) when the header's cash moves, steps on a journey, a sting when the road stops Aatami, brakes then the bell for the arrival. SOUND · ON/OFF is in the ≡ menu, remembered in `user://piritori-settings.cfg`; OFF frees every player and mutes the bus. The arrival (`scenes/arrival.gd`, the street drawn in code by `scenes/kallio_street.gd`) lies over the city on a new campaign only (`GameState.arrival_due`, never saved, cleared by a load; a debug deep link skips it): SKIP, a tap, a click or a key end it, it ends by itself after 9.5 s (6 s held still under `?still`), the money, markka, debt and first payment are read from the save and content, it never touches the save, and afterwards the next step is lit. The port has no Continue yet, so every launch is a new game. The landscape-phone header fix is web CSS and has no Godot counterpart.
 
 ## v4.58 — 2026-09-27
 
@@ -172,6 +180,8 @@ Godot: an arrival scene on New Game (not Continue), skippable by any input, endi
 ### Port
 
 Godot: load `content/road-events-v1.json` and apply the same rules: gap of 3 or 4 after story block 2; a deterministic roll from contentId|block|journey count (FNV-1a, the same as `deterministicRoll`); once each; highest open tier first. The rolled phase is `transit` or `arrival`, and `any` fits either. Show a road screen with each choice's minutes and any refusal reason. Add minutes to the current block's clock only; they never turn the block. A road fight has no mission and no block advance. Save `road: {journeys, since, seen, pending, minutes, minutesBlock, last}`.
+
+**Status: landed in Godot 2026-09-28.** `scripts/city/road.gd` is `road.js`; the roll is `GameState.deterministic_roll`, FNV-1a over contentId|block|label bit for bit, and the road is saved under `road` in the web's shape. The road screen stands the event on the drawn street (the 3 at the stop on the way, the place's own stop on arriving) with ON THE WAY · A → B or ARRIVING · B; each choice states +N MIN or NO TIME, and a choice you cannot take is shown, disabled, with the reason in words ("needs 2 crew with you", "needs a pack on you"). Answered, it says what it cost and NOW HH:MM with one lit CONTINUE, and the header reads DAY 02 · DAY · 10:10. A waiting event is the only thing that opens (every command and END DAY route to it) and survives a reload. A road fight is the ordinary battle marked as a road fight: no mission, no block. The requirement grammar had to grow for it: `flag:`, `relationship:`, `obligation:`, `deployed-crew`, `crew-role:` and `crew-critical` were all read as unmet or zero, so several authored slice choices could never be taken in Godot. Gate: `tests/test_story.tscn` replays 34 journeys against `tests/fixtures/web-reference.json`, which `tools/web-reference.mjs` writes by running the web modules themselves (CI re-runs it with `--check`). Godot gates: spine 264, locale 21, shell 237, battle 292, battle UI 29, playthrough 72, story 136.
 
 ## v4.57 — 2026-09-27
 

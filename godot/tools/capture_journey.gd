@@ -23,6 +23,7 @@ func _ready() -> void:
 		_out = "user://"
 	get_window().size = SIZE
 	GameState.new_campaign()
+	GameState.arrival_due = false   # the arrival is a New-Game veil; these shots are of the city
 	_shell = preload("res://scenes/app_shell.tscn").instantiate()
 	add_child(_shell)
 	await _frames(12)

@@ -22,6 +22,10 @@ var _copy: Label
 var _inspect: Label
 var _note_label: Label
 var _card: PanelContainer
+## A scene's own heading on the card — the counter's name, the case's title.
+## Empty (and hidden) for an ordinary encounter, whose card is narration only.
+var _eyebrow: Label
+var _heading: Label
 
 
 func _ready() -> void:
@@ -91,6 +95,14 @@ func _build_text_layer() -> void:
 	card_col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_card.add_child(card_col)
 
+	_eyebrow = _make_label(13, Color("#6b3f1c"))
+	_eyebrow.visible = false
+	card_col.add_child(_eyebrow)
+	_heading = _make_label(24, PiritoriChrome.plate_ink())
+	_heading.theme_type_variation = PiritoriChrome.TITLE
+	_heading.visible = false
+	card_col.add_child(_heading)
+
 	# Narration in the body voice (web v4.56 `.encounter-opening`, 18px).
 	_copy = _make_label(18, PiritoriChrome.plate_ink())
 	card_col.add_child(_copy)
@@ -141,7 +153,7 @@ func _make_label(size_px: int, col: Color) -> Label:
 
 func _apply_text_scale() -> void:
 	var s := _text_scale()
-	for l in [_copy, _inspect, _note_label]:
+	for l in [_copy, _inspect, _note_label, _eyebrow, _heading]:
 		if l == null or not l.has_meta("base_px"):
 			continue
 		l.add_theme_font_size_override("font_size",
@@ -171,6 +183,29 @@ func setup(encounter_id: String) -> void:
 	# card clipped its own third line here (2026-08-26), caught by rendering
 	# the actual encounter rather than trusting that a clean compile meant a
 	# clean layout. Deferred so it runs after the stage has a real size.
+	call_deferred("_refit_card")
+
+
+## A scene that is not a scheduled encounter — Toko's counter, the street
+## seller, a visit, the case (web v4.60-v4.62). The same stage and the same
+## card, fed directly: the art by asset id (falling back to the anchor's), an
+## optional eyebrow and heading, and the words.
+func setup_scene(scene_asset_id: String, anchor_id: String, body: String,
+		heading: String = "", eyebrow: String = "") -> void:
+	_encounter_id = ""
+	if _copy == null:
+		_build_text_layer()
+	_apply_text_scale()
+	_load_stage_art(anchor_id, scene_asset_id)
+	_eyebrow.text = eyebrow
+	_eyebrow.visible = eyebrow != ""
+	_heading.text = heading
+	_heading.visible = heading != ""
+	_copy.text = body
+	_copy.visible = body != ""
+	_note_label.text = _stage_note
+	_inspect.visible = false
+	queue_redraw()
 	call_deferred("_refit_card")
 
 
