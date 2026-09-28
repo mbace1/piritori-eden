@@ -139,6 +139,9 @@ static func _candidates(phase: String) -> Array:
 	var tier := tier_open()
 	var out: Array = []
 	for e in ContentRegistry.road_events():
+		# An event with a `trigger` belongs to the story; the road never rolls it (web v4.63).
+		if e.has("trigger"):
+			continue
 		if (r["seen"] as Array).has(String(e["id"])) or int(e.get("tier", 0)) > tier:
 			continue
 		var ph := String(e.get("phase", "any"))

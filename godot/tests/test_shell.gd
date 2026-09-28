@@ -1092,7 +1092,7 @@ func _test_story_through_ui() -> void:
 	var cards := _all_nodes(_shell._world_host).filter(func(n): return String(n.name).begins_with("Mission_"))
 	eq_("  every mission is briefed", cards.size(), (ContentRegistry.slice["missions"] as Array).size())
 	var clues := _all_nodes(_shell._world_host).filter(func(n): return String(n.name).begins_with("Clue_"))
-	eq_("  the case board lists all eight clues", clues.size(), 8)
+	eq_("  the case board lists every clue", clues.size(), ContentRegistry.story_clues().size())
 	eq_("  two found, on paper", clues.filter(func(n): return bool(n.get_meta("found"))).size(), 2)
 	eq_("  three marked KEY", clues.filter(func(n): return bool(n.get_meta("key"))).size(), 3)
 	check("  and says how far the case is", _labels_text().contains("1 of 2 key clues"))
