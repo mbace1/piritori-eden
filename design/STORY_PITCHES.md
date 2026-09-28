@@ -19,3 +19,19 @@ Owner, answer 15: "weave the narrative and ask me to greenlight rather than writ
   - **G7:** in-game mission briefings at this depth, plus a case board in the ledger.
 
 Kept exactly as in the game: every mission's steps, deadlines, requirements, effect numbers and named battle opponents (content/era1-slice-v1.json).
+
+## The Long Game (2026-09-28)
+
+Artifact: https://claude.ai/artifact/5qZzaoZ8vRKg4Vf253vJNF (private to the owner).
+A high-level pitch covering what comes after Act I. It asks for eight greenlights:
+
+- **H1:** an era is 4 chapters of about 10 days each.
+- **H2:** a chapter is a spine, plus doors built from templates, plus the road, plus a case.
+- **H3:** one case per chapter, pinned to a growing wall.
+- **H4:** territory is held by crewing corners.
+- **H5:** both families sit on a five-rung standing ladder, and the police react to heat only.
+- **H6:** about one fight every 2–3 days, always telegraphed, and Aatami stops fighting after chapter 2.
+- **H7:** the block turns only on beats and doors; minutes close late doors; cash and debt carry over; the threshold counts only this chapter's earnings.
+- **H8:** chapter 4 is the Pasila move, and the Era II gate stays shut.
+
+Proposed build order: H7, then H1+H2, then H4+H5, then H3, then H6. Nothing is built until the owner answers.
