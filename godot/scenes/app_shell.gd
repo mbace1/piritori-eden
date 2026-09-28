@@ -71,6 +71,14 @@ var _city_map: Control
 var _is_portrait := false
 var _stage_has_speaker := false   ## drives the portrait stage/rail split
 var _hud: CanvasLayer
+## Which non-encounter screen is up — "road", "ramen", "street", "case",
+## "visit", "missions" — so a language switch can rebuild the same one.
+var _screen := ""
+var _visit_open := ""
+## What Toko said at the last bowl: null = no bowl yet, "" = nothing new, or
+## the anchor he named (web `tokoTold`, presentation only, never saved).
+var _toko_told: Variant = null
+var _toko_epoch := -1
 
 
 func _ready() -> void:
@@ -182,6 +190,25 @@ func _on_language_changed(_code: String) -> void:
 			for child in row.get_children():
 				if child is Label:
 					child.text = tr(b.get_meta("key", ""))
+	match _screen:
+		"road":
+			_show_road()
+			return
+		"ramen":
+			_show_ramen()
+			return
+		"street":
+			_show_street()
+			return
+		"case":
+			_show_case()
+			return
+		"visit":
+			_show_visit(_visit_open)
+			return
+		"missions":
+			_show_missions()
+			return
 	if mode == Mode.LOCATION and _open_encounter != "":
 		_show_location(_open_encounter)
 	elif mode == Mode.MARKET:
@@ -683,8 +710,11 @@ func _refresh_status() -> void:
 		c.queue_free()
 
 	# Each chip is icon + number, and every icon means one thing only.
+	# The block's clock reads later once the road has spent minutes in it
+	# (web v4.58: DAY 2 · NIGHT · 21:00). Minutes never turn a block (D002).
+	var clock := PiritoriRoad.clock_label()
 	_add_stat(PiritoriIcon.Kind.END_DAY, MapStyle.TITLE_TEXT,
-		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()])
+		"%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()] + (" · " + clock if clock != "" else ""))
 
 	# §3.4: committed context shows the time block, the cash and the scene —
 	# and nothing else. END DAY in particular must not be reachable mid-fight:
@@ -930,6 +960,11 @@ func _apply_ui_scale() -> void:
 func _clear_world() -> void:
 	for c in _world_host.get_children():
 		_world_host.remove_child(c)
+		# The map is kept and re-mounted; everything else was built for one
+		# visit. Left orphaned, a ledger kept rebuilding itself on every
+		# `state_changed` from outside the tree, and every stage lived forever.
+		if c != _city_map:
+			c.queue_free()
 
 
 func _clear_rail() -> void:
@@ -940,7 +975,12 @@ func _clear_rail() -> void:
 
 
 func _show_city() -> void:
+	# A pending road event waits for an answer; nothing else opens past it
+	# (web `render()`), and it survives a reload.
+	if _road_guard():
+		return
 	_set_mode(Mode.CITY)
+	_screen = ""
 	_open_encounter = ""
 	_stage_has_speaker = false
 	if _rail:
@@ -995,6 +1035,10 @@ func _commit_journey() -> void:
 	if not bool(result.get("ok", false)):
 		_build_city_rail(String(plan.get("destination", GameState.current_anchor_id)))
 		_rail_box.add_child(_make_label(tr("ui.journey_refused"), 14, PiritoriPalette.TEXT_DIM))
+		return
+	# The road (web v4.58): a surprise — the preview never forecast it.
+	if not PiritoriRoad.roll(result).is_empty():
+		_show_road()
 		return
 	_city_map.select(String(result["destination"]))
 
@@ -1084,6 +1128,11 @@ func _build_city_rail_body(anchor_id: String) -> void:
 		var mb := _make_button(tr("ui.market_ledger_n") % offers.size(), PiritoriPalette.GOODS_MAGENTA)
 		mb.pressed.connect(_show_market)
 		_rail_box.add_child(mb)
+
+	# The places with a face (web v4.60-v4.62). None of these is ever lit:
+	# the next step stays the one lit thing on the rail.
+	if _add_here_buttons(anchor_id):
+		any = true
 
 	if not any:
 		_rail_box.add_child(_make_label(
@@ -1220,7 +1269,12 @@ func _make_lit(text: String) -> Button:
 
 func _show_location(encounter_id: String) -> void:
 	_set_mode(Mode.LOCATION)
+	_screen = ""
 	_open_encounter = encounter_id
+	# Standing in the scene is standing in the place (web `openEncounter`).
+	var here_site := ContentRegistry.site(String(ContentRegistry.encounter(encounter_id).get("site_id", "")))
+	if String(here_site.get("anchorId", "")) == GameState.current_anchor_id:
+		GameState.mark_seen(GameState.current_anchor_id)
 	# Cleared per scene, not per session: a face in the LAST location must not
 	# keep shrinking the list in the next one, which has nobody in it.
 	_stage_has_speaker = false
@@ -1303,13 +1357,16 @@ func _mount_location_speaker(encounter_id: String, stage: Control) -> void:
 	var enc := ContentRegistry.encounter(encounter_id)
 	if enc.is_empty():
 		return
-
-	var speaker = _Presenter3D.new()
-
 	var who := _encounter_speaker_id(enc)
 	if who == "":
-		speaker.free()
 		return
+	_mount_speaker(who, stage)
+
+
+## The face behind the counter, for any scene that has one (an encounter, Toko's
+## counter, a visit) — one component, one framing.
+func _mount_speaker(who: String, stage: Control) -> void:
+	var speaker = _Presenter3D.new()
 
 	speaker.speaker_id = who
 	speaker.framing = speaker.Framing.COUNTER
@@ -1407,6 +1464,9 @@ func _commit_choice(encounter_id: String, choice_id: String) -> void:
 
 
 func _show_market() -> void:
+	if _road_guard():
+		return
+	_screen = ""
 	_set_mode(Mode.MARKET)
 	_clear_world()
 	var ledger := preload("res://scenes/market_ledger.gd").new()
@@ -1518,7 +1578,7 @@ func _show_chapter_result() -> void:
 ## Piritori only. The travel requirement is the mechanic, not friction: selling
 ## from anywhere would make loot weightless and take the map out of an economy
 ## meant to run through it.
-func _add_fence() -> void:
+func _add_fence(refresh: Callable = _refresh_market_rail) -> void:
 	_rail_box.add_child(_separator())
 	_rail_box.add_child(_make_label(tr("ui.fence"), 15, MapStyle.TITLE_TEXT))
 
@@ -1551,7 +1611,7 @@ func _add_fence() -> void:
 			PiritoriPalette.GOODS_MAGENTA)
 		b.pressed.connect(func():
 			GameState.sell_loot(eid)
-			_refresh_market_rail())
+			refresh.call())
 		_rail_box.add_child(b)
 
 		# §8's asymmetry, said at the moment it costs something. Selling a
@@ -1569,7 +1629,7 @@ func _add_fence() -> void:
 ## Mirrors `_add_fence()`: same place-gate, the other direction. Taken-only
 ## never appears here — `is_purchasable` is the check at the point of sale,
 ## not merely the absence of a buy screen.
-func _add_shop() -> void:
+func _add_shop(refresh: Callable = _refresh_market_rail) -> void:
 	_rail_box.add_child(_separator())
 	_rail_box.add_child(_make_label(tr("ui.shop"), 15, MapStyle.TITLE_TEXT))
 
@@ -1597,7 +1657,7 @@ func _add_shop() -> void:
 		b.disabled = not affordable
 		b.pressed.connect(func():
 			if GameState.buy_equipment(eid):
-				_refresh_market_rail())
+				refresh.call())
 		_rail_box.add_child(b)
 		listed += 1
 
@@ -1700,6 +1760,9 @@ func _command(text: String, kind: int, accent: Color, handler: Callable) -> Cont
 ## CREW — the authored recruits, everyone hired off the street, and who is
 ## available to hire today.
 func _show_crew() -> void:
+	if _road_guard():
+		return
+	_screen = ""
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("cmd.crew"), 19, MapStyle.TITLE_TEXT))
 	var any := false
@@ -1844,37 +1907,497 @@ func _add_hiring_section() -> void:
 		_rail_box.add_child(b)
 
 
-## MISSIONS — commitment shown before acceptance (handoff §5).
+## MISSIONS — the week's ledger (web v4.62, G7). The world shows every
+## mission as a briefing and the case board beside it (`story_ledger.gd`); the
+## rail keeps what it always had — commitment before acceptance (handoff §5):
+## the fight a revealed mission can become, entered from the mission that
+## signals it (§13.12), never spawned at random.
 func _show_missions() -> void:
+	if _road_guard():
+		return
+	_set_mode(Mode.CITY)
+	_screen = "missions"
+	_open_encounter = ""
+	_stage_has_speaker = false
+	_rail.visible = true
+	_clear_world()
+	var ledger := preload("res://scenes/story_ledger.gd").new()
+	ledger.name = "StoryLedger"
+	ledger.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ledger.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_world_host.add_child(ledger)
 	_clear_rail()
 	_rail_box.add_child(_make_label(tr("cmd.missions"), 19, MapStyle.TITLE_TEXT))
+	var thread := ContentRegistry.story_thread()
+	if not thread.is_empty():
+		var prem := _make_label(String(thread.get("premise", "")), 13, PiritoriPalette.TEXT_DIM)
+		prem.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(prem)
 	var any := false
 	for m in ContentRegistry.slice.get("missions", []):
 		if not GameState.is_revealed(String(m.get("id", ""))):
 			continue
+		var bid := "" if m.get("battle_id", null) == null else String(m["battle_id"])
+		if bid == "" or ContentRegistry.battle(bid).is_empty():
+			continue
+		if not any:
+			_rail_box.add_child(_separator())
 		any = true
-		var dest := ContentRegistry.anchor(String(m.get("destination_anchor_id", "")))
-		_rail_box.add_child(_make_label(String(m.get("family", m.get("id", ""))).to_upper(),
+		var words := ContentRegistry.story_mission(String(m.get("id", "")))
+		_rail_box.add_child(_make_label(String(words.get("title", m.get("family", ""))).to_upper(),
 			15, MapStyle.METRO))
-		var dl: Dictionary = m.get("deadline", {})
-		_rail_box.add_child(_make_label("   " + tr("ui.mission_to") % [
-			dest.get("label", m.get("destination_anchor_id", "?")),
-			int(dl.get("day", 0)), dl.get("block", "")], 13, PiritoriPalette.TEXT))
-		# §13.12: a battle is one mission in four to six, and it is entered from
-		# the mission that signals it — never spawned at random.
-		var bid := String(m.get("battle_id", ""))
-		if bid != "" and not ContentRegistry.battle(bid).is_empty():
-			var fb := _make_button(tr("battle.enter") % _battle_format(bid),
-				PiritoriPalette.DANGER_RED)
-			fb.pressed.connect(func(): _show_battle(bid))
-			_rail_box.add_child(fb)
+		var fb := _make_button(tr("battle.enter") % _battle_format(bid), PiritoriPalette.DANGER_RED)
+		fb.pressed.connect(func(): _show_battle(bid))
+		_rail_box.add_child(fb)
+	_rail_box.add_child(_separator())
+	var board := _make_button(tr("board.button"), PiritoriPalette.INTEL_MUSTARD)
+	board.pressed.connect(_show_market)
+	_rail_box.add_child(board)
+	var back := _make_button(tr("ui.back_to_map"), PiritoriPalette.TEXT_DIM)
+	back.pressed.connect(_show_city)
+	_rail_box.add_child(back)
 
-		var req: Dictionary = m.get("requirements", {})
-		_rail_box.add_child(_make_label("   " + tr("ui.mission_needs") % [
-			req.get("capacity", "?"), " · ".join(req.get("roles_any", []))],
-			12, PiritoriPalette.TEXT_DIM))
-	if not any:
-		_rail_box.add_child(_make_label(tr("ui.no_missions"), 14, PiritoriPalette.TEXT_DIM))
+
+# ── the road (web v4.58, `renderRoad()`) ───────────────────────────────────
+#
+# An event on the way, or on arriving. While it waits for an answer it is the
+# only thing that opens: every command routes here (web `render()`), and it
+# survives a reload because it lives in the save. Each choice shows its
+# minutes; a choice you cannot take is shown and says why. Answered, it shows
+# what came of it and the block's clock, with one lit CONTINUE.
+
+## True when a road event is waiting and the road was opened instead.
+func _road_guard() -> bool:
+	if PiritoriRoad.pending_event().is_empty():
+		return false
+	_show_road()
+	return true
+
+
+func _show_road() -> void:
+	var event := PiritoriRoad.pending_event()
+	var r := GameState.road
+	var leg: Dictionary = PiritoriRoad.pending() if not event.is_empty() else PiritoriRoad.last()
+	if event.is_empty():
+		if leg.is_empty():
+			_show_city()
+			return
+		event = ContentRegistry.road_event(String(leg.get("id", "")))
+	_set_mode(Mode.LOCATION)
+	_screen = "road"
+	_open_encounter = ""
+	_stage_has_speaker = false
+	_rail.visible = true
+	var phase := String(leg.get("phase", "transit"))
+	var from_l := _place_label(leg.get("from", null))
+	var to_l := _place_label(leg.get("to", GameState.current_anchor_id))
+	var where := tr("road.arriving") % to_l.to_upper() if phase == "arrival" else (
+		tr("road.on_the_way") % [from_l.to_upper(), to_l.to_upper()] if from_l != "" and to_l != ""
+		else tr("road.on_the_way_plain"))
+
+	_clear_world()
+	var stage := preload("res://scenes/road_stage.gd").new()
+	stage.name = "RoadStage"
+	stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_world_host.add_child(stage)
+	var to_id := String(leg.get("to", GameState.current_anchor_id)) if leg.get("to", null) != null else GameState.current_anchor_id
+	stage.setup(where, String(event.get("title", "")), String(event.get("text", "")), phase,
+		to_id, _place_label(to_id))
+	stage.set_meta("road_event", String(event.get("id", "")))
+	stage.set_meta("phase", phase)
+
+	_clear_rail()
+	# The card on the street carries where and what; the rail carries the
+	# answer, the way an encounter's rail carries LOOK and ACT.
+	if not Loc.content_is_translated():
+		var note := _make_label(tr("ui.content_en_only"), 12, PiritoriPalette.TEXT_DIM)
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(note)
+		_rail_box.add_child(_separator())
+
+	if not PiritoriRoad.pending_event().is_empty():
+		_rail_box.add_child(_make_label(tr("verb.act"), 13, PiritoriPalette.TEXT_DIM))
+		for choice in event.get("choices", []):
+			var ch: Dictionary = choice
+			var st := PiritoriRoad.choice_status(ch)
+			var ok := bool(st["ok"])
+			var b := _make_icon_button(String(ch.get("label", ch["id"])), PiritoriIcon.Kind.RISK,
+				PiritoriChrome.ACCENT_ACT, ok)
+			b.set_meta("road_choice", String(ch["id"]))
+			var cid := String(ch["id"])
+			b.pressed.connect(func(): _on_road_choice(cid))
+			_rail_box.add_child(b)
+			var detail := _make_label("   " + String(ch.get("detail", "")), 12, PiritoriPalette.TEXT_DIM)
+			detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(detail)
+			var mins := _make_label("   " + _minutes_word(int(ch.get("minutes", 0))), 12, PiritoriPalette.INTEL_MUSTARD)
+			mins.set_meta("minutes", int(ch.get("minutes", 0)))
+			_rail_box.add_child(mins)
+			if not ok:
+				var why := _make_label("   " + _refusal_words(st["failed"]), 12, PiritoriPalette.DANGER_RED)
+				why.set_meta("refusal", true)
+				why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				_rail_box.add_child(why)
+		return
+
+	# Answered: what came of it, the time it took, and one lit way on.
+	var picked: Dictionary = {}
+	for choice in event.get("choices", []):
+		if String(choice.get("id", "")) == String(leg.get("choice", "")):
+			picked = choice
+	var took := _make_label(String(picked.get("label", "")), 15, PiritoriPalette.TEXT)
+	took.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(took)
+	var d := _make_label(String(picked.get("detail", "")), 13, PiritoriPalette.TEXT_DIM)
+	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(d)
+	var clock := PiritoriRoad.clock_label()
+	var spent := _minutes_word(int(leg.get("minutes", 0))) + ("  ·  " + tr("road.now") % clock if clock != "" else "")
+	var sl := _make_label(spent, 13, PiritoriPalette.INTEL_MUSTARD)
+	sl.name = "RoadSpent"
+	_rail_box.add_child(sl)
+	var go := _make_lit(tr("road.continue"))
+	go.set_meta("next_step", "road-continue")
+	go.pressed.connect(func():
+		PiritoriRoad.clear_last()
+		_show_city())
+	_rail_foot.add_child(_separator())
+	_rail_foot.add_child(go)
+
+
+func _on_road_choice(choice_id: String) -> void:
+	var result := PiritoriRoad.resolve(choice_id)
+	if not bool(result.get("ok", false)):
+		_show_road()
+		return
+	var bid := String(result.get("start_battle", ""))
+	if bid != "" and not ContentRegistry.battle(bid).is_empty():
+		_show_battle(bid, true)
+		return
+	_show_road()
+
+
+func _minutes_word(m: int) -> String:
+	return tr("road.minutes") % m if m > 0 else tr("road.no_time")
+
+
+## A refused requirement in words ("needs 2 crew with you"), never a formula.
+func _refusal_words(failed: Array) -> String:
+	var out := PackedStringArray()
+	for f in failed:
+		var st: Dictionary = f
+		match String(st.get("kind", "")):
+			"deployed-crew":
+				out.append(tr("road.needs_crew") % int(st.get("want", 0)))
+			"stock":
+				out.append(tr("road.needs_pack"))
+			"cash":
+				out.append(tr("ui.short_by") % maxi(int(st.get("want", 0)) - GameState.cash_eur, 0))
+			_:
+				out.append(tr("ui.requires") % String(st.get("req", "")))
+	return " · ".join(out)
+
+
+func _place_label(id: Variant) -> String:
+	if id == null or String(id) == "":
+		return ""
+	for a in ContentRegistry.anchors():
+		if String(a.get("id", "")) == String(id):
+			return String(a.get("label", id))
+	return String(id)
+
+
+# ── places with a face (web v4.60-v4.62) ──────────────────────────────────
+
+## The unlit doors where Aatami stands: the street seller at Piritori, Toko's
+## counter on Vaasankatu, a visit, the case once it is known. True if any.
+func _add_here_buttons(anchor_id: String) -> bool:
+	var any := false
+	if GameState.can_shop_here():
+		var sb := _make_button(tr("street.button"), PiritoriPalette.GOODS_MAGENTA)
+		sb.pressed.connect(_show_street)
+		_rail_box.add_child(sb)
+		any = true
+	var the_case := ContentRegistry.story_case()
+	if not the_case.is_empty() and anchor_id == String(the_case.get("anchor_id", "")) \
+			and PiritoriStory.case_blocker() == "":
+		var cb := _make_button(tr("story.case") % String(the_case.get("title", "")).to_upper(),
+			CASE_RED)
+		cb.pressed.connect(_show_case)
+		_rail_box.add_child(cb)
+		any = true
+	if anchor_id == PiritoriToko.ANCHOR:
+		var tb := _make_button(tr("toko.button"), PiritoriPalette.DANGER_RED)
+		tb.pressed.connect(_show_ramen)
+		_rail_box.add_child(tb)
+		any = true
+	for v in PiritoriVisits.available():
+		var vid := String(v.get("id", ""))
+		var vb := _make_button(tr("visit.button") % String(v.get("title", vid)), PiritoriPalette.PUBLIC_BLUE)
+		vb.pressed.connect(func(): _show_visit(vid))
+		_rail_box.add_child(vb)
+		any = true
+	return any
+
+
+## The case's own colour (web `.case-button`, `.clue-key`): red, so the case
+## never borrows the lantern, which belongs to the way forward.
+const CASE_RED := Color("#e0524a")
+
+
+## A scene that is not an encounter, on the location stage.
+func _mount_scene(asset_id: String, anchor_id: String, body: String, heading: String,
+		eyebrow: String, speaker_id: String = "") -> Control:
+	_set_mode(Mode.LOCATION)
+	_open_encounter = ""
+	_stage_has_speaker = false
+	_rail.visible = true
+	_clear_world()
+	var stage := preload("res://scenes/location_stage.gd").new()
+	stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stage.setup_scene(asset_id, anchor_id, body, heading, eyebrow)
+	_world_host.add_child(stage)
+	if speaker_id != "":
+		_mount_speaker(speaker_id, stage)
+	return stage
+
+
+## Toko's own line this block: one a block, a line and never a rule.
+func _toko_line() -> String:
+	return tr("toko.line_%s" % str(GameState.block_index % TOKO_LINES))
+
+const TOKO_LINES := 10
+## A name, the same in every language.
+const TOKO_TITLE := "TOKON RAMEN"
+
+
+## TOKON RAMEN (web v4.60/v4.61 `renderRamen()`): the counter with Toko behind
+## it, his line for the block, a bowl and what he heard, and the early weapons
+## under the counter. BACK TO THE STREET is the one lit thing.
+func _show_ramen() -> void:
+	if GameState.current_anchor_id != PiritoriToko.ANCHOR:
+		_show_city()
+		return
+	if _toko_epoch != GameState.campaign_epoch:
+		_toko_told = null
+		_toko_epoch = GameState.campaign_epoch
+	_screen = "ramen"
+	var body := "“%s”" % _toko_line()
+	var told := _toko_told_line()
+	if told != "":
+		body += "\n“%s”" % told
+	_mount_scene("scene-toko-noodles-empty-v01", PiritoriToko.ANCHOR, body, TOKO_TITLE,
+		"VAASANKATU · TOKO SLOMO · " + _day_block(), "toko")
+	_clear_rail()
+	_rail_box.add_child(_make_label(tr("toko.bowl_head") % PiritoriToko.BOWL_EUR, 15, MapStyle.TITLE_TEXT))
+	var note := _make_label(tr("toko.bowl_note"), 12, PiritoriPalette.TEXT_DIM)
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(note)
+	var blocked := PiritoriToko.bowl_blocker()
+	var btext := tr("toko.buy_bowl") % PiritoriToko.BOWL_EUR
+	if blocked == "already-this-block":
+		btext = tr("toko.eaten")
+	elif blocked == "cash":
+		btext = tr("toko.bowl_cash") % PiritoriToko.BOWL_EUR
+	var bowl := _make_button(btext, PiritoriPalette.TEXT if blocked == "" else PiritoriPalette.TEXT_DIM)
+	bowl.name = "BuyBowl"
+	bowl.disabled = blocked != ""
+	bowl.pressed.connect(func():
+		var got := PiritoriToko.buy_bowl()
+		if bool(got.get("ok", false)):
+			_toko_told = String(got.get("anchor_id", ""))
+		_show_ramen())
+	_rail_box.add_child(bowl)
+
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("toko.weapons_head"), 15, MapStyle.TITLE_TEXT))
+	for eid in PiritoriToko.weapons():
+		var price := GameState.buy_of(eid)
+		var nm := tr("equipment.%s" % eid)
+		if nm == "equipment.%s" % eid:
+			nm = eid
+		var afford := GameState.cash_eur >= price
+		var wb := _make_button(tr("ui.shop_buy") % [nm, price],
+			PiritoriPalette.PLAYER_CYAN if afford else PiritoriPalette.TEXT_DIM)
+		wb.disabled = not afford
+		wb.set_meta("toko_weapon", eid)
+		var weid := String(eid)
+		wb.pressed.connect(func():
+			PiritoriToko.buy_weapon(weid)
+			_show_ramen())
+		_rail_box.add_child(wb)
+	var wn := _make_label(tr("toko.weapons_note"), 12, PiritoriPalette.TEXT_DIM)
+	wn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(wn)
+	_add_back_to_street()
+
+
+## What Toko said at the last bowl, read off the board NOW — a range ages.
+func _toko_told_line() -> String:
+	if _toko_told == null:
+		return ""
+	if String(_toko_told) == "":
+		return tr("toko.nothing_new")
+	var row := PiritoriBoard.row(String(_toko_told))
+	if row.is_empty() or String(row["shown"]["level"]) != PiritoriMarket.INFO_RANGE:
+		return ""
+	return tr("toko.told") % [String(row["label"]), int(round(float(row["shown"]["low_sell"]))),
+		int(round(float(row["shown"]["high_sell"])))]
+
+
+## THE STREET SELLER (web v4.61 `renderStreet()`): the Piritori gear shop and
+## fence, with a face. The first handgun is his too, through its day-5 scene.
+func _show_street() -> void:
+	if not GameState.can_shop_here():
+		_show_city()
+		return
+	_screen = "street"
+	_mount_scene("scene-piritori-square-v01", "piritori", tr("street.line"), tr("street.title"),
+		"PIRITORI · VAASANPUISTIKKO · " + _day_block())
+	_clear_rail()
+	_add_shop(_show_street)
+	_add_fence(_show_street)
+	_add_back_to_street()
+
+
+## THE CASE (web v4.62 G6, `renderCase()`): the Thursday Tram, answered once,
+## at Piritori. It never turns the block.
+func _show_case() -> void:
+	var c := ContentRegistry.story_case()
+	var answer := PiritoriStory.case_answer()
+	if c.is_empty() or (answer == "" and PiritoriStory.case_blocker() != ""):
+		_show_city()
+		return
+	_screen = "case"
+	var thread := ContentRegistry.story_thread()
+	var stage := _mount_scene(String(c.get("scene_asset_id", "")), String(c.get("anchor_id", "")),
+		String(c.get("opening", "")), String(c.get("title", "")),
+		tr("story.case") % String(thread.get("title", "")).to_upper())
+	_clear_rail()
+	if answer != "":
+		var picked: Dictionary = {}
+		for ch in c.get("choices", []):
+			if String(ch.get("id", "")) == answer:
+				picked = ch
+		var took := _make_label(String(picked.get("label", "")), 15, PiritoriPalette.TEXT)
+		took.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(took)
+		var d := _make_label(String(picked.get("detail", "")), 13, PiritoriPalette.TEXT_DIM)
+		d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(d)
+		var fx := _make_label(PiritoriStory.effect_words(picked.get("effects", [])), 13, PiritoriPalette.INTEL_MUSTARD)
+		fx.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(fx)
+		_add_back_to_street()
+		return
+	_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
+	for item in c.get("inspectables", []):
+		var txt := String(item)
+		var lb := _make_icon_button(txt, PiritoriIcon.Kind.INFO, PiritoriChrome.ACCENT_LOOK)
+		lb.pressed.connect(func(): stage.show_inspect(txt))
+		_rail_box.add_child(lb)
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("verb.act"), 13, PiritoriPalette.TEXT_DIM))
+	for ch in c.get("choices", []):
+		var choice: Dictionary = ch
+		var b := _make_icon_button(String(choice.get("label", "")), PiritoriIcon.Kind.RISK, PiritoriChrome.ACCENT_ACT)
+		var cid := String(choice.get("id", ""))
+		b.set_meta("case_choice", cid)
+		b.pressed.connect(func():
+			PiritoriStory.resolve_case(cid)
+			_show_case())
+		_rail_box.add_child(b)
+		var det := _make_label("   " + String(choice.get("detail", "")), 12, PiritoriPalette.TEXT_DIM)
+		det.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(det)
+		var fx := _make_label("   " + PiritoriStory.effect_words(choice.get("effects", [])), 12,
+			PiritoriPalette.INTEL_MUSTARD)
+		fx.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(fx)
+	_rail_box.add_child(_separator())
+	var later := _make_button(tr("story.not_yet"), PiritoriPalette.TEXT_DIM)
+	later.pressed.connect(_show_city)
+	_rail_box.add_child(later)
+
+
+## AN OPTIONAL VISIT (web `visits.js`): answered once, records what the choice
+## says, never turns the block.
+func _show_visit(visit_id: String) -> void:
+	var v := ContentRegistry.visit(visit_id)
+	var answered := String(GameState.resolved_encounters.get(visit_id, ""))
+	if v.is_empty() or (answered == "" and not PiritoriVisits.is_available(visit_id)):
+		_show_city()
+		return
+	_screen = "visit"
+	_visit_open = visit_id
+	var speaker := ""
+	for p in v.get("participants", []):
+		if String(p) != "aatami" and _Presenter3D.SPEAKERS.has(String(p)):
+			speaker = String(p)
+	var stage := _mount_scene(String(v.get("scene_asset_id", "")), GameState.current_anchor_id,
+		String(v.get("opening", "")), String(v.get("title", "")), "", speaker)
+	_clear_rail()
+	if answered != "":
+		for ch in v.get("choices", []):
+			if String(ch.get("id", "")) == answered:
+				var took := _make_label(String(ch.get("label", "")), 15, PiritoriPalette.TEXT)
+				took.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				_rail_box.add_child(took)
+				var f := _make_label(String(ch.get("forecast", "")), 13, PiritoriPalette.TEXT_DIM)
+				f.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				_rail_box.add_child(f)
+		_add_back_to_street()
+		return
+	_rail_box.add_child(_make_label(tr("verb.look"), 13, PiritoriPalette.TEXT_DIM))
+	for item in v.get("inspectables", []):
+		var txt := String(item)
+		var lb := _make_icon_button(txt, PiritoriIcon.Kind.INFO, PiritoriChrome.ACCENT_LOOK)
+		lb.pressed.connect(func(): stage.show_inspect(txt))
+		_rail_box.add_child(lb)
+	_rail_box.add_child(_separator())
+	_rail_box.add_child(_make_label(tr("verb.act"), 13, PiritoriPalette.TEXT_DIM))
+	for ch in v.get("choices", []):
+		var choice: Dictionary = ch
+		var can := GameState.meets_all(choice.get("requirements", []))
+		var b := _make_icon_button(String(choice.get("label", "")), PiritoriIcon.Kind.RISK,
+			PiritoriChrome.ACCENT_ACT, can)
+		var cid := String(choice.get("id", ""))
+		b.set_meta("visit_choice", cid)
+		b.pressed.connect(func():
+			PiritoriVisits.resolve(visit_id, cid)
+			_show_visit(visit_id))
+		_rail_box.add_child(b)
+		var fl := _make_label("   " + String(choice.get("forecast", "")), 12, PiritoriPalette.TEXT_DIM)
+		fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(fl)
+		if not can:
+			var failed: Array = []
+			for req in choice.get("requirements", []):
+				var st := GameState.requirement_status(String(req))
+				if not bool(st["ok"]):
+					failed.append(st)
+			var why := _make_label("   " + _refusal_words(failed), 12, PiritoriPalette.DANGER_RED)
+			why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(why)
+	_rail_box.add_child(_separator())
+	var leave := _make_icon_button(tr("ui.leave_to_map"), PiritoriIcon.Kind.LEAVE, PiritoriChrome.ACCENT_LEAVE)
+	leave.pressed.connect(_show_city)
+	_rail_box.add_child(leave)
+
+
+## The one lit way out of a place with a face (web: the primary button).
+func _add_back_to_street() -> void:
+	var back := _make_lit(tr("street.back"))
+	back.set_meta("next_step", "back-to-street")
+	back.pressed.connect(_show_city)
+	_rail_foot.add_child(_separator())
+	_rail_foot.add_child(back)
+
+
+func _day_block() -> String:
+	return "%s · %s" % [tr("ui.day_n") % GameState.day, _block_word()]
 
 
 ## END DAY — spend the remaining block. A decision boundary, so it saves.
@@ -1882,8 +2405,15 @@ func _battle_format(battle_id: String) -> String:
 	return String(ContentRegistry.battle(battle_id).get("format", ""))
 
 
+## A road fight (web v4.58) is the ordinary battle with no mission behind it:
+## it reports to no mission and turns no block. Injuries, arrests, loot and
+## careers apply as in any fight.
+var _road_battle := false
+
 ## Enter a formation battle. The campaign model is untouched until it resolves.
-func _show_battle(battle_id: String) -> void:
+func _show_battle(battle_id: String, road_fight: bool = false) -> void:
+	_road_battle = road_fight
+	_screen = ""
 	_set_mode(Mode.BATTLE)
 	_clear_world()
 	_clear_rail()
@@ -1921,6 +2451,10 @@ func _show_battle(battle_id: String) -> void:
 				FightManager.BattleResult.VICTORY_BREAK]:
 			GameState.record_chapter_win()
 		var spoils := _settle_loot(scene.fight, int(result))
+		# The mission behind the fight takes its own authored effects (web
+		# `resultEffects`). A road fight has no mission behind it.
+		if not road_fight:
+			GameState.settle_mission_battle(battle_id, _mission_outcome(int(result)))
 		# The police take the fallen BEFORE careers are aged: somebody carried
 		# off a yard does not also come out of it one fight older.
 		for id in summary.get("taken", PackedStringArray()):
@@ -1928,6 +2462,18 @@ func _show_battle(battle_id: String) -> void:
 		var left := GameState.age_crew(deployed)
 		_show_aftermath(summary, spoils, left))
 	_rail.visible = false
+
+
+## A fight's result in the mission's terms: a win, a partial (a negotiated
+## exit, a withdrawal, a mixed result), or a loss.
+func _mission_outcome(result: int) -> String:
+	match result:
+		FightManager.BattleResult.VICTORY_ROUT, FightManager.BattleResult.VICTORY_BREAK:
+			return "win"
+		FightManager.BattleResult.STAND_DOWN, FightManager.BattleResult.WITHDRAWAL, \
+				FightManager.BattleResult.PARTIAL:
+			return "partial"
+	return "loss"
 
 
 ## What the fight cost, said once and in one place.
@@ -2085,6 +2631,9 @@ func _status_key(status: int) -> String:
 ## NEWS — the fifth mode. Era I is television-led: a bulletin arrives on its
 ## scheduled day and can be re-watched from here afterwards.
 func _show_news_list() -> void:
+	if _road_guard():
+		return
+	_screen = ""
 	_set_mode(Mode.NEWS)
 	_clear_rail()
 	_rail.visible = true
@@ -2137,7 +2686,7 @@ func _play_scheduled_news_if_due() -> bool:
 
 
 func _end_block() -> void:
-	if GameState.is_slice_complete():
+	if GameState.is_slice_complete() or _road_guard():
 		return
 	GameState.advance_block()
 	_show_city()
@@ -2300,6 +2849,16 @@ func _make_icon_button(text: String, icon_kind: int, accent: Color,
 	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(lbl)
 
+	# A Button is not a container: a label that wraps to a second line inside
+	# it does not make it taller, and the second line was drawn over the card's
+	# torn edge (found on the Brahenkenttä visit's long choice). Grow the card
+	# to the wrapped text once the label knows its width.
+	var floor_h := b.custom_minimum_size.y
+	var fit := func():
+		if is_instance_valid(b) and is_instance_valid(lbl):
+			b.custom_minimum_size.y = maxf(floor_h, lbl.get_minimum_size().y + 20.0)
+	lbl.resized.connect(fit)
+	lbl.minimum_size_changed.connect(fit)
 	return b
 
 

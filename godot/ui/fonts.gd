@@ -48,6 +48,16 @@ const FLOOR_PX := 12
 static var _cache: Dictionary = {}
 
 
+## How much body text grows on a screen held upright — the shell's own
+## `_text_scale()` rule, for views that are not the shell (the ledgers, the
+## road, the arrival). Landscape is the size the authored numbers were chosen
+## for and does not scale; portrait scales on width, 1 to 2.2.
+static func text_scale(vp: Vector2) -> float:
+	if vp.x <= 0.0 or vp.x >= vp.y:
+		return 1.0
+	return clampf(vp.x / 430.0, 1.0, 2.2)
+
+
 ## Barlow: labels, prices, body, buttons. Tabular numerals.
 static func body(weight: int = 400) -> Font:
 	return _face("body", BODY, weight, true)

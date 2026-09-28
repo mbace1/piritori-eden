@@ -33,8 +33,6 @@ ui.per_unit,€%d per %s · %s · %s,%d € / %s · %s · %s,€%d / %s · %s ·
 ui.crew_none,"Nobody yet. Crew are met through encounters, not hired from a list.","Ei vielä ketään. Porukka löytyy kohtaamisista, ei listalta palkkaamalla.",まだ誰もいない。仲間は出会いで得るもので、名簿から雇うものではない。
 ui.crew_stats,condition %s · nerve %s · tempo %s · €%s/day,kunto %s · hermo %s · tempo %s · %s €/pv,体調 %s · 胆力 %s · 速さ %s · €%s/日
 ui.no_missions,No missions signalled yet.,Ei vielä keikkoja.,まだ依頼はない。
-ui.mission_to,to %s · by day %s %s,kohteeseen %s · päivään %s %s mennessä,%s へ · %s日 %s まで
-ui.mission_needs,needs capacity %s · %s,vaatii kapasiteettia %s · %s,容量 %s が必要 · %s
 ui.seven_days_done,Seven days done.,Seitsemän päivää takana.,七日が終わった。
 ui.run_summary,€%d cash · €%d debt · intel %d,%d € käteistä · %d € velkaa · tietoa %d,現金 €%d · 借金 €%d · 情報 %d
 ui.content_failed,Content failed to load,Sisällön lataus epäonnistui,コンテンツの読み込みに失敗
@@ -232,6 +230,45 @@ ui.next_hint_enter,Aatami is at %s. The story is here.,Aatami on paikassa %s. Ta
 ui.next_hint_plan,The story has moved on. Aatami is still where you left him.,"Tarina on siirtynyt eteenpäin. Aatami on yhä siellä, mihin hänet jätit.",物語は動いた。だがアータミはまだそこにいる。
 ui.next_hint_commit,Walk there now. Nothing is spent until you arrive.,Kävele sinne nyt. Mitään ei kulu ennen kuin olet perillä.,今そこへ移動する。着くまで何も使わない。
 ui.at_place,at %s,paikassa %s,%sで
+road.arriving,ARRIVING · %s,PERILLÄ · %s,着いた · %s
+road.on_the_way,ON THE WAY · %s → %s,MATKALLA · %s → %s,移動中 · %s → %s
+road.on_the_way_plain,ON THE WAY,MATKALLA,移動中
+road.minutes,+%d MIN,+%d min,+%d分
+road.no_time,NO TIME,EI AIKAA,時間なし
+road.now,NOW %s,NYT %s,今 %s
+road.continue,CONTINUE,JATKA,次へ
+road.needs_crew,needs %d crew with you,vaatii %d porukasta mukaan,仲間%d人が必要
+road.needs_pack,needs a pack on you,vaatii erän mukanasi,品を持っていること
+street.button,STREET SELLER · GEAR,KATUKAUPPIAS · VARUSTEET,街の売人 · 装備
+street.title,THE STREET SELLER,KATUKAUPPIAS,街の売人
+street.line,"Gear under his coat, and he buys what you carry: best for the best condition, worst for broken.","Varusteita takin alla, ja hän ostaa sen mitä kannat: parhaasta kunnosta parhaan hinnan, rikkinäisestä huonoimman.",上着の下に装備がある。持ち物も買い取る。
+street.back,BACK TO THE STREET,TAKAISIN KADULLE,街に戻る
+story.case,CASE · %s,TAPAUS · %s,調べ · %s
+story.not_yet,NOT YET · BACK TO THE STREET,EI VIELÄ · TAKAISIN KADULLE,まだだ · 街に戻る
+story.missions_eyebrow,MISSIONS · %s,KEIKAT · %s,依頼 · %s
+story.week_asks,WHAT THE WEEK ASKS,MITÄ VIIKKO VAATII,この七日間の依頼
+story.status_complete,DONE,VALMIS,完了
+story.status_partial,PARTLY,OSITTAIN,不完全
+story.status_failed,LOST,MENETETTY,失敗
+story.status_open,OPEN,AUKI,対応中
+story.status_not_yet,NOT YET,EI VIELÄ,まだ
+story.family_delivery_collection,Delivery,Toimitus,運び
+story.family_information,Information,Tieto,情報
+story.family_protection,Protection,Suojelu,守り
+story.family_recovery,Recovery,Talteenotto,取り戻し
+story.by_day,"by day %d, %s","päivään %d mennessä, %s",%d日目の%sまで
+story.fight_avoidable,can become a fight (a way round exists),voi muuttua tappeluksi (kiertotie on),戦いになり得る（別の道もある）
+story.fight_forced,can become a fight (no way round),voi muuttua tappeluksi (ei kiertotietä),戦いになり得る（別の道はない）
+story.untold,Someone has not told you about this yet.,Kukaan ei ole vielä kertonut tästä.,まだ誰もこの話をしていない。
+story.or_alt,or %s,tai %s,または%s
+story.stake_clean,CLEAN,PUHTAASTI,完全
+story.stake_partly,PARTLY,OSITTAIN,不完全
+story.stake_lost,LOST,MENETETTY,失敗
+story.board_eyebrow,CASE BOARD · %d/%d,TAPAUSTAULU · %d/%d,手がかり · %d/%d
+story.key,KEY,AVAIN,重要
+story.settled,Settled: %s.,Ratkaistu: %s.,決着: %s。
+story.enough,Enough to act. %s is waiting at %s.,Tarpeeksi toimiaksesi. %s odottaa paikassa %s.,動ける。%sが%sで待っている。
+story.keys_short,%d of %d key clues. The week has more to show you.,%d/%d avainvihjettä. Viikolla on vielä näytettävää.,重要な手がかり %d/%d。まだ見るべき物がある。
 story.fx_exit,+€%d to the exit fund,+%d € lähtörahastoon,出発の金 +€%d
 story.fx_intel,intel %s,tiedot %s,情報 %s
 story.fx_packs,packs %s,erät %s,品 %s
@@ -246,6 +283,39 @@ story.fx_pattern,the van pattern,pakettiautojen kaava,バンの動き
 story.fx_half_pattern,half the pattern,puolet kaavasta,動きの一片
 story.fx_advantage,a rival gains ground,kilpailija vahvistuu,相手が勢いを得る
 story.fx_debt_memory,the debt holder remembers,velkoja muistaa,借金の相手が覚える
+toko.button,TOKON RAMEN · A BOWL AND WHAT HE HEARD,TOKON RAMEN · KULHO JA MITÄ HÄN KUULI,TOKON RAMEN · 店と噂
+toko.bowl_head,A BOWL AND WHAT HE HEARD · €%d,KULHO JA MITÄ HÄN KUULI · %d €,噂を買う · €%d
+toko.bowl_note,"He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.","Hän kertoo hintahaarukan parhaasta myyntipaikasta, jota et vielä tunne. Haarukka, ei koskaan tarkka hinta, ja se vanhenee kuten kaikki, minkä näit itse. Yksi kulho jaksossa: hänellä on muitakin asiakkaita.",まだ知らない一番の売り場で、いくらで売れるかのだいたいを話す。確かな数ではなく、自分で見た物のように古くなる。一つの時間帯に一つだけ。
+toko.buy_bowl,BUY A BOWL · €%d,OSTA KULHO · %d €,噂を買う · €%d
+toko.eaten,YOU HAVE EATEN THIS BLOCK,OLET JO SYÖNYT TÄSSÄ JAKSOSSA,この時間帯はもう済んだ
+toko.bowl_cash,A BOWL IS €%d,KULHO MAKSAA %d €,噂は€%d
+toko.weapons_head,UNDER THE COUNTER · EARLY WEAPONS,TISKIN ALTA · ENSIMMÄISET ASEET,店の下から · 武器
+toko.weapons_note,"Toko sells a friend's weapons, nothing that goes bang. The first handgun, the fence and the rest of the gear are the street seller's, on Piritori.","Toko myy ystävän aseita, ei mitään mikä pamahtaa. Ensimmäinen käsiase, kätkijä ja muut varusteet ovat katukauppiaan, Piritorilla.",Tokoは銃を売らない。一つ目の銃と故買と残りの装備は、ピリトリの街の売人が持つ。
+toko.told,"%s. They are paying €%d–€%d for a pack, if you get there soon. That is all I heard.","%s. Siellä maksetaan %d–%d € erästä, jos ehdit pian. Muuta en kuullut.",%s。今行けば、品一つが€%d–€%dで売れる。知っているのはそれだけだ。
+toko.nothing_new,Nothing new tonight. Eat.,Ei mitään uutta tänään. Syö.,今夜は新しい噂はない。
+toko.line_0,Broth has been on since Tuesday. It gets better. Everything else in Kallio gets worse.,Liemi on ollut tulella tiistaista asti. Se paranee. Kaikki muu Kalliossa huononee.,スープは何日も前から作っている。これは良くなる。Kallioの残りはだめになる。
+toko.line_1,The man at table two has eaten the same bowl since 1998. Do not sit near him. He listens.,Kakkospöydän mies on syönyt samaa kulhoa vuodesta 1998. Älä istu hänen lähelleen. Hän kuuntelee.,二番の人は1998からここにいる。そばに行くな。話をみんな覚えている。
+toko.line_2,Gear costs money. Gossip costs a bowl. Both are on the menu if you know where to look.,"Varusteet maksavat rahaa. Juorut maksavat kulhon. Molemmat ovat listalla, jos tiedät mistä katsoa.",装備には金がいる。噂は€6だ。どちらも、見る場所を知っていれば買える。
+toko.line_3,Somebody paid tonight with a Soviet kopek. I kept it. Things like that come back.,Joku maksoi tänään neuvostokopeekalla. Pidin sen. Sellaiset palaavat.,今夜、誰かが見たこともない金で払った。取ってある。そういう物は戻ってくる。
+toko.line_4,The radio picks up the police band when it rains. So it is always on.,"Radio kuulee poliisin taajuuden, kun sataa. Siksi se on aina päällä.",あめの日はこの電器に警察の話が入る。だから止めない。
+toko.line_5,Your debt is not my business. But it walks past my window twice a day.,Velkasi ei ole minun asiani. Mutta se kävelee ikkunani ohi kahdesti päivässä.,あんたの借金は知ったことではない。だが一日に二度、店の前を通っていく。
+toko.line_6,Three vans on Thursdays. I only count. I never ask.,Kolme pakettiautoa torstaisin. Minä vain lasken. En koskaan kysy.,決まった日に、バンが3つ来る。数えるだけだ。わけは知らない。
+toko.line_7,The woman with the pram full of radios was here again. She paid in stamps.,"Nainen, jolla on rattaat täynnä radioita, oli taas täällä. Hän maksoi postimerkeillä.",電器を積んだあの人がまた来た。金ではない物で払った。
+toko.line_8,Somebody keeps leaving one chopstick on the step. Just one. Every night.,Joku jättää yhden syömäpuikon portaalle. Vain yhden. Joka ilta.,誰かが店の前に、はしを一本置いていく。一本だけ。夜になるといつも。
+toko.line_9,Kurvi had a power cut and nobody noticed for an hour. That tells you something about Kurvi.,"Kurvista katkesi sähköt, eikä kukaan huomannut tuntiin. Se kertoo Kurvista jotain.",Kurviで明かりが消えたが、一時間誰も知らなかった。Kurviがどういう場所か、それでわかる。
+visit.button,VISIT · %s,KÄYNTI · %s,見に行く · %s
+board.button,THE BOARD · WHAT YOU KNOW,TAULU · MITÄ TIEDÄT,相場 · 知っていること
+board.eyebrow,THE BOARD · %s · %s,TAULU · %s · %s,相場 · %s · %s
+board.title,WHAT YOU KNOW,MITÄ TIEDÄT,知っていること
+board.note,"A quote is exact for the block you took it in, a range for four, a rumour for twelve, then nothing. Standing somewhere is how you learn its price.","Hinta on tarkka sillä jaksolla, jolloin sen näit, haarukka neljä jaksoa ja huhu kaksitoista, sitten ei mitään. Paikan hinnan oppii olemalla siellä.",その場で見た数は、その時間帯だけ確か。4つの時間帯はだいたい、12までは噂、その後は何もない。そこに立つことで数を知る。
+board.here,HERE,TÄSSÄ,ここ
+board.never,never been,et ole käynyt,行ったことがない
+board.rumour_dear,a rumour: dear,huhu: kallis,噂: 上がっている
+board.rumour_cheap,a rumour: cheap,huhu: halpa,噂: 下がっている
+board.rumour_ordinary,a rumour: ordinary,huhu: tavallinen,噂: いつも通り
+board.heard,"Toko, %d block(s) ago","Toko, %d jaksoa sitten",Toko · %d時間帯前
+board.ago,%d block(s) ago,%d jaksoa sitten,%d時間帯前
+board.go,You have not stood anywhere long enough to know a price. Go somewhere.,Et ole seissyt missään tarpeeksi kauan tietääksesi hintaa. Mene jonnekin.,どこにも長く立っていない。どこかへ行け。
 board.why_thin,thin supply here,vähän tarjontaa täällä,ここは品が足りない
 board.why_supplied,well supplied here,hyvin tarjolla täällä,ここは品が足りている
 board.why_area,ordinary for the area,tavallinen tälle alueelle,このあたりではいつも通り
@@ -259,3 +329,5 @@ board.why_untouched,you have not worked this place recently,et ole toiminut tä�
 board.why_selling,you have been selling here,olet myynyt täällä,ここでよく売っている
 board.why_buying,you have been buying here out,olet ostanut täältä liikaa,ここで買いすぎている
 board.why_ordinary,nothing much moving it,mikään ei juuri liikuta sitä,動きはあまりない
+board.heard_now,"Toko, this block","Toko, tällä jaksolla",Toko · この時間帯
+board.now,this block,tällä jaksolla,この時間帯
