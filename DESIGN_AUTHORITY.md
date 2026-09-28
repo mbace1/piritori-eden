@@ -33,6 +33,7 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 16. **Where Tokon Ramen stands:** "Vaasankatu." This keeps the DESIGN_LOCKS §9.2 lock. It stays open from day one.
 17. **Toko's stock:** "Slo-mo can sell early weapons as well." Toko sells melee gear (bat, baton, pipe, knife) as well as information. The first handgun stays at Piritori.
 18. **The Thursday Load:** "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md). The Jade front moves to Hakaniemi. Kello, the Piritori watcher, sells the Thursday load to both families. The four missions carry the thread, the Thursday Tram settles it, and the game gets mission briefings and a case board.
+19. **"1-4 go ahead" (2026-09-28):** (1) the Godot catch-up of v4.58–v4.62; (2) Kello's cut pays weekly, with growing risk; (3) more road events tied to the Thursday Load through the network; (4) the next pitch, at a higher level. Owner: "Pitch me higher level designs."
 
 ## Owner continuation, 2026-09-13 — art first
 

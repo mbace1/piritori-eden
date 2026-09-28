@@ -20,8 +20,8 @@ import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=2';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing } from './story.js?v=1';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel } from './road.js?v=1';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=2';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=2';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
@@ -1328,6 +1328,17 @@ function renderCase() {
   </div>`;
 }
 
+/** The story clock: advance the block, then settle anything the night owes
+ *  (Kello's cut). A found-out cut becomes a road event waiting on the map. */
+function advanceAndSettle() {
+  const ended = currentSchedule(state, data.content);
+  advanceSchedule(state, data);
+  if (ended?.block !== 'night') return;
+  const cut = settleCut(state, story);
+  if (cut.paid) logToast(`Kello's cut: €${cut.paid}.`);
+  if (cut.foundOut && forceRoad(state, roadEvents, story.case.cut.found_out_event, state.selectedAnchor)) state.mode = 'road';
+}
+
 function renderShop() {
   if (!canShopHere(state)) {
     return '<p class="consequence-strip">Not here. Gear is bought from the street seller on Piritori.</p>';
@@ -1762,7 +1773,7 @@ function recordBattleConsequences() {
   state.battle = null;
   state.battleOpeningNerve = 0;
   // A road fight has no mission behind it and does not turn the block.
-  if (!battle.training && !battle.road) advanceSchedule(state, data);
+  if (!battle.training && !battle.road) advanceAndSettle();
   state.mode = 'route';
 }
 
@@ -1867,7 +1878,7 @@ function handleRootClick(event) {
     if (state.road) state.road.last = null;
     persist(); render();
   } else if (action === 'advance') {
-    advanceSchedule(state, data); persist(); render();
+    advanceAndSettle(); persist(); render();
   } else if (action === 'show-battle') {
     state.mode = 'battle'; persist(); render();
   } else if (action === 'trade') {
@@ -2127,7 +2138,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.62',
+      version: 'v4.63',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

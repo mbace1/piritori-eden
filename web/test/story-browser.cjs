@@ -74,7 +74,7 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: the first is open, with its steps and stakes`, await paper.getAttribute('data-status') === 'open'
         && await paper.locator('.mission-steps li').count() === 3 && /CLEAN/.test(await paper.innerText()) && /\+€23/.test(await paper.innerText()));
       ok(`${name}: a mission not yet told is only a title`, /not told you/.test(await page.locator('.mission-card[data-mission="mission-bear-path"]').innerText()));
-      ok(`${name}: the case board lists every clue, none found`, await page.locator('.clue').count() === 8 && await page.locator('.clue.found').count() === 0);
+      ok(`${name}: the case board lists every clue, none found`, await page.locator('.clue').count() === 10 && await page.locator('.clue.found').count() === 0);
       // Harju visit: after Toko, with a runner, at Brahenkenttä.
       await fixture(page, 's.choices["enc-toko-quiet-voice"] = "buy-info"; s.flags.push("toko-van-pattern"); s.recruited = ["crew-slot-runner"]; s.deployed = ["crew-slot-runner"]; s.selectedAnchor = "harju"; s.mode = "route";');
       await page.locator('[data-mode-target="route"]').click();

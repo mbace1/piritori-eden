@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "road-events-v1",
-  "authority": "Owner 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10, 11, 12): events on the road and on arrival, about one journey in three or four, a surprise, a bit of time, the first ones low-end hustling; later, bigger contacts and money; any can become a fight. Answer 11: keep writing more, none repeat. Answer 12: Kallio noir, dirty and dingy, weird people, and the money always short.",
+  "authority": "Owner 2026-09-27 (DESIGN_AUTHORITY answers 2, 4, 6, 9, 10, 11, 12): events on the road and on arrival, about one journey in three or four, a surprise, a bit of time, the first ones low-end hustling; later, bigger contacts and money; any can become a fight. Answer 11: keep writing more, none repeat. Answer 12: Kallio noir, dirty and dingy, weird people, and the money always short. 2026-09-28 (item 3): the network carries the Thursday Load. An event with a `trigger` is never rolled on the road; the story raises it.",
   "fiction_boundary": "Composite people and situations. The good is abstract (DESIGN_LOCKS §9.1): no dosage, preparation, concealment or consumption detail.",
   "rules": {
     "first_story_block": 2,
@@ -224,6 +224,80 @@
       "choices": [
         { "id": "help", "label": "Help, and ride free", "detail": "The sleeper wakes, thanks you in Swedish and gives you a lighter with a stranger's name on it.", "minutes": 20, "effects": ["relationship:piritori_independents:+1", "flag:road-night-bus-lighter"] },
         { "id": "walk", "label": "Walk instead", "detail": "Forty minutes on wet streets. At least nobody asks you anything.", "minutes": 40, "effects": [] }
+      ]
+    },
+    {
+      "id": "road-cut-found-out",
+      "tier": 1,
+      "phase": "arrival",
+      "trigger": "story",
+      "title": "They know about Thursdays",
+      "text": "Two McCormick cousins are waiting where Kello usually stands. One of them is holding his cheap watch. They know somebody has been taking a cut of their Thursdays, and now they know who.",
+      "choices": [
+        {"id": "pay", "label": "Pay them off — €100", "detail": "Cheap, all things considered. The cut ends tonight.", "minutes": 20, "requires": ["cash>=100"], "effects": ["cash:-100", "flag:cut-ended"]},
+        {"id": "give-kello", "label": "Give them Kello", "detail": "They were going to find him anyway. The McCormicks remember who helped. The cut ends.", "minutes": 30, "effects": ["relationship:mccormick_family:+1", "flag:kello-sold", "flag:cut-ended"]},
+        {"id": "stand", "label": "Stand with the crew", "detail": "It becomes a fight. Win it and the cut goes on, with everyone watching.", "minutes": 30, "requires": ["deployed-crew>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"]}
+      ]
+    },
+    {
+      "id": "road-network-bottles",
+      "tier": 0,
+      "phase": "transit",
+      "requires": ["flag:toko-van-pattern"],
+      "title": "Empties going the wrong way",
+      "text": "The bottle collector is loading his trolley outside a closed bar. He has noticed the Thursday vans too: they leave empty and come back empty, and nobody who works a van ever does that.",
+      "choices": [
+        {"id": "pay", "label": "Buy him a coffee — €3", "detail": "\"The pram,\" he says. \"Kurvi, 20:40, every Thursday. Goes back lighter.\"", "minutes": 20, "effects": ["cash:-3", "intel:+1", "flag:network-pram-time"]},
+        {"id": "walk-on", "label": "Walk on", "detail": "He watches you go, and counts you too.", "minutes": 0, "effects": []}
+      ]
+    },
+    {
+      "id": "road-kello-time",
+      "tier": 0,
+      "phase": "transit",
+      "requires": ["flag:kello-named"],
+      "title": "The man who stays asks the time",
+      "text": "At the tram stop the man from the square falls into step beside Aatami. Kello. He asks the time, although he is wearing a watch.",
+      "choices": [
+        {"id": "true-time", "label": "Tell him the right time", "detail": "He checks it against his own and flinches. His watch runs five minutes fast, on purpose.", "minutes": 10, "effects": ["intel:+1", "flag:kello-rattled"]},
+        {"id": "wrong-time", "label": "Tell him it is later than it is", "detail": "He hurries off toward Kurvi. Now you know which way he goes when he thinks he is late.", "minutes": 15, "effects": ["flag:kello-rattled", "flag:kello-followed"]},
+        {"id": "shrug", "label": "Shrug and keep walking", "detail": "He smiles as if you had answered anyway.", "minutes": 0, "effects": []}
+      ]
+    },
+    {
+      "id": "road-mccormick-cousin",
+      "tier": 1,
+      "phase": "arrival",
+      "requires": ["flag:mccormicks-know-skim"],
+      "title": "A McCormick cousin, asking",
+      "text": "A young McCormick in a good leather jacket stops Aatami outside the kiosk. Since the bear, the family wants to know who sells air on Thursdays. He is paying for names.",
+      "choices": [
+        {"id": "sell-rumour", "label": "Sell him a rumour — €30", "detail": "Nothing true enough to hurt anyone yet. The family remembers you helped.", "minutes": 15, "effects": ["cash:+30", "relationship:mccormick_family:+1", "pressure:piritori:+1"]},
+        {"id": "nobody", "label": "\"Nobody I know\"", "detail": "He does not believe you. He writes your name down anyway.", "minutes": 5, "effects": []}
+      ]
+    },
+    {
+      "id": "road-accordion-sweep",
+      "tier": 1,
+      "phase": "transit",
+      "requires": ["flag:road-accordion-lookout"],
+      "title": "The busker changes key",
+      "text": "The accordion player you paid is on the corner. As Aatami turns into the street he changes key, loudly, twice. Up ahead, two patrol cars are parked where they are never parked.",
+      "choices": [
+        {"id": "round", "label": "Take the long way round", "detail": "Forty minutes through courtyards. Nobody stops you.", "minutes": 40, "effects": []},
+        {"id": "through", "label": "Walk through anyway", "detail": "They look. They let you go. The street remembers you walked past them.", "minutes": 10, "effects": ["pressure:piritori:+1"]}
+      ]
+    },
+    {
+      "id": "road-table-two",
+      "tier": 1,
+      "phase": "any",
+      "requires": ["flag:toko-van-pattern"],
+      "title": "The man from table two",
+      "text": "The man who has eaten the same bowl at Toko's since 1998 is on the same tram, three seats back, not reading his newspaper. When Aatami gets off, so does he.",
+      "choices": [
+        {"id": "confront", "label": "Turn round and ask what he wants", "detail": "\"Everybody in Kallio is for sale, son. Somebody has bought you.\" He will not say who. Yet.", "minutes": 20, "effects": ["intel:+1", "flag:someone-bought-aatami"]},
+        {"id": "lose-him", "label": "Lose him in the market crowd", "detail": "It takes half an hour. You are not sure it worked.", "minutes": 30, "effects": []}
       ]
     }
   ]

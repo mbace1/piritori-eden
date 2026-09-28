@@ -77,6 +77,25 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.63 — 2026-09-28
+
+**Kello's cut pays, and the network carries the Thursday Load.** Owner, 2026-09-28: "1-4 go ahead". Item 2: the cut pays weekly, with the growing risk the pitch promised. Item 3: more road events tied to the Thursday Load through the network of odd Kallio people.
+
+- **The cut.** "Take a cut and keep quiet" pays €60 now and €30 at every night's settlement after, counted on the square. The seven-day slice compresses Kello's Thursdays into nights. From the second payment, each payment risks the McCormicks finding out. The roll is deterministic from the save, and the chance is 35% × the number of risky payments so far. When they find out, the story raises a road event, *They know about Thursdays*. Pay them off (€100, which needs the cash), give them Kello (McCormick +1), or stand with the crew (a road fight, which needs two crew; winning keeps the cut). Paying and giving end the cut. `story.js` `settleCut` holds the rule, and `app.js` `advanceAndSettle` runs it after every block that ends a night.
+- **Story-triggered road events.** An event with `trigger` is never rolled on the road; `road.js` `forceRoad` raises it. `road.js` is now v2.
+- **Five network events** (25 in all), each gated on a Thursday Load flag so they arrive in story order:
+  - The bottle collector: the pram is at Kurvi at 20:40 every Thursday (new clue).
+  - Kello asks the time: his watch runs five minutes fast, on purpose (new clue).
+  - A McCormick cousin paying for names.
+  - The busker changes key before a police sweep.
+  - The man from table two: "somebody has bought you" (the Case File 03 hook).
+- The case board has 10 clues now: two new, non-key.
+- Gates: `story.mjs` 63 (the cut pays, is deterministic, is found out sooner or later, and paying or giving ends it; a triggered event never rolls), `road.mjs` 292, `story-browser.cjs` 30 (10 clues). The rest are unchanged and green: readability 86, opening 56, next-step 57, M1 71, M2 47, header 62, road 38.
+
+### Port
+
+Godot: the cut (`thursday-cut` / `cut-ended`, `state.cut.payments`, €30 per night, discovery 35% × n from payment 2, the same FNV roll labelled `kello-cut:<n>`), the story-triggered road event (never rolled), and the five network events plus two clues (data).
+
 ## v4.62 — 2026-09-27
 
 **The Thursday Load.** Owner, 2026-09-27: "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md, pitch page *The Thursday Load*). Somebody on Piritori is selling the same Thursday load to both families. The vans are theatre; the load rides the 3.

@@ -13,7 +13,7 @@
 //     not turn the block.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { applyEffects } from './state.js?v=7';
+import { applyEffects, deterministicRoll } from './state.js?v=7';
 
 const STORY_URL = '../../../content/act1-story-v1.json';
 
@@ -85,4 +85,27 @@ export function briefing(data, story, missionId) {
     battleId: mission.battle_id ?? null,
     avoidable: Boolean(mission.battle_avoidance),
   };
+}
+
+/**
+ * KELLO'S CUT (v4.63, owner item 2: "the cut pays weekly"). Called once when a
+ * NIGHT block has just ended. While the cut runs (flag `thursday-cut`, not
+ * `cut-ended`) it pays `nightly_eur`, and from the `from_payment`-th payment
+ * each one risks the McCormicks finding out: a deterministic roll against
+ * `chance_per_payment` x (payments - from_payment + 1). Returns
+ * { paid, foundOut } and records the count in `state.cut`.
+ */
+export function settleCut(state, story) {
+  const cut = story?.case?.cut;
+  const flags = state.flags ?? [];
+  if (!cut || !flags.includes('thursday-cut') || flags.includes('cut-ended')) return { paid: 0, foundOut: false };
+  state.cut = state.cut ?? { payments: 0 };
+  state.cut.payments += 1;
+  state.cash = Math.round(((state.cash ?? 0) + cut.nightly_eur) * 100) / 100;
+  state.logs = Array.isArray(state.logs) ? state.logs : [];
+  state.logs.unshift(`Kello's cut, counted on the square: €${cut.nightly_eur}.`);
+  state.logs.length = Math.min(24, state.logs.length);
+  const n = state.cut.payments - cut.discovery.from_payment + 1;
+  const foundOut = n >= 1 && deterministicRoll(state, `kello-cut:${state.cut.payments}`) < Math.min(1, cut.discovery.chance_per_payment * n);
+  return { paid: cut.nightly_eur, foundOut };
 }

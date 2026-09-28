@@ -70,7 +70,9 @@ export function pendingRoad(state, roadEvents) {
 function candidates(state, data, roadEvents, phase) {
   const r = road(state);
   const tier = tierOf(state, roadEvents.rules);
-  return roadEvents.events.filter(e => !r.seen.includes(e.id) && e.tier <= tier
+  // An event with a `trigger` belongs to the story (story.js raises it); the
+  // road never rolls it.
+  return roadEvents.events.filter(e => !e.trigger && !r.seen.includes(e.id) && e.tier <= tier
     && (e.phase === phase || e.phase === 'any')
     && (e.requires ?? []).every(req => requirementStatus(req, state, data).ok));
 }
@@ -131,4 +133,14 @@ export function resolveRoad(state, data, roadEvents, choiceId) {
   state.logs.unshift(`${event.title}: ${choice.label}.`);
   state.logs.length = Math.min(24, state.logs.length);
   return { ok: true, event, choice, startBattle: outcome.startBattle ?? null };
+}
+
+/** Raise a story-triggered event now (story.js), unless one is already waiting. */
+export function forceRoad(state, roadEvents, eventId, anchorId) {
+  const r = road(state);
+  if (r.pending) return false;
+  const event = roadEvents.events.find(e => e.id === eventId);
+  if (!event || r.seen.includes(eventId)) return false;
+  r.pending = { id: eventId, phase: event.phase === 'any' ? 'arrival' : event.phase, from: null, to: anchorId ?? state.selectedAnchor };
+  return true;
 }

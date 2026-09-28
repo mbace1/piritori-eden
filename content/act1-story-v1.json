@@ -42,6 +42,8 @@
     { "id": "sold-air", "flag": "mccormicks-know-skim", "key": true, "title": "Sold air", "found": "Karhupuisto: the McCormick buyers paid for a load that never came.", "hint": "Name the empty van at the bear." },
     { "id": "duplicate-invoice", "flag": "duplicate-invoice", "title": "One load, two invoices", "found": "Hakaniemi: Mei Lan's invoice matches the McCormicks'. Same date, same load.", "hint": "Ask Mei Lan about the invoice." },
     { "id": "kello-receipts", "flag": "kello-receipts", "key": true, "title": "Kello's handwriting", "found": "Torkkelinmäki: the receipts are in Kello's hand. Proof for either family.", "hint": "Settle the courtyard account, even partly." },
+    { "id": "pram-time", "flag": "network-pram-time", "title": "20:40 at Kurvi", "found": "The bottle collector: the pram is at Kurvi at 20:40 every Thursday, and it goes back lighter.", "hint": "Someone who knows every back door." },
+    { "id": "kello-rattled", "flag": "kello-rattled", "title": "Five minutes fast", "found": "Kello asked you the time and flinched at the answer. His watch runs five minutes fast, on purpose.", "hint": "Meet the man who stays, on the road." },
     { "id": "forty-one", "flag": "road-fur-hat-41", "title": "\"Forty-one\"", "found": "On the 3: the man in the fur hat says a number. The car he rides.", "hint": "Something on the road." },
     { "id": "the-plate", "flag": "road-empty-van-plate", "title": "The plate", "found": "Hämeentie: the empty van, engine running. You noted the plate.", "hint": "Something on the road." }
   ],
@@ -53,9 +55,16 @@
     "scene_asset_id": "scene-piritori-square-v01",
     "opening": "Thursday. Aatami rides car 41 of the 3 with the man in the fur hat, who nods as if they had always been colleagues. At Kurvi the pram gets on, heavier than a pram. At Piritori, Kello is waiting on his square with his cheap watch, and a very good excuse.",
     "inspectables": ["Kello's watch, five minutes fast", "the pram's weight", "the fur hat counting the load in"],
+    "cut": {
+      "choice": "take-a-cut",
+      "nightly_eur": 30,
+      "note": "Owner, 2026-09-28 (item 2): the cut pays every week, with the growing risk the pitch promised. In the seven-day slice every night is a week of Kello's Thursdays compressed: he pays at each night's settlement, and each payment makes it likelier a family finds out.",
+      "discovery": { "from_payment": 2, "chance_per_payment": 0.35 },
+      "found_out_event": "road-cut-found-out"
+    },
     "choices": [
       { "id": "sell-kello", "label": "Sell Kello to the McCormicks", "detail": "A large payment and a friend in the family. The Jade Lantern will treat you as the leak, and Kello leaves the square.", "effects": ["cash:+250", "relationship:mccormick_family:+2", "relationship:jade_lantern_network:-2", "pressure:piritori:+1", "flag:kello-sold"] },
-      { "id": "take-a-cut", "label": "Take a cut and keep quiet", "detail": "Money now and a Thursday arrangement with Kello. Either family can find out.", "effects": ["cash:+60", "obligation:kello:+1", "flag:thursday-cut"] },
+      { "id": "take-a-cut", "label": "Take a cut and keep quiet", "detail": "€60 now and €30 every night after, counted on the square. Each payment makes it likelier a family finds out.", "effects": ["cash:+60", "obligation:kello:+1", "flag:thursday-cut"] },
       { "id": "take-the-route", "label": "Take the tram route over", "detail": "The pram and car 41 carry for you now. The first load is yours; the route is a risk from here on.", "effects": ["stock:piri:+2", "pressure:piritori:+1", "flag:thursday-route"] },
       { "id": "tell-toko", "label": "Give it to Toko", "detail": "No money. He never asks, but now he knows, and he trusts you with what he hears.", "effects": ["relationship:toko:+2", "intel:+2", "flag:kello-told-toko"] }
     ]

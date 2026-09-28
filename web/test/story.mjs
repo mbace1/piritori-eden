@@ -5,7 +5,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, chooseEncounter, restoreState, applyEffects } from '../js/v3/state.js?v=7';
 import { chooseVisit, openVisit } from '../js/v3/visits.js?v=3';
-import { caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing } from '../js/v3/story.js?v=1';
+import { caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from '../js/v3/story.js?v=2';
+import { forceRoad, pendingRoad, resolveRoad, rollRoad } from '../js/v3/road.js?v=2';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
@@ -89,4 +90,38 @@ for (const ch of story.case.choices) {
   if (ch.id === 'tell-toko') ok((c.relationships.toko ?? 0) === (s.relationships.toko ?? 0) + 2, 'Toko +2');
 }
 ok(resolveCase(s, data, story, 'nope').reason === 'unknown-choice', 'an unknown answer is refused');
+
+// Kello's cut (v4.63): pays each night, and the risk grows.
+{
+  const base = restoreState(JSON.parse(JSON.stringify(s)), content);
+  ok(settleCut(base, story).paid === 0, 'no cut, no pay');
+  const r = resolveCase(base, data, story, 'take-a-cut');
+  ok(r.ok && base.flags.includes('thursday-cut'), 'taking the cut starts it');
+  const cash = base.cash; const first = settleCut(base, story);
+  ok(first.paid === 30 && base.cash === cash + 30 && !first.foundOut, 'the first night pays €30 and is safe');
+  let found = null;
+  for (let i = 2; i <= 6 && found === null; i += 1) { base.scheduleIndex += 2; if (settleCut(base, story).foundOut) found = i; }
+  ok(found !== null, `sooner or later a family finds out (payment ${found})`);
+  // Deterministic: the same save finds out on the same payment.
+  const again = restoreState(JSON.parse(JSON.stringify(s)), content); resolveCase(again, data, story, 'take-a-cut');
+  let found2 = null; settleCut(again, story);
+  for (let i = 2; i <= 6 && found2 === null; i += 1) { again.scheduleIndex += 2; if (settleCut(again, story).foundOut) found2 = i; }
+  ok(found2 === found, 'the same save finds out on the same night');
+  // The found-out event is raised by the story, and ends the cut.
+  ok(forceRoad(base, road, story.case.cut.found_out_event, 'piritori'), 'the story raises the event');
+  ok(pendingRoad(base, road)?.id === 'road-cut-found-out', 'it waits on the road screen');
+  const pay = structuredClone(base); pay.cash = 500;
+  ok(resolveRoad(pay, data, road, 'pay').ok && pay.flags.includes('cut-ended'), 'paying them off ends the cut');
+  ok(settleCut(pay, story).paid === 0, 'an ended cut pays nothing');
+  const give = structuredClone(base);
+  ok(resolveRoad(give, data, road, 'give-kello').ok && give.flags.includes('kello-sold') && give.flags.includes('cut-ended'), 'giving them Kello ends it too');
+  ok(forceRoad(pay, road, story.case.cut.found_out_event) === false, 'a seen event is not raised twice');
+}
+// A triggered event never rolls on the road.
+{
+  const t = createState(content); t.scheduleIndex = 8; t.flags.push('thursday-cut');
+  const seen = [];
+  for (let i = 0; i < 80; i += 1) { const e = rollRoad(t, data, road, {}); if (e) { seen.push(e.id); resolveRoad(t, data, road, e.choices.find(c => !(c.requires ?? []).length).id); } }
+  ok(!seen.includes('road-cut-found-out'), 'the found-out event never rolls by chance');
+}
 console.log(`story: ${n} checks passed`);
