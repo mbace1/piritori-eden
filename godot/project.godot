@@ -16,6 +16,7 @@ config/features=PackedStringArray("4.3")
 ContentRegistry="*res://autoload/content_registry.gd"
 GameState="*res://autoload/game_state.gd"
 SaveService="*res://autoload/save_service.gd"
+Sound="*res://autoload/sound.gd"
 Loc="*res://autoload/loc.gd"
 DebugEntry="*res://autoload/debug_entry.gd"
 

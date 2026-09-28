@@ -61,13 +61,15 @@ func _ready() -> void:
 	_test_story()
 	_test_every_clue_is_earned()
 	_test_mission_battles_settle()
+	_test_sound()
+	_test_arrival_lines()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
 		print("STORY FAIL")
 		get_tree().quit(1)
 	else:
-		print("STORY OK: the road, the board and the case match the web.")
+		print("STORY OK: the road, the board and the case match the web; sound and the arrival hold.")
 		get_tree().quit(0)
 
 
@@ -460,3 +462,60 @@ func _test_mission_battles_settle() -> void:
 	GameState.settle_mission_battle("battle-karhupuisto-2v2", "win")
 	eq("a mission already settled by its scene is not paid twice", GameState.cash_eur, cash)
 	eq("a battle no mission names settles nothing", GameState.settle_mission_battle("battle-hermanni-training", "win"), "")
+
+
+func _test_sound() -> void:
+	print("\nsound (v4.59): synthesised, one master bus, a switch")
+	var was := Sound.on
+	Sound.set_sound(true)
+	var st := Sound.state()
+	check("on: a graph is running", bool(st["running"]), str(st))
+	check("  every voice routes through the master bus", bool(st["routed_to_master"]) and int(st["players"]) > 2)
+	var n := Sound.played.size()
+	Sound.till(1)
+	Sound.till(-1)
+	Sound.steps()
+	Sound.sting()
+	Sound.bell()
+	check("  the till (in and out), steps, the sting and the bell play",
+		Sound.played.slice(n) == PackedStringArray(["till-up", "till-down", "steps", "sting", "bell"]),
+		str(Sound.played.slice(n)))
+	Sound.set_sound(false)
+	st = Sound.state()
+	check("OFF closes the whole graph, not just the volume", not bool(st["running"]) and int(st["players"]) == 0)
+	check("  and mutes the master bus", bool(st["master_muted"]))
+	n = Sound.played.size()
+	Sound.till(1)
+	check("  nothing plays while off", Sound.played.size() == n)
+	check("the switch is remembered", Sound._load_pref() == false)
+	Sound.set_sound(true)
+	check("ON again rebuilds it", bool(Sound.state()["running"]) and Sound._load_pref())
+	var files := false
+	for f in DirAccess.get_files_at("res://autoload"):
+		if f.ends_with(".wav") or f.ends_with(".ogg") or f.ends_with(".mp3"):
+			files = true
+	check("no audio files: every sound is computed", not files)
+	Sound.set_sound(was)
+
+
+func _test_arrival_lines() -> void:
+	print("\nthe arrival's lines are read from the save")
+	_fresh()
+	var lines := preload("res://scenes/arrival.gd").lines()
+	eq("three lines", lines.size(), 3)
+	check("the money, the markka and the debt from the save",
+		lines[1].contains("€160") and lines[1].contains("300 mk") and lines[1].contains("€350"), lines[1])
+	check("the first payment from the content: €75 on day 4",
+		lines[1].contains("€75") and lines[1].contains("day 4"), lines[1])
+	GameState.cash_eur = 999
+	check("and they follow the save, not a typed number",
+		preload("res://scenes/arrival.gd").lines()[1].contains("€999"))
+	check("a new campaign owes the arrival", _new_owes())
+	var saved := GameState.to_dict()
+	GameState.from_dict(saved)
+	check("a loaded one does not", not GameState.arrival_due)
+
+
+func _new_owes() -> bool:
+	GameState.new_campaign()
+	return GameState.arrival_due

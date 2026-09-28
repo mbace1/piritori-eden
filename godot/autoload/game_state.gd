@@ -366,6 +366,12 @@ func _ready() -> void:
 ## starting over or loading a save is not reported as money moving.
 var campaign_epoch: int = 0
 
+## The arrival (web v4.59) is owed to a NEW campaign and never to a loaded one.
+## Presentation state, never saved: `new_campaign()` sets it, `from_dict()`
+## clears it, and the shell clears it once the arrival has played or been
+## skipped. The arrival itself never touches the campaign.
+var arrival_due := false
+
 # ── the road (web Act I v4.58, `web/js/v3/road.js`) ───────────────────────
 ## Saved under the web's own key and shape, so the two builds' saves read the
 ## same: {journeys, since, seen, pending, minutes, minutesBlock, last}.
@@ -442,6 +448,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	# start on (`markSeen` at boot in web/js/v3/app.js).
 	if current_anchor_id != "":
 		seen[current_anchor_id] = 0
+	arrival_due = true
 
 	# Handoff §2: "Piritori selected as the only live first lead". The slice
 	# schedules exactly one encounter per block, so the opening reveal is the
@@ -1963,6 +1970,7 @@ func from_dict(d: Dictionary) -> bool:
 	footprint = _int_values(d.get("footprint", {}))
 	heard = _int_values(d.get("heard", {}))
 	toko_bowl_at = int(d.get("tokoBowlAt", -1))
+	arrival_due = false
 
 	state_changed.emit()
 	crew_aptitudes = d.get("crew_aptitudes", {})

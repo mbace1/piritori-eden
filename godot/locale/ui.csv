@@ -230,6 +230,13 @@ ui.next_hint_enter,Aatami is at %s. The story is here.,Aatami on paikassa %s. Ta
 ui.next_hint_plan,The story has moved on. Aatami is still where you left him.,"Tarina on siirtynyt eteenpäin. Aatami on yhä siellä, mihin hänet jätit.",物語は動いた。だがアータミはまだそこにいる。
 ui.next_hint_commit,Walk there now. Nothing is spent until you arrive.,Kävele sinne nyt. Mitään ei kulu ennen kuin olet perillä.,今そこへ移動する。着くまで何も使わない。
 ui.at_place,at %s,paikassa %s,%sで
+arrival.skip,SKIP ›,OHITA ›,スキップ ›
+arrival.line_rain,"Kallio, 2003. It has rained for a week and the gutters have given up.","Kallio, 2003. Vettä on satanut viikon, eivätkä rännit enää vedä.",Kallio、2003。七日もあめが止まない。道はもうあめに負けた。
+arrival.line_money,"Aatami steps off the 3 at Piritori with €%d, %d mk and a debt of €%d.","Aatami astuu kolmosesta Piritorilla. Taskussa %d €, %d mk ja velkaa %d €.",アータミはピリトリで3番から出る。手持ちは€%dと%d mk、借金は€%d。
+arrival.line_due,€%d of it is due on day %d.,Siitä %d € erääntyy päivänä %d.,そのうち€%dは%d日目に払う。
+arrival.line_hat,Up Vaasankatu the Tokon Ramen sign flickers. The man in the fur hat is at the tram stop again. He was there yesterday. Nobody gets on with him.,Vaasankadun päässä Tokon Ramenin kyltti lepattaa. Turkislakkinen mies on taas pysäkillä. Hän oli siellä eilenkin. Kukaan ei nouse kyytiin hänen kanssaan.,Vaasankatuの上の方で、Tokon Ramenの明かりが消えかけては戻る。かぶりものの人が、また3番を待つ場所にいる。前の日もいた。誰も彼とは3番に入らない。
+ui.sound_on,SOUND · ON,ÄÄNI · PÄÄLLÄ,SOUND · オン
+ui.sound_off,SOUND · OFF,ÄÄNI · POIS,SOUND · オフ
 road.arriving,ARRIVING · %s,PERILLÄ · %s,着いた · %s
 road.on_the_way,ON THE WAY · %s → %s,MATKALLA · %s → %s,移動中 · %s → %s
 road.on_the_way_plain,ON THE WAY,MATKALLA,移動中

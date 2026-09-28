@@ -62,6 +62,7 @@ func _ready() -> void:
 		if _shell:
 			_shell.queue_free()
 			await get_tree().process_frame
+		GameState.arrival_due = false   # the arrival is a New-Game veil; these shots are of the city
 		_shell = preload("res://scenes/app_shell.tscn").instantiate()
 		add_child(_shell)
 

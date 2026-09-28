@@ -35,6 +35,9 @@ func _ready() -> void:
 	Loc.set_language("en")
 	GameState.new_campaign()
 	SaveService.clear_save()
+	# Setup: the arrival is a New-Game veil and has its own gate below; the
+	# older gates start on the city behind it.
+	GameState.arrival_due = false
 
 	_shell = preload("res://scenes/app_shell.tscn").instantiate()
 	add_child(_shell)
@@ -62,6 +65,8 @@ func _ready() -> void:
 	await _test_toko_through_ui()
 	await _test_street_seller_through_ui()
 	await _test_story_through_ui()
+	await _test_sound_switch()
+	await _test_arrival()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -890,6 +895,7 @@ func _live_button(fragment: String) -> Button:
 
 func _fresh_city(anchor: String = "") -> void:
 	GameState.new_campaign()
+	GameState.arrival_due = false
 	if anchor != "":
 		GameState.current_anchor_id = anchor
 		GameState.mark_seen(anchor)
@@ -1144,4 +1150,105 @@ func _test_story_through_ui() -> void:
 	await _press(_shell._commands[3])
 	check("the board says it is settled", _labels_text().contains("Settled: Give it to Toko."))
 	_shell._show_city()
+	await get_tree().process_frame
+
+
+## web v4.59: SOUND · ON/OFF in the menu, remembered; OFF closes the graph.
+func _test_sound_switch() -> void:
+	print("\nsound (web v4.59) in the menu")
+	var was := Sound.on
+	Sound.set_sound(true)
+	_shell._rebuild_language_buttons()
+	await get_tree().process_frame
+	_shell._menu_button.emit_signal("pressed")
+	await get_tree().process_frame
+	var sw := _live_button("SOUND")
+	check("the menu has a SOUND switch", sw != null and "ON" in sw.text)
+	check("  a real touch target", sw != null and sw.custom_minimum_size.y >= _shell.MIN_TARGET)
+	if sw != null:
+		await _press(sw)
+		check("  pressing it turns sound off", not Sound.on and not bool(Sound.state()["running"]))
+		sw = _live_button("SOUND")
+		check("  and it says so", sw != null and "OFF" in sw.text)
+		await _press(sw)
+		check("  pressing again turns it back on", Sound.on and bool(Sound.state()["running"]))
+	_shell._menu_button.emit_signal("pressed")
+	await get_tree().process_frame
+	Sound.set_sound(was)
+
+
+## web v4.59/v4.61: the arrival — New Game only, any input skips it, it ends by
+## itself, it changes nothing, and afterwards the next step is lit.
+func _test_arrival() -> void:
+	print("\nthe arrival (web v4.59/v4.61)")
+	GameState.new_campaign()
+	var snapshot := JSON.stringify(GameState.to_dict())
+	var shell := preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var arrival: Node = shell.get_node_or_null("Arrival")
+	check("a new game opens on the arrival", arrival != null)
+	if arrival == null:
+		shell.queue_free()
+		return
+	var text := "\n".join(_all_nodes(arrival).filter(func(n): return n is Label).map(func(l): return l.text))
+	check("  its lines read the save: €160, 300 mk, a debt of €350",
+		text.contains("€160") and text.contains("300 mk") and text.contains("€350"), text)
+	check("  and the first payment from the content: €75 on day 4",
+		text.contains("€75") and text.contains("day 4"))
+	check("  the tram comes in with its sound", Sound.played.has("arrival") or not Sound.on)
+	var skip: Button = null
+	for n in _all_nodes(arrival):
+		if n is Button and "SKIP" in n.text:
+			skip = n
+	check("  SKIP is there from frame one", skip != null)
+	skip.pressed.emit()
+	await get_tree().create_timer(0.7).timeout
+	check("SKIP ends it", shell.get_node_or_null("Arrival") == null)
+	check("  it never changed the save", JSON.stringify(GameState.to_dict()) == snapshot)
+	var lit := _all_nodes(shell._rail).filter(func(n): return n is Button and n.is_visible_in_tree() \
+		and not n.is_queued_for_deletion() and PiritoriChrome.is_lit(n))
+	check("  afterwards the next step is lit: ENTER", lit.size() == 1 and "ENTER" in (lit[0] as Button).text)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# Any key.
+	GameState.new_campaign()
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var key := InputEventKey.new()
+	key.keycode = KEY_SPACE
+	key.pressed = true
+	Input.parse_input_event(key)
+	await get_tree().create_timer(0.7).timeout
+	check("any key ends it", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# By itself.
+	GameState.new_campaign()
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	arrival = shell.get_node_or_null("Arrival")
+	for i in 100:
+		if arrival == null or not is_instance_valid(arrival):
+			break
+		arrival._process(0.1)
+	await get_tree().create_timer(0.7).timeout
+	check("left alone, it ends by itself (about 9.5 s)", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
+	await get_tree().process_frame
+
+	# Continue: a loaded campaign opens on the city.
+	GameState.new_campaign()
+	GameState.from_dict(JSON.parse_string(snapshot))
+	shell = preload("res://scenes/app_shell.tscn").instantiate()
+	add_child(shell)
+	await get_tree().process_frame
+	check("a loaded campaign never sees it", shell.get_node_or_null("Arrival") == null)
+	shell.queue_free()
 	await get_tree().process_frame

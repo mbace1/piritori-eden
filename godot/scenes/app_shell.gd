@@ -79,6 +79,7 @@ var _visit_open := ""
 ## the anchor he named (web `tokoTold`, presentation only, never saved).
 var _toko_told: Variant = null
 var _toko_epoch := -1
+var _arrival: Control
 
 
 func _ready() -> void:
@@ -129,6 +130,12 @@ func _ready() -> void:
 func _open_first_screen() -> void:
 	if not DebugEntry.active:
 		_show_city()
+		# The arrival is owed to a NEW campaign only (web v4.59): a loaded one,
+		# or any debug deep link, opens straight on the city.
+		if GameState.arrival_due:
+			_play_arrival()
+		else:
+			Sound.wake()
 		return
 
 	var log := DebugEntry.apply_to_campaign()
@@ -162,6 +169,24 @@ func _open_first_screen() -> void:
 
 	if not log.is_empty():
 		print("DebugEntry applied: ", ", ".join(log))
+	Sound.wake()
+
+
+## THE ARRIVAL (web v4.59/v4.61, `playOpening()`): the 3 pulls into Piritori
+## in the rain and Aatami steps off. It lies over a city that is already built,
+## so skipping it — any input, from frame one — reveals the map with its one
+## lit step, and it changes nothing in the campaign.
+func _play_arrival() -> void:
+	if _arrival != null:
+		return
+	_arrival = preload("res://scenes/arrival.gd").new()
+	_arrival.name = "Arrival"
+	_arrival.still = _still()
+	_arrival.finished.connect(func():
+		_arrival = null
+		if mode == Mode.CITY and _screen == "":
+			_build_city_rail(_city_map.inspected()))
+	add_child(_arrival)
 
 
 ## A mistyped id must fail where the tester can see it — on the screen, on the
@@ -682,6 +707,23 @@ func _rebuild_language_buttons() -> void:
 		b.pressed.connect(func(): Loc.set_language(code_of))
 		_langs.add_child(b)
 
+	# SOUND · ON / OFF (web v4.59): remembered, and OFF closes the whole graph.
+	var snd := Button.new()
+	snd.name = "SoundSwitch"
+	snd.text = tr("ui.sound_on") if Sound.on else tr("ui.sound_off")
+	snd.custom_minimum_size = Vector2(MIN_TARGET * 2.4, MIN_TARGET)
+	snd.focus_mode = Control.FOCUS_ALL
+	snd.add_theme_font_size_override("font_size", 13)
+	snd.add_theme_color_override("font_color", MapStyle.TITLE_TEXT if Sound.on else MapStyle.TINY_TEXT)
+	var ssb := PiritoriChrome.button(MapStyle.SUB_TEXT if Sound.on else PiritoriChrome.RULE, Sound.on)
+	snd.add_theme_stylebox_override("normal", ssb)
+	snd.add_theme_stylebox_override("hover", ssb)
+	snd.add_theme_stylebox_override("pressed", ssb)
+	snd.pressed.connect(func():
+		Sound.set_sound(not Sound.on)
+		_rebuild_language_buttons())
+	_langs.add_child(snd)
+
 	# CLAUDE.md rule 6: reachable without a keyboard or a URL, because the
 	# device it matters on has neither.
 	var dev := Button.new()
@@ -767,6 +809,8 @@ func _add_cash_stat() -> void:
 			_cash_tween.kill()
 	elif to != _cash_shown:
 		_cash_delta = to - _cash_shown
+		# The till (web v4.59): bright for money in, lower for money out.
+		Sound.till(1 if _cash_delta > 0 else -1)
 		_cash_delta_until = now + int(CASH_DELTA_SEC * 1000.0)
 		if _cash_tween:
 			_cash_tween.kill()
@@ -1036,8 +1080,10 @@ func _commit_journey() -> void:
 		_build_city_rail(String(plan.get("destination", GameState.current_anchor_id)))
 		_rail_box.add_child(_make_label(tr("ui.journey_refused"), 14, PiritoriPalette.TEXT_DIM))
 		return
+	Sound.steps()
 	# The road (web v4.58): a surprise — the preview never forecast it.
 	if not PiritoriRoad.roll(result).is_empty():
+		Sound.sting(0.9)
 		_show_road()
 		return
 	_city_map.select(String(result["destination"]))
