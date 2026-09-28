@@ -52,7 +52,7 @@ if [ "${PIRITORI_TEST_NO_IMPORT:-0}" != "1" ]; then
 	echo
 fi
 
-ALL_TESTS=(test_spine test_shell test_locale test_battle test_battle_ui test_playthrough)
+ALL_TESTS=(test_spine test_shell test_locale test_battle test_battle_ui test_playthrough test_story)
 TESTS=("$@")
 if [ ${#TESTS[@]} -eq 0 ]; then
 	TESTS=("${ALL_TESTS[@]}")

@@ -53,6 +53,14 @@ jobs:
           node tools/sync-data.mjs --check
           node tools/build-map-geometry.mjs --check
 
+      # The road's roll and the board's prices are deterministic from the save,
+      # and the port must match the web build to the number. This re-runs the
+      # web modules and fails if tests/fixtures/web-reference.json (which
+      # test_story holds the Godot build to) no longer says what they say.
+      - name: the web reference the port is held to is current
+        working-directory: godot
+        run: node tools/web-reference.mjs --check
+
       # Fails on a missing translation, on a fi/ja string identical to its
       # English source, on mismatched format specifiers, and on a stale key.
       - name: en / fi / ja are complete
@@ -112,6 +120,12 @@ jobs:
       - name: the seven-day slice plays to an ending
         working-directory: godot
         run: godot --headless --path . res://tests/test_playthrough.tscn
+
+      # Act I v4.58-v4.62: the road, Toko's bowl and the board, the Thursday
+      # Load, sound and the arrival — against the web's own numbers.
+      - name: the road, the counter and the story match the web
+        working-directory: godot
+        run: godot --headless --path . res://tests/test_story.tscn
 
   web-state:
     name: browser campaign state

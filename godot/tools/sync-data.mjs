@@ -28,6 +28,10 @@ const dataDir = resolve(godotRoot, 'data');
 const FILES = [
   ['map/kallio-era1-2003-v1.json', 'kallio-era1-2003-v1.json'],
   ['content/era1-slice-v1.json', 'era1-slice-v1.json'],
+  // Act I v4.58: what happens on the road and on arriving.
+  ['content/road-events-v1.json', 'road-events-v1.json'],
+  // Act I v4.62: the woven story — briefings, the case board's clues, the case.
+  ['content/act1-story-v1.json', 'act1-story-v1.json'],
   ['art/v3/manifest.json', 'art-v3-manifest.json'],
   // GODOT_HANDOFF.md §3 lists this as a canonical input: the role/UI vocabulary
   // that gives each unit its coloured base tab and symbol.

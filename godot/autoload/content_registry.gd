@@ -11,10 +11,16 @@ extends Node
 const MAP_PATH := "res://data/kallio-era1-2003-v1.json"
 const SLICE_PATH := "res://data/era1-slice-v1.json"
 const ART_PATH := "res://data/art-v3-manifest.json"
+## Act I v4.58: the road — events in transit and on arriving.
+const ROAD_PATH := "res://data/road-events-v1.json"
+## Act I v4.62: the woven story — briefings, the case board, the case.
+const STORY_PATH := "res://data/act1-story-v1.json"
 
 var map: Dictionary = {}
 var slice: Dictionary = {}
 var art: Dictionary = {}
+var road: Dictionary = {}
+var story: Dictionary = {}
 
 ## Errors collected while loading. Non-empty means the port must not claim to
 ## resolve every referenced ID (§9 acceptance item 8).
@@ -29,6 +35,8 @@ var _missions: Dictionary = {}     # id -> mission
 var _crew: Dictionary = {}         # id -> crew
 var _products: Dictionary = {}     # id -> product
 var _battles: Dictionary = {}      # id -> battle
+var _road_events: Dictionary = {}  # id -> road event
+var _visits: Dictionary = {}       # id -> optional visit
 
 
 func _ready() -> void:
@@ -40,6 +48,8 @@ func load_all() -> bool:
 	map = _load_json(MAP_PATH)
 	slice = _load_json(SLICE_PATH)
 	art = _load_json(ART_PATH)
+	road = _load_json(ROAD_PATH)
+	story = _load_json(STORY_PATH)
 	if errors.size() > 0:
 		return false
 	_index()
@@ -100,6 +110,10 @@ func _index() -> void:
 		_products[p["id"]] = p
 	for b in slice.get("battles", []):
 		_battles[b["id"]] = b
+	for v in slice.get("optional_visits", []):
+		_visits[v["id"]] = v
+	for ev in road.get("events", []):
+		_road_events[ev["id"]] = ev
 
 
 ## Cross-check every reference the slice and map make at each other.
@@ -129,6 +143,28 @@ func _verify_references() -> void:
 		var dest: String = m.get("destination_anchor_id", "")
 		if dest != "" and not _anchors.has(dest):
 			errors.append("mission '%s' references unknown anchor '%s'" % [m["id"], dest])
+
+	# The road and the story point INTO the slice and the map, so they are
+	# checked the same way: a road fight must name a real battle, and a case
+	# must stand somewhere on the map and brief missions that exist.
+	for ev in _road_events.values():
+		for ch in ev.get("choices", []):
+			for fx in ch.get("effects", []):
+				var f := String(fx)
+				if f.begins_with("start-battle:") and not _battles.has(f.substr(13)):
+					errors.append("road event '%s' starts unknown battle '%s'" % [ev["id"], f.substr(13)])
+	for v in _visits.values():
+		if not _sites.has(String(v.get("site_id", ""))):
+			errors.append("visit '%s' references unknown site '%s'" % [v["id"], v.get("site_id", "")])
+		if not _encounters.has(String(v.get("requires_encounter", ""))):
+			errors.append("visit '%s' requires unknown encounter '%s'" % [v["id"], v.get("requires_encounter", "")])
+	for sm in story.get("missions", []):
+		if not _missions.has(String(sm.get("id", ""))):
+			errors.append("story briefs unknown mission '%s'" % sm.get("id", ""))
+	var the_case: Dictionary = story.get("case", {})
+	if not the_case.is_empty() and not _anchors.has(String(the_case.get("anchor_id", ""))):
+		errors.append("story case '%s' stands at unknown anchor '%s'" % [
+			the_case.get("id", ""), the_case.get("anchor_id", "")])
 
 	var campaign: Dictionary = slice.get("campaign", {})
 	if not _anchors.has(campaign.get("start_anchor_id", "")):
@@ -197,6 +233,39 @@ func product(id: String) -> Dictionary:
 
 func battle(id: String) -> Dictionary:
 	return _require(_battles, id, "battle")
+
+func road_event(id: String) -> Dictionary:
+	return _require(_road_events, id, "road event")
+
+func visit(id: String) -> Dictionary:
+	return _require(_visits, id, "visit")
+
+## Optional visits (web `visits.js`): a scene you may drop into, never a block.
+func visits() -> Array:
+	return slice.get("optional_visits", [])
+
+## The road's authored events, in authored order (the order IS the tie-break).
+func road_events() -> Array:
+	return road.get("events", [])
+
+func road_rules() -> Dictionary:
+	return road.get("rules", {})
+
+## A mission's woven words (premise, plants) from the story, or {}.
+func story_mission(id: String) -> Dictionary:
+	for m in story.get("missions", []):
+		if String(m.get("id", "")) == id:
+			return m
+	return {}
+
+func story_clues() -> Array:
+	return story.get("clues", [])
+
+func story_case() -> Dictionary:
+	return story.get("case", {})
+
+func story_thread() -> Dictionary:
+	return story.get("thread", {})
 
 
 func _require(table: Dictionary, id: String, kind: String) -> Dictionary:

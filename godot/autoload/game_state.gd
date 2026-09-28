@@ -18,6 +18,10 @@ signal slice_completed
 ## A scene asked for a battle. The shell opens it; the model never draws.
 signal battle_requested(battle_id: String, negotiation_open: bool)
 signal ending_resolved(ending_id: String)
+## A decision that is not an encounter and does not turn the block — a road
+## choice, a bowl at Toko's, a visit, the case. SaveService saves on it, the
+## same boundary rule as an encounter (GODOT_HANDOFF.md §8).
+signal decision_recorded(kind: String, id: String, choice: String)
 
 const SCHEMA_VERSION := 6
 
@@ -362,6 +366,24 @@ func _ready() -> void:
 ## starting over or loading a save is not reported as money moving.
 var campaign_epoch: int = 0
 
+# ── the road (web Act I v4.58, `web/js/v3/road.js`) ───────────────────────
+## Saved under the web's own key and shape, so the two builds' saves read the
+## same: {journeys, since, seen, pending, minutes, minutesBlock, last}.
+## `PiritoriRoad` owns the rules; this is only the record.
+var road: Dictionary = {}
+
+# ── what you know about prices (web `board.js`, MARKET.md §5) ─────────────
+## anchor -> the block you last STOOD there. Standing somewhere is how you
+## learn its price; the board decays what you know by its age.
+var seen: Dictionary = {}
+## anchor -> your own net footprint there (+ sold, − bought): saturation.
+var footprint: Dictionary = {}
+## anchor -> the block Toko TOLD you about it (web v4.61). A range at best,
+## ageing like anything seen, and never a visit.
+var heard: Dictionary = {}
+## The block of the last bowl at Toko's (one a block), or -1.
+var toko_bowl_at: int = -1
+
 
 ## Reset to the slice's authored starting state.
 func new_campaign(with_seed: int = 0) -> void:
@@ -410,6 +432,16 @@ func new_campaign(with_seed: int = 0) -> void:
 	content_package_id = String(ContentRegistry.slice.get("id", ""))
 	seed_value = with_seed if with_seed != 0 else 20030101
 	_rng.seed = seed_value
+
+	road = {}
+	seen = {}
+	footprint = {}
+	heard = {}
+	toko_bowl_at = -1
+	# Web boot marks where Aatami stands as seen: you know the corner you
+	# start on (`markSeen` at boot in web/js/v3/app.js).
+	if current_anchor_id != "":
+		seen[current_anchor_id] = 0
 
 	# Handoff §2: "Piritori selected as the only live first lead". The slice
 	# schedules exactly one encounter per block, so the opening reveal is the
@@ -1009,30 +1041,46 @@ func commit_journey(preview: Dictionary) -> Dictionary:
 	if fresh["path"] != preview["path"]:
 		return {"ok": false, "reason": "stale"}
 	current_anchor_id = String(preview["destination"])
+	# Arriving is seeing (web journey.js `markSeen(destination)`).
+	mark_seen(current_anchor_id)
 	state_changed.emit()
 	return {"ok": true, "destination": current_anchor_id, "path": preview["path"]}
+
+
+## You stood here in this block, so you know its price (web `markSeen`).
+func mark_seen(anchor_id: String) -> void:
+	if anchor_id != "":
+		seen[anchor_id] = block_index
+
+
+## FNV-1a over "contentId|block|label" — web `deterministicRoll` in
+## web/js/v3/state.js, bit for bit, so a web save and a Godot save roll the
+## same road. `unicode_at` is the UTF-16 code unit for everything in the
+## Basic Multilingual Plane, which is all the ids and labels this reads.
+func deterministic_roll(label: String) -> float:
+	var text := "%s|%d|%s" % [content_package_id, block_index, label]
+	var h := 2166136261
+	for i in text.length():
+		h = (h ^ text.unicode_at(i)) & 0xFFFFFFFF
+		h = imul32(h, 16777619)
+	return float(h) / 4294967296.0
+
+
+## `Math.imul` for unsigned 32-bit values, in 64-bit ints that cannot
+## overflow: the multiply is split so no partial product passes 2^48.
+static func imul32(a: int, b: int) -> int:
+	a &= 0xFFFFFFFF
+	b &= 0xFFFFFFFF
+	var lo := (a * (b & 0xFFFF)) & 0xFFFFFFFF
+	var hi := ((a * (b >> 16)) & 0xFFFF) << 16
+	return (lo + hi) & 0xFFFFFFFF
 
 
 # ── requirements and effects: the canonical grammar ───────────────────────
 
 ## Evaluate a requirement string from the slice, e.g. "cash>=45".
 func meets_requirement(req: String) -> bool:
-	var s := req.strip_edges()
-	for op in [">=", "<=", ">", "<", "=="]:
-		var idx := s.find(op)
-		if idx > 0:
-			var lhs := s.substr(0, idx).strip_edges()
-			var rhs := s.substr(idx + op.length()).strip_edges()
-			var left := _read_value(lhs)
-			var right := int(rhs) if rhs.is_valid_int() else _read_value(rhs)
-			match op:
-				">=": return left >= right
-				"<=": return left <= right
-				">": return left > right
-				"<": return left < right
-				"==": return left == right
-	# A bare token is a flag test.
-	return flags.get(s, false)
+	return bool(requirement_status(req).get("ok", false))
 
 
 func meets_all(reqs: Array) -> bool:
@@ -1040,6 +1088,78 @@ func meets_all(reqs: Array) -> bool:
 		if not meets_requirement(String(r)):
 			return false
 	return true
+
+
+## One requirement in the web grammar (`requirementStatus` in
+## web/js/v3/state.js): numeric comparisons on cash, markka, intel,
+## deployed-crew, crew-critical, stock:<id>, relationship:<id> and
+## obligation:<id>; `flag:<id>`; `crew-role:<role>`; a bare token is a flag.
+##
+## Until the road port this read only the numeric half, so every `flag:`,
+## `relationship:`, `obligation:`, `deployed-crew` and `crew-role:` gate in
+## the slice evaluated as unmet or as zero — "Name the empty van" could never
+## be taken however the week had gone. Returns {ok, req, kind, id, op, want,
+## have}; the shell turns a refusal into words (a road choice is shown and
+## refused, never hidden).
+func requirement_status(req: String) -> Dictionary:
+	var s := req.strip_edges()
+	if s.begins_with("flag:"):
+		var fid := s.substr(5)
+		return {"ok": has_flag(fid), "req": s, "kind": "flag", "id": fid}
+	if s.begins_with("crew-role:"):
+		var role := s.substr(10)
+		return {"ok": deployed_roles().has(role), "req": s, "kind": "crew-role", "id": role}
+	for op in [">=", "<=", "==", ">", "<", "="]:
+		var idx := s.find(op)
+		if idx <= 0:
+			continue
+		var lhs := s.substr(0, idx).strip_edges()
+		var rhs := s.substr(idx + op.length()).strip_edges()
+		var left := _read_value(lhs)
+		var right := int(rhs) if rhs.is_valid_int() else _read_value(rhs)
+		var ok := false
+		match op:
+			">=": ok = left >= right
+			"<=": ok = left <= right
+			">": ok = left > right
+			"<": ok = left < right
+			_: ok = left == right
+		var kind := lhs.split(":")[0]
+		return {"ok": ok, "req": s, "kind": kind,
+			"id": lhs.substr(kind.length() + 1) if lhs.contains(":") else "",
+			"op": op, "want": right, "have": left}
+	# A bare token is a flag test.
+	return {"ok": has_flag(s), "req": s, "kind": "flag", "id": s}
+
+
+## A flag, or a remembered moment written as `memory:<id>` — the slice's
+## `memory:` effects land in `memories`, and a clue may name either.
+func has_flag(id: String) -> bool:
+	if id.begins_with("memory:"):
+		return memories.has(id.substr(7))
+	return bool(flags.get(id, false))
+
+
+## Who goes out with Aatami: the roster, three at most (web `deployedCrew`).
+## Arrested and retired crew are already off the roster; temporary crew are
+## lent for one job and are not deployed on the road.
+func deployed_crew() -> PackedStringArray:
+	var out := PackedStringArray()
+	for id in roster:
+		if out.size() >= 3:
+			break
+		out.append(String(id))
+	return out
+
+
+func deployed_roles() -> PackedStringArray:
+	var out := PackedStringArray()
+	for id in deployed_crew():
+		var rec: Dictionary = generated_crew.get(id, {})
+		if rec.is_empty() and ContentRegistry.has_crew(id):
+			rec = ContentRegistry.crew_member(id)
+		out.append(String(rec.get("role", "")))
+	return out
 
 
 func _read_value(token: String) -> int:
@@ -1053,12 +1173,26 @@ func _read_value(token: String) -> int:
 		"surviving-crew": return surviving_crew()
 		"crew-deaths": return crew_deaths
 		"day": return day
+		"deployed-crew": return deployed_crew().size()
+		"crew-critical": return open_critical_wounds()
 		_:
 			if token.begins_with("stock:"):
 				return int(stock.get(token.substr(6), 0))
+			if token.begins_with("relationship:"):
+				return _keyed(relationships, token.substr(13))
+			if token.begins_with("obligation:"):
+				return _keyed(obligations, token.substr(11))
 			if stock.has(token):
 				return int(stock[token])
 			return 0
+
+
+## Content writes `karhupuisto-contact` where a key may be stored with an
+## underscore (web `relKey`); read either.
+func _keyed(table: Dictionary, key: String) -> int:
+	if table.has(key):
+		return int(table[key])
+	return int(table.get(key.replace("-", "_"), 0))
 
 
 ## Apply one canonical effect string. Recognised forms:
@@ -1248,6 +1382,41 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 		advance_block()
 		return true
 	return false
+
+
+## A mission's battle has settled: apply that mission's own authored effects
+## for the outcome (web `resultEffects` in battle.js: a win is the success
+## effects, a partial or a withdrawal the partial ones, anything else the
+## failure ones). `outcome` is "win" | "partial" | "loss".
+##
+## Until the story port the Godot battle applied none of them, so the
+## courtyard's "the receipts are in Kello's hand" (flag:kello-receipts, a KEY
+## clue of the Thursday Load) could never be earned here. Applied ONCE per
+## mission — a mission already settled (by its battle or by an encounter's
+## complete:/partial:/fail:) is not paid twice, which matters because the
+## MISSIONS rail can re-enter a mission's fight. A road fight is not a
+## mission and never reaches this.
+func settle_mission_battle(battle_id: String, outcome: String) -> String:
+	for m in ContentRegistry.slice.get("missions", []):
+		if str(m.get("battle_id", "")) != battle_id:
+			continue
+		var mid := String(m.get("id", ""))
+		if mission_state.has(mid):
+			return ""
+		var key := "failure_effects"
+		var state := "failed"
+		if outcome == "win":
+			key = "success_effects"
+			state = "complete"
+		elif outcome == "partial":
+			key = "partial_effects"
+			state = "partial"
+		apply_effects(m.get(key, []))
+		mission_state[mid] = state
+		decision_recorded.emit("mission", mid, state)
+		state_changed.emit()
+		return mid
+	return ""
 
 
 ## Crew on the roster and not lost. Everyone recruited counts; the slice has
@@ -1654,6 +1823,11 @@ func execute_offer(offer_id: String) -> bool:
 
 	if not market_history.has(offer.get("anchor_id", "")):
 		market_history.append(offer.get("anchor_id", ""))
+	# Your own footprint is the ONE side of the book saturation moves
+	# (MARKET.md §7), and trading somewhere is standing there (web `trade`).
+	var aid := String(offer.get("anchor_id", ""))
+	footprint[aid] = int(footprint.get(aid, 0)) + (1 if offer.get("side", "") == "sell" else -1)
+	mark_seen(aid)
 	advance_block()
 	return true
 
@@ -1718,8 +1892,23 @@ func to_dict() -> Dictionary:
 		"battle_modifiers": battle_modifiers,
 		"ending_id": ending_id,
 		"crew_deaths": crew_deaths,
+		# Act I v4.58-v4.61, under the web save's own keys.
+		"road": road,
+		"seen": seen,
+		"footprint": footprint,
+		"heard": heard,
+		"tokoBowlAt": toko_bowl_at,
 	}
 	return out.duplicate(true)
+
+
+## JSON hands every number back as a float; a block index is an int.
+static func _int_values(v: Variant) -> Dictionary:
+	var out := {}
+	if typeof(v) == TYPE_DICTIONARY:
+		for k in v:
+			out[String(k)] = int(v[k])
+	return out
 
 
 func from_dict(d: Dictionary) -> bool:
@@ -1767,6 +1956,13 @@ func from_dict(d: Dictionary) -> bool:
 	battle_modifiers = (d.get("battle_modifiers", {}) as Dictionary).duplicate(true)
 	ending_id = String(d.get("ending_id", ""))
 	crew_deaths = int(d.get("crew_deaths", 0))
+	# A save from before v4.58 simply has none of these: nothing heard, no
+	# journeys counted, and the road starts fresh.
+	road = PiritoriRoad.normalised(d.get("road", {}))
+	seen = _int_values(d.get("seen", {}))
+	footprint = _int_values(d.get("footprint", {}))
+	heard = _int_values(d.get("heard", {}))
+	toko_bowl_at = int(d.get("tokoBowlAt", -1))
 
 	state_changed.emit()
 	crew_aptitudes = d.get("crew_aptitudes", {})

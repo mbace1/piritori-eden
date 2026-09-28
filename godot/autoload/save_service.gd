@@ -18,6 +18,9 @@ func _ready() -> void:
 	# Autosave at every decision boundary the model announces.
 	GameState.encounter_resolved.connect(_on_boundary)
 	GameState.block_advanced.connect(_on_block)
+	# A road choice, a bowl, a visit, the case: decisions that turn no block
+	# are still decision boundaries.
+	GameState.decision_recorded.connect(func(_kind, _id, _choice): save_game())
 
 
 func _on_boundary(_encounter_id: String, _choice_id: String) -> void:
