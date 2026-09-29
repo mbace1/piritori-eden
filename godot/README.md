@@ -52,8 +52,8 @@ godot --headless --path . res://tests/test_shell.tscn        # interface
 godot --headless --path . res://tests/test_locale.tscn       # en/fi/ja
 godot --headless --path . res://tests/test_battle.tscn       # combat model
 godot --headless --path . res://tests/test_battle_ui.tscn    # battle screen
-godot --headless --path . res://tests/test_playthrough.tscn  # 7-day slice
-godot --headless --path . res://tests/test_story.tscn        # road, board, story, cut, chapter turn vs the web
+godot --headless --path . res://tests/test_playthrough.tscn  # the ten-day chapter
+godot --headless --path . res://tests/test_story.tscn        # road, board, story, cut, chapter turn, doors vs the web
 node tools/web-reference.mjs --check                        # the web numbers test_story holds to
 godot --path . res://tools/capture_battle.tscn   # battle screenshot; PIRITORI_SHOT_BATTLE picks the battle id
 godot --path . res://tools/capture.tscn          # write screenshots (needs a GPU)
@@ -79,7 +79,7 @@ line, and a board squeezed until its labels collided.
 | 1. opens on the full Kallio map with Piritori highlighted | **done** — all twelve anchors, north up, routes on graph edges |
 | 2. buy the first pack, reveal the profitable sale | **done** — €45 buy, €68 Siltasaari sale, both authored |
 | 3. same campaign state across all five modes | **done** — City, Location, Market, Mission/Battle and News/Events all read and write one `GameState` |
-| 4. complete the seven-day slice | **done** — all 14 blocks play, every authored effect lands, the run ends on an authored ending |
+| 4. complete the seven-day slice | **done**, and since v4.65 ten days — all 20 blocks play (a door taken on each free block), every authored effect lands, the chapter closes on the shipment night and Pasila is only forecast |
 | 5. resolve a 2v2 and a 3v3 | **done** — both build from canon and resolve; entered from the mission that signals them |
 | 6. save, quit, reload, resume | **done** — autosaves at every decision boundary |
 | 7. reflow at phone portrait / landscape / desktop | **done** — gated at 390×844, 844×390, 1920×1080 |
@@ -125,7 +125,8 @@ tools/                  sync-data.mjs, build-map-geometry.mjs, capture.tscn,
   could not reflow and was invisible to assistive tech.
 - **44px is the floor, 48 is preferred** (UX_SPEC). The shell gate measures it.
 - **The schedule gates content.** `content/era1-slice-v1.json`'s `schedule`
-  puts one encounter in each of the 14 blocks. `piritori_first_buy` hosts both
+  puts one encounter in each spine block (17 of 20; the other three are doors,
+  v4.65). `piritori_first_buy` hosts both
   the day 1 purchase and the day 5 firearm scene, so revealing by *site* leaks
   day 5 content onto day 1. Reveal by schedule; `test_spine.gd` guards it.
 - **JSON numbers arrive as floats.** `int()` them before display or the rail
@@ -223,11 +224,14 @@ grouped crew-left / actions-centre / automation-and-withdrawal-right. Only
 occupied, selected, targeted and reachable cells are drawn — the grid is a rule
 beneath the scene, not a checkerboard.
 
-## The seven-day slice
+## The ten-day chapter (was the seven-day slice)
 
-`test_playthrough.gd` walks all fourteen blocks through the real model, taking
-the first affordable choice at each, and asserts the run reaches one of the
-authored endings. It is the eeri lesson applied: the prover proves geometry, the
+`test_playthrough.gd` walks every block of the schedule through the real model
+(twenty since v4.65), taking the first door on each free block and the first
+affordable choice at each, and asserts the chapter closes — the shipment run or
+missed on day 10's night — with the Pasila ending only forecast. The four
+endings are the era's result now (H8), and the gate checks that each is where
+some road points. It is the eeri lesson applied: the prover proves geometry, the
 playthrough proves the thing is finishable.
 
 The slice speaks 35 effect verbs. Implementing only the obvious ones left twenty

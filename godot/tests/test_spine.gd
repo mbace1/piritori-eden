@@ -86,8 +86,15 @@ func _test_content_loads() -> void:
 	# 10 -> 12 on 2026-08-23: Sörnäinen opened by owner ruling, adding the
 	# Suvilahti yard and Kattilahalli. A pinned count so a place cannot appear
 	# without somebody deciding it should.
-	eq("twelve sites", ContentRegistry.map.get("sites", []).size(), 12)
-	eq("fourteen encounters", ContentRegistry.slice.get("encounters", []).size(), 14)
+	# 12 -> 13 on 2026-09-29 (v4.65, H1): the Sörnäinen quay, where the
+	# shipment now happens on day 10's night.
+	eq("thirteen sites", ContentRegistry.map.get("sites", []).size(), 13)
+	# One encounter per spine block (v4.65: 17 of 20 blocks; the other three
+	# are doors), counted off the schedule rather than written down.
+	var spine := ContentRegistry.schedule().filter(func(e): return String(e.get("encounter_id", "")) != "")
+	eq("one encounter per spine block", ContentRegistry.slice.get("encounters", []).size(), spine.size())
+	eq("  and the rest are doors", ContentRegistry.schedule().filter(func(e): return bool(e.get("door", false))).size(),
+		ContentRegistry.schedule().size() - spine.size())
 	eq("six crew", ContentRegistry.slice.get("crew", []).size(), 6)
 
 
@@ -233,19 +240,27 @@ func _test_journey_to_siltasaari() -> void:
 
 
 func _test_block_clock() -> void:
-	print("\nblock clock (integer, 14 blocks over 7 days)")
-	eq("total blocks", GameState.total_blocks, 14)
+	# v4.65 (H1): ten days, twenty blocks. Every number below is read from
+	# canon (`campaign.days`, `total_player_blocks`, the schedule), not typed.
+	var campaign := ContentRegistry.campaign()
+	var days := int(campaign.get("days", 0))
+	var blocks := int(campaign.get("total_player_blocks", 0))
+	print("\nblock clock (integer, %d blocks over %d days)" % [blocks, days])
+	eq("total blocks", GameState.total_blocks, blocks)
+	eq("  one per schedule entry", blocks, ContentRegistry.schedule().size())
+	eq("  a day and a night a day", blocks, days * GameState.blocks_per_day.size())
 	var fresh := GameState
 	fresh.new_campaign()
 	var seen_days: Array = []
-	for i in range(14):
+	for i in range(blocks):
 		seen_days.append("%d-%s" % [fresh.day, fresh.current_block()])
 		fresh.advance_block()
 	eq("first block", seen_days[0], "1-day")
 	eq("second block", seen_days[1], "1-night")
 	eq("third block", seen_days[2], "2-day")
-	eq("last block", seen_days[13], "7-night")
-	check("slice completes after 14 blocks", fresh.is_slice_complete())
+	eq("last block", seen_days[blocks - 1], "%d-night" % days)
+	check("slice completes after %d blocks" % blocks, fresh.is_slice_complete())
+	eq("  and the day the schedule is on stays its last", fresh.current_day(), days)
 
 
 func _test_save_round_trip() -> void:

@@ -116,8 +116,9 @@ jobs:
         run: godot --headless --path . res://tests/test_battle_ui.tscn
 
       # The prover proves geometry; the playthrough proves the thing is
-      # finishable. Walks all fourteen blocks to an authored ending.
-      - name: the seven-day slice plays to an ending
+      # finishable. Walks every block of the ten-day chapter, a door on each
+      # free block, to the chapter's close (Pasila is only forecast, v4.65).
+      - name: the ten-day chapter plays to its close
         working-directory: godot
         run: godot --headless --path . res://tests/test_playthrough.tscn
 

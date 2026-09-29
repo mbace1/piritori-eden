@@ -110,7 +110,7 @@ func apply_to_campaign() -> PackedStringArray:
 		return log
 
 	if has("day") or has("block"):
-		var want_day := clampi(get_int("day", GameState.day), 1, 7)
+		var want_day := clampi(get_int("day", GameState.day), 1, int(ContentRegistry.campaign().get("days", 10)))
 		var want_block := get_str("block", "day")
 		var target := ContentRegistry.block_ordinal(want_day, want_block)
 		var guard := 0

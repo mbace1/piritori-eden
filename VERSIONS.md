@@ -116,6 +116,8 @@ Godot:
 - `fights-today` and the daily count.
 - A door fight paying the door's own stakes.
 
+**Status: landed in Godot 2026-09-29** (branch `godot/h1h2-port`). `doors-v1.json` is synced (and `--check`ed). `scripts/city/doors.gd` is `doors.js`: the same `door:` roll labels in the same order, offers kept in `GameState.doors` under the web's key and shape, a taken door registered as the block's encounter (re-registered after a load) and standing at its own anchor. `GameState` gains `current_schedule`, `current_day`, `fights_today`/`record_fight` (`fightsByDay`), the `fights-today` and `chapter-goal-met` requirements, and `forecast-ending`, `chapter-ending:attempt` and `chapter-ending:missed`, with `forecast_ending` in the web's order. On screen: a door board heads the city rail on a free block (kind · from · where, title, premise, three steps, risk/fight/late tags, stakes, TAKE), each door pinned on the map, CHOOSE A DOOR as the lit step, the door briefed in its scene, a door fight recorded as such (no mission, the door's stakes on the result). The ledger no longer carries the shipment button; after day 10 the city shows CHAPTER 1 CLOSES · TO BE CONTINUED with INTO CHAPTER 2, WHERE THIS ROAD POINTS and START A NEW TEN DAYS. `tools/web-reference.mjs` now records 90 door boards, five chains of takes and a whole ten-day walk, and test_story holds the Godot build to all of it.
+
 ## v4.64 — 2026-09-29
 
 **The chapter turn (H7 of The Long Game).** Owner, 2026-09-29: "good to go in your order", with H7 first. Answer 21: time keeps the web rule, so the block turns only on a story beat, a door or nightfall, never on a trip or a trade. Answer 22: weapons carry; cash and produce need not, and each chapter opens on a standard stake. "Let's test these."

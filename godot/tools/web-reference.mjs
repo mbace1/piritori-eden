@@ -3,8 +3,8 @@
  * web-reference.mjs — numbers the WEB build computes, for the Godot port to
  * match exactly.
  *
- * The road (v4.58), Toko's bowl (v4.61) and Kello's cut (v4.63) are
- * deterministic from the save:
+ * The road (v4.58), Toko's bowl (v4.61), Kello's cut (v4.63) and the doors
+ * (v4.65) are deterministic from the save:
  * the road rolls FNV-1a over contentId|block|label (`deterministicRoll` in
  * web/js/v3/state.js) and the board prices come from `market/model.mjs`'s
  * seeded xmur3 + mulberry32. A port that is "close" is a different road and a
@@ -25,7 +25,11 @@ const repo = resolve(godot, '..');
 const out = resolve(godot, 'tests/fixtures/web-reference.json');
 const mod = (p) => import(pathToFileURL(resolve(repo, 'web/js/v3', p)).href);
 
-const { createState, deterministicRoll, advanceSchedule, currentSchedule } = await mod('state.js');
+const {
+  createState, deterministicRoll, advanceSchedule, currentSchedule, currentEncounter, chooseEncounter,
+  choiceStatus, recordFight, fightsToday, forecastEnding,
+} = await mod('state.js');
+const { offerDoors, takeDoor, isDoorBlock } = await mod('doors.js');
 const { settleCut } = await mod('story.js');
 const { turnPlan } = await mod('chapter.js');
 const { rollRoad, resolveRoad, choiceOpen, clockLabel } = await mod('road.js');
@@ -36,8 +40,12 @@ const content = await json('content/era1-slice-v1.json');
 const map = await json('map/kallio-era1-2003-v1.json');
 const roadEvents = await json('content/road-events-v1.json');
 const story = await json('content/act1-story-v1.json');
+const doorsCanon = await json('content/doors-v1.json');
 const data = {
   content,
+  encounters: new Map(content.encounters.map(e => [e.id, e])),
+  missions: new Map(content.missions.map(m => [m.id, m])),
+  battles: new Map(content.battles.map(b => [b.id, b])),
   equipment: new Map(content.equipment.map(e => [e.id, e])),
   anchors: new Map(map.anchors.map(a => [a.id, a])),
   sites: new Map(map.sites.map(s => [s.id, s])),
@@ -116,6 +124,69 @@ while (currentSchedule(k, content)) {
 // 5. The chapter turn (v4.64): the plan the web reads off a fresh save.
 ref.chapter_plan = turnPlan(createState(content), content).map(r => ({ key: r.key, rule: r.rule, now: r.now, next: r.next }));
 
+// 6. The doors (v4.65): the offers the web rolls for a door block, across
+// ten content ids (the roll's first term), the three door blocks, with and
+// without packs on hand (a sale door needs one), and with the day's two
+// fights already spent (no fight door is forced then).
+const doorBlocks = content.schedule.map((slot, i) => (slot.door ? i : -1)).filter(i => i >= 0);
+ref.door_blocks = doorBlocks;
+ref.doors = [];
+const contentIdOf = seed => (seed === 0 ? content.id : `${content.id}#${seed}`);
+for (let seed = 0; seed < 10; seed += 1) {
+  for (const block of doorBlocks) {
+    for (const [piri, fights] of [[0, 0], [2, 0], [2, 2]]) {
+      const d = createState(content);
+      d.contentId = contentIdOf(seed);
+      d.scheduleIndex = block;
+      d.stock.piri = piri;
+      for (let f = 0; f < fights; f += 1) recordFight(d, content);
+      ref.doors.push({ content_id: d.contentId, block, piri, fights, fights_today: fightsToday(d, content),
+        offers: offerDoors(d, data, doorsCanon).map(o => ({ template: o.template, anchor: o.anchor })) });
+    }
+  }
+}
+// A door is taken once a chapter: take the first at the first door block, and
+// the next door block's roll no longer holds it.
+ref.door_chain = [];
+for (let seed = 0; seed < 5; seed += 1) {
+  const d = createState(content);
+  d.contentId = contentIdOf(seed);
+  d.stock.piri = 2;
+  const row = { content_id: d.contentId, steps: [] };
+  for (const block of doorBlocks) {
+    d.scheduleIndex = block;
+    const offers = offerDoors(d, data, doorsCanon);
+    const took = takeDoor(d, data, doorsCanon, offers[0].template, roadEvents);
+    row.steps.push({ block, offers: offers.map(o => ({ template: o.template, anchor: o.anchor })),
+      took: took.ok ? took.offer.template : '', encounter: took.ok ? took.encounter.id : '' });
+  }
+  ref.door_chain.push(row);
+}
+
+// 7. The whole ten-day chapter, walked the way web/test/doors.mjs walks it:
+// every block, the first door taken on a free block, the last open choice
+// that starts no fight. What the web took, block by block, and where the
+// road points at the end.
+{
+  const w = createState(content);
+  ref.chapter_walk = [];
+  for (let guard = 0; guard < 40 && currentSchedule(w, content); guard += 1) {
+    let door = '';
+    if (isDoorBlock(w, content) && !w.doors.taken[w.scheduleIndex]) {
+      const offers = offerDoors(w, data, doorsCanon);
+      door = takeDoor(w, data, doorsCanon, offers[0].template, roadEvents).offer.template;
+    }
+    const enc = currentEncounter(w, data);
+    w.selectedAnchor = currentSchedule(w, content).anchor_id;
+    const quiet = [...enc.choices].reverse().find(c => choiceStatus(c, w, data).ok && !c.effects.some(fx => fx.startsWith('start-battle')));
+    chooseEncounter(w, enc, quiet, data);
+    ref.chapter_walk.push({ block: w.scheduleIndex, door, encounter: enc.id, choice: quiet.id });
+    advanceSchedule(w, data);
+  }
+  ref.chapter_walk_end = { cleared: w.chapterCleared, outcome: w.lastEndingOutcome ?? '',
+    forecast: w.flags.find(f => f.startsWith('memory:pasila-forecast:')) ?? '', ending: forecastEnding(w, data)?.id ?? '' };
+}
+
 const text = JSON.stringify(ref, null, 1) + '\n';
 if (process.argv.includes('--check')) {
   let have = '';
@@ -125,7 +196,7 @@ if (process.argv.includes('--check')) {
     console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
     process.exit(1);
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows.`);
+  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.chapter_walk.length} blocks walked.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);

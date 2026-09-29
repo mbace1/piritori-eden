@@ -110,9 +110,8 @@ func _ready() -> void:
 	_apply_ui_scale()
 	Loc.language_changed.connect(_on_language_changed)
 	GameState.state_changed.connect(_refresh_status)
-	GameState.slice_completed.connect(_on_slice_completed)
 	# An encounter can ask for a battle mid-scene (start-battle / start-negotiation).
-	GameState.battle_requested.connect(func(bid, _negotiation): _show_battle(bid))
+	GameState.battle_requested.connect(func(bid, _negotiation): _on_battle_requested(bid))
 	# The HUD is chrome for the developer, not for the game — a CanvasLayer so it
 	# survives every mode switch and floats over the battle (CLAUDE.md rule 9).
 	_hud = preload("res://ui/debug_hud.gd").new()
@@ -1029,6 +1028,10 @@ func _show_city() -> void:
 	_stage_has_speaker = false
 	if _rail:
 		_rail.visible = true
+	# Chapter 1 ends on the chapter turn, not on Pasila (H1/H8, v4.65).
+	if GameState.is_slice_complete() and GameState.ending_id == "":
+		_show_chapter_close()
+		return
 	# Era I news is a SCHEDULED broadcast: it arrives, it is not browsed to.
 	if _play_scheduled_news_if_due():
 		return
@@ -1043,6 +1046,9 @@ func _show_city() -> void:
 
 
 func _on_anchor_selected(anchor_id: String) -> void:
+	# The chapter has closed: the map stays to look at, the rail stays closed.
+	if _screen == "chapter-close":
+		return
 	# Looking somewhere else throws a planned journey away.
 	if String(_journey.get("destination", "")) != anchor_id:
 		_journey = {}
@@ -1096,6 +1102,9 @@ func _build_city_rail(anchor_id: String) -> void:
 
 
 func _build_city_rail_body(anchor_id: String) -> void:
+	# A block the spine leaves free offers its doors first, wherever the map
+	# is looking (web `renderDoorBoard`, above the inspect panel).
+	_add_door_board()
 	if anchor_id == "":
 		_rail_box.add_child(_make_label(tr("ui.select_place"), 15, PiritoriPalette.TEXT_DIM))
 		return
@@ -1139,7 +1148,7 @@ func _build_city_rail_body(anchor_id: String) -> void:
 	# Looking is not being there (M1): who stands where, and where the story is.
 	var present := ContentRegistry.anchor(GameState.current_anchor_id)
 	var lead_id := GameState.story_lead_id()
-	var lead := ContentRegistry.anchor(lead_id)
+	var lead := ContentRegistry.anchor(lead_id) if lead_id != "" else {}
 	var here := anchor_id == GameState.current_anchor_id
 	_rail_box.add_child(_make_label(tr("ui.you_are_here") if here else tr("ui.inspecting"),
 		13, PiritoriPalette.YOU if here else PiritoriPalette.TEXT_DIM))
@@ -1158,7 +1167,6 @@ func _build_city_rail_body(anchor_id: String) -> void:
 	var any := false
 	for enc in GameState.available_encounters_at(anchor_id):
 		any = true
-		var site := ContentRegistry.site(String(enc.get("site_id", "")))
 		var entry := ContentRegistry.schedule_of_encounter(String(enc["id"]))
 		# JSON numbers arrive as floats — int() or the rail reads "Day 1.0".
 		var when := ""
@@ -1169,7 +1177,7 @@ func _build_city_rail_body(anchor_id: String) -> void:
 				tr("ui.block.night") if blk == "night" else tr("ui.block.day"),
 			]
 		# Unlit: the same action is the lit next step at the foot of the rail.
-		var b := _make_button("▶ " + String(site.get("label", enc["id"])) + when,
+		var b := _make_button("▶ " + _encounter_label(enc) + when,
 			PiritoriPalette.TEXT)
 		var eid: String = enc["id"]
 		b.pressed.connect(func(): _show_location(eid))
@@ -1193,6 +1201,138 @@ func _build_city_rail_body(anchor_id: String) -> void:
 		_rail_box.add_child(_make_label(
 			tr("ui.nothing_here") if state != "locked" else tr("ui.closed_era"),
 			14, PiritoriPalette.TEXT_DIM))
+
+
+## What an encounter is called on a button: a door by its title, anything
+## else by the site it happens at.
+func _encounter_label(enc: Dictionary) -> String:
+	if enc.has("door"):
+		return String(enc.get("title", enc.get("id", "")))
+	var sid := String(enc.get("site_id", "")) if enc.get("site_id", null) != null else ""
+	if sid == "":
+		return String(enc.get("id", ""))
+	return String(ContentRegistry.site(sid).get("label", enc.get("id", "")))
+
+
+# ── doors (H2; web v4.65 `renderDoorBoard`) ────────────────────────────────
+#
+# A block the spine leaves free offers 2-3 doors. Take one: it becomes the
+# block's work where it is, and the others close with the block. Each card
+# says what kind of job it is, who offers it, where, the risk, whether it can
+# become a fight and whether it closes at 22:00 — then its three steps and
+# its stakes. The template words are canon, authored in English like the
+# road's; the chrome around them is the locale's.
+
+## The door board, or nothing off a free block (or once a door is taken).
+func _add_door_board() -> void:
+	if not PiritoriDoors.is_door_block() or not PiritoriDoors.taken_at().is_empty() \
+			or GameState.is_slice_complete():
+		return
+	var offers := PiritoriDoors.offer_doors()
+	var board := VBoxContainer.new()
+	board.name = "DoorBoard"
+	board.add_theme_constant_override("separation", 6)
+	_rail_box.add_child(board)
+	board.add_child(_make_label(tr("door.free_block") % _day_block(), 12, PiritoriPalette.TEXT_DIM))
+	var head := _make_label(tr("door.open_n") % offers.size(), 22)
+	head.theme_type_variation = PiritoriChrome.TITLE
+	board.add_child(head)
+	var note := _make_label(tr("door.note") % [GameState.fights_today(),
+		int(PiritoriDoors.rules().get("fights_per_day_max", 2))], 12, PiritoriPalette.TEXT_DIM)
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	board.add_child(note)
+	if not Loc.content_is_translated():
+		var en := _make_label(tr("ui.content_en_only"), 12, PiritoriPalette.TEXT_DIM)
+		en.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		board.add_child(en)
+	for offer in offers:
+		board.add_child(_door_card(offer))
+	if offers.is_empty():
+		var none := _make_label(tr("door.none"), 13, PiritoriPalette.TEXT_DIM)
+		none.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		board.add_child(none)
+		var pass_btn := _make_button(tr("door.pass"), PiritoriPalette.TEXT_DIM)
+		pass_btn.pressed.connect(_end_block)
+		board.add_child(pass_btn)
+	_rail_box.add_child(_separator())
+
+
+## One door: kind · from · where, the title, the premise, three steps, the
+## tags, the stakes, and TAKE.
+func _door_card(offer: Dictionary) -> Control:
+	var t := PiritoriDoors.template_of(String(offer.get("template", "")))
+	var anchor := String(offer.get("anchor", ""))
+	var where := String(ContentRegistry.anchor(anchor).get("label", anchor))
+	var card := VBoxContainer.new()
+	card.name = "Door_" + String(t.get("id", ""))
+	card.set_meta("door", String(t.get("id", "")))
+	card.set_meta("kind", String(t.get("kind", "")))
+	card.set_meta("anchor", anchor)
+	card.add_theme_constant_override("separation", 3)
+	card.add_child(_separator())
+	# Each word written out so the locale gate sees every key.
+	var kind := String({"gig": tr("door.kind_gig"), "pickup": tr("door.kind_pickup"),
+		"sale": tr("door.kind_sale"), "favour": tr("door.kind_favour"),
+		"watch": tr("door.kind_watch"), "hit": tr("door.kind_hit")}.get(String(t.get("kind", "")), String(t.get("kind", ""))))
+	var from := String({"network": tr("door.from_network"), "street": tr("door.from_street"),
+		"toko": tr("door.from_toko"), "mccormick_family": tr("door.from_mccormick_family"),
+		"jade_lantern_network": tr("door.from_jade_lantern_network")}.get(String(t.get("from", "")), String(t.get("from", ""))))
+	var eyebrow := _make_label("%s · %s · %s" % [kind, from, where.to_upper()], 12, PiritoriPalette.INTEL_MUSTARD)
+	eyebrow.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.add_child(eyebrow)
+	var title := _make_label(String(t.get("title", "")).to_upper(), 16, MapStyle.TITLE_TEXT)
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.add_child(title)
+	var prem := _make_label(String(t.get("premise", "")), 12, PiritoriPalette.TEXT)
+	prem.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.add_child(prem)
+	var n := 0
+	for step in t.get("steps", []):
+		n += 1
+		var sl := _make_label("%d. %s" % [n, String(step)], 12, PiritoriPalette.TEXT_DIM)
+		sl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		card.add_child(sl)
+	var tags := PackedStringArray([String({"low": tr("door.risk_low"), "medium": tr("door.risk_medium"),
+		"high": tr("door.risk_high")}.get(String(t.get("risk", "")), String(t.get("risk", ""))))])
+	if PiritoriDoors.can_fight(t):
+		tags.append(tr("door.fight"))
+	if bool(t.get("late", false)):
+		tags.append(tr("door.late"))
+	var tl := _make_label(" · ".join(tags), 12,
+		PiritoriPalette.DANGER_RED if PiritoriDoors.can_fight(t) else PiritoriPalette.TEXT_DIM)
+	tl.name = "DoorTags"
+	tl.set_meta("can_fight", PiritoriDoors.can_fight(t))
+	tl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.add_child(tl)
+	var stakes := _make_label(String(t.get("stakes", "")), 12, PiritoriPalette.INTEL_MUSTARD)
+	stakes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.add_child(stakes)
+	var blocked := PiritoriDoors.door_blocker(offer)
+	var b := _make_button(tr("door.closed") if blocked == "closed" else tr("door.take") % where.to_upper(),
+		PiritoriPalette.YOU if blocked == "" else PiritoriPalette.TEXT_DIM)
+	b.disabled = blocked != ""
+	b.set_meta("take_door", String(t.get("id", "")))
+	var tid := String(t.get("id", ""))
+	b.pressed.connect(func(): _take_door(tid))
+	card.add_child(b)
+	return card
+
+
+## Take a door: it becomes the block's encounter where it is. Look there, and
+## say so; the next step then plans the walk.
+func _take_door(template_id: String) -> void:
+	var r := PiritoriDoors.take_door(template_id)
+	if not bool(r.get("ok", false)):
+		_build_city_rail(_city_map.inspected())
+		return
+	var anchor := String(r["offer"].get("anchor", ""))
+	_city_map.select(anchor)
+	var said := _make_label(tr("door.taken") % [String(r["encounter"].get("title", "")),
+		String(ContentRegistry.anchor(anchor).get("label", anchor))], 13, PiritoriPalette.YOU)
+	said.name = "DoorTaken"
+	said.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(said)
+	_rail_box.move_child(said, 0)
 
 
 ## The rail for a place Aatami is only LOOKING at: no encounter, no market —
@@ -1251,22 +1391,25 @@ func _build_away_rail(anchor_id: String, state: String, lead_id: String) -> void
 func _next_step() -> Dictionary:
 	if GameState.ending_id != "" or GameState.is_slice_complete():
 		return {}
-	var lead_id := GameState.story_lead_id()
-	if lead_id == "":
-		return {}
+	var entry := GameState.current_schedule()
+	# A free block (H2): until a door is taken the step is to choose one.
+	if bool(entry.get("door", false)) and String(entry.get("encounter_id", "")) == "" \
+			and not bool(_journey.get("ok", false)):
+		return {"step": "doors", "label": tr("ui.next_doors"), "hint": tr("ui.next_hint_doors")}
 	if bool(_journey.get("ok", false)):
 		var dest := String(_journey.get("destination", ""))
 		return {"step": "commit", "label": tr("ui.next_travel") % _anchor_label(dest),
 			"hint": tr("ui.next_hint_commit")}
+	var lead_id := GameState.story_lead_id()
+	if lead_id == "":
+		return {}
 	if GameState.current_anchor_id == lead_id:
-		var entry := ContentRegistry.scheduled_for(GameState.day, GameState.current_block())
 		var eid := String(entry.get("encounter_id", ""))
 		if eid == "" or not GameState.is_encounter_available(eid):
 			return {}
 		var enc := ContentRegistry.encounter(eid)
-		var site := ContentRegistry.site(String(enc.get("site_id", "")))
 		return {"step": "enter", "encounter": eid,
-			"label": tr("ui.next_enter") % String(site.get("label", eid)).to_upper(),
+			"label": tr("ui.next_enter") % _encounter_label(enc).to_upper(),
 			"hint": tr("ui.next_hint_enter") % String(ContentRegistry.anchor(lead_id).get("label", lead_id))}
 	if not bool(GameState.preview_journey(lead_id).get("ok", false)):
 		return {}
@@ -1306,6 +1449,9 @@ func _on_next_step(step: String) -> void:
 			_plan_journey(lead)
 		"commit":
 			_commit_journey()
+		"doors":
+			# The board is the top of the rail; look where Aatami stands.
+			_city_map.select(GameState.current_anchor_id)
 
 
 ## THE lit primary (PiritoriChrome.LIT): lantern amber, dark ink. One per rail.
@@ -1327,8 +1473,7 @@ func _show_location(encounter_id: String) -> void:
 	_screen = ""
 	_open_encounter = encounter_id
 	# Standing in the scene is standing in the place (web `openEncounter`).
-	var here_site := ContentRegistry.site(String(ContentRegistry.encounter(encounter_id).get("site_id", "")))
-	if String(here_site.get("anchorId", "")) == GameState.current_anchor_id:
+	if GameState.encounter_anchor(encounter_id) == GameState.current_anchor_id:
 		GameState.mark_seen(GameState.current_anchor_id)
 	# Cleared per scene, not per session: a face in the LAST location must not
 	# keep shrinking the list in the next one, which has nobody in it.
@@ -1469,6 +1614,23 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 	if enc.is_empty():
 		return
 
+	# A door is briefed the way v4.62 briefs a mission: its three steps and
+	# its stakes, before anything is chosen (web `renderEncounter`).
+	if enc.has("door"):
+		var t := PiritoriDoors.template_of(String(enc["door"]))
+		_rail_box.add_child(_make_label(String(enc.get("title", "")).to_upper(), 15, MapStyle.TITLE_TEXT))
+		var n := 0
+		for step in t.get("steps", []):
+			n += 1
+			var sl := _make_label("%d. %s" % [n, String(step)], 12, PiritoriPalette.TEXT)
+			sl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			sl.set_meta("door_step", n)
+			_rail_box.add_child(sl)
+		var stakes := _make_label(String(t.get("stakes", "")), 12, PiritoriPalette.INTEL_MUSTARD)
+		stakes.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(stakes)
+		_rail_box.add_child(_separator())
+
 	if GameState.is_resolved(encounter_id):
 		_rail_box.add_child(_make_label(tr("ui.already_resolved"), 15, PiritoriPalette.TEXT_DIM))
 	else:
@@ -1496,6 +1658,7 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 			if forecast != "":
 				b.tooltip_text = forecast
 			var cid: String = choice["id"]
+			b.set_meta("choice", cid)
 			b.pressed.connect(func(): _commit_choice(encounter_id, cid))
 			_rail_box.add_child(b)
 
@@ -1503,8 +1666,14 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 			fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(fl)
 			if not can:
-				var req := _make_label("   " + tr("ui.requires") % " · ".join(choice.get("requirements", [])),
-					12, PiritoriPalette.DANGER_RED)
+				# Refused in words, never a formula (web `readableReason`).
+				var failed: Array = []
+				for r in choice.get("requirements", []):
+					var st := GameState.requirement_status(String(r))
+					if not bool(st["ok"]):
+						failed.append(st)
+				var req := _make_label("   " + _refusal_words(failed), 12, PiritoriPalette.DANGER_RED)
+				req.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 				_rail_box.add_child(req)
 
 	_rail_box.add_child(_separator())
@@ -1514,7 +1683,10 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 
 
 func _commit_choice(encounter_id: String, choice_id: String) -> void:
-	if GameState.resolve_encounter(encounter_id, choice_id):
+	# A choice that starts a fight has already opened the battle (the
+	# `battle_requested` signal fires inside the resolution); the city waits
+	# until the fight is over instead of being drawn over it.
+	if GameState.resolve_encounter(encounter_id, choice_id) and mode != Mode.BATTLE:
 		_show_city()
 
 
@@ -1545,76 +1717,115 @@ func _refresh_market_rail() -> void:
 	_rail_box.add_child(back)
 
 
-## THE END OF A CHAPTER (GDD run structure).
+## THE END OF A CHAPTER (GDD run structure; H1, web v4.65 `renderChapter`).
 ##
-## The threshold buys entry and the operation spends it, so this only appears
-## when both are true — and when it does it is the most important thing on the
-## screen, because it ends the run.
-##
-## It lives in the market rail rather than on a screen of its own: a shipment is
-## a purchase, and putting it beside the ledger and the fence says that plainly.
+## The threshold buys entry and the operation spends it. Since v4.65 the
+## shipment is not a button here: it is day 10's night at Sörnäinen, on the
+## schedule like any beat, and missing the threshold means the boat sails
+## without you. This rail only says how close you are and where it runs.
 func _add_chapter_ending() -> void:
 	var ending := GameState.chapter_ending()
 	if ending.is_empty():
 		return
+	_rail_box.add_child(_separator())
 	if GameState.chapter_cleared:
-		_rail_box.add_child(_separator())
 		_rail_box.add_child(_make_label(tr("chapter.cleared"), 15, MapStyle.TITLE_TEXT))
+		# Written inline so the locale gate sees the interpolated key family.
+		var ol := _make_label(tr("chapter.out_%s" % GameState.last_ending_outcome), 12, PiritoriPalette.TEXT)
+		ol.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(ol)
 		_add_chapter_turn()
 		return
 
-	if not GameState.chapter_goal_met():
-		# Show the distance. A goal you cannot see the edge of is not a goal, it
-		# is a surprise.
-		_rail_box.add_child(_separator())
-		_rail_box.add_child(_make_label(tr("chapter.progress") % [
-			GameState.chapter_progress(), GameState.chapter_threshold],
-			12, PiritoriPalette.TEXT_DIM))
-		return
-
-	_rail_box.add_child(_separator())
+	# Show the distance. A goal you cannot see the edge of is not a goal, it
+	# is a surprise.
+	_rail_box.add_child(_make_label(tr("chapter.progress") % [
+		GameState.chapter_progress(), GameState.chapter_threshold],
+		12, PiritoriPalette.TEXT_DIM))
 	_rail_box.add_child(_make_label(String(ending.get("label", "")).to_upper(),
 		15, MapStyle.TITLE_TEXT))
 	var brief := _make_label(String(ending.get("brief", "")), 12, PiritoriPalette.TEXT)
 	brief.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_rail_box.add_child(brief)
-
-	var stake := int(ending.get("stake_eur", 0))
-	var here := String(ending.get("anchor_id", "")) == GameState.current_anchor_id
-	if not here:
-		var l := _make_label(tr("chapter.elsewhere"), 12, PiritoriPalette.INTEL_MUSTARD)
-		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_rail_box.add_child(l)
-		return
-
-	var afford := GameState.cash_eur >= stake
-	var go := _make_button(tr("chapter.commit") % stake,
-		PiritoriPalette.GOODS_MAGENTA if afford else PiritoriPalette.LOCKED_GREY)
-	go.disabled = not afford
-	go.pressed.connect(func():
-		if GameState.attempt_chapter_ending() == "":
-			_show_chapter_result())
-	_rail_box.add_child(go)
-
-
-## What the night cost. Named outcomes rather than a number, because the number
-## — money — is the one thing that does not survive the chapter anyway.
-func _show_chapter_result() -> void:
-	_show_city()
-	_clear_rail()
-	_rail.visible = true
-	var out := GameState.last_ending_outcome
-	_rail_box.add_child(_make_label(tr("chapter.cleared"), 19, MapStyle.TITLE_TEXT))
-	# Written inline rather than through a variable. The locale gate scans the
-	# SOURCE for interpolated translation keys, so one assembled into a local is
-	# invisible to it and its rows get reported as stale. Three were.
-	# (And a comment quoting the pattern literally gets scanned too, which is how
-	# this comment came to be worded around it.)
-	var l := _make_label(tr("chapter.out_%s" % out), 13, PiritoriPalette.TEXT)
+	var days := int(GameState.chapter_def().get("days", GameState.CHAPTER_DAYS))
+	var line := tr("chapter.short") % days
+	if GameState.chapter_goal_met():
+		line = tr("chapter.earned_runs") % [String(ending.get("label", "")), days,
+			String(ContentRegistry.anchor(String(ending.get("anchor_id", ""))).get("label", "")),
+			int(ending.get("stake_eur", 0))]
+	var l := _make_label(line, 12, PiritoriPalette.INTEL_MUSTARD)
+	l.name = "ChapterWhere"
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_rail_box.add_child(l)
+
+
+## CHAPTER 1 CLOSES — TO BE CONTINUED (H1/H8; web v4.65 `renderChapterClose`).
+##
+## The four Pasila endings are the ERA's result. Until chapter 4 exists a
+## played-through chapter ends here: how the operation went (or that the boat
+## left without you), what crosses into chapter 2, and where the road points.
+func _show_chapter_close() -> void:
+	_screen = "chapter-close"
+	_clear_world()
+	_world_host.add_child(_city_map)
+	_city_map.call_deferred("_rebuild_layout")
+	_journey = {}
+	_city_map.reset_inspection()
+	_clear_rail()
+	_rail.visible = true
+	var def := GameState.chapter_def()
+	var head := tr("chapter.closes") % GameState.chapter
+	if String(def.get("label", "")) != "":
+		head += " / " + String(def["label"]).to_upper()
+	var hl := _make_label(head, 13, PiritoriPalette.TEXT_DIM)
+	hl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(hl)
+	var title := _make_label(tr("chapter.to_be_continued"), 22, MapStyle.TITLE_TEXT)
+	title.name = "ToBeContinued"
+	title.theme_type_variation = PiritoriChrome.TITLE
+	_rail_box.add_child(title)
+	# No outcome yet means the chapter was never run: the boat left.
+	var out := GameState.last_ending_outcome if GameState.last_ending_outcome != "" else "missed"
+	var ol := _make_label(tr("chapter.out_%s" % out), 13, PiritoriPalette.TEXT)
+	ol.name = "ChapterOutcome"
+	ol.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(ol)
 	_rail_box.add_child(_separator())
 	_add_chapter_turn()
+	var f := GameState.forecast_ending()
+	if not f.is_empty():
+		_rail_box.add_child(_separator())
+		var fh := _make_label(tr("chapter.road_points"), 13, PiritoriPalette.TEXT_DIM)
+		fh.name = "RoadPoints"
+		_rail_box.add_child(fh)
+		var fl := _make_label(String(f.get("label", "")), 17, MapStyle.TITLE_TEXT)
+		fl.set_meta("forecast", String(f.get("id", "")))
+		fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(fl)
+		var fs := _make_label(String(f.get("summary", "")), 12, PiritoriPalette.TEXT)
+		fs.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(fs)
+		if not Loc.content_is_translated():
+			var note := _make_label(tr("ui.content_en_only"), 12, PiritoriPalette.TEXT_DIM)
+			note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(note)
+	_rail_box.add_child(_separator())
+	var sum := _make_label(tr("chapter.summary") % [GameState.exit_fund_eur, GameState.debt_eur,
+		GameState.roster.size(), int(GameState.relationships.get("jaska", 0))], 13, PiritoriPalette.TEXT)
+	sum.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rail_box.add_child(sum)
+	if GameState.crew_deaths > 0:
+		_rail_box.add_child(_make_label(tr("ui.crew_lost") % GameState.crew_deaths, 13, PiritoriPalette.DANGER_RED))
+	var again := _make_lit(tr("chapter.new_ten"))
+	again.set_meta("next_step", "new-campaign")
+	again.pressed.connect(func():
+		SaveService.clear_save()
+		GameState.new_campaign()
+		_show_city()
+		if GameState.arrival_due:
+			_play_arrival())
+	_rail_foot.add_child(_separator())
+	_rail_foot.add_child(again)
 
 
 ## INTO CHAPTER N (H7; web v4.64 `renderChapterTurn`): what crosses into the
@@ -1776,27 +1987,6 @@ func _add_spoils_lines(spoils: PackedStringArray) -> void:
 			var l := _make_label(tr("loot.unbuyable"), 12, PiritoriPalette.INTEL_MUSTARD)
 			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(l)
-
-
-func _on_slice_completed() -> void:
-	_clear_rail()
-	_rail_box.add_child(_make_label(tr("ui.seven_days_done"), 19, PiritoriPalette.PLAYER_CYAN))
-
-	# The authored ending, in its own words — never a generated summary.
-	if GameState.ending_id == "":
-		GameState.resolve_ending()
-	var e := GameState.ending()
-	if not e.is_empty():
-		_rail_box.add_child(_make_label(String(e.get("label", "")), 17, MapStyle.TITLE_TEXT))
-		var sum := _make_label(String(e.get("summary", "")), 13, PiritoriPalette.TEXT)
-		sum.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_rail_box.add_child(sum)
-	_rail_box.add_child(_separator())
-	_rail_box.add_child(_make_label(tr("ui.run_summary") % [
-		GameState.cash_eur, GameState.debt_eur, GameState.intel], 14))
-	if GameState.crew_deaths > 0:
-		_rail_box.add_child(_make_label(
-			tr("ui.crew_lost") % GameState.crew_deaths, 13, PiritoriPalette.DANGER_RED))
 
 
 ## A command tab: dark paper with a tan edge, icon plus word, 48px minimum.
@@ -2176,6 +2366,10 @@ func _refusal_words(failed: Array) -> String:
 				out.append(tr("road.needs_crew") % int(st.get("want", 0)))
 			"stock":
 				out.append(tr("road.needs_pack"))
+			"fights-today":
+				out.append(tr("door.fights_full") % int(st.get("have", 0)))
+			"chapter-goal-met":
+				out.append(tr("chapter.goal_unmet"))
 			"cash":
 				out.append(tr("ui.short_by") % maxi(int(st.get("want", 0)) - GameState.cash_eur, 0))
 			_:
@@ -2493,10 +2687,27 @@ func _battle_format(battle_id: String) -> String:
 ## it reports to no mission and turns no block. Injuries, arrests, loot and
 ## careers apply as in any fight.
 var _road_battle := false
+## A door fight (web v4.65): the door's template id. No mission behind it
+## either (`missionId: null`); win or lose pays the door's own stakes.
+var _door_battle := ""
+
+
+## An encounter asked for a fight. From a door, it is a door fight.
+func _on_battle_requested(battle_id: String) -> void:
+	var door := ""
+	if _open_encounter != "" and ContentRegistry.is_door_encounter(_open_encounter):
+		door = String(ContentRegistry.encounter(_open_encounter).get("door", ""))
+	_show_battle(battle_id, false, door)
+
 
 ## Enter a formation battle. The campaign model is untouched until it resolves.
-func _show_battle(battle_id: String, road_fight: bool = false) -> void:
+func _show_battle(battle_id: String, road_fight: bool = false, door: String = "") -> void:
 	_road_battle = road_fight
+	_door_battle = door
+	# Answer 23: every real fight counts toward the day's two, a road fight
+	# and a door fight included; a training bout does not (web `startBattle`).
+	if not bool(ContentRegistry.battle(battle_id).get("training", false)):
+		GameState.record_fight()
 	_screen = ""
 	_set_mode(Mode.BATTLE)
 	_clear_world()
@@ -2536,8 +2747,12 @@ func _show_battle(battle_id: String, road_fight: bool = false) -> void:
 			GameState.record_chapter_win()
 		var spoils := _settle_loot(scene.fight, int(result))
 		# The mission behind the fight takes its own authored effects (web
-		# `resultEffects`). A road fight has no mission behind it.
-		if not road_fight:
+		# `resultEffects`). A road fight has no mission behind it, and neither
+		# does a door fight: it pays the door's own stakes.
+		if door != "":
+			var won := _mission_outcome(int(result)) == "win"
+			GameState.apply_effects(PiritoriDoors.door_fight_effects(door, "win" if won else "lose"))
+		elif not road_fight:
 			GameState.settle_mission_battle(battle_id, _mission_outcome(int(result)))
 		# The police take the fallen BEFORE careers are aged: somebody carried
 		# off a yard does not also come out of it one fight older.

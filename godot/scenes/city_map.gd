@@ -534,8 +534,18 @@ func _draw_dashed(pts: PackedVector2Array, col: Color, width: float,
 # ── 10-11. anchors, missions and selection ────────────────────────────────
 
 func _draw_anchors() -> void:
+	_door_pins = door_pin_anchors()
 	for a in ContentRegistry.anchors():
 		_draw_anchor(a)
+
+
+## Where a door is open this block (H2, web v4.65 `.door-pin`): one small
+## door stood above each such anchor. The same list the rail's door board is
+## built from, so a pin and a card cannot disagree.
+var _door_pins := PackedStringArray()
+
+func door_pin_anchors() -> PackedStringArray:
+	return PiritoriDoors.open_door_anchors()
 
 
 func _draw_anchor(a: Dictionary) -> void:
@@ -582,6 +592,13 @@ func _draw_anchor(a: Dictionary) -> void:
 		draw_arc(pos, r * 1.55 * pulse, 0, TAU, 44, MapStyle.LEAD, _w(3.5), true)
 	# Presence is a SHAPE as well as a word: a dashed diamond where Aatami
 	# stands, apart from the lead's pulse and the inspection ring.
+	if _door_pins.has(id):
+		var dw := maxf(18.0 * _scale, 9.0)
+		var dh := maxf(26.0 * _scale, 13.0)
+		var door := Rect2(pos + Vector2(-dw * 0.5, -r * 1.7 - dh), Vector2(dw, dh))
+		draw_rect(door, MapStyle.LEAD)
+		draw_rect(door, MapStyle.NODE_OUTER, false, _w(2.5))
+		draw_circle(door.position + Vector2(dw * 0.72, dh * 0.55), maxf(2.0 * _scale, 1.2), MapStyle.NODE_OUTER)
 	if id == GameState.current_anchor_id:
 		var d := r * 1.45
 		var diamond := PackedVector2Array([pos + Vector2(0, -d), pos + Vector2(d, 0),

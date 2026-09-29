@@ -1,7 +1,8 @@
 extends Node
 ## The city's new rules — the road (v4.58), sound (v4.59), Toko's counter and
-## the board (v4.60/v4.61), the Thursday Load (v4.62), Kello's cut (v4.63) and
-## the chapter turn (v4.64) — against the web.
+## the board (v4.60/v4.61), the Thursday Load (v4.62), Kello's cut (v4.63),
+## the chapter turn (v4.64) and the ten-day chapter of spine and doors (v4.65)
+## — against the web.
 ##
 ## Run: godot --headless --path . res://tests/test_story.tscn
 ##
@@ -66,6 +67,14 @@ func _ready() -> void:
 	_test_the_cut_is_the_webs()
 	_test_chapter_turn()
 	_test_chapter_turn_follows_the_data()
+	# v4.65, mirroring web/test/doors.mjs.
+	_test_doors_canon()
+	_test_door_offers_are_the_webs()
+	_test_doors_taken_once_are_the_webs()
+	_test_door_rules()
+	_test_two_fights_a_day()
+	_test_spine_beats_and_the_look_ahead()
+	_test_the_chapter_walk_is_the_webs()
 	_test_sound()
 	_test_arrival_lines()
 
@@ -590,6 +599,317 @@ func _test_the_cut_is_the_webs() -> void:
 				or bool(got["found_out"]) != bool(w["found_out"]) or absf(roll - float(w["roll"])) > 1e-12:
 			bad.append("block %d: %s roll %.12f vs %s" % [int(w["block"]), got, roll, w])
 	check("every payment, roll and discovery matches", bad.is_empty(), str(bad))
+
+
+# ── doors and the ten-day chapter (v4.65, web/test/doors.mjs) ─────────────
+
+const DOOR_KINDS := ["gig", "pickup", "sale", "favour", "watch", "hit"]
+
+
+## A campaign standing at one block of the schedule (setup only).
+func _at_block(index: int) -> void:
+	_fresh()
+	GameState.block_index = index
+	GameState.day = index / 2 + 1
+
+
+func _offers_text(offers: Array) -> String:
+	return ", ".join(offers.map(func(o): return "%s@%s" % [o["template"], o["anchor"]]))
+
+
+func _test_doors_canon() -> void:
+	print("\ndoors in canon (content/doors-v1.json)")
+	var ts := PiritoriDoors.templates()
+	var ids := {}
+	var dup := false
+	for t in ts:
+		dup = dup or ids.has(t["id"])
+		ids[t["id"]] = true
+	check("templates arrive through sync, unique", ts.size() >= 12 and not dup, str(ts.size()))
+	eq("all six kinds of door", DOOR_KINDS.filter(func(k): return ts.any(func(t): return t["kind"] == k)).size(), 6)
+	var fighting := ts.filter(func(t): return PiritoriDoors.can_fight(t))
+	check("enough doors that can become a fight for one a block", fighting.size() >= 4, str(fighting.size()))
+	check("a fight depends on the job, not only on hits (answer 23)", fighting.any(func(t): return t["kind"] != "hit"))
+	var cap := int(PiritoriDoors.rules().get("fights_per_day_max", 0))
+	eq("at most two fights a day", cap, 2)
+	var bad: Array = []
+	for t in ts:
+		if (t.get("steps", []) as Array).size() != 3 or String(t.get("stakes", "")) == "":
+			bad.append("%s is not briefed" % t["id"])
+		if not t.get("choices", []).any(func(c): return (c.get("requirements", []) as Array).is_empty()):
+			bad.append("%s has no open way out" % t["id"])
+		for c in t.get("choices", []):
+			var fx: Array = c.get("effects", [])
+			if fx.any(func(e): return String(e).begins_with("start-battle:")):
+				if not PiritoriDoors.can_fight(t) or not fx.has("start-battle:" + String(t["fight"]["battle"])):
+					bad.append("%s/%s starts a fight the door does not own" % [t["id"], c["id"]])
+				if not (c.get("requirements", []) as Array).has("fights-today<%d" % cap):
+					bad.append("%s/%s is not held to two a day" % [t["id"], c["id"]])
+				if not c.get("requirements", []).any(func(r): return String(r).begins_with("deployed-crew>=")):
+					bad.append("%s/%s needs no crew" % [t["id"], c["id"]])
+	check("every door is briefed, has a way out, and owns its one fight", bad.is_empty(), str(bad))
+	var doors_at: Array = []
+	for i in ContentRegistry.schedule().size():
+		if PiritoriDoors.is_door_block(i):
+			doors_at.append(i)
+	eq("the free blocks are the web's", doors_at, _ref.get("door_blocks", []).map(func(v): return int(v)))
+	eq("ten days, twenty blocks (from canon)", GameState.total_blocks,
+		int(ContentRegistry.campaign().get("days", 0)) * GameState.blocks_per_day.size())
+	eq("the shipment is the last night", String(ContentRegistry.schedule()[-1].get("encounter_id", "")), "enc-shipment-night")
+	var ends := false
+	for enc in ContentRegistry.slice.get("encounters", []):
+		for c in enc.get("choices", []):
+			if (c.get("effects", []) as Array).any(func(e): return String(e).begins_with("resolve-ending")):
+				ends = true
+	check("nothing ends the campaign on day 7 any more", not ends)
+
+
+func _test_door_offers_are_the_webs() -> void:
+	print("\nthe door offers, block by block and save by save, are the web's")
+	var rows: Array = _ref.get("doors", [])
+	check("the web rolled door boards", rows.size() >= 60, str(rows.size()))
+	var bad: Array = []
+	for w in rows:
+		_at_block(int(w["block"]))
+		# Setup: the save's identity (the roll's first term), packs, fights.
+		GameState.content_package_id = String(w["content_id"])
+		GameState.stock["piri"] = int(w["piri"])
+		for f in int(w["fights"]):
+			GameState.record_fight()
+		var got := PiritoriDoors.offer_doors()
+		if _offers_text(got) != _offers_text(w["offers"]) or GameState.fights_today() != int(w["fights_today"]):
+			bad.append("%s block %d piri %d fights %d: %s vs %s" % [w["content_id"], int(w["block"]),
+				int(w["piri"]), int(w["fights"]), _offers_text(got), _offers_text(w["offers"])])
+	check("every board matches, door and anchor, in order (%d)" % rows.size(), bad.is_empty(), str(bad))
+
+
+func _test_doors_taken_once_are_the_webs() -> void:
+	print("\na door is taken once a chapter, as on the web")
+	var bad: Array = []
+	for w in _ref.get("door_chain", []):
+		_fresh()
+		GameState.content_package_id = String(w["content_id"])
+		GameState.stock["piri"] = 2
+		for st in w["steps"]:
+			GameState.block_index = int(st["block"])
+			GameState.day = int(st["block"]) / 2 + 1
+			var offers := PiritoriDoors.offer_doors()
+			var took := PiritoriDoors.take_door(String(offers[0]["template"]))
+			if _offers_text(offers) != _offers_text(st["offers"]) \
+					or String(took.get("encounter", {}).get("id", "")) != String(st["encounter"]):
+				bad.append("%s block %d: %s took %s vs %s took %s" % [w["content_id"], int(st["block"]),
+					_offers_text(offers), took.get("encounter", {}).get("id", ""), _offers_text(st["offers"]), st["encounter"]])
+	check("each chain of three takes matches", bad.is_empty(), str(bad))
+
+
+func _test_door_rules() -> void:
+	print("\nthe door rules (doors.js's header)")
+	var first := int(_ref.get("door_blocks", [15])[0])
+	_at_block(first)
+	var a := PiritoriDoors.offer_doors().duplicate(true)
+	check("2-3 doors", a.size() >= 2 and a.size() <= 3, str(a.size()))
+	var kinds := {}
+	for o in a:
+		kinds[PiritoriDoors.template_of(o["template"])["kind"]] = true
+	eq("no two doors of one kind", kinds.size(), a.size())
+	check("a door that can become a fight is on offer",
+		a.any(func(o): return PiritoriDoors.can_fight(PiritoriDoors.template_of(o["template"]))))
+	GameState.cash_eur = 9999
+	GameState.stock["piri"] = 5
+	eq("offers are kept for the block, whatever changes", _offers_text(PiritoriDoors.offer_doors()), _offers_text(a))
+	var saved := GameState.to_dict()
+	_fresh()
+	GameState.from_dict(JSON.parse_string(JSON.stringify(saved)))
+	eq("and survive a save and a reload", _offers_text(PiritoriDoors.offer_doors()), _offers_text(a))
+	_at_block(first - 1)
+	check("no doors on a spine block", PiritoriDoors.offer_doors().is_empty() and not PiritoriDoors.is_door_block())
+	# Late doors only at night, over many saves.
+	var late_by_day := 0
+	var fight_every := 0
+	var n := 0
+	for seed in 40:
+		for i in _ref.get("door_blocks", []):
+			_at_block(int(i))
+			GameState.content_package_id = "%s#%d" % [ContentRegistry.slice.get("id", ""), seed]
+			GameState.stock["piri"] = 2
+			var offers := PiritoriDoors.offer_doors()
+			n += 1
+			if offers.any(func(o): return PiritoriDoors.can_fight(PiritoriDoors.template_of(o["template"]))):
+				fight_every += 1
+			if GameState.current_block() != "night":
+				late_by_day += offers.filter(func(o): return bool(PiritoriDoors.template_of(o["template"]).get("late", false))).size()
+	eq("every door block offers a fight door while fights are left (%d boards)" % n, fight_every, n)
+	eq("a late door never opens in the day", late_by_day, 0)
+
+	# A late door closes at 22:00 on the block clock.
+	_at_block(first)
+	GameState.doors["offers"][str(first)] = [{"template": "watch-back-door", "anchor": "hakaniemi"},
+		{"template": "gig-rauno-cart", "anchor": "harju"}]
+	var late: Dictionary = GameState.doors["offers"][str(first)][0]
+	eq("open at 20:00", PiritoriDoors.door_blocker(late), "")
+	GameState.road = {"journeys": 0, "since": 0, "seen": [], "pending": null, "minutes": 125, "minutesBlock": first, "last": null}
+	eq("closed at 22:05", PiritoriDoors.door_blocker(late), "closed")
+	eq("an ordinary door stays open", PiritoriDoors.door_blocker(GameState.doors["offers"][str(first)][1]), "")
+	eq("a closed door cannot be taken", String(PiritoriDoors.take_door("watch-back-door").get("reason", "")), "closed")
+
+	# Taking a door: it becomes the block's encounter, where it is.
+	_at_block(first)
+	GameState.doors["offers"][str(first)] = [{"template": "gig-rauno-cart", "anchor": "harju"},
+		{"template": "hit-bear-debt", "anchor": "karhupuisto"}]
+	check("no lead before a door is taken", String(GameState.current_schedule().get("encounter_id", "")) == ""
+		and GameState.story_lead_id() == "")
+	eq("only an offered door", String(PiritoriDoors.take_door("nope").get("reason", "")), "not-offered")
+	var r := PiritoriDoors.take_door("gig-rauno-cart")
+	check("the door is taken", bool(r.get("ok", false)))
+	eq("the lead is the door", GameState.story_lead_id(), "harju")
+	var eid := String(GameState.current_schedule().get("encounter_id", ""))
+	var enc := ContentRegistry.encounter(eid)
+	check("the door is the encounter, with its scene",
+		String(enc.get("door", "")) == "gig-rauno-cart" and String(enc.get("scene_asset_id", "")) == String(PiritoriDoors.rules()["scenes"]["harju"]))
+	check("  standing where the door is", GameState.encounter_anchor(eid) == "harju"
+		and GameState.available_encounters_at("harju").any(func(e): return e["id"] == eid)
+		and not GameState.available_encounters_at("piritori").any(func(e): return e["id"] == eid))
+	eq("one door a block", String(PiritoriDoors.take_door("hit-bear-debt").get("reason", "")), "already-taken")
+	var saved2 := GameState.to_dict()
+	_fresh()
+	GameState.from_dict(JSON.parse_string(JSON.stringify(saved2)))
+	eq("a taken door survives a reload", String(GameState.current_schedule().get("encounter_id", "")), eid)
+	check("  and is an encounter again after it", not ContentRegistry.encounter(eid).is_empty() and GameState.is_encounter_available(eid))
+	var cash := GameState.cash_eur
+	check("its choices are ordinary effects", GameState.resolve_encounter(eid, "push") and GameState.cash_eur == cash + 20)
+	eq("and it cost the block", GameState.block_index, first + 1)
+	check("a door is taken once a chapter",
+		not PiritoriDoors.offer_doors().any(func(o): return o["template"] == "gig-rauno-cart"))
+	check("a taken door closes with its block", not GameState.is_encounter_available(eid))
+
+
+func _test_two_fights_a_day() -> void:
+	print("\nanswer 23: two fights a day, then no more")
+	var first := int(_ref.get("door_blocks", [15])[0])
+	_at_block(first)
+	GameState.apply_effect("recruit:crew-slot-runner")
+	GameState.apply_effect("recruit:crew-slot-watcher")
+	GameState.apply_effect("recruit:crew-slot-fixer")
+	var lean: Dictionary = {}
+	for c in PiritoriDoors.template_of("hit-bear-debt")["choices"]:
+		if c["id"] == "lean":
+			lean = c
+	check("a fight is open with a crew and no fights today", GameState.meets_all(lean["requirements"]))
+	GameState.record_fight()
+	check("one fight today, a second is allowed", GameState.fights_today() == 1 and GameState.meets_all(lean["requirements"]))
+	GameState.record_fight()
+	check("two fights today, no third", not GameState.meets_all(lean["requirements"]))
+	var st := GameState.requirement_status("fights-today<2")
+	check("  and it says so in the grammar", st["kind"] == "fights-today" and int(st["have"]) == 2, str(st))
+	GameState.block_index = first + 1
+	GameState.day = (first + 1) / 2 + 1
+	check("the next day starts at nought", GameState.fights_today() == 0 and GameState.meets_all(lean["requirements"]))
+	eq("a door fight pays the door, not a mission", PiritoriDoors.door_fight_effects("hit-bear-debt", "win"),
+		PiritoriDoors.template_of("hit-bear-debt")["fight"]["win"])
+	eq("  and a loss pays the door's loss", PiritoriDoors.door_fight_effects("hit-bear-debt", "loss"),
+		PiritoriDoors.template_of("hit-bear-debt")["fight"]["lose"])
+	eq("a door with no fight pays nothing for one", PiritoriDoors.door_fight_effects("gig-rauno-cart", "win"), [])
+
+
+func _test_spine_beats_and_the_look_ahead() -> void:
+	print("\nthe spine beats of days 8-10, and the ending that is a look ahead")
+	var k := ContentRegistry.encounter("enc-kello-reckoning")
+	_at_block(14)
+	var open: Array = k["choices"].filter(func(c): return GameState.meets_all(c["requirements"])).map(func(c): return c["id"])
+	eq("with no case answered only the quiet way is open", open, ["let-it-pass"])
+	GameState.apply_effect("flag:thursday-cut")
+	check("the case outcome opens its own reckoning",
+		GameState.meets_all(k["choices"].filter(func(c): return c["id"] == "ask-kello")[0]["requirements"]))
+
+	var ship := ContentRegistry.encounter("enc-shipment-night")
+	var last := ContentRegistry.schedule().size() - 1
+	_at_block(last)
+	GameState.current_anchor_id = "sornainen_harbour"
+	GameState.cash_eur = 500
+	check("the shipment needs the chapter goal", not GameState.meets_requirement("chapter-goal-met")
+		and not GameState.meets_all(ship["choices"][0]["requirements"]))
+	GameState.chapter_earned = GameState.chapter_threshold
+	check("earned, it can run", GameState.meets_all(ship["choices"][0]["requirements"]))
+	check("the shipment runs for its stake", GameState.resolve_encounter("enc-shipment-night", "run-shipment")
+		and GameState.chapter_cleared and ["clean", "messy", "lost"].has(GameState.last_ending_outcome)
+		and GameState.cash_eur == 100, "%s %s €%d" % [GameState.chapter_cleared, GameState.last_ending_outcome, GameState.cash_eur])
+	check("and the chapter is over", GameState.is_slice_complete() and GameState.ending_id == "")
+
+	_at_block(last)
+	GameState.current_anchor_id = "sornainen_harbour"
+	check("missing the boat still closes the chapter", GameState.resolve_encounter("enc-shipment-night", "let-it-go")
+		and GameState.chapter_cleared and GameState.last_ending_outcome == "missed"
+		and GameState.memories.has("chapter-cleared:1:missed"))
+
+	_at_block(13)
+	GameState.current_anchor_id = "makelansilta"
+	var j := ContentRegistry.encounter("enc-jaska-last-light")
+	GameState.resolve_encounter("enc-jaska-last-light", String(j["choices"][0]["id"]))
+	check("day 7 points at Pasila instead of ending there", GameState.ending_id == ""
+		and Array(GameState.memories).any(func(m): return String(m).begins_with("pasila-forecast:"))
+		and GameState.has_flag("memory:pasila-forecast:" + String(GameState.forecast_ending().get("id", ""))))
+	check("the forecast names an ending", String(GameState.forecast_ending().get("id", "")).begins_with("pasila-"))
+	check("  and the week goes on", not GameState.is_slice_complete() and GameState.block_index == 14)
+	# Each of the four is where some road points (web `forecastEnding`).
+	for id in ["pasila-haunted", "pasila-expensive", "pasila-nearer", "pasila-deferred"]:
+		_fresh()
+		# Setup: a run shaped the way that ending reads it.
+		match id:
+			"pasila-haunted":
+				GameState.crew_deaths = 1
+			"pasila-expensive":
+				GameState.exit_fund_eur = 200
+				GameState.debt_eur = 300
+			"pasila-nearer":
+				GameState.exit_fund_eur = 200
+				GameState.debt_eur = 100
+				GameState.roster = PackedStringArray(["crew-slot-runner", "crew-slot-watcher"])
+		eq("  the road can point at %s" % id, String(GameState.forecast_ending().get("id", "")), id)
+
+
+func _test_the_chapter_walk_is_the_webs() -> void:
+	print("\na whole chapter, walked the web's way, is the web's")
+	_fresh()
+	var got: Array = []
+	for guard in 40:
+		if GameState.is_slice_complete():
+			break
+		var door := ""
+		if PiritoriDoors.is_door_block() and PiritoriDoors.taken_at().is_empty():
+			var offers := PiritoriDoors.offer_doors()
+			door = String(PiritoriDoors.take_door(String(offers[0]["template"])).get("offer", {}).get("template", ""))
+		var entry := GameState.current_schedule()
+		var eid := String(entry.get("encounter_id", ""))
+		var enc := ContentRegistry.encounter(eid)
+		GameState.current_anchor_id = GameState.story_lead_id()
+		var quiet := ""
+		var choices: Array = enc.get("choices", []).duplicate()
+		choices.reverse()
+		for c in choices:
+			if GameState.meets_all(c.get("requirements", [])) \
+					and not (c.get("effects", []) as Array).any(func(e): return String(e).begins_with("start-battle")):
+				quiet = String(c["id"])
+				break
+		got.append({"block": GameState.block_index, "door": door, "encounter": eid, "choice": quiet})
+		if quiet == "" or not GameState.resolve_encounter(eid, quiet):
+			GameState.advance_block()
+	var want: Array = _ref.get("chapter_walk", [])
+	var bad: Array = []
+	for i in maxi(got.size(), want.size()):
+		var g: Dictionary = got[i] if i < got.size() else {}
+		var w: Dictionary = want[i] if i < want.size() else {}
+		if g.is_empty() or w.is_empty() or int(g["block"]) != int(w["block"]) or g["door"] != w["door"] \
+				or g["encounter"] != w["encounter"] or g["choice"] != w["choice"]:
+			bad.append("%s vs %s" % [g, w])
+	check("all %d blocks play, door by door and choice by choice" % want.size(), bad.is_empty(), str(bad))
+	eq("all of the schedule was walked", got.size(), ContentRegistry.schedule().size())
+	var end: Dictionary = _ref.get("chapter_walk_end", {})
+	check("the chapter closes without ending the game", GameState.is_slice_complete() and GameState.chapter_cleared
+		and GameState.ending_id == "" and bool(end.get("cleared", false)))
+	eq("  on the web's outcome", GameState.last_ending_outcome, String(end.get("outcome", "")))
+	eq("  pointing where the web's road points", String(GameState.forecast_ending().get("id", "")), String(end.get("ending", "")))
+	check("  and remembering the day-7 look ahead as the web does",
+		GameState.has_flag(String(end.get("forecast", "-"))), String(end.get("forecast", "")))
 
 
 ## The chapter turn (v4.64), mirroring web/test/chapter.mjs.

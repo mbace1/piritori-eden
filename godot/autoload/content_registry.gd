@@ -15,12 +15,16 @@ const ART_PATH := "res://data/art-v3-manifest.json"
 const ROAD_PATH := "res://data/road-events-v1.json"
 ## Act I v4.62: the woven story — briefings, the case board, the case.
 const STORY_PATH := "res://data/act1-story-v1.json"
+## Act I v4.65 (H2 of The Long Game): doors — offers on the blocks the spine
+## leaves free. Templates, not scenes.
+const DOORS_PATH := "res://data/doors-v1.json"
 
 var map: Dictionary = {}
 var slice: Dictionary = {}
 var art: Dictionary = {}
 var road: Dictionary = {}
 var story: Dictionary = {}
+var doors: Dictionary = {}
 
 ## Errors collected while loading. Non-empty means the port must not claim to
 ## resolve every referenced ID (§9 acceptance item 8).
@@ -50,6 +54,7 @@ func load_all() -> bool:
 	art = _load_json(ART_PATH)
 	road = _load_json(ROAD_PATH)
 	story = _load_json(STORY_PATH)
+	doors = _load_json(DOORS_PATH)
 	if errors.size() > 0:
 		return false
 	_index()
@@ -166,6 +171,19 @@ func _verify_references() -> void:
 		errors.append("story case '%s' stands at unknown anchor '%s'" % [
 			the_case.get("id", ""), the_case.get("anchor_id", "")])
 
+	# A door stands somewhere on the map, shows a registered scene there, and a
+	# door that can become a fight names a real battle.
+	var door_scenes: Dictionary = doors.get("rules", {}).get("scenes", {})
+	for t in doors.get("templates", []):
+		for a in t.get("anchors", []):
+			if not _anchors.has(String(a)):
+				errors.append("door '%s' happens at unknown anchor '%s'" % [t.get("id", ""), a])
+			elif not door_scenes.has(String(a)):
+				errors.append("door '%s' has no scene at '%s'" % [t.get("id", ""), a])
+		var fight: Dictionary = t.get("fight", {}) if typeof(t.get("fight", null)) == TYPE_DICTIONARY else {}
+		if not fight.is_empty() and not _battles.has(String(fight.get("battle", ""))):
+			errors.append("door '%s' fights unknown battle '%s'" % [t.get("id", ""), fight.get("battle", "")])
+
 	var campaign: Dictionary = slice.get("campaign", {})
 	if not _anchors.has(campaign.get("start_anchor_id", "")):
 		errors.append("campaign start_anchor_id '%s' is not a known anchor" % campaign.get("start_anchor_id", ""))
@@ -182,7 +200,31 @@ func site(id: String) -> Dictionary:
 	return _require(_sites, id, "site")
 
 func encounter(id: String) -> Dictionary:
+	if _door_encounters.has(id):
+		return _door_encounters[id]
 	return _require(_encounters, id, "encounter")
+
+
+## A taken door is the block's encounter (web `doorEncounter`), built from its
+## template at runtime. Like generated crew it lives in an overlay, never in
+## canon: GameState owns the record and puts it back after a load.
+var _door_encounters: Dictionary = {}
+
+
+func register_door_encounter(enc: Dictionary) -> void:
+	var id := String(enc.get("id", ""))
+	if id == "" or _encounters.has(id):
+		push_error("ContentRegistry: door encounter '%s' collides with canon" % id)
+		return
+	_door_encounters[id] = enc
+
+
+func forget_door_encounters() -> void:
+	_door_encounters.clear()
+
+
+func is_door_encounter(id: String) -> bool:
+	return _door_encounters.has(id)
 
 func offer(id: String) -> Dictionary:
 	return _require(_offers, id, "offer")
@@ -251,6 +293,13 @@ func road_events() -> Array:
 func road_rules() -> Dictionary:
 	return road.get("rules", {})
 
+## The door templates and their rules (content/doors-v1.json).
+func door_rules() -> Dictionary:
+	return doors.get("rules", {})
+
+func door_templates() -> Array:
+	return doors.get("templates", [])
+
 ## A mission's woven words (premise, plants) from the story, or {}.
 func story_mission(id: String) -> Dictionary:
 	for m in story.get("missions", []):
@@ -311,7 +360,8 @@ func campaign() -> Dictionary:
 	return slice.get("campaign", {})
 
 
-## The authored 14-block schedule: one encounter per Day/Night block.
+## The authored schedule: one Day/Night block per entry. A door block (H2)
+## carries `door: true` and no encounter until a door is taken.
 func schedule() -> Array:
 	return slice.get("schedule", [])
 

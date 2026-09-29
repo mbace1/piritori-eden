@@ -30,9 +30,9 @@ const MARKKA_PER_EURO := 5.94573
 
 # ── campaign clock: integer blocks, day/night ─────────────────────────────
 var day: int = 1
-var block_index: int = 0          ## 0-based index into the whole slice, 0..13
+var block_index: int = 0          ## 0-based index into the whole slice (the web's scheduleIndex)
 var blocks_per_day: PackedStringArray = ["day", "night"]
-var total_blocks: int = 14
+var total_blocks: int = 20        ## read from canon (`total_player_blocks`) on a new campaign
 
 # ── economy ────────────────────────────────────────────────────────────────
 var cash_eur: int = 0
@@ -398,6 +398,15 @@ var cut: Dictionary = {}
 ## Presentation state, never saved, like `arrival_due`.
 var cut_paid_block: int = -1
 
+# ── doors (web Act I v4.65, `web/js/v3/doors.js`) ────────────────────────
+## Saved under the web's key and shape: {offers: {index: [{template, anchor}]},
+## taken: {index: {template, anchor, encounterId}}}. `PiritoriDoors` owns the
+## rules; this is only the record.
+var doors: Dictionary = {"offers": {}, "taken": {}}
+## Answer 23: at most two fights a day. day -> fights started (web
+## `fightsByDay`), counted when any real fight starts.
+var fights_by_day: Dictionary = {}
+
 
 ## Reset to the slice's authored starting state.
 func new_campaign(with_seed: int = 0) -> void:
@@ -408,7 +417,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	day = 1
 	block_index = 0
 	blocks_per_day = PackedStringArray(campaign.get("blocks_per_day", ["day", "night"]))
-	total_blocks = int(campaign.get("total_player_blocks", 14))
+	total_blocks = int(campaign.get("total_player_blocks", ContentRegistry.schedule().size()))
 
 	cash_eur = int(start.get("cash_eur", 0))
 	markka_mk = int(start.get("markka_mk", 0))
@@ -454,6 +463,9 @@ func new_campaign(with_seed: int = 0) -> void:
 	toko_bowl_at = -1
 	cut = {}
 	cut_paid_block = -1
+	doors = {"offers": {}, "taken": {}}
+	fights_by_day = {}
+	ContentRegistry.forget_door_encounters()
 	# Web boot marks where Aatami stands as seen: you know the corner you
 	# start on (`markSeen` at boot in web/js/v3/app.js).
 	if current_anchor_id != "":
@@ -646,9 +658,8 @@ func add_upgrade(id: String) -> void:
 ## The authored slice is a CHAPTER's worth, not an era's — everything built
 ## against it stands, but "seven days and an ending" is no longer the shape.
 ##
-## PLACEHOLDER (DESIGN_LOCKS §13): ten days is the owner's figure and the slice
-## currently authors seven, so the first chapter ends early on purpose rather
-## than pretending the content is longer than it is.
+## Ten days is the owner's figure, and since v4.65 (H1) the slice authors all
+## ten: days 1-7 as written, days 8-10 three spine beats and three doors.
 const CHAPTER_DAYS := 10
 const ERA_CHAPTERS := 4
 
@@ -923,6 +934,9 @@ func _reveal_scheduled_block(d: int, b: String) -> void:
 func is_encounter_available(encounter_id: String) -> bool:
 	if not is_revealed(encounter_id) or is_resolved(encounter_id):
 		return false
+	# A taken door is this block's work and closes with the block.
+	if ContentRegistry.is_door_encounter(encounter_id):
+		return int(ContentRegistry.encounter(encounter_id).get("door_index", -1)) == block_index
 	var entry := ContentRegistry.schedule_of_encounter(encounter_id)
 	if entry.is_empty():
 		return true
@@ -938,6 +952,13 @@ func available_encounters_at(anchor_id: String) -> Array:
 		for enc in ContentRegistry.encounters_at_site(site["id"]):
 			if is_encounter_available(enc["id"]):
 				out.append(enc)
+	# A taken door has no site: it stands at its own anchor (web
+	# `anchor_override_id`).
+	var taken := PiritoriDoors.taken_at()
+	if not taken.is_empty() and String(taken.get("anchor", "")) == anchor_id:
+		var did := String(taken.get("encounterId", ""))
+		if ContentRegistry.is_door_encounter(did) and is_encounter_available(did):
+			out.append(ContentRegistry.encounter(did))
 	return out
 
 
@@ -953,11 +974,66 @@ func available_encounters_at(anchor_id: String) -> Array:
 
 const JOURNEY_EXTRA_BLOCKS := 0
 
+## This block's schedule entry (web `currentSchedule`). A door block has no
+## lead until a door is taken; then the door IS the block's encounter, at the
+## door's anchor. {} once the schedule has run out.
+func current_schedule() -> Dictionary:
+	if is_slice_complete():
+		return {}
+	var entry := ContentRegistry.scheduled_for(day, current_block())
+	if not bool(entry.get("door", false)):
+		return entry
+	var taken := PiritoriDoors.taken_at()
+	if taken.is_empty():
+		return entry
+	var merged := entry.duplicate()
+	merged["anchor_id"] = String(taken.get("anchor", ""))
+	merged["encounter_id"] = String(taken.get("encounterId", ""))
+	return merged
+
+
+## The day the schedule is on (the last authored day once it has run out).
+func current_day() -> int:
+	var sched := ContentRegistry.schedule()
+	if sched.is_empty():
+		return day
+	var i := clampi(block_index, 0, sched.size() - 1)
+	return int(sched[i].get("day", day))
+
+
+## Fights started today (answer 23: a day holds at most two).
+func fights_today() -> int:
+	return int(fights_by_day.get(str(current_day()), 0))
+
+
+## Called when a real fight starts — any fight but training, a road fight
+## included (web `recordFight` in `startBattle`).
+func record_fight() -> void:
+	var k := str(current_day())
+	fights_by_day[k] = int(fights_by_day.get(k, 0)) + 1
+	state_changed.emit()
+
+
+## Where an encounter happens: a door's (or an authored override's) anchor,
+## else its site's. "" when it has neither.
+func encounter_anchor(encounter_id: String) -> String:
+	var enc := ContentRegistry.encounter(encounter_id)
+	var over := String(enc.get("anchor_override_id", "")) if enc.get("anchor_override_id", null) != null else ""
+	if over != "" and ContentRegistry.is_door_encounter(encounter_id):
+		return over
+	var sid := String(enc.get("site_id", "")) if enc.get("site_id", null) != null else ""
+	if sid == "":
+		return over
+	return String(ContentRegistry.site(sid).get("anchorId", ""))
+
+
 ## The authored story lead for this block: the anchor of its encounter.
 func story_lead_id() -> String:
 	if is_slice_complete():
 		return ""
-	var entry := ContentRegistry.scheduled_for(day, current_block())
+	var entry := current_schedule()
+	if String(entry.get("encounter_id", "")) == "":
+		return ""
 	var aid := String(entry.get("anchor_id", ""))
 	if aid != "":
 		return aid
@@ -1105,6 +1181,8 @@ func requirement_status(req: String) -> Dictionary:
 	if s.begins_with("flag:"):
 		var fid := s.substr(5)
 		return {"ok": has_flag(fid), "req": s, "kind": "flag", "id": fid}
+	if s == "chapter-goal-met":
+		return {"ok": chapter_goal_met(), "req": s, "kind": "chapter-goal-met", "id": ""}
 	if s.begins_with("crew-role:"):
 		var role := s.substr(10)
 		return {"ok": deployed_roles().has(role), "req": s, "kind": "crew-role", "id": role}
@@ -1174,6 +1252,7 @@ func _read_value(token: String) -> int:
 		"day": return day
 		"deployed-crew": return deployed_crew().size()
 		"crew-critical": return open_critical_wounds()
+		"fights-today": return fights_today()
 		_:
 			if token.begins_with("stock:"):
 				return int(stock.get(token.substr(6), 0))
@@ -1317,6 +1396,24 @@ func apply_effect(effect: String) -> void:
 				flags["label:" + ":".join(_tail(parts, 1))] = true
 		"resolve-ending":
 			resolve_ending()
+		"forecast-ending":
+			# H8 (v4.65): day 7 points at Pasila instead of ending there. The
+			# four endings are the ERA's result; this only remembers where the
+			# road points (web `memory:pasila-forecast:<id>`).
+			var f := forecast_ending()
+			if not f.is_empty():
+				var m := "pasila-forecast:" + String(f.get("id", ""))
+				if not memories.has(m):
+					memories.append(m)
+		"chapter-ending":
+			# H1 (v4.65): the shipment is day 10's night on the schedule.
+			if parts.size() >= 2 and parts[1] == "attempt":
+				attempt_chapter_ending()
+			elif parts.size() >= 2 and parts[1] == "missed" and not chapter_cleared:
+				# The boat sails without you; the chapter still closes.
+				chapter_cleared = true
+				last_ending_outcome = "missed"
+				memories.append("chapter-cleared:%d:missed" % chapter)
 		"mccormick-family":
 			if parts.size() >= 2:
 				relationships["mccormick_family"] = int(
@@ -1740,9 +1837,11 @@ func surviving_crew() -> int:
 
 ## Pick the authored ending whose requirements the run actually meets.
 ##
-## "resolve-ending:best-match" is the slice's own instruction. The endings are
-## authored in order of specificity, so the FIRST full match wins and nothing is
-## invented. If none match that is a finding, not a silent pass.
+## The endings are authored in order of specificity, so the FIRST full match
+## wins and nothing is invented. If none match that is a finding, not a silent
+## pass. Since v4.65 (H8) the four endings are the ERA's result and nothing in
+## chapter 1 resolves one: day 7 forecasts (`forecast_ending`) and the chapter
+## closes on "to be continued". Kept for the effect the web also keeps.
 func resolve_ending() -> String:
 	for e in ContentRegistry.slice.get("endings", []):
 		if meets_all(e.get("requirements", [])):
@@ -1751,6 +1850,24 @@ func resolve_ending() -> String:
 			return ending_id
 	push_warning("GameState: no authored ending matched this run")
 	return ""
+
+
+## The Pasila ending the run points at right now, with no side effects (web
+## `forecastEnding`, the same order): a death or an open critical wound is the
+## haunted one; then the exit fund against the debt; then whether the crew
+## holds. Until chapter 4 exists the game shows this instead of ending.
+func forecast_ending() -> Dictionary:
+	var id := "pasila-deferred"
+	if crew_deaths + open_critical_wounds() > 0:
+		id = "pasila-haunted"
+	elif exit_fund_eur >= 180 and debt_eur > 250:
+		id = "pasila-expensive"
+	elif exit_fund_eur >= 180 and debt_eur <= 250 and roster.size() >= 2:
+		id = "pasila-nearer"
+	for e in ContentRegistry.slice.get("endings", []):
+		if String(e.get("id", "")) == id:
+			return e
+	return {}
 
 
 func ending() -> Dictionary:
@@ -1901,6 +2018,9 @@ func to_dict() -> Dictionary:
 		"heard": heard,
 		"tokoBowlAt": toko_bowl_at,
 		"cut": cut,
+		# Act I v4.65, under the web save's own keys.
+		"doors": doors,
+		"fightsByDay": fights_by_day,
 	}
 	return out.duplicate(true)
 
@@ -1970,6 +2090,21 @@ func from_dict(d: Dictionary) -> bool:
 	if typeof(d.get("cut", null)) == TYPE_DICTIONARY:
 		cut = {"payments": int(d["cut"].get("payments", 0))}
 	cut_paid_block = -1
+	doors = {"offers": {}, "taken": {}}
+	var dd: Variant = d.get("doors", null)
+	if typeof(dd) == TYPE_DICTIONARY:
+		for k in (dd as Dictionary).get("offers", {}):
+			var offers: Array = []
+			for o in dd["offers"][k]:
+				offers.append({"template": String(o.get("template", "")), "anchor": String(o.get("anchor", ""))})
+			doors["offers"][str(k)] = offers
+		for k in (dd as Dictionary).get("taken", {}):
+			var t: Dictionary = dd["taken"][k]
+			doors["taken"][str(k)] = {"template": String(t.get("template", "")),
+				"anchor": String(t.get("anchor", "")), "encounterId": String(t.get("encounterId", ""))}
+	fights_by_day = _int_values(d.get("fightsByDay", {}))
+	# A taken door is the block's encounter; put it back (web `registerTaken`).
+	PiritoriDoors.register_taken()
 	arrival_due = false
 
 	state_changed.emit()

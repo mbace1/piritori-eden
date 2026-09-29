@@ -33,8 +33,6 @@ ui.per_unit,€%d per %s · %s · %s,%d € / %s · %s · %s,€%d / %s · %s ·
 ui.crew_none,"Nobody yet. Crew are met through encounters, not hired from a list.","Ei vielä ketään. Porukka löytyy kohtaamisista, ei listalta palkkaamalla.",まだ誰もいない。仲間は出会いで得るもので、名簿から雇うものではない。
 ui.crew_stats,condition %s · nerve %s · tempo %s · €%s/day,kunto %s · hermo %s · tempo %s · %s €/pv,体調 %s · 胆力 %s · 速さ %s · €%s/日
 ui.no_missions,No missions signalled yet.,Ei vielä keikkoja.,まだ依頼はない。
-ui.seven_days_done,Seven days done.,Seitsemän päivää takana.,七日が終わった。
-ui.run_summary,€%d cash · €%d debt · intel %d,%d € käteistä · %d € velkaa · tietoa %d,現金 €%d · 借金 €%d · 情報 %d
 ui.content_failed,Content failed to load,Sisällön lataus epäonnistui,コンテンツの読み込みに失敗
 state.open,open,auki,開いている
 state.lead,lead,johtolanka,手がかり
@@ -189,8 +187,6 @@ equipment.cond_used,used,käytetty,中古
 equipment.cond_faulty,faulty,viallinen,不良
 equipment.cond_broken,broken,rikki,故障
 chapter.progress,Toward the end of this one: %d of %d,Tämän loppuun: %d/%d,この章の目標: %d/%d
-chapter.elsewhere,Not from here. It happens at the harbour.,Ei täältä. Se tapahtuu satamassa.,ここでは無理だ。港で起きる。
-chapter.commit,Pay for the container — €%d,Maksa kontista — %d €,コンテナの代金を払う — €%d
 chapter.cleared,THAT IS THE END OF IT,SE OLI SIINÄ,これで終わりだ
 chapter.next,Whatever comes next,Mitä seuraavaksi tuleekaan,次に来るものへ
 chapter.out_clean,"It went quietly. The container is gone and so are you, and you have somewhere to put things now.","Meni hiljaa. Kontti on poissa ja niin olet sinäkin, ja nyt on paikka mihin panna tavaraa.",静かに済んだ。コンテナも消え、あなたも消えた。物を置く場所ができた。
@@ -355,3 +351,39 @@ board.why_buying,you have been buying here out,olet ostanut täältä liikaa,こ
 board.why_ordinary,nothing much moving it,mikään ei juuri liikuta sitä,動きはあまりない
 board.heard_now,"Toko, this block","Toko, tällä jaksolla",Toko · この時間帯
 board.now,this block,tällä jaksolla,この時間帯
+ui.next_doors,CHOOSE A DOOR,VALITSE OVI,仕事を選ぶ
+ui.next_hint_doors,The story leaves this block free. Take one door; the others close with the block.,Tarina jättää tämän jakson vapaaksi. Ota yksi ovi; muut sulkeutuvat jakson mukana.,この時間に物語はない。仕事を一つ選べ。残りはこの時間が終わると閉じる。
+door.kind_gig,GIG,KEIKKA,仕事
+door.kind_pickup,PICKUP,NOUTO,運び
+door.kind_sale,SALE,MYYNTI,売り
+door.kind_favour,FAVOUR,PALVELUS,頼み
+door.kind_watch,WATCH,VAHTI,観察
+door.kind_hit,HIT,ISKU,取り立て
+door.from_network,THE NETWORK,VERKOSTO,つながり
+door.from_street,THE STREET,KATU,街
+door.from_toko,TOKO,TOKOLTA,トコ
+door.from_mccormick_family,THE McCORMICKS,McCORMICKIT,McCormickの者
+door.from_jade_lantern_network,THE JADE LANTERN,JADE LANTERN -VERKOSTO,Jade Lanternの者
+door.risk_low,LOW RISK,PIENI RISKI,危険: 下
+door.risk_medium,MEDIUM RISK,KOHTALAINEN RISKI,危険: 中
+door.risk_high,HIGH RISK,SUURI RISKI,危険: 上
+door.fight,CAN BECOME A FIGHT,VOI MUUTTUA TAPPELUKSI,戦いになり得る
+door.late,LATE · CLOSES 22:00,MYÖHÄINEN · SULKEUTUU 22.00,夜 · 22:00に閉じる
+door.take,TAKE · %s,OTA · %s,取る · %s
+door.closed,CLOSED,SULJETTU,閉じた
+door.free_block,%s · FREE BLOCK,%s · VAPAA JAKSO,%s · 物語のない時間
+door.open_n,%d DOORS OPEN,%d OVEA AUKI,開いた仕事 %d
+door.note,"Take one: it becomes this block's work, where it is. The others close with the block. Fights today: %d of %d.","Ota yksi: siitä tulee tämän jakson työ, siellä missä se on. Muut sulkeutuvat jakson mukana. Tappeluita tänään: %d/%d.",一つ選べ。その場所で、この時間の仕事になる。残りはこの時間が終わると閉じる。今日の戦い: %d/%d。
+door.none,"Nothing is open. Rest, and let the block pass.",Mitään ei ole auki. Lepää ja anna jakson mennä.,開いている仕事はない。この時間を終えろ。
+door.pass,LET THE BLOCK PASS,ANNA JAKSON MENNÄ,この時間を終える
+door.taken,%s: travel to %s to do it.,%s: kulje paikkaan %s tehdäksesi sen.,%s: %sへ移動して行え。
+door.fights_full,already %d fights today,jo %d tappelua tänään,今日の戦いはもう%d
+chapter.goal_unmet,the chapter goal is not met,luvun tavoite ei ole täynnä,章の目標に届いていない
+chapter.out_missed,"The boat left without Aatami on it. No stake, and no upgrade.","Laiva lähti ilman Aatamia. Ei panosta, ei parannusta.",アータミのいないまま、コンテナは港を出た。払う金もなく、得る物もない。
+chapter.closes,CHAPTER %d CLOSES,LUKU %d PÄÄTTYY,第%d章が終わる
+chapter.to_be_continued,TO BE CONTINUED,JATKUU,まだ終わらない
+chapter.road_points,WHERE THIS ROAD POINTS · ERA I,MIHIN TÄMÄ TIE VIE · AIKAKAUSI I,この道はどこへ向かうか · 時代 I
+chapter.new_ten,START A NEW TEN DAYS,ALOITA UUDET KYMMENEN PÄIVÄÄ,新しい10日を始める
+chapter.summary,EXIT FUND €%d · DEBT €%d · CREW %d · JASKA %d,LÄHTÖRAHASTO %d € · VELKA %d € · PORUKKA %d · JASKA %d,出発の金 €%d · 借金 €%d · 仲間 %d · Jaska %d
+chapter.earned_runs,"Earned. %s runs on day %d's night at %s, for €%d.","Ansaittu. %s tehdään päivän %d yönä paikassa %s, hintaan %d €.",得た。%sは%d日目の夜、%sで行う。€%d。
+chapter.short,"Earned by fencing loot at Piritori; market sales and mission payouts do not count. Short of it on day %d, the boat sails without you.","Ansaitaan myymällä saalista Piritorilla; torikaupat ja keikkojen palkkiot eivät lasketa. Jos se jää vajaaksi päivänä %d, laiva lähtee ilman sinua.",ピリトリで物を売って得る金だけが数に入る。%d日目までに足りなければ、コンテナはあんた抜きで出ていく。

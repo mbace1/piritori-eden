@@ -66,6 +66,9 @@ func _ready() -> void:
 	await _test_street_seller_through_ui()
 	await _test_story_through_ui()
 	await _test_cut_and_turn_through_ui()
+	# Act I v4.65: doors, and the ten-day chapter's close.
+	await _test_doors_through_ui()
+	await _test_door_fight_through_ui()
 	await _test_sound_switch()
 	await _test_arrival()
 
@@ -1192,22 +1195,45 @@ func _test_cut_and_turn_through_ui() -> void:
 	await _press(give)
 	check("  giving them Kello ends the cut", GameState.has_flag("cut-ended"))
 
+	# H1 (v4.65): the shipment is day 10's night at Sörnäinen, an encounter
+	# like any other; the ledger no longer carries a button for it.
 	await _fresh_city("sornainen_harbour")
 	var ending := GameState.chapter_ending()
 	GameState.record_chapter_income(GameState.chapter_threshold)
 	GameState.cash_eur = int(ending.get("stake_eur", 0)) + 40
+	GameState.stock["piri"] = 2
 	_shell._show_market()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var go := _live_button("Pay for the container")
-	check("at the harbour, the shipment can be paid for", go != null and not go.disabled)
-	if go == null:
+	check("the ledger has no shipment button any more", _live_button("Pay for the container") == null)
+	var where := _all_nodes(_shell._rail).filter(func(n): return n is Label and n.name == "ChapterWhere" \
+		and not n.is_queued_for_deletion())
+	check("  it says where and when the shipment runs", not where.is_empty()
+		and where[0].text.contains(String(ContentRegistry.anchor("sornainen_harbour").get("label", "")))
+		and where[0].text.contains(str(int(ContentRegistry.campaign().get("days", 0)))),
+		where[0].text if not where.is_empty() else "none")
+	# Fixture: the clock walked on to the chapter's last night.
+	var last := ContentRegistry.schedule().size() - 1
+	while GameState.block_index < last:
+		GameState.advance_block()
+	_shell._show_city()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var enter := _one_lit("enter", "ENTER · " + String(ContentRegistry.site("sornainen_quay").get("label", "")))
+	if enter == null:
 		return
-	await _press(go)
-	var turn: Node = null
-	for n in _all_nodes(_shell._rail):
-		if n.name == "ChapterTurn" and not n.is_queued_for_deletion():
-			turn = n
+	await _press(enter)
+	var run := _choice_button("run-shipment")
+	check("the shipment can be run", run != null and not run.disabled)
+	if run == null:
+		return
+	await _press(run)
+	check("the chapter closes: TO BE CONTINUED", _rail_named("ToBeContinued") != null
+		and _labels_text().contains(tr("chapter.to_be_continued")))
+	check("  headed CHAPTER 1 CLOSES", _labels_text().contains(tr("chapter.closes") % 1))
+	check("  saying how the operation went", _rail_named("ChapterOutcome") != null
+		and ["clean", "messy", "lost"].has(GameState.last_ending_outcome))
+	var turn := _rail_named("ChapterTurn")
 	check("after it, the rail lists what crosses", turn != null)
 	if turn == null:
 		return
@@ -1221,7 +1247,216 @@ func _test_cut_and_turn_through_ui() -> void:
 	if PiritoriChapter.next_chapter().is_empty():
 		check("  it says chapter 2 comes in a later build", _labels_text().contains(tr("chapter.later") % 2))
 		check("  and offers no way on", _live_button(tr("chapter.next")) == null)
-	check("shown, not applied: still chapter 1, still €40", GameState.chapter == 1 and GameState.cash_eur == 40)
+	check("  and where the road points", _rail_named("RoadPoints") != null
+		and _labels_text().contains(String(GameState.forecast_ending().get("label", "---"))))
+	check("shown, not applied: still chapter 1, still €40, still two packs, no ending",
+		GameState.chapter == 1 and GameState.cash_eur == 40 and int(GameState.stock["piri"]) == 2
+		and GameState.chapter_cleared and GameState.ending_id == "")
+	# Looking at the map does not open a closed chapter back up.
+	_shell._city_map.select("piritori")
+	await get_tree().process_frame
+	check("the map stays to look at; the rail stays closed", _rail_named("ToBeContinued") != null)
+	var again := _one_lit("new-campaign", tr("chapter.new_ten"))
+	if again == null:
+		return
+	await _press(again)
+	check("START A NEW TEN DAYS opens day one", GameState.block_index == 0 and not GameState.chapter_cleared
+		and _rail_named("ToBeContinued") == null)
+	GameState.arrival_due = false
+	if _shell._arrival != null:
+		_shell._arrival.queue_free()
+		_shell._arrival = null
+	_shell._show_city()
+	await get_tree().process_frame
+
+	# Short of the goal, the boat leaves without you and the chapter still closes.
+	await _fresh_city("sornainen_harbour")
+	while GameState.block_index < last:
+		GameState.advance_block()
+	_shell._show_city()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	enter = _one_lit("enter", "ENTER · " + String(ContentRegistry.site("sornainen_quay").get("label", "")))
+	if enter == null:
+		return
+	await _press(enter)
+	run = _choice_button("run-shipment")
+	check("short of the goal, the shipment is refused", run != null and run.disabled)
+	check("  and says why in words", _rail_text().contains(tr("chapter.goal_unmet")))
+	var go := _choice_button("let-it-go")
+	await _press(go)
+	check("watching the boat leave closes the chapter too", _rail_named("ToBeContinued") != null
+		and GameState.last_ending_outcome == "missed" and _labels_text().contains(tr("chapter.out_missed")))
+	_shell._show_city()
+	await get_tree().process_frame
+
+
+func _rail_named(node_name: String) -> Node:
+	for n in _all_nodes(_shell._rail):
+		if n.name == node_name and not n.is_queued_for_deletion():
+			return n
+	return null
+
+
+func _choice_button(choice_id: String) -> Button:
+	for n in _all_nodes(_shell._rail):
+		if n is Button and String(n.get_meta("choice", "")) == choice_id and not n.is_queued_for_deletion():
+			return n
+	return null
+
+
+## A door card on the rail's board, by template id.
+func _door_cards() -> Array:
+	return _all_nodes(_shell._rail).filter(func(n): return n is VBoxContainer and n.has_meta("door") \
+		and not n.is_queued_for_deletion())
+
+
+func _take_button(card: Node) -> Button:
+	for n in _all_nodes(card):
+		if n is Button and n.has_meta("take_door"):
+			return n
+	return null
+
+
+## A block the spine leaves free (web doors-browser.cjs): the board, the pins,
+## CHOOSE A DOOR; taking a quiet door, walking to it and doing it, by button.
+func _test_doors_through_ui() -> void:
+	print("\ndoors (web v4.65), through the interface")
+	await _fresh_city("piritori")
+	var first := int(ContentRegistry.schedule().map(func(e): return bool(e.get("door", false))).find(true))
+	# Fixtures only: the block, packs, and a crew.
+	GameState.block_index = first
+	GameState.day = first / 2 + 1
+	GameState.stock["piri"] = 2
+	for id in ["crew-slot-runner", "crew-slot-watcher", "crew-slot-fixer"]:
+		GameState.apply_effect("recruit:" + id)
+	_shell._show_city()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check("a free block shows its doors", _rail_named("DoorBoard") != null)
+	var cards := _door_cards()
+	check("two or three doors (%d)" % cards.size(), cards.size() >= 2 and cards.size() <= 3)
+	var fights := _all_nodes(_shell._rail).filter(func(n): return n is Label and n.name == "DoorTags" \
+		and bool(n.get_meta("can_fight", false)) and not n.is_queued_for_deletion())
+	check("one of them can become a fight", fights.size() >= 1)
+	var anchors := {}
+	for c in cards:
+		anchors[String(c.get_meta("anchor"))] = true
+	var pins: PackedStringArray = _shell._city_map.door_pin_anchors()
+	check("every door is pinned on the map", pins.size() == anchors.size()
+		and Array(pins).all(func(a): return anchors.has(a)), str(pins))
+	_one_lit("doors", tr("ui.next_doors"))
+	_check_type_floor("the door board")
+	# Take a door that cannot become a fight.
+	var quiet: Node = null
+	for c in cards:
+		if not PiritoriDoors.can_fight(PiritoriDoors.template_of(String(c.get_meta("door")))):
+			quiet = c
+			break
+	if quiet == null:
+		check("a quiet door is on the board", false)
+		return
+	var door_id := String(quiet.get_meta("door"))
+	await _press(_take_button(quiet))
+	check("the door is taken", String(PiritoriDoors.taken_at().get("template", "")) == door_id
+		and _rail_named("DoorBoard") == null)
+	check("  and the rail says where to go", _rail_named("DoorTaken") != null)
+	check("the board's pins are gone with it", _shell._city_map.door_pin_anchors().is_empty())
+	# Walk there by the lit step (a road event on the way is answered).
+	for i in 6:
+		var lit := _rail_lit()
+		if lit.size() != 1:
+			break
+		var step := String(lit[0].get_meta("next_step", ""))
+		if step == "enter":
+			break
+		if step == "road-continue" or not PiritoriRoad.pending_event().is_empty():
+			var open := _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("road_choice") \
+				and not n.disabled and not n.is_queued_for_deletion())
+			if not open.is_empty():
+				await _press(open[-1])
+			var cont := _rail_lit()
+			if cont.size() == 1:
+				await _press(cont[0])
+			continue
+		await _press(lit[0])
+	var enter := _one_lit("enter", String(PiritoriDoors.template_of(door_id).get("title", "")))
+	if enter == null:
+		return
+	await _press(enter)
+	var steps := _all_nodes(_shell._rail).filter(func(n): return n is Label and n.has_meta("door_step") \
+		and not n.is_queued_for_deletion())
+	eq_("the door plays as a briefed scene: three steps", steps.size(), 3)
+	var choices := _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("choice") \
+		and not n.disabled and not n.is_queued_for_deletion())
+	await _press(choices[-1])
+	eq_("it cost the block", GameState.block_index, first + 1)
+	var next_cards := _door_cards()
+	check("the next free block has its own doors", next_cards.size() >= 2
+		and not next_cards.any(func(c): return String(c.get_meta("door")) == door_id),
+		str(next_cards.map(func(c): return c.get_meta("door"))))
+
+
+## A door fight (answer 23): the bear debt, with a crew. It is a door fight,
+## not a mission; it counts toward today's two; and when it ends it pays the
+## door's own stakes.
+func _test_door_fight_through_ui() -> void:
+	print("\na door fight (answer 23), through the interface")
+	await _fresh_city("karhupuisto")
+	var first := int(ContentRegistry.schedule().map(func(e): return bool(e.get("door", false))).find(true))
+	var today := int(ContentRegistry.schedule()[first].get("day", 0))
+	# Fixtures only: the block, a crew, and which doors are on the board.
+	GameState.block_index = first
+	GameState.day = first / 2 + 1
+	for id in ["crew-slot-runner", "crew-slot-watcher", "crew-slot-fixer"]:
+		GameState.apply_effect("recruit:" + id)
+	GameState.doors = {"offers": {str(first): [{"template": "hit-bear-debt", "anchor": "karhupuisto"},
+		{"template": "gig-rauno-cart", "anchor": "harju"}]}, "taken": {}}
+	GameState.fights_by_day = {}
+	_shell._show_city()
+	await get_tree().process_frame
+	var take: Button = null
+	for c in _door_cards():
+		if String(c.get_meta("door")) == "hit-bear-debt":
+			take = _take_button(c)
+	check("the bear debt is on the board", take != null and not take.disabled)
+	if take == null:
+		return
+	await _press(take)
+	var enter := _one_lit("enter", "ENTER")
+	if enter == null:
+		return
+	await _press(enter)
+	var lean := _choice_button("lean")
+	check("the fight is offered with a crew", lean != null and not lean.disabled)
+	if lean == null:
+		return
+	var rel := int(GameState.relationships.get("mccormick_family", 0))
+	var missions := GameState.mission_state.duplicate()
+	await _press(lean)
+	check("it is a fight", _shell.mode == _shell.Mode.BATTLE)
+	check("  a DOOR fight, not a mission and not the road",
+		_shell._door_battle == "hit-bear-debt" and not _shell._road_battle)
+	eq_("  and it counts toward today's two", GameState.fights_by_day.get(str(today), 0), 1)
+	# End it the way a thumb would: WITHDRAW, then let the round resolve.
+	var scene := _world_has("formation_battle.gd")
+	var wd := _live_button("Withdraw")
+	if scene == null or wd == null:
+		check("the battle can be withdrawn from", false)
+		return
+	await _press(wd)
+	var guard := 0
+	# The aftermath takes the stage down once the fight settles.
+	while is_instance_valid(scene) and not scene.is_queued_for_deletion() \
+			and scene.fight.result == FightManager.BattleResult.PENDING and guard < 10:
+		guard += 1
+		scene.fight.confirm_commands()
+		await get_tree().process_frame
+	await get_tree().process_frame
+	check("withdrawn, the fight is over and the city is back", _shell.mode == _shell.Mode.CITY)
+	eq_("  it paid the door's own stakes, not a mission's (a loss: McCormicks -1)",
+		int(GameState.relationships.get("mccormick_family", 0)), rel - 1)
+	check("  and settled no mission", GameState.mission_state == missions, str(GameState.mission_state))
 	_shell._show_city()
 	await get_tree().process_frame
 

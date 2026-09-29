@@ -167,12 +167,13 @@ func setup(encounter_id: String) -> void:
 	_apply_text_scale()
 
 	var enc := ContentRegistry.encounter(encounter_id)
-	var site := ContentRegistry.site(String(enc.get("site_id", "")))
 	# The encounter's own choice wins. Falling straight through to the anchor
 	# meant an anchor with two scenes handed out whichever sat first in the
 	# manifest — karhupuisto has both the park and the clearing, and the bear
-	# path asked for the clearing and got the park.
-	_load_stage_art(String(site.get("anchorId", "")), String(enc.get("scene_asset_id", "")))
+	# path asked for the clearing and got the park. A door (v4.65) has no site:
+	# it stands at its own anchor, which `encounter_anchor` answers either way.
+	var scene_id := String(enc.get("scene_asset_id", "")) if enc.get("scene_asset_id", null) != null else ""
+	_load_stage_art(GameState.encounter_anchor(encounter_id), scene_id)
 
 	_copy.text = String(enc.get("opening", ""))
 	_note_label.text = _stage_note

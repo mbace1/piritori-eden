@@ -1,8 +1,10 @@
 extends Node
-## Seven-day playthrough — §9 acceptance item 4.
+## The ten-day chapter, played through — §9 acceptance item 4.
 ##
 ## Walks the whole authored slice: every scheduled block, every encounter
-## resolved through the real model, ending in one of the authored endings.
+## resolved through the real model, a door taken on every free block (v4.65,
+## H2), ending on the chapter turn with the Pasila ending only forecast (H8).
+## Counts are read from canon: the schedule is the length of the chapter.
 ##
 ## The repo's own lesson, from eeri: "rooms.mjs proves a room's geometry;
 ## playthrough.cjs proves it is PLAYABLE — it exists because the prover passed
@@ -37,7 +39,7 @@ func _ready() -> void:
 	add_child(bail)
 	bail.start()
 
-	print("── seven-day playthrough ──")
+	print("── the ten-day chapter, played through ──")
 	Loc.set_language("en")
 	GameState.new_campaign()
 	GameState.battle_requested.connect(func(bid, negotiation):
@@ -45,7 +47,7 @@ func _ready() -> void:
 
 	_test_every_effect_is_understood()
 	_test_walk_the_slice()
-	_test_ending()
+	_test_chapter_closes()
 	_test_endings_are_reachable()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
@@ -53,7 +55,7 @@ func _ready() -> void:
 		print("PLAYTHROUGH FAIL")
 		get_tree().quit(1)
 	else:
-		print("PLAYTHROUGH OK: all 14 blocks play, every authored effect lands, the slice ends.")
+		print("PLAYTHROUGH OK: all %d blocks play, every authored effect lands, the chapter closes." % ContentRegistry.schedule().size())
 		get_tree().quit(0)
 
 
@@ -76,6 +78,15 @@ func _test_every_effect_is_understood() -> void:
 	for n in ContentRegistry.slice.get("news", []):
 		for e in n.get("effects", []):
 			verbs[String(e).split(":")[0]] = true
+	# And the doors (v4.65): their choices and what a door fight pays.
+	for t in ContentRegistry.door_templates():
+		for ch in t.get("choices", []):
+			for e in ch.get("effects", []):
+				verbs[String(e).split(":")[0]] = true
+		if PiritoriDoors.can_fight(t):
+			for key in ["win", "lose"]:
+				for e in t["fight"].get(key, []):
+					verbs[String(e).split(":")[0]] = true
 
 	var known := [
 		"cash", "markka", "debt", "intel", "capacity", "exit_fund", "exit-fund",
@@ -86,6 +97,7 @@ func _test_every_effect_is_understood() -> void:
 		"resolve-critical-wound", "start-battle", "start-negotiation",
 		"battle-on-failure", "battle", "opponent-nerve", "resolve",
 		"resolve-ending", "mccormick-family", "label",
+		"forecast-ending", "chapter-ending",
 	]
 	var unknown: Array = []
 	for v in verbs:
@@ -96,17 +108,25 @@ func _test_every_effect_is_understood() -> void:
 
 
 ## Play the schedule: at each block, resolve that block's encounter by taking
-## the first choice whose requirements are met.
+## the first choice whose requirements are met. A free block takes the first
+## door on its board, which then IS the block's encounter.
 func _test_walk_the_slice() -> void:
-	print("\nwalking all fourteen blocks")
+	print("\nwalking all %d blocks" % GameState.total_blocks)
 	var played := 0
+	var doors := 0
 	var journeys := 0
 	var skipped: Array = []
 
 	for i in range(GameState.total_blocks):
 		if GameState.is_slice_complete():
 			break
-		var entry := ContentRegistry.scheduled_for(GameState.day, GameState.current_block())
+		if PiritoriDoors.is_door_block() and PiritoriDoors.taken_at().is_empty():
+			var offers := PiritoriDoors.offer_doors()
+			check("day %d %s: a free block offers 2-3 doors" % [GameState.day, GameState.current_block()],
+				offers.size() >= 2 and offers.size() <= 3, str(offers))
+			if not offers.is_empty() and bool(PiritoriDoors.take_door(String(offers[0]["template"])).get("ok", false)):
+				doors += 1
+		var entry := GameState.current_schedule()
 		if entry.is_empty():
 			GameState.advance_block()
 			continue
@@ -151,7 +171,9 @@ func _test_walk_the_slice() -> void:
 			GameState.advance_block()
 
 	check("no block was unplayable", skipped.is_empty(), str(skipped))
-	eq("every scheduled block resolved", played, 14)
+	eq("every scheduled block resolved", played, ContentRegistry.schedule().size())
+	eq("  a door taken on every free block", doors,
+		ContentRegistry.schedule().filter(func(e): return bool(e.get("door", false))).size())
 	check("the walk travelled explicitly (%d journeys)" % journeys, journeys >= 8)
 	check("the slice reports itself complete", GameState.is_slice_complete())
 	print("        cash €%d · debt €%d · crew %d · missions %d · memories %d" % [
@@ -160,35 +182,42 @@ func _test_walk_the_slice() -> void:
 	print("        battles requested: %s" % str(_battles.map(func(b): return b["id"])))
 
 
-func _test_ending() -> void:
-	print("\nthe run produces an authored ending")
-	if GameState.ending_id == "":
-		GameState.resolve_ending()
-	check("an ending resolved", GameState.ending_id != "")
-	var e := GameState.ending()
-	check("it is one the slice authored", not e.is_empty())
+## v4.65 (H1/H8): the chapter closes on the shipment night — run, or the boat
+## leaving without you — and the game does not end. Day 7 only pointed at
+## Pasila; the four endings are the era's result.
+func _test_chapter_closes() -> void:
+	print("\nthe chapter closes; the game does not end")
+	check("the chapter is cleared", GameState.chapter_cleared)
+	check("  on an outcome the screen can render",
+		["clean", "messy", "lost", "missed"].has(GameState.last_ending_outcome), GameState.last_ending_outcome)
+	check("  and the city remembers how", Array(GameState.memories).has(
+		"chapter-cleared:%d:%s" % [GameState.chapter, GameState.last_ending_outcome]))
+	eq("no ending resolved", GameState.ending_id, "")
+	var forecast := ""
+	for m in GameState.memories:
+		if String(m).begins_with("pasila-forecast:"):
+			forecast = String(m).substr(16)
+	check("day 7 left a look ahead at Pasila", forecast != "", str(GameState.memories))
+	var e := GameState.forecast_ending()
+	check("the road points at an authored ending", not e.is_empty() and String(e.get("summary", "")) != "")
 	if not e.is_empty():
-		print("        %s — %s" % [e.get("id", ""), e.get("label", "")])
-		check("it carries its authored summary", String(e.get("summary", "")) != "")
-		check("the run met its requirements",
-			GameState.meets_all(e.get("requirements", [])),
-			str(e.get("requirements", [])))
+		print("        where the road points: %s — %s" % [e.get("id", ""), e.get("label", "")])
 
 
-## Each authored ending must be reachable by SOME run, or it is dead content.
+## Each authored ending must be where SOME road points, or it is dead content.
 func _test_endings_are_reachable() -> void:
-	print("\nevery authored ending is reachable")
+	print("\nevery authored ending is where some road points")
 	var endings: Array = ContentRegistry.slice.get("endings", [])
 	check("the slice authors endings", endings.size() > 0)
 	for e in endings:
 		GameState.new_campaign()
 		# Put the run into the shape this ending asks for, then confirm the
-		# resolver actually picks it.
+		# forecast actually picks it.
 		for req in e.get("requirements", []):
 			_force(String(req))
-		var got := GameState.resolve_ending()
+		var got := String(GameState.forecast_ending().get("id", ""))
 		check("  %s is reachable" % e.get("id", ""), got == String(e.get("id", "")),
-			"(resolver chose '%s')" % got)
+			"(the forecast chose '%s')" % got)
 
 	# pasila-haunted has exactly one authored path: battle-courtyard-3v3 says
 	# "Only an unresolved, clearly flagged critical wound at the final
