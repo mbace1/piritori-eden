@@ -39,8 +39,8 @@ const sites = uniqueIds(map.sites, "map sites");
 
 check(content.schema_version === 1, "content schema_version must be 1");
 check(content.campaign.era === "2003", "slice must remain anchored in 2003");
-check(content.campaign.days === 7, "slice must contain seven days");
-check(content.campaign.total_player_blocks === 14, "slice must contain fourteen player blocks");
+check(content.campaign.days === 10, "slice must contain ten days (H1: a ten-day chapter)");
+check(content.campaign.total_player_blocks === 20, "slice must contain twenty player blocks");
 check(JSON.stringify(content.campaign.blocks_per_day) === JSON.stringify(["day", "night"]), "block order must be day, night");
 check(content.products.length === 1 && products.has("piri"), "slice must use one product: piri");
 check(content.market_offers.length === 5, "slice must expose five market offers");
@@ -54,9 +54,12 @@ check(content.missions.length === 4, "slice must define four mission families");
 // QUEUE.md) is now a real, repeatable, no-stakes training battle rather
 // than a debug-only ?stage= curiosity.
 check(content.battles.length === 4, "slice must define exactly four authored battles");
-check(content.encounters.length >= 10 && content.encounters.length <= 14, "slice must define ten to fourteen meaningful encounters");
-check(content.encounters.length === 14, "implementation baseline expects fourteen encounters");
-check(content.schedule.length === 14, "schedule must contain fourteen entries");
+// 14 -> 17 encounters and 14 -> 20 blocks on 2026-09-29 (H1, The Long Game):
+// chapter 1 is ten days; days 8-10 hold three spine beats and three door
+// blocks (content/doors-v1.json, web/test/doors.mjs).
+check(content.encounters.length === 17, "implementation baseline expects seventeen encounters");
+check(content.schedule.length === 20, "schedule must contain twenty entries");
+check(content.schedule.filter((slot) => slot.door).length === 3, "chapter 1 has three door blocks");
 check(content.schedule[0]?.encounter_id === "enc-first-purchase" && content.schedule[0]?.anchor_id === "piritori", "opening must show Piritori as the first highlighted map destination");
 check(content.schedule[1]?.encounter_id === "enc-first-sale" && content.schedule[1]?.anchor_id !== "piritori", "first purchase must lead directly to a profitable sale elsewhere");
 check(content.news.length === 1, "slice must contain one scheduled Arvo bulletin");
@@ -65,10 +68,15 @@ check(content.endings.length >= 2, "slice must show more than one Pasila reachab
 const scheduleKeys = new Set();
 for (const slot of content.schedule) {
   const key = `${slot.day}:${slot.block}`;
-  check(slot.day >= 1 && slot.day <= 7, `schedule ${key}: invalid day`);
+  check(slot.day >= 1 && slot.day <= content.campaign.days, `schedule ${key}: invalid day`);
   check(["day", "night"].includes(slot.block), `schedule ${key}: invalid block`);
   check(!scheduleKeys.has(key), `schedule ${key}: duplicate block`);
   scheduleKeys.add(key);
+  if (slot.door) {
+    check(!slot.encounter_id && !slot.anchor_id, `schedule ${key}: a door block has no authored encounter or lead`);
+    check(slot.day >= 8, `schedule ${key}: doors open after the authored week`);
+    continue;
+  }
   check(encounters.has(slot.encounter_id), `schedule ${key}: missing encounter ${slot.encounter_id}`);
   check(anchors.has(slot.anchor_id), `schedule ${key}: missing anchor ${slot.anchor_id}`);
   const anchor = map.anchors.find((item) => item.id === slot.anchor_id);
@@ -77,7 +85,7 @@ for (const slot of content.schedule) {
   const encounter = content.encounters.find((item) => item.id === slot.encounter_id);
   check(encounter?.day === slot.day && encounter?.block === slot.block, `schedule ${key}: encounter timing mismatch`);
 }
-for (let day = 1; day <= 7; day += 1) {
+for (let day = 1; day <= content.campaign.days; day += 1) {
   for (const block of ["day", "night"]) check(scheduleKeys.has(`${day}:${block}`), `schedule: missing ${day}:${block}`);
 }
 

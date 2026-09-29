@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=3';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=4';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -14,22 +14,24 @@ import {
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-} from './state.js?v=7';
+  forecastEnding, recordFight, fightsToday,
+} from './state.js?v=8';
 import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=2';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=2';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=3';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=3';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=2';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock } from './doors.js?v=1';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=3';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=11';
+} from './battle.js?v=12';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -125,6 +127,7 @@ let tokoTold = null;
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.
 let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
+let doors = { rules: { offers_min: 0, offers_max: 0, scenes: {} }, templates: [] };
 let routePlanning = false;
 let routeDraft = [];
 let observation = '';
@@ -459,14 +462,15 @@ function anchorSvg(anchor, current, selected, present) {
   const point = anchor.board;
   const locked = ['locked', 'teaser'].includes(anchor.sliceState);
   const stateClass = [current ? 'current' : '', selected ? 'selected' : '', present ? 'present' : '', locked ? 'locked' : '', anchor.sliceState === 'landmark' ? 'landmark' : ''].join(' ');
-  const roles = [present ? 'you are here' : '', current ? 'story lead' : '', selected && !present ? 'inspecting' : ''].filter(Boolean);
+  const roles = [present ? 'you are here' : '', current ? 'story lead' : '', openDoorAnchors().has(anchor.id) ? 'a door is open here' : '', selected && !present ? 'inspecting' : ''].filter(Boolean);
   const offset = anchor.labelOffset ?? [14, -20];
   const small = anchor.label.length > 15 ? 'small' : '';
   const schedule = currentSchedule(state, data.content);
   const mission = schedule?.anchor_id === anchor.id ? `<path class="mission-pulse" d="M${point.x - 10} ${point.y - 45}l10 -16 10 16 -10 8Z"/>` : '';
+  const door = openDoorAnchors().has(anchor.id) ? `<rect class="door-pin" x="${point.x - 9}" y="${point.y - 58}" width="18" height="26" rx="2"/>` : '';
   return `
     <g class="map-node ${stateClass}" data-anchor-group="${esc(anchor.id)}">
-      ${mission}
+      ${mission}${door}
       ${present ? `<rect class="presence-mark" x="${point.x - 26}" y="${point.y - 26}" width="52" height="52" transform="rotate(45 ${point.x} ${point.y})"/>` : ''}
       <circle class="map-node-dot" cx="${point.x}" cy="${point.y}" r="${locked ? 14 : 18}"/>
       <circle class="map-anchor-hit" data-action="select-anchor" data-anchor="${esc(anchor.id)}"
@@ -529,6 +533,9 @@ function progressionCard(slot) {
 function nextStep(slot) {
   if (!slot || state.endingId) return null;
   const journey = currentJourney();
+  if (slot.door && !slot.encounter_id && !journey?.ok) {
+    return { step: 'doors', label: 'CHOOSE A DOOR', hint: 'The story leaves this block free. Take one door; the others close with the block.' };
+  }
   const leadId = slot.anchor_id;
   const lead = data.anchors.get(leadId);
   if (journey?.ok) return { step: 'commit', label: `TRAVEL · ${data.anchors.get(journey.destination)?.label ?? journey.destination}`, hint: 'Walk there now. Nothing is spent until you arrive.' };
@@ -659,6 +666,7 @@ function renderRoute() {
         </div>
       </section>
       <aside class="map-side">
+        ${renderDoorBoard(slot)}
         ${progressionCard(slot)}
         <section class="paper-panel inspect-panel" data-inspected="${esc(selected.id)}" data-present="${esc(present.id)}" data-lead="${esc(lead?.id ?? '')}">
           <p class="section-label">${here ? 'YOU ARE HERE' : 'INSPECTING'}${selected.sliceState === 'active' ? '' : ` · ${esc(selected.sliceState === 'landmark' ? 'LANDMARK' : 'SEALED')}`}</p>
@@ -673,7 +681,7 @@ function renderRoute() {
             ${here ? availableVisits(state, data).map(v => `<button class="paper-button" data-action="open-visit" data-visit="${esc(v.id)}">VISIT · ${esc(v.participants.includes('jaska') ? 'Jaska' : 'Toko')}</button>`).join('') : ''}
             ${here && selected.id === slot.anchor_id ? `<button class="paper-button" data-action="open-encounter">${tr('enter')} · ${esc(nextEncounter?.id.replace('enc-', '').replaceAll('-', ' '))}</button>` : ''}
             ${!here && canTravelTo(selected) && !journey ? `<button class="paper-button" data-action="plan-journey" data-anchor="${esc(selected.id)}">TRAVEL HERE · ${esc(selected.label)}</button>` : ''}
-            ${selected.id !== slot.anchor_id ? `<button class="paper-button" data-action="show-lead">SHOW LEAD · ${esc(lead?.label ?? '')}</button>` : ''}
+            ${lead && selected.id !== slot.anchor_id ? `<button class="paper-button" data-action="show-lead">SHOW LEAD · ${esc(lead?.label ?? '')}</button>` : ''}
             ${selected.sliceState === 'training'
               ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
               : `<button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>`}
@@ -689,6 +697,45 @@ function renderRoute() {
       </aside>
       ${renderNextStep(slot)}
     </div>`;
+}
+
+/** Anchors with a door open on this block (H2): pinned on the map. */
+function openDoorAnchors() {
+  const slot = data.content.schedule[state.scheduleIndex];
+  if (!slot?.door || state.doors?.taken?.[state.scheduleIndex]) return new Set();
+  return new Set(offerDoors(state, data, doors).map(o => o.anchor));
+}
+
+const DOOR_KIND = { gig: 'GIG', pickup: 'PICKUP', sale: 'SALE', favour: 'FAVOUR', watch: 'WATCH', hit: 'HIT' };
+const DOOR_FROM = { network: 'THE NETWORK', street: 'THE STREET', toko: 'TOKO', mccormick_family: 'THE McCORMICKS', jade_lantern_network: 'THE JADE LANTERN' };
+
+/** H2: a block the spine leaves free offers 2-3 doors. Take one; it costs the block. */
+function renderDoorBoard(slot) {
+  if (!slot?.door || slot.encounter_id) return '';
+  const offers = offerDoors(state, data, doors);
+  const today = fightsToday(state, data.content);
+  const cap = doors.rules.fights_per_day_max ?? 2;
+  const cards = offers.map(offer => {
+    const t = templateOf(doors, offer.template);
+    const anchor = data.anchors.get(offer.anchor);
+    const blocked = doorBlocker(state, data, doors, offer, roadEvents);
+    return `<article class="door-card" data-door="${esc(t.id)}" data-kind="${esc(t.kind)}" data-anchor="${esc(offer.anchor)}">
+      <p class="section-label">${DOOR_KIND[t.kind] ?? esc(t.kind)} · ${DOOR_FROM[t.from] ?? esc(t.from)} · ${esc(anchor?.label ?? offer.anchor)}</p>
+      <h3>${esc(t.title)}</h3>
+      <p>${esc(t.premise)}</p>
+      <ol class="mission-steps">${(t.steps ?? []).map(step => `<li>${esc(step)}</li>`).join('')}</ol>
+      <p class="door-stakes"><span class="tag risk-${esc(t.risk)}">${esc(t.risk.toUpperCase())} RISK</span>${canFight(t) ? '<span class="tag door-fight">CAN BECOME A FIGHT</span>' : ''}${t.late ? '<span class="tag">LATE · CLOSES 22:00</span>' : ''}</p>
+      <p class="consequence-strip">${esc(t.stakes)}</p>
+      <button class="paper-button ${blocked ? '' : 'primary'}" data-action="take-door" data-door="${esc(t.id)}" ${blocked ? 'disabled' : ''}>${blocked === 'closed' ? 'CLOSED' : `TAKE · ${esc(anchor?.label ?? '')}`}</button>
+    </article>`;
+  }).join('');
+  return `<section class="paper-panel door-board" aria-label="Doors open this block">
+    <p class="section-label">${esc(formatBlock(state, data.content))} · FREE BLOCK</p>
+    <h2>${offers.length} DOORS OPEN</h2>
+    <p class="dim">Take one: it becomes this block's work, where it is. The others close with the block. Fights today: ${today} of ${cap}.</p>
+    ${offers.length ? cards : '<p class="consequence-strip">Nothing is open. Rest, and let the block pass.</p>'}
+    ${offers.length ? '' : '<button class="paper-button" data-action="advance">LET THE BLOCK PASS</button>'}
+  </section>`;
 }
 
 /** The journey you are about to make, and what it will and will not cost —
@@ -800,6 +847,7 @@ function renderEncounter() {
         <p class="section-label">${formatBlock(state, data.content)} · ${esc(anchor?.label)}</p>
         <h2 class="section-title">${esc(encounterTitle(encounter))}</h2>
         <p class="encounter-opening">${esc(encounter.opening)}</p>
+        ${encounter.door ? (() => { const t = templateOf(doors, encounter.door); return `<ol class="mission-steps">${(t?.steps ?? []).map(step => `<li>${esc(step)}</li>`).join('')}</ol><p class="consequence-strip">${esc(t?.stakes ?? '')}</p>`; })() : ''}
         <div class="inspectables" aria-label="Inspect scene">
           ${encounter.inspectables.map((item, index) => `<button class="paper-button inspect-button" data-action="inspect" data-index="${index}" type="button">${esc(item)}</button>`).join('')}
         </div>
@@ -827,6 +875,9 @@ function encounterTitle(encounter) {
     'enc-courtyard-last-call': 'THE PORTTIKONGI',
     'enc-pasila-ledger': 'A CLEAN ADDRESS',
     'enc-jaska-last-light': 'THE BLANK SHAPE',
+    'enc-kello-reckoning': 'THE MAN WHO STAYED',
+    'enc-family-calls': 'THE FAMILIES KEEP BOOKS',
+    'enc-shipment-night': 'THE SHIPMENT',
   };
   return titles[encounter.id] ?? cap(encounter.id.replace('enc-', ''));
 }
@@ -837,9 +888,17 @@ function renderChoices(encounter) {
     return `<button class="choice-card" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
       <strong>${esc(choice.label)}</strong>
       <span>${esc(choice.forecast)}</span>
-      ${status.ok ? '' : `<em>${esc(status.reasons.join(' · '))}</em>`}
+      ${status.ok ? '' : `<em>${esc(status.reasons.map(readableReason).join(' · '))}</em>`}
     </button>`;
   }).join('')}</div>`;
+}
+
+function readableReason(reason) {
+  return reason
+    .replace(/^deployed-crew >= (\d+)$/, 'needs $1 crew with you')
+    .replace(/^fights-today < (\d+)$/, 'already $1 fights today')
+    .replace(/^stock piri >= (\d+)$/, 'needs $1 pack on you')
+    .replace(/^requires (.+)$/, 'only if $1');
 }
 
 function renderAwayFromLead(slot) {
@@ -891,6 +950,7 @@ function renderChapter() {
       clean: `The shipment got away clean.${ending.grants_upgrade ? ` ${esc(cap(ending.grants_upgrade))} is yours.` : ''}`,
       messy: 'Something had to be left behind, but it got away.',
       lost: 'Somebody did not come back.',
+      missed: 'The boat left without Aatami on it. No stake, and no upgrade.',
     };
     return `<section class="paper-panel">
       <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
@@ -900,20 +960,17 @@ function renderChapter() {
     </section>`;
   }
   const goalMet = chapterGoalMet(state);
-  const atAnchor = Boolean(ending.anchor_id) && state.selectedAnchor === ending.anchor_id;
-  const canAfford = state.cash >= (ending.stake_eur ?? 0);
   const fmt = value => state.chapterGoal === 'money' ? money(value) : String(value);
+  // H1: the shipment is on the schedule now, day 10's night at Sörnäinen.
+  // The threshold buys the right to run it there; missing it, the boat
+  // still sails and the chapter still closes.
   return `<section class="paper-panel">
     <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
     <h2 class="section-title">${esc(cap(state.chapterGoal))} · ${fmt(progress)} / ${fmt(state.chapterThreshold)}</h2>
-    ${goalMet
-      ? `<p>${esc(ending.brief ?? '')}</p>
-         <button class="paper-button primary" data-action="attempt-chapter-ending" ${atAnchor && canAfford ? '' : 'disabled'}>
-           ATTEMPT ${esc((ending.label ?? 'THE OPERATION').toUpperCase())} · ${money(ending.stake_eur ?? 0)}
-         </button>
-         ${!atAnchor ? `<p class="consequence-strip">Stand at ${esc(anchor?.label ?? 'the site')} to attempt it.</p>` : ''}
-         ${atAnchor && !canAfford ? '<p class="consequence-strip">Not enough cash on hand for the stake.</p>' : ''}`
-      : '<p class="consequence-strip">Earned by fencing loot at Piritori — market sales and mission payouts do not count.</p>'}
+    <p>${esc(ending.brief ?? '')}</p>
+    <p class="consequence-strip">${goalMet
+      ? `Earned. ${esc((ending.label ?? 'The operation'))} runs on day ${def.days ?? 10}'s night at ${esc(anchor?.label ?? 'the harbour')}, for ${money(ending.stake_eur ?? 0)}.`
+      : 'Earned by fencing loot at Piritori; market sales and mission payouts do not count. Short of it on day 10, the boat sails without you.'}</p>
   </section>`;
 }
 
@@ -1677,11 +1734,33 @@ function renderNews() {
     </div>`;
 }
 
+/** H1/H8: chapter 1 ends on the chapter turn, not on Pasila. The four
+ *  endings are the era's result; until chapter 4 exists this screen shows
+ *  where the road points, and what crosses into chapter 2. */
+function renderChapterClose() {
+  const def = data.content.chapters?.find(item => item.index === state.chapter);
+  const outcome = state.lastEndingOutcome || (state.chapterCleared ? '' : 'missed');
+  const words = { clean: 'The shipment got away clean.', messy: 'The shipment got away, and something was left behind.', lost: 'The shipment got away. Somebody did not come back.', missed: 'The boat left without Aatami on it.' };
+  const forecast = forecastEnding(state, data);
+  return `<section class="paper-panel chapter-close">
+    <p class="section-label">CHAPTER ${state.chapter} CLOSES${def?.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
+    <h2 class="section-title">TO BE CONTINUED</h2>
+    <p>${esc(words[outcome] ?? '')}</p>
+    ${renderChapterTurn()}
+    ${forecast ? `<div class="pasila-forecast"><p class="section-label">WHERE THIS ROAD POINTS · ERA I</p><h3>${esc(forecast.label)}</h3><p>${esc(forecast.summary)}</p></div>` : ''}
+    <div class="ledger-summary">
+      <div><span class="dim">EXIT FUND</span><b>${money(state.exitFund)}</b></div>
+      <div><span class="dim">DEBT</span><b>${money(state.debt)}</b></div>
+      <div><span class="dim">CREW</span><b>${state.recruited.length}</b></div>
+      <div><span class="dim">JASKA</span><b>${state.relationships.jaska ?? 0}</b></div>
+    </div>
+    <button class="paper-button" data-action="reset-campaign">START A NEW TEN DAYS</button>
+  </section>`;
+}
+
 function renderCampaignEnd() {
   const ending = data.content.endings.find(item => item.id === state.endingId);
-  if (!ending) {
-    return `<section class="paper-panel empty-state"><p class="section-label">SEVEN-DAY SLICE</p><h2 class="section-title">THE LAST BLOCK IS QUIET</h2><p>The campaign has reached its authored edge.</p></section>`;
-  }
+  if (!ending) return renderChapterClose();
   return `<section class="paper-panel empty-state">
     <p class="section-label">ERA I OUTCOME · NOT A MORALITY SCORE</p>
     <h2 class="section-title">${esc(ending.label)}</h2>
@@ -1693,7 +1772,7 @@ function renderCampaignEnd() {
       <div><span class="dim">JASKA</span><b>${state.relationships.jaska ?? 0}</b></div>
     </div>
     <p class="consequence-strip">Pasila is a possibility, not a victory screen. The route map remains part of what the family inherits.</p>
-    <button class="paper-button" data-action="reset-campaign">START A NEW SEVEN DAYS</button>
+    <button class="paper-button" data-action="reset-campaign">START A NEW TEN DAYS</button>
   </section>`;
 }
 
@@ -1723,6 +1802,7 @@ function startBattle(id) {
   try {
     state.battle = createBattleState(definition, crew, state, data);
     state.mode = 'battle';
+    if (!state.battle.training) recordFight(state, data.content);
   } catch (error) {
     logToast(error.message);
     return false;
@@ -1751,6 +1831,7 @@ function recordBattleConsequences() {
       if (spoils.length) logToast(`Took: ${spoils.map(cap).join(', ')}.`);
     }
     applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
+    if (battle.door) applyEffects(state, doorFightEffects(doors, battle.door, battle.result), data, `door:${battle.door}:${battle.result}`);
     // COMBAT.md §9.5.3: the police's default posture is subdue, and its
     // bite is on the fallen — a downed crew member the police take is not
     // merely hurt, they are gone. `taken` can also name a STANDING crew
@@ -1841,6 +1922,10 @@ function handleRootClick(event) {
     const next = nextStep(slot);
     if (!next || next.step !== target.dataset.step) { render(); return; }
     if (next.step === 'enter') openEncounter();
+    else if (next.step === 'doors') {
+      state.mode = 'route'; render();
+      document.querySelector('.door-board')?.scrollIntoView({ block: 'start', behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
     else if (next.step === 'plan') {
       inspectAnchor(slot.anchor_id);
       journeyDraft = { owner: state, preview: previewJourney(state, data, slot.anchor_id) };
@@ -1879,7 +1964,17 @@ function handleRootClick(event) {
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
-    else if (result.startBattle) startBattle(result.startBattle);
+    else if (result.startBattle && startBattle(result.startBattle) && encounter.door) {
+      // A door fight has no mission behind it: its stakes are the door's own.
+      state.battle.missionId = null;
+      state.battle.door = encounter.door;
+    }
+    persist(); render();
+  } else if (action === 'take-door') {
+    const result = takeDoor(state, data, doors, target.dataset.door, roadEvents);
+    if (!result.ok) { logToast(result.reason === 'closed' ? 'That door closed at 22:00.' : result.reason); render(); return; }
+    inspectAnchor(result.offer.anchor);
+    logToast(`${result.encounter.title}: travel to ${data.anchors.get(result.offer.anchor)?.label} to do it.`);
     persist(); render();
   } else if (action === 'road-choose') {
     const result = resolveRoad(state, data, roadEvents, target.dataset.choice);
@@ -2046,8 +2141,10 @@ async function boot() {
     data = await loadGameData();
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
     story = await loadStory().catch(() => story);
+    doors = await loadDoors().catch(() => doors);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
+    registerTaken(state, data, doors); // a taken door is the block's encounter; put it back
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     $('resumeButton').hidden = !hasSave;
     $('beginButton').addEventListener('click', () => {
@@ -2154,7 +2251,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.64',
+      version: 'v4.65',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });
@@ -2210,7 +2307,7 @@ async function boot() {
       get story() { return story; },
       get sound() { return soundState(); },
       debug: {
-        setState(next) { state = next; attachGrowth(state.battle, state, data); persist(); render(); },
+        setState(next) { state = next; registerTaken(state, data, doors); attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id) { startBattle(id); persist(); render(); },
         setBattleLights,
         openEncounter,

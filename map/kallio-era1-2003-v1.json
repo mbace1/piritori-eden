@@ -492,6 +492,15 @@
       "fictional": true,
       "addressPrecision": "anchor-only",
       "sliceState": "open"
+    },
+    {
+      "id": "sornainen_quay",
+      "anchorId": "sornainen_harbour",
+      "label": "Sörnäinen quay",
+      "kind": "narrative-encounter",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "chapter-ending"
     }
   ],
   "edges": [

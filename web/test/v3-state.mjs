@@ -4,7 +4,7 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=7';
+} from '../js/v3/state.js?v=8';
 import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -125,11 +125,13 @@ for (const choiceId of choicePlan) {
   assert.equal(status.ok, true, `${choiceId} is available: ${status.reasons.join(', ')}`);
   const result = chooseEncounter(full, encounter, choice, data);
   assert.equal(result.ok, true);
-  if (!full.endingId) advanceSchedule(full, data);
+  advanceSchedule(full, data);
 }
-assert.equal(full.scheduleIndex, 13, 'ending resolves inside the fourteenth block');
+// H1 (2026-09-29): day 7 no longer ends the game. The authored week plays
+// through; days 8-10 (doors, web/test/doors.mjs) follow it.
+assert.equal(full.scheduleIndex, 14, 'the authored week is fourteen blocks, and the chapter goes on');
 assert(journeys >= 8, `the full route travels explicitly (${journeys} journeys)`);
-assert(full.endingId, 'the final authored choice resolves an ending');
+assert(!full.endingId && full.flags.some(f => f.startsWith('memory:pasila-forecast:')), 'the last authored choice points at Pasila instead of ending there');
 assert.equal(full.choices['enc-first-firearm'], 'refuse', 'firearm refusal remains viable');
 assert.equal(full.missionStatus['mission-courtyard-receipts'], 'fail', 'non-combat courtyard path remains viable');
 
@@ -161,7 +163,7 @@ assert.equal(full.missionStatus['mission-courtyard-receipts'], 'fail', 'non-comb
   assert.equal(countOf(shop, 'pipe'), before + 1);
 }
 
-console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, fixed choices and ending ${full.endingId}.`);
+console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, fixed choices and Pasila forecast ${full.flags.find(f => f.startsWith('memory:pasila-forecast:')).split(':').pop()}.`);
 
 // ── Growth loop (GameState.gd Phase D / COMBAT.md §9.11) ───────────────────
 {
@@ -171,7 +173,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=7');
+  } = await import('../js/v3/state.js?v=8');
 
   const CAREER = 10;
 
@@ -266,7 +268,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=7');
+    restoreState } = await import('../js/v3/state.js?v=8');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');

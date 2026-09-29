@@ -3,9 +3,9 @@
 //   node web/test/toko.mjs
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, restoreState } from '../js/v3/state.js?v=7';
+import { createState, restoreState } from '../js/v3/state.js?v=8';
 import { board, INFO, markSeen } from '../js/v3/board.js?v=3';
-import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from '../js/v3/toko.js?v=2';
+import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from '../js/v3/toko.js?v=3';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));

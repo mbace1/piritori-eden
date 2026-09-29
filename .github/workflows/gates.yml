@@ -143,6 +143,7 @@ jobs:
           node web/test/toko.mjs
           node web/test/story.mjs
           node web/test/chapter.mjs
+          node web/test/doors.mjs
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
@@ -203,6 +204,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/chapter-browser.cjs
+      - name: doors (a free block, a door taken, a door fight)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/doors-browser.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

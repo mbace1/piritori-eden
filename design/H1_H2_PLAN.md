@@ -18,7 +18,7 @@ Owner, 2026-09-29: The Long Game is greenlit ("good to go in your order"). H7 sh
   The other three blocks are doors.
 - **The shipment moves onto the schedule** as the day-10 night beat. The threshold still buys entry: below it, the night is a missed boat and the chapter still turns, on the operation's "lost" outcome.
 - **The Pasila ledger (day 7) becomes a look ahead, not an ending.** The four endings move behind H8. Until chapter 4 exists, a played-through chapter 1 ends at the chapter turn, with a "to be continued" screen that shows the H7 plan. This is the one change a returning player will notice.
-- **Numbers.** `CHAPTER_DAYS` 10 stops being a placeholder. The debt payment on day 4 stays; a second payment lands on day 9.
+- **Numbers.** `CHAPTER_DAYS` 10 stops being a placeholder. The debt payments stay on days 4 and 7.
 
 ## H2: doors
 
@@ -32,7 +32,7 @@ Owner, 2026-09-29: The Long Game is greenlit ("good to go in your order"). H7 sh
   The offer for a block is a deterministic roll from the save, like the road, so a reload cannot reroll it.
 - **Doors feed the case.** A *watch* door can set a clue flag, which is how chapter 2's case gets clues from all three layers.
 - **Doors read standing.** A family's doors open and close with H5's ladder. Until H5 exists, doors read the relationship numbers already in the save.
-- **The hit door is the only door that can become a fight.** How often it is offered waits on owner question 23 (fight rhythm). Until then, one hit door per chapter is offered on days 8–10, and it is always telegraphed.
+- **Fights (owner answer 23, 2026-09-29): "Fights everyday, depending on the mission. Maybe 2 per day."** Any kind of door can carry a fight, not only a hit; every door block offers one while fewer than two fights have happened that day; a day holds at most two. Built as v4.65.
 
 ## Order of work
 

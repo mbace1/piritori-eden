@@ -9,7 +9,7 @@ const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
   read('../v3.css?v=8'),
-  read('../js/v3/app.js?v=30'),
+  read('../js/v3/app.js?v=31'),
   read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
@@ -20,7 +20,7 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=30'));
+assert(html.includes('js/v3/app.js?v=31'));
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
 // v11: main's fighter-scale fix and C.19's import-token pass each moved
 // render3d.js to "v10" with different bytes; the merge is a third file.
@@ -50,7 +50,7 @@ assert(app.includes('weather-rain-fine-v01'), 'weather stays a separate runtime 
 // it stays out of the 11 active/market-participating anchors below).
 assert.equal(map.anchors.length, 15, 'anchor count changed — check QUEUE.md before editing this number');
 assert.equal(map.anchors.filter(anchor => anchor.sliceState === 'active').length, 11);
-assert.equal(content.schedule.length, 14);
+assert.equal(content.schedule.length, 20);
 assert.deepEqual(content.schedule.slice(0, 2).map(item => item.encounter_id),
   ['enc-first-purchase', 'enc-first-sale'], 'classic purchase-to-profit opening stays immediate');
 // Same drift as the anchors above. A third battle was authored while this
@@ -70,5 +70,5 @@ for (const id of ['scene-toko-noodles-prototype-v02', 'scene-karhupuisto-v01',
   assert(ids.has(id), `${id} remains registered`);
 }
 
-console.log('V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 14 blocks and registered scene art.');
+console.log('V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.');
 

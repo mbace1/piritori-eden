@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "id": "doors-v1",
+  "authority": "Owner 2026-09-29: The Long Game H2 greenlit ('go ahead'); answer 23 'Fights everyday, depending on the mission. Maybe 2 per day.' A door is an offer on a block the spine leaves free: taking one costs the block. Templates, not scenes.",
+  "fiction_boundary": "Composite people and situations. The good is abstract (DESIGN_LOCKS §9.1).",
+  "rules": {
+    "offers_min": 2,
+    "offers_max": 3,
+    "fights_per_day_max": 2,
+    "fight_door_each_block": true,
+    "late_closes_at_minutes": 1320,
+    "note": "A late door closes when the block clock passes 22:00 (road minutes). While fewer than fights_per_day_max fights have happened today, every door block offers at least one door that can become a fight. A door is taken once per chapter.",
+    "scenes": {
+      "piritori": "scene-piritori-square-v01",
+      "hakaniemi": "scene-hakaniemi-square-v01",
+      "linjat_yard": "scene-kallio-service-yard-v01",
+      "karhupuisto": "scene-karhupuisto-clearing-v01",
+      "torkkelinmaki": "scene-kallio-backyard-v01",
+      "harju": "scene-harju-pitch-v01",
+      "vaasankatu": "scene-toko-noodles-empty-v01",
+      "sornainen_harbour": "scene-sornainen-quay-v01",
+      "suvilahti": "scene-sornainen-docks-v02",
+      "makelansilta": "scene-scene-club-v01",
+      "siltasaari": "scene-bank-counter-v01"
+    }
+  },
+  "templates": [
+    {
+      "id": "gig-rauno-cart",
+      "kind": "gig",
+      "from": "network",
+      "anchors": ["harju"],
+      "risk": "low",
+      "title": "Rauno's Cart",
+      "premise": "The bottle collector's cart has lost a wheel halfway up the Harju hill. Four hundred bottles, one wheel, and the return point shuts at nine.",
+      "steps": ["Find the wheel under the tram stop bench", "Push the cart up the hill", "Stand in line while Rauno counts every bottle twice"],
+      "stakes": "A few euros, and a man who knows every back door owes you one.",
+      "inspectables": ["a wheel with a sock tied round the axle", "four hundred bottles sorted by colour", "Rauno's tally in pencil on his arm"],
+      "choices": [
+        { "id": "push", "label": "Push it up the hill", "forecast": "€20, and Rauno owes you.", "requirements": [], "effects": ["cash:+20", "flag:network-rauno-owes"] },
+        { "id": "push-and-ask", "label": "Push it, and ask what he has seen", "forecast": "€10 and one thing worth knowing.", "requirements": [], "effects": ["cash:+10", "intel:+1"] },
+        { "id": "leave", "label": "Tell him the hill will still be there tomorrow", "forecast": "Nothing, and Rauno remembers.", "requirements": [], "effects": ["flag:network-rauno-snubbed"] }
+      ]
+    },
+    {
+      "id": "gig-queue-sitter",
+      "kind": "gig",
+      "from": "street",
+      "anchors": ["siltasaari"],
+      "risk": "low",
+      "title": "The Queue Sitter",
+      "premise": "A pensioner in a fur hat pays by the hour to have his place in the bank queue kept while he argues with the teller about markka. He argues for a long time.",
+      "steps": ["Take his ticket", "Keep his place without looking like you are", "Hand it back when the teller gives up"],
+      "stakes": "Clean money. Nobody fights in a bank queue.",
+      "inspectables": ["ticket 41", "a biscuit tin full of markka", "the teller's third cup of coffee"],
+      "choices": [
+        { "id": "hold", "label": "Hold his place", "forecast": "€25.", "requirements": [], "effects": ["cash:+25"] },
+        { "id": "hold-and-listen", "label": "Hold it, and listen to the argument", "forecast": "€15, and you learn how a markka tin turns into euros.", "requirements": [], "effects": ["cash:+15", "intel:+1", "flag:heard-markka-trick"] },
+        { "id": "leave", "label": "Give the ticket to someone who needs it", "forecast": "Nothing.", "requirements": [], "effects": ["memory:gave-away-41"] }
+      ]
+    },
+    {
+      "id": "pickup-fish-stall",
+      "kind": "pickup",
+      "from": "jade_lantern_network",
+      "anchors": ["hakaniemi"],
+      "risk": "low",
+      "title": "Crates Under the Fish Stall",
+      "premise": "Mei Lan's cousin needs three crates moved from under a fish stall before the market inspector's second round. The crates are heavier than fish.",
+      "steps": ["Wait for the inspector to pass once", "Carry the crates to the van behind the market hall", "Do not open them"],
+      "stakes": "The Jade Lantern pays and remembers. Skimming one is possible, and noticed.",
+      "inspectables": ["ice melting on the crates", "the inspector's clipboard", "the cousin counting on his fingers"],
+      "choices": [
+        { "id": "carry", "label": "Carry all three", "forecast": "€40, and the Jade Lantern thinks better of you.", "requirements": [], "effects": ["cash:+40", "relationship:jade_lantern_network:+1"] },
+        { "id": "skim", "label": "Carry two, keep one", "forecast": "A pack for yourself. They will count.", "requirements": [], "effects": ["stock:piri:+1", "relationship:jade_lantern_network:-1", "flag:jade-skimmed"] },
+        { "id": "leave", "label": "Tell the cousin the inspector is coming back", "forecast": "Nothing, but a warning is worth something.", "requirements": [], "effects": ["relationship:jade_lantern_network:+1"] }
+      ]
+    },
+    {
+      "id": "pickup-yard-van",
+      "kind": "pickup",
+      "from": "mccormick_family",
+      "anchors": ["linjat_yard"],
+      "risk": "medium",
+      "title": "The Van With No Seats",
+      "premise": "The McCormicks need a van driven from the Linjat yard to Siltanen with its back doors taped shut. The driver quit this morning. Nobody says why.",
+      "steps": ["Take the keys from the man by the skip", "Drive it the long way round", "Leave it with the doors still taped"],
+      "stakes": "McCormick money, McCormick attention. The yard gets hotter.",
+      "inspectables": ["tape over the back doors", "a child seat in the front", "the keys on a Hartwall bottle opener"],
+      "choices": [
+        { "id": "drive", "label": "Drive it the long way", "forecast": "€55 and a friend at the yard. Heat at Linjat.", "requirements": [], "effects": ["cash:+55", "relationship:mccormick_family:+1", "pressure:linjat_yard:+1"] },
+        { "id": "look", "label": "Peel back the tape at a red light", "forecast": "You know what is in it. They will know you looked.", "requirements": [], "effects": ["cash:+55", "intel:+1", "relationship:mccormick_family:-1", "flag:saw-inside-the-van"] },
+        { "id": "leave", "label": "Give the keys back", "forecast": "Nothing.", "requirements": [], "effects": ["flag:turned-down-the-van"] }
+      ]
+    },
+    {
+      "id": "pickup-boiler-hall",
+      "kind": "pickup",
+      "from": "mccormick_family",
+      "anchors": ["suvilahti"],
+      "risk": "high",
+      "title": "The Bag at the Boiler Hall",
+      "premise": "A bag waits behind the old boiler hall at Suvilahti. So, the McCormicks hear, does a crew that wants it more than they do.",
+      "steps": ["Come in by the gas holders", "Take the bag from the loading bay", "Leave before anyone decides it is theirs"],
+      "stakes": "Can become a fight · a way round exists.",
+      "inspectables": ["footprints in the coal dust", "a radio playing to nobody", "three bikes that do not belong to kids"],
+      "fight": { "battle": "battle-kattilahalli-3v3", "win": ["cash:+90", "relationship:mccormick_family:+1"], "lose": ["pressure:suvilahti:+1", "relationship:mccormick_family:-1"] },
+      "choices": [
+        { "id": "slip-in", "label": "Slip in by the gas holders", "forecast": "€45 if nobody is looking. Someone usually is.", "requirements": ["intel>=1"], "effects": ["cash:+45", "flag:boiler-hall-quiet"] },
+        { "id": "front-door", "label": "Walk in through the front with the crew", "forecast": "A fight for the bag. Win it and the McCormicks pay double.", "requirements": ["deployed-crew>=3", "fights-today<2"], "effects": ["start-battle:battle-kattilahalli-3v3"] },
+        { "id": "leave", "label": "Tell the McCormicks the bag is spoken for", "forecast": "Nothing, and they think less of you.", "requirements": [], "effects": ["relationship:mccormick_family:-1"] }
+      ]
+    },
+    {
+      "id": "sale-quay-shift",
+      "kind": "sale",
+      "from": "street",
+      "anchors": ["sornainen_harbour"],
+      "risk": "medium",
+      "title": "The Quay Shift",
+      "premise": "The night shift at the Sörnäinen quay buys at shift change, in the gap between one foreman leaving and the next arriving.",
+      "steps": ["Be at the gate at changeover", "Sell to the one in the orange jacket, not the one in yellow", "Gone before the next foreman"],
+      "stakes": "A better price than the square. The quay notices faces.",
+      "requires": ["stock:piri>=1"],
+      "inspectables": ["an orange jacket and a yellow one", "a crane moving with nobody in it", "the gate's broken clock"],
+      "choices": [
+        { "id": "sell", "label": "Sell one to the orange jacket", "forecast": "€48.", "requirements": ["stock:piri>=1"], "effects": ["stock:piri:-1", "cash:+48"] },
+        { "id": "sell-two", "label": "Sell two, and stay a minute too long", "forecast": "€90. The harbour gets hotter.", "requirements": ["stock:piri>=2"], "effects": ["stock:piri:-2", "cash:+90", "pressure:sornainen_harbour:+1"] },
+        { "id": "leave", "label": "Walk past the gate", "forecast": "Nothing.", "requirements": [], "effects": [] }
+      ]
+    },
+    {
+      "id": "sale-club-backroom",
+      "kind": "sale",
+      "from": "street",
+      "anchors": ["makelansilta"],
+      "risk": "low",
+      "title": "The Back Room at Scene Club",
+      "premise": "A painter at Scene Club wants to buy, quietly, in the room behind Jaska's. Jaska's door is open.",
+      "steps": ["Go in through the kitchen", "Sell in the back room", "Decide whether Jaska sees you"],
+      "stakes": "Easy money, twenty metres from your brother.",
+      "requires": ["stock:piri>=1"],
+      "inspectables": ["wet canvases facing the wall", "Jaska's radio through the partition", "a receipt pinned to the door frame"],
+      "choices": [
+        { "id": "sell", "label": "Sell in the back room", "forecast": "€38. Jaska hears it.", "requirements": ["stock:piri>=1"], "effects": ["stock:piri:-1", "cash:+38", "relationship:jaska:-1"] },
+        { "id": "sell-outside", "label": "Take the painter outside first", "forecast": "€30, and your brother keeps his room.", "requirements": ["stock:piri>=1"], "effects": ["stock:piri:-1", "cash:+30"] },
+        { "id": "leave", "label": "Say hello to Jaska instead", "forecast": "Nothing to sell tonight. Jaska is glad.", "requirements": [], "effects": ["relationship:jaska:+1"] }
+      ]
+    },
+    {
+      "id": "sale-park-bench",
+      "kind": "sale",
+      "from": "street",
+      "anchors": ["karhupuisto"],
+      "risk": "high",
+      "title": "The Buyer at the Bear",
+      "premise": "A buyer wants two packs at the granite bear after dark. He says he is coming alone. He says it twice.",
+      "steps": ["Meet him at the bear", "Count his money before he counts yours", "Watch the path behind him"],
+      "stakes": "Can become a fight · a way round exists.",
+      "requires": ["stock:piri>=1"],
+      "inspectables": ["cigarette ends behind the bear", "his new trainers", "the path lamp that is out"],
+      "fight": { "battle": "battle-karhupuisto-2v2", "win": ["cash:+60", "pressure:karhupuisto:+1"], "lose": ["stock:piri:-1", "pressure:karhupuisto:+1"] },
+      "choices": [
+        { "id": "sell", "label": "Sell one and keep your eyes on the path", "forecast": "€50.", "requirements": ["stock:piri>=1"], "effects": ["stock:piri:-1", "cash:+50"] },
+        { "id": "stand", "label": "Let his friends come out, with your crew beside you", "forecast": "A fight at the bear. Win it and you keep their money.", "requirements": ["deployed-crew>=2", "fights-today<2"], "effects": ["start-battle:battle-karhupuisto-2v2"] },
+        { "id": "leave", "label": "Tell him you are not coming alone either", "forecast": "No sale.", "requirements": [], "effects": [] }
+      ]
+    },
+    {
+      "id": "favour-toko-broth",
+      "kind": "favour",
+      "from": "toko",
+      "anchors": ["vaasankatu"],
+      "risk": "low",
+      "title": "Broth for the Old Man Upstairs",
+      "premise": "Toko wants a pot of broth carried upstairs to a man who has not left his flat since the markka went. Toko does not say who he is.",
+      "steps": ["Carry the pot up four floors", "Knock twice, then once", "Listen to whatever he wants to say"],
+      "stakes": "No money. Toko trusts you with more.",
+      "inspectables": ["the pot's lid tied down with string", "a door with no name", "a stack of old tram tickets"],
+      "choices": [
+        { "id": "carry", "label": "Carry it up and stay for the story", "forecast": "Toko trusts you more, and the old man knew the 3 in 1991.", "requirements": [], "effects": ["relationship:toko:+1", "intel:+1"] },
+        { "id": "carry-quick", "label": "Carry it up and leave it at the door", "forecast": "Toko nods.", "requirements": [], "effects": ["relationship:toko:+1"] },
+        { "id": "leave", "label": "Say you have work", "forecast": "Toko says nothing, which is worse.", "requirements": [], "effects": ["relationship:toko:-1"] }
+      ]
+    },
+    {
+      "id": "favour-mccormick-name",
+      "kind": "favour",
+      "from": "mccormick_family",
+      "anchors": ["linjat_yard"],
+      "risk": "medium",
+      "title": "A Name for the McCormicks",
+      "premise": "The McCormicks want one name: whoever has been buying on their corner for the Jade Lantern. They think you know it. You might.",
+      "steps": ["Hear the question", "Decide what you know", "Live with the answer"],
+      "stakes": "A family's goodwill against the other family's.",
+      "inspectables": ["a list of names with two crossed out", "a kettle nobody has filled", "the brothers not looking at each other"],
+      "choices": [
+        { "id": "give", "label": "Give them a name", "forecast": "The McCormicks like you. The Jade Lantern will hear.", "requirements": ["intel>=1"], "effects": ["relationship:mccormick_family:+2", "relationship:jade_lantern_network:-2", "flag:gave-a-name"] },
+        { "id": "wrong-name", "label": "Give them a name that is nobody's", "forecast": "They pay for it, and one day they check.", "requirements": [], "effects": ["cash:+40", "flag:gave-a-false-name"] },
+        { "id": "leave", "label": "Say you sell, you do not watch", "forecast": "Nothing, and the kettle stays empty.", "requirements": [], "effects": ["relationship:mccormick_family:-1"] }
+      ]
+    },
+    {
+      "id": "watch-car-41",
+      "kind": "watch",
+      "from": "network",
+      "anchors": ["piritori"],
+      "risk": "low",
+      "title": "Watch Car 41",
+      "premise": "The 3 comes through Piritori every eight minutes. Car 41 comes through when it likes. Watch it for one evening.",
+      "steps": ["Stand where Kello used to stand", "Count who gets on 41 and who only pretends to", "Write nothing down"],
+      "stakes": "Something worth knowing. The square notices a new watcher.",
+      "inspectables": ["car 41's scratched window", "a man who rides one stop and back", "the tram driver's thermos"],
+      "choices": [
+        { "id": "watch", "label": "Watch the whole evening", "forecast": "You learn who rides 41 now.", "requirements": [], "effects": ["intel:+1", "flag:watched-car-41", "pressure:piritori:+1"] },
+        { "id": "ride", "label": "Get on 41 and ride it to the end", "forecast": "You learn where it goes. The man who rides one stop sees you.", "requirements": [], "effects": ["intel:+2", "flag:rode-car-41"] },
+        { "id": "leave", "label": "Let the trams go by", "forecast": "Nothing.", "requirements": [], "effects": [] }
+      ]
+    },
+    {
+      "id": "watch-back-door",
+      "kind": "watch",
+      "from": "jade_lantern_network",
+      "anchors": ["hakaniemi"],
+      "risk": "medium",
+      "late": true,
+      "title": "The Back Door at Hakaniemi",
+      "premise": "After ten the Jade Lantern's back door opens for people who are not customers. Mei Lan would like to know who. So would everyone else.",
+      "steps": ["Find a window with a view of the door", "Time who goes in and who comes out", "Decide who hears it"],
+      "stakes": "Worth something to either family. A late door: gone after 22:00.",
+      "inspectables": ["a door wedged with a chopstick", "a delivery bike with no deliveries", "the same cough twice"],
+      "choices": [
+        { "id": "watch-for-mei", "label": "Time it for Mei Lan", "forecast": "The Jade Lantern trusts you.", "requirements": [], "effects": ["intel:+1", "relationship:jade_lantern_network:+1", "flag:timed-jade-door"] },
+        { "id": "watch-for-sale", "label": "Time it and sell it to the McCormicks", "forecast": "€45. Mei Lan will find out one day.", "requirements": [], "effects": ["cash:+45", "relationship:mccormick_family:+1", "flag:sold-jade-door"] },
+        { "id": "leave", "label": "Go home before ten", "forecast": "Nothing.", "requirements": [], "effects": [] }
+      ]
+    },
+    {
+      "id": "hit-bear-debt",
+      "kind": "hit",
+      "from": "mccormick_family",
+      "anchors": ["karhupuisto"],
+      "risk": "high",
+      "title": "The Debt at the Bear",
+      "premise": "A man owes the McCormicks and sits at the granite bear every night as if daring them. They would rather it was not them who went.",
+      "steps": ["Find him at the bear", "Ask once", "Decide what asking twice looks like"],
+      "stakes": "Can become a fight · a way round exists.",
+      "inspectables": ["a thermos with no tea in it", "two friends pretending to feed ducks", "a bear with a new scratch"],
+      "fight": { "battle": "battle-karhupuisto-2v2", "win": ["cash:+80", "relationship:mccormick_family:+1"], "lose": ["pressure:karhupuisto:+1", "relationship:mccormick_family:-1"] },
+      "choices": [
+        { "id": "talk", "label": "Talk him into paying", "forecast": "€60, if you know enough about him.", "requirements": ["intel>=2"], "effects": ["cash:+60", "relationship:mccormick_family:+1"] },
+        { "id": "lean", "label": "Lean on him, with the crew", "forecast": "His friends stop feeding the ducks. A fight at the bear.", "requirements": ["deployed-crew>=2", "fights-today<2"], "effects": ["start-battle:battle-karhupuisto-2v2"] },
+        { "id": "leave", "label": "Tell the McCormicks to go themselves", "forecast": "They will remember who said no.", "requirements": [], "effects": ["relationship:mccormick_family:-1"] }
+      ]
+    },
+    {
+      "id": "hit-courtyard-ledger",
+      "kind": "hit",
+      "from": "jade_lantern_network",
+      "anchors": ["torkkelinmaki"],
+      "risk": "high",
+      "late": true,
+      "title": "The Card Game's Ledger",
+      "premise": "A card game in a Torkkelinmäki courtyard keeps a ledger of who owes the Jade Lantern. Mei Lan wants it gone before morning. The players want it where it is.",
+      "steps": ["Get into the courtyard", "Get the ledger off the table", "Get out"],
+      "stakes": "Can become a fight · a way round exists. A late door: gone after 22:00.",
+      "inspectables": ["a ledger under an ashtray", "a player who never looks at his cards", "washing lines across the courtyard"],
+      "fight": { "battle": "battle-courtyard-3v3", "win": ["cash:+120", "intel:+1", "relationship:jade_lantern_network:+1"], "lose": ["pressure:torkkelinmaki:+1", "relationship:jade_lantern_network:-1"] },
+      "choices": [
+        { "id": "buy-in", "label": "Buy into the game and lose the ledger on purpose", "forecast": "€50 for a seat. The ledger leaves with you.", "requirements": ["cash>=50"], "effects": ["cash:-50", "intel:+2", "relationship:jade_lantern_network:+1"] },
+        { "id": "take-it", "label": "Take it off the table, with the crew", "forecast": "The players stand up. A fight in the courtyard.", "requirements": ["deployed-crew>=3", "fights-today<2"], "effects": ["start-battle:battle-courtyard-3v3"] },
+        { "id": "leave", "label": "Tell Mei Lan the ledger is a bad idea", "forecast": "Mei Lan will find someone else.", "requirements": [], "effects": ["relationship:jade_lantern_network:-1"] }
+      ]
+    }
+  ]
+}

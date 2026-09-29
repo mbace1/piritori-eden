@@ -1,10 +1,10 @@
-// The chapter turn in a browser (H7, owner greenlight 2026-09-29).
+// Doors in a browser (H2, owner greenlight 2026-09-29; answer 23).
 //
-//   NODE_PATH=$(npm root -g) node web/test/chapter-browser.cjs
+//   NODE_PATH=$(npm root -g) node web/test/doors-browser.cjs
 //
-// chapter.mjs holds the rules; this holds the screen. Fixtures only set the
-// scene (money earned, where Aatami stands); the shipment is a real tap, and
-// the panel must then say what crosses into chapter 2 without applying it.
+// doors.mjs holds the rules; this holds the screens. Fixtures only set the
+// scene (which block it is, the crew, and, for the fight, which doors are
+// on the board); taking a door, the walk, the choice and the fight are taps.
 const { chromium } = require('playwright');
 const http = require('http');
 const fs = require('fs');
@@ -55,6 +55,20 @@ function watchErrors(page) {
 
 const S = page => page.evaluate(() => structuredClone(window.__ptv3.state));
 const fixture = (page, body, arg) => page.evaluate(([b, a]) => { const s = structuredClone(window.__ptv3.state); new Function('s', 'a', b)(s, a); window.__ptv3.debug.setState(s); }, [body, arg]);
+async function walkToLead(page) {
+  for (let i = 0; i < 6; i += 1) {
+    const step = await page.locator('[data-action="next-step"]').getAttribute('data-step').catch(() => null);
+    if (step === 'enter') return true;
+    if (await page.locator('[data-action="road-choose"]').count()) {
+      const open = page.locator('[data-action="road-choose"]:not([disabled])');
+      await open.last().click(); await page.locator('[data-action="road-continue"]').click(); continue;
+    }
+    if (step === 'plan' || step === 'commit') { await page.locator('[data-action="next-step"]').click(); continue; }
+    return false;
+  }
+  return false;
+}
+
 server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
@@ -65,34 +79,48 @@ server.listen(0, '127.0.0.1', async () => {
       await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
-      // H1: the shipment is day 10's night at Sörnäinen, an encounter like any other.
-      await fixture(page, 's.scheduleIndex = 19; s.selectedAnchor = "sornainen_harbour"; s.cash = 700; s.chapterEarned = 450; s.stock.piri = 2; s.equipment.push({ id: "knife", cond: 0 });');
+      await fixture(page, 's.scheduleIndex = 15; s.selectedAnchor = "piritori"; s.stock.piri = 2; const ids = a.slice(0, 3); s.recruited = ids; s.deployed = [...ids];',
+        await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
+      const board = page.locator('.door-board');
+      ok(`${name}: a free block shows its doors`, await board.isVisible());
+      const cards = await page.locator('.door-card').count();
+      ok(`${name}: two or three doors (${cards})`, cards >= 2 && cards <= 3);
+      ok(`${name}: one of them can become a fight`, await page.locator('.door-card .door-fight').count() >= 1);
+      const anchors = new Set(await page.locator('.door-card').evaluateAll(els => els.map(e => e.dataset.anchor)));
+      ok(`${name}: every door is pinned on the map`, await page.locator('.door-pin').count() === anchors.size);
+      ok(`${name}: the next step says to choose a door`, await page.locator('[data-action="next-step"][data-step="doors"]').count() === 1);
+      // Take a door that cannot become a fight, walk there, do it.
+      const quiet = page.locator('.door-card:not(:has(.door-fight)) [data-action="take-door"]').first();
+      const doorId = await quiet.getAttribute('data-door');
+      await quiet.click();
+      let s = await S(page);
+      ok(`${name}: the door is taken`, s.doors.taken[15]?.template === doorId && !(await board.count()));
+      ok(`${name}: and Aatami can walk to it`, await walkToLead(page));
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
-      const run = page.locator('[data-action="choose"][data-choice="run-shipment"]');
-      ok(`${name}: the shipment can be run`, await run.isEnabled());
-      await run.click();
+      ok(`${name}: the door plays as a briefed scene`, await page.locator('.encounter-copy .mission-steps li').count() === 3);
+      await page.locator('[data-action="choose"]:not([disabled])').last().click();
       await page.locator('[data-action="advance"]').click();
-      const list = page.locator('.turn-list');
-      await list.waitFor({ timeout: 5000 }).catch(() => {});
-      const close = page.locator('.chapter-close');
-      ok(`${name}: the chapter closes, to be continued`, await close.isVisible() && /TO BE CONTINUED/.test(await close.innerText()));
-      ok(`${name}: it says what goes into chapter 2`, await list.isVisible() && /INTO CHAPTER 2/.test(await close.innerText()));
-      ok(`${name}: and where the road points`, /WHERE THIS ROAD POINTS/.test(await close.innerText()));
-      const text = await list.innerText();
-      const stake = await page.evaluate(() => window.__ptv3.data.content.chapter_turn.opening_cash_eur);
-      ok(`${name}: cash goes to the stake`, new RegExp(`Cash[\\s\\S]*€${stake}[\\s\\S]*STANDARD STAKE`, 'i').test(text), text);
-      ok(`${name}: stock resets and weapons carry`, /Stock[\s\S]*2 → 0[\s\S]*RESETS/i.test(text) && /Weapons and gear[\s\S]*CARRIES/i.test(text), text);
-      const s = await S(page);
-      ok(`${name}: shown, not applied`, s.chapter === 1 && s.chapterCleared && s.stock.piri === 2 && !s.endingId);
-      ok(`${name}: chapter 2 is not authored yet, and it says so`, /later build/.test(await close.innerText()));
+      s = await S(page);
+      ok(`${name}: it cost the block`, s.scheduleIndex === 16);
+      ok(`${name}: the next free block has its own doors`, await page.locator('.door-card').count() >= 2
+        && !(await page.locator('.door-card').evaluateAll(els => els.map(e => e.dataset.door))).includes(doorId));
+      // A door fight (answer 23): the bear debt, with a crew.
+      await fixture(page, 's.scheduleIndex = 15; s.selectedAnchor = "karhupuisto"; s.doors = { offers: { 15: [{ template: "hit-bear-debt", anchor: "karhupuisto" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {};');
+      await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
+      await page.locator('[data-action="next-step"][data-step="enter"]').click();
+      const lean = page.locator('[data-action="choose"][data-choice="lean"]');
+      ok(`${name}: the fight is offered with a crew`, await lean.isEnabled());
+      await lean.click();
+      s = await S(page);
+      ok(`${name}: it is a door fight, not a mission`, s.battle?.door === 'hit-bear-debt' && s.battle.missionId === null && s.mode === 'battle');
+      ok(`${name}: and it counts toward today's two`, s.fightsByDay?.[8] === 1);
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-      if (name === 'phone') await page.locator('.chapter-close').screenshot({ path: path.join(require('os').tmpdir(), 'chapter-turn-phone.png') });
       const e = errors();
       ok(`${name}: no errors`, e.length === 0, e.join(' | '));
       await page.close();
     }
   } catch (err) { failed += 1; console.log('  FAIL crashed →', err.stack); }
   await browser.close(); server.close();
-  console.log(`chapter-browser: ${passed} passed, ${failed} failed`);
+  console.log(`doors-browser: ${passed} passed, ${failed} failed`);
   process.exit(failed ? 1 : 0);
 });

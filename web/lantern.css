@@ -576,3 +576,21 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
 .turn-row em { font: 600 12px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; font-style: normal; color: var(--ink-faint); }
 .turn-carry em { color: var(--cyan); }
 .turn-stake em, .turn-reset em { color: var(--lantern); }
+
+/* H2: doors on a free block (app.js renderDoorBoard) and their map pins. */
+.door-board h2 { margin: 2px 0 6px; }
+.door-card { border-top: 1px solid var(--line-strong); padding: 12px 0 14px; display: grid; gap: 6px; }
+.door-card h3 { margin: 0; font: 700 20px/1.15 var(--display); letter-spacing: .02em; color: var(--ink); }
+.door-card p { margin: 0; }
+.door-stakes { display: flex; flex-wrap: wrap; gap: 6px; }
+.door-stakes .door-fight { color: var(--lantern); border-color: var(--lantern); }
+.door-stakes .risk-high { color: var(--lantern); }
+.door-card .paper-button { justify-self: start; min-height: 44px; }
+.door-pin { fill: var(--lantern); stroke: var(--night, #0a0d11); stroke-width: 3; }
+.map-node .door-pin { animation: door-breathe 2.4s ease-in-out infinite; }
+@keyframes door-breathe { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .map-node .door-pin { animation: none; } }
+.chapter-close .pasila-forecast { border-left: 3px solid var(--lantern); padding: 4px 0 4px 12px; margin: 14px 0; }
+.chapter-close .pasila-forecast h3 { margin: 2px 0 4px; }
+.chapter-close { max-width: 720px; margin: 24px auto 96px; padding: 22px 20px; }
+@media (max-width: 760px) { .chapter-close { margin: 12px 8px 96px; padding: 18px 16px; } }

@@ -22,12 +22,12 @@
   "campaign": {
     "era": "2003",
     "location": "Kallio, Helsinki",
-    "days": 7,
+    "days": 10,
     "blocks_per_day": [
       "day",
       "night"
     ],
-    "total_player_blocks": 14,
+    "total_player_blocks": 20,
     "start_anchor_id": "piritori",
     "start_site_id": "piritori_first_buy",
     "starting_state": {
@@ -1938,7 +1938,7 @@
           "requirements": [],
           "forecast": "Close the slice with Aatami defending the plan.",
           "effects": [
-            "resolve-ending:best-match",
+            "forecast-ending:best-match",
             "memory:aatami-called-it-eden"
           ]
         },
@@ -1950,7 +1950,7 @@
           ],
           "forecast": "Close with a harder family truth; no morality score is awarded.",
           "effects": [
-            "resolve-ending:best-match",
+            "forecast-ending:best-match",
             "relationship:jaska:+1",
             "memory:aatami-named-cost"
           ]
@@ -1963,7 +1963,7 @@
           ],
           "forecast": "Carry the Kallio network into the future literally and mechanically.",
           "effects": [
-            "resolve-ending:best-match",
+            "forecast-ending:best-match",
             "flag:network-inherited-as-map"
           ]
         },
@@ -1973,12 +1973,214 @@
           "requirements": [],
           "forecast": "Pasila remains a possibility rather than a victory screen.",
           "effects": [
-            "resolve-ending:best-match",
+            "forecast-ending:best-match",
             "flag:map-left-with-jaska"
           ]
         }
       ],
       "scene_asset_id": "scene-scene-club-v01"
+    },
+    {
+      "id": "enc-kello-reckoning",
+      "day": 8,
+      "block": "day",
+      "site_id": "piritori_first_buy",
+      "participants": [
+        "aatami",
+        "kello"
+      ],
+      "source_status": "fiction",
+      "scene_asset_id": "scene-piritori-square-v01",
+      "opening": "Day 8. The square has had a week to decide what it thinks of Aatami. Kello's bench is where it always was. What is on it depends on what you did on Thursday.",
+      "inspectables": [
+        "Kello's bench, dry in the rain",
+        "car 41 going past without stopping",
+        "a new man counting trams"
+      ],
+      "choices": [
+        {
+          "id": "ask-kello",
+          "label": "Ask Kello what one more Thursday costs",
+          "requirements": [
+            "flag:thursday-cut"
+          ],
+          "forecast": "He names the man who buys car 41 next week, and it is not a family.",
+          "effects": [
+            "intel:+1",
+            "flag:heard-never-arrives",
+            "memory:kello-reckoning-cut"
+          ]
+        },
+        {
+          "id": "empty-bench",
+          "label": "Sit on Kello's empty bench",
+          "requirements": [
+            "flag:kello-sold"
+          ],
+          "forecast": "The square is quieter without him. Quieter is not the same as safe.",
+          "effects": [
+            "pressure:piritori:-1",
+            "memory:kello-reckoning-sold"
+          ]
+        },
+        {
+          "id": "ride-41",
+          "label": "Ride car 41 as its new owner",
+          "requirements": [
+            "flag:thursday-route"
+          ],
+          "forecast": "A pack off the pram, and the square watching you instead of Kello.",
+          "effects": [
+            "stock:piri:+1",
+            "pressure:piritori:+1",
+            "memory:kello-reckoning-route"
+          ]
+        },
+        {
+          "id": "ask-toko",
+          "label": "Ask Toko what he did with Thursday",
+          "requirements": [
+            "flag:kello-told-toko"
+          ],
+          "forecast": "Toko says he sold it to nobody. He says it the way he says the soup is fresh.",
+          "effects": [
+            "intel:+1",
+            "relationship:toko:+1",
+            "memory:kello-reckoning-toko"
+          ]
+        },
+        {
+          "id": "let-it-pass",
+          "label": "Let Thursday pass without you",
+          "requirements": [],
+          "forecast": "Nothing moves. The man counting trams writes your name down anyway.",
+          "effects": [
+            "memory:kello-reckoning-quiet"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enc-family-calls",
+      "day": 9,
+      "block": "night",
+      "site_id": "mccormick_yard",
+      "participants": [
+        "aatami",
+        "mccormick-brothers"
+      ],
+      "source_status": "fiction",
+      "scene_asset_id": "scene-kallio-service-yard-v01",
+      "opening": "Day 9. The families have been keeping books on Aatami too. Tonight one of them reads its page out loud, in the yard, with the kettle still empty.",
+      "inspectables": [
+        "an account book with a new page",
+        "the kettle, empty again",
+        "a second van where the first one was"
+      ],
+      "choices": [
+        {
+          "id": "stand-with-mccormicks",
+          "label": "Stand with the McCormicks on the shipment night",
+          "requirements": [
+            "relationship:mccormick_family>=1"
+          ],
+          "forecast": "€30 now, and a favour owed that they will collect in chapter 2.",
+          "effects": [
+            "cash:+30",
+            "obligation:mccormick_family:+1",
+            "flag:mccormick-escort"
+          ]
+        },
+        {
+          "id": "take-jade-warehouse",
+          "label": "Take Mei Lan's warehouse instead",
+          "requirements": [
+            "relationship:jade_lantern_network>=1"
+          ],
+          "forecast": "A place to keep what you do not sell, and a favour owed to the Jade Lantern.",
+          "effects": [
+            "intel:+1",
+            "obligation:jade_lantern_network:+1",
+            "flag:jade-warehouse"
+          ]
+        },
+        {
+          "id": "pay-it-off",
+          "label": "Pay what they think you owe",
+          "requirements": [
+            "cash>=60"
+          ],
+          "forecast": "€60, and you owe nobody going into the shipment.",
+          "effects": [
+            "cash:-60",
+            "flag:owes-nobody"
+          ]
+        },
+        {
+          "id": "stall",
+          "label": "Tell them it can wait until after the boat",
+          "requirements": [],
+          "forecast": "Both families like you a little less.",
+          "effects": [
+            "relationship:mccormick_family:-1",
+            "relationship:jade_lantern_network:-1",
+            "flag:stalled-the-families"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enc-shipment-night",
+      "day": 10,
+      "block": "night",
+      "site_id": "sornainen_quay",
+      "participants": [
+        "aatami"
+      ],
+      "source_status": "fiction",
+      "scene_asset_id": "scene-sornainen-docks-v02",
+      "opening": "Day 10, night. A container comes off a ship at Sörnäinen. Pay for it, move it, and be somewhere else by morning. The quay lights go off one row at a time.",
+      "inspectables": [
+        "a container with a painted-over number",
+        "the harbour clock, two minutes slow",
+        "a van with its engine running"
+      ],
+      "choices": [
+        {
+          "id": "run-shipment",
+          "label": "Run the shipment · €400",
+          "requirements": [
+            "chapter-goal-met",
+            "cash>=400"
+          ],
+          "forecast": "The chapter's operation. It goes clean, messy or lost depending on the crew and the heat.",
+          "effects": [
+            "chapter-ending:attempt"
+          ]
+        },
+        {
+          "id": "let-it-go",
+          "label": "Watch the boat leave without you",
+          "requirements": [],
+          "forecast": "No stake, no upgrade. The chapter still closes; the square will say you missed it.",
+          "effects": [
+            "chapter-ending:missed"
+          ]
+        },
+        {
+          "id": "sell-the-slot",
+          "label": "Sell your slot on the boat to the McCormicks",
+          "requirements": [
+            "relationship:mccormick_family>=1"
+          ],
+          "forecast": "€120 and nothing moved. The chapter closes on someone else's operation.",
+          "effects": [
+            "cash:+120",
+            "chapter-ending:missed",
+            "flag:sold-the-slot"
+          ]
+        }
+      ]
     }
   ],
   "schedule": [
@@ -2066,6 +2268,39 @@
       "block": "night",
       "encounter_id": "enc-jaska-last-light",
       "anchor_id": "makelansilta"
+    },
+    {
+      "day": 8,
+      "block": "day",
+      "encounter_id": "enc-kello-reckoning",
+      "anchor_id": "piritori"
+    },
+    {
+      "day": 8,
+      "block": "night",
+      "door": true
+    },
+    {
+      "day": 9,
+      "block": "day",
+      "door": true
+    },
+    {
+      "day": 9,
+      "block": "night",
+      "encounter_id": "enc-family-calls",
+      "anchor_id": "linjat_yard"
+    },
+    {
+      "day": 10,
+      "block": "day",
+      "door": true
+    },
+    {
+      "day": 10,
+      "block": "night",
+      "encounter_id": "enc-shipment-night",
+      "anchor_id": "sornainen_harbour"
     }
   ],
   "news": [
@@ -2161,7 +2396,7 @@
       "id": "chapter-1-piritori",
       "index": 1,
       "label": "What the square is worth",
-      "days": 7,
+      "days": 10,
       "goal": {
         "type": "money",
         "threshold": 400

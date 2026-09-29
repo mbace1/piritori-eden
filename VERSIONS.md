@@ -77,6 +77,45 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.65 — 2026-09-29
+
+**A ten-day chapter of spine and doors (H1 + H2 of The Long Game).** Owner, 2026-09-29: "Go ahead" on design/H1_H2_PLAN.md, and answer 23: "Fights everyday, depending on the mission. Maybe 2 per day."
+
+- **H1, ten days.**
+  - Chapter 1 runs days 1–10: 20 blocks, 17 encounters. Days 1–7 are unchanged. Days 8–10 add three spine beats:
+    - *The Man Who Stayed*, day 8 at Piritori. Kello's reckoning, read from how the Thursday Tram was answered.
+    - *The Families Keep Books*, day 9 night at Linjat. A family calls in what it thinks you owe, read from standing.
+    - *The Shipment*, day 10 night at the new Sörnäinen quay site.
+  - The other three blocks of days 8–10 are doors.
+  - The debt payments stay on days 4 and 7.
+- **The shipment is on the schedule.** It is no longer a button in the ledger. Once the chapter goal is met, run it for its €400 stake, and it goes clean, messy or lost as before. If you can't run it, the boat leaves without you (the new outcome `missed`). You can also sell your slot to the McCormicks. Either way the chapter closes.
+- **Pasila is a look ahead (H8).**
+  - Day 7's four choices at Jaska's no longer end the game: `forecast-ending:best-match` records `memory:pasila-forecast:<id>` and the run goes on.
+  - After day 10 the game shows *Chapter 1 closes — to be continued*: the operation's outcome, H7's *Into chapter 2* list, and *Where this road points*, the Pasila ending the run is heading for (`forecastEnding`, pure).
+  - "Start a new ten days" replaces seven.
+- **H2, doors.** `content/doors-v1.json` holds 14 templates across six kinds (gig, pickup, sale, favour, watch, hit). Each has who offers it, where, a risk, a briefing with three steps and the stakes, things to look at, and choices in the ordinary grammar. `doors.js` is new and pure:
+  - A free block offers 2–3 doors, rolled once from the save and kept, so a reload shows the same board. No kind repeats before every kind has had a turn.
+  - Each door is pinned on the map. Taking one makes it the block's encounter at its anchor, with that anchor's scene. You walk there, do it, and it costs the block.
+  - A door is taken once a chapter.
+  - A *late* door opens only at night and closes when the block clock passes 22:00.
+- **Answer 23: fights every day, at most two.**
+  - Four doors can become a fight: two hits, a pickup and a sale. A fight depends on the job, not only on "hit".
+  - While fewer than two fights have happened today, every door block offers at least one of them.
+  - A fight choice needs a crew and `fights-today<2`. Every real fight counts toward the day (`recordFight`), so a road fight counts too.
+  - A door fight has no mission behind it; win or lose pays the door's own stakes (`fight.win` / `fight.lose`).
+  - Days 1–7 keep their authored rhythm until H6.
+- `state.js` v8, cascaded: `currentSchedule` resolves a taken door, and the new requirements `fights-today` and `chapter-goal-met` exist. The effects `forecast-ending`, `chapter-ending:attempt` and `chapter-ending:missed` are added.
+- Gates: `doors.mjs` 357 (new: canon, offers, the late rule, taking, two fights a day, the beats, the look-ahead ending, a whole ten-day chapter), `doors-browser.cjs` 30 (new: desktop and phone, a door taken, walked to and done, then a door fight). `chapter-browser.cjs` is now 20: the shipment is a real tap on day 10's night, and the chapter-close screen is checked. `v3-state` walks the authored week and no longer expects an ending. `validate-slice` expects 10 days, 20 blocks and 17 encounters.
+
+### Port
+
+Godot:
+- `doors-v1.json` (synced), `doors.gd`, days 8–10 and the three beats.
+- The shipment on the schedule, with the `missed` outcome.
+- `forecast-ending`, and the chapter-close screen with *Into chapter 2* and *Where this road points*.
+- `fights-today` and the daily count.
+- A door fight paying the door's own stakes.
+
 ## v4.64 — 2026-09-29
 
 **The chapter turn (H7 of The Long Game).** Owner, 2026-09-29: "good to go in your order", with H7 first. Answer 21: time keeps the web rule, so the block turns only on a story beat, a door or nightfall, never on a trip or a trade. Answer 22: weapons carry; cash and produce need not, and each chapter opens on a standard stake. "Let's test these."

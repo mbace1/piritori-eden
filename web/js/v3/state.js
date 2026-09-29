@@ -117,6 +117,11 @@ export function createState(content) {
     battle: null,
     battleHistory: [],
     endingId: null,
+    // H2 doors (doors.js): the offers each door block rolled, and the one
+    // taken, keyed by schedule index so a reload shows the same offers.
+    doors: { offers: {}, taken: {} },
+    // Answer 23: at most two fights a day. Counted when a fight starts.
+    fightsByDay: {},
     logs: ['Day 1. Piritori is the only corner that already knows Aatami.'],
     lastOutcome: null,
   };
@@ -142,6 +147,8 @@ export function restoreState(raw, content) {
     crewPerkPoints: { ...fresh.crewPerkPoints, ...(raw.crewPerkPoints ?? {}) },
     crewAptitudes: { ...fresh.crewAptitudes, ...(raw.crewAptitudes ?? {}) },
     trainedCrew: Array.isArray(raw.trainedCrew) ? [...raw.trainedCrew] : [],
+    doors: { offers: { ...(raw.doors?.offers ?? {}) }, taken: { ...(raw.doors?.taken ?? {}) } },
+    fightsByDay: { ...(raw.fightsByDay ?? {}) },
   };
 }
 
@@ -158,7 +165,27 @@ export function loadState(content, storage = globalThis.localStorage) {
 }
 
 export function currentSchedule(state, content) {
-  return content.schedule[state.scheduleIndex] ?? null;
+  const slot = content.schedule[state.scheduleIndex] ?? null;
+  // A door block (H2) has no lead until a door is taken; then the door IS
+  // the block's encounter, at the door's anchor.
+  const taken = slot?.door ? state.doors?.taken?.[state.scheduleIndex] : null;
+  return taken ? { ...slot, anchor_id: taken.anchor, encounter_id: taken.encounterId } : slot;
+}
+
+/** The day the schedule is on (the last authored day once it has run out). */
+export function currentDay(state, content) {
+  return (content.schedule[state.scheduleIndex] ?? content.schedule.at(-1))?.day ?? 1;
+}
+
+export function fightsToday(state, content) {
+  return state.fightsByDay?.[currentDay(state, content)] ?? 0;
+}
+
+/** Answer 23: a day holds at most two fights. Called when a real fight starts. */
+export function recordFight(state, content) {
+  state.fightsByDay ??= {};
+  const day = currentDay(state, content);
+  state.fightsByDay[day] = (state.fightsByDay[day] ?? 0) + 1;
 }
 
 export function currentEncounter(state, data) {
@@ -760,8 +787,10 @@ export function requirementStatus(requirement, state, data) {
     ?? numeric('markka', state.markka)
     ?? numeric('intel', state.intel)
     ?? numeric('deployed-crew', deployedCrew(state, data).length)
-    ?? numeric('crew-critical', Object.values(state.crewStatus).filter(x => x.critical).length);
+    ?? numeric('crew-critical', Object.values(state.crewStatus).filter(x => x.critical).length)
+    ?? numeric('fights-today', data?.content ? fightsToday(state, data.content) : 0);
   if (result) return result;
+  if (requirement === 'chapter-goal-met') return { ok: chapterGoalMet(state), reason: 'the chapter goal is not met' };
 
   let match = requirement.match(/^stock:([^><=]+)(>=|>|<=|<|=)(-?\d+)$/);
   if (match) {
@@ -822,6 +851,19 @@ function reveal(state, id) {
   else if (id.startsWith('mission-')) addUnique(state.revealedMissions, id);
   else if (id.startsWith('enc-')) addUnique(state.revealedEncounters, id);
   else addUnique(state.flags, `revealed-${id}`);
+}
+
+/** The Pasila ending the run points at right now, with no side effects
+ *  (H8: the four endings are the ERA's result; until chapter 4 exists the
+ *  game shows where the road points instead of ending on day 7). */
+export function forecastEnding(state, data) {
+  const deaths = Object.values(state.crewStatus).filter(x => x.status === 'dead' || x.critical).length;
+  let id;
+  if (deaths) id = 'pasila-haunted';
+  else if (state.exitFund >= 180 && state.debt > 250) id = 'pasila-expensive';
+  else if (state.exitFund >= 180 && state.debt <= 250 && state.recruited.length >= 2) id = 'pasila-nearer';
+  else id = 'pasila-deferred';
+  return data.content.endings.find(item => item.id === id) ?? null;
 }
 
 function chooseEnding(state, data) {
@@ -935,6 +977,25 @@ export function applyEffects(state, effects, data, label = 'choice') {
       outcome.ending = chooseEnding(state, data);
       continue;
     }
+    if (effect === 'forecast-ending:best-match') {
+      const ending = forecastEnding(state, data);
+      if (ending) addUnique(state.flags, `memory:pasila-forecast:${ending.id}`);
+      continue;
+    }
+    if (effect === 'chapter-ending:attempt') {
+      const reason = attemptChapterEnding(state, data);
+      if (reason) message(`The shipment cannot run: ${reason.replaceAll('-', ' ')}.`);
+      continue;
+    }
+    if (effect === 'chapter-ending:missed') {
+      if (!state.chapterCleared) {
+        state.chapterCleared = true;
+        state.lastEndingOutcome = 'missed';
+        addUnique(state.flags, `memory:chapter-cleared:${state.chapter}:missed`);
+        message('The boat leaves without Aatami on it.');
+      }
+      continue;
+    }
     if (effect === 'battle:avoided') { addUnique(state.flags, 'battle-karhupuisto-avoided'); continue; }
     if (effect.startsWith('opponent-nerve:')) {
       state.battleOpeningNerve = Number(effect.split(':')[1]);
@@ -991,7 +1052,7 @@ export function advanceSchedule(state, data) {
   // M2: the story moving on moves the LEAD, not Aatami. Presence changes only
   // through an explicit journey (journey.js) — the schedule used to teleport
   // him to the next lead, which made the map's travel meaningless.
-  if (next) addUnique(state.revealedEncounters, next.encounter_id);
+  if (next?.encounter_id) addUnique(state.revealedEncounters, next.encounter_id);
   return next;
 }
 
