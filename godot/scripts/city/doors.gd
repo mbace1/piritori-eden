@@ -21,6 +21,10 @@ extends RefCounted
 ##     encounter does: the door becomes the block's encounter at its anchor.
 ##   - A LATE door opens only at night and closes when the block clock passes
 ##     22:00 (road minutes).
+##   - Answer 25: a bad deal ESCALATES. A choice with `escalates` rolls once
+##     (`escalate:<door>:<choice>`); on a bad roll the door's fight starts if
+##     a crew is there to fight it, and if not the door's `fight.lose` is
+##     paid. Never past two fights a day.
 ##
 ## No clock and no randomness of its own: everything reads and writes
 ## `GameState.doors`, saved under the web's key and shape. Schedule indexes
@@ -240,3 +244,30 @@ static func open_door_anchors() -> PackedStringArray:
 		if not out.has(a):
 			out.append(a)
 	return out
+
+
+## Answer 25: did this choice's bad deal escalate? Asked once, right after the
+## choice resolved and before the block turns (the roll reads the door's own
+## block). {} when it held or cannot escalate, {battle} when a fight starts,
+## {effects} when it went bad with nobody to stand with Aatami: the door's
+## losing stakes (web `escalation`).
+static func escalation(template_id: String, choice_id: String) -> Dictionary:
+	var t := template_of(template_id)
+	if not can_fight(t):
+		return {}
+	var choice: Dictionary = {}
+	for c in t.get("choices", []):
+		if String(c.get("id", "")) == choice_id:
+			choice = c
+	var chance := float(choice.get("escalates", 0.0)) if choice.get("escalates", null) != null else 0.0
+	if chance <= 0.0:
+		return {}
+	if GameState.fights_today() >= int(rules().get("fights_per_day_max", 2)):
+		return {}
+	if GameState.deterministic_roll("escalate:%s:%s" % [template_id, choice_id]) >= chance:
+		return {}
+	var battle := String(t["fight"].get("battle", ""))
+	var need := int(ContentRegistry.battle(battle).get("player_deployed", 2))
+	if GameState.deployed_crew().size() >= need:
+		return {"battle": battle}
+	return {"effects": t["fight"].get("lose", [])}

@@ -1665,6 +1665,12 @@ func _build_location_rail(encounter_id: String, stage: Control) -> void:
 			var fl := _make_label("   " + forecast, 12, PiritoriPalette.TEXT_DIM)
 			fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			_rail_box.add_child(fl)
+			# Answer 25: a bad deal says it can go bad, and how likely.
+			if choice.get("escalates", null) != null and float(choice["escalates"]) > 0.0:
+				var bad := _make_label("   " + tr("door.can_go_bad") % int(round(float(choice["escalates"]) * 100.0)),
+					12, PiritoriPalette.DANGER_RED)
+				bad.set_meta("escalates", cid)
+				_rail_box.add_child(bad)
 			if not can:
 				# Refused in words, never a formula (web `readableReason`).
 				var failed: Array = []
@@ -1688,6 +1694,13 @@ func _commit_choice(encounter_id: String, choice_id: String) -> void:
 	# until the fight is over instead of being drawn over it.
 	if GameState.resolve_encounter(encounter_id, choice_id) and mode != Mode.BATTLE:
 		_show_city()
+		# Answer 25: it went bad with nobody standing with Aatami — say so.
+		if String(GameState.last_escalation.get("kind", "")) == "alone" and _screen == "":
+			var l := _make_label(tr("door.went_bad_alone"), 14, PiritoriPalette.DANGER_RED)
+			l.name = "DealWentBad"
+			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(l)
+			_rail_box.move_child(l, 0)
 
 
 func _show_market() -> void:
@@ -2690,6 +2703,8 @@ var _road_battle := false
 ## A door fight (web v4.65): the door's template id. No mission behind it
 ## either (`missionId: null`); win or lose pays the door's own stakes.
 var _door_battle := ""
+## The door's bad deal turned into this fight (answer 25): the aftermath says so.
+var _door_escalated := false
 
 
 ## An encounter asked for a fight. From a door, it is a door fight.
@@ -2698,12 +2713,14 @@ func _on_battle_requested(battle_id: String) -> void:
 	if _open_encounter != "" and ContentRegistry.is_door_encounter(_open_encounter):
 		door = String(ContentRegistry.encounter(_open_encounter).get("door", ""))
 	_show_battle(battle_id, false, door)
+	_door_escalated = door != "" and String(GameState.last_escalation.get("kind", "")) == "battle"
 
 
 ## Enter a formation battle. The campaign model is untouched until it resolves.
 func _show_battle(battle_id: String, road_fight: bool = false, door: String = "") -> void:
 	_road_battle = road_fight
 	_door_battle = door
+	_door_escalated = false
 	# Answer 23: every real fight counts toward the day's two, a road fight
 	# and a door fight included; a training bout does not (web `startBattle`).
 	if not bool(ContentRegistry.battle(battle_id).get("training", false)):
@@ -2791,6 +2808,11 @@ func _show_aftermath(summary: Dictionary, spoils: PackedStringArray,
 	_rail.visible = true
 
 	var result := int(summary.get("result", 0))
+	if _door_escalated:
+		var bad := _make_label(tr("door.went_bad_fight"), 13, PiritoriPalette.DANGER_RED)
+		bad.name = "DealWentBad"
+		bad.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(bad)
 	_rail_box.add_child(_make_label(tr(_outcome_title(result)), 19, MapStyle.TITLE_TEXT))
 	var line := _make_label(tr(_outcome_line(result)), 13, PiritoriPalette.TEXT)
 	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

@@ -73,6 +73,8 @@ func _ready() -> void:
 	_test_doors_taken_once_are_the_webs()
 	_test_door_rules()
 	_test_two_fights_a_day()
+	_test_escalation_is_the_webs()
+	_test_bad_deals_escalate()
 	_test_spine_beats_and_the_look_ahead()
 	_test_the_chapter_walk_is_the_webs()
 	_test_sound()
@@ -636,8 +638,18 @@ func _test_doors_canon() -> void:
 	for t in ts:
 		if (t.get("steps", []) as Array).size() != 3 or String(t.get("stakes", "")) == "":
 			bad.append("%s is not briefed" % t["id"])
-		if not t.get("choices", []).any(func(c): return (c.get("requirements", []) as Array).is_empty()):
-			bad.append("%s has no open way out" % t["id"])
+		# Answer 25: the way out is open AND safe — it cannot go bad or fight.
+		if not t.get("choices", []).any(func(c): return (c.get("requirements", []) as Array).is_empty() \
+				and c.get("escalates", null) == null \
+				and not (c.get("effects", []) as Array).any(func(e): return String(e).begins_with("start-battle"))):
+			bad.append("%s has no open, safe way out" % t["id"])
+		var goes_bad: Array = t.get("choices", []).filter(func(c): return c.get("escalates", null) != null)
+		for c in goes_bad:
+			if not (float(c["escalates"]) > 0.0 and float(c["escalates"]) < 1.0 and String(c.get("forecast", "")).to_lower().contains("fight")):
+				bad.append("%s/%s: an escalation is a chance the forecast names as a fight" % [t["id"], c["id"]])
+		var fights_here: Array = t.get("choices", []).filter(func(c): return (c.get("effects", []) as Array).any(func(e): return String(e).begins_with("start-battle:")))
+		if PiritoriDoors.can_fight(t) != (not fights_here.is_empty() or not goes_bad.is_empty()):
+			bad.append("%s: a fight block exactly when a choice fights or can go bad" % t["id"])
 		for c in t.get("choices", []):
 			var fx: Array = c.get("effects", [])
 			if fx.any(func(e): return String(e).begins_with("start-battle:")):
@@ -647,7 +659,9 @@ func _test_doors_canon() -> void:
 					bad.append("%s/%s is not held to two a day" % [t["id"], c["id"]])
 				if not c.get("requirements", []).any(func(r): return String(r).begins_with("deployed-crew>=")):
 					bad.append("%s/%s needs no crew" % [t["id"], c["id"]])
-	check("every door is briefed, has a way out, and owns its one fight", bad.is_empty(), str(bad))
+	check("every door is briefed, has a safe way out, and owns its one fight", bad.is_empty(), str(bad))
+	check("bad deals escalate on most doors (answer 25)",
+		ts.filter(func(t): return t.get("choices", []).any(func(c): return c.get("escalates", null) != null)).size() >= 6)
 	var doors_at: Array = []
 	for i in ContentRegistry.schedule().size():
 		if PiritoriDoors.is_door_block(i):
@@ -809,6 +823,117 @@ func _test_two_fights_a_day() -> void:
 	eq("  and a loss pays the door's loss", PiritoriDoors.door_fight_effects("hit-bear-debt", "loss"),
 		PiritoriDoors.template_of("hit-bear-debt")["fight"]["lose"])
 	eq("a door with no fight pays nothing for one", PiritoriDoors.door_fight_effects("gig-rauno-cart", "win"), [])
+
+
+## Answer 25: every bad-deal roll the web made, with a crew, alone, and with
+## the day's two fights spent.
+func _test_escalation_is_the_webs() -> void:
+	print("\na bad deal goes bad exactly when it does on the web (answer 25)")
+	var rows: Array = _ref.get("escalation", [])
+	check("the web rolled bad deals", rows.size() >= 200, str(rows.size()))
+	var crew: Array = ContentRegistry.slice.get("crew", []).slice(0, 3).map(func(c): return String(c["id"]))
+	var bad: Array = []
+	var seen := {}
+	for w in rows:
+		_at_block(int(_ref.get("door_blocks", [15])[0]))
+		# Setup: the save's identity, who is with Aatami, the day's fights.
+		GameState.content_package_id = String(w["content_id"])
+		if int(w["crew"]) > 0:
+			GameState.roster = PackedStringArray(crew)
+		for f in int(w["fights"]):
+			GameState.record_fight()
+		var r := PiritoriDoors.escalation(String(w["door"]), String(w["choice"]))
+		var got := ""
+		if r.has("battle"):
+			got = "battle:" + String(r["battle"])
+		elif r.has("effects"):
+			got = "effects"
+			if r["effects"] != PiritoriDoors.template_of(String(w["door"]))["fight"]["lose"]:
+				got = "wrong effects"
+		seen[got] = true
+		if got != String(w["result"]):
+			bad.append("%s %s/%s crew %d fights %d: %s vs %s" % [w["content_id"], w["door"], w["choice"],
+				int(w["crew"]), int(w["fights"]), got, w["result"]])
+	check("every roll matches, fight, stakes or held (%d)" % rows.size(), bad.is_empty(), str(bad))
+	check("  and the rolls cover all three outcomes", seen.has("") and seen.has("effects")
+		and seen.keys().any(func(k): return String(k).begins_with("battle:")), str(seen.keys()))
+
+
+## web/test/doors.mjs's escalation block, and the resolution that carries it.
+func _test_bad_deals_escalate() -> void:
+	print("\nbad deals escalate (answer 25), by a roll the forecast names")
+	var first := int(_ref.get("door_blocks", [15])[0])
+	var crew: Array = ContentRegistry.slice.get("crew", []).slice(0, 3).map(func(c): return String(c["id"]))
+	var fights := 0
+	var alone := 0
+	var same := true
+	for seed in 200:
+		_at_block(first)
+		GameState.content_package_id = "%s#%d" % [ContentRegistry.slice.get("id", ""), seed]
+		GameState.roster = PackedStringArray(crew)
+		var a := PiritoriDoors.escalation("pickup-fish-stall", "skim")
+		same = same and a == PiritoriDoors.escalation("pickup-fish-stall", "skim")
+		if a.has("battle"):
+			fights += 1
+		GameState.roster = PackedStringArray()
+		var b := PiritoriDoors.escalation("pickup-fish-stall", "skim")
+		if not b.is_empty():
+			alone += 1
+			same = same and not b.has("battle") \
+				and b["effects"] == PiritoriDoors.template_of("pickup-fish-stall")["fight"]["lose"]
+	check("an escalation is deterministic, and alone it costs the losing stakes", same)
+	check("the skim goes bad about half the time (%d/200)" % fights, fights > 80 and fights < 120)
+	eq("with no crew the same rolls go bad, without a fight", alone, fights)
+	_at_block(first)
+	GameState.roster = PackedStringArray(crew)
+	GameState.record_fight()
+	GameState.record_fight()
+	var any := 0
+	for seed in 50:
+		GameState.content_package_id = "%s#%d" % [ContentRegistry.slice.get("id", ""), seed]
+		if not PiritoriDoors.escalation("pickup-fish-stall", "skim").is_empty():
+			any += 1
+	eq("nothing escalates past two fights a day", any, 0)
+	_at_block(first)
+	check("an honest job never escalates", PiritoriDoors.escalation("gig-rauno-cart", "push").is_empty())
+
+	# Through the resolution: the quay's sell-two at the first free block goes
+	# bad on the reference save's roll (web doors-browser.cjs).
+	_at_block(first)
+	GameState.stock["piri"] = 2
+	GameState.current_anchor_id = "sornainen_harbour"
+	GameState.roster = PackedStringArray(crew)
+	GameState.doors["offers"][str(first)] = [{"template": "sale-quay-shift", "anchor": "sornainen_harbour"},
+		{"template": "gig-rauno-cart", "anchor": "harju"}]
+	PiritoriDoors.take_door("sale-quay-shift")
+	var asked: Array = []
+	var cb := func(bid, _n): asked.append(bid)
+	GameState.battle_requested.connect(cb)
+	var eid := PiritoriDoors.encounter_id_of(first, "sale-quay-shift")
+	GameState.resolve_encounter(eid, "sell-two")
+	GameState.battle_requested.disconnect(cb)
+	check("sold two at the quay, it goes bad and it is the door's fight",
+		asked == ["battle-kattilahalli-3v3"] and String(GameState.last_escalation.get("kind", "")) == "battle"
+		and int(GameState.last_escalation.get("block", -1)) == first, "%s %s" % [asked, GameState.last_escalation])
+	_at_block(first)
+	GameState.stock["piri"] = 2
+	GameState.current_anchor_id = "sornainen_harbour"
+	GameState.doors["offers"][str(first)] = [{"template": "sale-quay-shift", "anchor": "sornainen_harbour"},
+		{"template": "gig-rauno-cart", "anchor": "harju"}]
+	PiritoriDoors.take_door("sale-quay-shift")
+	var cash := GameState.cash_eur
+	var sale := 0
+	var lose := 0
+	for fx in PiritoriDoors.template_of("sale-quay-shift")["choices"].filter(func(c): return c["id"] == "sell-two")[0]["effects"]:
+		if String(fx).begins_with("cash:"):
+			sale += int(String(fx).substr(5))
+	for fx in PiritoriDoors.template_of("sale-quay-shift")["fight"]["lose"]:
+		if String(fx).begins_with("cash:"):
+			lose += int(String(fx).substr(5))
+	GameState.resolve_encounter(eid, "sell-two")
+	check("alone, it goes bad without a fight and costs the door (€%d, then €%d)" % [sale, lose],
+		String(GameState.last_escalation.get("kind", "")) == "alone" and GameState.cash_eur == cash + sale + lose,
+		"%s €%d" % [GameState.last_escalation, GameState.cash_eur])
 
 
 func _test_spine_beats_and_the_look_ahead() -> void:

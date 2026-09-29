@@ -1347,12 +1347,16 @@ func _test_doors_through_ui() -> void:
 		and Array(pins).all(func(a): return anchors.has(a)), str(pins))
 	_one_lit("doors", tr("ui.next_doors"))
 	_check_type_floor("the door board")
-	# Take a door that cannot become a fight.
+	# Most doors can go bad now (answer 25); pin one that cannot, so the walk
+	# is about walking (fixture, as web doors-browser.cjs does).
+	GameState.doors["offers"][str(first)] = [{"template": "gig-rauno-cart", "anchor": "harju"},
+		{"template": "hit-bear-debt", "anchor": "karhupuisto"}]
+	_shell._show_city()
+	await get_tree().process_frame
 	var quiet: Node = null
-	for c in cards:
-		if not PiritoriDoors.can_fight(PiritoriDoors.template_of(String(c.get_meta("door")))):
+	for c in _door_cards():
+		if String(c.get_meta("door")) == "gig-rauno-cart":
 			quiet = c
-			break
 	if quiet == null:
 		check("a quiet door is on the board", false)
 		return
@@ -1459,6 +1463,52 @@ func _test_door_fight_through_ui() -> void:
 	check("  and settled no mission", GameState.mission_state == missions, str(GameState.mission_state))
 	_shell._show_city()
 	await get_tree().process_frame
+
+	# Answer 25: a bad deal escalates. Selling two at the quay goes bad on
+	# this block's roll (web doors-browser.cjs): with a crew it is a fight.
+	for crew in [3, 0]:
+		await _fresh_city("sornainen_harbour")
+		GameState.block_index = first
+		GameState.day = first / 2 + 1
+		GameState.stock["piri"] = 2
+		for id in ["crew-slot-runner", "crew-slot-watcher", "crew-slot-fixer"].slice(0, crew):
+			GameState.apply_effect("recruit:" + id)
+		GameState.doors = {"offers": {str(first): [{"template": "sale-quay-shift", "anchor": "sornainen_harbour"},
+			{"template": "gig-rauno-cart", "anchor": "harju"}]}, "taken": {}}
+		_shell._show_city()
+		await get_tree().process_frame
+		var take_quay: Button = null
+		for c in _door_cards():
+			if String(c.get_meta("door")) == "sale-quay-shift":
+				take_quay = _take_button(c)
+		if take_quay == null:
+			check("the quay is on the board", false)
+			return
+		await _press(take_quay)
+		enter = _one_lit("enter", "ENTER")
+		if enter == null:
+			return
+		await _press(enter)
+		var warn := _all_nodes(_shell._rail).filter(func(n): return n is Label and String(n.get_meta("escalates", "")) == "sell-two" \
+			and not n.is_queued_for_deletion())
+		check("a bad deal says it can go bad", not warn.is_empty() and warn[0].text.contains(tr("door.can_go_bad") % 40),
+			warn[0].text if not warn.is_empty() else "none")
+		var sell := _choice_button("sell-two")
+		if sell == null:
+			return
+		var cash := GameState.cash_eur
+		await _press(sell)
+		if crew > 0:
+			check("it goes bad, and it is a fight", _shell.mode == _shell.Mode.BATTLE
+				and _shell._door_battle == "sale-quay-shift" and _shell._door_escalated
+				and GameState.fights_by_day.get(str(today), 0) == 1, str(GameState.fights_by_day))
+		else:
+			check("alone, it goes bad without a fight and costs the door",
+				_shell.mode == _shell.Mode.CITY and _rail_named("DealWentBad") != null
+				and _labels_text().contains(tr("door.went_bad_alone")) and GameState.cash_eur == cash + 90 - 60,
+				"€%d → €%d" % [cash, GameState.cash_eur])
+		_shell._show_city()
+		await get_tree().process_frame
 
 
 ## web v4.59: SOUND · ON/OFF in the menu, remembered; OFF closes the graph.

@@ -387,3 +387,6 @@ chapter.new_ten,START A NEW TEN DAYS,ALOITA UUDET KYMMENEN PÄIVÄÄ,新しい10
 chapter.summary,EXIT FUND €%d · DEBT €%d · CREW %d · JASKA %d,LÄHTÖRAHASTO %d € · VELKA %d € · PORUKKA %d · JASKA %d,出発の金 €%d · 借金 €%d · 仲間 %d · Jaska %d
 chapter.earned_runs,"Earned. %s runs on day %d's night at %s, for €%d.","Ansaittu. %s tehdään päivän %d yönä paikassa %s, hintaan %d €.",得た。%sは%d日目の夜、%sで行う。€%d。
 chapter.short,"Earned by fencing loot at Piritori; market sales and mission payouts do not count. Short of it on day %d, the boat sails without you.","Ansaitaan myymällä saalista Piritorilla; torikaupat ja keikkojen palkkiot eivät lasketa. Jos se jää vajaaksi päivänä %d, laiva lähtee ilman sinua.",ピリトリで物を売って得る金だけが数に入る。%d日目までに足りなければ、コンテナはあんた抜きで出ていく。
+door.can_go_bad,CAN GO BAD · %d%%,VOI MENNÄ PIELEEN · %d %%,こじれ得る · %d%%
+door.went_bad_fight,The deal goes bad. It is a fight now.,Kauppa menee pieleen. Nyt tapellaan.,取引がこじれた。戦いになった。
+door.went_bad_alone,"The deal goes bad, and nobody was standing with Aatami.","Kauppa menee pieleen, eikä kukaan ollut Aatamin tukena.",取引がこじれた。アータミのそばには誰もいなかった。

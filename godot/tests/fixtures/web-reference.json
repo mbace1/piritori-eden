@@ -551,8 +551,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-courtyard-ledger",
-     "anchor": "torkkelinmaki"
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
     },
     {
      "template": "watch-back-door",
@@ -568,6 +568,23 @@
    "fights_today": 0,
    "offers": [
     {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "piri": 2,
+   "fights": 2,
+   "fights_today": 2,
+   "offers": [
+    {
      "template": "hit-courtyard-ledger",
      "anchor": "torkkelinmaki"
     },
@@ -579,149 +596,132 @@
   },
   {
    "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 15,
+   "block": 16,
+   "piri": 0,
+   "fights": 0,
+   "fights_today": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "piri": 2,
+   "fights": 0,
+   "fights_today": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
    "piri": 2,
    "fights": 2,
    "fights_today": 2,
    "offers": [
     {
-     "template": "hit-courtyard-ledger",
-     "anchor": "torkkelinmaki"
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "piri": 0,
+   "fights": 0,
+   "fights_today": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "piri": 2,
+   "fights": 0,
+   "fights_today": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "piri": 2,
+   "fights": 2,
+   "fights_today": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "piri": 0,
+   "fights": 0,
+   "fights_today": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "watch-back-door",
      "anchor": "hakaniemi"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 16,
-   "piri": 0,
-   "fights": 0,
-   "fights_today": 0,
-   "offers": [
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
-    },
-    {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 16,
-   "piri": 2,
-   "fights": 0,
-   "fights_today": 0,
-   "offers": [
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
-    },
-    {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 16,
-   "piri": 2,
-   "fights": 2,
-   "fights_today": 2,
-   "offers": [
-    {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    },
-    {
-     "template": "watch-car-41",
-     "anchor": "piritori"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 18,
-   "piri": 0,
-   "fights": 0,
-   "fights_today": 0,
-   "offers": [
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
-    },
-    {
-     "template": "watch-car-41",
-     "anchor": "piritori"
-    },
-    {
-     "template": "favour-mccormick-name",
-     "anchor": "linjat_yard"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 18,
-   "piri": 2,
-   "fights": 0,
-   "fights_today": 0,
-   "offers": [
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
-    },
-    {
-     "template": "favour-mccormick-name",
-     "anchor": "linjat_yard"
-    },
-    {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1",
-   "block": 18,
-   "piri": 2,
-   "fights": 2,
-   "fights_today": 2,
-   "offers": [
-    {
-     "template": "favour-toko-broth",
-     "anchor": "vaasankatu"
-    },
-    {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
-    },
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
-    }
-   ]
-  },
-  {
-   "content_id": "piritori-era1-seven-day-slice-v1#1",
-   "block": 15,
-   "piri": 0,
-   "fights": 0,
-   "fights_today": 0,
-   "offers": [
-    {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    },
-    {
-     "template": "favour-mccormick-name",
-     "anchor": "linjat_yard"
     },
     {
      "template": "pickup-boiler-hall",
@@ -737,8 +737,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "watch-car-41",
@@ -779,8 +779,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "hit-bear-debt",
@@ -796,8 +796,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     },
     {
      "template": "hit-bear-debt",
@@ -830,16 +830,16 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
     },
     {
      "template": "favour-mccormick-name",
      "anchor": "linjat_yard"
-    },
-    {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
     }
    ]
   },
@@ -851,8 +851,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "favour-mccormick-name",
@@ -893,8 +893,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-toko-broth",
@@ -910,8 +910,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "sale-park-bench",
@@ -944,12 +944,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     }
    ]
   },
@@ -961,12 +961,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "sale-club-backroom",
-     "anchor": "makelansilta"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     }
    ]
   },
@@ -995,12 +995,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     }
    ]
   },
@@ -1012,12 +1012,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "sale-club-backroom",
-     "anchor": "makelansilta"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     }
    ]
   },
@@ -1046,8 +1046,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
     },
     {
      "template": "pickup-yard-van",
@@ -1063,8 +1063,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "pickup-boiler-hall",
@@ -1097,8 +1097,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-mccormick-name",
@@ -1118,8 +1118,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "sale-park-bench",
@@ -1160,8 +1160,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     },
     {
      "template": "favour-mccormick-name",
@@ -1223,8 +1223,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
     },
     {
      "template": "gig-queue-sitter",
@@ -1240,8 +1240,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "pickup-fish-stall",
@@ -1291,8 +1291,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "pickup-boiler-hall",
@@ -1325,12 +1325,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "favour-toko-broth",
-     "anchor": "vaasankatu"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
     }
    ]
   },
@@ -1342,12 +1342,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
     }
    ]
   },
@@ -1376,8 +1376,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-toko-broth",
@@ -1397,16 +1397,16 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "sale-park-bench",
      "anchor": "karhupuisto"
     },
     {
-     "template": "favour-toko-broth",
-     "anchor": "vaasankatu"
+     "template": "watch-car-41",
+     "anchor": "piritori"
     }
    ]
   },
@@ -1439,8 +1439,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "pickup-fish-stall",
@@ -1460,8 +1460,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "pickup-yard-van",
@@ -1502,8 +1502,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     },
     {
      "template": "hit-bear-debt",
@@ -1519,8 +1519,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
     },
     {
      "template": "hit-bear-debt",
@@ -1574,8 +1574,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-courtyard-ledger",
-     "anchor": "torkkelinmaki"
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
     },
     {
      "template": "watch-car-41",
@@ -1667,8 +1667,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     },
     {
      "template": "watch-car-41",
@@ -1684,8 +1684,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
     },
     {
      "template": "watch-car-41",
@@ -1718,8 +1718,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-courtyard-ledger",
-     "anchor": "torkkelinmaki"
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
     },
     {
      "template": "pickup-yard-van",
@@ -1739,8 +1739,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
     },
     {
      "template": "pickup-boiler-hall",
@@ -1853,16 +1853,16 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    },
-    {
-     "template": "favour-toko-broth",
-     "anchor": "vaasankatu"
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     },
     {
      "template": "sale-park-bench",
      "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
     }
    ]
   },
@@ -1895,8 +1895,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-courtyard-ledger",
-     "anchor": "torkkelinmaki"
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
     },
     {
      "template": "gig-rauno-cart",
@@ -1912,8 +1912,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
     },
     {
      "template": "gig-queue-sitter",
@@ -1946,16 +1946,16 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
     },
     {
      "template": "gig-rauno-cart",
      "anchor": "harju"
     },
     {
-     "template": "pickup-fish-stall",
-     "anchor": "hakaniemi"
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
     }
    ]
   },
@@ -1967,8 +1967,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "gig-rauno-cart",
@@ -2009,8 +2009,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-mccormick-name",
@@ -2026,8 +2026,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-toko-broth",
@@ -2060,12 +2060,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
-    },
-    {
      "template": "pickup-boiler-hall",
      "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
     }
    ]
   },
@@ -2077,8 +2077,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "sale-park-bench",
-     "anchor": "karhupuisto"
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
     },
     {
      "template": "favour-toko-broth",
@@ -2111,12 +2111,12 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "hit-bear-debt",
-     "anchor": "karhupuisto"
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
     },
     {
-     "template": "pickup-fish-stall",
-     "anchor": "hakaniemi"
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
     }
    ]
   },
@@ -2162,8 +2162,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "favour-mccormick-name",
@@ -2179,8 +2179,8 @@
    "fights_today": 0,
    "offers": [
     {
-     "template": "pickup-boiler-hall",
-     "anchor": "suvilahti"
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
     },
     {
      "template": "sale-park-bench",
@@ -2214,50 +2214,50 @@
      "block": 15,
      "offers": [
       {
-       "template": "hit-courtyard-ledger",
-       "anchor": "torkkelinmaki"
-      },
-      {
        "template": "watch-back-door",
        "anchor": "hakaniemi"
+      },
+      {
+       "template": "hit-courtyard-ledger",
+       "anchor": "torkkelinmaki"
       }
      ],
-     "took": "hit-courtyard-ledger",
-     "encounter": "door-15-hit-courtyard-ledger"
+     "took": "watch-back-door",
+     "encounter": "door-15-watch-back-door"
     },
     {
      "block": 16,
      "offers": [
       {
-       "template": "pickup-boiler-hall",
-       "anchor": "suvilahti"
+       "template": "pickup-yard-van",
+       "anchor": "linjat_yard"
       },
       {
        "template": "hit-bear-debt",
        "anchor": "karhupuisto"
       }
      ],
-     "took": "pickup-boiler-hall",
-     "encounter": "door-16-pickup-boiler-hall"
+     "took": "pickup-yard-van",
+     "encounter": "door-16-pickup-yard-van"
     },
     {
      "block": 18,
      "offers": [
       {
-       "template": "sale-park-bench",
-       "anchor": "karhupuisto"
+       "template": "pickup-boiler-hall",
+       "anchor": "suvilahti"
       },
       {
        "template": "favour-mccormick-name",
        "anchor": "linjat_yard"
       },
       {
-       "template": "watch-car-41",
-       "anchor": "piritori"
+       "template": "sale-park-bench",
+       "anchor": "karhupuisto"
       }
      ],
-     "took": "sale-park-bench",
-     "encounter": "door-18-sale-park-bench"
+     "took": "pickup-boiler-hall",
+     "encounter": "door-18-pickup-boiler-hall"
     }
    ]
   },
@@ -2268,6 +2268,40 @@
      "block": 15,
      "offers": [
       {
+       "template": "sale-quay-shift",
+       "anchor": "sornainen_harbour"
+      },
+      {
+       "template": "watch-car-41",
+       "anchor": "piritori"
+      },
+      {
+       "template": "favour-mccormick-name",
+       "anchor": "linjat_yard"
+      }
+     ],
+     "took": "sale-quay-shift",
+     "encounter": "door-15-sale-quay-shift"
+    },
+    {
+     "block": 16,
+     "offers": [
+      {
+       "template": "pickup-yard-van",
+       "anchor": "linjat_yard"
+      },
+      {
+       "template": "hit-bear-debt",
+       "anchor": "karhupuisto"
+      }
+     ],
+     "took": "pickup-yard-van",
+     "encounter": "door-16-pickup-yard-van"
+    },
+    {
+     "block": 18,
+     "offers": [
+      {
        "template": "sale-park-bench",
        "anchor": "karhupuisto"
       },
@@ -2281,41 +2315,7 @@
       }
      ],
      "took": "sale-park-bench",
-     "encounter": "door-15-sale-park-bench"
-    },
-    {
-     "block": 16,
-     "offers": [
-      {
-       "template": "pickup-boiler-hall",
-       "anchor": "suvilahti"
-      },
-      {
-       "template": "hit-bear-debt",
-       "anchor": "karhupuisto"
-      }
-     ],
-     "took": "pickup-boiler-hall",
-     "encounter": "door-16-pickup-boiler-hall"
-    },
-    {
-     "block": 18,
-     "offers": [
-      {
-       "template": "hit-bear-debt",
-       "anchor": "karhupuisto"
-      },
-      {
-       "template": "favour-toko-broth",
-       "anchor": "vaasankatu"
-      },
-      {
-       "template": "sale-club-backroom",
-       "anchor": "makelansilta"
-      }
-     ],
-     "took": "hit-bear-debt",
-     "encounter": "door-18-hit-bear-debt"
+     "encounter": "door-18-sale-park-bench"
     }
    ]
   },
@@ -2326,16 +2326,16 @@
      "block": 15,
      "offers": [
       {
-       "template": "hit-bear-debt",
-       "anchor": "karhupuisto"
+       "template": "favour-mccormick-name",
+       "anchor": "linjat_yard"
       },
       {
        "template": "sale-park-bench",
        "anchor": "karhupuisto"
       }
      ],
-     "took": "hit-bear-debt",
-     "encounter": "door-15-hit-bear-debt"
+     "took": "favour-mccormick-name",
+     "encounter": "door-15-favour-mccormick-name"
     },
     {
      "block": 16,
@@ -2356,16 +2356,16 @@
      "block": 18,
      "offers": [
       {
-       "template": "pickup-boiler-hall",
-       "anchor": "suvilahti"
+       "template": "sale-quay-shift",
+       "anchor": "sornainen_harbour"
       },
       {
-       "template": "sale-club-backroom",
-       "anchor": "makelansilta"
+       "template": "pickup-boiler-hall",
+       "anchor": "suvilahti"
       }
      ],
-     "took": "pickup-boiler-hall",
-     "encounter": "door-18-pickup-boiler-hall"
+     "took": "sale-quay-shift",
+     "encounter": "door-18-sale-quay-shift"
     }
    ]
   },
@@ -2376,23 +2376,23 @@
      "block": 15,
      "offers": [
       {
-       "template": "hit-bear-debt",
-       "anchor": "karhupuisto"
+       "template": "favour-mccormick-name",
+       "anchor": "linjat_yard"
       },
       {
        "template": "pickup-boiler-hall",
        "anchor": "suvilahti"
       }
      ],
-     "took": "hit-bear-debt",
-     "encounter": "door-15-hit-bear-debt"
+     "took": "favour-mccormick-name",
+     "encounter": "door-15-favour-mccormick-name"
     },
     {
      "block": 16,
      "offers": [
       {
-       "template": "pickup-boiler-hall",
-       "anchor": "suvilahti"
+       "template": "pickup-fish-stall",
+       "anchor": "hakaniemi"
       },
       {
        "template": "sale-park-bench",
@@ -2403,27 +2403,27 @@
        "anchor": "vaasankatu"
       }
      ],
-     "took": "pickup-boiler-hall",
-     "encounter": "door-16-pickup-boiler-hall"
+     "took": "pickup-fish-stall",
+     "encounter": "door-16-pickup-fish-stall"
     },
     {
      "block": 18,
      "offers": [
       {
-       "template": "sale-park-bench",
-       "anchor": "karhupuisto"
+       "template": "pickup-boiler-hall",
+       "anchor": "suvilahti"
       },
       {
        "template": "favour-toko-broth",
        "anchor": "vaasankatu"
       },
       {
-       "template": "pickup-yard-van",
-       "anchor": "linjat_yard"
+       "template": "sale-park-bench",
+       "anchor": "karhupuisto"
       }
      ],
-     "took": "sale-park-bench",
-     "encounter": "door-18-sale-park-bench"
+     "took": "pickup-boiler-hall",
+     "encounter": "door-18-pickup-boiler-hall"
     }
    ]
   },
@@ -2434,16 +2434,16 @@
      "block": 15,
      "offers": [
       {
-       "template": "sale-park-bench",
-       "anchor": "karhupuisto"
+       "template": "sale-quay-shift",
+       "anchor": "sornainen_harbour"
       },
       {
        "template": "pickup-fish-stall",
        "anchor": "hakaniemi"
       }
      ],
-     "took": "sale-park-bench",
-     "encounter": "door-15-sale-park-bench"
+     "took": "sale-quay-shift",
+     "encounter": "door-15-sale-quay-shift"
     },
     {
      "block": 16,
@@ -2453,8 +2453,8 @@
        "anchor": "suvilahti"
       },
       {
-       "template": "sale-club-backroom",
-       "anchor": "makelansilta"
+       "template": "sale-park-bench",
+       "anchor": "karhupuisto"
       }
      ],
      "took": "pickup-boiler-hall",
@@ -2464,18 +2464,4340 @@
      "block": 18,
      "offers": [
       {
-       "template": "hit-bear-debt",
-       "anchor": "karhupuisto"
+       "template": "favour-mccormick-name",
+       "anchor": "linjat_yard"
       },
       {
-       "template": "favour-toko-broth",
-       "anchor": "vaasankatu"
+       "template": "sale-park-bench",
+       "anchor": "karhupuisto"
       }
      ],
-     "took": "hit-bear-debt",
-     "encounter": "door-18-hit-bear-debt"
+     "took": "favour-mccormick-name",
+     "encounter": "door-18-favour-mccormick-name"
     }
    ]
+  }
+ ],
+ "escalation": [
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-fish-stall",
+   "choice": "skim",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-yard-van",
+   "choice": "look",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "pickup-boiler-hall",
+   "choice": "slip-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-kattilahalli-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-quay-shift",
+   "choice": "sell-two",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "sale-park-bench",
+   "choice": "sell",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "favour-mccormick-name",
+   "choice": "wrong-name",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "watch-back-door",
+   "choice": "watch-for-sale",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-karhupuisto-2v2"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-bear-debt",
+   "choice": "talk",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#10",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#11",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#12",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#13",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#14",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#15",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#16",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#17",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#18",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 0,
+   "result": "battle:battle-courtyard-3v3"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 0,
+   "fights": 0,
+   "result": "effects"
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#19",
+   "door": "hit-courtyard-ledger",
+   "choice": "buy-in",
+   "crew": 3,
+   "fights": 2,
+   "result": ""
   }
  ],
  "chapter_walk": [
@@ -2571,14 +6893,14 @@
   },
   {
    "block": 15,
-   "door": "hit-courtyard-ledger",
-   "encounter": "door-15-hit-courtyard-ledger",
+   "door": "hit-bear-debt",
+   "encounter": "door-15-hit-bear-debt",
    "choice": "leave"
   },
   {
    "block": 16,
-   "door": "pickup-boiler-hall",
-   "encounter": "door-16-pickup-boiler-hall",
+   "door": "pickup-fish-stall",
+   "encounter": "door-16-pickup-fish-stall",
    "choice": "leave"
   },
   {
@@ -2589,8 +6911,8 @@
   },
   {
    "block": 18,
-   "door": "hit-bear-debt",
-   "encounter": "door-18-hit-bear-debt",
+   "door": "pickup-yard-van",
+   "encounter": "door-18-pickup-yard-van",
    "choice": "leave"
   },
   {

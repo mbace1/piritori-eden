@@ -465,6 +465,7 @@ func new_campaign(with_seed: int = 0) -> void:
 	cut_paid_block = -1
 	doors = {"offers": {}, "taken": {}}
 	fights_by_day = {}
+	last_escalation = {}
 	ContentRegistry.forget_door_encounters()
 	# Web boot marks where Aatami stands as seen: you know the corner you
 	# start on (`markSeen` at boot in web/js/v3/app.js).
@@ -1472,12 +1473,38 @@ func resolve_encounter(encounter_id: String, choice_id: String) -> bool:
 			continue
 		if not meets_all(choice.get("requirements", [])):
 			return false
+		# Cleared before the effects: a fight the choice itself starts is
+		# asked for inside them, and must not read the last choice's deal.
+		last_escalation = {}
 		apply_effects(choice.get("effects", []))
 		resolved_encounters[encounter_id] = choice_id
+		_escalate(enc, choice)
 		encounter_resolved.emit(encounter_id, choice_id)
 		advance_block()
 		return true
 	return false
+
+
+## Answer 25 (web v4.65 `escalation`): a door choice that started no fight of
+## its own may go bad. Rolled while the block is still the door's — the web
+## asks after the choice and before its block turns — and remembered for the
+## screen in `last_escalation` (presentation only, never saved).
+var last_escalation: Dictionary = {}
+
+func _escalate(enc: Dictionary, choice: Dictionary) -> void:
+	if not enc.has("door"):
+		return
+	for fx in choice.get("effects", []):
+		if String(fx).begins_with("start-battle:") or String(fx).begins_with("start-negotiation:"):
+			return
+	var door := String(enc["door"])
+	var bad := PiritoriDoors.escalation(door, String(choice.get("id", "")))
+	if bad.has("battle"):
+		last_escalation = {"door": door, "block": block_index, "kind": "battle"}
+		apply_effect("start-battle:" + String(bad["battle"]))
+	elif bad.has("effects"):
+		last_escalation = {"door": door, "block": block_index, "kind": "alone"}
+		apply_effects(bad["effects"])
 
 
 ## A mission's battle has settled: apply that mission's own authored effects

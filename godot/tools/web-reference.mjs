@@ -29,7 +29,7 @@ const {
   createState, deterministicRoll, advanceSchedule, currentSchedule, currentEncounter, chooseEncounter,
   choiceStatus, recordFight, fightsToday, forecastEnding,
 } = await mod('state.js');
-const { offerDoors, takeDoor, isDoorBlock } = await mod('doors.js');
+const { offerDoors, takeDoor, isDoorBlock, escalation } = await mod('doors.js');
 const { settleCut } = await mod('story.js');
 const { turnPlan } = await mod('chapter.js');
 const { rollRoad, resolveRoad, choiceOpen, clockLabel } = await mod('road.js');
@@ -163,6 +163,28 @@ for (let seed = 0; seed < 5; seed += 1) {
   ref.door_chain.push(row);
 }
 
+// 6b. A bad deal escalates (answer 25): every choice with `escalates`, over
+// twenty saves, with three crew (a fight), with none (the door's losing
+// stakes), and with the day's two fights spent (never).
+ref.escalation = [];
+const crew3 = content.crew.slice(0, 3).map(c => c.id);
+for (const t of doorsCanon.templates) {
+  for (const c of t.choices.filter(ch => ch.escalates)) {
+    for (let seed = 0; seed < 20; seed += 1) {
+      for (const [who, fights] of [['crew', 0], ['alone', 0], ['crew', 2]]) {
+        const e = createState(content);
+        e.contentId = contentIdOf(seed);
+        e.scheduleIndex = doorBlocks[0];
+        if (who === 'crew') { e.recruited = [...crew3]; e.deployed = [...crew3]; }
+        for (let f = 0; f < fights; f += 1) recordFight(e, content);
+        const r = escalation(e, data, doorsCanon, t.id, c.id);
+        ref.escalation.push({ content_id: e.contentId, door: t.id, choice: c.id, crew: who === 'crew' ? crew3.length : 0, fights,
+          result: r ? (r.battle ? `battle:${r.battle}` : 'effects') : '' });
+      }
+    }
+  }
+}
+
 // 7. The whole ten-day chapter, walked the way web/test/doors.mjs walks it:
 // every block, the first door taken on a free block, the last open choice
 // that starts no fight. What the web took, block by block, and where the
@@ -196,7 +218,7 @@ if (process.argv.includes('--check')) {
     console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
     process.exit(1);
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.chapter_walk.length} blocks walked.`);
+  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.chapter_walk.length} blocks walked.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);
