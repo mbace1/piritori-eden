@@ -249,7 +249,7 @@ static func open_door_anchors() -> PackedStringArray:
 ## Answer 25: did this choice's bad deal escalate? Asked once, right after the
 ## choice resolved and before the block turns (the roll reads the door's own
 ## block). {} when it held or cannot escalate, {battle} when a fight starts,
-## {effects} when it went bad with nobody to stand with Aatami: the door's
+## {effects} when it went bad without enough who can fight: the door's
 ## losing stakes (web `escalation`).
 static func escalation(template_id: String, choice_id: String) -> Dictionary:
 	var t := template_of(template_id)
@@ -268,6 +268,7 @@ static func escalation(template_id: String, choice_id: String) -> Dictionary:
 		return {}
 	var battle := String(t["fight"].get("battle", ""))
 	var need := int(ContentRegistry.battle(battle).get("player_deployed", 2))
-	if GameState.deployed_crew().size() >= need:
+	# Answer 24 (v4.66): who can fight, so Aatami counts while he still does.
+	if GameState.fighters().size() >= need:
 		return {"battle": battle}
 	return {"effects": t["fight"].get("lose", [])}

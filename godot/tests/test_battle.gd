@@ -43,6 +43,7 @@ func _ready() -> void:
 	_test_equipment_from_canon()
 	_test_build_2v2()
 	_test_hired_crew_can_fight()
+	_test_aatami_can_fight()
 	_test_aftermath()
 	_test_every_role_has_a_body()
 	_test_battle_stage_matches_manifest()
@@ -449,6 +450,17 @@ func _test_unit_variants() -> void:
 	check("a specialist still has exactly one body",
 		BattleStage3D.unit_path("watcher", "anyone")
 			== String(BattleStage3D.UNIT_BY_ROLE["watcher"]))
+
+	# v4.66: Aatami fights with no model of his own. On the player's side an
+	# unmodelled role wears the generic hired hand (the web's PLAYER_FALLBACK);
+	# the opposition keeps the loud fallback.
+	var role := String(ContentRegistry.protagonist().get("role", ""))
+	check("Aatami's role has no model yet", role != "" and not BattleStage3D.UNIT_BY_ROLE.has(role))
+	check("  so he wears a hired hand's body",
+		options.has(BattleStage3D.unit_path(BattleStage3D.fighter_role(role, true), "aatami")))
+	check("  a modelled role is untouched",
+		BattleStage3D.fighter_role("watcher", true) == "watcher"
+		and BattleStage3D.fighter_role(role, false) == role)
 
 
 ## The concrete slab under every arena.
@@ -1299,6 +1311,29 @@ func _test_aftermath() -> void:
 ## A hire is only real if they can be sent into a fight. Everything else about
 ## hiring lives in the shell, so this is the one check that proves the registry
 ## overlay reaches the thing that actually matters.
+## v4.66 (answer 24): Aatami is a player unit the builder accepts, with no
+## portrait or model art, and a fight with him in it runs.
+func _test_aatami_can_fight() -> void:
+	print("\nAatami takes the board (answer 24)")
+	var crew := _crew_ids(1)
+	var def := BattleBuilder.build("battle-karhupuisto-2v2", ["aatami", crew[0]], 4242)
+	var units: Array = def.get("player_units", [])
+	eq("the builder fields him first, then the hire",
+		units.map(func(u): return String(u["fighter_id"])), ["aatami", crew[0]])
+	var a: Dictionary = units[0] if not units.is_empty() else {}
+	var rec := ContentRegistry.protagonist()
+	check("  with his own condition and nerve", int(a.get("condition", 0)) == int(rec.get("condition", -1))
+		and int(a.get("nerve", 0)) == int(rec.get("nerve", -1)))
+	check("  no portrait art, and nothing asks for one", String(a.get("portrait_id", "x")) == "")
+	check("  his phone, and his fists", Array(a.get("item_ids", [])) == ["feature-phone"]
+		and String(a.get("held_weapon_id", "")) == "unarmed")
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-karhupuisto-2v2", ["aatami", crew[0]], 4242)
+	check("  and the fight begins", errs.is_empty(), str(errs))
+	fm.resolve_to_end()
+	check("  and runs to an end", fm.result != FightManager.BattleResult.PENDING)
+
+
 func _test_hired_crew_can_fight() -> void:
 	print("
 somebody hired off the street can be fielded")

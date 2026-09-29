@@ -2377,6 +2377,8 @@ func _refusal_words(failed: Array) -> String:
 		match String(st.get("kind", "")):
 			"deployed-crew":
 				out.append(tr("road.needs_crew") % int(st.get("want", 0)))
+			"fighters":
+				out.append(tr("road.needs_fighters") % int(st.get("want", 0)))
 			"stock":
 				out.append(tr("road.needs_pack"))
 			"fights-today":
@@ -2721,24 +2723,42 @@ func _show_battle(battle_id: String, road_fight: bool = false, door: String = ""
 	_road_battle = road_fight
 	_door_battle = door
 	_door_escalated = false
+	var training := bool(ContentRegistry.battle(battle_id).get("training", false))
+	# Answer 24 (web v4.66 `startBattle`): Aatami fights the first fights, then
+	# steps back for good. The first real fight he can stay out of is a beat,
+	# decided before the lineup so he is not in it.
+	var beat := "" if training else GameState.step_back_if_ready()
 	# Answer 23: every real fight counts toward the day's two, a road fight
 	# and a door fight included; a training bout does not (web `startBattle`).
-	if not bool(ContentRegistry.battle(battle_id).get("training", false)):
+	if not training:
 		GameState.record_fight()
 	_screen = ""
 	_set_mode(Mode.BATTLE)
 	_clear_world()
 	_clear_rail()
-	var crew: Array = []
+	# Who takes the board: Aatami first while he still fights, then the crew
+	# with him (web `fighters`). Every fight choice is gated on `fighters>=N`,
+	# so a real fight arrives with enough of them.
+	var crew: Array = [] if training else Array(GameState.fighters())
+	# A training bout, and the ungated ways in (the MISSIONS rail re-entering a
+	# mission's fight, a `?battle=` deep link), keep the port's authored-roster
+	# lineup to fill the side rather than fielding a short formation. No gated
+	# choice arrives short, so a real fight's lineup is exactly `fighters()`.
+	var need := int(ContentRegistry.battle(battle_id).get("player_deployed", 2))
+	var authored: Array = []
 	for c in ContentRegistry.slice.get("crew", []):
 		var cid := String(c.get("id", ""))
 		if GameState.is_revealed(cid) or GameState.is_revealed(String(c.get("recruit_encounter_id", ""))):
-			crew.append(cid)
-	# The slice's first battles are reachable before anyone is recruited, so
-	# fall back to the authored roster rather than fielding an empty formation.
-	if crew.is_empty():
+			authored.append(cid)
+	# The slice's first battles are reachable before anyone is recruited.
+	if authored.is_empty():
 		for c in ContentRegistry.slice.get("crew", []):
-			crew.append(String(c.get("id", "")))
+			authored.append(String(c.get("id", "")))
+	for cid in authored:
+		if crew.size() >= need:
+			break
+		if not crew.has(cid):
+			crew.append(cid)
 
 	var scene := preload("res://scenes/formation_battle.gd").new()
 	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2748,6 +2768,9 @@ func _show_battle(battle_id: String, road_fight: bool = false, door: String = ""
 	if not errs.is_empty():
 		_rail_box.add_child(_make_label(str(errs), 13, PiritoriPalette.DANGER_RED))
 		return
+	# The step-back opens the fight's log (web: unshifted into `battle.log`).
+	if beat != "":
+		scene.open_log(beat)
 	# A fight is where a career is spent (COMBAT.md §7.2). Everyone who was
 	# deployed comes out one fight older, and whoever reached the ceiling leaves
 	# — alive. Done HERE, once, when the battle settles: doing it inside the

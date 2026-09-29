@@ -69,6 +69,8 @@ func _ready() -> void:
 	# Act I v4.65: doors, and the ten-day chapter's close.
 	await _test_doors_through_ui()
 	await _test_door_fight_through_ui()
+	# Act I v4.66: Aatami fights first, then the crew does.
+	await _test_aatami_through_ui()
 	await _test_sound_switch()
 	await _test_arrival()
 
@@ -992,7 +994,7 @@ func _test_road_through_ui() -> void:
 	var stand := _live_button("Stand your ground")
 	check("a choice you cannot take is shown", stand != null)
 	check("  and refused", stand != null and stand.disabled)
-	check("  and says why in words", _rail_text().contains("needs 2 crew with you"))
+	check("  and says why in words", _rail_text().contains("needs 2 who can fight"))
 	# With two crew it becomes a fight: the ordinary battle, no mission, no block.
 	GameState.apply_effect("recruit:crew-slot-runner")
 	GameState.apply_effect("recruit:crew-slot-watcher")
@@ -1509,6 +1511,77 @@ func _test_door_fight_through_ui() -> void:
 				"€%d → €%d" % [cash, GameState.cash_eur])
 		_shell._show_city()
 		await get_tree().process_frame
+
+
+## web/test/aatami-browser.cjs (answer 24): the bear debt's two-a-side fight
+## with one hire, with none, and with three. Fixtures set the block, who is
+## hired and which door is on the board; the fight starts from a real press.
+func _aatami_at_the_bear(hired: int) -> Button:
+	await _fresh_city("karhupuisto")
+	var first := int(ContentRegistry.schedule().map(func(e): return bool(e.get("door", false))).find(true))
+	GameState.block_index = first
+	GameState.day = first / 2 + 1
+	for id in ["crew-slot-runner", "crew-slot-watcher", "crew-slot-fixer"].slice(0, hired):
+		GameState.apply_effect("recruit:" + id)
+	GameState.doors = {"offers": {str(first): [{"template": "hit-bear-debt", "anchor": "karhupuisto"},
+		{"template": "gig-rauno-cart", "anchor": "harju"}]}, "taken": {}}
+	GameState.fights_by_day = {}
+	_shell._show_city()
+	await get_tree().process_frame
+	var take: Button = null
+	for c in _door_cards():
+		if String(c.get_meta("door")) == "hit-bear-debt":
+			take = _take_button(c)
+	if take == null:
+		check("the bear debt is on the board (%d hired)" % hired, false)
+		return null
+	await _press(take)
+	var enter := _one_lit("enter", "ENTER")
+	if enter == null:
+		return null
+	await _press(enter)
+	return _choice_button("lean")
+
+
+func _test_aatami_through_ui() -> void:
+	print("\nAatami fights first, then the crew does (answer 24), through the interface")
+	# One hire: Aatami makes the second fighter.
+	var lean := await _aatami_at_the_bear(1)
+	check("with one hire the fight is open (Aatami fights)", lean != null and not lean.disabled)
+	if lean == null:
+		return
+	await _press(lean)
+	var scene := _world_has("formation_battle.gd")
+	var players: Array = scene.fight.get_fighters(Fighter.Side.PLAYER) if scene != null else []
+	check("Aatami is on the board, in front", _shell.mode == _shell.Mode.BATTLE and players.size() == 2
+		and String(players[0].fighter_id) == "aatami" and String(players[0].display_name) == "Aatami"
+		and int(players[0].slot.y) == FightBoard.depth_of(0, true),
+		str(players.map(func(f): return "%s@%s" % [f.fighter_id, f.slot])))
+	check("  and not stepped back", not GameState.has_flag("memory:aatami-stepped-back"))
+	check("  no beat opens a fight he stands in", scene != null and scene.fight_log.is_empty())
+
+	# Nobody hired: the bear debt's fight is closed, and says why.
+	lean = await _aatami_at_the_bear(0)
+	check("alone he cannot take a two-a-side fight, and the card says so",
+		lean != null and lean.disabled and _rail_text().contains("needs 2 who can fight"), _rail_text())
+
+	# A crew of three: the first fight he stays out of is a beat.
+	lean = await _aatami_at_the_bear(3)
+	if lean == null:
+		return
+	await _press(lean)
+	scene = _world_has("formation_battle.gd")
+	players = scene.fight.get_fighters(Fighter.Side.PLAYER) if scene != null else []
+	check("with three hired he steps back", _shell.mode == _shell.Mode.BATTLE and players.size() == 2
+		and not players.any(func(f): return String(f.fighter_id) == "aatami")
+		and GameState.has_flag("memory:aatami-stepped-back"))
+	var beat := String(ContentRegistry.protagonist().get("step_back_beat", ""))
+	var log_label: Label = scene.find_child("FightLog", true, false) if scene != null else null
+	check("  and the fight opens on that beat", scene != null and scene.fight_log.size() == 1
+		and scene.fight_log[0] == beat and beat.contains("edge of the board")
+		and log_label != null and log_label.visible and log_label.text.contains(beat))
+	_shell._show_city()
+	await get_tree().process_frame
 
 
 ## web v4.59: SOUND · ON/OFF in the menu, remembered; OFF closes the graph.

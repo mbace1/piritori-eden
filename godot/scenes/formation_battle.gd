@@ -117,6 +117,11 @@ var _stage3d: SubViewportContainer
 var _faceoff: PanelContainer
 var _top_strip: PanelContainer
 var _top_label: Label
+## The fight's own log, newest last. Only story beats land here so far: the
+## web unshifts Aatami's step-back into `battle.log` (v4.66), and this is where
+## the port keeps it. Shown under the round line through the first round.
+var fight_log: PackedStringArray = []
+var _log_label: Label
 var _intent_box: HBoxContainer
 var _console: PanelContainer
 var _crew_col: VBoxContainer
@@ -199,6 +204,15 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	return errors
 
 
+## A beat that opens the fight's log (web `battle.log.unshift`): Aatami
+## stepping back is said before anyone moves.
+func open_log(line: String) -> void:
+	if line == "":
+		return
+	fight_log.insert(0, line)
+	_refresh()
+
+
 ## The battle's own location art. Each battle names a scene_asset_id, and the
 ## slice ships approved art for both — Karhupuisto and the courtyard. Only
 ## for the 2D renderer: some battles now name a `mesh-3d` stage instead of a
@@ -264,6 +278,11 @@ func _build() -> void:
 	top.add_theme_constant_override("separation", 2)
 	_top_label = _label("", 15, MapStyle.TITLE_TEXT)
 	top.add_child(_top_label)
+	_log_label = _label("", 13, MapStyle.SMALL_TEXT)
+	_log_label.name = "FightLog"
+	_log_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_log_label.visible = false
+	top.add_child(_log_label)
 	_intent_box = HBoxContainer.new()
 	_intent_box.add_theme_constant_override("separation", 18)
 	top.add_child(_intent_box)
@@ -1115,6 +1134,10 @@ func _refresh() -> void:
 	# round_number is 0 until the first resolve; the player is in round 1.
 	_top_label.text = "%s %d · %s" % [
 		tr("battle.round"), maxi(fight.round_number, 1), _phase_word()]
+	# A beat that opened the fight reads through its first round, then gives
+	# the strip back to the round.
+	_log_label.text = "\n".join(fight_log)
+	_log_label.visible = not fight_log.is_empty() and fight.round_number <= 1
 
 	for c in _intent_box.get_children():
 		c.queue_free()
@@ -1781,7 +1804,10 @@ func _negotiate() -> void:
 
 func _on_battle_ended(result: int) -> void:
 	battle_finished.emit(result)
-	_refresh()
+	# The shell may have taken the board down to show the aftermath; a board
+	# out of the tree has no viewport to size its text against.
+	if is_inside_tree():
+		_refresh()
 
 
 # ── input and helpers ─────────────────────────────────────────────────────

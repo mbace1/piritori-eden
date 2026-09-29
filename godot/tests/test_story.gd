@@ -1,8 +1,8 @@
 extends Node
 ## The city's new rules — the road (v4.58), sound (v4.59), Toko's counter and
 ## the board (v4.60/v4.61), the Thursday Load (v4.62), Kello's cut (v4.63),
-## the chapter turn (v4.64) and the ten-day chapter of spine and doors (v4.65)
-## — against the web.
+## the chapter turn (v4.64), the ten-day chapter of spine and doors (v4.65) and
+## Aatami fighting first, then the crew (v4.66) — against the web.
 ##
 ## Run: godot --headless --path . res://tests/test_story.tscn
 ##
@@ -77,6 +77,9 @@ func _ready() -> void:
 	_test_bad_deals_escalate()
 	_test_spine_beats_and_the_look_ahead()
 	_test_the_chapter_walk_is_the_webs()
+	# v4.66, mirroring web/test/aatami.mjs.
+	_test_aatami_fights_first()
+	_test_the_lineup_is_the_webs()
 	_test_sound()
 	_test_arrival_lines()
 
@@ -238,8 +241,10 @@ func _test_road_rules() -> void:
 		if String(c["id"]) == "stand":
 			stand = c
 	var st := PiritoriRoad.choice_status(stand)
-	check("standing your ground needs two crew, and says so",
-		not bool(st["ok"]) and String(st["failed"][0]["kind"]) == "deployed-crew")
+	# v4.66: a fight needs two who can fight; alone, Aatami is one.
+	check("standing your ground needs two who can fight, and says so",
+		not bool(st["ok"]) and String(st["failed"][0]["kind"]) == "fighters"
+		and int(st["failed"][0]["have"]) == 1)
 	eq("a refused choice is refused by the model too", PiritoriRoad.resolve("stand").get("reason", ""), "refused")
 	var clock_before := PiritoriRoad.clock_label()
 	var res := PiritoriRoad.resolve("pay")
@@ -657,8 +662,8 @@ func _test_doors_canon() -> void:
 					bad.append("%s/%s starts a fight the door does not own" % [t["id"], c["id"]])
 				if not (c.get("requirements", []) as Array).has("fights-today<%d" % cap):
 					bad.append("%s/%s is not held to two a day" % [t["id"], c["id"]])
-				if not c.get("requirements", []).any(func(r): return String(r).begins_with("deployed-crew>=")):
-					bad.append("%s/%s needs no crew" % [t["id"], c["id"]])
+				if not c.get("requirements", []).any(func(r): return String(r).begins_with("fighters>=")):
+					bad.append("%s/%s needs nobody who can fight" % [t["id"], c["id"]])
 	check("every door is briefed, has a safe way out, and owns its one fight", bad.is_empty(), str(bad))
 	check("bad deals escalate on most doors (answer 25)",
 		ts.filter(func(t): return t.get("choices", []).any(func(c): return c.get("escalates", null) != null)).size() >= 6)
@@ -838,8 +843,7 @@ func _test_escalation_is_the_webs() -> void:
 		_at_block(int(_ref.get("door_blocks", [15])[0]))
 		# Setup: the save's identity, who is with Aatami, the day's fights.
 		GameState.content_package_id = String(w["content_id"])
-		if int(w["crew"]) > 0:
-			GameState.roster = PackedStringArray(crew)
+		GameState.roster = PackedStringArray(crew.slice(0, int(w["crew"])))
 		for f in int(w["fights"]):
 			GameState.record_fight()
 		var r := PiritoriDoors.escalation(String(w["door"]), String(w["choice"]))
@@ -857,6 +861,100 @@ func _test_escalation_is_the_webs() -> void:
 	check("every roll matches, fight, stakes or held (%d)" % rows.size(), bad.is_empty(), str(bad))
 	check("  and the rolls cover all three outcomes", seen.has("") and seen.has("effects")
 		and seen.keys().any(func(k): return String(k).begins_with("battle:")), str(seen.keys()))
+
+
+## web/test/aatami.mjs (H6.1, owner answer 24, COMBAT.md §9.9.1): he fights
+## the first battles because he cannot afford a crew, then steps back for good.
+func _test_aatami_fights_first() -> void:
+	print("\nAatami fights first, then the crew does (answer 24)")
+	var aatami := ContentRegistry.protagonist()
+	var slots: Array = ContentRegistry.slice.get("crew", [])
+	var crew: Array = slots.map(func(c): return String(c["id"]))
+	check("Aatami is in canon, named, and steps back at a crew of three",
+		String(aatami.get("id", "")) == "aatami" and bool(aatami.get("named", false))
+		and int(aatami.get("steps_back_at_crew", 0)) == 3)
+	check("he is not one of the six crew slots", not crew.has("aatami"))
+
+	_fresh()
+	check("on day one he fights", GameState.aatami_fights())
+	eq("with nobody hired, he is the whole side", GameState.fighters(), PackedStringArray(["aatami"]))
+	var rec := ContentRegistry.crew_member("aatami")
+	var unit: Dictionary = BattleBuilder.build("battle-karhupuisto-2v2", ["aatami"]).get("player_units", [{}])[0]
+	check("he has a condition like anyone who fights",
+		int(rec.get("condition", 0)) > 0 and int(unit.get("condition", 0)) == int(rec.get("condition", 0)))
+	check("his record resolves, and he is named",
+		String(rec.get("name", "")) == "Aatami" and GameState.is_named("aatami"))
+
+	GameState.roster = PackedStringArray([crew[0]])
+	check("one hire and Aatami make two who can fight", GameState.meets_requirement("fighters>=2"))
+	check("but only one crew with you", not GameState.meets_requirement("deployed-crew>=2"))
+	check("\"someone with you\" still means crew",
+		GameState.meets_requirement("deployed-crew>=1") and not GameState.meets_requirement("deployed-crew>=2"))
+	var battle := BattleBuilder.build("battle-karhupuisto-2v2", Array(GameState.fighters()))
+	eq("he takes the board, in front",
+		(battle.get("player_units", []) as Array).map(func(u): return String(u["fighter_id"])), ["aatami", crew[0]])
+	check("he has no career ceiling",
+		GameState.age_crew(PackedStringArray(["aatami"])).is_empty() and not GameState.crew_fights.has("aatami"))
+	eq("with one hire he does not step back", GameState.step_back_if_ready(), "")
+
+	GameState.roster = PackedStringArray(crew.slice(0, 3))
+	check("a crew of three: he could stay out", not GameState.aatami_fights())
+	var beat := GameState.step_back_if_ready()
+	check("the first time, he does, and it is a beat",
+		beat == String(aatami.get("step_back_beat", "")) and beat != ""
+		and GameState.has_flag("memory:aatami-stepped-back"))
+	eq("the beat plays once", GameState.step_back_if_ready(), "")
+	check("from then on the crew fights", not GameState.fighters().has("aatami"))
+	# Missing, in the port, is taken by the police: off the roster for good.
+	GameState.arrest(String(crew[0]))
+	GameState.arrest(String(crew[1]))
+	check("the withdrawal is permanent, even short-handed",
+		not GameState.aatami_fights() and not GameState.fighters().has("aatami"))
+
+	var text := JSON.stringify(GameState.to_dict())
+	GameState.new_campaign()
+	check("a fresh campaign has him fighting again", GameState.aatami_fights())
+	GameState.from_dict(JSON.parse_string(text))
+	check("a save carries the step-back", GameState.has_flag("memory:aatami-stepped-back")
+		and not GameState.aatami_fights())
+
+
+## tools/web-reference.mjs's lineups: for each crew the web was given, who
+## fights, the gates, both fights' boards and the beat, all as the web says.
+func _test_the_lineup_is_the_webs() -> void:
+	print("\nwho takes the board is the web's (answer 24)")
+	var rows: Array = _ref.get("fighters", [])
+	check("the web recorded lineups", rows.size() >= 6, str(rows.size()))
+	var slots: Array = ContentRegistry.slice.get("crew", []).map(func(c): return String(c["id"]))
+	var bad: Array = []
+	for w in rows:
+		_fresh()
+		if bool(w["stepped"]):
+			GameState.roster = PackedStringArray(slots.slice(0, 3))
+			GameState.step_back_if_ready()
+		GameState.roster = PackedStringArray(w["hired"])
+		var tag := "%d hired%s" % [(w["hired"] as Array).size(), ", stepped back" if bool(w["stepped"]) else ""]
+		if GameState.aatami_fights() != bool(w["aatami_fights"]):
+			bad.append("%s: aatami fights %s" % [tag, GameState.aatami_fights()])
+		if Array(GameState.fighters()) != Array(w["fighters"]):
+			bad.append("%s: fighters %s vs %s" % [tag, GameState.fighters(), w["fighters"]])
+		for req in (w["requirements"] as Dictionary):
+			if GameState.meets_requirement(String(req)) != bool(w["requirements"][req]):
+				bad.append("%s: %s" % [tag, req])
+		for id in (w["lineups"] as Dictionary):
+			var want: Variant = w["lineups"][id]
+			var got: Variant = null
+			if GameState.fighters().size() >= int(ContentRegistry.battle(String(id)).get("player_deployed", 2)):
+				got = (BattleBuilder.build(String(id), Array(GameState.fighters()))["player_units"] as Array) \
+					.map(func(u): return String(u["fighter_id"]))
+			if got != want:
+				bad.append("%s: %s lineup %s vs %s" % [tag, id, got, want])
+		var beat := GameState.step_back_if_ready()
+		if beat != String(w["beat"]):
+			bad.append("%s: beat '%s'" % [tag, beat])
+		if Array(GameState.fighters()) != Array(w["fighters_after_beat"]):
+			bad.append("%s: after the beat %s" % [tag, GameState.fighters()])
+	check("every lineup, gate and beat matches (%d)" % rows.size(), bad.is_empty(), str(bad))
 
 
 ## web/test/doors.mjs's escalation block, and the resolution that carries it.

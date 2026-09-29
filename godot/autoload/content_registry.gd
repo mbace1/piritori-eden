@@ -245,13 +245,27 @@ var _generated: Dictionary = {}
 ## crew id, so asking about them is ordinary rather than exceptional — and
 ## `crew_member()` pushes an error, which turned a normal question into log spam.
 func has_crew(id: String) -> bool:
-	return _generated.has(id) or _crew.has(id)
+	return _generated.has(id) or _crew.has(id) or _is_protagonist(id)
 
 
+## Web `crewRecord`: a slot, a hire, or Aatami himself (v4.66, owner answer
+## 24). He is a mainline character, so his authored name stands.
 func crew_member(id: String) -> Dictionary:
 	if _generated.has(id):
 		return _generated[id]
+	if not _crew.has(id) and _is_protagonist(id):
+		return protagonist()
 	return _require(_crew, id, "crew")
+
+
+## Aatami's fighter record (`content.protagonist`, COMBAT.md §9.9.1): named,
+## no career ceiling, and on the board until he can field a crew of three.
+func protagonist() -> Dictionary:
+	return slice.get("protagonist", {})
+
+
+func _is_protagonist(id: String) -> bool:
+	return id != "" and String(protagonist().get("id", "")) == id
 
 
 func register_generated_crew(record: Dictionary) -> void:
@@ -259,7 +273,7 @@ func register_generated_crew(record: Dictionary) -> void:
 	if id == "":
 		push_error("ContentRegistry: generated crew with no id")
 		return
-	if _crew.has(id):
+	if _crew.has(id) or _is_protagonist(id):
 		# A generated id colliding with an authored one would silently shadow a
 		# story character, which is the worst failure this file can have.
 		push_error("ContentRegistry: generated crew '%s' collides with canon" % id)

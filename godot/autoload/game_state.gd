@@ -1168,7 +1168,7 @@ func meets_all(reqs: Array) -> bool:
 
 ## One requirement in the web grammar (`requirementStatus` in
 ## web/js/v3/state.js): numeric comparisons on cash, markka, intel,
-## deployed-crew, crew-critical, stock:<id>, relationship:<id> and
+## deployed-crew, fighters, crew-critical, stock:<id>, relationship:<id> and
 ## obligation:<id>; `flag:<id>`; `crew-role:<role>`; a bare token is a flag.
 ##
 ## Until the road port this read only the numeric half, so every `flag:`,
@@ -1230,6 +1230,39 @@ func deployed_crew() -> PackedStringArray:
 	return out
 
 
+## COMBAT.md §9.9.1, owner answer 24 (web v4.66 `aatamiFights`): Aatami fights
+## the first battles, because he cannot afford a crew, then steps back for good.
+## He fights while the crew he can field is short of `steps_back_at_crew`, and
+## never again once `memory:aatami-stepped-back` is remembered. The roster holds
+## no one the police took, so its size is the web's recruited-not-missing count.
+func aatami_fights() -> bool:
+	var aatami := ContentRegistry.protagonist()
+	if aatami.is_empty() or has_flag("memory:aatami-stepped-back"):
+		return false
+	return roster.size() < int(aatami.get("steps_back_at_crew", 3))
+
+
+## Called as a fight is about to start (web `stepBackIfReady`): the first time
+## Aatami can stay out, he does, and the city remembers it. Returns the beat
+## (canon story text), or "".
+func step_back_if_ready() -> String:
+	var aatami := ContentRegistry.protagonist()
+	if aatami.is_empty() or has_flag("memory:aatami-stepped-back") or aatami_fights():
+		return ""
+	apply_effect("memory:aatami-stepped-back")
+	return String(aatami.get("step_back_beat", ""))
+
+
+## Who takes the board (web `fighters`): Aatami first while he still fights,
+## then the crew with him.
+func fighters() -> PackedStringArray:
+	var out := PackedStringArray()
+	if aatami_fights():
+		out.append(String(ContentRegistry.protagonist().get("id", "")))
+	out.append_array(deployed_crew())
+	return out
+
+
 func deployed_roles() -> PackedStringArray:
 	var out := PackedStringArray()
 	for id in deployed_crew():
@@ -1252,6 +1285,8 @@ func _read_value(token: String) -> int:
 		"crew-deaths": return crew_deaths
 		"day": return day
 		"deployed-crew": return deployed_crew().size()
+		# Who can take the board: the crew, and Aatami while he still fights.
+		"fighters": return fighters().size()
 		"crew-critical": return open_critical_wounds()
 		"fights-today": return fights_today()
 		_:

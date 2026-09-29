@@ -257,6 +257,7 @@ road.no_time,NO TIME,EI AIKAA,時間なし
 road.now,NOW %s,NYT %s,今 %s
 road.continue,CONTINUE,JATKA,次へ
 road.needs_crew,needs %d crew with you,vaatii %d porukasta mukaan,仲間%d人が必要
+road.needs_fighters,needs %d who can fight,vaatii %d taistelukykyistä,戦える者が%d人必要
 road.needs_pack,needs a pack on you,vaatii erän mukanasi,品を持っていること
 street.button,STREET SELLER · GEAR,KATUKAUPPIAS · VARUSTEET,街の売人 · 装備
 street.title,THE STREET SELLER,KATUKAUPPIAS,街の売人

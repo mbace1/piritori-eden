@@ -126,6 +126,18 @@ const UNIT_VARIANTS := {
 }
 
 
+## A player fighter whose role nothing has been modelled for wears the generic
+## hired hand (the web's PLAYER_FALLBACK in render3d.js). Aatami is the case in
+## point (v4.66): he fights with no model or head art of his own yet. The
+## opposition keeps the loud UNIT_FALLBACK.
+const PLAYER_FALLBACK_ROLE := "hired"
+
+static func fighter_role(role: String, is_player: bool) -> String:
+	if is_player and not UNIT_BY_ROLE.has(role) and not UNIT_VARIANTS.has(role):
+		return PLAYER_FALLBACK_ROLE
+	return role
+
+
 ## Which body this particular person wears.
 ##
 ## `fighter_id` picks deterministically, so the same crew member is the same
@@ -602,7 +614,8 @@ func refresh(acting_id: String = "") -> void:
 		for f in fight.get_fighters(side):
 			if f == null:
 				continue
-			var path := unit_path(String(f.role), String(f.fighter_id))
+			var path := unit_path(fighter_role(String(f.role), side == Fighter.Side.PLAYER),
+				String(f.fighter_id))
 			if not ResourceLoader.exists(path):
 				continue
 			var n := (load(path) as PackedScene).instantiate()

@@ -3,8 +3,8 @@
  * web-reference.mjs — numbers the WEB build computes, for the Godot port to
  * match exactly.
  *
- * The road (v4.58), Toko's bowl (v4.61), Kello's cut (v4.63) and the doors
- * (v4.65) are deterministic from the save:
+ * The road (v4.58), Toko's bowl (v4.61), Kello's cut (v4.63), the doors
+ * (v4.65) and who takes the board (v4.66) are deterministic from the save:
  * the road rolls FNV-1a over contentId|block|label (`deterministicRoll` in
  * web/js/v3/state.js) and the board prices come from `market/model.mjs`'s
  * seeded xmur3 + mulberry32. A port that is "close" is a different road and a
@@ -28,7 +28,9 @@ const mod = (p) => import(pathToFileURL(resolve(repo, 'web/js/v3', p)).href);
 const {
   createState, deterministicRoll, advanceSchedule, currentSchedule, currentEncounter, chooseEncounter,
   choiceStatus, recordFight, fightsToday, forecastEnding,
+  aatamiFights, stepBackIfReady, fighters, requirementStatus,
 } = await mod('state.js');
+const { createBattleState } = await mod('battle.js');
 const { offerDoors, takeDoor, isDoorBlock, escalation } = await mod('doors.js');
 const { settleCut } = await mod('story.js');
 const { turnPlan } = await mod('chapter.js');
@@ -164,25 +166,58 @@ for (let seed = 0; seed < 5; seed += 1) {
 }
 
 // 6b. A bad deal escalates (answer 25): every choice with `escalates`, over
-// twenty saves, with three crew (a fight), with none (the door's losing
-// stakes), and with the day's two fights spent (never).
+// twenty saves, with three crew (a fight), with one hire (Aatami makes two
+// who can fight, answer 24: a two-a-side door fights, a three-a-side one
+// costs its stakes), with none (Aatami alone: the door's losing stakes), and
+// with the day's two fights spent (never).
 ref.escalation = [];
 const crew3 = content.crew.slice(0, 3).map(c => c.id);
 for (const t of doorsCanon.templates) {
   for (const c of t.choices.filter(ch => ch.escalates)) {
     for (let seed = 0; seed < 20; seed += 1) {
-      for (const [who, fights] of [['crew', 0], ['alone', 0], ['crew', 2]]) {
+      for (const [hired, fights] of [[3, 0], [1, 0], [0, 0], [3, 2]]) {
         const e = createState(content);
         e.contentId = contentIdOf(seed);
         e.scheduleIndex = doorBlocks[0];
-        if (who === 'crew') { e.recruited = [...crew3]; e.deployed = [...crew3]; }
+        e.recruited = crew3.slice(0, hired); e.deployed = [...e.recruited];
         for (let f = 0; f < fights; f += 1) recordFight(e, content);
         const r = escalation(e, data, doorsCanon, t.id, c.id);
-        ref.escalation.push({ content_id: e.contentId, door: t.id, choice: c.id, crew: who === 'crew' ? crew3.length : 0, fights,
+        ref.escalation.push({ content_id: e.contentId, door: t.id, choice: c.id, crew: hired, fights,
           result: r ? (r.battle ? `battle:${r.battle}` : 'effects') : '' });
       }
     }
   }
+}
+
+// 6c. Who takes the board (answer 24, COMBAT.md §9.9.1): Aatami first while
+// he cannot field a crew of three, then the crew; the first fight he can stay
+// out of is a one-time beat, and after it he stays out even short-handed.
+// Each row: the hires, whether he has already stepped back, and what the web
+// says — does he fight, who the fighters are, the fight requirements, the
+// beat a fight starting now would open on, and the lineup of both fights.
+ref.fighters = [];
+for (const [hired, stepped] of [[0, false], [1, false], [2, false], [3, false], [4, false], [1, true], [0, true]]) {
+  const f = createState(content);
+  if (stepped) {
+    f.recruited = content.crew.slice(0, 3).map(c => c.id); f.deployed = [...f.recruited];
+    stepBackIfReady(f, content);
+  }
+  f.recruited = content.crew.slice(0, hired).map(c => c.id); f.deployed = [...f.recruited];
+  const row = {
+    hired: f.recruited, stepped,
+    aatami_fights: aatamiFights(f, content),
+    fighters: fighters(f, data).map(x => x.id),
+    requirements: Object.fromEntries(['fighters>=2', 'fighters>=3', 'deployed-crew>=2'].map(r => [r, requirementStatus(r, f, data).ok])),
+    lineups: {},
+  };
+  for (const id of ['battle-karhupuisto-2v2', 'battle-courtyard-3v3']) {
+    const crew = fighters(f, data);
+    row.lineups[id] = crew.length >= data.battles.get(id).player_deployed
+      ? createBattleState(data.battles.get(id), crew, f, data).players.map(p => p.id) : null;
+  }
+  row.beat = stepBackIfReady(f, content);
+  row.fighters_after_beat = fighters(f, data).map(x => x.id);
+  ref.fighters.push(row);
 }
 
 // 7. The whole ten-day chapter, walked the way web/test/doors.mjs walks it:
@@ -218,7 +253,7 @@ if (process.argv.includes('--check')) {
     console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
     process.exit(1);
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.chapter_walk.length} blocks walked.`);
+  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.fighters.length} lineups, ${ref.chapter_walk.length} blocks walked.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);
