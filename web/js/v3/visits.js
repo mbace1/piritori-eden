@@ -1,4 +1,4 @@
-import {chooseEncounter} from './state.js?v=8';
+import {chooseEncounter} from './state.js?v=9';
 
 export function availableVisits(state,data) {
  if(state.chapterCleared||state.endingId||state.battle?.status==='active')return [];

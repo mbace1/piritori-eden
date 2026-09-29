@@ -315,7 +315,7 @@
           "label": "Walk in through the front with the crew",
           "forecast": "A fight for the bag. Win it and the McCormicks pay double.",
           "requirements": [
-            "deployed-crew>=3",
+            "fighters>=3",
             "fights-today<2"
           ],
           "effects": [
@@ -518,7 +518,7 @@
           "label": "Let his friends come out, with your crew beside you",
           "forecast": "A fight at the bear. Win it and you keep their money.",
           "requirements": [
-            "deployed-crew>=2",
+            "fighters>=2",
             "fights-today<2"
           ],
           "effects": [
@@ -821,7 +821,7 @@
           "label": "Lean on him, with the crew",
           "forecast": "His friends stop feeding the ducks. A fight at the bear.",
           "requirements": [
-            "deployed-crew>=2",
+            "fighters>=2",
             "fights-today<2"
           ],
           "effects": [
@@ -893,7 +893,7 @@
           "label": "Take it off the table, with the crew",
           "forecast": "The players stand up. A fight in the courtyard.",
           "requirements": [
-            "deployed-crew>=3",
+            "fighters>=3",
             "fights-today<2"
           ],
           "effects": [

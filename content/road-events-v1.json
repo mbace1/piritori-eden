@@ -111,7 +111,7 @@
       "choices": [
         { "id": "pay", "label": "Pay them off — €20", "detail": "Cheap, humiliating, over.", "minutes": 10, "effects": ["cash:-20"] },
         { "id": "go-round", "label": "Go the long way round", "detail": "An hour on foot through the back streets.", "minutes": 60, "effects": [] },
-        { "id": "stand", "label": "Stand your ground with the crew", "detail": "It becomes a fight. You will see their intent before you commit.", "minutes": 30, "requires": ["deployed-crew>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"] }
+        { "id": "stand", "label": "Stand your ground with the crew", "detail": "It becomes a fight. You will see their intent before you commit.", "minutes": 30, "requires": ["fighters>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"] }
       ]
     },
     {
@@ -236,7 +236,7 @@
       "choices": [
         {"id": "pay", "label": "Pay them off — €100", "detail": "Cheap, all things considered. The cut ends tonight.", "minutes": 20, "requires": ["cash>=100"], "effects": ["cash:-100", "flag:cut-ended"]},
         {"id": "give-kello", "label": "Give them Kello", "detail": "They were going to find him anyway. The McCormicks remember who helped. The cut ends.", "minutes": 30, "effects": ["relationship:mccormick_family:+1", "flag:kello-sold", "flag:cut-ended"]},
-        {"id": "stand", "label": "Stand with the crew", "detail": "It becomes a fight. Win it and the cut goes on, with everyone watching.", "minutes": 30, "requires": ["deployed-crew>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"]}
+        {"id": "stand", "label": "Stand with the crew", "detail": "It becomes a fight. Win it and the cut goes on, with everyone watching.", "minutes": 30, "requires": ["fighters>=2"], "effects": ["start-battle:battle-karhupuisto-2v2"]}
       ]
     },
     {

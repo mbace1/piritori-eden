@@ -145,6 +145,7 @@ jobs:
           node web/test/story.mjs
           node web/test/chapter.mjs
           node web/test/doors.mjs
+          node web/test/aatami.mjs
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
@@ -209,6 +210,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/doors-browser.cjs
+      - name: Aatami on the board, then stepping back
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/aatami-browser.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

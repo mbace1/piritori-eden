@@ -14,12 +14,13 @@
 //     encounter does: the door becomes the block's encounter at its anchor.
 //   - A LATE door closes when the block clock passes 22:00 (road minutes).
 //   - Answer 25: a bad deal ESCALATES. A choice with `escalates` rolls once;
-//     on a bad roll the door's fight starts if a crew is there to fight it,
+//     on a bad roll the door's fight starts if there are enough fighters
+//     (Aatami counts while he still fights, answer 24),
 //     and if not the door's `fight.lose` is paid. Never past two fights a day.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { deterministicRoll, requirementStatus, fightsToday, deployedCrew } from './state.js?v=8';
-import { minutesThisBlock } from './road.js?v=3';
+import { deterministicRoll, requirementStatus, fightsToday, fighters } from './state.js?v=9';
+import { minutesThisBlock } from './road.js?v=4';
 
 const DOORS_URL = '../../../content/doors-v1.json';
 
@@ -162,6 +163,6 @@ export function escalation(state, data, doors, templateId, choiceId) {
   if (fightsToday(state, data.content) >= doors.rules.fights_per_day_max) return null;
   if (deterministicRoll(state, `escalate:${templateId}:${choiceId}`) >= choice.escalates) return null;
   const need = data.battles?.get?.(t.fight.battle)?.player_deployed ?? 2;
-  if (deployedCrew(state, data).length >= need) return { battle: t.fight.battle };
+  if (fighters(state, data).length >= need) return { battle: t.fight.battle };
   return { effects: t.fight.lose };
 }

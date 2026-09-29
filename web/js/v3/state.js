@@ -30,7 +30,7 @@ function syncChapterFromContent(state, content) {
 
 export function createState(content) {
   const start = content.campaign.starting_state;
-  const crewStatus = Object.fromEntries(content.crew.map(member => [member.id, {
+  const crewStatus = Object.fromEntries([...content.crew, ...(content.protagonist ? [content.protagonist] : [])].map(member => [member.id, {
     condition: member.condition,
     maxCondition: member.condition,
     nerve: member.nerve,
@@ -205,7 +205,36 @@ export function formatBlock(state, content) {
  *  its full record — deployment, wages, the crew screen — reads through
  *  this rather than assuming the source. */
 export function crewRecord(state, data, id) {
-  return data.crew.get(id) ?? state.hiredCrew[id] ?? null;
+  const aatami = data.content?.protagonist;
+  return data.crew.get(id) ?? state.hiredCrew[id] ?? (aatami?.id === id ? aatami : null);
+}
+
+/** COMBAT.md §9.9.1, owner answer 24: Aatami fights the first battles,
+ *  because he cannot afford a crew, then steps back for good. He steps back
+ *  once he can field `steps_back_at_crew` of his own (the withdrawal is
+ *  permanent: `memory:aatami-stepped-back`). */
+export function aatamiFights(state, content) {
+  const aatami = content?.protagonist;
+  if (!aatami || state.flags?.includes('memory:aatami-stepped-back')) return false;
+  const able = state.recruited.filter(id => state.crewStatus[id]?.status !== 'missing').length;
+  return able < (aatami.steps_back_at_crew ?? 3);
+}
+
+/** Called when a fight is about to start: the first time Aatami can stay
+ *  out, he does, and the city remembers it. Returns the beat, or ''. */
+export function stepBackIfReady(state, content) {
+  const aatami = content?.protagonist;
+  if (!aatami || state.flags.includes('memory:aatami-stepped-back') || aatamiFights(state, content)) return '';
+  addUnique(state.flags, 'memory:aatami-stepped-back');
+  addLog(state, aatami.step_back_beat);
+  return aatami.step_back_beat;
+}
+
+/** Who takes the board: Aatami first while he still fights, then the crew. */
+export function fighters(state, data) {
+  const crew = deployedCrew(state, data);
+  const aatami = data.content?.protagonist;
+  return aatami && aatamiFights(state, data.content) ? [aatami, ...crew] : crew;
 }
 
 export function deployedCrew(state, data) {
@@ -787,6 +816,8 @@ export function requirementStatus(requirement, state, data) {
     ?? numeric('markka', state.markka)
     ?? numeric('intel', state.intel)
     ?? numeric('deployed-crew', deployedCrew(state, data).length)
+    // Who can take the board: the crew, and Aatami while he still fights (answer 24).
+    ?? numeric('fighters', fighters(state, data).length)
     ?? numeric('crew-critical', Object.values(state.crewStatus).filter(x => x.critical).length)
     ?? numeric('fights-today', data?.content ? fightsToday(state, data.content) : 0);
   if (result) return result;

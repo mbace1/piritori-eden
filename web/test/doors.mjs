@@ -11,8 +11,8 @@ import { readFile } from 'node:fs/promises';
 import {
   createState, restoreState, currentSchedule, currentEncounter, chooseEncounter, choiceStatus,
   advanceSchedule, requirementStatus, recordFight, fightsToday, forecastEnding,
-} from '../js/v3/state.js?v=8';
-import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock, escalation } from '../js/v3/doors.js?v=1';
+} from '../js/v3/state.js?v=9';
+import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock, escalation } from '../js/v3/doors.js?v=2';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
@@ -37,7 +37,7 @@ const ok = (c, m) => { assert(c, m); checks += 1; };
 const active = new Set(map.anchors.filter(a => a.sliceState === 'active').map(a => a.id));
 const battles = new Set(content.battles.map(b => b.id));
 const effect = /^(cash|intel|markka|debt):[+-]\d+$|^stock:[^:]+:[+-]\d+$|^relationship:(jaska|toko|mccormick_family|jade_lantern_network):[+-]\d+$|^obligation:[^:]+:[+-]\d+$|^pressure:[^:]+:[+-]\d+$|^flag:[a-z0-9-]+$|^memory:[a-z0-9-:]+$|^start-battle:[a-z0-9-]+$/;
-const requirement = /^(cash|intel|deployed-crew|fights-today)(>=|<)\d+$|^stock:piri>=\d+$|^relationship:[a-z_]+>=-?\d+$|^flag:[a-z0-9-]+$/;
+const requirement = /^(cash|intel|deployed-crew|fighters|fights-today)(>=|<)\d+$|^stock:piri>=\d+$|^relationship:[a-z_]+>=-?\d+$|^flag:[a-z0-9-]+$/;
 const ids = new Set();
 for (const t of doors.templates) {
   ok(!ids.has(t.id), `unique ${t.id}`); ids.add(t.id);
@@ -66,7 +66,7 @@ for (const t of doors.templates) {
     if (c.effects.some(fx => fx.startsWith('start-battle:'))) {
       ok(c.effects.includes(`start-battle:${t.fight.battle}`), `${t.id}/${c.id} starts the door's own fight`);
       ok(c.requirements.includes(`fights-today<${doors.rules.fights_per_day_max}`), `${t.id}/${c.id}: at most two fights a day`);
-      ok(c.requirements.some(r => r.startsWith('deployed-crew>=')), `${t.id}/${c.id}: a fight needs a crew`);
+      ok(c.requirements.some(r => r.startsWith('fighters>=')), `${t.id}/${c.id}: a fight needs people who can fight`);
     }
   }
 }

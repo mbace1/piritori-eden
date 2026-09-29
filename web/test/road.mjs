@@ -6,8 +6,8 @@
 // time, low-end hustle first. This holds the rules in road.js's header.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, restoreState, advanceSchedule, requirementStatus } from '../js/v3/state.js?v=8';
-import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen } from '../js/v3/road.js?v=3';
+import { createState, restoreState, advanceSchedule, requirementStatus } from '../js/v3/state.js?v=9';
+import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen } from '../js/v3/road.js?v=4';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const roadEvents = JSON.parse(await readFile(new URL('../../content/road-events-v1.json', import.meta.url)));
@@ -35,7 +35,7 @@ for (const e of roadEvents.events) {
       ok(requirementStatus(req, createState(content), data).reason !== req, `${e.id} requirement ${req} is understood`);
     }
     if (c.effects.some(fx => fx.startsWith('start-battle:'))) {
-      ok((c.requires ?? []).includes('deployed-crew>=2'), `${e.id}/${c.id}: a fight needs a crew`);
+      ok((c.requires ?? []).includes('fighters>=2'), `${e.id}/${c.id}: a fight needs two who can fight`);
       ok(content.battles.some(b => `start-battle:${b.id}` === c.effects.find(fx => fx.startsWith('start-battle:'))), `${e.id} battle exists`);
     }
   }

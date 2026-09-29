@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=4';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=5';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -14,24 +14,24 @@ import {
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
-  forecastEnding, recordFight, fightsToday,
-} from './state.js?v=8';
+  forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
+} from './state.js?v=9';
 import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=3';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=3';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=1';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=3';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=2';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=4';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=12';
+} from './battle.js?v=13';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -581,7 +581,7 @@ function renderRoad() {
           <strong>${esc(choice.label)}</strong>
           <span>${esc(choice.detail)}</span>
           <small class="road-time">${minutes(choice.minutes)}</small>
-          ${open.ok ? '' : `<em>${esc(open.reasons.join(' · ').replace(/deployed-crew >= (\d+)/, 'needs $1 crew with you').replace(/stock piri >= 1/, 'needs a pack on you'))}</em>`}
+          ${open.ok ? '' : `<em>${esc(open.reasons.join(' · ').replace(/deployed-crew >= (\d+)/, 'needs $1 crew with you').replace(/fighters >= (\d+)/, 'needs $1 who can fight').replace(/stock piri >= 1/, 'needs a pack on you'))}</em>`}
         </button>`;
       }).join('')}</div>`
     : (() => {
@@ -897,6 +897,7 @@ function renderChoices(encounter) {
 function readableReason(reason) {
   return reason
     .replace(/^deployed-crew >= (\d+)$/, 'needs $1 crew with you')
+    .replace(/^fighters >= (\d+)$/, 'needs $1 who can fight')
     .replace(/^fights-today < (\d+)$/, 'already $1 fights today')
     .replace(/^stock piri >= (\d+)$/, 'needs $1 pack on you')
     .replace(/^requires (.+)$/, 'only if $1');
@@ -1555,7 +1556,7 @@ function renderUnit(unit, battle, preview = null) {
     <span class="unit-body">
       <img class="legs" src="${assetUrl(data, unit.legs)}" alt="">
       <img class="torso" src="${assetUrl(data, unit.torso)}" alt="">
-      <img class="head" src="${assetUrl(data, unit.head)}" alt="">
+      ${unit.head ? `<img class="head" src="${assetUrl(data, unit.head)}" alt="">` : ''}
     </span>
     <span class="unit-label">${esc(unit.name.split(' ')[0])}<br><b>${unit.hp}♥ · ${unit.guard}◇ · ${unit.nerve}!</b></span>
   </button>`;
@@ -1799,10 +1800,13 @@ function openEncounter() {
 
 function startBattle(id) {
   const definition = data.battles.get(id);
-  const crew = deployedCrew(state, data);
+  // Answer 24: Aatami fights the first fights, then steps back for good.
+  const beat = definition.training ? '' : stepBackIfReady(state, data.content);
+  const crew = definition.training ? deployedCrew(state, data) : fighters(state, data);
   try {
     state.battle = createBattleState(definition, crew, state, data);
     state.mode = 'battle';
+    if (beat) { state.battle.log.unshift(beat); logToast(beat); }
     if (!state.battle.training) recordFight(state, data.content);
   } catch (error) {
     logToast(error.message);
@@ -1844,7 +1848,8 @@ function recordBattleConsequences() {
       const status = state.crewStatus[id];
       if (taken.has(id)) { status.status = 'missing'; continue; }
       status.condition = Math.max(0, status.condition - 4);
-      if (battle.id === 'battle-courtyard-3v3') {
+      // Aatami is hurt, never left critical: the story is about who he sends.
+      if (battle.id === 'battle-courtyard-3v3' && id !== data.content.protagonist?.id) {
         status.status = 'critical';
         status.critical = true;
       } else {
@@ -2263,7 +2268,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.65',
+      version: 'v4.66',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

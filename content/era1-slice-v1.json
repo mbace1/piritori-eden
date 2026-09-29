@@ -1641,7 +1641,7 @@
           "id": "hold-path",
           "label": "Hold the path",
           "requirements": [
-            "deployed-crew>=2"
+            "fighters>=2"
           ],
           "forecast": "Begin the 2v2. No death outcome; wounds and missing status are possible.",
           "effects": [
@@ -1823,7 +1823,7 @@
           "id": "take-positions",
           "label": "Take positions",
           "requirements": [
-            "deployed-crew>=3"
+            "fighters>=3"
           ],
           "forecast": "Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
           "effects": [
@@ -2372,6 +2372,18 @@
     "foliage-lime-tree-v01",
     "animal-spitz-v03"
   ],
+  "protagonist": {
+    "id": "aatami",
+    "name": "Aatami",
+    "role": "aatami",
+    "named": true,
+    "condition": 8,
+    "nerve": 6,
+    "initial_equipment": ["feature-phone"],
+    "steps_back_at_crew": 3,
+    "authority": "COMBAT.md §9.9.1 and owner answer 24 (2026-09-29): 'Aatami fights in first fights and then has minions do fighting.' He fights while he cannot field a crew of three, then steps back for good; the withdrawal is the arc. The threshold is provisional pending owner question 26.",
+    "step_back_beat": "Aatami stays at the edge of the board. He tells them where to stand, and does not go in. From here on, he calls it."
+  },
   "chapter_turn": {
     "authority": "Owner 2026-09-29 (DESIGN_AUTHORITY answer 22): weapons carry; cash and produce need not, with a standard stake at each chapter's start. The GDD persistence table (2026-08-22): what you built persists, what you were granted does not.",
     "opening_cash_eur": 160,
