@@ -21,6 +21,7 @@ import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=2';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=2';
+import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=2';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -895,6 +896,7 @@ function renderChapter() {
       <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
       <h2 class="section-title">${esc((ending.label ?? 'THE OPERATION').toUpperCase())} — ${esc(state.lastEndingOutcome.toUpperCase())}</h2>
       <p>${esc(outcomeCopy[state.lastEndingOutcome] ?? '')}</p>
+      ${renderChapterTurn()}
     </section>`;
   }
   const goalMet = chapterGoalMet(state);
@@ -913,6 +915,20 @@ function renderChapter() {
          ${atAnchor && !canAfford ? '<p class="consequence-strip">Not enough cash on hand for the stake.</p>' : ''}`
       : '<p class="consequence-strip">Earned by fencing loot at Piritori — market sales and mission payouts do not count.</p>'}
   </section>`;
+}
+
+/** H7: what crosses into the next chapter, read off the save and the rules
+ *  in canon (`chapter_turn`). Shown, never applied here: the turn itself
+ *  waits for chapter 2 to be authored (`chapter.js`). */
+function renderChapterTurn() {
+  const plan = turnPlan(state, data.content);
+  if (!plan.length) return '';
+  const word = { carry: 'carries', reset: 'resets', stake: 'standard stake' };
+  const val = row => v => row.money ? money(v) : String(v);
+  const rows = plan.map(row => `<li class="turn-row turn-${row.rule}"><span>${esc(row.label)}</span>
+    <span>${esc(val(row)(row.now))} → ${esc(val(row)(row.next))}</span><em>${esc(word[row.rule] ?? row.rule)}</em></li>`).join('');
+  const later = nextChapter(state, data.content) ? '' : '<p class="consequence-strip">Chapter 2 opens in a later build. This is what it will open with.</p>';
+  return `<p class="section-label">INTO CHAPTER ${state.chapter + 1}</p><ul class="turn-list">${rows}</ul>${later}`;
 }
 
 function renderBoard() {
@@ -2138,7 +2154,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.63',
+      version: 'v4.64',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

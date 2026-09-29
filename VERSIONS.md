@@ -77,6 +77,23 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.64 — 2026-09-29
+
+**The chapter turn (H7 of The Long Game).** Owner, 2026-09-29: "good to go in your order", with H7 first. Answer 21: time keeps the web rule, so the block turns only on a story beat, a door or nightfall, never on a trip or a trade. Answer 22: weapons carry; cash and produce need not, and each chapter opens on a standard stake. "Let's test these."
+
+- **`chapter_turn` in canon** (`content/era1-slice-v1.json`) gives one word per thing:
+  - `stake`: cash opens at €160.
+  - `reset`: stock, and mission unlocks, which are re-earned.
+  - `carry`: gear, crew, standing, contacts, built upgrades, debt, favours owed, markka, the exit fund and memories.
+  - It is the GDD persistence table of 2026-08-22 made data: what you built persists, what you were granted does not. Temporary help is dropped.
+- **`chapter.js` (new, pure).** `turnPlan` reads the save and changes nothing; `turnChapter` applies the rules and is the only writer. `turnChapter` opens the next chapter's goal and resets the chapter's own count, so the threshold counts this chapter only. It leaves `memory:chapter-turned:N`. Flipping a rule in the data flips the turn; the gate checks both directions.
+- **On screen.** After the Sörnäinen shipment, the chapter panel lists *Into chapter 2*: each row's value now → next, and whether it carries, resets or goes to the stake. It is shown, not applied: chapter 2 is not authored yet (H1+H2 is next), and the panel says so.
+- Gates: `chapter.mjs` 41 (new) and `chapter-browser.cjs` 16 (new: the shipment is a real tap, desktop and phone). The existing node gates are unchanged and green.
+
+### Port
+
+Godot: the same `chapter_turn` rules and turn (plan reads, turn writes, `memory:chapter-turned:N`), the *Into chapter 2* list after the operation, and answer 21: a ledger trade no longer spends a block.
+
 ## v4.63 — 2026-09-28
 
 **Kello's cut pays, and the network carries the Thursday Load.** Owner, 2026-09-28: "1-4 go ahead". Item 2: the cut pays weekly, with the growing risk the pitch promised. Item 3: more road events tied to the Thursday Load through the network of odd Kallio people.

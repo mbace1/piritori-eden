@@ -2137,6 +2137,25 @@
     "foliage-lime-tree-v01",
     "animal-spitz-v03"
   ],
+  "chapter_turn": {
+    "authority": "Owner 2026-09-29 (DESIGN_AUTHORITY answer 22): weapons carry; cash and produce need not, with a standard stake at each chapter's start. The GDD persistence table (2026-08-22): what you built persists, what you were granted does not.",
+    "opening_cash_eur": 160,
+    "rules": {
+      "cash": "stake",
+      "stock": "reset",
+      "gear": "carry",
+      "crew": "carry",
+      "relationships": "carry",
+      "contacts": "carry",
+      "upgrades": "carry",
+      "debt": "carry",
+      "obligations": "carry",
+      "markka": "carry",
+      "exit_fund": "carry",
+      "memories": "carry",
+      "mission_unlocks": "reset"
+    }
+  },
   "chapters": [
     {
       "id": "chapter-1-piritori",

@@ -35,6 +35,8 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 18. **The Thursday Load:** "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md). The Jade front moves to Hakaniemi. Kello, the Piritori watcher, sells the Thursday load to both families. The four missions carry the thread, the Thursday Tram settles it, and the game gets mission briefings and a case board.
 19. **"1-4 go ahead" (2026-09-28):** (1) the Godot catch-up of v4.58–v4.62; (2) Kello's cut pays weekly, with growing risk; (3) more road events tied to the Thursday Load through the network; (4) the next pitch, at a higher level. Owner: "Pitch me higher level designs."
 20. **The Long Game, greenlit (2026-09-29):** Owner: "Looks good, just shortly ask me about the contradictions. Otherwise good to go in your order." H1-H8 of design/STORY_PITCHES.md are approved, built in the order H7, H1+H2, H4+H5, H3, H6. The recommendations there stand until the contradiction questions are answered.
+21. **Time keeps the web rule (2026-09-29):** "yes, web". The block turns only on a story beat, a door or nightfall; trips and trades cost minutes, never a block. Godot, which spends a block per ledger trade, follows.
+22. **What crosses a chapter (2026-09-29):** "let's test these. I thought GDD would say weapons carry over. But cash and produce might not, although you need some cash, it could be set as a standard for each chapter beginning." Weapons and what you built carry; cash opens on a standard stake; stock resets. It is data (`chapter_turn`) so it can be tested and changed.
 
 ## Owner continuation, 2026-09-13 — art first
 
