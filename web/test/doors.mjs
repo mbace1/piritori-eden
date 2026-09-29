@@ -12,7 +12,7 @@ import {
   createState, restoreState, currentSchedule, currentEncounter, chooseEncounter, choiceStatus,
   advanceSchedule, requirementStatus, recordFight, fightsToday, forecastEnding,
 } from '../js/v3/state.js?v=8';
-import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock } from '../js/v3/doors.js?v=1';
+import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock, escalation } from '../js/v3/doors.js?v=1';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
@@ -47,15 +47,17 @@ for (const t of doors.templates) {
   ok(t.anchors.every(a => artIds.has(doors.rules.scenes[a])), `${t.id} has a registered scene at every anchor`);
   ok(t.title && t.premise.length >= 60 && t.steps.length === 3 && t.stakes, `${t.id} is briefed (premise, three steps, stakes)`);
   ok((t.inspectables ?? []).length >= 2, `${t.id} has things to look at`);
-  ok(t.choices.length >= 3 && t.choices.some(c => !c.requirements.length), `${t.id} always has an open way out`);
+  ok(t.choices.length >= 3 && t.choices.some(c => !c.requirements.length && !c.escalates && !c.effects.some(fx => fx.startsWith('start-battle'))), `${t.id} always has an open, safe way out`);
+  for (const c of t.choices) if (c.escalates !== undefined) ok(c.escalates > 0 && c.escalates < 1 && /fight/i.test(c.forecast), `${t.id}/${c.id}: an escalation is a chance, and the forecast says fight`);
   for (const req of t.requires ?? []) ok(requirement.test(req), `${t.id} requires ${req}`);
   const fights = t.choices.filter(c => c.effects.some(fx => fx.startsWith('start-battle:')));
-  ok(Boolean(t.fight) === fights.length > 0, `${t.id}: only a door with a fight block can start one`);
+  const escalates = t.choices.filter(c => c.escalates);
+  ok(Boolean(t.fight) === (fights.length > 0 || escalates.length > 0), `${t.id}: a fight block exactly when a choice fights or can go bad`);
   if (t.fight) {
     ok(battles.has(t.fight.battle), `${t.id} fight exists`);
     ok(/fight/i.test(t.stakes) && /way round/i.test(t.stakes), `${t.id} says it can become a fight and that there is a way round`);
     ok(t.fight.win.every(fx => effect.test(fx)) && t.fight.lose.every(fx => effect.test(fx)), `${t.id} fight stakes are in the grammar`);
-    ok(fights.length === 1 && t.choices.filter(c => !c.effects.some(fx => fx.startsWith('start-battle:'))).length >= 2, `${t.id}: one fight choice, and at least two other ways`);
+    ok(fights.length <= 1 && t.choices.filter(c => !c.effects.some(fx => fx.startsWith('start-battle:'))).length >= 2, `${t.id}: at most one fight choice, and at least two other ways`);
   }
   for (const c of t.choices) {
     ok(c.forecast && c.label, `${t.id}/${c.id} forecast`);
@@ -71,6 +73,7 @@ for (const t of doors.templates) {
 ok(new Set(doors.templates.map(t => t.kind)).size === 6, 'all six kinds of door');
 ok(doors.templates.filter(canFight).length >= 4, 'enough doors that can become a fight for one a block');
 ok(doors.templates.filter(canFight).some(t => t.kind !== 'hit'), 'a fight depends on the job, not only on hits (answer 23)');
+ok(doors.templates.filter(t => t.choices.some(c => c.escalates)).length >= 6, 'bad deals escalate on most doors (answer 25)');
 
 // ── the ten-day chapter ──────────────────────────────────────────────
 const doorIdx = content.schedule.map((s, i) => (s.door ? i : -1)).filter(i => i >= 0);
@@ -161,6 +164,30 @@ function atDoor(index = 15, mutate) {
   s.scheduleIndex = 16;
   ok(fightsToday(s, content) === 0 && choiceStatus(lean, s, data).ok, 'the next day starts at nought');
   ok(JSON.stringify(doorFightEffects(doors, 'hit-bear-debt', 'win')) === JSON.stringify(doors.templates.find(t => t.id === 'hit-bear-debt').fight.win), 'a door fight pays the door, not a mission');
+}
+
+// Answer 25: a bad deal escalates, by a roll the forecast names.
+{
+  const data = makeData();
+  const crew = content.crew.slice(0, 3).map(c => c.id);
+  let fights = 0, alone = 0, n = 0;
+  for (let seed = 0; seed < 200; seed += 1) {
+    const s = atDoor(15, x => { x.contentId = `${content.id}#${seed}`; x.recruited = [...crew]; x.deployed = [...crew]; });
+    const a = escalation(s, data, doors, 'pickup-fish-stall', 'skim');
+    ok(JSON.stringify(a) === JSON.stringify(escalation(s, data, doors, 'pickup-fish-stall', 'skim')), 'an escalation is deterministic');
+    n += 1; if (a?.battle) fights += 1;
+    const lone = atDoor(15, x => { x.contentId = `${content.id}#${seed}`; });
+    const b = escalation(lone, data, doors, 'pickup-fish-stall', 'skim');
+    if (b) { ok(!b.battle && JSON.stringify(b.effects) === JSON.stringify(templateOf(doors, 'pickup-fish-stall').fight.lose), 'alone, it costs the losing stakes'); alone += 1; }
+  }
+  ok(fights / n > 0.4 && fights / n < 0.6, `the skim goes bad about half the time (${fights}/${n})`);
+  ok(alone === fights, 'with no crew the same rolls go bad, without a fight');
+  const s = atDoor(15, x => { x.recruited = [...crew]; x.deployed = [...crew]; });
+  recordFight(s, content); recordFight(s, content);
+  let any = 0;
+  for (let seed = 0; seed < 50; seed += 1) { s.contentId = `${content.id}#${seed}`; if (escalation(s, data, doors, 'pickup-fish-stall', 'skim')) any += 1; }
+  ok(any === 0, 'nothing escalates past two fights a day');
+  ok(escalation(atDoor(15), data, doors, 'gig-rauno-cart', 'push') === null, 'an honest job never escalates');
 }
 
 // The spine beats and the ending.

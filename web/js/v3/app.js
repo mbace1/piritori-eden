@@ -23,7 +23,7 @@ import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=3';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=3';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock } from './doors.js?v=1';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=3';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -888,6 +888,7 @@ function renderChoices(encounter) {
     return `<button class="choice-card" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
       <strong>${esc(choice.label)}</strong>
       <span>${esc(choice.forecast)}</span>
+      ${choice.escalates ? `<small class="road-time">CAN GO BAD · ${Math.round(choice.escalates * 100)}%</small>` : ''}
       ${status.ok ? '' : `<em>${esc(status.reasons.map(readableReason).join(' · '))}</em>`}
     </button>`;
   }).join('')}</div>`;
@@ -1968,6 +1969,17 @@ function handleRootClick(event) {
       // A door fight has no mission behind it: its stakes are the door's own.
       state.battle.missionId = null;
       state.battle.door = encounter.door;
+    } else if (!result.startBattle && encounter.door) {
+      // Answer 25: a bad deal can turn into a fight.
+      const bad = escalation(state, data, doors, encounter.door, choice.id);
+      if (bad?.battle && startBattle(bad.battle)) {
+        state.battle.missionId = null;
+        state.battle.door = encounter.door;
+        state.lastOutcome = [...(state.lastOutcome ?? []), 'The deal goes bad. It is a fight now.'];
+      } else if (bad?.effects) {
+        applyEffects(state, bad.effects, data, `door:${encounter.door}:alone`);
+        state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.', ...(state.lastOutcome ?? [])];
+      }
     }
     persist(); render();
   } else if (action === 'take-door') {
