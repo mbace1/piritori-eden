@@ -13,9 +13,12 @@
 //   - A door is taken once per chapter. Taking one costs the block, as an
 //     encounter does: the door becomes the block's encounter at its anchor.
 //   - A LATE door closes when the block clock passes 22:00 (road minutes).
+//   - Answer 25: a bad deal ESCALATES. A choice with `escalates` rolls once;
+//     on a bad roll the door's fight starts if a crew is there to fight it,
+//     and if not the door's `fight.lose` is paid. Never past two fights a day.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { deterministicRoll, requirementStatus, fightsToday } from './state.js?v=8';
+import { deterministicRoll, requirementStatus, fightsToday, deployedCrew } from './state.js?v=8';
 import { minutesThisBlock } from './road.js?v=3';
 
 const DOORS_URL = '../../../content/doors-v1.json';
@@ -144,4 +147,21 @@ export function doorFightEffects(doors, templateId, result) {
   const fight = templateOf(doors, templateId)?.fight;
   if (!fight) return [];
   return result === 'win' ? fight.win : fight.lose;
+}
+
+/**
+ * Answer 25: did this choice's bad deal escalate? Called once, right after
+ * the choice resolved. Returns null (it held, or it cannot escalate),
+ * { battle } (a fight starts), or { effects } (it went bad with nobody to
+ * stand with Aatami: the door's losing stakes).
+ */
+export function escalation(state, data, doors, templateId, choiceId) {
+  const t = templateOf(doors, templateId);
+  const choice = t?.choices.find(c => c.id === choiceId);
+  if (!t?.fight || !choice?.escalates) return null;
+  if (fightsToday(state, data.content) >= doors.rules.fights_per_day_max) return null;
+  if (deterministicRoll(state, `escalate:${templateId}:${choiceId}`) >= choice.escalates) return null;
+  const need = data.battles?.get?.(t.fight.battle)?.player_deployed ?? 2;
+  if (deployedCrew(state, data).length >= need) return { battle: t.fight.battle };
+  return { effects: t.fight.lose };
 }

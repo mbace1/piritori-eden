@@ -104,8 +104,13 @@ Use resolved impact classifications for presentation; never reapply damage on re
   - A fight choice needs a crew and `fights-today<2`. Every real fight counts toward the day (`recordFight`), so a road fight counts too.
   - A door fight has no mission behind it; win or lose pays the door's own stakes (`fight.win` / `fight.lose`).
   - Days 1–7 keep their authored rhythm until H6.
+- **Answers 24 and 25: fights are central, and bad deals escalate.**
+  - Nine doors now carry a fight. Ten choices are bad deals with `escalates` (skimming, looking inside, staying too long, a false name, selling what you saw), each at 20–50%, printed on the card as *can go bad · N%*.
+  - On a bad roll (deterministic, `escalation()` in doors.js) the door's own fight starts if the crew is there. If it is not, the door's losing stakes are paid.
+  - Nothing escalates past two fights a day, and every door keeps a safe way out.
+  - Answer 24, "Aatami fights in first fights and then has minions do fighting" (COMBAT.md §9.9.1), is recorded. City battles do not yet put him on the board; that is H6's first item.
 - `state.js` v8, cascaded: `currentSchedule` resolves a taken door, and the new requirements `fights-today` and `chapter-goal-met` exist. The effects `forecast-ending`, `chapter-ending:attempt` and `chapter-ending:missed` are added.
-- Gates: `doors.mjs` 357 (new: canon, offers, the late rule, taking, two fights a day, the beats, the look-ahead ending, a whole ten-day chapter), `doors-browser.cjs` 30 (new: desktop and phone, a door taken, walked to and done, then a door fight). `chapter-browser.cjs` is now 20: the shipment is a real tap on day 10's night, and the chapter-close screen is checked. `v3-state` walks the authored week and no longer expects an ending. `validate-slice` expects 10 days, 20 blocks and 17 encounters.
+- Gates: `doors.mjs` 692 (new: canon, offers, the late rule, taking, two fights a day, escalation, the beats, the look-ahead ending, a whole ten-day chapter), `doors-browser.cjs` 36 (new: desktop and phone, a door taken, walked to and done, a door fight, and a bad deal going bad with and without a crew). `chapter-browser.cjs` is now 20: the shipment is a real tap on day 10's night, and the chapter-close screen is checked. `v3-state` walks the authored week and no longer expects an ending. `validate-slice` expects 10 days, 20 blocks and 17 encounters.
 
 ### Port
 
@@ -115,6 +120,7 @@ Godot:
 - `forecast-ending`, and the chapter-close screen with *Into chapter 2* and *Where this road points*.
 - `fights-today` and the daily count.
 - A door fight paying the door's own stakes.
+- Escalation (`escalates`, rolled with the label `escalate:<door>:<choice>`), and the *can go bad* tag.
 
 **Status: landed in Godot 2026-09-29** (branch `godot/h1h2-port`). `doors-v1.json` is synced (and `--check`ed). `scripts/city/doors.gd` is `doors.js`: the same `door:` roll labels in the same order, offers kept in `GameState.doors` under the web's key and shape, a taken door registered as the block's encounter (re-registered after a load) and standing at its own anchor. `GameState` gains `current_schedule`, `current_day`, `fights_today`/`record_fight` (`fightsByDay`), the `fights-today` and `chapter-goal-met` requirements, and `forecast-ending`, `chapter-ending:attempt` and `chapter-ending:missed`, with `forecast_ending` in the web's order. On screen: a door board heads the city rail on a free block (kind · from · where, title, premise, three steps, risk/fight/late tags, stakes, TAKE), each door pinned on the map, CHOOSE A DOOR as the lit step, the door briefed in its scene, a door fight recorded as such (no mission, the door's stakes on the result). The ledger no longer carries the shipment button; after day 10 the city shows CHAPTER 1 CLOSES · TO BE CONTINUED with INTO CHAPTER 2, WHERE THIS ROAD POINTS and START A NEW TEN DAYS. `tools/web-reference.mjs` now records 90 door boards, five chains of takes and a whole ten-day walk, and test_story holds the Godot build to all of it.
 

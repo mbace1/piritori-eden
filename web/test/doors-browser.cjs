@@ -90,7 +90,9 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: every door is pinned on the map`, await page.locator('.door-pin').count() === anchors.size);
       ok(`${name}: the next step says to choose a door`, await page.locator('[data-action="next-step"][data-step="doors"]').count() === 1);
       // Take a door that cannot become a fight, walk there, do it.
-      const quiet = page.locator('.door-card:not(:has(.door-fight)) [data-action="take-door"]').first();
+      // Most doors can go bad now (answer 25); pin one that cannot, so the walk is about walking.
+      await fixture(page, 's.doors.offers[15] = [{ template: "gig-rauno-cart", anchor: "harju" }, { template: "hit-bear-debt", anchor: "karhupuisto" }];');
+      const quiet = page.locator('[data-action="take-door"][data-door="gig-rauno-cart"]');
       const doorId = await quiet.getAttribute('data-door');
       await quiet.click();
       let s = await S(page);
@@ -114,6 +116,21 @@ server.listen(0, '127.0.0.1', async () => {
       s = await S(page);
       ok(`${name}: it is a door fight, not a mission`, s.battle?.door === 'hit-bear-debt' && s.battle.missionId === null && s.mode === 'battle');
       ok(`${name}: and it counts toward today's two`, s.fightsByDay?.[8] === 1);
+      // Answer 25: a bad deal escalates. Selling two at the quay goes bad on this block's roll.
+      const quay = (crew) => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "sornainen_harbour"; s.stock.piri = 2; s.recruited = ${crew}; s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "sale-quay-shift", anchor: "sornainen_harbour" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {};`;
+      await fixture(page, quay('a.slice(0, 3)'), await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
+      await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
+      await page.locator('[data-action="next-step"][data-step="enter"]').click();
+      ok(`${name}: a bad deal says it can go bad`, /CAN GO BAD · 40%/.test(await page.locator('[data-choice="sell-two"]').innerText()));
+      await page.locator('[data-action="choose"][data-choice="sell-two"]').click();
+      s = await S(page);
+      ok(`${name}: it goes bad, and it is a fight`, s.battle?.door === 'sale-quay-shift' && s.battle.id === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1);
+      await fixture(page, quay('[]'));
+      await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
+      await page.locator('[data-action="next-step"][data-step="enter"]').click();
+      await page.locator('[data-action="choose"][data-choice="sell-two"]').click();
+      s = await S(page);
+      ok(`${name}: alone, it goes bad without a fight and costs the door`, !s.battle && /nobody was standing/.test(await page.locator('.outcome-card').innerText()));
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       const e = errors();
       ok(`${name}: no errors`, e.length === 0, e.join(' | '));
