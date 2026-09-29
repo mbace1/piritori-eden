@@ -53,7 +53,7 @@ godot --headless --path . res://tests/test_locale.tscn       # en/fi/ja
 godot --headless --path . res://tests/test_battle.tscn       # combat model
 godot --headless --path . res://tests/test_battle_ui.tscn    # battle screen
 godot --headless --path . res://tests/test_playthrough.tscn  # 7-day slice
-godot --headless --path . res://tests/test_story.tscn        # road, board, story vs the web
+godot --headless --path . res://tests/test_story.tscn        # road, board, story, cut, chapter turn vs the web
 node tools/web-reference.mjs --check                        # the web numbers test_story holds to
 godot --path . res://tools/capture_battle.tscn   # battle screenshot; PIRITORI_SHOT_BATTLE picks the battle id
 godot --path . res://tools/capture.tscn          # write screenshots (needs a GPU)
@@ -102,8 +102,8 @@ scenes/kallio_street.gd the drawn street at night: the arrival and the road stan
 scenes/arrival.gd       the New-Game arrival (web v4.59/v4.61): any input skips it
 scenes/road_stage.gd    what happened on the road, on its card (web v4.58)
 scenes/story_ledger.gd  MISSIONS: briefings and the case board (web v4.62)
-scripts/city/           road, market_model + board, toko, story, visits — the rules
-                        the web keeps in web/js/v3/{road,board,toko,story,visits}.js
+scripts/city/           road, market_model + board, toko, story, visits, chapter — the
+                        rules the web keeps in web/js/v3/{road,board,toko,story,visits,chapter}.js
 autoload/sound.gd       synthesised sound on one master bus, SOUND on/off (web v4.59)
 ui/
   palette.gd            ART_BIBLE §4.2 accents, each paired with a glyph

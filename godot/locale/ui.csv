@@ -25,7 +25,7 @@ ui.buy,BUY,OSTA,買う
 ui.sell,SELL,MYY,売る
 ui.buy_verb,Buy,Osta,買う
 ui.sell_verb,Sell,Myy,売る
-ui.costs_block,%s for €%d — costs one block,%s hintaan %d € — vie yhden jakson,%s €%d — 1ブロック消費
+ui.trade_for,%s for €%d,%s hintaan %d €,%s €%d で
 ui.short_by,short €%d,puuttuu %d €,€%d 足りない
 ui.nothing_in_stock,nothing in stock,ei varastoa,在庫なし
 ui.no_capacity,no capacity,ei tilaa,容量なし
@@ -196,6 +196,22 @@ chapter.next,Whatever comes next,Mitä seuraavaksi tuleekaan,次に来るもの�
 chapter.out_clean,"It went quietly. The container is gone and so are you, and you have somewhere to put things now.","Meni hiljaa. Kontti on poissa ja niin olet sinäkin, ja nyt on paikka mihin panna tavaraa.",静かに済んだ。コンテナも消え、あなたも消えた。物を置く場所ができた。
 chapter.out_messy,"It moved, but not cleanly. Something had to be left on the quay.","Se liikkui, muttei siististi. Jotain jäi laiturille.",動きはした。だが綺麗にではない。何かを岸に残した。
 chapter.out_lost,It went wrong on the quay. Somebody did not come back.,Laiturilla meni pieleen. Joku ei tullut takaisin.,岸で失敗した。戻らなかった者がいる。
+chapter.into,INTO CHAPTER %d,LUKUUN %d,第%d章へ
+chapter.later,Chapter %d opens in a later build. This is what it will open with.,Luku %d avautuu myöhemmässä versiossa. Tällä se alkaa.,第%d章はまだ作られていない。始まる時はこうなる。
+chapter.rule_carry,carries,säilyy,そのまま残る
+chapter.rule_reset,resets,nollautuu,消える
+chapter.rule_stake,standard stake,vakiopanos,決まった手持ち
+chapter.row_cash,Cash,Käteinen,現金
+chapter.row_stock,Stock,Varasto,在庫
+chapter.row_gear,Weapons and gear,Aseet ja varusteet,武器と装備
+chapter.row_crew,Crew,Porukka,仲間
+chapter.row_relationships,Standing with people,Välit ihmisiin,人との仲
+chapter.row_upgrades,Built upgrades,Rakennetut parannukset,作った場所
+chapter.row_debt,Debt,Velka,借金
+chapter.row_obligations,Favours owed,Velatut palvelukset,負った借り
+chapter.row_markka,Markka,Markat,mk
+chapter.row_exit_fund,Exit fund,Lähtörahasto,出発の金
+chapter.row_mission_unlocks,Mission unlocks,Avatut keikat,開いた依頼
 battle.read_ahead,and the one after,ja seuraavakin,次の手まで見える
 battle.mark,Read them,Lue heidät,読む
 battle.mark_note,Spend the round watching one of them. You will see everything about them for %d round(s).,Käytä vuoro yhden tarkkailuun. Näet heistä kaiken %d kierroksen ajan.,この手番を使って一人を観察する。%dラウンドの間、その者の全てが見える。
@@ -290,6 +306,7 @@ story.fx_pattern,the van pattern,pakettiautojen kaava,バンの動き
 story.fx_half_pattern,half the pattern,puolet kaavasta,動きの一片
 story.fx_advantage,a rival gains ground,kilpailija vahvistuu,相手が勢いを得る
 story.fx_debt_memory,the debt holder remembers,velkoja muistaa,借金の相手が覚える
+story.cut_paid,"Kello's cut, counted on the square: €%d.","Kellon osuus, laskettu torilla: %d €.",Kelloの取り分、市場で数えた: €%d。
 toko.button,TOKON RAMEN · A BOWL AND WHAT HE HEARD,TOKON RAMEN · KULHO JA MITÄ HÄN KUULI,TOKON RAMEN · 店と噂
 toko.bowl_head,A BOWL AND WHAT HE HEARD · €%d,KULHO JA MITÄ HÄN KUULI · %d €,噂を買う · €%d
 toko.bowl_note,"He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.","Hän kertoo hintahaarukan parhaasta myyntipaikasta, jota et vielä tunne. Haarukka, ei koskaan tarkka hinta, ja se vanhenee kuten kaikki, minkä näit itse. Yksi kulho jaksossa: hänellä on muitakin asiakkaita.",まだ知らない一番の売り場で、いくらで売れるかのだいたいを話す。確かな数ではなく、自分で見た物のように古くなる。一つの時間帯に一つだけ。

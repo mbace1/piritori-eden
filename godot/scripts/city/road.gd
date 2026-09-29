@@ -22,6 +22,8 @@ extends RefCounted
 ##   - A choice with `requires` is shown and refused, never hidden.
 ##   - A fight is the ordinary battle with no mission behind it and no block
 ##     advance (the shell marks it a road fight).
+##   - An event with a `trigger` belongs to the story: it is never rolled, and
+##     `force` raises it (v4.63, Kello's cut found out).
 ##
 ## No clock, no DOM, no randomness of its own: everything reads and writes
 ## `GameState.road`, which is saved under the web's own key and shape.
@@ -196,6 +198,27 @@ static func roll(journey: Dictionary) -> Dictionary:
 	}
 	GameState.state_changed.emit()
 	return pick
+
+
+## Raise a story-triggered event now (web `forceRoad`, v4.63), unless one is
+## already waiting or it has been seen. The story raises it; the road never
+## rolls it (`_candidates` skips a `trigger`). Returns whether it was raised.
+static func force(event_id: String, anchor_id: String = "") -> bool:
+	var r := state()
+	if r.get("pending", null) != null:
+		return false
+	var event := ContentRegistry.road_event(event_id)
+	if event.is_empty() or (r["seen"] as Array).has(event_id):
+		return false
+	var ph := String(event.get("phase", "any"))
+	r["pending"] = {
+		"id": event_id,
+		"phase": "arrival" if ph == "any" else ph,
+		"from": null,
+		"to": anchor_id if anchor_id != "" else GameState.current_anchor_id,
+	}
+	GameState.state_changed.emit()
+	return true
 
 
 ## Whether a choice can be taken, and every requirement that stops it.

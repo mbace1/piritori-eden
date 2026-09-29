@@ -186,8 +186,10 @@ func _test_profitable_first_sale() -> void:
 		eq("  so nothing moved", GameState.cash_eur, before)
 		_test_journey_to_siltasaari()
 		check("can sell with stock in hand", GameState.can_sell(sale[0]))
+		var block := GameState.block_index
 		var ok := GameState.execute_offer("offer-siltasaari-sell")
 		check("sale executes", ok)
+		eq("  and a trade spends no block (answer 21: the web rule)", GameState.block_index, block)
 		eq("cash + 68", GameState.cash_eur, before + 68)
 		eq("stock spent", int(GameState.stock.get("piri", 0)), 0)
 		check("sale is profitable against the 45 buy", 68 > 45)
@@ -348,29 +350,35 @@ chapters (GDD: run structure)")
 	check("but does count the fights", GameState.chapter_goal_met())
 
 	# ── the ledger ──
+	# What crosses a chapter is canon now (`chapter_turn`, owner answer 22) and
+	# the turn is `PiritoriChapter.turn_chapter`, after the chapter's ending
+	# has run; test_story holds every rule against the web's chapter.mjs.
 	GameState.new_campaign()
-	GameState.cash_eur = 500
+	var turn: Dictionary = ContentRegistry.slice.get("chapter_turn", {})
 	GameState.take_loot(PackedStringArray(["sawn-off"]))
 	GameState.add_upgrade("stash-house-1")
 	GameState.memories.append("retired:somebody")
-	GameState.flags["mission-unlocked"] = true
+	GameState.apply_effect("reveal:mission-paper-bag")
 	var roster_before := GameState.roster.size()
-
-	GameState.begin_next_chapter()
-
+	eq("no turn before the ending", PiritoriChapter.turn_chapter().get("reason", ""), "chapter-not-cleared")
+	var ending := GameState.chapter_ending()
+	GameState.record_chapter_income(GameState.chapter_threshold)
+	GameState.current_anchor_id = String(ending.get("anchor_id", ""))
+	GameState.cash_eur = int(ending.get("stake_eur", 0)) + 500
+	eq("the operation runs", GameState.attempt_chapter_ending(), "")
+	var gear_before := GameState.equipment.size()
+	check("the chapter turns", bool(PiritoriChapter.turn_chapter().get("ok", false)))
 	check("the chapter advanced", GameState.chapter == 2)
-	check("and the day follows it",
-		GameState.day == GameState.CHAPTER_DAYS + 1, str(GameState.day))
 
 	# What you BUILT.
-	check("gear carries", GameState.equipment_owned.has("sawn-off"))
+	eq("gear carries", GameState.equipment.size(), gear_before)
 	check("built upgrades carry", GameState.has_upgrade("stash-house-1"))
 	check("contacts carry", GameState.memories.has("retired:somebody"))
 	check("people carry", GameState.roster.size() == roster_before)
 
 	# What you were GRANTED.
-	check("money does not carry", GameState.cash_eur == 0)
-	check("mission unlocks do not carry", GameState.flags.is_empty())
+	eq("money opens on the standard stake", GameState.cash_eur, int(turn.get("opening_cash_eur", -1)))
+	check("mission unlocks do not carry", not GameState.is_revealed("mission-paper-bag"))
 	check("and chapter progress starts again", GameState.chapter_progress() == 0)
 
 	# It has to survive a save, or the ledger is only true until you close the
@@ -528,7 +536,7 @@ the chapter ends at the docks")
 		GameState.attempt_chapter_ending() == "not-available")
 
 	# And the turnover reopens the next one.
-	GameState.begin_next_chapter()
+	PiritoriChapter.turn_chapter()
 	check("the next chapter is not already cleared", not GameState.chapter_cleared)
 
 

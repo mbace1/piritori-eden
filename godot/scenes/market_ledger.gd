@@ -200,7 +200,7 @@ func _offer_row(o: Dictionary) -> Control:
 	btn.add_theme_font_size_override("font_size", int(round(15 * _scale)))
 	btn.disabled = not can
 	var verb_word := tr("ui.sell_verb") if side == "sell" else tr("ui.buy_verb")
-	btn.text = tr("ui.costs_block") % [verb_word, price]
+	btn.text = tr("ui.trade_for") % [verb_word, price]
 	if not can:
 		btn.text += "  (" + _why_not(o, side) + ")"
 	var oid: String = o["id"]

@@ -390,6 +390,14 @@ var heard: Dictionary = {}
 ## The block of the last bowl at Toko's (one a block), or -1.
 var toko_bowl_at: int = -1
 
+# ── Kello's cut (web Act I v4.63, `settleCut` in web/js/v3/story.js) ──────
+## Saved under the web's key and shape: {payments}. `PiritoriStory` owns the
+## rule; this is only the record.
+var cut: Dictionary = {}
+## The block a payment last landed in, or -1, so the rail can say so once.
+## Presentation state, never saved, like `arrival_due`.
+var cut_paid_block: int = -1
+
 
 ## Reset to the slice's authored starting state.
 func new_campaign(with_seed: int = 0) -> void:
@@ -444,6 +452,8 @@ func new_campaign(with_seed: int = 0) -> void:
 	footprint = {}
 	heard = {}
 	toko_bowl_at = -1
+	cut = {}
+	cut_paid_block = -1
 	# Web boot marks where Aatami stands as seen: you know the corner you
 	# start on (`markSeen` at boot in web/js/v3/app.js).
 	if current_anchor_id != "":
@@ -626,44 +636,6 @@ func add_upgrade(id: String) -> void:
 	if id == "" or upgrades.has(id):
 		return
 	upgrades.append(id)
-	state_changed.emit()
-
-
-## Start the next chapter without starting a new campaign.
-##
-## The roster, the gear, the contacts and the upgrades come with you. The money
-## does not — that is what stops farming an early chapter buying away the next
-## chapter's difficulty, which is the usual failure of a persistent-currency
-## roguelike.
-func begin_next_chapter() -> void:
-	chapter += 1
-	chapter_cleared = false
-	day = ((chapter - 1) * CHAPTER_DAYS) + 1
-	block_index = (day - 1) * blocks_per_day.size()
-
-	# The run layer.
-	cash_eur = 0
-	stock.clear()
-	market_history.clear()
-	flags.clear()
-
-	# Gear crosses the boundary and is a step worse for it (§8.4). This is the
-	# load the whole ledger carries: without decay, persistence plus re-runnable
-	# chapters is a farming exploit.
-	decay_equipment()
-
-	# ...and what it is FOR may differ next time, so read it from content
-	# rather than carrying the last chapter's goal forward.
-	_sync_chapter_from_content()
-
-	# Chapter progress starts again; what it is FOR may differ next time.
-	chapter_earned = 0
-	chapter_loot_taken = 0
-	chapter_fights_won = 0
-
-	# `revealed`, `roster`, `equipment_owned`, `memories`, `crew_fights`,
-	# `retired_crew`, `arrested_crew`, `trained_crew`, `generated_crew` and
-	# `upgrades` are all deliberately untouched.
 	state_changed.emit()
 
 
@@ -865,11 +837,18 @@ func record_chapter_win() -> void:
 func advance_block() -> void:
 	if is_slice_complete():
 		return
+	var ended := current_block()
 	block_index += 1
 	day = (block_index / blocks_per_day.size()) + 1
-	# A chapter is a span of days, so it follows from the day rather than being
-	# advanced separately — two counters for one fact would drift.
-	chapter = ((day - 1) / CHAPTER_DAYS) + 1
+	# The chapter is NOT derived from the day any more: it turns only when the
+	# chapter's ending has run and `PiritoriChapter.turn_chapter` applies the
+	# rules in canon (web v4.64). A derived chapter would undo that turn on the
+	# next block.
+
+	# What the night owes is settled once the night is over (web
+	# `advanceAndSettle`), before anything reads the new block.
+	if ended == "night":
+		_settle_cut()
 
 	if not is_slice_complete():
 		if current_block() == "night":
@@ -880,6 +859,19 @@ func advance_block() -> void:
 		_apply_final_settlement()
 		slice_completed.emit()
 	state_changed.emit()
+
+
+## Kello's cut at the end of a night (web `advanceAndSettle`): pay it, and if
+## a family has found out, raise the story's road event where Aatami stands.
+## The shell's road guard opens it on the next screen, as the web's mode does.
+func _settle_cut() -> void:
+	var r := PiritoriStory.settle_cut()
+	if int(r.get("paid", 0)) > 0:
+		cut_paid_block = block_index
+	if bool(r.get("found_out", false)):
+		var ev := String(ContentRegistry.story_case().get("cut", {}).get("found_out_event", ""))
+		if ev != "":
+			PiritoriRoad.force(ev, current_anchor_id)
 
 
 ## The final settlement, per battle-courtyard-3v3's casualty table: an
@@ -1809,7 +1801,10 @@ func _total_stock() -> int:
 	return n
 
 
-## Execute a market offer at its quoted price. Spends a block.
+## Execute a market offer at its quoted price.
+##
+## A trade costs no block (owner, DESIGN_AUTHORITY answer 21: "time keeps the
+## web rule" — the block turns only on a story beat, a door or nightfall).
 func execute_offer(offer_id: String) -> bool:
 	var offer: Dictionary = ContentRegistry.offer(offer_id)
 	if offer.is_empty():
@@ -1835,7 +1830,7 @@ func execute_offer(offer_id: String) -> bool:
 	var aid := String(offer.get("anchor_id", ""))
 	footprint[aid] = int(footprint.get(aid, 0)) + (1 if offer.get("side", "") == "sell" else -1)
 	mark_seen(aid)
-	advance_block()
+	state_changed.emit()
 	return true
 
 
@@ -1905,6 +1900,7 @@ func to_dict() -> Dictionary:
 		"footprint": footprint,
 		"heard": heard,
 		"tokoBowlAt": toko_bowl_at,
+		"cut": cut,
 	}
 	return out.duplicate(true)
 
@@ -1970,6 +1966,10 @@ func from_dict(d: Dictionary) -> bool:
 	footprint = _int_values(d.get("footprint", {}))
 	heard = _int_values(d.get("heard", {}))
 	toko_bowl_at = int(d.get("tokoBowlAt", -1))
+	cut = {}
+	if typeof(d.get("cut", null)) == TYPE_DICTIONARY:
+		cut = {"payments": int(d["cut"].get("payments", 0))}
+	cut_paid_block = -1
 	arrival_due = false
 
 	state_changed.emit()

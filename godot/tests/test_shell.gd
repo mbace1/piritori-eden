@@ -65,6 +65,7 @@ func _ready() -> void:
 	await _test_toko_through_ui()
 	await _test_street_seller_through_ui()
 	await _test_story_through_ui()
+	await _test_cut_and_turn_through_ui()
 	await _test_sound_switch()
 	await _test_arrival()
 
@@ -849,9 +850,11 @@ func _test_market_through_ui() -> void:
 	check("sale is enabled with stock in hand", not sell.disabled)
 
 	var before := GameState.cash_eur
+	var block_before := GameState.block_index
 	await _press(sell)
 	check("cash rose by the authored €68", GameState.cash_eur == before + 68,
 		"(%d -> %d)" % [before, GameState.cash_eur])
+	eq_("  and the trade turned no block (answer 21)", GameState.block_index, block_before)
 	# Web v4.57's gate: "€183 and +€68 at the sale". The count is a tween, so
 	# wait it out; at rest the chip must read exactly the state.
 	check("  and the header names the change: +€68", _cash_delta_text() == "+€68",
@@ -1149,6 +1152,76 @@ func _test_story_through_ui() -> void:
 	check("the case is gone from Piritori", _live_button("THE THURSDAY TRAM") == null)
 	await _press(_shell._commands[3])
 	check("the board says it is settled", _labels_text().contains("Settled: Give it to Toko."))
+	_shell._show_city()
+	await get_tree().process_frame
+
+
+## web v4.63: Kello's cut lands as a night ends and says so; found out, the
+## story's road event opens. web v4.64: after the shipment the rail lists what
+## crosses into chapter 2, and applies none of it while chapter 2 is unwritten.
+func _test_cut_and_turn_through_ui() -> void:
+	print("\nKello's cut and the chapter turn (web v4.63/v4.64), through the interface")
+	await _fresh_city("piritori")
+	# Fixtures: the cut taken, and the clock at a night.
+	GameState.apply_effect("flag:thursday-cut")
+	GameState.block_index = 1
+	var paid := int(ContentRegistry.story_case()["cut"]["nightly_eur"])
+	var cash := GameState.cash_eur
+	_shell._end_block()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	eq_("the night's end pays Kello's cut", GameState.cash_eur, cash + paid)
+	check("  and the rail says so", _labels_text().contains(tr("story.cut_paid") % paid))
+	var event_id := String(ContentRegistry.story_case()["cut"]["found_out_event"])
+	for i in 5:
+		if not PiritoriRoad.pending_event().is_empty():
+			break
+		GameState.block_index += 1   # fixture: on to the next night
+		_shell._end_block()
+		await get_tree().process_frame
+		await get_tree().process_frame
+	eq_("found out, the story's event waits", String(PiritoriRoad.pending_event().get("id", "")), event_id)
+	check("  and the road screen opens on it", _world_has("road_stage.gd") != null)
+	var choices := _all_nodes(_shell._rail).filter(func(n): return n is Button and n.has_meta("road_choice") \
+		and not n.is_queued_for_deletion())
+	eq_("  with its three answers", choices.size(), (ContentRegistry.road_event(event_id)["choices"] as Array).size())
+	var give: Button = null
+	for b in choices:
+		if String(b.get_meta("road_choice")) == "give-kello":
+			give = b
+	await _press(give)
+	check("  giving them Kello ends the cut", GameState.has_flag("cut-ended"))
+
+	await _fresh_city("sornainen_harbour")
+	var ending := GameState.chapter_ending()
+	GameState.record_chapter_income(GameState.chapter_threshold)
+	GameState.cash_eur = int(ending.get("stake_eur", 0)) + 40
+	_shell._show_market()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var go := _live_button("Pay for the container")
+	check("at the harbour, the shipment can be paid for", go != null and not go.disabled)
+	if go == null:
+		return
+	await _press(go)
+	var turn: Node = null
+	for n in _all_nodes(_shell._rail):
+		if n.name == "ChapterTurn" and not n.is_queued_for_deletion():
+			turn = n
+	check("after it, the rail lists what crosses", turn != null)
+	if turn == null:
+		return
+	var rows := _all_nodes(turn).filter(func(n): return n is Label and n.has_meta("turn_row"))
+	eq_("  one row per rule the data names", rows.size(), PiritoriChapter.turn_plan().size())
+	check("  under INTO CHAPTER 2", _labels_text().contains(tr("chapter.into") % 2))
+	var cash_row := rows.filter(func(l): return String(l.get_meta("turn_row")) == "cash")
+	check("  cash reads now → the standard stake",
+		not cash_row.is_empty() and cash_row[0].text.contains("€40 → €%d" % int(ContentRegistry.slice["chapter_turn"]["opening_cash_eur"])),
+		cash_row[0].text if not cash_row.is_empty() else "no row")
+	if PiritoriChapter.next_chapter().is_empty():
+		check("  it says chapter 2 comes in a later build", _labels_text().contains(tr("chapter.later") % 2))
+		check("  and offers no way on", _live_button(tr("chapter.next")) == null)
+	check("shown, not applied: still chapter 1, still €40", GameState.chapter == 1 and GameState.cash_eur == 40)
 	_shell._show_city()
 	await get_tree().process_frame
 

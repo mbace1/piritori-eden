@@ -1,6 +1,7 @@
 extends Node
 ## The city's new rules — the road (v4.58), sound (v4.59), Toko's counter and
-## the board (v4.60/v4.61), and the Thursday Load (v4.62) — against the web.
+## the board (v4.60/v4.61), the Thursday Load (v4.62), Kello's cut (v4.63) and
+## the chapter turn (v4.64) — against the web.
 ##
 ## Run: godot --headless --path . res://tests/test_story.tscn
 ##
@@ -61,6 +62,10 @@ func _ready() -> void:
 	_test_story()
 	_test_every_clue_is_earned()
 	_test_mission_battles_settle()
+	_test_the_cut()
+	_test_the_cut_is_the_webs()
+	_test_chapter_turn()
+	_test_chapter_turn_follows_the_data()
 	_test_sound()
 	_test_arrival_lines()
 
@@ -463,6 +468,234 @@ func _test_mission_battles_settle() -> void:
 	GameState.settle_mission_battle("battle-karhupuisto-2v2", "win")
 	eq("a mission already settled by its scene is not paid twice", GameState.cash_eur, cash)
 	eq("a battle no mission names settles nothing", GameState.settle_mission_battle("battle-hermanni-training", "win"), "")
+
+
+## Kello's cut (v4.63, web `story.mjs`): pays each night, and the risk grows.
+func _test_the_cut() -> void:
+	print("\nKello's cut (v4.63)")
+	var cut: Dictionary = ContentRegistry.story_case().get("cut", {})
+	var nightly := int(cut.get("nightly_eur", -1))
+	var event_id := String(cut.get("found_out_event", ""))
+	check("canon: the cut pays nightly and names its found-out event",
+		nightly > 0 and not ContentRegistry.road_event(event_id).is_empty(), str(cut))
+	check("  and that event belongs to the story", ContentRegistry.road_event(event_id).has("trigger"))
+	_fresh()
+	eq("no cut, no pay", int(PiritoriStory.settle_cut()["paid"]), 0)
+	# Setup: the two key clues, standing at the case.
+	GameState.apply_effect("flag:mccormicks-know-skim")
+	GameState.apply_effect("flag:kello-receipts")
+	GameState.current_anchor_id = String(ContentRegistry.story_case().get("anchor_id", ""))
+	var before := JSON.stringify(GameState.to_dict())
+	check("taking the cut starts it",
+		bool(PiritoriStory.resolve_case("take-a-cut")["ok"]) and GameState.has_flag("thursday-cut"))
+	var cash := GameState.cash_eur
+	var first := PiritoriStory.settle_cut()
+	check("the first night pays €%d and is safe" % nightly,
+		int(first["paid"]) == nightly and GameState.cash_eur == cash + nightly and not bool(first["found_out"]))
+	var found := _found_on()
+	check("sooner or later a family finds out (payment %d)" % found, found > 0)
+	GameState.from_dict(JSON.parse_string(before))
+	PiritoriStory.resolve_case("take-a-cut")
+	PiritoriStory.settle_cut()
+	eq("the same save finds out on the same payment", _found_on(), found)
+
+	# The found-out event is raised by the story and waits on the road.
+	check("the story raises the event", PiritoriRoad.force(event_id, "piritori"))
+	eq("  it waits on the road screen", String(PiritoriRoad.pending_event().get("id", "")), event_id)
+	check("  one at a time: a second raise is refused", not PiritoriRoad.force(event_id, "piritori"))
+	var raised := JSON.stringify(GameState.to_dict())
+	GameState.cash_eur = 500
+	check("paying them off ends the cut",
+		bool(PiritoriRoad.resolve("pay")["ok"]) and GameState.has_flag("cut-ended"))
+	eq("  an ended cut pays nothing", int(PiritoriStory.settle_cut()["paid"]), 0)
+	check("  a seen event is not raised twice", not PiritoriRoad.force(event_id, "piritori"))
+	GameState.from_dict(JSON.parse_string(raised))
+	check("giving them Kello ends it too", bool(PiritoriRoad.resolve("give-kello")["ok"])
+		and GameState.has_flag("kello-sold") and GameState.has_flag("cut-ended"))
+
+	# The night's end is where it settles: through the clock, not by hand.
+	_fresh()
+	GameState.apply_effect("flag:thursday-cut")
+	cash = GameState.cash_eur
+	GameState.advance_block()
+	eq("a day's end pays nothing", GameState.cash_eur, cash)
+	GameState.advance_block()
+	eq("a night's end pays the cut", int(GameState.cut.get("payments", 0)), 1)
+	eq("  and marks the block it landed in, for the rail", GameState.cut_paid_block, GameState.block_index)
+	var reload := JSON.stringify(GameState.to_dict())
+	GameState.new_campaign()
+	GameState.from_dict(JSON.parse_string(reload))
+	eq("  the count survives a reload, under the web's key", int(GameState.cut.get("payments", 0)), 1)
+	var raised_at := -1
+	while not GameState.is_slice_complete() and raised_at < 0:
+		GameState.advance_block()
+		if String(PiritoriRoad.pending_event().get("id", "")) == event_id:
+			raised_at = GameState.block_index
+	var want_at := -1
+	for row in _ref.get("cut", []):
+		if bool(row["found_out"]) and want_at < 0:
+			want_at = int(row["block"])
+	eq("found out at a night's end, the event waits — on the web's block", raised_at, want_at)
+	var payments := int(GameState.cut.get("payments", 0))
+	GameState.advance_block()
+	GameState.advance_block()
+	eq("  while it waits the cut still pays", int(GameState.cut.get("payments", 0)), payments + 1)
+	eq("  and nothing else is raised over it", String(PiritoriRoad.pending_event().get("id", "")), event_id)
+
+	# A triggered event never rolls on the road, however long Aatami walks.
+	_fresh()
+	GameState.block_index = 8
+	GameState.apply_effect("flag:thursday-cut")
+	var seen: Array = []
+	var journey := {"path": PackedStringArray(["piritori", "siltasaari"]), "destination": "siltasaari"}
+	for i in 80:
+		var ev := PiritoriRoad.roll(journey)
+		if ev.is_empty():
+			continue
+		seen.append(String(ev["id"]))
+		for c in ev.get("choices", []):
+			if (c.get("requires", []) as Array).is_empty():
+				PiritoriRoad.resolve(String(c["id"]))
+				break
+		if not PiritoriRoad.pending_event().is_empty():
+			GameState.road["pending"] = null
+	check("the found-out event never rolls by chance (%d events)" % seen.size(),
+		not seen.has(event_id) and not seen.is_empty())
+
+
+## Settle nights until a family finds out; the payment it happened on, or 0.
+func _found_on() -> int:
+	for i in range(2, 7):
+		GameState.block_index += 2
+		if bool(PiritoriStory.settle_cut()["found_out"]):
+			return i
+	return 0
+
+
+## Every night of the cut, taken on day one and never ended, is the web's:
+## the payment count, the roll and whether a family found out.
+func _test_the_cut_is_the_webs() -> void:
+	print("\nthe cut, night by night, is the web's")
+	_fresh()
+	GameState.apply_effect("flag:thursday-cut")
+	var rows: Array = _ref.get("cut", [])
+	check("the web walked every night of the slice", rows.size() * 2 == GameState.total_blocks, str(rows.size()))
+	var bad: Array = []
+	for w in rows:
+		# Setup only: the block the web settled at.
+		GameState.block_index = int(w["block"])
+		var got := PiritoriStory.settle_cut()
+		var roll := GameState.deterministic_roll("kello-cut:%d" % int(GameState.cut["payments"]))
+		if int(GameState.cut["payments"]) != int(w["payments"]) or int(got["paid"]) != int(w["paid"]) \
+				or bool(got["found_out"]) != bool(w["found_out"]) or absf(roll - float(w["roll"])) > 1e-12:
+			bad.append("block %d: %s roll %.12f vs %s" % [int(w["block"]), got, roll, w])
+	check("every payment, roll and discovery matches", bad.is_empty(), str(bad))
+
+
+## The chapter turn (v4.64), mirroring web/test/chapter.mjs.
+func _test_chapter_turn() -> void:
+	print("\nthe chapter turn (v4.64): what crosses into chapter 2")
+	var turn: Dictionary = ContentRegistry.slice.get("chapter_turn", {})
+	var r: Dictionary = turn.get("rules", {})
+	var bad: Array = []
+	for k in r:
+		if not ["carry", "reset", "stake"].has(String(r[k])):
+			bad.append(k)
+	check("canon: every one of the %d rules is carry, reset or stake" % r.size(), bad.is_empty() and not r.is_empty(), str(bad))
+	var stake := int(turn.get("opening_cash_eur", 0))
+	check("cash opens on a standard stake", r.get("cash", "") == "stake" and stake > 0)
+	eq("produce does not carry", String(r.get("stock", "")), "reset")
+	eq("weapons carry", String(r.get("gear", "")), "carry")
+	check("what you built carries", r.get("crew", "") == "carry" and r.get("upgrades", "") == "carry")
+	eq("access is re-earned", String(r.get("mission_unlocks", "")), "reset")
+
+	_fresh()
+	var plan0 := PiritoriChapter.turn_plan()
+	var want0: Array = _ref.get("chapter_plan", [])
+	eq("the plan names the web's rows, in its order, with its rules",
+		plan0.map(func(p): return "%s:%s" % [p["key"], p["rule"]]),
+		want0.map(func(p): return "%s:%s" % [p["key"], p["rule"]]))
+
+	_played()
+	eq("no turn before the ending", PiritoriChapter.turn_chapter().get("reason", ""), "chapter-not-cleared")
+	check("  a refused turn changes nothing", GameState.chapter == 1 and GameState.cash_eur == 900)
+	var plan := PiritoriChapter.turn_plan()
+	var row := func(k: String) -> Dictionary:
+		for p in plan:
+			if p["key"] == k:
+				return p
+		return {}
+	check("the plan shows cash going to the stake",
+		int(row.call("cash")["now"]) == 900 and int(row.call("cash")["next"]) == stake)
+	check("  stock gone and gear kept",
+		int(row.call("stock")["next"]) == 0 and int(row.call("gear")["next"]) == int(row.call("gear")["now"]))
+	eq("  the plan reads, it never writes", int(GameState.stock.get("piri", 0)), 3)
+
+	eq("the shipment runs", GameState.attempt_chapter_ending(), "")
+	var gear := GameState.equipment.size()
+	var crew := Array(GameState.roster)
+	var debt := GameState.debt_eur
+	var upgrades := Array(GameState.upgrades)
+	var authored: bool = not ContentRegistry.slice.get("chapters", []).filter(func(c): return int(c.get("index", 0)) == 2).is_empty()
+	GameState.temporary_crew = PackedStringArray(["crew-slot-runner"])
+	var res := PiritoriChapter.turn_chapter()
+	check("the chapter turns", bool(res.get("ok", false)))
+	check("chapter 2 opens", GameState.chapter == 2 and not GameState.chapter_cleared)
+	eq("cash is the stake", GameState.cash_eur, stake)
+	check("stock is gone", GameState.stock.values().all(func(v): return int(v) == 0))
+	eq("weapons carry", GameState.equipment.size(), gear)
+	eq("crew carry", Array(GameState.roster), crew)
+	eq("built upgrades carry", Array(GameState.upgrades), upgrades)
+	check("debt and markka carry", GameState.debt_eur == debt and GameState.markka_mk == 300)
+	check("the threshold counts this chapter only", GameState.chapter_earned == 0
+		and GameState.chapter_loot_taken == 0 and GameState.chapter_fights_won == 0)
+	check("mission unlocks are re-earned", not GameState.is_revealed("mission-paper-bag"))
+	check("the city remembers the turn", GameState.has_flag("memory:chapter-turned:1"))
+	check("help hired for one job does not follow", GameState.temporary_crew.is_empty())
+	eq("says whether chapter 2 is authored yet", bool(res.get("authored", true)), authored)
+	eq("one turn per ending", PiritoriChapter.turn_chapter().get("reason", ""), "chapter-not-cleared")
+	var saved := JSON.stringify(GameState.to_dict())
+	var cash := GameState.cash_eur
+	GameState.new_campaign()
+	GameState.from_dict(JSON.parse_string(saved))
+	check("the turn survives a reload", GameState.chapter == 2 and GameState.cash_eur == cash
+		and GameState.equipment.size() == gear)
+
+
+## The rules are data: flip them in a copy of canon and the turn follows.
+func _test_chapter_turn_follows_the_data() -> void:
+	print("\nthe turn follows the data, not a habit")
+	var flipped: Dictionary = ContentRegistry.slice.duplicate(true)
+	flipped["chapter_turn"]["rules"]["cash"] = "carry"
+	flipped["chapter_turn"]["rules"]["gear"] = "reset"
+	flipped["chapter_turn"]["rules"]["stock"] = "carry"
+	_played()
+	GameState.attempt_chapter_ending()
+	var cash := GameState.cash_eur
+	var plan := PiritoriChapter.turn_plan(flipped)
+	check("the plan reads the copy", plan.any(func(p): return p["key"] == "gear" and p["rule"] == "reset" and int(p["next"]) == 0))
+	PiritoriChapter.turn_chapter(flipped)
+	eq("cash:carry keeps the cash", GameState.cash_eur, cash)
+	eq("gear:reset empties the stash", GameState.equipment.size(), 0)
+	eq("stock:carry keeps the stock", int(GameState.stock.get("piri", 0)), 3)
+	check("and canon itself was not touched",
+		String(ContentRegistry.slice["chapter_turn"]["rules"]["gear"]) == "carry")
+
+
+## A chapter that has been played (web chapter.mjs `played()`): money made,
+## stock held, a weapon bought, someone recruited, a mission unlocked, and
+## Aatami at the harbour. Fixtures only; the ending and the turn are real.
+func _played() -> void:
+	_fresh()
+	GameState.cash_eur = 900
+	GameState.stock["piri"] = 3
+	GameState.chapter_earned = 450
+	GameState.debt_eur = 275
+	GameState.markka_mk = 300
+	GameState.add_equipment("folding-knife")
+	GameState.roster = PackedStringArray([String(ContentRegistry.slice["crew"][0]["id"])])
+	GameState.apply_effect("reveal:mission-paper-bag")
+	GameState.current_anchor_id = String(GameState.chapter_ending().get("anchor_id", ""))
 
 
 func _test_sound() -> void:

@@ -1119,6 +1119,15 @@ func _build_city_rail_body(anchor_id: String) -> void:
 
 	_rail_box.add_child(_separator())
 
+	# Kello's cut landed as the night ended (web v4.63's toast): said once,
+	# for the block it arrived in.
+	if GameState.cut_paid_block >= 0 and GameState.cut_paid_block == GameState.block_index:
+		var paid := int(ContentRegistry.story_case().get("cut", {}).get("nightly_eur", 0))
+		var cl := _make_label(tr("story.cut_paid") % paid, 13, PiritoriPalette.INTEL_MUSTARD)
+		cl.name = "CutPaid"
+		cl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_rail_box.add_child(cl)
+
 	# The authored slice is owner-written narrative and exists in one language.
 	# Say so plainly rather than letting English prose under a Finnish or
 	# Japanese interface read as a bug.
@@ -1551,11 +1560,7 @@ func _add_chapter_ending() -> void:
 	if GameState.chapter_cleared:
 		_rail_box.add_child(_separator())
 		_rail_box.add_child(_make_label(tr("chapter.cleared"), 15, MapStyle.TITLE_TEXT))
-		var b := _make_button(tr("chapter.next"), PiritoriPalette.PLAYER_CYAN)
-		b.pressed.connect(func():
-			GameState.begin_next_chapter()
-			_show_city())
-		_rail_box.add_child(b)
+		_add_chapter_turn()
 		return
 
 	if not GameState.chapter_goal_met():
@@ -1609,11 +1614,44 @@ func _show_chapter_result() -> void:
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_rail_box.add_child(l)
 	_rail_box.add_child(_separator())
+	_add_chapter_turn()
+
+
+## INTO CHAPTER N (H7; web v4.64 `renderChapterTurn`): what crosses into the
+## next chapter, read off the save and the rules in canon (`chapter_turn`).
+## Shown, never applied here while the next chapter is unauthored: the rail
+## says so, and offers no way on. Once it is authored, the one button turns it
+## through `PiritoriChapter.turn_chapter`, the only writer.
+func _add_chapter_turn() -> void:
+	var plan := PiritoriChapter.turn_plan()
+	if plan.is_empty():
+		return
+	var box := VBoxContainer.new()
+	box.name = "ChapterTurn"
+	_rail_box.add_child(box)
+	box.add_child(_make_label(tr("chapter.into") % (GameState.chapter + 1), 13, PiritoriPalette.TEXT_DIM))
+	for row in plan:
+		var fmt := func(v: int) -> String: return ("€%d" % v) if bool(row["money"]) else str(v)
+		# One word per rule, written out so the locale gate sees every key.
+		var word := String({"carry": tr("chapter.rule_carry"), "reset": tr("chapter.rule_reset"),
+			"stake": tr("chapter.rule_stake")}.get(String(row["rule"]), String(row["rule"])))
+		var l := _make_label("%s   %s → %s   · %s" % [tr(String(row["label"])),
+			fmt.call(int(row["now"])), fmt.call(int(row["next"])), word], 12,
+			PiritoriPalette.TEXT if String(row["rule"]) == "carry" else PiritoriPalette.TEXT_DIM)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.set_meta("turn_row", String(row["key"]))
+		box.add_child(l)
+	if PiritoriChapter.next_chapter().is_empty():
+		var later := _make_label(tr("chapter.later") % (GameState.chapter + 1), 12, PiritoriPalette.INTEL_MUSTARD)
+		later.name = "ChapterLater"
+		later.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(later)
+		return
 	var b := _make_button(tr("chapter.next"), PiritoriPalette.PLAYER_CYAN)
 	b.pressed.connect(func():
-		GameState.begin_next_chapter()
+		PiritoriChapter.turn_chapter()
 		_show_city())
-	_rail_box.add_child(b)
+	box.add_child(b)
 
 
 ## THE FENCE — where loot finally becomes money (COMBAT.md §9.7).

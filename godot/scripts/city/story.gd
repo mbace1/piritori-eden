@@ -12,6 +12,9 @@ extends RefCounted
 ##     answered once, like an encounter (recorded in `resolved_encounters`,
 ##     the web's `state.choices`).
 ##   - answering it runs the ordinary effect grammar and never turns the block.
+##   - KELLO'S CUT (v4.63): "take a cut" pays `case.cut.nightly_eur` at every
+##     night's end after, counted in `GameState.cut` (the web's `state.cut`).
+##     From payment `from_payment` each one risks the McCormicks finding out.
 
 
 static func clue_found(clue: Dictionary) -> bool:
@@ -88,6 +91,26 @@ static func resolve_case(choice_id: String) -> Dictionary:
 	GameState.decision_recorded.emit("case", case_id(), choice_id)
 	GameState.state_changed.emit()
 	return {"ok": true, "reason": "", "choice": choice}
+
+
+## Kello's cut, settled once at the end of a night block (web `settleCut`).
+## Pays while `thursday-cut` is set and `cut-ended` is not; n risky payments
+## in, the chance a family finds out is `chance_per_payment * n`, capped at 1,
+## rolled on `kello-cut:<payments>` with the web's FNV roll. Raising the
+## found-out event is the caller's (`GameState._settle_cut`). {paid, found_out}
+static func settle_cut() -> Dictionary:
+	var cut: Dictionary = ContentRegistry.story_case().get("cut", {})
+	if cut.is_empty() or not GameState.has_flag("thursday-cut") or GameState.has_flag("cut-ended"):
+		return {"paid": 0, "found_out": false}
+	var payments := int(GameState.cut.get("payments", 0)) + 1
+	GameState.cut["payments"] = payments
+	var paid := int(cut.get("nightly_eur", 0))
+	GameState.cash_eur += paid
+	var disc: Dictionary = cut.get("discovery", {})
+	var n := payments - int(disc.get("from_payment", 1)) + 1
+	var found := n >= 1 and GameState.deterministic_roll("kello-cut:%d" % payments) \
+		< minf(1.0, float(disc.get("chance_per_payment", 0.0)) * n)
+	return {"paid": paid, "found_out": found}
 
 
 ## A mission's briefing: the woven words plus the authored steps and stakes.

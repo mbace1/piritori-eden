@@ -3,7 +3,8 @@
  * web-reference.mjs — numbers the WEB build computes, for the Godot port to
  * match exactly.
  *
- * The road (v4.58) and Toko's bowl (v4.61) are deterministic from the save:
+ * The road (v4.58), Toko's bowl (v4.61) and Kello's cut (v4.63) are
+ * deterministic from the save:
  * the road rolls FNV-1a over contentId|block|label (`deterministicRoll` in
  * web/js/v3/state.js) and the board prices come from `market/model.mjs`'s
  * seeded xmur3 + mulberry32. A port that is "close" is a different road and a
@@ -24,7 +25,9 @@ const repo = resolve(godot, '..');
 const out = resolve(godot, 'tests/fixtures/web-reference.json');
 const mod = (p) => import(pathToFileURL(resolve(repo, 'web/js/v3', p)).href);
 
-const { createState, deterministicRoll } = await mod('state.js');
+const { createState, deterministicRoll, advanceSchedule, currentSchedule } = await mod('state.js');
+const { settleCut } = await mod('story.js');
+const { turnPlan } = await mod('chapter.js');
 const { rollRoad, resolveRoad, choiceOpen, clockLabel } = await mod('road.js');
 const { board } = await mod('board.js');
 const { buyBowl, tokoTip } = await mod('toko.js');
@@ -32,6 +35,7 @@ const json = async (p) => JSON.parse(await readFile(resolve(repo, p), 'utf8'));
 const content = await json('content/era1-slice-v1.json');
 const map = await json('map/kallio-era1-2003-v1.json');
 const roadEvents = await json('content/road-events-v1.json');
+const story = await json('content/act1-story-v1.json');
 const data = {
   content,
   equipment: new Map(content.equipment.map(e => [e.id, e])),
@@ -94,6 +98,24 @@ ref.after_six = board(b, data).rows.find(r => r.id === ref.tip).shown.level;
 b.scheduleIndex += 10;
 ref.after_sixteen = board(b, data).rows.find(r => r.id === ref.tip).shown.level;
 
+// 4. Kello's cut (v4.63): taken on day one and never ended, the whole slice
+// walked block by block the way `advanceAndSettle` walks it — the cut settles
+// after every block that ends a night, and rolls at the block after it.
+const k = createState(content);
+k.flags.push('thursday-cut');
+ref.cut = [];
+while (currentSchedule(k, content)) {
+  const ended = currentSchedule(k, content);
+  advanceSchedule(k, data);
+  if (ended.block !== 'night') continue;
+  const r = settleCut(k, story);
+  ref.cut.push({ block: k.scheduleIndex, payments: k.cut.payments, paid: r.paid, found_out: r.foundOut,
+    roll: deterministicRoll(k, `kello-cut:${k.cut.payments}`) });
+}
+
+// 5. The chapter turn (v4.64): the plan the web reads off a fresh save.
+ref.chapter_plan = turnPlan(createState(content), content).map(r => ({ key: r.key, rule: r.rule, now: r.now, next: r.next }));
+
 const text = JSON.stringify(ref, null, 1) + '\n';
 if (process.argv.includes('--check')) {
   let have = '';
@@ -103,7 +125,7 @@ if (process.argv.includes('--check')) {
     console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
     process.exit(1);
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}.`);
+  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);

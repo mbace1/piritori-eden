@@ -94,6 +94,8 @@ Use resolved impact classifications for presentation; never reapply damage on re
 
 Godot: the same `chapter_turn` rules and turn (plan reads, turn writes, `memory:chapter-turned:N`), the *Into chapter 2* list after the operation, and answer 21: a ledger trade no longer spends a block.
 
+**Status: landed in Godot 2026-09-29** (branch `godot/h7-port`). `scripts/city/chapter.gd` is `chapter.js`: `turn_plan` reads the save against `chapter_turn` in canon and changes nothing; `turn_chapter` is the only writer (carry/reset/stake, the next chapter's goal, progress counters to zero, temporary crew dropped, `memory:chapter-turned:N` in the memories, which `has_flag` reads as the web's flag). It replaces Godot's older `begin_next_chapter`, whose ledger (cash to zero, flags cleared, gear decayed, day jumped) predated answer 22, and the chapter is no longer derived from the day, so a turn cannot be undone by the next block. After the shipment the market rail lists INTO CHAPTER 2 (label, now → next, carries / resets / standard stake) and says chapter 2 opens in a later build; there is no way on until chapter 2 is authored. Answer 21: `execute_offer` no longer calls `advance_block`, and the trade button no longer says it costs a block. Tests: test_story mirrors `chapter.mjs` (including a flipped copy of the rules), test_spine's ledger runs the real ending and turn, test_shell presses the shipment and reads the list, and both spine and shell assert a trade turns no block.
+
 ## v4.63 — 2026-09-28
 
 **Kello's cut pays, and the network carries the Thursday Load.** Owner, 2026-09-28: "1-4 go ahead". Item 2: the cut pays weekly, with the growing risk the pitch promised. Item 3: more road events tied to the Thursday Load through the network of odd Kallio people.
@@ -112,6 +114,8 @@ Godot: the same `chapter_turn` rules and turn (plan reads, turn writes, `memory:
 ### Port
 
 Godot: the cut (`thursday-cut` / `cut-ended`, `state.cut.payments`, €30 per night, discovery 35% × n from payment 2, the same FNV roll labelled `kello-cut:<n>`), the story-triggered road event (never rolled), and the five network events plus two clues (data).
+
+**Status: landed in Godot 2026-09-29** (branch `godot/h7-port`). `PiritoriStory.settle_cut` is `settleCut`, saved as `cut: {payments}` under the web's key; `GameState.advance_block` settles it once a night block has ended (the web's `advanceAndSettle`), and a found-out cut raises the event through `PiritoriRoad.force` (`forceRoad`), which the road guard opens on the next screen. The city rail says "Kello's cut, counted on the square" for the block it landed in (en/fi/ja). `tools/web-reference.mjs` now walks the web's cut night by night and test_story holds every payment, roll and discovery to it (found out at block 4 on the reference save). The five network events and two clues arrived through sync earlier.
 
 ## v4.62 — 2026-09-27
 
