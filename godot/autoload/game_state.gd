@@ -407,6 +407,17 @@ var doors: Dictionary = {"offers": {}, "taken": {}}
 ## `fightsByDay`), counted when any real fight starts.
 var fights_by_day: Dictionary = {}
 
+# ── the families' standing (web Act I v4.67, `web/js/v3/standing.js`) ─────
+## Saved under the web's key and shape: {warned: {family: bool}, demanded:
+## {family: bool}}. The rung itself is read off `relationships`; this is only
+## the night's bookkeeping. `PiritoriStanding` owns the rules.
+var standing: Dictionary = {"warned": {}, "demanded": {}}
+## The warnings the last night settled, and the block they arrived in (web:
+## toasted and put in the city memory). Presentation state, never saved, like
+## `cut_paid_block`; the card keeps saying it from `standing.warned`.
+var standing_warnings := PackedStringArray()
+var standing_warned_block: int = -1
+
 
 ## Reset to the slice's authored starting state.
 func new_campaign(with_seed: int = 0) -> void:
@@ -465,6 +476,9 @@ func new_campaign(with_seed: int = 0) -> void:
 	cut_paid_block = -1
 	doors = {"offers": {}, "taken": {}}
 	fights_by_day = {}
+	standing = {"warned": {}, "demanded": {}}
+	standing_warnings = PackedStringArray()
+	standing_warned_block = -1
 	last_escalation = {}
 	ContentRegistry.forget_door_encounters()
 	# Web boot marks where Aatami stands as seen: you know the corner you
@@ -861,6 +875,7 @@ func advance_block() -> void:
 	# `advanceAndSettle`), before anything reads the new block.
 	if ended == "night":
 		_settle_cut()
+		_settle_standing()
 
 	if not is_slice_complete():
 		if current_block() == "night":
@@ -884,6 +899,22 @@ func _settle_cut() -> void:
 		var ev := String(ContentRegistry.story_case().get("cut", {}).get("found_out_event", ""))
 		if ev != "":
 			PiritoriRoad.force(ev, current_anchor_id)
+
+
+## The families settle their books at night too (web v4.67
+## `advanceAndSettle`, after the cut): a warning is kept for the rail, and a
+## demand or retaliation is raised where Aatami stands — unless the cut's
+## found-out event already waits, in which case `force` refuses it, as the
+## web's `forceRoad` does.
+func _settle_standing() -> void:
+	var r := PiritoriStanding.settle()
+	var warnings: PackedStringArray = r.get("warnings", PackedStringArray())
+	if not warnings.is_empty():
+		standing_warnings = warnings
+		standing_warned_block = block_index
+	var ev := String(r.get("raise", ""))
+	if ev != "":
+		PiritoriRoad.force(ev, current_anchor_id)
 
 
 ## The final settlement, per battle-courtyard-3v3's casualty table: an
@@ -2083,6 +2114,8 @@ func to_dict() -> Dictionary:
 		# Act I v4.65, under the web save's own keys.
 		"doors": doors,
 		"fightsByDay": fights_by_day,
+		# Act I v4.67, under the web save's own key.
+		"standing": standing,
 	}
 	return out.duplicate(true)
 
@@ -2165,6 +2198,9 @@ func from_dict(d: Dictionary) -> bool:
 			doors["taken"][str(k)] = {"template": String(t.get("template", "")),
 				"anchor": String(t.get("anchor", "")), "encounterId": String(t.get("encounterId", ""))}
 	fights_by_day = _int_values(d.get("fightsByDay", {}))
+	standing = PiritoriStanding.normalised(d.get("standing", null))
+	standing_warnings = PackedStringArray()
+	standing_warned_block = -1
 	# A taken door is the block's encounter; put it back (web `registerTaken`).
 	PiritoriDoors.register_taken()
 	arrival_due = false

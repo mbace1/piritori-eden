@@ -1137,6 +1137,15 @@ func _build_city_rail_body(anchor_id: String) -> void:
 		cl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_rail_box.add_child(cl)
 
+	# A family's warning, the night it came (web v4.67's toast and city
+	# memory): said for the block it arrived in; the ledger's card keeps it.
+	if GameState.standing_warned_block >= 0 and GameState.standing_warned_block == GameState.block_index:
+		for w in GameState.standing_warnings:
+			var wl := _make_label(String(w), 13, PiritoriPalette.LANTERN)
+			wl.name = "StandingWarning"
+			wl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			_rail_box.add_child(wl)
+
 	# The authored slice is owner-written narrative and exists in one language.
 	# Say so plainly rather than letting English prose under a Finnish or
 	# Japanese interface read as a bug.
@@ -2360,7 +2369,7 @@ func _on_road_choice(choice_id: String) -> void:
 		return
 	var bid := String(result.get("start_battle", ""))
 	if bid != "" and not ContentRegistry.battle(bid).is_empty():
-		_show_battle(bid, true)
+		_show_battle(bid, true, "", String(result.get("event", {}).get("id", "")))
 		return
 	_show_road()
 
@@ -2719,7 +2728,8 @@ func _on_battle_requested(battle_id: String) -> void:
 
 
 ## Enter a formation battle. The campaign model is untouched until it resolves.
-func _show_battle(battle_id: String, road_fight: bool = false, door: String = "") -> void:
+func _show_battle(battle_id: String, road_fight: bool = false, door: String = "",
+		road_event: String = "") -> void:
 	_road_battle = road_fight
 	_door_battle = door
 	_door_escalated = false
@@ -2792,7 +2802,12 @@ func _show_battle(battle_id: String, road_fight: bool = false, door: String = ""
 		if door != "":
 			var won := _mission_outcome(int(result)) == "win"
 			GameState.apply_effects(PiritoriDoors.door_fight_effects(door, "win" if won else "lose"))
-		elif not road_fight:
+		elif road_fight:
+			# A road fight with stakes of its own (a family's retaliation,
+			# web v4.67): win or lose pays the event's `fight` block.
+			var won := _mission_outcome(int(result)) == "win"
+			GameState.apply_effects(PiritoriRoad.fight_effects(road_event, "win" if won else "lose"))
+		else:
 			GameState.settle_mission_battle(battle_id, _mission_outcome(int(result)))
 		# The police take the fallen BEFORE careers are aged: somebody carried
 		# off a yard does not also come out of it one fight older.

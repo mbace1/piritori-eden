@@ -391,3 +391,12 @@ chapter.short,"Earned by fencing loot at Piritori; market sales and mission payo
 door.can_go_bad,CAN GO BAD · %d%%,VOI MENNÄ PIELEEN · %d %%,こじれ得る · %d%%
 door.went_bad_fight,The deal goes bad. It is a fight now.,Kauppa menee pieleen. Nyt tapellaan.,取引がこじれた。戦いになった。
 door.went_bad_alone,"The deal goes bad, and nobody was standing with Aatami.","Kauppa menee pieleen, eikä kukaan ollut Aatamin tukena.",取引がこじれた。アータミのそばには誰もいなかった。
+standing.eyebrow,THE FAMILIES · STANDING,SUVUT · ASEMA,一味 · 立場
+standing.rung_friendly,FRIENDLY,YSTÄVÄLLINEN,味方
+standing.rung_neutral,NEUTRAL,NEUTRAALI,中立
+standing.rung_wary,WARY,VAROVAINEN,不信
+standing.rung_insulted,INSULTED,LOUKATTU,顔に傷
+standing.rung_retaliating,RETALIATING,KOSTAVA,報い
+standing.rung_vendetta,VENDETTA,VERIKOSTO,終わりなき戦い
+standing.ground,Their ground: %s,Heidän alueensa: %s,持ち場 · %s
+standing.police,"The police are not a family. They answer heat, not standing.","Poliisi ei ole suku. Se vastaa kuumuuteen, ei asemaan.",警察は一味ではない。立場ではなく、危険に応じて動く。

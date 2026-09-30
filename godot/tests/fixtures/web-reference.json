@@ -8550,8 +8550,8 @@
   },
   {
    "block": 18,
-   "door": "pickup-yard-van",
-   "encounter": "door-18-pickup-yard-van",
+   "door": "favour-toko-broth",
+   "encounter": "door-18-favour-toko-broth",
    "choice": "leave"
   },
   {
@@ -8566,5 +8566,8296 @@
   "outcome": "missed",
   "forecast": "memory:pasila-forecast:pasila-deferred",
   "ending": "pasila-deferred"
- }
+ },
+ "rungs": [
+  {
+   "value": 3,
+   "rung": "friendly"
+  },
+  {
+   "value": 2,
+   "rung": "friendly"
+  },
+  {
+   "value": 1,
+   "rung": "neutral"
+  },
+  {
+   "value": 0,
+   "rung": "neutral"
+  },
+  {
+   "value": -1,
+   "rung": "wary"
+  },
+  {
+   "value": -2,
+   "rung": "insulted"
+  },
+  {
+   "value": -3,
+   "rung": "retaliating"
+  },
+  {
+   "value": -4,
+   "rung": "vendetta"
+  },
+  {
+   "value": -5,
+   "rung": "vendetta"
+  },
+  {
+   "value": -6,
+   "rung": "vendetta"
+  }
+ ],
+ "standing_doors": [
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#1",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#2",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#3",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#4",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#5",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#6",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#7",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "watch-car-41",
+     "anchor": "piritori"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-bear-debt",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "gig-rauno-cart",
+     "anchor": "harju"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#8",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "watch-back-door",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "hit-courtyard-ledger",
+     "anchor": "torkkelinmaki"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 15,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "gig-queue-sitter",
+     "anchor": "siltasaari"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-quay-shift",
+     "anchor": "sornainen_harbour"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    },
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 16,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "favour-mccormick-name",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 0,
+   "jade": -2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    },
+    {
+     "template": "favour-toko-broth",
+     "anchor": "vaasankatu"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 0,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 0,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": -1,
+   "jade": 2,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-fish-stall",
+     "anchor": "hakaniemi"
+    },
+    {
+     "template": "sale-club-backroom",
+     "anchor": "makelansilta"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 0,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "pickup-boiler-hall",
+     "anchor": "suvilahti"
+    }
+   ]
+  },
+  {
+   "content_id": "piritori-era1-seven-day-slice-v1#9",
+   "block": 18,
+   "mccormick": 2,
+   "jade": -4,
+   "fights": 2,
+   "offers": [
+    {
+     "template": "pickup-yard-van",
+     "anchor": "linjat_yard"
+    },
+    {
+     "template": "sale-park-bench",
+     "anchor": "karhupuisto"
+    }
+   ]
+  }
+ ],
+ "standing_nights": [
+  {
+   "name": "one family down the ladder",
+   "nights": [
+    {
+     "mccormick": 0,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -1,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": 0,
+     "raise": "road-restitution-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -1,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": 0,
+     "raise": "road-restitution-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": 0,
+     "raise": "",
+     "warnings": [
+      "Word from the Linjat yard: the McCormicks are coming for what is theirs. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": 0,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": 0,
+     "raise": "",
+     "warnings": [
+      "Word from the Linjat yard: the McCormicks are coming for what is theirs. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": 0,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -4,
+     "jade": 0,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -4,
+     "jade": 0,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     }
+    },
+    {
+     "mccormick": 0,
+     "jade": 0,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "two families at once",
+   "nights": [
+    {
+     "mccormick": -2,
+     "jade": -2,
+     "raise": "road-restitution-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": -2,
+     "raise": "road-restitution-jade",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -2,
+     "jade": -2,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": -3,
+     "raise": "",
+     "warnings": [
+      "Word from the Linjat yard: the McCormicks are coming for what is theirs. Tomorrow night.",
+      "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": -3,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": -3,
+     "raise": "road-retaliation-jade",
+     "warnings": [
+      "Word from the Linjat yard: the McCormicks are coming for what is theirs. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": true,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -3,
+     "jade": -3,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [
+      "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -4,
+     "jade": -4,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -4,
+     "jade": -4,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -4,
+     "jade": -3,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": true,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -1,
+     "jade": -3,
+     "raise": "road-retaliation-jade",
+     "warnings": [],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": -1,
+     "jade": -3,
+     "raise": "",
+     "warnings": [
+      "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+     ],
+     "warned": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     }
+    }
+   ]
+  },
+  {
+   "name": "a vendetta holds the night",
+   "nights": [
+    {
+     "mccormick": -4,
+     "jade": -2,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": false
+     },
+     "demanded": {}
+    },
+    {
+     "mccormick": -4,
+     "jade": -2,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": false
+     },
+     "demanded": {}
+    },
+    {
+     "mccormick": -4,
+     "jade": -3,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [
+      "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+     ],
+     "warned": {
+      "jade_lantern_network": true
+     },
+     "demanded": {}
+    },
+    {
+     "mccormick": -4,
+     "jade": -3,
+     "raise": "road-retaliation-mccormick",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": true
+     },
+     "demanded": {}
+    },
+    {
+     "mccormick": 0,
+     "jade": -3,
+     "raise": "road-retaliation-jade",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": false,
+      "mccormick_family": false
+     },
+     "demanded": {
+      "mccormick_family": false
+     }
+    },
+    {
+     "mccormick": 0,
+     "jade": -3,
+     "raise": "",
+     "warnings": [
+      "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+     ],
+     "warned": {
+      "jade_lantern_network": true,
+      "mccormick_family": false
+     },
+     "demanded": {
+      "mccormick_family": false
+     }
+    },
+    {
+     "mccormick": 2,
+     "jade": -2,
+     "raise": "road-restitution-jade",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": false,
+      "mccormick_family": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": true
+     }
+    },
+    {
+     "mccormick": 2,
+     "jade": 2,
+     "raise": "",
+     "warnings": [],
+     "warned": {
+      "jade_lantern_network": false,
+      "mccormick_family": false
+     },
+     "demanded": {
+      "mccormick_family": false,
+      "jade_lantern_network": false
+     }
+    }
+   ]
+  }
+ ]
 }

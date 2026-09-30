@@ -12,6 +12,9 @@ extends Control
 ##     paper, missing ones as a "?" with a hint, the key ones marked, and where
 ##     the case is waiting. A clue is its flag in the save (`PiritoriStory`),
 ##     so the board cannot claim anything the player did not do.
+##   THE FAMILIES (v4.67, H5: `renderFamilies()`) — a card per family: its
+##     rung and number, what that rung does, its ground, and the warning while
+##     one stands. The police are not a family, and the board says so.
 ##
 ## Story words (titles, premises, clue texts) are authored content and read in
 ## English, like every other scene's prose; the ledger's own words are UI and
@@ -80,6 +83,7 @@ func _rebuild() -> void:
 	side.size_flags_stretch_ratio = 1.0
 	_box.add_child(side)
 	_add_case_board(side)
+	_add_families(side)
 
 
 func _add_briefings(to: VBoxContainer) -> void:
@@ -218,6 +222,98 @@ func _add_case_board(to: VBoxContainer) -> void:
 	var fl := _label(foot, 14, PiritoriPalette.TEXT)
 	fl.name = "CaseFoot"
 	col.add_child(fl)
+
+
+## Where Aatami stands with each family, and what that rung does (web
+## `renderFamilies`). Family names, rung effects and warnings are canon and
+## read in English; the board's own words are UI and are translated.
+func _add_families(to: VBoxContainer) -> void:
+	if ContentRegistry.families_list().is_empty():
+		return
+	var panel := PanelContainer.new()
+	panel.name = "FamilyBoard"
+	panel.add_theme_stylebox_override("panel", PiritoriChrome.margins(PiritoriChrome.panel(), 16, 12))
+	to.add_child(panel)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 8)
+	panel.add_child(col)
+	col.add_child(_label(tr("standing.eyebrow"), 13, PiritoriPalette.TEXT_FAINT))
+	for s in PiritoriStanding.standings():
+		col.add_child(_family_card(s))
+	var police := _label(tr("standing.police"), 13, PiritoriPalette.TEXT_DIM)
+	police.name = "PoliceLine"
+	col.add_child(police)
+
+
+func _family_card(s: Dictionary) -> Control:
+	var family: Dictionary = s["family"]
+	var rung: Dictionary = s["rung"]
+	var rid := String(rung.get("id", ""))
+	var value := int(s["value"])
+	var card := PanelContainer.new()
+	card.name = "Family_" + String(family.get("id", ""))
+	card.set_meta("family", String(family.get("id", "")))
+	card.set_meta("rung", rid)
+	card.set_meta("value", value)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0, 0, 0, 0)
+	sb.border_color = PiritoriPalette.LINE_STRONG
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(6)
+	sb.content_margin_left = 14
+	sb.content_margin_right = 14
+	sb.content_margin_top = 12
+	sb.content_margin_bottom = 12
+	card.add_theme_stylebox_override("panel", sb)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	card.add_child(col)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	var name_l := _label(String(family.get("name", "")), 20, PiritoriPalette.TEXT)
+	name_l.theme_type_variation = PiritoriChrome.TITLE
+	name_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(name_l)
+	# The rung is a word in a ruled box, like a mission's state: the colour
+	# repeats the word, it never carries it alone.
+	var tag_col := _rung_color(rid)
+	var tag_box := PanelContainer.new()
+	var tsb := StyleBoxFlat.new()
+	tsb.bg_color = Color(0, 0, 0, 0)
+	tsb.border_color = PiritoriChrome.readable(tag_col, PiritoriPalette.PANEL)
+	tsb.set_border_width_all(1)
+	tsb.set_corner_radius_all(2)
+	tsb.content_margin_left = 7
+	tsb.content_margin_right = 7
+	tsb.content_margin_top = 3
+	tsb.content_margin_bottom = 3
+	tag_box.add_theme_stylebox_override("panel", tsb)
+	tag_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var tag := _label("%s · %s%d" % [tr("standing.rung_%s" % rid), "+" if value > 0 else "", value], 12, tag_col)
+	tag.autowrap_mode = TextServer.AUTOWRAP_OFF
+	tag.name = "Rung"
+	tag_box.add_child(tag)
+	row.add_child(tag_box)
+	col.add_child(row)
+
+	col.add_child(_label(String(rung.get("effect", "")), 14, PiritoriPalette.TEXT))
+	var ground := PackedStringArray()
+	for a in family.get("ground", []):
+		ground.append(String(ContentRegistry.anchor(String(a)).get("label", a)))
+	col.add_child(_label(tr("standing.ground") % ", ".join(ground), 13, PiritoriPalette.TEXT_DIM))
+	if bool(s.get("warned", false)):
+		var w := _label(String(family.get("warning", "")), 14, PiritoriPalette.LANTERN)
+		w.name = "Warning"
+		col.add_child(w)
+	return card
+
+
+func _rung_color(rid: String) -> Color:
+	match rid:
+		"friendly": return PiritoriPalette.CASH_UP
+		"insulted", "retaliating", "vendetta": return PiritoriPalette.LANTERN
+	return PiritoriPalette.TEXT_DIM
 
 
 func _clue_card(c: Dictionary) -> Control:

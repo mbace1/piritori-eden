@@ -23,7 +23,10 @@ extends RefCounted
 ##   - A fight is the ordinary battle with no mission behind it and no block
 ##     advance (the shell marks it a road fight).
 ##   - An event with a `trigger` belongs to the story: it is never rolled, and
-##     `force` raises it (v4.63, Kello's cut found out).
+##     `force` raises it (v4.63, Kello's cut found out). A `repeatable` one (a
+##     family's demand or retaliation, v4.67) can be raised again.
+##   - A road fight can carry its own stakes (`fight.win` / `fight.lose`),
+##     paid when the fight ends (v4.67).
 ##
 ## No clock, no DOM, no randomness of its own: everything reads and writes
 ## `GameState.road`, which is saved under the web's own key and shape.
@@ -203,12 +206,14 @@ static func roll(journey: Dictionary) -> Dictionary:
 ## Raise a story-triggered event now (web `forceRoad`, v4.63), unless one is
 ## already waiting or it has been seen. The story raises it; the road never
 ## rolls it (`_candidates` skips a `trigger`). Returns whether it was raised.
+## A `repeatable` event (a family's demand or retaliation, v4.67) can come
+## again; everything else is seen once per campaign.
 static func force(event_id: String, anchor_id: String = "") -> bool:
 	var r := state()
 	if r.get("pending", null) != null:
 		return false
 	var event := ContentRegistry.road_event(event_id)
-	if event.is_empty() or (r["seen"] as Array).has(event_id):
+	if event.is_empty() or ((r["seen"] as Array).has(event_id) and not bool(event.get("repeatable", false))):
 		return false
 	var ph := String(event.get("phase", "any"))
 	r["pending"] = {
@@ -274,6 +279,17 @@ static func resolve(choice_id: String) -> Dictionary:
 	GameState.state_changed.emit()
 	return {"ok": true, "event": event, "choice": choice,
 		"start_battle": "" if battle_id == null else String(battle_id)}
+
+
+## A road fight's own stakes (web v4.67 `recordBattleConsequences`): the
+## event's `fight.win` on a win, `fight.lose` otherwise; [] for a road fight
+## with no stakes of its own.
+static func fight_effects(event_id: String, result: String) -> Array:
+	var event: Dictionary = ContentRegistry.road_event(event_id) if event_id != "" else {}
+	var fight: Variant = event.get("fight", null)
+	if typeof(fight) != TYPE_DICTIONARY:
+		return []
+	return (fight as Dictionary).get("win", []) if result == "win" else (fight as Dictionary).get("lose", [])
 
 
 ## The answered event, kept until the player reads the outcome and walks on.

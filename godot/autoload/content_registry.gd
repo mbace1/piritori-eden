@@ -18,6 +18,9 @@ const STORY_PATH := "res://data/act1-story-v1.json"
 ## Act I v4.65 (H2 of The Long Game): doors — offers on the blocks the spine
 ## leaves free. Templates, not scenes.
 const DOORS_PATH := "res://data/doors-v1.json"
+## Act I v4.67 (H5 of The Long Game): the families' standing — the ladder and
+## the two families it is read for.
+const FAMILIES_PATH := "res://data/families-v1.json"
 
 var map: Dictionary = {}
 var slice: Dictionary = {}
@@ -25,6 +28,7 @@ var art: Dictionary = {}
 var road: Dictionary = {}
 var story: Dictionary = {}
 var doors: Dictionary = {}
+var families: Dictionary = {}
 
 ## Errors collected while loading. Non-empty means the port must not claim to
 ## resolve every referenced ID (§9 acceptance item 8).
@@ -55,6 +59,7 @@ func load_all() -> bool:
 	road = _load_json(ROAD_PATH)
 	story = _load_json(STORY_PATH)
 	doors = _load_json(DOORS_PATH)
+	families = _load_json(FAMILIES_PATH)
 	if errors.size() > 0:
 		return false
 	_index()
@@ -183,6 +188,21 @@ func _verify_references() -> void:
 		var fight: Dictionary = t.get("fight", {}) if typeof(t.get("fight", null)) == TYPE_DICTIONARY else {}
 		if not fight.is_empty() and not _battles.has(String(fight.get("battle", ""))):
 			errors.append("door '%s' fights unknown battle '%s'" % [t.get("id", ""), fight.get("battle", "")])
+
+	# A family is a relationship the save already keeps, stands on the map, and
+	# answers its standing with repeatable triggered road events.
+	var rels: Dictionary = slice.get("campaign", {}).get("starting_state", {}).get("relationships", {})
+	for f in families.get("families", []):
+		var fid := String(f.get("id", ""))
+		if not rels.has(fid):
+			errors.append("family '%s' is not a relationship the save keeps" % fid)
+		for a in f.get("ground", []):
+			if not _anchors.has(String(a)):
+				errors.append("family '%s' stands on unknown anchor '%s'" % [fid, a])
+		for key in ["restitution_event", "retaliation_event"]:
+			var ev: Dictionary = _road_events.get(String(f.get(key, "")), {})
+			if ev.is_empty() or not bool(ev.get("repeatable", false)):
+				errors.append("family '%s' %s '%s' is not a repeatable road event" % [fid, key, f.get(key, "")])
 
 	var campaign: Dictionary = slice.get("campaign", {})
 	if not _anchors.has(campaign.get("start_anchor_id", "")):
@@ -313,6 +333,21 @@ func door_rules() -> Dictionary:
 
 func door_templates() -> Array:
 	return doors.get("templates", [])
+
+
+## The families' ladder and the families themselves (content/families-v1.json),
+## in canon order.
+func family_rungs() -> Array:
+	return families.get("rungs", [])
+
+func families_list() -> Array:
+	return families.get("families", [])
+
+func family(id: String) -> Dictionary:
+	for f in families_list():
+		if String(f.get("id", "")) == id:
+			return f
+	return {}
 
 ## A mission's woven words (premise, plants) from the story, or {}.
 func story_mission(id: String) -> Dictionary:

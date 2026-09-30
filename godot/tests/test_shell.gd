@@ -71,6 +71,8 @@ func _ready() -> void:
 	await _test_door_fight_through_ui()
 	# Act I v4.66: Aatami fights first, then the crew does.
 	await _test_aatami_through_ui()
+	# Act I v4.67: the families' standing.
+	await _test_standing_through_ui()
 	await _test_sound_switch()
 	await _test_arrival()
 
@@ -1580,6 +1582,155 @@ func _test_aatami_through_ui() -> void:
 	check("  and the fight opens on that beat", scene != null and scene.fight_log.size() == 1
 		and scene.fight_log[0] == beat and beat.contains("edge of the board")
 		and log_label != null and log_label.visible and log_label.text.contains(beat))
+	_shell._show_city()
+	await get_tree().process_frame
+
+
+## web/test/standing-browser.cjs (v4.67, H5): the ledger's family cards, a
+## bill after the night you insult them, paying it, a warning, then the
+## retaliation — on a desktop and on a phone. Fixtures set the scene (the
+## block, where Aatami stands, a family's number, cash); the choice that
+## insults them, the nights that settle it and the answers are real presses.
+func _family_cards() -> Array:
+	return _all_nodes(_shell._world_host).filter(func(n): return n is PanelContainer and n.has_meta("family") \
+		and not n.is_queued_for_deletion())
+
+
+func _open_ledger() -> void:
+	await _press(_shell._commands[3])
+	await get_tree().process_frame
+
+
+func _play_beat(choice_id: String) -> bool:
+	# Fixture: the block's scene revealed, as arriving at the block reveals it.
+	var eid := String(GameState.current_schedule().get("encounter_id", ""))
+	GameState.revealed[eid] = true
+	GameState.revealed[String(ContentRegistry.encounter(eid).get("site_id", ""))] = true
+	_shell._show_city()
+	await get_tree().process_frame
+	_shell._city_map.select(GameState.current_anchor_id)
+	await get_tree().process_frame
+	var enter: Button = null
+	for b in _rail_lit():
+		if String(b.get_meta("next_step", "")) == "enter":
+			enter = b
+	if enter == null:
+		check("the night's scene can be entered", false, str(_rail_lit().map(func(b): return b.text)))
+		return false
+	await _press(enter)
+	var c := _choice_button(choice_id)
+	if c == null or c.disabled:
+		check("%s can be chosen" % choice_id, false)
+		return false
+	await _press(c)
+	return true
+
+
+func _road_button(choice_id: String) -> Button:
+	for n in _all_nodes(_shell._rail):
+		if n is Button and String(n.get_meta("road_choice", "")) == choice_id and not n.is_queued_for_deletion():
+			return n
+	return null
+
+
+func _test_standing_through_ui() -> void:
+	print("\nthe families' standing (web v4.67), through the interface")
+	var prior := get_tree().root.size
+	for probe in [["desktop", Vector2i(1280, 800)], ["phone", Vector2i(390, 844)]]:
+		var name: String = probe[0]
+		get_tree().root.size = probe[1]
+		await _fresh_city("piritori")
+		await _open_ledger()
+		var cards := _family_cards()
+		eq_("%s: the ledger shows both families" % name, cards.size(), 2)
+		check("%s: both start neutral" % name, cards.all(func(c): return String(c.get_meta("rung")) == "neutral"))
+		check("%s: the board says the police are not a family" % name, _labels_text().contains(tr("standing.police")))
+		_check_type_floor("%s family board" % name)
+
+		# Day 9's night: stalling the families insults the McCormicks (-1 -> -2).
+		GameState.block_index = 17
+		GameState.day = 9
+		GameState.current_anchor_id = "linjat_yard"
+		GameState.relationships["mccormick_family"] = -1
+		GameState.cash_eur = 200
+		if not await _play_beat("stall"):
+			return
+		check("%s: the night brings their bill" % name, _world_has("road_stage.gd") != null
+			and String(PiritoriRoad.pending_event().get("id", "")) == "road-restitution-mccormick")
+		check("%s: and it reads as theirs" % name, _labels_text().contains("The McCormicks send a bill"))
+		var pay := _road_button("pay")
+		if pay == null:
+			check("%s: the bill can be paid" % name, false)
+			return
+		await _press(pay)
+		var cont := _rail_lit()
+		if cont.size() == 1:
+			await _press(cont[0])
+		check("%s: paying buys them back to wary" % name,
+			int(GameState.relationships["mccormick_family"]) == -1 and GameState.cash_eur == 120,
+			"%s €%d" % [GameState.relationships, GameState.cash_eur])
+
+		# Retaliating: a warning one night, the McCormicks the next.
+		GameState.block_index = 17
+		GameState.day = 9
+		GameState.current_anchor_id = "linjat_yard"
+		GameState.relationships["mccormick_family"] = -2
+		GameState.relationships["jade_lantern_network"] = 0
+		GameState.standing = {"warned": {}, "demanded": {"mccormick_family": true}}
+		GameState.resolved_encounters.erase("enc-family-calls")
+		GameState.road["pending"] = null
+		if not await _play_beat("stall"):
+			return
+		check("%s: retaliating, first they warn you" % name,
+			int(GameState.relationships["mccormick_family"]) == -3
+			and bool(GameState.standing["warned"].get("mccormick_family", false))
+			and PiritoriRoad.pending_event().is_empty() and _world_has("road_stage.gd") == null)
+		check("%s: the rail says so the morning after" % name, _rail_named("StandingWarning") != null
+			and _rail_text().contains("Tomorrow night"))
+		await _open_ledger()
+		var mc: Node = null
+		for c in _family_cards():
+			if String(c.get_meta("family")) == "mccormick_family":
+				mc = c
+		var card_text := "" if mc == null else "\n".join(_all_nodes(mc).filter(func(n): return n is Label).map(func(l): return l.text))
+		check("%s: the card says retaliating, and when" % name, mc != null
+			and String(mc.get_meta("rung")) == "retaliating" and card_text.contains("Tomorrow night")
+			and card_text.contains(tr("standing.rung_retaliating") + " · -3"), card_text)
+		var board: Control = _world_has("story_ledger.gd").find_child("FamilyBoard", true, false) \
+			if _world_has("story_ledger.gd") != null else null
+		# The board asks for no more width than a phone has (the web's "no
+		# overflow"): its cards wrap rather than push the screen wider.
+		check("%s: the board fits the screen" % name, board != null
+			and board.get_combined_minimum_size().x <= _shell.get_viewport_rect().size.x,
+			"%s in %s" % [board.get_combined_minimum_size(), _shell.get_viewport_rect()] if board != null else "none")
+
+		GameState.block_index = 19
+		GameState.day = 10
+		GameState.current_anchor_id = "sornainen_harbour"
+		if not await _play_beat("let-it-go"):
+			return
+		_shell._show_city()
+		await get_tree().process_frame
+		check("%s: the next night they come" % name, _world_has("road_stage.gd") != null
+			and String(PiritoriRoad.pending_event().get("id", "")) == "road-retaliation-mccormick")
+		var stand := _road_button("stand")
+		check("%s: alone, Aatami cannot stand against them" % name, stand != null and stand.disabled)
+		if name == "phone":
+			var debt := GameState.debt_eur
+			var take := _road_button("take-it")
+			if take != null:
+				await _press(take)
+			check("phone: letting them take it costs stock and debt", GameState.debt_eur == debt + 60
+				and GameState.has_flag("took-the-hit"))
+			cont = _rail_lit()
+			if cont.size() == 1:
+				await _press(cont[0])
+			await _open_ledger()
+			check("phone: the card still reads retaliating, the warning spent", _family_cards().any(func(c):
+				return String(c.get_meta("family")) == "mccormick_family" and String(c.get_meta("rung")) == "retaliating")
+				and not bool(GameState.standing["warned"].get("mccormick_family", true)))
+	get_tree().root.size = prior
+	await get_tree().process_frame
 	_shell._show_city()
 	await get_tree().process_frame
 

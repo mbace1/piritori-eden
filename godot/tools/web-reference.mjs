@@ -4,7 +4,8 @@
  * match exactly.
  *
  * The road (v4.58), Toko's bowl (v4.61), Kello's cut (v4.63), the doors
- * (v4.65) and who takes the board (v4.66) are deterministic from the save:
+ * (v4.65), who takes the board (v4.66) and the families' standing (v4.67)
+ * are deterministic from the save:
  * the road rolls FNV-1a over contentId|block|label (`deterministicRoll` in
  * web/js/v3/state.js) and the board prices come from `market/model.mjs`'s
  * seeded xmur3 + mulberry32. A port that is "close" is a different road and a
@@ -33,6 +34,7 @@ const {
 const { createBattleState } = await mod('battle.js');
 const { offerDoors, takeDoor, isDoorBlock, escalation } = await mod('doors.js');
 const { settleCut } = await mod('story.js');
+const { rungOf, settleStanding } = await mod('standing.js');
 const { turnPlan } = await mod('chapter.js');
 const { rollRoad, resolveRoad, choiceOpen, clockLabel } = await mod('road.js');
 const { board } = await mod('board.js');
@@ -43,6 +45,7 @@ const map = await json('map/kallio-era1-2003-v1.json');
 const roadEvents = await json('content/road-events-v1.json');
 const story = await json('content/act1-story-v1.json');
 const doorsCanon = await json('content/doors-v1.json');
+const families = await json('content/families-v1.json');
 const data = {
   content,
   encounters: new Map(content.encounters.map(e => [e.id, e])),
@@ -223,25 +226,72 @@ for (const [hired, stepped] of [[0, false], [1, false], [2, false], [3, false], 
 // 7. The whole ten-day chapter, walked the way web/test/doors.mjs walks it:
 // every block, the first door taken on a free block, the last open choice
 // that starts no fight. What the web took, block by block, and where the
-// road points at the end.
+// road points at the end. The families are loaded, as they are in the game
+// (v4.67): a walk that insults one closes its doors on the next free block.
 {
+  const walk = { ...data, families };
   const w = createState(content);
   ref.chapter_walk = [];
   for (let guard = 0; guard < 40 && currentSchedule(w, content); guard += 1) {
     let door = '';
     if (isDoorBlock(w, content) && !w.doors.taken[w.scheduleIndex]) {
-      const offers = offerDoors(w, data, doorsCanon);
-      door = takeDoor(w, data, doorsCanon, offers[0].template, roadEvents).offer.template;
+      const offers = offerDoors(w, walk, doorsCanon);
+      door = takeDoor(w, walk, doorsCanon, offers[0].template, roadEvents).offer.template;
     }
-    const enc = currentEncounter(w, data);
+    const enc = currentEncounter(w, walk);
     w.selectedAnchor = currentSchedule(w, content).anchor_id;
-    const quiet = [...enc.choices].reverse().find(c => choiceStatus(c, w, data).ok && !c.effects.some(fx => fx.startsWith('start-battle')));
-    chooseEncounter(w, enc, quiet, data);
+    const quiet = [...enc.choices].reverse().find(c => choiceStatus(c, w, walk).ok && !c.effects.some(fx => fx.startsWith('start-battle')));
+    chooseEncounter(w, enc, quiet, walk);
     ref.chapter_walk.push({ block: w.scheduleIndex, door, encounter: enc.id, choice: quiet.id });
-    advanceSchedule(w, data);
+    advanceSchedule(w, walk);
   }
   ref.chapter_walk_end = { cleared: w.chapterCleared, outcome: w.lastEndingOutcome ?? '',
-    forecast: w.flags.find(f => f.startsWith('memory:pasila-forecast:')) ?? '', ending: forecastEnding(w, data)?.id ?? '' };
+    forecast: w.flags.find(f => f.startsWith('memory:pasila-forecast:')) ?? '', ending: forecastEnding(w, walk)?.id ?? '' };
+}
+
+// 8. The families' standing (v4.67). The ladder at every number from +3 to
+// -6; the door boards with a family Wary or worse (its doors never offered)
+// or Friendly (its work always on the board, rolled under `door:favoured`),
+// across ten saves, the three door blocks and with the day's fights spent;
+// and the night's settlement over scripted runs of relationship numbers,
+// both families walked in canon order, one event a night.
+ref.rungs = [];
+for (let v = 3; v >= -6; v -= 1) ref.rungs.push({ value: v, rung: rungOf(v, families).id });
+const standingData = { ...data, families };
+ref.standing_doors = [];
+for (let seed = 0; seed < 10; seed += 1) {
+  for (const block of doorBlocks) {
+    for (const [mc, jade] of [[-1, 0], [0, -2], [2, 0], [0, 2], [2, 2], [-1, 2], [2, -4]]) {
+      for (const fights of [0, 2]) {
+        const d = createState(content);
+        d.contentId = contentIdOf(seed);
+        d.scheduleIndex = block;
+        d.stock.piri = 2;
+        d.relationships.mccormick_family = mc;
+        d.relationships.jade_lantern_network = jade;
+        for (let f = 0; f < fights; f += 1) recordFight(d, content);
+        ref.standing_doors.push({ content_id: d.contentId, block, mccormick: mc, jade, fights,
+          offers: offerDoors(d, standingData, doorsCanon).map(o => ({ template: o.template, anchor: o.anchor })) });
+      }
+    }
+  }
+}
+ref.standing_nights = [];
+for (const [name, nights] of [
+  ['one family down the ladder', [[0, 0], [-1, 0], [-2, 0], [-2, 0], [-1, 0], [-2, 0], [-3, 0], [-3, 0], [-3, 0], [-3, 0], [-4, 0], [-4, 0], [-2, 0], [0, 0]]],
+  ['two families at once', [[-2, -2], [-2, -2], [-2, -2], [-3, -3], [-3, -3], [-3, -3], [-3, -3], [-4, -4], [-4, -4], [-4, -3], [-1, -3], [-1, -3]]],
+  ['a vendetta holds the night', [[-4, -2], [-4, -2], [-4, -3], [-4, -3], [0, -3], [0, -3], [2, -2], [2, 2]]],
+]) {
+  const st = createState(content);
+  const row = { name, nights: [] };
+  for (const [mc, jade] of nights) {
+    st.relationships.mccormick_family = mc;
+    st.relationships.jade_lantern_network = jade;
+    const r = settleStanding(st, families);
+    row.nights.push({ mccormick: mc, jade, raise: r.raise ?? '', warnings: r.warnings,
+      warned: { ...st.standing.warned }, demanded: { ...st.standing.demanded } });
+  }
+  ref.standing_nights.push(row);
 }
 
 const text = JSON.stringify(ref, null, 1) + '\n';
@@ -253,7 +303,7 @@ if (process.argv.includes('--check')) {
     console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
     process.exit(1);
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.fighters.length} lineups, ${ref.chapter_walk.length} blocks walked.`);
+  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.fighters.length} lineups, ${ref.chapter_walk.length} blocks walked, ${ref.standing_doors.length} standing boards, ${ref.standing_nights.length} runs of nights.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);

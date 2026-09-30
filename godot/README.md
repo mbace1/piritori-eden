@@ -53,7 +53,7 @@ godot --headless --path . res://tests/test_locale.tscn       # en/fi/ja
 godot --headless --path . res://tests/test_battle.tscn       # combat model
 godot --headless --path . res://tests/test_battle_ui.tscn    # battle screen
 godot --headless --path . res://tests/test_playthrough.tscn  # the ten-day chapter
-godot --headless --path . res://tests/test_story.tscn        # road, board, story, cut, chapter turn, doors vs the web
+godot --headless --path . res://tests/test_story.tscn        # road, board, story, cut, chapter turn, doors, standing vs the web
 node tools/web-reference.mjs --check                        # the web numbers test_story holds to
 godot --path . res://tools/capture_battle.tscn   # battle screenshot; PIRITORI_SHOT_BATTLE picks the battle id
 godot --path . res://tools/capture.tscn          # write screenshots (needs a GPU)

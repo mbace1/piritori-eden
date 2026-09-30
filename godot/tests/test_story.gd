@@ -1,8 +1,9 @@
 extends Node
 ## The city's new rules — the road (v4.58), sound (v4.59), Toko's counter and
 ## the board (v4.60/v4.61), the Thursday Load (v4.62), Kello's cut (v4.63),
-## the chapter turn (v4.64), the ten-day chapter of spine and doors (v4.65) and
-## Aatami fighting first, then the crew (v4.66) — against the web.
+## the chapter turn (v4.64), the ten-day chapter of spine and doors (v4.65),
+## Aatami fighting first, then the crew (v4.66) and the families' standing
+## (v4.67) — against the web.
 ##
 ## Run: godot --headless --path . res://tests/test_story.tscn
 ##
@@ -80,6 +81,13 @@ func _ready() -> void:
 	# v4.66, mirroring web/test/aatami.mjs.
 	_test_aatami_fights_first()
 	_test_the_lineup_is_the_webs()
+	# v4.67, mirroring web/test/standing.mjs.
+	_test_standing_canon()
+	_test_the_ladder_is_the_webs()
+	_test_standing_doors_are_the_webs()
+	_test_standing_nights_are_the_webs()
+	_test_the_night_settles_standing()
+	_test_standing_events_play()
 	_test_sound()
 	_test_arrival_lines()
 
@@ -1133,6 +1141,208 @@ func _test_the_chapter_walk_is_the_webs() -> void:
 	eq("  pointing where the web's road points", String(GameState.forecast_ending().get("id", "")), String(end.get("ending", "")))
 	check("  and remembering the day-7 look ahead as the web does",
 		GameState.has_flag(String(end.get("forecast", "-"))), String(end.get("forecast", "")))
+
+
+# ── the families' standing (v4.67, web/test/standing.mjs) ─────────────────
+
+func _test_standing_canon() -> void:
+	print("\nthe families' standing in canon (content/families-v1.json)")
+	var ids := PackedStringArray(PiritoriStanding.rungs().map(func(r): return String(r["id"])))
+	eq("the ladder is the GDD's four under Friendly and Neutral", ",".join(ids),
+		"friendly,neutral,wary,insulted,retaliating,vendetta")
+	var falling := true
+	var rs := PiritoriStanding.rungs()
+	for i in range(1, rs.size()):
+		falling = falling and int(rs[i]["min"]) < int(rs[i - 1]["min"])
+	check("each rung is lower than the one above", falling)
+	var rels: Dictionary = ContentRegistry.campaign().get("starting_state", {}).get("relationships", {})
+	eq("two families", PiritoriStanding.families().size(), 2)
+	for f in PiritoriStanding.families():
+		var fid := String(f["id"])
+		check("%s is a relationship the save already keeps" % fid, rels.has(fid))
+		check("%s ground is on the board" % fid, (f["ground"] as Array).all(func(a):
+			return String(ContentRegistry.anchor(String(a)).get("sliceState", "")) == "active"))
+		for key in ["restitution_event", "retaliation_event"]:
+			var e := ContentRegistry.road_event(String(f[key]))
+			check("%s %s is a repeatable triggered event" % [fid, key],
+				String(e.get("trigger", "")) == "standing" and bool(e.get("repeatable", false)))
+			check("  %s always has a way out" % e.get("id", ""),
+				e.get("choices", []).any(func(c): return (c.get("requires", []) as Array).is_empty()))
+			check("  %s has a priced way back up" % e.get("id", ""),
+				e.get("choices", []).any(func(c): return (c.get("effects", []) as Array).has("relationship:%s:+1" % fid)))
+		var r := ContentRegistry.road_event(String(f["retaliation_event"]))
+		check("%s can be a fight, with fighters, inside the day's two" % r.get("id", ""),
+			typeof(r.get("fight", null)) == TYPE_DICTIONARY and r.get("choices", []).any(func(c):
+				return (c.get("effects", []) as Array).any(func(e): return String(e).begins_with("start-battle:")) \
+					and (c.get("requires", []) as Array).has("fighters>=2") \
+					and (c.get("requires", []) as Array).has("fights-today<2")))
+		check("%s offers doors" % fid, PiritoriDoors.templates().any(func(t): return String(t.get("from", "")) == fid))
+	check("the road never rolls a standing event (it is triggered)", ContentRegistry.road_events().filter(func(e):
+		return String(e.get("trigger", "")) == "standing").size() == 4)
+
+
+func _test_the_ladder_is_the_webs() -> void:
+	print("\nthe ladder reads the number the save already has")
+	var bad: Array = []
+	for w in _ref.get("rungs", []):
+		var got := String(PiritoriStanding.rung_of(int(w["value"])).get("id", ""))
+		if got != String(w["rung"]):
+			bad.append("%d reads %s, web %s" % [int(w["value"]), got, w["rung"]])
+	check("every number from +3 to -6 reads the web's rung (%d)" % (_ref.get("rungs", []) as Array).size(),
+		bad.is_empty() and (_ref.get("rungs", []) as Array).size() == 10, str(bad))
+	_fresh()
+	check("everyone starts neutral", PiritoriStanding.standings().all(func(x): return String(x["rung"]["id"]) == "neutral"))
+	GameState.relationships["mccormick_family"] = 2
+	eq("the ladder reads relationships", String(PiritoriStanding.standing_of("mccormick_family")["rung"]["id"]), "friendly")
+	check("an unknown family is no standing", PiritoriStanding.standing_of("the-police").is_empty())
+
+
+func _test_standing_doors_are_the_webs() -> void:
+	print("\ndoors follow standing, board by board as the web rolls them")
+	var rows: Array = _ref.get("standing_doors", [])
+	check("the web rolled standing boards", rows.size() >= 400, str(rows.size()))
+	var bad: Array = []
+	var closed_seen := 0
+	var favoured_missing := 0
+	for w in rows:
+		_at_block(int(w["block"]))
+		# Setup: the save's identity, packs, fights and the two numbers.
+		GameState.content_package_id = String(w["content_id"])
+		GameState.stock["piri"] = 2
+		GameState.relationships["mccormick_family"] = int(w["mccormick"])
+		GameState.relationships["jade_lantern_network"] = int(w["jade"])
+		for f in int(w["fights"]):
+			GameState.record_fight()
+		var got := PiritoriDoors.offer_doors()
+		if _offers_text(got) != _offers_text(w["offers"]):
+			bad.append("%s block %d mc %d jade %d fights %d: %s vs %s" % [w["content_id"], int(w["block"]),
+				int(w["mccormick"]), int(w["jade"]), int(w["fights"]), _offers_text(got), _offers_text(w["offers"])])
+		# One favoured pick a board: with both Friendly, one of them comes first.
+		var any_friendly := false
+		var friendly_on := false
+		for fam in ["mccormick_family", "jade_lantern_network"]:
+			var from_fam := got.filter(func(o): return String(PiritoriDoors.template_of(String(o["template"])).get("from", "")) == fam)
+			var rung := String(PiritoriStanding.standing_of(fam)["rung"]["id"])
+			if rung in ["wary", "insulted", "retaliating", "vendetta"] and not from_fam.is_empty():
+				closed_seen += 1
+			if rung == "friendly":
+				any_friendly = true
+				friendly_on = friendly_on or not from_fam.is_empty()
+		if any_friendly and not friendly_on:
+			favoured_missing += 1
+	check("every board matches, door and anchor, in order (%d)" % rows.size(), bad.is_empty(), str(bad.slice(0, 5)))
+	eq("Wary or worse: their doors are never on the board", closed_seen, 0)
+	eq("Friendly: their work is always on the board", favoured_missing, 0)
+	_at_block(int(_ref.get("door_blocks", [15])[0]))
+	GameState.relationships["mccormick_family"] = -1
+	check("Wary: every one of their doors is closed", PiritoriDoors.templates().filter(func(t):
+		return String(t.get("from", "")) == "mccormick_family").all(func(t): return not PiritoriStanding.door_allowed(t)))
+	GameState.relationships["jade_lantern_network"] = 2
+	check("a Friendly family is favoured", PiritoriStanding.door_favoured({"from": "jade_lantern_network"}))
+	check("a door from nobody is always allowed and never favoured",
+		PiritoriStanding.door_allowed({"from": ""}) and not PiritoriStanding.door_favoured({"from": ""}))
+
+
+func _test_standing_nights_are_the_webs() -> void:
+	print("\nthe night settles standing as the web settles it")
+	var runs: Array = _ref.get("standing_nights", [])
+	check("the web settled runs of nights", runs.size() == 3, str(runs.size()))
+	for run in runs:
+		_fresh()
+		var bad: Array = []
+		for w in run["nights"]:
+			GameState.relationships["mccormick_family"] = int(w["mccormick"])
+			GameState.relationships["jade_lantern_network"] = int(w["jade"])
+			var r := PiritoriStanding.settle()
+			if String(r["raise"]) != String(w["raise"]) or Array(r["warnings"]) != Array(w["warnings"]) \
+					or GameState.standing["warned"] != w["warned"] or GameState.standing["demanded"] != w["demanded"]:
+				bad.append("mc %d jade %d: %s %s vs %s" % [int(w["mccormick"]), int(w["jade"]), r, GameState.standing, w])
+		check("%s: every night's event, warning and bookkeeping (%d)" % [run["name"], (run["nights"] as Array).size()],
+			bad.is_empty(), str(bad))
+
+
+func _test_the_night_settles_standing() -> void:
+	print("\nthe night settles it (standing.js's header)")
+	_fresh()
+	eq("neutral: nothing happens at night", String(PiritoriStanding.settle()["raise"]), "")
+	GameState.relationships["mccormick_family"] = -2
+	eq("insulted: a demand", String(PiritoriStanding.settle()["raise"]), "road-restitution-mccormick")
+	eq("the demand comes once", String(PiritoriStanding.settle()["raise"]), "")
+	GameState.relationships["mccormick_family"] = -1
+	PiritoriStanding.settle()
+	GameState.relationships["mccormick_family"] = -2
+	eq("insult them again, and it comes again", String(PiritoriStanding.settle()["raise"]), "road-restitution-mccormick")
+	GameState.relationships["mccormick_family"] = -3
+	var warn := PiritoriStanding.settle()
+	check("retaliating: first a warning", String(warn["raise"]) == "" and (warn["warnings"] as PackedStringArray).size() == 1
+		and bool(PiritoriStanding.standing_of("mccormick_family")["warned"]))
+	eq("  in the family's own words", String(warn["warnings"][0]), String(PiritoriStanding.families()[0]["warning"]))
+	eq("then, the next night, they come", String(PiritoriStanding.settle()["raise"]), "road-retaliation-mccormick")
+	eq("and warn again before the next time", String(PiritoriStanding.settle()["raise"]), "")
+	GameState.relationships["mccormick_family"] = -5
+	check("vendetta: every night", String(PiritoriStanding.settle()["raise"]) == "road-retaliation-mccormick"
+		and String(PiritoriStanding.settle()["raise"]) == "road-retaliation-mccormick")
+	_fresh()
+	GameState.relationships["mccormick_family"] = -2
+	GameState.relationships["jade_lantern_network"] = -2
+	check("two families at once: two demands arrive on two nights",
+		String(PiritoriStanding.settle()["raise"]) == "road-restitution-mccormick"
+		and String(PiritoriStanding.settle()["raise"]) == "road-restitution-jade")
+	var text := JSON.stringify(GameState.to_dict())
+	GameState.new_campaign()
+	check("  a new campaign forgets the bookkeeping", GameState.standing["demanded"].is_empty())
+	GameState.from_dict(JSON.parse_string(text))
+	check("the bookkeeping survives a reload", bool(GameState.standing["demanded"].get("jade_lantern_network", false)))
+
+	# Through the ordinary night: advance_block settles standing after the cut.
+	_at_block(17)
+	GameState.current_anchor_id = "linjat_yard"
+	GameState.relationships["mccormick_family"] = -2
+	GameState.advance_block()
+	eq("a night that ends insulted raises their bill on the road",
+		String(PiritoriRoad.pending_event().get("id", "")), "road-restitution-mccormick")
+	eq("  where Aatami stands", String(PiritoriRoad.pending().get("to", "")), "linjat_yard")
+	_at_block(17)
+	GameState.relationships["mccormick_family"] = -3
+	GameState.advance_block()
+	check("a night that ends retaliating warns, and raises nothing",
+		PiritoriRoad.pending_event().is_empty() and GameState.standing_warned_block == GameState.block_index
+		and GameState.standing_warnings.size() == 1)
+	_at_block(16)
+	GameState.relationships["mccormick_family"] = -3
+	GameState.advance_block()
+	check("a day that ends settles nothing", GameState.standing["warned"].is_empty() and PiritoriRoad.pending_event().is_empty())
+	# One event a night: a waiting event keeps the family's raise off the road,
+	# and the web's bookkeeping moves anyway.
+	_at_block(17)
+	GameState.relationships["mccormick_family"] = -2
+	PiritoriRoad.force("road-underpass", "piritori")
+	GameState.advance_block()
+	check("one event at a time: a waiting one is not replaced",
+		String(PiritoriRoad.pending_event().get("id", "")) == "road-underpass"
+		and bool(GameState.standing["demanded"].get("mccormick_family", false)))
+
+
+func _test_standing_events_play() -> void:
+	print("\nthe standing events play")
+	_fresh()
+	GameState.relationships["mccormick_family"] = -2
+	GameState.cash_eur = 200
+	check("a demand is raised on the road", PiritoriRoad.force("road-restitution-mccormick", "piritori"))
+	check("paying it buys you back to wary", bool(PiritoriRoad.resolve("pay").get("ok", false))
+		and GameState.cash_eur == 120 and int(GameState.relationships["mccormick_family"]) == -1)
+	check("a repeatable event can come again", PiritoriRoad.force("road-restitution-mccormick", "piritori"))
+	eq("  and waits for an answer", String(PiritoriRoad.pending_event().get("id", "")), "road-restitution-mccormick")
+	_fresh()
+	GameState.road = {"journeys": 0, "since": 0, "seen": ["road-cut-found-out"], "pending": null,
+		"minutes": 0, "minutesBlock": -1, "last": null}
+	check("an ordinary triggered event is still seen once", not PiritoriRoad.force("road-cut-found-out", "piritori"))
+	_fresh()
+	check("alone, Aatami cannot stand against a retaliation", not GameState.meets_requirement("fighters>=2"))
+	eq("a won retaliation: they think better of you",
+		PiritoriRoad.fight_effects("road-retaliation-mccormick", "win"), ["relationship:mccormick_family:+1", "flag:won-a-retaliation"])
+	eq("a lost one: your stock, and debt", PiritoriRoad.fight_effects("road-retaliation-jade", "lose"), ["stock:piri:-2", "debt:+60"])
+	eq("an ordinary road fight has no stakes of its own", PiritoriRoad.fight_effects("road-underpass", "lose"), [])
 
 
 ## The chapter turn (v4.64), mirroring web/test/chapter.mjs.

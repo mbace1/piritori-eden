@@ -21,6 +21,10 @@ extends RefCounted
 ##     encounter does: the door becomes the block's encounter at its anchor.
 ##   - A LATE door opens only at night and closes when the block clock passes
 ##     22:00 (road minutes).
+##   - H5 (v4.67): a family's doors close while it is Wary or worse, and come
+##     first while it is Friendly (`PiritoriStanding`). The favoured pick rolls
+##     `door:favoured` only when a favoured door exists, so with both families
+##     neutral the board rolls exactly as v4.65's did.
 ##   - Answer 25: a bad deal ESCALATES. A choice with `escalates` rolls once
 ##     (`escalate:<door>:<choice>`); on a bad roll the door's fight starts if
 ##     a crew is there to fight it, and if not the door's `fight.lose` is
@@ -98,6 +102,8 @@ static func _eligible(slot: Dictionary) -> Array:
 	for t in templates():
 		if taken.has(String(t.get("id", ""))):
 			continue
+		if not PiritoriStanding.door_allowed(t):
+			continue
 		if bool(t.get("late", false)) and String(slot.get("block", "")) != "night":
 			continue
 		if not GameState.meets_all(t.get("requires", [])):
@@ -125,6 +131,10 @@ static func offer_doors() -> Array:
 	if bool(r.get("fight_door_each_block", false)) \
 			and GameState.fights_today() < int(r.get("fights_per_day_max", 2)):
 		_pick(picked, pool.filter(func(t): return can_fight(t)), "fight")
+	# H5: a Friendly family's work comes first.
+	var favoured := pool.filter(func(t): return PiritoriStanding.door_favoured(t))
+	if not favoured.is_empty() and picked.size() < count:
+		_pick(picked, favoured, "favoured")
 	# One of each kind before a second of any: a board of three sales is a
 	# menu, not a choice.
 	var i := 0
