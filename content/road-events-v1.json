@@ -299,6 +299,194 @@
         {"id": "confront", "label": "Turn round and ask what he wants", "detail": "\"Everybody in Kallio is for sale, son. Somebody has bought you.\" He will not say who. Yet.", "minutes": 20, "effects": ["intel:+1", "flag:someone-bought-aatami"]},
         {"id": "lose-him", "label": "Lose him in the market crowd", "detail": "It takes half an hour. You are not sure it worked.", "minutes": 30, "effects": []}
       ]
+    },
+    {
+      "id": "road-restitution-mccormick",
+      "tier": 1,
+      "phase": "arrival",
+      "trigger": "standing",
+      "repeatable": true,
+      "title": "The McCormicks send a bill",
+      "text": "A cousin you have never seen hands you an envelope with a number written on it and nothing else. The McCormicks are insulted, and insult has a price.",
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay the bill — €80",
+          "detail": "They take it as an apology. Back to wary, which is where you should have stayed.",
+          "minutes": 15,
+          "requires": [
+            "cash>=80"
+          ],
+          "effects": [
+            "cash:-80",
+            "relationship:mccormick_family:+1"
+          ]
+        },
+        {
+          "id": "give-a-name",
+          "label": "Pay them in a name instead",
+          "detail": "Somebody else's corner for your peace. The Jade Lantern will hear about it.",
+          "minutes": 25,
+          "requires": [
+            "intel>=1"
+          ],
+          "effects": [
+            "intel:-1",
+            "relationship:mccormick_family:+1",
+            "relationship:jade_lantern_network:-1"
+          ]
+        },
+        {
+          "id": "tear-it-up",
+          "label": "Tear up the envelope",
+          "detail": "The next thing they send will not be paper.",
+          "minutes": 5,
+          "effects": [
+            "relationship:mccormick_family:-1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "road-restitution-jade",
+      "tier": 1,
+      "phase": "arrival",
+      "trigger": "standing",
+      "repeatable": true,
+      "title": "Mei Lan's invoice",
+      "text": "Mei Lan's cousin catches you at a crossing and presses a printed invoice into your hand. Itemised. The last line is what the Jade Lantern thinks you owe for the insult.",
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay the invoice — €80",
+          "detail": "Mei Lan files it. Back to wary.",
+          "minutes": 15,
+          "requires": [
+            "cash>=80"
+          ],
+          "effects": [
+            "cash:-80",
+            "relationship:jade_lantern_network:+1"
+          ]
+        },
+        {
+          "id": "work-it-off",
+          "label": "Offer to work it off",
+          "detail": "A night of carrying crates for nothing. It counts, and it costs the Jade Lantern nothing.",
+          "minutes": 60,
+          "effects": [
+            "relationship:jade_lantern_network:+1",
+            "pressure:hakaniemi:+1"
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Hand the invoice back",
+          "detail": "The cousin folds it very carefully. That is worse than shouting.",
+          "minutes": 5,
+          "effects": [
+            "relationship:jade_lantern_network:-1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "road-retaliation-mccormick",
+      "tier": 1,
+      "phase": "arrival",
+      "trigger": "standing",
+      "repeatable": true,
+      "title": "The McCormicks come to collect",
+      "text": "They said tomorrow night, and it is tomorrow night. Three of them, between Aatami and his door. They want what they think is theirs, and they want to be seen taking it.",
+      "fight": { "win": ["relationship:mccormick_family:+1", "flag:won-a-retaliation"], "lose": ["stock:piri:-2", "debt:+60"] },
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay them — €120",
+          "detail": "Expensive. It stops tonight, and they think a little better of you for knowing when to.",
+          "minutes": 15,
+          "requires": [
+            "cash>=120"
+          ],
+          "effects": [
+            "cash:-120",
+            "relationship:mccormick_family:+1"
+          ]
+        },
+        {
+          "id": "stand",
+          "label": "Stand with the crew",
+          "detail": "A fight in the park. Win it and they think twice; lose it and they take more than money.",
+          "minutes": 30,
+          "requires": [
+            "fighters>=2",
+            "fights-today<2"
+          ],
+          "effects": [
+            "start-battle:battle-karhupuisto-2v2"
+          ]
+        },
+        {
+          "id": "take-it",
+          "label": "Let them take what they came for",
+          "detail": "They take your stock, and your debt goes up by what they say the rest is worth.",
+          "minutes": 10,
+          "effects": [
+            "stock:piri:-2",
+            "debt:+60",
+            "flag:took-the-hit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "road-retaliation-jade",
+      "tier": 1,
+      "phase": "arrival",
+      "trigger": "standing",
+      "repeatable": true,
+      "title": "The Jade Lantern comes to collect",
+      "text": "The delivery bike stops this time. Two more come round the corner behind it. Nobody says a word about the invoice; nobody has to.",
+      "fight": { "win": ["relationship:jade_lantern_network:+1", "flag:won-a-retaliation"], "lose": ["stock:piri:-2", "debt:+60"] },
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay them — €120",
+          "detail": "It stops tonight. Mei Lan will take your calls again, carefully.",
+          "minutes": 15,
+          "requires": [
+            "cash>=120"
+          ],
+          "effects": [
+            "cash:-120",
+            "relationship:jade_lantern_network:+1"
+          ]
+        },
+        {
+          "id": "stand",
+          "label": "Stand with the crew",
+          "detail": "A fight in the park. Win it and they reconsider; lose it and they take more.",
+          "minutes": 30,
+          "requires": [
+            "fighters>=2",
+            "fights-today<2"
+          ],
+          "effects": [
+            "start-battle:battle-karhupuisto-2v2"
+          ]
+        },
+        {
+          "id": "take-it",
+          "label": "Let them take what they came for",
+          "detail": "They take your stock, and your debt goes up by what they say the rest is worth.",
+          "minutes": 10,
+          "effects": [
+            "stock:piri:-2",
+            "debt:+60",
+            "flag:took-the-hit"
+          ]
+        }
+      ]
     }
   ]
 }

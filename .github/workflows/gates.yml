@@ -146,6 +146,7 @@ jobs:
           node web/test/chapter.mjs
           node web/test/doors.mjs
           node web/test/aatami.mjs
+          node web/test/standing.mjs
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
@@ -214,6 +215,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/aatami-browser.cjs
+      - name: the families' standing (a demand, a warning, a retaliation)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/standing-browser.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

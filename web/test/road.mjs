@@ -7,7 +7,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, restoreState, advanceSchedule, requirementStatus } from '../js/v3/state.js?v=9';
-import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen } from '../js/v3/road.js?v=4';
+import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen } from '../js/v3/road.js?v=5';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const roadEvents = JSON.parse(await readFile(new URL('../../content/road-events-v1.json', import.meta.url)));

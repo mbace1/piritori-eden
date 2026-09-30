@@ -140,7 +140,9 @@ export function forceRoad(state, roadEvents, eventId, anchorId) {
   const r = road(state);
   if (r.pending) return false;
   const event = roadEvents.events.find(e => e.id === eventId);
-  if (!event || r.seen.includes(eventId)) return false;
+  // A `repeatable` event (a family's demand or retaliation, standing.js) can
+  // come again; everything else is seen once per campaign.
+  if (!event || (r.seen.includes(eventId) && !event.repeatable)) return false;
   r.pending = { id: eventId, phase: event.phase === 'any' ? 'arrival' : event.phase, from: null, to: anchorId ?? state.selectedAnchor };
   return true;
 }

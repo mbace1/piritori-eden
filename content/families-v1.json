@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "families-v1",
+  "authority": "The Long Game H5, greenlit 2026-09-29; GDD §16.8's grievance states (Wary, Insulted, Retaliating, Vendetta) with Friendly and Neutral above them. Owner answer 27 (2026-09-30): no corners, so standing moves through choices, doors and fights. Derived from state.relationships; nothing new is saved but a little bookkeeping.",
+  "rungs": [
+    { "id": "friendly", "label": "Friendly", "min": 2, "effect": "Their jobs are offered first." },
+    { "id": "neutral", "label": "Neutral", "min": 0, "effect": "Business only." },
+    { "id": "wary", "label": "Wary", "min": -1, "effect": "Their jobs stop being offered. Their people watch you." },
+    { "id": "insulted", "label": "Insulted", "min": -2, "effect": "They want restitution, in euros, and they will say so." },
+    { "id": "retaliating", "label": "Retaliating", "min": -3, "effect": "They warn you one night and come for you the next." },
+    { "id": "vendetta", "label": "Vendetta", "min": -999, "effect": "They come for you every night until something changes." }
+  ],
+  "families": [
+    {
+      "id": "mccormick_family",
+      "name": "The McCormicks",
+      "ground": ["linjat_yard"],
+      "restitution_event": "road-restitution-mccormick",
+      "retaliation_event": "road-retaliation-mccormick",
+      "warning": "Word from the Linjat yard: the McCormicks are coming for what is theirs. Tomorrow night."
+    },
+    {
+      "id": "jade_lantern_network",
+      "name": "The Jade Lantern",
+      "ground": ["hakaniemi"],
+      "restitution_event": "road-restitution-jade",
+      "retaliation_event": "road-retaliation-jade",
+      "warning": "Mei Lan has stopped answering. A delivery bike has passed your door twice. Tomorrow night."
+    }
+  ]
+}

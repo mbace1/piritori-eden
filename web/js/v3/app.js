@@ -23,8 +23,9 @@ import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=2';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=4';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
+import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=5';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
@@ -1091,6 +1092,7 @@ function renderLedger() {
           </div>
         </section>
         ${renderCaseBoard()}
+        ${renderFamilies()}
       </aside>
     </div>`;
 }
@@ -1351,6 +1353,23 @@ function renderMissions() {
 }
 
 /** THE CASE BOARD (G7): every clue the week can give, found or not. */
+/** H5: where Aatami stands with each family, and what that rung does. */
+function renderFamilies() {
+  if (!data.families) return '';
+  const ground = ids => ids.map(id => data.anchors.get(id)?.label ?? id).join(', ');
+  return `<section class="paper-panel family-board" aria-label="The families">
+    <p class="section-label">THE FAMILIES · STANDING</p>
+    <div class="family-cards">${standings(state, data.families).map(s => `
+      <article class="family-card" data-family="${esc(s.family.id)}" data-rung="${esc(s.rung.id)}">
+        <header><h3>${esc(s.family.name)}</h3><span class="tag rung-${esc(s.rung.id)}">${esc(s.rung.label.toUpperCase())} · ${s.value > 0 ? '+' : ''}${s.value}</span></header>
+        <p>${esc(s.rung.effect)}</p>
+        <p class="dim">Their ground: ${esc(ground(s.family.ground))}</p>
+        ${s.warned ? `<p class="consequence-strip">${esc(s.family.warning)}</p>` : ''}
+      </article>`).join('')}</div>
+    <p class="dim">The police are not a family. They answer heat, not standing.</p>
+  </section>`;
+}
+
 function renderCaseBoard() {
   if (!story.case) return '';
   const board = caseBoard(state, story);
@@ -1412,6 +1431,12 @@ function advanceAndSettle() {
   const cut = settleCut(state, story);
   if (cut.paid) logToast(`Kello's cut: €${cut.paid}.`);
   if (cut.foundOut && forceRoad(state, roadEvents, story.case.cut.found_out_event, state.selectedAnchor)) state.mode = 'road';
+  // H5: the families settle their books at night too.
+  if (data.families) {
+    const settled = settleStanding(state, data.families);
+    for (const w of settled.warnings) logToast(w);
+    if (settled.raise && forceRoad(state, roadEvents, settled.raise, state.selectedAnchor)) state.mode = 'road';
+  }
 }
 
 function renderShop() {
@@ -1837,6 +1862,9 @@ function recordBattleConsequences() {
     }
     applyEffects(state, resultEffects(battle, data), data, `battle:${battle.id}:${battle.result}`);
     if (battle.door) applyEffects(state, doorFightEffects(doors, battle.door, battle.result), data, `door:${battle.door}:${battle.result}`);
+    // A road fight with stakes of its own (a family's retaliation, H5).
+    const roadFight = battle.road ? roadEvents.events.find(e => e.id === battle.road)?.fight : null;
+    if (roadFight) applyEffects(state, battle.result === 'win' ? roadFight.win : roadFight.lose, data, `road:${battle.road}:${battle.result}`);
     // COMBAT.md §9.5.3: the police's default posture is subdue, and its
     // bite is on the fallen — a downed crew member the police take is not
     // merely hurt, they are gone. `taken` can also name a STANDING crew
@@ -2159,6 +2187,7 @@ async function boot() {
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
     story = await loadStory().catch(() => story);
     doors = await loadDoors().catch(() => doors);
+    data.families = await loadFamilies().catch(() => null);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
     registerTaken(state, data, doors); // a taken door is the block's encounter; put it back
@@ -2268,7 +2297,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.66',
+      version: 'v4.67',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

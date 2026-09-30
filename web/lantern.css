@@ -594,3 +594,12 @@ a.paper-button { text-decoration: none; display: inline-flex; align-items: cente
 .chapter-close .pasila-forecast h3 { margin: 2px 0 4px; }
 .chapter-close { max-width: 720px; margin: 24px auto 96px; padding: 22px 20px; }
 @media (max-width: 760px) { .chapter-close { margin: 12px 8px 96px; padding: 18px 16px; } }
+
+/* H5: the families' standing (app.js renderFamilies). */
+.family-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.family-card { border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: grid; gap: 6px; }
+.family-card header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.family-card h3 { margin: 0; font: 700 20px/1.1 var(--display); color: var(--ink); }
+.family-card p { margin: 0; }
+.family-card .rung-friendly { color: var(--cyan); border-color: var(--cyan); }
+.family-card .rung-insulted, .family-card .rung-retaliating, .family-card .rung-vendetta { color: var(--lantern); border-color: var(--lantern); }

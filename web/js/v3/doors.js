@@ -13,6 +13,8 @@
 //   - A door is taken once per chapter. Taking one costs the block, as an
 //     encounter does: the door becomes the block's encounter at its anchor.
 //   - A LATE door closes when the block clock passes 22:00 (road minutes).
+//   - H5: a family's doors close while it is Wary or worse, and come first
+//     while it is Friendly (standing.js; `data.families`, if loaded).
 //   - Answer 25: a bad deal ESCALATES. A choice with `escalates` rolls once;
 //     on a bad roll the door's fight starts if there are enough fighters
 //     (Aatami counts while he still fights, answer 24),
@@ -20,7 +22,8 @@
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { deterministicRoll, requirementStatus, fightsToday, fighters } from './state.js?v=9';
-import { minutesThisBlock } from './road.js?v=4';
+import { minutesThisBlock } from './road.js?v=5';
+import { doorAllowed, doorFavoured } from './standing.js?v=1';
 
 const DOORS_URL = '../../../content/doors-v1.json';
 
@@ -44,6 +47,7 @@ function takenIds(state) {
 function eligible(state, data, doors, slot) {
   const taken = new Set(takenIds(state));
   return doors.templates.filter(t => !taken.has(t.id)
+    && doorAllowed(state, data.families, t)
     && !(t.late && slot.block !== 'night')
     && (t.requires ?? []).every(req => requirementStatus(req, state, data).ok));
 }
@@ -71,6 +75,9 @@ export function offerDoors(state, data, doors) {
   if (rules.fight_door_each_block && fightsToday(state, data.content) < rules.fights_per_day_max) {
     pick(pool.filter(canFight), 'fight');
   }
+  // H5: a Friendly family's work comes first.
+  const favoured = pool.filter(t => doorFavoured(state, data.families, t));
+  if (favoured.length && picked.length < count) pick(favoured, 'favoured');
   // One of each kind before a second of any: a board of three sales is a menu, not a choice.
   for (let i = 0; picked.length < count && i < 12; i += 1) {
     const kinds = new Set(picked.map(t => t.kind));

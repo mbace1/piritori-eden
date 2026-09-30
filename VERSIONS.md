@@ -77,6 +77,24 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.67 — 2026-09-30
+
+**The families' standing (H5).** The Long Game H5, greenlit 2026-09-29. Owner answer 27 (2026-09-30), "Let's forget postin people on the corner, that seems to advanced at this point": corners (H4) are shelved, and standing is built on its own.
+
+- **A ladder you can read.** `content/families-v1.json` holds six rungs: Friendly (≥ 2), Neutral, Wary (−1), Insulted (−2), Retaliating (−3), Vendetta (below that). The four lower rungs are GDD §16.8's. The rung is read off `relationships.mccormick_family` and `relationships.jade_lantern_network`, which choices, doors and fights already move. The ledger shows a card per family: its rung, the number, what that rung does, and its ground. The police are not a family.
+- **Doors follow standing.** A Wary-or-worse family's doors are never on the board. A Friendly family's work is always on it. With both families neutral, the board rolls exactly as v4.65 did (gated).
+- **The night settles it.** `standing.js` `settleStanding`:
+  - Insulted raises a restitution demand, once per fall. Pay €80, pay in a name, work it off for the Jade Lantern, or refuse and slip lower.
+  - Retaliating warns you one night, in the city memory and on the card, then comes the next night. Pay €120, stand with the crew in a fight (it needs `fighters>=2` and `fights-today<2`; win it and they think better of you, lose it and they take your stock and add debt), or let them take it.
+  - Vendetta comes every night.
+  - One event a night; a second family waits its turn.
+- **Repeatable triggered events.** A road event with `repeatable` can be raised again by `forceRoad`; everything else is still seen once. A road fight can carry its own stakes (`fight.win` / `fight.lose`), applied when the fight ends.
+- `road.js` v5, `doors.js` v3, `standing.js` v1, `app.js` v33, `lantern.css` v10. Gates: `standing.mjs` 74 (new), `standing-browser.cjs` 22 (new: desktop and phone, a bill after the night you insult them, paying it, a warning, then the retaliation), `road.mjs` 360 (the four new events).
+
+### Port
+
+Godot: `families-v1.json` (synced), `standing.gd`, doors filtered and favoured by standing, the night settlement, `repeatable` in `force`, road-fight stakes, and the family cards in the ledger.
+
 ## v4.66 — 2026-09-29
 
 **Aatami fights first, then the crew does (H6.1).** Owner answer 24: "Aatami fights in first fights and then has minions do fighting" (COMBAT.md §9.9.1). Owner: "continue the build."
