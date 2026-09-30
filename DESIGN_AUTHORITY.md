@@ -40,6 +40,7 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 23. **Fight rhythm (2026-09-29):** "Fights everyday, depending on the mission. Maybe 2 per day." This replaces the pitch's one-every-2-3-days. Every day offers at least one job that can become a fight, and a day holds at most two fights. Whether a job becomes a fight depends on the job, and it is always briefed. Days 8-10 (doors) follow this now; the authored days 1-7 are re-paced in H6.
 24. **Aatami fights first, then the crew does (2026-09-29):** "Aatami fights in first fights and then has minions do fighting.. these are all in the documentation." COMBAT.md §9.9.1 stands as written: he fights the first battles because he cannot afford crew, then stops, and the withdrawal is the arc. The city battles do not yet put him on the board; that is H6's first item.
 25. **Fights are central and escalate (2026-09-29):** "Fights are central and can escalate easily from bad deals or if you want to play agressive." A bad deal (skimming, lying, staying too long, selling what you saw) can turn into a fight by a roll the forecast warns about. Playing aggressive is always a choice where a fight is on the table.
+27. **No corners for now (2026-09-30):** "Let's forget postin people on the corner, that seems to advanced at this point." H4 (holding corners with crew) is shelved, not cut: no posting, no corner pay. H5 (the families' standing) goes ahead on its own, moved by choices, doors and fights.
 
 ## Owner continuation, 2026-09-13 — art first
 

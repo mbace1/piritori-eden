@@ -1,5 +1,7 @@
 # H4 + H5 build plan: corners, and the families' standing
 
+> **2026-09-30, owner answer 27: corners are shelved** ("Let's forget postin people on the corner, that seems to advanced at this point"). H5 is built on its own. Standing moves through choices, doors and fights, and retaliation hits stock, cash or an exposed crew member. The H4 section below is kept as a record, not a to-do list.
+
 Owner, 2026-09-29: The Long Game is greenlit ("good to go in your order"), and the build continues after v4.66. Answer 25: "Fights are central and can escalate easily from bad deals or if you want to play agressive." This is the plan, not a build.
 
 ## What exists today
@@ -38,10 +40,10 @@ H4 needs it: holding a corner on a family's ground is what moves their standing.
 
 1. `standing.js` (pure): the ladder, the rung effects as data in `content/families-v1.json`, the family cards in the ledger, doors filtered by standing, and quotes by standing. Gates first.
 2. The Insulted, Retaliating and Vendetta events, as triggered road events, with restitution choices.
-3. `corners.js` (pure): posting and recalling, night settlement, bad nights into doors or events, the map marks, and the chapter-turn row.
+3. ~~`corners.js`~~ shelved (answer 27).
 4. Godot port by agent, then one hub release (v4.67).
 
 ## Open until the owner answers
 
 - **26:** what makes Aatami step back. A crew of three is provisional.
-- **27:** does a crew member on a corner stop being a fighter? The recommendation is yes.
+- ~~27~~ answered: no corners for now.
