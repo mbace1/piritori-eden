@@ -77,6 +77,16 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.68 — 2026-09-30
+
+**Aatami steps back at chapter 3, as the GDD says.** Owner answer 26, "It's all in the GDD": in GDD §16 chapter 3, The Supplier, is where he becomes the commander and delegates. He fights through chapters 1 and 2, then steps back for good when chapter 3 opens, with the same one-time beat. `protagonist.steps_back_at_chapter` (3) replaces v4.66's provisional crew-of-three rule. In the current one-chapter build he fights every fight. Answer 28 is also recorded: chapter 2, The Route, stays on the Kallio board.
+
+- `state.js` v10, cascaded. Gates: `aatami.mjs` 21 (chapter 1 with three crew he still fights; chapter 2 he fights; chapter 3 he steps back, for good). `aatami-browser.cjs` 16 (the step-back scene is set in chapter 3).
+
+### Port
+
+Godot: `aatami_fights` reads `state.chapter < protagonist.steps_back_at_chapter`, and the tests move with it.
+
 ## v4.67 — 2026-09-30
 
 **The families' standing (H5).** The Long Game H5, greenlit 2026-09-29. Owner answer 27 (2026-09-30), "Let's forget postin people on the corner, that seems to advanced at this point": corners (H4) are shelved, and standing is built on its own.

@@ -209,15 +209,15 @@ export function crewRecord(state, data, id) {
   return data.crew.get(id) ?? state.hiredCrew[id] ?? (aatami?.id === id ? aatami : null);
 }
 
-/** COMBAT.md §9.9.1, owner answer 24: Aatami fights the first battles,
- *  because he cannot afford a crew, then steps back for good. He steps back
- *  once he can field `steps_back_at_crew` of his own (the withdrawal is
- *  permanent: `memory:aatami-stepped-back`). */
+/** COMBAT.md §9.9.1, owner answers 24 and 26: Aatami fights the first
+ *  battles, then steps back for good. GDD §16 puts the step back where
+ *  chapter 3 (The Supplier) makes him the commander: he fights through
+ *  chapters 1 and 2, and from `steps_back_at_chapter` he calls it instead.
+ *  The withdrawal is permanent (`memory:aatami-stepped-back`). */
 export function aatamiFights(state, content) {
   const aatami = content?.protagonist;
   if (!aatami || state.flags?.includes('memory:aatami-stepped-back')) return false;
-  const able = state.recruited.filter(id => state.crewStatus[id]?.status !== 'missing').length;
-  return able < (aatami.steps_back_at_crew ?? 3);
+  return (state.chapter ?? 1) < (aatami.steps_back_at_chapter ?? 3);
 }
 
 /** Called when a fight is about to start: the first time Aatami can stay

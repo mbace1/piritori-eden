@@ -7,7 +7,7 @@
 // flips them and checks the code follows the data rather than a habit.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, restoreState, attemptChapterEnding } from '../js/v3/state.js?v=9';
+import { createState, restoreState, attemptChapterEnding } from '../js/v3/state.js?v=10';
 import { turnPlan, turnChapter, nextChapter } from '../js/v3/chapter.js?v=1';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));

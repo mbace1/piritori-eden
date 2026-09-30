@@ -2380,8 +2380,8 @@
     "condition": 8,
     "nerve": 6,
     "initial_equipment": ["feature-phone"],
-    "steps_back_at_crew": 3,
-    "authority": "COMBAT.md §9.9.1 and owner answer 24 (2026-09-29): 'Aatami fights in first fights and then has minions do fighting.' He fights while he cannot field a crew of three, then steps back for good; the withdrawal is the arc. The threshold is provisional pending owner question 26.",
+    "steps_back_at_chapter": 3,
+    "authority": "COMBAT.md §9.9.1, owner answer 24 (2026-09-29: 'Aatami fights in first fights and then has minions do fighting') and answer 26 (2026-09-30: 'It's all in the GDD'). GDD §16: chapter 3, The Supplier, is where Aatami becomes the commander and delegates. He fights through chapters 1 and 2, and steps back for good when chapter 3 opens; the withdrawal is the arc.",
     "step_back_beat": "Aatami stays at the edge of the board. He tells them where to stand, and does not go in. From here on, he calls it."
   },
   "chapter_turn": {

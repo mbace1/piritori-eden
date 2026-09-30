@@ -66,7 +66,7 @@ server.listen(0, '127.0.0.1', async () => {
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
       const crew = await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id));
-      const scene = n => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "karhupuisto"; s.recruited = a.slice(0, ${n}); s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "hit-bear-debt", anchor: "karhupuisto" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {}; s.flags = s.flags.filter(f => f !== "memory:aatami-stepped-back");`;
+      const scene = n => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "karhupuisto"; s.recruited = a.slice(0, ${n}); s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "hit-bear-debt", anchor: "karhupuisto" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {}; s.flags = s.flags.filter(f => f !== "memory:aatami-stepped-back"); s.chapter = ${n === 3 ? 3 : 1};`;
       // One hire: Aatami makes the second fighter.
       await fixture(page, scene(1), crew);
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
@@ -82,13 +82,13 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       ok(`${name}: alone he cannot take a two-a-side fight, and the card says so`, await lean.isDisabled() && /needs 2 who can fight/.test(await lean.innerText()));
-      // A crew of three: the first fight he stays out of is a beat.
+      // Chapter 3 (GDD §16, The Supplier): the first fight he stays out of is a beat.
       await fixture(page, scene(3), crew);
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       await lean.click();
       s = await S(page);
-      ok(`${name}: with three hired he steps back`, s.mode === 'battle' && !s.battle.players.some(p => p.id === 'aatami') && s.flags.includes('memory:aatami-stepped-back'));
+      ok(`${name}: in chapter 3 he steps back`, s.mode === 'battle' && !s.battle.players.some(p => p.id === 'aatami') && s.flags.includes('memory:aatami-stepped-back'));
       ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.battle.log.join(' ')));
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       const e = errors();

@@ -8,10 +8,10 @@
 // vendetta every night), raised as repeatable road events.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, restoreState, requirementStatus } from '../js/v3/state.js?v=9';
+import { createState, restoreState, requirementStatus } from '../js/v3/state.js?v=10';
 import { rungOf, standingOf, standings, doorAllowed, doorFavoured, settleStanding } from '../js/v3/standing.js?v=1';
-import { offerDoors } from '../js/v3/doors.js?v=3';
-import { forceRoad, resolveRoad, pendingRoad } from '../js/v3/road.js?v=5';
+import { offerDoors } from '../js/v3/doors.js?v=4';
+import { forceRoad, resolveRoad, pendingRoad } from '../js/v3/road.js?v=6';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
