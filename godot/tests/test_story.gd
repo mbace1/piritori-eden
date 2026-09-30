@@ -871,16 +871,17 @@ func _test_escalation_is_the_webs() -> void:
 		and seen.keys().any(func(k): return String(k).begins_with("battle:")), str(seen.keys()))
 
 
-## web/test/aatami.mjs (H6.1, owner answer 24, COMBAT.md §9.9.1): he fights
-## the first battles because he cannot afford a crew, then steps back for good.
+## web/test/aatami.mjs (H6.1, owner answers 24 and 26, COMBAT.md §9.9.1, GDD
+## §16): he fights through chapters 1 and 2, and steps back for good at
+## chapter 3, The Supplier — a story point, not a crew count.
 func _test_aatami_fights_first() -> void:
-	print("\nAatami fights first, then the crew does (answer 24)")
+	print("\nAatami fights first, then the crew does (answers 24 and 26)")
 	var aatami := ContentRegistry.protagonist()
 	var slots: Array = ContentRegistry.slice.get("crew", [])
 	var crew: Array = slots.map(func(c): return String(c["id"]))
-	check("Aatami is in canon, named, and steps back at a crew of three",
+	check("Aatami is in canon, named, and steps back at chapter 3 (GDD §16, answer 26)",
 		String(aatami.get("id", "")) == "aatami" and bool(aatami.get("named", false))
-		and int(aatami.get("steps_back_at_crew", 0)) == 3)
+		and int(aatami.get("steps_back_at_chapter", 0)) == 3)
 	check("he is not one of the six crew slots", not crew.has("aatami"))
 
 	_fresh()
@@ -906,9 +907,15 @@ func _test_aatami_fights_first() -> void:
 	eq("with one hire he does not step back", GameState.step_back_if_ready(), "")
 
 	GameState.roster = PackedStringArray(crew.slice(0, 3))
-	check("a crew of three: he could stay out", not GameState.aatami_fights())
+	check("a crew of three in chapter 1: he still fights (it is a story point, not a crew count)",
+		GameState.aatami_fights() and GameState.fighters()[0] == "aatami")
+	eq("and does not step back yet", GameState.step_back_if_ready(), "")
+	GameState.chapter = 2
+	check("chapter 2, The Route: he still fights", GameState.aatami_fights())
+	GameState.chapter = 3
+	check("chapter 3, The Supplier: he could stay out", not GameState.aatami_fights())
 	var beat := GameState.step_back_if_ready()
-	check("the first time, he does, and it is a beat",
+	check("the first fight of chapter 3, he does, and it is a beat",
 		beat == String(aatami.get("step_back_beat", "")) and beat != ""
 		and GameState.has_flag("memory:aatami-stepped-back"))
 	eq("the beat plays once", GameState.step_back_if_ready(), "")
@@ -916,7 +923,8 @@ func _test_aatami_fights_first() -> void:
 	# Missing, in the port, is taken by the police: off the roster for good.
 	GameState.arrest(String(crew[0]))
 	GameState.arrest(String(crew[1]))
-	check("the withdrawal is permanent, even short-handed",
+	GameState.chapter = 1
+	check("the withdrawal is permanent, even short-handed and in chapter 1 again",
 		not GameState.aatami_fights() and not GameState.fighters().has("aatami"))
 
 	var text := JSON.stringify(GameState.to_dict())
@@ -930,18 +938,19 @@ func _test_aatami_fights_first() -> void:
 ## tools/web-reference.mjs's lineups: for each crew the web was given, who
 ## fights, the gates, both fights' boards and the beat, all as the web says.
 func _test_the_lineup_is_the_webs() -> void:
-	print("\nwho takes the board is the web's (answer 24)")
+	print("\nwho takes the board is the web's (answers 24 and 26)")
 	var rows: Array = _ref.get("fighters", [])
-	check("the web recorded lineups", rows.size() >= 6, str(rows.size()))
-	var slots: Array = ContentRegistry.slice.get("crew", []).map(func(c): return String(c["id"]))
+	check("the web recorded lineups", rows.size() >= 10, str(rows.size()))
 	var bad: Array = []
 	for w in rows:
 		_fresh()
 		if bool(w["stepped"]):
-			GameState.roster = PackedStringArray(slots.slice(0, 3))
+			GameState.chapter = 3
 			GameState.step_back_if_ready()
+		GameState.chapter = int(w["chapter"])
 		GameState.roster = PackedStringArray(w["hired"])
-		var tag := "%d hired%s" % [(w["hired"] as Array).size(), ", stepped back" if bool(w["stepped"]) else ""]
+		var tag := "%d hired, chapter %d%s" % [(w["hired"] as Array).size(), int(w["chapter"]),
+			", stepped back" if bool(w["stepped"]) else ""]
 		if GameState.aatami_fights() != bool(w["aatami_fights"]):
 			bad.append("%s: aatami fights %s" % [tag, GameState.aatami_fights()])
 		if Array(GameState.fighters()) != Array(w["fighters"]):

@@ -8243,6 +8243,7 @@
  "fighters": [
   {
    "hired": [],
+   "chapter": 1,
    "stepped": false,
    "aatami_fights": true,
    "fighters": [
@@ -8266,6 +8267,7 @@
    "hired": [
     "crew-slot-runner"
    ],
+   "chapter": 1,
    "stepped": false,
    "aatami_fights": true,
    "fighters": [
@@ -8295,6 +8297,7 @@
     "crew-slot-runner",
     "crew-slot-muscle"
    ],
+   "chapter": 1,
    "stepped": false,
    "aatami_fights": true,
    "fighters": [
@@ -8331,9 +8334,11 @@
     "crew-slot-muscle",
     "crew-slot-watcher"
    ],
+   "chapter": 1,
    "stepped": false,
-   "aatami_fights": false,
+   "aatami_fights": true,
    "fighters": [
+    "aatami",
     "crew-slot-runner",
     "crew-slot-muscle",
     "crew-slot-watcher"
@@ -8345,17 +8350,18 @@
    },
    "lineups": {
     "battle-karhupuisto-2v2": [
-     "crew-slot-runner",
-     "crew-slot-muscle"
+     "aatami",
+     "crew-slot-runner"
     ],
     "battle-courtyard-3v3": [
+     "aatami",
      "crew-slot-runner",
-     "crew-slot-muscle",
-     "crew-slot-watcher"
+     "crew-slot-muscle"
     ]
    },
-   "beat": "Aatami stays at the edge of the board. He tells them where to stand, and does not go in. From here on, he calls it.",
+   "beat": "",
    "fighters_after_beat": [
+    "aatami",
     "crew-slot-runner",
     "crew-slot-muscle",
     "crew-slot-watcher"
@@ -8368,6 +8374,109 @@
     "crew-slot-watcher",
     "crew-slot-fixer"
    ],
+   "chapter": 1,
+   "stepped": false,
+   "aatami_fights": true,
+   "fighters": [
+    "aatami",
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ],
+   "requirements": {
+    "fighters>=2": true,
+    "fighters>=3": true,
+    "deployed-crew>=2": true
+   },
+   "lineups": {
+    "battle-karhupuisto-2v2": [
+     "aatami",
+     "crew-slot-runner"
+    ],
+    "battle-courtyard-3v3": [
+     "aatami",
+     "crew-slot-runner",
+     "crew-slot-muscle"
+    ]
+   },
+   "beat": "",
+   "fighters_after_beat": [
+    "aatami",
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ]
+  },
+  {
+   "hired": [
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ],
+   "chapter": 2,
+   "stepped": false,
+   "aatami_fights": true,
+   "fighters": [
+    "aatami",
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ],
+   "requirements": {
+    "fighters>=2": true,
+    "fighters>=3": true,
+    "deployed-crew>=2": true
+   },
+   "lineups": {
+    "battle-karhupuisto-2v2": [
+     "aatami",
+     "crew-slot-runner"
+    ],
+    "battle-courtyard-3v3": [
+     "aatami",
+     "crew-slot-runner",
+     "crew-slot-muscle"
+    ]
+   },
+   "beat": "",
+   "fighters_after_beat": [
+    "aatami",
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ]
+  },
+  {
+   "hired": [
+    "crew-slot-runner"
+   ],
+   "chapter": 3,
+   "stepped": false,
+   "aatami_fights": false,
+   "fighters": [
+    "crew-slot-runner"
+   ],
+   "requirements": {
+    "fighters>=2": false,
+    "fighters>=3": false,
+    "deployed-crew>=2": false
+   },
+   "lineups": {
+    "battle-karhupuisto-2v2": null,
+    "battle-courtyard-3v3": null
+   },
+   "beat": "Aatami stays at the edge of the board. He tells them where to stand, and does not go in. From here on, he calls it.",
+   "fighters_after_beat": [
+    "crew-slot-runner"
+   ]
+  },
+  {
+   "hired": [
+    "crew-slot-runner",
+    "crew-slot-muscle",
+    "crew-slot-watcher"
+   ],
+   "chapter": 3,
    "stepped": false,
    "aatami_fights": false,
    "fighters": [
@@ -8402,6 +8511,7 @@
    "hired": [
     "crew-slot-runner"
    ],
+   "chapter": 1,
    "stepped": true,
    "aatami_fights": false,
    "fighters": [
@@ -8423,6 +8533,7 @@
   },
   {
    "hired": [],
+   "chapter": 1,
    "stepped": true,
    "aatami_fights": false,
    "fighters": [],

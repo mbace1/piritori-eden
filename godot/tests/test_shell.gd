@@ -1515,9 +1515,10 @@ func _test_door_fight_through_ui() -> void:
 		await get_tree().process_frame
 
 
-## web/test/aatami-browser.cjs (answer 24): the bear debt's two-a-side fight
-## with one hire, with none, and with three. Fixtures set the block, who is
-## hired and which door is on the board; the fight starts from a real press.
+## web/test/aatami-browser.cjs (answers 24 and 26): the bear debt's two-a-side
+## fight with one hire, with none, and with three in chapter 3. Fixtures set
+## the block, who is hired, the chapter and which door is on the board; the
+## fight starts from a real press.
 func _aatami_at_the_bear(hired: int) -> Button:
 	await _fresh_city("karhupuisto")
 	var first := int(ContentRegistry.schedule().map(func(e): return bool(e.get("door", false))).find(true))
@@ -1525,6 +1526,7 @@ func _aatami_at_the_bear(hired: int) -> Button:
 	GameState.day = first / 2 + 1
 	for id in ["crew-slot-runner", "crew-slot-watcher", "crew-slot-fixer"].slice(0, hired):
 		GameState.apply_effect("recruit:" + id)
+	GameState.chapter = 3 if hired == 3 else 1
 	GameState.doors = {"offers": {str(first): [{"template": "hit-bear-debt", "anchor": "karhupuisto"},
 		{"template": "gig-rauno-cart", "anchor": "harju"}]}, "taken": {}}
 	GameState.fights_by_day = {}
@@ -1546,7 +1548,7 @@ func _aatami_at_the_bear(hired: int) -> Button:
 
 
 func _test_aatami_through_ui() -> void:
-	print("\nAatami fights first, then the crew does (answer 24), through the interface")
+	print("\nAatami fights first, then the crew does (answers 24 and 26), through the interface")
 	# One hire: Aatami makes the second fighter.
 	var lean := await _aatami_at_the_bear(1)
 	check("with one hire the fight is open (Aatami fights)", lean != null and not lean.disabled)
@@ -1567,14 +1569,14 @@ func _test_aatami_through_ui() -> void:
 	check("alone he cannot take a two-a-side fight, and the card says so",
 		lean != null and lean.disabled and _rail_text().contains("needs 2 who can fight"), _rail_text())
 
-	# A crew of three: the first fight he stays out of is a beat.
+	# Chapter 3, The Supplier: the first fight he stays out of is a beat.
 	lean = await _aatami_at_the_bear(3)
 	if lean == null:
 		return
 	await _press(lean)
 	scene = _world_has("formation_battle.gd")
 	players = scene.fight.get_fighters(Fighter.Side.PLAYER) if scene != null else []
-	check("with three hired he steps back", _shell.mode == _shell.Mode.BATTLE and players.size() == 2
+	check("in chapter 3 he steps back", _shell.mode == _shell.Mode.BATTLE and players.size() == 2
 		and not players.any(func(f): return String(f.fighter_id) == "aatami")
 		and GameState.has_flag("memory:aatami-stepped-back"))
 	var beat := String(ContentRegistry.protagonist().get("step_back_beat", ""))
@@ -1582,6 +1584,7 @@ func _test_aatami_through_ui() -> void:
 	check("  and the fight opens on that beat", scene != null and scene.fight_log.size() == 1
 		and scene.fight_log[0] == beat and beat.contains("edge of the board")
 		and log_label != null and log_label.visible and log_label.text.contains(beat))
+	GameState.chapter = 1
 	_shell._show_city()
 	await get_tree().process_frame
 

@@ -1261,16 +1261,17 @@ func deployed_crew() -> PackedStringArray:
 	return out
 
 
-## COMBAT.md §9.9.1, owner answer 24 (web v4.66 `aatamiFights`): Aatami fights
-## the first battles, because he cannot afford a crew, then steps back for good.
-## He fights while the crew he can field is short of `steps_back_at_crew`, and
-## never again once `memory:aatami-stepped-back` is remembered. The roster holds
-## no one the police took, so its size is the web's recruited-not-missing count.
+## COMBAT.md §9.9.1, owner answers 24 and 26 (web v4.68 `aatamiFights`): Aatami
+## fights the first battles, then steps back for good. GDD §16 puts the step
+## back where chapter 3 (The Supplier) makes him the commander: he fights
+## through chapters 1 and 2, and from `steps_back_at_chapter` he calls it
+## instead. It is a story point, not a crew count. The withdrawal is permanent
+## (`memory:aatami-stepped-back`).
 func aatami_fights() -> bool:
 	var aatami := ContentRegistry.protagonist()
 	if aatami.is_empty() or has_flag("memory:aatami-stepped-back"):
 		return false
-	return roster.size() < int(aatami.get("steps_back_at_crew", 3))
+	return chapter < int(aatami.get("steps_back_at_chapter", 3))
 
 
 ## Called as a fight is about to start (web `stepBackIfReady`): the first time

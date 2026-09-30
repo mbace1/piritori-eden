@@ -192,22 +192,26 @@ for (const t of doorsCanon.templates) {
   }
 }
 
-// 6c. Who takes the board (answer 24, COMBAT.md §9.9.1): Aatami first while
-// he cannot field a crew of three, then the crew; the first fight he can stay
-// out of is a one-time beat, and after it he stays out even short-handed.
-// Each row: the hires, whether he has already stepped back, and what the web
-// says — does he fight, who the fighters are, the fight requirements, the
-// beat a fight starting now would open on, and the lineup of both fights.
+// 6c. Who takes the board (answers 24 and 26, COMBAT.md §9.9.1, GDD §16):
+// Aatami fights through chapters 1 and 2 whatever crew he can field, and
+// from chapter 3 (The Supplier) he stays out; the first fight he can stay out
+// of is a one-time beat, and after it he stays out for good, even if the
+// chapter reads 1 again. Each row: the hires, the chapter, whether he has
+// already stepped back, and what the web says — does he fight, who the
+// fighters are, the fight requirements, the beat a fight starting now would
+// open on, and the lineup of both fights.
 ref.fighters = [];
-for (const [hired, stepped] of [[0, false], [1, false], [2, false], [3, false], [4, false], [1, true], [0, true]]) {
+for (const [hired, chapter, stepped] of [[0, 1, false], [1, 1, false], [2, 1, false], [3, 1, false], [4, 1, false],
+  [3, 2, false], [1, 3, false], [3, 3, false], [1, 1, true], [0, 1, true]]) {
   const f = createState(content);
   if (stepped) {
-    f.recruited = content.crew.slice(0, 3).map(c => c.id); f.deployed = [...f.recruited];
+    f.chapter = 3;
     stepBackIfReady(f, content);
   }
+  f.chapter = chapter;
   f.recruited = content.crew.slice(0, hired).map(c => c.id); f.deployed = [...f.recruited];
   const row = {
-    hired: f.recruited, stepped,
+    hired: f.recruited, chapter, stepped,
     aatami_fights: aatamiFights(f, content),
     fighters: fighters(f, data).map(x => x.id),
     requirements: Object.fromEntries(['fighters>=2', 'fighters>=3', 'deployed-crew>=2'].map(r => [r, requirementStatus(r, f, data).ok])),
