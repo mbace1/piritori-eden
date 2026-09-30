@@ -35,3 +35,17 @@ A high-level pitch covering what comes after Act I. It asks for eight greenlight
 - **H8:** chapter 4 is the Pasila move, and the Era II gate stays shut.
 
 Proposed build order: H7, then H1+H2, then H4+H5, then H3, then H6. Nothing is built until the owner answers.
+
+## The Man Who Never Arrives (2026-09-30), chapter 2's case (H3)
+
+Artifact: https://claude.ai/artifact/1iNaD36dPsmgGhGxozw7v7 (private to the owner).
+
+The pitch is built on GDD §16 (chapter 2, The Route), §7.5 (debt holders) and three seeds already in the game: the day-4 park watch, Kello's reckoning, and table two.
+
+- **The culprit:** Ilmari Saarto, the man in the camel coat. He buys Kallio's debts for Saarto & Paino, a fictional firm that has been doing so since the 1993 crash, and he owns Aatami's debt from day 12.
+- **Chapter 2, days 11–20:** the spine is the GDD's three turns (the first runner, Toko's information market, McCormick obligations), plus the new letterhead on Aatami's debt and the bench where Saarto finally sits down. The recurring line runs on the existing shared routes.
+- **Clues:** nine in all, four of them key.
+- **The case on the bench has four answers:** pay off the paper, take his terms, sell him to the McCormicks, or raid the office for the box.
+- **It plants Dead Money** for chapter 3.
+
+Greenlights R1–R5 are pending.
