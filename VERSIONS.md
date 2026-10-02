@@ -89,6 +89,7 @@ Use resolved impact classifications for presentation; never reapply damage on re
 ### Port
 
 Landed in both builds in this version. Character promotion is now a deliberate two-build change: a candidate must pass visual, rig, animation and in-game QA before either runtime may replace the stand-ins.
+
 ## v4.67 — 2026-09-30
 
 **The families' standing (H5).** The Long Game H5, greenlit 2026-09-29. Owner answer 27 (2026-09-30), "Let's forget postin people on the corner, that seems to advanced at this point": corners (H4) are shelved, and standing is built on its own.
