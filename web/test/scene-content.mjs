@@ -15,10 +15,17 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=33');
+const app=await read('../js/v3/app.js?v=34');
 for(const id of ['cast3d-jaska-v01','cast3d-toko-v01','presenter-arvo-linde-v05']){
  assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
 }
-assert((await read('../index.html')).includes('ACT I · v4.67'));
+assert((await read('../index.html')).includes('ACT I · v4.68'));
+const fight=await read('../fight-module/main.js');
+assert(!fight.includes('loadFighters('),'playable fight routes never load candidate meshes');
+assert(fight.includes('makeActor({placeholder:true},u,world)'),'playable fight routes always build stand-ins');
+for(const page of ['../fight-module/index.html','../bear-path/index.html','../arena-lab/index.html']){
+  assert((await read(page)).includes('main.js?v=35'),'shared stand-in runtime cache token');
+}
+assert((await read('../crew-run/startup.js')).includes('main.js?v=35'),'Night Shift uses the shared stand-in runtime');
 console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers and release marker');
 
