@@ -8,7 +8,7 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
-  read('../v3.css?v=8'),
+  read('../v3.css?v=9'),
   read('../js/v3/app.js?v=33'),
   read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
@@ -24,7 +24,10 @@ assert(html.includes('js/v3/app.js?v=33'));
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
 // v11: main's fighter-scale fix and C.19's import-token pass each moved
 // render3d.js to "v10" with different bytes; the merge is a third file.
-assert(app.includes("./render3d.js?v=11"), 'fight renderer cache token advances with the fix');
+assert(app.includes("./render3d.js?v=12"), 'fight renderer cache token advances with the fix');
+assert(render3d.includes("makeStandIn(unit, scene)"), 'Act I battles use procedural stand-ins');
+assert(!render3d.includes("const unitLoads = units.map"), 'Act I does not load imported character meshes');
+assert(css.includes('.battle-stage .unit-body { visibility: hidden; }'), 'flat character art never appears in playable battles');
 assert(!/\.skeleton\.pose\s*\(/.test(render3d), 'Meshy unit conversion is not collapsed by a bind reset');
 assert(css.includes('min-width: 44px') && css.includes('min-height: 44px'), '44px control floor is declared');
 assert(!/smartphone|app grid/i.test(html), 'shell does not present the market as a smartphone app');
