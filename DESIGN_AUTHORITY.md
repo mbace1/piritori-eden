@@ -9,6 +9,7 @@ Meshy candidates may appear only in explicitly labelled review tooling. A
 candidate does not enter a game because it exists, is rigged or loads: it must
 pass visual proportions/materials, rig deformation, required animation and an
 in-game readability check, then be promoted deliberately in both builds.
+
 ## Owner answers, 2026-09-27 — the city look, travel time and travel events
 
 Asked as numbered questions after the Lantern Noir interface (Act I v4.56):
