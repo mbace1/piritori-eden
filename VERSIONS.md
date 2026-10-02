@@ -77,6 +77,18 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.68 — 2026-10-02
+
+**Stand-ins are the only playable cast.** Owner: "Stand ins should be the only characters used until others are proven to work. Make this to all versions."
+
+- Act I, Fight Module, Bear Path, Arena Laboratory and Night Shift now instantiate deterministic procedural bodies only. The old 2D battle dolls stay hidden while the 3D stand-ins mount, so no legacy character flashes between renders.
+- The shared fight runtime no longer fetches F01/F02. Their meshes remain registered for inspection but are isolated on a page labelled **CANDIDATE REVIEW · NOT IN GAME**, which is no longer linked from the campaign entry.
+- Godot builds the same kind of neutral procedural bodies directly. Its imported role registry remains review evidence, and `USE_APPROVED_CHARACTER_MODELS` is hard-off until a later, explicit production promotion.
+- Cache: `render3d.js?v=12`, `app.js?v=34`, `v3.css?v=9`, shared `fight-module/main.js?v=35`, Night Shift `startup.js?v=9`.
+
+### Port
+
+Landed in both builds in this version. Character promotion is now a deliberate two-build change: a candidate must pass visual, rig, animation and in-game QA before either runtime may replace the stand-ins.
 ## v4.67 — 2026-09-30
 
 **The families' standing (H5).** The Long Game H5, greenlit 2026-09-29. Owner answer 27 (2026-09-30), "Let's forget postin people on the corner, that seems to advanced at this point": corners (H4) are shelved, and standing is built on its own.
