@@ -642,6 +642,7 @@ func _make_stand_in(f: Fighter, side: int) -> Node3D:
 	var seed := absi(String(f.fighter_id).hash())
 	var broad := String(f.role) == "muscle"
 	var body := Node3D.new()
+	body.name = "Body"
 	root.add_child(body)
 
 	var sphere := SphereMesh.new()
@@ -699,6 +700,25 @@ func _make_stand_in(f: Fighter, side: int) -> Node3D:
 		marker_color = SIDE_RED
 	_stand_in_part(root, marker_mesh, Vector3(0, 0.01, 0),
 		Vector3.ONE, marker_color.darkened(0.18))
+
+	# A tiny procedural breathing loop keeps the neutral body alive without
+	# importing a rig or an unapproved clip.
+	var player := AnimationPlayer.new()
+	player.name = "StandInMotion"
+	root.add_child(player)
+	var library := AnimationLibrary.new()
+	var idle := Animation.new()
+	idle.length = 1.6
+	idle.loop_mode = Animation.LOOP_LINEAR
+	var track := idle.add_track(Animation.TYPE_VALUE)
+	idle.track_set_path(track, NodePath("Body:scale"))
+	idle.track_insert_key(track, 0.0, Vector3.ONE)
+	idle.track_insert_key(track, 0.8, Vector3(1.01, 1.02, 0.99))
+	idle.track_insert_key(track, 1.6, Vector3.ONE)
+	library.add_animation("idle", idle)
+	player.add_animation_library("", library)
+	if f.is_active():
+		player.play("idle")
 
 	if not f.is_active():
 		body.rotation_degrees.z = -78.0
