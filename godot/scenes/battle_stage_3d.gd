@@ -58,6 +58,8 @@ static func stage_path(scene_asset_id: String) -> String:
 	if stage_override != "":
 		return String(STAGE_BY_SCENE.get(stage_override, STAGE_FALLBACK))
 	return String(STAGE_BY_SCENE.get(scene_asset_id, STAGE_FALLBACK))
+
+
 ## REVIEW-ONLY MODEL REGISTRY. Playable battles do not instantiate these assets
 ## until a candidate has passed visual, rig, animation and in-game QA. Keeping
 ## the map lets the isolated review tooling and manifest checks continue to
@@ -634,7 +636,7 @@ func _stand_in_part(parent: Node3D, shape: Mesh, at: Vector3,
 ## Neutral, deterministic development body. It deliberately has complete,
 ## conservative human proportions and closed mitten hands: no imported face,
 ## skin texture, garment or rig can reach a playable battle through this path.
-func _make_stand_in(f: Fighter, side: int, index: int) -> Node3D:
+func _make_stand_in(f: Fighter, side: int) -> Node3D:
 	var root := Node3D.new()
 	root.name = "StandIn_%s" % String(f.fighter_id)
 	var seed := absi(String(f.fighter_id).hash())
@@ -653,7 +655,7 @@ func _make_stand_in(f: Fighter, side: int, index: int) -> Node3D:
 		Color("#9B7057"), Color("#795744")
 	]
 	var skin: Color = skin_tones[seed % skin_tones.size()]
-	var hue := float((seed / 7) % 1000) / 1000.0
+	var hue := float((seed >> 3) % 1000) / 1000.0
 	var coat := Color.from_hsv(hue, 0.24, 0.34)
 	if side == Fighter.Side.PLAYER:
 		coat = coat.lerp(Color("#458C81"), 0.38)
@@ -717,7 +719,7 @@ func refresh(acting_id: String = "") -> void:
 		for f in fight.get_fighters(side):
 			if f == null:
 				continue
-			var n := _make_stand_in(f, side, i)
+			var n := _make_stand_in(f, side)
 			n.position = cell_world(f.slot.x, f.slot.y)
 			# Face the other side across the board.
 			n.rotation_degrees.y = 225.0 if side == Fighter.Side.PLAYER else 45.0
