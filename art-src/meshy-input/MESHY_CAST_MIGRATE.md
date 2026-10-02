@@ -11,18 +11,19 @@ Owner rule: **one Meshy template for the whole cast**, then **one** re-export of
 Idle / Attack / BeHit / Dead. No one-off re-rigs (they land on a foreign
 24-joint / no-`Head1` family and tear at ~110–176°).
 
-## Current measured state (2026-09-06)
+## Current measured state (2026-10-02 migrate)
 
 | Check | Result |
 |---|---|
-| Clip source | `art/v3/cast3d/clips/muscle-{idle,attack,behit,dead}-v01.glb` |
-| Compatible body | **none** (SHARED_CLIP_COMPATIBLE empty after Eeri restore) |
-| Pending (13) | **muscle included** + driver, enforcer, fixer, hired, hired-b, jaska, local, runner, street-raver, suited-man, toko, watcher — shared clips not safe on any current body |
+| Clip source | `art/v3/cast3d/clips/muscle-{idle,attack,behit,dead}-v01.glb` (re-exported vs Piritori muscle Meshy rig `01a0fd0f-c73d-71e6-9f57-39fe9c1501b8`) |
+| Compatible body | **muscle** (SHARED_CLIP_COMPATIBLE = muscle; rest drift ~0° vs clips) |
+| Pending (12) | driver, enforcer, fixer, hired, hired-b, jaska, local, runner, street-raver, suited-man, toko, watcher — batch Meshy re-rig 2026-10-02 succeeded per-role but rests still drift 29–179° vs muscle template (auto-rig ≠ shared rest). Blender rest-align still needed to graduate them. |
 | Unrigged | `parka-man` (no skin) — ambient only |
 | Blender | 5.2.1 LTS on Grok Bot box; `art-src/tools/blender_cast_clip_audit.py` |
+| Spend | 77 credits (13×5 rig + 4×3 anim); balance after ~3943. Task ids under `/workspace/meshy-cast-migrate/logs/`. |
 
-Godot / web play shared clips on **no** roles until this migrate lands
-(fight-motion / still bodies meanwhile).
+Godot / web play shared GLB clips on **muscle** only; other roles stay on
+fight-motion / still until a rest-align lands.
 
 ## Do not do before migrate day
 

@@ -192,8 +192,8 @@ function loadUnitModel(data, assetId) {
     if (!url) { reject(new Error(`render3d: no registered asset for '${assetId}'`)); return; }
     loader.load(url, gltf => {
       neutralizeMetalness(gltf.scene);
-      // Discard embedded clips — we never play them (SHARED_CLIP_* empty;
-      // procedural stance only). Preserve the imported skeleton transform:
+      // Discard embedded clips — fight motion comes from CLIP_SOURCES or
+      // fight-motion.js. Preserve the imported skeleton transform:
       // these Meshy GLBs carry a 100x armature/unit conversion, and calling
       // skeleton.pose() collapses a roughly 1.7 m body to about 1 cm.
       gltf.animations.length = 0;
@@ -204,7 +204,7 @@ function loadUnitModel(data, assetId) {
 
 // ── animation ───────────────────────────────────────────────────────────────
 //
-// STATUS 2026-09-07: SHARED_CLIP_* empty; stance frozen; clip0 stripped.
+// STATUS 2026-10-02: SHARED_CLIP_* has muscle; GLB clips play for that role.
 // Plate mode (arenas parked): transparent clear, NO ACES (it turns alpha
 // opaque black), ShadowMaterial ground only, no fog. Opaque slab was
 // painting out the CSS plate after remount/action.
@@ -217,8 +217,8 @@ const CLIP_SOURCES = {
 
 /** Bodies safe to bind CLIP_SOURCES onto — keep in sync with
  *  `port/rig-vectors.mjs` SHARED_CLIP_COMPATIBLE / Godot `_animate` gate. */
-const SHARED_CLIP_ROLES = new Set(); // empty: Eeri muscle overwrite restored 2026-09-06
-const SHARED_CLIP_ASSETS = new Set();
+const SHARED_CLIP_ROLES = new Set(['muscle']);
+const SHARED_CLIP_ASSETS = new Set(['cast3d-muscle-v01']);
 
 let clipCache = null;
 
@@ -264,17 +264,24 @@ function applyClips(model, pose, seed = 0, sharedClips = null, useShared = false
   if (!clip) return null;
   const mixer = new THREE.AnimationMixer(model);
   const action = mixer.clipAction(clip);
-  // Still stance until Meshy migrate: apply one frame and pause. Looping idle
-  // / attack read as a mess (owner 2026-09-07). Dead still clamps at the end.
-  action.play();
   if (pose === 'dead') {
     action.setLoop(THREE.LoopOnce, 1);
     action.clampWhenFinished = true;
-    mixer.update(clip.duration);
+  }
+  action.play();
+  if (useShared) {
+    // Meshy migrate 2026-10-02: muscle (and any future compatible role) loops.
+    if (pose !== 'dead') action.time = (seed % 1000) / 1000 * clip.duration;
   } else {
-    action.time = 0;
-    mixer.update(0);
-    action.paused = true;
+    // Pending roles: procedural deltas on own rest — still freeze to one frame
+    // until those rests are migrated (owner: looping mismatch looked like a mess).
+    if (pose === 'dead') {
+      mixer.update(clip.duration);
+    } else {
+      action.time = 0;
+      mixer.update(0);
+      action.paused = true;
+    }
   }
   return mixer;
 }
