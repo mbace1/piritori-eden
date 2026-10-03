@@ -58,6 +58,13 @@ static func stage_path(scene_asset_id: String) -> String:
 	if stage_override != "":
 		return String(STAGE_BY_SCENE.get(stage_override, STAGE_FALLBACK))
 	return String(STAGE_BY_SCENE.get(scene_asset_id, STAGE_FALLBACK))
+
+
+## REVIEW-ONLY MODEL REGISTRY. Playable battles do not instantiate these assets
+## until a candidate has passed visual, rig, animation and in-game QA. Keeping
+## the map lets the isolated review tooling and manifest checks continue to
+## prove candidates without letting them leak back into the game.
+##
 ## A model PER ROLE. Every unit used to be the muscle recoloured, which made a
 ## 3v3 six copies of one person — the same failure the 2D board had before the
 ## cast sets were registered, arrived at from the opposite direction.
@@ -131,6 +138,12 @@ const UNIT_VARIANTS := {
 ## point (v4.66): he fights with no model or head art of his own yet. The
 ## opposition keeps the loud UNIT_FALLBACK.
 const PLAYER_FALLBACK_ROLE := "hired"
+
+## Owner 2026-10-02: procedural stand-ins are the only playable cast until an
+## imported candidate is explicitly proven. Changing this constant is not
+## enough to enable a mesh: refresh() intentionally builds stand-ins directly,
+## so production promotion requires an explicit reviewed runtime change.
+const USE_APPROVED_CHARACTER_MODELS := false
 
 static func fighter_role(role: String, is_player: bool) -> String:
 	if is_player and not UNIT_BY_ROLE.has(role) and not UNIT_VARIANTS.has(role):
@@ -600,6 +613,120 @@ func _cover_mesh(prop_id: String) -> MeshInstance3D:
 	return m
 
 
+func _stand_in_material(color: Color) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = color
+	mat.roughness = 0.82
+	mat.metallic = 0.0
+	return mat
+
+
+func _stand_in_part(parent: Node3D, shape: Mesh, at: Vector3,
+		size: Vector3, color: Color) -> MeshInstance3D:
+	var part := MeshInstance3D.new()
+	part.mesh = shape
+	part.position = at
+	part.scale = size
+	part.material_override = _stand_in_material(color)
+	part.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	parent.add_child(part)
+	return part
+
+
+## Neutral, deterministic development body. It deliberately has complete,
+## conservative human proportions and closed mitten hands: no imported face,
+## skin texture, garment or rig can reach a playable battle through this path.
+func _make_stand_in(f: Fighter, side: int) -> Node3D:
+	var root := Node3D.new()
+	root.name = "StandIn_%s" % String(f.fighter_id)
+	var seed := absi(String(f.fighter_id).hash())
+	var broad := String(f.role) == "muscle"
+	var body := Node3D.new()
+	body.name = "Body"
+	root.add_child(body)
+
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.5
+	sphere.height = 1.0
+	var box := BoxMesh.new()
+	box.size = Vector3.ONE
+
+	var skin_tones: Array[Color] = [
+		Color("#C8AA8A"), Color("#B88E6D"), Color("#D0B397"),
+		Color("#9B7057"), Color("#795744")
+	]
+	var skin: Color = skin_tones[seed % skin_tones.size()]
+	var hue := float((seed >> 3) % 1000) / 1000.0
+	var coat := Color.from_hsv(hue, 0.24, 0.34)
+	if side == Fighter.Side.PLAYER:
+		coat = coat.lerp(Color("#458C81"), 0.38)
+	elif side == Fighter.Side.OPPOSITION:
+		coat = coat.lerp(Color("#8B4938"), 0.38)
+	var trousers := coat.darkened(0.32)
+	var boots := Color("#252B2C")
+
+	var torso_w := 0.40 if broad else 0.34
+	_stand_in_part(body, box, Vector3(0, 1.34, 0),
+		Vector3(torso_w, 0.52, 0.24), coat)
+	_stand_in_part(body, sphere, Vector3(0, 1.86, 0),
+		Vector3(0.27, 0.31, 0.25), skin)
+	_stand_in_part(body, sphere, Vector3(0, 0.93, 0),
+		Vector3(0.31 if broad else 0.27, 0.20, 0.22), trousers)
+
+	var shoulder_x := torso_w + 0.10
+	for side_x in [-1.0, 1.0]:
+		var arm := _stand_in_part(body, sphere,
+			Vector3(side_x * shoulder_x, 1.30, 0),
+			Vector3(0.12, 0.47, 0.12), coat)
+		arm.rotation_degrees.z = side_x * 7.0
+		_stand_in_part(body, sphere,
+			Vector3(side_x * (shoulder_x + 0.06), 0.84, 0),
+			Vector3(0.13, 0.14, 0.12), skin)
+		_stand_in_part(body, sphere,
+			Vector3(side_x * 0.17, 0.52, 0),
+			Vector3(0.15, 0.48, 0.16), trousers)
+		_stand_in_part(body, box,
+			Vector3(side_x * 0.17, 0.10, -0.035),
+			Vector3(0.20, 0.12, 0.34), boots)
+
+	var marker_mesh := CylinderMesh.new()
+	marker_mesh.height = 0.018
+	marker_mesh.top_radius = 0.43
+	marker_mesh.bottom_radius = 0.43
+	var marker_color := SIDE_THIRD
+	if side == Fighter.Side.PLAYER:
+		marker_color = SIDE_CYAN
+	elif side == Fighter.Side.OPPOSITION:
+		marker_color = SIDE_RED
+	_stand_in_part(root, marker_mesh, Vector3(0, 0.01, 0),
+		Vector3.ONE, marker_color.darkened(0.18))
+
+	# A tiny procedural breathing loop keeps the neutral body alive without
+	# importing a rig or an unapproved clip.
+	var player := AnimationPlayer.new()
+	player.name = "StandInMotion"
+	root.add_child(player)
+	var library := AnimationLibrary.new()
+	var idle := Animation.new()
+	idle.length = 1.6
+	idle.loop_mode = Animation.LOOP_LINEAR
+	var track := idle.add_track(Animation.TYPE_VALUE)
+	idle.track_set_path(track, NodePath("Body:scale"))
+	idle.track_insert_key(track, 0.0, Vector3.ONE)
+	idle.track_insert_key(track, 0.8, Vector3(1.01, 1.02, 0.99))
+	idle.track_insert_key(track, 1.6, Vector3.ONE)
+	library.add_animation("idle", idle)
+	player.add_animation_library("", library)
+	if f.is_active():
+		player.play("idle")
+
+	if not f.is_active():
+		body.rotation_degrees.z = -78.0
+		body.position.y = 0.22
+		body.position.x = -0.42
+	return root
+
+
 func refresh(acting_id: String = "") -> void:
 	_acting_id = acting_id
 	if fight == null or _units == null:
@@ -607,27 +734,17 @@ func refresh(acting_id: String = "") -> void:
 	for c in _units.get_children():
 		c.queue_free()
 	_unit_nodes.clear()
-	var sh := Shader.new()
-	sh.code = RECOLOUR
 	var i := 0
 	for side in [Fighter.Side.PLAYER, Fighter.Side.OPPOSITION]:
 		for f in fight.get_fighters(side):
 			if f == null:
 				continue
-			var path := unit_path(fighter_role(String(f.role), side == Fighter.Side.PLAYER),
-				String(f.fighter_id))
-			if not ResourceLoader.exists(path):
-				continue
-			var n := (load(path) as PackedScene).instantiate()
+			var n := _make_stand_in(f, side)
 			n.position = cell_world(f.slot.x, f.slot.y)
-			n.scale = Vector3(0.60, 0.60, 0.60)
 			# Face the other side across the board.
-			n.rotation_degrees = Vector3(0,
-				225.0 if side == Fighter.Side.PLAYER else 45.0, 0)
+			n.rotation_degrees.y = 225.0 if side == Fighter.Side.PLAYER else 45.0
 			_units.add_child(n)
 			_unit_nodes[f.fighter_id] = n
-			_paint(n, sh, i, f)
-			_animate(n, f)
 			i += 1
 	_rebuild_cover()
 

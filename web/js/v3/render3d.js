@@ -1,5 +1,5 @@
 /**
- * THE 3D BATTLE STAGE — real `.glb` cast rendered in the browser.
+ * THE 3D BATTLE STAGE — procedural stand-ins rendered in the browser.
  *
  * DESIGN_AUTHORITY.md addendum, 2026-08-28: "That ruling only starts AFTER js
  * has feature and asset parity with Godot." Godot's `battle_stage_3d.gd`
@@ -38,6 +38,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from '../../vendor/jsm/loaders/GLTFLoader.js?v=1';
 import { buildFightClip } from './fight-motion.js?v=1';
+import { makeStandIn } from '../../fight-module/stand-in.js?v=8';
 import { assetUrl } from './content.js?v=2';
 import { LANES, totalRows } from './grid.js?v=2';
 import { CELL_M, boardSpan, worldFor, buildStageCamera, fitBoardToArena, resetBoardMetric, positionBattleDOM } from './stage-camera.js?v=5';
@@ -569,60 +570,32 @@ export function mountBattleStage3D(container, battle, data) {
   scene.add(ground);
   addCoverMarkers(scene, battle);
 
-  // Additive, not a replacement: renderBattle() in app.js still draws every
-  // unit's flat legs/torso/head sprite underneath this canvas, so a battle
-  // is still a complete, playable screen the instant a model fails to load
-  // or a browser has no WebGL. `stage3d-ready` only goes on `.battle-stage`
-  // once EVERY unit's real mesh is actually up — CSS then hides the 2D
-  // sprite ART specifically (not the label/track/button around it, which
-  // stays the real hit target and readout either way). A partial failure
-  // — one unit's mesh 404s — leaves 2D art showing for EVERYONE this
-  // battle rather than mixing a rendered body with a blank one. The same
-  // logic extends to the arena: `stage3d-arena` only goes on once the real
-  // arena mesh is up, and only THEN does CSS hide the flat 2D scene image —
-  // a battle with no registered arena (karhupuisto, courtyard) never gets
-  // that class and keeps its real 2D backdrop forever, unchanged.
+  // Character policy is replacement, not fallback: playable battles mount
+  // deterministic procedural stand-ins, and CSS always suppresses the old
+  // flat character drawing. Labels and HTML hit targets remain live above
+  // this canvas. The location plate is separate: `stage3d-arena` still only
+  // hides it after an approved arena mesh has loaded.
   const stage = container.closest('.battle-stage');
   stage?.classList.remove('stage3d-ready', 'stage3d-arena', 'stage3d-pending');
 
   const units = [...battle.players, ...battle.enemies, ...(battle.police ?? [])].filter(unit => unit.alive);
-  const mixers = [];
   resetBoardMetric();
-  const placed = []; // { model, unit } — repositioned after a successful fit
-
-  const clipsReady = loadFightClips(data);
-  const unitLoads = units.map(unit => {
-    const fallback = unit.side === 'player' ? PLAYER_FALLBACK : ENEMY_FALLBACK;
-    const assetId = ROLE_MODEL[unit.role] ?? fallback;
-    return Promise.all([loadUnitModel(data, assetId), clipsReady])
-      .then(([model, sharedClips]) => {
-        // The mount that requested this load may already have been torn
-        // down by a later render before the network resolved.
-        if (myGeneration !== generation) return;
-        const mixer = applyClips(
-          model, poseFor(unit, battle), seedFromId(unit.id),
-          sharedClips, usesSharedGlbClips(assetId, unit.role));
-        if (mixer) mixers.push(mixer);
-        const { x, z } = worldFor(unit.cell);
-        model.scale.setScalar(UNIT_SCALE);
-        model.position.set(x, 0, z);
-        model.rotation.y = unit.side === 'player' ? Math.PI * 0.5 : -Math.PI * 0.5;
-        styleUnitMaterial(model, {
-          seed: seedFromId(unit.id),
-          rimTint: RIM_TINT[unit.side] ?? RIM_TINT.police,
-          // The currently selected unit reads brighter at its edge than the
-          // rest of the field — the nearest thing this build has to
-          // Godot's `is_active()` dim (that distinguishes downed-but-shown
-          // fighters, which this build simply never renders at all).
-          // Stronger team Fresnel so cast is not silhouette-only on the plate.
-          rimGain: unit.id === battle.selectedId ? 1.15 : 0.75,
-        });
-        enableShadows(model);
-        scene.add(model);
-        placed.push({ model, unit });
-      })
-      .catch(err => { console.error(`render3d: '${unit.id}' (${assetId})`, err); throw err; });
+  stage?.classList.add('stage3d-pending');
+  const standIns = units.map(unit => {
+    const actor = makeStandIn(unit, scene);
+    const { x, z } = worldFor(unit.cell);
+    actor.group.position.set(x, 0, z);
+    actor.group.rotation.y = unit.side === 'player' ? Math.PI * 0.5 : -Math.PI * 0.5;
+    const pose = poseFor(unit, battle);
+    actor.play(pose === 'dead' ? 'down' : pose);
+    actor.update(0);
+    return { actor, model: actor.group, unit };
   });
+  const placed = standIns;
+  positionBattleDOM(container, battle);
+  stage?.classList.remove('stage3d-pending');
+  if (placed.length > 0) stage?.classList.add('stage3d-ready');
+
   const stageLoad = loadStageModel(data, battle)
     .then(loaded => {
       if (!loaded || myGeneration !== generation) return;
@@ -652,10 +625,9 @@ export function mountBattleStage3D(container, battle, data) {
     })
     .catch(err => { console.error(`render3d: arena '${battle.sceneAssetId}'`, err); });
 
-  // Re-bind unitLoads to record models for post-fit reposition.
-  // (unitLoads already created above — patch by wrapping placement)
+  // A future approved arena may resize the board; keep stand-ins aligned.
 
-  Promise.all([...unitLoads, stageLoad])
+  Promise.resolve(stageLoad)
     .then(() => {
       if (myGeneration !== generation) return;
       // Units were placed with the pre-fit CELL_M; slide them onto the fitted grid.
@@ -668,8 +640,8 @@ export function mountBattleStage3D(container, battle, data) {
       addCoverMarkers(scene, battle);
       positionBattleDOM(container, battle);
       stage?.classList.remove('stage3d-pending');
-      // Only hide 2D dolls when at least one real mesh is on the board.
-      // Ready-with-zero-bodies left an empty stage (owner: "no characters").
+      // The board remains stand-in-only; flat unit art never replaces it.
+      // Ready-with-zero-bodies still leaves the stage visible for diagnostics.
       if (placed.length > 0) stage?.classList.add('stage3d-ready');
       else stage?.classList.remove('stage3d-ready');
     })
@@ -683,7 +655,7 @@ export function mountBattleStage3D(container, battle, data) {
   const clock = new THREE.Clock();
   function tick() {
     const dt = clock.getDelta();
-    for (const mixer of mixers) mixer.update(dt);
+    for (const { actor } of standIns) actor.update(dt);
     renderer.render(scene, camera);
     if (myGeneration === generation) current.raf = requestAnimationFrame(tick);
   }

@@ -46,6 +46,7 @@ func _ready() -> void:
 	_test_aatami_can_fight()
 	_test_aftermath()
 	_test_every_role_has_a_body()
+	_test_playable_cast_is_parked()
 	_test_battle_stage_matches_manifest()
 	_test_every_stage_exists()
 	_test_unit_variants()
@@ -1182,6 +1183,12 @@ func _test_every_stage_exists() -> void:
 ## but only if somebody looks. The generator can now roll seven roles and the
 ## board maps seven; nothing but this check keeps those two lists equal, and a
 ## missing .glb is a file that exists in a constant and not on disk.
+func _test_playable_cast_is_parked() -> void:
+	print("\nplayable cast stays on procedural stand-ins")
+	check("imported candidates are disabled in every playable Godot battle",
+		not BattleStage3D.USE_APPROVED_CHARACTER_MODELS)
+
+
 func _test_every_role_has_a_body() -> void:
 	print("\nevery role has a body")
 	var missing: PackedStringArray = []
