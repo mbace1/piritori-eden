@@ -17,13 +17,12 @@
  * that skeleton's rest with the source's. Same names, same joint count, torn
  * pelvis. Rest orientation is checked, not just joint names.
  *
- * STATUS 2026-09-06 (corrected same night): the "re-export against live
- * Meshy muscle archive" that landed in cd64cd2 overwrote `muscle-v01` and
- * the four fight clips with a foreign untextured 22-joint/`Head1` body.
- * Owner identified those as **Eeri** assets, not Piritori. Restored the
- * pre-overwrite Piritori muscle (24-joint, textured bomber) + prior clips.
- * SHARED_CLIP_COMPATIBLE is empty again; shared playback stays off in Godot
- * and web until a migrate uses real Piritori Meshy output.
+ * STATUS 2026-10-02: Piritori Meshy cast migrate — muscle re-rigged + four
+ * fight clips (Idle/Attack/BeHit/Dead) re-exported against that rest. Muscle
+ * is SHARED_CLIP_COMPATIBLE again. Batch re-rig of the other 12 pending roles
+ * succeeded as Meshy tasks but rests still drift 29–179° vs the muscle
+ * template (Meshy auto-rig is not a shared-rest template); they stay pending.
+ * Never pull Eeri. USE_STAGE3D_ARENAS stays off.
  *
  *
  * THE ONE EXCEPTION, and it is a real defect rather than a tolerance:
@@ -44,13 +43,13 @@ const OUT = resolve(here, 'vectors/rigs.json');
 const CLIP_REF = 'art/v3/cast3d/clips/muscle-idle-v01.glb';
 
 /** Bodies whose rest + joints match CLIP_REF and may safely play shared clips. */
-const SHARED_CLIP_COMPATIBLE = new Set(); // none — Eeri overwrite restored 2026-09-06
+const SHARED_CLIP_COMPATIBLE = new Set(['muscle']); // Meshy migrate 2026-10-02 — muscle rest matches clips
 
 /** Rigged bodies still on a foreign Meshy rest — known, not a regression.
  *  Re-rig onto the muscle archive rest (~5 Meshy credits each) to graduate. */
 const SHARED_CLIP_PENDING = new Set([
   'driver', 'enforcer', 'fixer', 'hired-b', 'hired', 'jaska', 'local',
-  'muscle', 'runner', 'street-raver', 'suited-man', 'toko', 'watcher',
+  'runner', 'street-raver', 'suited-man', 'toko', 'watcher',
 ]);
 
 /** Known unrigged, and why. Listed rather than silently skipped. */
