@@ -10,11 +10,11 @@ const [indexHtml, html, css, js, manifest] = await Promise.all([
   read('../../art/v3/manifest.json').then(JSON.parse),
 ]);
 
-assert(indexHtml.includes('fighter-test.html?v=449'), 'splash link cache-busts the v4.49 fighter page');
-assert(html.includes('PLAYABLE TEST · v4.49'), 'test is visibly versioned');
+assert(!indexHtml.includes('fighter-test.html'), 'the game splash does not offer the unapproved fighter review');
+assert(html.includes('CANDIDATE REVIEW · NOT IN GAME'), 'the review page says it is not in the game');
 assert(html.includes('fighter-test.css?v=2'), 'changed fighter stylesheet has a fresh cache token');
 assert(html.includes('fighter-test.js?v=3'), 'changed fighter runtime has a fresh cache token');
-assert(html.includes('provisional runtime candidates'), 'provisional status is visible');
+assert(html.includes('Unapproved runtime candidates isolated from every playable Piritori build.'), 'unapproved status is visible');
 assert(html.includes('UPDATED IN v2'), 'the owner-directed proportion/material correction is visible');
 assert(html.includes('NOT FINAL IN THIS TEST'), 'unavailable and non-final work is stated');
 assert(!html.includes('current arm proportions'), 'the corrected v2 arms are no longer listed as unfinished');
