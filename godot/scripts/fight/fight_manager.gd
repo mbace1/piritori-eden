@@ -2134,15 +2134,20 @@ func attack_targets_for(fighter_id: String) -> Array:
 	return _get_attack_targets(f, _get_weapon_data(f.held_weapon_id))
 
 
-## Free cells on this unit's own half-board (§13.3: reposition to a valid free cell).
+## Free cells on the shared board a fighter may reposition onto.
+##
+## Owner ruling (board.gd): crews start in their colour and may move to all
+## coloured areas, including the neutral strip. The old loop was `range(3)`, a
+## leftover from the pre-unified half-board — it silently limited every side to
+## depths 0-2 (the player's home band) and hid the rest of the reachable tiles.
 func free_slots_for(fighter_id: String) -> Array:
 	if not _fighters.has(fighter_id):
 		return []
 	var f: Fighter = _fighters[fighter_id]
 	var out: Array = []
 	for lane in range(FightBoard.lanes):
-		for row in range(3):
-			var slot := Vector2i(lane, row)
+		for depth in range(FightBoard.total_rows()):
+			var slot := Vector2i(lane, depth)
 			if slot != f.slot and _is_slot_free(slot, f.side):
 				out.append(slot)
 	return out
