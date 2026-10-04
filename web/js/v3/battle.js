@@ -627,20 +627,9 @@ export function brace(battle) {
 /**
  * FightManager.free_slots_for(), ported — every unoccupied cell on the
  * WHOLE shared board, not merely adjacent ones and not merely a unit's own
- * half. Godot's own version loops `range(3)` rather than
- * `FightBoard.total_rows()`, which is a leftover from before the board was
- * unified (board.gd's own docstring: "a `range(3)` in the intent scan" was
- * one of four places the three-row assumption hid, three of which were
- * already found and fixed there) — as written it silently limits every
- * fighter, opposition included, to depths 0-2 (the PLAYER's home band).
- * That contradicts the owner ruling both `free_slots_for`'s own comment and
- * board.gd quote outright ("crews start in their colour areas and can move
- * to all coloured areas", "[the neutral rows] are ground a unit can be
- * pushed or repositioned into") and has no adjacency check of its own to
- * fall back on — a reposition here is a placement anywhere free, not a
- * step. This port uses the documented-correct wide range rather than
- * replicating what reads as an unported leftover; flagged here rather than
- * silently diverging.
+ * half. Matches Godot: depths run 0 .. totalRows()-1 so a step can enter the
+ * neutral strip and the far colour. A reposition here is a placement anywhere
+ * free, not a step; adjacency is a separate legal-command question.
  */
 export function validMoveCells(battle, unit = selectedUnit(battle)) {
   if (!unit) return [];

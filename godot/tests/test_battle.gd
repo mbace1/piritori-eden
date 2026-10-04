@@ -73,6 +73,7 @@ func _ready() -> void:
 	_test_sync_fire()
 	_test_desync()
 	_test_anchor_covers_own_back()
+	_test_free_slots_span_the_shared_board()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1833,3 +1834,37 @@ func _test_anchor_covers_own_back() -> void:
 	if oc.size() == 1:
 		eq("and it is one step toward the opposition's own back rank",
 			oc[0], Vector2i(opp.slot.x, opp.slot.y + 1))
+
+
+## Reposition candidates used to stop at depth 2 — a leftover from the old
+## three-row half-board. The shared grid is wider: both home bands and the
+## neutral strip. free_slots_for feeds the reachable tiles on the fight screen,
+## so that leftover hid half the board from a player who wanted to step forward.
+func _test_free_slots_span_the_shared_board() -> void:
+	print("\nfree slots reach the shared board, not only depths 0-2")
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 13)
+	check("the yard opens for free-slot scan", errs.is_empty(), str(errs))
+
+	var player: Fighter = fm.get_fighters(Fighter.Side.PLAYER)[0]
+	var slots: Array = fm.free_slots_for(player.fighter_id)
+	var depths: Dictionary = {}
+	for s in slots:
+		var slot: Vector2i = s
+		depths[slot.y] = true
+	check("free slots exist", not slots.is_empty(), str(slots.size()))
+	check("a free slot past the old range(3) exists",
+		depths.keys().any(func(d): return int(d) >= 3),
+		"depths=%s" % str(depths.keys()))
+
+	var neutral := Vector2i(0, FightBoard.rows)
+	while not fm._is_slot_free(neutral, Fighter.Side.PLAYER) and neutral.x < FightBoard.lanes - 1:
+		neutral.x += 1
+	check("a neutral cell is free to ask about",
+		fm._is_slot_free(neutral, Fighter.Side.PLAYER), str(neutral))
+	var found := false
+	for s in slots:
+		if s == neutral:
+			found = true
+			break
+	check("free_slots_for includes that neutral cell", found, str(neutral))
