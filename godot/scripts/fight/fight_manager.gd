@@ -1752,6 +1752,10 @@ func _score_base(f: Fighter, cmd: Command) -> float:
 			match f.behaviour_package:
 				"runner":  score = 1.8
 				"watcher": score = 1.2
+			# Where to step, not only whether. Every neighbour used to share this
+			# flat number, and the picker then drew among the top three — so a
+			# fighter who had decided to move picked a direction at random.
+			score *= _approach_weight(f, cmd.target_slot)
 
 		Command.Type.STAND_DOWN:
 			# Only when nerve is below personal threshold
@@ -1769,6 +1773,47 @@ func _score_base(f: Fighter, cmd: Command) -> float:
 			score = 0.0
 
 	return maxf(score, 0.0)
+
+
+## How much better a destination is than standing still.
+##
+## Prefer a cell you can attack from. Otherwise prefer the cell that closes
+## the most distance, and penalise one that opens it. Reach is directional, so
+## walking past the other side can mean never attacking again.
+##
+## The fighter is moved, asked, and put back. Nothing else reads `slot` here.
+func _approach_weight(f: Fighter, dest: Vector2i) -> float:
+	var foes: Array = []
+	for other_id in _fighters:
+		var o: Fighter = _fighters[other_id]
+		if o != null and o.side != f.side and o.is_active():
+			foes.append(o)
+	if foes.is_empty():
+		return 1.0
+	var here := _gap_to(f.slot, foes)
+	var there := _gap_to(dest, foes)
+	var was := f.slot
+	f.slot = dest
+	var can_hit := not _get_attack_targets(f, _get_weapon_data(f.held_weapon_id)).is_empty()
+	f.slot = was
+	if can_hit:
+		return 2.5
+	if there < here:
+		return 1.6
+	if there > here:
+		return 0.35
+	return 1.0
+
+
+func _gap_to(slot: Vector2i, foes: Array) -> int:
+	var best := 1 << 30
+	for o_raw in foes:
+		var o: Fighter = o_raw
+		var d := absi(o.slot.x - slot.x) + absi(o.slot.y - slot.y)
+		if d < best:
+			best = d
+	return best
+
 
 ## Returns all commands that are legal for this fighter right now.
 ## Gate §8: AI selects only from this list.

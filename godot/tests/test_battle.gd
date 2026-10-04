@@ -64,6 +64,7 @@ func _ready() -> void:
 	_test_build_3v3()
 	_test_kattilahalli()
 	_test_forecast_before_commitment()
+	_test_reposition_scores_the_direction()
 	_test_attrition_is_not_the_exit()
 	_test_withdraw_ends_it()
 	_test_determinism()
@@ -1467,8 +1468,63 @@ func _test_forecast_before_commitment() -> void:
 ## is unnecessary." GDD §13.10: "Killing every opponent should rarely be the
 ## optimal requirement."
 ##
-## So the gate asserts the shape of the design: attrition alone does not end
-## this fight, and the authored exits do.
+## So the gate asserts the shape of the design: the player cannot eliminate
+## their way out, an opponent stays standing, and the authored exits still end it.
+
+func _nearest_gap(slot: Vector2i, foes: Array) -> int:
+	var best := 1 << 30
+	for o in foes:
+		var foe: Fighter = o
+		var d := absi(foe.slot.x - slot.x) + absi(foe.slot.y - slot.y)
+		if d < best:
+			best = d
+	return best
+
+
+## A fighter who has decided to step used to score every legal neighbour the
+## same flat number, and the picker then chose among the top three at random.
+## So "move" did not mean "close". This pins the direction, not the role bonus.
+func _test_reposition_scores_the_direction() -> void:
+	print("\na move prefers the enemy, not a random neighbour")
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 11)
+	check("the yard opens", errs.is_empty(), str(errs))
+	var saw_pair := false
+	var closes_wins := true
+	var detail := ""
+	for side in [Fighter.Side.PLAYER, Fighter.Side.OPPOSITION]:
+		var foe_side: int = Fighter.Side.OPPOSITION if side == Fighter.Side.PLAYER else Fighter.Side.PLAYER
+		var foes: Array = []
+		for o in fm.get_fighters(foe_side):
+			if o.is_active():
+				foes.append(o)
+		for f in fm.get_fighters(side):
+			if foes.is_empty() or not f.can_act():
+				continue
+			var here := _nearest_gap(f.slot, foes)
+			var closer: FightManager.Command = null
+			var farther: FightManager.Command = null
+			for cmd_raw in fm._get_legal_commands(f):
+				var cmd: FightManager.Command = cmd_raw
+				if cmd.type != FightManager.Command.Type.REPOSITION:
+					continue
+				var there := _nearest_gap(cmd.target_slot, foes)
+				if there < here:
+					closer = cmd
+				elif there > here:
+					farther = cmd
+			if closer == null or farther == null:
+				continue
+			saw_pair = true
+			var sc: float = fm._score_base(f, closer)
+			var sf: float = fm._score_base(f, farther)
+			if sc <= sf:
+				closes_wins = false
+				detail = "%s closer %.3f farther %.3f" % [f.fighter_id, sc, sf]
+	check("somebody can step both toward an enemy and away", saw_pair)
+	check("the step that closes scores higher than the step that opens the gap", closes_wins, detail)
+
+
 func _test_attrition_is_not_the_exit() -> void:
 	print("
 attrition alone does not end the handover (§13.10)")
@@ -1479,10 +1535,24 @@ attrition alone does not end the handover (§13.10)")
 	while fm.result == FightManager.BattleResult.PENDING and rounds < 25:
 		rounds += 1
 		fm.confirm_commands()
-	check("trading blows does not resolve it", fm.result == FightManager.BattleResult.PENDING,
+	# The old assertion was "still PENDING after 25 rounds". It passed because
+	# every legal step scored the same, so neither side closed. With direction
+	# scoring the opposition can wipe the crew. What §13.10 claims is narrower:
+	# the player cannot eliminate their way out. Pauli stands behind a bench
+	# and day-one weapons do not pierce, so an opponent is still standing.
+	check("the player never wins this by elimination",
+		fm.result != FightManager.BattleResult.VICTORY_BREAK
+			and fm.result != FightManager.BattleResult.VICTORY_ROUT,
 		"result=%s" % fm.result)
-	check("and the player is never stuck without an exit",
-		fm.phase == FightManager.Phase.COMMAND, "phase=%s" % fm.phase)
+	var standing := 0
+	for opp in fm.get_fighters(Fighter.Side.OPPOSITION):
+		if opp.is_active():
+			standing += 1
+	check("an opponent is still standing", standing > 0, "standing=%d" % standing)
+	check("and while it is live the player still has an exit",
+		fm.result != FightManager.BattleResult.PENDING
+			or fm.phase == FightManager.Phase.COMMAND,
+		"phase=%s" % fm.phase)
 
 
 func _test_withdraw_ends_it() -> void:
