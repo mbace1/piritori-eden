@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createSession} from '../fight-module/session.js?v=16';
 import {endPlayerPhase,attackTargets,selectAction,playerAttack,validMoveCells} from '../fight-module/resolver.js?v=7';
+import {anchorCoverCells} from '../fight-module/resolver.js?v=7';
+import {createState,setAptitudes} from '../js/v3/state.js?v=9';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 for(const mode of ['mixed','melee','ranged']){
   const s=createSession(content,mode);assert.equal(s.snapshot().units.length,4);assert.equal(s.battle.players[0].equipment,s.battle.enemies[0].equipment);assert.equal(s.battle.players[1].equipment,s.battle.enemies[1].equipment);
@@ -16,3 +18,15 @@ function replay(){const s=createSession(content);for(let n=0;n<40&&s.battle.stat
 console.log('PASS: mirrored fixture, action/item guards, move occupancy, cover, legal enemy fallback, training results and deterministic replay');
 
 
+
+const shield = createSession(content);
+const shieldState = createState(content);
+const front = shield.battle.players[0];
+setAptitudes(shieldState, front.id, ['anchor']);
+shieldState.crewSkills[front.id] = [];
+assert.deepEqual(anchorCoverCells(shield.battle, shieldState, shield.data, front), [{lane: 2, depth: 1}], 'player anchor covers the cell behind, not toward the enemy');
+const oppFront = shield.battle.enemies[0];
+setAptitudes(shieldState, oppFront.id, ['anchor']);
+shieldState.crewSkills[oppFront.id] = [];
+assert.deepEqual(anchorCoverCells(shield.battle, shieldState, shield.data, oppFront), [{lane: 2, depth: 6}], 'opposition anchor covers the cell behind, not toward the enemy');
+console.log('PASS: anchor covers the rank behind them');

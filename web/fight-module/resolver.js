@@ -314,12 +314,13 @@ const MARK_ROUNDS_BASE = 1;
 const MARK_ROUNDS_CALL_IT = 3;
 
 /** Cells this living Anchor is covering — one cell behind, three with take-it.
- *  Godot formula: behind = depth + (player ? 1 : -1). Matched exactly. */
+ *  Behind is this side's own back rank: player depth falls toward 0,
+ *  opposition depth rises. The old sign matched the attack direction. */
 export function anchorCoverCells(battle, state, data, unit) {
   if (!unit?.alive || !state || !data) return [];
   if (!hasAptitude(state, data, unit.id, 'anchor')) return [];
   const { lane, depth } = parseSlotKey(unit.cell);
-  const behind = depth + (unit.side === 'player' ? 1 : -1);
+  const behind = depth + (unit.side === 'player' ? -1 : 1);
   if (behind < 0 || behind >= totalRows()) return [];
   const out = [{ lane, depth: behind }];
   if (skillsOf(state, unit.id).includes(ANCHOR_COVER_WIDE_SKILL)) {

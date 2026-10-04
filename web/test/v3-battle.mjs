@@ -6,7 +6,7 @@ import {
   withdrawBattle, resultEffects, playerAttack, syncAlliesFor, attackTargets,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, POLICE_POSTURE,
 } from '../js/v3/battle.js?v=13';
-import { parseCellFor, slotKey } from '../js/v3/grid.js?v=2';
+import { parseCellFor, slotKey, parseSlotKey, depthOf } from '../js/v3/grid.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const data = {
@@ -244,6 +244,21 @@ console.log('V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command
   st.crewSkills[who] = [];
   const narrow = anchorCoverCells(b, st, data, unit);
   assert.equal(narrow.length, 1, 'anchor covers one cell');
+  const savedCell = unit.cell;
+  const placed = parseSlotKey(unit.cell);
+  unit.cell = slotKey(placed.lane, depthOf(0, true));
+  const playerCover = anchorCoverCells(b, st, data, unit);
+  assert.deepEqual(playerCover, [{ lane: placed.lane, depth: depthOf(0, true) - 1 }],
+    'a player anchor covers one step toward their own back rank');
+  const enemy = b.enemies[0];
+  const enemySlot = parseSlotKey(enemy.cell);
+  enemy.cell = slotKey(enemySlot.lane, depthOf(0, false));
+  setAptitudes(st, enemy.id, ['anchor']);
+  st.crewSkills[enemy.id] = [];
+  const enemyCover = anchorCoverCells(b, st, data, enemy);
+  assert.deepEqual(enemyCover, [{ lane: enemySlot.lane, depth: depthOf(0, false) + 1 }],
+    'an opposition anchor covers one step toward their own back rank');
+  unit.cell = savedCell;
   st.crewSkills[who] = ['take-it'];
   assert.equal(anchorCoverCells(b, st, data, unit).length, 3, 'take-it widens to three');
   st.crewSkills[who] = ['wall'];

@@ -876,8 +876,11 @@ func anchor_cover_cells(f: Fighter) -> Array[Vector2i]:
 	if cid == "" or not GameState.has_aptitude(cid, "anchor"):
 		return out
 
-	# Toward this side's own back rank.
-	var behind := f.slot.y + (1 if f.side == Fighter.Side.PLAYER else -1)
+	# Toward this side's own back rank. The player's end is depth 0, so behind
+	# them is a smaller depth. The opposition's end is the far side, so behind
+	# them is a larger one. The old sign matched the attack direction instead,
+	# and the shield sat on the empty cell toward the enemy.
+	var behind := f.slot.y + (-1 if f.side == Fighter.Side.PLAYER else 1)
 	if behind < 0 or behind >= FightBoard.total_rows():
 		return out
 

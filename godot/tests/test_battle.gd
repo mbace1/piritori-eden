@@ -72,6 +72,7 @@ func _ready() -> void:
 	_test_board_shape()
 	_test_sync_fire()
 	_test_desync()
+	_test_anchor_covers_own_back()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1800,3 +1801,35 @@ func _test_desync() -> void:
 			sync_hits2 += 1
 	eq("still only the one sync from the first chain", sync_hits2, 1)
 
+
+
+## An anchor stands in front of their own people. "Behind" is one step toward
+## that side's back rank: depth falls for the player (their end is 0) and rises
+## for the opposition. The sign used to match the attack direction, so the
+## shield sat on the cell toward the enemy.
+func _test_anchor_covers_own_back() -> void:
+	print("\nan anchor shields the rank behind them")
+	GameState.new_campaign()
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 7)
+	check("the yard opens for the anchor", errs.is_empty(), str(errs))
+
+	var player: Fighter = fm.get_fighters(Fighter.Side.PLAYER)[0]
+	player.slot = Vector2i(2, FightBoard.depth_of(0, true))
+	GameState.set_aptitudes(player.character_id, PackedStringArray(["anchor"]))
+	GameState.crew_skills[player.character_id] = PackedStringArray()
+	var cells := fm.anchor_cover_cells(player)
+	check("a player anchor on the front rank covers one cell", cells.size() == 1, str(cells))
+	if cells.size() == 1:
+		eq("and it is one step toward the player's own back rank",
+			cells[0], Vector2i(player.slot.x, player.slot.y - 1))
+
+	var opp: Fighter = fm.get_fighters(Fighter.Side.OPPOSITION)[0]
+	opp.slot = Vector2i(2, FightBoard.depth_of(0, false))
+	GameState.set_aptitudes(opp.character_id, PackedStringArray(["anchor"]))
+	GameState.crew_skills[opp.character_id] = PackedStringArray()
+	var oc := fm.anchor_cover_cells(opp)
+	check("an opposition anchor on the front rank covers one cell", oc.size() == 1, str(oc))
+	if oc.size() == 1:
+		eq("and it is one step toward the opposition's own back rank",
+			oc[0], Vector2i(opp.slot.x, opp.slot.y + 1))
