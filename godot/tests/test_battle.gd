@@ -74,6 +74,7 @@ func _ready() -> void:
 	_test_desync()
 	_test_anchor_covers_own_back()
 	_test_free_slots_span_the_shared_board()
+	_test_queued_step_leaves_the_old_half()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1868,3 +1869,39 @@ func _test_free_slots_span_the_shared_board() -> void:
 			found = true
 			break
 	check("free_slots_for includes that neutral cell", found, str(neutral))
+
+
+## _get_legal_commands walks the shared board. The gate the player actually
+## queues through still refused anything outside lanes 0-2 and depths 0-2, a
+## leftover of the old half-board. A step into the neutral strip or onto a
+## wider lane was offered and then rejected.
+func _test_queued_step_leaves_the_old_half() -> void:
+	print("\na queued step can leave the old 3x3 half")
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 17)
+	check("the yard opens for a queued step", errs.is_empty(), str(errs))
+
+	var offered := false
+	var accepted := true
+	var detail := ""
+	for f in fm.get_fighters(Fighter.Side.PLAYER):
+		for cmd_raw in fm._get_legal_commands(f):
+			var cmd: FightManager.Command = cmd_raw
+			if cmd.type != FightManager.Command.Type.REPOSITION:
+				continue
+			if cmd.target_slot.x <= 2 and cmd.target_slot.y <= 2:
+				continue
+			offered = true
+			if not fm._is_legal_command(cmd):
+				accepted = false
+				detail = "%s %s -> %s" % [f.fighter_id, f.slot, cmd.target_slot]
+	check("the fight offers a step outside the old 3x3", offered)
+	check("and the player can queue that step", accepted, detail)
+
+	var player: Fighter = fm.get_fighters(Fighter.Side.PLAYER)[0]
+	var off := FightManager.Command.new(FightManager.Command.Type.REPOSITION, player.fighter_id)
+	off.target_slot = Vector2i(player.slot.x, -1)
+	check("a step off the board is still refused", not fm._is_legal_command(off))
+	var jump := FightManager.Command.new(FightManager.Command.Type.REPOSITION, player.fighter_id)
+	jump.target_slot = player.slot + Vector2i(0, 2)
+	check("a jump of two is still refused", not fm._is_legal_command(jump))
