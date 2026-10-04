@@ -2281,10 +2281,14 @@ func _is_legal_command(cmd: Command) -> bool:
 
 		Command.Type.REPOSITION:
 			var dest := cmd.target_slot
-			if dest.x < 0 or dest.x > 2 or dest.y < 0 or dest.y > 2:
+			# The shared board, not the old half. This used to reject any
+			# destination outside lanes 0-2 and depths 0-2, so a step the
+			# legal-command list offered — into the neutral strip, or onto a
+			# lane past the authored three — could not be queued.
+			if not FightBoard.has_slot(dest.x, dest.y):
 				return false
 			var delta := dest - f.slot
-			if abs(delta.x) + abs(delta.y) != 1:
+			if absi(delta.x) + absi(delta.y) != 1:
 				return false   # must be orthogonally adjacent
 			return _is_slot_free(dest, f.side)
 
