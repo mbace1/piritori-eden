@@ -77,6 +77,21 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.69 — 2026-10-11
+
+**Fight fixes: moving with purpose, shields that face the right way, and grief that stops.** Battle and movement fixes from #96–#99 and one new one. Stand-ins and the shared fight animation set are unchanged.
+
+- **A fighter who steps, steps somewhere useful (#96).** Every possible step used to score the same, so a fighter who had decided to move picked a direction at random. It now prefers a cell it can attack from, otherwise one that closes the gap to the enemy.
+- **An anchor shields the people behind them (#97).** The cover sat one cell toward the enemy instead of on the anchor's own back rank. Fixed in Godot, the Fight Module and Act I.
+- **The whole board is open for a move (#98).** Godot's list of free cells still stopped at the old three rows, so the fight screen never offered the neutral strip or the far colour.
+- **A step into the neutral strip can be queued (#99).** The fight offered that step and then refused it; the queue now asks the board whether the cell exists.
+- **A fall is felt once (new).** Seeing a lane-mate go down costs one nerve. The morale check charged it again every round the body stayed on the ground, so one fall could slowly rout a whole lane. Each fall now costs its witnesses once, and a saved fight remembers which falls were already felt.
+- Cache: `app.js?v=35`. Gates: `test_battle` 324 (one new check: a fall is witnessed once).
+
+### Port
+
+Godot only: the web fight has no witness morale, so the new fix has nothing to port. #97 landed in both builds; #96, #98 and #99 are Godot fixes (#98 also tidied the web scan).
+
 ## v4.68 — 2026-10-02
 
 **Stand-ins are the only playable cast.** Owner: "Stand ins should be the only characters used until others are proven to work. Make this to all versions."

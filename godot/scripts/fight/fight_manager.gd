@@ -1495,12 +1495,18 @@ func _do_morale_check() -> void:
 	round_started.emit(round_number)
 	_transition_phase(Phase.INTENT)
 
+## Downed fighters whose fall has already been witnessed. Seeing it costs
+## nerve once; without this a body on the ground drained its lane every round.
+var _witnessed: Dictionary = {}
+
 func _apply_witness_morale() -> void:
-	## A downed unit in lane X causes -1 nerve to active allies in the same lane.
+	## A downed unit in lane X causes -1 nerve to active allies in the same lane,
+	## once, at the morale check of the round it went down.
 	for id in _fighters:
 		var downed: Fighter = _fighters[id]
-		if downed.status != Fighter.Status.DOWNED:
+		if downed.status != Fighter.Status.DOWNED or _witnessed.has(id):
 			continue
+		_witnessed[id] = true
 		for ally_id in _fighters:
 			var ally: Fighter = _fighters[ally_id]
 			if ally.side == downed.side and ally.is_active() and ally.slot.x == downed.slot.x:
@@ -2349,6 +2355,7 @@ func to_dict() -> Dictionary:
 		"grid":                 grid_out,
 		"cover":                cover_out,
 		"event_log":            _event_log,
+		"witnessed":            _witnessed.keys(),
 	}
 
 static func from_dict(d: Dictionary) -> FightManager:
@@ -2364,6 +2371,8 @@ static func from_dict(d: Dictionary) -> FightManager:
 	fm._stand_down_available = d.get("stand_down_available", true)
 	fm._withdrawal_cost      = d.get("withdrawal_cost", {})
 	fm._event_log            = d.get("event_log", [])
+	for wid in d.get("witnessed", []):
+		fm._witnessed[wid] = true
 
 	for id in d.get("fighters", {}):
 		fm._fighters[id] = Fighter.from_dict(d.get("fighters", {})[id])

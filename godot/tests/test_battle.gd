@@ -75,6 +75,7 @@ func _ready() -> void:
 	_test_anchor_covers_own_back()
 	_test_free_slots_span_the_shared_board()
 	_test_queued_step_leaves_the_old_half()
+	_test_witness_morale_once()
 
 	print("\n%d passed, %d failed" % [_pass, _fail])
 	if _fail > 0:
@@ -1905,3 +1906,29 @@ func _test_queued_step_leaves_the_old_half() -> void:
 	var jump := FightManager.Command.new(FightManager.Command.Type.REPOSITION, player.fighter_id)
 	jump.target_slot = player.slot + Vector2i(0, 2)
 	check("a jump of two is still refused", not fm._is_legal_command(jump))
+
+
+## Seeing a lane-mate go down costs one nerve, once. The morale check used to
+## walk every DOWNED fighter every round, so a body on the ground kept draining
+## its lane each round until the whole lane routed.
+func _test_witness_morale_once() -> void:
+	print("\na fall is witnessed once, not every round")
+	var fm := FightManager.new()
+	var errs: Array = fm.begin_canonical("battle-courtyard-3v3", _crew_ids(3), 19)
+	check("the yard opens for a witness", errs.is_empty(), str(errs))
+
+	var crew: Array = fm.get_fighters(Fighter.Side.PLAYER)
+	var fallen: Fighter = crew[0]
+	var witness: Fighter = crew[1]
+	for f in crew:
+		if f != fallen and f != witness:
+			f.slot = Vector2i(FightBoard.lanes - 1, f.slot.y)
+	witness.slot = Vector2i(fallen.slot.x, witness.slot.y)
+	fm._force_status(fallen, Fighter.Status.DOWNED)
+
+	var start := witness.nerve
+	fm._apply_witness_morale()
+	eq("the round they fall, a lane-mate loses one nerve", start - witness.nerve, 1)
+	fm._apply_witness_morale()
+	fm._apply_witness_morale()
+	eq("later rounds do not take it again", start - witness.nerve, 1)
