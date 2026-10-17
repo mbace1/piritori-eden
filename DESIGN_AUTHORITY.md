@@ -1,5 +1,24 @@
 # Piritori → Eden — design authority
 
+## Owner ruling, 2026-10-17 — 3D is the future; C.19 is the reference
+
+Owner, asked whether the campaign's future is the 3D tactics or whether C.19 is
+a side pilot: **"3D is the future, update the GDD. C19 is the best we have and
+you should do some analysis and planning on that."** And: "C19 is the latest
+and this all is in the history and maybe in the documentation. Now we need to
+tie things together and apparently update the plan."
+
+- Fights, and the places they happen in, are 3D. Night Shift C.19
+  (`web/crew-run/`, `web/fight-module/`) is the reference for how a fight
+  plays, reads and looks.
+- The two fight engines converge on C.19's (the C.11 tactical resolver).
+  The formation board is the previous target, as the 2026-09-13
+  "Mewgenics meets XCOM" continuation already says.
+- [CAMPAIGN.md](CAMPAIGN.md) holds the analysis and the step plan (P0–P6) and is
+  the first document to read. Its §7 questions are open, not decided here.
+- Unchanged: stand-ins only until proven (2026-10-02); web leads, Godot
+  follows; the city map stays the Lantern Noir interface (2026-09-27).
+
 ## Owner continuation, 2026-10-02 — stand-ins only until proven
 
 "Stand ins should be the only characters used until others are proven to work.
