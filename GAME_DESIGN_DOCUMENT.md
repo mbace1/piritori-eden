@@ -1,5 +1,28 @@
 # PIRITORI → EDEN
 
+## Owner ruling, 2026-10-17 — 3D fights, one engine, C.19 as reference
+
+This supersedes the presentation and combat-engine parts of §5 and §13 and
+the "flat battle" assumptions anywhere else in this document. The authority
+and the owner's words are in `DESIGN_AUTHORITY.md` (top section); the
+analysis and the plan are in [CAMPAIGN.md](CAMPAIGN.md).
+
+- **Fights are 3D, and so are the places they happen in.** A job, a bad deal
+  or a road event that turns violent becomes a 3D outing in a Kallio place,
+  lit from that place's 2D background mood (the 2026-09-12 ruling above).
+- **One fight engine: C.19's.** Move + Act per person, full enemy intent in
+  words and on the ground, two cover classes, pressure that brings announced
+  rivals, and objectives that are not "defeat everyone" (reach, help, carry,
+  extract, take the bag, hold). The formation board of §13 is the previous
+  target and receives no new features.
+- **Consequences stay the campaign's.** An outing returns a receipt — who
+  came home, wounds, missing, loot, noise — and the campaign's one
+  consequence boundary turns it into cash, heat, standing and time.
+- **Aatami fights alone first, then his crew fights** (`COMBAT.md` §9.9.1):
+  the C engine gains a one-person outing before the crew arrive.
+- **Unchanged:** the city map is the 2D Lantern Noir interface; stand-ins only
+  until a model is proven; web leads, Godot ports.
+
 ## Owner ruling, 2026-09-12 — places, shared markets and continuous encounters
 
 This supplements §§5.2, 6.5, 7.2 and 9, and controls the Option C environment
@@ -1062,6 +1085,11 @@ casualty result.
 ---
 
 ## 13. Isometric formation battles
+
+> **Superseded as the target, 2026-10-17.** Fights move to the C.19 engine and
+> 3D places (top of this document; [CAMPAIGN.md](CAMPAIGN.md) §5). This section
+> describes the formation board that Act I runs today, kept for reference
+> until CAMPAIGN.md step P6 retires it.
 
 ### 13.1 Combat promise
 

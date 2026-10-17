@@ -1,3 +1,10 @@
+# Start here — 2026-10-17
+
+3D is the future and C.19 is the reference build (owner ruling, top of
+`DESIGN_AUTHORITY.md`). Read [CAMPAIGN.md](CAMPAIGN.md): what exists, where, what
+C.19 gets right and lacks, and the step plan P0–P6 that turns Act I and
+Night Shift into one game. The sections below are the record before that ruling.
+
 # C.19 implementation and release record — 2026-09-17
 
 The approved acceptance/readability implementation is in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89).

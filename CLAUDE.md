@@ -1,5 +1,12 @@
 # Working rules — Piritori → Eden
 
+## Start here — 2026-10-17
+
+3D is the future and Night Shift C.19 is the reference build (owner ruling,
+top of `DESIGN_AUTHORITY.md`). Read [CAMPAIGN.md](CAMPAIGN.md) first: it ties Act I,
+C.19 and the Godot port together and holds the plan. The takeover section
+below is the record from 2026-09-24.
+
 ## Current Claude takeover — 2026-09-24
 
 For the current city/map/mission continuation, read

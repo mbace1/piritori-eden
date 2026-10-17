@@ -1,5 +1,10 @@
 # Piritori agent startup
 
+**From 2026-10-17, read [CAMPAIGN.md](CAMPAIGN.md) first.** It ties Act I,
+Night Shift C.19 and the Godot port together and holds the current plan. The
+rest of this file predates it; where they disagree on direction, CAMPAIGN.md
+and the 2026-10-17 ruling in `DESIGN_AUTHORITY.md` win.
+
 For the current Claude city/map/mission continuation, read `CLAUDE_TAKEOVER.md`
 and `design/CLAUDE_MAP_MISSION_NEXT_STEPS.md` first (2026-09-24). They distinguish
 current main/C.19/Act I v4.51 from the unmerged M1 overlay and link the M0 audit
