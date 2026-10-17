@@ -75,3 +75,16 @@ this file once per session before finishing, and append anything new.
   writing down that a piece of unported code is "independent" of some
   other unported piece, trace what its return value or side effect is
   actually FOR, not just what state it happens to touch.
+
+- **Told to compare Radio Free's papercut films with Piritori's own work
+  ("Even that look should be compared to earlier Piritori reference and
+  concept work"), I built a Piritori scene in the films' style before opening
+  a single Piritori reference** (2026-10-17). In the same pass I called the
+  Radio Free "Deer" film papercut on the strength of one README line; it is
+  claymation. Caught by the owner, who stopped the work twice. Rule: an
+  outside look is an input to compare, never a target to copy. Before drawing
+  anything, open this repo's canon (`ART_BIBLE.md`, `art-library/APPROVALS.md`,
+  the concept targets) and set it beside the reference at phone size. Read the
+  owner's words literally — "compare" means compare, "see X" does not mean
+  "make X". And check a fact about a reference by looking at it, not by
+  trusting its label.
