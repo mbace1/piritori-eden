@@ -28,7 +28,9 @@
     "headfront",
     "neck"
   ],
-  "shared_clip_compatible": [],
+  "shared_clip_compatible": [
+    "muscle"
+  ],
   "shared_clip_pending": [
     "driver",
     "enforcer",
@@ -37,7 +39,6 @@
     "hired-b",
     "jaska",
     "local",
-    "muscle",
     "runner",
     "street-raver",
     "suited-man",
@@ -49,56 +50,56 @@
   },
   "rest_drift_deg": {
     "driver": {
-      "joint": "Spine02",
-      "deg": 159.3
+      "joint": "LeftUpLeg",
+      "deg": 160.5
     },
     "enforcer": {
-      "joint": "RightForeArm",
-      "deg": 24.6
+      "joint": "RightUpLeg",
+      "deg": 105
     },
     "fixer": {
-      "joint": "LeftUpLeg",
-      "deg": 98.7
+      "joint": "RightHand",
+      "deg": 25.5
     },
     "hired-b": {
       "joint": "RightUpLeg",
-      "deg": 157.6
+      "deg": 141.4
     },
     "hired": {
-      "joint": "LeftFoot",
-      "deg": 27.8
+      "joint": "LeftUpLeg",
+      "deg": 112.7
     },
     "jaska": {
-      "joint": "RightArm",
-      "deg": 70.4
+      "joint": "RightUpLeg",
+      "deg": 115.7
     },
     "local": {
-      "joint": "Spine02",
-      "deg": 39.4
+      "joint": "Hips",
+      "deg": 127.6
     },
     "muscle": {
-      "joint": "LeftUpLeg",
-      "deg": 96.4
+      "joint": "RightArm",
+      "deg": 4.9
     },
     "runner": {
-      "joint": "Hips",
-      "deg": 108.2
+      "joint": "RightHand",
+      "deg": 25.9
     },
     "street-raver": {
-      "joint": "Spine02",
-      "deg": 32
+      "joint": "Hips",
+      "deg": 125.1
     },
     "suited-man": {
       "joint": "Spine02",
-      "deg": 69
+      "deg": 149.6
     },
     "toko": {
-      "joint": "Spine02",
-      "deg": 27.3
+      "joint": "RightUpLeg",
+      "deg": 120.1
     },
     "watcher": {
-      "joint": "LeftUpLeg",
-      "deg": 102.6
+      "joint": "LeftFoot",
+      "deg": 28.9
     }
   },
   "rigs": {

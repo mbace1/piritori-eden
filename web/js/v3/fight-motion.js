@@ -3,7 +3,7 @@
  * than imported as clips.
  *
  * WHY THIS EXISTS. Shared GLB clips tore hips when rests mismatched. As of
- * 2026-09-06 muscle matches the pack again (Godot + web use GLBs for muscle);
+ * 2026-10-02 muscle again matches the pack (Godot + web use GLBs for muscle);
  * this module still drives SHARED_CLIP_PENDING roles. Historical context:
  * Both builds used to play ONE body's
  * four baked clips on every fighter. Reported on sight, 2026-09-02: "the
