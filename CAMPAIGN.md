@@ -129,8 +129,9 @@ cabinet into "Piritori → Eden".
 
 ## 6. What does not change
 
-- The city map stays the 2D Lantern Noir interface ("looks good for now",
-  2026-09-27). 3D is the fights and the places they happen in.
+- The city map stays 2D (a relief plan, Art Bible §6.1). 3D is the fights and
+  the places they happen in. All non-battle graphics are being overhauled
+  (owner, 2026-10-17): [design/ART_DIRECTION_NON_BATTLE.md](design/ART_DIRECTION_NON_BATTLE.md).
 - Stand-ins only, in every build, until a model is proven (2026-10-02).
 - Web first, Godot follows; content is authored once and flows.
 - The campaign's one consequence boundary owns money, time, heat and standing;
@@ -140,5 +141,6 @@ cabinet into "Piritori → Eden".
 
 1. **P1:** freeze the formation board now? (Recommended — every week it grows
    is work P6 throws away.)
-2. **Map:** confirm the city map stays 2D and only fights and places go 3D.
+2. **Map:** confirm the city map stays 2D (overhauled, not 3D) and only fights
+   and places go 3D.
 3. **Hub:** keep "Night Shift C.19" as its own cabinet until P3, then merge?

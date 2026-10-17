@@ -20,8 +20,11 @@ analysis and the plan are in [CAMPAIGN.md](CAMPAIGN.md).
   consequence boundary turns it into cash, heat, standing and time.
 - **Aatami fights alone first, then his crew fights** (`COMBAT.md` §9.9.1):
   the C engine gains a one-person outing before the crew arrive.
-- **Unchanged:** the city map is the 2D Lantern Noir interface; stand-ins only
-  until a model is proven; web leads, Godot ports.
+- **Non-battle graphics are overhauled** toward the Art Bible's cut-paper
+  north star, using the Radio Free papercut films' technique, not their look
+  ([design/ART_DIRECTION_NON_BATTLE.md](design/ART_DIRECTION_NON_BATTLE.md)).
+  The city map stays 2D.
+- **Unchanged:** stand-ins only until a model is proven; web leads, Godot ports.
 
 ## Owner ruling, 2026-09-12 — places, shared markets and continuous encounters
 

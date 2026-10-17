@@ -16,8 +16,17 @@ tie things together and apparently update the plan."
   "Mewgenics meets XCOM" continuation already says.
 - [CAMPAIGN.md](CAMPAIGN.md) holds the analysis and the step plan (P0–P6) and is
   the first document to read. Its §7 questions are open, not decided here.
+- Same day, on everything else: **"All non-battle graphics need to be over
+  hauled, see recent paper cut graphics in Radio Free and the motion graphics
+  side."** Then: **"You have not been given command to copy the style exactly,
+  your command is to look at the tech and compare to original concepts and
+  references. Act as a high level Art Director to plan upgrades according to
+  these."** The target is this repo's Art Bible and approved library; the films
+  are a technique. Plan: [design/ART_DIRECTION_NON_BATTLE.md](design/ART_DIRECTION_NON_BATTLE.md).
+  This supersedes "looks good for now" (2026-09-27, Lantern Noir) for surfaces;
+  Lantern Noir's lighting logic stays.
 - Unchanged: stand-ins only until proven (2026-10-02); web leads, Godot
-  follows; the city map stays the Lantern Noir interface (2026-09-27).
+  follows.
 
 ## Owner continuation, 2026-10-02 — stand-ins only until proven
 
