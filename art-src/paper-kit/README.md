@@ -1,5 +1,10 @@
 # Paper kit — AD1, the material test sheet
 
+**Decided 2026-10-17. Owner: "A, restrained."** Treatment A (clean scissor
+and knife cuts, almost no marker, faint grain) is the house treatment for
+the non-battle cut-paper register. It is `HOUSE` in `web/js/v3/paper-kit.js`;
+B and C stay in `TREATMENTS` only as the record of what was shown.
+
 Step AD1 of `design/ART_DIRECTION_NON_BATTLE.md` (the non-battle art overhaul
 plan, PR #102). It draws the **cut-paper register** of `ART_BIBLE.md` in code,
 so the owner can choose paper, edge and marker before any screen is touched.
@@ -40,8 +45,9 @@ repo root (it needs `web/fonts/` and `art/v3/`).
 
 ## Files
 
-- `paper-kit.js`: palette tokens, seeded RNG, edges, paper fills, cards with
-  cached shadows, the light, and marker strokes.
+- `web/js/v3/paper-kit.js` (moved there in AD2 so the game ships it): palette
+  tokens, seeded RNG, edges, paper fills, cards with cached shadows, the light,
+  marker strokes and the treatments.
 - `ad1-boards.html`: the four boards.
 - `capture.cjs`: renders them with Playwright, as `web/test/*-browser.cjs` do.
 

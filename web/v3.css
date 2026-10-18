@@ -1095,3 +1095,16 @@ html body .arcade-home { display: none; }
   margin: 0.25rem 0 0;
   font-size: 0.75rem;
 }
+
+/* AD2 — cut paper behind live UI (web/js/v3/paper-skin.js). Treatment A,
+   owner 2026-10-17: clean cuts, faint grain, one shadow, no marker. The card is
+   drawn to the element's size and sits on ::before, so the text stays text. */
+.ramen-layout .papered { isolation: isolate; background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
+.ramen-layout .papered::before { content: ''; position: absolute; inset: calc(-1 * var(--paper-pad, 15px)); background: var(--paper) center / 100% 100% no-repeat; z-index: -1; pointer-events: none; }
+.ramen-layout .papered[data-paper=slab] { color: #17191A !important; border-left: 0 !important; }
+.ramen-layout .equipment-chip.papered { padding-left: 12px; }
+.ramen-layout .equipment-chip.papered .dim { color: #b8ad95; }
+.ramen-layout .papered[data-paper=plate] h2, .ramen-layout .papered[data-paper=plate] p { color: #17191A; }
+.ramen-layout .papered[data-paper=plate] { border-left: 0 !important; }
+.ramen-layout .papered:not(.scene-caption) { position: relative; }   /* the caption keeps its own absolute place */
+.ramen-layout .papered[data-paper=button] { padding-left: 22px; color: #E2D8C2 !important; }
