@@ -1,5 +1,6 @@
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=5';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=3';
+import { mountCounterMotion, disposeCounterMotion } from './counter-motion.js?v=1';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -335,7 +336,7 @@ function render() {
     ramen: renderRamen,
     case: renderCase,
   };
-  disposeSceneSpeaker();
+  disposeSceneSpeaker(); disposeCounterMotion();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
@@ -343,6 +344,7 @@ function render() {
   if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
+  if (state.mode === 'ramen') mountCounterMotion(root.querySelector('.ramen-layout .speaker-stage'));
 
   // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
   // meshes, is one of the parity gaps this build owes Godot. Mounted here
