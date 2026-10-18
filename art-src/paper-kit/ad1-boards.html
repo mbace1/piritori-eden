@@ -23,7 +23,7 @@
 </style>
 <body>
 <script type="module">
-import { PAL, PAPER, LIGHT, card, place, pool, marker, markerBox, markerRing, shade } from './paper-kit.js';
+import { PAL, PAPER, LIGHT, card, place, pool, marker, markerBox, markerRing, shade, TREATMENTS } from './paper-kit.js';
 
 const W = 1000;
 const mk = (h) => { const c = document.createElement('canvas'); c.width = W; c.height = h; document.body.appendChild(c); return [c, c.getContext('2d')]; };
@@ -98,11 +98,7 @@ function board3() {
 }
 
 // ── board 4: the pick — the conversation band in three treatments ─────────
-const T = {
-  A: { name: 'A · RESTRAINED', sub: 'clean cuts, almost no marker, faint grain', edge: 'scissor', slab: { top: 'scissor', bottom: 'scissor' }, tooth: 0.03, rims: false, fold: 0, mark: 0, extras: 0 },
-  B: { name: 'B · BALANCED', sub: 'torn slab, knife-cut buttons, sparse marker', edge: 'knife', slab: { top: 'torn', bottom: 'torn' }, tooth: null, rims: true, fold: 34, mark: 1, extras: 1 },
-  C: { name: 'C · RICH (the limit)', sub: 'everything torn, folds, heavy marker, print', edge: 'torn', slab: { top: 'torn', bottom: 'torn' }, tooth: 0.13, rims: true, fold: 44, mark: 2, extras: 2 },
-};
+const T = TREATMENTS;
 function panel(g, y0, t, plate) {
   const PH = 380;
   // the painted register: the empty bar, cropped through the counter
@@ -142,10 +138,10 @@ function panel(g, y0, t, plate) {
 }
 function board4(plate) {
   const PANEL = 700, H = 200 + 3 * (PANEL + 40), [c, g] = mk(H); ground(g, H, '#0b0e0f');
-  title(g, 'AD1 · 4  PICK ONE: A, B OR C', 'The cut-paper band in front of the painted plate (two registers)');
+  title(g, 'AD1 · 4  THE PICK: A', 'The cut-paper band in front of the painted plate (two registers)');
   ['A', 'B', 'C'].forEach((k, i) => {
     const y = 150 + i * (PANEL + 40), t = T[k];
-    label(g, t.name, 40, y + 40, k === 'B' ? PAL.ochre : PAL.offwhite, 40); note(g, t.sub, 40, y + 80);
+    label(g, k === 'A' ? t.name + '   ✓ CHOSEN 17.10.2026' : t.name, 40, y + 40, k === 'A' ? PAL.ochre : PAL.offwhite, 40); note(g, t.sub, 40, y + 80);
     panel(g, y + 100, t, plate);
   });
   note(g, 'Plate: scene-toko-noodles-empty-v01 (semi-approved, prototype).', 40, H - 58, '#8d8165'); note(g, 'Toko is a 3D stand-in layer, so he is absent here.', 40, H - 20, '#8d8165');

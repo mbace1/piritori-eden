@@ -203,3 +203,14 @@ export function markerRing(g, cx, cy, rx, ry, o = {}) {
   for (let a = -0.4; a < Math.PI * 2 + 0.5; a += 0.12) { const k = 1 + (r() - 0.5) * 0.06; pts.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]); }
   marker(g, pts, o);
 }
+
+// ── treatments (AD1 board 4) ───────────────────────────────────────────────
+// Owner, 2026-10-17, picking from AD1 board 4: "A, restrained". A is the house
+// treatment for the non-battle cut-paper register. B and C are kept as the
+// record of what was shown, not as options to use.
+export const TREATMENTS = {
+  A: { name: 'A · RESTRAINED', sub: 'clean cuts, almost no marker, faint grain', edge: 'scissor', slab: { top: 'scissor', bottom: 'scissor' }, tooth: 0.03, rims: false, fold: 0, mark: 0, extras: 0 },
+  B: { name: 'B · BALANCED', sub: 'torn slab, knife-cut buttons, sparse marker', edge: 'knife', slab: { top: 'torn', bottom: 'torn' }, tooth: null, rims: true, fold: 34, mark: 1, extras: 1 },
+  C: { name: 'C · RICH (the limit)', sub: 'everything torn, folds, heavy marker, print', edge: 'torn', slab: { top: 'torn', bottom: 'torn' }, tooth: 0.13, rims: true, fold: 44, mark: 2, extras: 2 },
+};
+export const HOUSE = TREATMENTS.A;
