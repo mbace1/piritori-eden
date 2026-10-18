@@ -1,5 +1,5 @@
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=5';
-import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
+import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=3';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -139,7 +139,10 @@ function tr(key, ...args) {
   for (const a of args) s = String(s).replace('%d', String(a));
   return s;
 }
-function persist() { saveState(state); }
+// A debug jump (?battle=, ?scene=) runs on a throwaway state; nothing it does
+// may be written over the player's real save (debug_entry.gd makes the same choice).
+let debugSession = false;
+function persist() { if (!debugSession) saveState(state); }
 
 // ── M1: where the player is LOOKING is not where Aatami IS ─────────────
 // (design/CLAUDE_MAP_MISSION_NEXT_STEPS.md §1.) `state.selectedAnchor` stays
@@ -2323,8 +2326,18 @@ async function boot() {
     // where Godot's own 3D is a known driver black-screen (upstream
     // godotengine/godot#121005) and the open question is whether three.js
     // takes a different-enough driver path to survive.
+    // ?scene=ramen opens Tokon Ramen directly (CLAUDE.md rule 6: a screen
+    // must be reachable from a phone in under 30 seconds). A fresh state at
+    // Toko's anchor, never saved.
+    const wantScene = new URLSearchParams(location.search).get('scene');
+    if (wantScene === 'ramen') {
+      state = createState(data.content); debugSession = true;
+      state.selectedAnchor = TOKO_ANCHOR; state.mode = 'ramen';
+      $('splash').hidden = true; render();
+    } else if (wantScene) logToast(`unknown scene '${wantScene}'`);
+
     const wantBattle = new URLSearchParams(location.search).get('battle');
-    if (wantBattle) {
+    if (wantBattle) { debugSession = true;
       if (!data.battles.get(wantBattle)) {
         logToast(`unknown battle id '${wantBattle}'`);
       } else {

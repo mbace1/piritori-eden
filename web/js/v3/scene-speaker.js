@@ -1,5 +1,12 @@
 import * as THREE from 'three';
 import {GLTFLoader} from '../../vendor/jsm/loaders/GLTFLoader.js?v=1';
+import {makeStandIn} from '../../fight-module/stand-in.js?v=8';
+
+// Owner, 2026-10-02: "Stand ins should be the only characters used until others
+// are proven to work. Make this to all versions." These speakers draw the
+// neutral procedural stand-in (the C-track cast) instead of an imported model.
+// No mask, no face: Toko's identity returns when a model is promoted.
+const STAND_INS = { toko: { coat: 0xb9b2a2, seed: 7311 } };
 
 let disposeCurrent = () => {};
 export function disposeSceneSpeaker() { disposeCurrent(); disposeCurrent = () => {}; }
@@ -31,6 +38,21 @@ export function mountSceneSpeaker(host, url, person) {
   const lost=e=>{e.preventDefault();host.dataset.status='unavailable';cancelAnimationFrame(frame);};
   renderer.domElement.addEventListener('webglcontextlost',lost);
   disposeCurrent=()=>{dead=true;cancelAnimationFrame(frame);observer.disconnect();renderer.domElement.removeEventListener('webglcontextlost',lost);release();renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();};
+  if (STAND_INS[person]) {
+    const look = STAND_INS[person], world = new THREE.Group();
+    const a = makeStandIn({ id: person, side: 'player', role: 'contact', equipment: [], color: look.coat, appearanceSeed: look.seed }, world);
+    a.ring.visible = false; a.shadow.visible = false; a.prop.visible = false; a.play('idle');
+    world.scale.setScalar(1 / 1.8); scene.add(world);
+    world.traverse(n => { if (n.geometry) geometries.add(n.geometry); for (const m of Array.isArray(n.material) ? n.material : n.material ? [n.material] : []) materials.add(m); });
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    host.dataset.status = 'ready'; host.dataset.standIn = 'true';
+    let last = performance.now();
+    const tick = now => { if (dead) return; const dt = Math.min((now - last) / 1000, .05); last = now;
+      if (!document.hidden) { a.update(reduced.matches ? 0 : dt); a.prop.visible = false; renderer.render(scene, camera); }
+      frame = requestAnimationFrame(tick); };
+    tick(performance.now());
+    return;
+  }
   new GLTFLoader().load(url,gltf=>{
     model=gltf.scene;collect(model);if(dead){release();return;}
     const bones=[];
