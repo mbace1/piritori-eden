@@ -25,6 +25,11 @@ tie things together and apparently update the plan."
   are a technique. Plan: [design/ART_DIRECTION_NON_BATTLE.md](design/ART_DIRECTION_NON_BATTLE.md).
   This supersedes "looks good for now" (2026-09-27, Lantern Noir) for surfaces;
   Lantern Noir's lighting logic stays.
+- AD1, the material pick (same day), from four boards of paper, edge and
+  marker: **"A, restrained."** Clean scissor and knife cuts, almost no
+  marker, faint grain is the house treatment for the non-battle cut-paper
+  register (`art-src/paper-kit/`, `HOUSE`; PR #103). Torn edges and heavy
+  marker were shown (B, C) and not chosen.
 - Unchanged: stand-ins only until proven (2026-10-02); web leads, Godot
   follows.
 

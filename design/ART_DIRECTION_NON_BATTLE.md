@@ -117,6 +117,8 @@ live, new — and an owner yes before the next.
 
 **AD1 — Material test sheet (the "style test" step).** Built: PR #103,
 `art-src/paper-kit/`, boards in `design/art-direction/ad1-*.jpg`.
+**Decided 2026-10-17: "A, restrained"** — clean scissor and knife cuts,
+almost no marker, faint grain. Every later step uses treatment A.
 A Piritori paper kit, owned by this repo and built on the same technique:
 paper families × edge vocabulary × marker, in Era I palette tokens (§4.1), lit
 by one practical light. One swatch board, no screen. This is what the Radio Free
