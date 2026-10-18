@@ -98,7 +98,7 @@ one), so a meeting and the fight it turns into share one place and one light
 
 | # | Screen | Concept target to measure against | Camera family (§6.1) |
 |---|---|---|---|
-| 1 | **Toko's counter** (Tokon Ramen) | `toko-slomo-noodles-v02.png`, `ui-target-location-toko-v01.jpg` (approved baseline) | staged frontal |
+| 1 | **Toko's counter** (Tokon Ramen) | `toko-slomo-noodles-v02.png`, `ui-target-location-toko-v01.jpg` (approved baseline); construction in `STAGE_SPEC.md` §6 | staged frontal |
 | 2 | **City map** | `ui-target-city-map-v01.jpg` | relief plan |
 | 3 | Arrival opening and story cards | Toko screen materials; Art Bible §8 | staged frontal |
 | 4 | Location scenes and the face cut-ins | Karhupuisto plate (approved), location plates in `art-library/locations/era1/` | staged frontal |
@@ -115,17 +115,26 @@ against taste.
 Each step ends in a phone-size side-by-side board — concept target, previous
 live, new — and an owner yes before the next.
 
-**AD1 — Material test sheet (the "style test" step).**
+**AD1 — Material test sheet (the "style test" step).** Built: PR #103,
+`art-src/paper-kit/`, boards in `design/art-direction/ad1-*.jpg`.
 A Piritori paper kit, owned by this repo and built on the same technique:
 paper families × edge vocabulary × marker, in Era I palette tokens (§4.1), lit
 by one practical light. One swatch board, no screen. This is what the Radio Free
 style tests did before their films; the owner picks before anything is built.
 
 **AD2 — Pilot: Toko's counter, live in Act I.**
-Rebuilt from cards against the approved v02 target: counter, stools, signage,
-steam, the tram passing the window, Toko as a stand-in until proven. Layers
-switch state (the sign, a lamp, the steam); dialogue and buttons stay live UI.
-Board: v02 target / today / pilot.
+*Corrected after checking (2026-10-17):* the counter's construction is already
+decided in `STAGE_SPEC.md` §6 (the counter: "the goal reference for
+conversations that don't happen on a fight area", owner 2026-08-24). It is
+**the painted plate** (`scene-toko-noodles-empty-v01`, delivered 2026-08-27),
+**Toko as a 3D layer** (owner: "Toko needs to be a 3D layer for this to work";
+a stand-in until proven), and **motion drawn over the plate in code** — tier 0
+steam, rain, lamp and tram light, tier 1 the window
+(`art-src/prototypes/counter-motion.html` is that tier 0, built). AD2 adds the
+AD1 cut-paper band (slab, name plate, choices) and the light that follows the
+camera, and wires it into Act I. It does not rebuild the room from cards.
+Board: v02 target / today / pilot. The same screen is Arvo's news desk with
+different furniture (`STAGE_SPEC.md` §6), so it is built once.
 
 **AD3 — The city map as a relief plan.**
 Districts as torn dark card from the real map geometry (`map/`), water as
