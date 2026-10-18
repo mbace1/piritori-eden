@@ -1,5 +1,20 @@
 # QUEUE
 
+## Found during AD2, Toko's counter (2026-10-18)
+
+- **Jaska's and Arvo's speakers still load imported models** (`cast3d-jaska-v01`,
+  Arvo's presenter). The owner's 2026-10-02 ruling is stand-ins in every
+  playable route; AD2 changed Toko only (`scene-speaker.js` `STAND_INS`). Add
+  the other two there.
+- **`v3-playthrough.cjs` fails 2 checks on main**: "Toko art is deliberately
+  cropped above its baked prototype UI" and "Toko receives live narrative
+  choices", both "`.scene-viewport.toko` not found". The test points at a
+  QUEUE entry that does not exist. The Toko encounter now renders a
+  `.speaker-stage`, not `.scene-viewport.toko`; the test needs updating to it.
+- **`map/tools/build-transit-layer.mjs --check` reports drift on a Windows
+  checkout** only because the working copy has CRLF; the regenerated content
+  is identical. It stops `check-project` early on Windows.
+
 > **Claude Code / Godot pickup (2026-09-06):** read [`GODOT_PICKUP.md`](GODOT_PICKUP.md) first.
 > Baseline `main` `f3e7997` / **v4.40** — Phase A leftovers + Phase B already in `godot/`. Pull, `sync-data`, smoke shop + tough desync; do not re-port.
 
