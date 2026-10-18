@@ -1,5 +1,38 @@
 # Piritori → Eden — design authority
 
+## Owner ruling, 2026-10-17 — 3D is the future; C.19 is the reference
+
+Owner, asked whether the campaign's future is the 3D tactics or whether C.19 is
+a side pilot: **"3D is the future, update the GDD. C19 is the best we have and
+you should do some analysis and planning on that."** And: "C19 is the latest
+and this all is in the history and maybe in the documentation. Now we need to
+tie things together and apparently update the plan."
+
+- Fights, and the places they happen in, are 3D. Night Shift C.19
+  (`web/crew-run/`, `web/fight-module/`) is the reference for how a fight
+  plays, reads and looks.
+- The two fight engines converge on C.19's (the C.11 tactical resolver).
+  The formation board is the previous target, as the 2026-09-13
+  "Mewgenics meets XCOM" continuation already says.
+- [CAMPAIGN.md](CAMPAIGN.md) holds the analysis and the step plan (P0–P6) and is
+  the first document to read. Its §7 questions are open, not decided here.
+- Same day, on everything else: **"All non-battle graphics need to be over
+  hauled, see recent paper cut graphics in Radio Free and the motion graphics
+  side."** Then: **"You have not been given command to copy the style exactly,
+  your command is to look at the tech and compare to original concepts and
+  references. Act as a high level Art Director to plan upgrades according to
+  these."** The target is this repo's Art Bible and approved library; the films
+  are a technique. Plan: [design/ART_DIRECTION_NON_BATTLE.md](design/ART_DIRECTION_NON_BATTLE.md).
+  This supersedes "looks good for now" (2026-09-27, Lantern Noir) for surfaces;
+  Lantern Noir's lighting logic stays.
+- AD1, the material pick (same day), from four boards of paper, edge and
+  marker: **"A, restrained."** Clean scissor and knife cuts, almost no
+  marker, faint grain is the house treatment for the non-battle cut-paper
+  register (`art-src/paper-kit/`, `HOUSE`; PR #103). Torn edges and heavy
+  marker were shown (B, C) and not chosen.
+- Unchanged: stand-ins only until proven (2026-10-02); web leads, Godot
+  follows.
+
 ## Owner continuation, 2026-10-02 — stand-ins only until proven
 
 "Stand ins should be the only characters used until others are proven to work.
