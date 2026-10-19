@@ -74,16 +74,29 @@ export const PAPER = {
   newsprint: { base: '#d2cbb8', core: '#e8e2d2', tooth: 0.06, fibre: 0.3, print: 'news', job: 'broadcasts, ledger, dated notices' },
   vellum: { base: '#f3efe4', core: '#ffffff', tooth: 0, fibre: 0, alpha: 0.26, job: 'fog, window glow, breath, TV bloom' },
 };
+// Shared texture tiles (AD2 performance pass): the grain, the low cloudiness and
+// the fibres are each drawn ONCE into a tile and laid onto every card with a
+// single pattern fill, offset by the card's seed. Before, every card repeated
+// ~1,200 tiny fillRects; the look is the same, the cost is one fill each.
+const TILES = {};
+function tile(kind) {
+  if (TILES[kind]) return TILES[kind];
+  const n = kind === 'cloud' ? 512 : 256, c = document.createElement('canvas'); c.width = c.height = n; const g = c.getContext('2d'), r = rng(kind.length * 977 + 13);
+  if (kind === 'tooth') { for (let i = 0; i < (n * n) / 260; i++) { g.fillStyle = r() < 0.5 ? 'rgba(255,250,235,1)' : 'rgba(0,0,0,1)'; g.globalAlpha = r() < 0.5 ? 0.8 : 1; g.fillRect(r() * n, r() * n, 1 + r() * 1.5, 1); } }
+  if (kind === 'cloud') { const m = document.createElement('canvas'), k = 24, mw = Math.ceil(n / k) + 1; m.width = m.height = mw; const mg = m.getContext('2d'), id = mg.createImageData(mw, mw);
+    for (let i = 0; i < mw * mw; i++) { const v = r() < 0.5 ? 255 : 0; id.data[i * 4] = id.data[i * 4 + 1] = id.data[i * 4 + 2] = v; id.data[i * 4 + 3] = Math.round(r() * 10); }
+    mg.putImageData(id, 0, 0); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(m, 0, 0, mw * k, mw * k); }
+  if (kind === 'fibre') { g.lineWidth = 1; for (let i = 0; i < (n * n) / 5000; i++) { const x = r() * n, y = r() * n, a = r() * 6.3, l = 4 + r() * 10; g.strokeStyle = r() < 0.6 ? 'rgba(255,240,210,.10)' : 'rgba(60,40,20,.10)'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * l * 0.5 + (r() - 0.5) * 3, y + Math.sin(a) * l * 0.5, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }
+  return (TILES[kind] = c);
+}
+function layTile(g, kind, w, h, r, alpha = 1) {
+  const pat = g.createPattern(tile(kind), 'repeat'); g.save(); g.globalAlpha = alpha; g.translate(-r() * 256, -r() * 256); g.fillStyle = pat; g.fillRect(0, 0, w + 600, h + 600); g.restore();
+}
 function fillPaper(g, w, h, paper, col, r, tooth) {
   g.fillStyle = col || paper.base; g.fillRect(-20, -20, w + 40, h + 40);
-  // low cloudiness: the sheet is never one flat colour, but no shape may read
-  // before the card's own silhouette (§3.5) — a coarse noise field, upscaled smooth
-  { const m = document.createElement('canvas'), mw = Math.ceil(w / 24) + 2, mh = Math.ceil(h / 24) + 2; m.width = mw; m.height = mh; const mg = m.getContext('2d'), id = mg.createImageData(mw, mh);
-    for (let i = 0; i < mw * mh; i++) { const v = r() < 0.5 ? 255 : 0; id.data[i * 4] = id.data[i * 4 + 1] = id.data[i * 4 + 2] = v; id.data[i * 4 + 3] = Math.round(r() * 10); }
-    mg.putImageData(id, 0, 0); g.save(); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.drawImage(m, -24, -24, mw * 24, mh * 24); g.restore(); }
-  const t = tooth ?? paper.tooth;
-  for (let i = 0; i < (w * h) / 260; i++) { g.fillStyle = r() < 0.5 ? `rgba(255,250,235,${t})` : `rgba(0,0,0,${t * 1.2})`; g.fillRect(r() * w, r() * h, 1 + r() * 1.5, 1); }
-  if (paper.fibre) { g.lineWidth = 1; for (let i = 0; i < (w * h * paper.fibre) / 5000; i++) { const x = r() * w, y = r() * h, a = r() * 6.3, l = 4 + r() * 10; g.strokeStyle = r() < 0.6 ? 'rgba(255,240,210,.10)' : 'rgba(60,40,20,.10)'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * l * 0.5 + (r() - 0.5) * 3, y + Math.sin(a) * l * 0.5, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }
+  layTile(g, 'cloud', w, h, r);                                    // the sheet is never one flat colour; no shape reads before the silhouette (§3.5)
+  const t = tooth ?? paper.tooth; if (t) layTile(g, 'tooth', w, h, r, t);
+  if (paper.fibre) layTile(g, 'fibre', w, h, r, Math.min(1, paper.fibre));
   if (paper.print === 'pack') printPack(g, w, h, r);
   if (paper.print === 'news') printNews(g, w, h, r);
 }
@@ -141,9 +154,15 @@ function rims(g, w, h, spec, paper, seed) {
   }
 }
 function finish(c, pad, spec) {
-  const s = document.createElement('canvas'); s.width = c.width; s.height = c.height; const sg = s.getContext('2d');
-  sg.drawImage(c, 0, 0); sg.globalCompositeOperation = 'source-in'; sg.fillStyle = '#000'; sg.fillRect(0, 0, s.width, s.height);
-  const b = document.createElement('canvas'); b.width = c.width; b.height = c.height; const bg = b.getContext('2d'); bg.filter = `blur(${spec.blur ?? 7}px)`; bg.drawImage(s, 0, 0);
+  // The shadow without a blur filter (AD2 performance pass): the silhouette is
+  // shrunk by ~the blur radius and smoothed back up, which is soft enough for a
+  // contact shadow and an order of magnitude cheaper than ctx.filter on a phone.
+  const k = Math.max(3, Math.min(16, Math.round(spec.blur ?? 7))), sw = Math.max(2, Math.round(c.width / k)), sh = Math.max(2, Math.round(c.height / k));
+  const small = document.createElement('canvas'); small.width = sw; small.height = sh; const sg = small.getContext('2d');
+  sg.imageSmoothingEnabled = true; sg.imageSmoothingQuality = 'high'; sg.drawImage(c, 0, 0, sw, sh);
+  sg.globalCompositeOperation = 'source-in'; sg.fillStyle = '#000'; sg.fillRect(0, 0, sw, sh);
+  const b = document.createElement('canvas'); b.width = c.width; b.height = c.height; const bg = b.getContext('2d');
+  bg.imageSmoothingEnabled = true; bg.imageSmoothingQuality = 'high'; bg.drawImage(small, 0, 0, c.width, c.height);
   return { c, s: b, pad, w: spec.w, h: spec.h };
 }
 
