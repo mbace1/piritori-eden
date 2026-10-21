@@ -1,0 +1,13 @@
+{
+  "clip": "nod",
+  "seconds": 1.5,
+  "fps": 24,
+  "posesPerSecond": 12,
+  "size": [
+    1280,
+    720
+  ],
+  "kit": "Suds-Jack radiofree/studio/art-motion/clay/dishes/lib",
+  "kitCommit": "23d040525efc590e01480200649561c04dddded1",
+  "rendered": "2026-10-19"
+}
