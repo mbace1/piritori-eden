@@ -1,5 +1,35 @@
 # Piritori → Eden — design authority
 
+## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
+
+The owner approved the cut-card Toko Slomo loops ("Approved, put it in the
+game") and chose **"Paper Toko in empty bar"** for how. At the counter, Toko is
+now `scene-toko-rig-v01`: the approved `toko-slomo-noodles-v02` painting cut
+into eleven pieces that turn on hidden pivots. It is drawn over
+`scene-toko-noodles-empty-v01` and replaces the 3D speaker (`cast3d-toko-v01`)
+in every Toko scene: the Three Vans encounter, the after-service visit and
+Tokon Ramen.
+
+- **This supersedes ruling 2 of 2026-08-24 ("Toko is a 3D LAYER") for the
+  counter.** The empty bar that ruling asked for is still the plate. Only the
+  figure in front of it changes. The paper rig is cut from a painting made in
+  front of that same counter, so the two line up at the counter's back edge,
+  which is the "framing must match the plate" point solved by construction.
+- **It is the deliberate promotion that the 2026-10-02 rule asks for**, for this
+  one figure in the web build. The owner approved the concept and the renders,
+  and the in-game readability check was done at phone and desktop width.
+- **Jaska and Arvo stay 3D.** Nothing here touches them.
+- **Godot still shows the 3D Toko** until the rig is ported. The handoff is the
+  Port section of `VERSIONS.md` v4.70.
+- **He acts with his head, brows, hands and eyelids, never the mask.** The gold
+  mask is canon and fixed (`ART_BIBLE.md` §8.3). Clips map to the scene's own
+  states: idle, a lean while his line is on screen, `BUY INFO`, `RISK
+  SABOTAGE` and `LEAVE`. Under `prefers-reduced-motion` the rest pose is drawn
+  still.
+
+Provenance and the cutting method are in
+`art-library/rigs/toko-slomo-paper-v01/README.md`.
+
 ## Owner continuation, 2026-10-02 — stand-ins only until proven
 
 "Stand ins should be the only characters used until others are proven to work.
