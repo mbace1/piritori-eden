@@ -1,5 +1,6 @@
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=5';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
+import { mountPaperSkin, disposePaperSkin } from './paper-skin.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -165,7 +166,10 @@ function tr(key, ...args) {
   for (const a of args) s = String(s).replace('%d', String(a));
   return s;
 }
-function persist() { saveState(state); }
+// A debug jump (?battle=, ?scene=) runs on a throwaway state; nothing it does
+// may be written over the player's real save (debug_entry.gd makes the same choice).
+let debugSession = false;
+function persist() { if (!debugSession) saveState(state); }
 
 // ── M1: where the player is LOOKING is not where Aatami IS ─────────────
 // (design/CLAUDE_MAP_MISSION_NEXT_STEPS.md §1.) `state.selectedAnchor` stays
@@ -358,7 +362,7 @@ function render() {
     ramen: renderRamen,
     case: renderCase,
   };
-  disposeSceneSpeaker();
+  disposeSceneSpeaker(); disposePaperSkin();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
@@ -367,6 +371,12 @@ function render() {
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
   mountTokoStage(root);
+  if (state.mode === 'ramen') {
+    const stage = root.querySelector('.ramen-layout .speaker-stage');
+    // AD2: the band in cut paper, lit by the counter's lantern (top-left of the plate). The room's own
+    // life (steam, rain, the lamps) is the Toko stage's, so AD2's separate motion layer is gone.
+    mountPaperSkin(root.querySelector('.ramen-layout'), () => { const r = stage.getBoundingClientRect(); return { x: r.left + r.width * 0.05, y: r.top + r.height * 0.15 }; });
+  }
 
   // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
   // meshes, is one of the parity gaps this build owes Godot. Mounted here
@@ -1264,32 +1274,32 @@ function renderRamen() {
         ${art ? `<img class="scene-image" src="${esc(art)}" alt="Tokon Ramen, the counter">` : genericScene('toko_slomo_noodles')}
         ${TOKO_CANVAS}
         <i class="scene-vignette"></i>
-        <div class="scene-caption">
+        <div class="scene-caption" data-paper="plate">
           <h2>TOKON RAMEN</h2>
           <p>VAASANKATU · TOKO SLOMO · ${esc(formatBlock(state, data.content))}</p>
         </div>
       </div>
     </section>
-    <section class="paper-panel encounter-copy ramen-copy">
+    <section class="paper-panel encounter-copy ramen-copy" data-paper="panel">
       <p class="section-label">TOKO, BEHIND THE COUNTER</p>
-      <blockquote class="toko-line">“${esc(line)}”</blockquote>
+      <blockquote class="toko-line" data-paper="slab">“${esc(line)}”</blockquote>
       ${told && band
-        ? `<blockquote class="toko-line toko-told">“${esc(told.label)}. They are paying ${esc(band)} for a pack, if you get there soon. That is all I heard.”</blockquote>`
-        : told === null && tokoTold === '' ? '<blockquote class="toko-line toko-told">“Nothing new tonight. Eat.”</blockquote>' : ''}
+        ? `<blockquote class="toko-line toko-told" data-paper="slab">“${esc(told.label)}. They are paying ${esc(band)} for a pack, if you get there soon. That is all I heard.”</blockquote>`
+        : told === null && tokoTold === '' ? '<blockquote class="toko-line toko-told" data-paper="slab">“Nothing new tonight. Eat.”</blockquote>' : ''}
       <p class="section-label">A BOWL AND WHAT HE HEARD · ${money(BOWL_EUR)}</p>
       <p>He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.</p>
-      <button class="paper-button" data-action="buy-bowl" ${blocked ? 'disabled' : ''}>${blocked === 'already-this-block' ? 'YOU HAVE EATEN THIS BLOCK' : blocked === 'cash' ? `A BOWL IS ${money(BOWL_EUR)}` : `BUY A BOWL · ${money(BOWL_EUR)}`}</button>
+      <button class="paper-button" data-paper="button" data-tab="mustard" data-action="buy-bowl" ${blocked ? 'disabled' : ''}>${blocked === 'already-this-block' ? 'YOU HAVE EATEN THIS BLOCK' : blocked === 'cash' ? `A BOWL IS ${money(BOWL_EUR)}` : `BUY A BOWL · ${money(BOWL_EUR)}`}</button>
       <p class="section-label">UNDER THE COUNTER · EARLY WEAPONS</p>
       <div class="equipment-list">${tokoWeapons(data).map(id => {
         const equipment = data.equipment.get(id); const price = buyOf(data, id);
-        return `<div class="equipment-chip">
+        return `<div class="equipment-chip" data-paper="button">
           ${equipment?.asset_id ? `<img src="${assetUrl(data, equipment.asset_id)}" alt="">` : '<span aria-hidden="true">◇</span>'}
           <span>${esc(cap(id))}<br><span class="dim">${esc(equipment?.hold ?? '')}</span></span>
-          <button class="paper-button" data-action="buy-toko-weapon" data-equipment="${esc(id)}" ${state.cash >= price ? '' : 'disabled'}>BUY · ${money(price)}</button>
+          <button class="paper-button" data-paper="button" data-tab="orange" data-action="buy-toko-weapon" data-equipment="${esc(id)}" ${state.cash >= price ? '' : 'disabled'}>BUY · ${money(price)}</button>
         </div>`;
       }).join('')}</div>
-      <p class="consequence-strip">Toko sells a friend's weapons, nothing that goes bang. The first handgun, the fence and the rest of the gear are the street seller's, on Piritori.</p>
-      <button class="paper-button primary" data-action="leave-shop">BACK TO THE STREET</button>
+      <p class="consequence-strip" data-paper="slab">Toko sells a friend's weapons, nothing that goes bang. The first handgun, the fence and the rest of the gear are the street seller's, on Piritori.</p>
+      <button class="paper-button primary" data-paper="button" data-tab="grey" data-action="leave-shop">BACK TO THE STREET</button>
     </section>
   </div>`;
 }
@@ -2355,8 +2365,18 @@ async function boot() {
     // where Godot's own 3D is a known driver black-screen (upstream
     // godotengine/godot#121005) and the open question is whether three.js
     // takes a different-enough driver path to survive.
+    // ?scene=ramen opens Tokon Ramen directly (CLAUDE.md rule 6: a screen
+    // must be reachable from a phone in under 30 seconds). A fresh state at
+    // Toko's anchor, never saved.
+    const wantScene = new URLSearchParams(location.search).get('scene');
+    if (wantScene === 'ramen') {
+      state = createState(data.content); debugSession = true;
+      state.selectedAnchor = TOKO_ANCHOR; state.mode = 'ramen';
+      $('splash').hidden = true; render();
+    } else if (wantScene) logToast(`unknown scene '${wantScene}'`);
+
     const wantBattle = new URLSearchParams(location.search).get('battle');
-    if (wantBattle) {
+    if (wantBattle) { debugSession = true;
       if (!data.battles.get(wantBattle)) {
         logToast(`unknown battle id '${wantBattle}'`);
       } else {

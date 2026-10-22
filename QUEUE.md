@@ -17,6 +17,17 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Found during AD2, Toko's counter (2026-10-18; updated 2026-10-22 after v4.70)
+
+- **Jaska's and Arvo's speakers still load imported models** (`cast3d-jaska-v01`,
+  Arvo's presenter). Toko is the approved paper rig since v4.70 (#105); for the
+  other two, the owner's 2026-10-02 stand-ins ruling still applies.
+- **`v3-playthrough.cjs`'s two Toko checks** fail on main: already filed under
+  the v4.70 entry below ("Still open, Engine lane"), which names the fix.
+- **`map/tools/build-transit-layer.mjs --check` reports drift on a Windows
+  checkout** only because the working copy has CRLF; the regenerated content
+  is identical. It stops `check-project` early on Windows.
+
 ## The two builds charge different time for a trade (found filming v4.54, 2026-09-26)
 
 - **Godot spends a block on every ledger trade** (`execute_offer` →
