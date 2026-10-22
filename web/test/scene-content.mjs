@@ -15,11 +15,20 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=36');
-for(const id of ['cast3d-jaska-v01','cast3d-toko-v01','presenter-arvo-linde-v05']){
+const app=await read('../js/v3/app.js?v=38');
+for(const id of ['cast3d-jaska-v01','presenter-arvo-linde-v05']){
  assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
 }
-assert((await read('../index.html')).includes('ACT I · v4.68'));
+// Toko is the paper rig over the empty bar (owner, 2026-10-21), not the 3D speaker: the app mounts it, the stage names
+// the registered rig, and the rig's plate is the empty bar every Toko scene points at.
+const stage=await read('../js/v3/toko-stage.js');
+assert(app.includes("from './toko-stage.js?v=1'")&&app.includes('data-toko-stage'),'Toko stage mounted by the app');
+const rig=a.assets.find(x=>x.id==='scene-toko-rig-v01');
+assert(rig&&stage.includes("'scene-toko-rig-v01'"),'Registered Toko rig');
+assert.equal(rig.plate_asset_id,'scene-toko-noodles-empty-v01','Rig drawn over the empty bar');
+assert(c.encounters.concat(c.optional_visits??[]).filter(e=>e.participants?.includes('toko')).every(e=>e.scene_asset_id===rig.plate_asset_id),'Every Toko scene is the empty bar');
+for(const part of ['torso','head','hood_bare','brow_l','brow_r','eye_l','eye_r','counter','fore_r','note','hand_l'])assert(rig.members.some(m=>m.part===part),`rig part ${part}`);
+assert((await read('../index.html')).includes('ACT I · v4.70'));
 const fight=await read('../fight-module/main.js');
 assert(!fight.includes('loadFighters('),'playable fight routes never load candidate meshes');
 assert(fight.includes('makeActor({placeholder:true},u,world)'),'playable fight routes always build stand-ins');

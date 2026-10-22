@@ -187,6 +187,11 @@ reason it exists.
 
 ## 6. The counter — the other kind of screen
 
+> **Update, owner ruling 2026-10-21 (`DESIGN_AUTHORITY.md`):** in the web build,
+> Toko at the counter is the paper rig `scene-toko-rig-v01`, drawn over the empty
+> bar, and no longer the 3D layer described below. The empty bar (§6.3) is still
+> the plate.
+
 > "the two marked at the bottom are not levels, but Toko Slomo's Noodle Bar,
 > where you chat and get info, the scene and Toko are slightly animated. this is
 > the goal reference for conversations that don't happen on a fight area, but

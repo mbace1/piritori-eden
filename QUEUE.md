@@ -1,20 +1,5 @@
 # QUEUE
 
-## Found during AD2, Toko's counter (2026-10-18)
-
-- **Jaska's and Arvo's speakers still load imported models** (`cast3d-jaska-v01`,
-  Arvo's presenter). The owner's 2026-10-02 ruling is stand-ins in every
-  playable route; AD2 changed Toko only (`scene-speaker.js` `STAND_INS`). Add
-  the other two there.
-- **`v3-playthrough.cjs` fails 2 checks on main**: "Toko art is deliberately
-  cropped above its baked prototype UI" and "Toko receives live narrative
-  choices", both "`.scene-viewport.toko` not found". The test points at a
-  QUEUE entry that does not exist. The Toko encounter now renders a
-  `.speaker-stage`, not `.scene-viewport.toko`; the test needs updating to it.
-- **`map/tools/build-transit-layer.mjs --check` reports drift on a Windows
-  checkout** only because the working copy has CRLF; the regenerated content
-  is identical. It stops `check-project` early on Windows.
-
 > **Claude Code / Godot pickup (2026-09-06):** read [`GODOT_PICKUP.md`](GODOT_PICKUP.md) first.
 > Baseline `main` `f3e7997` / **v4.40** — Phase A leftovers + Phase B already in `godot/`. Pull, `sync-data`, smoke shop + tough desync; do not re-port.
 
@@ -31,6 +16,17 @@ Nothing here is approved work. It is a list of things a future session might
 pick up, and half of it will turn out to be wrong.
 
 ---
+
+## Found during AD2, Toko's counter (2026-10-18; updated 2026-10-22 after v4.70)
+
+- **Jaska's and Arvo's speakers still load imported models** (`cast3d-jaska-v01`,
+  Arvo's presenter). Toko is the approved paper rig since v4.70 (#105); for the
+  other two, the owner's 2026-10-02 stand-ins ruling still applies.
+- **`v3-playthrough.cjs`'s two Toko checks** fail on main: already filed under
+  the v4.70 entry below ("Still open, Engine lane"), which names the fix.
+- **`map/tools/build-transit-layer.mjs --check` reports drift on a Windows
+  checkout** only because the working copy has CRLF; the regenerated content
+  is identical. It stops `check-project` early on Windows.
 
 ## The two builds charge different time for a trade (found filming v4.54, 2026-09-26)
 
@@ -386,6 +382,14 @@ found and reported, not both fixed:**
   `web/`-specific art asset with Toko drawn back in — not a one-line id
   swap. The test (`v3-playthrough.cjs`) now soft-fails this instead of
   throwing, so it no longer blocks the checks after it from running.
+  **Closed by v4.70 (2026-10-21):** it took the second route. The owner
+  approved the paper rig `scene-toko-rig-v01`, which is the v02 painting cut into
+  pieces and drawn over the empty bar in `web/` (see `DESIGN_AUTHORITY.md`, owner
+  ruling 2026-10-21). **Still open, Engine lane:** the two Toko checks in
+  `v3-playthrough.cjs` look for `.scene-viewport.toko` and the old baked-UI crop,
+  and neither exists any more, so they fail just as they do on main. They should
+  check `[data-toko-stage][data-status="ready"]` and the four live choices
+  instead, the way `act1-scenes.cjs` already does.
 - **"the whole twelve-anchor Kallio board is present" still fails** —
   already named in this file, "Canon drift the browser gate found when it
   was unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still
