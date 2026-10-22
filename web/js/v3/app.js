@@ -17,11 +17,12 @@ import {
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=9';
 import { createPauseMenu } from './pause.js?v=4';
-import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
+import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=2';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
 import { loadTokoStage } from './toko-stage.js?v=1';
+import { tokoCue, warmTokoCues } from './toko-voice.js?v=1';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
@@ -132,7 +133,8 @@ let tokoStage = null, tokoStageLoad = null;
 const TOKO_CANVAS = '<canvas class="scene-image toko-stage" data-toko-stage width="1536" height="864" role="img" aria-label="Toko Slomo behind the counter"></canvas>';
 // What he does when you answer him. Anything unlisted gets a nod.
 const TOKO_CLIP = { 'buy-info': 'buy_info', 'risk-sabotage': 'sabotage', 'eat-and-listen': 'lean', leave: 'leave', 'toko-ordinary-evening': 'lean', 'toko-quiet-company': 'nod' };
-function tokoActs(clip, options) { tokoStage?.play(clip, options); }
+// ...and what he sounds like doing it: the Toko films' palette (toko-voice.js; owner, 2026-10-22)
+function tokoActs(clip, options) { tokoStage?.play(clip, options); if (tokoStage) tokoCue(clip); }
 function mountTokoStage(root) {
   const canvas = root.querySelector('[data-toko-stage]');
   if (!canvas) return;
@@ -149,6 +151,7 @@ function mountTokoStage(root) {
     if (!canvas.isConnected) return;
     if (!stage) { canvas.dataset.status = 'unavailable'; canvas.hidden = true; return; }   // the empty bar stays, as before the rig
     stage.attach(canvas, context);
+    warmTokoCues();   // build his sounds in idle time, before the first reaction needs one
   });
 }
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.

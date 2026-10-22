@@ -116,6 +116,20 @@ export function arrival() {
   setTimeout(() => bell(1), 2300);
 }
 
+/** Play ready-made samples through the master gain: build(sampleRate) returns a
+ *  Float32Array (built once and cached by the caller). Toko's cues use it
+ *  (toko-voice.js) — still synthesised, never sampled. */
+export function play(build, gain = 0.4, delay = 0) {
+  if (!ctx || !on) return;
+  const data = build(ctx.sampleRate); if (!data?.length) return;
+  const buffer = ctx.createBuffer(1, data.length, ctx.sampleRate); buffer.getChannelData(0).set(data);
+  const s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buffer; g.gain.value = gain;
+  s.connect(g).connect(master); s.start(ctx.currentTime + 0.01 + delay);
+}
+
+/** The running context's sample rate, or 0 before the first gesture wakes it. */
+export function sampleRate() { return ctx?.sampleRate ?? 0; }
+
 export function soundOn() { return on; }
 
 export function setSound(next) {
