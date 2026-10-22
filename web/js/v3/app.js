@@ -21,6 +21,7 @@ import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
+import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
@@ -125,6 +126,31 @@ let state;
 // and a failed load leaves the city exactly as it was, with no events.
 // What Toko said at the last bowl ('' = nothing new, null = no bowl yet).
 let tokoTold = null;
+// Toko in cut card behind his counter (owner, 2026-10-21: "Approved, put it in the game"; placed in the empty bar in
+// place of the 3D speaker). One stage outlives every re-render; each render hands it the new canvas.
+let tokoStage = null, tokoStageLoad = null;
+const TOKO_CANVAS = '<canvas class="scene-image toko-stage" data-toko-stage width="1536" height="864" role="img" aria-label="Toko Slomo behind the counter"></canvas>';
+// What he does when you answer him. Anything unlisted gets a nod.
+const TOKO_CLIP = { 'buy-info': 'buy_info', 'risk-sabotage': 'sabotage', 'eat-and-listen': 'lean', leave: 'leave', 'toko-ordinary-evening': 'lean', 'toko-quiet-company': 'nod' };
+function tokoActs(clip, options) { tokoStage?.play(clip, options); }
+function mountTokoStage(root) {
+  const canvas = root.querySelector('[data-toko-stage]');
+  if (!canvas) return;
+  canvas.dataset.status = 'loading';
+  let context;
+  if (state.mode === 'ramen') context = { noteGone: state.tokoBowlAt === state.scheduleIndex };
+  else {
+    const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data);
+    const resolved = encounter ? state.choices[encounter.id] : null;
+    context = { noteGone: resolved === 'buy-info', leanAfter: resolved ? null : 2.5 };   // he lowers his voice as you arrive
+  }
+  (tokoStageLoad ??= loadTokoStage(data, { reducedMotion })).then(stage => {
+    tokoStage = stage;
+    if (!canvas.isConnected) return;
+    if (!stage) { canvas.dataset.status = 'unavailable'; canvas.hidden = true; return; }   // the empty bar stays, as before the rig
+    stage.attach(canvas, context);
+  });
+}
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.
 let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
@@ -340,6 +366,7 @@ function render() {
   if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
+  mountTokoStage(root);
 
   // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
   // meshes, is one of the parity gaps this build owes Godot. Mounted here
@@ -834,7 +861,7 @@ function renderEncounter() {
       <section class="paper-panel scene-card">
         <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
-          ${isToko ? `<div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko Slomo behind the counter"></div><img class="counter-foreground" src="${esc(art)}" alt="" aria-hidden="true">` : ''}
+          ${isToko ? TOKO_CANVAS : ''}
           ${isJaska ? '<i class="jaska-contact" aria-hidden="true"></i><div class="scene-speaker jaska-standing" data-speaker="jaska" data-asset="cast3d-jaska-v01" aria-label="Jaska"></div>' : ''}
           ${ambientLayers(encounter)}
           <i class="scene-vignette"></i>
@@ -1235,8 +1262,7 @@ function renderRamen() {
     <section class="paper-panel scene-card">
       <div class="scene-viewport speaker-stage">
         ${art ? `<img class="scene-image" src="${esc(art)}" alt="Tokon Ramen, the counter">` : genericScene('toko_slomo_noodles')}
-        <div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko Slomo behind the counter"></div>
-        ${art ? `<img class="counter-foreground" src="${esc(art)}" alt="" aria-hidden="true">` : ''}
+        ${TOKO_CANVAS}
         <i class="scene-vignette"></i>
         <div class="scene-caption">
           <h2>TOKON RAMEN</h2>
@@ -2014,6 +2040,10 @@ function handleRootClick(event) {
         state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.', ...(state.lastOutcome ?? [])];
       }
     }
+    if (result.ok && encounter.participants?.includes('toko')) {
+      const clip = TOKO_CLIP[choice?.id] ?? 'nod';
+      tokoActs(clip, { then: clip === 'lean' ? 'lean' : 'idle', till: 120 });
+    }
     persist(); render();
   } else if (action === 'take-door') {
     const result = takeDoor(state, data, doors, target.dataset.door, roadEvents);
@@ -2076,12 +2106,14 @@ function handleRootClick(event) {
   } else if (action === 'buy-toko-weapon') {
     const result = buyFromToko(state, data, target.dataset.equipment);
     logToast(result.ok ? `Bought from Toko for ${money(result.paid)}.` : ({ cash: 'Not enough cash.', 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? 'He does not sell that.'));
+    if (result.ok) tokoActs('sell', { till: result.paid });
     persist(); render();
   } else if (action === 'buy-bowl') {
     const result = buyBowl(state, data);
     if (!result.ok) logToast({ 'already-this-block': 'One bowl a block. He has other customers.', cash: `A bowl is ${money(BOWL_EUR)}.`, 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? result.reason);
     else logToast(result.anchorId ? `Toko on ${data.anchors.get(result.anchorId)?.label}: a price range, on the board.` : 'Toko has nothing new tonight. The broth is good.');
     tokoTold = result.ok ? (result.anchorId ?? '') : tokoTold;
+    if (result.ok) tokoActs('buy_info', { till: BOWL_EUR, then: 'lean' });   // what he heard, passed across the counter
     persist(); render();
   } else if (action === 'buy-equipment') {
     const result = buyEquipment(state, data, target.dataset.equipment);
