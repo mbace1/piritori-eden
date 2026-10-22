@@ -371,6 +371,14 @@ found and reported, not both fixed:**
   `web/`-specific art asset with Toko drawn back in — not a one-line id
   swap. The test (`v3-playthrough.cjs`) now soft-fails this instead of
   throwing, so it no longer blocks the checks after it from running.
+  **Closed by v4.70 (2026-10-21):** it took the second route. The owner
+  approved the paper rig `scene-toko-rig-v01`, which is the v02 painting cut into
+  pieces and drawn over the empty bar in `web/` (see `DESIGN_AUTHORITY.md`, owner
+  ruling 2026-10-21). **Still open, Engine lane:** the two Toko checks in
+  `v3-playthrough.cjs` look for `.scene-viewport.toko` and the old baked-UI crop,
+  and neither exists any more, so they fail just as they do on main. They should
+  check `[data-toko-stage][data-status="ready"]` and the four live choices
+  instead, the way `act1-scenes.cjs` already does.
 - **"the whole twelve-anchor Kallio board is present" still fails** —
   already named in this file, "Canon drift the browser gate found when it
   was unparked": the map has 14 anchors now, `DESIGN_AUTHORITY.md` still

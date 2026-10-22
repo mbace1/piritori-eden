@@ -68,6 +68,219 @@
       "note": "The empty bar - STAGE_SPEC 6.3. Same room, same camera, same moment, nobody behind the counter, for the ruling that Toko is a 3D layer composited into the gap. What he stood in front of - tiled splashback, sink, shelving, stacked bowls, hanging utensils - is painted as continuing objects rather than smeared, and the counter where he worked is bare. NO UI BAND: the room runs to the bottom edge, so the stool legs and floorboards the baked band covered are visible, and the baked-screen exception in APPROVALS.md retires with this asset. NO TEXT AT ALL, which took three passes and is the point: the signboard is a blank aged board, the menu strips keep their pictograms and lose their characters, the poster is a picture, the lantern is plain, the till keys are blank. v02 still read TOKO SLOMO ... ; v03 removed the tram route number and left a glaring white destination box that looked like a mistake; v04 switches that panel off. A blank lit sign is as conspicuous as a written one."
     },
     {
+      "id": "scene-toko-rig-v01",
+      "kind": "scene-rig",
+      "approval_status": "approved",
+      "production_status": "animated-rig",
+      "dimensions": [
+        1536,
+        864
+      ],
+      "format": "webp-alpha",
+      "layer": "location-speaker",
+      "era": "2003",
+      "location": "vaasankatu",
+      "plate_asset_id": "scene-toko-noodles-empty-v01",
+      "source": "screens/instances/era1/toko-slomo-noodles-v02.png (Toko cut into pieces); the counter strip is cut from scene-toko-noodles-empty-v01",
+      "source_version": "v02",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            695.4,
+            418.0
+          ],
+          "head": [
+            700.0,
+            310.5
+          ],
+          "brow_l": [
+            667.9,
+            170.9
+          ],
+          "brow_r": [
+            734.9,
+            169.0
+          ],
+          "fore_r": [
+            540.2,
+            390.4
+          ],
+          "hand_l": [
+            861.7,
+            378.5
+          ],
+          "note": [
+            746.0,
+            445.6
+          ]
+        },
+        "lid_rgb": [
+          210,
+          139,
+          26
+        ],
+        "ambient": {
+          "glass": [
+            [
+              1288,
+              24
+            ],
+            [
+              1536,
+              24
+            ],
+            [
+              1536,
+              412
+            ],
+            [
+              1288,
+              378
+            ]
+          ],
+          "headlights": [
+            [
+              1445,
+              344
+            ],
+            [
+              1496,
+              344
+            ]
+          ],
+          "street_lamp": [
+            1362,
+            135
+          ],
+          "lantern": [
+            68,
+            150
+          ],
+          "steam": [
+            222,
+            296
+          ],
+          "till": [1086, 351, 1180, 367]
+        }
+      },
+      "members": [
+        {
+          "id": "toko-rig-v01-torso",
+          "part": "torso",
+          "file": "scenes/toko-rig-v01/torso.webp",
+          "x": 519,
+          "y": 258,
+          "w": 340,
+          "h": 172,
+          "sha256": "27f3da70fae978153a209cf10ade8a834c7798d349fbf4fb9e4f2d1a079ba5ba"
+        },
+        {
+          "id": "toko-rig-v01-head",
+          "part": "head",
+          "file": "scenes/toko-rig-v01/head.webp",
+          "x": 614,
+          "y": 106,
+          "w": 168,
+          "h": 219,
+          "sha256": "d10dfeb2a9e35d7bfc2dfaf1a3c6050043386b400b6b98d5966cc0ecfebbdbcf"
+        },
+        {
+          "id": "toko-rig-v01-hood-bare",
+          "part": "hood_bare",
+          "file": "scenes/toko-rig-v01/hood_bare.webp",
+          "x": 643,
+          "y": 156,
+          "w": 113,
+          "h": 30,
+          "sha256": "67644070d62ee7d6fa1f280188f0dd1de754c130946564dc1f805ca8321f9d6b"
+        },
+        {
+          "id": "toko-rig-v01-brow-l",
+          "part": "brow_l",
+          "file": "scenes/toko-rig-v01/brow_l.webp",
+          "x": 643,
+          "y": 156,
+          "w": 49,
+          "h": 29,
+          "sha256": "ce8716f2388d9a4de7b779c4a1cd18fa09adfc759f2c3082e77c763d25f410a6"
+        },
+        {
+          "id": "toko-rig-v01-brow-r",
+          "part": "brow_r",
+          "file": "scenes/toko-rig-v01/brow_r.webp",
+          "x": 714,
+          "y": 160,
+          "w": 42,
+          "h": 18,
+          "sha256": "6c1320554b4b959b47ebc3f97bb5b041bae1f3f63ef8728ae1353190ebcb9bed"
+        },
+        {
+          "id": "toko-rig-v01-eye-l",
+          "part": "eye_l",
+          "file": "scenes/toko-rig-v01/eye_l.webp",
+          "x": 664,
+          "y": 194,
+          "w": 29,
+          "h": 32,
+          "sha256": "a0121a07542871ac005a8fdb5d78ce9556b51ddc8fd28196035e97651bfc72ad"
+        },
+        {
+          "id": "toko-rig-v01-eye-r",
+          "part": "eye_r",
+          "file": "scenes/toko-rig-v01/eye_r.webp",
+          "x": 722,
+          "y": 191,
+          "w": 24,
+          "h": 29,
+          "sha256": "a0a67d85d3474288fc0a25e437374d2c93538f24408cdde8514d4b772b078e1b"
+        },
+        {
+          "id": "toko-rig-v01-counter",
+          "part": "counter",
+          "file": "scenes/toko-rig-v01/counter.webp",
+          "x": 505,
+          "y": 416,
+          "w": 385,
+          "h": 72,
+          "sha256": "5413a4e2f5654251b4e9243cc20293bc56fb6a64875094037493ccb374688059"
+        },
+        {
+          "id": "toko-rig-v01-fore-r",
+          "part": "fore_r",
+          "file": "scenes/toko-rig-v01/fore_r.webp",
+          "x": 521,
+          "y": 329,
+          "w": 176,
+          "h": 111,
+          "sha256": "ebca48cc77154b9ca2d420c942d7f183e9aba4f5cd0e5e7b802d5013295e2d7e"
+        },
+        {
+          "id": "toko-rig-v01-note",
+          "part": "note",
+          "file": "scenes/toko-rig-v01/note.webp",
+          "x": 715,
+          "y": 425,
+          "w": 66,
+          "h": 39,
+          "sha256": "7c146853f6cdcc7457dc3cc90876253ec0d2bc70b06daafde211ec145a2d818f"
+        },
+        {
+          "id": "toko-rig-v01-hand-l",
+          "part": "hand_l",
+          "file": "scenes/toko-rig-v01/hand_l.webp",
+          "x": 714,
+          "y": 339,
+          "w": 159,
+          "h": 123,
+          "sha256": "3335091cfdd7961ba6eb93d085d9e2453469604a2d97cbafcdf4a38c22851f01"
+        }
+      ],
+      "note": "Toko Slomo in cut card, acting. Owner, 2026-10-21: approved the looped animations (\"Approved, put it in the game\") and chose to place this paper Toko in the empty bar in place of the 3D speaker cast3d-toko-v01, overriding the 2026-08-24 3D-layer ruling for the counter scenes. The pieces are cut from the approved v02 painting (the gold smiling mask is canon, ART_BIBLE 8.3) and drawn over the text-free empty bar, whose counter line they share; the counter strip in front of his waist is cut from the empty bar itself. Every piece moves from a hidden pivot (ART_BIBLE 14.2) on a 10 fps pose rhythm; steam, rain, the street lamp and the tram's headlights are additive passes (STAGE_SPEC tier 0). Pieces total about 60 KB. Rest pose = the reduced-motion frame. Provenance and review renders: art-library/rigs/toko-slomo-paper-v01/README.md."
+    },
+    {
       "id": "scene-karhupuisto-v01",
       "kind": "scene",
       "file": "scenes/karhupuisto-v01.webp",

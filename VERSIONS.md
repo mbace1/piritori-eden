@@ -77,6 +77,25 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.70 — 2026-10-21
+
+**Toko Slomo acts, in cut card, behind his own counter.** Owner, 2026-10-21: *"Approved, put it in the game"*, and asked where, the paper Toko in the empty bar in place of the 3D speaker. That sets aside the 2026-08-24 3D-layer ruling for the counter scenes; Jaska and Arvo stay 3D.
+
+- **The approved v02 Toko, cut and rigged** (`scene-toko-rig-v01`, about 60 KB). Hood, brows, eyelids, torso and both forearms turn on hidden pivots (ART_BIBLE §14.2) at a 10 fps pose rhythm, over `scene-toko-noodles-empty-v01`. The counter in front of his waist is cut from the empty bar itself, which shares v02's counter line. Anything his pieces uncover is the painted room, not a fill.
+- **He acts on what you choose.** On arrival he dries the cloth round his fist, breathes, looks about and blinks, and 2.5 s later leans in and lowers his voice.
+  - BUY INFO: he slides the note across and the till rings €120.
+  - RISK SABOTAGE: he looks hard at the window and shakes his head.
+  - EAT AND LISTEN: he talks.
+  - LEAVE: he bows and waves the cloth.
+- **The same stage serves Tokon Ramen and the after-service visit.** A bowl passes the note across with €6 on the till, and a weapon is a tap, a ring and a nod.
+- **The room breathes:** steam off the pot, rain in the window, the street lamp and the tram's headlights. These are additive, STAGE_SPEC tier 0.
+- **Reduced motion** draws the rest pose, which is the painting as approved, and nothing loops. The stage draws at most 12 times a second and stops when its canvas leaves the page. If the rig fails to load, the empty bar shows as before.
+- Cache: `app.js?v=36`, `toko-stage.js?v=1`. Gates: `scene-content` checks the rig is registered, mounted and drawn over the empty bar, and `act1-scenes` waits for the Toko stage instead of the 3D speaker. `v3-playthrough`'s two Toko checks fail exactly as they did on main (QUEUE.md, scene_asset_id drift).
+
+### Port
+
+Godot still shows the 3D Toko at the counter. Porting means drawing the rig's eleven pieces (manifest `members[]`, with `x`, `y` and the `rig.pivots`) and the clip table in `web/js/v3/toko-stage.js` over the same plate. It is web-only for now.
+
 ## v4.69 — 2026-10-11
 
 **Fight fixes: moving with purpose, shields that face the right way, and grief that stops.** Battle and movement fixes from #96–#99 and one new one. Stand-ins and the shared fight animation set are unchanged.
