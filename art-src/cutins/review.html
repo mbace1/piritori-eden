@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Cut-in review</title>
+<!-- Owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and talk options",
+     the level and its characters behind; "the player character profile can be shown when he talks".
+     A review page, not the game: ?who=jaska&scene=scene-club-v01. render.cjs films it. -->
+<style>
+ html,body{margin:0;background:#000}
+ #s{width:1080px;height:1920px;position:relative;overflow:hidden;font-family:'Barlow',Arial,sans-serif}
+ canvas{position:absolute;inset:0}
+</style></head><body><div id="s"><canvas id="c" width="1080" height="1920"></canvas></div>
+<script type="module">
+const Q = new URLSearchParams(location.search), WHO = Q.get('who') || 'jaska', SCENE = Q.get('scene') || 'scene-club-v01';
+const load = (src) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+const rig = await (await fetch(`./${WHO}/out/rig.json`)).json();
+const img = {}; for (const p of rig.pieces) img[p.name] = await load(`./${WHO}/out/${p.file}`);
+const scene = await load(`../../art/v3/scenes/${SCENE}.webp`);
+const c = document.getElementById('c'), g = c.getContext('2d'), W = 1080, H = 1920;
+const D = Math.PI / 180, clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), sm = (k) => { k = clamp(k); return k * k * (3 - 2 * k); };
+const key = (ks, t) => { if (t <= ks[0][0]) return ks[0][1]; for (let i = 1; i < ks.length; i++) if (t <= ks[i][0]) { const [a, va] = ks[i - 1], [b, vb] = ks[i]; return va + (vb - va) * sm((t - a) / (b - a)); } return ks[ks.length - 1][1]; };
+// CLIPS, the paper-rig grammar of Toko's (toko-stage.js): head on the neck pivot, torso breath, eyelid blinks
+const CLIPS = {
+  idle: { dur: 5, f: (t) => ({ sy: 1 + 0.008 * Math.sin(t / 5 * 2 * Math.PI * 2), rot: 1.6 * D * Math.sin(t / 5 * 2 * Math.PI), ty: 0, blink: key([[0,0],[1.6,0],[1.7,1],[1.8,0],[4.2,0],[4.3,1],[4.4,0]], t) }) },
+  talk: { dur: 3.2, f: (t) => ({ sy: 1.004, rot: key([[0,0],[0.8,-2*D],[1.6,1.5*D],[2.4,-1*D],[3.2,0]], t), ty: key([[0,0],[0.25,5],[0.45,0],[0.8,7],[1.0,0],[1.4,4],[1.6,0],[2.1,6],[2.3,0],[3.2,0]], t), blink: key([[0,0],[2.6,0],[2.7,1],[2.8,0]], t) }) },
+  nod: { dur: 1.6, f: (t) => ({ sy: 1, rot: -1 * D * sm(t / 0.4), ty: key([[0,0],[0.35,14],[0.8,14],[1.2,0]], t), blink: key([[0,0],[0.4,0],[0.5,1],[0.6,0]], t) }) },
+  shake: { dur: 1.8, f: (t) => ({ sy: 1, rot: key([[0,0],[0.3,-4*D],[0.6,4*D],[0.9,-4*D],[1.2,3*D],[1.6,0]], t), ty: 2, blink: 0 }) },
+};
+const SEQ = [['idle', 'idle', 'JASKA', 'Tervetuloa. Nobody here has slept since Thursday. Sit anywhere that is not a keyboard.'],
+  ['talk', 'talk', 'JASKA', 'Aatami. You came all the way up past the bridge. That means you want something.'],
+  ['nod', 'nod', 'JASKA', 'Fine. I will ask around. Quietly.'],
+  ['shake', 'shake', 'JASKA', 'No. Not that. Not from me.']];
+const T = SEQ.map(s => CLIPS[s[0]].dur), TOTAL = T.reduce((a, b) => a + b, 0);
+const piece = (n) => rig.pieces.find(p => p.name === n);
+// the figure: waist-up, bottom-left, scaled to ~62% of the frame's height
+const FH = H * 0.62, S = FH / rig.size[1], FX = -40, FY = H - FH;
+function figure(p) {
+  g.save(); g.translate(FX, FY); g.scale(S, S);
+  const tor = piece('torso'), hd = piece('head');
+  g.save(); const [px, py] = tor.pivot; g.translate(px, py); g.scale(1, p.sy); g.translate(-px, -py); g.drawImage(img.torso, tor.box[0], tor.box[1]); g.restore();
+  g.save(); const [hx, hy] = hd.pivot; g.translate(hx, hy + p.ty - (p.sy - 1) * 300); g.rotate(p.rot); g.translate(-hx, -hy);
+  g.drawImage(img.head, hd.box[0], hd.box[1]);
+  for (const l of rig.pieces.filter(q => q.lid_of === 'head')) { const k = clamp(p.blink); if (k > 0.02) g.drawImage(img[l.name], 0, 0, l.box[2], l.box[3] * k, l.box[0], l.box[1], l.box[2], l.box[3] * k); }
+  g.restore(); g.restore();
+}
+function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); return yy; }
+function ui(name, line) {
+  // the speech bubble: kraft card with a tail toward the speaker
+  const bx = 350, by = 150, bw = 690, bh = 320;
+  g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 18; g.shadowOffsetX = 8; g.shadowOffsetY = 12;
+  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 170, by + bh - 4); g.lineTo(bx - 60, by + bh + 150); g.lineTo(bx + 90, by + bh - 4); g.lineTo(bx + 4, by + bh - 2); g.closePath(); g.fill(); g.restore();
+  g.fillStyle = '#17191A'; g.font = '700 44px Arial Narrow, Arial'; g.fillText(name, bx + 34, by + 62);
+  g.font = '400 40px Courier New, monospace'; wrap(line, bx + 34, by + 124, bw - 70, 52);
+  // talk options: dark cards with a colour tab, bottom right
+  const opts = [['ASK ABOUT THE THURSDAY LOAD', '#C5A044'], ['BORROW A KEYBOARD · €0', '#38B8C8'], ['LEAVE', '#676B6B']];
+  opts.forEach(([t, tab], i) => { const y = H - 380 + i * 118, x = 470; g.fillStyle = 'rgba(20,24,26,.94)'; g.fillRect(x, y, 580, 96); g.fillStyle = tab; g.fillRect(x + 14, y + 14, 12, 68); g.fillStyle = '#E2D8C2'; g.font = '700 38px Arial Narrow, Arial'; g.fillText(t, x + 44, y + 62); });
+}
+function frame(t) {
+  t = ((t % TOTAL) + TOTAL) % TOTAL; let k = 0, t0 = 0; while (t >= t0 + T[k]) { t0 += T[k]; k++; }
+  const [clipName, , name, line] = SEQ[k], lt = t - t0, p = CLIPS[clipName].f(Math.floor(lt * 10) / 10);   // posed at 10 fps, as Toko
+  // the level behind: the Scene Club, dimmed and pushed back
+  const sh = H * 0.62, sw = sh * scene.width / scene.height; g.drawImage(scene, (W - sw) / 2 - 120, 0, sw, sh);
+  g.fillStyle = '#121719'; g.fillRect(0, sh, W, H - sh);
+  const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(10,12,14,.35)'); gr.addColorStop(0.55, 'rgba(10,12,14,.55)'); gr.addColorStop(1, 'rgba(10,12,14,.9)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  figure(p); ui(name, line);
+  g.fillStyle = 'rgba(226,216,194,.7)'; g.font = '700 30px Arial'; g.fillText(`REVIEW · ${WHO.toUpperCase()} · ${clipName}`, 30, 50);
+}
+window.__review = { TOTAL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
+frame(0); window.__ready = true;
+</script></body></html>
