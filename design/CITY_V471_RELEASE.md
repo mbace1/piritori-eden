@@ -1,0 +1,27 @@
+# Hub release: Act I city v4.71 (a fight happens where it starts)
+
+- **Source:** `mbace1/piritori-eden` @ `7fb8ef7`: web v4.71, its Godot port, and a fix to `build-hub-cabinet.mjs`.
+  - CI `gates` run 979: the Godot build and the bare-node web gates (`places.mjs` among them) are green.
+  - The Act I browser job is expected to stop at the step it has stopped at since v4.70 (see Known issue).
+- **Site:** `mbace1/Suds-Jack` gh-pages `788c2e90`, `piritori/`. Pages run 1537 succeeded. Nothing was deleted; 250 files are in `release.json`.
+  - The cabinet was at v4.67. It now also carries v4.68–v4.70 from main: stand-ins only, the #96–#99 fight fixes and Toko's paper rig.
+- **What players get:**
+  - A door fight is fought at the door, on that place's plate, against people from the side the door names.
+  - A road fight is fought where the event happened.
+  - Eleven anchors have a fight place. Mäkelänsilta and Siltasaari are bare stages until they get a plate; Suvilahti uses a stand-in plate.
+- **Catalogue:**
+  - The note moves to v4.71 in en, fi and ja. `versions.json` piritori goes from 4.67 to 4.71 (by hand).
+  - Token cascade: games 160, shell 123, hub 164, hub-entry 87, with toko/js 27–29 following. 46 site files.
+  - The service worker `VERSION` goes to v153, and `sw-shell.mjs --check` agrees.
+- **Found in the deploy:** since v4.68 the Act I app imports `fight-module/stand-in.js`. The site's `piritori/` never had it, so a cabinet staged from `js/`, `content/` and `art/` alone does not boot. It ships now. `build-hub-cabinet.mjs` copies all of `web/`, so it carries the file; it also failed its own roster check on every build since the import gained `?v=1`, which is fixed.
+- **Verified on the staged site tree:**
+  - `act1.html` forwards to `?v=471`. The header says v4.71 and the hub HOME button mounts.
+  - A staged Hakaniemi fight decodes its plate and names the place.
+  - A bare Siltasaari stage has no horizontal overflow on a phone.
+  - The arcade card reads v4.71.
+  - `doors-browser` (40) and `road-browser` (40) pass against the site tree itself.
+- **Known issue (not this release):** `opening.cjs` times out on a reload after the arrival plays out unskipped.
+  - It fails on main since v4.70 (CI run 966), so CI skips the doors, Aatami and families browser steps after it.
+  - The page commits and nothing is pending, but `load` never fires under the test's own Node server. It does not reproduce under `python3 -m http.server`, so it looks like a harness problem.
+  - It is not diagnosed further here.
+- **Not verified:** the public github.io URL (this session's network policy blocks it), owner acceptance on a device, and a Godot visual capture. Godot's 3D fight stage does not draw plates yet (ACT1_PLAN G13).
