@@ -43,9 +43,9 @@ function figure(p) {
 function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); return yy; }
 function ui(name, line) {
   // the speech bubble: kraft card with a tail toward the speaker
-  const bx = 350, by = 150, bw = 690, bh = 320;
+  const bx = 580, by = 620, bw = 470, bh = 400;   // beside him; the tail ends at the corner of his mouth
   g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 18; g.shadowOffsetX = 8; g.shadowOffsetY = 12;
-  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 170, by + bh - 4); g.lineTo(bx - 60, by + bh + 150); g.lineTo(bx + 90, by + bh - 4); g.lineTo(bx + 4, by + bh - 2); g.closePath(); g.fill(); g.restore();
+  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 4, by + bh - 2); g.lineTo(bx + 2, by + bh - 60); g.lineTo(568, 1096); g.lineTo(bx, by + bh - 150); g.closePath(); g.fill(); g.restore();
   g.fillStyle = '#17191A'; g.font = '700 44px Arial Narrow, Arial'; g.fillText(name, bx + 34, by + 62);
   g.font = '400 40px Courier New, monospace'; wrap(line, bx + 34, by + 124, bw - 70, 52);
   // talk options: dark cards with a colour tab, bottom right
