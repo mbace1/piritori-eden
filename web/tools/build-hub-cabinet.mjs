@@ -136,7 +136,7 @@ if (leftovers.length) {
 const contentSrc = readFileSync(join(out, 'js/v3/content.js'), 'utf8');
 for (const [re, label] of [
   [/'\.\.\/\.\.\/content\/era1-slice-v1\.json'/, 'content fetch is two levels up'],
-  [/'\.\.\/\.\.\/people\/roster\.mjs'/, 'roster import is two levels up'],
+  [/'\.\.\/\.\.\/people\/roster\.mjs(\?v=\d+)?'/, 'roster import is two levels up'],
   [/ART_BASE = 'art\/v3'/, 'ART_BASE is page-relative'],
 ]) {
   if (!re.test(contentSrc)) { console.error(`  FAIL ${label}`); bad += 1; }
