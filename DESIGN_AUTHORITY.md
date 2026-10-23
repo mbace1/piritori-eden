@@ -1,5 +1,20 @@
 # Piritori → Eden — design authority
 
+## Owner note, 2026-10-23 — 3D might not be the future
+
+Asked whether to freeze the formation board so every fight moves to Night
+Shift's 3D tactics (CAMPAIGN.md §7, PR #102, which records "3D is the
+future" from 2026-10-17): **"3d might not be the future. Recent steps are
+using motion graphics."**
+
+- The recent steps are the cut-paper rigs: Toko at the counter (v4.70), the
+  waist-up NPC cut-ins (PR #107: "the characters don't need to be 3D"), the
+  paper kit (AD1) and the Radio Free papercut technique behind them.
+- Until the owner says more, no lane should build on "3D is the future": no
+  freeze of the formation board, no new 3D place kits. The `kit` field in
+  `content/places-v1.json` (v4.71) is a record, not a plan.
+- Stand-ins only (2026-10-02) and web leads, Godot follows, are unchanged.
+
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 
 The owner approved the cut-card Toko Slomo loops ("Approved, put it in the
