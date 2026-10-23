@@ -145,6 +145,7 @@ jobs:
           node web/test/story.mjs
           node web/test/chapter.mjs
           node web/test/doors.mjs
+          node web/test/places.mjs
           node web/test/aatami.mjs
           node web/test/standing.mjs
           node web/test/chapter-narrative.mjs

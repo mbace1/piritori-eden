@@ -57,6 +57,14 @@ if (!out) {
  *  passes its own tests, but the live app never imports it. */
 const DATA = [
   ['content/era1-slice-v1.json', 'content/'],
+  // The Long Game's content (v4.6x) and the fight places (v4.71): each is
+  // fetched by its own module and fails soft, so a cabinet without them
+  // boots and quietly has no story, doors, road, families or places.
+  ['content/act1-story-v1.json', 'content/'],
+  ['content/doors-v1.json', 'content/'],
+  ['content/road-events-v1.json', 'content/'],
+  ['content/families-v1.json', 'content/'],
+  ['content/places-v1.json', 'content/'],
   ['map/kallio-era1-2003-v1.json', 'map/'],
   ['map/kallio-transit-layer-v1.json', 'map/'],
   ['market/model.mjs', 'market/'],
@@ -136,7 +144,8 @@ for (const [re, label] of [
 
 for (const f of ['index.html', 'fighter-test.html', 'fighter-test.css', 'js/v3/app.js',
   'js/v3/render3d.js', 'js/v3/fighter-test.js', 'art/v3/manifest.json',
-  'content/era1-slice-v1.json', 'market/model.mjs', 'people/hiring.mjs',
+  'content/era1-slice-v1.json', 'content/doors-v1.json', 'content/places-v1.json',
+  'market/model.mjs', 'people/hiring.mjs',
   'art/v3/cast3d/clips/muscle-idle-v01.glb',
   'art/v3/cast3d/f01-heavy-bruiser-v02.glb',
   'art/v3/cast3d/f02-wiry-skirmisher-v02.glb',

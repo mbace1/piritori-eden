@@ -571,6 +571,8 @@ html body .arcade-home { display: none; }
 .battle-layout { min-height: 100%; display: grid; grid-template-rows: minmax(440px, 1fr) auto; }
 .battle-stage { position: relative; min-height: 440px; overflow: hidden; background: #141921; border-bottom: 2px solid #80684b; }
 .battle-stage > .scene-image { position: absolute; inset: 0; filter: brightness(1.12) saturate(.9) contrast(1.04); }
+/* v4.71: a place with no plate that holds the board (places-v1.json) fights on bare ground, not a void. */
+.battle-stage.bare-stage { background: radial-gradient(ellipse 70% 55% at 50% 60%, #2b3036 0%, #1b2027 55%, #141921 100%); }
 .battle-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6,11,15,.10), transparent 20% 80%, rgba(6,11,15,.10)), linear-gradient(transparent 68%, rgba(4,8,12,.14)); }
 /* Stand-in stage. The CSS location plate remains; imported character meshes
    and legacy 2D character art do not. z-index stays below the formation

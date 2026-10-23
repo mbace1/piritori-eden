@@ -116,6 +116,9 @@ server.listen(0, '127.0.0.1', async () => {
       s = await S(page);
       ok(`${name}: it is a door fight, not a mission`, s.battle?.door === 'hit-bear-debt' && s.battle.missionId === null && s.mode === 'battle');
       ok(`${name}: and it counts toward today's two`, s.fightsByDay?.[8] === 1);
+      // v4.71: it is fought where the door is, against the people the door names.
+      ok(`${name}: fought at the door, by its side`, s.battle.place?.anchor === 'karhupuisto' && s.battle.place.by === 'piritori_independents'
+        && s.battle.sceneAssetId === 'scene-karhupuisto-clearing-v01' && await page.locator('.battle-stage[data-place="karhupuisto"]').count() === 1);
       // Answer 25: a bad deal escalates. Selling two at the quay goes bad on this block's roll.
       const quay = (crew) => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "sornainen_harbour"; s.stock.piri = 2; s.recruited = ${crew}; s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "sale-quay-shift", anchor: "sornainen_harbour" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {};`;
       await fixture(page, quay('a.slice(0, 3)'), await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
@@ -125,6 +128,8 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="choose"][data-choice="sell-two"]').click();
       s = await S(page);
       ok(`${name}: it goes bad, and it is a fight`, s.battle?.door === 'sale-quay-shift' && s.battle.id === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1);
+      ok(`${name}: on the quay, not in the boiler hall`, s.battle.place?.anchor === 'sornainen_harbour' && s.battle.sceneAssetId === 'scene-sornainen-quay-v01'
+        && /The Sörnäinen quay/.test(await page.locator('.battle-objective').innerText()));
       await fixture(page, quay('[]'));
       await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();

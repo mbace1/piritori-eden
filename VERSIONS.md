@@ -77,6 +77,28 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.71 — 2026-10-23
+
+**A fight happens where it starts.** Owner, 2026-10-23: *"start on map locations, battles, etc"*. Until now the nine door fights and four road fights borrowed one of three mission arenas and its named people. A crate skimmed at the Hakaniemi market was fought "at the bear" against the Karhupuisto pair, and a sale gone bad on the Sörnäinen quay was fought in the Suvilahti boiler hall.
+
+- **One fight place per active anchor** (`content/places-v1.json`, eleven places). Each has the plate it is fought on, cover markers on the board's cells (STAGE_SPEC 4.5: a marker, never snapped to the art), the way out, and the 3D kit Night Shift would stage there (CAMPAIGN.md P4, PR #102).
+- **Every plate holds the board** (STAGE_SPEC 5.2), checked with `stage-contact.mjs`. Piritori and Brahenkenttä are new to fights and pass.
+  - `karhupuisto-v01` ("not a battle floor") and `sornainen-docks-v02` (a perspective plate) are refused by the gate.
+  - Suvilahti fights on the service yard as a marked stand-in.
+  - Mäkelänsilta and Siltasaari have no plate that holds the board. They fight on a bare stage, and each names the plate it wants.
+- **Where.** A door fight is fought at the door. A road fight is fought where it happens: arriving, the place arrived at; in transit, the place just left (the first of the two that has a place). Mission battles keep their authored arenas.
+- **Who.** Each door and road fight names a side: the McCormicks' people, the Jade Lantern's people, or the locals.
+  - The people are generated (COMBAT.md §7.1) from the fight's own key. A reload shows the same faces, and the next retaliation brings new ones.
+  - A board shows first names, so no first name appears twice: not between two rivals, and not between a rival and your own crew.
+- **What does not move:** the shape. Format, roles, cells, weapons, negotiation, casualties and the day's two fights stay the battle the door names. Only the place, the people, the objective ("Behind the market hall. Make the Jade Lantern's people back off, or leave on a tram from the stop.") and the withdrawal cost change.
+- **Copy follows the place.** The fish stall, the yard van and the quay shift no longer name somewhere else. The McCormicks' retaliation says "Two of them", which is what the board shows.
+- **Deploy lists.** `build-hub-cabinet.mjs` and `deploy.yml` now ship the story, doors, road, families and places JSON. Before this, a cabinet built by the tool booted without them, quietly.
+- Cache: `app.js?v=37`, `places.js?v=1`, `v3.css?v=10`. Gates: `places.mjs` 183 (new, in gates.yml). `doors-browser` and `road-browser` now check where each fight is fought and by whom.
+
+### Port
+
+Ported in the same version. `PiritoriPlaces` (`godot/scripts/city/places.gd`) mirrors `places.js`. `ContentRegistry` loads and verifies `places-v1.json`. `BattleBuilder.build`, `entry_forecast` and `opponent_intents` and `FightManager.begin_canonical` take the staged definition. `app_shell._show_battle` stages door and road fights. Names come from the port's own `CrewGenerator`, as every generated name there does, so they differ from the web's; place, side and shape match. `test_story` +36. Godot's 3D fight stage does not draw a plate yet (ACT1_PLAN G13), so in Godot the place shows in the objective and forecast, not in the picture.
+
 ## v4.70 — 2026-10-21
 
 **Toko Slomo acts, in cut card, behind his own counter.** Owner, 2026-10-21: *"Approved, put it in the game"*, and asked where, the paper Toko in the empty bar in place of the 3D speaker. That sets aside the 2026-08-24 3D-layer ruling for the counter scenes; Jaska and Arvo stay 3D.

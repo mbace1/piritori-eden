@@ -15,7 +15,7 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=36');
+const app=await read('../js/v3/app.js?v=37');
 for(const id of ['cast3d-jaska-v01','presenter-arvo-linde-v05']){
  assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
 }
@@ -28,7 +28,7 @@ assert(rig&&stage.includes("'scene-toko-rig-v01'"),'Registered Toko rig');
 assert.equal(rig.plate_asset_id,'scene-toko-noodles-empty-v01','Rig drawn over the empty bar');
 assert(c.encounters.concat(c.optional_visits??[]).filter(e=>e.participants?.includes('toko')).every(e=>e.scene_asset_id===rig.plate_asset_id),'Every Toko scene is the empty bar');
 for(const part of ['torso','head','hood_bare','brow_l','brow_r','eye_l','eye_r','counter','fore_r','note','hand_l'])assert(rig.members.some(m=>m.part===part),`rig part ${part}`);
-assert((await read('../index.html')).includes('ACT I · v4.70'));
+assert((await read('../index.html')).includes('ACT I · v4.71'));
 const fight=await read('../fight-module/main.js');
 assert(!fight.includes('loadFighters('),'playable fight routes never load candidate meshes');
 assert(fight.includes('makeActor({placeholder:true},u,world)'),'playable fight routes always build stand-ins');

@@ -126,7 +126,7 @@ jobs:
         run: |
           cp -r web build/web/web
           mkdir -p build/web/content build/web/map build/web/market build/web/people
-          cp content/era1-slice-v1.json build/web/content/
+          cp content/era1-slice-v1.json content/act1-story-v1.json content/doors-v1.json content/road-events-v1.json content/families-v1.json content/places-v1.json build/web/content/
           cp map/kallio-era1-2003-v1.json map/kallio-transit-layer-v1.json build/web/map/
           mkdir -p build/web/art
           cp -r art/v3 build/web/art/
