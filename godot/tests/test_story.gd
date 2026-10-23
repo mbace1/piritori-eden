@@ -88,6 +88,8 @@ func _ready() -> void:
 	_test_standing_nights_are_the_webs()
 	_test_the_night_settles_standing()
 	_test_standing_events_play()
+	# v4.71, mirroring web/test/places.mjs.
+	_test_fights_happen_where_they_start()
 	_test_sound()
 	_test_arrival_lines()
 
@@ -966,6 +968,75 @@ func _test_the_lineup_is_the_webs() -> void:
 
 
 ## web/test/doors.mjs's escalation block, and the resolution that carries it.
+func _test_fights_happen_where_they_start() -> void:
+	print("\nfights happen where they start (v4.71, web places.js)")
+	for a in ContentRegistry.map.get("anchors", []):
+		if String(a.get("sliceState", "")) == "active":
+			check("%s has a fight place" % a["id"], not PiritoriPlaces.place_at(String(a["id"])).is_empty())
+	var sides: Dictionary = PiritoriPlaces.rules().get("sides", {})
+	for t in PiritoriDoors.templates():
+		if PiritoriDoors.can_fight(t):
+			check("%s names who fights" % t["id"], sides.has(String(t["fight"].get("by", ""))))
+
+	# A door fight: at the door, by its side, the shape kept.
+	var t := PiritoriDoors.template_of("pickup-fish-stall")
+	var enc := PiritoriDoors.door_encounter(14, "pickup-fish-stall", "hakaniemi")
+	var stage := PiritoriPlaces.door_fight_stage(enc, t)
+	check("the fish stall is fought at the door, by the Jade Lantern",
+		stage["anchor"] == "hakaniemi" and stage["by"] == "jade_lantern_network" and stage["key"] == String(enc["id"]))
+	var shape := ContentRegistry.battle("battle-karhupuisto-2v2")
+	var before := JSON.stringify(shape)
+	var crew := ["Aatami"]
+	var staged := PiritoriPlaces.stage_fight(shape, stage, crew)
+	check("staging never edits the authored battle", JSON.stringify(shape) == before)
+	check("on the Hakaniemi plate, with its cover",
+		staged["scene_asset_id"] == "scene-hakaniemi-square-v01"
+		and JSON.stringify(staged["cover"]) == JSON.stringify(PiritoriPlaces.place_at("hakaniemi")["cover"]))
+	var kept := true
+	for k in ["id", "format", "player_deployed", "negotiation", "casualty_table"]:
+		kept = kept and JSON.stringify(staged[k]) == JSON.stringify(shape[k])
+	check("the shape is kept", kept)
+	var people: Array = staged["opponents"]
+	var firsts := {}
+	var same_roles: bool = people.size() == shape["opponents"].size()
+	for i in people.size():
+		same_roles = same_roles and people[i]["role"] == shape["opponents"][i]["role"] \
+			and people[i]["cell"] == shape["opponents"][i]["cell"] and people[i]["name"] != shape["opponents"][i]["name"]
+		firsts[String(people[i]["name"]).split(" ")[0]] = true
+	check("same roles and cells, new people", same_roles)
+	check("no first name twice, and none of the crew's", firsts.size() == people.size() and not firsts.has("Aatami"))
+	check("deterministic: a reload is the same faces",
+		JSON.stringify(PiritoriPlaces.stage_fight(shape, stage, crew)) == JSON.stringify(staged))
+	check("the objective says where, who and the way out",
+		String(staged["objective"]) == "Behind the market hall. Make the Jade Lantern's people back off, or leave on a tram from the stop.")
+	var bare := PiritoriPlaces.stage_fight(ContentRegistry.battle("battle-courtyard-3v3"),
+		{"anchor": "makelansilta", "by": "mccormick_family", "key": "k"})
+	check("Mäkelänsilta is a bare stage until its plate exists", bare["scene_asset_id"] == "" and bool(bare["place"]["bare"]))
+	check("no place: the authored fight", PiritoriPlaces.stage_fight(shape, {"anchor": "nowhere", "by": "", "key": "k"}) == shape)
+
+	# A road fight: where it happened.
+	check("arriving: the place arrived at",
+		PiritoriPlaces.road_fight_anchor({"phase": "arrival", "from": "piritori", "to": "hakaniemi"}) == "hakaniemi")
+	check("in transit: the place just left",
+		PiritoriPlaces.road_fight_anchor({"phase": "transit", "from": "piritori", "to": "hakaniemi"}) == "piritori")
+	check("in transit from no fight place: the place ahead",
+		PiritoriPlaces.road_fight_anchor({"phase": "transit", "from": "kurvi", "to": "hakaniemi"}) == "hakaniemi")
+	var ev := ContentRegistry.road_event("road-retaliation-mccormick")
+	var r1 := PiritoriPlaces.road_fight_stage({"phase": "arrival", "from": "linjat_yard", "to": "vaasankatu"}, ev, 15)
+	check("a retaliation is fought where Aatami arrived, by the McCormicks",
+		r1["anchor"] == "vaasankatu" and r1["by"] == "mccormick_family" and r1["key"] == "road-retaliation-mccormick-15")
+
+	# The board builds from the staged fight.
+	var def := BattleBuilder.build("battle-karhupuisto-2v2",
+		ContentRegistry.slice.get("crew", []).slice(0, 2).map(func(c): return String(c["id"])), 7, staged)
+	var names: Array = def["opposition_units"].map(func(u): return String(u["display_name"]))
+	check("the board is built at Hakaniemi, against the staged people",
+		def["stage_id"] == "scene-hakaniemi-square-v01" and String(def["place"].get("anchor", "")) == "hakaniemi"
+		and names == people.map(func(o): return String(o["name"])))
+	check("the forecast reads the staged objective",
+		BattleBuilder.entry_forecast("battle-karhupuisto-2v2", staged).contains("Behind the market hall"))
+
+
 func _test_bad_deals_escalate() -> void:
 	print("\nbad deals escalate (answer 25), by a roll the forecast names")
 	var first := int(_ref.get("door_blocks", [15])[0])

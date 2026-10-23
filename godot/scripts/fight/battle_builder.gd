@@ -32,6 +32,12 @@ const DEFAULT_PROFILE := {"condition": 6, "nerve": 6, "tempo": 5, "nerve_bias": 
 
 ## Parse a canonical cell id such as "front-2" into (lane, row), 0-based.
 ## Lanes are written 1..3 in the data and stored 0..2 here.
+## The battle a fight is built from: the staged one when a door or road
+## fight was moved to its place (v4.71), else the authored one.
+static func _definition(battle_id: String, staged: Dictionary) -> Dictionary:
+	return staged if not staged.is_empty() else ContentRegistry.battle(battle_id)
+
+
 static func parse_cell(cell: String) -> Vector2i:
 	var parts := cell.split("-")
 	if parts.size() != 2:
@@ -95,8 +101,11 @@ static func cell_name(lane: int, row: int) -> String:
 ##
 ## `crew_ids` are canonical crew ids to deploy; the battle's `player_deployed`
 ## caps how many take the field.
-static func build(battle_id: String, crew_ids: Array, seed_value: int = 0) -> Dictionary:
-	var battle := ContentRegistry.battle(battle_id)
+##
+## `staged` (v4.71) is the definition PiritoriPlaces.stage_fight made for a
+## door or road fight; empty means the authored battle.
+static func build(battle_id: String, crew_ids: Array, seed_value: int = 0, staged: Dictionary = {}) -> Dictionary:
+	var battle := _definition(battle_id, staged)
 	if battle.is_empty():
 		return {}
 
@@ -131,6 +140,7 @@ static func build(battle_id: String, crew_ids: Array, seed_value: int = 0) -> Di
 		"opposition_units": opposition_units,
 		"cover_props": _cover_props(battle),
 		"objective": String(battle.get("objective", "")),
+		"place": battle.get("place", {}),
 		"death_eligible": String(battle.get("casualty_table", {}).get("death", "")) != "not-eligible-in-this-battle",
 		"seed": seed_value,
 	}
@@ -288,8 +298,8 @@ static func _cover_props(battle: Dictionary) -> Array:
 
 
 ## Intent lines for the top strip (§13.4 step 1: opponent intent is telegraphed).
-static func opponent_intents(battle_id: String) -> Array:
-	var battle := ContentRegistry.battle(battle_id)
+static func opponent_intents(battle_id: String, staged: Dictionary = {}) -> Array:
+	var battle := _definition(battle_id, staged)
 	var out: Array = []
 	for opp in battle.get("opponents", []):
 		out.append({
@@ -304,8 +314,8 @@ static func opponent_intents(battle_id: String) -> Array:
 ## Encounters already print `choice.forecast`; fights had the pieces
 ## (objective, withdrawal cost, casualty telegraph) and never assembled them.
 ## Optional authored `forecast` on the battle overrides the compose.
-static func entry_forecast(battle_id: String) -> String:
-	var battle := ContentRegistry.battle(battle_id)
+static func entry_forecast(battle_id: String, staged: Dictionary = {}) -> String:
+	var battle := _definition(battle_id, staged)
 	var authored := String(battle.get("forecast", "")).strip_edges()
 	if authored != "":
 		return authored

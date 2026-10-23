@@ -2115,13 +2115,13 @@ func _get_item_data(item_id: String) -> Dictionary:
 ## (content/era1-slice-v1.json), adapted by EquipmentRules and BattleBuilder.
 ##
 ## Returns the same error Array as initialise(); empty means success.
-func begin_canonical(battle_id: String, crew_ids: Array, seed_val: int = 0) -> Array:
+func begin_canonical(battle_id: String, crew_ids: Array, seed_val: int = 0, staged: Dictionary = {}) -> Array:
 	for wid in EquipmentRules.weapons():
 		register_weapon(wid, EquipmentRules.weapons()[wid])
 	for iid in EquipmentRules.items():
 		register_item(iid, EquipmentRules.items()[iid])
 
-	var def := BattleBuilder.build(battle_id, crew_ids, seed_val)
+	var def := BattleBuilder.build(battle_id, crew_ids, seed_val, staged)
 	if def.is_empty():
 		return ["unknown battle id '%s'" % battle_id]
 	return initialise(def, seed_val)

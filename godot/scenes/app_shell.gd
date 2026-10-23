@@ -2730,6 +2730,8 @@ func _on_battle_requested(battle_id: String) -> void:
 ## Enter a formation battle. The campaign model is untouched until it resolves.
 func _show_battle(battle_id: String, road_fight: bool = false, door: String = "",
 		road_event: String = "") -> void:
+	# Read before the world is cleared: the door's encounter is where its fight is.
+	var door_encounter := _open_encounter if door != "" else ""
 	_road_battle = road_fight
 	_door_battle = door
 	_door_escalated = false
@@ -2770,11 +2772,24 @@ func _show_battle(battle_id: String, road_fight: bool = false, door: String = ""
 		if not crew.has(cid):
 			crew.append(cid)
 
+	# v4.71 (web `startBattle`): a door or road fight is fought where it
+	# starts, against the people its door or event names (PiritoriPlaces).
+	var staged := {}
+	var stage := {}
+	if door != "" and door_encounter != "":
+		stage = PiritoriPlaces.door_fight_stage(ContentRegistry.encounter(door_encounter),
+			PiritoriDoors.template_of(door))
+	elif road_fight and road_event != "":
+		stage = PiritoriPlaces.road_fight_stage(GameState.road.get("last", null),
+			ContentRegistry.road_event(road_event), GameState.block_index)
+	if not stage.is_empty():
+		staged = PiritoriPlaces.stage_fight(ContentRegistry.battle(battle_id), stage, _board_names(crew))
+
 	var scene := preload("res://scenes/formation_battle.gd").new()
 	scene.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scene.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_world_host.add_child(scene)
-	var errs: Array = scene.begin(battle_id, crew, GameState.seed_value + GameState.block_index)
+	var errs: Array = scene.begin(battle_id, crew, GameState.seed_value + GameState.block_index, staged)
 	if not errs.is_empty():
 		_rail_box.add_child(_make_label(str(errs), 13, PiritoriPalette.DANGER_RED))
 		return
@@ -2816,6 +2831,22 @@ func _show_battle(battle_id: String, road_fight: bool = false, door: String = ""
 		var left := GameState.age_crew(deployed)
 		_show_aftermath(summary, spoils, left))
 	_rail.visible = false
+
+
+## The names already on a board (v4.71): a generated rival never shares a
+## first name with one of your own.
+func _board_names(ids: Array) -> Array:
+	var out: Array = []
+	var hero := ContentRegistry.protagonist()
+	for id in ids:
+		var sid := String(id)
+		var rec: Dictionary = GameState.generated_crew.get(sid, {})
+		if rec.is_empty() and sid == String(hero.get("id", "")):
+			rec = hero
+		if rec.is_empty() and ContentRegistry.has_crew(sid):
+			rec = ContentRegistry.crew_member(sid)
+		out.append(String(rec.get("name", rec.get("display_name", ""))))
+	return out
 
 
 ## A fight's result in the mission's terms: a win, a partial (a negotiated
