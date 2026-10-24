@@ -2250,9 +2250,9 @@
     {
       "id": "cutin-jaska-rig-v01",
       "kind": "cutin-rig",
-      "approval_status": "semi-approved",
+      "approval_status": "approved",
       "production_status": "animated-rig",
-      "review_status": "Owner review pending (PR #107). The owner steered the speech bubble, 2026-10-23/24.",
+      "review_status": "Owner-approved, 2026-10-24: Jaska is already approved.",
       "dimensions": [
         520,
         700

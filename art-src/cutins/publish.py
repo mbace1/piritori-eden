@@ -12,7 +12,7 @@ MANIFEST = os.path.join(REPO, 'art', 'v3', 'manifest.json')
 # Owner status per character. Semi-approved = the direction is accepted, the rig itself still awaits review.
 META = {
   'jaska': {'source': 'art-src/concepts/people/jaska-concept-v03.jpg', 'location': 'scene-club',
-            'review': 'Owner review pending (PR #107). The owner steered the speech bubble, 2026-10-23/24.'},
+            'approval': 'approved', 'review': 'Owner-approved, 2026-10-24: Jaska is already approved.'},
   'arvo': {'source': 'art-library/presenter/arvo-linde-concept-v05.png (the approved v05 presenter painting)', 'location': 'news',
            'review': 'Owner review pending (PR #107). Fictional homage, not a likeness (NARRATIVE.md).'},
 }
@@ -31,7 +31,7 @@ def entry(cid):
         if p.get('pivot'): pivots[p['name']] = p['pivot']
         if p.get('lid_of'): lids[p['name']] = p['lid_of']
     m = META[cid]
-    return {'id': f'cutin-{cid}-rig-v01', 'kind': 'cutin-rig', 'approval_status': 'semi-approved', 'production_status': 'animated-rig',
+    return {'id': f'cutin-{cid}-rig-v01', 'kind': 'cutin-rig', 'approval_status': m.get('approval', 'semi-approved'), 'production_status': 'animated-rig',
             'review_status': m['review'], 'dimensions': rig['size'], 'format': 'webp-alpha', 'layer': 'cutin-speaker', 'era': '2003',
             'character': cid, 'location': m['location'], 'source': f'{m["source"]}, cut by art-src/cutins/cut.py',
             'baked_text': False, 'baked_ui': False, 'reduced_motion_fallback': 'rest-pose',
