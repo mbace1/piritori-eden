@@ -61,6 +61,15 @@ export const TESTS = [
     jump: { kind: 'encounter', id: 'enc-bank-counter' },
   },
   {
+    id: 'battle-paper',
+    rev: 1,
+    build: 'js',
+    title: 'A fight in cut paper — Hakaniemi',
+    where: 'a door fight behind the market hall, drawn as paper',
+    note: 'Owner, 2026-10-23: motion graphics may replace 3D. The same board and rules, with the fighters as cut-card stand-ins acting over the place background. Attack once, then END TEAM TURN, and watch: a figure leans back before it strikes, the card bends when hit, a torn guard flinches, a fall topples about the feet and lies. Use FIGHTS in this menu to see the same fight in 3D.',
+    jump: { kind: 'battle', id: 'battle-karhupuisto-2v2', at: 'hakaniemi', by: 'jade_lantern_network', look: 'paper' },
+  },
+  {
     id: 'battle-2v2',
     rev: 1,
     build: 'both',

@@ -570,6 +570,9 @@ html body .arcade-home { display: none; }
 /* Battle */
 .battle-layout { min-height: 100%; display: grid; grid-template-rows: minmax(440px, 1fr) auto; }
 .battle-stage { position: relative; min-height: 440px; overflow: hidden; background: #141921; border-bottom: 2px solid #80684b; }
+/* v4.72: its own stacking context. nameplates.js depth-sorts tokens with z-index into the hundreds, which
+   otherwise rose above the pause veil (z 60): a tap on RESUME during a fight could land on a fighter. */
+.battle-stage { isolation: isolate; }
 .battle-stage > .scene-image { position: absolute; inset: 0; filter: brightness(1.12) saturate(.9) contrast(1.04); }
 /* v4.71: a place with no plate that holds the board (places-v1.json) fights on bare ground, not a void. */
 .battle-stage.bare-stage { background: radial-gradient(ellipse 70% 55% at 50% 60%, #2b3036 0%, #1b2027 55%, #141921 100%); }

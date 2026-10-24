@@ -77,6 +77,31 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.72 — 2026-10-24
+
+**Fights in cut paper, as a switch.** Owner, 2026-10-23: *"3d might not be the future. Recent steps are using motion graphics."* Then: *"Plan your approach and then execute."* The fight can now be drawn the way Toko is drawn at his counter (v4.70): flat cut-card figures on hidden pivots, acting over the place's plate (v4.71). The board, the rules and the plates are unchanged; only the drawing changes. The 3D stand-ins remain the default.
+
+- **Paper stand-ins** (`paper-fight.js`). Each fighter is cut from card in code: legs, coat, arms, head, weapon. They are neutral and procedural, seeded from the unit with the same palette as the 3D stand-ins, so the 2026-10-02 rule holds.
+  - The look is AD1 "A, restrained": a clean cut, a pale edge where the card's core shows on the lit side, faint grain, and a hard shadow where the card stands off the ground.
+  - Cover is a kraft card lying flat on its cell, so it never stands in front of the person using it.
+- **The fight is acted out.** `battle.js` records **beats**: who struck whom and what it did (`guard` torn, `hurt`, `down`), and who hopped, braced, marked or used an item. No rule reads them; the last 24 are kept.
+  - `paper-motion.js` plays the beats one after another, posed twelve times a second.
+  - A striker leans away, commits under half a step, holds the release and settles. The struck card bends back at the impact. A torn guard is a smaller flinch with the arms up. A fall topples about the feet and lies there.
+  - Each figure turns to whoever its beat is about. A long reposition hops for longer and higher.
+  - The enemy turn plays out one blow at a time. A reload never replays old blows.
+  - Reduced motion: no breath and no wind-up. Each beat shows its end pose, briefly.
+- **The switch:** FIGHTS · 3D / PAPER in the pause menu, or `?fight=paper|3d` on a link. It is remembered. It is a comparison, not a decision.
+- **THINGS TO TEST** has a new entry, **A fight in cut paper — Hakaniemi**. It jumps to a paper fight behind the market hall.
+- **Fixed (pre-existing): the pause menu under a fight.** Fighters' depth z-index (up to ~440, `nameplates.js`) rose above the pause veil (60), so a tap meant for the menu could land on a fighter. `.battle-stage` is now its own stacking context.
+- Cache: `app.js?v=39`, `battle.js?v=14`, `pause.js?v=5`, `testlist.js?v=4`, `v3.css?v=11`, `paper-fight.js?v=1`, `paper-motion.js?v=1`.
+- Gates:
+  - `paper-fight.mjs`: 47 checks of the motion vocabulary and the beats.
+  - `paper-fight-browser.cjs`: 27 checks. Every standing fighter is painted where its token is; a turn is acted out to the end; the switch works both ways and is remembered; the THINGS TO TEST jump works; reduced motion; a phone; and the pause menu sits above the fighters.
+
+### Port
+
+None yet, deliberately. Paper is a comparison until the owner picks a look; Godot ports the one that is chosen. If paper is chosen, the port needs `paper-motion.js` (pure, a direct translation) and a 2D figure drawer over the plate. The beats would be recorded in `FightManager`'s resolution, which already emits `event_resolved`.
+
 ## v4.71 — 2026-10-23
 
 **A fight happens where it starts.** Owner, 2026-10-23: *"start on map locations, battles, etc"*. Until now the nine door fights and four road fights borrowed one of three mission arenas and its named people. A crate skimmed at the Hakaniemi market was fought "at the bear" against the Karhupuisto pair, and a sale gone bad on the Sörnäinen quay was fought in the Suvilahti boiler hall.

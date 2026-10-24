@@ -9,7 +9,7 @@ import { readFile } from 'node:fs/promises';
 import {
   createState, restoreState, aatamiFights, stepBackIfReady, fighters, requirementStatus, ageCrew, crewRecord, isNamed,
 } from '../js/v3/state.js?v=9';
-import { createBattleState } from '../js/v3/battle.js?v=13';
+import { createBattleState } from '../js/v3/battle.js?v=14';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
