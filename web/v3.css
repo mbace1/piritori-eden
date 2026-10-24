@@ -1097,3 +1097,16 @@ html body .arcade-home { display: none; }
   margin: 0.25rem 0 0;
   font-size: 0.75rem;
 }
+
+/* Waist-up cut-ins (js/v3/cutin-stage.js; owner, 2026-10-23). The picture is a 9:16 canvas; the words and the
+   buttons are HTML laid over it at the canvas's own boxes, so they wrap and scale with the frame. */
+.cutin { position: fixed; inset: 0; z-index: 400; display: flex; align-items: center; justify-content: center; background: rgba(8, 10, 11, 0.72); }
+.cutin-frame { position: relative; width: min(100vw, calc(100dvh * 9 / 16)); aspect-ratio: 9 / 16; container-type: inline-size; }
+.cutin-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cutin-words { position: absolute; box-sizing: border-box; padding: 3.1cqw 3.2cqw 0; color: #17191a; overflow: hidden; }
+.cutin-words b { display: block; font: 700 4.1cqw/1.1 "Arial Narrow", Arial, sans-serif; letter-spacing: 0.02em; }
+.cutin-words p { margin: 1.8cqw 0 0; font: 400 3.7cqw/1.3 "Courier New", monospace; }
+.cutin-news b { display: inline-block; padding: 1.2cqw 2.4cqw 1.2cqw 2cqw; border-left: 1.1cqw solid var(--tag, #676b6b); background: #17191a; color: #e2d8c2; font-size: 3.2cqw; }
+.cutin-options { position: absolute; display: flex; flex-direction: column; justify-content: flex-end; gap: 2cqw; }
+.cutin-options button { display: flex; align-items: center; gap: 2.4cqw; min-height: 8.9cqw; padding: 1.4cqw 2.4cqw 1.4cqw 1.3cqw; border: 0; background: rgba(20, 24, 26, 0.94); color: #e2d8c2; font: 700 3.3cqw/1.15 "Arial Narrow", Arial, sans-serif; text-align: left; text-transform: uppercase; cursor: pointer; }
+.cutin-options button i { flex: none; align-self: stretch; width: 1.1cqw; background: var(--tab, #676b6b); }

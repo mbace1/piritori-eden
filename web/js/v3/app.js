@@ -22,6 +22,7 @@ import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
 import { loadTokoStage } from './toko-stage.js?v=1';
+import { loadCutin, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=1';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
@@ -151,6 +152,55 @@ function mountTokoStage(root) {
     if (!stage) { canvas.dataset.status = 'unavailable'; canvas.hidden = true; return; }   // the empty bar stays, as before the rig
     stage.attach(canvas, context);
   });
+}
+// Waist-up cut-ins (cutin-stage.js; owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and
+// talk options", the level behind). For now a PREVIEW reached by ?cutin=<who> (CLAUDE.md rule 6, the phone debug rule):
+// the words come from the authored slice, a choice makes the speaker react and says what it would do, and nothing is
+// applied or saved. The slice has no spoken lines for Jaska yet, so his bubble carries the encounter's opening.
+const CUTIN_TABS = ['#C5A044', '#38B8C8', '#676B6B'];
+const CUTIN_TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8', ACCUSATION: '#B5523B', FICTION: '#676B6B' };
+const CUTIN_SCRIPT = {
+  jaska: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
+    lines: [{ text: e.opening, clip: 'talk' }],
+    choices: e.choices.map(c => ({ label: c.label, reply: c.forecast, clip: c.effects.some(x => /^relationship:jaska:-/.test(x)) ? 'shake' : 'nod' })) }; },
+  arvo: () => { const n = data.news.get('news-markka-afterlife'); return n && { lines: [
+    { tag: 'ARVO LINDE', text: n.arvo_copy, clip: 'read' }, { tag: 'DOCUMENTED', text: n.documented, clip: 'glance' },
+    { tag: 'INFERENCE', text: n.inference, clip: 'gesture' }, n.accusation && { tag: 'ACCUSATION', text: n.accusation, clip: 'read' },
+    { tag: 'FICTION', text: n.fiction, clip: 'nod' }].filter(Boolean) }; },
+};
+async function openCutin(who) {
+  const script = CUTIN_SCRIPT[who]?.();
+  if (!script) { logToast(`unknown cut-in '${who}'`); return; }
+  const stage = await loadCutin(data, who, { reducedMotion, plateId: script.plateId });
+  if (!stage) { logToast(`cut-in '${who}' is not registered or failed to load`); return; }
+  const cast = stage.cast, news = cast.layout === 'news', pct = (v, of) => `${(v / of * 100).toFixed(3)}%`;
+  const box = b => `left:${pct(b.x, CUTIN_W)};top:${pct(b.y, CUTIN_H)};width:${pct(b.w, CUTIN_W)};height:${pct(b.h, CUTIN_H)}`;
+  const el = document.createElement('div');
+  el.className = 'cutin'; el.dataset.cutin = who; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', cast.name);
+  el.innerHTML = `<div class="cutin-frame"><canvas class="cutin-canvas" aria-hidden="true"></canvas>
+    <div class="cutin-words cutin-${cast.layout}" aria-live="polite" style="${box(news ? cast.copy : cast.bubble)}"></div>
+    <div class="cutin-options" style="${box(news ? { x: 600, y: 1784, w: 440, h: 110 } : { x: 470, y: 1500, w: 580, h: 394 })}"></div></div>`;
+  document.body.append(el);
+  stage.attach(el.querySelector('canvas'));
+  const words = el.querySelector('.cutin-words'), options = el.querySelector('.cutin-options');
+  const close = () => { el.remove(); removeEventListener('keydown', onKey); };
+  const onKey = event => { if (event.key === 'Escape') close(); };
+  addEventListener('keydown', onKey);
+  function show(line, buttons) {
+    words.style.setProperty('--tag', CUTIN_TAGS[line.tag] ?? '#676B6B');
+    words.innerHTML = `<b>${esc(line.tag ?? cast.name)}</b><p>${esc(line.text)}</p>`;
+    options.innerHTML = buttons.map(([label], i) => `<button type="button" data-i="${i}" style="--tab:${CUTIN_TABS[Math.min(i, 2)]}"><i></i>${esc(label)}</button>`).join('');
+    options.querySelectorAll('button').forEach(b => { b.onclick = () => buttons[Number(b.dataset.i)][1](); });
+    if (line.clip) stage.play(line.clip);
+  }
+  const leave = ['Leave', close];
+  if (news) {
+    const next = i => show(script.lines[i], [i + 1 < script.lines.length ? ['Next', () => next(i + 1)] : ['Close', close]]);
+    next(0);
+  } else {
+    show(script.lines[0], [...script.choices.map(c => [c.label, () => show({ text: c.reply, clip: c.clip }, [leave])]), leave]);
+  }
+  options.querySelector('button')?.focus();
 }
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.
 let story = { missions: [], clues: [], case: null };
@@ -2390,6 +2440,10 @@ async function boot() {
         if (startBattle(wantBattle, at ? { anchor: at, by: new URLSearchParams(location.search).get('by'), key: 'debug' } : null)) render();
       }
     }
+
+    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska at the Scene Club, arvo on the news)
+    const wantCutin = new URLSearchParams(location.search).get('cutin');
+    if (wantCutin) openCutin(wantCutin);
 
     window.__ptv3 = {
       get data() { return data; },

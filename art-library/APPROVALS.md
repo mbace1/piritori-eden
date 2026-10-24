@@ -36,6 +36,7 @@ additional frames or true layer extraction before shipping.
 | Alley landscape battle assembly | Layout direction | Replace the archived courtyard plate. |
 | Alley portrait battle assembly | Mobile reflow direction | Replace its plate and retain the tighter crop. |
 | Back/mid/front/ground weather vectors | Layer direction | Tune density, masks and palette in engine. |
+| Jaska and Arvo cut-in rigs v01 (`cutin-jaska-rig-v01`, `cutin-arvo-rig-v01`) | Direction accepted, 2026-10-23: NPCs waist-up over the level, "they don't need to be 3D" | Cut from Jaska concept v03 and the approved Arvo v05. Previewed with ?cutin=jaska and ?cutin=arvo; the rigs themselves await owner review (PR #107). |
 
 ## Needs rework
 
