@@ -22,6 +22,7 @@ import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
 import { loadTokoStage } from './toko-stage.js?v=1';
+import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
@@ -153,6 +154,118 @@ function mountTokoStage(root) {
     stage.attach(canvas, context);
   });
 }
+// Waist-up cut-ins (cutin-stage.js; owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and
+// talk options", the level behind). For now a PREVIEW reached by ?cutin=<who> (CLAUDE.md rule 6, the phone debug rule):
+// the words come from the authored slice, a choice makes the speaker react and says what it would do, and nothing is
+// applied or saved. The slice has no spoken lines for Jaska yet, so his bubble carries the encounter's opening.
+const CUTIN_TABS = ['#C5A044', '#38B8C8', '#676B6B'];
+const CUTIN_TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8', ACCUSATION: '#B5523B', FICTION: '#676B6B' };
+const CUTIN_SCRIPT = {
+  jaska: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
+    lines: [{ text: e.opening, clip: 'talk' }],
+    choices: e.choices.map(c => ({ label: c.label, reply: c.forecast, clip: c.effects.some(x => /^relationship:jaska:-/.test(x)) ? 'shake' : 'nod' })) }; },
+  // Aatami's side of the same conversation: the choices are what he says
+  aatami: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
+    lines: e.choices.map(c => ({ text: c.label, clip: 'talk' })) }; },
+  arvo: () => { const n = data.news.get('news-markka-afterlife'); return n && { lines: [
+    { tag: 'ARVO LINDE', text: n.arvo_copy, clip: 'read' }, { tag: 'DOCUMENTED', text: n.documented, clip: 'glance' },
+    { tag: 'INFERENCE', text: n.inference, clip: 'gesture' }, n.accusation && { tag: 'ACCUSATION', text: n.accusation, clip: 'read' },
+    { tag: 'FICTION', text: n.fiction, clip: 'nod' }].filter(Boolean) }; },
+};
+// The overlay both uses share: a 9:16 canvas, the words laid over the speaker's bubble or copy card, the buttons.
+function cutinShell(label, onClose) {
+  const el = document.createElement('div');
+  el.className = 'cutin'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', label);
+  el.innerHTML = '<div class="cutin-frame"><canvas class="cutin-canvas" aria-hidden="true"></canvas><div class="cutin-words" aria-live="polite"></div><div class="cutin-options"></div></div>';
+  document.body.append(el);
+  const canvas = el.querySelector('canvas'), words = el.querySelector('.cutin-words'), options = el.querySelector('.cutin-options');
+  const pct = (v, of) => `${(v / of * 100).toFixed(3)}%`;
+  const box = b => `left:${pct(b.x, CUTIN_W)};top:${pct(b.y, CUTIN_H)};width:${pct(b.w, CUTIN_W)};height:${pct(b.h, CUTIN_H)}`;
+  const onKey = event => { if (event.key === 'Escape') onClose(); };
+  addEventListener('keydown', onKey);
+  let current = null;
+  return {
+    el,
+    /** Put this speaker on the canvas and show a line; buttons are [label, action, { disabled, note }]. */
+    show(stage, line, buttons) {
+      if (current !== stage) { current?.detach(); stage.attach(canvas); current = stage; }
+      const cast = stage.cast, news = cast.layout === 'news';
+      words.className = `cutin-words cutin-${cast.layout}`; words.style.cssText = box(news ? cast.copy : cast.bubble);
+      options.style.cssText = box(news ? { x: 600, y: 1784, w: 440, h: 110 } : { x: 470, y: 1500, w: 580, h: 394 });
+      words.style.setProperty('--tag', CUTIN_TAGS[line.tag] ?? '#676B6B');
+      words.innerHTML = `<b>${esc(line.tag ?? cast.name)}</b><p>${esc(line.text)}</p>`;
+      options.innerHTML = buttons.map(([text, , o = {}], i) => `<button type="button" data-i="${i}" style="--tab:${CUTIN_TABS[Math.min(i, 2)]}" ${o.disabled ? 'disabled' : ''}><i></i><span>${esc(text)}${o.note ? `<small>${esc(o.note)}</small>` : ''}</span></button>`).join('');
+      options.querySelectorAll('button').forEach(b => { b.onclick = () => buttons[Number(b.dataset.i)][1](); });
+      if (line.clip) stage.play(line.clip);
+      options.querySelector('button:not([disabled])')?.focus();
+    },
+    close() { current?.detach(); current = null; el.remove(); removeEventListener('keydown', onKey); },
+  };
+}
+async function openCutin(who) {
+  const script = CUTIN_SCRIPT[who]?.();
+  if (!script) { logToast(`unknown cut-in '${who}'`); return; }
+  const stage = await loadCutin(data, who, { reducedMotion, plateId: script.plateId });
+  if (!stage) { logToast(`cut-in '${who}' is not registered or failed to load`); return; }
+  const shell = cutinShell(stage.cast.name, () => shell.close()), close = () => shell.close();
+  shell.el.dataset.cutin = who;
+  const leave = ['Leave', close];
+  if (!script.choices) {
+    const next = i => shell.show(stage, script.lines[i], [i + 1 < script.lines.length ? ['Next', () => next(i + 1)] : ['Close', close]]);
+    next(0);
+  } else {
+    shell.show(stage, script.lines[0], [...script.choices.map(c => [c.label, () => shell.show(stage, { text: c.reply, clip: c.clip }, [leave])]), leave]);
+  }
+}
+
+// The conversation, for real (owner, 2026-10-23: "the player character profile can be shown when he talks"). An
+// encounter whose speaker has a cut-in opens as that cut-in over the scene, once, until answered or set aside:
+// the opening in the speaker's bubble, the choices as talk options. A choice goes through the very same handler as
+// the choice cards (applied, saved, rendered); Aatami's profile says it; the speaker reacts with the outcome, and
+// CONTINUE does what the outcome card's button does. LOOK AROUND sets it aside for the ordinary screen.
+let talk = null;
+const talkSetAside = new Set();
+function talkSpeaker(encounter) { return encounter?.participants?.find(p => p !== 'aatami' && CUTINS[p]) ?? null; }
+function closeTalk() { talk?.shell?.close(); talk = null; }
+function mountTalk() {
+  if (!['encounter', 'visit'].includes(state.mode)) { closeTalk(); return; }
+  if (!$('splash').hidden) return;                       // the title screen first: RESUME re-renders and the talk opens then
+  const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data), who = talkSpeaker(encounter);
+  if (talk) { if (talk.id !== encounter?.id) closeTalk(); else { disposeSceneSpeaker(); return; } }
+  if (!who || state.choices[encounter.id] || talkSetAside.has(encounter.id)) return;
+  if (state.battle?.status === 'active' || (state.mode === 'encounter' && !presentAtLead())) return;
+  openTalk(encounter, who);
+}
+async function openTalk(encounter, who) {
+  const mine = talk = { id: encounter.id };
+  const [speaker, aatami] = await Promise.all([loadCutin(data, who, { reducedMotion, plateId: encounter.scene_asset_id }), loadCutin(data, 'aatami', { reducedMotion, plateId: encounter.scene_asset_id })]);
+  if (talk !== mine) return;
+  if (!speaker || !aatami) { talk = null; return; }    // the ordinary screen stays, as before cut-ins
+  disposeSceneSpeaker();                                 // the 3D figure under the overlay would only cost frames
+  const dispatch = (action, choice) => { const b = document.createElement('button'); b.dataset.action = action; if (choice) b.dataset.choice = choice; handleRootClick({ target: b }); };
+  const shell = talk.shell = cutinShell(speaker.cast.name, () => setAside());
+  shell.el.dataset.talk = encounter.id;
+  function setAside() { talkSetAside.add(encounter.id); closeTalk(); render(); }
+  function ask() {
+    shell.show(speaker, { text: encounter.opening, clip: 'talk' }, [
+      ...encounter.choices.map(choice => { const status = choiceStatus(choice, state, data);
+        return [choice.label, () => answer(choice), { disabled: !status.ok, note: status.ok ? '' : status.reasons.map(readableReason).join(' · ') }]; }),
+      ['Look around', setAside]]);
+  }
+  function answer(choice) {
+    dispatch('choose', choice.id);                       // applied, persisted and rendered exactly as a choice card
+    if (!state.choices[encounter.id]) return;            // refused: the reason is already a toast; still asking
+    const outcome = state.lastOutcome?.length ? state.lastOutcome.join(' ') : choice.forecast;
+    const pendingBattle = state.battle?.status === 'active', visit = state.mode === 'visit';
+    const reaction = choice.effects?.some(x => x.startsWith(`relationship:${who}:-`)) ? 'shake' : 'nod';
+    shell.show(aatami, { text: choice.label, clip: 'talk' }, []);
+    setTimeout(() => { if (talk?.shell !== shell) return;
+      shell.show(speaker, { text: outcome, clip: reaction }, [[pendingBattle ? 'Fight' : 'Continue', () => {
+        closeTalk(); if (pendingBattle) dispatch('show-battle'); else if (visit) dispatch('leave-visit'); else dispatch('advance'); }]]);
+    }, reducedMotion ? 600 : 1900);
+  }
+  ask();
+}
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.
 let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
@@ -169,7 +282,9 @@ function tr(key, ...args) {
   for (const a of args) s = String(s).replace('%d', String(a));
   return s;
 }
-function persist() { saveState(state); }
+// A debug jump (?encounter=) plays a throwaway campaign: it must never overwrite the real save.
+let debugSession = false;
+function persist() { if (!debugSession) saveState(state); }
 
 // ── M1: where the player is LOOKING is not where Aatami IS ─────────────
 // (design/CLAUDE_MAP_MISSION_NEXT_STEPS.md §1.) `state.selectedAnchor` stays
@@ -375,6 +490,7 @@ function render() {
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
   mountTokoStage(root);
+  mountTalk();
 
   // DESIGN_AUTHORITY.md addendum 2026-08-28: real 3D, not just registered
   // meshes, is one of the parity gaps this build owes Godot. Mounted here
@@ -2490,6 +2606,26 @@ async function boot() {
         if (startBattle(wantBattle, at ? { anchor: at, by: new URLSearchParams(location.search).get('by'), key: 'debug' } : null)) render();
       }
     }
+
+    // ?encounter=<id> — a fresh, unsaved campaign stood at that encounter's story lead, its scene open (CLAUDE.md
+    // rule 6, the phone debug rule). Saving is off for the whole session: a debug jump must not overwrite a real save.
+    const wantEncounter = new URLSearchParams(location.search).get('encounter');
+    if (wantEncounter) {
+      const index = data.content.schedule.findIndex(slot => slot.encounter_id === wantEncounter);
+      if (index < 0) logToast(`unknown encounter '${wantEncounter}'`);
+      else {
+        debugSession = true;
+        state = createState(data.content);
+        state.scheduleIndex = index;
+        state.selectedAnchor = storyLeadId();
+        state.mode = 'encounter';
+        $('splash').hidden = true;
+        render();
+      }
+    }
+    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)
+    const wantCutin = new URLSearchParams(location.search).get('cutin');
+    if (wantCutin) openCutin(wantCutin);
 
     window.__ptv3 = {
       get data() { return data; },

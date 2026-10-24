@@ -17,6 +17,25 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
+## Cut-ins: what v4.76 leaves open (2026-10-24)
+
+- **No spoken lines in the slice.** Jaska's bubble carries the encounter's
+  narrated opening, and Aatami's carries the choice label. A Content pass could
+  give each speaker encounter a line or two of real speech
+  (`content/era1-slice-v1.json`). The agent writes it; the owner greenlights.
+- **Arvo's cut-in is preview-only** (`?cutin=arvo`). The news tab still shows
+  the 3D presenter. It waits on the owner's pick of looks A–D
+  (`art-src/cutins/renders/arvo-looks-sheet.jpg`) and a review of his rig.
+- **The hooded lady** (random-location NPC) waits on the owner's OK of her
+  standing pose v03 (`art-src/cutins/renders/hooded-sheet.jpg`).
+- **Two speakers on one screen.** `aatami-side` is registered for it; there is
+  no layout yet.
+- **Godot port.** See VERSIONS.md v4.76, the Port section.
+- **Toko** keeps his own stage (v4.70). He does not open as a cut-in, and
+  Aatami's profile does not answer him yet (planned next).
+
+---
+
 ## The two builds charge different time for a trade (found filming v4.54, 2026-09-26)
 
 - **Godot spends a block on every ledger trade** (`execute_offer` →

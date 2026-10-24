@@ -77,6 +77,29 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.76 — 2026-10-24
+
+**Characters talk as waist-up cut-ins.** Owner, 2026-10-23: NPCs *"zoomed from waist up layered over with a text bubble and talk options"*, the level behind them, and *"the player character profile can be shown when he talks"*. They *"don't need to be 3d"*. The rulings are in DESIGN_AUTHORITY.md, 2026-10-23/24.
+
+- **The cut-in player** (`web/js/v3/cutin-stage.js`, new). An approved painting is cut into paper pieces and acted the way Toko is (v4.70): head on a neck pivot, the torso breathing, eyelids that blink, poses held at 10 fps, the rest pose under reduced motion.
+  - A location speaker stands waist-up, bottom left, over the scene's own plate, dimmed. The bubble sits above him, and its short tail has one side square to the bubble and points toward his mouth.
+  - The words and the buttons are HTML laid over the canvas, so they wrap and scale. Buttons keep the 44 px floor.
+- **Four rigs, about 150 KB together** (`art/v3/cutins/`, made by `art-src/cutins/cut.py` and `publish.py`, both offline):
+  - Jaska, from concept v03. Owner-approved.
+  - Aatami, front: study 06 from PR #108, looking near the camera.
+  - Aatami, side: the young final, kept for a later layout with both speakers on one screen.
+  - Arvo, from the approved v05, with a jaw so he can read aloud.
+- **Jaska's encounters and his visit open as his cut-in.** The opening is in his bubble and the choices are the talk options, with the same requirements and reasons as the cards. LOOK AROUND sets it aside for the ordinary screen.
+  - A choice goes through the very handler the choice cards use: applied, saved and rendered exactly as before.
+  - Aatami's profile then says it, and Jaska nods or shakes his head by the choice's relationship effect and gives the outcome. CONTINUE does what the outcome card does.
+  - The 3D Jaska under the overlay is disposed while it is open.
+- **The slice has no spoken lines yet.** Jaska's bubble carries the encounter's opening, and Aatami's carries the choice label (QUEUE).
+- **Phone debug entries.** `?encounter=<id>` stands a fresh campaign at that encounter with saving off for the session (`debugSession`). `?cutin=jaska|aatami|arvo` previews a speaker; Arvo reads the day-3 markka bulletin one source-status card at a time.
+- Cache: `app.js?v=43`, `cutin-stage.js?v=4`, `v3.css?v=12`. Gates: `scene-content` checks every cut-in is a registered rig with its pieces and that `?cutin=` exists. `act1-scenes` waits for Jaska's cut-in and answers his visit in it. `v3-contract` follows the tokens.
+
+### Port
+
+Godot still shows the 3D Jaska. Porting means drawing each `cutin-rig` asset's pieces (manifest `members[]` with `x`, `y`, and `rig.pivots` / `rig.lids`) with the clip table in `cutin-stage.js` (PERSON for Jaska and Aatami; Arvo's own). The conversation flow is the `openTalk()` block in `app.js`, and the bubble and options boxes are `CUTINS[who].bubble` on a 1080×1920 frame. Landscape framing is Godot's own call, since web leads and Godot follows.
 ## v4.75 — 2026-10-24
 
 **A fight has a job, the police can come, and it is three stops.** Owner, 2026-10-24, correcting v4.74: *"Please read all designs / No, fighting 75%, escape 25% / Also police can arrive etc. It's all in the docs / Simplify UX, plan better"*. The reading was confirmed the same day ("Yes, as read") and this build was approved ("Yes, build it"). Both answers are in `DESIGN_AUTHORITY.md`. This is step 1 of the replanned `design/C19_CAMPAIGN_FIGHTS.md` §6.

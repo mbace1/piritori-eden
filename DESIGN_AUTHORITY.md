@@ -1,5 +1,36 @@
 # Piritori → Eden — design authority
 
+## Owner rulings, 2026-10-23/24 — characters talk as waist-up cut-ins
+
+Shipped in v4.76 (PR #107). In the owner's words:
+
+- **No 3D needed for characters.** *"They don't need to be 3d. It was just when
+  I thought it was the easier means of animation."* Speakers are approved
+  paintings cut into paper pieces and acted in code, the way Toko is (v4.70).
+- **The layout.** *"Characters like hooded lady can be NPCs that give info etc
+  while the level and characters are in the background and she is zoomed from
+  waist up layered over with a text bubble and talk options. Similarly the
+  player character profile can be shown when he talks."*
+- **Who is who.** *"Jaska is reoccurring location npc and hooded lady is random
+  location NPC."* Jaska's place is the Scene Club. Arvo *"is the most important
+  and different from others since he is always on the news tab. Therefore
+  variety of looks and animations adds depth."* That supersedes the "idle
+  motion is minimal" line in ART_BIBLE §13.2 (the Arvo 3D exception) wherever
+  the two disagree.
+- **Aatami** comes from the owner's selection made with GPT (PR #108): the young
+  Aatami in an olive cardigan, and an older Aatami. *"You can use supporting art
+  when it makes sense. If he talks to Jaska. It makes sense they both look near
+  the camera, unless shown on the same screen at opposite sides."* So a
+  one-at-a-time conversation uses study 06 (looking near the camera), and the
+  sideways final is kept for a layout with both speakers on one screen.
+- **The speech bubble.** Its tail comes from the bubble's bottom, short, with one
+  side square to the bubble, and points toward the speaker's mouth without
+  touching the face (owner steering, 2026-10-23/24).
+- **Jaska's cut-in is approved** (*"already approved"*, 2026-10-24). Arvo's and
+  Aatami's rigs are semi-approved until the owner reviews them.
+- PR #102's "3D is the future" is superseded on characters by these rulings and
+  by the 2026-10-23 note above.
+
 ## Owner note, 2026-10-23 — 3D might not be the future
 
 Asked whether to freeze the formation board so every fight moves to Night

@@ -2246,6 +2246,335 @@
       "baked_text": false,
       "baked_ui": false,
       "note": "C.08 environment prototype. D009 records relative preference, not owner approval of this derivative. Final runtime/device visual acceptance pending. See design/BEAR_PATH_C08_VERIFICATION.md."
+    },
+    {
+      "id": "cutin-jaska-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner-approved, 2026-10-24: Jaska is already approved.",
+      "dimensions": [
+        520,
+        700
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "jaska",
+      "location": "scene-club",
+      "source": "art-src/concepts/people/jaska-concept-v03.jpg, cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            260,
+            680
+          ],
+          "head": [
+            260,
+            256
+          ]
+        },
+        "lids": {
+          "lid_0": "head",
+          "lid_1": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-jaska-v01-torso",
+          "part": "torso",
+          "file": "cutins/jaska-v01/torso.webp",
+          "x": 56,
+          "y": 224,
+          "w": 353,
+          "h": 466,
+          "sha256": "add940a51bb3f746c394f02427774696874aa50472bea8efbd943656d32e3176"
+        },
+        {
+          "id": "cutin-jaska-v01-head",
+          "part": "head",
+          "file": "cutins/jaska-v01/head.webp",
+          "x": 175,
+          "y": 52,
+          "w": 166,
+          "h": 213,
+          "sha256": "22b3bd4571aceea751fbf3af628fedadc5ab60b1b8c54b8b54b69ad1ad5513f5"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/jaska-v01/lid_0.webp",
+          "x": 215,
+          "y": 150,
+          "w": 45,
+          "h": 22,
+          "sha256": "263c1121aa292a1a3e4460b88eef0377fd0e309c4bea704d64f39d1a5e6c4279"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-1",
+          "part": "lid_1",
+          "file": "cutins/jaska-v01/lid_1.webp",
+          "x": 300,
+          "y": 148,
+          "w": 45,
+          "h": 22,
+          "sha256": "a1720c1feb4400c24e4a96cbc7f3e7578bf024c83bd536a5444fede1851d8d10"
+        }
+      ]
+    },
+    {
+      "id": "cutin-arvo-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "semi-approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner review pending (PR #107). Fictional homage, not a likeness (NARRATIVE.md).",
+      "dimensions": [
+        800,
+        820
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "arvo",
+      "location": "news",
+      "source": "art-library/presenter/arvo-linde-concept-v05.png (the approved v05 presenter painting), cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            400,
+            800
+          ],
+          "hands": [
+            400,
+            760
+          ],
+          "head": [
+            400,
+            355
+          ],
+          "jaw": [
+            390,
+            284
+          ]
+        },
+        "lids": {
+          "lid_0": "head",
+          "lid_1": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-arvo-v01-torso",
+          "part": "torso",
+          "file": "cutins/arvo-v01/torso.webp",
+          "x": 33,
+          "y": 313,
+          "w": 734,
+          "h": 499,
+          "sha256": "4d350c5fe895b6197a1ebff19ec4b6b1a0d89f183e9db97387d09ac75e9dc964"
+        },
+        {
+          "id": "cutin-arvo-v01-hands",
+          "part": "hands",
+          "file": "cutins/arvo-v01/hands.webp",
+          "x": 215,
+          "y": 695,
+          "w": 386,
+          "h": 117,
+          "sha256": "f77367b5d300ef16281cc952196761fb18fd6734d5213640ffb8566eae711f6a"
+        },
+        {
+          "id": "cutin-arvo-v01-head",
+          "part": "head",
+          "file": "cutins/arvo-v01/head.webp",
+          "x": 284,
+          "y": 31,
+          "w": 231,
+          "h": 332,
+          "sha256": "8f0cceaf34820141c6a049a81d5d6503d031805b1af078ae9a0774c6db262511"
+        },
+        {
+          "id": "cutin-arvo-v01-jaw",
+          "part": "jaw",
+          "file": "cutins/arvo-v01/jaw.webp",
+          "x": 330,
+          "y": 280,
+          "w": 121,
+          "h": 76,
+          "sha256": "aaeccea3cac838184460ffbe9a1dea2789d43627b3683bf49981f765aacaab3d"
+        },
+        {
+          "id": "cutin-arvo-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/arvo-v01/lid_0.webp",
+          "x": 340,
+          "y": 196,
+          "w": 42,
+          "h": 18,
+          "sha256": "39bb62d716f31721b8ed09cdef08841b8bc895f65fd940bf8f7d5c35c8d99bd7"
+        },
+        {
+          "id": "cutin-arvo-v01-lid-1",
+          "part": "lid_1",
+          "file": "cutins/arvo-v01/lid_1.webp",
+          "x": 420,
+          "y": 196,
+          "w": 44,
+          "h": 18,
+          "sha256": "3a30e7e2146d6182cf86fd07b57e0d272c4b049063167df87817bf0955f791b0"
+        }
+      ]
+    },
+    {
+      "id": "cutin-aatami-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "semi-approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner review pending (PR #107). The player profile, shown when he talks (owner, 2026-10-23).",
+      "dimensions": [
+        470,
+        700
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "aatami",
+      "location": "any",
+      "source": "art-src/concepts/people/aatami-young-final-v01.png (the owner pick from GPT, PR #108), cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            255,
+            680
+          ],
+          "head": [
+            270,
+            240
+          ]
+        },
+        "lids": {
+          "lid_0": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-aatami-v01-torso",
+          "part": "torso",
+          "file": "cutins/aatami-v01/torso.webp",
+          "x": 13,
+          "y": 196,
+          "w": 428,
+          "h": 484,
+          "sha256": "706042e3a0bf181fbeeb7e3b9306023b5f6b865efa1d05c3d102cac29e9fa023"
+        },
+        {
+          "id": "cutin-aatami-v01-head",
+          "part": "head",
+          "file": "cutins/aatami-v01/head.webp",
+          "x": 185,
+          "y": 20,
+          "w": 193,
+          "h": 233,
+          "sha256": "1eb4a49b016528132c4409ce56fdd05af6709ece4090e596edc18098ba1e374a"
+        },
+        {
+          "id": "cutin-aatami-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/aatami-v01/lid_0.webp",
+          "x": 302,
+          "y": 113,
+          "w": 30,
+          "h": 17,
+          "sha256": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78"
+        }
+      ]
+    },
+    {
+      "id": "cutin-aatami-front-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "semi-approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner review pending (PR #107). Looks near the camera: the conversation pose (owner, 2026-10-24).",
+      "dimensions": [
+        450,
+        685
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "aatami-front",
+      "location": "any",
+      "source": "art-src/concepts/people/aatami-young-support-06.png (owner-committed study, PR #108), cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            225,
+            675
+          ],
+          "head": [
+            265,
+            235
+          ]
+        },
+        "lids": {
+          "lid_0": "head",
+          "lid_1": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-aatami-front-v01-torso",
+          "part": "torso",
+          "file": "cutins/aatami-front-v01/torso.webp",
+          "x": 9,
+          "y": 191,
+          "w": 428,
+          "h": 484,
+          "sha256": "e4b915f0939d4dec9052214dcbc48da7582bf6ce28d8299ffa20adbc61f09ef0"
+        },
+        {
+          "id": "cutin-aatami-front-v01-head",
+          "part": "head",
+          "file": "cutins/aatami-front-v01/head.webp",
+          "x": 172,
+          "y": 9,
+          "w": 175,
+          "h": 232,
+          "sha256": "253068ce0141ef40e1a9c937c7eae44516bf1386f7ee15635179fdd3a3a1f404"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/aatami-front-v01/lid_0.webp",
+          "x": 231,
+          "y": 106,
+          "w": 31,
+          "h": 16,
+          "sha256": "d9899894d3ccca426b3ea93e1e0292a9def4385cb66b0148f3b4c0b52f473b75"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-1",
+          "part": "lid_1",
+          "file": "cutins/aatami-front-v01/lid_1.webp",
+          "x": 280,
+          "y": 112,
+          "w": 30,
+          "h": 15,
+          "sha256": "5130ae5888295d0bf10a10b724339d1e5526e60e92309a9ef4660e15a9218109"
+        }
+      ]
     }
   ]
 }
