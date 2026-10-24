@@ -80,6 +80,25 @@ export const LAYOUTS={
     props:[['pallets',5.8,0,2.4,0],['container',-5.25,0,2.15,0],['container',-5.25,0,3.3,0]],
     ...COMMON,
   },
+  // A Kallio tram street (layer 6), duplicated from the park's municipal
+  // street: a row of tenements with a porttikongi on the far pavement, and
+  // the board standing on the road with the tram track across it. A tram
+  // waits beside the board; the near side is lifted away like every set.
+  street:{
+    runs:[{id:'row',x:-21.64,z:-7.7,rotation:0,modules:[...bays(5),'archway',...bays(9)],
+      hangs:[['balcony',-13.92,3.7,-7.2,0],['balcony',1.64,3.7,-7.2,0],['balcony',10.88,3.7,-7.2,0],['bike_rack',-11.2,0,-6.5,0]]}],
+    joins:[],
+    blocks:[
+      {run:'row',box:[-21.64,-6.24,-16,-8.05,0,6.3],ridge:'x'},
+      {run:'row',box:[-2.96,24.76,-16,-8.05,0,6.3],ridge:'x'},
+      {run:'row',box:[-6.24,-2.96,-16,-8.05,3.5,6.3],ridge:null},
+    ],
+    road:{z0:-5.2,z1:2.6},rails:[-1.9],tram:{x:12,z:-1.9},rear:[-4.6,2.5,-8],
+    lamps:[[13.96,3.2,-7.1,0,'row'],[4.72,3.2,-7.1,0,'row'],[-7.76,3.2,-7.1,0,'row']],
+    props:[['container',-9.4,0,-6.4,0],['container',-8.3,0,-6.4,0]],
+    ...COMMON,
+    planters:[[-4.7,4.3,Math.PI/2],[5.2,4.0,Math.PI/2]],
+  },
   // The yard: sheds along the back, two down the left, and the tenement row
   // behind the sheds with its building.
   yard:{

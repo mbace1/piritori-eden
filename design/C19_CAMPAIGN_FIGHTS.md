@@ -215,6 +215,7 @@ Each step ships to the hub and is played before the next.
    - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped.
    - The rout threshold, half their weight with a tough one counting two, is unmeasured beyond one played opening.
 2. **Road fights**: the same path, arriving where the event happened.
+   *Built (VERSIONS.md v4.77):* `roadOuting` is the door's record made from the road event. It is staged where the event happened, pays the event's own stakes, and does not turn the block.
 3. **The shot caller**: a design for COMBAT §9.9.4's open questions, brought for
    a greenlight before it is built.
 4. **The meeting in the place**: a door's conversation staged in the 3D scene

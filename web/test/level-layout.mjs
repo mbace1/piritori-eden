@@ -54,7 +54,9 @@ for(const [place,L] of Object.entries(LAYOUTS)){
   }
   for(const w of walls)ok(!overlap(w.box,BOARD),`${place}: ${w.run}'s ${w.name} stands on the board`);
   for(const m of masses)ok(!overlap(m.box,BOARD),`${place}: ${m.run}'s building stands on the board`);
-  // 6. Every lamp belongs to a wall that exists.
+  // 6. A street's tram stands beside the board, never on it.
+  if(L.tram)ok(!overlap([L.tram.x-3.6,L.tram.x+3.6,L.tram.z-.85,L.tram.z+.85],BOARD),`${place}: the tram stands on the board`);
+  // 7. Every lamp belongs to a wall that exists.
   for(const l of L.lamps)ok(runs[l[4]],`${place}: a lamp hangs on ${l[4]}, which is not a run`);
 }
 console.log(`level-layout: ${checks} checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (${Object.keys(LAYOUTS).join(', ')})`);

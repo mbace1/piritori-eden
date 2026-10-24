@@ -15,9 +15,9 @@ const content = read('../../content/era1-slice-v1.json');
 const places = read('../../content/places-v1.json');
 const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=9');
-const { stageFight, doorFightStage } = await import('../js/v3/places.js?v=1');
+const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=3');
-const O = await import('../js/v3/outing.js?v=2');
+const O = await import('../js/v3/outing.js?v=3');
 const R = await import('../crew-run/run.js?v=12');
 const { missionCue } = await import('../fight-module/readability.js?v=3');
 const { coordinate } = await import('../fight-module/tactics.js?v=8');
@@ -35,7 +35,8 @@ assert.deepEqual(getaways, ['pickup-fish-stall', 'pickup-yard-van', 'sale-quay-s
 assert.equal(fights.length - getaways.length, 5, 'the other five doors are fights (with the four road fights and two missions: 11 of 15)');
 
 // ── the pure rules ─────────────────────────────────────────────────────────
-assert.equal(O.cPlace('street'), 'courtyard', 'a place C has not built yet falls back to the courtyard');
+assert.equal(O.cPlace('street'), 'street', 'a street fight is fought on the street (v4.77)');
+assert.equal(O.cPlace('quay'), 'courtyard', 'a place C has not built yet falls back to the courtyard');
 assert.equal(O.cWeapon('lifted-handgun'), 'first-handgun');
 assert.equal(O.cWeapon('feature-phone'), 'folding-knife');
 for (const blunt of ['pipe', 'baton', 'tire-iron', 'chain']) assert.equal(O.cWeapon(blunt), 'baseball-bat');
@@ -240,6 +241,40 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   console.log(`  a played opening: ${b.result} (${b.mission.end}) in ${b.round} rounds · pressure ${b.mission.heat} · ${b.mission.routed ? 'they ran' : 'no rout'} · police ${b.mission.police.arrived ? 'came' : 'did not come'}`);
 }
 
+// ── a road fight is an outing too (§6.4 step 2, v4.77) ────────────────────
+{
+  const roadEvents = read('../../content/road-events-v1.json');
+  const event = roadEvents.events.find(e => e.id === 'road-retaliation-mccormick');
+  const battleId = event.choices.find(c => c.id === 'stand').effects.find(e => e.startsWith('start-battle:')).split(':')[1];
+  const state = createState(content);
+  state.scheduleIndex = 12;
+  state.recruited = ['crew-slot-runner', 'crew-slot-muscle'];
+  state.deployed = [...state.recruited];
+  const authored = content.battles.find(b => b.id === battleId);
+  const team = fighters(state, crewData);
+  const staged = stageFight(authored, roadFightStage({ from: 'kurvi', to: 'karhupuisto' }, event, state.scheduleIndex, places), places, team.map(m => m.name));
+  const outing = O.roadOuting(state, event, staged, team.slice(0, authored.player_deployed).map(m => m.id), { nonce: 'road', when: 'DAY 7 · NIGHT' });
+  assert.equal(outing.kind, 'road');
+  assert.equal(outing.road, event.id);
+  assert.equal(outing.door, null, 'a road fight has no door');
+  assert.equal(outing.goal, 'fight', 'a road fight is always a fight');
+  assert.equal(outing.battle, battleId);
+  assert.ok(outing.place && outing.rivals.length >= 2, 'staged where it happened, against its people');
+  assert.equal(outing.by, event.by ?? null, 'by the family that came for you');
+  state.outing = outing;
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  const { run, fight } = nightShift(outing);
+  const b = fight.battle;
+  assert.equal(b.mission.goal, 'fight', 'Night Shift plays it as a fight');
+  assert.ok(b.enemies.filter(e => e.rival).length >= 2, 'the people who came for you are on the board');
+  assert.ok(fight.command('withdraw').ok, 'Withdraw is there in a road fight too');
+  assert.ok(R.settle(run, fight));
+  const camp = campaign();
+  assert.equal(camp.outing.status, 'settled');
+  assert.equal(camp.outing.end, 'withdraw', 'and it comes back to Act I once, as a road fight');
+  assert.equal(camp.outing.kind, 'road');
+}
+
 // Reopening a settled fight, or one from another campaign, is refused.
 {
   localStorage.removeItem(R.OUTING_SAVE_KEY);
@@ -248,4 +283,4 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.throws(() => R.loadRun(null, content), /not in this campaign/);
 }
 
-console.log('C.19 outing v4.75: a job per fight (5 doors fight, 4 get away), they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');
+console.log('C.19 outing v4.77: a job per fight (5 doors fight, 4 get away), road fights as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');

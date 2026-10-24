@@ -23,7 +23,7 @@
 // Pure: no DOM, no clock.
 
 /** The C places that exist in web/crew-run/locations.js. */
-export const C_PLACES = new Set(['courtyard', 'yard', 'park']);
+export const C_PLACES = new Set(['courtyard', 'yard', 'park', 'street']);
 
 export const cPlace = kit => (C_PLACES.has(kit) ? kit : 'courtyard');
 
@@ -66,6 +66,13 @@ export function doorOuting(state, encounter, staged, fighterIds, { opening = '',
     status: 'open',
     result: null,
   };
+}
+
+/** The outing a road fight becomes (§6.4 step 2): the door's record, made
+ *  from the road event that turned into a fight. A road fight's job is always
+ *  to make them back off, and it does not turn the block. */
+export function roadOuting(state, event, staged, fighterIds, opts = {}) {
+  return { ...doorOuting(state, { id: event.id, door: null }, staged, fighterIds, { ...opts, goal: 'fight' }), kind: 'road', road: event.id, encounter: null };
 }
 
 /** Where Night Shift is, from the Act I page (the same relative path in the

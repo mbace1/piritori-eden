@@ -4,9 +4,9 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing} from './layouts.js?v=1';
+import {LAYOUTS,lay,facing} from './layouts.js?v=2';
 
-export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',park:'Karhupuisto · park'};
+export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
 export async function loadLocationAssets(profile){
  const base=new URL('./assets/',import.meta.url),manifest=await fetch(new URL('kallio-kit-v02.manifest.json',base)).then(r=>{if(!r.ok)throw Error('Scenery register unavailable');return r.json();});
@@ -75,13 +75,32 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  // square where both slabs end, so neither slab's end shows.
  const pier=(owner,x0,x1,z0,z1)=>block(owner,x0,x1,z0,z1,0,6.55,false,'stone');
  // Everything the place is, from layouts.js.
- const layout=LAYOUTS[yard?'yard':'courtyard'],byId={};
+ const layout=LAYOUTS[id]??LAYOUTS.courtyard,byId={};const wispX=layout.rear?.[0]??(yard?1:0);
  for(const spec of layout.runs)byId[spec.id]=run(spec);
  for(const b of layout.blocks){const [x0,x1,z0,z1,y0,y1]=b.box;block(byId[b.run],x0,x1,z0,z1,y0,y1,b.ridge??false,b.stone?'stone':'plaster');}
  for(const [name,x,y,z,r] of layout.props)put(name,x,y,z,r);
  for(const [x,z,r] of layout.planters)put('planter',x,0,z,r);
  for(const [x,z] of layout.litter)put('ground_litter',x,0,z,x*.4);
  for(const [name,x,y,z,r] of layout.common??[])put(name,x,y,z,r);
+ // Layer 6: the street's dressing, after the park's municipal street
+ // (bear-path/park.js): asphalt between two kerbs, a tram track and a tram
+ // standing on it beside the board. Plain materials, no vertex colour.
+ if(layout.road){
+  const plain=(color,extra={})=>new T.MeshStandardMaterial({color,roughness:.7,...extra});
+  const asphalt=plain(0x22292c,{roughness:.5}),iron=plain(0x2d3436,{metalness:.35,roughness:.45}),tramGreen=plain(0x315a4b),cream=plain(0xd0b87e),pane=plain(0x987848,{emissive:0xc08b43,emissiveIntensity:.8,roughness:1}),dark=plain(0x152b32);
+  const piece=(mat,x,y,z,w,h,d,parent=group)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.receiveShadow=true;parent.add(m);return m;};
+  const {z0,z1}=layout.road;
+  const road=new T.Mesh(new T.PlaneGeometry(64,z1-z0),asphalt);road.rotation.x=-Math.PI/2;road.position.set(0,.012,(z0+z1)/2);road.receiveShadow=true;group.add(road);
+  for(const z of [z0,z1])block(null,-32,32,z-.12,z+.12,0,.14,false,'stone');
+  for(const zt of layout.rails??[])for(const dz of [-.72,.72])piece(iron,0,.03,zt+dz,64,.035,.07);
+  if(layout.tram){const {x:tx,z:tz}=layout.tram;
+   piece(tramGreen,tx,.88,tz,7.1,1.55,1.6);piece(cream,tx,1.9,tz,7.1,.35,1.6);piece(iron,tx,2.13,tz,7.2,.12,1.7);
+   for(let n=0;n<7;n++){const x=tx-2.9+n*.94;for(const side of [1,-1]){piece(dark,x,1.53,tz+side*.82,.81,.92,.04);piece(n===0||n===6?dark:pane,x,1.53,tz+side*.845,.66,.74,.025);}}
+   piece(cream,tx,.8,tz+.82,6.8,.055,.04);
+   for(const x of [tx-2.4,tx+2.4])piece(dark,x,.24,tz,.6,.4,1.2);
+   piece(iron,tx+.24,3.1,tz,1,.04,.1);piece(iron,tx,2.62,tz,.04,.95,.04);
+  }
+ }
  for(const [cell,v]of cover){const p=position(cell);if(v.hardBlock)put('container',p.x,0,p.z);else{const [dx,dy]=EDGES[v.edge];put('low_wall',p.x+dx*.585,0,p.z-dy*.585,dx?Math.PI/2:0);}}
  const lamps=layout.lamps.map(([x,y,z,r])=>[x,y,z,r]),lampOwners=layout.lamps.map(l=>byId[l[4]]);
  lamps.forEach(([x,y,z,r],i)=>{into=lampOwners[i]??null;put('lamp',x,y,z,r);into=null;});
@@ -95,17 +114,17 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  for(const [i,[x,y,z,r]]of lamps.entries()){
   const light=new T.SpotLight(i===1?0x9bc4d2:0xffc481,i===2?30:24,19,.95,.85,1.6);light.position.set(x+(r?.5:0),y,z+(r?0:.55));light.target.position.set(x*.20,0,z*.22);light.castShadow=i===2;light.shadow.mapSize.set(1024,1024);light.shadow.normalBias=.035;world.add(light,light.target);
  }
- const rear=new T.PointLight(0xffbd73,24,9,2);rear.position.set(yard?1:0,2.5,yard?-7.1:-8);world.add(rear);
+ const rear=new T.PointLight(0xffbd73,24,9,2);rear.position.set(...(layout.rear??[yard?1:0,2.5,yard?-7.1:-8]));world.add(rear);
  const cc=document.createElement('canvas');cc.width=cc.height=64;const cx=cc.getContext('2d'),g=cx.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,222,170,.7)');g.addColorStop(.2,'rgba(255,190,110,.18)');g.addColorStop(1,'rgba(255,170,80,0)');cx.fillStyle=g;cx.fillRect(0,0,64,64);
  const glowMap=new T.CanvasTexture(cc),glowMat=new T.SpriteMaterial({map:glowMap,blending:T.AdditiveBlending,depthWrite:false,opacity:.65});
  lamps.forEach(([x,y,z,r],i)=>{const s=new T.Sprite(glowMat);s.position.set(x+(r?.36:0),y-.12,z+(r?0:.36));s.scale.set(2,2,1);(lampOwners[i]?.group??group).add(s);});
  // Local wisps at the far service passage, never a full-screen white wash.
- const wisps=[];for(let i=0;i<5;i++){const m=new T.SpriteMaterial({map:glowMap,color:0x77949d,transparent:true,opacity:.055,depthWrite:false});const s=new T.Sprite(m);s.position.set((yard?1:0)+(i-2)*.7,.4,yard?-6.8:-6.5);s.scale.set(2.5,.65,1);group.add(s);wisps.push(s);}
+ const wisps=[];for(let i=0;i<5;i++){const m=new T.SpriteMaterial({map:glowMap,color:0x77949d,transparent:true,opacity:.055,depthWrite:false});const s=new T.Sprite(m);s.position.set(wispX+(i-2)*.7,.4,yard?-6.8:-6.5);s.scale.set(2.5,.65,1);group.add(s);wisps.push(s);}
  const lab=developmentLook(world,renderer,group,floorMat,mats,true,{courtyard:true,pavingTexture:assets.pavingTexture,lights:lamps.map(([x,y,z])=>[x,y,z])});let clock=0;
  const look=new T.Vector3();
  const hidden=new T.Matrix4().makeScale(0,0,0);
  function cutaway(camera){camera.getWorldDirection(look);const h=Math.hypot(look.x,look.z)||1;let changed=false;
   for(const r of runs){const v=-(r.normal[0]*look.x+r.normal[1]*look.z)/h>-.1;if(v!==r.visible){r.visible=v;r.group.visible=v;changed=true;}}
   if(changed)for(const b of batches){b.owners.forEach((o,i)=>b.mesh.setMatrixAt(i,o&&!o.visible?hidden:b.matrices[i]));b.mesh.instanceMatrix.needsUpdate=true;}}
- return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;wisps.forEach((s,i)=>{s.position.x=(yard?1:0)+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length}),aftermath(){}};
+ return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;wisps.forEach((s,i)=>{s.position.x=wispX+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length}),aftermath(){}};
 }

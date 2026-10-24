@@ -77,4 +77,5 @@ Layers 1–5 are v4.76 (courtyard and yard). The street is v4.77, then the quay.
 
 - **v4.76:** layers 1, 2, 4, 5 and 8 for the courtyard and the yard. The courtyard is rebuilt as four runs. `level-layout.mjs` passes 507 checks, and it fails on the old free-standing bay, a wing pulled off its corner, and a back wall that stops short. Renders: the eight-angle audit, three presets at 1280 and 1920 wide.
 - **Layer 3 (coverage)** holds at the default and Oblique presets on 1280 and 1920 frames, checked by render. It is not computed by the gate yet.
-- **Next:** layer 6, the street set duplicated from the park's street. Then layer 7, the quay.
+- **v4.77:** layer 6, the street. It is built from v4.76's runs and buildings plus the park's street dressing, and takes the four street fights off the courtyard.
+- **Next:** layer 7, the quay, built from the yard's sheds plus a quay edge. It is the last fight place still falling back to the courtyard.

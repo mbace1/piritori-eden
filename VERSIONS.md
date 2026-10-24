@@ -77,6 +77,47 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.77 — 2026-10-24
+
+**A street of its own, and road fights in Night Shift.** Owner, 2026-10-24:
+
+> "Find easy ways to get further in development, if something works, duplicate"
+
+Two things that worked were duplicated:
+
+- the park's street became a place of its own;
+- the door path became the road path.
+
+- **The street** (`C19_LEVEL_PASS.md` layer 6). Four of Act I's eleven fight places are streets: Vaasanpuistikko, behind the market hall, under Mäkelänsilta and the Siltasaari shore. Until now they fell back to the courtyard. They now have `crew-run`'s **Kallio · tram street**, built from v4.76's runs and buildings plus the park's street dressing:
+  - one tenement row of fifteen bays with a porttikongi on the far pavement;
+  - the board standing on the asphalt between two kerbs, with the tram track across it;
+  - a tram waiting on the track beside the board, wall lamps, bins and bicycles.
+  - The near side lifts away like every set. The passage's mist follows the passage.
+  - `outing.js` `C_PLACES` gains `street`. Only the quay still falls back to the courtyard.
+- **Road fights** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 2). The underpass, Kello's cut found out and both families' retaliations used to open the formation board. They now go straight to Night Shift, the way a door's fight does:
+  - `roadOuting` is the door's record made from the road event, and a road fight's job is always to make them back off;
+  - it is staged where it happened, against the side that came for you;
+  - it returns through the same receipt and pays the event's own stakes once (the retaliations' win and lose);
+  - it does not turn the block;
+  - the board fallback plays the same road fight.
+- **Gates:**
+  - `level-layout.mjs` holds the street too (670 checks), plus a new check that the tram stands clear of the board. The first run found a planter of mine 10 cm into the street's façade.
+  - `c19-outing.mjs` builds the McCormick retaliation as a road outing, plays a Withdraw in Night Shift and settles it once.
+  - `road-browser.cjs` expects the underpass to go to Night Shift, staged on the road and by the locals, then plays it on the board fallback.
+  - `night-places-browser.cjs` walks the street with the other three places.
+- Cache:
+  - `crew-run/locations.js?v=6`, `layouts.js?v=2`, `ui.js?v=19`, `startup.js?v=15`
+  - `fight-module/main.js?v=41`
+  - `outing.js?v=3`, `app.js?v=44`
+
+### Port
+
+When C is ported:
+
+- the street layout in `layouts.js` with its `road`, `rails` and `tram`;
+- `roadOuting`;
+- the road branch of `settleReturnedOuting`: the event's `fight.win` and `fight.lose`, and no block turn.
+
 ## v4.76 — 2026-10-24
 
 **The level pass: walls that join, buildings behind them, and near walls that lift away.** Owner, 2026-10-24, on v4.75's courtyard:
