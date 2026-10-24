@@ -77,6 +77,47 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.74 — 2026-10-24
+
+**A door fight is fought in Night Shift.** Owner, 2026-10-24: *"You should be looking at C19"*, and every campaign fight is **get away** (Q1). This is step 1 of `design/C19_CAMPAIGN_FIGHTS.md`. A door that becomes a fight no longer opens the formation board. It becomes an **outing**: Night Shift (C.19) plays it in its 3D place, and the result comes back to the map once.
+
+- **Act I raises it** (`outing.js`, `app.js`). Taking a door's fight, or a deal that goes bad, writes `state.outing` into the campaign save. It holds:
+  - the fighters (`fighters()`: Aatami while he still fights, then the crew);
+  - the place, its way out, and its C kit (`places-v1.json`). Street and quay fall back to the courtyard until they are built;
+  - the door's people by name, with their weapons mapped to C's three: blunt is a bat, either handgun is the handgun, and a knife or a phone is a knife;
+  - the Act I clock.
+  The fight counts toward the day's two when it starts.
+- **The city waits.** While an outing is open, Act I shows one screen, **IT IS A FIGHT**, with the place, who is in it, the job (get everyone out) and **GO TO THE FIGHT**. Nothing else opens past it, and the block does not pass.
+  - A quiet **NO 3D HERE · FIGHT ON THE BOARD** plays the same fight on the formation board. It is counted once, so a phone without WebGL2 cannot soft-lock the campaign.
+- **Night Shift plays it** (`crew-run/run.js`, `campaign-adapter.js`, `ui.js`). The outing runs under its own save key, so the ordinary Night Shift roster is never touched and a reload resumes the same fight.
+  - Nobody is chosen: the people are Act I's. Aatami projects into C.
+  - The crew stand where it went bad, on row 6. The door's people stand between them and the south edge, in the door battle's own formation. Two more arrive under pressure, as in every C outing.
+  - The win is **everyone extracted**. Withdraw and auto are not offered: the way out is the exit. Beating anyone is never needed.
+  - The header reads Act I's clock, and its link goes back to Kallio.
+- **The way home.** The aftermath says who came home and offers **Back to Kallio**.
+  - Night Shift's receipt applies once (C.17's rule). Wounds land, and anyone left behind is **missing**.
+  - **Aatami is never left behind** (owner, 2026-10-24): down at the end, he is carried out, hurt.
+  - Act I then pays the door's own `win` or `lose` stakes once, behind `memory:outing-settled:<id>`. It turns the block and says how it went.
+- **Measured, not tuned:** the getaway is easy. The opening is won in four rounds with **zero attacks and zero hits taken**. C's plans are visible, and a broken plan cancels, so a straight run past the door's people dodges every blow. Pressure never reached the arrivals. Whether that is the right difficulty is a playtest question, not a number to guess (see the design doc).
+- Cache:
+  - `app.js?v=41`
+  - `outing.js?v=1` (new)
+  - `crew-run/run.js?v=11`, `campaign-adapter.js?v=7`, `ui.js?v=14`, `startup.js?v=10`
+  - `fight-module/readability.js?v=2`, `main.js?v=36`
+- Gates:
+  - `c19-outing.mjs` (bare node, real content): the outing, the getaway built and won with no attack, the receipt exactly once, Aatami carried, the rest missing, and a settled fight that cannot reopen.
+  - `outing-browser.cjs`: the whole loop on a phone and a desktop, from the door to Night Shift's courtyard, then the getaway, a reload mid-fight, the aftermath, and back to the map, paid once (46 checks).
+  - `doors-browser` and `aatami-browser` now expect the outing, and test the board fallback.
+
+### Port
+
+Nothing into the formation board. Godot has no C engine yet (CAMPAIGN G8), so its door fights stay on the board until P5. When C is ported, port:
+- `outing.js` (pure);
+- the getaway branch of `makeMission` (zero-based: the crew at y 5; the formation's front at y 3, middle 2, back 1; lanes 1/2/3 at x 1/2/4);
+- the outing branch of `applyCampaignReceipt` (`carried` is a wound, never missing);
+- Act I's `settleReturnedOuting`;
+- `c19-outing.mjs`'s vectors.
+
 ## v4.73 — 2026-10-24
 
 **The paper fight is withdrawn.** Owner, on v4.72's cut-paper fight: *"This is awful and wrong. You should be looking at C19."* Everything v4.72 added for it is gone: the FIGHTS switch, `paper-fight.js`, `paper-motion.js`, the beats record in `battle.js`, the THINGS TO TEST entry and both of its gates.

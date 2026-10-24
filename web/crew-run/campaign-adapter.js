@@ -52,8 +52,14 @@ export function campaignCrew(state,content){
   const missing=roster.filter(id=>state.crewStatus?.[id]?.status==='missing');
   const preferred=(state.deployed||[]).filter(id=>ready.includes(id));
   const ordered=[...preferred,...ready.filter(id=>!preferred.includes(id)),...missing];
-  return ordered.map(id=>{
-    const record=crewRecord(state,data,id),status=state.crewStatus?.[id];
+  return ordered.map(id=>projectPerson(state,content,id)).filter(Boolean);
+}
+
+// One campaign person as Night Shift sees them. Aatami resolves here too
+// (crewRecord falls back to the protagonist), which is how an outing (v4.74)
+// carries him while he still fights.
+export function projectPerson(state,content,id){
+    const data=dataFor(content),record=crewRecord(state,data,id),status=state.crewStatus?.[id];
     if(!record)return null;
     const aptitudes=aptitudesOf(state,data,id),perks=copy(perksOf(state,id)),skills=copy(skillsOf(state,id)),weapon=weaponRead(record),kit=kitRead(record);
     const maxCondition=Math.max(1,Number(status?.maxCondition??record.condition??5));
@@ -81,8 +87,34 @@ export function campaignCrew(state,content){
       campaignCondition:condition,
       campaignMaxCondition:maxCondition,
       appearanceSeed:hash(`c17:${id}`),
+      protagonist:content.protagonist?.id===id,
     };
-  }).filter(Boolean);
+}
+
+// v4.74 (design/C19_CAMPAIGN_FIGHTS.md step 1): an Act I door fight arrives
+// as an OUTING already written into the campaign save. Who fights, where, and
+// against whom are the campaign's, so nothing is chosen here.
+export function campaignOuting(state,id){
+  const outing=state?.outing;
+  return outing&&outing.id===id?outing:null;
+}
+
+export function outingRun(state,content,outing){
+  if(outing?.status!=='open')throw Error('That fight is already settled.');
+  const crew=outing.fighters.map(id=>projectPerson(state,content,id)).filter(Boolean);
+  if(crew.length<2)throw Error('An outing needs at least two people who can fight.');
+  return {
+    version:1,
+    night:Math.max(1,Number(state.scheduleIndex||0)+1),
+    phase:'prep',
+    crew,
+    selected:crew.map(p=>p.id),
+    active:null,
+    ledger:[],
+    last:null,
+    outing:copy(outing),
+    bridge:{mode:'campaign-v3',id:outing.id,outingId:outing.id,contentId:content.id,sourceScheduleIndex:Number(state.scheduleIndex||0)},
+  };
 }
 
 export function campaignRun(state,content,{now=Date.now}={}){
@@ -123,10 +155,13 @@ export function applyCampaignReceipt(state,content,receipt){
   for(const change of receipt.changes||[]){
     const status=state.crewStatus?.[change.id];
     if(!status)continue;
-    const effect=change.campaignEffect||(
+    let effect=change.campaignEffect||(
       String(change.state).startsWith('Missing')?'missing':
       String(change.state).startsWith('Wounded')?'damage':'unchanged'
     );
+    // Aatami is hurt, never left behind: the crew carry him out (Act I's rule,
+    // owner 2026-10-24). An outing marks him `carried`; nothing makes him missing.
+    if(effect==='carried'||(effect==='missing'&&change.id===content.protagonist?.id))effect='damage';
     if(effect==='missing'){
       status.status='missing';status.condition=0;status.critical=false;
       pushUnique(state.flags,`memory:missing:${change.id}`);
@@ -149,6 +184,15 @@ export function applyCampaignReceipt(state,content,receipt){
   // advances career/level boundaries once, regardless of success.
   ageCrew(state,data,receipt.deployedIds);
   state.battleHistory=Array.isArray(state.battleHistory)?state.battleHistory:[];
+  // An outing goes back to Act I settled; Act I pays the door's stakes once.
+  const outing=receipt.outingId&&state.outing?.id===receipt.outingId?state.outing:null;
+  if(outing){
+    const named=effect=>(receipt.changes||[]).filter(c=>c.campaignEffect===effect).map(c=>c.name);
+    Object.assign(outing,{status:'settled',result:receipt.result,rounds:receipt.rounds,carried:named('carried'),missing:named('missing')});
+    state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift'});
+    log(state,`Night Shift: ${receipt.text||'outing resolved.'}`);
+    return true;
+  }
   state.battleHistory.push({
     id:receipt.bridgeReceiptId,
     result:receipt.success?'objective-complete':'withdraw-or-loss',

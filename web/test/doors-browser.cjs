@@ -114,10 +114,20 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: the fight is offered with a crew`, await lean.isEnabled());
       await lean.click();
       s = await S(page);
-      ok(`${name}: it is a door fight, not a mission`, s.battle?.door === 'hit-bear-debt' && s.battle.missionId === null && s.mode === 'battle');
+      // v4.74: a door fight is a Night Shift outing, and the city waits for it.
+      ok(`${name}: it is a door fight, fought in Night Shift`, s.outing?.door === 'hit-bear-debt' && s.outing.status === 'open' && !s.battle && s.mode === 'outing');
       ok(`${name}: and it counts toward today's two`, s.fightsByDay?.[8] === 1);
       // v4.71: it is fought where the door is, against the people the door names.
-      ok(`${name}: fought at the door, by its side`, s.battle.place?.anchor === 'karhupuisto' && s.battle.place.by === 'piritori_independents'
+      ok(`${name}: fought at the door, by its side`, s.outing.anchor === 'karhupuisto' && s.outing.by === 'piritori_independents' && s.outing.kit === 'park'
+        && /The clearing in Karhupuisto/.test(await page.locator('.outing-panel').innerText()));
+      const go = page.locator('.outing-panel a.paper-button.primary');
+      ok(`${name}: the way to the fight is Night Shift, in its place`, (await go.getAttribute('href')) === `crew-run/?campaign=1&outing=${s.outing.id}&arena=park`);
+      ok(`${name}: nothing else opens past it`, !(await page.locator('.door-board').count()) && !(await page.locator('[data-action="advance"]').count()));
+      // The board fallback, for a device without 3D: the same fight, counted once.
+      await page.locator('[data-action="outing-board"]').click();
+      s = await S(page);
+      ok(`${name}: no 3D: the same fight on the board, counted once`, s.battle?.door === 'hit-bear-debt' && s.battle.missionId === null && s.mode === 'battle' && !s.outing && s.fightsByDay?.[8] === 1);
+      ok(`${name}: at the door, by its side`, s.battle.place?.anchor === 'karhupuisto' && s.battle.place.by === 'piritori_independents'
         && s.battle.sceneAssetId === 'scene-karhupuisto-clearing-v01' && await page.locator('.battle-stage[data-place="karhupuisto"]').count() === 1);
       // v4.72: the fighters' depth z-index once rose above the pause veil and took its taps.
       await page.locator('#pauseButton').click();
@@ -127,16 +137,17 @@ server.listen(0, '127.0.0.1', async () => {
       await page.keyboard.press('Escape');
       await page.waitForSelector('#pause', { state: 'hidden', timeout: 8000 }).catch(() => {});
       // Answer 25: a bad deal escalates. Selling two at the quay goes bad on this block's roll.
-      const quay = (crew) => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "sornainen_harbour"; s.stock.piri = 2; s.recruited = ${crew}; s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "sale-quay-shift", anchor: "sornainen_harbour" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {};`;
+      const quay = (crew) => `s.battle = null; s.outing = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "sornainen_harbour"; s.stock.piri = 2; s.recruited = ${crew}; s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "sale-quay-shift", anchor: "sornainen_harbour" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {};`;
       await fixture(page, quay('a.slice(0, 3)'), await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
       await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       ok(`${name}: a bad deal says it can go bad`, /CAN GO BAD · 40%/.test(await page.locator('[data-choice="sell-two"]').innerText()));
       await page.locator('[data-action="choose"][data-choice="sell-two"]').click();
       s = await S(page);
-      ok(`${name}: it goes bad, and it is a fight`, s.battle?.door === 'sale-quay-shift' && s.battle.id === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1);
-      ok(`${name}: on the quay, not in the boiler hall`, s.battle.place?.anchor === 'sornainen_harbour' && s.battle.sceneAssetId === 'scene-sornainen-quay-v01'
-        && /The Sörnäinen quay/.test(await page.locator('.battle-objective').innerText()));
+      ok(`${name}: it goes bad, and it is a fight`, s.outing?.door === 'sale-quay-shift' && s.outing.battle === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1
+        && /The deal goes bad\. It is a fight now\./.test(await page.locator('.outing-panel').innerText()));
+      ok(`${name}: on the quay, not in the boiler hall`, s.outing.anchor === 'sornainen_harbour' && s.outing.kit === 'courtyard'
+        && /The Sörnäinen quay/.test(await page.locator('.outing-panel').innerText()));
       await fixture(page, quay('[]'));
       await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();

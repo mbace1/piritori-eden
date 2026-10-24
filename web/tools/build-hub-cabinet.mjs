@@ -119,6 +119,22 @@ if (!rewritten.length) {
   process.exit(1);
 }
 
+// ── Night Shift, which a door fight opens since v4.74 ─────────────────────
+// `crew-run/` and what it imports (`fight-module/`, `bear-path/`) sit one
+// level under the game root in both layouts, but in the repo the game root is
+// web/ and the data is one more level up. So their `../../` reaches for
+// content/, art/, people/ and market/ lose one level here, exactly as js/'s
+// `../../../` do. Their fetches are page-relative and their pages sit in the
+// same folders, so one rewrite covers imports, `new URL()`s and fetches alike.
+const NIGHT = ['crew-run', 'fight-module', 'bear-path', 'arena-lab'];
+const TWO_LEVEL = /(['"`])\.\.\/\.\.\//g;
+const nightModules = NIGHT.flatMap(dir => (existsSync(join(out, dir)) ? jsFiles(join(out, dir)) : []));
+for (const abs of nightModules) {
+  const before = readFileSync(abs, 'utf8');
+  const src = before.replace(TWO_LEVEL, '$1../');
+  if (src !== before) { writeFileSync(abs, src); rewritten.push(abs.slice(out.length + 1)); }
+}
+
 let bad = 0;
 
 // The assertion that would have caught the live cabinet's failure. NOTHING may
@@ -132,6 +148,15 @@ if (leftovers.length) {
   bad += 1;
 }
 
+const nightLeftovers = nightModules
+  .filter(abs => new RegExp(TWO_LEVEL.source).test(readFileSync(abs, 'utf8')))
+  .map(abs => abs.slice(out.length + 1));
+if (nightLeftovers.length) {
+  console.error(`  FAIL two-level paths survived in ${nightLeftovers.join(', ')} — ` +
+    `Night Shift would reach past the cabinet for its data`);
+  bad += 1;
+}
+
 // And the positive checks, so "nothing matched" cannot pass as "all correct".
 const contentSrc = readFileSync(join(out, 'js/v3/content.js'), 'utf8');
 for (const [re, label] of [
@@ -141,11 +166,27 @@ for (const [re, label] of [
 ]) {
   if (!re.test(contentSrc)) { console.error(`  FAIL ${label}`); bad += 1; }
 }
+const nightMain = readFileSync(join(out, 'fight-module/main.js'), 'utf8');
+for (const [re, label] of [
+  [/'\.\.\/content\/era1-slice-v1\.json'/, 'Night Shift\'s content fetch is one level up'],
+  [/'\.\.\/art\/v3\/manifest\.json/, 'Night Shift\'s art manifest is one level up'],
+]) {
+  if (!re.test(nightMain)) { console.error(`  FAIL ${label}`); bad += 1; }
+}
+for (const [file, re, label] of [
+  ['crew-run/run.js', /'\.\.\/people\/roster\.mjs/, 'Night Shift\'s roster import is one level up'],
+  ['crew-run/campaign-adapter.js', /'\.\.\/js\/v3\/state\.js/, 'the campaign bridge reads Act I\'s own state module'],
+]) {
+  if (!re.test(readFileSync(join(out, file), 'utf8'))) { console.error(`  FAIL ${label}`); bad += 1; }
+}
 
 for (const f of ['index.html', 'fighter-test.html', 'fighter-test.css', 'js/v3/app.js',
   'js/v3/render3d.js', 'js/v3/fighter-test.js', 'art/v3/manifest.json',
   'content/era1-slice-v1.json', 'content/doors-v1.json', 'content/places-v1.json',
   'market/model.mjs', 'people/hiring.mjs',
+  'crew-run/index.html', 'crew-run/startup.js', 'crew-run/assets/kallio-kit-v02.glb',
+  'crew-run/assets/kallio-kit-v02.manifest.json', 'fight-module/main.js', 'bear-path/park.js',
+  'vendor/three.module.min.js',
   'art/v3/cast3d/clips/muscle-idle-v01.glb',
   'art/v3/cast3d/f01-heavy-bruiser-v02.glb',
   'art/v3/cast3d/f02-wiry-skirmisher-v02.glb',

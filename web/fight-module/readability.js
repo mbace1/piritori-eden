@@ -12,6 +12,15 @@ export function fighterLabel(battle, unit, {targetId = null, full = false} = {})
 export function missionCue(battle, coordinate) {
   const m = battle.mission;
   if (!m) return null;
+  // Act I v4.74: every campaign fight is a getaway. Nobody has to be beaten;
+  // everyone has to reach the exit, and a fallen friend has to be got up first.
+  if (m.objective === 'getaway') {
+    const out = battle.players.filter(p => p.extracted).length, all = battle.players.length;
+    const fallen = battle.players.find(p => !p.alive && !p.evacuated && !p.helped);
+    const goal = fallen ? `Help ${fallen.name} at ${coordinate(fallen.cell)}, then everyone out → EXIT A1–F1`
+      : out ? `${out}/${all} out · everyone out → EXIT A1–F1` : 'Get everyone out → EXIT A1–F1';
+    return {goal, exit: 'EXIT · A1–F1', cost: 'EXTRACT · 1 ACTION'};
+  }
   const target = battle.players.find(p => p.id === m.targetId);
   const carrier = battle.players.find(p => p.id === m.carrierId);
   let goal;

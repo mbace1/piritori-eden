@@ -1,7 +1,7 @@
-import {fighterLabel} from './readability.js?v=1';
+import {fighterLabel} from './readability.js?v=2';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=3';
-import {mountCrew} from '../crew-run/ui.js?v=13';
+import {mountCrew} from '../crew-run/ui.js?v=14';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';

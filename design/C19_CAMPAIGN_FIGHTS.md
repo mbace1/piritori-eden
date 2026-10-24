@@ -1,6 +1,7 @@
 # C.19 fights in the campaign — the mapping (CAMPAIGN.md P1)
 
-Status: **proposed, 2026-10-24. No code until the owner says yes.**
+Status: **step 1 shipped in Act I v4.74 (2026-10-24).** Proposed the same day;
+both owner questions were answered before any code.
 Owner, 2026-10-24, on the withdrawn paper fight: *"This is awful and wrong. You
 should be looking at C19."* Read with 2026-10-17: *"C19 is the best we have."*
 
@@ -60,7 +61,8 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
 1. **Door fights launch C.19** (nine templates, every anchor). They are the most
    generic fights and have no mission logic. Exit: take a door, the deal goes
    bad, the fight is in the 3D place at that anchor, and you are back on the map
-   with the door's stakes paid.
+   with the door's stakes paid. **Done in v4.74** (`web/js/v3/outing.js`,
+   `web/crew-run/`; gates `c19-outing.mjs`, `outing-browser.cjs`).
 2. **Road fights**: the families' retaliations and the others. Same path,
    arriving where the event happened.
 3. **The two mission battles** (Bear Path at Karhupuisto, the courtyard
@@ -86,6 +88,23 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
 - **Negotiation**: Act I's NEGOTIATE has no C counterpart yet.
 - **Godot** has no C engine at all (CAMPAIGN G8). The campaign's fights moving
   to C widens that gap until P5.
+
+## What step 1 found
+
+- **The getaway is easy.** The first door fight measured (the courtyard
+  ledger, three a side) is won in four rounds with no attack and no hit taken.
+  C's plans are visible and a broken plan cancels, so a straight run past the
+  door's people dodges every blow, and pressure never reaches the arrivals.
+  The levers are all in C and none was pulled. They include where the crew
+  start, a rival who holds the exit, arrivals that come from the south, and
+  pressure that counts rounds. Which way to go is a playtest question for the
+  owner.
+- **The shot caller is now a visible gap.** Once Aatami steps back he is not
+  in the outing at all. The seat (§5) is the next thing C needs before a
+  chapter can be played with no formation fight.
+- **No 3D, no soft-lock.** A device that cannot open Night Shift plays the same
+  fight on the formation board from the waiting screen. That fallback goes when
+  the board is retired (step 5).
 
 ## Questions for the owner
 

@@ -66,7 +66,7 @@ server.listen(0, '127.0.0.1', async () => {
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
       const crew = await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id));
-      const scene = n => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "karhupuisto"; s.recruited = a.slice(0, ${n}); s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "hit-bear-debt", anchor: "karhupuisto" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {}; s.flags = s.flags.filter(f => f !== "memory:aatami-stepped-back");`;
+      const scene = n => `s.battle = null; s.outing = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "karhupuisto"; s.recruited = a.slice(0, ${n}); s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "hit-bear-debt", anchor: "karhupuisto" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {}; s.flags = s.flags.filter(f => f !== "memory:aatami-stepped-back");`;
       // One hire: Aatami makes the second fighter.
       await fixture(page, scene(1), crew);
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
@@ -75,7 +75,9 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: with one hire the fight is open (Aatami fights)`, await lean.isEnabled());
       await lean.click();
       let s = await S(page);
-      ok(`${name}: Aatami is on the board, in front`, s.mode === 'battle' && s.battle.players[0]?.id === 'aatami' && s.battle.players[0].name === 'Aatami');
+      // v4.74: a door fight is a Night Shift outing; Aatami leads who goes.
+      ok(`${name}: Aatami is in the fight, in front`, s.mode === 'outing' && s.outing.fighters[0] === 'aatami'
+        && /YOURS · Aatami,/.test(await page.locator('.outing-panel .presence-line').innerText()));
       ok(`${name}: and not stepped back`, !s.flags.includes('memory:aatami-stepped-back'));
       // Nobody hired: the bear debt's fight is closed, and says why.
       await fixture(page, scene(0), crew);
@@ -88,8 +90,8 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       await lean.click();
       s = await S(page);
-      ok(`${name}: with three hired he steps back`, s.mode === 'battle' && !s.battle.players.some(p => p.id === 'aatami') && s.flags.includes('memory:aatami-stepped-back'));
-      ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.battle.log.join(' ')));
+      ok(`${name}: with three hired he steps back`, s.mode === 'outing' && !s.outing.fighters.includes('aatami') && s.flags.includes('memory:aatami-stepped-back'));
+      ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.outing.opening) && /edge of the board/.test(await page.locator('.outing-panel').innerText()));
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       const e = errors();
       ok(`${name}: no errors`, e.length === 0, e.join(' | '));
