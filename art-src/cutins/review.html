@@ -84,7 +84,7 @@ function atLocation(p, name, line) {
   const FH = H * 0.62; figure(p, -40, H - FH, FH / rig.size[1]);
   const bx = 350, by = 420, bw = 690, bh = 320;   // above him; the tail has one side square to the bubble and aims at his mouth
   g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 18; g.shadowOffsetX = 8; g.shadowOffsetY = 12;
-  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 360, by + bh - 4); g.lineTo(565, 935); g.lineTo(565, by + bh - 3); g.lineTo(bx + 4, by + bh - 2); g.closePath(); g.fill(); g.restore();
+  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 320, by + bh - 4); g.lineTo(565, 855); g.lineTo(565, by + bh - 3); g.lineTo(bx + 4, by + bh - 2); g.closePath(); g.fill(); g.restore();
   g.fillStyle = '#17191A'; g.font = '700 44px Arial Narrow, Arial'; g.fillText(name, bx + 34, by + 62);
   g.font = '400 40px Courier New, monospace'; wrap(line, bx + 34, by + 124, bw - 70, 52);
   const opts = [['ASK ABOUT THE THURSDAY LOAD', '#C5A044'], ['BORROW A KEYBOARD · €0', '#38B8C8'], ['LEAVE', '#676B6B']];
