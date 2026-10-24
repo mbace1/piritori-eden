@@ -54,6 +54,14 @@ function watchErrors(page) {
 
 
 const S = page => page.evaluate(() => structuredClone(window.__ptv3.state));
+// v4.75: a door fight leaves Act I straight for Night Shift. This test is about
+// Act I, so Night Shift is a stub page here (outing-browser.cjs plays it).
+const saved = page => page.evaluate(() => JSON.parse(localStorage.getItem('piritori-to-eden:v3')));
+async function backToKallio(page, base) {
+  await page.goto(`${base}/web/?skip`);
+  await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
+  await page.locator('#resumeButton').click();
+}
 const fixture = (page, body, arg) => page.evaluate(([b, a]) => { const s = structuredClone(window.__ptv3.state); new Function('s', 'a', b)(s, a); window.__ptv3.debug.setState(s); }, [body, arg]);
 async function walkToLead(page) {
   for (let i = 0; i < 6; i += 1) {
@@ -76,6 +84,7 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const page = await browser.newPage({ viewport: vp, hasTouch: touch, isMobile: touch });
       const errors = watchErrors(page);
+      await page.route('**/web/crew-run/**', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Night Shift (stub)</title>' }));
       await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
@@ -113,15 +122,18 @@ server.listen(0, '127.0.0.1', async () => {
       const lean = page.locator('[data-action="choose"][data-choice="lean"]');
       ok(`${name}: the fight is offered with a crew`, await lean.isEnabled());
       await lean.click();
-      s = await S(page);
-      // v4.74: a door fight is a Night Shift outing, and the city waits for it.
-      ok(`${name}: it is a door fight, fought in Night Shift`, s.outing?.door === 'hit-bear-debt' && s.outing.status === 'open' && !s.battle && s.mode === 'outing');
+      // v4.75: the choice goes straight to Night Shift, in the door's place.
+      await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
+      s = await saved(page);
+      ok(`${name}: it is a door fight, fought in Night Shift`, s.outing?.door === 'hit-bear-debt' && s.outing.status === 'open' && !s.battle && s.outing.goal === 'fight');
+      ok(`${name}: straight there, in its place`, page.url().endsWith(`crew-run/?campaign=1&outing=${s.outing.id}&arena=park`));
       ok(`${name}: and it counts toward today's two`, s.fightsByDay?.[8] === 1);
       // v4.71: it is fought where the door is, against the people the door names.
-      ok(`${name}: fought at the door, by its side`, s.outing.anchor === 'karhupuisto' && s.outing.by === 'piritori_independents' && s.outing.kit === 'park'
-        && /The clearing in Karhupuisto/.test(await page.locator('.outing-panel').innerText()));
-      const go = page.locator('.outing-panel a.paper-button.primary');
-      ok(`${name}: the way to the fight is Night Shift, in its place`, (await go.getAttribute('href')) === `crew-run/?campaign=1&outing=${s.outing.id}&arena=park`);
+      ok(`${name}: fought at the door, by its side`, s.outing.anchor === 'karhupuisto' && s.outing.by === 'piritori_independents' && s.outing.kit === 'park');
+      // Back in Act I with it unfinished: the fight is still on, and nothing else opens.
+      await backToKallio(page, base);
+      ok(`${name}: back unfinished, the fight is still on`, /The clearing in Karhupuisto/.test(await page.locator('.outing-panel').innerText())
+        && (await page.locator('.outing-panel a.paper-button.primary').getAttribute('href')) === `crew-run/?campaign=1&outing=${s.outing.id}&arena=park`);
       ok(`${name}: nothing else opens past it`, !(await page.locator('.door-board').count()) && !(await page.locator('[data-action="advance"]').count()));
       // The board fallback, for a device without 3D: the same fight, counted once.
       await page.locator('[data-action="outing-board"]').click();
@@ -143,11 +155,12 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       ok(`${name}: a bad deal says it can go bad`, /CAN GO BAD · 40%/.test(await page.locator('[data-choice="sell-two"]').innerText()));
       await page.locator('[data-action="choose"][data-choice="sell-two"]').click();
-      s = await S(page);
+      await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
+      s = await saved(page);
       ok(`${name}: it goes bad, and it is a fight`, s.outing?.door === 'sale-quay-shift' && s.outing.battle === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1
-        && /The deal goes bad\. It is a fight now\./.test(await page.locator('.outing-panel').innerText()));
-      ok(`${name}: on the quay, not in the boiler hall`, s.outing.anchor === 'sornainen_harbour' && s.outing.kit === 'courtyard'
-        && /The Sörnäinen quay/.test(await page.locator('.outing-panel').innerText()));
+        && /The deal goes bad\. It is a fight now\./.test(s.outing.opening));
+      ok(`${name}: a getaway, on the quay, not in the boiler hall`, s.outing.goal === 'getaway' && s.outing.anchor === 'sornainen_harbour' && s.outing.kit === 'courtyard' && s.outing.place === 'The Sörnäinen quay');
+      await backToKallio(page, base);
       await fixture(page, quay('[]'));
       await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();

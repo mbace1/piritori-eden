@@ -77,6 +77,69 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.75 — 2026-10-24
+
+**A fight has a job, the police can come, and it is three stops.** Owner, 2026-10-24, correcting v4.74: *"Please read all designs / No, fighting 75%, escape 25% / Also police can arrive etc. It's all in the docs / Simplify UX, plan better"*. The reading was confirmed the same day ("Yes, as read") and this build was approved ("Yes, build it"). Both answers are in `DESIGN_AUTHORITY.md`. This is step 1 of the replanned `design/C19_CAMPAIGN_FIGHTS.md` §6.
+
+- **A job per fight** (`content/doors-v1.json` `fight.goal`, `outing.js`).
+  - **fight**: make them back off. Five doors.
+  - **getaway**: get out with it. Four doors: the fish stall and yard-van pickups, the quay-shift sale and the back-door watch.
+  - Road fights and missions carry the rest of the 75/25 when they come over (§6).
+- **Make them back off** (`crew-run/run.js` `makeOuting`).
+  - The crew start at the exit end and the door's people stand up the board in their own formation.
+  - Won when none of them is still standing. **They break and run** once half their weight is down; a tough one weighs two.
+  - There are no arrivals; the police are the escalation now.
+  - The rout threshold is proposed, not measured. A played opening is won in 2 rounds with pressure at 3.
+- **The getaway** is v4.74's, with the formation turned to face the way out.
+- **Withdraw is in every fight** at the job's losing price. Everyone still standing gets out; anyone down is missing, or taken if the police are already on the way.
+- **The police** (COMBAT §9.5, Act I `battle.js`):
+  - Pressure starts from the place's heat (0–3). A round adds 1, a gunshot 1, a body 2.
+  - At 5 they are announced at one end. Two to four cells are marked blue and the bar says when they come.
+  - They walk in after the next enemy turn. The fight stops on Act I's two postures, **Back off** or **Help your friends**, each button naming who that answer gets taken. ENGAGE is not offered.
+  - Anyone taken is arrested through `arrestCrew`. Aatami is never taken or left behind: down, he is carried out.
+- **Three stops instead of six** (UX_SPEC; GDD 2026-09-12):
+  1. **The choice opens the fight.** IT IS A FIGHT is no longer a stop, and the choice navigates straight to Night Shift.
+  2. **A brief card over the scene**: the job, who is on each side, the way out, when the police come, and one **Fight** button. No crew page, nothing to pick.
+  3. **One result card**: the title, a line per person, **Back to Kallio**. The aftermath grid is gone for outings.
+  4. **The map** says what changed in a strip at the top of the side panel: the place, the outcome, who was hurt, missing or arrested, and the stakes in words. It stays until the block turns again.
+  - The waiting screen is now only the way back into an unfinished fight, plus the board fallback for a device without 3D.
+  - While the police question is open it takes the whole command strip, so on a phone both answers are full-size.
+- **Known:**
+  - The question is asked even when nobody is down, and then both answers cost nothing.
+  - The getaway is still untuned (v4.74's finding stands).
+  - Nobody has fought a rout or a police arrival on a device.
+- Cache:
+  - `app.js?v=42`, `outing.js?v=2`
+  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=15`, `startup.js?v=11`, `style.css?v=7`
+  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=37`, `tactical-ui.js?v=11`, `session.js?v=17`
+- Gates:
+  - `c19-outing.mjs` covers in bare node, on real content:
+    - every door's job;
+    - the fight formation, the rout and a played win;
+    - Withdraw, and the police announced, arriving and answered both ways;
+    - the arrests, Aatami carried, and the receipt once.
+  - `outing-browser.cjs` runs three scenarios (66 checks): a phone win, a desktop win, and a phone police arrival. It covers:
+    - the choice straight into the brief;
+    - a reload mid-fight;
+    - the question naming its cost;
+    - the result card;
+    - the map strip clear of the bar;
+    - the stakes paid once.
+  - `doors-browser` and `aatami-browser` reach the map through Resume. Night Shift is stubbed there because they test Act I.
+  - The police answer is a free command in `tactics.js` (`free`): it is answered without spending anyone's Action, and `c19-outing.mjs` checks it.
+
+### Port
+
+Godot still plays door fights on the formation board (CAMPAIGN G8), and the board already has the postures. When C is ported, port:
+- `outing.js`'s goal and heat;
+- `makeOuting` (zero-based rows: fight crew y 1, rivals 4/5/6; getaway crew y 5, rivals 3/2/1);
+- `policeOutcome`;
+- the adapter's `arrested`, which goes through `arrestCrew`;
+- `settleReturnedOuting` and `lastFight`;
+- `c19-outing.mjs`'s vectors.
+
+The new `goal` field in `doors-v1.json` is synced and ignored until then.
+
 ## v4.74 — 2026-10-24
 
 **A door fight is fought in Night Shift.** Owner, 2026-10-24: *"You should be looking at C19"*, and every campaign fight is **get away** (Q1). This is step 1 of `design/C19_CAMPAIGN_FIGHTS.md`. A door that becomes a fight no longer opens the formation board. It becomes an **outing**: Night Shift (C.19) plays it in its 3D place, and the result comes back to the map once.

@@ -1,6 +1,6 @@
 import {
   SAVE_KEY as CAMPAIGN_SAVE_KEY,
-  crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew,
+  crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, arrestCrew,
 } from '../js/v3/state.js?v=9';
 import {nameFrom} from '../../people/roster.mjs?v=1';
 
@@ -161,7 +161,14 @@ export function applyCampaignReceipt(state,content,receipt){
     );
     // Aatami is hurt, never left behind: the crew carry him out (Act I's rule,
     // owner 2026-10-24). An outing marks him `carried`; nothing makes him missing.
-    if(effect==='carried'||(effect==='missing'&&change.id===content.protagonist?.id))effect='damage';
+    const aatami=change.id===content.protagonist?.id;
+    if(effect==='carried'||(['missing','arrested'].includes(effect)&&aatami))effect='damage';
+    if(effect==='arrested'){
+      // COMBAT §9.5.3, as Act I's board does it: taken, and gone from the roster.
+      status.status='missing';status.condition=0;status.critical=false;
+      arrestCrew(state,data,change.id);
+      continue;
+    }
     if(effect==='missing'){
       status.status='missing';status.condition=0;status.critical=false;
       pushUnique(state.flags,`memory:missing:${change.id}`);
@@ -188,7 +195,8 @@ export function applyCampaignReceipt(state,content,receipt){
   const outing=receipt.outingId&&state.outing?.id===receipt.outingId?state.outing:null;
   if(outing){
     const named=effect=>(receipt.changes||[]).filter(c=>c.campaignEffect===effect).map(c=>c.name);
-    Object.assign(outing,{status:'settled',result:receipt.result,rounds:receipt.rounds,carried:named('carried'),missing:named('missing')});
+    Object.assign(outing,{status:'settled',result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,
+      carried:named('carried'),missing:named('missing'),arrested:named('arrested'),wounded:named('damage')});
     state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift'});
     log(state,`Night Shift: ${receipt.text||'outing resolved.'}`);
     return true;

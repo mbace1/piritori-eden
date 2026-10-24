@@ -189,6 +189,7 @@
       "fight": {
         "battle": "battle-karhupuisto-2v2",
         "by": "jade_lantern_network",
+        "goal": "getaway",
         "win": [
           "relationship:jade_lantern_network:-1"
         ],
@@ -257,6 +258,7 @@
       "fight": {
         "battle": "battle-courtyard-3v3",
         "by": "mccormick_family",
+        "goal": "getaway",
         "win": [
           "intel:+1"
         ],
@@ -290,6 +292,7 @@
       "fight": {
         "battle": "battle-kattilahalli-3v3",
         "by": "piritori_independents",
+        "goal": "fight",
         "win": [
           "cash:+90",
           "relationship:mccormick_family:+1"
@@ -398,6 +401,7 @@
       "fight": {
         "battle": "battle-kattilahalli-3v3",
         "by": "piritori_independents",
+        "goal": "getaway",
         "win": [
           "cash:+40"
         ],
@@ -495,6 +499,7 @@
       "fight": {
         "battle": "battle-karhupuisto-2v2",
         "by": "piritori_independents",
+        "goal": "fight",
         "win": [
           "cash:+60",
           "pressure:karhupuisto:+1"
@@ -650,6 +655,7 @@
       "fight": {
         "battle": "battle-courtyard-3v3",
         "by": "mccormick_family",
+        "goal": "fight",
         "win": [
           "relationship:mccormick_family:+1"
         ],
@@ -768,6 +774,7 @@
       "fight": {
         "battle": "battle-karhupuisto-2v2",
         "by": "jade_lantern_network",
+        "goal": "getaway",
         "win": [
           "cash:+20"
         ],
@@ -801,6 +808,7 @@
       "fight": {
         "battle": "battle-karhupuisto-2v2",
         "by": "piritori_independents",
+        "goal": "fight",
         "win": [
           "cash:+80",
           "relationship:mccormick_family:+1"
@@ -872,6 +880,7 @@
       "fight": {
         "battle": "battle-courtyard-3v3",
         "by": "piritori_independents",
+        "goal": "fight",
         "win": [
           "cash:+120",
           "intel:+1",

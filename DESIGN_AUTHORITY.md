@@ -48,6 +48,13 @@ Simplify UX, plan better."*
   return to, not a separate screen (UX_SPEC §4).
 - The plan that answers this is `design/C19_CAMPAIGN_FIGHTS.md` §6.
 
+**Answered the same day:**
+- **The 75/25 reading: "Yes, as read."** About three in four campaign fights
+  are won by beating them (down them or make them run). About one in four are
+  jobs where getting out is the win. In every fight you can still choose to
+  run, at the job's losing price. Each fight carries its job in the data.
+- **§6 greenlit as planned: "Yes, build it."** v4.75 first, then road fights.
+
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 
 The owner approved the cut-card Toko Slomo loops ("Approved, put it in the

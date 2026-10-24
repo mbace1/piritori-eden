@@ -282,7 +282,7 @@ jobs:
 
   campaign-outing:
     timeout-minutes: 20
-    name: a door fight in Night Shift (Act I v4.74)
+    name: a door fight in Night Shift (Act I v4.74-v4.75)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

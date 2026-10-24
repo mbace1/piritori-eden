@@ -62,6 +62,14 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const page = await browser.newPage({ viewport: vp, hasTouch: touch, isMobile: touch });
       const errors = watchErrors(page);
+      // v4.75: a door fight leaves for Night Shift at once; here it is a stub.
+      await page.route('**/web/crew-run/**', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Night Shift (stub)</title>' }));
+      const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem('piritori-to-eden:v3')));
+      const backToKallio = async () => {
+        await page.goto(`${base}/web/?skip`);
+        await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
+        await page.locator('#resumeButton').click();
+      };
       await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
       await page.locator('#beginButton').click(); await page.waitForSelector('.city-map');
@@ -74,11 +82,12 @@ server.listen(0, '127.0.0.1', async () => {
       const lean = page.locator('[data-action="choose"][data-choice="lean"]');
       ok(`${name}: with one hire the fight is open (Aatami fights)`, await lean.isEnabled());
       await lean.click();
-      let s = await S(page);
-      // v4.74: a door fight is a Night Shift outing; Aatami leads who goes.
-      ok(`${name}: Aatami is in the fight, in front`, s.mode === 'outing' && s.outing.fighters[0] === 'aatami'
-        && /YOURS · Aatami,/.test(await page.locator('.outing-panel .presence-line').innerText()));
+      await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
+      let s = await saved();
+      // A door fight is a Night Shift outing; Aatami leads who goes.
+      ok(`${name}: Aatami is in the fight, in front`, s.outing?.status === 'open' && s.outing.fighters[0] === 'aatami');
       ok(`${name}: and not stepped back`, !s.flags.includes('memory:aatami-stepped-back'));
+      await backToKallio();
       // Nobody hired: the bear debt's fight is closed, and says why.
       await fixture(page, scene(0), crew);
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
@@ -89,9 +98,11 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       await lean.click();
-      s = await S(page);
-      ok(`${name}: with three hired he steps back`, s.mode === 'outing' && !s.outing.fighters.includes('aatami') && s.flags.includes('memory:aatami-stepped-back'));
-      ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.outing.opening) && /edge of the board/.test(await page.locator('.outing-panel').innerText()));
+      await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
+      s = await saved();
+      ok(`${name}: with three hired he steps back`, s.outing?.status === 'open' && !s.outing.fighters.includes('aatami') && s.flags.includes('memory:aatami-stepped-back'));
+      ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.outing.opening));
+      await backToKallio();
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       const e = errors();
       ok(`${name}: no errors`, e.length === 0, e.join(' | '));

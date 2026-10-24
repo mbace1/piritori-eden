@@ -210,6 +210,10 @@ Each step ships to the hub and is played before the next.
    with the two postures, the place's heat, and the three-stop flow above.
    v4.74's plumbing stays: the outing record, the receipt applied once, Aatami
    carried, and the cabinet carrying Night Shift.
+   *Built (VERSIONS.md v4.75).* It differs from the plan above in three places:
+   - The end is a short card over the scene, with a line per person, not a single line in the scene: arrests and the carried need naming.
+   - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped.
+   - The rout threshold, half their weight with a tough one counting two, is unmeasured beyond one played opening.
 2. **Road fights**: the same path, arriving where the event happened.
 3. **The shot caller**: a design for COMBAT §9.9.4's open questions, brought for
    a greenlight before it is built.

@@ -36,8 +36,11 @@ if(!gl){
   retry.textContent='Retry graphics';
   retry.hidden=false;
   retry.addEventListener('click',()=>location.reload(),{once:true});
+  // Act I v4.75: a campaign fight is never stuck behind a phone that cannot do
+  // 3D. Act I plays the same fight on its board instead (`?outing=board`).
+  if(new URLSearchParams(location.search).get('outing')){const board=document.createElement('a');board.href='../?outing=board';board.textContent='Fight it on the board instead';board.className='board-fallback';retry.after(board);}
   throw new Error(status||'WebGL2 context unavailable after retry');
 }
 
 canvas.__piritoriGL=gl;
-await import('../fight-module/main.js?v=36');
+await import('../fight-module/main.js?v=37');
