@@ -1,0 +1,23 @@
+# Hub release: Act I city v4.72 (fights in cut paper, as a switch)
+
+- **Source:** `mbace1/piritori-eden` @ `d33a0ff`, web only. Godot ports whichever look the owner picks.
+- **Site:** `mbace1/Suds-Jack` gh-pages `e4ea99d0`, `piritori/`. Nothing was deleted; 252 files are in `release.json`. The two new modules are `js/v3/paper-fight.js` and `js/v3/paper-motion.js`.
+- **What players get:**
+  - **FIGHTS · 3D / PAPER** in the pause menu, or `?fight=paper` on a link. Paper draws the fight as cut-card stand-ins acting over the place's plate.
+  - The fight is acted out from recorded beats: a lean before a blow, the card bending when hit, a guard flinch, a topple on a fall, and hops on a reposition.
+  - The board, the rules and the default (3D) are unchanged.
+  - THINGS TO TEST has **A fight in cut paper — Hakaniemi**.
+  - The pause menu now sits above the fighters. Before this, their depth z-index took its taps.
+- **Catalogue:**
+  - The note moves to v4.72 in en, fi and ja. `versions.json` piritori goes from 4.71 to 4.72 (by hand).
+  - Token cascade: games 163, shell 126, hub 167, with toko/js following. 46 site files.
+  - The service worker `VERSION` goes to v156, and `sw-shell.mjs --check` agrees.
+  - Another lane had merged after v4.71 and re-cascaded (shell 125); this cascade started from that.
+- **Verified on the staged site tree:**
+  - `paper-fight-browser` (27) and `doors-browser` (40) pass against the site tree.
+  - `act1.html` forwards to `?v=472`, the header says v4.72, the HOME button mounts, the Hakaniemi plate decodes, and the arcade card reads v4.72.
+- **Review clip:** one turn at Hakaniemi, filmed on a hand-driven clock (12 frames a second, the motion's own rhythm). Aatami braces, Reijo hops across the board, and two blows land on him. It was sent to the owner in the session; it is not committed.
+- **Known, unchanged:**
+  - `v3-playthrough`'s two Toko checks (QUEUE.md).
+  - `opening.cjs` timing out under the test's own server since v4.70 (see CITY_V471_RELEASE.md). The new paper browser step runs before it in CI, so it is not skipped.
+- **Not verified:** the public github.io URL (this session's network policy blocks it) and owner acceptance on a device.
