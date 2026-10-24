@@ -228,10 +228,6 @@ export function createBattleState(definition, crew, state, data) {
     policeSaved: [],
     // Tough-target desync tracker — cleared each round with acted[].
     syncHitsThisRound: new Set(),
-    // v4.72: what just happened, for a renderer to act out (paper-fight.js).
-    // Presentation only: no rule reads it. See `beat()`.
-    beats: [],
-    beatSeq: 0,
   };
   return attachGrowth(battle, state, data);
 }
@@ -533,7 +529,7 @@ function triggerSyncFire(battle, attacker, target) {
     // Desync mid-chain: tough already marked from an earlier primary this
     // round — stop. Same chain before any sync: first fires, then mark+stop.
     if (target.tough && battle.syncHitsThisRound?.has(target.id)) return;
-    battle.log.unshift(`${ally.name} syncs fire: ${strike(battle, ally, target, 1 + (ally.harmBonus ?? 0), true)}`);
+    battle.log.unshift(`${ally.name} syncs fire: ${hit(target, 1 + (ally.harmBonus ?? 0))}`);
     if (target.tough) {
       battle.syncHitsThisRound.add(target.id);
       return;
@@ -546,31 +542,6 @@ function markActed(battle, unit) {
   battle.action = null;
   const next = battle.players.find(item => item.alive && !battle.acted.includes(item.id));
   battle.selectedId = next?.id ?? unit.id;
-}
-
-/**
- * v4.72: a BEAT is one thing that happened on the board, in order — who did
- * it, to whom, and what it did (`guard` torn, `hurt`, `down`). The log says
- * the same thing in words; this says it in a shape a renderer can act out
- * (the paper fight leans, lunges, bends and topples from it). No rule reads
- * it, the last 24 are kept, and `beatSeq` only ever rises, so a renderer
- * that has played up to N knows exactly what is new.
- */
-const BEATS_KEPT = 24;
-function beat(battle, kind, actor, extra = {}) {
-  battle.beats ??= [];
-  battle.beatSeq = (battle.beatSeq ?? 0) + 1;
-  battle.beats.push({ seq: battle.beatSeq, round: battle.round, kind, actor: actor?.id ?? null, ...extra });
-  if (battle.beats.length > BEATS_KEPT) battle.beats.splice(0, battle.beats.length - BEATS_KEPT);
-}
-
-/** `hit()`, recorded as a strike beat. */
-function strike(battle, attacker, target, amount = 1, sync = false) {
-  const guard = target.guard;
-  const line = hit(target, amount);
-  const effect = !target.alive ? 'down' : target.guard < guard ? 'guard' : 'hurt';
-  beat(battle, 'strike', attacker, { target: target.id, effect, sync, weapon: attacker.equipment ?? null });
-  return line;
 }
 
 function hit(target, amount = 1) {
@@ -596,9 +567,8 @@ export function playerAttack(battle, targetId) {
     target.nerve = Math.max(0, target.nerve - 1);
     target.guard = Math.max(0, target.guard - 1);
     battle.log.unshift(`${attacker.name} marks ${target.name}'s lane. Guard and nerve drop.`);
-    beat(battle, 'mark', attacker, { target: target.id });
   } else {
-    battle.log.unshift(`${attacker.name}: ${strike(battle, attacker, target, 1 + (attacker.harmBonus ?? 0))}`);
+    battle.log.unshift(`${attacker.name}: ${hit(target, 1 + (attacker.harmBonus ?? 0))}`);
     triggerSyncFire(battle, attacker, target);
   }
   markActed(battle, attacker);
@@ -639,7 +609,6 @@ export function useItem(battle, itemId) {
       battle.log.unshift(`${unit.name} uses ${itemId}.`);
   }
   if (item.singleUse) unit.itemIds = unit.itemIds.filter(id => id !== itemId);
-  beat(battle, 'item', unit, { item: itemId });
   markActed(battle, unit);
   return { ok: true };
 }
@@ -651,7 +620,6 @@ export function brace(battle) {
   unit.guard = Math.min(3, unit.guard + 1);
   unit.nerve = Math.min(3, unit.nerve + 1);
   battle.log.unshift(`${unit.name} braces: guard ${unit.guard}, nerve ${unit.nerve}.`);
-  beat(battle, 'brace', unit);
   markActed(battle, unit);
   return { ok: true };
 }
@@ -683,7 +651,6 @@ export function moveUnit(battle, cell) {
   const old = unit.cell;
   unit.cell = cell;
   battle.log.unshift(`${unit.name} repositions ${describeCell(old)} → ${describeCell(cell)}.`);
-  beat(battle, 'step', unit, { from: old, to: cell });
   markActed(battle, unit);
   return { ok: true };
 }
@@ -869,7 +836,7 @@ function enemyPhase(battle) {
       .sort((a, b) => (a.guard + a.hp) - (b.guard + b.hp) || a.name.localeCompare(b.name));
     const target = targets.find(item => attackableInBattle(battle, enemy, item)) ?? targets[0];
     if (!target) break;
-    battle.log.unshift(`${enemy.name}: ${strike(battle, enemy, target)}`);
+    battle.log.unshift(`${enemy.name}: ${hit(target)}`);
     // Symmetric with the player side (COMBAT.md §9.13): sync fire is a
     // property of standing where a gun already reaches, not a player perk.
     triggerSyncFire(battle, enemy, target);

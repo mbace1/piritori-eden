@@ -10,10 +10,15 @@ using motion graphics."**
 - The recent steps are the cut-paper rigs: Toko at the counter (v4.70), the
   waist-up NPC cut-ins (PR #107: "the characters don't need to be 3D"), the
   paper kit (AD1) and the Radio Free papercut technique behind them.
-- Until the owner says more, no lane should build on "3D is the future": no
-  freeze of the formation board, no new 3D place kits. The `kit` field in
-  `content/places-v1.json` (v4.71) is a record, not a plan.
 - Stand-ins only (2026-10-02) and web leads, Godot follows, are unchanged.
+
+**Follow-up, 2026-10-24.** Told "plan your approach and then execute", Claude
+read the note as a cue to put fights into cut paper and shipped it behind a
+switch (v4.72). Owner: **"This is awful and wrong. You should be looking at
+C19."** It was withdrawn in v4.73. The motion-graphics note is about the
+non-battle screens (the counter, the cut-ins). For fights, **C.19 Night Shift
+is the reference**, as PR #102's CAMPAIGN.md already says. The formation
+board is not to be re-skinned.
 
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 

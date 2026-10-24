@@ -77,7 +77,19 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
-## v4.72 — 2026-10-24
+## v4.73 — 2026-10-24
+
+**The paper fight is withdrawn.** Owner, on v4.72's cut-paper fight: *"This is awful and wrong. You should be looking at C19."* Everything v4.72 added for it is gone: the FIGHTS switch, `paper-fight.js`, `paper-motion.js`, the beats record in `battle.js`, the THINGS TO TEST entry and both of its gates.
+
+- **Kept:** v4.72's one fix that was not about paper. `.battle-stage` is its own stacking context, so the fighters' depth z-index can no longer rise above the pause menu and take its taps. `doors-browser` checks it now, on a door fight.
+- **Fights are 3D again, and only 3D,** as they were in v4.71. C.19 (Night Shift) is the reference for what comes next.
+- Cache: `app.js?v=40`, `v3.css?v=11`. `battle.js` (13), `pause.js` (4) and `testlist.js` (3) are back to their v4.71 bytes, so they keep their v4.71 tokens.
+
+### Port
+
+Nothing. v4.72 was never ported.
+
+## v4.72 — 2026-10-24 (withdrawn in v4.73)
 
 **Fights in cut paper, as a switch.** Owner, 2026-10-23: *"3d might not be the future. Recent steps are using motion graphics."* Then: *"Plan your approach and then execute."* The fight can now be drawn the way Toko is drawn at his counter (v4.70): flat cut-card figures on hidden pivots, acting over the place's plate (v4.71). The board, the rules and the plates are unchanged; only the drawing changes. The 3D stand-ins remain the default.
 

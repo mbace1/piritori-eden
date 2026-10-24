@@ -16,7 +16,7 @@ import {
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=9';
-import { createPauseMenu } from './pause.js?v=5';
+import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
@@ -34,12 +34,11 @@ import {
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=14';
+} from './battle.js?v=13';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=12';
-import { mountPaperFight, disposePaperFight } from './paper-fight.js?v=1';
 import { positionBattleDOM } from './stage-camera.js?v=5';
 
 const $ = id => document.getElementById(id);
@@ -159,22 +158,6 @@ let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
 let doors = { rules: { offers_min: 0, offers_max: 0, scenes: {} }, templates: [] };
 // v4.71: where door and road fights happen (places.js). Empty: they keep the arena they name.
 let places = { rules: {}, places: [] };
-
-// v4.72: how a fight is drawn — '3d' (the procedural stand-ins) or 'paper'
-// (cut-card stand-ins over the place's plate, paper-fight.js). A COMPARISON,
-// not a decision: the switch exists so one fight can be watched both ways.
-// `?fight=paper|3d` sets it for a link and is remembered like the menu's.
-const FIGHT_LOOK_KEY = 'piritori-to-eden:fight-look';
-function fightLook() {
-  try { return localStorage.getItem(FIGHT_LOOK_KEY) === 'paper' ? 'paper' : '3d'; } catch { return '3d'; }
-}
-function setFightLook(look) {
-  try { localStorage.setItem(FIGHT_LOOK_KEY, look === 'paper' ? 'paper' : '3d'); } catch { /* private window: the default stands */ }
-}
-{
-  const wanted = new URLSearchParams(location.search).get('fight');
-  if (wanted === 'paper' || wanted === '3d') setFightLook(wanted);
-}
 let routePlanning = false;
 let routeDraft = [];
 let observation = '';
@@ -399,13 +382,7 @@ function render() {
   if (state.mode === 'route') mountMapRelief($('cityRelief'));
 
   if (state.mode === 'battle' && state.battle) {
-    if (fightLook() === 'paper') {
-      disposeBattleStage3D();
-      mountPaperFight($('stage3dMount'), state.battle);
-    } else {
-      disposePaperFight();
-      mountBattleStage3D($('stage3dMount'), state.battle, data);
-    }
+    mountBattleStage3D($('stage3dMount'), state.battle, data);
     // Both calls measure the SAME just-attached container; running this
     // right after gives the DOM grid/unit tokens the real projected
     // positions instead of `cellPosition()`'s static guess — see
@@ -413,7 +390,6 @@ function render() {
     positionBattleDOM($('stage3dMount'), state.battle);
   } else {
     disposeBattleStage3D();
-    disposePaperFight();
   }
 }
 
@@ -2330,8 +2306,7 @@ async function boot() {
           if (state.recruited.length >= need) break;
           if (!state.recruited.includes(crew.id)) state.recruited.push(crew.id);
         }
-        if (target.look) setFightLook(target.look);
-        if (!startBattle(target.id, target.at ? { anchor: target.at, by: target.by ?? null, key: `test-${target.at}` } : null)) return;
+        if (!startBattle(target.id)) return;
       } else if (target.kind === 'news') {
         state.newsSeen = state.newsSeen.filter(id => id !== target.id);
         state.newsReturnMode = 'route';
@@ -2365,10 +2340,9 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.72',
+      version: 'v4.73',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
-      fightLook: { get: fightLook, set: look => { setFightLook(look); if (state.mode === 'battle') render(); } },
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
     // Esc pauses from anywhere. The menu handles Esc itself once it is open,

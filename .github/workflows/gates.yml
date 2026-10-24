@@ -146,7 +146,6 @@ jobs:
           node web/test/chapter.mjs
           node web/test/doors.mjs
           node web/test/places.mjs
-          node web/test/paper-fight.mjs
           node web/test/aatami.mjs
           node web/test/standing.mjs
           node web/test/chapter-narrative.mjs
@@ -197,10 +196,6 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/road-browser.cjs
-      - name: a fight in cut paper (drawn where the tokens are, acted out, the switch to 3D, reduced motion)
-        env:
-          NODE_PATH: /tmp/piritori-test/node_modules
-        run: node web/test/paper-fight-browser.cjs
       - name: the arrival and the city's sound (skippable, never changes the save, one mute)
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

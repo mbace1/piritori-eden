@@ -119,6 +119,13 @@ server.listen(0, '127.0.0.1', async () => {
       // v4.71: it is fought where the door is, against the people the door names.
       ok(`${name}: fought at the door, by its side`, s.battle.place?.anchor === 'karhupuisto' && s.battle.place.by === 'piritori_independents'
         && s.battle.sceneAssetId === 'scene-karhupuisto-clearing-v01' && await page.locator('.battle-stage[data-place="karhupuisto"]').count() === 1);
+      // v4.72: the fighters' depth z-index once rose above the pause veil and took its taps.
+      await page.locator('#pauseButton').click();
+      ok(`${name}: the pause menu is above the fighters`, await page.locator('[data-pause="resume"]').first().evaluate(el => {
+        const r = el.getBoundingClientRect(); const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return hit === el || el.contains(hit);
+      }));
+      await page.keyboard.press('Escape');
+      await page.waitForSelector('#pause', { state: 'hidden', timeout: 8000 }).catch(() => {});
       // Answer 25: a bad deal escalates. Selling two at the quay goes bad on this block's roll.
       const quay = (crew) => `s.battle = null; s.mode = "route"; s.scheduleIndex = 15; s.selectedAnchor = "sornainen_harbour"; s.stock.piri = 2; s.recruited = ${crew}; s.deployed = [...s.recruited]; s.doors = { offers: { 15: [{ template: "sale-quay-shift", anchor: "sornainen_harbour" }, { template: "gig-rauno-cart", anchor: "harju" }] }, taken: {} }; s.fightsByDay = {}; s.choices = {};`;
       await fixture(page, quay('a.slice(0, 3)'), await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
