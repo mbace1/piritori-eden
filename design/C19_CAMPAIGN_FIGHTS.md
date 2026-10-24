@@ -26,7 +26,7 @@ answered by the owner's words above).
 | Where | the door's anchor, the road event's place, or the mission's `location_anchor_id` | the C location | `places-v1.json` (v4.71) names a `kit` per anchor. courtyard (Porttikongi), yard (Linjat) and park (Karhupuisto) **exist in `crew-run/locations.js`**. **street** (Piritori, Hakaniemi, Mäkelänsilta, Siltasaari) and **quay** (Sörnäinen) **do not**, and fall back to the courtyard until built (CAMPAIGN P4) |
 | Who against | the battle's opponents (2–3: role, cell, weapon, tough), the side `by` (v4.71), generated names | `b.enemies` | Today `makeMission` always fields the same four (2 + 2 arrivals). It must take the fight's own people instead |
 | Their weapons | pipe, baton, tire-iron, chain, bat, knife, two handguns, a phone | C knows bat, knife and handgun only (`tactics.js` `WEAPONS`) | Map blunt weapons to **bat**, knife to **knife**, either handgun to **handgun**. A phone has no weapon in C (see Gaps) |
-| What the fight is for | the door's stakes, the road event's `fight`, or the mission's success/partial/failure | the objective and the exit | **Question 1.** C.19 asks *reach → help → extract*. Act I fights ask "make them back off, or leave" |
+| What the fight is for | the door's stakes, the road event's `fight`, or the mission's success/partial/failure | the objective and the exit | **Answered (owner, 2026-10-24): get away.** Every campaign fight is won by reaching the exit with your people and what you carry; beating them is never needed. This is how C.19 already plays |
 | Pressure | Act I heat brings the **police** (arrests) | C pressure 5 brings **two rival arrivals** a turn early | C's arrivals, from the side that is fighting. Police stay out until a later step |
 | Death | only the courtyard mission can turn a flagged critical wound into death | C has wounds and **missing** (left behind, a later rescue) | Missing maps onto Act I's existing `missing` crew status, as C.17 already does |
 | Walking away | withdrawal from round 1; negotiation from round 2 | `withdraw` exists; `talk` is refused in crew-run | Withdraw is enough for step one. A C negotiation is a later rule |
@@ -89,11 +89,10 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
 
 ## Questions for the owner
 
-1. **What is a campaign fight for, in C.19's terms?** C.19's drama is *a way out
-   matters more than a cleared arena*. Recommendation: **by the job**. A bad
-   deal is *get out with what you carry* (reach the exit). A family coming to
-   collect, or a hit, is *stand your ground until they break* (down or rout
-   them). Both always keep the exit open.
+1. ~~What is a campaign fight for?~~ **Answered 2026-10-24: get away.** Every
+   campaign fight is won by reaching the exit with your people and what you
+   carry. Beating them is never needed. A crew member who does not get out is
+   missing (a later rescue), and the job's losing stakes are paid.
 2. ~~Can Aatami be left behind?~~ **Answered 2026-10-24:** *"Aatami is in the
    first phase of act1 in all fights and then for rest of act1 he is the shot
    caller but not a fighter."*

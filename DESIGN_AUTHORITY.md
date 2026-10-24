@@ -25,6 +25,11 @@ all fights and then for rest of act1 he is the shot caller but not a fighter."*
 This confirms answer 24 and COMBAT.md §9.9. It is binding on the C.19 mapping
 (`design/C19_CAMPAIGN_FIGHTS.md`): C needs a shot-caller seat.
 
+**What a campaign fight is for (2026-10-24), asked with three options (depends
+on the job / get away / beat them): "Get away".** Every campaign fight in C.19
+is won by reaching the exit with your people and what you carry. Beating the
+rivals is never needed. This is how C.19 already plays.
+
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 
 The owner approved the cut-card Toko Slomo loops ("Approved, put it in the
