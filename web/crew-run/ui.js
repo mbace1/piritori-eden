@@ -1,5 +1,5 @@
 import {missionCue} from '../fight-module/readability.js?v=3';
-import {LOCATIONS,locationId} from './locations.js?v=3';
+import {LOCATIONS,locationId} from './locations.js?v=4';
 import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=12';
 import {icon} from './icons.js?v=2';
 import {coordinate} from '../fight-module/tactics.js?v=8';
@@ -63,7 +63,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
     // is supplied, so there is nothing to choose here: who, where, the job, the
     // way out and the heat, over the scene, and one button.
     const o=state.outing,them=o.side?o.side[0].toUpperCase()+o.side.slice(1):'They',fight=o.goal!=='getaway';
-    left.append(text('p',[(o.place||LOCATIONS[locationId()]).toUpperCase(),o.when].filter(Boolean).join(' · '),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
+    left.append(text('p',(o.place||LOCATIONS[locationId()]).toUpperCase(),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
      text('p',`${o.opening?o.opening+' ':''}${fight?`${them} want this to go their way. Put them down or make them run.`:`${them} are between you and the way out, ${o.wayOut||'the south edge'}. Get out with it.`}`,'lead'));
     const facts=document.createElement('dl');facts.className='brief-facts';
     for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${o.heat||0}.`]])facts.append(text('dt',k),text('dd',v));

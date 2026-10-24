@@ -104,14 +104,24 @@ Use resolved impact classifications for presentation; never reapply damage on re
   4. **The map** says what changed in a strip at the top of the side panel: the place, the outcome, who was hurt, missing or arrested, and the stakes in words. It stays until the block turns again.
   - The waiting screen is now only the way back into an unfinished fight, plus the board fallback for a device without 3D.
   - While the police question is open it takes the whole command strip, so on a phone both answers are full-size.
+- **The courtyard looked broken** (owner, 2026-10-24: *"The level looks broken"*). `crew-run/locations.js` built a fragment of `courtyard-prototype-v05`:
+  - one facade bay stood free three metres in front of the back wall, with its balcony;
+  - the back wall stopped at x 9.1 and the left wing at z 2.9.
+  The camera fits the board, not the set, so a wide desktop frame (about 27 m across) and a tall phone frame showed every end in the air. Night Shift's own gallery frame happened to crop them, which is why C.19 never showed it.
+  - The courtyard is now closed: the back wall steps forward on the right into a four-bay wing with a return closing the jog, and the left wing runs one bay further.
+  - The left wing stops at z 5.95 so the Oblique preset still sees the exit row.
+  - The yard gets one more shed so its row runs past a 1920-wide frame.
+  - Rendered at 412, 1280 and 1920 wide in Tactical, Oblique and Overhead. This is the same set C.19's own outings use, so it changes there too.
+- The brief's eyebrow names only the place: the clock is already on the line above it.
 - **Known:**
   - The question is asked even when nobody is down, and then both answers cost nothing.
   - The getaway is still untuned (v4.74's finding stands).
   - Nobody has fought a rout or a police arrival on a device.
 - Cache:
   - `app.js?v=42`, `outing.js?v=2`
-  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=15`, `startup.js?v=11`, `style.css?v=7`
-  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=37`, `tactical-ui.js?v=11`, `session.js?v=17`
+  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=17`, `startup.js?v=13`, `style.css?v=7`, `locations.js?v=4`
+  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=39`, `tactical-ui.js?v=11`, `session.js?v=17`
+  - `99f9a0a` had already published `ui.js?v=15`, `startup.js?v=11` and `main.js?v=37` through this repo's own deploy, so the changes after it took new numbers rather than reuse those.
 - Gates:
   - `c19-outing.mjs` covers in bare node, on real content:
     - every door's job;
@@ -136,7 +146,8 @@ Godot still plays door fights on the formation board (CAMPAIGN G8), and the boar
 - `policeOutcome`;
 - the adapter's `arrested`, which goes through `arrestCrew`;
 - `settleReturnedOuting` and `lastFight`;
-- `c19-outing.mjs`'s vectors.
+- `c19-outing.mjs`'s vectors;
+- the courtyard's placements in `crew-run/locations.js`, when C's places are ported (closed set, no free-standing bay).
 
 The new `goal` field in `doors-v1.json` is synced and ignored until then.
 

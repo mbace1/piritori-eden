@@ -35,14 +35,22 @@ export function buildLocation(world,renderer,cover,position,assets,id){
   motif.traverse(o=>{if(!o.isMesh)return;const key=o.geometry.uuid+':'+o.material.name;if(!bins.has(key))bins.set(key,{geometry:o.geometry,material:mats[o.material.name],matrices:[]});bins.get(key).matrices.push(placement.clone().multiply(o.matrixWorld));});
  }
  if(!yard){
+  // A closed courtyard (courtyard-prototype-v05): the back wall with its
+  // passage, the left wing, and on the right the back wall stepping forward
+  // into a wing, with a return closing the jog. Every run carries on past the
+  // widest frame the camera fits, so no wall ends in the air (Act I v4.75: a
+  // lone bay stood free on the right and the walls stopped mid-frame).
   put('archway',0,0,-7.7);
-  for(const x of [-7.6,-4.6,4.6,7.6])put(x<0?'facade_bay':'facade_bay_b',x,0,-7.7);
-  for(const z of [-4.55,-1.55,1.45])put(z<0?'facade_bay':'facade_bay_b',-6.4,0,z,Math.PI/2);
+  for(const x of [-7.6,-4.6,4.6])put(x<0?'facade_bay':'facade_bay_b',x,0,-7.7);
+  for(const z of [-4.55,-1.55,1.45,4.45])put(z<0?'facade_bay':'facade_bay_b',-6.4,0,z,Math.PI/2);
+  put('facade_bay_b',6.1,0,-6.2,-Math.PI/2);
+  for(const x of [7.6,10.6,13.6,16.6])put(x%6>3?'facade_bay':'facade_bay_b',x,0,-4.7);
   for(const x of [-4.6,4.6])put('balcony',x,3.7,-7.2);
-  put('facade_bay',7.6,0,-4.7);put('balcony',7.6,3.7,-4.2);put('bike_rack',-4.5,0,-6.5);put('vent',-5.9,1.3,-3,Math.PI/2);
+  for(const x of [7.6,13.6])put('balcony',x,3.7,-4.2);
+  put('bike_rack',-4.5,0,-6.5);put('vent',-5.9,1.3,-3,Math.PI/2);
   put('pallets',5.8,0,2.4);put('container',-5.25,0,2.15);put('container',-5.25,0,3.3);
  }else{
-  for(const x of [-7,-3,1,5,9])put('service_bay',x,0,-8.4);
+  for(const x of [-7,-3,1,5,9,13])put('service_bay',x,0,-8.4);
   for(const z of [-4.8,-.8])put('service_bay',-7,0,z,Math.PI/2);
   for(const x of [-7,-4,-1,2,5,8])put('facade_bay',x,0,-13);
   put('pallets',-5.8,0,2.4);put('pallets',-5.8,.5,2.4);put('pallets',5.5,0,-5.6);
