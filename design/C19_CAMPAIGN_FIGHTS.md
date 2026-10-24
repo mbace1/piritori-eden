@@ -21,7 +21,7 @@ answered by the owner's words above).
 
 | Act I has | Where it lives now | Night Shift needs | Status |
 |---|---|---|---|
-| Who fights: Aatami while he still fights, plus deployed crew, at most 3 | `fighters(state)`, `state.js` | `config.crew`, 2–3 people | **Exists** for crew (`campaignCrew`); **Aatami needs a projection**. He is the protagonist, not a crew record |
+| Who fights: Aatami while he still fights, plus deployed crew, at most 3 | `fighters(state)`, `state.js` | `config.crew`, 2–3 people | **Exists** for crew (`campaignCrew`); **Aatami needs a projection**. He is the protagonist, not a crew record. **Answered (owner, 2026-10-24):** in Act I's first phase he is in every fight; for the rest of Act I he is the **shot caller and not a fighter** (COMBAT.md §9.9) |
 | How many | `battle.player_deployed` (2 or 3) | crew size 2–3 | **Fits.** Every Act I fight already requires `fighters>=2` |
 | Where | the door's anchor, the road event's place, or the mission's `location_anchor_id` | the C location | `places-v1.json` (v4.71) names a `kit` per anchor. courtyard (Porttikongi), yard (Linjat) and park (Karhupuisto) **exist in `crew-run/locations.js`**. **street** (Piritori, Hakaniemi, Mäkelänsilta, Siltasaari) and **quay** (Sörnäinen) **do not**, and fall back to the courtyard until built (CAMPAIGN P4) |
 | Who against | the battle's opponents (2–3: role, cell, weapon, tough), the side `by` (v4.71), generated names | `b.enemies` | Today `makeMission` always fields the same four (2 + 2 arrivals). It must take the fight's own people instead |
@@ -76,8 +76,13 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
 
 - **A watcher with a phone** (several Act I opponents) has no C weapon. Options:
   a C spotter rule (calls the arrivals early), or an unarmed watcher who flees.
-- **Aatami in C**: he is named and authored. Act I never leaves him critical.
-  Whether C can leave him behind is Question 2.
+- **Aatami in C**, answered: a fighter in the first phase, then the shot caller
+  and never on the board. While he fights he follows Act I's existing rule: he
+  can be hurt, never left critical, and the crew always bring him out.
+- **The shot caller in C**: C.19 has no shot-caller role yet. COMBAT.md §9.9.2
+  says the caller gives the crew an advantage (stances are the caller's
+  instrument) rather than standing in a lane. C needs that seat before step 1
+  reaches the part of Act I after he steps back.
 - **Negotiation**: Act I's NEGOTIATE has no C counterpart yet.
 - **Godot** has no C engine at all (CAMPAIGN G8). The campaign's fights moving
   to C widens that gap until P5.
@@ -89,7 +94,6 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
    deal is *get out with what you carry* (reach the exit). A family coming to
    collect, or a hit, is *stand your ground until they break* (down or rout
    them). Both always keep the exit open.
-2. **Can Aatami be left behind?** In C, anyone who falls and is not carried out
-   goes missing and becomes a rescue. Recommendation: **yes, while he still
-   fights**. His own rescue is the strongest reason a crew exists, and it stops
-   once he steps back.
+2. ~~Can Aatami be left behind?~~ **Answered 2026-10-24:** *"Aatami is in the
+   first phase of act1 in all fights and then for rest of act1 he is the shot
+   caller but not a fighter."*
