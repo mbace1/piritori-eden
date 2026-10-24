@@ -1110,3 +1110,5 @@ html body .arcade-home { display: none; }
 .cutin-options { position: absolute; display: flex; flex-direction: column; justify-content: flex-end; gap: 2cqw; }
 .cutin-options button { display: flex; align-items: center; gap: 2.4cqw; min-height: 8.9cqw; padding: 1.4cqw 2.4cqw 1.4cqw 1.3cqw; border: 0; background: rgba(20, 24, 26, 0.94); color: #e2d8c2; font: 700 3.3cqw/1.15 "Arial Narrow", Arial, sans-serif; text-align: left; text-transform: uppercase; cursor: pointer; }
 .cutin-options button i { flex: none; align-self: stretch; width: 1.1cqw; background: var(--tab, #676b6b); }
+.cutin-options button small { display: block; margin-top: 0.6cqw; font: 400 2.6cqw/1.2 Arial, sans-serif; text-transform: none; color: #c9b98f; }
+.cutin-options button:disabled { opacity: 0.5; cursor: default; }

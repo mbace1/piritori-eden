@@ -159,6 +159,8 @@ export async function loadCutin(data, who, { reducedMotion = false, plateId = nu
       if (reducedMotion) { draw(0, true); return; }
       lastDrawn = -1; if (!frame) frame = requestAnimationFrame(loop);
     },
+    /** Stop drawing (another speaker takes the canvas). */
+    detach() { if (frame) cancelAnimationFrame(frame); frame = 0; canvas = g = null; },
     /** Act: blend from wherever the speaker is into the clip over 0.3 s; a one-shot falls back to `then`. */
     play(name, { then = 'idle' } = {}) {
       if (!cast.clips[name]) return;
