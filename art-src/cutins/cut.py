@@ -38,8 +38,9 @@ fig &= ~poly([(x0, cfg['waist']), (x1, cfg['waist']), (x1, y1), (x0, y1)])
 # ---- the pieces
 pieces, rig = {}, {'id': ID, 'source': cfg['source'], 'crop': cfg['crop'], 'size': [W, H], 'pieces': []}
 taken = np.zeros((H, W), bool)
-# pieces with a region claim first; a piece without one takes what is left. Draw order stays the list's.
-for pc in [q for q in cfg['pieces'] if q.get('region')] + [q for q in cfg['pieces'] if not q.get('region')]:
+# pieces with a region claim first (lowest "claim" first, so a jaw inside a head goes before it); a piece
+# without a region takes what is left. Draw order stays the list's.
+for pc in sorted([q for q in cfg['pieces'] if q.get('region')], key=lambda q: q.get('claim', 0)) + [q for q in cfg['pieces'] if not q.get('region')]:
     m = fig & poly(pc['region']) & ~taken if pc.get('region') else fig & ~taken
     pieces[pc['name']] = (m, pc); taken |= m
 pieces = {q['name']: pieces[q['name']] for q in cfg['pieces']}

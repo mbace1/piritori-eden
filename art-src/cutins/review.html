@@ -1,7 +1,8 @@
 <!doctype html><html><head><meta charset="utf-8"><title>Cut-in review</title>
 <!-- Owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and talk options",
      the level and its characters behind; "the player character profile can be shown when he talks".
-     A review page, not the game: ?who=jaska&scene=scene-club-v01. render.cjs films it. -->
+     Arvo: "always on the news tab. Therefore variety of looks and animations adds depth."
+     A review page, not the game: ?who=jaska&scene=scene-club-v01, ?who=arvo. render.cjs films it. -->
 <style>
  html,body{margin:0;background:#000}
  #s{width:1080px;height:1920px;position:relative;overflow:hidden;font-family:'Barlow',Arial,sans-serif}
@@ -12,54 +13,114 @@ const Q = new URLSearchParams(location.search), WHO = Q.get('who') || 'jaska', S
 const load = (src) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
 const rig = await (await fetch(`./${WHO}/out/rig.json`)).json();
 const img = {}; for (const p of rig.pieces) img[p.name] = await load(`./${WHO}/out/${p.file}`);
-const scene = await load(`../../art/v3/scenes/${SCENE}.webp`);
 const c = document.getElementById('c'), g = c.getContext('2d'), W = 1080, H = 1920;
 const D = Math.PI / 180, clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), sm = (k) => { k = clamp(k); return k * k * (3 - 2 * k); };
 const key = (ks, t) => { if (t <= ks[0][0]) return ks[0][1]; for (let i = 1; i < ks.length; i++) if (t <= ks[i][0]) { const [a, va] = ks[i - 1], [b, vb] = ks[i]; return va + (vb - va) * sm((t - a) / (b - a)); } return ks[ks.length - 1][1]; };
-// CLIPS, the paper-rig grammar of Toko's (toko-stage.js): head on the neck pivot, torso breath, eyelid blinks
-const CLIPS = {
-  idle: { dur: 5, f: (t) => ({ sy: 1 + 0.008 * Math.sin(t / 5 * 2 * Math.PI * 2), rot: 1.6 * D * Math.sin(t / 5 * 2 * Math.PI), ty: 0, blink: key([[0,0],[1.6,0],[1.7,1],[1.8,0],[4.2,0],[4.3,1],[4.4,0]], t) }) },
-  talk: { dur: 3.2, f: (t) => ({ sy: 1.004, rot: key([[0,0],[0.8,-2*D],[1.6,1.5*D],[2.4,-1*D],[3.2,0]], t), ty: key([[0,0],[0.25,5],[0.45,0],[0.8,7],[1.0,0],[1.4,4],[1.6,0],[2.1,6],[2.3,0],[3.2,0]], t), blink: key([[0,0],[2.6,0],[2.7,1],[2.8,0]], t) }) },
-  nod: { dur: 1.6, f: (t) => ({ sy: 1, rot: -1 * D * sm(t / 0.4), ty: key([[0,0],[0.35,14],[0.8,14],[1.2,0]], t), blink: key([[0,0],[0.4,0],[0.5,1],[0.6,0]], t) }) },
-  shake: { dur: 1.8, f: (t) => ({ sy: 1, rot: key([[0,0],[0.3,-4*D],[0.6,4*D],[0.9,-4*D],[1.2,3*D],[1.6,0]], t), ty: 2, blink: 0 }) },
+// a jaw that speaks: open-close beats from a syllable string, 'a' wide, 'e' half, '.' shut
+const say = (s, t, rate = 7, open = 6) => { const i = Math.floor(t * rate), ch = s[i % s.length]; return ch === 'a' ? open : ch === 'e' ? open * 0.55 : 0; };
+const P = (o) => ({ sy: 1, rot: 0, ty: 0, blink: 0, jaw: 0, hy: 0, ...o });
+const breath = (t, dur) => 1 + 0.008 * Math.sin(t / dur * 2 * Math.PI * 2);
+
+// ---- each character: clips (the paper-rig grammar of Toko's toko-stage.js), lines, and a layout
+const CAST = {
+  jaska: {
+    layout: 'location',
+    clips: {
+      idle: { dur: 5, f: (t) => P({ sy: breath(t, 5), rot: 1.6 * D * Math.sin(t / 5 * 2 * Math.PI), blink: key([[0,0],[1.6,0],[1.7,1],[1.8,0],[4.2,0],[4.3,1],[4.4,0]], t) }) },
+      talk: { dur: 3.2, f: (t) => P({ sy: 1.004, rot: key([[0,0],[0.8,-2*D],[1.6,1.5*D],[2.4,-1*D],[3.2,0]], t), ty: key([[0,0],[0.25,5],[0.45,0],[0.8,7],[1.0,0],[1.4,4],[1.6,0],[2.1,6],[2.3,0],[3.2,0]], t), blink: key([[0,0],[2.6,0],[2.7,1],[2.8,0]], t) }) },
+      nod: { dur: 1.6, f: (t) => P({ rot: -1 * D * sm(t / 0.4), ty: key([[0,0],[0.35,14],[0.8,14],[1.2,0]], t), blink: key([[0,0],[0.4,0],[0.5,1],[0.6,0]], t) }) },
+      shake: { dur: 1.8, f: (t) => P({ rot: key([[0,0],[0.3,-4*D],[0.6,4*D],[0.9,-4*D],[1.2,3*D],[1.6,0]], t), ty: 2 }) },
+    },
+    seq: [['idle', 'JASKA', 'Tervetuloa. Nobody here has slept since Thursday. Sit anywhere that is not a keyboard.'],
+      ['talk', 'JASKA', 'Aatami. You came all the way up past the bridge. That means you want something.'],
+      ['nod', 'JASKA', 'Fine. I will ask around. Quietly.'],
+      ['shake', 'JASKA', 'No. Not that. Not from me.']],
+  },
+  arvo: {
+    layout: 'news',
+    // ART_BIBLE §13.2, the Arvo exception: "breathing, blink, paper glance, small hand gesture" — plus a jaw, so he reads aloud
+    clips: {
+      idle: { dur: 3, f: (t) => P({ sy: breath(t, 3), rot: 0.8 * D * Math.sin(t / 3 * 2 * Math.PI), blink: key([[0,0],[1.9,0],[2.0,1],[2.1,0]], t) }) },
+      read: { dur: 6, f: (t) => P({ sy: 1.004, rot: key([[0,0],[1.2,-1.2*D],[2.6,0.8*D],[4.2,-0.6*D],[6,0]], t), ty: key([[0,0],[1.5,2],[1.7,0],[3.4,3],[3.6,0],[6,0]], t),
+        jaw: t < 5.6 ? say('a.e.a..e.a.e..a.ea..e.a.a..e.a.e.a...', t) : 0, blink: key([[0,0],[2.9,0],[3.0,1],[3.1,0]], t) }) },
+      glance: { dur: 2.6, f: (t) => P({ rot: key([[0,0],[0.4,1.5*D],[1.6,1.5*D],[2.0,0]], t), ty: key([[0,0],[0.4,12],[1.6,12],[2.0,0]], t), blink: key([[0,0],[0.3,0],[0.4,0.7],[1.6,0.7],[1.7,0]], t) }) },
+      gesture: { dur: 4, f: (t) => P({ sy: 1.004, rot: key([[0,0],[1,-1*D],[2.4,1*D],[4,0]], t), hy: key([[0,0],[0.5,-12],[1.0,-4],[1.5,-14],[2.2,-2],[2.8,0]], t),
+        jaw: t < 3.6 ? say('.a.e.a..a.e.e.a..e.a.', t) : 0, blink: key([[0,0],[3.2,0],[3.3,1],[3.4,0]], t) }) },
+      nod: { dur: 1.8, f: (t) => P({ ty: key([[0,0],[0.35,9],[0.7,9],[1.1,0]], t), blink: key([[0,0],[0.4,0],[0.5,1],[0.6,0]], t) }) },
+    },
+    // content/era1-slice-v1.json, news-markka-afterlife (day 3). The status labels are the copy's, never baked in art.
+    seq: [['idle', 'DOCUMENTED', 'Good evening. Day three.'],
+      ['read', 'DOCUMENTED', 'Markka notes and coins ceased to be legal tender after February 2002.'],
+      ['glance', 'DOCUMENTED', 'The conversion rate is fixed: 5.94573 markka per euro.'],
+      ['gesture', 'INFERENCE', 'Old cash can still appear in homes and informal payments.'],
+      ['nod', 'ARVO LINDE', 'The markka is no longer money at the till.']],
+  },
 };
-const SEQ = [['idle', 'idle', 'JASKA', 'Tervetuloa. Nobody here has slept since Thursday. Sit anywhere that is not a keyboard.'],
-  ['talk', 'talk', 'JASKA', 'Aatami. You came all the way up past the bridge. That means you want something.'],
-  ['nod', 'nod', 'JASKA', 'Fine. I will ask around. Quietly.'],
-  ['shake', 'shake', 'JASKA', 'No. Not that. Not from me.']];
+const CH = CAST[WHO], CLIPS = CH.clips, SEQ = CH.seq;
 const T = SEQ.map(s => CLIPS[s[0]].dur), TOTAL = T.reduce((a, b) => a + b, 0);
 const piece = (n) => rig.pieces.find(p => p.name === n);
-// the figure: waist-up, bottom-left, scaled to ~62% of the frame's height
-const FH = H * 0.62, S = FH / rig.size[1], FX = -40, FY = H - FH;
-function figure(p) {
+const scene = CH.layout === 'location' ? await load(`../../art/v3/scenes/${SCENE}.webp`) : null;
+
+// the figure, in the rig's own pixels: torso breathes, hands lift, the head turns on its neck, the jaw and lids ride the head
+function figure(p, FX, FY, S, between) {
   g.save(); g.translate(FX, FY); g.scale(S, S);
-  const tor = piece('torso'), hd = piece('head');
+  const tor = piece('torso'), hd = piece('head'), hn = piece('hands'), jw = piece('jaw');
   g.save(); const [px, py] = tor.pivot; g.translate(px, py); g.scale(1, p.sy); g.translate(-px, -py); g.drawImage(img.torso, tor.box[0], tor.box[1]); g.restore();
+  if (between) between();
+  if (hn) g.drawImage(img.hands, hn.box[0], hn.box[1] + p.hy);
   g.save(); const [hx, hy] = hd.pivot; g.translate(hx, hy + p.ty - (p.sy - 1) * 300); g.rotate(p.rot); g.translate(-hx, -hy);
   g.drawImage(img.head, hd.box[0], hd.box[1]);
+  if (jw) g.drawImage(img.jaw, jw.box[0], jw.box[1] + p.jaw);
   for (const l of rig.pieces.filter(q => q.lid_of === 'head')) { const k = clamp(p.blink); if (k > 0.02) g.drawImage(img[l.name], 0, 0, l.box[2], l.box[3] * k, l.box[0], l.box[1], l.box[2], l.box[3] * k); }
   g.restore(); g.restore();
 }
 function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); return yy; }
-function ui(name, line) {
-  // the speech bubble: kraft card with a tail toward the speaker
-  const bx = 350, by = 420, bw = 690, bh = 320;   // above him; the tail aims at his mouth and stops short of his head
+
+// ---- location: the level behind, dimmed; the speaker waist-up bottom-left; bubble above; talk options
+function atLocation(p, name, line) {
+  const sh = H * 0.62, sw = sh * scene.width / scene.height; g.drawImage(scene, (W - sw) / 2 - 120, 0, sw, sh);
+  g.fillStyle = '#121719'; g.fillRect(0, sh, W, H - sh);
+  const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(10,12,14,.35)'); gr.addColorStop(0.55, 'rgba(10,12,14,.55)'); gr.addColorStop(1, 'rgba(10,12,14,.9)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  const FH = H * 0.62; figure(p, -40, H - FH, FH / rig.size[1]);
+  const bx = 350, by = 420, bw = 690, bh = 320;   // above him; the tail has one side square to the bubble and aims at his mouth
   g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = 18; g.shadowOffsetX = 8; g.shadowOffsetY = 12;
   g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(bx, by); g.lineTo(bx + bw, by + 6); g.lineTo(bx + bw - 4, by + bh); g.lineTo(bx + 360, by + bh - 4); g.lineTo(565, 935); g.lineTo(565, by + bh - 3); g.lineTo(bx + 4, by + bh - 2); g.closePath(); g.fill(); g.restore();
   g.fillStyle = '#17191A'; g.font = '700 44px Arial Narrow, Arial'; g.fillText(name, bx + 34, by + 62);
   g.font = '400 40px Courier New, monospace'; wrap(line, bx + 34, by + 124, bw - 70, 52);
-  // talk options: dark cards with a colour tab, bottom right
   const opts = [['ASK ABOUT THE THURSDAY LOAD', '#C5A044'], ['BORROW A KEYBOARD · €0', '#38B8C8'], ['LEAVE', '#676B6B']];
   opts.forEach(([t, tab], i) => { const y = H - 380 + i * 118, x = 470; g.fillStyle = 'rgba(20,24,26,.94)'; g.fillRect(x, y, 580, 96); g.fillStyle = tab; g.fillRect(x + 14, y + 14, 12, 68); g.fillStyle = '#E2D8C2'; g.font = '700 38px Arial Narrow, Arial'; g.fillText(t, x + 44, y + 62); });
 }
+
+// ---- news: ART_BIBLE §13.1 — CRT shell, studio frame, lower-third card, scanlines; the copy and its status below on paper
+function news(p, tag, line, t) {
+  g.fillStyle = '#17191A'; g.fillRect(0, 0, W, H);
+  const sx = 70, sy = 200, sw = 940, shh = 760;                 // the tube
+  g.fillStyle = '#2C2F2E'; g.beginPath(); g.roundRect(sx - 46, sy - 46, sw + 92, shh + 150, 34); g.fill();
+  g.fillStyle = '#1E201F'; g.beginPath(); g.roundRect(sx - 12, sy - 12, sw + 24, shh + 24, 40); g.fill();
+  g.save(); g.beginPath(); g.roundRect(sx, sy, sw, shh, 36); g.clip();
+  const bg = g.createRadialGradient(sx + sw * 0.5, sy + shh * 0.4, 60, sx + sw * 0.5, sy + shh * 0.5, sw * 0.75);
+  bg.addColorStop(0, '#5E7381'); bg.addColorStop(1, '#2C3A44'); g.fillStyle = bg; g.fillRect(sx, sy, sw, shh);
+  g.fillStyle = 'rgba(199,170,121,.18)'; g.fillRect(sx + sw - 260, sy + 70, 190, 120);   // the studio's map card, out of focus
+  const S = 0.78, FY = sy + shh - 754, FX = sx + (sw - rig.size[0] * S) / 2;
+  figure(p, FX, FY, S, () => { g.fillStyle = '#6E655B'; g.fillRect(-FX / S, 778, sw / S + 400, 200); g.fillStyle = '#EDE6D6'; g.save(); g.translate(130, 800); g.rotate(-0.05); g.fillRect(0, 0, 170, 40); g.restore(); });
+  g.fillStyle = 'rgba(16,18,18,.88)'; g.fillRect(sx, sy + shh - 104, sw * 0.78, 70);                 // lower third
+  g.fillStyle = '#C5A044'; g.fillRect(sx, sy + shh - 104, 14, 70);
+  g.fillStyle = '#E2D8C2'; g.font = '700 36px Arial Narrow, Arial'; g.fillText('ARVO LINDE · HELSINKI', sx + 34, sy + shh - 57);
+  g.fillStyle = 'rgba(0,0,0,.10)'; for (let y = sy + ((t * 40) % 4); y < sy + shh; y += 4) g.fillRect(sx, y, sw, 2);   // scanlines, slowly rolling
+  const vg = g.createRadialGradient(sx + sw / 2, sy + shh / 2, shh * 0.45, sx + sw / 2, sy + shh / 2, sw * 0.72); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)'); g.fillStyle = vg; g.fillRect(sx, sy, sw, shh);
+  g.restore();
+  const cy = sy + shh + 170;                                                                         // the copy, on kraft
+  g.fillStyle = '#C7AA79'; g.beginPath(); g.moveTo(40, cy); g.lineTo(W - 40, cy + 6); g.lineTo(W - 44, cy + 420); g.lineTo(44, cy + 416); g.closePath(); g.fill();
+  const col = tag === 'INFERENCE' ? '#38B8C8' : tag === 'DOCUMENTED' ? '#C5A044' : '#676B6B';
+  g.fillStyle = '#17191A'; g.fillRect(80, cy + 40, 300, 60); g.fillStyle = col; g.fillRect(90, cy + 50, 10, 40);
+  g.fillStyle = '#E2D8C2'; g.font = '700 34px Arial Narrow, Arial'; g.fillText(tag, 116, cy + 82);
+  g.fillStyle = '#17191A'; g.font = '400 42px Courier New, monospace'; wrap(line, 80, cy + 170, W - 170, 56);
+}
+
 function frame(t) {
   t = ((t % TOTAL) + TOTAL) % TOTAL; let k = 0, t0 = 0; while (t >= t0 + T[k]) { t0 += T[k]; k++; }
-  const [clipName, , name, line] = SEQ[k], lt = t - t0, p = CLIPS[clipName].f(Math.floor(lt * 10) / 10);   // posed at 10 fps, as Toko
-  // the level behind: the Scene Club, dimmed and pushed back
-  const sh = H * 0.62, sw = sh * scene.width / scene.height; g.drawImage(scene, (W - sw) / 2 - 120, 0, sw, sh);
-  g.fillStyle = '#121719'; g.fillRect(0, sh, W, H - sh);
-  const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(10,12,14,.35)'); gr.addColorStop(0.55, 'rgba(10,12,14,.55)'); gr.addColorStop(1, 'rgba(10,12,14,.9)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
-  figure(p); ui(name, line);
+  const [clipName, name, line] = SEQ[k], lt = t - t0, p = CLIPS[clipName].f(Math.floor(lt * 10) / 10);   // posed at 10 fps, as Toko
+  if (CH.layout === 'news') news(p, name, line, t); else atLocation(p, name, line);
   g.fillStyle = 'rgba(226,216,194,.7)'; g.font = '700 30px Arial'; g.fillText(`REVIEW · ${WHO.toUpperCase()} · ${clipName}`, 30, 50);
 }
 window.__review = { TOTAL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
