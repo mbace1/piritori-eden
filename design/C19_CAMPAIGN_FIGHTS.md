@@ -1,7 +1,10 @@
 # C.19 fights in the campaign — the mapping (CAMPAIGN.md P1)
 
-Status: **step 1 shipped in Act I v4.74 (2026-10-24).** Proposed the same day;
-both owner questions were answered before any code.
+Status: **replanned, 2026-10-24 (§6).** Step 1 shipped in v4.74 on a narrow
+reading of "get away"; the owner corrected it the same day: *"No, fighting 75%,
+escape 25%. Also police can arrive etc. It's all in the docs. Simplify UX, plan
+better."* §6 is the plan now. §§1–5 are kept as the record of what v4.74
+built; where they say "every fight is a getaway", §6 replaces them.
 Owner, 2026-10-24, on the withdrawn paper fight: *"This is awful and wrong. You
 should be looking at C19."* Read with 2026-10-17: *"C19 is the best we have."*
 
@@ -115,3 +118,104 @@ That is the C.17 bridge made the default, which is CAMPAIGN P3.
 2. ~~Can Aatami be left behind?~~ **Answered 2026-10-24:** *"Aatami is in the
    first phase of act1 in all fights and then for rest of act1 he is the shot
    caller but not a fighter."*
+
+## 6. The replan (owner correction, 2026-10-24)
+
+### 6.1 What the documents already settle
+
+v4.74 read one answer and missed the canon around it. In order of authority:
+
+| The docs say | Where | v4.74 did |
+|---|---|---|
+| Fights are central, daily (at most two a day), and escalate from bad deals | DESIGN_AUTHORITY answers 23–25 | kept |
+| A fight ends when **they withdraw or break**, by negotiation, by the objective, when **you withdraw**, or when one side cannot go on. Killing everyone is rarely required | GDD §13.10 | only "you leave" counted |
+| Breaking their nerve (a **rout**) is a first-class win; it is the cheap, merciful way through | FIGHT_BRIEF §5 | no |
+| Escape is a first-class strategy with a cost, and withdrawing is always findable | DESIGN_NOTES 2026-09-13; UX_SPEC §9.9 | escape was the only way to win, and Withdraw was removed |
+| **Owner, today:** fighting 75%, escape 25% | DESIGN_AUTHORITY, top | — |
+| **Police.** Heat from rounds, bodies on the ground and firearms brings them. They arrive at one end of the board, behind the side that looks like it started it. The player answers **Back off** (the downed are taken) or **Help your friends** (the standing pull the downed out; anyone too close to the police is taken too). Not authored per fight | COMBAT §9.5; built in `web/js/v3/battle.js` and Bear Path | no police in Night Shift at all |
+| A hot place brings the police sooner | H4_H5_PLAN (anchor pressure 0–3) | no |
+| A third party is **forecast before you commit**, never rolled behind the screen | PHASING (owner direction 2026-08-21); COMBAT §5.1 | — |
+| Which fights must be fought, and how you can get out of them, comes from authored data, not a universal shortcut | PIRITORI_CHAPTER_EXECUTION (owner direction 2026-09-11) | one rule for every fight |
+| Rivals are a different third party: they attack on sight | COMBAT §9.5.35; C.12 arrivals | kept as the pressure arrivals |
+| Aatami fights in Act I's first phase, then calls it from the edge; a shot caller gives an advantage, not a body | owner today; COMBAT §9.9 | he fights, then is simply absent |
+| The meeting is the arena: escalation happens in the same scene, with the same people | GDD 2026-09-12; NEGOTIATION §1 | a separate page in a separate app |
+| One blocking mode at a time; a consequence is a strip in the destination, not a separate screen; a battle opens with a brief | UX_SPEC §4, §9.2 | six stops for one fight (below) |
+| *"The whole face and name screen is not needed. Only when a character is active"*; *"less clutter and less patchwork"*; the C.12 interface was *"poorly grounded in the design"* | owner, QUEUE 2026-08-27; ACTIVE_CONTEXT 2026-09-16 | added a crew page |
+
+### 6.2 The fight, as the docs describe it
+
+- **Every fight has a job, and three in four jobs are fights.** The job is data
+  on the door, road event or mission (`fight.goal`), so the 75/25 split is
+  visible and testable rather than a feeling:
+  - **Fight** (the default): make them back off. You win when nobody on their
+    side is still standing on the board, whether downed or run off.
+  - **Getaway**: get out with what you came for. You win when everyone is out
+    by the exit.
+  - Proposed tags for the 15 fights that exist (owner can move any of them):
+    getaway: `pickup-fish-stall`, `pickup-yard-van`, `watch-back-door`,
+    `sale-quay-shift` (4 of 15). Fight: the other five doors, the four road
+    fights and both mission battles (11 of 15).
+- **They can break.** C has no nerve track, so the smallest honest version of
+  FIGHT_BRIEF's rout: when half of their side is down, the rest run and the
+  fight is won. A tough one down counts double. Proposed, playtest gate.
+- **You can always run.** Withdraw comes back in every fight. Everyone standing
+  leaves by the exit; anyone downed stays behind and is missing (C.17). It pays
+  the job's losing stakes. In a getaway the exit is the win instead.
+- **The police come, and you see them coming.** Night Shift already counts
+  pressure: a round +1, a gunshot +1, someone down +2. The place's own heat is
+  added at the start. The brief and the pressure line say where the police
+  come in (*"police at 5"*), so it is forecast, never a surprise. At 5 they are
+  announced at one end of the board, a round early, as C's arrivals already
+  are. When they arrive, the fight pauses on one question: **Back off** or
+  **Help your friends**, with Act I's rules exactly. The question names who
+  each answer costs, which no screen does yet (QUEUE), and then the fight ends.
+  Anyone taken is arrested and gone from the roster (`arrestCrew`). Fighting
+  the police is not offered (GDD §14.6; Act I refuses it too).
+- **Rivals still arrive** where the job brings them (a retaliation, a crew that
+  wants the bag). They attack on sight, announced a round early as now.
+- **Aatami**, while he fights, is on the board and is carried out if he goes
+  down. After he steps back he is not on the board. The shot-caller's advantage
+  is open in COMBAT §9.9.4 and is a later step, not invented here.
+
+### 6.3 The UX, cut down
+
+v4.74 put six stops between a choice and the map:
+
+    choice → IT IS A FIGHT screen → Night Shift crew page → fight
+           → aftermath page → Back to Kallio → map
+
+The docs ask for three:
+
+    choice → the fight, in its place, with a brief over it
+           → the result, in the same scene → the map, with a consequence strip
+
+- **No waiting screen.** A choice that becomes a fight goes straight to it. If
+  the fight is left unfinished, the map's existing next-step bar says
+  **Back to the fight** and the block cannot pass. A device without 3D gets
+  the formation board from Night Shift's own graphics-failure screen, not from
+  a button on every fight.
+- **No crew page.** The people are Act I's and the support kit is prototype
+  supply, so the page decides nothing. The fight opens with the brief that
+  UX_SPEC §9.2 already asks for: the place, who they are, the job, the exit,
+  the heat. One button: **Fight**.
+- **No aftermath page.** The end is one line in the scene ("They ran." /
+  "Everyone got out." / "The police took Lan.") and **Back to Kallio**. The map
+  then shows what changed as a strip: money, wounds, missing, arrested, heat.
+
+### 6.4 Steps
+
+Each step ships to the hub and is played before the next.
+
+1. **v4.75: the fight and its UX.** Ship the job tags, rout, Withdraw, police
+   with the two postures, the place's heat, and the three-stop flow above.
+   v4.74's plumbing stays: the outing record, the receipt applied once, Aatami
+   carried, and the cabinet carrying Night Shift.
+2. **Road fights**: the same path, arriving where the event happened.
+3. **The shot caller**: a design for COMBAT §9.9.4's open questions, brought for
+   a greenlight before it is built.
+4. **The meeting in the place**: a door's conversation staged in the 3D scene
+   with face cut-ins, so escalation needs no transition (Bear Path already does
+   this for one encounter).
+5. **The two mission battles** with their authored alternatives.
+6. **Street and quay kits**, then **landscape**, then retiring the board
+   (CAMPAIGN P4–P6).

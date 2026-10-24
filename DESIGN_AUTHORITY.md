@@ -26,9 +26,27 @@ This confirms answer 24 and COMBAT.md §9.9. It is binding on the C.19 mapping
 (`design/C19_CAMPAIGN_FIGHTS.md`): C needs a shot-caller seat.
 
 **What a campaign fight is for (2026-10-24), asked with three options (depends
-on the job / get away / beat them): "Get away".** Every campaign fight in C.19
-is won by reaching the exit with your people and what you carry. Beating the
-rivals is never needed. This is how C.19 already plays.
+on the job / get away / beat them): "Get away".** *Corrected the same day,
+below: this answer was read too narrowly and shipped as "every fight is only a
+getaway" (v4.74).*
+
+**Correction, 2026-10-24, after v4.74:** *"Please read all designs. No,
+fighting 75%, escape 25%. Also police can arrive etc. It's all in the docs.
+Simplify UX, plan better."*
+
+- A campaign fight is mostly a fight. Escape is the smaller share, and an
+  option in every fight rather than the only way to win one. GDD §13.10
+  already lists the ways a fight ends (they withdraw or break, negotiation,
+  the objective, you withdraw, one side cannot go on). FIGHT_BRIEF §5 makes
+  routing them a first-class win. DESIGN_NOTES 2026-09-13 makes escape a
+  first-class strategy with a cost.
+- The police are part of a fight (COMBAT §9.5). Heat from a long, loud
+  fight brings them, and the downed are taken. Act I's board and Bear Path
+  already have this; v4.74's Night Shift fights did not.
+- The UX of v4.74 was too many screens. The meeting is the arena (GDD
+  2026-09-12, NEGOTIATION §1), and a consequence is a strip in the place you
+  return to, not a separate screen (UX_SPEC §4).
+- The plan that answers this is `design/C19_CAMPAIGN_FIGHTS.md` §6.
 
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 
