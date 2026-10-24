@@ -26,6 +26,7 @@ import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCas
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
+import { loadPlaces, stageFight, doorFightStage, roadFightStage } from './places.js?v=1';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=5';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -155,6 +156,8 @@ function mountTokoStage(root) {
 let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
 let doors = { rules: { offers_min: 0, offers_max: 0, scenes: {} }, templates: [] };
+// v4.71: where door and road fights happen (places.js). Empty: they keep the arena they name.
+let places = { rules: {}, places: [] };
 let routePlanning = false;
 let routeDraft = [];
 let observation = '';
@@ -1691,14 +1694,15 @@ function renderBattle() {
     </section>`;
   }
   const unit = selectedUnit(battle);
-  const scene = assetUrl(data, plateForBattleScene(battle.sceneAssetId));
+  // v4.71: a place with no plate that holds the board fights on a bare stage.
+  const scene = battle.sceneAssetId ? assetUrl(data, plateForBattleScene(battle.sceneAssetId)) : '';
   const negotiationReady = battle.round >= 2 || battle.enemies.filter(item => item.alive).reduce((sum, item) => sum + item.nerve, 0) <= 4;
   const preview = attackPreview(battle);
   const boardUnits = battle.players.concat(battle.enemies, battle.police ?? []);
   return `
     <div class="battle-layout">
-      <section class="battle-stage" aria-label="${esc(battle.format)} isometric formation battle">
-        <img class="scene-image" src="${scene}" alt="">
+      <section class="battle-stage${scene ? '' : ' bare-stage'}" aria-label="${esc(battle.format)} isometric formation battle${battle.place ? ` · ${esc(battle.place.name)}` : ''}"${battle.place ? ` data-place="${esc(battle.place.anchor)}"` : ''}>
+        ${scene ? `<img class="scene-image" src="${scene}" alt="">` : ''}
         <img class="weather-layer front" src="${assetUrl(data, 'weather-rain-fine-v01')}" alt="">
         <div class="stage3d-mount" id="stage3dMount" aria-hidden="true"></div>
         <p class="battle-objective"><b>${tr('objective')} · ${esc(battle.format)}</b><br>${esc(battle.objective)}</p>
@@ -1849,13 +1853,19 @@ function openEncounter() {
   render();
 }
 
-function startBattle(id) {
-  const definition = data.battles.get(id);
+/** v4.71: a door's fight is fought at the door; a road fight where it happened. */
+const doorStage = encounter => doorFightStage(encounter, encounter?.door ? templateOf(doors, encounter.door) : null);
+const roadStage = event => roadFightStage(state.road?.last, event, state.scheduleIndex, places);
+
+function startBattle(id, stage = null) {
+  const authored = data.battles.get(id);
   // Answer 24: Aatami fights the first fights, then steps back for good.
-  const beat = definition.training ? '' : stepBackIfReady(state, data.content);
-  const crew = definition.training ? deployedCrew(state, data) : fighters(state, data);
+  const beat = authored.training ? '' : stepBackIfReady(state, data.content);
+  const crew = authored.training ? deployedCrew(state, data) : fighters(state, data);
+  const definition = stage ? stageFight(authored, stage, places, crew.map(member => member.name)) : authored;
   try {
     state.battle = createBattleState(definition, crew, state, data);
+    if (definition.place) state.battle.place = definition.place;
     state.mode = 'battle';
     if (beat) { state.battle.log.unshift(beat); logToast(beat); }
     if (!state.battle.training) recordFight(state, data.content);
@@ -1926,7 +1936,7 @@ function recordBattleConsequences() {
     const retired = ageCrew(state, data, battle.players.map(p => p.id));
     for (const id of retired) logToast(`${crewRecord(state, data, id)?.name ?? id} retires after this one.`);
   }
-  state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round });
+  state.battleHistory.push({ id: battle.id, result: battle.result, round: battle.round, ...(battle.place ? { at: battle.place.anchor } : {}) });
   state.battle = null;
   state.battleOpeningNerve = 0;
   // A road fight has no mission behind it and does not turn the block.
@@ -2024,14 +2034,14 @@ function handleRootClick(event) {
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
-    else if (result.startBattle && startBattle(result.startBattle) && encounter.door) {
+    else if (result.startBattle && startBattle(result.startBattle, doorStage(encounter)) && encounter.door) {
       // A door fight has no mission behind it: its stakes are the door's own.
       state.battle.missionId = null;
       state.battle.door = encounter.door;
     } else if (!result.startBattle && encounter.door) {
       // Answer 25: a bad deal can turn into a fight.
       const bad = escalation(state, data, doors, encounter.door, choice.id);
-      if (bad?.battle && startBattle(bad.battle)) {
+      if (bad?.battle && startBattle(bad.battle, doorStage(encounter))) {
         state.battle.missionId = null;
         state.battle.door = encounter.door;
         state.lastOutcome = [...(state.lastOutcome ?? []), 'The deal goes bad. It is a fight now.'];
@@ -2054,7 +2064,7 @@ function handleRootClick(event) {
   } else if (action === 'road-choose') {
     const result = resolveRoad(state, data, roadEvents, target.dataset.choice);
     if (!result.ok) { logToast(result.reason); render(); return; }
-    if (result.startBattle && startBattle(result.startBattle)) {
+    if (result.startBattle && startBattle(result.startBattle, roadStage(result.event))) {
       state.battle.missionId = null;
       state.battle.road = result.event.id;
     }
@@ -2219,6 +2229,7 @@ async function boot() {
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
     story = await loadStory().catch(() => story);
     doors = await loadDoors().catch(() => doors);
+    places = await loadPlaces().catch(() => places);
     data.families = await loadFamilies().catch(() => null);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
@@ -2374,7 +2385,9 @@ async function boot() {
         state.deployed = slots;
         for (const id of slots) state.crewStatus[id].status = 'available';
         $('splash').hidden = true;
-        if (startBattle(wantBattle)) render();
+        // `&at=<anchor>&by=<side>` stages it the way a door fight is (v4.71).
+        const at = new URLSearchParams(location.search).get('at');
+        if (startBattle(wantBattle, at ? { anchor: at, by: new URLSearchParams(location.search).get('by'), key: 'debug' } : null)) render();
       }
     }
 
@@ -2386,7 +2399,7 @@ async function boot() {
       get sound() { return soundState(); },
       debug: {
         setState(next) { state = next; registerTaken(state, data, doors); attachGrowth(state.battle, state, data); persist(); render(); },
-        startBattle(id) { startBattle(id); persist(); render(); },
+        startBattle(id, stage) { startBattle(id, stage ?? null); persist(); render(); },
         setBattleLights,
         openEncounter,
         render,

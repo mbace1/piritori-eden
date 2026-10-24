@@ -21,6 +21,9 @@ const DOORS_PATH := "res://data/doors-v1.json"
 ## Act I v4.67 (H5 of The Long Game): the families' standing — the ladder and
 ## the two families it is read for.
 const FAMILIES_PATH := "res://data/families-v1.json"
+## Act I v4.71: where door and road fights happen — one fight place per
+## active anchor (PiritoriPlaces).
+const PLACES_PATH := "res://data/places-v1.json"
 
 var map: Dictionary = {}
 var slice: Dictionary = {}
@@ -29,6 +32,7 @@ var road: Dictionary = {}
 var story: Dictionary = {}
 var doors: Dictionary = {}
 var families: Dictionary = {}
+var places: Dictionary = {}
 
 ## Errors collected while loading. Non-empty means the port must not claim to
 ## resolve every referenced ID (§9 acceptance item 8).
@@ -60,6 +64,7 @@ func load_all() -> bool:
 	story = _load_json(STORY_PATH)
 	doors = _load_json(DOORS_PATH)
 	families = _load_json(FAMILIES_PATH)
+	places = _load_json(PLACES_PATH)
 	if errors.size() > 0:
 		return false
 	_index()
@@ -188,6 +193,34 @@ func _verify_references() -> void:
 		var fight: Dictionary = t.get("fight", {}) if typeof(t.get("fight", null)) == TYPE_DICTIONARY else {}
 		if not fight.is_empty() and not _battles.has(String(fight.get("battle", ""))):
 			errors.append("door '%s' fights unknown battle '%s'" % [t.get("id", ""), fight.get("battle", "")])
+
+	# v4.71: every active anchor is a fight place on a registered plate (or a
+	# bare stage that names the plate it wants), and every door or road fight
+	# names a side the places know.
+	var sides: Dictionary = places.get("rules", {}).get("sides", {})
+	var stage_plates := {}
+	for asset in art.get("assets", []):
+		if String(asset.get("layer", "")) == "location-stage":
+			stage_plates[String(asset.get("id", ""))] = true
+	for a in map.get("anchors", []):
+		if String(a.get("sliceState", "")) == "active" and place(String(a.get("id", ""))).is_empty():
+			errors.append("active anchor '%s' has no fight place" % a.get("id", ""))
+	for p in places.get("places", []):
+		var plate = p.get("plate", null)
+		if plate == null:
+			if String(p.get("plate_wanted", "")) == "":
+				errors.append("place '%s' is bare and names no plate it wants" % p.get("anchor", ""))
+		elif not stage_plates.has(String(plate)):
+			errors.append("place '%s' stands on unregistered plate '%s'" % [p.get("anchor", ""), plate])
+	for t in doors.get("templates", []):
+		var f = t.get("fight", null)
+		if typeof(f) == TYPE_DICTIONARY and not sides.has(String(f.get("by", ""))):
+			errors.append("door '%s' fight names unknown side '%s'" % [t.get("id", ""), f.get("by", "")])
+	for ev in road.get("events", []):
+		for c in ev.get("choices", []):
+			for fx in c.get("effects", []):
+				if String(fx).begins_with("start-battle:") and not sides.has(String(ev.get("by", ""))):
+					errors.append("road event '%s' fight names unknown side '%s'" % [ev.get("id", ""), ev.get("by", "")])
 
 	# A family is a relationship the save already keeps, stands on the map, and
 	# answers its standing with repeatable triggered road events.
@@ -333,6 +366,18 @@ func door_rules() -> Dictionary:
 
 func door_templates() -> Array:
 	return doors.get("templates", [])
+
+
+## Where door and road fights happen (content/places-v1.json). An anchor with
+## no place answers {}: the fight keeps the arena it names.
+func place_rules() -> Dictionary:
+	return places.get("rules", {})
+
+func place(anchor: String) -> Dictionary:
+	for p in places.get("places", []):
+		if String(p.get("anchor", "")) == anchor:
+			return p
+	return {}
 
 
 ## The families' ladder and the families themselves (content/families-v1.json),

@@ -36,6 +36,8 @@ const FILES = [
   ['content/doors-v1.json', 'doors-v1.json'],
   // Act I v4.67: the families' standing — the ladder and the two families.
   ['content/families-v1.json', 'families-v1.json'],
+  // Act I v4.71: where door and road fights happen.
+  ['content/places-v1.json', 'places-v1.json'],
   ['art/v3/manifest.json', 'art-v3-manifest.json'],
   // GODOT_HANDOFF.md §3 lists this as a canonical input: the role/UI vocabulary
   // that gives each unit its coloured base tab and symbol.

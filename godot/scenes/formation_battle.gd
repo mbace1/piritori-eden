@@ -106,6 +106,9 @@ static var play_diamond_override: Dictionary = {}
 
 var fight: FightManager
 var battle_id: String = ""
+## What the fight is built from: the authored battle, or (v4.71) the door or
+## road fight PiritoriPlaces moved to where it happens.
+var definition: Dictionary = {}
 
 var _board: Control
 ## Owner ruling 2026-08-22: the game is 3D. Kept as a switch rather than a
@@ -183,8 +186,9 @@ func _role_color(role: String) -> Color:
 	return Color(hex) if hex != "" else MapStyle.LOCKED
 
 
-func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
+func begin(id: String, crew_ids: Array, seed_value: int = 0, staged: Dictionary = {}) -> Array:
 	battle_id = id
+	definition = staged if not staged.is_empty() else ContentRegistry.battle(id)
 	fight = FightManager.new()
 	# The board finally listens. event_resolved has always been emitted and
 	# never consumed, so nothing on screen acknowledged anything that happened.
@@ -195,7 +199,7 @@ func begin(id: String, crew_ids: Array, seed_value: int = 0) -> Array:
 	GameState.crew_levelled.connect(_on_crew_levelled)
 	_load_stage(id)
 	_mount_stage3d()
-	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value)
+	var errors: Array = fight.begin_canonical(id, crew_ids, seed_value, staged)
 	if errors.is_empty():
 		fight.state_changed.connect(_refresh)
 		fight.battle_ended.connect(_on_battle_ended)
@@ -220,9 +224,9 @@ func open_log(line: String) -> void:
 ## `.glb` into it used to throw a script error every 3D battle ("Trying to
 ## assign value of type 'PackedScene' to a variable of type 'Texture2D'"),
 ## found alongside the stage-mounting bug this file also fixes 2026-08-28.
-func _load_stage(id: String) -> void:
+func _load_stage(_id: String) -> void:
 	_stage = null
-	var asset_id := String(ContentRegistry.battle(id).get("scene_asset_id", ""))
+	var asset_id := String(definition.get("scene_asset_id", ""))
 	_stage_id = asset_id
 	if asset_id == "":
 		return
@@ -1166,14 +1170,14 @@ func _refresh() -> void:
 func _build_telegraphs() -> void:
 	# Battle-entry forecast — the fight's equivalent of encounter choice.forecast.
 	# Shown every refresh so the cost read stays visible while you plan.
-	var entry := BattleBuilder.entry_forecast(battle_id)
+	var entry := BattleBuilder.entry_forecast(battle_id, definition)
 	if entry != "":
 		var el := _label(entry, 11, PiritoriPalette.INTEL_MUSTARD)
 		el.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_intent_box.add_child(el)
 
 	var authored: Dictionary = {}
-	for a in BattleBuilder.opponent_intents(battle_id):
+	for a in BattleBuilder.opponent_intents(battle_id, definition):
 		authored[String(a["id"])] = String(a["intent"])
 
 	var live: Array = fight.get_opposition_intents()
@@ -1589,7 +1593,7 @@ func _show_faceoff() -> void:
 			col.add_child(_label("   %s · %s" % [f.display_name, f.role],
 				13, MapStyle.SMALL_TEXT))
 
-	var cost := String(ContentRegistry.battle(battle_id)
+	var cost := String(definition
 		.get("withdrawal", {}).get("known_cost", ""))
 	if cost != "":
 		var cl := _label(cost, 11, MapStyle.TINY_TEXT)
@@ -1689,7 +1693,7 @@ func _build_auto_column() -> void:
 
 	var wd := _chrome_button(tr("battle.withdraw"), MapStyle.METRO, _withdraw)
 	wd.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	wd.tooltip_text = String(ContentRegistry.battle(battle_id)
+	wd.tooltip_text = String(definition
 		.get("withdrawal", {}).get("known_cost", ""))
 	exits.add_child(wd)
 	var cost := _label(wd.tooltip_text, 10, MapStyle.TINY_TEXT)

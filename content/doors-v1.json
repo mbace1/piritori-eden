@@ -147,7 +147,7 @@
         "Carry the crates to the van behind the market hall",
         "Do not open them"
       ],
-      "stakes": "The Jade Lantern pays and remembers. Skim one and it can become a fight: the cousin's men catch up with you at the bear · a way round exists.",
+      "stakes": "The Jade Lantern pays and remembers. Skim one and it can become a fight: the cousin's men catch up with you behind the market hall · a way round exists.",
       "inspectables": [
         "ice melting on the crates",
         "the inspector's clipboard",
@@ -167,7 +167,7 @@
         {
           "id": "skim",
           "label": "Carry two, keep one",
-          "forecast": "A pack for yourself. Half the time they count before you are out of the park, and it becomes a fight at the bear.",
+          "forecast": "A pack for yourself. Half the time they count before you are out of the market, and it becomes a fight behind the hall.",
           "requirements": [],
           "effects": [
             "stock:piri:+1",
@@ -188,6 +188,7 @@
       ],
       "fight": {
         "battle": "battle-karhupuisto-2v2",
+        "by": "jade_lantern_network",
         "win": [
           "relationship:jade_lantern_network:-1"
         ],
@@ -212,7 +213,7 @@
         "Drive it the long way round",
         "Leave it with the doors still taped"
       ],
-      "stakes": "McCormick money, McCormick attention. Look inside and it can become a fight in a Torkkelinmäki courtyard · a way round exists.",
+      "stakes": "McCormick money, McCormick attention. Look inside and it can become a fight in the yard when you bring the keys back · a way round exists.",
       "inspectables": [
         "tape over the back doors",
         "a child seat in the front",
@@ -233,7 +234,7 @@
         {
           "id": "look",
           "label": "Peel back the tape at a red light",
-          "forecast": "You know what is in it. They will know you looked, and a third of the time they corner you in a courtyard: a fight.",
+          "forecast": "You know what is in it. They will know you looked, and a third of the time they are waiting in the yard: a fight.",
           "requirements": [],
           "effects": [
             "cash:+55",
@@ -255,6 +256,7 @@
       ],
       "fight": {
         "battle": "battle-courtyard-3v3",
+        "by": "mccormick_family",
         "win": [
           "intel:+1"
         ],
@@ -287,6 +289,7 @@
       ],
       "fight": {
         "battle": "battle-kattilahalli-3v3",
+        "by": "piritori_independents",
         "win": [
           "cash:+90",
           "relationship:mccormick_family:+1"
@@ -348,7 +351,7 @@
         "Sell to the one in the orange jacket, not the one in yellow",
         "Gone before the next foreman"
       ],
-      "stakes": "A better price than the square. Stay too long and it can become a fight: the yellow jacket's friends follow you to the boiler hall · a way round exists.",
+      "stakes": "A better price than the square. Stay too long and it can become a fight: the yellow jacket's friends catch you on the quay · a way round exists.",
       "requires": [
         "stock:piri>=1"
       ],
@@ -394,6 +397,7 @@
       ],
       "fight": {
         "battle": "battle-kattilahalli-3v3",
+        "by": "piritori_independents",
         "win": [
           "cash:+40"
         ],
@@ -490,6 +494,7 @@
       ],
       "fight": {
         "battle": "battle-karhupuisto-2v2",
+        "by": "piritori_independents",
         "win": [
           "cash:+60",
           "pressure:karhupuisto:+1"
@@ -644,6 +649,7 @@
       ],
       "fight": {
         "battle": "battle-courtyard-3v3",
+        "by": "mccormick_family",
         "win": [
           "relationship:mccormick_family:+1"
         ],
@@ -761,6 +767,7 @@
       ],
       "fight": {
         "battle": "battle-karhupuisto-2v2",
+        "by": "jade_lantern_network",
         "win": [
           "cash:+20"
         ],
@@ -793,6 +800,7 @@
       ],
       "fight": {
         "battle": "battle-karhupuisto-2v2",
+        "by": "piritori_independents",
         "win": [
           "cash:+80",
           "relationship:mccormick_family:+1"
@@ -863,6 +871,7 @@
       ],
       "fight": {
         "battle": "battle-courtyard-3v3",
+        "by": "piritori_independents",
         "win": [
           "cash:+120",
           "intel:+1",

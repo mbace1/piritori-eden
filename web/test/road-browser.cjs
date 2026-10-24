@@ -127,6 +127,9 @@ server.listen(0, '127.0.0.1', async () => {
       const s3 = await S(page);
       ok(`${name}: with a crew, standing becomes a fight`, s3.mode === 'battle' && s3.battle?.id === 'battle-karhupuisto-2v2' && s3.battle?.road === 'road-underpass');
       ok(`${name}: the road fight reports to no mission`, s3.battle?.missionId === null);
+      // v4.71: fought where it happened (in transit from no fight place: the place ahead), by the locals.
+      ok(`${name}: fought on the road, by the locals`, s3.battle?.place?.anchor === s3.road.last.to && s3.battle.place.by === 'piritori_independents'
+        && s3.battle.enemies.every(e => !/Rinne|Leko/.test(e.name)), JSON.stringify(s3.battle?.place));
       ok(`${name}: no page errors`, errors().length === 0, errors().join(' | '));
       await page.close();
     }

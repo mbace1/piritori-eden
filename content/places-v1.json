@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "id": "places-v1",
+  "authority": "Act I v4.71. A fight happens where it starts. A door fight is fought at the door's own anchor; a road fight where the road event happens (on arrival, the place arrived at; in transit, the place just left). Mission battles keep their authored arena. Who fights you is the side the door or event names, generated people under COMBAT.md 7.1: named characters are rare and authored, everyone else is generated.",
+  "fiction_boundary": "Kallio 2003 public places only. A place is a stage for a fight, not a claim that anything happened there.",
+  "rules": {
+    "plate_rule": "A plate must hold the board (STAGE_SPEC.md 5): the arena on flat ground, no building base across it. A place with no plate that holds the board fights on a bare stage and names the plate it wants; a stand-in plate is marked `stand_in`.",
+    "cover_rule": "Cover is a marker on a cell, never snapped to the plate's props (STAGE_SPEC.md 4.5). Cells are the formation board's: front/middle/back by lane 1-3, the same on both halves.",
+    "kit_rule": "`kit` is the 3D place Night Shift would stage here (CAMPAIGN.md P4). courtyard, yard and park exist in web/crew-run; the rest are listed in `kits_wanted`.",
+    "kits": ["courtyard", "yard", "park"],
+    "kits_wanted": {
+      "street": "a Kallio street corner with a tram stop: Piritori, Hakaniemi, Mäkelänsilta, Siltasaari",
+      "quay": "a concrete quay edge with bollards and flush rails: Sörnäinen"
+    },
+    "sides": {
+      "mccormick_family": "the McCormicks' people",
+      "jade_lantern_network": "the Jade Lantern's people",
+      "piritori_independents": "the locals"
+    },
+    "intents": {
+      "muscle": "stand-in-the-way",
+      "runner": "grab-and-run",
+      "watcher": "call-more-in",
+      "fixer": "make-a-point"
+    },
+    "withdrawal_cost": "lose what the fight is about; the crew walks out"
+  },
+  "places": [
+    {
+      "anchor": "piritori",
+      "name": "Vaasanpuistikko",
+      "plate": "scene-piritori-square-v01",
+      "kit": "street",
+      "way_out": "down the metro steps",
+      "cover": [
+        { "id": "advertising-column", "cells": ["middle-2"], "effect": "guard-from-direct-line" },
+        { "id": "shuttered-kiosk", "cells": ["front-3"], "effect": "cover-but-pinned-on-heavy-hit" },
+        { "id": "metro-railing", "cells": ["back-1"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "vaasankatu",
+      "name": "The bin yard behind Vaasankatu",
+      "plate": "scene-kallio-backyard-v01",
+      "kit": "courtyard",
+      "way_out": "through the gate onto Vaasankatu",
+      "cover": [
+        { "id": "bin-store", "cells": ["back-2"], "effect": "guard-from-direct-line" },
+        { "id": "pallet-stack", "cells": ["middle-1"], "effect": "cover-but-pinned-on-heavy-hit" },
+        { "id": "skip", "cells": ["front-3"], "effect": "guard-from-same-lane" }
+      ]
+    },
+    {
+      "anchor": "hakaniemi",
+      "name": "Behind the market hall",
+      "plate": "scene-hakaniemi-square-v01",
+      "kit": "street",
+      "way_out": "on a tram from the stop",
+      "cover": [
+        { "id": "shuttered-stall", "cells": ["middle-1"], "effect": "guard-from-direct-line" },
+        { "id": "stall-row", "cells": ["middle-3"], "effect": "guard-from-direct-line" },
+        { "id": "tram-pole", "cells": ["front-2"], "effect": "blocks-diagonal-front-pressure" }
+      ]
+    },
+    {
+      "anchor": "linjat_yard",
+      "name": "The Linjat service yard",
+      "plate": "scene-kallio-service-yard-v01",
+      "kit": "yard",
+      "way_out": "by the lit passage to Hämeentie",
+      "cover": [
+        { "id": "keg-stack", "cells": ["middle-3"], "effect": "guard-from-direct-line" },
+        { "id": "crate-stack", "cells": ["back-3"], "effect": "cover-but-pinned-on-heavy-hit" },
+        { "id": "service-door", "cells": ["back-1"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "karhupuisto",
+      "name": "The clearing in Karhupuisto",
+      "plate": "scene-karhupuisto-clearing-v01",
+      "kit": "park",
+      "way_out": "up the lit path",
+      "cover": [
+        { "id": "park-bench", "cells": ["middle-1"], "effect": "blocks-diagonal-front-pressure" },
+        { "id": "litter-bin", "cells": ["front-3"], "effect": "guard-from-direct-line" },
+        { "id": "lit-path", "cells": ["back-2"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "torkkelinmaki",
+      "name": "A Torkkelinmäki courtyard",
+      "plate": "scene-courtyard-prototype-v05",
+      "kit": "courtyard",
+      "way_out": "through the porttikongi",
+      "cover": [
+        { "id": "stone-bin", "cells": ["front-1"], "effect": "guard-from-direct-line" },
+        { "id": "bicycle-rack", "cells": ["middle-2"], "effect": "cover-but-pinned-on-heavy-hit" },
+        { "id": "porttikongi-edge", "cells": ["back-3"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "harju",
+      "name": "Brahenkenttä",
+      "plate": "scene-harju-pitch-v01",
+      "kit": "park",
+      "way_out": "through the gate in the fence",
+      "cover": [
+        { "id": "goal-frame", "cells": ["middle-1"], "effect": "blocks-diagonal-front-pressure" },
+        { "id": "bleacher-end", "cells": ["back-1"], "effect": "guard-from-direct-line" },
+        { "id": "fence-gate", "cells": ["back-3"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "sornainen_harbour",
+      "name": "The Sörnäinen quay",
+      "plate": "scene-sornainen-quay-v01",
+      "kit": "quay",
+      "way_out": "along the rail line",
+      "cover": [
+        { "id": "bollard", "cells": ["front-2"], "effect": "guard-from-same-lane" },
+        { "id": "crate-pile", "cells": ["back-3"], "effect": "guard-from-direct-line" },
+        { "id": "rail-line", "cells": ["back-1"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "suvilahti",
+      "name": "Behind the boiler hall",
+      "plate": "scene-kallio-service-yard-v01",
+      "stand_in": true,
+      "plate_wanted": "the loading bay behind the Suvilahti boiler hall, gas holders beyond, made to the stage template",
+      "kit": "yard",
+      "way_out": "out past the gas holders",
+      "cover": [
+        { "id": "boiler-housing", "cells": ["front-2"], "effect": "guard-from-direct-line" },
+        { "id": "steel-stair", "cells": ["middle-1"], "effect": "cover-but-pinned-on-heavy-hit" },
+        { "id": "pallet-stack", "cells": ["back-2"], "effect": "guard-from-direct-line" }
+      ]
+    },
+    {
+      "anchor": "makelansilta",
+      "name": "Under Mäkelänsilta",
+      "plate": null,
+      "plate_wanted": "the foot of the stairs down from Mäkelänsilta to the rail yard, made to the stage template",
+      "kit": "street",
+      "way_out": "up the bridge stairs",
+      "cover": [
+        { "id": "bridge-pier", "cells": ["middle-2"], "effect": "guard-from-direct-line" },
+        { "id": "stair-rail", "cells": ["back-1"], "effect": "withdrawal-lane" }
+      ]
+    },
+    {
+      "anchor": "siltasaari",
+      "name": "The Siltasaari shore",
+      "plate": null,
+      "plate_wanted": "the shore path by Siltavuorensalmi under the street lamps, made to the stage template",
+      "kit": "street",
+      "way_out": "back over the bridge",
+      "cover": [
+        { "id": "shore-bench", "cells": ["front-3"], "effect": "blocks-diagonal-front-pressure" },
+        { "id": "lamp-post", "cells": ["middle-1"], "effect": "guard-from-same-lane" },
+        { "id": "bridge-steps", "cells": ["back-2"], "effect": "withdrawal-lane" }
+      ]
+    }
+  ]
+}

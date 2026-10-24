@@ -104,6 +104,7 @@
     },
     {
       "id": "road-underpass",
+      "by": "piritori_independents",
       "tier": 1,
       "phase": "transit",
       "title": "The underpass",
@@ -228,6 +229,7 @@
     },
     {
       "id": "road-cut-found-out",
+      "by": "mccormick_family",
       "tier": 1,
       "phase": "arrival",
       "trigger": "story",
@@ -392,12 +394,13 @@
     },
     {
       "id": "road-retaliation-mccormick",
+      "by": "mccormick_family",
       "tier": 1,
       "phase": "arrival",
       "trigger": "standing",
       "repeatable": true,
       "title": "The McCormicks come to collect",
-      "text": "They said tomorrow night, and it is tomorrow night. Three of them, between Aatami and his door. They want what they think is theirs, and they want to be seen taking it.",
+      "text": "They said tomorrow night, and it is tomorrow night. Two of them, between Aatami and his door. They want what they think is theirs, and they want to be seen taking it.",
       "fight": { "win": ["relationship:mccormick_family:+1", "flag:won-a-retaliation"], "lose": ["stock:piri:-2", "debt:+60"] },
       "choices": [
         {
@@ -441,6 +444,7 @@
     },
     {
       "id": "road-retaliation-jade",
+      "by": "jade_lantern_network",
       "tier": 1,
       "phase": "arrival",
       "trigger": "standing",
