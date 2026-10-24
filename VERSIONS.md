@@ -77,6 +77,59 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.76 — 2026-10-24
+
+**The level pass: walls that join, buildings behind them, and near walls that lift away.** Owner, 2026-10-24, on v4.75's courtyard:
+
+> "Lots of layers to fix here. Plan it out, then execute. Level art is bad sometimes. Walls don't connect right etc"
+
+and then:
+
+> "Find easy ways to get further in development, if something works, duplicate"
+
+The plan is `design/C19_LEVEL_PASS.md`. This release is its layers 1, 2, 5 and 8 for the courtyard and the yard.
+
+- **The audit.** Every place was rendered from eight camera angles. The kit was measured in the browser: a façade bay is a 3.12 × 6.44 × **1.03 m slab**, the archway is 3.28 m wide, and every material is double-sided. That explained the owner's report:
+  - the archway's neighbours stood 1.4 m clear of it on both sides;
+  - the left wing stopped 0.93 m short of the back wall;
+  - v4.75's own wing had a notch at its corner and ran into the back wall;
+  - every wall was a card with void behind it;
+  - turning the camera put the back of the set between it and the board.
+- **Runs (joins by construction).** A wall is a run of modules end to end at their measured widths (`crew-run/layouts.js`, `lay`). A join can no longer open or overlap.
+  - The courtyard is rebuilt as four runs: the back wall with its passage at x 0, the left wing butting into it, and a return stepping forward into the right-hand wing. Each run starts where another's face stops.
+  - The yard's sheds and its tenement row are runs too.
+- **Buildings behind the walls.** This duplicates the park's street blocks, the part of the sets that already worked. Every run gets the building it belongs to:
+  - a plaster box from the slab's back, with a zinc roof and chimneys;
+  - the passage left open under a bridge;
+  - a filler behind the inner corner and a stone pier on the outer one.
+  The kit's materials read per-vertex colour, so the new boxes carry white, or they render black.
+- **The cutaway, instead of limiting the camera.** Each run is its own group, with its building, balconies, lamps and chimneys. A run whose face turns away from the camera is hidden, the way tactics games lift the near walls.
+  - In the Oblique preset the left wing lifts and the whole board shows, with no x-ray discs.
+  - From behind, the back wall lifts.
+  - The presets and free rotation are unchanged.
+- **Props stand clear.** One planter stood 0.4 m inside the left wing and another stood in the back wall. A bicycle leaned 5 cm into the wall; the new gate found that one.
+- **The data is the place.** `locations.js` builds exactly what `layouts.js` says: the walls, buildings, lamps and props. `metrics()` reports `runs` and `hiddenRuns`.
+- **The park stays as it is.** Its audit holds from every angle; it is the reference the courtyard was rebuilt towards.
+- **Next:** a **street** set duplicated from the park's street (the four street fights stop falling back to the courtyard), then the quay.
+- Cache:
+  - `crew-run/locations.js?v=5`, `layouts.js?v=1` (new), `ui.js?v=18`, `startup.js?v=14`
+  - `fight-module/main.js?v=40`
+  - `app.js?v=43` (the version label)
+- Gates:
+  - `level-layout.mjs` (new, bare node, 507 checks): every run is continuous, every declared join sits on the other run's face, no wall ends in the air, and nothing stands in a wall, in a building or on the board.
+  - The gate was shown to fail on three broken layouts: the wing pulled off its corner, the v4.74 free-standing bay, and a back wall that stops short.
+  - The audit renderer (eight angles, three presets, three widths) is the picture an art change ends in. The gate cannot see how a place looks.
+  - `scene-content.mjs` pinned `fight-module/main.js?v=37` in two places. v4.75's courtyard commit (`4258b2a`) moved the token and left the test red in CI; the site deploy was made from that commit. The test now asserts the pages share one token rather than a literal.
+  - The kit stays in one batch per material: hidden runs' instances are zeroed rather than split per run. A batch per run cost 37% more draw calls (209 against v4.75's 152) and timed the outing gate out under software WebGL. Now 160.
+
+### Port
+
+When C's places are ported: `layouts.js` is the contract.
+
+- Runs at measured widths, the declared joins, the buildings behind the façades.
+- The cutaway rule: hide a run when its face normal · the camera's horizontal view direction > 0.1, which is when it faces away.
+- `level-layout.mjs`'s vectors.
+
 ## v4.75 — 2026-10-24
 
 **A fight has a job, the police can come, and it is three stops.** Owner, 2026-10-24, correcting v4.74: *"Please read all designs / No, fighting 75%, escape 25% / Also police can arrive etc. It's all in the docs / Simplify UX, plan better"*. The reading was confirmed the same day ("Yes, as read") and this build was approved ("Yes, build it"). Both answers are in `DESIGN_AUTHORITY.md`. This is step 1 of the replanned `design/C19_CAMPAIGN_FIGHTS.md` §6.

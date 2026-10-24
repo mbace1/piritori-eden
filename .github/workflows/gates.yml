@@ -233,6 +233,7 @@ jobs:
         run: |
           node web/test/crew-run.mjs
           node web/test/c19-outing.mjs
+          node web/test/level-layout.mjs
           node web/test/tactics.mjs
           node web/test/directional-cover.mjs
           node web/test/arena-lab.mjs
