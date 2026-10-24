@@ -35,9 +35,15 @@ export const CUTINS = {
     bubble: { x: 350, y: 360, w: 690, h: 380, tail: [[670, 736], [565, 855], [565, 737]] },
     clips: PERSON,
   },
+  // Aatami, the player's profile when he talks (owner, 2026-10-23). Owner, 2026-10-24: talking to Jaska one at a time,
+  // both look near the camera (study 06); the sideways final is for the two of them on one screen, at opposite sides.
   aatami: {
+    rig: 'cutin-aatami-front-rig-v01', name: 'AATAMI', layout: 'location',
+    bubble: { x: 350, y: 330, w: 690, h: 380, tail: [[710, 706], [600, 790], [600, 707]] },
+    clips: PERSON,
+  },
+  'aatami-side': {
     rig: 'cutin-aatami-rig-v01', name: 'AATAMI', layout: 'location',
-    // the player's profile when he talks (owner, 2026-10-23); same bubble, its square-sided tail clear of his hair
     bubble: { x: 350, y: 360, w: 690, h: 380, tail: [[740, 736], [630, 800], [630, 737]] },
     clips: PERSON,
   },

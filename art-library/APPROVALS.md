@@ -38,6 +38,7 @@ additional frames or true layer extraction before shipping.
 | Alley portrait battle assembly | Mobile reflow direction | Replace its plate and retain the tighter crop. |
 | Back/mid/front/ground weather vectors | Layer direction | Tune density, masks and palette in engine. |
 | Arvo cut-in rig v01 (`cutin-arvo-rig-v01`) | Direction accepted, 2026-10-23: NPCs waist-up, "they don't need to be 3D" | Cut from the approved Arvo v05. Preview: ?cutin=arvo. The rig awaits owner review (PR #107). |
+| Aatami cut-in rigs v01 (`cutin-aatami-front-rig-v01`, `cutin-aatami-rig-v01`) | Sources owner-committed (PR #108), 2026-10-24 | Front: study 06, looking near the camera, used when he talks one at a time. Side: the young final, for both speakers on one screen. The rigs await owner review (PR #107). |
 
 ## Needs rework
 

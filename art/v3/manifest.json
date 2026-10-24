@@ -2497,6 +2497,84 @@
           "sha256": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78"
         }
       ]
+    },
+    {
+      "id": "cutin-aatami-front-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "semi-approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner review pending (PR #107). Looks near the camera: the conversation pose (owner, 2026-10-24).",
+      "dimensions": [
+        450,
+        685
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "aatami-front",
+      "location": "any",
+      "source": "art-src/concepts/people/aatami-young-support-06.png (owner-committed study, PR #108), cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            225,
+            675
+          ],
+          "head": [
+            265,
+            235
+          ]
+        },
+        "lids": {
+          "lid_0": "head",
+          "lid_1": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-aatami-front-v01-torso",
+          "part": "torso",
+          "file": "cutins/aatami-front-v01/torso.webp",
+          "x": 9,
+          "y": 191,
+          "w": 428,
+          "h": 484,
+          "sha256": "e4b915f0939d4dec9052214dcbc48da7582bf6ce28d8299ffa20adbc61f09ef0"
+        },
+        {
+          "id": "cutin-aatami-front-v01-head",
+          "part": "head",
+          "file": "cutins/aatami-front-v01/head.webp",
+          "x": 172,
+          "y": 9,
+          "w": 175,
+          "h": 232,
+          "sha256": "253068ce0141ef40e1a9c937c7eae44516bf1386f7ee15635179fdd3a3a1f404"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/aatami-front-v01/lid_0.webp",
+          "x": 231,
+          "y": 106,
+          "w": 31,
+          "h": 16,
+          "sha256": "d9899894d3ccca426b3ea93e1e0292a9def4385cb66b0148f3b4c0b52f473b75"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-1",
+          "part": "lid_1",
+          "file": "cutins/aatami-front-v01/lid_1.webp",
+          "x": 280,
+          "y": 112,
+          "w": 30,
+          "h": 15,
+          "sha256": "5130ae5888295d0bf10a10b724339d1e5526e60e92309a9ef4660e15a9218109"
+        }
+      ]
     }
   ]
 }
