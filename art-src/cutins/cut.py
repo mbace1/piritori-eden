@@ -31,6 +31,7 @@ inv = cv2.bitwise_not(fig); n, lab, st, _ = cv2.connectedComponentsWithStats(inv
 for i in range(1, n):                                                   # holes inside the figure are figure (glasses, gaps)
     x, y, w, h, a = st[i]
     if x > 0 and y > 0 and x + w < W and y + h < H and a < cfg.get('max_hole', 6000): fig[lab == i] = 255
+for s in cfg.get('cut_out', []): fig[poly(s)] = 0                         # background seen through the figure, kept as background
 fig = cv2.morphologyEx(fig, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8)) > 0
 # the bottom edge is a cut, not a silhouette: anything below the waist line goes
 fig &= ~poly([(x0, cfg['waist']), (x1, cfg['waist']), (x1, y1), (x0, y1)])
@@ -68,7 +69,8 @@ for name, (m, pc) in pieces.items():
 # eyelids: small cards of the face's own skin over each eye (a blink), sampled just above the eye
 for i, e in enumerate(cfg.get('eyes', [])):
     ex0, ey0, ex1, ey1 = e['box']; ex0 -= x0; ex1 -= x0; ey0 -= y0; ey1 -= y0
-    skin = np.median(im[max(0, ey0 - e.get('sample', 8)):ey0, ex0:ex1].reshape(-1, 3), axis=0)
+    sy0, sy1 = (e['sample_at'][0] - y0, e['sample_at'][1] - y0) if e.get('sample_at') else (max(0, ey0 - e.get('sample', 8)), ey0)   # skin rows: above the eye, or where told
+    skin = np.median(im[sy0:sy1, ex0:ex1].reshape(-1, 3), axis=0)
     lid = np.zeros((ey1 - ey0, ex1 - ex0, 4), np.uint8); lid[..., :3] = skin; lid[..., 3] = 255
     cv2.ellipse(lid, ((ex1 - ex0) // 2, 0), ((ex1 - ex0) // 2, ey1 - ey0), 0, 0, 180, (0, 0, 0, 0), -1) if False else None
     cv2.imwrite(os.path.join(OUT, f'lid_{i}.png'), lid)

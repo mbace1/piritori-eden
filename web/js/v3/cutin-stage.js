@@ -19,18 +19,27 @@ const breath = (t, dur) => 1 + 0.008 * Math.sin(t / dur * 2 * Math.PI * 2);
 export const REST = { sy: 1, rot: 0, ty: 0, blink: 0, jaw: 0, hy: 0 };
 const P = (o) => ({ ...REST, ...o });
 
+// People at a location share one grammar: breathe and look about, talk in head beats, nod, shake.
+const PERSON = {
+  idle: { dur: 5, loop: true, f: (t) => P({ sy: breath(t, 5), rot: 1.6 * D * Math.sin(t / 5 * 2 * Math.PI), blink: key([[0, 0], [1.6, 0], [1.7, 1], [1.8, 0], [4.2, 0], [4.3, 1], [4.4, 0]], t) }) },
+  talk: { dur: 3.2, f: (t) => P({ sy: 1.004, rot: key([[0, 0], [0.8, -2 * D], [1.6, 1.5 * D], [2.4, -1 * D], [3.2, 0]], t), ty: key([[0, 0], [0.25, 5], [0.45, 0], [0.8, 7], [1.0, 0], [1.4, 4], [1.6, 0], [2.1, 6], [2.3, 0], [3.2, 0]], t), blink: key([[0, 0], [2.6, 0], [2.7, 1], [2.8, 0]], t) }) },
+  nod: { dur: 1.6, f: (t) => P({ rot: -1 * D * smooth(t / 0.4) * (1 - smooth((t - 1.2) / 0.4)), ty: key([[0, 0], [0.35, 14], [0.8, 14], [1.2, 0]], t), blink: key([[0, 0], [0.4, 0], [0.5, 1], [0.6, 0]], t) }) },
+  shake: { dur: 1.8, f: (t) => P({ rot: key([[0, 0], [0.3, -4 * D], [0.6, 4 * D], [0.9, -4 * D], [1.2, 3 * D], [1.6, 0]], t), ty: key([[0, 0], [0.3, 2], [1.6, 2], [1.8, 0]], t) }) },
+};
+
 // Each speaker: rig id, layout, and clips (t is the clip's local time in seconds; values are in the painting's pixels).
 export const CUTINS = {
   jaska: {
     rig: 'cutin-jaska-rig-v01', name: 'JASKA', layout: 'location',
     // the bubble sits above him; its tail has one side square to the bubble and aims at his mouth (owner, 2026-10-24)
     bubble: { x: 350, y: 360, w: 690, h: 380, tail: [[670, 736], [565, 855], [565, 737]] },
-    clips: {
-      idle: { dur: 5, loop: true, f: (t) => P({ sy: breath(t, 5), rot: 1.6 * D * Math.sin(t / 5 * 2 * Math.PI), blink: key([[0, 0], [1.6, 0], [1.7, 1], [1.8, 0], [4.2, 0], [4.3, 1], [4.4, 0]], t) }) },
-      talk: { dur: 3.2, f: (t) => P({ sy: 1.004, rot: key([[0, 0], [0.8, -2 * D], [1.6, 1.5 * D], [2.4, -1 * D], [3.2, 0]], t), ty: key([[0, 0], [0.25, 5], [0.45, 0], [0.8, 7], [1.0, 0], [1.4, 4], [1.6, 0], [2.1, 6], [2.3, 0], [3.2, 0]], t), blink: key([[0, 0], [2.6, 0], [2.7, 1], [2.8, 0]], t) }) },
-      nod: { dur: 1.6, f: (t) => P({ rot: -1 * D * smooth(t / 0.4) * (1 - smooth((t - 1.2) / 0.4)), ty: key([[0, 0], [0.35, 14], [0.8, 14], [1.2, 0]], t), blink: key([[0, 0], [0.4, 0], [0.5, 1], [0.6, 0]], t) }) },
-      shake: { dur: 1.8, f: (t) => P({ rot: key([[0, 0], [0.3, -4 * D], [0.6, 4 * D], [0.9, -4 * D], [1.2, 3 * D], [1.6, 0]], t), ty: key([[0, 0], [0.3, 2], [1.6, 2], [1.8, 0]], t) }) },
-    },
+    clips: PERSON,
+  },
+  aatami: {
+    rig: 'cutin-aatami-rig-v01', name: 'AATAMI', layout: 'location',
+    // the player's profile when he talks (owner, 2026-10-23); same bubble, its square-sided tail clear of his hair
+    bubble: { x: 350, y: 360, w: 690, h: 380, tail: [[740, 736], [630, 800], [630, 737]] },
+    clips: PERSON,
   },
   arvo: {
     rig: 'cutin-arvo-rig-v01', name: 'ARVO LINDE', layout: 'news',

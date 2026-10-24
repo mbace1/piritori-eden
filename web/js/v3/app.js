@@ -22,7 +22,7 @@ import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
 import { loadTokoStage } from './toko-stage.js?v=1';
-import { loadCutin, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=1';
+import { loadCutin, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=2';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
@@ -163,6 +163,9 @@ const CUTIN_SCRIPT = {
   jaska: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
     lines: [{ text: e.opening, clip: 'talk' }],
     choices: e.choices.map(c => ({ label: c.label, reply: c.forecast, clip: c.effects.some(x => /^relationship:jaska:-/.test(x)) ? 'shake' : 'nod' })) }; },
+  // Aatami's side of the same conversation: the choices are what he says
+  aatami: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
+    lines: e.choices.map(c => ({ text: c.label, clip: 'talk' })) }; },
   arvo: () => { const n = data.news.get('news-markka-afterlife'); return n && { lines: [
     { tag: 'ARVO LINDE', text: n.arvo_copy, clip: 'read' }, { tag: 'DOCUMENTED', text: n.documented, clip: 'glance' },
     { tag: 'INFERENCE', text: n.inference, clip: 'gesture' }, n.accusation && { tag: 'ACCUSATION', text: n.accusation, clip: 'read' },
@@ -194,7 +197,7 @@ async function openCutin(who) {
     if (line.clip) stage.play(line.clip);
   }
   const leave = ['Leave', close];
-  if (news) {
+  if (!script.choices) {
     const next = i => show(script.lines[i], [i + 1 < script.lines.length ? ['Next', () => next(i + 1)] : ['Close', close]]);
     next(0);
   } else {
@@ -2441,7 +2444,7 @@ async function boot() {
       }
     }
 
-    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska at the Scene Club, arvo on the news)
+    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)
     const wantCutin = new URLSearchParams(location.search).get('cutin');
     if (wantCutin) openCutin(wantCutin);
 

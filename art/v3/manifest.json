@@ -2430,6 +2430,73 @@
           "sha256": "3a30e7e2146d6182cf86fd07b57e0d272c4b049063167df87817bf0955f791b0"
         }
       ]
+    },
+    {
+      "id": "cutin-aatami-rig-v01",
+      "kind": "cutin-rig",
+      "approval_status": "semi-approved",
+      "production_status": "animated-rig",
+      "review_status": "Owner review pending (PR #107). The player profile, shown when he talks (owner, 2026-10-23).",
+      "dimensions": [
+        470,
+        700
+      ],
+      "format": "webp-alpha",
+      "layer": "cutin-speaker",
+      "era": "2003",
+      "character": "aatami",
+      "location": "any",
+      "source": "art-src/concepts/people/aatami-young-final-v01.png (the owner pick from GPT, PR #108), cut by art-src/cutins/cut.py",
+      "baked_text": false,
+      "baked_ui": false,
+      "reduced_motion_fallback": "rest-pose",
+      "rig": {
+        "pivots": {
+          "torso": [
+            255,
+            680
+          ],
+          "head": [
+            270,
+            240
+          ]
+        },
+        "lids": {
+          "lid_0": "head"
+        }
+      },
+      "members": [
+        {
+          "id": "cutin-aatami-v01-torso",
+          "part": "torso",
+          "file": "cutins/aatami-v01/torso.webp",
+          "x": 13,
+          "y": 196,
+          "w": 428,
+          "h": 484,
+          "sha256": "706042e3a0bf181fbeeb7e3b9306023b5f6b865efa1d05c3d102cac29e9fa023"
+        },
+        {
+          "id": "cutin-aatami-v01-head",
+          "part": "head",
+          "file": "cutins/aatami-v01/head.webp",
+          "x": 185,
+          "y": 20,
+          "w": 193,
+          "h": 233,
+          "sha256": "1eb4a49b016528132c4409ce56fdd05af6709ece4090e596edc18098ba1e374a"
+        },
+        {
+          "id": "cutin-aatami-v01-lid-0",
+          "part": "lid_0",
+          "file": "cutins/aatami-v01/lid_0.webp",
+          "x": 302,
+          "y": 113,
+          "w": 30,
+          "h": 17,
+          "sha256": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78"
+        }
+      ]
     }
   ]
 }

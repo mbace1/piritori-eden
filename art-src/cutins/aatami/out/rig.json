@@ -1,0 +1,56 @@
+{
+ "id": "aatami",
+ "source": "art-src/concepts/people/aatami-young-final-v01.png",
+ "crop": [
+  330,
+  10,
+  800,
+  710
+ ],
+ "size": [
+  470,
+  700
+ ],
+ "pieces": [
+  {
+   "name": "torso",
+   "file": "torso.png",
+   "box": [
+    13,
+    196,
+    428,
+    484
+   ],
+   "pivot": [
+    255,
+    680
+   ]
+  },
+  {
+   "name": "head",
+   "file": "head.png",
+   "box": [
+    185,
+    20,
+    193,
+    233
+   ],
+   "pivot": [
+    270,
+    240
+   ]
+  },
+  {
+   "name": "lid_0",
+   "file": "lid_0.png",
+   "box": [
+    302,
+    113,
+    30,
+    17
+   ],
+   "pivot": null,
+   "lid_of": "head"
+  }
+ ]
+}

@@ -35,6 +35,15 @@ assert(fight.includes('makeActor({placeholder:true},u,world)'),'playable fight r
 for(const page of ['../fight-module/index.html','../bear-path/index.html','../arena-lab/index.html']){
   assert((await read(page)).includes('main.js?v=35'),'shared stand-in runtime cache token');
 }
+// Waist-up cut-ins (cutin-stage.js): every speaker the player knows is a registered rig with the pieces it draws.
+const {CUTINS}=await import('../js/v3/cutin-stage.js');
+for(const [who,cast] of Object.entries(CUTINS)){
+ const rig=a.assets.find(x=>x.id===cast.rig);
+ assert(rig&&rig.kind==='cutin-rig',`${who}: registered cut-in rig`);
+ for(const part of ['torso','head'])assert(rig.members.some(x=>x.part===part)&&rig.rig.pivots[part],`${who}: ${part} piece and pivot`);
+ assert(Object.keys(rig.rig.lids).every(l=>rig.members.some(x=>x.part===l)),`${who}: eyelids are pieces`);
+}
+assert(app.includes("get('cutin')"),'?cutin= debug entry');
 assert((await read('../crew-run/startup.js')).includes('main.js?v=35'),'Night Shift uses the shared stand-in runtime');
-console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers and release marker');
+console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker');
 

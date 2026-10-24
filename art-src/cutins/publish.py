@@ -13,6 +13,8 @@ MANIFEST = os.path.join(REPO, 'art', 'v3', 'manifest.json')
 META = {
   'jaska': {'source': 'art-src/concepts/people/jaska-concept-v03.jpg', 'location': 'scene-club',
             'approval': 'approved', 'review': 'Owner-approved, 2026-10-24: Jaska is already approved.'},
+  'aatami': {'source': 'art-src/concepts/people/aatami-young-final-v01.png (the owner pick from GPT, PR #108)', 'location': 'any',
+             'review': 'Owner review pending (PR #107). The player profile, shown when he talks (owner, 2026-10-23).'},
   'arvo': {'source': 'art-library/presenter/arvo-linde-concept-v05.png (the approved v05 presenter painting)', 'location': 'news',
            'review': 'Owner review pending (PR #107). Fictional homage, not a likeness (NARRATIVE.md).'},
 }
