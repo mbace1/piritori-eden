@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js?v=6';
-import {configure,launchConfig} from '../crew-run/run.js?v=10';
-import {forecast} from '../fight-module/tactics.js?v=7';
+import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js?v=8';
+import {configure,launchConfig} from '../crew-run/run.js?v=12';
+import {forecast} from '../fight-module/tactics.js?v=8';
 
 const content={
   id:'era1-test',

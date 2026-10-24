@@ -28,6 +28,7 @@ import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage } from './places.js?v=1';
+import { doorOuting, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=2';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=5';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -464,7 +465,11 @@ function render() {
   const root = $('modeRoot');
   // A pending road event waits for an answer; nothing else opens past it.
   if (state.road?.pending && state.mode !== 'battle') state.mode = 'road';
+  // An open outing (v4.74) is the same: the fight is still on in Night Shift.
+  if (openOuting(state)) state.mode = 'outing';
+  else if (state.mode === 'outing') state.mode = 'route';
   const views = {
+    outing: renderOuting,
     route: renderRoute,
     encounter: renderEncounter,
     visit: renderEncounter,
@@ -813,6 +818,7 @@ function renderRoute() {
         </div>
       </section>
       <aside class="map-side">
+        ${renderFightStrip()}
         ${renderDoorBoard(slot)}
         ${progressionCard(slot)}
         <section class="paper-panel inspect-panel" data-inspected="${esc(selected.id)}" data-present="${esc(present.id)}" data-lead="${esc(lead?.id ?? '')}">
@@ -1048,6 +1054,20 @@ function readableReason(reason) {
     .replace(/^fights-today < (\d+)$/, 'already $1 fights today')
     .replace(/^stock piri >= (\d+)$/, 'needs $1 pack on you')
     .replace(/^requires (.+)$/, 'only if $1');
+}
+
+/** v4.75: a fight goes straight to Night Shift. This card only shows when
+ *  you come back with it unfinished: the block does not pass until it is. */
+function renderOuting() {
+  const outing = openOuting(state);
+  return `<section class="paper-panel inspect-panel outing-panel" data-outing="${esc(outing.id)}" data-kit="${esc(outing.kit)}">
+    <p class="section-label">${esc(formatBlock(state, data.content))} · THE FIGHT IS STILL ON</p>
+    <h2>${esc(outing.place ?? 'The fight')}</h2>
+    <div class="node-actions">
+      <a class="paper-button primary" href="${esc(outingUrl(outing))}">BACK TO THE FIGHT</a>
+      <button class="paper-button" type="button" data-action="outing-board">NO 3D HERE · FIGHT ON THE BOARD</button>
+    </div>
+  </section>`;
 }
 
 function renderAwayFromLead(slot) {
@@ -1570,6 +1590,7 @@ function renderCase() {
 /** The story clock: advance the block, then settle anything the night owes
  *  (Kello's cut). A found-out cut becomes a road event waiting on the map. */
 function advanceAndSettle() {
+  state.lastFight = null;
   const ended = currentSchedule(state, data.content);
   advanceSchedule(state, data);
   if (ended?.block !== 'night') return;
@@ -1973,7 +1994,7 @@ function openEncounter() {
 const doorStage = encounter => doorFightStage(encounter, encounter?.door ? templateOf(doors, encounter.door) : null);
 const roadStage = event => roadFightStage(state.road?.last, event, state.scheduleIndex, places);
 
-function startBattle(id, stage = null) {
+function startBattle(id, stage = null, { counted = false } = {}) {
   const authored = data.battles.get(id);
   // Answer 24: Aatami fights the first fights, then steps back for good.
   const beat = authored.training ? '' : stepBackIfReady(state, data.content);
@@ -1984,11 +2005,75 @@ function startBattle(id, stage = null) {
     if (definition.place) state.battle.place = definition.place;
     state.mode = 'battle';
     if (beat) { state.battle.log.unshift(beat); logToast(beat); }
-    if (!state.battle.training) recordFight(state, data.content);
+    if (!state.battle.training && !counted) recordFight(state, data.content);
   } catch (error) {
     logToast(error.message);
     return false;
   }
+  return true;
+}
+
+/**
+ * v4.74 (design/C19_CAMPAIGN_FIGHTS.md step 1): a door that becomes a fight is
+ * fought in Night Shift (C.19), not on the formation board. It is written into
+ * the save as an OUTING and the city waits for it: same fighters, same place,
+ * same people as the board would have had, and the fight counts toward the
+ * day's two when it starts, as every fight does.
+ */
+function startOuting(encounter, battleId, opening = '') {
+  const authored = data.battles.get(battleId);
+  const beat = stepBackIfReady(state, data.content);
+  const crew = fighters(state, data);
+  if (crew.length < authored.player_deployed) { logToast(`${battleId} requires ${authored.player_deployed} who can fight`); return false; }
+  const staged = stageFight(authored, doorStage(encounter), places, crew.map(member => member.name));
+  const ids = crew.slice(0, authored.player_deployed).map(member => member.id);
+  const goal = templateOf(doors, encounter.door)?.fight?.goal;
+  state.outing = doorOuting(state, encounter, staged, ids, { opening: [beat, opening].filter(Boolean).join(' '), nonce: Date.now().toString(36), when: formatBlock(state, data.content), goal });
+  recordFight(state, data.content);
+  return true;
+}
+
+/** The fight came back from Night Shift: pay the door's stakes once, turn the
+ *  block (a door fight does, v4.71), and say how it went. The crew's wounds and
+ *  the missing were already written by Night Shift's receipt. */
+function settleReturnedOuting() {
+  const outing = settledOuting(state);
+  if (!outing) return false;
+  const flag = settledFlag(outing);
+  state.outing = null;
+  if (state.flags.includes(flag)) return false;
+  state.flags.push(flag);
+  const result = outing.result === 'win' ? 'win' : 'lose';
+  const stakes = doorFightEffects(doors, outing.door, outing.result);
+  applyEffects(state, stakes, data, `door:${outing.door}:${result}`);
+  advanceAndSettle();
+  // UX_SPEC §4: what changed is a strip in the place you come back to.
+  state.lastFight = { id: outing.id, place: outing.place, won: outing.result === 'win', lines: outingLines(outing), stakes: effectWords(stakes) };
+  return true;
+}
+
+/** The strip at the top of the map after a fight: how it ended, who it cost,
+ *  and the job's stakes. It stays until the next block turns. */
+function renderFightStrip() {
+  const f = state.lastFight;
+  if (!f) return '';
+  return `<section class="paper-panel fight-strip" data-fight="${esc(f.id)}" data-won="${f.won}">
+    <p class="section-label">AFTER THE FIGHT · ${esc((f.place ?? '').toUpperCase())}</p>
+    ${f.lines.map((line, i) => (i ? `<p>${esc(line)}</p>` : `<h2>${esc(line)}</h2>`)).join('')}
+    ${f.stakes ? `<p class="consequence-strip">${esc(f.stakes)}</p>` : ''}
+  </section>`;
+}
+
+/** The board fallback, for a device that cannot open Night Shift's 3D. The
+ *  fight was already counted when the outing opened. */
+function fightOutingOnBoard() {
+  const outing = openOuting(state);
+  const encounter = outing && data.encounters.get(outing.encounter);
+  if (!encounter) return false;
+  state.outing = null;
+  if (!startBattle(outing.battle, doorStage(encounter), { counted: true })) { state.outing = outing; return false; }
+  state.battle.missionId = null;
+  state.battle.door = outing.door;
   return true;
 }
 
@@ -2148,24 +2233,27 @@ function handleRootClick(event) {
     }
     const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
+    const outingBefore = state.outing?.id ?? null;
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
-    else if (result.startBattle && startBattle(result.startBattle, doorStage(encounter)) && encounter.door) {
-      // A door fight has no mission behind it: its stakes are the door's own.
-      state.battle.missionId = null;
-      state.battle.door = encounter.door;
-    } else if (!result.startBattle && encounter.door) {
+    else if (result.startBattle && encounter.door) {
+      // A door fight has no mission behind it: its stakes are the door's own,
+      // and it is fought in Night Shift (v4.74).
+      startOuting(encounter, result.startBattle);
+    } else if (result.startBattle) {
+      startBattle(result.startBattle, doorStage(encounter));
+    } else if (encounter.door) {
       // Answer 25: a bad deal can turn into a fight.
       const bad = escalation(state, data, doors, encounter.door, choice.id);
-      if (bad?.battle && startBattle(bad.battle, doorStage(encounter))) {
-        state.battle.missionId = null;
-        state.battle.door = encounter.door;
+      if (bad?.battle && startOuting(encounter, bad.battle, 'The deal goes bad. It is a fight now.')) {
         state.lastOutcome = [...(state.lastOutcome ?? []), 'The deal goes bad. It is a fight now.'];
       } else if (bad?.effects) {
         applyEffects(state, bad.effects, data, `door:${encounter.door}:alone`);
         state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.', ...(state.lastOutcome ?? [])];
       }
     }
+    // v4.75: a choice that became a fight goes straight to it.
+    if (openOuting(state) && openOuting(state).id !== outingBefore) { persist(); location.assign(outingUrl(state.outing)); return; }
     if (result.ok && encounter.participants?.includes('toko')) {
       const clip = TOKO_CLIP[choice?.id] ?? 'nod';
       tokoActs(clip, { then: clip === 'lean' ? 'lean' : 'idle', till: 120 });
@@ -2193,6 +2281,9 @@ function handleRootClick(event) {
     advanceAndSettle(); persist(); render();
   } else if (action === 'show-battle') {
     state.mode = 'battle'; persist(); render();
+  } else if (action === 'outing-board') {
+    if (!fightOutingOnBoard()) { render(); return; }
+    persist(); render();
   } else if (action === 'trade') {
     const offer = data.offers.get(target.dataset.offer);
     // MARKET.md §5/§8: you trade where you stand; the ledger records.
@@ -2351,6 +2442,7 @@ async function boot() {
     state = loadState(data.content);
     registerTaken(state, data, doors); // a taken door is the block's encounter; put it back
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
+    if (settleReturnedOuting()) persist(); // a fight that came back from Night Shift (v4.74)
     $('resumeButton').hidden = !hasSave;
     $('beginButton').addEventListener('click', () => {
       wakeSound();
@@ -2456,7 +2548,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.69',
+      version: 'v4.75',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });
@@ -2471,6 +2563,14 @@ async function boot() {
     });
 
     render();
+    // Back from Night Shift (v4.74): the campaign is already running, so the
+    // title is not in the way.
+    const back = new URLSearchParams(location.search).get('outing');
+    if (hasSave && back === 'board' && fightOutingOnBoard()) { persist(); render(); }
+    if (hasSave && ['back', 'board'].includes(back)) {
+      $('splash').hidden = true;
+      $('modeRoot').focus();
+    }
 
     // ?battle=<id> — the same debug entry Godot has had since Phase 0
     // (godot/autoload/debug_entry.gd), ported per DESIGN_AUTHORITY.md's

@@ -77,7 +77,7 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
-## v4.72 — 2026-10-24
+## v4.76 — 2026-10-24
 
 **Characters talk as waist-up cut-ins.** Owner, 2026-10-23: NPCs *"zoomed from waist up layered over with a text bubble and talk options"*, the level behind them, and *"the player character profile can be shown when he talks"*. They *"don't need to be 3d"*. The rulings are in DESIGN_AUTHORITY.md, 2026-10-23/24.
 
@@ -95,11 +95,151 @@ Use resolved impact classifications for presentation; never reapply damage on re
   - The 3D Jaska under the overlay is disposed while it is open.
 - **The slice has no spoken lines yet.** Jaska's bubble carries the encounter's opening, and Aatami's carries the choice label (QUEUE).
 - **Phone debug entries.** `?encounter=<id>` stands a fresh campaign at that encounter with saving off for the session (`debugSession`). `?cutin=jaska|aatami|arvo` previews a speaker; Arvo reads the day-3 markka bulletin one source-status card at a time.
-- Cache: `app.js?v=41`, `cutin-stage.js?v=4`, `v3.css?v=13`. Gates: `scene-content` checks every cut-in is a registered rig with its pieces and that `?cutin=` exists. `act1-scenes` waits for Jaska's cut-in and answers his visit in it. `v3-contract` follows the tokens.
+- Cache: `app.js?v=43`, `cutin-stage.js?v=4`, `v3.css?v=12`. Gates: `scene-content` checks every cut-in is a registered rig with its pieces and that `?cutin=` exists. `act1-scenes` waits for Jaska's cut-in and answers his visit in it. `v3-contract` follows the tokens.
 
 ### Port
 
 Godot still shows the 3D Jaska. Porting means drawing each `cutin-rig` asset's pieces (manifest `members[]` with `x`, `y`, and `rig.pivots` / `rig.lids`) with the clip table in `cutin-stage.js` (PERSON for Jaska and Aatami; Arvo's own). The conversation flow is the `openTalk()` block in `app.js`, and the bubble and options boxes are `CUTINS[who].bubble` on a 1080×1920 frame. Landscape framing is Godot's own call, since web leads and Godot follows.
+## v4.75 — 2026-10-24
+
+**A fight has a job, the police can come, and it is three stops.** Owner, 2026-10-24, correcting v4.74: *"Please read all designs / No, fighting 75%, escape 25% / Also police can arrive etc. It's all in the docs / Simplify UX, plan better"*. The reading was confirmed the same day ("Yes, as read") and this build was approved ("Yes, build it"). Both answers are in `DESIGN_AUTHORITY.md`. This is step 1 of the replanned `design/C19_CAMPAIGN_FIGHTS.md` §6.
+
+- **A job per fight** (`content/doors-v1.json` `fight.goal`, `outing.js`).
+  - **fight**: make them back off. Five doors.
+  - **getaway**: get out with it. Four doors: the fish stall and yard-van pickups, the quay-shift sale and the back-door watch.
+  - Road fights and missions carry the rest of the 75/25 when they come over (§6).
+- **Make them back off** (`crew-run/run.js` `makeOuting`).
+  - The crew start at the exit end and the door's people stand up the board in their own formation.
+  - Won when none of them is still standing. **They break and run** once half their weight is down; a tough one weighs two.
+  - There are no arrivals; the police are the escalation now.
+  - The rout threshold is proposed, not measured. A played opening is won in 2 rounds with pressure at 3.
+- **The getaway** is v4.74's, with the formation turned to face the way out.
+- **Withdraw is in every fight** at the job's losing price. Everyone still standing gets out; anyone down is missing, or taken if the police are already on the way.
+- **The police** (COMBAT §9.5, Act I `battle.js`):
+  - Pressure starts from the place's heat (0–3). A round adds 1, a gunshot 1, a body 2.
+  - At 5 they are announced at one end. Two to four cells are marked blue and the bar says when they come.
+  - They walk in after the next enemy turn. The fight stops on Act I's two postures, **Back off** or **Help your friends**, each button naming who that answer gets taken. ENGAGE is not offered.
+  - Anyone taken is arrested through `arrestCrew`. Aatami is never taken or left behind: down, he is carried out.
+- **Three stops instead of six** (UX_SPEC; GDD 2026-09-12):
+  1. **The choice opens the fight.** IT IS A FIGHT is no longer a stop, and the choice navigates straight to Night Shift.
+  2. **A brief card over the scene**: the job, who is on each side, the way out, when the police come, and one **Fight** button. No crew page, nothing to pick.
+  3. **One result card**: the title, a line per person, **Back to Kallio**. The aftermath grid is gone for outings.
+  4. **The map** says what changed in a strip at the top of the side panel: the place, the outcome, who was hurt, missing or arrested, and the stakes in words. It stays until the block turns again.
+  - The waiting screen is now only the way back into an unfinished fight, plus the board fallback for a device without 3D.
+  - While the police question is open it takes the whole command strip, so on a phone both answers are full-size.
+- **Known:**
+  - The question is asked even when nobody is down, and then both answers cost nothing.
+  - The getaway is still untuned (v4.74's finding stands).
+  - Nobody has fought a rout or a police arrival on a device.
+- Cache:
+  - `app.js?v=42`, `outing.js?v=2`
+  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=15`, `startup.js?v=11`, `style.css?v=7`
+  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=37`, `tactical-ui.js?v=11`, `session.js?v=17`
+- Gates:
+  - `c19-outing.mjs` covers in bare node, on real content:
+    - every door's job;
+    - the fight formation, the rout and a played win;
+    - Withdraw, and the police announced, arriving and answered both ways;
+    - the arrests, Aatami carried, and the receipt once.
+  - `outing-browser.cjs` runs three scenarios (66 checks): a phone win, a desktop win, and a phone police arrival. It covers:
+    - the choice straight into the brief;
+    - a reload mid-fight;
+    - the question naming its cost;
+    - the result card;
+    - the map strip clear of the bar;
+    - the stakes paid once.
+  - `doors-browser` and `aatami-browser` reach the map through Resume. Night Shift is stubbed there because they test Act I.
+  - The police answer is a free command in `tactics.js` (`free`): it is answered without spending anyone's Action, and `c19-outing.mjs` checks it.
+
+### Port
+
+Godot still plays door fights on the formation board (CAMPAIGN G8), and the board already has the postures. When C is ported, port:
+- `outing.js`'s goal and heat;
+- `makeOuting` (zero-based rows: fight crew y 1, rivals 4/5/6; getaway crew y 5, rivals 3/2/1);
+- `policeOutcome`;
+- the adapter's `arrested`, which goes through `arrestCrew`;
+- `settleReturnedOuting` and `lastFight`;
+- `c19-outing.mjs`'s vectors.
+
+The new `goal` field in `doors-v1.json` is synced and ignored until then.
+
+## v4.74 — 2026-10-24
+
+**A door fight is fought in Night Shift.** Owner, 2026-10-24: *"You should be looking at C19"*, and every campaign fight is **get away** (Q1). This is step 1 of `design/C19_CAMPAIGN_FIGHTS.md`. A door that becomes a fight no longer opens the formation board. It becomes an **outing**: Night Shift (C.19) plays it in its 3D place, and the result comes back to the map once.
+
+- **Act I raises it** (`outing.js`, `app.js`). Taking a door's fight, or a deal that goes bad, writes `state.outing` into the campaign save. It holds:
+  - the fighters (`fighters()`: Aatami while he still fights, then the crew);
+  - the place, its way out, and its C kit (`places-v1.json`). Street and quay fall back to the courtyard until they are built;
+  - the door's people by name, with their weapons mapped to C's three: blunt is a bat, either handgun is the handgun, and a knife or a phone is a knife;
+  - the Act I clock.
+  The fight counts toward the day's two when it starts.
+- **The city waits.** While an outing is open, Act I shows one screen, **IT IS A FIGHT**, with the place, who is in it, the job (get everyone out) and **GO TO THE FIGHT**. Nothing else opens past it, and the block does not pass.
+  - A quiet **NO 3D HERE · FIGHT ON THE BOARD** plays the same fight on the formation board. It is counted once, so a phone without WebGL2 cannot soft-lock the campaign.
+- **Night Shift plays it** (`crew-run/run.js`, `campaign-adapter.js`, `ui.js`). The outing runs under its own save key, so the ordinary Night Shift roster is never touched and a reload resumes the same fight.
+  - Nobody is chosen: the people are Act I's. Aatami projects into C.
+  - The crew stand where it went bad, on row 6. The door's people stand between them and the south edge, in the door battle's own formation. Two more arrive under pressure, as in every C outing.
+  - The win is **everyone extracted**. Withdraw and auto are not offered: the way out is the exit. Beating anyone is never needed.
+  - The header reads Act I's clock, and its link goes back to Kallio.
+- **The way home.** The aftermath says who came home and offers **Back to Kallio**.
+  - Night Shift's receipt applies once (C.17's rule). Wounds land, and anyone left behind is **missing**.
+  - **Aatami is never left behind** (owner, 2026-10-24): down at the end, he is carried out, hurt.
+  - Act I then pays the door's own `win` or `lose` stakes once, behind `memory:outing-settled:<id>`. It turns the block and says how it went.
+- **Measured, not tuned:** the getaway is easy. The opening is won in four rounds with **zero attacks and zero hits taken**. C's plans are visible, and a broken plan cancels, so a straight run past the door's people dodges every blow. Pressure never reached the arrivals. Whether that is the right difficulty is a playtest question, not a number to guess (see the design doc).
+- Cache:
+  - `app.js?v=41`
+  - `outing.js?v=1` (new)
+  - `crew-run/run.js?v=11`, `campaign-adapter.js?v=7`, `ui.js?v=14`, `startup.js?v=10`
+  - `fight-module/readability.js?v=2`, `main.js?v=36`
+- Gates:
+  - `c19-outing.mjs` (bare node, real content): the outing, the getaway built and won with no attack, the receipt exactly once, Aatami carried, the rest missing, and a settled fight that cannot reopen.
+  - `outing-browser.cjs`: the whole loop on a phone and a desktop, from the door to Night Shift's courtyard, then the getaway, a reload mid-fight, the aftermath, and back to the map, paid once (46 checks).
+  - `doors-browser` and `aatami-browser` now expect the outing, and test the board fallback.
+
+### Port
+
+Nothing into the formation board. Godot has no C engine yet (CAMPAIGN G8), so its door fights stay on the board until P5. When C is ported, port:
+- `outing.js` (pure);
+- the getaway branch of `makeMission` (zero-based: the crew at y 5; the formation's front at y 3, middle 2, back 1; lanes 1/2/3 at x 1/2/4);
+- the outing branch of `applyCampaignReceipt` (`carried` is a wound, never missing);
+- Act I's `settleReturnedOuting`;
+- `c19-outing.mjs`'s vectors.
+
+## v4.73 — 2026-10-24
+
+**The paper fight is withdrawn.** Owner, on v4.72's cut-paper fight: *"This is awful and wrong. You should be looking at C19."* Everything v4.72 added for it is gone: the FIGHTS switch, `paper-fight.js`, `paper-motion.js`, the beats record in `battle.js`, the THINGS TO TEST entry and both of its gates.
+
+- **Kept:** v4.72's one fix that was not about paper. `.battle-stage` is its own stacking context, so the fighters' depth z-index can no longer rise above the pause menu and take its taps. `doors-browser` checks it now, on a door fight.
+- **Fights are 3D again, and only 3D,** as they were in v4.71. C.19 (Night Shift) is the reference for what comes next.
+- Cache: `app.js?v=40`, `v3.css?v=11`. `battle.js` (13), `pause.js` (4) and `testlist.js` (3) are back to their v4.71 bytes, so they keep their v4.71 tokens.
+
+### Port
+
+Nothing. v4.72 was never ported.
+
+## v4.72 — 2026-10-24 (withdrawn in v4.73)
+
+**Fights in cut paper, as a switch.** Owner, 2026-10-23: *"3d might not be the future. Recent steps are using motion graphics."* Then: *"Plan your approach and then execute."* The fight can now be drawn the way Toko is drawn at his counter (v4.70): flat cut-card figures on hidden pivots, acting over the place's plate (v4.71). The board, the rules and the plates are unchanged; only the drawing changes. The 3D stand-ins remain the default.
+
+- **Paper stand-ins** (`paper-fight.js`). Each fighter is cut from card in code: legs, coat, arms, head, weapon. They are neutral and procedural, seeded from the unit with the same palette as the 3D stand-ins, so the 2026-10-02 rule holds.
+  - The look is AD1 "A, restrained": a clean cut, a pale edge where the card's core shows on the lit side, faint grain, and a hard shadow where the card stands off the ground.
+  - Cover is a kraft card lying flat on its cell, so it never stands in front of the person using it.
+- **The fight is acted out.** `battle.js` records **beats**: who struck whom and what it did (`guard` torn, `hurt`, `down`), and who hopped, braced, marked or used an item. No rule reads them; the last 24 are kept.
+  - `paper-motion.js` plays the beats one after another, posed twelve times a second.
+  - A striker leans away, commits under half a step, holds the release and settles. The struck card bends back at the impact. A torn guard is a smaller flinch with the arms up. A fall topples about the feet and lies there.
+  - Each figure turns to whoever its beat is about. A long reposition hops for longer and higher.
+  - The enemy turn plays out one blow at a time. A reload never replays old blows.
+  - Reduced motion: no breath and no wind-up. Each beat shows its end pose, briefly.
+- **The switch:** FIGHTS · 3D / PAPER in the pause menu, or `?fight=paper|3d` on a link. It is remembered. It is a comparison, not a decision.
+- **THINGS TO TEST** has a new entry, **A fight in cut paper — Hakaniemi**. It jumps to a paper fight behind the market hall.
+- **Fixed (pre-existing): the pause menu under a fight.** Fighters' depth z-index (up to ~440, `nameplates.js`) rose above the pause veil (60), so a tap meant for the menu could land on a fighter. `.battle-stage` is now its own stacking context.
+- Cache: `app.js?v=39`, `battle.js?v=14`, `pause.js?v=5`, `testlist.js?v=4`, `v3.css?v=11`, `paper-fight.js?v=1`, `paper-motion.js?v=1`.
+- Gates:
+  - `paper-fight.mjs`: 47 checks of the motion vocabulary and the beats.
+  - `paper-fight-browser.cjs`: 27 checks. Every standing fighter is painted where its token is; a turn is acted out to the end; the switch works both ways and is remembered; the THINGS TO TEST jump works; reduced motion; a phone; and the pause menu sits above the fighters.
+
+### Port
+
+None yet, deliberately. Paper is a comparison until the owner picks a look; Godot ports the one that is chosen. If paper is chosen, the port needs `paper-motion.js` (pure, a direct translation) and a 2D figure drawer over the plate. The beats would be recorded in `FightManager`'s resolution, which already emits `event_resolved`.
 
 ## v4.71 — 2026-10-23
 

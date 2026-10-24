@@ -106,6 +106,9 @@ export function createTacticalSession(battle,mode,scenario,data,options={}){
     if(options.reject?.(type))return {ok:false};
     if(type==='select'){const next=battle.players.find(v=>v.id===value&&v.alive);if(!next)return {ok:false};battle.selectedId=value;return {ok:true};}
     const before=snapshot(),events=[],actionUsed=battle.acted.includes(u?.id);let ok=false;
+    // A mission's free command belongs to the crew, not to one person's
+    // action budget (Act I v4.74: the answer to the police).
+    if(options.free?.includes(type)){if(!options.action(battle,u,type,value,events))return {ok:false};options.after?.(battle,type,events);finish();const record={type,value,actor:u?.id,before,after:snapshot(),events};history.push(record);return {ok:true,record};}
     const isAction=['attack','brace','item','reload',...(options.actions||[])].includes(type);
     if(isAction&&(!u?.alive||actionUsed))return {ok:false,message:'Action already used. Movement is separate.'};
     if(options.actions?.includes(type))ok=options.action(battle,u,type,value,events);
@@ -119,7 +122,7 @@ export function createTacticalSession(battle,mode,scenario,data,options={}){
       if(!battle.moved.includes(actor.id)&&move(actor,p.path,events))battle.moved.push(actor.id);
       if(!battle.acted.includes(actor.id)){if(p.type==='attack')attack(actor,battle.enemies.find(v=>v.id===p.target),events);else if(p.type==='reload'){actor.ammo=actor.maxAmmo;events.push({type:'reload',id:actor.id});}else{actor.guard=Math.min(4,actor.guard+2);events.push({type:'brace',id:actor.id});}battle.acted.push(actor.id);}}
       if(battle.status==='active')enemyTurn(events);ok=true;
-    }else if(type==='withdraw'||type==='talk'&&battle.round>=2){battle.status='complete';battle.result=type==='withdraw'?'withdraw':'partial';ok=true;log(type==='withdraw'?'Crew withdrew. No campaign cost.':'Training truce.');}
+    }else if(type==='withdraw'||type==='talk'&&battle.round>=2){battle.status='complete';battle.result=type==='withdraw'?'withdraw':'partial';ok=true;log(type==='withdraw'?(options.withdrawText||'Crew withdrew. No campaign cost.'):'Training truce.');}
     if(!ok)return {ok:false,message:'Unavailable: check route, range, ammo and action budget.'};
     if(isAction)battle.acted.push(u.id);
     options.after?.(battle,type,events);finish();

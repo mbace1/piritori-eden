@@ -2,7 +2,7 @@
 
 ## Owner rulings, 2026-10-23/24 — characters talk as waist-up cut-ins
 
-Shipped in v4.72 (PR #107). In the owner's words:
+Shipped in v4.76 (PR #107). In the owner's words:
 
 - **No 3D needed for characters.** *"They don't need to be 3d. It was just when
   I thought it was the easier means of animation."* Speakers are approved
@@ -41,10 +41,50 @@ using motion graphics."**
 - The recent steps are the cut-paper rigs: Toko at the counter (v4.70), the
   waist-up NPC cut-ins (PR #107: "the characters don't need to be 3D"), the
   paper kit (AD1) and the Radio Free papercut technique behind them.
-- Until the owner says more, no lane should build on "3D is the future": no
-  freeze of the formation board, no new 3D place kits. The `kit` field in
-  `content/places-v1.json` (v4.71) is a record, not a plan.
 - Stand-ins only (2026-10-02) and web leads, Godot follows, are unchanged.
+
+**Follow-up, 2026-10-24.** Told "plan your approach and then execute", Claude
+read the note as a cue to put fights into cut paper and shipped it behind a
+switch (v4.72). Owner: **"This is awful and wrong. You should be looking at
+C19."** It was withdrawn in v4.73. The motion-graphics note is about the
+non-battle screens (the counter, the cut-ins). For fights, **C.19 Night Shift
+is the reference**, as PR #102's CAMPAIGN.md already says. The formation
+board is not to be re-skinned.
+
+**Aatami in fights (2026-10-24):** *"Aatami is in the first phase of act1 in
+all fights and then for rest of act1 he is the shot caller but not a fighter."*
+This confirms answer 24 and COMBAT.md §9.9. It is binding on the C.19 mapping
+(`design/C19_CAMPAIGN_FIGHTS.md`): C needs a shot-caller seat.
+
+**What a campaign fight is for (2026-10-24), asked with three options (depends
+on the job / get away / beat them): "Get away".** *Corrected the same day,
+below: this answer was read too narrowly and shipped as "every fight is only a
+getaway" (v4.74).*
+
+**Correction, 2026-10-24, after v4.74:** *"Please read all designs. No,
+fighting 75%, escape 25%. Also police can arrive etc. It's all in the docs.
+Simplify UX, plan better."*
+
+- A campaign fight is mostly a fight. Escape is the smaller share, and an
+  option in every fight rather than the only way to win one. GDD §13.10
+  already lists the ways a fight ends (they withdraw or break, negotiation,
+  the objective, you withdraw, one side cannot go on). FIGHT_BRIEF §5 makes
+  routing them a first-class win. DESIGN_NOTES 2026-09-13 makes escape a
+  first-class strategy with a cost.
+- The police are part of a fight (COMBAT §9.5). Heat from a long, loud
+  fight brings them, and the downed are taken. Act I's board and Bear Path
+  already have this; v4.74's Night Shift fights did not.
+- The UX of v4.74 was too many screens. The meeting is the arena (GDD
+  2026-09-12, NEGOTIATION §1), and a consequence is a strip in the place you
+  return to, not a separate screen (UX_SPEC §4).
+- The plan that answers this is `design/C19_CAMPAIGN_FIGHTS.md` §6.
+
+**Answered the same day:**
+- **The 75/25 reading: "Yes, as read."** About three in four campaign fights
+  are won by beating them (down them or make them run). About one in four are
+  jobs where getting out is the win. In every fight you can still choose to
+  run, at the job's losing price. Each fight carries its job in the data.
+- **§6 greenlit as planned: "Yes, build it."** v4.75 first, then road fights.
 
 ## Owner ruling, 2026-10-21 — Toko at the counter is the paper rig
 

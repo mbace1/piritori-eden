@@ -12,6 +12,20 @@ export function fighterLabel(battle, unit, {targetId = null, full = false} = {})
 export function missionCue(battle, coordinate) {
   const m = battle.mission;
   if (!m) return null;
+  // Act I v4.75: a campaign fight's job is a fight (make them back off) or a
+  // getaway (everyone out). The police, once here, outrank both.
+  if (m.goal) {
+    if (m.police?.arrived && !m.police.resolved) return {goal: 'The police are here · Back off, or help your friends', exit: 'EXIT · A1–F1', cost: 'ANSWER · NO ACTION'};
+    const fallen = battle.players.find(p => !p.alive && !p.evacuated && !p.helped);
+    if (m.goal === 'fight') {
+      const standing = battle.enemies.filter(e => e.alive).length;
+      return {goal: `Make them back off · ${standing} still standing${fallen ? ` · help ${fallen.name} at ${coordinate(fallen.cell)}` : ''}`, exit: 'EXIT · A1–F1', cost: 'WITHDRAW · THE JOB IS LOST'};
+    }
+    const out = battle.players.filter(p => p.extracted).length, all = battle.players.length;
+    const goal = fallen ? `Help ${fallen.name} at ${coordinate(fallen.cell)}, then everyone out → EXIT A1–F1`
+      : out ? `${out}/${all} out · everyone out → EXIT A1–F1` : 'Get everyone out → EXIT A1–F1';
+    return {goal, exit: 'EXIT · A1–F1', cost: 'EXTRACT · 1 ACTION'};
+  }
   const target = battle.players.find(p => p.id === m.targetId);
   const carrier = battle.players.find(p => p.id === m.carrierId);
   let goal;

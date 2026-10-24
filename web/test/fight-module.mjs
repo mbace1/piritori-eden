@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession} from '../fight-module/session.js?v=16';
+import {createSession} from '../fight-module/session.js?v=17';
 import {endPlayerPhase,attackTargets,selectAction,playerAttack,validMoveCells} from '../fight-module/resolver.js?v=7';
 import {anchorCoverCells} from '../fight-module/resolver.js?v=7';
 import {createState,setAptitudes} from '../js/v3/state.js?v=9';

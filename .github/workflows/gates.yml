@@ -232,6 +232,7 @@ jobs:
       - name: laboratory rules and legacy regression
         run: |
           node web/test/crew-run.mjs
+          node web/test/c19-outing.mjs
           node web/test/tactics.mjs
           node web/test/directional-cover.mjs
           node web/test/arena-lab.mjs
@@ -278,6 +279,22 @@ jobs:
           python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c12-server.log 2>&1 &
           node web/test/crew-gamepad.cjs
           node web/test/crew-run-browser.cjs
+
+  campaign-outing:
+    timeout-minutes: 20
+    name: a door fight in Night Shift (Act I v4.74-v4.75)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --prefix /tmp/piritori-test playwright
+      - run: /tmp/piritori-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: Act I to Night Shift and back, paid once, on a phone and a desktop
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/outing-browser.cjs
 
 
   c-art-and-camera:

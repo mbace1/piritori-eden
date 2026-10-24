@@ -1,0 +1,31 @@
+# Hub release: Act I city v4.74 (a door fight is fought in Night Shift)
+
+- **Source:** `mbace1/piritori-eden` @ `05da8fa`, web only. Gates run 1005 was green on that head. All nine jobs passed, including the new `campaign-outing` job.
+- **Site:** `mbace1/Suds-Jack` gh-pages `6e555a4d`, under `piritori/`. **Pages run 1546 succeeded**: build, deploy and report all green, deployed at 14:07 UTC.
+  - Nothing was deleted. `release.json` holds 289 files.
+  - The cabinet now carries Night Shift's runtime, so a door fight can open from the map:
+    - `crew-run/`: code, style, fonts, and the v02 kit and its two textures;
+    - `fight-module/*.js`;
+    - `bear-path/*.js`.
+  - Left out on purpose: lab pages, reports, review images, the unused v01 kit and `crew-run/c17/`.
+- **What players get:**
+  - Taking a door's fight, or a deal that goes bad, opens **IT IS A FIGHT**. The screen names the place, who is in it and the job: get everyone out. **GO TO THE FIGHT** opens Night Shift in that place, against the door's own people.
+  - Night Shift prepares that fight and no other. Nobody is chosen there. Support kits can still be equipped. Withdraw and auto are not offered.
+  - Everyone extracted wins the door's stakes. Anyone left behind is missing, and the door's losing stakes are paid. Aatami is never left behind: down at the end, he is carried out, hurt.
+  - **Back to Kallio** returns to the map. The stakes are paid once, the block turns, and a line says how it went.
+  - A device without 3D can play the same fight on the formation board from the waiting screen.
+- **Catalogue:**
+  - The note moves to v4.74 in en, fi and ja. `versions.json` piritori goes from 4.73 to 4.74 by hand.
+  - Token cascade: games 167, shell 130, hub 171, with toko/js following. 46 site files.
+  - The service worker `VERSION` goes to v160, and `sw-shell.mjs --check` agrees.
+- **Deploys never merge.** The first push was rejected because Toko Move v2.65 had landed. The cabinet was re-staged on that tip (`72e7645e`).
+  - The rejected local commit had also picked up a stray `undefined/site-hak.png`, a screenshot from the site check. The re-stage does not carry it, and the check now writes to its own folder.
+- **Verified on the staged site tree, before the push:**
+  - `outing-browser` against `/piritori/`: 46 checks, the whole loop on a phone and a desktop. It goes from the door to the courtyard, plays the getaway with a reload mid-fight, reaches the aftermath, and returns to the map paid once.
+  - `doors-browser` against `/piritori/`: 50 checks.
+  - The site check (8): `act1.html` forwards to `?v=474`, the header says v4.74, the HOME button mounts, the Hakaniemi plate decodes, and the arcade card reads v4.74.
+- **Not verified:**
+  - The public github.io URL. This session's network policy blocks it.
+  - Owner acceptance on a device.
+- **Known, recorded in VERSIONS.md and the design doc:** the getaway is easy. The opening is won with no attack and no hit taken, and its difficulty is untuned.
+- v4.73 (gh-pages `c9dce895`, Pages run 1542) shipped without a receipt of its own. Its deploy is described in that commit's message.

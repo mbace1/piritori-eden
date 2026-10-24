@@ -56,3 +56,25 @@ body.crew-menu{grid-template-rows:44px 0 minmax(0,1fr) 0}.crew-menu #panel,.crew
 .exit-marker small{font:9px/1.1 Arial,sans-serif;letter-spacing:.03em}
 #label-mode{min-height:44px;min-width:44px;font:12px/1.2 Arial,sans-serif}
 #camera-panel #label-mode{width:100%}
+/* Act I v4.75: a campaign fight's brief and result are one card over the scene,
+   not a page in front of it (UX_SPEC §9.2, §4). The place stays visible. */
+body.crew-brief #crew-screen{inset:auto 0 0;max-height:64vh;padding:28px max(16px,calc((100vw - 720px)/2)) max(16px,env(safe-area-inset-bottom));background:linear-gradient(0deg,#111719f7 78%,#11171900)}
+body.crew-brief #crew-content{grid-template-columns:1fr;gap:12px}
+body.crew-brief #crew-night{margin-bottom:8px}
+body.crew-brief .mission-copy{padding-top:0}
+body.crew-brief .mission-copy h2{font-size:clamp(30px,4.4vw,46px);margin:0 0 10px;max-width:none}
+body.crew-brief .lead{font-size:16px;margin:0 0 8px;max-width:none}
+body.crew-brief .crew-ledger{padding:0;background:none;border:0}
+body.crew-brief #crew-deploy,body.crew-brief #crew-home{min-height:48px;min-width:160px;font-size:20px}
+.brief-facts{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 4px;font:15px/1.4 Arial,sans-serif}
+.brief-facts dt{font:12px/1.6 monospace;letter-spacing:.08em;color:var(--cream);text-transform:uppercase}
+.brief-facts dd{margin:0}
+.police-ask{margin:0 0 4px;font:600 15px/1.3 Arial,sans-serif;color:#cfe0ef}
+#mission-actions [data-police]{min-height:44px;font-size:15px;border-color:#4f7fa0}
+/* v4.75: while the police question is open it is the only thing to answer, so it takes the whole strip. */
+body.police-asking .command-console{grid-template-columns:minmax(0,1fr)!important}
+body.police-asking #selected-unit,body.police-asking .command-centre,body.police-asking #utility-actions{display:none!important}
+body.police-asking .command-utility{grid-row:auto!important;grid-column:1!important}
+body.police-asking #mission-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+body.police-asking .police-ask{grid-column:1/-1}
+body.police-asking #mission-actions [data-police]{white-space:normal;line-height:1.25;min-height:52px}

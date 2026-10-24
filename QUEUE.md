@@ -17,7 +17,7 @@ pick up, and half of it will turn out to be wrong.
 
 ---
 
-## Cut-ins: what v4.72 leaves open (2026-10-24)
+## Cut-ins: what v4.76 leaves open (2026-10-24)
 
 - **No spoken lines in the slice.** Jaska's bubble carries the encounter's
   narrated opening, and Aatami's carries the choice label. A Content pass could
@@ -30,9 +30,9 @@ pick up, and half of it will turn out to be wrong.
   standing pose v03 (`art-src/cutins/renders/hooded-sheet.jpg`).
 - **Two speakers on one screen.** `aatami-side` is registered for it; there is
   no layout yet.
-- **Godot port.** See VERSIONS.md v4.72, the Port section.
+- **Godot port.** See VERSIONS.md v4.76, the Port section.
 - **Toko** keeps his own stage (v4.70). He does not open as a cut-in, and
-  Aatami's profile does not answer him yet (planned for v4.73).
+  Aatami's profile does not answer him yet (planned next).
 
 ---
 
