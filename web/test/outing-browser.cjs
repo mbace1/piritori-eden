@@ -92,6 +92,11 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [view, vp, touch, kind] of scenarios) {
       const name = `${view}/${kind}`;
       const ctx = await browser.newContext({ viewport: vp, hasTouch: touch, isMobile: touch });
+      // Leaving Night Shift destroys its WebGL2 context, and under
+      // --use-angle=swiftshader that alone takes 13-38 s (measured v4.78:
+      // 38 s for the 1280x800 courtyard, 79 ms on Chromium's default backend).
+      // A navigation away from it gets the time that teardown needs.
+      ctx.setDefaultNavigationTimeout(120000);
       const page = await ctx.newPage();
       const errors = watchErrors(page);
       const tap = async el => { await el.scrollIntoViewIfNeeded(); await el[touch ? 'tap' : 'click'](); };

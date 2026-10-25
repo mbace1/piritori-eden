@@ -284,4 +284,4 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.throws(() => R.loadRun(null, content), /not in this campaign/);
 }
 
-console.log('C.19 outing v4.77: a job per fight (5 doors fight, 4 get away), road fights as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');
+console.log('C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');
