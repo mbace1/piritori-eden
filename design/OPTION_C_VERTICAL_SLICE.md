@@ -1,5 +1,7 @@
 # Option C — Dream Loop vertical-slice design
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](../ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Status: **implementation brief, not a completed build or approved art direction**. Owner direction, 2026-09-13. Read [ACTIVE_CONTEXT](../ACTIVE_CONTEXT.md) first. This brief applies the existing [3D_PIPELINE](../3D_PIPELINE.md); it does not replace the Meshy handoffs or create a second production process.
 
 ## What the slice must answer

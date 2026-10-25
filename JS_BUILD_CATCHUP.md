@@ -1,5 +1,7 @@
 # JS build catch-up — assets, canon and what changed
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Written 2026-08-27, for whoever brings the JavaScript instance of Piritori
 forward. It is an inventory and a status report, not instructions: it says what
 exists, where it is, and which decisions have been made since the JS build

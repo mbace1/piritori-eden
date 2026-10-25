@@ -1,5 +1,7 @@
 # H1 + H2 build plan: a ten-day chapter made of a spine and doors
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](../ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Owner, 2026-09-29: The Long Game is greenlit ("good to go in your order"). H7 shipped as v4.64. This plan is next in that order. It is a plan, not a build.
 
 ## Where the slice is today

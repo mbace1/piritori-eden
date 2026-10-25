@@ -1,5 +1,7 @@
 # Free-roaming chapters: owner direction and execution plan
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Status: active implementation plan, 2026-09-11. This records direct owner direction after the September 10 scope. It does not declare an integrated C campaign or lift the Era II production gate.
 
 ## Owner direction

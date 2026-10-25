@@ -1,5 +1,7 @@
 # C.19 implementation and release record — 2026-09-17
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 The approved acceptance/readability implementation is in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89).
 The matching hub records are [development #546](https://github.com/mbace1/Suds-Jack/pull/546)
 and [Pages #547](https://github.com/mbace1/Suds-Jack/pull/547). Read their latest

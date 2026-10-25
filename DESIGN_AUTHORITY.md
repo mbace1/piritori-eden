@@ -1,5 +1,7 @@
 # Piritori → Eden — design authority
 
+> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
+
 ## Owner note, 2026-10-23 — 3D might not be the future
 
 Asked whether to freeze the formation board so every fight moves to Night

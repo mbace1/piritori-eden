@@ -1,5 +1,7 @@
 # Claude execution brief — map and mission continuation
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](../ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Updated: 2026-09-24. **Handoff and implementation brief, not completed gameplay.**
 Read [CLAUDE_TAKEOVER.md](../CLAUDE_TAKEOVER.md) for verified refs and startup.
 This supplements the existing design authority; it does not replace the GDD,
