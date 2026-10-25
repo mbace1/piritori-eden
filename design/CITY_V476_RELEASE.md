@@ -1,0 +1,27 @@
+# Hub release: Act I city v4.76 (the level pass)
+
+- **Source:** `mbace1/piritori-eden` @ `de3f397`, web only.
+  - **Gates on `de3f397` were green:** run 1015, all nine jobs. That includes "browser campaign state", which was red on v4.75's `4258b2a`. `scene-content.mjs` now checks that the pages share one runtime token, not a literal.
+- **Site:** `mbace1/Suds-Jack` gh-pages `0f8cc685`, under `piritori/`. **Pages run 1559 succeeded.**
+  - Nothing was deleted.
+  - `release.json` holds 290 files: one added (`crew-run/layouts.js`) and 57 site files changed.
+- **What players get** (owner: *"Lots of layers to fix here… Walls don't connect right"*):
+  - **The courtyard and the yard are rebuilt from runs of wall.** Modules stand end to end at their measured widths, so a corner can neither gap nor overlap.
+  - **Every wall has a building behind it:** a plaster box, a zinc roof and chimneys. The passage stays open under a bridge.
+  - **The near walls lift away** as the camera turns. Oblique, and the views from behind, show the whole board.
+  - Two planters and a bicycle that stood in walls have moved.
+- **Catalogue:**
+  - The note moves to v4.76 in en, fi and ja. `versions.json` piritori goes 4.75 → 4.76 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went 169 → 170. `sw-shell --check` agrees.
+- **Verified on the staged site tree, before the push:**
+  - the site check: 8 of 8;
+  - `doors-browser` against `/piritori/`: 52. Its first run, alongside another browser suite, timed out on one page load; the rerun alone passed;
+  - `outing-browser` against `/piritori/`: 66, with screenshots off.
+    - With screenshots on, it fails on one: the desktop fight frame takes over 30 s, run alone too.
+    - Measured on the same 1280×800 frame, the staged site and the repo tree are the same: 1 frame a second under the software renderer, a 9 s screenshot, 160 draws.
+    - So it is the harness's software renderer at desktop size, not the cabinet. CI does not take screenshots.
+- **Not verified:**
+  - the public github.io URL, which this session's network policy blocks;
+  - owner acceptance on a device.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`990d0e11`, toko-drop-2 v45).
+- **Another v4.76:** PR #107 (the talking cut-ins) is open and titled v4.76. It renumbered once already when main moved, and it will need to again: main is now v4.76 and v4.77, with `app.js?v=43` and `?v=44`.
