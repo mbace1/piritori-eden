@@ -77,6 +77,37 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.79 — 2026-10-25
+
+**The two mission battles are fought in Night Shift** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 5), and a board battle survives a reload.
+
+- **Mission battles.** The Bear Path (*Hold the path*, Karhupuisto) and the courtyard receipts (*Take positions*, Torkkelinmäki) used to open the formation board. They now go straight to Night Shift, the way a door's or a road's fight does:
+  - `missionOuting` is the door's record made from the story encounter. Its job is to make them back off.
+  - It is fought by the battle's own authored people (Rinne and Leko; Kettunen, Peltola and Haddad) at the battle's own place: the park and a courtyard.
+  - It pays the **mission's** stakes, read as the board reads them (`missionStakes`): a win is the mission's success, pulling out (Withdraw or the police) its partial, a loss its failure. The block turns, as it did on the board.
+  - The courtyard receipts keep their authored cost: whoever comes home hurt is **critical**, Aatami excepted. The rule lives in the receipt (`campaign-adapter.js`) and only for that mission, since door fights borrow the same battle template.
+  - The peaceful choices (*Name the empty van*, *Send the fixer*, *Withdraw*; *Trade a favour*, *Leave the receipts*) are untouched.
+  - The board fallback (`?outing=board`) plays the same battle **for the same mission**: its `missionId` is kept, so the board pays it as it always has.
+- **A board battle survives a reload.** Found by the new browser gate. It reproduces on v4.78's main, so it is live. A board battle keeps its cover in a `Map` and the round's hits in a `Set`. The save's plain JSON flattened both to `{}`, so a reload mid-battle showed *LOAD FAILURE · cover.has is not a function*, and so did every load after it: the save was locked.
+  - `saveState` now carries Maps and Sets tagged, and `loadState` turns them back.
+  - A save already flattened loads its battle without its cover, rather than locking.
+- **Gates:**
+  - `c19-outing.mjs` builds both mission outings: the record, the place, the authored people, the three stakes. It plays a Withdraw in Night Shift with someone hurt and settles once: critical in the courtyard, wounded at the bear. It was shown to fail without the courtyard rule.
+  - `v3-state.mjs` round-trips a battle's Map and Set and loads a flattened save. It was shown to fail with plain JSON.
+  - **`mission-browser.cjs`** (new, in CI's Act I job) takes both choices for real on desktop and phone. They reach Night Shift as mission battles at their own place against their own people. The board fallback keeps the mission, and the save with that board battle in it loads: 32 checks.
+- Cache: `state.js` changed, so the cascade reaches most of Act I and the fight module:
+  - `outing.js?v=5`, `app.js?v=46`, `state.js?v=10`, `battle.js?v=14`, `road.js?v=6`, `story.js?v=5`, `doors.js?v=4`, `visits.js?v=6`, `toko.js?v=5`
+  - `crew-run/campaign-adapter.js?v=9`, `run.js?v=14`, `ui.js?v=22`, `startup.js?v=18`
+  - `fight-module/resolver.js?v=8`, `session.js?v=18`, `main.js?v=44`
+
+### Port
+
+When C is ported:
+
+- `missionOuting` and `missionStakes`;
+- the courtyard receipts' critical rule on the receipt;
+- the save's Maps and Sets, which a Godot save carries natively.
+
 ## v4.78 — 2026-10-25
 
 **The quay, and no question when there is nothing to choose.** The level pass's last place (`C19_LEVEL_PASS.md` layer 7), duplicated again: the yard, cut off at the water.

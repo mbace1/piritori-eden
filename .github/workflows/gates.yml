@@ -212,6 +212,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/doors-browser.cjs
+      - name: the two mission battles in Night Shift (Act I v4.79)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/mission-browser.cjs
       - name: Aatami on the board, then stepping back
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

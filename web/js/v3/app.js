@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=5';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=6';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -15,27 +15,27 @@ import {
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=9';
+} from './state.js?v=10';
 import { createPauseMenu } from './pause.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=5';
 import { loadTokoStage } from './toko-stage.js?v=1';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=4';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=5';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=4';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
-import { loadPlaces, stageFight, doorFightStage, roadFightStage } from './places.js?v=1';
-import { doorOuting, roadOuting, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=4';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=5';
+import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
+import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=5';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=6';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=13';
+} from './battle.js?v=14';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -1931,6 +1931,22 @@ function startRoadOuting(event, battleId) {
   return true;
 }
 
+/** §6.4 step 5: a mission battle goes to Night Shift too. Its people are the
+ *  battle's own, authored, and it is fought at the battle's own place. */
+function startMissionOuting(encounter, battleId) {
+  const authored = data.battles.get(battleId);
+  const place = placeAt(places, authored?.location_anchor_id);
+  if (!authored || !place || !encounter.mission_id) return false;
+  const beat = stepBackIfReady(state, data.content);
+  const crew = fighters(state, data);
+  if (crew.length < authored.player_deployed) { logToast(`${battleId} requires ${authored.player_deployed} who can fight`); return false; }
+  const staged = { ...authored, place: { anchor: authored.location_anchor_id, name: place.name, way_out: place.way_out, kit: place.kit, by: null, side: 'them' } };
+  const ids = crew.slice(0, authored.player_deployed).map(member => member.id);
+  state.outing = missionOuting(state, encounter, encounter.mission_id, staged, ids, { opening: beat, nonce: Date.now().toString(36), when: formatBlock(state, data.content) });
+  recordFight(state, data.content);
+  return true;
+}
+
 /** The fight came back from Night Shift: pay the door's stakes once, turn the
  *  block (a door fight does, v4.71), and say how it went. The crew's wounds and
  *  the missing were already written by Night Shift's receipt. */
@@ -1943,8 +1959,9 @@ function settleReturnedOuting() {
   state.flags.push(flag);
   const result = outing.result === 'win' ? 'win' : 'lose';
   const roadFight = outing.kind === 'road' ? roadEvents.events.find(e => e.id === outing.road)?.fight : null;
-  const stakes = outing.kind === 'road' ? (roadFight ? (outing.result === 'win' ? roadFight.win : roadFight.lose) : []) : doorFightEffects(doors, outing.door, outing.result);
-  applyEffects(state, stakes, data, outing.kind === 'road' ? `road:${outing.road}:${result}` : `door:${outing.door}:${result}`);
+  const stakes = outing.kind === 'mission' ? missionStakes(data.missions.get(outing.mission), outing.result)
+    : outing.kind === 'road' ? (roadFight ? (outing.result === 'win' ? roadFight.win : roadFight.lose) : []) : doorFightEffects(doors, outing.door, outing.result);
+  applyEffects(state, stakes, data, outing.kind === 'mission' ? `battle:${outing.battle}:${outing.result}` : outing.kind === 'road' ? `road:${outing.road}:${result}` : `door:${outing.door}:${result}`);
   // A road fight has no mission behind it and does not turn the block.
   if (outing.kind === 'road') { if (state.road) state.road.last = null; } else advanceAndSettle();
   // UX_SPEC §4: what changed is a strip in the place you come back to.
@@ -1973,6 +1990,8 @@ function fightOutingOnBoard() {
   if (!road && !encounter) return false;
   state.outing = null;
   if (!startBattle(outing.battle, road ? roadStage(road) : doorStage(encounter), { counted: true })) { state.outing = outing; return false; }
+  // A mission battle keeps its mission: the board pays it as it always has.
+  if (outing.kind === 'mission') return true;
   state.battle.missionId = null;
   if (road) state.battle.road = road.id; else state.battle.door = outing.door;
   return true;
@@ -2142,7 +2161,8 @@ function handleRootClick(event) {
       // and it is fought in Night Shift (v4.74).
       startOuting(encounter, result.startBattle);
     } else if (result.startBattle) {
-      startBattle(result.startBattle, doorStage(encounter));
+      // §6.4 step 5: a mission battle is fought in Night Shift, like a door's.
+      if (!startMissionOuting(encounter, result.startBattle)) startBattle(result.startBattle, doorStage(encounter));
     } else if (encounter.door) {
       // Answer 25: a bad deal can turn into a fight.
       const bad = escalation(state, data, doors, encounter.door, choice.id);
@@ -2447,7 +2467,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.78',
+      version: 'v4.79',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

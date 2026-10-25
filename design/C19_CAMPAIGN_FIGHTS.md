@@ -222,6 +222,7 @@ Each step ships to the hub and is played before the next.
    with face cut-ins, so escalation needs no transition (Bear Path already does
    this for one encounter).
 5. **The two mission battles** with their authored alternatives.
+   *Built (VERSIONS.md v4.79):* `missionOuting` is the door's record made from the story encounter. It is fought by the battle's authored people at its own place and pays the mission's success, partial or failure. The courtyard receipts' critical rule rides on the receipt. The peaceful choices are untouched.
 6. **Street and quay kits**, then **landscape**, then retiring the board
    (CAMPAIGN P4–P6).
    *Street and quay built (VERSIONS.md v4.77, v4.78)* as sets assembled from the v02 kit, not new Blender kits. Every Act I fight place now has its own set.

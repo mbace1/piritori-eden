@@ -13,7 +13,7 @@
 //     not turn the block.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { applyEffects, deterministicRoll } from './state.js?v=9';
+import { applyEffects, deterministicRoll } from './state.js?v=10';
 
 const STORY_URL = '../../../content/act1-story-v1.json';
 

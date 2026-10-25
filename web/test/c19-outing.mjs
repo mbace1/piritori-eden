@@ -14,11 +14,11 @@ const read = path => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)))
 const content = read('../../content/era1-slice-v1.json');
 const places = read('../../content/places-v1.json');
 const doors = read('../../content/doors-v1.json');
-const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=9');
+const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=10');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
-const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=3');
-const O = await import('../js/v3/outing.js?v=4');
-const R = await import('../crew-run/run.js?v=13');
+const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
+const O = await import('../js/v3/outing.js?v=5');
+const R = await import('../crew-run/run.js?v=14');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate } = await import('../fight-module/tactics.js?v=8');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -276,6 +276,56 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(camp.outing.kind, 'road');
 }
 
+// ── a mission battle is an outing too (§6.4 step 5, v4.79) ────────────────
+{
+  const { placeAt } = await import('../js/v3/places.js?v=1');
+  const encounterOf = id => content.encounters.find(e => e.id === id);
+  const missionOf = id => content.missions.find(m => m.id === id);
+  for (const [encId, choiceId, kit, names] of [['enc-bear-path', 'hold-path', 'park', /Rinne|Leko/], ['enc-courtyard-last-call', 'take-positions', 'courtyard', /Kettunen|Peltola|Haddad/]]) {
+    const encounter = encounterOf(encId);
+    const battleId = encounter.choices.find(c => c.id === choiceId).effects.find(e => e.startsWith('start-battle:')).split(':')[1];
+    const authored = content.battles.find(b => b.id === battleId);
+    const place = placeAt(places, authored.location_anchor_id);
+    assert.ok(place, `${battleId} has a fight place at ${authored.location_anchor_id}`);
+    const state = createState(content);
+    state.scheduleIndex = 10;
+    state.recruited = ['crew-slot-runner', 'crew-slot-muscle', 'crew-slot-wheels'];
+    state.deployed = [...state.recruited];
+    const team = fighters(state, crewData);
+    const staged = { ...authored, place: { anchor: authored.location_anchor_id, name: place.name, way_out: place.way_out, kit: place.kit, by: null, side: 'them' } };
+    const outing = O.missionOuting(state, encounter, encounter.mission_id, staged, team.slice(0, authored.player_deployed).map(m => m.id), { nonce: 'mission', when: 'DAY 6 · NIGHT' });
+    assert.equal(outing.kind, 'mission');
+    assert.equal(outing.mission, encounter.mission_id);
+    assert.equal(outing.door, null, 'a mission battle has no door');
+    assert.equal(outing.goal, 'fight', 'a mission battle is a fight');
+    assert.equal(outing.kit, kit, `${encId} is fought in the ${kit}, its own place`);
+    assert.ok(outing.rivals.length === authored.opponents.length && outing.rivals.every(r => names.test(r.name)), 'against the battle\'s own, authored people');
+    // The board's stakes, read the same way (battle.js resultEffects).
+    const mission = missionOf(encounter.mission_id);
+    assert.deepEqual(O.missionStakes(mission, 'win'), mission.success_effects);
+    assert.deepEqual(O.missionStakes(mission, 'withdraw'), mission.partial_effects, 'pulling out is the mission\'s partial');
+    assert.deepEqual(O.missionStakes(mission, 'loss'), mission.failure_effects);
+    state.outing = outing;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    const { run, fight } = nightShift(outing);
+    const b = fight.battle;
+    assert.equal(b.mission.goal, 'fight', 'Night Shift plays it as a fight');
+    assert.ok(b.enemies.filter(e => e.rival).every(e => names.test(e.name)), 'the authored people are on the board');
+    // Someone hurt who gets out: the courtyard receipts leave them critical.
+    const hurt = b.players.find(p => p.id !== content.protagonist?.id);
+    hurt.hp = 1;
+    assert.ok(fight.command('withdraw').ok, 'Withdraw is there in a mission battle too');
+    assert.ok(R.settle(run, fight));
+    const camp = campaign();
+    assert.equal(camp.outing.status, 'settled');
+    assert.equal(camp.outing.kind, 'mission', 'and it comes back to Act I once, as a mission battle');
+    assert.equal(camp.outing.end, 'withdraw');
+    const status = camp.crewStatus[hurt.id];
+    if (battleId === 'battle-courtyard-3v3') assert.equal(status.status, 'critical', `the courtyard receipts leave ${hurt.id} critical`);
+    else assert.equal(status.status, 'wounded', 'only the courtyard receipts leave anyone critical');
+  }
+}
+
 // Reopening a settled fight, or one from another campaign, is refused.
 {
   localStorage.removeItem(R.OUTING_SAVE_KEY);
@@ -284,4 +334,4 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.throws(() => R.loadRun(null, content), /not in this campaign/);
 }
 
-console.log('C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');
+console.log('C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');

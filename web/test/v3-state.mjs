@@ -4,7 +4,7 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=9';
+} from '../js/v3/state.js?v=10';
 import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -173,7 +173,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=9');
+  } = await import('../js/v3/state.js?v=10');
 
   const CAREER = 10;
 
@@ -268,7 +268,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=9');
+    restoreState } = await import('../js/v3/state.js?v=10');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');
@@ -301,3 +301,25 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
   assert.equal(chapterProgress(restored), trader.chapterThreshold, 'progress survives save/load');
 }
 console.log('PASS chapter progress through sales and route deliveries');
+
+// ── a board battle survives a reload (v4.79) ────────────────────────────────
+// Its cover is a Map and the round's hits a Set; plain JSON flattened both and
+// every load after a reload mid-battle failed on `cover.has`.
+{
+  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=10');
+  const storage = { _d: null, setItem(_k, v) { this._d = v; }, getItem() { return this._d; } };
+  const g = freshState(content);
+  g.mode = 'battle';
+  g.battle = { id: 'battle-karhupuisto-2v2', cover: new Map([['2,3', { propId: 'bench', effect: 'soft' }]]), syncHitsThisRound: new Set(['opp-1']) };
+  saveState(g, storage);
+  const back = loadState(content, storage);
+  assert.ok(back.battle.cover instanceof Map && back.battle.cover.get('2,3')?.propId === 'bench', 'the cover comes back as the Map it was');
+  assert.ok(back.battle.syncHitsThisRound instanceof Set && back.battle.syncHitsThisRound.has('opp-1'), 'and the round\'s hits as a Set');
+  // A save written before the fix: both already flattened to {}.
+  const raw = JSON.parse(storage._d); raw.battle.cover = {}; raw.battle.syncHitsThisRound = {}; storage._d = JSON.stringify(raw);
+  const legacy = loadState(content, storage);
+  assert.ok(legacy.battle.cover instanceof Map && legacy.battle.syncHitsThisRound instanceof Set, 'an old save loads without its cover rather than locking');
+  assert.equal(legacy.mode, 'battle', 'and the battle is still there');
+}
+console.log('PASS a board battle survives a reload');
+

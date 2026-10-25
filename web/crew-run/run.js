@@ -1,7 +1,7 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=17';
+import {createSession} from '../fight-module/session.js?v=18';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=8';
-import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=8';
+import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=9';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.

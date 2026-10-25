@@ -76,6 +76,24 @@ export function roadOuting(state, event, staged, fighterIds, opts = {}) {
   return { ...doorOuting(state, { id: event.id, door: null }, staged, fighterIds, { ...opts, goal: 'fight' }), kind: 'road', road: event.id, encounter: null };
 }
 
+/** The outing a mission battle becomes (§6.4 step 5): the door's record, made
+ *  from the story encounter whose choice became the fight. It is fought by the
+ *  battle's own authored people at the battle's own place, its job is to make
+ *  them back off, and it pays the mission's stakes rather than a door's. */
+export function missionOuting(state, encounter, missionId, staged, fighterIds, opts = {}) {
+  return { ...doorOuting(state, { id: encounter.id, door: null }, staged, fighterIds, { ...opts, goal: 'fight' }), kind: 'mission', mission: missionId };
+}
+
+/** A mission's stakes for how its outing ended, as the board pays them
+ *  (battle.js `resultEffects`): a win is the mission's success, pulling out
+ *  (Withdraw or the police) its partial, a loss its failure. */
+export function missionStakes(mission, result) {
+  if (!mission) return [];
+  if (result === 'win') return mission.success_effects ?? [];
+  if (result === 'withdraw' || result === 'partial') return mission.partial_effects ?? [];
+  return mission.failure_effects ?? [];
+}
+
 /** Where Night Shift is, from the Act I page (the same relative path in the
  *  repo's web/ and in the hub cabinet). */
 export const outingUrl = outing => `crew-run/?campaign=1&outing=${encodeURIComponent(outing.id)}&arena=${encodeURIComponent(outing.kit)}`;

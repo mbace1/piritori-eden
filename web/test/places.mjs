@@ -8,7 +8,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { placeAt, stageFight, roadFightAnchor, doorFightStage, roadFightStage } from '../js/v3/places.js?v=1';
-import { doorEncounter, templateOf } from '../js/v3/doors.js?v=3';
+import { doorEncounter, templateOf } from '../js/v3/doors.js?v=4';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
