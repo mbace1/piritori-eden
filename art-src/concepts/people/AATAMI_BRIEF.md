@@ -1,29 +1,30 @@
-# Aatami — concept art (PR #108)
+# Aatami — concept-art review (PR #108)
 
-**Owner, 2026-10-24:** *"Aatami.. Just get concept art for me to approve. Think
-of Kurt Cobain in the Piritori style."* Gemini and Meshy were out of credit, so
-GPT made the art from a brief in this branch. The owner chose this set with GPT;
-it replaced the three outfit options the first brief asked for (A cardigan,
-B parka, C corduroy).
+**Owner direction, 2026-10-24:** "Think of Kurt Cobain in the Piritori style." The original three outfit explorations (A cardigan, B parka, C corduroy) were **superseded**, not delivered as three separate final concepts. Do not resurrect them without a new request.
 
-## What is here
+## Verified assets and review status (2026-10-25)
 
-| File | What it is |
-|---|---|
-| `aatami-young-final-v01` | **The young Aatami (2003).** Olive cardigan, striped tee, dark jeans, canvas bag. Owner-confirmed as the source of his talking-profile cut-in (PR #107). |
-| `aatami-young-support-01` … `06` | Supporting studies of the young Aatami. 02 has a cigarette in hand. |
-| `aatami-older-final-v01` | **The older Aatami.** Stockier, moustache, beige sports coat. |
-| `aatami-older-support-01` | Supporting study of the older Aatami. Delivered as "young-support-07" and renamed on the owner's word. |
+The nine PNGs below are present on this PR branch. Their Git blob SHA-1 values were cross-checked against the nine files in the delivered Aatami package. **Committed does not mean runtime-approved.**
 
-GPT did not supply its prompts; each `.txt` says so instead of guessing.
+| File stem | Contents | Status |
+|---|---|---|
+| `aatami-young-final-v01` | Young Aatami (2003): olive cardigan, striped shirt, dark jeans, shoulder bag, camera-right look | **Owner-selected concept final**; source art only |
+| `aatami-young-support-01` … `04` | Four young studies; 02 shows a cigarette | Supporting concept references |
+| `aatami-young-support-05` | **Two young poses in one PNG**, not an individual single-pose image | Supporting sheet; split/extract for one-pose-per-file delivery |
+| `aatami-young-support-06` | Young front-facing study | Supporting concept reference |
+| `aatami-older-final-v01` | Older Aatami: heavier, moustache, beige sports coat | **Owner-selected concept final**; source art only |
+| `aatami-older-support-01` | An additional older Aatami study, originally packaged as `young-support-07` | **Not selected or approved by owner.** Retain only as a clearly marked review candidate; do not promote |
 
-## Who he is
+### Outstanding correction
 
-From `NARRATIVE.md`, the character canon: Era I protagonist, early thirties,
-Kallio, Helsinki, 2003. He arrives at Piritori with cash, debt, one small bag
-and one known route, and later calls the shots while his crew does the work.
-His brother is Jaska. The look nods to the early-1990s grunge musician; it is an
-homage, not a likeness (the same rule the project applies to Arvo Linde).
+The owner's requested selection is **one young final + seven individual young supporting images + one older final**. The current branch instead contains **one young final + six young supporting PNGs (one with two poses) + one older final + one unapproved older supporting PNG**. The extra older study does **not** count as the seventh young support. Deliver a separate seventh young single-pose support PNG, preferably by cleanly extracting one of the two poses in support-05 with the original preserved, and remove/exclude the extra older study from the approved-selection handoff. **Do not represent this nine-file set as fully matching the owner's requested breakdown.**
 
-These are source illustrations, not runtime assets. The game uses the young
-final through its cut-in rig, `cutin-aatami-rig-v01`, in PR #107.
+### Production boundary
+
+These are review/source illustrations. Per `DESIGN_AUTHORITY.md` (2026-10-02 and 2026-10-23), neutral stand-ins remain the default for playable characters; paper/motion-graphic cut-ins require explicit asset-specific approval and device-readability checks. A reference from PR #107 to a young-Aatami cut-in does not itself approve this PR's files for runtime use. Do not modify runtime manifests, ship the unapproved older study, or merge this PR as an art-approval action.
+
+## Character canon
+
+From `NARRATIVE.md`: Era I protagonist, early thirties, Kallio, Helsinki, 2003. He arrives at Piritori with cash, debt, one small bag and one known route; his brother is Jaska. The grunge-era reference is an homage, not a likeness. Use `ART_BIBLE.md`'s `cut-cardstock-hand-ink-v03` style and `art-library/APPROVALS.md` as the approval register.
+
+Exact generation prompts were not supplied with the images; the adjacent `.txt` provenance files should not invent them.
