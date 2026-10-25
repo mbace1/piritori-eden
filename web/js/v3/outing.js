@@ -8,8 +8,9 @@
 //   - Who fights is Act I's `fighters()`: Aatami while he still fights, then
 //     the crew (answer 24; owner 2026-10-24: first phase in every fight, then
 //     the shot caller and not a fighter).
-//   - Where is the door's anchor, as a C place: courtyard, yard or park exist;
-//     a street or quay place falls back to the courtyard until it is built.
+//   - Where is the door's anchor, as a C place: courtyard, yard, park, street
+//     (v4.77) and quay (v4.78) all exist; anything else falls back to the
+//     courtyard.
 //   - Against whom is the door's fight, moved to its place (places.js, v4.71):
 //     its people, with their weapons mapped onto C's three.
 //   - What it is for is the door's `fight.goal`: `fight` (make them back off,
@@ -23,7 +24,7 @@
 // Pure: no DOM, no clock.
 
 /** The C places that exist in web/crew-run/locations.js. */
-export const C_PLACES = new Set(['courtyard', 'yard', 'park']);
+export const C_PLACES = new Set(['courtyard', 'yard', 'park', 'street', 'quay']);
 
 export const cPlace = kit => (C_PLACES.has(kit) ? kit : 'courtyard');
 
@@ -66,6 +67,31 @@ export function doorOuting(state, encounter, staged, fighterIds, { opening = '',
     status: 'open',
     result: null,
   };
+}
+
+/** The outing a road fight becomes (§6.4 step 2): the door's record, made
+ *  from the road event that turned into a fight. A road fight's job is always
+ *  to make them back off, and it does not turn the block. */
+export function roadOuting(state, event, staged, fighterIds, opts = {}) {
+  return { ...doorOuting(state, { id: event.id, door: null }, staged, fighterIds, { ...opts, goal: 'fight' }), kind: 'road', road: event.id, encounter: null };
+}
+
+/** The outing a mission battle becomes (§6.4 step 5): the door's record, made
+ *  from the story encounter whose choice became the fight. It is fought by the
+ *  battle's own authored people at the battle's own place, its job is to make
+ *  them back off, and it pays the mission's stakes rather than a door's. */
+export function missionOuting(state, encounter, missionId, staged, fighterIds, opts = {}) {
+  return { ...doorOuting(state, { id: encounter.id, door: null }, staged, fighterIds, { ...opts, goal: 'fight' }), kind: 'mission', mission: missionId };
+}
+
+/** A mission's stakes for how its outing ended, as the board pays them
+ *  (battle.js `resultEffects`): a win is the mission's success, pulling out
+ *  (Withdraw or the police) its partial, a loss its failure. */
+export function missionStakes(mission, result) {
+  if (!mission) return [];
+  if (result === 'win') return mission.success_effects ?? [];
+  if (result === 'withdraw' || result === 'partial') return mission.partial_effects ?? [];
+  return mission.failure_effects ?? [];
 }
 
 /** Where Night Shift is, from the Act I page (the same relative path in the

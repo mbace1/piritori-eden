@@ -92,9 +92,15 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [view, vp, touch, kind] of scenarios) {
       const name = `${view}/${kind}`;
       const ctx = await browser.newContext({ viewport: vp, hasTouch: touch, isMobile: touch });
+      // Leaving Night Shift destroys its WebGL2 context, and under
+      // --use-angle=swiftshader that alone takes 13-38 s (measured v4.78:
+      // 38 s for the 1280x800 courtyard, 79 ms on Chromium's default backend).
+      // A navigation away from it gets the time that teardown needs; so does
+      // a tap that starts one, which waits under the action timeout.
+      ctx.setDefaultNavigationTimeout(120000);
       const page = await ctx.newPage();
       const errors = watchErrors(page);
-      const tap = async el => { await el.scrollIntoViewIfNeeded(); await el[touch ? 'tap' : 'click'](); };
+      const tap = async (el, options = {}) => { await el.scrollIntoViewIfNeeded(); await el[touch ? 'tap' : 'click'](options); };
 
       // ── Act I: the courtyard ledger, a fight job, three who can fight.
       await page.goto(`${base}${APP}?skip`);
@@ -156,7 +162,9 @@ server.listen(0, '127.0.0.1', async () => {
         await play(WAIT);
         ok(`${name}: the police were announced a round early, then came`, /POLICE HERE/.test(await page.locator('#mission-pressure').innerText()) && /^The police are here/.test(await page.locator('#mission-goal').innerText()));
         const backOff = page.locator('[data-police="BACK_OFF"]');
-        ok(`${name}: the question names who each answer costs`, /taken: nobody/.test(await backOff.innerText()) && await page.locator('[data-police="HELP_FRIENDS"]').count() === 1);
+        // v4.78: nobody is down here, so both answers would cost the same and
+        // there is no question: one way out, saying so.
+        ok(`${name}: with nobody down there is one answer, and it says who is taken`, /^Clear out · taken: nobody/.test(await backOff.innerText()) && await page.locator('[data-police="HELP_FRIENDS"]').count() === 0 && /Nobody is down/.test(await page.locator('#mission-goal').innerText()));
         ok(`${name}: and nothing else can be done until it is answered`, await page.locator('#end').isDisabled() || !(await page.locator('[data-mission-action]:enabled').count()));
         await shot(page, `${view}-${kind}-question`);
         await tap(backOff); await idle();
@@ -170,7 +178,8 @@ server.listen(0, '127.0.0.1', async () => {
       await shot(page, `${view}-${kind}-result`);
 
       // ── back to Kallio: the strip, and the stakes once.
-      await tap(page.locator('#crew-home'));
+      // A tap that leaves Night Shift waits for that teardown too (see above).
+      await tap(page.locator('#crew-home'), { timeout: 120000 });
       await page.waitForURL(at('\\?outing=back'));
       await page.waitForFunction(() => Boolean(window.__ptv3?.state));
       let s = await S(page);

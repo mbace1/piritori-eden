@@ -2,7 +2,7 @@
 
 ## Owner rulings, 2026-10-23/24 — characters talk as waist-up cut-ins
 
-Shipped in v4.76 (PR #107). In the owner's words:
+Shipped in v4.80 (PR #107). In the owner's words:
 
 - **No 3D needed for characters.** *"They don't need to be 3d. It was just when
   I thought it was the easier means of animation."* Speakers are approved

@@ -122,14 +122,22 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: without a crew the fight is shown and refused`, await stand.isDisabled() && /crew/i.test(await stand.innerText()), await stand.innerText());
       await fixture(page, 'const ids = a.slice(0, 2); s.recruited = ids; s.deployed = ids; for (const id of ids) s.crewStatus[id].status = "available";',
         await page.evaluate(() => window.__ptv3.data.content.crew.map(c => c.id)));
+      // v4.77 (§6.4 step 2): a road fight goes straight to Night Shift, like a
+      // door's. Night Shift is stubbed: this gate is about Act I.
+      await page.route('**/web/crew-run/**', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Night Shift (stub)</title>' }));
       await page.locator('[data-action="road-choose"][data-choice="stand"]').click();
-      await page.waitForTimeout(800);
-      const s3 = await S(page);
-      ok(`${name}: with a crew, standing becomes a fight`, s3.mode === 'battle' && s3.battle?.id === 'battle-karhupuisto-2v2' && s3.battle?.road === 'road-underpass');
-      ok(`${name}: the road fight reports to no mission`, s3.battle?.missionId === null);
+      await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
+      const out = await page.evaluate(() => JSON.parse(localStorage.getItem('piritori-to-eden:v3')));
+      ok(`${name}: with a crew, standing goes straight to the fight`, out.outing?.kind === 'road' && out.outing.road === 'road-underpass' && out.outing.battle === 'battle-karhupuisto-2v2' && out.outing.goal === 'fight', JSON.stringify(out.outing && { kind: out.outing.kind, road: out.outing.road, goal: out.outing.goal }));
       // v4.71: fought where it happened (in transit from no fight place: the place ahead), by the locals.
-      ok(`${name}: fought on the road, by the locals`, s3.battle?.place?.anchor === s3.road.last.to && s3.battle.place.by === 'piritori_independents'
-        && s3.battle.enemies.every(e => !/Rinne|Leko/.test(e.name)), JSON.stringify(s3.battle?.place));
+      ok(`${name}: fought on the road, by the locals`, out.outing.anchor === out.road.last.to && out.outing.by === 'piritori_independents'
+        && out.outing.rivals.every(e => !/Rinne|Leko/.test(e.name)), JSON.stringify({ anchor: out.outing.anchor, by: out.outing.by }));
+      // No 3D on this device: the board plays the same road fight, to no mission.
+      await page.goto(`${base}/web/?outing=board`);
+      await page.waitForFunction(() => Boolean(window.__ptv3?.state?.battle));
+      const s3 = await S(page);
+      ok(`${name}: on the board it is the same road fight`, s3.mode === 'battle' && s3.battle?.id === 'battle-karhupuisto-2v2' && s3.battle?.road === 'road-underpass' && !s3.outing);
+      ok(`${name}: the road fight reports to no mission`, s3.battle?.missionId === null);
       ok(`${name}: no page errors`, errors().length === 0, errors().join(' | '));
       await page.close();
     }

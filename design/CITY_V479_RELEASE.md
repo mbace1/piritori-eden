@@ -1,0 +1,31 @@
+# Hub release: Act I city v4.79 (the mission battles in Night Shift, and a save that survives a reload)
+
+- **Source:** `mbace1/piritori-eden` @ `f5cd1b1`, web only.
+  - **Gates were green:** run 1023, all nine jobs, including the new mission step in the Act I job.
+- **Site:** `mbace1/Suds-Jack` gh-pages `0eecab4f`, under `piritori/`. **Pages run 1562 succeeded.**
+  - Nothing was deleted. `release.json` holds 290 files, and 68 site files changed.
+- **What players get:**
+  - **The Bear Path and the courtyard receipts are fought in Night Shift.** *Hold the path* (Karhupuisto) and *Take positions* (Torkkelinmäki) go straight to the 3D place, as a door's fight does.
+    - Each is fought by the battle's own authored people at its own place: the park and a courtyard.
+    - It pays the mission's stakes once: success for a win, partial for pulling out or the police, failure for a loss.
+    - The courtyard still leaves whoever comes home hurt critical.
+    - The peaceful choices are unchanged.
+  - **Reloading during a board battle no longer breaks the save.** Until now, reloading the page in the middle of a formation-board fight showed *LOAD FAILURE*, and so did every load after it. The training fight, the no-3D fallback and the mission battles on the board were all exposed.
+    - A save already caught that way loads again, with the battle missing its cover.
+- **Catalogue:**
+  - The note moves to v4.79 in en, fi and ja. `versions.json` piritori goes 4.78 → 4.79 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went 172 → 173. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 24 bare-node CI suites;
+    - `mission-browser` 32 (new), `act1-scenes`, `story-browser` 30, `chapter-browser` 20, `m2-journey` 47, `doors-browser` 52, `road-browser` 42, `aatami-browser` 16, `standing-browser` 22, `outing-browser` 66.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - `mission-browser` against `/piritori/`: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 66.
+- **Not verified:**
+  - the public github.io URL, which this session's network policy blocks;
+  - owner acceptance on a device.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`00ee04d9`, v4.78).

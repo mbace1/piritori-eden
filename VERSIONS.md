@@ -77,7 +77,7 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
-## v4.76 — 2026-10-24
+## v4.80 — 2026-10-25
 
 **Characters talk as waist-up cut-ins.** Owner, 2026-10-23: NPCs *"zoomed from waist up layered over with a text bubble and talk options"*, the level behind them, and *"the player character profile can be shown when he talks"*. They *"don't need to be 3d"*. The rulings are in DESIGN_AUTHORITY.md, 2026-10-23/24.
 
@@ -95,11 +95,170 @@ Use resolved impact classifications for presentation; never reapply damage on re
   - The 3D Jaska under the overlay is disposed while it is open.
 - **The slice has no spoken lines yet.** Jaska's bubble carries the encounter's opening, and Aatami's carries the choice label (QUEUE).
 - **Phone debug entries.** `?encounter=<id>` stands a fresh campaign at that encounter with saving off for the session (`debugSession`). `?cutin=jaska|aatami|arvo` previews a speaker; Arvo reads the day-3 markka bulletin one source-status card at a time.
-- Cache: `app.js?v=43`, `cutin-stage.js?v=4`, `v3.css?v=12`. Gates: `scene-content` checks every cut-in is a registered rig with its pieces and that `?cutin=` exists. `act1-scenes` waits for Jaska's cut-in and answers his visit in it. `v3-contract` follows the tokens.
+- Cache: `app.js?v=47`, `cutin-stage.js?v=4`, `v3.css?v=12`. Gates: `scene-content` checks every cut-in is a registered rig with its pieces and that `?cutin=` exists. `act1-scenes` waits for Jaska's cut-in and answers his visit in it. `v3-contract` follows the tokens.
 
 ### Port
 
 Godot still shows the 3D Jaska. Porting means drawing each `cutin-rig` asset's pieces (manifest `members[]` with `x`, `y`, and `rig.pivots` / `rig.lids`) with the clip table in `cutin-stage.js` (PERSON for Jaska and Aatami; Arvo's own). The conversation flow is the `openTalk()` block in `app.js`, and the bubble and options boxes are `CUTINS[who].bubble` on a 1080×1920 frame. Landscape framing is Godot's own call, since web leads and Godot follows.
+## v4.79 — 2026-10-25
+
+**The two mission battles are fought in Night Shift** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 5), and a board battle survives a reload.
+
+- **Mission battles.** The Bear Path (*Hold the path*, Karhupuisto) and the courtyard receipts (*Take positions*, Torkkelinmäki) used to open the formation board. They now go straight to Night Shift, the way a door's or a road's fight does:
+  - `missionOuting` is the door's record made from the story encounter. Its job is to make them back off.
+  - It is fought by the battle's own authored people (Rinne and Leko; Kettunen, Peltola and Haddad) at the battle's own place: the park and a courtyard.
+  - It pays the **mission's** stakes, read as the board reads them (`missionStakes`): a win is the mission's success, pulling out (Withdraw or the police) its partial, a loss its failure. The block turns, as it did on the board.
+  - The courtyard receipts keep their authored cost: whoever comes home hurt is **critical**, Aatami excepted. The rule lives in the receipt (`campaign-adapter.js`) and only for that mission, since door fights borrow the same battle template.
+  - The peaceful choices (*Name the empty van*, *Send the fixer*, *Withdraw*; *Trade a favour*, *Leave the receipts*) are untouched.
+  - The board fallback (`?outing=board`) plays the same battle **for the same mission**: its `missionId` is kept, so the board pays it as it always has.
+- **A board battle survives a reload.** Found by the new browser gate. It reproduces on v4.78's main, so it is live. A board battle keeps its cover in a `Map` and the round's hits in a `Set`. The save's plain JSON flattened both to `{}`, so a reload mid-battle showed *LOAD FAILURE · cover.has is not a function*, and so did every load after it: the save was locked.
+  - `saveState` now carries Maps and Sets tagged, and `loadState` turns them back.
+  - A save already flattened loads its battle without its cover, rather than locking.
+- **Gates:**
+  - `c19-outing.mjs` builds both mission outings: the record, the place, the authored people, the three stakes. It plays a Withdraw in Night Shift with someone hurt and settles once: critical in the courtyard, wounded at the bear. It was shown to fail without the courtyard rule.
+  - `v3-state.mjs` round-trips a battle's Map and Set and loads a flattened save. It was shown to fail with plain JSON.
+  - **`mission-browser.cjs`** (new, in CI's Act I job) takes both choices for real on desktop and phone. They reach Night Shift as mission battles at their own place against their own people. The board fallback keeps the mission, and the save with that board battle in it loads: 32 checks.
+- Cache: `state.js` changed, so the cascade reaches most of Act I and the fight module:
+  - `outing.js?v=5`, `app.js?v=46`, `state.js?v=10`, `battle.js?v=14`, `road.js?v=6`, `story.js?v=5`, `doors.js?v=4`, `visits.js?v=6`, `toko.js?v=5`
+  - `crew-run/campaign-adapter.js?v=9`, `run.js?v=14`, `ui.js?v=22`, `startup.js?v=18`
+  - `fight-module/resolver.js?v=8`, `session.js?v=18`, `main.js?v=44`
+
+### Port
+
+When C is ported:
+
+- `missionOuting` and `missionStakes`;
+- the courtyard receipts' critical rule on the receipt;
+- the save's Maps and Sets, which a Godot save carries natively.
+
+## v4.78 — 2026-10-25
+
+**The quay, and no question when there is nothing to choose.** The level pass's last place (`C19_LEVEL_PASS.md` layer 7), duplicated again: the yard, cut off at the water.
+
+- **The quay.** The Sörnäinen quay was the last of Act I's eleven fight places still staged in the courtyard. It now has `crew-run`'s **Sörnäinen · quay**, after the docks plate:
+  - the yard's sheds, side shed and warehouse row, each ending at the quay edge;
+  - the ground and the wet paving stop at the edge, a stone quay wall drops to the harbour, and bollards stand along the coping;
+  - a boat is tied up beside the board, with two lines to the bollards, and the far pier lies across the water;
+  - a lamp post at the back of the quay lays its light on the water, and a railway crosses the front.
+  - **The plate's cranes were built and cut.** Under the orthographic camera, anything that tall stands up through the frame: a 10 m crane's jib crossed the shed roofs beside the board. Two lamp posts were cut back to one for the same reason: the front one stood over the exit row.
+  - `outing.js` `C_PLACES` gains `quay`. **Every Act I fight place now has a set of its own.**
+- **The police question** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 1, the open item). With nobody on the ground, both answers cost the same, so it is no longer a question. The bar says *Nobody is down: clear out*, and the one answer is **Clear out · taken: nobody**. With someone down, it is Act I's two answers as before.
+- **Gates:**
+  - `level-layout.mjs` holds the quay (870 checks across the four places). It requires that:
+    - every wall, building, prop, piece of litter and lamp post stands on the ground;
+    - the ground stops at the edge, and the board is a metre from the water;
+    - the boat is moored outside the quay, and no lamp post stands in a prop.
+    Each new check was shown to fail: on a container in the water, the boat inside the quay, a building past the edge, a ground plane that runs on, and a container on the lamp post.
+  - Renders: three presets at 1280 and 1920 wide, and the eight-angle audit.
+  - `c19-outing.mjs` maps the quay to the quay.
+  - `night-places-browser.cjs` walks the quay.
+  - `outing-browser.cjs` expects the one answer when nobody is down.
+- Cache:
+  - `crew-run/locations.js?v=7`, `layouts.js?v=3`, `ui.js?v=21`, `run.js?v=13`, `style.css?v=8`, `startup.js?v=17`
+  - `fight-module/readability.js?v=4`, `main.js?v=43`
+  - `outing.js?v=4`, `app.js?v=45`
+
+### Port
+
+When C is ported:
+
+- the quay layout in `layouts.js`, with its `floor` and `quay` (edge, bollards, rails, posts, boat, pier);
+- the police answer: with nobody down (`policeOutcome(b,'BACK_OFF').taken` empty), one answer, *Clear out*.
+
+## v4.77 — 2026-10-24
+
+**A street of its own, and road fights in Night Shift.** Owner, 2026-10-24:
+
+> "Find easy ways to get further in development, if something works, duplicate"
+
+Two things that worked were duplicated:
+
+- the park's street became a place of its own;
+- the door path became the road path.
+
+- **The street** (`C19_LEVEL_PASS.md` layer 6). Four of Act I's eleven fight places are streets: Vaasanpuistikko, behind the market hall, under Mäkelänsilta and the Siltasaari shore. Until now they fell back to the courtyard. They now have `crew-run`'s **Kallio · tram street**, built from v4.76's runs and buildings plus the park's street dressing:
+  - one tenement row of fifteen bays with a porttikongi on the far pavement;
+  - the board standing on the asphalt between two kerbs, with the tram track across it;
+  - a tram waiting on the track beside the board, wall lamps, bins and bicycles.
+  - The near side lifts away like every set. The passage's mist follows the passage.
+  - `outing.js` `C_PLACES` gains `street`. Only the quay still falls back to the courtyard.
+- **Road fights** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 2). The underpass, Kello's cut found out and both families' retaliations used to open the formation board. They now go straight to Night Shift, the way a door's fight does:
+  - `roadOuting` is the door's record made from the road event, and a road fight's job is always to make them back off;
+  - it is staged where it happened, against the side that came for you;
+  - it returns through the same receipt and pays the event's own stakes once (the retaliations' win and lose);
+  - it does not turn the block;
+  - the board fallback plays the same road fight.
+- **Gates:**
+  - `level-layout.mjs` holds the street too (670 checks), plus a new check that the tram stands clear of the board. The first run found a planter of mine 10 cm into the street's façade.
+  - `c19-outing.mjs` builds the McCormick retaliation as a road outing, plays a Withdraw in Night Shift and settles it once.
+  - `road-browser.cjs` expects the underpass to go to Night Shift, staged on the road and by the locals, then plays it on the board fallback.
+  - `night-places-browser.cjs` walks the street with the other three places.
+- Cache:
+  - `crew-run/locations.js?v=6`, `layouts.js?v=2`, `ui.js?v=19`, `startup.js?v=15`
+  - `fight-module/main.js?v=41`
+  - `outing.js?v=3`, `app.js?v=44`
+
+### Port
+
+When C is ported:
+
+- the street layout in `layouts.js` with its `road`, `rails` and `tram`;
+- `roadOuting`;
+- the road branch of `settleReturnedOuting`: the event's `fight.win` and `fight.lose`, and no block turn.
+
+## v4.76 — 2026-10-24
+
+**The level pass: walls that join, buildings behind them, and near walls that lift away.** Owner, 2026-10-24, on v4.75's courtyard:
+
+> "Lots of layers to fix here. Plan it out, then execute. Level art is bad sometimes. Walls don't connect right etc"
+
+and then:
+
+> "Find easy ways to get further in development, if something works, duplicate"
+
+The plan is `design/C19_LEVEL_PASS.md`. This release is its layers 1, 2, 5 and 8 for the courtyard and the yard.
+
+- **The audit.** Every place was rendered from eight camera angles. The kit was measured in the browser: a façade bay is a 3.12 × 6.44 × **1.03 m slab**, the archway is 3.28 m wide, and every material is double-sided. That explained the owner's report:
+  - the archway's neighbours stood 1.4 m clear of it on both sides;
+  - the left wing stopped 0.93 m short of the back wall;
+  - v4.75's own wing had a notch at its corner and ran into the back wall;
+  - every wall was a card with void behind it;
+  - turning the camera put the back of the set between it and the board.
+- **Runs (joins by construction).** A wall is a run of modules end to end at their measured widths (`crew-run/layouts.js`, `lay`). A join can no longer open or overlap.
+  - The courtyard is rebuilt as four runs: the back wall with its passage at x 0, the left wing butting into it, and a return stepping forward into the right-hand wing. Each run starts where another's face stops.
+  - The yard's sheds and its tenement row are runs too.
+- **Buildings behind the walls.** This duplicates the park's street blocks, the part of the sets that already worked. Every run gets the building it belongs to:
+  - a plaster box from the slab's back, with a zinc roof and chimneys;
+  - the passage left open under a bridge;
+  - a filler behind the inner corner and a stone pier on the outer one.
+  The kit's materials read per-vertex colour, so the new boxes carry white, or they render black.
+- **The cutaway, instead of limiting the camera.** Each run is its own group, with its building, balconies, lamps and chimneys. A run whose face turns away from the camera is hidden, the way tactics games lift the near walls.
+  - In the Oblique preset the left wing lifts and the whole board shows, with no x-ray discs.
+  - From behind, the back wall lifts.
+  - The presets and free rotation are unchanged.
+- **Props stand clear.** One planter stood 0.4 m inside the left wing and another stood in the back wall. A bicycle leaned 5 cm into the wall; the new gate found that one.
+- **The data is the place.** `locations.js` builds exactly what `layouts.js` says: the walls, buildings, lamps and props. `metrics()` reports `runs` and `hiddenRuns`.
+- **The park stays as it is.** Its audit holds from every angle; it is the reference the courtyard was rebuilt towards.
+- **Next:** a **street** set duplicated from the park's street (the four street fights stop falling back to the courtyard), then the quay.
+- Cache:
+  - `crew-run/locations.js?v=5`, `layouts.js?v=1` (new), `ui.js?v=18`, `startup.js?v=14`
+  - `fight-module/main.js?v=40`
+  - `app.js?v=43` (the version label)
+- Gates:
+  - `level-layout.mjs` (new, bare node, 507 checks): every run is continuous, every declared join sits on the other run's face, no wall ends in the air, and nothing stands in a wall, in a building or on the board.
+  - The gate was shown to fail on three broken layouts: the wing pulled off its corner, the v4.74 free-standing bay, and a back wall that stops short.
+  - The audit renderer (eight angles, three presets, three widths) is the picture an art change ends in. The gate cannot see how a place looks.
+  - `scene-content.mjs` pinned `fight-module/main.js?v=37` in two places. v4.75's courtyard commit (`4258b2a`) moved the token and left the test red in CI; the site deploy was made from that commit. The test now asserts the pages share one token rather than a literal.
+  - The kit stays in one batch per material: hidden runs' instances are zeroed rather than split per run. A batch per run cost 37% more draw calls (209 against v4.75's 152) and timed the outing gate out under software WebGL. Now 160.
+
+### Port
+
+When C's places are ported: `layouts.js` is the contract.
+
+- Runs at measured widths, the declared joins, the buildings behind the façades.
+- The cutaway rule: hide a run when its face normal · the camera's horizontal view direction > 0.1, which is when it faces away.
+- `level-layout.mjs`'s vectors.
+
 ## v4.75 — 2026-10-24
 
 **A fight has a job, the police can come, and it is three stops.** Owner, 2026-10-24, correcting v4.74: *"Please read all designs / No, fighting 75%, escape 25% / Also police can arrive etc. It's all in the docs / Simplify UX, plan better"*. The reading was confirmed the same day ("Yes, as read") and this build was approved ("Yes, build it"). Both answers are in `DESIGN_AUTHORITY.md`. This is step 1 of the replanned `design/C19_CAMPAIGN_FIGHTS.md` §6.
@@ -127,14 +286,24 @@ Godot still shows the 3D Jaska. Porting means drawing each `cutin-rig` asset's p
   4. **The map** says what changed in a strip at the top of the side panel: the place, the outcome, who was hurt, missing or arrested, and the stakes in words. It stays until the block turns again.
   - The waiting screen is now only the way back into an unfinished fight, plus the board fallback for a device without 3D.
   - While the police question is open it takes the whole command strip, so on a phone both answers are full-size.
+- **The courtyard looked broken** (owner, 2026-10-24: *"The level looks broken"*). `crew-run/locations.js` built a fragment of `courtyard-prototype-v05`:
+  - one facade bay stood free three metres in front of the back wall, with its balcony;
+  - the back wall stopped at x 9.1 and the left wing at z 2.9.
+  The camera fits the board, not the set, so a wide desktop frame (about 27 m across) and a tall phone frame showed every end in the air. Night Shift's own gallery frame happened to crop them, which is why C.19 never showed it.
+  - The courtyard is now closed: the back wall steps forward on the right into a four-bay wing with a return closing the jog, and the left wing runs one bay further.
+  - The left wing stops at z 5.95 so the Oblique preset still sees the exit row.
+  - The yard gets one more shed so its row runs past a 1920-wide frame.
+  - Rendered at 412, 1280 and 1920 wide in Tactical, Oblique and Overhead. This is the same set C.19's own outings use, so it changes there too.
+- The brief's eyebrow names only the place: the clock is already on the line above it.
 - **Known:**
   - The question is asked even when nobody is down, and then both answers cost nothing.
   - The getaway is still untuned (v4.74's finding stands).
   - Nobody has fought a rout or a police arrival on a device.
 - Cache:
   - `app.js?v=42`, `outing.js?v=2`
-  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=15`, `startup.js?v=11`, `style.css?v=7`
-  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=37`, `tactical-ui.js?v=11`, `session.js?v=17`
+  - `crew-run/run.js?v=12`, `campaign-adapter.js?v=8`, `ui.js?v=17`, `startup.js?v=13`, `style.css?v=7`, `locations.js?v=4`
+  - `fight-module/tactics.js?v=8`, `readability.js?v=3`, `main.js?v=39`, `tactical-ui.js?v=11`, `session.js?v=17`
+  - `99f9a0a` had already published `ui.js?v=15`, `startup.js?v=11` and `main.js?v=37` through this repo's own deploy, so the changes after it took new numbers rather than reuse those.
 - Gates:
   - `c19-outing.mjs` covers in bare node, on real content:
     - every door's job;
@@ -159,7 +328,8 @@ Godot still plays door fights on the formation board (CAMPAIGN G8), and the boar
 - `policeOutcome`;
 - the adapter's `arrested`, which goes through `arrestCrew`;
 - `settleReturnedOuting` and `lastFight`;
-- `c19-outing.mjs`'s vectors.
+- `c19-outing.mjs`'s vectors;
+- the courtyard's placements in `crew-run/locations.js`, when C's places are ported (closed set, no free-standing bay).
 
 The new `goal` field in `doors-v1.json` is synced and ignored until then.
 

@@ -15,7 +15,12 @@ export function missionCue(battle, coordinate) {
   // Act I v4.75: a campaign fight's job is a fight (make them back off) or a
   // getaway (everyone out). The police, once here, outrank both.
   if (m.goal) {
-    if (m.police?.arrived && !m.police.resolved) return {goal: 'The police are here · Back off, or help your friends', exit: 'EXIT · A1–F1', cost: 'ANSWER · NO ACTION'};
+    // v4.78: with nobody on the ground both answers cost the same, so there
+    // is no question, only the way out (crew-run/run.js policeOutcome).
+    if (m.police?.arrived && !m.police.resolved) {
+      const down = battle.players.some(p => !p.alive && !p.evacuated && !p.taken && p.id !== m.protagonist);
+      return {goal: down ? 'The police are here · Back off, or help your friends' : 'The police are here · Nobody is down: clear out', exit: 'EXIT · A1–F1', cost: 'ANSWER · NO ACTION'};
+    }
     const fallen = battle.players.find(p => !p.alive && !p.evacuated && !p.helped);
     if (m.goal === 'fight') {
       const standing = battle.enemies.filter(e => e.alive).length;

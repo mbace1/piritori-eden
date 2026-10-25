@@ -135,6 +135,7 @@ export function restoreState(raw, content) {
   return {
     ...fresh,
     ...raw,
+    battle: restoreBattle(raw.battle),
     stock: { ...fresh.stock, ...(raw.stock ?? {}) },
     relationships: { ...fresh.relationships, ...(raw.relationships ?? {}) },
     pressure: { ...fresh.pressure, ...(raw.pressure ?? {}) },
@@ -152,13 +153,33 @@ export function restoreState(raw, content) {
   };
 }
 
+// A board battle keeps its cover in a Map and the round's hits in a Set
+// (battle.js). Plain JSON flattens both to {}, and a reload mid-battle then
+// failed on `cover.has`, every load after it too (found v4.79). The save
+// carries them tagged, and the load turns them back.
+const keepCollections = (key, value) => (value instanceof Map ? { __map: [...value] } : value instanceof Set ? { __set: [...value] } : value);
+const reviveCollections = (key, value) => (value && typeof value === 'object' && !Array.isArray(value)
+  ? (Array.isArray(value.__map) ? new Map(value.__map) : Array.isArray(value.__set) ? new Set(value.__set) : value) : value);
+
+/** A saved battle as the board needs it. One saved before v4.79 lost its
+ *  cover and hits to JSON: it comes back without them rather than locking
+ *  the save. */
+function restoreBattle(battle) {
+  if (!battle) return null;
+  return {
+    ...battle,
+    cover: battle.cover instanceof Map ? battle.cover : new Map(),
+    syncHitsThisRound: battle.syncHitsThisRound instanceof Set ? battle.syncHitsThisRound : new Set(),
+  };
+}
+
 export function saveState(state, storage = globalThis.localStorage) {
-  storage?.setItem(SAVE_KEY, JSON.stringify(state));
+  storage?.setItem(SAVE_KEY, JSON.stringify(state, keepCollections));
 }
 
 export function loadState(content, storage = globalThis.localStorage) {
   try {
-    return restoreState(JSON.parse(storage?.getItem(SAVE_KEY) ?? 'null'), content);
+    return restoreState(JSON.parse(storage?.getItem(SAVE_KEY) ?? 'null', reviveCollections), content);
   } catch {
     return createState(content);
   }

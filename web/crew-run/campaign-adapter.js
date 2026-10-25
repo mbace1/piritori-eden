@@ -1,7 +1,7 @@
 import {
   SAVE_KEY as CAMPAIGN_SAVE_KEY,
   crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, arrestCrew,
-} from '../js/v3/state.js?v=9';
+} from '../js/v3/state.js?v=10';
 import {nameFrom} from '../../people/roster.mjs?v=1';
 
 // C.17 bridge: the authored campaign remains the source of truth. Night Shift
@@ -152,6 +152,9 @@ export function applyCampaignReceipt(state,content,receipt){
   const data=dataFor(content);
   pushUnique(state.flags,marker);
 
+  // The courtyard receipts leave whoever goes down critical (Act I's board
+  // rule for that mission battle), Aatami excepted.
+  const critical=state.outing?.id===receipt.outingId&&state.outing?.kind==='mission'&&state.outing.battle==='battle-courtyard-3v3';
   for(const change of receipt.changes||[]){
     const status=state.crewStatus?.[change.id];
     if(!status)continue;
@@ -179,6 +182,7 @@ export function applyCampaignReceipt(state,content,receipt){
       log(state,`${crewRecord(state,data,change.id)?.name||change.name||change.id} came home from a recovery outing and still needs treatment.`);
     }else if(effect==='damage'){
       status.condition=Math.max(1,Math.min(status.maxCondition??status.condition??1,(status.condition??1)-1));
+      if(critical&&!aatami){status.critical=true;}
       if(status.critical){status.status='critical';}
       else {status.status='wounded';status.critical=false;}
       pushUnique(state.flags,`memory:wounded:${change.id}`);

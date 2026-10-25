@@ -1,7 +1,7 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=17';
+import {createSession} from '../fight-module/session.js?v=18';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=8';
-import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=8';
+import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=9';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -138,7 +138,7 @@ function makeOuting(content,config){
    b.log.unshift(`Sirens. The police come in at the ${pol.y===0?'south':'north'} end after enemy turn ${b.round}.`);
   }
   if(b.status==='active'&&type==='end'&&pol.afterRound!==null&&!pol.arrived&&b.round>pol.afterRound){
-   pol.arrived=true;b.log.unshift('The police are here. Back off, or help your friends.');
+   pol.arrived=true;b.log.unshift(policeOutcome(b,'BACK_OFF').taken.length?'The police are here. Back off, or help your friends.':'The police are here. Nobody is down: clear out.');
   }
  }};
  const s=createTacticalSession(b,'mixed','crew-run',base.data,options);

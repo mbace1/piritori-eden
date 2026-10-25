@@ -1,6 +1,6 @@
-import {missionCue} from '../fight-module/readability.js?v=3';
-import {LOCATIONS,locationId} from './locations.js?v=3';
-import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=12';
+import {missionCue} from '../fight-module/readability.js?v=4';
+import {LOCATIONS,locationId} from './locations.js?v=7';
+import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=14';
 import {icon} from './icons.js?v=2';
 import {coordinate} from '../fight-module/tactics.js?v=8';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};
@@ -63,7 +63,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
     // is supplied, so there is nothing to choose here: who, where, the job, the
     // way out and the heat, over the scene, and one button.
     const o=state.outing,them=o.side?o.side[0].toUpperCase()+o.side.slice(1):'They',fight=o.goal!=='getaway';
-    left.append(text('p',[(o.place||LOCATIONS[locationId()]).toUpperCase(),o.when].filter(Boolean).join(' · '),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
+    left.append(text('p',(o.place||LOCATIONS[locationId()]).toUpperCase(),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
      text('p',`${o.opening?o.opening+' ':''}${fight?`${them} want this to go their way. Put them down or make them run.`:`${them} are between you and the way out, ${o.wayOut||'the south edge'}. Get out with it.`}`,'lead'));
     const facts=document.createElement('dl');facts.className='brief-facts';
     for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${o.heat||0}.`]])facts.append(text('dt',k),text('dd',v));
@@ -94,7 +94,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
    if(!p.alive&&!p.helped)cmd(`Help ${p.name}`,'help',p.id,u&&dist(u.cell,p.cell)<=1);
    if(u?.kit==='medical'&&p.alive&&p.hp<p.maxHp)cmd(`Treat ${p.name} +3 HP`,'aid',p.id,!u.medicalUsed&&dist(u.cell,p.cell)<=1);
   }
-  if(asked){const names=ids=>ids.map(id=>b.players.find(p=>p.id===id)?.name).join(', ')||'nobody';commands.replaceChildren(text('p','The police are here. They take whoever is on the ground.','police-ask'));for(const [posture,label] of [['BACK_OFF','Back off'],['HELP_FRIENDS','Help your friends']]){const cost=policeOutcome(b,posture),el=button(`${label} · taken: ${names(cost.taken)}`,()=>run('police',posture),{'data-police':posture,'aria-label':`${label}. Taken: ${names(cost.taken)}`});el.disabled=busy;commands.append(el);}}
+  if(asked){const names=ids=>ids.map(id=>b.players.find(p=>p.id===id)?.name).join(', ')||'nobody';const down=policeOutcome(b,'BACK_OFF').taken.length>0;commands.replaceChildren(text('p',down?'The police are here. They take whoever is on the ground.':'The police are here. Nobody is down, so there is nothing to choose: clear out.','police-ask'));for(const [posture,label] of down?[['BACK_OFF','Back off'],['HELP_FRIENDS','Help your friends']]:[['BACK_OFF','Clear out']]){const cost=policeOutcome(b,posture),el=button(`${label} · taken: ${names(cost.taken)}`,()=>run('police',posture),{'data-police':posture,'aria-label':`${label}. Taken: ${names(cost.taken)}`});el.disabled=busy;commands.append(el);}}
   const retreat=button('Withdraw from outing…',()=>{$('help-dialog').close();$('retreat-dialog').showModal();});retreat.setAttribute('aria-label','Retreat with standing crew');retreat.className='withdraw-command';retreat.disabled=busy||b.status!=='active'||!!asked;if(state.outing)$('retreat-dialog').querySelector('p').textContent='Everyone still on their feet gets out. Anyone down stays behind and is missing, or taken if the police are coming. The job is lost.';const end=$('end');$('outing-options').replaceChildren(retreat);$('utility-actions').replaceChildren(end);
 
  }

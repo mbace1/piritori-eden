@@ -212,14 +212,17 @@ Each step ships to the hub and is played before the next.
    carried, and the cabinet carrying Night Shift.
    *Built (VERSIONS.md v4.75).* It differs from the plan above in three places:
    - The end is a short card over the scene, with a line per person, not a single line in the scene: arrests and the carried need naming.
-   - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped.
+   - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped. *Fixed in v4.78:* with nobody down there is one answer, *Clear out*.
    - The rout threshold, half their weight with a tough one counting two, is unmeasured beyond one played opening.
 2. **Road fights**: the same path, arriving where the event happened.
+   *Built (VERSIONS.md v4.77):* `roadOuting` is the door's record made from the road event. It is staged where the event happened, pays the event's own stakes, and does not turn the block.
 3. **The shot caller**: a design for COMBAT §9.9.4's open questions, brought for
    a greenlight before it is built.
 4. **The meeting in the place**: a door's conversation staged in the 3D scene
    with face cut-ins, so escalation needs no transition (Bear Path already does
    this for one encounter).
 5. **The two mission battles** with their authored alternatives.
+   *Built (VERSIONS.md v4.79):* `missionOuting` is the door's record made from the story encounter. It is fought by the battle's authored people at its own place and pays the mission's success, partial or failure. The courtyard receipts' critical rule rides on the receipt. The peaceful choices are untouched.
 6. **Street and quay kits**, then **landscape**, then retiring the board
    (CAMPAIGN P4–P6).
+   *Street and quay built (VERSIONS.md v4.77, v4.78)* as sets assembled from the v02 kit, not new Blender kits. Every Act I fight place now has its own set.

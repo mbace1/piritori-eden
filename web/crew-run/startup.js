@@ -43,4 +43,4 @@ if(!gl){
 }
 
 canvas.__piritoriGL=gl;
-await import('../fight-module/main.js?v=37');
+await import('../fight-module/main.js?v=44');

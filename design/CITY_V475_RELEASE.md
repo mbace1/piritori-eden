@@ -1,0 +1,29 @@
+# Hub release: Act I city v4.75 (a fight has a job, the police can come, three stops)
+
+- **Source:** `mbace1/piritori-eden` @ `4258b2a`, web only.
+  - Gates on `99f9a0a`, the rules and UX, were green: run 1009, all nine jobs.
+  - **Gates on `4258b2a`, the courtyard fix, were red** in one job, "browser campaign state". The courtyard commit moved `fight-module/main.js` to `?v=39`. `scene-content.mjs` still pinned `?v=37` in two places, and I did not run that test locally before pushing.
+  - The shipped pages agree with each other, so nothing a player loads is affected. A gate was still red on the deployed commit, which the rules do not allow. v4.76 fixes the test: it now asserts the pages share one token rather than a literal.
+- **Site:** `mbace1/Suds-Jack` gh-pages `dec0ba1e`, under `piritori/`. **Pages run 1557 succeeded.**
+  - Nothing was deleted. `release.json` holds 289 files and 66 site files changed.
+- **What players get:**
+  - A door fight now has a job. Five doors are **fights**: make them back off. They break and run once half their weight is down. Four doors are **getaways**.
+  - **Withdraw** is in every fight, at the job's losing price.
+  - **The police** can come. Pressure starts from the place's heat, and at 5 they are announced at one end and walk in after the next enemy turn. Then comes Act I's question: back off, or help your friends. Each answer names who it gets taken. Anyone taken is arrested.
+  - **Three stops:**
+    - the choice opens the fight;
+    - a brief card over the scene, with one Fight button;
+    - one result card with Back to Kallio;
+    - the map says what changed.
+  - **The courtyard** no longer has a wall standing free in the middle of it (owner: *"The level looks broken"*). The level pass that followed is v4.76.
+- **Catalogue:**
+  - The note moves to v4.75 in en, fi and ja. `versions.json` piritori goes 4.74 → 4.75 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went +1. `sw-shell --check` agrees.
+- **Verified on the staged site tree, before the push:**
+  - the site check: 8 of 8;
+  - `doors-browser` against `/piritori/`: 52;
+  - `outing-browser` against `/piritori/`: 66. Its first run timed out on a reload under load; the rerun passed.
+- **Not verified:**
+  - the public github.io URL, which this session's network policy blocks;
+  - owner acceptance on a device.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`2965be7d`, Toko Drop 2 v44).
