@@ -1,5 +1,7 @@
 # Post-C.18: approved sequence and iterative map / mission work
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](../ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Date: 2026-09-17  
 Status: **Owner-approved sequence; implementation and playtest acceptance remain open.**
 

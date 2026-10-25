@@ -1,5 +1,36 @@
 # QUEUE
 
+> **Triage, 2026-10-25 (producer audit; the plan is [ROADMAP.md](ROADMAP.md)).** Line numbers below were read before this note was added: add 31 to find them now.
+>
+> - **About half of this file is overtaken.** Every fight item about the formation board, the Godot stage, `cast3d` or `stage3d` predates Night Shift, which now plays every Act I fight but training. Nothing below mentions Night Shift.
+> - **Overtaken ranges:** :3-10, :150-157, :222-241, :252-257, :289-321, :464-587, :628-652, :806-865, :892-896, :929-998, :1028-1031, :1091-1116, :1191-1244, :1649, :1689, :1820-1843, :2041, :2492, :2734-2749, :2839-2875, :2893-3212.
+> - **Done but still listed:** :119-124, :164-170, :382-389, :485-494, :673-680, :1278-1282, :1387-1400, :1471-1476, :1542-1757, :1804-1810, :2712-2732, :2793, :2831.
+> - **New, and not yet listed below:** Night Shift's settlement (`crew-run/campaign-adapter.js`) pays wounds, missing, arrests and careers, but **no loot, no kit loss and no glory**. The board did (`app.js` `recordBattleConsequences`). So in Act I today, fights feed nothing to the fence or to gear condition. This is ROADMAP G2.
+> - **Still open, ranked by what a player would feel in Act I:**
+>   1. D002, what travel and trades cost in time (:20-32).
+>   2. Missing or arrested crew have no way back (:36-42, :158-163).
+>   3. The chapter-end operation is one roll (:1515).
+>   4. The fight economy, once fights pay out again (:648-652).
+>   5. Market readability (:208-212).
+>   6. Hiring puts no pressure on the player (:50, :708-716).
+>   7. Chapter 1's goal is not foreshadowed (:103-107).
+>   8. The ledger and missions on the map (:2032-2039, :1760).
+>   9. Kattilahalli and Suvilahti are unreachable (:845-891, :1345).
+>   10. The tuning gates: careers, police numbers, skill tiers (:489, :1199, :1615, :1746).
+> - **Waiting on the owner:**
+>   - D002;
+>   - the anchor count in DESIGN_AUTHORITY (:422-443);
+>   - chapter 1 foreshadowing (:103);
+>   - equipment grouping (:126);
+>   - the 19 orphan assets (:746);
+>   - playwright as a declared dependency (:2779);
+>   - what repair, `faulty` and `broken` mean (:1432);
+>   - 10 vs 7 days (:1394);
+>   - fees and wages (:708);
+>   - the hub's dual build (:2174);
+>   - Kattilahalli's mission (:883);
+>   - chapters 2–4 (:1477).
+
 > **Claude Code / Godot pickup (2026-09-06):** read [`GODOT_PICKUP.md`](GODOT_PICKUP.md) first.
 > Baseline `main` `f3e7997` / **v4.40** — Phase A leftovers + Phase B already in `godot/`. Pull, `sync-data`, smoke shop + tough desync; do not re-port.
 
@@ -18,6 +49,9 @@ pick up, and half of it will turn out to be wrong.
 ---
 
 ## Cut-ins: what v4.80 leaves open (2026-10-24)
+
+Held under ROADMAP.md §3 (no new art pipelines until G1 closes); the faces
+return in G5, "the meeting in the place".
 
 - **No spoken lines in the slice.** Jaska's bubble carries the encounter's
   narrated opening, and Aatami's carries the choice label. A Content pass could

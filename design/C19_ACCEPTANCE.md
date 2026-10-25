@@ -1,5 +1,7 @@
 # C.19 acceptance and release record
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](../ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Read the latest receipt in [source PR #89](https://github.com/mbace1/piritori-eden/pull/89), [hub development #546](https://github.com/mbace1/Suds-Jack/pull/546) and [Pages #547](https://github.com/mbace1/Suds-Jack/pull/547). Those records distinguish tested heads, merges and the actual public-site check. A source commit, successful pure tests or a screenshot is not by itself a public release or physical-device approval.
 
 ## Findings corrected before release

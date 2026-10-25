@@ -1,14 +1,8 @@
 # Working rules — Piritori → Eden
 
-## Current Claude takeover — 2026-09-24
+## Current state — 2026-10-25
 
-For the current city/map/mission continuation, read
-[CLAUDE_TAKEOVER.md](CLAUDE_TAKEOVER.md) and
-[the M1/M2 execution brief](design/CLAUDE_MAP_MISSION_NEXT_STEPS.md) first.
-C.19 is now on main, the city header is v4.51, and M1 PR #91 is still unmerged.
-The v4.40 pickup and older branch-only status below are historical, not this
-task's starting point. Preserve all working rules below and later main fixes.
-This update adds documentation only; it does not start a worker or release M1.
+**Read [ROADMAP.md](ROADMAP.md) first.** It is the plan of record: Act I v4.79 is live on the hub, every fight but the training fight is fought in Night Shift (`web/crew-run/`), and the next step is G0/G1 (play it, then make the fight a fight). The September pointers that used to stand here (v4.40 pickup, the M1/M2 takeover at v4.51) are history; M1 and M2 shipped as v4.52–v4.54. The working rules below still apply.
 
 Read this before every session. These rules outrank convenience, speed,
 and your own judgment about what would be tidier. If a rule blocks you,

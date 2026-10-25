@@ -349,6 +349,8 @@ Era I feature-complete means:
 6. save/resume and the critical accessibility paths work;
 7. the full Era I duration has a recorded playtest decision.
 
+> **2026-10-25:** items 1, 3 and 5 describe a game that is no longer the one built: a seven-day loop (Chapter 1 is ten days), the formation battle (Act I fights are Night Shift outings), and an art pipeline (stand-ins only, 2026-10-02). [ROADMAP.md](ROADMAP.md) G4 rewrites this list for Chapter 1 as built, with the owner; until then it stands as written.
+
 Aaro's full 2024–2025 scene count is deliberately deferred. His departure and
 death remain fixed canon and are never converted into a mission or a variable
 punishment.

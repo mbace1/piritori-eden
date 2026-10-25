@@ -1,5 +1,7 @@
 # Piritori → Eden — design authority
 
+> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
+
 ## Owner rulings, 2026-10-23/24 — characters talk as waist-up cut-ins
 
 Shipped in v4.80 (PR #107). In the owner's words:
@@ -30,6 +32,10 @@ Shipped in v4.80 (PR #107). In the owner's words:
   Aatami's rigs are semi-approved until the owner reviews them.
 - PR #102's "3D is the future" is superseded on characters by these rulings and
   by the 2026-10-23 note above.
+- **Under ROADMAP.md §3 (no new art pipelines until G1 closes)**, the rest of the
+  cut-in work waits: Arvo on the news tab, the hooded lady, a two-speaker
+  layout and the Godot port. The cut-ins shipped here are the faces that
+  ROADMAP G5's "meeting in the place" will use.
 
 ## Owner note, 2026-10-23 — 3D might not be the future
 

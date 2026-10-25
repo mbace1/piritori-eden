@@ -218,6 +218,7 @@ Each step ships to the hub and is played before the next.
    *Built (VERSIONS.md v4.77):* `roadOuting` is the door's record made from the road event. It is staged where the event happened, pays the event's own stakes, and does not turn the block.
 3. **The shot caller**: a design for COMBAT §9.9.4's open questions, brought for
    a greenlight before it is built.
+   *Proposed (2026-10-25):* [C19_SHOT_CALLER.md](C19_SHOT_CALLER.md), awaiting the owner.
 4. **The meeting in the place**: a door's conversation staged in the 3D scene
    with face cut-ins, so escalation needs no transition (Bear Path already does
    this for one encounter).
@@ -226,3 +227,5 @@ Each step ships to the hub and is played before the next.
 6. **Street and quay kits**, then **landscape**, then retiring the board
    (CAMPAIGN P4–P6).
    *Street and quay built (VERSIONS.md v4.77, v4.78)* as sets assembled from the v02 kit, not new Blender kits. Every Act I fight place now has its own set.
+
+**Next, 2026-10-25: [ROADMAP.md](../ROADMAP.md) G0 and G1, before steps 3, 4 and 6.** Measured with `web/tools/fight-balance.mjs` on all 15 Act I fights: careless "close and swing" play wins 10 of the 11 fight jobs every time, in about 2 rounds, losing 0.1 HP. Every getaway is won in 2 rounds by walking out. A broken plan cancels the rival's whole turn, and the rout at half their weight ends the fight before they act. The getaway finding above ("What step 1 found") now holds for every fight. CAMPAIGN.md, cited throughout, is PR #102 and was never merged; its live parts (P0, P5, P6) are in the roadmap.

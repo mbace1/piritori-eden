@@ -1,5 +1,7 @@
 # Claude takeover — Piritori
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 Verified repository snapshot: **2026-09-24**. This is a documentation handoff,
 not a gameplay release, a fresh browser test, or evidence that a Claude session
 has been started. Owner request: “Next steps? Can you add docs so Claude can take over?”

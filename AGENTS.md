@@ -1,10 +1,9 @@
 # Piritori agent startup
 
-For the current Claude city/map/mission continuation, read `CLAUDE_TAKEOVER.md`
-and `design/CLAUDE_MAP_MISSION_NEXT_STEPS.md` first (2026-09-24). They distinguish
-current main/C.19/Act I v4.51 from the unmerged M1 overlay and link the M0 audit
-on its verified older ref. Start clean M1 from current main; preserve PR #92.
-This is a documentation handoff, not a new playable release or worker dispatch.
+Read `ROADMAP.md` first (2026-10-25): the plan of record. Act I v4.79 is live;
+every fight but training is fought in Night Shift (`web/crew-run/`); the next
+step is G0/G1, play it and then make the fight a fight. The September pointers
+(`CLAUDE_TAKEOVER.md`, the M1/M2 brief at v4.51) are history: M1 and M2 shipped.
 
 Then read `ACTIVE_CONTEXT.md`, keeping historical release sections separate
 from current status, before asking the owner to repeat decisions. For Meshy

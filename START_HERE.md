@@ -1,5 +1,7 @@
 # Piritori → Eden — start here
 
+> **Superseded as the plan, 2026-10-25.** What to do next is [ROADMAP.md](ROADMAP.md) (Act I v4.79 is live; every fight but training is fought in Night Shift). This file is kept as history: read it for its reasons, not for the current state.
+
 > **3D production pickup (2026-09-12):** Read [AGENTS.md](AGENTS.md) and [3D_PIPELINE.md](3D_PIPELINE.md). Current character state is in [assets/asset_manifest.json](assets/asset_manifest.json). The older Godot-only startup below is historical: DESIGN_AUTHORITY.md makes `web/` primary and Godot the port.
 
 A narrative strategy game set in Kallio, Helsinki, 2003: a visible city-flow
