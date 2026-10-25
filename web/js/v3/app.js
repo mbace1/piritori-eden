@@ -27,7 +27,7 @@ import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=3';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage } from './places.js?v=1';
-import { doorOuting, roadOuting, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=3';
+import { doorOuting, roadOuting, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=4';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=5';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -2447,7 +2447,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.77',
+      version: 'v4.78',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

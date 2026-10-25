@@ -76,5 +76,5 @@ body.police-asking .command-console{grid-template-columns:minmax(0,1fr)!importan
 body.police-asking #selected-unit,body.police-asking .command-centre,body.police-asking #utility-actions{display:none!important}
 body.police-asking .command-utility{grid-row:auto!important;grid-column:1!important}
 body.police-asking #mission-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
-body.police-asking .police-ask{grid-column:1/-1}
+body.police-asking .police-ask,body.police-asking #mission-actions button[data-police]:only-of-type{grid-column:1/-1}
 body.police-asking #mission-actions [data-police]{white-space:normal;line-height:1.25;min-height:52px}

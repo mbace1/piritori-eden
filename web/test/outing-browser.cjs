@@ -156,7 +156,9 @@ server.listen(0, '127.0.0.1', async () => {
         await play(WAIT);
         ok(`${name}: the police were announced a round early, then came`, /POLICE HERE/.test(await page.locator('#mission-pressure').innerText()) && /^The police are here/.test(await page.locator('#mission-goal').innerText()));
         const backOff = page.locator('[data-police="BACK_OFF"]');
-        ok(`${name}: the question names who each answer costs`, /taken: nobody/.test(await backOff.innerText()) && await page.locator('[data-police="HELP_FRIENDS"]').count() === 1);
+        // v4.78: nobody is down here, so both answers would cost the same and
+        // there is no question: one way out, saying so.
+        ok(`${name}: with nobody down there is one answer, and it says who is taken`, /^Clear out · taken: nobody/.test(await backOff.innerText()) && await page.locator('[data-police="HELP_FRIENDS"]').count() === 0 && /Nobody is down/.test(await page.locator('#mission-goal').innerText()));
         ok(`${name}: and nothing else can be done until it is answered`, await page.locator('#end').isDisabled() || !(await page.locator('[data-mission-action]:enabled').count()));
         await shot(page, `${view}-${kind}-question`);
         await tap(backOff); await idle();

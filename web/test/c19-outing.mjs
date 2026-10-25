@@ -17,9 +17,9 @@ const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=9');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=3');
-const O = await import('../js/v3/outing.js?v=3');
-const R = await import('../crew-run/run.js?v=12');
-const { missionCue } = await import('../fight-module/readability.js?v=3');
+const O = await import('../js/v3/outing.js?v=4');
+const R = await import('../crew-run/run.js?v=13');
+const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate } = await import('../fight-module/tactics.js?v=8');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 
@@ -36,7 +36,8 @@ assert.equal(fights.length - getaways.length, 5, 'the other five doors are fight
 
 // ── the pure rules ─────────────────────────────────────────────────────────
 assert.equal(O.cPlace('street'), 'street', 'a street fight is fought on the street (v4.77)');
-assert.equal(O.cPlace('quay'), 'courtyard', 'a place C has not built yet falls back to the courtyard');
+assert.equal(O.cPlace('quay'), 'quay', 'the quay fight is fought on the quay (v4.78)');
+assert.equal(O.cPlace('nowhere'), 'courtyard', 'a place C has not built falls back to the courtyard');
 assert.equal(O.cWeapon('lifted-handgun'), 'first-handgun');
 assert.equal(O.cWeapon('feature-phone'), 'folding-knife');
 for (const blunt of ['pipe', 'baton', 'tire-iron', 'chain']) assert.equal(O.cWeapon(blunt), 'baseball-bat');

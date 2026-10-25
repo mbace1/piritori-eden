@@ -4,9 +4,9 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing} from './layouts.js?v=2';
+import {LAYOUTS,lay,facing} from './layouts.js?v=3';
 
-export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',park:'Karhupuisto · park'};
+export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',quay:'Sörnäinen · quay',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
 export async function loadLocationAssets(profile){
  const base=new URL('./assets/',import.meta.url),manifest=await fetch(new URL('kallio-kit-v02.manifest.json',base)).then(r=>{if(!r.ok)throw Error('Scenery register unavailable');return r.json();});
@@ -23,7 +23,7 @@ export async function loadLocationAssets(profile){
 // Fictional visual pilots grounded in the atlas, not campaign site dispatch.
 // Tactical cover is built from the resolver's map, never inferred from scenery.
 export function buildLocation(world,renderer,cover,position,assets,id){
- const yard=id==='yard',group=new T.Group();group.name=id;world.add(group);
+ const yard=id==='yard'||id==='quay',group=new T.Group();group.name=id;world.add(group);
  world.background=new T.Color('#0c1922');world.fog=new T.Fog('#173040',22,50);renderer.toneMappingExposure=1.02;
  const hemi=new T.HemisphereLight(0xa4bfd0,0x344343,.94),moon=new T.DirectionalLight(0xb9d4e1,1.14);moon.position.set(-5,11,6);world.add(hemi,moon);
  const model=assets.model;model.updateMatrixWorld(true);const mats={},bins=new Map(),dummy=new T.Object3D();
@@ -54,6 +54,8 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  // the run it belongs to. UVs are in metres so the plaster keeps the bays'
  // scale, and the kit's materials read vertex colour, so the box carries white.
  const roofMat=new T.MeshStandardMaterial({color:0x3b454a,roughness:.58,metalness:.2,side:T.DoubleSide});
+ // A plane cut short keeps the texture's scale: UVs over the size it replaces.
+ const metric=(g,w,d)=>{const uv=g.attributes.uv,p=g.parameters;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*p.width/w,uv.getY(i)*p.height/d);return g;};
  const white=g=>{g.setAttribute('color',new T.Float32BufferAttribute(new Array(g.attributes.position.count*3).fill(1),3));return g;};
  const setParts={},stacks=[],part=(owner,key,g)=>{const parts=owner?owner.parts:setParts;(parts[key]??=[]).push(g);};
  function block(owner,x0,x1,z0,z1,y0=0,y1=6.3,ridge='x',material='plaster'){
@@ -101,6 +103,35 @@ export function buildLocation(world,renderer,cover,position,assets,id){
    piece(iron,tx+.24,3.1,tz,1,.04,.1);piece(iron,tx,2.62,tz,.04,.95,.04);
   }
  }
+ // Layer 7: the quay's dressing, after the Sörnäinen docks plate. The ground
+ // stops at the edge (layout.floor); a stone quay wall drops to the harbour, a
+ // boat is tied up and the far pier lies across the water. Plain materials.
+ if(layout.quay){
+  const q=layout.quay,plain=(color,extra={})=>new T.MeshStandardMaterial({color,roughness:.7,...extra});
+  const water=plain(0x16313b,{roughness:.32}),iron=plain(0x2d3436,{metalness:.35,roughness:.45}),hull=plain(0x3a2220,{roughness:.6}),gunwale=plain(0xc9bfa6),deck=plain(0x4b4136),house=plain(0xb8b2a2),pane=plain(0x987848,{emissive:0xc08b43,emissiveIntensity:.8,roughness:1}),head=plain(0xffd59a,{emissive:0xffc070,emissiveIntensity:1.4});
+  const piece=(mat,x,y,z,w,h,d)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.receiveShadow=true;group.add(m);return m;};
+  const sea=new T.Mesh(new T.PlaneGeometry(80,q.z1-q.z0+40),water);sea.rotation.x=-Math.PI/2;sea.position.set(q.edge+40,-1.05,(q.z0+q.z1)/2);group.add(sea);
+  block(null,q.edge-.15,q.edge+.15,q.z0,q.z1,-1.3,0,false,'stone');block(null,q.edge-.35,q.edge+.2,q.z0,q.z1,0,.16,false,'stone');
+  for(const z of q.bollards??[]){const b=new T.Mesh(new T.CylinderGeometry(.15,.19,.46,10),iron);b.position.set(q.edge-.12,.39,z);b.castShadow=true;group.add(b);}
+  const fx0=layout.floor?.[0]??-23;for(const zt of q.rails??[])for(const dz of [-.72,.72])piece(iron,(fx0+q.edge)/2,.03,zt+dz,q.edge-fx0,.035,.07);
+  // A low hull with a pale gunwale and a pointed bow (a three-sided prism),
+  // the wheelhouse aft, a mast, and two lines to the bollards.
+  if(q.boat){const {x,z,beam,length}=q.boat,top=.12,bowZ=z-length/2,hz=z+length*.3;
+   piece(hull,x,(top-1.2)/2,z,beam,top+1.2,length);piece(gunwale,x,top+.05,z,beam+.06,.1,length+.02);piece(deck,x,top+.12,z,beam-.3,.04,length-.3);
+   const R=beam/Math.sqrt(3),bow=new T.Mesh(new T.CylinderGeometry(R,R,top+1.2,3),hull);bow.rotation.y=Math.PI;bow.scale.set(1,1,.9);bow.position.set(x,(top-1.2)/2,bowZ-.45*R);group.add(bow);
+   piece(house,x,top+.85,hz,beam*.62,1.5,length*.2);piece(deck,x,top+1.64,hz,beam*.7,.08,length*.22);
+   for(const s of [1,-1])for(let n=-1;n<=1;n+=2)piece(pane,x+s*(beam*.31+.01),top+1.05,hz+n*length*.05,.02,.42,length*.06);
+   piece(iron,x,top+2.6,z-length*.12,.1,5,.1);
+   for(const zb of [bowZ+1.2,z+length/2-1.2]){const dx=x-beam/2-(q.edge-.12),len=Math.hypot(dx,.6),l=piece(iron,(x-beam/2+q.edge-.12)/2,.35,zb,len,.03,.03);l.rotation.z=Math.atan2(-.3,dx);}
+  }
+  // The far pier across the harbour. The plate's cranes are not here: an
+  // orthographic camera stands anything that tall up through the frame.
+  if(q.pier)block(null,q.pier[0],q.pier[1],q.pier[2],q.pier[3],-1.3,.4,false,'stone');
+  // Lamp posts along the quay, each with its light lying on the water.
+  const streak=new T.MeshBasicMaterial({color:0xffb35c,transparent:true,opacity:.3,blending:T.AdditiveBlending,depthWrite:false});
+  for(const [px,pz] of q.posts??[]){piece(iron,px,2.1,pz,.12,4.2,.12);piece(iron,px+.25,4.15,pz,.6,.08,.08);piece(head,px+.52,4.02,pz,.34,.18,.3);
+   const glow=new T.Mesh(new T.PlaneGeometry(6.5,.9),streak);glow.rotation.x=-Math.PI/2;glow.position.set(q.edge+3.6,-1.03,pz);group.add(glow);}
+ }
  for(const [cell,v]of cover){const p=position(cell);if(v.hardBlock)put('container',p.x,0,p.z);else{const [dx,dy]=EDGES[v.edge];put('low_wall',p.x+dx*.585,0,p.z-dy*.585,dx?Math.PI/2:0);}}
  const lamps=layout.lamps.map(([x,y,z,r])=>[x,y,z,r]),lampOwners=layout.lamps.map(l=>byId[l[4]]);
  lamps.forEach(([x,y,z,r],i)=>{into=lampOwners[i]??null;put('lamp',x,y,z,r);into=null;});
@@ -109,7 +140,7 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  if(stacks.length){const stack=new T.InstancedMesh(white(new T.BoxGeometry(.62,1.5,.62)),mats.brick??mats.stone,stacks.length),matrices=stacks.map(({at:[x,y,z]})=>{dummy.position.set(x,y+.75,z);dummy.rotation.set(0,0,0);dummy.scale.setScalar(1);dummy.updateMatrix();return dummy.matrix.clone();});matrices.forEach((m,i)=>stack.setMatrixAt(i,m));stack.receiveShadow=true;stack.frustumCulled=false;group.add(stack);batches.push({mesh:stack,matrices,owners:stacks.map(s=>s.owner)});}
  const surface={plaster:mats.plaster,stone:mats.stone,roof:roofMat};
  for(const [owner,parts] of [...runs.map(r=>[r,r.parts]),[null,setParts]])for(const [key,list] of Object.entries(parts)){const m=new T.Mesh(merge(list),surface[key]);m.receiveShadow=true;(owner?.group??group).add(m);}
- const floorMat=new T.MeshStandardMaterial({color:0x3b474a,roughness:.7,map:assets.texture}),floor=new T.Mesh(new T.PlaneGeometry(46,50),floorMat);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;group.add(floor);
+ const floorMat=new T.MeshStandardMaterial({color:0x3b474a,roughness:.7,map:assets.texture}),[fx0,fx1,fz0,fz1]=layout.floor??[-23,23,-25,25],floor=new T.Mesh(metric(new T.PlaneGeometry(fx1-fx0,fz1-fz0),46,50),floorMat);floor.rotation.x=-Math.PI/2;floor.position.set((fx0+fx1)/2,0,(fz0+fz1)/2);floor.receiveShadow=true;group.add(floor);
  // One shadowed practical. Other pools and the sky fill have no shadow maps.
  for(const [i,[x,y,z,r]]of lamps.entries()){
   const light=new T.SpotLight(i===1?0x9bc4d2:0xffc481,i===2?30:24,19,.95,.85,1.6);light.position.set(x+(r?.5:0),y,z+(r?0:.55));light.target.position.set(x*.20,0,z*.22);light.castShadow=i===2;light.shadow.mapSize.set(1024,1024);light.shadow.normalBias=.035;world.add(light,light.target);
@@ -121,6 +152,9 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  // Local wisps at the far service passage, never a full-screen white wash.
  const wisps=[];for(let i=0;i<5;i++){const m=new T.SpriteMaterial({map:glowMap,color:0x77949d,transparent:true,opacity:.055,depthWrite:false});const s=new T.Sprite(m);s.position.set(wispX+(i-2)*.7,.4,yard?-6.8:-6.5);s.scale.set(2.5,.65,1);group.add(s);wisps.push(s);}
  const lab=developmentLook(world,renderer,group,floorMat,mats,true,{courtyard:true,pavingTexture:assets.pavingTexture,lights:lamps.map(([x,y,z])=>[x,y,z])});let clock=0;
+ // The wet paving stops where the ground does.
+ const wet=layout.floor&&group.getObjectByName('wet-paving');
+ if(wet){const p=wet.geometry.parameters,x0=wet.position.x-p.width/2,x1=Math.min(wet.position.x+p.width/2,layout.floor[1]);wet.geometry.dispose();wet.geometry=metric(new T.PlaneGeometry(x1-x0,p.height),p.width,p.height);wet.position.x=(x0+x1)/2;}
  const look=new T.Vector3();
  const hidden=new T.Matrix4().makeScale(0,0,0);
  function cutaway(camera){camera.getWorldDirection(look);const h=Math.hypot(look.x,look.z)||1;let changed=false;

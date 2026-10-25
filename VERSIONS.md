@@ -77,6 +77,40 @@ Port `cover-edges.js`, `directional-cover.mjs` and `design/C11_PORT_VECTORS.json
 New lab checkpoint version 4 / rules c11-v1; preserve campaign and Bear Path rules.
 Use resolved impact classifications for presentation; never reapply damage on recovery.
 
+## v4.78 — 2026-10-25
+
+**The quay, and no question when there is nothing to choose.** The level pass's last place (`C19_LEVEL_PASS.md` layer 7), duplicated again: the yard, cut off at the water.
+
+- **The quay.** The Sörnäinen quay was the last of Act I's eleven fight places still staged in the courtyard. It now has `crew-run`'s **Sörnäinen · quay**, after the docks plate:
+  - the yard's sheds, side shed and warehouse row, each ending at the quay edge;
+  - the ground and the wet paving stop at the edge, a stone quay wall drops to the harbour, and bollards stand along the coping;
+  - a boat is tied up beside the board, with two lines to the bollards, and the far pier lies across the water;
+  - a lamp post at the back of the quay lays its light on the water, and a railway crosses the front.
+  - **The plate's cranes were built and cut.** Under the orthographic camera, anything that tall stands up through the frame: a 10 m crane's jib crossed the shed roofs beside the board. Two lamp posts were cut back to one for the same reason: the front one stood over the exit row.
+  - `outing.js` `C_PLACES` gains `quay`. **Every Act I fight place now has a set of its own.**
+- **The police question** (`C19_CAMPAIGN_FIGHTS.md` §6.4 step 1, the open item). With nobody on the ground, both answers cost the same, so it is no longer a question. The bar says *Nobody is down: clear out*, and the one answer is **Clear out · taken: nobody**. With someone down, it is Act I's two answers as before.
+- **Gates:**
+  - `level-layout.mjs` holds the quay (870 checks across the four places). It requires that:
+    - every wall, building, prop, piece of litter and lamp post stands on the ground;
+    - the ground stops at the edge, and the board is a metre from the water;
+    - the boat is moored outside the quay, and no lamp post stands in a prop.
+    Each new check was shown to fail: on a container in the water, the boat inside the quay, a building past the edge, a ground plane that runs on, and a container on the lamp post.
+  - Renders: three presets at 1280 and 1920 wide, and the eight-angle audit.
+  - `c19-outing.mjs` maps the quay to the quay.
+  - `night-places-browser.cjs` walks the quay.
+  - `outing-browser.cjs` expects the one answer when nobody is down.
+- Cache:
+  - `crew-run/locations.js?v=7`, `layouts.js?v=3`, `ui.js?v=21`, `run.js?v=13`, `style.css?v=8`, `startup.js?v=17`
+  - `fight-module/readability.js?v=4`, `main.js?v=43`
+  - `outing.js?v=4`, `app.js?v=45`
+
+### Port
+
+When C is ported:
+
+- the quay layout in `layouts.js`, with its `floor` and `quay` (edge, bollards, rails, posts, boat, pier);
+- the police answer: with nobody down (`policeOutcome(b,'BACK_OFF').taken` empty), one answer, *Clear out*.
+
 ## v4.77 — 2026-10-24
 
 **A street of its own, and road fights in Night Shift.** Owner, 2026-10-24:

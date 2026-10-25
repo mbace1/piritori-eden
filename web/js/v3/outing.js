@@ -8,8 +8,9 @@
 //   - Who fights is Act I's `fighters()`: Aatami while he still fights, then
 //     the crew (answer 24; owner 2026-10-24: first phase in every fight, then
 //     the shot caller and not a fighter).
-//   - Where is the door's anchor, as a C place: courtyard, yard or park exist;
-//     a street or quay place falls back to the courtyard until it is built.
+//   - Where is the door's anchor, as a C place: courtyard, yard, park, street
+//     (v4.77) and quay (v4.78) all exist; anything else falls back to the
+//     courtyard.
 //   - Against whom is the door's fight, moved to its place (places.js, v4.71):
 //     its people, with their weapons mapped onto C's three.
 //   - What it is for is the door's `fight.goal`: `fight` (make them back off,
@@ -23,7 +24,7 @@
 // Pure: no DOM, no clock.
 
 /** The C places that exist in web/crew-run/locations.js. */
-export const C_PLACES = new Set(['courtyard', 'yard', 'park', 'street']);
+export const C_PLACES = new Set(['courtyard', 'yard', 'park', 'street', 'quay']);
 
 export const cPlace = kit => (C_PLACES.has(kit) ? kit : 'courtyard');
 

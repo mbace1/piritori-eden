@@ -58,5 +58,20 @@ for(const [place,L] of Object.entries(LAYOUTS)){
   if(L.tram)ok(!overlap([L.tram.x-3.6,L.tram.x+3.6,L.tram.z-.85,L.tram.z+.85],BOARD),`${place}: the tram stands on the board`);
   // 7. Every lamp belongs to a wall that exists.
   for(const l of L.lamps)ok(runs[l[4]],`${place}: a lamp hangs on ${l[4]}, which is not a run`);
+  // 8. A quay: the ground stops at its edge, and everything but the boat
+  //    stands on the ground, the board a metre short of the water.
+  if(L.quay){
+    const q=L.quay;
+    ok(q.edge>=BOARD[1]+1,`${place}: the board is ${(q.edge-BOARD[1]).toFixed(2)} m from the water`);
+    ok(L.floor&&Math.abs(L.floor[1]-q.edge)<1e-9,`${place}: the ground does not stop at the quay edge`);
+    for(const w of walls)ok(w.box[1]<=q.edge,`${place}: ${w.run}'s ${w.name} stands in the water`);
+    for(const m of masses)ok(m.box[1]<=q.edge,`${place}: ${m.run}'s building stands in the water`);
+    for(const t of things)ok(t.box[1]<=q.edge-.1,`${place}: ${t.n} at ${t.box.map(v=>v.toFixed(2))} stands in the water`);
+    for(const l of L.litter)ok(l[0]<q.edge-.3,`${place}: litter at x ${l[0]} lies in the water`);
+    if(q.boat)ok(q.boat.x-q.boat.beam/2>q.edge+.2,`${place}: the boat is moored inside the quay`);
+    // A lamp post stands on the quay, clear of everything else on it.
+    for(const [px,pz] of q.posts??[]){const post=[px-.12,px+.12,pz-.12,pz+.12];ok(post[1]<=q.edge-.1,`${place}: a lamp post stands in the water`);
+      for(const t of things)ok(!overlap(post,t.box),`${place}: a lamp post at ${px},${pz} stands in a ${t.n}`);}
+  }
 }
 console.log(`level-layout: ${checks} checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (${Object.keys(LAYOUTS).join(', ')})`);

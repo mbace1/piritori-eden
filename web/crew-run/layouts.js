@@ -113,4 +113,26 @@ export const LAYOUTS={
     props:[['pallets',-5.8,0,2.4,0],['pallets',-5.8,.5,2.4,0],['pallets',5.5,0,-5.6,0],['container',6.5,0,-3,0],['container',6.5,0,-1.8,0],['container',6.5,0,0,0]],
     ...COMMON,
   },
+  // The quay (layer 7), duplicated from the yard after the Sörnäinen docks
+  // plate: the sheds and the warehouse row stop at the quay edge, the ground
+  // stops at it too, and past it is the harbour with a boat tied up and the
+  // far pier across the water. A railway crosses the front of the quay.
+  quay:{
+    runs:[
+      {id:'sheds',x:-14.4,z:-8.4,rotation:0,modules:Array(5).fill('service_bay')},
+      {id:'side',x:-7,z:1.2,rotation:Math.PI/2,modules:['service_bay','service_bay']},
+      {id:'far',x:-16.2,z:-13,rotation:0,modules:bays(7)},
+    ],
+    joins:[],
+    blocks:[{run:'far',box:[-16.2,5.4,-21.5,-13.35,0,6.3],ridge:'x'}],
+    floor:[-23,5.6,-25,25],
+    quay:{edge:5.6,z0:-30,z1:22,bollards:[-6.8,-3.4,0,3.4,6.8],rails:[6.2],posts:[[5.15,-9.3]],boat:{x:9.4,z:1.5,beam:3.4,length:12},pier:[14.5,44,-40,30]},
+    rear:[-1,2.5,-7.1],
+    lamps:[[-4.5,3.2,-7.4,0,'sheds'],[3,3.2,-7.4,0,'sheds'],[-6.4,3.2,.4,Math.PI/2,'side']],
+    props:[['pallets',-5.8,0,2.4,0],['pallets',-5.8,.5,2.4,0],['pallets',4.5,0,3.4,0],['container',4.35,0,-6.5,0],['container',4.35,0,-5.4,0]],
+    ...COMMON,
+    planters:[],
+    litter:[[-5.7,4.9],[-5.5,1],[-5.4,-2.9],[4.7,1.2],[-2.5,-6.8],[2.4,-6.6]],
+    common:[['bicycle',-4.8,0,-6.25,.14],['bicycle',-3.7,0,-6.35,-.08],['drain',-4.4,0,4.0,0]],
+  },
 };

@@ -56,7 +56,7 @@ This is the plan. Each layer ships to the hub and is rendered before the next.
    - A run whose face turns away from the camera is hidden, the way tactics games lift the near walls.
    - The presets and free rotation are unchanged.
 6. **Street set**, duplicated from the park's street (next release).
-7. **Quay set** (after the street).
+7. **Quay set** (after the street): the yard's sheds, cut off at a quay edge, with the harbour beyond.
 8. **A layout gate** (bare node, `level-layout.mjs`). It checks that:
    - every run is continuous;
    - every corner is closed;
@@ -65,7 +65,7 @@ This is the plan. Each layer ships to the hub and is rendered before the next.
    - the runs cover the frames.
    The audit renderer stays as a tool: an art change ends in a picture, not a green suite.
 
-Layers 1–5 are v4.76 (courtyard and yard). The street is v4.77, then the quay. The park is audited too: whatever it needs joins whichever release finds it.
+Layers 1–5 are v4.76 (courtyard and yard). The street is v4.77 and the quay v4.78. The park is audited too: whatever it needs joins whichever release finds it.
 
 ## Not in this pass
 
@@ -78,4 +78,5 @@ Layers 1–5 are v4.76 (courtyard and yard). The street is v4.77, then the quay.
 - **v4.76:** layers 1, 2, 4, 5 and 8 for the courtyard and the yard. The courtyard is rebuilt as four runs. `level-layout.mjs` passes 507 checks, and it fails on the old free-standing bay, a wing pulled off its corner, and a back wall that stops short. Renders: the eight-angle audit, three presets at 1280 and 1920 wide.
 - **Layer 3 (coverage)** holds at the default and Oblique presets on 1280 and 1920 frames, checked by render. It is not computed by the gate yet.
 - **v4.77:** layer 6, the street. It is built from v4.76's runs and buildings plus the park's street dressing, and takes the four street fights off the courtyard.
-- **Next:** layer 7, the quay, built from the yard's sheds plus a quay edge. It is the last fight place still falling back to the courtyard.
+- **v4.78:** layer 7, the quay. It is the yard duplicated and cut off at the water: the ground, the wet paving and every wall stop at the edge, and the gate holds everything but the boat on land. Every one of Act I's eleven fight places now has a set of its own.
+- **Next:** layer 3 computed rather than checked by render (do the runs cover the 1280 and 1920 frames at each preset?), and the park, if the audit finds anything there.

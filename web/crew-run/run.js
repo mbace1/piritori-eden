@@ -138,7 +138,7 @@ function makeOuting(content,config){
    b.log.unshift(`Sirens. The police come in at the ${pol.y===0?'south':'north'} end after enemy turn ${b.round}.`);
   }
   if(b.status==='active'&&type==='end'&&pol.afterRound!==null&&!pol.arrived&&b.round>pol.afterRound){
-   pol.arrived=true;b.log.unshift('The police are here. Back off, or help your friends.');
+   pol.arrived=true;b.log.unshift(policeOutcome(b,'BACK_OFF').taken.length?'The police are here. Back off, or help your friends.':'The police are here. Nobody is down: clear out.');
   }
  }};
  const s=createTacticalSession(b,'mixed','crew-run',base.data,options);

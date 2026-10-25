@@ -212,7 +212,7 @@ Each step ships to the hub and is played before the next.
    carried, and the cabinet carrying Night Shift.
    *Built (VERSIONS.md v4.75).* It differs from the plan above in three places:
    - The end is a short card over the scene, with a line per person, not a single line in the scene: arrests and the carried need naming.
-   - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped.
+   - The police question is asked even when nobody is down. Both answers then cost nothing, and the question could be skipped. *Fixed in v4.78:* with nobody down there is one answer, *Clear out*.
    - The rout threshold, half their weight with a tough one counting two, is unmeasured beyond one played opening.
 2. **Road fights**: the same path, arriving where the event happened.
    *Built (VERSIONS.md v4.77):* `roadOuting` is the door's record made from the road event. It is staged where the event happened, pays the event's own stakes, and does not turn the block.
@@ -224,3 +224,4 @@ Each step ships to the hub and is played before the next.
 5. **The two mission battles** with their authored alternatives.
 6. **Street and quay kits**, then **landscape**, then retiring the board
    (CAMPAIGN P4–P6).
+   *Street and quay built (VERSIONS.md v4.77, v4.78)* as sets assembled from the v02 kit, not new Blender kits. Every Act I fight place now has its own set.
