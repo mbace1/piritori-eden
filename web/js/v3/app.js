@@ -16,7 +16,8 @@ import {
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=10';
-import { createPauseMenu } from './pause.js?v=4';
+import { createPauseMenu } from './pause.js?v=5';
+import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
@@ -266,6 +267,40 @@ async function openTalk(encounter, who) {
   }
   ask();
 }
+// ── The play card (ROADMAP.md G0) ────────────────────────────────────────────
+// A play card plays a fresh campaign, and it has to save: a Night Shift fight hands over through the save. So the
+// campaign you had is kept aside first, and the title screen's RESTORE YOUR CAMPAIGN puts it back. A play card's own
+// campaign is marked, so a second card never sets it aside in place of yours.
+const SET_ASIDE_KEY = `${SAVE_KEY}:set-aside`, PLAY_CARD_KEY = `${SAVE_KEY}:play-card`;
+function setCampaignAside() {
+  try {
+    const saved = localStorage.getItem(SAVE_KEY), yours = saved && !localStorage.getItem(PLAY_CARD_KEY);
+    if (yours) localStorage.setItem(SET_ASIDE_KEY, saved);
+    localStorage.setItem(PLAY_CARD_KEY, '1');
+    return Boolean(yours);
+  } catch { return false; }
+}
+function restoreCampaign() {
+  try {
+    const kept = localStorage.getItem(SET_ASIDE_KEY);
+    if (kept) localStorage.setItem(SAVE_KEY, kept);
+    localStorage.removeItem(SET_ASIDE_KEY);
+    localStorage.removeItem(PLAY_CARD_KEY);
+  } catch { /* private mode: nothing was kept */ }
+  location.replace(location.pathname);
+}
+// The crew a jump's fight needs, fielded the way ?battle= fields them. Only the newly recruited are made available,
+// so a jump from the pause menu never heals somebody in a real campaign.
+function fieldCrew(n) {
+  for (const crew of data.content.crew) {
+    if (state.recruited.length >= n) break;
+    if (state.recruited.includes(crew.id)) continue;
+    state.recruited.push(crew.id);
+    if (state.crewStatus[crew.id]) state.crewStatus[crew.id].status = 'available';
+  }
+  state.deployed = state.recruited.slice(0, 3);
+}
+
 // The Thursday Load (story.js). Empty until loaded; a failed load hides it.
 let story = { missions: [], clues: [], case: null };
 let roadEvents = { rules: { first_story_block: Infinity }, events: [] };
@@ -2479,9 +2514,12 @@ async function boot() {
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     if (settleReturnedOuting()) persist(); // a fight that came back from Night Shift (v4.74)
     $('resumeButton').hidden = !hasSave;
+    $('restoreButton').hidden = !localStorage.getItem(SET_ASIDE_KEY);
+    $('restoreButton').addEventListener('click', restoreCampaign);
     $('beginButton').addEventListener('click', () => {
       wakeSound();
       if (hasSave) state = createState(data.content);
+      try { localStorage.removeItem(PLAY_CARD_KEY); } catch { /* private mode */ }
       resetInspection();
       persist();
       $('splash').hidden = true;
@@ -2527,6 +2565,8 @@ async function boot() {
     function jumpTo(target) {
       if (!target) return;
       resetInspection();
+      if (target.crew) fieldCrew(target.crew);
+      if (target.stock) state.stock.piri = Math.max(state.stock.piri ?? 0, target.stock);
       if (target.kind === 'encounter') {
         // Walk the schedule to the block this encounter belongs to, so the
         // screen arrives with the state around it rather than out of context —
@@ -2550,6 +2590,23 @@ async function boot() {
           if (!state.recruited.includes(crew.id)) state.recruited.push(crew.id);
         }
         if (!startBattle(target.id)) return;
+      } else if (target.kind === 'door') {
+        // A door, taken, with Aatami standing at it (the play card, ROADMAP G0). `block` names the door block; a late
+        // door needs a night. The door is offered and taken through doors.js, exactly as the board does it.
+        const t = templateOf(doors, target.id);
+        const index = target.block ?? data.content.schedule.findIndex(slot => slot.door && (!t?.late || slot.block === 'night'));
+        if (!t || !data.content.schedule[index]?.door) { logToast(`cannot stage door '${target.id}'`); return; }
+        const anchor = target.anchor ?? t.anchors[0];
+        state.scheduleIndex = index;
+        state.doors ??= { offers: {}, taken: {} };
+        state.doors.offers = { ...(state.doors.offers ?? {}), [index]: [{ template: t.id, anchor }] };
+        state.doors.taken = { ...(state.doors.taken ?? {}) };
+        delete state.doors.taken[index];
+        const taken = takeDoor(state, data, doors, t.id, roadEvents);
+        if (!taken.ok) { logToast(`door '${t.id}': ${taken.reason}`); return; }
+        state.selectedAnchor = anchor;
+        state.mode = 'encounter';
+        observation = '';
       } else if (target.kind === 'news') {
         state.newsSeen = state.newsSeen.filter(id => id !== target.id);
         state.newsReturnMode = 'route';
@@ -2583,7 +2640,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.79',
+      version: 'v4.81',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });
@@ -2656,6 +2713,20 @@ async function boot() {
         state.mode = 'encounter';
         $('splash').hidden = true;
         render();
+      }
+    }
+    // ?play=<id> — the play card (ROADMAP.md G0): a THINGS TO TEST item opened from a cold start, as a fresh
+    // campaign. It saves (Night Shift needs it), so the campaign you had is set aside first; see setCampaignAside().
+    const wantPlay = new URLSearchParams(location.search).get('play');
+    if (wantPlay) {
+      const item = TESTS.find(test => test.id === wantPlay && test.jump);
+      if (!item) logToast(`unknown play card '${wantPlay}'`);
+      else {
+        const keptYours = setCampaignAside();
+        state = createState(data.content);
+        $('splash').hidden = true;
+        jumpTo(item.jump);
+        if (keptYours) logToast('Your campaign is set aside. RESTORE YOUR CAMPAIGN on the title screen brings it back.');
       }
     }
     // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)

@@ -170,6 +170,10 @@ jobs:
         run: |
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
+      - name: the play card (ROADMAP G0) — three links, each one tap from its fight, your campaign kept aside
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/play-card.cjs
       - name: M1 inspection is not presence (map, encounter tab, routes, sale, visit, touch)
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
