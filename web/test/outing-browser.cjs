@@ -95,11 +95,12 @@ server.listen(0, '127.0.0.1', async () => {
       // Leaving Night Shift destroys its WebGL2 context, and under
       // --use-angle=swiftshader that alone takes 13-38 s (measured v4.78:
       // 38 s for the 1280x800 courtyard, 79 ms on Chromium's default backend).
-      // A navigation away from it gets the time that teardown needs.
+      // A navigation away from it gets the time that teardown needs; so does
+      // a tap that starts one, which waits under the action timeout.
       ctx.setDefaultNavigationTimeout(120000);
       const page = await ctx.newPage();
       const errors = watchErrors(page);
-      const tap = async el => { await el.scrollIntoViewIfNeeded(); await el[touch ? 'tap' : 'click'](); };
+      const tap = async (el, options = {}) => { await el.scrollIntoViewIfNeeded(); await el[touch ? 'tap' : 'click'](options); };
 
       // ── Act I: the courtyard ledger, a fight job, three who can fight.
       await page.goto(`${base}${APP}?skip`);
@@ -177,7 +178,8 @@ server.listen(0, '127.0.0.1', async () => {
       await shot(page, `${view}-${kind}-result`);
 
       // ── back to Kallio: the strip, and the stakes once.
-      await tap(page.locator('#crew-home'));
+      // A tap that leaves Night Shift waits for that teardown too (see above).
+      await tap(page.locator('#crew-home'), { timeout: 120000 });
       await page.waitForURL(at('\\?outing=back'));
       await page.waitForFunction(() => Boolean(window.__ptv3?.state));
       let s = await S(page);
