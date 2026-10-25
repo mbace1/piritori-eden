@@ -46,7 +46,7 @@ Owner, 2026-10-25: *"Check all documentation to see if we are going with the pla
 
 | Step | What | Exit (how we know) |
 |---|---|---|
-| **G0. Play it** | The owner plays v4.79 on the Pixel: one door fight, one getaway, the Bear Path (about 20 minutes). This is CAMPAIGN.md's P0, still open. | Two answers. Did any fight make you decide something? Did anything break on the device? |
+| **G0. Play it** | The owner plays the live build on the Pixel: one door fight, one getaway, the Bear Path (about 20 minutes). This is CAMPAIGN.md's P0, still open. **The play card (v4.81):** `?play=g0-door`, `?play=g0-getaway`, `?play=g0-bear`, each one tap from its fight; the same three lead THINGS TO TEST. | Two answers. Did any fight make you decide something? Did anything break on the device? |
 | **G1. The fight is a fight** | Tune Night Shift against targets the owner signs (§5). The levers are measured below. | `fight-balance.mjs` meets the targets for all 15 fights; the owner plays three fights and says yes. |
 | **G2. Fights feed the city** | Night Shift pays what the board paid: loot off the fallen, kit lost with the downed, glory. Missing crew get a way back (a rescue door, or bail at the bank). The shipment becomes a played outing or a real choice, not a roll. | A fight's spoils reach the fence. A missing person can come home. The finale asks something of the crew. |
 | **G3. The shot caller** | Build the owner-approved version of `design/C19_SHOT_CALLER.md`. Aatami's step-back becomes a role, not an absence. | His call changes a measured fight. |
