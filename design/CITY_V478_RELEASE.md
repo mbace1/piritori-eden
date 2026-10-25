@@ -1,0 +1,36 @@
+# Hub release: Act I city v4.78 (the quay, and no question when there is nothing to choose)
+
+- **Source:** `mbace1/piritori-eden` @ `3d4b011`, web only.
+  - **Gates were green:** run 1021, all nine jobs, on `b07b3a7`: `3d4b011` plus three test-only fixes. The shipped bytes are `3d4b011`'s.
+    - **Gates 1018 failed** at `outing-browser`'s desktop mid-fight reload, which hit its 30 s timeout. Measured, the 13–38 s is spent destroying Night Shift's WebGL2 context under the gate's `--use-angle=swiftshader`. On Chromium's default backend the same teardown takes 79 ms.
+      - No leak: geometry falls over the fight, and the heap stays at 26–35 MB. No GPU backlog. No unload handler.
+      - v4.76's buildings had taken it up to the limit. v4.76's and v4.77's receipts called it "the software renderer at desktop size"; this is the precise cause.
+      - The test keeps its backend and gives a navigation 120 s, with the reason written beside it (`dd23ff5`).
+    - **Gates 1019 failed** at `doors-browser`, which still asserted v4.77's courtyard fallback for the quay getaway. I had not rerun it for v4.78. Fixed in `a8882fc`.
+    - **Gates 1020 failed** on the next way out of Night Shift. Tapping *Back to Kallio* waits for the navigation it starts under Playwright's 30 s action timeout, not the navigation timeout. It is the same teardown; that tap gets 120 s too (`b07b3a7`).
+- **Site:** `mbace1/Suds-Jack` gh-pages `00ee04d9`, under `piritori/`. **Pages run 1561 succeeded.**
+  - Nothing was deleted. `release.json` holds 290 files, and 62 site files changed.
+- **What players get:**
+  - **The Sörnäinen quay** is a fight place of its own. It was the last of Act I's eleven still staged in a courtyard, so **every Act I place now has its own set.**
+    - It is the yard, cut off at the water: sheds and a warehouse row ending at the quay edge, a stone quay wall, bollards, and a boat tied up beside the board.
+    - Beyond it are the far pier across the water and a lamp post laying its light on the water.
+  - **The police only ask when someone is down.** With nobody on the ground, both answers used to cost the same. Now there is one, *Clear out*.
+- **Catalogue:**
+  - The note moves to v4.78 in en, fi and ja. `versions.json` piritori goes 4.77 → 4.78 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went 171 → 172. `sw-shell --check` agrees.
+- **Verified locally:**
+  - all 24 bare-node CI suites;
+  - `outing-browser`: 66, including the single answer;
+  - `night-places-browser`: all five places, the quay included, at four layouts (desktop, phone, landscape, tablet). In each, every cell is framed in all three presets, scenery textures are bounded, and a reload keeps the fight;
+  - renders at three presets and the eight-angle audit.
+  - `doors-browser` 52, `aatami-browser` 16, `standing-browser` 22.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - doors 52, with the quay's kit;
+    - road 42;
+    - outing 66. Its reloads were measured at 13.5 s (phone) and 30.9 s (desktop) under the gate's backend.
+- **Not verified:**
+  - the public github.io URL, which this session's network policy blocks;
+  - owner acceptance on a device.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`fee19ec1`, v4.77).
+- **Also in `3d4b011`, not built:** `design/C19_SHOT_CALLER.md`, step 3's proposal for the owner.
