@@ -159,7 +159,8 @@ server.listen(0, '127.0.0.1', async () => {
       s = await saved(page);
       ok(`${name}: it goes bad, and it is a fight`, s.outing?.door === 'sale-quay-shift' && s.outing.battle === 'battle-kattilahalli-3v3' && s.fightsByDay?.[8] === 1
         && /The deal goes bad\. It is a fight now\./.test(s.outing.opening));
-      ok(`${name}: a getaway, on the quay, not in the boiler hall`, s.outing.goal === 'getaway' && s.outing.anchor === 'sornainen_harbour' && s.outing.kit === 'courtyard' && s.outing.place === 'The Sörnäinen quay');
+      // v4.78: the quay is a Night Shift place of its own (it fell back to the courtyard).
+      ok(`${name}: a getaway, on the quay, not in the boiler hall`, s.outing.goal === 'getaway' && s.outing.anchor === 'sornainen_harbour' && s.outing.kit === 'quay' && s.outing.place === 'The Sörnäinen quay');
       await backToKallio(page, base);
       await fixture(page, quay('[]'));
       await page.locator('[data-action="take-door"][data-door="sale-quay-shift"]').click();
