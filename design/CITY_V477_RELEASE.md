@@ -1,0 +1,33 @@
+# Hub release: Act I city v4.77 (a tram street, and road fights in Night Shift)
+
+- **Source:** `mbace1/piritori-eden` @ `4a72ed7`, web only.
+  - **Gates were green:** run 1016, all nine jobs, on `354eebb` (`4a72ed7` plus the v4.76 receipt).
+- **Site:** `mbace1/Suds-Jack` gh-pages `fee19ec1`, under `piritori/`. **Pages run 1560 succeeded.**
+  - Nothing was deleted. `release.json` holds 290 files, and 59 site files changed.
+- **What players get** (owner: *"if something works, duplicate"*):
+  - **A tram street** for the four street fights, which used to be staged in a courtyard: Vaasanpuistikko, behind the market hall, under Mäkelänsilta and the Siltasaari shore.
+    - It is v4.76's runs and buildings plus the park's street dressing.
+    - The board stands on the asphalt, the tram track crosses it, and a tram waits beside it.
+  - **Road fights in Night Shift.** The underpass, Kello's cut found out, and both families' retaliations go straight to the 3D place, as a door's fight does.
+    - They are staged where they happened, by the side that came for you.
+    - They pay the event's own stakes once and do not turn the block.
+- **Catalogue:**
+  - The note moves to v4.77 in en, fi and ja. `versions.json` piritori goes 4.76 → 4.77 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went 170 → 171. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 24 bare-node CI suites, `road-browser`, `doors-browser`, `standing-browser`;
+    - `outing-browser`: 66.
+    - The local `night-places-browser` was stopped partway, once CI's night-places job, which walks the street, was green.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - `doors-browser` against `/piritori/`: 52;
+    - the road check against `/piritori/` (`road-browser`, re-pointed): 42. It sees the underpass go to Night Shift;
+    - `outing-browser` against `/piritori/`: 66, with the mid-fight reload given 240 s.
+  - **The outing's reload, measured.** At its own 30 s, the desktop mid-fight reload timed out twice in a row.
+    - Timed with the same test: 25.4 s on the staged site and 22.5 s on the repo tree. Phone: 13.5 s and 12.1 s.
+    - It is the software renderer at desktop size, close to the test's limit, on both trees. CI passes it at 30 s.
+- **Not verified:**
+  - the public github.io URL, which this session's network policy blocks;
+  - owner acceptance on a device.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`0f8cc685`, v4.76).
