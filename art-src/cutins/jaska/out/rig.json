@@ -1,0 +1,68 @@
+{
+ "id": "jaska",
+ "source": "art-src/concepts/people/jaska-concept-v03.jpg",
+ "crop": [
+  440,
+  80,
+  960,
+  780
+ ],
+ "size": [
+  520,
+  700
+ ],
+ "pieces": [
+  {
+   "name": "torso",
+   "file": "torso.png",
+   "box": [
+    56,
+    224,
+    353,
+    466
+   ],
+   "pivot": [
+    260,
+    680
+   ]
+  },
+  {
+   "name": "head",
+   "file": "head.png",
+   "box": [
+    175,
+    52,
+    166,
+    213
+   ],
+   "pivot": [
+    260,
+    256
+   ]
+  },
+  {
+   "name": "lid_0",
+   "file": "lid_0.png",
+   "box": [
+    215,
+    150,
+    45,
+    22
+   ],
+   "pivot": null,
+   "lid_of": "head"
+  },
+  {
+   "name": "lid_1",
+   "file": "lid_1.png",
+   "box": [
+    300,
+    148,
+    45,
+    22
+   ],
+   "pivot": null,
+   "lid_of": "head"
+  }
+ ]
+}

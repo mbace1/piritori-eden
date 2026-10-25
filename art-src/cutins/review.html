@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Cut-in review</title>
+<!-- Owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and talk options", the level behind;
+     "the player character profile can be shown when he talks"; Arvo "always on the news tab".
+     A review page, not the game: ?who=jaska|aatami|arvo. render.cjs films it. The rigs, clips and drawing are the
+     game's own (web/js/v3/cutin-stage.js and art/v3/manifest.json), so a review shows exactly what ships. -->
+<style>
+ html,body{margin:0;background:#000}
+ #s{width:1080px;height:1920px;position:relative;overflow:hidden}
+ canvas{position:absolute;inset:0}
+</style></head><body><div id="s"><canvas id="c" width="1080" height="1920"></canvas></div>
+<script type="module">
+import { CUTINS, rigParts, pose, drawCutin, W, H } from '../../web/js/v3/cutin-stage.js';
+const Q = new URLSearchParams(location.search), WHO = Q.get('who') || 'jaska', SCENE = Q.get('scene') || 'scene-club-v01';
+const load = (src) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+const cast = CUTINS[WHO];
+const manifest = await (await fetch('../../art/v3/manifest.json')).json(), asset = manifest.assets.find(a => a.id === cast.rig);
+const images = {}; for (const m of asset.members) images[m.part] = await load(`../../art/v3/${m.file}`);
+const rig = rigParts(asset, images), plate = cast.layout === 'location' ? await load(`../../art/v3/scenes/${SCENE}.webp`) : null;
+const c = document.getElementById('c'), g = c.getContext('2d');
+// what each review shows: [clip, label, words]
+const SEQ = {
+  jaska: [['idle', 'JASKA', 'Tervetuloa. Nobody here has slept since Thursday. Sit anywhere that is not a keyboard.'],
+    ['talk', 'JASKA', 'Aatami. You came all the way up past the bridge. That means you want something.'],
+    ['nod', 'JASKA', 'Fine. I will ask around. Quietly.'], ['shake', 'JASKA', 'No. Not that. Not from me.']],
+  aatami: [['idle', 'AATAMI', 'Ask before taking the envelope.'], ['talk', 'AATAMI', 'Call it family money.'],
+    ['nod', 'AATAMI', 'Leave the old money under the map.'], ['shake', 'AATAMI', 'No.']],
+  arvo: [['idle', 'DOCUMENTED', 'Good evening. Day three.'],
+    ['read', 'DOCUMENTED', 'Markka notes and coins ceased to be legal tender after February 2002.'],
+    ['glance', 'DOCUMENTED', 'The conversion rate is fixed: 5.94573 markka per euro.'],
+    ['gesture', 'INFERENCE', 'Old cash can still appear in homes and informal payments.'],
+    ['nod', 'ARVO LINDE', 'The markka is no longer money at the till.']],
+}[WHO];
+const T = SEQ.map(s => cast.clips[s[0]].dur), TOTAL = T.reduce((a, b) => a + b, 0);
+const TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8' };
+function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); }
+function words(label, text) {      // the game lays these out in HTML (v3.css .cutin-words); the film paints them the same
+  if (cast.layout === 'news') { const { x, y, w } = cast.copy;
+    g.fillStyle = '#17191A'; g.fillRect(x + 40, y + 40, 300, 60); g.fillStyle = TAGS[label] ?? '#676B6B'; g.fillRect(x + 40, y + 40, 12, 60);
+    g.fillStyle = '#E2D8C2'; g.font = '700 34px "Arial Narrow", Arial'; g.fillText(label, x + 72, y + 82);
+    g.fillStyle = '#17191A'; g.font = '400 40px "Courier New", monospace'; wrap(text, x + 40, y + 170, w - 90, 52); return; }
+  const { x, y, w } = cast.bubble;
+  g.fillStyle = '#17191A'; g.font = '700 44px "Arial Narrow", Arial'; g.fillText(label, x + 34, y + 62);
+  g.font = '400 40px "Courier New", monospace'; wrap(text, x + 34, y + 124, w - 70, 52);
+}
+function frame(t) {
+  t = ((t % TOTAL) + TOTAL) % TOTAL; let k = 0, t0 = 0; while (t >= t0 + T[k]) { t0 += T[k]; k++; }
+  const [clip, label, text] = SEQ[k];
+  drawCutin(g, WHO, rig, pose(WHO, clip, t - t0), { t, plate }); words(label, text);
+  g.fillStyle = 'rgba(226,216,194,.7)'; g.font = '700 30px Arial'; g.fillText(`REVIEW · ${WHO.toUpperCase()} · ${clip}`, 30, 50);
+}
+window.__review = { TOTAL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
+frame(0); window.__ready = true;
+</script></body></html>

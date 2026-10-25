@@ -25,6 +25,7 @@ additional frames or true layer extraction before shipping.
 | Toko Slomo paper rig v01 (`scene-toko-rig-v01`) | Owner-approved, 2026-10-21: "Approved, put it in the game" | Toko cut from the v02 screen into eleven pieces (hood, brows, eyelids, torso, both forearms, the note, a counter strip from the empty bar) and acted on hidden pivots: idle, lean (lowers his voice), buy, sabotage, leave. Drawn over `scene-toko-noodles-empty-v01` in place of `cast3d-toko-v01` at the counter; the owner chose this over the 3D layer. Provenance: `art-library/rigs/toko-slomo-paper-v01/README.md`. |
 | F01 heavy bruiser front T-pose concept | Owner-approved Meshy pilot source | The 2D identity and pose are approved. Generated 3D geometry, topology, texture, rig, animation and runtime readiness require separate review; see [Meshy pilot results](../MESHY_PILOT_RESULTS.md). |
 | F02 wiry skirmisher front T-pose concept | Owner-approved Meshy pilot source | The 2D identity and pose are approved. Generated 3D geometry, topology, texture, rig, animation and runtime readiness require separate review; see [Meshy pilot results](../MESHY_PILOT_RESULTS.md). |
+| Jaska cut-in rig v01 (`cutin-jaska-rig-v01`) | Owner-approved, 2026-10-24: "Jaska ... already approved" | Cut from Jaska concept v03; waist-up over the Scene Club with the speech bubble the owner steered. Preview: ?cutin=jaska. |
 
 ## Semi-approved
 
@@ -36,6 +37,8 @@ additional frames or true layer extraction before shipping.
 | Alley landscape battle assembly | Layout direction | Replace the archived courtyard plate. |
 | Alley portrait battle assembly | Mobile reflow direction | Replace its plate and retain the tighter crop. |
 | Back/mid/front/ground weather vectors | Layer direction | Tune density, masks and palette in engine. |
+| Arvo cut-in rig v01 (`cutin-arvo-rig-v01`) | Direction accepted, 2026-10-23: NPCs waist-up, "they don't need to be 3D" | Cut from the approved Arvo v05. Preview: ?cutin=arvo. The rig awaits owner review (PR #107). |
+| Aatami cut-in rigs v01 (`cutin-aatami-front-rig-v01`, `cutin-aatami-rig-v01`) | Sources owner-committed (PR #108), 2026-10-24 | Front: study 06, looking near the camera, used when he talks one at a time. Side: the young final, for both speakers on one screen. The rigs await owner review (PR #107). |
 
 ## Needs rework
 

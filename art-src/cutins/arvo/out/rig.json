@@ -1,0 +1,96 @@
+{
+ "id": "arvo",
+ "source": "art-library/presenter/arvo-linde-concept-v05.png",
+ "crop": [
+  200,
+  40,
+  1000,
+  860
+ ],
+ "size": [
+  800,
+  820
+ ],
+ "pieces": [
+  {
+   "name": "torso",
+   "file": "torso.png",
+   "box": [
+    33,
+    313,
+    734,
+    499
+   ],
+   "pivot": [
+    400,
+    800
+   ]
+  },
+  {
+   "name": "hands",
+   "file": "hands.png",
+   "box": [
+    215,
+    695,
+    386,
+    117
+   ],
+   "pivot": [
+    400,
+    760
+   ]
+  },
+  {
+   "name": "head",
+   "file": "head.png",
+   "box": [
+    284,
+    31,
+    231,
+    332
+   ],
+   "pivot": [
+    400,
+    355
+   ]
+  },
+  {
+   "name": "jaw",
+   "file": "jaw.png",
+   "box": [
+    330,
+    280,
+    121,
+    76
+   ],
+   "pivot": [
+    390,
+    284
+   ]
+  },
+  {
+   "name": "lid_0",
+   "file": "lid_0.png",
+   "box": [
+    340,
+    196,
+    42,
+    18
+   ],
+   "pivot": null,
+   "lid_of": "head"
+  },
+  {
+   "name": "lid_1",
+   "file": "lid_1.png",
+   "box": [
+    420,
+    196,
+    44,
+    18
+   ],
+   "pivot": null,
+   "lid_of": "head"
+  }
+ ]
+}

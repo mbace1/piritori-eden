@@ -15,7 +15,7 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=46');
+const app=await read('../js/v3/app.js?v=47');
 for(const id of ['cast3d-jaska-v01','presenter-arvo-linde-v05']){
  assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
 }
@@ -28,7 +28,7 @@ assert(rig&&stage.includes("'scene-toko-rig-v01'"),'Registered Toko rig');
 assert.equal(rig.plate_asset_id,'scene-toko-noodles-empty-v01','Rig drawn over the empty bar');
 assert(c.encounters.concat(c.optional_visits??[]).filter(e=>e.participants?.includes('toko')).every(e=>e.scene_asset_id===rig.plate_asset_id),'Every Toko scene is the empty bar');
 for(const part of ['torso','head','hood_bare','brow_l','brow_r','eye_l','eye_r','counter','fore_r','note','hand_l'])assert(rig.members.some(m=>m.part===part),`rig part ${part}`);
-assert((await read('../index.html')).includes('ACT I · v4.79'));
+assert((await read('../index.html')).includes('ACT I · v4.80'));
 const fight=await read('../fight-module/main.js');
 assert(!fight.includes('loadFighters('),'playable fight routes never load candidate meshes');
 assert(fight.includes('makeActor({placeholder:true},u,world)'),'playable fight routes always build stand-ins');
@@ -39,6 +39,15 @@ assert(runtimeToken,'fight-module names its runtime token');
 for(const page of ['../fight-module/index.html','../bear-path/index.html','../arena-lab/index.html']){
   assert((await read(page)).includes(`main.js?v=${runtimeToken}`),'shared stand-in runtime cache token');
 }
+// Waist-up cut-ins (cutin-stage.js): every speaker the player knows is a registered rig with the pieces it draws.
+const {CUTINS}=await import('../js/v3/cutin-stage.js');
+for(const [who,cast] of Object.entries(CUTINS)){
+ const rig=a.assets.find(x=>x.id===cast.rig);
+ assert(rig&&rig.kind==='cutin-rig',`${who}: registered cut-in rig`);
+ for(const part of ['torso','head'])assert(rig.members.some(x=>x.part===part)&&rig.rig.pivots[part],`${who}: ${part} piece and pivot`);
+ assert(Object.keys(rig.rig.lids).every(l=>rig.members.some(x=>x.part===l)),`${who}: eyelids are pieces`);
+}
+assert(app.includes("get('cutin')"),'?cutin= debug entry');
 assert((await read('../crew-run/startup.js')).includes(`main.js?v=${runtimeToken}`),'Night Shift uses the shared stand-in runtime');
-console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers and release marker');
+console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker');
 
