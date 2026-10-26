@@ -267,10 +267,10 @@ async function openTalk(encounter, who) {
   }
   ask();
 }
-// ── The play card (ROADMAP.md G0) ────────────────────────────────────────────
-// A play card plays a fresh campaign, and it has to save: a Night Shift fight hands over through the save. So the
-// campaign you had is kept aside first, and the title screen's RESTORE YOUR CAMPAIGN puts it back. A play card's own
-// campaign is marked, so a second card never sets it aside in place of yours.
+// ── The playtest links (ROADMAP.md G0) ────────────────────────────────────────────
+// A playtest plays a fresh campaign, and it has to save: a Night Shift fight hands over through the save. So the
+// campaign you had is kept aside first, and the title screen's RESTORE YOUR CAMPAIGN puts it back. A playtest's own
+// campaign is marked, so a second playtest never sets it aside in place of yours.
 const SET_ASIDE_KEY = `${SAVE_KEY}:set-aside`, PLAY_CARD_KEY = `${SAVE_KEY}:play-card`;
 function setCampaignAside() {
   try {
@@ -2591,7 +2591,7 @@ async function boot() {
         }
         if (!startBattle(target.id)) return;
       } else if (target.kind === 'door') {
-        // A door, taken, with Aatami standing at it (the play card, ROADMAP G0). `block` names the door block; a late
+        // A door, taken, with Aatami standing at it (the playtest, ROADMAP G0). `block` names the door block; a late
         // door needs a night. The door is offered and taken through doors.js, exactly as the board does it.
         const t = templateOf(doors, target.id);
         const index = target.block ?? data.content.schedule.findIndex(slot => slot.door && (!t?.late || slot.block === 'night'));
@@ -2715,12 +2715,12 @@ async function boot() {
         render();
       }
     }
-    // ?play=<id> — the play card (ROADMAP.md G0): a THINGS TO TEST item opened from a cold start, as a fresh
+    // ?play=<id> — the playtest links (ROADMAP.md G0): a THINGS TO TEST item opened from a cold start, as a fresh
     // campaign. It saves (Night Shift needs it), so the campaign you had is set aside first; see setCampaignAside().
     const wantPlay = new URLSearchParams(location.search).get('play');
     if (wantPlay) {
       const item = TESTS.find(test => test.id === wantPlay && test.jump);
-      if (!item) logToast(`unknown play card '${wantPlay}'`);
+      if (!item) logToast(`unknown playtest '${wantPlay}'`);
       else {
         const keptYours = setCampaignAside();
         state = createState(data.content);

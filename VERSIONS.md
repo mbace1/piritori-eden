@@ -79,17 +79,17 @@ Use resolved impact classifications for presentation; never reapply damage on re
 
 ## v4.81 — 2026-10-25
 
-**The play card (ROADMAP.md G0): three links, each one tap from a fight.** Owner, 2026-10-25: *"Go, make the play card."* G0 is the owner playing one door fight, one getaway and the Bear Path on the Pixel. It takes about twenty minutes and ends in two answers: did any fight make you decide something, and did anything break on the device?
+**The playtest (ROADMAP.md G0): three links, each one tap from a fight.** Owner, 2026-10-25: *"Go, make the play card."* ("Card" was only the name for a one-page sheet of links; in the game it is called the playtest.) G0 is the owner playing one door fight, one getaway and the Bear Path on the Pixel. It takes about twenty minutes and ends in two answers: did any fight make you decide something, and did anything break on the device?
 
 - **Three links, from a cold start:**
   - `?play=g0-door`: *The Card Game's Ledger* in the Torkkelinmäki courtyard, day 8 night, three crew, so Aatami has stepped back. *"Take it off the table, with the crew"* goes straight into Night Shift. The job is a fight.
   - `?play=g0-getaway`: *The Quay Shift*, day 8 night, with two packs on you. *"Sell two, and stay a minute too long"* goes bad on that block by the door's own roll (0.06 against 40%), so it becomes the getaway on the quay.
   - `?play=g0-bear`: the Bear Path, day 5, two crew, so Aatami still fights. *"Hold the path"* is fought in the park.
-- **The same three lead THINGS TO TEST** in the pause menu, each with what to look for and the two questions. Approving one removes it, so the list is the card's checklist.
-- **Your campaign is kept.** A Night Shift fight hands over through the save, so a play card plays a fresh campaign that saves. The campaign you had is set aside first, once, and never a play card's own. **RESTORE YOUR CAMPAIGN** on the title screen puts it back.
+- **The same three lead THINGS TO TEST** in the pause menu, each with what to look for and the two questions. Approving one removes it, so the list is the playtest's checklist.
+- **Your campaign is kept.** A Night Shift fight hands over through the save, so a playtest plays a fresh campaign that saves. The campaign you had is set aside first, once, and never a playtest's own. **RESTORE YOUR CAMPAIGN** on the title screen puts it back.
 - **A new jump, and nothing about the fights changed.** A door is offered and taken through `doors.js` exactly as the board does it, at a named block. Any jump can bring the crew its fight needs and the stock its deal needs.
 - Cache: `app.js?v=48`, `pause.js?v=5`, `testlist.js?v=4`. Gates: `play-card.cjs` (new, 26 checks, in the Act I browser job). Each link lands on its encounter with its fight open, hands over to Night Shift at the right place with the right job, and RESTORE gives your campaign back. `v3-contract` and `scene-content` follow the tokens.
-- **Owner played: pending.** This is the card for it.
+- **Owner played: pending.** This is the playtest for it.
 
 ### Port
 

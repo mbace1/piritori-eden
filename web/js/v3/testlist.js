@@ -42,17 +42,17 @@ export const APPROVAL_KEY = 'piritori-to-eden:approvals:v1';
  * does not know what it was supposed to prove.
  */
 export const TESTS = [
-  // ── ROADMAP.md G0, the play card ────────────────────────────────────────
+  // ── ROADMAP.md G0, the playtest ────────────────────────────────────────
   // Three fights, about twenty minutes on the Pixel, then two answers: did any
   // fight make you decide something, and did anything break on the device?
   // Each also opens from a cold start with `?play=<id>`. A Night Shift fight
-  // hands over through the save, so a play card plays a fresh campaign; the
+  // hands over through the save, so a playtest plays a fresh campaign; the
   // one you had is set aside first and the title screen offers it back.
   {
     id: 'g0-door',
     rev: 1,
     build: 'js',
-    title: 'Play card 1 of 3 — a door fight',
+    title: 'Playtest 1 of 3 — a door fight',
     where: 'Day 8 · night · the Torkkelinmäki courtyard',
     note: 'You are standing at a taken door, The Card Game\'s Ledger, with three crew; Aatami has stepped back. The job is a fight: make them back off. "Take it off the table, with the crew" goes straight into Night Shift in the courtyard. Look for a moment where you have to decide whose safety to spend, the police clock that tells you when they come, and the result coming back to the map once. Then the two questions: did it make you decide something, and did anything break on the phone?',
     jump: { kind: 'door', id: 'hit-courtyard-ledger', block: 15, crew: 3 },
@@ -61,7 +61,7 @@ export const TESTS = [
     id: 'g0-getaway',
     rev: 1,
     build: 'js',
-    title: 'Play card 2 of 3 — a getaway',
+    title: 'Playtest 2 of 3 — a getaway',
     where: 'Day 8 · night · the Sörnäinen quay',
     note: 'A sale on the quay, with two packs on you. Choose "Sell two, and stay a minute too long", marked CAN GO BAD: on this card it goes bad, so you get the getaway. Here the win is everyone out by the exit with what you came for. Look for whether walking straight out is enough (it measured at two rounds) and whether the way out reads on the small screen. Then the two questions.',
     jump: { kind: 'door', id: 'sale-quay-shift', block: 15, crew: 3, stock: 2 },
@@ -70,7 +70,7 @@ export const TESTS = [
     id: 'g0-bear',
     rev: 1,
     build: 'js',
-    title: 'Play card 3 of 3 — the Bear Path',
+    title: 'Playtest 3 of 3 — the Bear Path',
     where: 'Day 5 · day · Karhupuisto',
     note: 'A mission battle. Aatami still fights here, beside one of his two crew. "Hold the path" is fought in the park in Night Shift; the other answers avoid it. Look for Aatami on the board and carried out if he falls, and the mission\'s stakes paid once when you come back. Then the two questions.',
     jump: { kind: 'encounter', id: 'enc-bear-path', crew: 2 },
