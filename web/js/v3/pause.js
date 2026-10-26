@@ -9,7 +9,7 @@
  * See `testlist.js` for the list itself and for why approval stamps a rev
  * rather than a tick.
  */
-import { TESTS, partition, approve, unapprove } from './testlist.js?v=3';
+import { TESTS, partition, approve, unapprove } from './testlist.js?v=4';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
