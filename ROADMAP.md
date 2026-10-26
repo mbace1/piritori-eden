@@ -47,11 +47,11 @@ Owner, 2026-10-25: *"Check all documentation to see if we are going with the pla
 | Step | What | Exit (how we know) |
 |---|---|---|
 | **G0. Play it** | The owner plays the live build on the Pixel (picture: `design/G0_PLAYTEST.jpg`): one door fight, one getaway, the Bear Path (about 20 minutes). This is CAMPAIGN.md's P0, still open. **The playtest links (v4.81):** `?play=g0-door`, `?play=g0-getaway`, `?play=g0-bear`, each one tap from its fight; the same three lead THINGS TO TEST. | Two answers. Did any fight make you decide something? Did anything break on the device? |
-| **G1. The fight is a fight** | Tune Night Shift against targets the owner signs (§5). The levers are measured below. | `fight-balance.mjs` meets the targets for all 15 fights; the owner plays three fights and says yes. |
+| **G1. The fight is a fight** | Tune Night Shift against the targets in §5. The levers are measured below. **Aatami is in every chapter 1 fight** (answer 26, §9), so G1 puts him on the board first and tunes with him there. | `fight-balance.mjs` meets the targets for all 15 fights; the owner plays three fights and says yes. |
 | **G2. Fights feed the city** | Night Shift pays what the board paid: loot off the fallen, kit lost with the downed, glory. Missing crew get a way back (a rescue door, or bail at the bank). The shipment becomes a played outing or a real choice, not a roll. | A fight's spoils reach the fence. A missing person can come home. The finale asks something of the crew. |
-| **G3. The shot caller** | Build the owner-approved version of `design/C19_SHOT_CALLER.md`. Aatami's step-back becomes a role, not an absence. | His call changes a measured fight. |
-| **G4. Chapter 1, start to finish** | A playthrough bot plays the 10 days. The owner plays them. The playtest decision (F7) is recorded. `DESIGN_LOCKS` §12.1 is rewritten for the chapter as built: Night Shift fights, 10 days. | A recorded "this is fun / this is not, because…" and a feature-complete checklist that matches the game. |
-| **G5. Then grow** | In this order, each its own plan: landscape and retiring the board (CAMPAIGN P5/P6); the meeting in the place (after PR #107's cut-ins land); chapter 2 (pitch R1–R5 awaits greenlight); Godot (see §6). | |
+| ~~G3. The shot caller~~ | **Moved to chapter 2 (G5).** Aatami fights all of chapter 1 (answer 26), so chapter 1 has no caller. The design waits in `design/C19_SHOT_CALLER.md`. | |
+| **G4. Chapter 1, start to finish** | Travel and trades start costing time (D002: 30% of a block each, §9). A playthrough bot plays the 10 days, so it measures what that does to them. The owner plays them. The playtest decision (F7) is recorded. `DESIGN_LOCKS` §12.1 is rewritten for the chapter as built: Night Shift fights, 10 days. | Every story beat is still reachable with the time costs on. A recorded "this is fun / this is not, because…", and a feature-complete checklist that matches the game. |
+| **G5. Then grow** | In this order, each its own plan: landscape and retiring the board (CAMPAIGN P5/P6); the meeting in the place (the v4.80 cut-ins are its faces); chapter 2, with the shot caller (pitch R1–R5 awaits greenlight); Godot (see §6). | |
 
 ### The G1 levers, already measured
 
@@ -76,13 +76,40 @@ Each lever is measured on its own before they are combined.
 
 ## 5. Targets to sign (G1). Proposed; the owner moves any number
 
-| Fight job (careless play) | Getaway (walk straight out) | Police |
-|---|---|---|
-| wins 60–75% | wins under 50% | heat 0: in fewer than 1 fight in 5 |
-| 4–6 rounds | the safe line costs a round or HP | heat 3: in most fights |
-| 2–4 HP lost | | |
-| someone down in about 1 fight in 4 | | |
-| careful play wins more and loses less | | |
+Owner, 2026-10-26, on the first draft: *"What specifically."* These are the specifics.
+
+**What is measured.** `node web/tools/fight-balance.mjs` plays every Act I fight through Night Shift's own commands, 12 seeds each, at heat 0, 2 and 3. Heat 3 joins the tool in G1; today's heat-3 numbers came from a one-off copy. It plays:
+- the **11 fight jobs**: 5 door fights, 4 road fights and the 2 mission battles;
+- the **4 getaways** (doors whose job is getting out).
+
+**Three ways of playing**, each a policy in the tool:
+- **careless**: everyone walks at the nearest rival and swings. No guard, no reading the plans. This is the floor any player reaches. It exists today (`fight`).
+- **straight out**: everyone walks to the exit. It exists today (`run`).
+- **careful**: steps out of a telegraphed hit, guards when one cannot be dodged, and puts the tough down first. **G1 adds it.** Without it we cannot say whether thinking pays.
+
+**For scale:** a crew of two has about 10 HP (5 each), and a rival has 4–5.
+
+| # | Measure | Today (v4.81) | Target |
+|---|---|---|---|
+| 1 | Fight jobs, careless: won | 95% | **60–75%** |
+| 2 | Fight jobs, careless: rounds | 2.1 | **4–6** |
+| 3 | Fight jobs, careless: crew HP lost | 0.1 | **2–4** (a fifth to two fifths of the crew) |
+| 4 | Fight jobs, careless: someone goes down | 0% of fights | **20–30%** (about 1 fight in 4) |
+| 5 | Fight jobs, careful over careless | (no careful policy yet) | **15+ points** more won, and **1+ HP** less lost |
+| 6 | Getaways, straight out: won | 100% in 2 rounds | **under 50%** |
+| 7 | Getaways, careful: won | (no careful policy yet) | **70%+**, at a cost against straight out of a round or a point of HP |
+| 8 | Police arrive, heat 0 | 0 of 15 fights | **under 20%** of fights |
+| 9 | Police arrive, heat 3 | 1 of 15 fights | **over 50%** of fights |
+
+**Why these numbers:**
+- A fight should be won more often than lost when played without thought (rows 1–4), but not for free.
+- It is a fight if thinking pays (rows 5 and 7).
+- A getaway is a different job (rows 6–7).
+- Heat is the clock the player can see (rows 8–9).
+
+Today rows 8–9 look "fine" only because every fight ends before the police are due.
+
+**Passes when** all nine rows hold over the 15 fights, then the owner plays three of them and says yes. The before/after table goes into the release receipt.
 
 ## 6. Pipeline and housekeeping
 
@@ -97,9 +124,9 @@ Each lever is measured on its own before they are combined.
 - **Hub reconcile.** `design/HUB_RELEASE.md` step 4 (reconcile `gh-pages` → Suds-Jack `main` with a game PR) has not been done since 2026-10-02. Either do one reconcile PR or drop the rule. Owner's call.
 - **Open PRs (17).**
   - #101 and #102 are folded in here: their still-live parts are G0, G4, P5 and P6.
-  - Proposed to close as overtaken: #39, #63, #64, #65, #67, #68, #72, #75, #91, #93. Owner's call; nothing is closed without a yes.
+  - Proposed to close as overtaken (twelve, §9): #39, #63, #64, #65, #67, #68, #72, #75, #91, #93, and #101 and #102 now that this plan holds them. Nothing is closed without a yes.
   - Art PRs #103, #104, #106 and #108 wait on owner picks.
-  - #107 (cut-ins) must renumber past v4.79 and take `app.js?v=47+`.
+  - #107 merged as v4.80 (the cut-ins) and #109 as v4.81 (the playtest). #110 is the playtest follow-up.
 - **The stale documents** now carry a one-line banner pointing here:
   - `PHASING.md`, `ACTIVE_CONTEXT.md`, `START_HERE.md`, `CLAUDE_TAKEOVER.md`, `DECISIONS.md`, `PIRITORI_CHAPTER_EXECUTION.md`, `JS_BUILD_CATCHUP.md`;
   - `design/POST_C18_ITERATION_PLAN.md`, `design/OPTION_C_VERTICAL_SLICE.md`, `design/CLAUDE_MAP_MISSION_NEXT_STEPS.md`, `design/C19_ACCEPTANCE.md`, `design/H1_H2_PLAN.md`;
@@ -116,7 +143,7 @@ The Suds-Jack goal *"export cool MP4s that work as marketing for Toko and the ga
 
 GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), because it is one file with no build step. Adding it needs the owner's yes (`CLAUDE.md` §2: no new dependencies).
 
-## 8. Decisions only the owner can make
+## 8. Decisions only the owner can make (answered 2026-10-26: §9)
 
 1. The G1 targets (§5).
 2. The shot caller: the four questions at the end of `design/C19_SHOT_CALLER.md`.
@@ -124,3 +151,38 @@ GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), be
 4. Which stale PRs to close.
 5. Question 26: what makes Aatami step back. Three crew is provisional.
 6. D002: what travel and trades cost in time. Today they are free on the web.
+
+## 9. The owner's answers, 2026-10-26
+
+Owner: *"1. What specifically 2. Please suggest 3. Pause 4. You suggest 5. Sure and after chapter 1 6. 30%"*
+
+1. **The G1 targets: "What specifically."**
+   - §5 now spells out each measure, how it is taken and today's number.
+   - It waits for a yes.
+2. **The shot caller: "Please suggest."**
+   - The suggested answers are at the end of `design/C19_SHOT_CALLER.md`.
+   - Nothing is urgent: after answer 26 the caller is chapter 2 work.
+3. **Godot: "Pause."** This is the same answer as *"No Godot until later"* (PR #110). No ports before G4.
+4. **The PRs: "You suggest."**
+   - **Close twelve as overtaken:**
+     - #39, #72 and #75: September orientation and pipeline notes;
+     - #63 and #64: Godot fights (paused);
+     - #65: board-era fight stats (Night Shift replaced the board);
+     - #67, #68 and #93: Meshy 3D fighters (characters are cut paper now);
+     - #91: M1 map inspection, overtaken by the shipped M1/M2;
+     - #101 and #102: folded into this plan.
+   - **Keep five:**
+     - the art picks #103, #104, #106 and #108;
+     - #110, the live playtest follow-up.
+   - Nothing is closed until the owner says "close".
+5. **Answer 26, when Aatami steps back: "Sure and after chapter 1."**
+   - **The rule.** Aatami fights every fight in chapter 1. After chapter 1 he steps back, at the first fight where three of his own can fight (the existing rule, `steps_back_at_crew`). This is the 2026-10-24 ruling (*"the first phase of act1 in all fights"*) with chapter 1 as the first phase.
+   - **What it moves:**
+     - Chapter 1 has no shot caller, so G3 moves to chapter 2.
+     - Today the game steps him back inside chapter 1, at three crew. The fix is one chapter check in `aatamiFights`. It lands with G1, because it changes who stands in every chapter 1 fight and G1 measures every fight.
+     - Until then the G0 playtest shows today's rule.
+6. **D002, what travel and trades cost: "30%."**
+   - **Read as:** a trip, or a visit to a seller (however much changes hands), costs 30% of a block. Three fit in a block, and the fourth turns it. Road events keep their own minutes on top.
+   - **What it replaces:** answer 21's "trips and trades cost minutes, never a block".
+   - **When it lands:** G4, where the playthrough bot can see what it does to the 10 days.
+   - **To check:** if "30%" meant something else, for example how often a journey has an event, this reading is wrong.

@@ -1,6 +1,6 @@
 # The shot caller in Night Shift — a proposal for the owner
 
-Status: **proposal, not built.** This is step 3 of `C19_CAMPAIGN_FIGHTS.md` §6.4: *"a design for COMBAT §9.9.4's open questions, brought for a greenlight before it is built."* Nothing below is in the game.
+Status: **proposal, not built; suggested answers below, waiting for a yes. Chapter 2 work since 2026-10-26** (Aatami fights all of chapter 1, ROADMAP §9). This is step 3 of `C19_CAMPAIGN_FIGHTS.md` §6.4: *"a design for COMBAT §9.9.4's open questions, brought for a greenlight before it is built."* Nothing below is in the game.
 
 ## What is already settled
 
@@ -69,3 +69,20 @@ That doubles what the chair is worth without doubling any single call.
    - **Pull out**: a free Withdraw that takes the downed with it.
 3. **One call for Aatami, two for a promoted veteran?** Or one each, with the veteran's calls stronger?
 4. **Should Aatami appear while he calls?** His cut-in portrait, on the phone, is the obvious picture. PR #107's cut-ins would carry it.
+
+## Suggested answers (owner, 2026-10-26: *"Please suggest"*)
+
+Waiting for a yes. None of this is built, and it is chapter 2 work: Aatami fights every chapter 1 fight (answer 26).
+
+1. **Calls, not a pre-fight stance.**
+   - A stance picked before the fight is decided once and then forgotten.
+   - A call is a decision in the middle of the fight, when you can see what it buys.
+2. **These three: Go now, Hold, Keep them talking.**
+   - **Eyes** is already true: Night Shift shows every rival's plan and the police clock, so a warning would repeat what is on screen.
+   - **Pull out** would make running free, and running has a price on purpose (DESIGN_NOTES 2026-09-13).
+3. **One call for Aatami, two for a promoted veteran.**
+   - Two of the same calls double what the chair is worth and keep every call one size, so the forecasts stay simple.
+   - Stronger calls would need a second set of numbers.
+4. **Yes, Aatami appears while he calls, but small.**
+   - For now: his name on the CALL button, and one line in the fight log ("Aatami calls it: go now").
+   - His waist-up cut-in comes when the cut-ins grow a two-speaker layout. That waits for G1 under ROADMAP §3.

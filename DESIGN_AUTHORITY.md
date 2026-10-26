@@ -37,6 +37,24 @@ Shipped in v4.80 (PR #107). In the owner's words:
   layout and the Godot port. The cut-ins shipped here are the faces that
   ROADMAP G5's "meeting in the place" will use.
 
+## Owner answers, 2026-10-26 — the roadmap's decisions
+
+Asked the six open decisions of ROADMAP §8. Owner: *"1. What specifically 2. Please suggest 3. Pause 4. You suggest 5. Sure and after chapter 1 6. 30%"*. ROADMAP §9 records each one and what it moves.
+
+- **Godot is paused** ("Pause"; the same answer as *"No Godot until later"*, PR #110).
+- **Answer 26: Aatami steps back after chapter 1** ("Sure and after chapter 1").
+  - He fights every chapter 1 fight.
+  - After chapter 1 he steps back, at the first fight where three of his own can fight (`steps_back_at_crew`).
+  - Chapter 1 is the "first phase of act1" of the 2026-10-24 ruling.
+  - The shot caller is chapter 2 work.
+- **D002: a trip or a trade costs 30% of a block** ("30%").
+  - This replaces answer 21's "never a block".
+  - The reading (a trade is one visit to a seller) is stated in ROADMAP §9 for the owner to correct.
+- **Still waiting for a yes:**
+  - the G1 targets, now specific (ROADMAP §5);
+  - the shot caller's suggested answers (`design/C19_SHOT_CALLER.md`);
+  - the twelve PRs to close (ROADMAP §9).
+
 ## Owner note, 2026-10-23 — 3D might not be the future
 
 Asked whether to freeze the formation board so every fight moves to Night
@@ -167,11 +185,12 @@ Owner, same message: "Make the Tokon Ramen shop appear at the Piritori area or a
 18. **The Thursday Load:** "Go ahead" on the greenlight list G1–G7 (design/STORY_PITCHES.md). The Jade front moves to Hakaniemi. Kello, the Piritori watcher, sells the Thursday load to both families. The four missions carry the thread, the Thursday Tram settles it, and the game gets mission briefings and a case board.
 19. **"1-4 go ahead" (2026-09-28):** (1) the Godot catch-up of v4.58–v4.62; (2) Kello's cut pays weekly, with growing risk; (3) more road events tied to the Thursday Load through the network; (4) the next pitch, at a higher level. Owner: "Pitch me higher level designs."
 20. **The Long Game, greenlit (2026-09-29):** Owner: "Looks good, just shortly ask me about the contradictions. Otherwise good to go in your order." H1-H8 of design/STORY_PITCHES.md are approved, built in the order H7, H1+H2, H4+H5, H3, H6. The recommendations there stand until the contradiction questions are answered.
-21. **Time keeps the web rule (2026-09-29):** "yes, web". The block turns only on a story beat, a door or nightfall; trips and trades cost minutes, never a block. Godot, which spends a block per ledger trade, follows.
+21. **Time keeps the web rule (2026-09-29):** "yes, web". The block turns only on a story beat, a door or nightfall; trips and trades cost minutes, never a block. Godot, which spends a block per ledger trade, follows. *Superseded by D002, 2026-10-26: a trip or a trade costs 30% of a block.*
 22. **What crosses a chapter (2026-09-29):** "let's test these. I thought GDD would say weapons carry over. But cash and produce might not, although you need some cash, it could be set as a standard for each chapter beginning." Weapons and what you built carry; cash opens on a standard stake; stock resets. It is data (`chapter_turn`) so it can be tested and changed.
 23. **Fight rhythm (2026-09-29):** "Fights everyday, depending on the mission. Maybe 2 per day." This replaces the pitch's one-every-2-3-days. Every day offers at least one job that can become a fight, and a day holds at most two fights. Whether a job becomes a fight depends on the job, and it is always briefed. Days 8-10 (doors) follow this now; the authored days 1-7 are re-paced in H6.
 24. **Aatami fights first, then the crew does (2026-09-29):** "Aatami fights in first fights and then has minions do fighting.. these are all in the documentation." COMBAT.md §9.9.1 stands as written: he fights the first battles because he cannot afford crew, then stops, and the withdrawal is the arc. The city battles do not yet put him on the board; that is H6's first item.
 25. **Fights are central and escalate (2026-09-29):** "Fights are central and can escalate easily from bad deals or if you want to play agressive." A bad deal (skimming, lying, staying too long, selling what you saw) can turn into a fight by a roll the forecast warns about. Playing aggressive is always a choice where a fight is on the table.
+26. **When Aatami steps back (2026-10-26):** "Sure and after chapter 1." He fights all of chapter 1, then steps back once three of his own can fight. See the 2026-10-26 answers above.
 27. **No corners for now (2026-09-30):** "Let's forget postin people on the corner, that seems to advanced at this point." H4 (holding corners with crew) is shelved, not cut: no posting, no corner pay. H5 (the families' standing) goes ahead on its own, moved by choices, doors and fights.
 
 ## Owner continuation, 2026-09-13 — art first
