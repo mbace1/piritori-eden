@@ -2726,7 +2726,7 @@ async function boot() {
         state = createState(data.content);
         $('splash').hidden = true;
         jumpTo(item.jump);
-        if (keptYours) logToast('Your campaign is set aside. RESTORE YOUR CAMPAIGN on the title screen brings it back.');
+        if (keptYours) logToast('Your campaign is kept. Restore it from the title screen.');
       }
     }
     // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)
