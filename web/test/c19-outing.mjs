@@ -18,7 +18,7 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=5');
-const R = await import('../crew-run/run.js?v=15');
+const R = await import('../crew-run/run.js?v=16');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate } = await import('../fight-module/tactics.js?v=9');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');

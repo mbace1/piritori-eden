@@ -1,7 +1,7 @@
 import {
   SAVE_KEY as CAMPAIGN_SAVE_KEY,
   crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, arrestCrew,
-} from '../js/v3/state.js?v=10';
+} from '../js/v3/state.js?v=11';
 import {nameFrom} from '../../people/roster.mjs?v=1';
 
 // C.17 bridge: the authored campaign remains the source of truth. Night Shift

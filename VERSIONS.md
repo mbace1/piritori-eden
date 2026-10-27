@@ -4,8 +4,9 @@ Enemy routes stop at the first obstruction; rivals move along the unblocked
 portion and attack their original target only when that target remains in
 range and sight. Preview and resolution use the same route; there is no
 retargeting. C.19 test build, not deployed; owner device acceptance pending.
-Godot paused. Cache: tactical resolver v9, session v19, run v15, crew UI v23,
-tactical UI v12, fight main v45, startup v19, Act I app v51.
+Godot paused. Cache: tactics v9, fight resolver v9, session v20, run v16,
+crew UI v24, tactical UI v12, fight main v46, startup v20, Act I app v52;
+campaign state v11, battle v15, Toko v6, campaign adapter v10.
 
 `fight-balance.mjs`, 12 seeds, 15 fights at heat 0 and 2, with Aatami in
 Chapter 1: careless fight wins 100% → 95.45%, rounds 2.00 → 2.09, HP lost
