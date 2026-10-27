@@ -117,10 +117,7 @@ Today rows 8–9 look "fine" only because every fight ends before the police are
   - Keep the receipt.
   - Add two lines: "owner played: yes/pending", and the `fight-balance` table whenever a release touches fights.
   - Ship only bytes that CI saw green. v4.78 shipped with CI green on a later, test-only head; the bytes matched, but say so in the receipt.
-- **Godot: owner decision.**
-  - (a) Pause it officially until G4. Port notes keep piling up in VERSIONS.md, and its CI stays green only because it does not change.
-  - (b) Port the C engine now, which is CAMPAIGN P5 pulled forward.
-  - **Recommended: (a).** A port of fights that are not yet fun is work done twice.
+- **Godot: paused.** Owner, 2026-10-26: *"No Godot until later."* That is option (a): no ports until the web build has earned them (G4 at the earliest). Releases stop writing Port sections and say "Godot paused" instead.
 - **Hub reconcile.** `design/HUB_RELEASE.md` step 4 (reconcile `gh-pages` → Suds-Jack `main` with a game PR) has not been done since 2026-10-02. Either do one reconcile PR or drop the rule. Owner's call.
 - **Open PRs (17).**
   - #101 and #102 are folded in here: their still-live parts are G0, G4, P5 and P6.
@@ -141,13 +138,15 @@ The Suds-Jack goal *"export cool MP4s that work as marketing for Toko and the ga
 - FFmpeg (already in this environment) encodes it;
 - optionally, Kokoro voiceover (English and Japanese; no Finnish voice) and whisper.cpp captions.
 
+- **The Toko dance (v3, made with the Grok bot, 2026-10-26).** A 7.5-second transparent loop at 128 BPM from AIST++ motion capture (Google), licensed **CC BY 4.0**: any published use needs the credit *"Motion data: AIST++ (Google), CC BY 4.0"*. The files are in the bot's own workspace, not in this repo.
+
 GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), because it is one file with no build step. Adding it needs the owner's yes (`CLAUDE.md` §2: no new dependencies).
 
 ## 8. Decisions only the owner can make (answered 2026-10-26: §9)
 
 1. The G1 targets (§5).
 2. The shot caller: the four questions at the end of `design/C19_SHOT_CALLER.md`.
-3. Godot: pause (recommended) or port now.
+3. ~~Godot: pause or port now.~~ **Answered 2026-10-26: "No Godot until later."**
 4. Which stale PRs to close.
 5. Question 26: what makes Aatami step back. Three crew is provisional.
 6. D002: what travel and trades cost in time. Today they are free on the web.

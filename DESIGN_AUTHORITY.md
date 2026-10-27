@@ -2,6 +2,13 @@
 
 > **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
 
+## Owner answers, 2026-10-26 — Godot waits; simple UI
+
+- **"No Godot until later."** ROADMAP §6 option (a): no Godot ports until the web
+  build has earned them. Port notes stop; releases say "Godot paused".
+- **"Too much text on those cards, simple UI is better."** Said of the playtest
+  (v4.81). A test card says what to tap and nothing more.
+
 ## Owner rulings, 2026-10-23/24 — characters talk as waist-up cut-ins
 
 Shipped in v4.80 (PR #107). In the owner's words:
