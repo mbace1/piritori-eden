@@ -28,6 +28,9 @@ const CARDS=[
    ok(st.recruited===expect.crew,`${id}: ${expect.crew} crew recruited (got ${st.recruited})`);
    ok(st.cash!==4321,`${id}: a fresh campaign, not yours`);
    ok(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null')?.cash,ASIDE)===4321,`${id}: your campaign is set aside, and only yours`);
+   // The UI diet's rule, as a gate: the decision is on the first screen (the first choice you can take ends inside it).
+   const fold=await page.evaluate(()=>{const c=[...document.querySelectorAll('.choice-card')].find(x=>!x.disabled);return c?Math.round(c.getBoundingClientRect().bottom)-innerHeight:null;});
+   ok(fold!==null&&fold<=0,`${id}: the first open choice is on the first screen (${fold} px past it)`);
    const card=page.locator(`.choice-card[data-choice="${choice}"]`);
    ok(await card.count()===1&&await card.isEnabled(),`${id}: "${choice}" is there and open`);
    await Promise.all([page.waitForURL(/crew-run\/\?campaign=1&outing=/,{timeout:30000}),card.tap()]);

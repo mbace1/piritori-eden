@@ -478,7 +478,6 @@ function renderHud() {
   $('intelValue').textContent = state.intel;
   const clock = clockLabel(state, currentSchedule(state, data.content), roadEvents);
   $('blockLabel').textContent = formatBlock(state, data.content) + (clock ? ` · ${clock}` : '');
-  $('localeButton').textContent = state.locale.toUpperCase();
   $('eraLabel').textContent = state.locale === 'fi'
     ? '2003 · AATAMI · ERA I · UI FI / TARINA EN (ALFA)'
     : '2003 · AATAMI · ERA I';
@@ -1025,25 +1024,38 @@ function renderEncounter() {
           ${isJaska ? '<i class="jaska-contact" aria-hidden="true"></i><div class="scene-speaker jaska-standing" data-speaker="jaska" data-asset="cast3d-jaska-v01" aria-label="Jaska"></div>' : ''}
           ${ambientLayers(encounter)}
           <i class="scene-vignette"></i>
-          <div class="scene-caption">
-            <h2>${esc(site?.label ?? anchor?.label)}</h2>
-            <p>${esc(anchor?.label)} · ${esc(slot.block.toUpperCase())} · ${encounter.source_status === 'fiction' ? 'FICTIONAL COMPOSITE' : 'MIXED SOURCE'}</p>
-          </div>
         </div>
       </section>
       <section class="paper-panel encounter-copy">
-        <p class="section-label">${formatBlock(state, data.content)} · ${esc(anchor?.label)}</p>
+        <p class="section-label">${formatBlock(state, data.content)} · ${esc(anchor?.label)}${encounter.source_status === 'fiction' ? '' : ' · MIXED SOURCE'}</p>
         <h2 class="section-title">${esc(encounterTitle(encounter))}</h2>
         <p class="encounter-opening">${esc(encounter.opening)}</p>
-        ${encounter.door ? (() => { const t = templateOf(doors, encounter.door); return `<ol class="mission-steps">${(t?.steps ?? []).map(step => `<li>${esc(step)}</li>`).join('')}</ol><p class="consequence-strip">${esc(t?.stakes ?? '')}</p>`; })() : ''}
-        <div class="inspectables" aria-label="Inspect scene">
-          ${encounter.inspectables.map((item, index) => `<button class="paper-button inspect-button" data-action="inspect" data-index="${index}" type="button">${esc(item)}</button>`).join('')}
-        </div>
-        <p class="observation" aria-live="polite">${esc(observation)}</p>
+        ${encounterTags(encounter)}
         ${resolved ? renderEncounterOutcome(choice, pendingBattle) : renderChoices(encounter)}
         ${state.mode === 'visit' && !resolved ? '<button class="paper-button" data-action="leave-visit">LEAVE WITHOUT CHOOSING</button>' : ''}
+        ${lookAround(encounter)}
       </section>
     </div>`;
+}
+
+// The UI diet (design/UI_DIET.md; owner, 2026-10-26: "These aren't needed, so we need to optimize"). The meeting keeps
+// the decision on the first screen: the place is named once (the label line), a door's step list and stakes sentence
+// become two short tags drawn from its data, and the things to look at fold into one LOOK AROUND below the choices.
+// A source label shows only when the scene cites real events (GDD: "source status if it references real events").
+function encounterTags(encounter) {
+  const t = encounter.door ? templateOf(doors, encounter.door) : null;
+  const tags = [t?.fight && 'CAN TURN INTO A FIGHT', t?.late && 'GONE AFTER 22:00'].filter(Boolean);
+  return tags.length ? `<p class="encounter-tags">${tags.map(tag => `<span>${esc(tag)}</span>`).join('')}</p>` : '';
+}
+function lookAround(encounter) {
+  if (!encounter.inspectables?.length) return '';
+  return `<details class="look-around"${observation ? ' open' : ''}>
+    <summary class="paper-button inspect-button">LOOK AROUND</summary>
+    <div class="inspectables" aria-label="Inspect scene">
+      ${encounter.inspectables.map((item, index) => `<button class="paper-button inspect-button" data-action="inspect" data-index="${index}" type="button">${esc(item)}</button>`).join('')}
+    </div>
+    <p class="observation" aria-live="polite">${esc(observation)}</p>
+  </details>`;
 }
 
 function encounterTitle(encounter) {
@@ -1073,9 +1085,10 @@ function encounterTitle(encounter) {
 function renderChoices(encounter) {
   return `<div class="choice-list">${encounter.choices.map(choice => {
     const status = choiceStatus(choice, state, data);
-    return `<button class="choice-card" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
+    // The UI diet: a choice you cannot take yet is one line, its label and why, so it does not push the open ones off the screen.
+    return `<button class="choice-card${status.ok ? '' : ' locked'}" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
       <strong>${esc(choice.label)}</strong>
-      <span>${esc(choice.forecast)}</span>
+      ${status.ok ? `<span>${esc(choice.forecast)}</span>` : ''}
       ${choice.escalates ? `<small class="road-time">CAN GO BAD · ${Math.round(choice.escalates * 100)}%</small>` : ''}
       ${status.ok ? '' : `<em>${esc(status.reasons.map(readableReason).join(' · '))}</em>`}
     </button>`;
@@ -2488,7 +2501,7 @@ function inspectionCopy(item) {
 }
 
 function resetCampaign() {
-  if (!confirm('Reset the seven-day campaign and remove its local save?')) return;
+  if (!confirm('Start over? This campaign\'s save is removed.')) return;
   localStorage.removeItem(SAVE_KEY);
   state = createState(data.content);
   routePlanning = false;
@@ -2536,11 +2549,6 @@ async function boot() {
       render();
       $('modeRoot').focus();
     });
-    $('localeButton').addEventListener('click', () => {
-      state.locale = state.locale === 'en' ? 'fi' : 'en';
-      persist(); render();
-    });
-    $('resetButton').addEventListener('click', resetCampaign);
     $('modeNav').addEventListener('click', event => {
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
@@ -2640,9 +2648,12 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.82',
+      version: 'v4.83',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
+      // The UI diet: language and starting over live here, not on every screen's header.
+      language: { get: () => state.locale, toggle: () => { state.locale = state.locale === 'en' ? 'fi' : 'en'; persist(); render(); } },
+      reset: resetCampaign,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
     // Esc pauses from anywhere. The menu handles Esc itself once it is open,

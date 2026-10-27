@@ -108,7 +108,8 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: the door is taken`, s.doors.taken[15]?.template === doorId && !(await board.count()));
       ok(`${name}: and Aatami can walk to it`, await walkToLead(page));
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
-      ok(`${name}: the door plays as a briefed scene`, await page.locator('.encounter-copy .mission-steps li').count() === 3);
+      // The UI diet (design/UI_DIET.md): a door plays as a scene with its choices, and no step list.
+      ok(`${name}: the door plays as a scene, choices first`, await page.locator('.encounter-copy .choice-card').count() >= 2 && await page.locator('.encounter-copy .mission-steps').count() === 0);
       await page.locator('[data-action="choose"]:not([disabled])').last().click();
       await page.locator('[data-action="advance"]').click();
       s = await S(page);

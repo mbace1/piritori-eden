@@ -118,6 +118,7 @@ server.listen(0, '127.0.0.1', async () => {
     await page.locator('[data-action="open-encounter"]').click();
     ok('the first location is the first-bag encounter',
       /THE FIRST BAG/.test(await page.locator('#modeRoot').textContent()));
+    await page.locator('.look-around > summary').first().click(); // the UI diet folds the things to look at
     await page.locator('[data-action="inspect"]').first().click();
     ok('LOOK produces a live observation', (await page.locator('.observation').textContent()).length > 20);
     await page.locator('[data-choice="buy"]').click();
