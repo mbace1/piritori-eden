@@ -880,7 +880,7 @@ function renderRoute() {
         <section class="paper-panel">${routeInfo}</section>
         <section class="paper-panel">
           <p class="section-label">CITY MEMORY</p>
-          <ul class="log-list">${state.logs.slice(0, 5).map(item => `<li>${esc(item)}</li>`).join('')}</ul>
+          <ul class="log-list">${state.logs.slice(0, 5).map(item => `<li>${esc(item.replace(/^enc-[a-z0-9-]+:\s*/, ''))}</li>`).join('')}</ul>
         </section>
       </aside>
       ${renderNextStep(slot)}
@@ -2640,7 +2640,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.81',
+      version: 'v4.82',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

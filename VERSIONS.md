@@ -1,3 +1,7 @@
+## v4.82 — candidate, 2026-10-27
+
+City memory shows encounter choices without internal `enc-` identifiers, including entries already in saved games. Campaign data and rules are unchanged. Cache: `app.js?v=49`. Owner device playtest and deployment are pending; this entry does not assert a release. Godot paused.
+
 # C.19 — Night Shift battlefield clarity
 
 Focused fighter labels, full statistics in VIEW, selected/target rings, labelled south exit, and honest rescue guidance. Enemy plans, action costs, rules, campaign settlement and procedural characters remain unchanged. Physical Pixel/iPad and owner visual acceptance remain pending. Source and tested head `69b23168`; live on the hub as `piritori-c17/web/crew-run/?campaign=1&release=19` (its `release.json` holds the file hashes). This entry was written into the source log at the C.19 → main merge (2026-09-23): until then only the generated copy inside the deployed package said C.19, and this file stopped at C.18. See design/C19_READABILITY.md and design/C19_ACCEPTANCE.md.
