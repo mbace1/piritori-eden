@@ -1,3 +1,17 @@
+## v4.84 — candidate, 2026-10-27
+
+Enemy routes stop at the first obstruction; rivals move along the unblocked
+portion and attack their original target only when that target remains in
+range and sight. Preview and resolution use the same route; there is no
+retargeting. C.19 test build, not deployed; owner device acceptance pending.
+Godot paused. Cache: tactical resolver v9, session v19, run v15, crew UI v23,
+tactical UI v12, fight main v45, startup v19, Act I app v51.
+
+`fight-balance.mjs`, 12 seeds, 15 fights at heat 0 and 2, with Aatami in
+Chapter 1: careless fight wins 100% → 95.45%, rounds 2.00 → 2.09, HP lost
+0 → 1.09, downed 0 → 0. Straight-out getaways win 87.5% → 87.5%, rounds
+2.25 → 2.25, HP lost 0 → 0.5. A single lever; the fights remain too easy.
+
 ## v4.83 — candidate, 2026-10-27
 
 Chapter 1 now always includes Aatami in campaign fights, even with three crew;

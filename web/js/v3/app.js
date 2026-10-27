@@ -2640,7 +2640,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.83',
+      version: 'v4.84',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
     });

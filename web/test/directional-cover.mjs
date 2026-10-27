@@ -16,7 +16,7 @@ for(const [edge,[dx,dy]] of Object.entries(EDGES)){
  assert.equal(forecast(s.battle,u,t).chance,65);u.cell=side;assert.equal(forecast(s.battle,u,t).chance,90);assert.equal(forecast(s.battle,u,t).flanked,true);
  u.cell=neighbor;const path=routes(s.battle,u).get(to);assert.equal(path,undefined,'occupied destination stays blocked');t.cell='5,7';
  const detour=routes(s.battle,u).get(to);assert.equal(detour.length,3,'walk around the low wall; do not phase through');
- const plan={id:u.id,type:'advance',path:[to],to};assert.equal(planView(s.battle,plan).reason,'Planned route blocked');
+ const plan={id:u.id,type:'advance',path:[to],to};const blocked=planView(s.battle,plan);assert.equal(blocked.reason,'Route blocked; holds');assert.equal(blocked.to,u.cell);
  u.equipment='baseball-bat';t.cell=to;assert.equal(forecast(s.battle,u,t).chance,100,'low walls do not give melee evasion');
 }
 // A natural 90%-accuracy miss must not be presented as a wall block. Rolls in

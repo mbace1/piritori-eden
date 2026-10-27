@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=18';
-import {routes,forecast,threats,planView,sightCells,choosePlan} from '../fight-module/tactics.js?v=8';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=19';
+import {routes,forecast,threats,planView,sightCells,choosePlan} from '../fight-module/tactics.js?v=9';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const make=()=>createSession(content,'ranged','lab-2');
 for(const order of ['move-first','attack-first']){
@@ -23,6 +23,20 @@ for(const order of ['move-first','attack-first']){
  u.cell='0,2';t.cell='0,4';assert.equal(forecast(b,u,t).reason,'Line blocked');
  u.cell='1,2';t.cell='1,3';assert.equal(forecast(b,u,t).chance,90,'rear approach flanks north wall');u.cell='1,4';assert.equal(forecast(b,u,t).chance,65);b.cover.delete(t.cell);assert.equal(forecast(b,u,t).chance,90);
  assert.deepEqual(sightCells('0,0','1,1'),['1,0','0,1'],'touching walls cannot be shot through');
+}
+{
+ const s=createSession(content,'melee','lab-6'),b=s.battle; b.cover.clear();
+ const enemy=b.enemies[0],target=b.players[0];
+ enemy.cell='0,5'; target.cell='0,3';
+ b.players[1].cell='4,0'; b.players[2].cell='5,0';
+ b.enemies[1].cell='4,7'; b.enemies[2].cell='5,7';
+ const plan={id:enemy.id,type:'attack',target:target.id,path:['0,4','0,3'],to:'0,3'}; b.plans=[plan];
+ const preview=threats(b).views[0];
+ assert.deepEqual(preview.path,['0,4']); assert.equal(preview.to,'0,4');
+ assert.equal(preview.valid,true); assert.equal(preview.target,target.id);
+ const result=s.command('end'); const move=result.record.events.find(e=>e.id===enemy.id&&e.type==='move');
+ const hit=result.record.events.find(e=>e.id===enemy.id&&e.type==='attack');
+ assert.equal(move.to,preview.to); assert.equal(hit.target,preview.target); assert.equal(hit.forecast.chance,preview.chance);
 }
 {
  const s=make(),b=s.battle,u=b.players[0],t=b.enemies[0],plan=structuredClone(b.plans[0]);
