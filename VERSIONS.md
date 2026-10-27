@@ -1,3 +1,18 @@
+## v4.83 — candidate, 2026-10-27
+
+Chapter 1 now always includes Aatami in campaign fights, even with three crew;
+older Chapter 1 saves clear an invalid early step-back flag. After Chapter 1
+the existing three-available-crew withdrawal and permanent memory remain.
+This is a rule correction, not combat tuning. Owner Pixel playtest and 3D
+visual acceptance are pending. Godot paused. Cache: app v50; state v11;
+doors v5; road and visits v7; story v6.
+
+`fight-balance.mjs`, 12 seeds, 15 fights, heat 0 and 2: the careless fight
+policy changes from 95.45% wins, 2.09 rounds and 0.09 HP lost to 100%, 2.00
+rounds and 0 HP; straightforward getaways change from 100% wins, 2.00 rounds,
+0.25 HP lost to 87.5%, 2.25 rounds and 0 HP. These are simulation averages,
+not human acceptance; combat is still too easy and needs G1 tuning.
+
 ## v4.82 — candidate, 2026-10-27
 
 City memory shows encounter choices without internal `enc-` identifiers, including entries already in saved games. Campaign data and rules are unchanged. Cache: `app.js?v=49`. Owner device playtest and deployment are pending; this entry does not assert a release. Godot paused.
