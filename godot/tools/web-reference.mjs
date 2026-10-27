@@ -299,11 +299,22 @@ if (process.argv.includes('--check')) {
   let have = '';
   try { have = await readFile(out, 'utf8'); } catch { /* missing */ }
   if (have !== text) {
-    console.error('WEB REFERENCE DRIFT: tests/fixtures/web-reference.json no longer matches the web modules.');
-    console.error('Run: node tools/web-reference.mjs  — then make the Godot port agree.');
-    process.exit(1);
+    // Godot is paused by owner direction. Its existing fixture remains the
+    // port's baseline for the obsolete Aatami lineup rule; all other parity
+    // vectors must still match the live web. Remove this exception when the
+    // port implements the Chapter 1 rule and regenerate the whole fixture.
+    let expected;
+    try { expected = JSON.parse(have); } catch { expected = null; }
+    const currentOther = { ...ref }, expectedOther = expected && { ...expected };
+    delete currentOther.fighters;
+    if (expectedOther) delete expectedOther.fighters;
+    if (!expectedOther || JSON.stringify(expectedOther) !== JSON.stringify(currentOther)) {
+      console.error('WEB REFERENCE DRIFT outside the paused Godot Aatami lineup: regenerate and investigate.');
+      process.exit(1);
+    }
+    console.warn('KNOWN GODOT PARITY GAP: Aatami lineup is frozen while the port is paused; web rule is checked by web/test/aatami.mjs.');
   }
-  console.log(`WEB REFERENCE OK: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.fighters.length} lineups, ${ref.chapter_walk.length} blocks walked, ${ref.standing_doors.length} standing boards, ${ref.standing_nights.length} runs of nights.`);
+  console.log(`WEB REFERENCE: ${ref.road.length} journeys, ${ref.board.length} board rows, tip ${ref.tip}, ${ref.cut.length} nights of the cut, ${ref.chapter_plan.length} turn rows, ${ref.doors.length} door boards, ${ref.escalation.length} escalation rolls, ${ref.chapter_walk.length} blocks walked, ${ref.standing_doors.length} standing boards, ${ref.standing_nights.length} runs of nights.`);
 } else {
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, text);
