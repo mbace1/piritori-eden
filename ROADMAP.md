@@ -1,5 +1,43 @@
 # ROADMAP: the one plan for Act I (producer's cut)
 
+## Act I completion — 27 October 2026
+
+**Working estimate: 38%.** This is a producer's judgment, not a count of code
+or a claim of player acceptance. It uses the same 100-point rubric at each
+check-in: playable foundation **15/20**, combat **4/20**, story and
+consequences **8/20**, city/economy **8/15**, arenas and presentation **3/15**,
+device validation and release **0/10**. Raise a score only with evidence;
+reassess estimates as work and playtests expose gaps.
+
+**Owner, 27 October:** finish Act I in small playable steps; ask only high-level
+design questions; report the percentage at check-ins. Arenas need polish:
+the current 3D blocks do not always fit together. This overrides the blanket
+freeze on arena work below. It does not approve new character models or
+expensive asset production.
+
+| Order | Milestone | Done when |
+|---|---|---|
+| 1 | Baseline and fast playtest | The three G0 routes work and the owner's Pixel observations are recorded. The opening trade is verified. |
+| 2 | Crew and combat | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. |
+| 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. |
+| 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. |
+| 5 | Consequences and finale | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. |
+| 6 | Complete chapter | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. |
+| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. |
+
+Arena pass must start with evidence: capture all five existing `crew-run`
+locations and identify actual gaps, intersections, floor seams, scale and
+occlusion before changing geometry. `web/crew-run/layouts.js` assembles wall
+runs; `locations.js` instantiates them. Do not infer that every join is sound
+from the code comment, or fix it blindly without 3D captures. Fit the walkable
+board, keep cover and exit cues readable, and retain a coherent miniature
+Kallio identity. One place and one playable release at a time.
+
+**First implementation in review:** Chapter 1 Aatami rule; old Chapter 1
+saves with the invalid early step-back flag are corrected. No balance change
+is claimed. Automated comparisons are in the candidate release entry; the
+physical G0 and final tuning targets remain open.
+
 Status: **plan of record from 2026-10-25.** Written after an audit of every plan in the repo against what is live (Act I v4.79). It **replaces** the older plans listed in §6 as the answer to "what next". It does not replace the design canon (GDD, COMBAT, the scenario atlas, `DESIGN_AUTHORITY.md` rulings); it orders the work.
 
 Owner, 2026-10-25: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."*
@@ -40,7 +78,7 @@ Owner, 2026-10-25: *"Check all documentation to see if we are going with the pla
 - **Play before build.** Every milestone ends with the owner playing it on the Pixel, and the receipt records it or says it is pending.
 - **Measure, then tune.** Fight numbers come from `web/tools/fight-balance.mjs`, never from one played opening. A tuning change ships with its before/after table.
 - **Chapter 1 is a game before anything gets bigger.** Chapter 2, the Godot catch-up, new places and new art wait until G4.
-- **Freeze what is not gameplay.** Until G1 closes: no new sets, no new art pipelines, no new libraries. The trailer kit (§7) is the one exception: it touches no game code.
+- **Keep scope focused.** Arena cohesion and readability are authorized by the owner on 27 October; no new art pipelines or libraries. The trailer kit (§7) touches no game code.
 
 ## 4. The road (each step ships to the hub and is played before the next)
 

@@ -1,8 +1,8 @@
 import {missionCue} from '../fight-module/readability.js?v=4';
 import {LOCATIONS,locationId} from './locations.js?v=7';
-import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=14';
+import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=16';
 import {icon} from './icons.js?v=2';
-import {coordinate} from '../fight-module/tactics.js?v=8';
+import {coordinate} from '../fight-module/tactics.js?v=9';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};
 const dist=(a,b)=>{const[x,y]=a.split(',').map(Number),[u,v]=b.split(',').map(Number);return Math.abs(x-u)+Math.abs(y-v);};
 export function mountCrew({content,button,replaceSession,getSession,refresh,run,tile}){

@@ -93,15 +93,15 @@ server.listen(0, '127.0.0.1', async () => {
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       ok(`${name}: alone he cannot take a two-a-side fight, and the card says so`, await lean.isDisabled() && /needs 2 who can fight/.test(await lean.innerText()));
-      // A crew of three: the first fight he stays out of is a beat.
+      // Three crew in chapter 1: Aatami still leads the outing.
       await fixture(page, scene(3), crew);
       await page.locator('[data-action="take-door"][data-door="hit-bear-debt"]').click();
       await page.locator('[data-action="next-step"][data-step="enter"]').click();
       await lean.click();
       await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);
       s = await saved();
-      ok(`${name}: with three hired he steps back`, s.outing?.status === 'open' && !s.outing.fighters.includes('aatami') && s.flags.includes('memory:aatami-stepped-back'));
-      ok(`${name}: and the fight opens on that beat`, /edge of the board/.test(s.outing.opening));
+      ok(`${name}: with three hired Aatami still fights in chapter 1`, s.outing?.status === 'open' && s.outing.fighters[0] === 'aatami' && !s.flags.includes('memory:aatami-stepped-back'));
+      ok(`${name}: no premature step-back beat`, !/edge of the board/.test(s.outing.opening));
       await backToKallio();
       ok(`${name}: no overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       const e = errors();
