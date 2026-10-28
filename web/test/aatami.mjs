@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   createState, restoreState, aatamiFights, stepBackIfReady, fighters, requirementStatus, ageCrew, crewRecord, isNamed,
-} from '../js/v3/state.js?v=10';
+} from '../js/v3/state.js?v=11';
 import { createBattleState } from '../js/v3/battle.js?v=14';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
@@ -43,7 +43,15 @@ ok(ageCrew(s, data, ['aatami']).length === 0 && !s.crewFights.aatami, 'he has no
 ok(stepBackIfReady(s, content) === '', 'with one hire he does not step back');
 
 s.recruited = content.crew.slice(0, 3).map(c => c.id); s.deployed = [...s.recruited];
-ok(!aatamiFights(s, content), 'a crew of three: he could stay out');
+ok(aatamiFights(s, content) && fighters(s, data)[0].id === 'aatami', 'three crew: Aatami still fights in chapter 1');
+ok(stepBackIfReady(s, content) === '' && !s.flags.includes('memory:aatami-stepped-back'), 'no early withdrawal beat');
+const legacy = createState(content); legacy.flags.push('memory:aatami-stepped-back', 'memory:keep');
+ok(aatamiFights(legacy, content), 'an old early flag cannot exclude him in chapter 1');
+const restored = restoreState(legacy, content);
+ok(!restored.flags.includes('memory:aatami-stepped-back') && restored.flags.includes('memory:keep'), 'old chapter 1 save clears only the invalid withdrawal');
+ok(stepBackIfReady(legacy, content) === '' && !legacy.flags.includes('memory:aatami-stepped-back'), 'a live old state is corrected before a fight');
+s.chapter = 2;
+ok(!aatamiFights(s, content), 'chapter 2 with three crew: he can stay out');
 const beat = stepBackIfReady(s, content);
 ok(beat === aatami.step_back_beat && s.flags.includes('memory:aatami-stepped-back'), 'the first time, he does, and it is a beat');
 ok(stepBackIfReady(s, content) === '', 'the beat plays once');

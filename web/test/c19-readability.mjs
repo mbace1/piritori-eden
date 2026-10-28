@@ -5,6 +5,8 @@ import {createSession} from '../fight-module/session.js';
 import {newRun,launch,makeMission,missionCheckpoint,restoreMission,settle,continueRun,loadRun,available} from '../crew-run/run.js';
 import {coordinate} from '../fight-module/tactics.js';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
+const releaseFiles=JSON.parse(fs.readFileSync(new URL('../../tools/publish/arena_lab_files.json',import.meta.url)));
+assert.ok(releaseFiles.includes('web/crew-run/layouts.js'),'the staged cabinet includes the arena layouts imported by locations.js');
 for(const count of [2,6,12]){
  const s=createSession(content,'mixed','lab-'+count),b=s.battle,prior=s.snapshot(),target=b.enemies[0].id,units=b.players.concat(b.enemies);
  assert.equal(units.filter(u=>fighterLabel(b,u).detail==='full').length,1,'only selected defaults to full stats');

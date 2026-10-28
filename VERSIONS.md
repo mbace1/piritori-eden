@@ -1,4 +1,4 @@
-## v4.83 — 2026-10-27
+## v4.85 — 2026-10-27
 
 **The UI diet, step 1: the meeting's decision is on the first screen.** Owner, 2026-10-26: *"Analyze current UI and elements like character names in general. These aren't needed, so we need to optimize."* Then, on the analysis (`design/UI_DIET.md`): *"Go, start with the meeting."*
 
@@ -9,8 +9,37 @@
 - **On phones the painting is a strip** (a quarter of the screen). Toko's counter keeps its stage.
 - **The header loses EN and reset.** LANGUAGE and START OVER are in the pause menu.
 - **Measured at 412 × 915**, the first open choice ends on the first screen in all five meetings checked: door 842, getaway 725, Bear Path 881, Toko 666, first purchase 709 (it was up to 1111). The picture is `design/UI_DIET_MEETING.jpg`.
-- Cache: `app.js?v=50`, `v3.css?v=13`, `pause.js?v=5`. Gates: `play-card.cjs` checks the first open choice is on the first screen; `doors-browser` checks a door plays as a scene with no step list.
+- Cache: `app.js?v=53`, `v3.css?v=13`, `pause.js?v=5`. Gates: `play-card.cjs` checks the first open choice is on the first screen; `doors-browser` checks a door plays as a scene with no step list.
 - **Owner played: pending.** Godot paused.
+## v4.84 — candidate, 2026-10-27
+
+Enemy routes stop at the first obstruction; rivals move along the unblocked
+portion and attack their original target only when that target remains in
+range and sight. Preview and resolution use the same route; there is no
+retargeting. C.19 test build, not deployed; owner device acceptance pending.
+Godot paused. Cache: tactics v9, fight resolver v9, session v20, run v16,
+crew UI v24, tactical UI v12, fight main v46, startup v20, Act I app v52;
+campaign state v11, battle v15, Toko v6, campaign adapter v10.
+
+`fight-balance.mjs`, 12 seeds, 15 fights at heat 0 and 2, with Aatami in
+Chapter 1: careless fight wins 100% → 95.45%, rounds 2.00 → 2.09, HP lost
+0 → 1.09, downed 0 → 0. Straight-out getaways win 87.5% → 87.5%, rounds
+2.25 → 2.25, HP lost 0 → 0.5. A single lever; the fights remain too easy.
+
+## v4.83 — candidate, 2026-10-27
+
+Chapter 1 now always includes Aatami in campaign fights, even with three crew;
+older Chapter 1 saves clear an invalid early step-back flag. After Chapter 1
+the existing three-available-crew withdrawal and permanent memory remain.
+This is a rule correction, not combat tuning. Owner Pixel playtest and 3D
+visual acceptance are pending. Godot paused. Cache: app v50; state v11;
+doors v5; road and visits v7; story v6.
+
+`fight-balance.mjs`, 12 seeds, 15 fights, heat 0 and 2: the careless fight
+policy changes from 95.45% wins, 2.09 rounds and 0.09 HP lost to 100%, 2.00
+rounds and 0 HP; straightforward getaways change from 100% wins, 2.00 rounds,
+0.25 HP lost to 87.5%, 2.25 rounds and 0 HP. These are simulation averages,
+not human acceptance; combat is still too easy and needs G1 tuning.
 
 ## v4.82 — candidate, 2026-10-27
 

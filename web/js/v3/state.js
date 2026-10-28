@@ -135,6 +135,9 @@ export function restoreState(raw, content) {
   return {
     ...fresh,
     ...raw,
+    // Older builds could record an early withdrawal in Chapter 1. It was
+    // never valid under the owner's Chapter 1 rule; keep all other memories.
+    flags: (raw.flags ?? fresh.flags).filter(flag => (raw.chapter ?? 1) !== 1 || flag !== 'memory:aatami-stepped-back'),
     battle: restoreBattle(raw.battle),
     stock: { ...fresh.stock, ...(raw.stock ?? {}) },
     relationships: { ...fresh.relationships, ...(raw.relationships ?? {}) },
@@ -230,13 +233,13 @@ export function crewRecord(state, data, id) {
   return data.crew.get(id) ?? state.hiredCrew[id] ?? (aatami?.id === id ? aatami : null);
 }
 
-/** COMBAT.md §9.9.1, owner answer 24: Aatami fights the first battles,
- *  because he cannot afford a crew, then steps back for good. He steps back
- *  once he can field `steps_back_at_crew` of his own (the withdrawal is
- *  permanent: `memory:aatami-stepped-back`). */
+/** Owner answer 26: Aatami fights throughout Chapter 1. After that he
+ *  steps back once enough crew can fight, permanently. */
 export function aatamiFights(state, content) {
   const aatami = content?.protagonist;
-  if (!aatami || state.flags?.includes('memory:aatami-stepped-back')) return false;
+  if (!aatami) return false;
+  if ((state.chapter ?? 1) === 1) return true;
+  if (state.flags?.includes('memory:aatami-stepped-back')) return false;
   const able = state.recruited.filter(id => state.crewStatus[id]?.status !== 'missing').length;
   return able < (aatami.steps_back_at_crew ?? 3);
 }
@@ -245,6 +248,10 @@ export function aatamiFights(state, content) {
  *  out, he does, and the city remembers it. Returns the beat, or ''. */
 export function stepBackIfReady(state, content) {
   const aatami = content?.protagonist;
+  if ((state.chapter ?? 1) === 1) {
+    state.flags = state.flags.filter(flag => flag !== 'memory:aatami-stepped-back');
+    return '';
+  }
   if (!aatami || state.flags.includes('memory:aatami-stepped-back') || aatamiFights(state, content)) return '';
   addUnique(state.flags, 'memory:aatami-stepped-back');
   addLog(state, aatami.step_back_beat);
