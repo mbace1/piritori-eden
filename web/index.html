@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#111722">
   <meta name="description" content="Piritori to Eden — an adult narrative strategy game set in a fictionalised Kallio, Helsinki, in 2003.">
   <title>Piritori → Eden · Era I</title>
-  <link rel="stylesheet" href="v3.css?v=12">
+  <link rel="stylesheet" href="v3.css?v=13">
   <link rel="stylesheet" href="lantern.css?v=10" id="lookSheet">
   <script>/* ?look=classic shows the pre-v4.56 interface for comparison; URL-only, never stored. */
     if (new URLSearchParams(location.search).get('look') === 'classic') document.getElementById('lookSheet').disabled = true;</script>
@@ -24,7 +24,7 @@
       </div>
       <div class="time-card" aria-live="polite">
         <span id="blockLabel">DAY 1 · DAY</span>
-        <small>ACT I · v4.84</small>
+        <small>ACT I · v4.85</small>
       </div>
       <dl class="resource-strip" aria-label="Campaign resources">
         <div class="res-cash"><dt>€</dt><dd id="cashValue">160</dd></div>
@@ -34,9 +34,7 @@
       </dl>
       <div class="top-actions">
         <a class="paper-button icon-button" href="https://mbace1.github.io/Suds-Jack/#piritori" aria-label="Return to Suds Jack hub">⌂</a>
-        <button class="paper-button icon-button" id="localeButton" type="button" aria-label="Change language">EN</button>
-        <button class="paper-button icon-button" id="pauseButton" type="button" aria-label="Pause and things to test">⏸</button>
-        <button class="paper-button icon-button" id="resetButton" type="button" aria-label="Reset campaign">↺</button>
+        <button class="paper-button icon-button" id="pauseButton" type="button" aria-label="Pause: language, start over and things to test">⏸</button>
       </div>
     </header>
 
@@ -72,7 +70,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  <script type="module" src="js/v3/app.js?v=52"></script>
+  <script type="module" src="js/v3/app.js?v=53"></script>
   <!-- The arcade's HOME button, which lives in the Suds-Jack site root and
        not in this repository. Correct once this deploys to gh-pages/piritori/,
        one level under the arcade hub — ../hub/shell.js then reaches the hub's

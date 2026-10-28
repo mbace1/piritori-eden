@@ -1115,3 +1115,15 @@ html body .arcade-home { display: none; }
 .cutin-options button i { flex: none; align-self: stretch; width: 1.1cqw; background: var(--tab, #676b6b); }
 .cutin-options button small { display: block; margin-top: 0.6cqw; font: 400 2.6cqw/1.2 Arial, sans-serif; text-transform: none; color: #c9b98f; }
 .cutin-options button:disabled { opacity: 0.5; cursor: default; }
+
+/* The UI diet, step 1 (design/UI_DIET.md): the meeting's decision on the first screen. */
+.encounter-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; }
+.encounter-tags span { padding: 4px 8px; border: 1px solid rgba(214, 172, 68, 0.55); color: #d6ac44; font: 700 12px/1.3 var(--display, sans-serif); letter-spacing: 0.06em; }
+.look-around { margin-top: 14px; }
+.look-around > summary { display: inline-flex; align-items: center; min-height: 44px; list-style: none; cursor: pointer; }
+.look-around > summary::-webkit-details-marker { display: none; }
+@media (max-width: 760px) {
+  .scene-viewport:not(.toko):not(.speaker-stage) { height: min(26dvh, 250px); }
+}
+.choice-card.locked { min-height: 44px; padding: 2px 8px; border-width: 10px; }
+.choice-card.locked em { margin-top: 2px; }

@@ -1,3 +1,16 @@
+## v4.85 — 2026-10-27
+
+**The UI diet, step 1: the meeting's decision is on the first screen.** Owner, 2026-10-26: *"Analyze current UI and elements like character names in general. These aren't needed, so we need to optimize."* Then, on the analysis (`design/UI_DIET.md`): *"Go, start with the meeting."*
+
+- **The place is named once,** in the label line. The caption over the painting is gone. A source label shows only when a scene cites real events; the GDD asks for source status only *"if it references real events"*.
+- **A door's step list and stakes sentence are now two tags** drawn from its data: CAN TURN INTO A FIGHT and GONE AFTER 22:00.
+- **LOOK AROUND** folds the things to look at into one button, below the choices, together with what you saw.
+- **A choice you cannot take yet is one line:** its label and why.
+- **On phones the painting is a strip** (a quarter of the screen). Toko's counter keeps its stage.
+- **The header loses EN and reset.** LANGUAGE and START OVER are in the pause menu.
+- **Measured at 412 × 915**, the first open choice ends on the first screen in all five meetings checked: door 842, getaway 725, Bear Path 881, Toko 666, first purchase 709 (it was up to 1111). The picture is `design/UI_DIET_MEETING.jpg`.
+- Cache: `app.js?v=53`, `v3.css?v=13`, `pause.js?v=5`. Gates: `play-card.cjs` checks the first open choice is on the first screen; `doors-browser` checks a door plays as a scene with no step list.
+- **Owner played: pending.** Godot paused.
 ## v4.84 — candidate, 2026-10-27
 
 Enemy routes stop at the first obstruction; rivals move along the unblocked

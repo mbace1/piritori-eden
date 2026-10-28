@@ -21,7 +21,7 @@ const BUILD_LABEL = {
   both: { tag: 'BOTH', hint: 'jump here, then check the same screen in the port' },
 };
 
-export function createPauseMenu({ root, version, jump, onClose, sound }) {
+export function createPauseMenu({ root, version, jump, onClose, sound, language, reset }) {
   let view = 'menu';        // 'menu' | 'tests'
   let showDone = false;
   let lastFocus = null;
@@ -51,10 +51,12 @@ export function createPauseMenu({ root, version, jump, onClose, sound }) {
       <div class="pause-actions">
         <button class="paper-button primary" data-pause="resume" type="button">RESUME</button>
         ${sound ? `<button class="paper-button" data-pause="sound" type="button" aria-pressed="${sound.get()}">SOUND · ${sound.get() ? 'ON' : 'OFF'}</button>` : ''}
+        ${language ? `<button class="paper-button" data-pause="language" type="button">LANGUAGE · ${esc(language.get().toUpperCase())}</button>` : ''}
         <button class="paper-button" data-pause="tests" type="button">
           THINGS TO TEST <span class="pause-count">${open.length}</span>
         </button>
       </div>
+      ${reset ? '<button class="paper-button ghost" data-pause="reset" type="button">START OVER</button>' : ''}
       <p class="pause-foot">${done.length
         ? `${done.length} approved. An item comes back if the screen it points at moves.`
         : 'Nothing approved yet.'}</p>
@@ -144,6 +146,8 @@ export function createPauseMenu({ root, version, jump, onClose, sound }) {
     if (what === 'resume') close();
     else if (what === 'tests') { view = 'tests'; render(); }
     else if (what === 'sound') { sound?.set(!sound.get()); render(); }
+    else if (what === 'language') { language?.toggle(); render(); }
+    else if (what === 'reset') { close(); reset?.(); }
     else if (what === 'menu') { view = 'menu'; render(); }
     else if (what === 'toggle-done') { showDone = !showDone; render(); }
     else if (what === 'approve') { approve(id, version); render(); }
