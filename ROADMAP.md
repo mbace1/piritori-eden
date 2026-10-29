@@ -1,13 +1,17 @@
 # ROADMAP: the one plan for Act I (producer's cut)
 
-## Act I completion — 27 October 2026
+## Act I completion — check-in, 29 October 2026
 
-**Working estimate: 38%.** This is a producer's judgment, not a count of code
-or a claim of player acceptance. It uses the same 100-point rubric at each
-check-in: playable foundation **15/20**, combat **4/20**, story and
-consequences **8/20**, city/economy **8/15**, arenas and presentation **3/15**,
-device validation and release **0/10**. Raise a score only with evidence;
-reassess estimates as work and playtests expose gaps.
+**Working estimate: 41%** (38% on 27 October). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
+
+| Part | 27 Oct | 29 Oct | Evidence for the change |
+|---|---|---|---|
+| Playable foundation | 15/20 | 15/20 | |
+| Combat | 4/20 | 5/20 | v4.84: blocked rivals press on. Measured, crew HP lost per fight 0.1 → 1.1; still far too easy (§5). |
+| Story and consequences | 8/20 | 8/20 | |
+| City and economy | 8/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
+| Arenas and presentation | 3/15 | 3/15 | The courtyard is audited (below); nothing is fixed yet. |
+| Device validation and release | 0/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
 
 **Owner, 27 October:** finish Act I in small playable steps; ask only high-level
 design questions; report the percentage at check-ins. Arenas need polish:
@@ -15,15 +19,17 @@ the current 3D blocks do not always fit together. This overrides the blanket
 freeze on arena work below. It does not approve new character models or
 expensive asset production.
 
-| Order | Milestone | Done when |
-|---|---|---|
-| 1 | Baseline and fast playtest | The three G0 routes work and the owner's Pixel observations are recorded. The opening trade is verified. |
-| 2 | Crew and combat | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. |
-| 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. |
-| 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. |
-| 5 | Consequences and finale | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. |
-| 6 | Complete chapter | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. |
-| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. |
+**This table is the road.** The G-steps in §4 are the same road under their earlier names: G0 is 1, G1 is 2, G2 is 5 and G4 is 6. Arenas (3) and city/UI (4) were added on 27 October. G3, the shot caller, moved to chapter 2.
+
+| Order | Milestone | Done when | Status, 29 October |
+|---|---|---|---|
+| 1 | Baseline and fast playtest (G0) | The three G0 routes work and the owner's Pixel observations are recorded. The opening trade is verified. | **Waiting on the owner.** The three playtest links are live in v4.85. |
+| 2 | Crew and combat (G1) | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. | Aatami fights all of chapter 1 (v4.83). Lever 1, blocked rivals press, has shipped (v4.84). Next: levers 2–4 and the careful policy (§4, §5). |
+| 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. | The courtyard is audited (below). Not fixed yet. |
+| 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85). The map and the ledger are next. |
+| 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | Not started. |
+| 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | Not started. |
+| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.85 is live; device checks are pending. |
 
 Arena pass must start with evidence: capture all five existing `crew-run`
 locations and identify actual gaps, intersections, floor seams, scale and
@@ -33,16 +39,39 @@ from the code comment, or fix it blindly without 3D captures. Fit the walkable
 board, keep cover and exit cues readable, and retain a coherent miniature
 Kallio identity. One place and one playable release at a time.
 
-**First implementation in review:** Chapter 1 Aatami rule; old Chapter 1
-saves with the invalid early step-back flag are corrected. No balance change
-is claimed. Automated comparisons are in the candidate release entry; the
-physical G0 and final tuning targets remain open.
+**The courtyard, audited (29 October).** Sources: Codex's capture notes (`design/COURTYARD_VISUAL_AUDIT_2026-10-27.md`) and the courtyard rendered from all eight camera angles at desktop size. Four faults, each fixable with the existing kit:
+1. **A blank cut end.** The left wing's building ends in an 8 m plaster wall facing the camera, with nothing on it. This is the "large blank exterior wall".
+2. **Pale wall tops.** Every façade's cream cornice (0.9 m deep, top at 6.44 m) stands above the roof's eave (6.3 m). Seen from above, each wall carries a pale band, and the back roof turns 90° at the archway. These are the "pale caps" and "perpendicular pieces".
+3. **An orphan.** From behind, the cutaway hides the wing but leaves the one-bay return standing alone.
+4. **Repetition.** Every building has one plaster colour and the same window.
+
+**Proposed fix:**
+- a façade on the cut end, hidden whenever its wing is hidden;
+- dark copings;
+- one roof line along the back;
+- the return hidden with its wing;
+- a plaster tint per building.
+
+Compare before and after at the same cameras, then ship it as one playable release.
+
+**Codex's lane is closed** (owner, 29 October: *"No more codex for now, just wrap up those loose ends"*):
+- v4.83 and v4.84 shipped to the hub inside v4.85;
+- PR #117 (heat 3 and the share of fights with someone down, in the measuring tool) is merged;
+- PR #115 (the courtyard capture notes) is merged.
 
 Status: **plan of record from 2026-10-25.** Written after an audit of every plan in the repo against what is live (Act I v4.79). It **replaces** the older plans listed in §6 as the answer to "what next". It does not replace the design canon (GDD, COMBAT, the scenario atlas, `DESIGN_AUTHORITY.md` rulings); it orders the work.
 
 Owner, 2026-10-25: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."*
 
-## 1. Where Act I really is (v4.79, live)
+## 1. Where Act I really is (v4.79 on 25 October; v4.85 live since 29 October)
+
+- **v4.80–v4.85, live since 29 October:**
+  - characters talk as cut-ins (Jaska, Aatami);
+  - the three playtest links;
+  - city memory without internal ids;
+  - Aatami fights all of chapter 1;
+  - blocked rivals press on;
+  - a meeting's decision on the first screen.
 
 - **One chapter** ("What the square is worth"): 10 days, 20 blocks, 17 encounters, 4 missions, 14 door templates, 29 road events, 6 crew, 4 Pasila endings.
 - **Every fight but the training fight is fought in Night Shift** (the C.19 3D tactics):
@@ -51,7 +80,7 @@ Owner, 2026-10-25: *"Check all documentation to see if we are going with the pla
   - the two mission battles;
   - each in its own set: courtyard, yard, park, tram street, quay.
 - The old formation board is only the training fight and the no-3D fallback.
-- **Godot stopped at v4.71.** Every web release since says "When C is ported".
+- **Godot stopped at v4.71** and is paused (owner, 26 October).
 
 ## 2. The producer's verdict: built a lot, played very little
 
@@ -85,7 +114,7 @@ Owner, 2026-10-25: *"Check all documentation to see if we are going with the pla
 | Step | What | Exit (how we know) |
 |---|---|---|
 | **G0. Play it** | The owner plays the live build on the Pixel (picture: `design/G0_PLAYTEST.jpg`): one door fight, one getaway, the Bear Path (about 20 minutes). This is CAMPAIGN.md's P0, still open. **The playtest links (v4.81):** `?play=g0-door`, `?play=g0-getaway`, `?play=g0-bear`, each one tap from its fight; the same three lead THINGS TO TEST. | Two answers. Did any fight make you decide something? Did anything break on the device? |
-| **G1. The fight is a fight** | Tune Night Shift against the targets in §5. The levers are measured below. **Aatami is in every chapter 1 fight** (answer 26, §9), so G1 puts him on the board first and tunes with him there. | `fight-balance.mjs` meets the targets for all 15 fights; the owner plays three fights and says yes. |
+| **G1. The fight is a fight** | Tune Night Shift against the targets in §5. The levers are measured below. **Aatami is in every chapter 1 fight** (answer 26, §9; shipped in v4.83), so G1 tunes with him on the board. | `fight-balance.mjs` meets the targets for all 15 fights; the owner plays three fights and says yes. |
 | **G2. Fights feed the city** | Night Shift pays what the board paid: loot off the fallen, kit lost with the downed, glory. Missing crew get a way back (a rescue door, or bail at the bank). The shipment becomes a played outing or a real choice, not a roll. | A fight's spoils reach the fence. A missing person can come home. The finale asks something of the crew. |
 | ~~G3. The shot caller~~ | **Moved to chapter 2 (G5).** Aatami fights all of chapter 1 (answer 26), so chapter 1 has no caller. The design waits in `design/C19_SHOT_CALLER.md`. | |
 | **G4. Chapter 1, start to finish** | Travel and trades start costing time (D002: 30% of a block each, §9). A playthrough bot plays the 10 days, so it measures what that does to them. The owner plays them. The playtest decision (F7) is recorded. `DESIGN_LOCKS` §12.1 is rewritten for the chapter as built: Night Shift fights, 10 days. | Every story beat is still reachable with the time costs on. A recorded "this is fun / this is not, because…", and a feature-complete checklist that matches the game. |
@@ -105,7 +134,7 @@ Measured on scratch copies (not shipped), over the 11 fight jobs, 6 seeds, with 
 **Reading:** the fight is a stack of clocks: the first move reaches them, the rout comes at half, and the police at about round 3. No single number fixes it.
 
 G1 is a tuning pass on four levers, in this order:
-1. rivals that press when blocked;
+1. rivals that press when blocked. **Shipped in v4.84.** Measured with Aatami on the board, careless play goes from 100% to 95.5% won and from 0 to 1.1 HP lost. The 1.7 HP above was measured before the Aatami rule;
 2. a later rout;
 3. the police clock pushed out to round 5 or later at low heat;
 4. for getaways, rivals who start between the crew and the exit.
@@ -116,7 +145,7 @@ Each lever is measured on its own before they are combined.
 
 Owner, 2026-10-26, on the first draft: *"What specifically."* These are the specifics.
 
-**What is measured.** `node web/tools/fight-balance.mjs` plays every Act I fight through Night Shift's own commands, 12 seeds each, at heat 0, 2 and 3. Heat 3 joins the tool in G1; today's heat-3 numbers came from a one-off copy. It plays:
+**What is measured.** `node web/tools/fight-balance.mjs` plays every Act I fight through Night Shift's own commands, 12 seeds each, at heat 0, 2 and 3 (heat 3 and the share of fights with someone down came in with PR #117). It plays:
 - the **11 fight jobs**: 5 door fights, 4 road fights and the 2 mission battles;
 - the **4 getaways** (doors whose job is getting out).
 
@@ -127,17 +156,17 @@ Owner, 2026-10-26, on the first draft: *"What specifically."* These are the spec
 
 **For scale:** a crew of two has about 10 HP (5 each), and a rival has 4–5.
 
-| # | Measure | Today (v4.81) | Target |
+| # | Measure | Today (v4.85) | Target |
 |---|---|---|---|
-| 1 | Fight jobs, careless: won | 95% | **60–75%** |
+| 1 | Fight jobs, careless: won | 95.5% | **60–75%** |
 | 2 | Fight jobs, careless: rounds | 2.1 | **4–6** |
-| 3 | Fight jobs, careless: crew HP lost | 0.1 | **2–4** (a fifth to two fifths of the crew) |
+| 3 | Fight jobs, careless: crew HP lost | 1.1 | **2–4** (a fifth to two fifths of the crew) |
 | 4 | Fight jobs, careless: someone goes down | 0% of fights | **20–30%** (about 1 fight in 4) |
 | 5 | Fight jobs, careful over careless | (no careful policy yet) | **15+ points** more won, and **1+ HP** less lost |
-| 6 | Getaways, straight out: won | 100% in 2 rounds | **under 50%** |
+| 6 | Getaways, straight out: won | 87.5% in 2.3 rounds | **under 50%** |
 | 7 | Getaways, careful: won | (no careful policy yet) | **70%+**, at a cost against straight out of a round or a point of HP |
 | 8 | Police arrive, heat 0 | 0 of 15 fights | **under 20%** of fights |
-| 9 | Police arrive, heat 3 | 1 of 15 fights | **over 50%** of fights |
+| 9 | Police arrive, heat 3 | 3 of 15 fights | **over 50%** of fights |
 
 **Why these numbers:**
 - A fight should be won more often than lost when played without thought (rows 1–4), but not for free.
@@ -157,11 +186,16 @@ Today rows 8–9 look "fine" only because every fight ends before the police are
   - Ship only bytes that CI saw green. v4.78 shipped with CI green on a later, test-only head; the bytes matched, but say so in the receipt.
 - **Godot: paused.** Owner, 2026-10-26: *"No Godot until later."* That is option (a): no ports until the web build has earned them (G4 at the earliest). Releases stop writing Port sections and say "Godot paused" instead.
 - **Hub reconcile.** `design/HUB_RELEASE.md` step 4 (reconcile `gh-pages` → Suds-Jack `main` with a game PR) has not been done since 2026-10-02. Either do one reconcile PR or drop the rule. Owner's call.
-- **Open PRs (17).**
+- **Open PRs (16 on 29 October).**
   - #101 and #102 are folded in here: their still-live parts are G0, G4, P5 and P6.
   - Proposed to close as overtaken (twelve, §9): #39, #63, #64, #65, #67, #68, #72, #75, #91, #93, and #101 and #102 now that this plan holds them. Nothing is closed without a yes.
   - Art PRs #103, #104, #106 and #108 wait on owner picks.
-  - #107 merged as v4.80 (the cut-ins) and #109 as v4.81 (the playtest). #110 is the playtest follow-up.
+  - Merged since 25 October:
+    - #107 (v4.80, the cut-ins) and #109/#110 (v4.81, the playtest);
+    - #111 (the UI diet plan) and #112 (v4.82);
+    - #114 (v4.83–v4.84, Codex) and #116 (v4.85);
+    - and, closing Codex's lane, #115 and #117.
+  - #113 was closed (its commits arrived through #114).
 - **The stale documents** now carry a one-line banner pointing here:
   - `PHASING.md`, `ACTIVE_CONTEXT.md`, `START_HERE.md`, `CLAUDE_TAKEOVER.md`, `DECISIONS.md`, `PIRITORI_CHAPTER_EXECUTION.md`, `JS_BUILD_CATCHUP.md`;
   - `design/POST_C18_ITERATION_PLAN.md`, `design/OPTION_C_VERTICAL_SLICE.md`, `design/CLAUDE_MAP_MISSION_NEXT_STEPS.md`, `design/C19_ACCEPTANCE.md`, `design/H1_H2_PLAN.md`;
@@ -216,8 +250,7 @@ Owner: *"1. What specifically 2. Please suggest 3. Pause 4. You suggest 5. Sure 
    - **The rule.** Aatami fights every fight in chapter 1. After chapter 1 he steps back, at the first fight where three of his own can fight (the existing rule, `steps_back_at_crew`). This is the 2026-10-24 ruling (*"the first phase of act1 in all fights"*) with chapter 1 as the first phase.
    - **What it moves:**
      - Chapter 1 has no shot caller, so G3 moves to chapter 2.
-     - Today the game steps him back inside chapter 1, at three crew. The fix is one chapter check in `aatamiFights`. It lands with G1, because it changes who stands in every chapter 1 fight and G1 measures every fight.
-     - Until then the G0 playtest shows today's rule.
+     - **Shipped in v4.83** (Codex): a chapter check in `aatamiFights`, and old chapter 1 saves that had stepped him back early are corrected. Live in v4.85.
 6. **D002, what travel and trades cost: "30%."**
    - **Read as:** a trip, or a visit to a seller (however much changes hands), costs 30% of a block. Three fit in a block, and the fourth turns it. Road events keep their own minutes on top.
    - **What it replaces:** answer 21's "trips and trades cost minutes, never a block".

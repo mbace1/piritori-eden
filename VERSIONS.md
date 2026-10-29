@@ -11,7 +11,7 @@
 - **Measured at 412 × 915**, the first open choice ends on the first screen in all five meetings checked: door 842, getaway 725, Bear Path 881, Toko 666, first purchase 709 (it was up to 1111). The picture is `design/UI_DIET_MEETING.jpg`.
 - Cache: `app.js?v=53`, `v3.css?v=13`, `pause.js?v=5`. Gates: `play-card.cjs` checks the first open choice is on the first screen; `doors-browser` checks a door plays as a scene with no step list.
 - **Owner played: pending.** Godot paused.
-## v4.84 — candidate, 2026-10-27
+## v4.84 — 2026-10-27 (a candidate then; on the hub inside v4.85, 2026-10-29)
 
 Enemy routes stop at the first obstruction; rivals move along the unblocked
 portion and attack their original target only when that target remains in
@@ -26,7 +26,7 @@ Chapter 1: careless fight wins 100% → 95.45%, rounds 2.00 → 2.09, HP lost
 0 → 1.09, downed 0 → 0. Straight-out getaways win 87.5% → 87.5%, rounds
 2.25 → 2.25, HP lost 0 → 0.5. A single lever; the fights remain too easy.
 
-## v4.83 — candidate, 2026-10-27
+## v4.83 — 2026-10-27 (a candidate then; on the hub inside v4.85, 2026-10-29)
 
 Chapter 1 now always includes Aatami in campaign fights, even with three crew;
 older Chapter 1 saves clear an invalid early step-back flag. After Chapter 1
@@ -41,7 +41,7 @@ rounds and 0 HP; straightforward getaways change from 100% wins, 2.00 rounds,
 0.25 HP lost to 87.5%, 2.25 rounds and 0 HP. These are simulation averages,
 not human acceptance; combat is still too easy and needs G1 tuning.
 
-## v4.82 — candidate, 2026-10-27
+## v4.82 — 2026-10-27 (a candidate then; on the hub inside v4.85, 2026-10-29)
 
 City memory shows encounter choices without internal `enc-` identifiers, including entries already in saved games. Campaign data and rules are unchanged. Cache: `app.js?v=49`. Owner device playtest and deployment are pending; this entry does not assert a release. Godot paused.
 
