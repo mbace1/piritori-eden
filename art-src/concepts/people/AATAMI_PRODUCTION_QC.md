@@ -61,3 +61,49 @@ Authority: \`DESIGN_AUTHORITY.md\`, \`ART_BIBLE.md\` §§9, 14, 18–19,
 default where explicit promotion has not occurred.
 
 **No gameplay changes, art promotion, approval-register changes or merge.**
+
+## 2026-10-29 — existing young-rig cross-branch inspection (documentation only)
+
+**Source of truth for the existing rigs is `main`, not this PR branch.**
+PR #107 is merged, but PR #108 was branched before those rig files landed.
+Therefore `art-src/cutins/aatami/rig.src.json` and
+`art-src/cutins/aatami-front/rig.src.json` are present on `main` and absent
+at this PR head. Do not interpret their absence here as missing production work,
+copy the rigs into this branch, or start another extraction pipeline.
+
+Checked the GitHub file metadata on 2026-10-29:
+
+| Existing `main` rig | Input PNG (same Git blob on `main` and PR #108) | Crop / output size | Pieces | Static observations |
+|---|---|---|---|---|
+| `aatami` side | `aatami-young-final-v01.png` — `1a2d028710a03cf26f8179bfd919e358cc14cf08` | `[330,10,800,710]` / 470×700 | torso, head, lid_0 | head pivot (270,240), torso pivot (255,680); one eye lid |
+| `aatami-front` | `aatami-young-support-06.png` — `20ed3517211356d0bc17e4a0f505b9c888fa045e` | `[310,15,760,700]` / 450×685 | torso, head, lid_0, lid_1 | head pivot (265,235), torso pivot (225,675); two eye lids |
+
+The existing `out/rig.json` piece boxes and pivots lie within their declared
+canvases; the eyelid boxes lie within their respective head boxes. This is a
+**static metadata check**, not a pixel/edge-quality, animation, phone or iPad
+pass. The source PNGs are opaque; the already extracted PNG/WebP rig layers
+are separate derivatives and need visual inspection rather than assuming their
+joins and masks are correct.
+
+### Next permitted review (when the Act I roadmap allows it)
+
+The 2026-10-27 `ROADMAP.md` §3 freezes **new art pipelines/libraries until G4**;
+its arena cohesion/readability exception does not approve new character models.
+Thus no new older-Aatami cut-in, source isolation, or gameplay promotion is
+undertaken now. Reuse the existing PR #107 cut-in review route on `main`
+(`art-src/cutins/review.html?who=aatami`, or the game's
+`?cutin=aatami` preview) for the next **read-only** visual/device QC:
+
+1. At phone portrait and desktop landscape, check head/torso seam, shoulder
+   silhouette, eye blink cards, grey-background contamination and text-bubble
+   clearance against the real game scene; record screenshots, device, viewport
+   and verdict for **both** side and front variants.
+2. Check rest pose and reduced-motion fallback, and ensure no unapproved
+   older Aatami or unrelated concept is loaded.
+3. Record the owner's explicit asset-specific decision separately from any
+   visual/technical pass. Do not change `APPROVALS.md`, `art/v3/manifest.json`,
+   runtime code, or merge this PR on the strength of this inspection.
+
+**Not performed in this audit:** browser rendering, actual phone/iPad testing,
+new layer extraction, approval, or gameplay integration. The existing rig
+review remains pending evidence and owner sign-off.
