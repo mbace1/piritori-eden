@@ -1,0 +1,36 @@
+# Hub release: Act I city v4.86 (the courtyard holds together)
+
+- **Source:** `mbace1/piritori-eden` @ `7958157`, web only.
+  - **Gates were green:** run 1088, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `2e317ae8`, under `piritori/`. **Pages run 1581 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 58 site files changed.
+- **What players get** (ROADMAP milestone 3, the first place; owner, 27 October: *"Arenas need polish: the current 3D blocks do not always fit together"*):
+  - **The courtyard's blank end has a face.** The left building turns the corner with a street front and a stone pier.
+  - **No pale stripes on the wall tops.** Every façade in every place carries a zinc coping over its cornice.
+  - **The back is one roof line.**
+  - **Nothing is left standing alone when the cutaway lifts a building.**
+  - **Three buildings in three plasters:** ochre, pale green and salmon.
+  - The picture is `design/COURTYARD_PASS.jpg`, before and after at the same cameras.
+  - **Not fixed:** from behind, every wall is lifted and the board stands on bare paving.
+- **Catalogue:**
+  - The note moves to v4.86 in en, fi and ja. `versions.json` piritori goes 4.85 → 4.86 by hand.
+  - The token cascade ran from `hub/games.js` (v=200, `hub/shell.js` v=163), and `sw.js` `VERSION` went 191 → 192. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 24 bare-node CI suites;
+    - `level-layout`: 917;
+    - `c18-render-contract`;
+    - `night-places-browser`: five places at four layouts;
+    - `crew-run-browser`;
+    - before/after renders at desktop, wide and phone sizes and in eight rotations, with no page errors.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 66.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`9926f89e`, Toko Drop 2 v62).
