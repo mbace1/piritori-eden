@@ -47,31 +47,42 @@ export const LAYOUTS={
   // A closed courtyard (courtyard-prototype-v05): the back wall with its
   // passage at x 0, the left wing butting into it, and on the right a return
   // stepping forward into a wing. Each run starts where another's face stops.
+  // Three buildings, three plasters (`tint`, a multiplier on the kit's own):
+  // one colour for every wall read as one building cut into modules.
   courtyard:{
     runs:[
-      {id:'back',x:-13.96,z:-7.7,rotation:0,modules:[...bays(4),'archway','facade_bay_b'],
+      {id:'back',x:-13.96,z:-7.7,rotation:0,modules:[...bays(4),'archway','facade_bay_b'],tint:[1.22,.98,.58],
         hangs:[['balcony',-6.24,3.7,-7.2,0],['balcony',3.16,3.7,-7.2,0],['bike_rack',-4.5,0,-6.5,0]]},
-      {id:'left',x:-6.4,z:5.32,rotation:Math.PI/2,modules:['facade_bay_b','facade_bay','facade_bay_b','facade_bay'],
+      {id:'left',x:-6.4,z:5.32,rotation:Math.PI/2,modules:['facade_bay_b','facade_bay','facade_bay_b','facade_bay'],tint:[.76,1.02,.88],
         hangs:[['vent',-5.9,1.3,-3,Math.PI/2]]},
-      {id:'return',x:5.38,z:-7.04,rotation:-Math.PI/2,modules:['facade_bay_b']},
-      {id:'wing',x:4.72,z:-4.58,rotation:0,modules:bays(5),
+      // The left building's street front: its end faced the camera as 8 m of
+      // blank plaster. `with` makes it part of the left building, so the
+      // cutaway lifts the two together and neither is left standing alone.
+      {id:'left_end',x:-15.02,z:5.69,rotation:0,modules:bays(3),with:'left'},
+      {id:'wing',x:4.72,z:-4.58,rotation:0,modules:bays(5),tint:[1.2,.74,.64],
         hangs:[['balcony',9.36,3.7,-4.08,0],['balcony',15.52,3.7,-4.08,0]]},
+      // One bay of the wing's building: seen from behind it stood alone once
+      // the wing was lifted, so it goes with the wing.
+      {id:'return',x:5.38,z:-7.04,rotation:-Math.PI/2,modules:['facade_bay_b'],with:'wing'},
     ],
     // Where two runs meet: `a`'s end (or start) sits on `b`'s face plane.
     joins:[
       {run:'left',at:'end',onto:'back'},
+      {run:'left_end',at:'end',onto:'left'},
       {run:'return',at:'start',onto:'back',plane:'face'},
       {run:'back',at:'end',onto:'return'},
       {run:'wing',at:'start',onto:'return'},
     ],
     // The buildings behind the façades: [x0,x1,z0,z1,y0,y1], a roof ridge or
     // none. The passage stays open under a bridge; a filler closes the roof
-    // behind the inner corner and a stone pier covers the outer one.
+    // behind the inner corner and stone piers cover the outer ones. The back
+    // is one building with one roof line, the bridge over the passage too.
     blocks:[
       {run:'back',box:[-17,-1.64,-16,-8.05,0,6.3],ridge:'x'},
-      {run:'back',box:[1.64,5.75,-16,-8.05,0,6.3],ridge:'z'},
-      {run:'back',box:[-1.64,1.64,-16,-8.05,3.5,6.3],ridge:null},
+      {run:'back',box:[1.64,5.75,-16,-8.05,0,6.3],ridge:'x'},
+      {run:'back',box:[-1.64,1.64,-16,-8.05,3.5,6.3],ridge:'x'},
       {run:'left',box:[-15,-6.75,-16,5.32,0,6.3],ridge:'z'},
+      {run:'left',box:[-6.8,-5.68,5.33,6.41,0,6.55],ridge:null,stone:true},
       {run:'wing',box:[4.7,5.75,-8.07,-7.04,0,6.3],ridge:null},
       {run:'wing',box:[5.73,21.5,-16,-4.93,0,6.3],ridge:'x'},
       {run:'wing',box:[4.66,5.79,-5.01,-3.86,0,6.55],ridge:null,stone:true},

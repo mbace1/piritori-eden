@@ -4,7 +4,7 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing} from './layouts.js?v=3';
+import {LAYOUTS,lay,facing} from './layouts.js?v=4';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',quay:'Sörnäinen · quay',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
@@ -44,8 +44,12 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  // Layer 1: a wall is a RUN (layouts.js `lay`), modules end to end at their
  // measured widths, so a join can neither open nor overlap. `hangs` is what
  // is fixed to that wall (balconies, racks, vents) and goes where it goes.
- function run(spec){const rec={id:spec.id,group:new T.Group(),normal:facing(spec.rotation),visible:true,parts:{}};rec.group.name='run-'+spec.id;group.add(rec.group);runs.push(rec);into=rec;
-  for(const m of lay(spec).placed)put(m.name,m.x,0,m.z,m.rotation);
+ // A run `with` another is part of that building: it shares its record, so
+ // the cutaway lifts the two together and both wear the building's plaster
+ // (`tint`). Every façade module gets its coping (`cap`).
+ function run(spec){const shared=spec.with&&byId[spec.with];const rec=shared??{id:spec.id,group:new T.Group(),normal:facing(spec.rotation),visible:true,parts:{},tint:spec.tint};
+  if(!shared){rec.group.name='run-'+spec.id;group.add(rec.group);runs.push(rec);}into=rec;
+  for(const m of lay(spec).placed){put(m.name,m.x,0,m.z,m.rotation);cap(rec,m);}
   for(const [name,x,y,z,r] of spec.hangs??[])put(name,x,y,z,r);
   into=null;return rec;}
  // Layer 2: the building behind a façade, after the park's street blocks
@@ -56,10 +60,17 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  const roofMat=new T.MeshStandardMaterial({color:0x3b454a,roughness:.58,metalness:.2,side:T.DoubleSide});
  // A plane cut short keeps the texture's scale: UVs over the size it replaces.
  const metric=(g,w,d)=>{const uv=g.attributes.uv,p=g.parameters;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*p.width/w,uv.getY(i)*p.height/d);return g;};
- const white=g=>{g.setAttribute('color',new T.Float32BufferAttribute(new Array(g.attributes.position.count*3).fill(1),3));return g;};
+ const white=(g,tint=[1,1,1])=>{const n=g.attributes.position.count,a=new Float32Array(n*3);for(let i=0;i<n;i++)a.set(tint,i*3);g.setAttribute('color',new T.BufferAttribute(a,3));return g;};
  const setParts={},stacks=[],part=(owner,key,g)=>{const parts=owner?owner.parts:setParts;(parts[key]??=[]).push(g);};
+ // The kit's cornice is a pale band 0.9 m deep whose top (6.44 m) stands above
+ // the roofs' eaves (6.3 m), so from above every wall wore a white stripe
+ // (design/COURTYARD_VISUAL_AUDIT). A zinc coping over it, front edge just past
+ // the cornice, reads as the roof's edge instead; from the front it is a thin
+ // dark line on the cornice. In the run's group, so it is lifted with the wall.
+ const CAP={facade_bay:.63,facade_bay_b:.63,archway:1.21};
+ function cap(owner,m){const front=CAP[m.name];if(front==null)return;const g=new T.BoxGeometry(m.to-m.from,.09,front+.39);g.translate(0,6.475,(front-.39)/2);g.rotateY(m.rotation);g.translate(m.x,0,m.z);part(owner,'roof',g);}
  function block(owner,x0,x1,z0,z1,y0=0,y1=6.3,ridge='x',material='plaster'){
-  const w=x1-x0,h=y1-y0,d=z1-z0,g=white(new T.BoxGeometry(w,h,d)),uv=g.attributes.uv,size=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
+  const w=x1-x0,h=y1-y0,d=z1-z0,g=white(new T.BoxGeometry(w,h,d),material==='plaster'?owner?.tint:undefined),uv=g.attributes.uv,size=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
   for(let f=0;f<6;f++)for(let v=0;v<4;v++){const i=f*4+v;uv.setXY(i,uv.getX(i)*size[f][0]/3,uv.getY(i)*size[f][1]/3);}
   g.translate((x0+x1)/2,(y0+y1)/2,(z0+z1)/2);part(owner,material,g);
   if(!ridge)return;
@@ -136,7 +147,9 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  const lamps=layout.lamps.map(([x,y,z,r])=>[x,y,z,r]),lampOwners=layout.lamps.map(l=>byId[l[4]]);
  lamps.forEach(([x,y,z,r],i)=>{into=lampOwners[i]??null;put('lamp',x,y,z,r);into=null;});
  const batches=[];
- for(const bin of bins.values()){const mesh=new T.InstancedMesh(bin.geometry,bin.material,bin.matrices.length);bin.matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.castShadow=bin.material!==mats.lit;mesh.receiveShadow=true;mesh.frustumCulled=false;group.add(mesh);batches.push({mesh,matrices:bin.matrices,owners:bin.owners});}
+ const paint=new T.Color();
+ for(const bin of bins.values()){const mesh=new T.InstancedMesh(bin.geometry,bin.material,bin.matrices.length);bin.matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));
+  if(bin.material===mats.plaster&&bin.owners.some(o=>o?.tint))bin.owners.forEach((o,i)=>mesh.setColorAt(i,paint.setRGB(...(o?.tint??[1,1,1]))));mesh.castShadow=bin.material!==mats.lit;mesh.receiveShadow=true;mesh.frustumCulled=false;group.add(mesh);batches.push({mesh,matrices:bin.matrices,owners:bin.owners});}
  if(stacks.length){const stack=new T.InstancedMesh(white(new T.BoxGeometry(.62,1.5,.62)),mats.brick??mats.stone,stacks.length),matrices=stacks.map(({at:[x,y,z]})=>{dummy.position.set(x,y+.75,z);dummy.rotation.set(0,0,0);dummy.scale.setScalar(1);dummy.updateMatrix();return dummy.matrix.clone();});matrices.forEach((m,i)=>stack.setMatrixAt(i,m));stack.receiveShadow=true;stack.frustumCulled=false;group.add(stack);batches.push({mesh:stack,matrices,owners:stacks.map(s=>s.owner)});}
  const surface={plaster:mats.plaster,stone:mats.stone,roof:roofMat};
  for(const [owner,parts] of [...runs.map(r=>[r,r.parts]),[null,setParts]])for(const [key,list] of Object.entries(parts)){const m=new T.Mesh(merge(list),surface[key]);m.receiveShadow=true;(owner?.group??group).add(m);}

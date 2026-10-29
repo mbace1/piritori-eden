@@ -1,3 +1,16 @@
+## v4.86 — 2026-10-29
+
+**The courtyard holds together (ROADMAP milestone 3, the first place).** Owner, 2026-10-27: *"Arenas need polish: the current 3D blocks do not always fit together."* The audit is in ROADMAP.md (the courtyard, four faults); the picture is `design/COURTYARD_PASS.jpg`, before on the left, after on the right, at the same cameras. Everything below reuses the kit; nothing new was modelled.
+
+- **The blank end has a face.** The left building ended in 8 m of bare plaster facing the camera. It now turns the corner: three bays of street front and a stone pier on the corner, like the wing's.
+- **The pale caps are gone.** The kit's cornice top (6.44 m) stood above every roof's eave (6.3 m), so from above each wall wore a white stripe. A zinc coping now sits over every façade module in every place (the street, the yard and the quay rows too). From the front it is a thin dark line on the cornice.
+- **The back is one roof.** Its right block and the bridge over the passage turned their ridges 90° against the left block's; all three now run along the building.
+- **Nothing stands alone.** A run can be `with` another building's run. It shares that run's cutaway, so the corner bay goes with the wing and the new street front goes with the left building. Seen from behind, the one-bay return used to stay standing on its own.
+- **Three buildings, three plasters** (`tint`): ochre at the back, pale green on the left, salmon on the wing. A per-instance colour on the kit's plaster and a vertex colour on the boxes behind; the windows, stone and cornices keep their own.
+- **Not fixed:** from behind, every wall is lifted and the board stands on bare paving. That is the cutaway rule, not a broken join, and it is the next arena question.
+- **Gates:** `level-layout` 917 (was 870). A run `with` another must name a building's own run, and its ends may rest on that building. Rendered before and after at desktop, wide and phone sizes and in all eight rotations, with no page errors.
+- **Cache:** `layouts.js?v=4`, `locations.js?v=8`, crew `ui.js?v=25`, fight `main.js?v=47`, `startup.js?v=21`; `app.js?v=54` for the label.
+- **Owner played: pending.** Godot paused.
 ## v4.85 — 2026-10-27
 
 **The UI diet, step 1: the meeting's decision is on the first screen.** Owner, 2026-10-26: *"Analyze current UI and elements like character names in general. These aren't needed, so we need to optimize."* Then, on the analysis (`design/UI_DIET.md`): *"Go, start with the meeting."*

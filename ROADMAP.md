@@ -2,7 +2,7 @@
 
 ## Act I completion — check-in, 29 October 2026
 
-**Working estimate: 41%** (38% on 27 October). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
+**Working estimate: 42%** (38% on 27 October; 41% with v4.85, 42% with v4.86). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
 
 | Part | 27 Oct | 29 Oct | Evidence for the change |
 |---|---|---|---|
@@ -10,7 +10,7 @@
 | Combat | 4/20 | 5/20 | v4.84: blocked rivals press on. Measured, crew HP lost per fight 0.1 → 1.1; still far too easy (§5). |
 | Story and consequences | 8/20 | 8/20 | |
 | City and economy | 8/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
-| Arenas and presentation | 3/15 | 3/15 | The courtyard is audited (below); nothing is fixed yet. |
+| Arenas and presentation | 3/15 | 4/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. Not yet played on a device. |
 | Device validation and release | 0/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
 
 **Owner, 27 October:** finish Act I in small playable steps; ask only high-level
@@ -25,7 +25,7 @@ expensive asset production.
 |---|---|---|---|
 | 1 | Baseline and fast playtest (G0) | The three G0 routes work and the owner's Pixel observations are recorded. The opening trade is verified. | **Waiting on the owner.** The three playtest links are live in v4.85. |
 | 2 | Crew and combat (G1) | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. | Aatami fights all of chapter 1 (v4.83). Lever 1, blocked rivals press, has shipped (v4.84). Next: levers 2–4 and the careful policy (§4, §5). |
-| 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. | The courtyard is audited (below). Not fixed yet. |
+| 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. | **The courtyard is fixed in v4.86** (`design/COURTYARD_PASS.jpg`): its four audited faults, with the kit as it is. Open: from behind, every wall is lifted and the board stands on bare paving. Next: the yard, the street and the quay get the same look. |
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85). The map and the ledger are next. |
 | 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | Not started. |
 | 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | Not started. |
@@ -45,14 +45,14 @@ Kallio identity. One place and one playable release at a time.
 3. **An orphan.** From behind, the cutaway hides the wing but leaves the one-bay return standing alone.
 4. **Repetition.** Every building has one plaster colour and the same window.
 
-**Proposed fix:**
-- a façade on the cut end, hidden whenever its wing is hidden;
-- dark copings;
+**Fixed in v4.86**, as proposed:
+- a street front on the cut end, lifted with its building;
+- dark copings in every place;
 - one roof line along the back;
-- the return hidden with its wing;
+- the return lifted with its wing;
 - a plaster tint per building.
 
-Compare before and after at the same cameras, then ship it as one playable release.
+The picture is `design/COURTYARD_PASS.jpg`.
 
 **Codex's lane is closed** (owner, 29 October: *"No more codex for now, just wrap up those loose ends"*):
 - v4.83 and v4.84 shipped to the hub inside v4.85;

@@ -31,12 +31,14 @@ for(const [place,L] of Object.entries(LAYOUTS)){
     closed.add(`${j.run}:${j.at}`);
   }
   // 3. No wall ends in the air: an end is joined, inside a pier or filler, or
-  //    the gable of its own run's building. A shed is a volume and needs none.
+  //    the gable of its own run's building (or of the building it is `with`).
+  //    A shed is a volume and needs none.
   for(const r of Object.values(runs)){
     if(r.modules.every(m=>VOLUME.has(m)))continue;
+    if(r.with)ok(runs[r.with]&&!runs[r.with].with,`${place}: ${r.id} goes with ${r.with}, which is not a building's own run`);
     for(const [at,p] of Object.entries(ends(r))){
       if(closed.has(`${r.id}:${at}`))continue;
-      const covered=L.blocks.some(b=>(b.run===r.id||!b.ridge)&&inside(p,b.box,1.1));
+      const covered=L.blocks.some(b=>(b.run===r.id||b.run===r.with||!b.ridge)&&inside(p,b.box,1.1));
       ok(covered,`${place}: ${r.id} ${at} (${p.map(v=>v.toFixed(2))}) ends in the air`);
     }
   }
