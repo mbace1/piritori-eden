@@ -2,8 +2,8 @@
 // gate: every Act I fight (the door fights, the road fights, the two mission
 // battles) played through Night Shift's own commands by simple policies, over
 // seeds and the place's starting heat. It prints one JSON row per fight,
-// heat and policy: win/withdraw/loss rates, rounds, HP lost, downs, rout and
-// police rates.
+// heat (0, 2 and 3) and policy: win/withdraw/loss rates, rounds, HP lost,
+// average downs, the percentage of fights with a down, rout and police rates.
 //
 //   node web/tools/fight-balance.mjs              # the table, 12 seeds
 //   SEEDS=30 node web/tools/fight-balance.mjs     # more seeds
@@ -135,11 +135,11 @@ if (process.env.TRACE) {
 }
 const SEEDS = Number(process.env.SEEDS || 12);
 const rows = [];
-for (const f of fights) for (const heat of [0, 2]) for (const policyName of f.goal === 'getaway' ? ['run', 'fight'] : ['fight']) {
+for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f.goal === 'getaway' ? ['run', 'fight'] : ['fight']) {
   const res = [];
   for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), policyName === 'run' ? runPolicy : fightPolicy));
   const n = res.length, pct = k => Math.round(100 * res.filter(k).length / n);
   const avg = k => (res.reduce((a, r) => a + r[k], 0) / n).toFixed(1);
-  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), stuck: pct(r => r.stuck) });
+  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck) });
 }
 console.log(JSON.stringify(rows));
