@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><title>Cut-in review</title>
 <!-- Owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and talk options", the level behind;
      "the player character profile can be shown when he talks"; Arvo "always on the news tab".
-     A review page, not the game: ?who=jaska|aatami|arvo. render.cjs films it. The rigs, clips and drawing are the
+     A review page, not the game: ?who=jaska|aatami|aatami-side|arvo. render.cjs films it. The rigs, clips and drawing are the
      game's own (web/js/v3/cutin-stage.js and art/v3/manifest.json), so a review shows exactly what ships. -->
 <style>
  html,body{margin:0;background:#000}
@@ -29,7 +29,7 @@ const SEQ = {
     ['glance', 'DOCUMENTED', 'The conversion rate is fixed: 5.94573 markka per euro.'],
     ['gesture', 'INFERENCE', 'Old cash can still appear in homes and informal payments.'],
     ['nod', 'ARVO LINDE', 'The markka is no longer money at the till.']],
-}[WHO];
+}[WHO === 'aatami-side' ? 'aatami' : WHO]; // Same dialogue clips, different approved-source candidate rig.
 const T = SEQ.map(s => cast.clips[s[0]].dur), TOTAL = T.reduce((a, b) => a + b, 0);
 const TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8' };
 function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); }
