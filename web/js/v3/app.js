@@ -2,6 +2,7 @@ import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=3';
 import { mountCounterMotion, disposeCounterMotion } from './counter-motion.js?v=2';
 import { mountPaperSkin, disposePaperSkin } from './paper-skin.js?v=2';
+import { mountTokoClay, disposeTokoClay, tokoReact, tokoLeft } from './toko-clay.js?v=1';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -19,7 +20,7 @@ import {
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=9';
 import { createPauseMenu } from './pause.js?v=4';
-import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
+import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=2';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
 import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=4';
@@ -337,7 +338,7 @@ function render() {
     ramen: renderRamen,
     case: renderCase,
   };
-  disposeSceneSpeaker(); disposeCounterMotion(); disposePaperSkin();
+  disposeSceneSpeaker(); disposeCounterMotion(); disposePaperSkin(); disposeTokoClay();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
@@ -345,8 +346,11 @@ function render() {
   if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
   const speakerHost = root.querySelector('[data-speaker]');
   if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
+  if (state.mode !== 'ramen') tokoLeft();   // the next visit starts with his wave again
   if (state.mode === 'ramen') {
     const stage = root.querySelector('.ramen-layout .speaker-stage');
+    // Toko in clay (owner, 2026-10-19): the Radio Free clay Toko, as video loops that change on reactions
+    mountTokoClay(stage, (clip) => assetUrl(data, `cast-clay-toko-counter-${clip}-v01`));
     mountCounterMotion(stage);
     // AD2: the band in cut paper, lit by the counter's lantern (top-left of the plate)
     mountPaperSkin(root.querySelector('.ramen-layout'), () => { const r = stage.getBoundingClientRect(); return { x: r.left + r.width * 0.05, y: r.top + r.height * 0.15 }; });
@@ -1246,8 +1250,7 @@ function renderRamen() {
     <section class="paper-panel scene-card">
       <div class="scene-viewport speaker-stage">
         ${art ? `<img class="scene-image" src="${esc(art)}" alt="Tokon Ramen, the counter">` : genericScene('toko_slomo_noodles')}
-        <div class="scene-speaker toko-speaker" data-speaker="toko" data-asset="cast3d-toko-v01" aria-label="Toko Slomo behind the counter"></div>
-        ${art ? `<img class="counter-foreground" src="${esc(art)}" alt="" aria-hidden="true">` : ''}
+        <p class="visually-hidden">Toko behind the counter, in clay, his magenta mask on.</p>
         <i class="scene-vignette"></i>
         <div class="scene-caption" data-paper="plate">
           <h2>TOKON RAMEN</h2>
@@ -2086,6 +2089,7 @@ function handleRootClick(event) {
     state.mode = 'ramen'; persist(); render();
   } else if (action === 'buy-toko-weapon') {
     const result = buyFromToko(state, data, target.dataset.equipment);
+    if (result.ok) tokoReact('nod');
     logToast(result.ok ? `Bought from Toko for ${money(result.paid)}.` : ({ cash: 'Not enough cash.', 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? 'He does not sell that.'));
     persist(); render();
   } else if (action === 'buy-bowl') {
@@ -2093,6 +2097,7 @@ function handleRootClick(event) {
     if (!result.ok) logToast({ 'already-this-block': 'One bowl a block. He has other customers.', cash: `A bowl is ${money(BOWL_EUR)}.`, 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? result.reason);
     else logToast(result.anchorId ? `Toko on ${data.anchors.get(result.anchorId)?.label}: a price range, on the board.` : 'Toko has nothing new tonight. The broth is good.');
     tokoTold = result.ok ? (result.anchorId ?? '') : tokoTold;
+    if (result.ok) tokoReact('tilt');   // he leans in and tells you: 'bwoop?'
     persist(); render();
   } else if (action === 'buy-equipment') {
     const result = buyEquipment(state, data, target.dataset.equipment);

@@ -19,3 +19,11 @@
 .news-lower-third { z-index:3; }
 .scene-speaker[data-status=unavailable]::after { content:"Portrait unavailable"; position:absolute; bottom:0; font-size:12px; color:#f0dfbb; }
 
+/* Toko in clay (owner, 2026-10-19): video loops over the whole stage — each clip carries the
+   painted room, so it lines up with the plate under it pixel for pixel. Steam and rain draw
+   above it; the caption above them. Until a clip plays, the plate shows. */
+.toko-clay { position:absolute; inset:0; z-index:0; pointer-events:none; }
+.toko-clay video { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; display:block; }
+.toko-clay video[hidden] { display:none; }
+.counter-motion { z-index:1; }
+.visually-hidden { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
