@@ -91,7 +91,9 @@ function runPolicy(fight) {
 // put down, the tough first, the rest broken. Counted against: HP the plans
 // would take and anyone they would put down. It reads only what the player can
 // see (plans, HP, guard, the objective's rule for when they break), never the
-// dice. Answering the police, it takes whichever answer costs fewer people.
+// dice. On a getaway it heads out and swings only when that costs nothing,
+// because the field notes say to leave them standing and a body is +2 on the
+// police clock. Answering the police, it takes whichever answer costs fewer people.
 const ROUT_AT = R.ROUT_AT ?? 1 / 2;
 const weight = e => (e.tough ? 2 : 1);
 const dist = (a, c) => { const [x, y] = a.split(',').map(Number), [u, v] = c.split(',').map(Number); return Math.abs(x - u) + Math.abs(y - v); };
@@ -127,7 +129,9 @@ function carefulScore(b, p, to, c) {
     const t = sim.enemies.find(u => u.id === c.target), odds = c.f.chance / 100;
     gain += odds * c.f.hpDamage * (t.tough ? 1.5 : 1);
     if (odds >= 0.5) { t.hp -= c.f.hpDamage; t.guard -= c.f.guardDamage; t.alive = t.hp > 0; if (!t.alive) gain += t.tough ? 4 : 2; }
-    if (goal === 'getaway') gain *= 0.5;
+    // A getaway is won by leaving. The field notes say so ("Leave opponents
+    // alive if you can"), and a body is +2 pressure on the police clock.
+    if (goal === 'getaway') gain = 0.2 * odds * c.f.hpDamage - (t.alive ? 0 : 1);
   }
   if (c.type === 'brace') me.guard = Math.min(4, me.guard + 2);
   if (c.type === 'help') { const a = sim.players.find(u => u.id === c.target); a.alive = true; a.hp = p.kit === 'medical' ? 3 : 1; gain += 4; }
@@ -135,7 +139,7 @@ function carefulScore(b, p, to, c) {
   if (c.type === 'extract') { me.alive = false; me.evacuated = true; gain += 8; }
   const o = outlook(sim);
   let score = gain - 1.5 * o.hp - 4 * o.downs + (o.ends ? 6 : 0);
-  if (goal === 'getaway' && c.type !== 'extract') score -= 0.6 * rowOf(to);
+  if (goal === 'getaway' && c.type !== 'extract') score -= 1.0 * rowOf(to);
   if (goal === 'fight') { const near = sim.enemies.filter(e => e.alive).map(e => dist(to, e.cell)); if (near.length) score -= 0.1 * Math.min(...near); }
   return score;
 }
@@ -222,7 +226,9 @@ if (process.env.TRACE) {
 }
 const SEEDS = Number(process.env.SEEDS || 12);
 const rows = [];
-for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f.goal === 'getaway' ? ['run', 'careful', 'fight'] : ['fight', 'careful']) {
+// ONLY=getaway (a pattern on the fight's name or goal) and POLICY=careful narrow a run while tuning.
+const only = process.env.ONLY ? new RegExp(process.env.ONLY) : null, onlyPolicy = process.env.POLICY;
+for (const f of fights.filter(f => !only || only.test(`${f.name} ${f.goal}`))) for (const heat of [0, 2, 3]) for (const policyName of (f.goal === 'getaway' ? ['run', 'careful', 'fight'] : ['fight', 'careful']).filter(p => !onlyPolicy || p === onlyPolicy)) {
   const res = [];
   for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), POLICIES[policyName]));
   const n = res.length, pct = k => Math.round(100 * res.filter(k).length / n);
