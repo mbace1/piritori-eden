@@ -212,6 +212,13 @@ The Suds-Jack goal *"export cool MP4s that work as marketing for Toko and the ga
 
 - **The Toko dance (v3, made with the Grok bot, 2026-10-26).** A 7.5-second transparent loop at 128 BPM from AIST++ motion capture (Google), licensed **CC BY 4.0**: any published use needs the credit *"Motion data: AIST++ (Google), CC BY 4.0"*. The files are in the bot's own workspace, not in this repo.
 
+**Built 2026-10-30 (V6): `web/tools/trailer.cjs`.**
+- It records the real game a frame at a time (the page's clock frozen and stepped), so a 3D scene that renders at a few frames a second still comes out smooth at 30 fps.
+- 2D pages record in a browser that keeps canvases on the CPU.
+- FFmpeg joins the scenes over a synthesised rain-and-drone bed.
+- The first cut is 19 s at 1080p: the courtyard, Jaska's cut-in, a fight turn, the title card and the Toko sting.
+- Run it again after any visual change; it touches no game code.
+
 GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), because it is one file with no build step. Adding it needs the owner's yes (`CLAUDE.md` §2: no new dependencies).
 
 ## 8. Decisions only the owner can make (answered 2026-10-26: §9)

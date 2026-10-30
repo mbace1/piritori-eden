@@ -4,7 +4,7 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing} from './layouts.js?v=4';
+import {LAYOUTS,lay,facing} from './layouts.js?v=5';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',quay:'Sörnäinen · quay',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
@@ -22,7 +22,8 @@ export async function loadLocationAssets(profile){
 
 // Fictional visual pilots grounded in the atlas, not campaign site dispatch.
 // Tactical cover is built from the resolver's map, never inferred from scenery.
-export function buildLocation(world,renderer,cover,position,assets,id){
+// `opts.marks` is what earlier fights left in this set (outing.js `placeMarks`).
+export function buildLocation(world,renderer,cover,position,assets,id,opts={}){
  const yard=id==='yard'||id==='quay',group=new T.Group();group.name=id;world.add(group);
  world.background=new T.Color('#0c1922');world.fog=new T.Fog('#173040',22,50);renderer.toneMappingExposure=1.02;
  const hemi=new T.HemisphereLight(0xa4bfd0,0x344343,.94),moon=new T.DirectionalLight(0xb9d4e1,1.14);moon.position.set(-5,11,6);world.add(hemi,moon);
@@ -164,6 +165,57 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  lamps.forEach(([x,y,z,r],i)=>{const s=new T.Sprite(glowMat);s.position.set(x+(r?.36:0),y-.12,z+(r?0:.36));s.scale.set(2,2,1);(lampOwners[i]?.group??group).add(s);});
  // Local wisps at the far service passage, never a full-screen white wash.
  const wisps=[];for(let i=0;i<5;i++){const m=new T.SpriteMaterial({map:glowMap,color:0x77949d,transparent:true,opacity:.055,depthWrite:false});const s=new T.Sprite(m);s.position.set(wispX+(i-2)*.7,.4,yard?-6.8:-6.5);s.scale.set(2.5,.65,1);group.add(s);wisps.push(s);}
+ // V3, the place's own lights (layouts.js `signs`): a lit box sign flat on its
+ // wall, or a blade sign out from it, read from both sides; a glow; and its
+ // colour spilled on the paving under it. No new lights, which would cost every
+ // material a pass: emissive faces and additive planes, lifted with the wall.
+ // The text is redrawn once the house face has loaded, or a slow font leaves
+ // the fallback baked into the texture for good.
+ const signs=[],still=matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ const FONT='"Barlow Condensed","Arial Narrow",sans-serif';
+ function signFace(text,color,w,h){const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=2;
+  const draw=()=>{const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.fillStyle='#140e11';x.fillRect(0,0,c.width,c.height);x.globalAlpha=.5;x.strokeStyle=color;x.lineWidth=5;x.strokeRect(9,9,c.width-18,c.height-18);x.globalAlpha=1;
+   let size=c.height*.6;const font=()=>x.font=`600 ${size}px ${FONT}`;font();while(x.measureText(text).width>c.width*.84&&size>12){size-=2;font();}
+   x.textAlign='center';x.textBaseline='middle';const y=c.height/2+size*.05;x.shadowColor=color;x.shadowBlur=size*.5;x.fillStyle=color;x.fillText(text,c.width/2,y);x.fillText(text,c.width/2,y);
+   x.shadowBlur=size*.12;x.fillStyle='#fff3ea';x.fillText(text,c.width/2,y);t.needsUpdate=true;};
+  draw();document.fonts?.load(`600 40px ${FONT}`).then(draw,()=>{});return t;}
+ const signBody=new T.MeshStandardMaterial({color:0x1b1416,roughness:.6,metalness:.3});
+ for(const [text,runId,x,y,z,r,color,w,blade,flicker] of layout.signs??[]){
+  const parent=byId[runId]?.group??group,h=blade?.58:w>2.2?.66:.52,face=new T.MeshBasicMaterial({map:signFace(text,color,w,h),toneMapped:false});
+  const sign=new T.Group();sign.name='sign-'+text;sign.position.set(x,y,z);sign.rotation.y=r;parent.add(sign);
+  sign.add(new T.Mesh(new T.BoxGeometry(w+.06,h+.06,blade?.06:.09),signBody));
+  for(const side of blade?[1,-1]:[1]){const p=new T.Mesh(new T.PlaneGeometry(w,h),face);p.position.z=side*(blade?.035:.05);if(side<0)p.rotation.y=Math.PI;sign.add(p);}
+  // A blade hangs from a bracket into the wall (local +x is toward it).
+  if(blade){const arm=new T.Mesh(new T.BoxGeometry(w+.16,.035,.035),signBody);arm.position.set(.08,h/2+.06,0);sign.add(arm);}
+  const tint=new T.Color(color),glow=new T.Sprite(new T.SpriteMaterial({map:glowMap,color:tint,blending:T.AdditiveBlending,depthWrite:false,transparent:true,opacity:.85}));
+  glow.position.z=blade?0:.25;glow.scale.set(w*2.2,h*4,1);sign.add(glow);
+  const n=[Math.sin(r),Math.cos(r)],out=blade?0:1.1,spill=new T.Mesh(new T.PlaneGeometry(blade?2.2:w*1.8,2.2),new T.MeshBasicMaterial({map:glowMap,color:tint,transparent:true,opacity:.42,blending:T.AdditiveBlending,depthWrite:false}));
+  spill.rotation.x=-Math.PI/2;spill.rotation.z=r;spill.position.set(x+n[0]*out,.03,z+n[1]*out);parent.add(spill);
+  signs.push({face,glow,spill,flicker:flicker&&!still,base:[.85,.42]});
+ }
+ // V4, the place remembers (outing.js `placeMarks`, layouts.js `aftermath`):
+ // what earlier fights in this set left, always off the board. The police
+ // leave their tape (blue and white, POLIISI · POLIS, as Finnish police tape
+ // is), someone hurt leaves a stain, and every fight leaves more glass.
+ // `?aftermath=all` shows all three, for a picture or a check.
+ const after=layout.aftermath,marks=new URLSearchParams(location.search).get('aftermath')==='all'?{fights:2,police:true,hurt:true}:opts.marks;
+ if(after&&marks){
+  const seeded=s=>()=>(s=(Math.imul(s,1664525)+1013904223)>>>0)/4294967296;
+  if(marks.police&&after.tape){const [runId,x0,z0,x1,z1,y]=after.tape,len=Math.hypot(x1-x0,z1-z0),c=document.createElement('canvas');c.width=512;c.height=40;const cx=c.getContext('2d');
+   for(let i=0;i<4;i++){const blue=i%2===0;cx.fillStyle=blue?'#1f4fbf':'#f1f3f6';cx.fillRect(i*128,0,128,40);cx.fillStyle=blue?'#f1f3f6':'#1f4fbf';cx.font='600 26px '+FONT;cx.textAlign='center';cx.textBaseline='middle';cx.fillText(blue?'POLIISI':'POLIS',i*128+64,21);}
+   const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=T.RepeatWrapping;
+   const N=10,pos=[],uv=[],index=[];for(let i=0;i<=N;i++){const t=i/N,px=x0+(x1-x0)*t,pz=z0+(z1-z0)*t,py=y-.14*(1-(2*t-1)**2);pos.push(px,py+.035,pz,px,py-.035,pz);uv.push(t*len/1.6,1,t*len/1.6,0);if(i<N){const a=i*2;index.push(a,a+1,a+2,a+1,a+3,a+2);}}
+   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(index);g.computeVertexNormals();
+   const tape=new T.Mesh(g,new T.MeshStandardMaterial({map,emissiveMap:map,emissive:0xffffff,emissiveIntensity:.3,roughness:.5,side:T.DoubleSide}));tape.name='aftermath-tape';(byId[runId]?.group??group).add(tape);}
+  if(marks.fights>0)for(const [gx,gz] of (after.glass??[]).slice(0,marks.fights>1?2:1)){const rnd=seeded(Math.round(gx*97+gz*13)),tri=[];
+   for(let i=0;i<16;i++){const a=rnd()*Math.PI*2,d=Math.sqrt(rnd())*.55,cxp=gx+Math.cos(a)*d,czp=gz+Math.sin(a)*d,s=.04+rnd()*.08,b=rnd()*Math.PI*2;for(let k=0;k<3;k++){const q=b+k*2.1+rnd()*.5;tri.push(cxp+Math.cos(q)*s,.012,czp+Math.sin(q)*s);}}
+   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(tri,3));g.computeVertexNormals();
+   const glass=new T.Mesh(g,new T.MeshStandardMaterial({color:0xcfe4ec,roughness:.08,metalness:.15,emissive:0x5d7a84,emissiveIntensity:.25,side:T.DoubleSide}));glass.name='aftermath-glass';group.add(glass);
+   const neck=new T.Mesh(new T.CylinderGeometry(.03,.04,.2,8),new T.MeshStandardMaterial({color:0x2f6b3a,roughness:.15,emissive:0x163a1d,emissiveIntensity:.4}));neck.rotation.set(0,rnd()*Math.PI,Math.PI/2);neck.position.set(gx+.2,.04,gz-.1);group.add(neck);}
+  if(marks.hurt&&after.stain){const [sx,sz]=after.stain,c=document.createElement('canvas');c.width=c.height=128;const cx=c.getContext('2d'),rnd=seeded(Math.round(sx*31+sz*7));
+   for(let i=0;i<9;i++){const x=40+rnd()*48,y=40+rnd()*48,r=12+rnd()*26,gr=cx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,'rgba(58,10,8,.75)');gr.addColorStop(.7,'rgba(42,8,6,.45)');gr.addColorStop(1,'rgba(30,6,5,0)');cx.fillStyle=gr;cx.fillRect(0,0,128,128);}
+   const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;const stain=new T.Mesh(new T.PlaneGeometry(1.2,1.2),new T.MeshBasicMaterial({map,transparent:true,depthWrite:false}));stain.name='aftermath-stain';stain.rotation.x=-Math.PI/2;stain.position.set(sx,.014,sz);group.add(stain);}
+ }
  const lab=developmentLook(world,renderer,group,floorMat,mats,true,{courtyard:true,pavingTexture:assets.pavingTexture,lights:lamps.map(([x,y,z])=>[x,y,z])});let clock=0;
  // The wet paving stops where the ground does.
  const wet=layout.floor&&group.getObjectByName('wet-paving');
@@ -173,5 +225,5 @@ export function buildLocation(world,renderer,cover,position,assets,id){
  function cutaway(camera){camera.getWorldDirection(look);const h=Math.hypot(look.x,look.z)||1;let changed=false;
   for(const r of runs){const v=-(r.normal[0]*look.x+r.normal[1]*look.z)/h>-.1;if(v!==r.visible){r.visible=v;r.group.visible=v;changed=true;}}
   if(changed)for(const b of batches){b.owners.forEach((o,i)=>b.mesh.setMatrixAt(i,o&&!o.visible?hidden:b.matrices[i]));b.mesh.instanceMatrix.needsUpdate=true;}}
- return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;wisps.forEach((s,i)=>{s.position.x=wispX+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length}),aftermath(){}};
+ return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;for(const s of signs){if(!s.flicker)continue;const on=Math.sin(clock*1.3)<.82||Math.sin(clock*23)>-.2;s.face.color.setScalar(on?1:.35);s.glow.material.opacity=on?s.base[0]:.12;s.spill.material.opacity=on?s.base[1]:.06;}wisps.forEach((s,i)=>{s.position.x=wispX+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,signs:signs.length,aftermath:['tape','glass','stain'].filter(k=>group.getObjectByName('aftermath-'+k)||runs.some(r=>r.group.getObjectByName('aftermath-'+k))),runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length}),aftermath(){}};
 }

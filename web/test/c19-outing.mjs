@@ -17,8 +17,8 @@ const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=10');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
-const O = await import('../js/v3/outing.js?v=5');
-const R = await import('../crew-run/run.js?v=16');
+const O = await import('../js/v3/outing.js?v=6');
+const R = await import('../crew-run/run.js?v=17');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate } = await import('../fight-module/tactics.js?v=9');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -122,6 +122,10 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.deepEqual(doorFightEffects(doors, after.outing.door, after.outing.result), template.fight.win, 'the door\'s winning stakes');
   assert.deepEqual(O.outingLines(after.outing), ['They ran. A Torkkelinmäki courtyard is yours.']);
   assert.equal(R.settle(run, fight), false, 'settled exactly once');
+  const record = after.battleHistory.at(-1);
+  assert.equal(record.kit, 'courtyard', 'the history keeps the set the fight was in (v4.87)');
+  assert.equal(record.end, 'win');
+  assert.equal(typeof record.hurt, 'number', 'and how many came home hurt, missing or taken');
 }
 
 // Withdraw is in every fight: the standing leave, the downed are missing, the job is lost.
@@ -332,6 +336,24 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.throws(() => R.loadRun(null, content), /already settled/);
   search = '?campaign=1&outing=not-a-fight';
   assert.throws(() => R.loadRun(null, content), /not in this campaign/);
+}
+
+// v4.87, the place remembers: what a set's earlier fights left, and an
+// outing carries it to Night Shift.
+{
+  const s = createState(content);
+  assert.deepEqual(O.placeMarks(s, 'courtyard'), { fights: 0, police: false, hurt: false }, 'a new campaign: nothing in any set');
+  s.battleHistory = [
+    { source: 'c19-night-shift', kit: 'courtyard', end: 'win', hurt: 0 },
+    { source: 'c19-night-shift', kit: 'courtyard', end: 'police', hurt: 2 },
+    { source: 'c19-night-shift', kit: 'quay', end: 'police', hurt: 1 },
+    { source: 'c19-night-shift', end: 'police', hurt: 1 },
+    { source: 'c17-night-shift', kit: 'courtyard', hurt: 1 },
+  ];
+  assert.deepEqual(O.placeMarks(s, 'courtyard'), { fights: 2, police: true, hurt: true }, 'two fights in the courtyard, one ended by the police, someone hurt');
+  assert.deepEqual(O.placeMarks(s, 'yard'), { fights: 0, police: false, hurt: false }, 'a fight elsewhere, or one recorded before sets were, leaves this set clean');
+  const { outing } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'marks' });
+  assert.deepEqual(outing.marks, { fights: 0, police: false, hurt: false }, 'every outing carries its set\'s marks');
 }
 
 console.log('C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');

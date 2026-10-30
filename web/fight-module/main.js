@@ -1,7 +1,7 @@
 import {fighterLabel} from './readability.js?v=4';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
-import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=8';
-import {mountCrew} from '../crew-run/ui.js?v=25';
+import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=9';
+import {mountCrew} from '../crew-run/ui.js?v=26';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
@@ -70,7 +70,7 @@ function buildStage(){
   renderer=new T.WebGLRenderer({canvas,context:canvas.__piritoriGL||undefined,antialias:profile.antialias,powerPreference:'default',alpha:false,stencil:false});renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=profile.shadows;renderer.shadowMap.type=T.PCFSoftShadowMap;
   edgeSmoothing=createEdgeSmoothing(renderer);
   camera=new T.OrthographicCamera(-5,5,5,-5,.1,60);ray=new T.Raycaster();ground=new T.Plane(new T.Vector3(0,1,0),0);highlight=new T.Group();world.add(highlight);
-  stage=isCrew&&arenaId!=='park'?buildLocation(world,renderer,session.battle.cover,position,locationAssets,arenaId):isPark?buildKarhupuisto(world,renderer,session.battle.cover,position,parkAssets,artStyle,isLab,isCrew):buildNightCourtyard(world,renderer,session.battle.cover,position);
+  stage=isCrew&&arenaId!=='park'?buildLocation(world,renderer,session.battle.cover,position,locationAssets,arenaId,{marks:crew?.state?.().outing?.marks}):isPark?buildKarhupuisto(world,renderer,session.battle.cover,position,parkAssets,artStyle,isLab,isCrew):buildNightCourtyard(world,renderer,session.battle.cover,position);
   if(isCrew)crew.setPortraitSource(portraitStudio(renderer));
   if(isBear)showArtStyle();
   bindGraphicsRecovery();fit();new ResizeObserver(fit).observe(area);

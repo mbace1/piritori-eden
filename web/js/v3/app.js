@@ -29,7 +29,7 @@ import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=5';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
-import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=5';
+import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=6';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=7';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -2648,7 +2648,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.86',
+      version: 'v4.87',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.

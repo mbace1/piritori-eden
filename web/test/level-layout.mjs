@@ -75,5 +75,26 @@ for(const [place,L] of Object.entries(LAYOUTS)){
     for(const [px,pz] of q.posts??[]){const post=[px-.12,px+.12,pz-.12,pz+.12];ok(post[1]<=q.edge-.1,`${place}: a lamp post stands in the water`);
       for(const t of things)ok(!overlap(post,t.box),`${place}: a lamp post at ${px},${pz} stands in a ${t.n}`);}
   }
+  // 9. A sign (v4.87) hangs on a wall that exists: in front of its face by
+  //    no more than a blade's (or an awning's) reach, along it, above head
+  //    height, off the board.
+  for(const [text,runId,x,y,z] of L.signs??[]){
+    const r=runs[runId];ok(r,`${place}: the ${text} sign hangs on ${runId}, which is not a run`);if(!r)continue;
+    const off=[x-r.x,z-r.z],out=dot(off,facing(r.rotation)),along=dot(off,axis(r.rotation));
+    ok(out>=FACE-.08&&out<=FACE+1.25,`${place}: the ${text} sign is ${(out-FACE).toFixed(2)} m off ${runId}'s face`);
+    ok(along>=0&&along<=r.length,`${place}: the ${text} sign is past the end of ${runId}`);
+    ok(y>=2.4,`${place}: the ${text} sign hangs at ${y} m, below head height`);
+    ok(!inside([x,z],BOARD,.3),`${place}: the ${text} sign is over the board`);
+  }
+  // 10. What earlier fights leave (v4.87) stays off the board, out of the
+  //     buildings and out from under the props; the tape is tied to a wall.
+  if(L.aftermath){
+    const a=L.aftermath,spots=[...(a.glass??[]).map(p=>['glass',p,.6]),...(a.stain?[['stain',a.stain,.6]]:[])];
+    if(a.tape){const [runId,x0,z0,x1,z1]=a.tape;ok(runs[runId],`${place}: the tape is tied to ${runId}, which is not a run`);spots.push(['tape',[x0,z0],0],['tape',[x1,z1],0]);}
+    for(const [what,[x,z],rad] of spots){const box=[x-rad,x+rad,z-rad,z+rad];
+      ok(!overlap(box,BOARD),`${place}: the ${what} at ${x},${z} is on the board`);
+      for(const m of masses)ok(!overlap(box,m.box),`${place}: the ${what} at ${x},${z} is inside ${m.run}'s building`);
+      if(what!=='tape')for(const t of things)ok(!overlap(box,t.box),`${place}: the ${what} at ${x},${z} lies under a ${t.n}`);}
+  }
 }
 console.log(`level-layout: ${checks} checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (${Object.keys(LAYOUTS).join(', ')})`);

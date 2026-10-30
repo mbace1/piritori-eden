@@ -43,6 +43,13 @@ const COMMON={
 
 const bays=n=>Array.from({length:n},(_,i)=>i%2?'facade_bay_b':'facade_bay');
 
+// Every place's own lights (v4.87, V3): `signs` are [text, run, x, y, z,
+// rotation, colour, width, blade, flicker], each on a wall of `run` (a shed's
+// hangs from its awning's edge, which covers the wall above the door) and
+// lifted with it. Fictional 2003 Kallio businesses; Tokon Ramen is Toko's own.
+// `aftermath` (V4) is where earlier fights leave their marks, all off the
+// board: `tape` [run, x0, z0, x1, z1, y] across a way in, `glass` patches and
+// a `stain` (outing.js `placeMarks` says which).
 export const LAYOUTS={
   // A closed courtyard (courtyard-prototype-v05): the back wall with its
   // passage at x 0, the left wing butting into it, and on the right a return
@@ -89,6 +96,8 @@ export const LAYOUTS={
     ],
     lamps:[[-4.6,3.2,-7.1,0,'back'],[3.4,3.2,-7.1,0,'back'],[-5.9,3.6,1.1,Math.PI/2,'left']],
     props:[['pallets',5.8,0,2.4,0],['container',-5.25,0,2.15,0],['container',-5.25,0,3.3,0]],
+    signs:[['BAARI','back',0,3.3,-6.42,0,'#ff4f8b',2,false,true],['KAHVILA','wing',7.82,2.7,-3.27,Math.PI/2,'#4fe3ff',1.15,true,false]],
+    aftermath:{tape:['back',-1.25,-6.4,1.25,-6.4,1],glass:[[4.3,1.4],[-4.3,-3]],stain:[4.2,-2.6]},
     ...COMMON,
   },
   // A Kallio tram street (layer 6), duplicated from the park's municipal
@@ -107,6 +116,9 @@ export const LAYOUTS={
     road:{z0:-5.2,z1:2.6},rails:[-1.9],tram:{x:12,z:-1.9},rear:[-4.6,2.5,-8],
     lamps:[[13.96,3.2,-7.1,0,'row'],[4.72,3.2,-7.1,0,'row'],[-7.76,3.2,-7.1,0,'row']],
     props:[['container',-9.4,0,-6.4,0],['container',-8.3,0,-6.4,0]],
+    signs:[['PANTTI','row',-6.24,2.7,-6.39,Math.PI/2,'#ffcf4a',1.15,true,true],['TOKON RAMEN','row',3.2,2.7,-6.39,Math.PI/2,'#ff3b4e',1.15,true,false],
+      ['KEBAB PIZZA','row',9.36,2.7,-6.39,Math.PI/2,'#ff7a2e',1.15,true,false],['PELIT','row',15.52,2.7,-6.39,Math.PI/2,'#5dff9a',1.15,true,false]],
+    aftermath:{tape:['row',-5.85,-6.4,-3.35,-6.4,1],glass:[[4.5,.8],[-4.6,-3.6]],stain:[-4.2,1.6]},
     ...COMMON,
     planters:[[-4.7,4.3,Math.PI/2],[5.2,4.0,Math.PI/2]],
   },
@@ -122,6 +134,8 @@ export const LAYOUTS={
     blocks:[{run:'far',box:[-11.6,13.08,-21.5,-13.35,0,6.3],ridge:'x'}],
     lamps:[[-4.5,3.2,-7.4,0,'sheds'],[4,3.2,-7.4,0,'sheds'],[-6.4,3.2,.4,Math.PI/2,'side']],
     props:[['pallets',-5.8,0,2.4,0],['pallets',-5.8,.5,2.4,0],['pallets',5.5,0,-5.6,0],['container',6.5,0,-3,0],['container',6.5,0,-1.8,0],['container',6.5,0,0,0]],
+    signs:[['KORJAAMO','sheds',.92,2.45,-6.55,0,'#9fd8ff',1.7,false,false]],
+    aftermath:{tape:['sheds',3.65,-7.45,6.1,-7.45,1],glass:[[4.4,-3.9],[-4.5,1.2]],stain:[4.3,2]},
     ...COMMON,
   },
   // The quay (layer 7), duplicated from the yard after the Sörnäinen docks
@@ -141,6 +155,8 @@ export const LAYOUTS={
     rear:[-1,2.5,-7.1],
     lamps:[[-4.5,3.2,-7.4,0,'sheds'],[3,3.2,-7.4,0,'sheds'],[-6.4,3.2,.4,Math.PI/2,'side']],
     props:[['pallets',-5.8,0,2.4,0],['pallets',-5.8,.5,2.4,0],['pallets',4.5,0,3.4,0],['container',4.35,0,-6.5,0],['container',4.35,0,-5.4,0]],
+    signs:[['VARASTO 7','sheds',-.52,2.45,-6.55,0,'#e8f2ff',1.7,false,false]],
+    aftermath:{tape:['sheds',-5.7,-7.45,-3.25,-7.45,1],glass:[[-4.6,1.4],[4.3,-2.4]],stain:[-4.4,-3.6]},
     ...COMMON,
     planters:[],
     litter:[[-5.7,4.9],[-5.5,1],[-5.4,-2.9],[4.7,1.2],[-2.5,-6.8],[2.4,-6.6]],

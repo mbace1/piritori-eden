@@ -1,3 +1,26 @@
+## v4.87 — 2026-10-30
+
+**Kallio's own lights, and a place that remembers (V3 and V4 of the 2026-10-30 pitch).** Owner, on the pitch: *"V3-6, others after."*
+
+- **Every Night Shift place has its own neon** (`layouts.js` `signs`):
+  - the courtyard has BAARI over the passage and a KAHVILA blade sign on the wing;
+  - the tram street has PANTTI, TOKON RAMEN (Toko's own), KEBAB PIZZA and PELIT;
+  - the yard has KORJAAMO and the quay has VARASTO 7, both hung from a shed's awning, which covers the wall above the door.
+  - Each sign is a lit box or a blade sign readable from both sides, with a glow and its colour spilled on the paving. There are no new lights (each would cost every material a pass), and each sign is lifted with its wall.
+  - One sign per place flickers; under reduced motion it holds still.
+  - The text is redrawn once the house face loads, so a slow font cannot leave the fallback baked in.
+- **The place remembers** (`outing.js` `placeMarks`, `layouts.js` `aftermath`). Night Shift's fight history now keeps the set, how the fight ended and how many came home hurt, missing or taken. The next outing in that set carries this, and Night Shift dresses the set with it, always off the board:
+  - **police tape across a way in** if the police ended a fight there: blue and white, POLIISI · POLIS, as Finnish police tape is;
+  - **a stain** if someone was hurt;
+  - **broken glass and a bottle** for every earlier fight (one patch, then two).
+  - It is keyed by the set rather than the address, because the set is what a player recognises. Fights recorded before v4.87 carry no set, so an older save starts clean. `?aftermath=all` shows all three marks, for a picture or a check.
+- **Gates:**
+  - `level-layout` 1144 (was 917): every sign hangs on a wall that exists, in front of its face by no more than a blade's or an awning's reach, along it, above head height and off the board. Nothing an earlier fight left is on the board, inside a building or under a prop. The first draft of the courtyard's stain sat inside the wing's corner pier, and the gate caught it.
+  - `c19-outing`: the history keeps the set, the ending and who was hurt (shown to fail without the set), `placeMarks` counts only Night Shift fights in that set, and an outing carries the marks.
+- **Mock-ups before shipping:** `design/V3_V5_MOCKS.jpg` shows the four places with every mark forced on.
+- Cache: `layouts.js?v=5`, `locations.js?v=9`, `campaign-adapter.js?v=11`, `outing.js?v=6`, fight `main.js?v=48`, crew `run.js?v=17`, `startup.js?v=22`, `app.js?v=55`.
+- **Also in this commit, not part of the game:** `web/tools/trailer.cjs`, the trailer kit (ROADMAP §7). Its first cut is 19 s at 1080p, recorded from this build.
+- **Owner played: pending.** Godot paused.
 ## v4.86 — 2026-10-29
 
 **The courtyard holds together (ROADMAP milestone 3, the first place).** Owner, 2026-10-27: *"Arenas need polish: the current 3D blocks do not always fit together."* The audit is in ROADMAP.md (the courtyard, four faults); the picture is `design/COURTYARD_PASS.jpg`, before on the left, after on the right, at the same cameras. Everything below reuses the kit; nothing new was modelled.

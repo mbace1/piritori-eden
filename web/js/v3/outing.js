@@ -38,6 +38,17 @@ export function cWeapon(equipment) {
   return 'baseball-bat';
 }
 
+/** What earlier fights left in a set (v4.87, "the place remembers"), for
+ *  Night Shift to dress it with: a fight the police ended leaves their tape,
+ *  one that hurt someone leaves a stain, and every fight leaves glass. Keyed
+ *  by the set (`kit`) rather than the address, because the set is what a
+ *  player recognises. Only Night Shift fights count, and they are recorded
+ *  with their set since v4.87, so an older save starts clean. */
+export function placeMarks(state, kit) {
+  const past = (state.battleHistory ?? []).filter(h => h.source === 'c19-night-shift' && h.kit && h.kit === kit);
+  return { fights: past.length, police: past.some(h => h.end === 'police'), hurt: past.some(h => (h.hurt ?? 0) > 0) };
+}
+
 /** The outing a door fight becomes. `staged` is the door's battle moved to
  *  its place (places.js `stageFight`); `fighterIds` are who takes the board.
  *  `nonce` makes the id unique across campaigns (the caller passes the clock),
@@ -57,6 +68,7 @@ export function doorOuting(state, encounter, staged, fighterIds, { opening = '',
     goal: goal === 'getaway' ? 'getaway' : 'fight',
     heat: Math.max(0, Math.min(3, Number(state.pressure?.[anchor] ?? 0) || 0)),
     kit: cPlace(place.kit),
+    marks: placeMarks(state, cPlace(place.kit)),
     place: place.name ?? null,
     wayOut: place.way_out ?? null,
     side: place.side ?? null,

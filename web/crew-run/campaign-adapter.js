@@ -201,7 +201,9 @@ export function applyCampaignReceipt(state,content,receipt){
     const named=effect=>(receipt.changes||[]).filter(c=>c.campaignEffect===effect).map(c=>c.name);
     Object.assign(outing,{status:'settled',result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,
       carried:named('carried'),missing:named('missing'),arrested:named('arrested'),wounded:named('damage')});
-    state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift'});
+    // `kit`, `end` and `hurt` are what the set remembers (outing.js `placeMarks`).
+    state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift',
+      kit:outing.kit??null,end:outing.end,hurt:outing.carried.length+outing.missing.length+outing.arrested.length+outing.wounded.length});
     log(state,`Night Shift: ${receipt.text||'outing resolved.'}`);
     return true;
   }
