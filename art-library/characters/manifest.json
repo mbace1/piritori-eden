@@ -28,8 +28,8 @@
   "fighter_pilots": {
     "approval_status": "approved",
     "production_ready": false,
-    "active": false,
-    "usage": "Meshy geometry evaluation only",
+    "active": true,
+    "usage": "Provisional v02 browser locomotion testing; not production gameplay",
     "sources": [
       {
         "id": "f01-heavy-bruiser",
@@ -44,7 +44,7 @@
         "sha256": "e7fbf7c927faf4277757ab6be6458a8adffdbaaaadcc3805ac12cfac42329587"
       }
     ],
-    "note": "Owner: these are the new poses; all other T-poses are older work. 2D concept approval does not approve generated geometry or runtime use."
+    "note": "Owner: these are the new poses; all other T-poses are older work. Approval here applies to the 2D concepts. The generated v02 bodies and own-rig clip packs are separately registered as public playable-test-only derivatives, with v01 retained for rollback; neither registration grants final generated-art or production approval."
   },
   "heads": {
     "approval_status": "approved",

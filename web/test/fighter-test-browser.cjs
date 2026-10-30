@@ -1,4 +1,4 @@
-// Real-browser gate for the provisional F01/F02 locomotion page.
+// Real-browser gate for the provisional F01/F02 layered body/hand animation page.
 const { chromium } = require('playwright');
 const http = require('http');
 const fs = require('fs');
@@ -39,6 +39,21 @@ function ok(name, condition, detail = '') {
 
 function changed(before, after) {
   return JSON.stringify(before) !== JSON.stringify(after);
+}
+
+function sameBoneComponent(before, after, component) {
+  if (!Array.isArray(before) || !Array.isArray(after) || before.length !== after.length) return false;
+  const afterByName = new Map(after.map(bone => [bone.name, bone[component]]));
+  return before.every(bone => (
+    afterByName.has(bone.name)
+    && JSON.stringify(bone[component]) === JSON.stringify(afterByName.get(bone.name))
+  ));
+}
+
+function rotationOnlyChanged(before, after) {
+  return sameBoneComponent(before, after, 'position')
+    && sameBoneComponent(before, after, 'scale')
+    && !sameBoneComponent(before, after, 'quaternion');
 }
 
 function fullyVisible(bounds) {
@@ -122,7 +137,7 @@ async function runViewport(browser, base, label, viewport, touch = false) {
     if (message.type() === 'error') problems.push(`console: ${message.text()}`);
   });
 
-  await page.goto(`${base}/web/fighter-test.html?f01=alert-idle&f02=casual-walk`);
+  await page.goto(`${base}/web/fighter-test.html?f01=alert-idle&f02=casual-walk&f01hands=hands-relaxed&f02hands=hands-prop-grip`);
   await page.waitForFunction(() => document.body.dataset.ready === 'true' || document.body.dataset.ready === 'false', null, { timeout: 30000 });
   const ready = await page.getAttribute('body', 'data-ready');
   ok(`${label}: importer reaches ready`, ready === 'true', await page.locator('#loadStatus').textContent());
@@ -134,15 +149,18 @@ async function runViewport(browser, base, label, viewport, touch = false) {
   }
 
   const expectedGlbs = [
-    'f01-heavy-bruiser-v02.glb',
-    'f01-heavy-bruiser-clips-v02.glb',
-    'f02-wiry-skirmisher-v02.glb',
-    'f02-wiry-skirmisher-clips-v02.glb',
+    'f01-heavy-bruiser-v03.glb',
+    'f01-heavy-bruiser-clips-v03.glb',
+    'f02-wiry-skirmisher-v03.glb',
+    'f02-wiry-skirmisher-clips-v03.glb',
   ];
   ok(`${label}: all four GLBs return 200`, expectedGlbs.every(name => glbs.get(name) === 200), JSON.stringify(Object.fromEntries(glbs)));
 
   const initial = await page.evaluate(() => window.__fighterTest.state());
-  ok(`${label}: URL selects independent starting motions`, initial.f01 === 'alert-idle' && initial.f02 === 'casual-walk');
+  ok(`${label}: URL selects independent body and hand states`,
+    initial.f01 === 'alert-idle' && initial.f02 === 'casual-walk'
+      && initial.f01Hands === 'hands-relaxed' && initial.f02Hands === 'hands-prop-grip',
+    JSON.stringify(initial));
 
   const f01Before = await page.evaluate(() => window.__fighterTest.sampleBones('f01'));
   const f01Walk = page.locator('[data-pilot="f01"][data-motion="casual-walk"]');
@@ -162,23 +180,70 @@ async function runViewport(browser, base, label, viewport, touch = false) {
   ok(`${label}: F02 alert moves real bones`, changed(f02Before, f02After));
   ok(`${label}: F02 control leaves F01 unchanged`, afterF02.f01 === 'casual-walk' && afterF02.f02 === 'alert-idle');
 
-  const views = [await page.evaluate(() => window.__fighterTest.view())];
-  const durationMs = Math.ceil(await page.evaluate(() => window.__fighterTest.activeDuration()) * 1000);
-  const sampleEveryMs = Math.max(80, Math.ceil(durationMs / 14));
-  for (let elapsed = 0; elapsed < durationMs; elapsed += sampleEveryMs) {
-    await page.waitForTimeout(sampleEveryMs);
-    views.push(await page.evaluate(() => window.__fighterTest.view()));
+  const f01HandsBefore = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  const f01Fist = page.locator('[data-pilot="f01"][data-hand-pose="hands-fist"]');
+  if (touch) await f01Fist.tap();
+  else {
+    await f01Fist.focus();
+    await f01Fist.press('Enter');
   }
-  const allVisible = views.every(view => fullyVisible(view.f01) && fullyVisible(view.f02));
-  const allSeparated = views.every(view => separatelyFramed(view.f01, view.f02));
-  const stableSlots = views.every(stableSlotsAndScale);
-  const liveBounds = views.slice(1).some(view => (
-    boundsChanged(views[0].f01, view.f01) || boundsChanged(views[0].f02, view.f02)
-  ));
-  ok(`${label}: skinned bounds change during full playback`, liveBounds, JSON.stringify(views));
-  ok(`${label}: both full animations stay visible`, allVisible, JSON.stringify(views));
-  ok(`${label}: F01 and F02 keep separate screen slots`, allSeparated, JSON.stringify(views));
-  ok(`${label}: holder slots and animated world scale stay stable`, stableSlots, JSON.stringify(views));
+  const f01HandsAfter = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  const afterF01Hands = await page.evaluate(() => window.__fighterTest.state());
+  ok(`${label}: F01 hand control poses 20 real finger bones`,
+    f01HandsAfter.length === 20 && rotationOnlyChanged(f01HandsBefore, f01HandsAfter), JSON.stringify(f01HandsAfter));
+  ok(`${label}: F01 hand control leaves F02 hand pose unchanged`,
+    afterF01Hands.f01Hands === 'hands-fist' && afterF01Hands.f02Hands === 'hands-prop-grip',
+    JSON.stringify(afterF01Hands));
+  ok(`${label}: active hand control exposes pressed state`, await f01Fist.getAttribute('aria-pressed') === 'true');
+
+  const f01HandsBeforeBodySwitch = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  const f01Alert = page.locator('[data-pilot="f01"][data-motion="alert-idle"]');
+  if (touch) await f01Alert.tap(); else await f01Alert.click();
+  const f01HandsAfterBodySwitch = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  const layeredF01 = await page.evaluate(() => window.__fighterTest.state());
+  ok(`${label}: body switch preserves the active hand layer`,
+    !changed(f01HandsBeforeBodySwitch, f01HandsAfterBodySwitch)
+      && layeredF01.f01 === 'alert-idle' && layeredF01.f01Hands === 'hands-fist',
+    JSON.stringify(layeredF01));
+
+  const f02HandsBefore = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f02', 'hands'));
+  const f02Open = page.locator('[data-pilot="f02"][data-hand-pose="hands-open"]');
+  if (touch) await f02Open.tap(); else await f02Open.click();
+  const f02HandsAfter = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f02', 'hands'));
+  const afterF02Hands = await page.evaluate(() => window.__fighterTest.state());
+  ok(`${label}: F02 hand control poses 20 real finger bones`,
+    f02HandsAfter.length === 20 && rotationOnlyChanged(f02HandsBefore, f02HandsAfter), JSON.stringify(f02HandsAfter));
+  ok(`${label}: F02 hand control leaves F01 hand pose unchanged`,
+    afterF02Hands.f02Hands === 'hands-open' && afterF02Hands.f01Hands === 'hands-fist',
+    JSON.stringify(afterF02Hands));
+
+  const fullCyclePairs = [
+    { label: 'F01 walk / F02 alert', f01: 'casual-walk', f02: 'alert-idle' },
+    { label: 'F01 alert / F02 walk', f01: 'alert-idle', f02: 'casual-walk' },
+  ];
+  for (const pair of fullCyclePairs) {
+    for (const pilot of ['f01', 'f02']) {
+      const control = page.locator(`[data-pilot="${pilot}"][data-motion="${pair[pilot]}"]`);
+      if (touch) await control.tap(); else await control.click();
+    }
+    const views = [await page.evaluate(() => window.__fighterTest.view())];
+    const durationMs = Math.ceil(await page.evaluate(() => window.__fighterTest.activeDuration()) * 1000);
+    const sampleEveryMs = Math.max(80, Math.ceil(durationMs / 14));
+    for (let elapsed = 0; elapsed < durationMs; elapsed += sampleEveryMs) {
+      await page.waitForTimeout(sampleEveryMs);
+      views.push(await page.evaluate(() => window.__fighterTest.view()));
+    }
+    const allVisible = views.every(view => fullyVisible(view.f01) && fullyVisible(view.f02));
+    const allSeparated = views.every(view => separatelyFramed(view.f01, view.f02));
+    const stableSlots = views.every(stableSlotsAndScale);
+    const liveBounds = views.slice(1).some(view => (
+      boundsChanged(views[0].f01, view.f01) || boundsChanged(views[0].f02, view.f02)
+    ));
+    ok(`${label}: ${pair.label} changes skinned bounds for a full cycle`, liveBounds, JSON.stringify(views));
+    ok(`${label}: ${pair.label} stays fully visible`, allVisible, JSON.stringify(views));
+    ok(`${label}: ${pair.label} keeps separate screen slots`, allSeparated, JSON.stringify(views));
+    ok(`${label}: ${pair.label} keeps holder slots and world scale stable`, stableSlots, JSON.stringify(views));
+  }
 
   const appearance = await page.evaluate(() => ({
     f01: window.__fighterTest.appearance('f01'),
@@ -189,7 +254,7 @@ async function runViewport(browser, base, label, viewport, touch = false) {
     && material.emissiveIntensity === 0
     && material.hasEmissiveMap === false
   ));
-  ok(`${label}: v02 materials stay matte and non-emissive`, neutralEmission, JSON.stringify(appearance));
+  ok(`${label}: v03 materials stay matte and non-emissive`, neutralEmission, JSON.stringify(appearance));
 
   await page.locator('.motion-controls').scrollIntoViewIfNeeded();
   const heights = await page.locator('.motion-controls button').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
@@ -218,7 +283,7 @@ async function runViewport(browser, base, label, viewport, touch = false) {
 async function runReducedMotion(browser, base) {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto(`${base}/web/fighter-test.html?f01=alert-idle&f02=casual-walk`);
+  await page.goto(`${base}/web/fighter-test.html?f01=alert-idle&f02=casual-walk&f01hands=hands-relaxed&f02hands=hands-relaxed`);
   await page.waitForFunction(() => document.body.dataset.ready === 'true', null, { timeout: 30000 });
   await page.waitForTimeout(120);
 
@@ -233,6 +298,13 @@ async function runReducedMotion(browser, base) {
   ok('reduced-motion: touch can select a static clip frame', selected.f01 === 'casual-walk');
   ok('reduced-motion: bones remain still', !changed(before, after));
 
+  const handsBefore = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  await page.locator('[data-pilot="f01"][data-hand-pose="hands-fist"]').tap();
+  const handsAfter = await page.evaluate(() => window.__fighterTest.sampleLocalBones('f01', 'hands'));
+  const handSelected = await page.evaluate(() => window.__fighterTest.state());
+  ok('reduced-motion: touch can select a static hand pose',
+    handSelected.f01Hands === 'hands-fist' && rotationOnlyChanged(handsBefore, handsAfter), JSON.stringify(handSelected));
+
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.waitForTimeout(400);
   const resumed = await page.evaluate(() => window.__fighterTest.sampleBones('f01'));
@@ -244,7 +316,7 @@ async function runReducedMotion(browser, base) {
 
 async function runLifecycle(browser, base) {
   const page = await browser.newPage({ viewport: { width: 800, height: 700 } });
-  await page.goto(`${base}/web/fighter-test.html?f01=casual-walk&f02=alert-idle`);
+  await page.goto(`${base}/web/fighter-test.html?f01=casual-walk&f02=alert-idle&f01hands=hands-fist&f02hands=hands-open`);
   await page.waitForFunction(() => document.body.dataset.ready === 'true', null, { timeout: 30000 });
 
   for (let cycle = 1; cycle <= 2; cycle += 1) {
@@ -254,7 +326,9 @@ async function runLifecycle(browser, base) {
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => window.__fighterTest.sampleBones('f01'));
     ok(`BFCache cycle ${cycle}: persisted pagehide suspends without disposal`,
-      suspended.suspended && !suspended.destroyed && !suspended.rendering, JSON.stringify(suspended));
+      suspended.suspended && !suspended.destroyed && !suspended.rendering
+        && suspended.f01Hands === 'hands-fist' && suspended.f02Hands === 'hands-open',
+      JSON.stringify(suspended));
     ok(`BFCache cycle ${cycle}: animation stays still while suspended`, !changed(before, after));
 
     await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));

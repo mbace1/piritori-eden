@@ -144,20 +144,36 @@ h1 {
 
 .motion-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 10px;
   align-items: stretch;
+}
+
+.fighter-control-panel {
+  min-width: 0;
+  padding: 8px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid #5f625e;
+  background: rgba(36, 40, 42, .85);
+}
+
+.fighter-control-panel h3 {
+  margin: 0;
+  color: var(--cyan);
+  font-size: .8rem;
+  letter-spacing: .12em;
 }
 
 .fighter-controls {
   min-width: 0;
   margin: 0;
-  padding: 8px;
+  padding: 4px 0 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  border: 1px solid #5f625e;
-  background: rgba(36, 40, 42, .85);
+  border: 0;
+  border-top: 1px solid #5f625e;
 }
 
 .fighter-controls legend {
@@ -167,6 +183,8 @@ h1 {
   font-size: .72rem;
   letter-spacing: .1em;
 }
+
+.hand-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 .paper-button {
   min-width: 44px;
@@ -193,7 +211,7 @@ h1 {
 .paper-button:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .paper-button:disabled { opacity: .45; cursor: wait; }
 .back-link { flex: 0 0 auto; background: var(--kraft); }
-.pause-button { min-width: 126px; }
+.pause-button { min-width: 126px; align-self: stretch; }
 
 .scope-note {
   display: grid;

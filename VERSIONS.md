@@ -10,6 +10,21 @@
 > (`PORTING.md` §2): the block names what the Godot side must re-port, so it
 > never has to read a diff to find out.
 
+## v4.49 — 2026-09-12
+
+**Corrected F01/F02 v02 playable-test derivatives.**
+
+- Registers the optimized v02 F01 and F02 bodies and their meshless, own-rig Alert/Casual Walk packs as public `playable-test-only` assets. The packs preserve the source 30 Hz key cadence and absolute 4.0/4.2-second timing. The v01 bodies and packs remain registered as rollback candidates; neither version is final production art.
+- The owner requested shorter F01 arms and longer F02 arms. The measured pipeline correction uses factors `0.953` and `1.080`, yielding mean shoulder-to-wrist/height ratios `0.319953` and `0.250006`. The v02 round trip retains 15,512/15,503 triangles, 24-bone skins, existing UV/joint/weight contracts and one 2K texture per body.
+- The v02 GLBs carry the durable material correction themselves: no emissive atlas duplication, metallic `0`, roughness `0.92`, and specular factor `0.5`.
+- The dedicated browser test now uses v02 and passes 76/76 regression checks across desktop, mobile, Pixel and iPad viewport emulations. Coverage includes full-duration framing of the configured F01 walk/F02 alert pair, independent motion controls, a real Pixel-profile swipe-scroll gesture, static selected poses under reduced motion, and two BFCache suspend/resume cycles. CSS also preserves `pan-y pinch-zoom`; the suite does not synthesize a pinch gesture or assert terminal renderer disposal.
+- Four new optimized v02 test GLBs are added here; together with the retained v01 rollback set, eight F01/F02 test GLBs are public. Raw Meshy outputs, FBXs, editable Blender sources, full-resolution renders and validation reports remain private. The private archive still needs an independent restore check.
+- Shared cross-rig clips, stop/turn transitions, finger articulation and weapon grips, the Godot importer, physical-device testing and final owner approval remain open. Hub deployment is not claimed in this version entry.
+
+### Port
+
+This checkpoint is browser-only. Import the v02 body/own-rig packs through Godot's real importer before claiming engine parity. Pixel and iPad viewport emulation is regression coverage, not testing on physical devices; no Godot gameplay or production-asset approval is added here.
+
 ## v4.48 — 2026-09-11
 
 **Provisional F01/F02 locomotion test.**
@@ -18,8 +33,8 @@
 - A dedicated touch-first screen stages both fighters together and plays each fighter's own Alert idle and Casual Walk clips through the production Three.js GLTFLoader.
 - The runtime neutralises Meshy's duplicated full-strength emissive atlas so skin and clothing display their accepted base colours instead of washing out white.
 - The screen labels the candidates provisional and names the unavailable attack, damage, finger/grip and final-polish work instead of implying those states exist.
-- Current arm proportions remain part of the provisional pilot meshes and are explicitly left for the later body/rig correction pass.
-- The test is linked from the cold-start splash and can also be opened directly on the hub.
+- The v01 arm proportions remained part of this initial checkpoint; v4.49 corrects them while retaining v01 for rollback.
+- The test is linked from the cold-start splash. Hub source synchronization is separate from deployment and is not claimed by this entry.
 
 ### Port
 

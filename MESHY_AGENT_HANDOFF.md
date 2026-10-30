@@ -1,9 +1,32 @@
 # Piritori Meshy pilot handoff
 
-Updated: 2026-09-12. Receiving-agent update added; approved source references
-are now included, while generated geometry remains private and unregistered.
+Updated: 2026-09-12. Approved source references and the current public v02
+playable-test derivatives are recorded here; private source and QA boundaries
+remain in force.
 
 The owner requested this repository handoff so agents on other PCs can continue the two approved source pilots. Do not batch beyond F01 and F02. Coordinate with the art-lane owner before submitting: another agent may have advanced a pilot since this snapshot.
+
+## v4.49 / PR #68 current state — 2026-09-12 PDT
+
+Four optimized v02 GLBs are now public, active `playable-test-only`
+derivatives: one corrected body and one meshless own-rig Alert/Casual Walk pack
+for each fighter. F01 uses an Arm/ForeArm factor of `0.953` and measures
+`0.319953` mean shoulder-to-wrist/height; F02 uses `1.080` and measures
+`0.250006`. The bodies retain 15,512/15,503 triangles, 24-bone skins, and one
+2K texture each. Their raw material payload is non-emissive with metallic `0`,
+roughness `0.92`, and specular factor `0.5`. Both packs preserve the source
+30 Hz key cadence and absolute Alert/Walk timing.
+
+The v01 public test bodies/packs remain available for rollback. Neither v01 nor
+v02 is final production art. The browser checkpoint passes 76/76 regression
+checks across desktop, mobile, Pixel, and iPad viewport emulations, including
+full-duration framing of the configured F01 walk/F02 alert pair, touch
+scrolling, reduced motion, and BFCache lifecycle. Those
+are emulated viewports, not physical-device results, and the hub is not claimed
+deployed. Raw Meshy outputs, FBXs, Blender sources, full QA, and validation
+reports remain private. Independent private-archive restore, shared cross-rig
+clips, stop/turn transitions, fingers/grips, Godot import, physical devices, and
+final owner approval remain open.
 
 ## Production continuation — 2026-09-11 PDT
 
@@ -17,8 +40,10 @@ is documented rather than described as fully manifold.
 
 See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md) for every derivative task
 ID, action ID, actual triangle count, credit total, output fingerprint, visual
-evidence, caveat, and remaining gate. The generated GLBs/FBXs and full QA data
-remain private. No runtime registration, integration, or deployment occurred.
+evidence, caveat, and remaining gate. Raw outputs, FBXs, editable scenes, and
+full QA remain private; only the optimized public test GLBs described above are
+registered. This is a provisional browser integration, not production gameplay
+or deployment.
 
 ## Receiving-agent update — 2026-09-11 PDT
 
@@ -34,9 +59,10 @@ The received JPEG bytes are committed as approved source concepts at:
 
 Both geometry-only Meshy jobs completed. See [MESHY_PILOT_RESULTS.md](MESHY_PILOT_RESULTS.md)
 for task IDs, exact input hashes and settings, output hashes, Blender findings,
-credit usage and remaining gates. The generated GLBs and diagnostic files are
-not part of this PR. Raw masters and the later remeshed, textured, rigged
-review candidates remain private; none is accepted runtime art.
+credit usage and remaining gates. At that receiving checkpoint, generated GLBs
+and diagnostics were not part of the PR. Raw masters and working derivatives
+remain private; the later optimized v01/v02 public files are provisional test
+art under the current-state record above, not final accepted runtime art.
 
 Owner follow-up: **use a 15,000-triangle target for accepted character
 derivatives to preserve facial clarity.** This replaces 12k as the target for
@@ -49,12 +75,12 @@ Read [CLAUDE.md](CLAUDE.md), [DESIGN_AUTHORITY.md](DESIGN_AUTHORITY.md), [PHASIN
 Explicit approval: "First 2 approved. Scrap 3".
 F01 heavy bruiser: broad adult man, receding hair/stubble, black leather jacket, ochre knit, dark trousers, heavy shoes.
 F02 wiry skirmisher: lean adult woman, short uneven dark hair, black padded vest, grey hoodie, rust two-stripe track pants, offwhite trainers.
-Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D T-pose concepts only; the owner subsequently authorized remesh, texture, rigging and motion testing, as recorded above. Final visual acceptance and runtime approval remain outstanding. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
+Both approvals are recorded separately in the canonical [art-library/APPROVALS.md](art-library/APPROVALS.md) register. They cover the front-facing 2D pose concepts only (F01 A-pose, F02 T-pose); the owner subsequently authorized remesh, texture, rigging and motion testing, as recorded above. Final visual acceptance and runtime approval remain outstanding. F03 burgundy-bomber stocky brawler is rejected; do not reuse it.
 Older poses may be reused ONLY after showing the exact candidate to the owner for approval.
 Fighters only, gritty Piritori street combatants with distinct silhouettes. No civilians/grandmas or narrative cast substitutions. Existing plain/janky 3D originals are not the new style baseline. Kallio 2003, no modern techwear. Preserve the approved ink illustration character identities.
 
 ## Files on the source Windows desktop at handoff
-Source workspace-relative directory: `.private/piritori-asset-drafts/2026-09-11/`. The root `/.private/` ignore rule protects this repo-local workspace from Git. Never force-add it. These private files are not part of the repository handoff; ask the owner or source agent for the approved PNGs.
+Source workspace-relative directory: `.private/piritori-asset-drafts/2026-09-11/`. The root `/.private/` ignore rule protects this repo-local workspace from Git. Never force-add it. These private PNGs are historical provenance, not required inputs for continuation: use the committed authoritative JPEGs listed above. Ask the owner or source agent for the PNGs only if a provenance audit specifically needs the original private bytes.
 Approved images:
 concept-review/F01-heavy-bruiser-front-tpose-v01.png
 concept-review/F02-wiry-skirmisher-front-tpose-v01.png
@@ -114,8 +140,8 @@ The direct remesh output is untextured and therefore is not a valid rig input. S
 
 Replace the example height with the measured character height. Do not run `rig.py --task` with the original Image to 3D task ID. If that helper cannot accept the textured derivative GLB URL, update or bypass it rather than routing the raw master into rigging. Verify the GLB faces toward +Z as Meshy requires for `model_url`, record the rigging task ID, then use that ID as `rig_task_id` for each `POST /openapi/v1/animations` request. Record every animation task ID together with its preset `action_id` or custom `motion_task_id`. Current references: [Remesh API](https://docs.meshy.ai/en/api/remesh), [Retexture API](https://docs.meshy.ai/en/api/retexture), [Rigging API](https://docs.meshy.ai/en/api/rigging), and [Animation API](https://docs.meshy.ai/en/api/animation).
 
-After rigging, inspect one purposeful idle, then walk/stop/turn. Avoid generic realism, shiny plastic or baked lighting. A 1k atlas is the proposed runtime texture target, not a proven limit; Meshy's current Retexture API generates 2k or larger, so create and validate the 1k runtime derivative separately. Actual device targets: Pixel 10 Pro and iPad M2. Browser emulation is not physical-device testing.
-Do not claim fully repaired, rigged, animated, device-tested or published without evidence. Keep intermediates/rejected art private. No public deployment is authorized for this pilot.
+After rigging, inspect one purposeful idle, then walk/stop/turn. Avoid generic realism, shiny plastic or baked lighting. The current optimized v02 bodies deliberately retain validated 2K atlases and remain below 7.8 MB each; a separate 1K derivative is not a prerequisite for this browser checkpoint. Actual device targets remain Pixel 10 Pro and iPad M2. Browser viewport emulation is not physical-device testing.
+Do not claim fully repaired, transition-complete, device-tested, production-approved, or deployed without evidence. Keep intermediates/rejected art private. Public authorization currently extends only to the provisional optimized test GLBs.
 Show images directly in chat: plain generated-image output was invisible remotely, but saved PNGs displayed through view_image succeeded. Localhost/file links alone do not work for the remote owner.
 
 ## Receiving agent completion record
@@ -124,4 +150,4 @@ Record the source image hash; Image to 3D, remesh, retexture and rigging task ID
 
 ## Future animation and finalization gate
 
-Follow [FIGHTER_ANIMATION_CONTINUITY.md](FIGHTER_ANIMATION_CONTINUITY.md) before merging the asset follow-up (#68). It requires verified private backups, versioned rigs, shared-clip compatibility, finger/grip support, and full playback/export checks. Adding the document does not complete those tasks. Final runtime acceptance also needs owner visual approval and actual importer/device evidence. Do not merge #68 merely because documentation checks pass.
+Follow [FIGHTER_ANIMATION_CONTINUITY.md](FIGHTER_ANIMATION_CONTINUITY.md) before merging PR #68 or promoting these assets beyond its playable-test checkpoint. The own-rig v02 bodies/packs and scoped browser checks are complete, but independent private-archive restore, shared cross-rig compatibility, stop/turn transitions, finger/grip support, Godot import, physical devices, and final owner visual approval are not. The playable hub test may be published now; that publication, documentation, or viewport-emulation success does not complete the PR merge gates unless the owner explicitly waives one.

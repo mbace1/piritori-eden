@@ -25,10 +25,14 @@ Individual transparent assets sit beside each review sheet.
 
 ## Approved Meshy pilot sources
 
-- [Current F01/F02 fighter T-poses](characters/concepts-3d/pilots/README.md)
+- [Current F01/F02 fighter poses](characters/concepts-3d/pilots/README.md)
 
-These two 2D concepts are owner-approved inputs but remain inactive source
-pilots. Their generated geometry is not yet approved or registered for runtime.
+These two 2D concepts are owner-approved inputs. Their optimized v02 bodies and
+own-rig Alert/Casual Walk packs are registered separately as active,
+`playable-test-only` browser derivatives; v01 remains available for rollback.
+That provisional registration does not extend the concept approval to generated
+3D art, production gameplay, Godot import, physical-device acceptance, or final
+owner approval.
 
 ## Approved equipment and animation
 

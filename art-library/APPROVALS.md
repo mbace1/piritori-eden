@@ -52,7 +52,11 @@ manifests.
 ## Runtime extraction status
 
 `../art/v3/manifest.json` registers the first optimized prototype derivatives.
-Registration does not change the approval table above. The active register contains
-42 stable ids and explicitly preserves the Toko baked-screen
-exception plus the courtyard/weather semi-approved status. The slice validator
-rejects empty files, bad references and any needs-rework archive dependency.
+Registration does not change the approval table above. In particular, the F01/F02
+v02 bodies and own-rig packs are public `playable-test-only` derivatives, with v01
+retained for rollback; the table approves their 2D source concepts, not final
+generated art or production use. Approval-row and runtime-asset counts are derived
+from their respective files and are not duplicated here. The slice validator
+rejects empty files, bad references, and needs-rework archive dependencies;
+individual asset exceptions and semi-approved states remain explicit in the
+runtime manifest rather than being inferred from this register.

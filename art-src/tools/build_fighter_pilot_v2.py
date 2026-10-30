@@ -57,7 +57,7 @@ ARM_CHAINS = {
 PILOTS = {
     "F01": {
         "slug": "heavy-bruiser",
-        "factor": 0.953,
+        "factor": 0.833999,
         "triangles": 15512,
         "body": {
             "file": "F01-heavy-bruiser-rigged.glb",
@@ -79,7 +79,7 @@ PILOTS = {
     },
     "F02": {
         "slug": "wiry-skirmisher",
-        "factor": 1.080,
+        "factor": 1.295975,
         "triangles": 15503,
         "body": {
             "file": "F02-wiry-skirmisher-rigged.glb",
@@ -365,7 +365,7 @@ def accessor_values(
 
 
 def raw_mesh_contract(
-    document: dict[str, Any], binary: bytes
+    document: dict[str, Any], binary: bytes, expected_joint_count: int = 24
 ) -> dict[str, Any]:
     mesh_records = document.get("meshes", [])
     if len(mesh_records) != 1 or len(mesh_records[0].get("primitives", [])) != 1:
@@ -397,7 +397,7 @@ def raw_mesh_contract(
     )
     if len(indices) % 3 or any(index < 0 or index >= position_count for index in indices):
         raise RuntimeError("mesh index accessor is not a valid triangle stream")
-    skin = raw_skin_contract(document, binary)
+    skin = raw_skin_contract(document, binary, expected_joint_count)
     joint_names = skin["joint_names"]
     memberships = []
     for joints, weights in zip(values["JOINTS_0"], values["WEIGHTS_0"]):
@@ -834,11 +834,13 @@ def compare_animation_contracts(
 
 
 def raw_skin_contract(
-    document: dict[str, Any], binary: bytes
+    document: dict[str, Any], binary: bytes, expected_joint_count: int = 24
 ) -> dict[str, Any]:
     skins = document.get("skins", [])
-    if len(skins) != 1 or len(skins[0].get("joints", [])) != 24:
-        raise RuntimeError("expected exactly one 24-joint skin")
+    if len(skins) != 1 or len(skins[0].get("joints", [])) != expected_joint_count:
+        raise RuntimeError(
+            f"expected exactly one {expected_joint_count}-joint skin"
+        )
     nodes = document.get("nodes", [])
     parents: dict[int, int] = {}
     for parent_index, node in enumerate(nodes):
@@ -868,8 +870,12 @@ def raw_skin_contract(
     if ibm_index is None:
         raise RuntimeError("skin has no inverseBindMatrices accessor")
     inverse_binds = accessor_values(document, binary, ibm_index)
-    if len(inverse_binds) != 24 or any(len(matrix) != 16 for matrix in inverse_binds):
-        raise RuntimeError("inverse bind matrix payload is not 24 MAT4 values")
+    if len(inverse_binds) != expected_joint_count or any(
+        len(matrix) != 16 for matrix in inverse_binds
+    ):
+        raise RuntimeError(
+            f"inverse bind matrix payload is not {expected_joint_count} MAT4 values"
+        )
     canonical = json.dumps(records, separators=(",", ":"), sort_keys=True).encode("utf-8")
     return {
         "joint_names": [record["name"] for record in records],

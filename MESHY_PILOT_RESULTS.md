@@ -2,12 +2,14 @@
 
 - Pilot run: 2026-09-11–12 (America/Los_Angeles)
 - Lane: Art
-- Current state: **rigged review candidates; not runtime-registered, deployed, or game-ready**
+- Current state: **public v02 playable-test derivatives; not final production art or deployed gameplay**
 
 This is the receiving-agent completion record requested by
 [MESHY_AGENT_HANDOFF.md](MESHY_AGENT_HANDOFF.md). It records the exact approved
-sources, paid Meshy task chain, private-output fingerprints, Blender inspection,
-and the gates that remain. Generated GLBs and working files remain private.
+sources, paid Meshy task chain, public optimized test fingerprints, private
+provenance, Blender inspection, browser evidence, and the gates that remain.
+Only the optimized v01/v02 test GLBs are public; raw outputs and working files
+remain private.
 
 ## Owner scope
 
@@ -21,12 +23,14 @@ The same direction says F01's A-pose is acceptable when deformation works.
 That authorization does **not** mean final runtime approval:
 
 - F01 and F02 source concepts remain owner-approved.
-- The derivative pipeline below is complete and provisionally passes local
-  rig/animation QA, but still needs owner visual review.
-- No runtime manifest registration, game integration, deployment, or additional
-  Image-to-3D generation was authorized or performed.
-- Raw masters, derivative GLBs, FBXs, Blender files, and detailed QA reports are
-  retained only in the ignored private workspace.
+- The derivative pipeline below is complete. The corrected v02 bodies and
+  own-rig clip packs pass Blender and provisional browser QA, but still need
+  final owner visual review.
+- v02 is registered for a scoped browser locomotion test, with v01 retained for
+  rollback. This is not production gameplay, hub deployment, or authorization
+  for additional Image-to-3D generation.
+- Raw masters, working derivative GLBs, FBXs, Blender files, full-resolution
+  renders, and detailed QA reports remain only in the ignored private workspace.
 
 ## Source references
 
@@ -106,6 +110,42 @@ Meshy's rig task also returned basic-walking and basic-running GLBs plus FBX
 versions. They are retained privately; the requested Alert and Casual Walk GLBs
 were the clips used for this review.
 
+## Public v02 playable-test derivatives — v4.49 / PR #68
+
+The public repository now contains the four optimized v02 test artifacts below.
+The v01 bodies and packs remain registered as rollback candidates. These hashes
+identify the public GLBs; they are not fingerprints for the private raw masters,
+editable Blender sources, or full QA bundle.
+
+| Artifact | Bytes | SHA-256 | Contract |
+|---|---:|---|---|
+| `art/v3/cast3d/f01-heavy-bruiser-v02.glb` | 7,778,876 | `282F1826A4C90D3516638DBCC11F4F426766301A2DA5BC85AC35448414CEA2EE` | F01 body; 15,512 triangles; 24 bones; 2K texture |
+| `art/v3/cast3d/clips/f01-heavy-bruiser-clips-v02.glb` | 133,524 | `B0F43F565D26BEB2370FDA081BB75EAD90D4D0AF3FFB050A346AB621934825B7` | F01 meshless own-rig Alert/Casual Walk pack |
+| `art/v3/cast3d/f02-wiry-skirmisher-v02.glb` | 7,717,884 | `FD1121F26DA7BD5454FF8F4D3A0A1D5479469FF46C803C6FB872CB43D5A6FF2E` | F02 body; 15,503 triangles; 24 bones; 2K texture |
+| `art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v02.glb` | 136,532 | `4221905BB230D2819F10839DFCC0ED590BE02E749631390ECA45E8EB3C458F29` | F02 meshless own-rig Alert/Casual Walk pack |
+
+The v02 rest edit shortens F01's Arm/ForeArm chains by factor `0.953` and
+lengthens F02's by `1.080`, producing mean shoulder-to-wrist/height ratios of
+`0.319953` and `0.250006`. The offline Blender 5.2 build preserves the source
+triangle stream, UV values, joint membership, normalized weights, 24-bone
+hierarchy, and 2K atlas. The body GLBs remove the duplicated emissive atlas and
+carry metallic `0`, roughness `0.92`, and specular factor `0.5`; the two packs
+contain no mesh, material, image, or texture payload.
+
+The clip packs preserve every source joint/path channel, absolute key-time
+range, 30 Hz cadence, and 4.0/4.2-second duration. Constant channels remain
+sparse; the Blender playback gate evaluates 121 Alert plus 127 Walk frames per
+fighter (496 total) against rest geometry.
+
+The v02 browser checkpoint passes 76/76 regression checks across desktop,
+mobile, Pixel, and iPad viewport emulations. It covers full-duration framing of
+the configured F01 walk/F02 alert pair, independent fighter controls, a real
+Pixel-profile swipe-scroll gesture, static selected poses for reduced motion,
+and two BFCache suspend/resume cycles. CSS preserves `pan-y pinch-zoom`; this
+suite does not synthesize a pinch gesture or assert terminal renderer disposal.
+Viewport emulation is not physical-device evidence, and this record does not
+claim that the hub has been deployed.
+
 ## Blender 5.2.1 remesh inspection
 
 | Check | F01 heavy bruiser | F02 wiry skirmisher |
@@ -164,14 +204,16 @@ Automated triangle-area comparison found only isolated outliers—at most three
 of roughly 15.5k faces in a sample below 0.2× reference area, and only F01 had a
 single face above 5×. None corresponds to a visible tear in the sampled renders.
 
-Each Meshy rig/animation GLB also includes an unskinned 42-vertex object named
-`Icosphere`. It is not part of the character and must be stripped during runtime
-staging.
+Each private Meshy rig/animation source GLB also includes an unskinned 42-vertex
+object named `Icosphere`. It is not part of the character. The public v01/v02
+body derivatives strip it, and the public own-rig packs contain no render
+payload.
 
 ### Visual evidence
 
-The committed sheets are compressed review evidence only; source renders and
-per-frame JSON reports remain private.
+The committed sheets are compressed pre-v02 source-motion evidence only. The
+v02 proportion/material correction is reviewed in PR #68's playable browser
+test; its full-resolution renders and per-frame JSON reports remain private.
 
 ![F01 Alert and Casual Walk deformation samples](art-library/characters/concepts-3d/pilots/f01-heavy-bruiser-rig-animation-review-v01.jpg)
 
@@ -179,22 +221,30 @@ per-frame JSON reports remain private.
 
 ## Decision and remaining gates
 
-- **F01 — provisional rig/animation pass.** The A-pose did not prevent a
-  functional rig. Face, hands, jacket silhouette, and lower-body deformation
-  remain readable through Alert and Casual Walk.
-- **F02 — provisional rig/animation pass.** The T-pose produced a functional
-  rig; vest/hoodie, track-trouser silhouette, shoulders, hips, and knees survive
-  the sampled clips.
+- **F01 — current v02 provisional browser-test pass.** The corrected A-pose rig
+  preserves the readable face, hands, jacket silhouette, and lower-body motion
+  through its own Alert and Casual Walk pack.
+- **F02 — current v02 provisional browser-test pass.** The corrected T-pose rig
+  preserves the vest/hoodie, track-trouser silhouette, shoulders, hips, and
+  knees through its own pack.
 
-Before either becomes runtime art:
+The public v02 GLBs are safe only for the scoped playable test. Before either is
+promoted to final production art:
 
-1. the owner must review the textured identities and motion sheets;
-2. strip the helper Icosphere and create/validate a 1k runtime texture derivative;
-3. decide whether the documented junction topology is acceptable to the actual
-   importer, or repair and revalidate it if the importer exposes a failure;
-4. integrate idle/walk/stop/turn in an explicitly authorized runtime step;
-5. measure download, memory, and animation behavior on Pixel 10 Pro and iPad M2;
-6. only then register production GLBs in the runtime manifest and deploy.
+1. restore the accepted private archive in an independent clean location and
+   verify its hashes and editable sources offline;
+2. test a genuinely shared cross-rig clip on both v02 bodies;
+3. author and inspect stop, turn, and transition behavior rather than inferring
+   it from idle/walk;
+4. add or explicitly waive finger articulation and representative weapon grips;
+5. pass the real Godot importer and resolve any exposed junction-topology issue;
+6. measure behavior on physical Pixel and iPad devices—viewport emulation does
+   not satisfy this gate;
+7. obtain final owner visual approval before production registration or deploy.
+
+The validated 2K atlases are intentional for this checkpoint; a separate 1K
+derivative is not a prerequisite. Final optimization remains part of production
+review, and no hub deployment is claimed here.
 
 ## Official references checked
 
