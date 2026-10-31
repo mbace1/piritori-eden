@@ -36,8 +36,8 @@ const ok = (c, m) => { assert(c, m); checks += 1; };
 // ── canon ────────────────────────────────────────────────────────────
 const active = new Set(map.anchors.filter(a => a.sliceState === 'active').map(a => a.id));
 const battles = new Set(content.battles.map(b => b.id));
-const effect = /^(cash|intel|markka|debt):[+-]\d+$|^stock:[^:]+:[+-]\d+$|^relationship:(jaska|toko|mccormick_family|jade_lantern_network):[+-]\d+$|^obligation:[^:]+:[+-]\d+$|^pressure:[^:]+:[+-]\d+$|^flag:[a-z0-9-]+$|^memory:[a-z0-9-:]+$|^start-battle:[a-z0-9-]+$/;
-const requirement = /^(cash|intel|deployed-crew|fighters|fights-today)(>=|<)\d+$|^stock:piri>=\d+$|^relationship:[a-z_]+>=-?\d+$|^flag:[a-z0-9-]+$/;
+const effect = /^(cash|intel|markka|debt):[+-]\d+$|^stock:[^:]+:[+-]\d+$|^relationship:(jaska|toko|mccormick_family|jade_lantern_network):[+-]\d+$|^obligation:[^:]+:[+-]\d+$|^pressure:[^:]+:[+-]\d+$|^flag:[a-z0-9-]+$|^memory:[a-z0-9-:]+$|^start-battle:[a-z0-9-]+$|^rescue:missing$|^bail:arrested$/;
+const requirement = /^(cash|intel|deployed-crew|fighters|fights-today|missing-crew|arrested-crew)(>=|<)\d+$|^stock:piri>=\d+$|^relationship:[a-z_]+>=-?\d+$|^flag:[a-z0-9-]+$/;
 const ids = new Set();
 for (const t of doors.templates) {
   ok(!ids.has(t.id), `unique ${t.id}`); ids.add(t.id);
@@ -234,6 +234,47 @@ function atDoor(index = 15, mutate) {
   }
   ok(s.scheduleIndex === 20 && !currentSchedule(s, content), 'all twenty blocks play');
   ok(!s.endingId && s.chapterCleared, 'the chapter closes without ending the game');
+}
+
+// v4.92, a way home: someone lost brings their own door, every door block,
+// beside the fight door; nobody lost, and it never shows.
+{
+  const data = makeData();
+  const crew = content.crew.slice(0, 3).map(c => c.id), home = ['favour-find-them', 'favour-bail'];
+  const setUp = (i, seed, mutate) => atDoor(i, s => { s.contentId = `${content.id}#${seed}`; s.recruited = [...crew]; s.deployed = [...crew]; mutate?.(s); });
+  let leak = 0, found = 0, bailed = 0, fightToo = 0, n = 0;
+  for (let seed = 0; seed < 40; seed += 1) for (const i of doorIdx) {
+    n += 1;
+    if (offerDoors(setUp(i, seed), data, doors).some(o => home.includes(o.template))) leak += 1;
+    const gone = offerDoors(setUp(i, seed, s => { s.crewStatus[crew[1]].status = 'missing'; }), data, doors);
+    if (gone.some(o => o.template === 'favour-find-them')) found += 1;
+    if (gone.some(o => canFight(templateOf(doors, o.template)))) fightToo += 1;
+    const jailed = offerDoors(setUp(i, seed, s => { s.arrestedCrew.push(crew[2]); s.recruited = s.recruited.filter(x => x !== crew[2]); }), data, doors);
+    if (jailed.some(o => o.template === 'favour-bail')) bailed += 1;
+  }
+  ok(leak === 0, `nobody lost, no way home on the board (${leak}/${n})`);
+  ok(found === n, `someone missing: the way home is on every door block (${found}/${n})`);
+  ok(bailed === n, `someone arrested: bail is on every door block (${bailed}/${n})`);
+  ok(fightToo === n, `and the fight door is still there (${fightToo}/${n})`);
+
+  const missing = setUp(15, 0, s => { s.crewStatus[crew[1]].status = 'missing'; s.doors = { offers: { 15: [{ template: 'favour-find-them', anchor: 'torkkelinmaki' }] }, taken: {} }; });
+  ok(requirementStatus('missing-crew>=1', missing, data).ok && !requirementStatus('arrested-crew>=1', missing, data).ok, 'missing and arrested are counted apart');
+  ok(takeDoor(missing, data, doors, 'favour-find-them', roadEvents).ok, 'the way home is a door like any other');
+  const find = currentEncounter(missing, data);
+  ok(chooseEncounter(missing, find, find.choices.find(c => c.id === 'go'), data).ok, 'go and get them');
+  ok(missing.crewStatus[crew[1]].status === 'wounded' && missing.recruited.includes(crew[1]) && missing.flags.includes(`memory:found:${crew[1]}`), 'they come home hurt, and it is remembered');
+  ok(!requirementStatus('missing-crew>=1', missing, data).ok, 'and nobody is missing now');
+  advanceSchedule(missing, data);
+  missing.crewStatus[crew[2]].status = 'missing';
+  ok(offerDoors(missing, data, doors).some(o => o.template === 'favour-find-them'), 'the next one lost gets the door again: it can be taken more than once');
+
+  const jailed = setUp(15, 0, s => { s.arrestedCrew.push(crew[2]); s.recruited = s.recruited.filter(x => x !== crew[2]); s.cash = 200; s.doors = { offers: { 15: [{ template: 'favour-bail', anchor: 'piritori' }] }, taken: {} }; });
+  ok(takeDoor(jailed, data, doors, 'favour-bail', roadEvents).ok, 'bail is a door');
+  const bail = currentEncounter(jailed, data), pay = bail.choices.find(c => c.id === 'pay');
+  ok(chooseEncounter(jailed, bail, pay, data).ok && jailed.cash === 80, 'bail costs €120');
+  ok(jailed.recruited.includes(crew[2]) && !jailed.arrestedCrew.includes(crew[2]) && jailed.crewStatus[crew[2]].status === 'available', 'and they are back on the roster');
+  const broke = setUp(15, 0, s => { s.arrestedCrew.push(crew[2]); s.recruited = s.recruited.filter(x => x !== crew[2]); s.cash = 50; });
+  ok(!requirementStatus('cash>=120', broke, data).ok && pay.requirements.includes('cash>=120'), 'and cannot be paid without the money');
 }
 
 console.log(`doors: ${checks} checks passed`);

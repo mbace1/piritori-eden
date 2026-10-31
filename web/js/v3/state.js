@@ -847,6 +847,9 @@ export function requirementStatus(requirement, state, data) {
     // Who can take the board: the crew, and Aatami while he still fights (answer 24).
     ?? numeric('fighters', fighters(state, data).length)
     ?? numeric('crew-critical', Object.values(state.crewStatus).filter(x => x.critical).length)
+    // v4.92, a way home: who never made it back, and who the police took.
+    ?? numeric('missing-crew', state.recruited.filter(id => state.crewStatus[id]?.status === 'missing').length)
+    ?? numeric('arrested-crew', state.arrestedCrew.length)
     ?? numeric('fights-today', data?.content ? fightsToday(state, data.content) : 0);
   if (result) return result;
   if (requirement === 'chapter-goal-met') return { ok: chapterGoalMet(state), reason: 'the chapter goal is not met' };
@@ -968,6 +971,27 @@ export function applyEffects(state, effects, data, label = 'choice') {
       continue;
     }
     if (effect.startsWith('flag:')) { addUnique(state.flags, effect.slice(5)); continue; }
+    // v4.92, a way home. A missing crew member comes home hurt; an arrested one
+    // is bailed back onto the roster. Each brings back the first who was lost.
+    if (effect === 'rescue:missing') {
+      const id = state.recruited.find(x => state.crewStatus[x]?.status === 'missing');
+      if (!id) continue;
+      Object.assign(state.crewStatus[id], { status: 'wounded', condition: Math.max(1, state.crewStatus[id].condition ?? 0), critical: false });
+      addUnique(state.flags, `memory:found:${id}`);
+      message(`${crewRecord(state, data, id)?.name ?? id} is home. Hurt, but home.`);
+      continue;
+    }
+    if (effect === 'bail:arrested') {
+      const id = state.arrestedCrew[0];
+      if (!id) continue;
+      state.arrestedCrew.splice(0, 1);
+      addUnique(state.recruited, id);
+      const status = state.crewStatus[id] ??= {};
+      Object.assign(status, { status: 'available', condition: Math.max(1, status.maxCondition ?? status.condition ?? 1), critical: false });
+      addUnique(state.flags, `memory:bailed:${id}`);
+      message(`${crewRecord(state, data, id)?.name ?? id} walks out of the station in Pasila. Back on the roster.`);
+      continue;
+    }
     if (effect.startsWith('memory:')) { addUnique(state.flags, effect); continue; }
     if (effect.startsWith('reveal:')) { reveal(state, effect.slice(7)); continue; }
     // Authored grants may repeat: a second pipe is a second pipe (§8).

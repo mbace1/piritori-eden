@@ -9,7 +9,7 @@
     "fights_per_day_max": 2,
     "fight_door_each_block": true,
     "late_closes_at_minutes": 1320,
-    "note": "A late door closes when the block clock passes 22:00 (road minutes). While fewer than fights_per_day_max fights have happened today, every door block offers at least one door that can become a fight. A door is taken once per chapter.",
+    "note": "A late door closes when the block clock passes 22:00 (road minutes). While fewer than fights_per_day_max fights have happened today, every door block offers at least one door that can become a fight. A door is taken once per chapter. A way home for someone lost (urgent, repeatable) is always offered while they are lost, and can be taken again for the next one (v4.92).",
     "scenes": {
       "piritori": "scene-piritori-square-v01",
       "hakaniemi": "scene-hakaniemi-square-v01",
@@ -593,6 +593,124 @@
           "effects": [
             "relationship:toko:-1"
           ]
+        }
+      ]
+    },
+    {
+      "id": "favour-find-them",
+      "kind": "favour",
+      "from": "network",
+      "anchors": [
+        "torkkelinmaki"
+      ],
+      "risk": "low",
+      "urgent": true,
+      "repeatable": true,
+      "requires": [
+        "missing-crew>=1"
+      ],
+      "title": "Still Out There",
+      "premise": "One of yours never made it out of the last one. A woman on the third floor says somebody has been sitting in the bike shed since, bleeding into a scarf, and will not open up to anyone they do not know.",
+      "steps": [
+        "Find the shed the woman meant",
+        "Talk them out from behind the bikes",
+        "Walk them home the long way round"
+      ],
+      "stakes": "One of the crew back on the roster, hurt. The block is spent on them, not on money.",
+      "inspectables": [
+        "a bloody glove left on the shed latch",
+        "bike locks cut and left hanging",
+        "a third-floor window with the light still on"
+      ],
+      "choices": [
+        {
+          "id": "go",
+          "label": "Go and get them",
+          "forecast": "They come home hurt.",
+          "requirements": [],
+          "effects": [
+            "rescue:missing"
+          ]
+        },
+        {
+          "id": "go-thank",
+          "label": "Get them, and leave the woman something",
+          "forecast": "€15. They come home, and the stairwell remembers it.",
+          "requirements": [
+            "cash>=15"
+          ],
+          "effects": [
+            "cash:-15",
+            "rescue:missing",
+            "flag:network-stairwell-owes"
+          ]
+        },
+        {
+          "id": "not-tonight",
+          "label": "Not tonight",
+          "forecast": "Nothing changes. They stay out there.",
+          "requirements": [],
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "favour-bail",
+      "kind": "favour",
+      "from": "network",
+      "anchors": [
+        "piritori"
+      ],
+      "risk": "low",
+      "urgent": true,
+      "repeatable": true,
+      "requires": [
+        "arrested-crew>=1"
+      ],
+      "title": "Bail Money",
+      "premise": "The police took one of yours. A duty lawyer who drinks at the square says the charge is thin and the bail is not, that it has to be cash, and that it has to be today, before somebody in Pasila decides to make an example.",
+      "steps": [
+        "Meet the lawyer at the kiosk",
+        "Count the money out where nobody is watching",
+        "Wait outside the station in Pasila"
+      ],
+      "stakes": "One of the crew back on the roster, paid for with the money meant for getting out, or with a friend's good name.",
+      "inspectables": [
+        "a charge sheet folded into a cigarette packet",
+        "the lawyer's watch, an hour slow",
+        "a tram ticket to Pasila"
+      ],
+      "choices": [
+        {
+          "id": "pay",
+          "label": "Pay the bail",
+          "forecast": "€120. They walk out tonight.",
+          "requirements": [
+            "cash>=120"
+          ],
+          "effects": [
+            "cash:-120",
+            "bail:arrested"
+          ]
+        },
+        {
+          "id": "jaska",
+          "label": "Ask Jaska to vouch for them",
+          "forecast": "No money. Jaska puts his name on it, and it costs him.",
+          "requirements": [
+            "relationship:jaska>=2"
+          ],
+          "effects": [
+            "relationship:jaska:-2",
+            "bail:arrested"
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave them in there",
+          "forecast": "Nothing paid. They stay inside.",
+          "requirements": [],
+          "effects": []
         }
       ]
     },

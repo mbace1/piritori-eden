@@ -46,7 +46,7 @@ function takenIds(state) {
 
 function eligible(state, data, doors, slot) {
   const taken = new Set(takenIds(state));
-  return doors.templates.filter(t => !taken.has(t.id)
+  return doors.templates.filter(t => (t.repeatable || !taken.has(t.id))
     && doorAllowed(state, data.families, t)
     && !(t.late && slot.block !== 'night')
     && (t.requires ?? []).every(req => requirementStatus(req, state, data).ok));
@@ -75,6 +75,9 @@ export function offerDoors(state, data, doors) {
   if (rules.fight_door_each_block && fightsToday(state, data.content) < rules.fights_per_day_max) {
     pick(pool.filter(canFight), 'fight');
   }
+  // v4.92: a way home for someone lost is always on the board while they are lost.
+  const urgent = pool.filter(t => t.urgent);
+  for (const [i] of urgent.entries()) if (picked.length < count) pick(urgent, `urgent:${i}`);
   // H5: a Friendly family's work comes first.
   const favoured = pool.filter(t => doorFavoured(state, data.families, t));
   if (favoured.length && picked.length < count) pick(favoured, 'favoured');
