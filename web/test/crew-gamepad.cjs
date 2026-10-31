@@ -12,11 +12,14 @@ const url=process.env.CREW_RUN_URL||'http://127.0.0.1:8788/web/crew-run/';
  await p.goto(url);await p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy&&fightModule.metrics().renderedFrames>0);
  await p.waitForTimeout(1500);const frames=await p.evaluate(()=>fightModule.metrics().renderedFrames);
  await p.waitForTimeout(800);assert.equal(await p.evaluate(()=>fightModule.metrics().renderedFrames),frames,'planning keeps its static scene');
+ // A press waits for the pad to be polled twice. Deploying builds the 3D fight,
+ // which under the software renderer can hold the page past 10 s (2026-10-31:
+ // 62 s for the whole run here); the poll still has to come, just later.
  async function press(index){
   const first=await p.evaluate(i=>{padDevice.buttons[i]={pressed:true,value:1};return padPolls},index);
-  await p.waitForFunction(n=>padPolls>n+1,first,{timeout:10000});
+  await p.waitForFunction(n=>padPolls>n+1,first,{timeout:30000});
   const released=await p.evaluate(i=>{padDevice.buttons[i]={pressed:false,value:0};return padPolls},index);
-  await p.waitForFunction(n=>padPolls>n+1,released,{timeout:10000});await p.waitForTimeout(180);
+  await p.waitForFunction(n=>padPolls>n+1,released,{timeout:30000});await p.waitForTimeout(180);
  }
  async function navigate(selector){
   for(let i=0;i<65;i++){

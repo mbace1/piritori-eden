@@ -29,7 +29,7 @@ expensive asset production.
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85). The map and the ledger are next. |
 | 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | Not started. |
 | 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | Not started. |
-| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.88 is live (`design/CITY_V488_RELEASE.md`); device checks are pending. |
+| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.90 is live (`design/CITY_V490_RELEASE.md`); device checks are pending. |
 
 Arena pass must start with evidence: capture all five existing `crew-run`
 locations and identify actual gaps, intersections, floor seams, scale and
