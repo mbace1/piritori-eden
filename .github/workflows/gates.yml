@@ -290,7 +290,9 @@ jobs:
           node web/test/crew-run-browser.cjs
 
   campaign-outing:
-    timeout-minutes: 20
+    # outing-browser plays three whole fights through the software renderer:
+    # 16 min in run 1109, cut off at 20 in run 1110 with every check passing.
+    timeout-minutes: 35
     name: a door fight in Night Shift (Act I v4.74-v4.75)
     runs-on: ubuntu-latest
     steps:
