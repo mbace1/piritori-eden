@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=21';
-import {routes,forecast,threats,planView,sightCells,choosePlan} from '../fight-module/tactics.js?v=10';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=22';
+import {routes,forecast,threats,planView,sightCells,choosePlan} from '../fight-module/tactics.js?v=11';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const make=()=>createSession(content,'ranged','lab-2');
 for(const order of ['move-first','attack-first']){

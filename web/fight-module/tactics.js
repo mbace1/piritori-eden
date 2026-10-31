@@ -41,8 +41,11 @@ export function forecast(b,u,target,from=u?.cell){
   const blockers=new Set(alive(b).filter(v=>v.id!==u.id&&v.id!==target.id).map(v=>v.cell));
   const blocked=sightCells(from,target.cell).find(c=>b.cover.get(c)?.hardBlock||blockers.has(c));
   if(blocked)return {...fail('Line blocked'),blocked};
+  // A battle may carry its own accuracy table (v4.90: Act I outings, where a
+  // blow can miss); the lab keeps the weapon's own number.
+  const base=b.accuracy?.[u.equipment]??w.accuracy;
   const wall=w.magazine?coverProtection(b,from,target.cell):null,partial=!!wall,damage=w.damage+Math.max(0,Number(u.harmBonus)||0),guardDamage=Math.min(target.guard,Math.max(0,damage-(w.pierce||0)));
-  return {valid:true,reason:'Clear',from,to:target.cell,chance:w.accuracy-(partial?25:0),damage,guardDamage,hpDamage:Math.min(target.hp,damage-guardDamage),cover:partial?'partial':'exposed',coverEdge:wall?.edge??null,coverPoint:wall?.point??null,flanked:!!w.magazine&&!partial&&coverEdges(b,target.cell).length>0};
+  return {valid:true,reason:'Clear',from,to:target.cell,base,chance:base-(partial?25:0),damage,guardDamage,hpDamage:Math.min(target.hp,damage-guardDamage),cover:partial?'partial':'exposed',coverEdge:wall?.edge??null,coverPoint:wall?.point??null,flanked:!!w.magazine&&!partial&&coverEdges(b,target.cell).length>0};
 }
 export const targets=(b,u,from=u.cell)=>b.enemies.filter(v=>forecast(b,u,v,from).valid);
 function copyBattle(b){return {...structuredClone({...b,cover:undefined}),cover:b.cover};}
@@ -99,7 +102,7 @@ export function createTacticalSession(battle,mode,scenario,data,options={}){
   const snapshot=()=>structuredClone({rules:options.rules||'c11-v1',...(battle.mission?{mission:battle.mission}:{}),round:battle.round,status:battle.status,result:battle.result,selectedId:battle.selectedId,moved:battle.moved,acted:battle.acted,plans:battle.plans,rng:battle.rng,units:units(battle),log:battle.log.slice(0,18)});
   const log=s=>battle.log.unshift(s),finish=()=>{if(options.finish){options.finish(battle);return;}if(!battle.enemies.some(u=>u.alive)||!battle.players.some(u=>u.alive)){battle.status='complete';battle.result=battle.players.some(u=>u.alive)?'win':'loss';}};
   function attack(u,target,events){const f=forecast(battle,u,target);if(!f.valid)return false;
-    battle.rng=(Math.imul(battle.rng,1664525)+1013904223)>>>0;const roll=battle.rng/4294967296*100,hit=roll<f.chance,impact=hit?(f.hpDamage?'body':'guard'):f.cover==='partial'&&roll<weapon(u).accuracy?'cover':'miss';
+    battle.rng=(Math.imul(battle.rng,1664525)+1013904223)>>>0;const roll=battle.rng/4294967296*100,hit=roll<f.chance,impact=hit?(f.hpDamage?'body':'guard'):f.cover==='partial'&&roll<f.base?'cover':'miss';
     if(weapon(u).magazine)u.ammo--;if(hit){target.hp-=f.hpDamage;target.guard-=f.guardDamage;target.alive=target.hp>0;}
     events.push({type:'attack',id:u.id,target:target.id,hit,impact,forecast:f,down:!target.alive});
     log(`${u.label} → ${target.label}: ${hit?`${f.hpDamage} HP, ${f.guardDamage} guard`:impact==='cover'?'wall stopped the shot':'miss'} (${f.chance}%).`);finish();return true;

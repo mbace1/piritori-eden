@@ -65,25 +65,27 @@ const campaign = page => page.evaluate(() => JSON.parse(localStorage.getItem('pi
 const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, `${name}.png`) }); };
 
 // A real win, found by playing the courtyard opening in bare node (the "played
-// opening" in c19-outing.mjs, recorded): close in on the tough one, then on the
-// next. Since v4.88 they break at two-thirds of their weight (RULES.rout), so
-// the tough one alone is not enough, and the runner goes down on the way: a
-// win that costs someone. The ids are the generated people the door's key
-// always gives.
+// opening" in c19-outing.mjs, recorded) with the outing id the pinned clock
+// gives: close in on the tough one, then on the next. They break at two-thirds
+// of their weight (RULES.rout, v4.88), and since v4.90 blows can miss, so the
+// line is only good for these dice: Aatami's first swing misses and the tough
+// one takes a third. The ids are the generated people the door's key always
+// gives.
+const PINNED = 1761900000000;
 const R = n => `opp-door-15-hit-courtyard-ledger-${n}`;
 const WIN = [
   ['select', 'aatami'], ['move', '2,3'], ['attack', R(1)],
   ['select', 'crew-slot-runner'], ['move', '3,4'], ['attack', R(1)],
   ['end'],
   ['select', 'aatami'], ['attack', R(1)],
-  ['select', 'crew-slot-runner'], ['attack', R(3)],
+  ['select', 'crew-slot-runner'], ['attack', R(1)],
   ['select', 'crew-slot-muscle'], ['move', '1,3'], ['attack', R(2)],
   ['end'],
   ['select', 'aatami'], ['move', '2,4'], ['attack', R(2)],
 ];
 // Stand and wait in a place that is already hot: pressure 3 reaches 6 after
-// turn 3, and the police come in after turn 4. Since v4.88 rivals hit harder
-// (RULES.rivalHarm), so four rounds of standing still cost two of the crew.
+// turn 3, and the police come in after turn 4. Four rounds of standing still
+// cost someone (with the pinned dice, Lan Ho goes down), so the police ask.
 const WAIT = [].concat(...Array.from({ length: 4 }, () => [
   ['select', 'aatami'], ['brace'], ['select', 'crew-slot-runner'], ['brace'], ['select', 'crew-slot-muscle'], ['brace'], ['end'],
 ]));
@@ -120,6 +122,11 @@ server.listen(0, '127.0.0.1', async () => {
       const before = await S(page);
       await tap(page.locator('[data-action="take-door"][data-door="hit-courtyard-ledger"]'));
       await tap(page.locator('[data-action="next-step"][data-step="enter"]'));
+      // Since v4.90 a blow can miss, and an outing's dice are seeded from its id,
+      // which carries the clock: pin it for the tap that writes the outing, so
+      // the routes below meet the same rolls every run (the bare harness found
+      // them with this very id).
+      await page.evaluate(t => { Date.now = () => t; }, PINNED);
       await tap(page.locator('[data-action="choose"][data-choice="take-it"]'));
 
       // ── Straight to the fight: no waiting screen, no crew page.
@@ -171,10 +178,10 @@ server.listen(0, '127.0.0.1', async () => {
         await play(WAIT);
         ok(`${name}: the police were announced a round early, then came`, /POLICE HERE/.test(await page.locator('#mission-pressure').innerText()) && /^The police are here/.test(await page.locator('#mission-goal').innerText()));
         const backOff = page.locator('[data-police="BACK_OFF"]');
-        // Two are down by now, so the question is a real one (v4.78): two
+        // Someone is down by now, so the question is a real one (v4.78): two
         // answers, each naming who it costs. Aatami is never taken.
         const asked = await backOff.innerText();
-        ok(`${name}: with people down there are two answers, each saying who is taken`, /^Back off · taken: /.test(asked) && !/taken: nobody/.test(asked) && !/Aatami/.test(asked)
+        ok(`${name}: with someone down there are two answers, each saying who is taken`, /^Back off · taken: /.test(asked) && !/taken: nobody/.test(asked) && !/Aatami/.test(asked)
           && /^Help your friends · taken: /.test(await page.locator('[data-police="HELP_FRIENDS"]').innerText()), asked);
         ok(`${name}: and nothing else can be done until it is answered`, await page.locator('#end').isDisabled() || !(await page.locator('[data-mission-action]:enabled').count()));
         await shot(page, `${view}-${kind}-question`);

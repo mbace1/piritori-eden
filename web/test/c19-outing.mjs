@@ -18,9 +18,9 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=19');
+const R = await import('../crew-run/run.js?v=20');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
-const { coordinate, routes } = await import('../fight-module/tactics.js?v=10');
+const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 
 // As content.js loads it: an authored slot is named by the generator.
@@ -206,6 +206,19 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.ok(fight.command('withdraw').ok, 'you can still pull out before they walk in');
   R.settle(run, fight);
   assert.equal(run.last.changes.find(c => c.id === 'crew-slot-muscle').campaignEffect, 'arrested', 'left on the ground with the police coming: taken');
+}
+
+// Blows can miss (owner, 2026-10-31): a bat or a knife lands RULES.accuracy in
+// an Act I fight, and the dice are the outing's own, seeded from its id.
+{
+  const one = nightShift(actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'dice-a' }).outing).fight.battle;
+  const aatami = one.players.find(p => p.id === 'aatami'), tough = one.enemies.find(e => e.tough);
+  assert.equal(aatami.equipment, 'baseball-bat');
+  assert.equal(forecast(one, aatami, tough, tough.cell.replace(/,(\d+)$/, (_, y) => `,${y - 1}`)).chance, R.RULES.accuracy['baseball-bat'], 'a bat swing is quoted at the outing\'s accuracy');
+  assert.ok(R.RULES.accuracy['baseball-bat'] < 100 && WEAPONS['baseball-bat'].accuracy === 100, 'below the 100 the lab keeps');
+  const two = nightShift(actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'dice-b' }).outing).fight.battle;
+  assert.notEqual(one.rng, two.rng, 'two outings do not roll the same fight');
+  assert.notEqual(one.rng, 104729, 'and neither rolls the lab\'s fixed dice');
 }
 
 // A getaway job: the yard van. The crew are deep in, the way out is behind them.

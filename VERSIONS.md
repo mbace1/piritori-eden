@@ -1,3 +1,40 @@
+## v4.90 — 2026-10-31
+
+**Blows can miss.** Owner, asked whether a fight should have chance in it: *"Blows can miss, of course."*
+
+- **In an Act I fight, a bat or a knife lands 70%** (`RULES.accuracy`). The handgun keeps its 90%, and the lab its own numbers.
+  - The table rides on the battle (`b.accuracy`), and `forecast()` reads it. The number the board quotes ("R1 → Lan · 70%") is the number rolled.
+- **Each outing's dice are its own,** seeded from its id. A reload replays the same rolls, and no two outings roll the same fight. Until now every fight started from the same dice.
+- **Before and after**, Act I's 15 fights × 12 seeds (rows 1–7 at heat 0 and 2):
+
+| # | Measure | v4.89 | v4.90 | Target |
+|---|---|---|---|---|
+| 1 | Fight jobs, careless: won | 100% | **75%** ✓ | 60–75% |
+| 2 | … rounds | 2.4 | 2.8 | 4–6 |
+| 3 | … crew HP lost | 2.9 | **3.8** ✓ | 2–4 |
+| 4 | … someone goes down | 27% | 37% | 20–30% |
+| 5 | Careful over careless | +0 pts | +5 pts | +15 pts |
+| 6 | Getaways, straight out | 88% | 76% | under 50% |
+| 7 | Getaways, escort | 100% | **100%** ✓ | 70%+ |
+| 8 | Police arrive, heat 0 | 0% | **9%** ✓ | under 20% |
+| 9 | Police arrive, heat 3 | 40% | 32% | over 50% |
+
+- **Reading:**
+  - **A fight is no longer the same fight every time.** 19 of the 22 fight-and-heat combinations now end differently on different seeds; before, every one was won by every seed or by none.
+  - **Heat bites:** the boiler hall is won 50% at heat 0 and 25% at heat 2; the courtyard's last call 83% and 50%.
+  - **Careless play loses a quarter of its fights**, and someone goes down in a bit more than one fight in three, a little over the target.
+- **Tried and cut:** a brace that also made the fighter harder to hit (−20 and −30 points).
+  - With careful play bracing when the plans would leave a fighter on 2 HP or less, careful play lost about 20 points against careless play, and the dodge won back 3.
+  - Bracing spends a round, and rounds bring the police.
+- **Gates:**
+  - `c19-outing`:
+    - a bat swing in an outing is quoted at `RULES.accuracy`, below the lab's 100;
+    - two outings do not share their dice, and neither uses the lab's fixed seed.
+  - `outing-browser`:
+    - pins the clock for the tap that writes the outing, because the outing id carries the clock and the dice now follow the id;
+    - its win is a line recorded in bare node with that very id. Aatami's first swing misses, and the tough one takes a third.
+- **Owner played: pending.** Godot paused.
+
 ## v4.89 — 2026-10-31
 
 **A getaway is out *with* something (G1, roadmap milestone 2, lever 4).** Getaways were won by every crew walking straight to the exit, 100% of the time. The design's job for them is *"get out with what you came for"*, and nothing was being carried.

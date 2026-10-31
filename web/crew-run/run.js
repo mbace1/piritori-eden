@@ -1,6 +1,6 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=21';
-import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=10';
+import {createSession} from '../fight-module/session.js?v=22';
+import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=11';
 import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=11';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
@@ -56,7 +56,10 @@ function tacticalPerson(p,base,extra={}){
 // `rivalHp` what each rival can take on top of the 4 (5 for a tough one).
 // `carryReach` is how far the one carrying the take moves in a getaway, where
 // everyone else moves 4 (v4.89: 3, so the others have a reason to screen them).
-export const RULES={policeAt:6,rout:2/3,rivalHarm:1,rivalHp:0,carryReach:3};
+// `accuracy` is each weapon's chance to land in an Act I fight (owner,
+// 2026-10-31: "Blows can miss, of course"): a bat or a knife lands 70%; a
+// weapon not named keeps its own (the handgun's 90).
+export const RULES={policeAt:6,rout:2/3,rivalHarm:1,rivalHp:0,carryReach:3,accuracy:{'baseball-bat':70,'folding-knife':70}};
 export const POLICE_AT=RULES.policeAt;
 /** Who carries the take in a getaway: the first fighter who is not the
  *  protagonist. One rule, so the brief names the one the board slows. */
@@ -103,7 +106,9 @@ function makeOuting(content,config){
  const options={rules:'c19-outing-v2',actions:['help','extract','sprint','aid','police'],free:['police'],
  reject:t=>['auto','talk'].includes(t)||(b.mission?.police?.arrived&&!b.mission.police.resolved&&t!=='police'),
  withdrawText:'The crew pulls out. The job is lost.',
- prepare(b){b.mission={id:config.id,objective:config.objective,goal,protagonist:content.protagonist?.id||null,targetId:null,targetCell:null,recovered:false,carrierId:null,
+ // The dice are the outing's own: seeded from its id, so a reload replays the
+ // same rolls and two outings do not roll the same fight.
+ prepare(b){b.rng=seedOf(config.id)||104729;if(RULES.accuracy)b.accuracy={...RULES.accuracy};b.mission={id:config.id,objective:config.objective,goal,protagonist:content.protagonist?.id||null,targetId:null,targetCell:null,recovered:false,carrierId:null,
   heat:Math.max(0,Math.min(3,Number(outing.heat)||0)),police:{at:RULES.policeAt,afterRound:null,y:null,cells:[],arrived:false,resolved:false,posture:null,taken:[],saved:[]},routed:false,end:null,
   place:outing.place||null,wayOut:outing.wayOut||null,side:outing.side||null};},
  finish(b){if(b.status!=='active')return;const m=b.mission;

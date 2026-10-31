@@ -1,11 +1,11 @@
 import {fighterLabel} from './readability.js?v=4';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=9';
-import {mountCrew} from '../crew-run/ui.js?v=28';
+import {mountCrew} from '../crew-run/ui.js?v=29';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
-import {createSession,checkpoint,restoreSession} from './session.js?v=21';
+import {createSession,checkpoint,restoreSession} from './session.js?v=22';
 import {makeActor,updateActor,disposeActor} from './actors.js?v=9';
 import {attackTargets,validMoveCells,coverStandingLine,policeAwaitingPosture} from './resolver.js?v=9';
 import {LANES,totalRows,parseSlotKey} from '../js/v3/grid.js?v=2';
@@ -17,8 +17,8 @@ import {loadParkAssets} from '../bear-path/assets.js?v=2';
 import {createEncounter} from '../bear-path/encounter.js?v=2';
 import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
-import {tacticalUI} from './tactical-ui.js?v=13';
-import {routes} from './tactics.js?v=10';
+import {tacticalUI} from './tactical-ui.js?v=14';
+import {routes} from './tactics.js?v=11';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
 const isCrew=document.body.dataset.scenario==='crew-run';

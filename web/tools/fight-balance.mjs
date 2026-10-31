@@ -36,8 +36,8 @@ const { createState, SAVE_KEY, fighters } = await import('../js/v3/state.js?v=10
 const { stageFight, doorFightStage, roadFightStage, placeAt } = await import('../js/v3/places.js?v=1');
 const { templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=19');
-const { threats, routes, forecast } = await import('../fight-module/tactics.js?v=10');
+const R = await import('../crew-run/run.js?v=20');
+const { threats, routes, forecast } = await import('../fight-module/tactics.js?v=11');
 if (process.env.RULES) Object.assign(R.RULES, JSON.parse(process.env.RULES));
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 const crewData = { content, crew: new Map(content.crew.map(c => [c.id, { ...c, name: c.name ?? nameFrom(c.id) }])) };

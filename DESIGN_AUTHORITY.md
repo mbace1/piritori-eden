@@ -2,6 +2,12 @@
 
 > **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
 
+## Owner answer, 2026-10-31 — blows can miss
+
+- **"Blows can miss, of course."** Asked after v4.88 measured every Act I fight as
+  the same fight every time. Shipped in v4.90: a bat or a knife lands 70% in an
+  Act I fight, and each outing's dice are seeded from its id. ROADMAP §10.
+
 ## Owner answers, 2026-10-26 — Godot waits; simple UI
 
 - **"No Godot until later."** ROADMAP §6 option (a): no Godot ports until the web
