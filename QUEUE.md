@@ -6,6 +6,7 @@
 > - **Overtaken ranges:** :3-10, :150-157, :222-241, :252-257, :289-321, :464-587, :628-652, :806-865, :892-896, :929-998, :1028-1031, :1091-1116, :1191-1244, :1649, :1689, :1820-1843, :2041, :2492, :2734-2749, :2839-2875, :2893-3212.
 > - **Done but still listed:** :119-124, :164-170, :382-389, :485-494, :673-680, :1278-1282, :1387-1400, :1471-1476, :1542-1757, :1804-1810, :2712-2732, :2793, :2831.
 > - **New, and not yet listed below:** Night Shift's settlement (`crew-run/campaign-adapter.js`) pays wounds, missing, arrests and careers, but **no loot, no kit loss and no glory**. The board did (`app.js` `recordBattleConsequences`). So in Act I today, fights feed nothing to the fence or to gear condition. This is ROADMAP G2.
+> - **New, 2026-10-31 (G1): every Night Shift fight rolls the same dice.** `createTacticalSession` in `web/fight-module/tactics.js` (the shared fight rules) starts `battle.rng` at 104729 for every fight, so the first gunshot of every outing rolls the same number. It barely shows today because every close-combat hit lands, but any accuracy below 100% would make each fight's luck the same. Fix: seed it from the outing id, which keeps a reload's replay exact. `fight-balance.mjs` (the fight-measuring tool) already seeds per fight; the game does not.
 > - **Still open, ranked by what a player would feel in Act I:**
 >   1. D002, what travel and trades cost in time (:20-32).
 >   2. Missing or arrested crew have no way back (:36-42, :158-163).

@@ -45,7 +45,12 @@ function nightShift(outing) {
   search = `?campaign=1&outing=${outing.id}&arena=${outing.kit}`;
   localStorage.removeItem(R.OUTING_SAVE_KEY);
   const run = R.loadRun(localStorage.getItem(R.OUTING_SAVE_KEY), content);
-  return R.makeMission(content, R.launch(run));
+  const fight = R.makeMission(content, R.launch(run));
+  // Every Night Shift fight starts its dice at the same number (tactics.js,
+  // rng 104729), so without this the seeds would all roll alike and be one
+  // sample. Each seed rolls its own dice here; the game itself is unchanged.
+  fight.battle.rng = [...outing.id].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
+  return fight;
 }
 function baseState(heat, anchor) {
   const state = createState(content);
@@ -98,6 +103,7 @@ const ROUT_AT = R.ROUT_AT ?? 1 / 2;
 const weight = e => (e.tough ? 2 : 1);
 const dist = (a, c) => { const [x, y] = a.split(',').map(Number), [u, v] = c.split(',').map(Number); return Math.abs(x - u) + Math.abs(y - v); };
 function sideBroken(b) {
+  if (R.routs) return !b.enemies.some(e => e.rival && e.alive) || R.routs(b);
   const side = b.enemies.filter(e => e.rival), total = side.reduce((n, e) => n + weight(e), 0);
   const down = side.filter(e => !e.alive && !e.fled).reduce((n, e) => n + weight(e), 0);
   return !side.some(e => e.alive) || down >= total * ROUT_AT;
