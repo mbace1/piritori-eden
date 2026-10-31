@@ -1,3 +1,39 @@
+## v4.88 — 2026-10-31
+
+**Fights cost something (G1, roadmap milestone 2, levers 2 and 3).** The roadmap's headline (§2) was that a careless player won every fight in two rounds for a tenth of a point of HP.
+
+- **The fight's numbers live in one place** (`RULES` in `crew-run/run.js`), so the measuring tool can try a lever without editing the rules:
+  - **they break at two-thirds of their weight down**, not half (`rout`). Putting the tough one down is no longer the whole fight;
+  - **each rival hits one harder** (`rivalHarm` 1, was 0);
+  - **the police come at pressure 6**, not 5 (`policeAt`). With the later rout, police at 5 ended almost every heat-2 fight before anyone could win it;
+  - `rivalHp` stays 0; it is there to be measured.
+- The brief and the pressure line read the new threshold.
+- **The measuring tool** (`web/tools/fight-balance.mjs`) takes `RULES='{…}'` and has two more ways of playing: **careful** (steps out of a telegraphed hit, braces when one cannot be dodged) and **focused** (the tough one first, no bracing).
+- **Before and after**, 15 fights × 12 seeds (rows 1–7 at heat 0 and 2, as ROADMAP §5 was measured):
+
+| # | Measure | v4.87 | v4.88 | Target |
+|---|---|---|---|---|
+| 1 | Fight jobs, careless: won | 95% | 100% | 60–75% |
+| 2 | … rounds | 2.1 | 2.4 | 4–6 |
+| 3 | … crew HP lost | 1.1 | **2.9** | 2–4 ✓ |
+| 4 | … someone goes down | 0% | **27%** | 20–30% ✓ |
+| 5 | Careful over careless | +5 pts | +0 pts | +15 pts, 1 HP less |
+| 6 | Getaways, straight out: won | 88% | 100% | under 50% |
+| 7 | Getaways, careful | 100% | 100% | 70%+ at a cost |
+| 8 | Police arrive, heat 0 | 0% | 0% | under 20% ✓ |
+| 9 | Police arrive, heat 3 | 3 of 15 | 5 of 15 | over 50% |
+
+- **Reading:** a fight now costs the crew about three points of HP and puts someone down about one fight in four (rows 3–4 on target). It is still always won when played without thought, still short, and thinking still does not pay:
+  - **every fight is deterministic.** Melee lands every time and the rivals' plans are fixed, so a fight is won by every seed or by none, and a win rate moves only by whole fights;
+  - **careful play is slower, and time is pressure.** Bracing spends a round, a round adds pressure, and the police end fights. So careful and focused play are no better than careless play;
+  - **a getaway is still a walk to the exit** (row 6); lever 4, rivals between the crew and the way out, is next.
+- **Gates:**
+  - `c19-outing`'s police checks read `RULES.policeAt`, and the runner who waits for the police is stood up sturdy, so the test is about the rule and not the swing. Under the new rules the runner went down before the sirens and the check failed;
+  - `outing-browser`'s win is a newly recorded line of play: three rounds, the tough one and one more down before the rest run, and the runner falls on the way;
+  - waiting for the police now takes four rounds and costs two of the crew, so the browser sees the two-answer question;
+  - `doors-browser` gives a navigation two minutes, because leaving the relief map's WebGL takes over 30 s under SwiftShader (the v4.87 site check).
+- **Owner played: pending.** Godot paused.
+
 ## v4.87 — 2026-10-30
 
 **Kallio's own lights, and a place that remembers (V3 and V4 of the 2026-10-30 pitch).** Owner, on the pitch: *"V3-6, others after."*

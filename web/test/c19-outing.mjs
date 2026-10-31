@@ -18,7 +18,7 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=17');
+const R = await import('../crew-run/run.js?v=18');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate } = await import('../fight-module/tactics.js?v=9');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -97,7 +97,7 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(fight.command('auto').ok, false);
   assert.equal(fight.command('talk').ok, false, 'talking is a later step');
 
-  // They break: half their weight down, and the rest run.
+  // They break: two-thirds of their weight down (RULES.rout, v4.88), and the rest run.
   const tough = b.enemies.find(e => e.tough), other = b.enemies.find(e => !e.tough);
   assert.ok(tough && other, 'the courtyard has a tough one');
   down(b, other.id);
@@ -145,7 +145,8 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(O.outingLines(camp.outing)[0], 'You pulled out of A Torkkelinmäki courtyard. The job is lost.');
 }
 
-// The police: announced at 5, in after the next enemy turn, and the fight stops on one question.
+// The police: announced at the threshold (RULES.policeAt, 6 since v4.88), in after the next
+// enemy turn, and the fight stops on one question.
 {
   const { outing, template } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'police', heat: 3 });
   const { run, fight } = nightShift(outing), b = fight.battle, m = b.mission;
@@ -153,9 +154,14 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   const lan = down(b, 'crew-slot-muscle');
   down(b, 'aatami');
   assert.ok(fight.command('select', 'crew-slot-runner').ok);
-  m.heat = 4;
+  // This block is about the police, not the swing: since v4.88 rivals hit
+  // harder (RULES.rivalHarm), and the runner alone used to go down before the
+  // sirens arrived. Stand them up sturdy so the rule, not the dice, decides it.
+  const runner = b.players.find(p => p.id === 'crew-slot-runner');
+  runner.hp = runner.maxHp = 99;
+  m.heat = R.RULES.policeAt - 1;
   assert.ok(fight.command('end').ok);
-  assert.ok(m.heat >= 5 && m.police.afterRound !== null, 'pressure reached 5: the police are announced');
+  assert.ok(m.heat >= R.RULES.policeAt && m.police.afterRound !== null, 'pressure reached the threshold: the police are announced');
   assert.ok(m.police.cells.length >= 2, 'their entry is marked on the board');
   assert.match(b.log.join(' '), /Sirens\. The police come in at the (south|north) end after enemy turn \d+\./);
   assert.equal(m.police.arrived, false, 'announced a round early, never a surprise');
@@ -193,7 +199,7 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   const { run, fight } = nightShift(outing), b = fight.battle, m = b.mission;
   down(b, 'crew-slot-muscle');
   fight.command('select', 'crew-slot-runner');
-  m.heat = 4;
+  m.heat = R.RULES.policeAt - 1;
   fight.command('end');
   assert.ok(m.police.afterRound !== null && !m.police.arrived);
   assert.ok(fight.command('withdraw').ok, 'you can still pull out before they walk in');

@@ -64,18 +64,27 @@ const fixture = (page, body, arg) => page.evaluate(([b, a]) => { const s = struc
 const campaign = page => page.evaluate(() => JSON.parse(localStorage.getItem('piritori-to-eden:v3')));
 const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, `${name}.png`) }); };
 
-// A real win, found by playing the courtyard opening in bare node: close in on
-// the tough one, and when he goes down the rest run (c19-outing.mjs). The ids
-// are the generated people the door's key always gives.
-const R1 = 'opp-door-15-hit-courtyard-ledger-1';
+// A real win, found by playing the courtyard opening in bare node (the "played
+// opening" in c19-outing.mjs, recorded): close in on the tough one, then on the
+// next. Since v4.88 they break at two-thirds of their weight (RULES.rout), so
+// the tough one alone is not enough, and the runner goes down on the way: a
+// win that costs someone. The ids are the generated people the door's key
+// always gives.
+const R = n => `opp-door-15-hit-courtyard-ledger-${n}`;
 const WIN = [
-  ['select', 'aatami'], ['move', '2,3'], ['attack', R1],
-  ['select', 'crew-slot-runner'], ['move', '3,4'], ['attack', R1],
+  ['select', 'aatami'], ['move', '2,3'], ['attack', R(1)],
+  ['select', 'crew-slot-runner'], ['move', '3,4'], ['attack', R(1)],
   ['end'],
-  ['select', 'aatami'], ['attack', R1],
+  ['select', 'aatami'], ['attack', R(1)],
+  ['select', 'crew-slot-runner'], ['attack', R(3)],
+  ['select', 'crew-slot-muscle'], ['move', '1,3'], ['attack', R(2)],
+  ['end'],
+  ['select', 'aatami'], ['move', '2,4'], ['attack', R(2)],
 ];
-// Stand and wait in a place that is already hot: the police come in round 4.
-const WAIT = [].concat(...Array.from({ length: 3 }, () => [
+// Stand and wait in a place that is already hot: pressure 3 reaches 6 after
+// turn 3, and the police come in after turn 4. Since v4.88 rivals hit harder
+// (RULES.rivalHarm), so four rounds of standing still cost two of the crew.
+const WAIT = [].concat(...Array.from({ length: 4 }, () => [
   ['select', 'aatami'], ['brace'], ['select', 'crew-slot-runner'], ['brace'], ['select', 'crew-slot-muscle'], ['brace'], ['end'],
 ]));
 
@@ -130,7 +139,7 @@ server.listen(0, '127.0.0.1', async () => {
       await shot(page, `${view}-${kind}-brief`);
       await tap(page.locator('#crew-deploy')); await idle();
       ok(`${name}: one tap and it is on`, (await page.evaluate(() => crewRun.snapshot().phase)) === 'battle' && /^Make them back off/.test(await page.locator('#mission-goal').innerText()));
-      ok(`${name}: the police are forecast on the pressure line`, new RegExp(`PRESSURE ${kind === 'police' ? 3 : 0}/5 · POLICE AT 5`).test(await page.locator('#mission-pressure').innerText()));
+      ok(`${name}: the police are forecast on the pressure line`, new RegExp(`PRESSURE ${kind === 'police' ? 3 : 0}/6 · POLICE AT 6`).test(await page.locator('#mission-pressure').innerText()));
       await tap(page.locator('#help'));
       ok(`${name}: Withdraw is in the menu`, await page.locator('#outing-options .withdraw-command').isEnabled());
       await page.keyboard.press('Escape');
@@ -162,9 +171,11 @@ server.listen(0, '127.0.0.1', async () => {
         await play(WAIT);
         ok(`${name}: the police were announced a round early, then came`, /POLICE HERE/.test(await page.locator('#mission-pressure').innerText()) && /^The police are here/.test(await page.locator('#mission-goal').innerText()));
         const backOff = page.locator('[data-police="BACK_OFF"]');
-        // v4.78: nobody is down here, so both answers would cost the same and
-        // there is no question: one way out, saying so.
-        ok(`${name}: with nobody down there is one answer, and it says who is taken`, /^Clear out · taken: nobody/.test(await backOff.innerText()) && await page.locator('[data-police="HELP_FRIENDS"]').count() === 0 && /Nobody is down/.test(await page.locator('#mission-goal').innerText()));
+        // Two are down by now, so the question is a real one (v4.78): two
+        // answers, each naming who it costs. Aatami is never taken.
+        const asked = await backOff.innerText();
+        ok(`${name}: with people down there are two answers, each saying who is taken`, /^Back off · taken: /.test(asked) && !/taken: nobody/.test(asked) && !/Aatami/.test(asked)
+          && /^Help your friends · taken: /.test(await page.locator('[data-police="HELP_FRIENDS"]').innerText()), asked);
         ok(`${name}: and nothing else can be done until it is answered`, await page.locator('#end').isDisabled() || !(await page.locator('[data-mission-action]:enabled').count()));
         await shot(page, `${view}-${kind}-question`);
         await tap(backOff); await idle();

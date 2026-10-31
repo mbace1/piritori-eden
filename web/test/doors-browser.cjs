@@ -84,6 +84,9 @@ server.listen(0, '127.0.0.1', async () => {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const page = await browser.newPage({ viewport: vp, hasTouch: touch, isMobile: touch });
       const errors = watchErrors(page);
+      // Leaving the Act I relief map tears down a WebGL context, which under
+      // SwiftShader can take over 30 s (v4.87 site check): give navigation room.
+      page.setDefaultNavigationTimeout(120000);
       await page.route('**/web/crew-run/**', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Night Shift (stub)</title>' }));
       await page.goto(`${base}/web/?skip`);
       await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
