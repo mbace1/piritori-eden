@@ -66,6 +66,9 @@ server.listen(0, '127.0.0.1', async () => {
   try {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const ctx = await browser.newContext({ viewport: vp, hasTouch: touch, isMobile: touch });
+      // Each goto leaves a page with the relief map's WebGL context, whose
+      // teardown under SwiftShader can pass 30 s (CI run 1101): give it room.
+      ctx.setDefaultNavigationTimeout(120000);
       const page = await ctx.newPage();
       const errors = watchErrors(page);
       await page.goto(`${base}/web/`); await ready(page);
@@ -150,6 +153,7 @@ server.listen(0, '127.0.0.1', async () => {
     }
     // Reduced motion: one still frame, the same lines, no movement.
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    ctx.setDefaultNavigationTimeout(120000);
     const page = await ctx.newPage();
     await page.goto(`${base}/web/`); await ready(page);
     await page.locator('#beginButton').click();
