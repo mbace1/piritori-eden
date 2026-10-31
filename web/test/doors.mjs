@@ -256,6 +256,14 @@ function atDoor(index = 15, mutate) {
   ok(found === n, `someone missing: the way home is on every door block (${found}/${n})`);
   ok(bailed === n, `someone arrested: bail is on every door block (${bailed}/${n})`);
   ok(fightToo === n, `and the fight door is still there (${fightToo}/${n})`);
+  let both = 0, extra = 0;
+  for (let seed = 0; seed < 40; seed += 1) for (const i of doorIdx) {
+    const two = offerDoors(setUp(i, seed, s => { s.crewStatus[crew[1]].status = 'missing'; s.arrestedCrew.push(crew[2]); s.recruited = s.recruited.filter(x => x !== crew[2]); }), data, doors);
+    if (home.every(h => two.some(o => o.template === h))) both += 1;
+    if (two.filter(o => !home.includes(o.template)).length >= 2) extra += 1;
+  }
+  ok(both === n, `one missing and one arrested: both ways home are on the board (${both}/${n})`);
+  ok(extra === n, `and they come on top of the day's work, never instead of it (${extra}/${n})`);
 
   const missing = setUp(15, 0, s => { s.crewStatus[crew[1]].status = 'missing'; s.doors = { offers: { 15: [{ template: 'favour-find-them', anchor: 'torkkelinmaki' }] }, taken: {} }; });
   ok(requirementStatus('missing-crew>=1', missing, data).ok && !requirementStatus('arrested-crew>=1', missing, data).ok, 'missing and arrested are counted apart');

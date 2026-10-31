@@ -65,7 +65,9 @@ export function offerDoors(state, data, doors) {
   const rules = doors.rules;
   const pool = eligible(state, data, doors, slot);
   const roll = label => deterministicRoll(state, `door:${label}`);
-  const count = Math.min(pool.length, rules.offers_min + Math.floor(roll('count') * (rules.offers_max - rules.offers_min + 1)));
+  // v4.92: a way home for someone lost comes on top of the day's two or three.
+  const urgent = pool.filter(t => t.urgent);
+  const count = Math.min(pool.length, urgent.length + rules.offers_min + Math.floor(roll('count') * (rules.offers_max - rules.offers_min + 1)));
   const picked = [];
   const pick = (from, label) => {
     const rest = from.filter(t => !picked.includes(t));
@@ -75,9 +77,8 @@ export function offerDoors(state, data, doors) {
   if (rules.fight_door_each_block && fightsToday(state, data.content) < rules.fights_per_day_max) {
     pick(pool.filter(canFight), 'fight');
   }
-  // v4.92: a way home for someone lost is always on the board while they are lost.
-  const urgent = pool.filter(t => t.urgent);
-  for (const [i] of urgent.entries()) if (picked.length < count) pick(urgent, `urgent:${i}`);
+  // ...and is always on the board while they are lost.
+  for (const [i] of urgent.entries()) pick(urgent, `urgent:${i}`);
   // H5: a Friendly family's work comes first.
   const favoured = pool.filter(t => doorFavoured(state, data.families, t));
   if (favoured.length && picked.length < count) pick(favoured, 'favoured');
