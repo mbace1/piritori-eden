@@ -4,7 +4,7 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing} from './layouts.js?v=5';
+import {LAYOUTS,lay,facing,footprint} from './layouts.js?v=6';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',quay:'Sörnäinen · quay',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}
@@ -48,9 +48,9 @@ export function buildLocation(world,renderer,cover,position,assets,id,opts={}){
  // A run `with` another is part of that building: it shares its record, so
  // the cutaway lifts the two together and both wear the building's plaster
  // (`tint`). Every façade module gets its coping (`cap`).
- function run(spec){const shared=spec.with&&byId[spec.with];const rec=shared??{id:spec.id,group:new T.Group(),normal:facing(spec.rotation),visible:true,parts:{},tint:spec.tint};
+ function run(spec){const shared=spec.with&&byId[spec.with];const rec=shared??{id:spec.id,group:new T.Group(),normal:facing(spec.rotation),visible:true,parts:{},tint:spec.tint,low:!!spec.low};
   if(!shared){rec.group.name='run-'+spec.id;group.add(rec.group);runs.push(rec);}into=rec;
-  for(const m of lay(spec).placed){put(m.name,m.x,0,m.z,m.rotation);cap(rec,m);}
+  for(const m of lay(spec).placed){for(let k=0;k<(spec.stack??1);k++)put(m.name,m.x,k*.74,m.z,m.rotation);cap(rec,m);}
   for(const [name,x,y,z,r] of spec.hangs??[])put(name,x,y,z,r);
   into=null;return rec;}
  // Layer 2: the building behind a façade, after the park's street blocks
@@ -92,6 +92,14 @@ export function buildLocation(world,renderer,cover,position,assets,id,opts={}){
  const layout=LAYOUTS[id]??LAYOUTS.courtyard,byId={};const wispX=layout.rear?.[0]??(yard?1:0);
  for(const spec of layout.runs)byId[spec.id]=run(spec);
  for(const b of layout.blocks){const [x0,x1,z0,z1,y0,y1]=b.box;block(byId[b.run],x0,x1,z0,z1,y0,y1,b.ridge??false,b.stone?'stone':'plaster');}
+ // Layer 5b, the plinths (v4.91, V1 of the 2026-10-30 pitch): a lifted run
+ // leaves its footprint behind, its walls and the building behind them cut to
+ // a 0.9 m plinth in the building's plaster with a dark cut on top, so the
+ // place keeps its outline from every side instead of standing in a void.
+ // One instanced box for all of them, switched with the cutaway.
+ const PLINTH=.9,plinths=[];
+ for(const spec of layout.runs){const rec=byId[spec.id];for(const m of lay(spec).placed)plinths.push({owner:rec,box:footprint(m.name,m.x,m.z,m.rotation)});}
+ for(const b of layout.blocks)if(b.run&&!b.box[4])plinths.push({owner:byId[b.run],box:b.box.slice(0,4)});
  for(const [name,x,y,z,r] of layout.props)put(name,x,y,z,r);
  for(const [x,z,r] of layout.planters)put('planter',x,0,z,r);
  for(const [x,z] of layout.litter)put('ground_litter',x,0,z,x*.4);
@@ -221,9 +229,19 @@ export function buildLocation(world,renderer,cover,position,assets,id,opts={}){
  const wet=layout.floor&&group.getObjectByName('wet-paving');
  if(wet){const p=wet.geometry.parameters,x0=wet.position.x-p.width/2,x1=Math.min(wet.position.x+p.width/2,layout.floor[1]);wet.geometry.dispose();wet.geometry=metric(new T.PlaneGeometry(x1-x0,p.height),p.width,p.height);wet.position.x=(x0+x1)/2;}
  const look=new T.Vector3();
+ const plinthBody=new T.InstancedMesh(new T.BoxGeometry(1,1,1).translate(0,.5,0),new T.MeshStandardMaterial({color:0xffffff,roughness:.86}),plinths.length),
+  plinthCut=new T.InstancedMesh(new T.BoxGeometry(1,1,1).translate(0,.5,0),new T.MeshStandardMaterial({color:0x1d2226,roughness:.95}),plinths.length);
+ plinths.forEach((pl,i)=>{const [x0,x1,z0,z1]=pl.box,lift=(i%5)*.003;
+  pl.body=new T.Matrix4().compose(new T.Vector3((x0+x1)/2,0,(z0+z1)/2),new T.Quaternion(),new T.Vector3(x1-x0,PLINTH+lift,z1-z0));
+  pl.cut=new T.Matrix4().compose(new T.Vector3((x0+x1)/2,PLINTH+lift,(z0+z1)/2),new T.Quaternion(),new T.Vector3(x1-x0+.02,.05,z1-z0+.02));
+  plinthBody.setColorAt(i,paint.setHex(0xc3b9a2).multiply(new T.Color().setRGB(...(pl.owner?.tint??[1,1,1]))).multiplyScalar(.78));});
+ for(const m of [plinthBody,plinthCut]){m.receiveShadow=true;m.frustumCulled=false;m.name='plinths';group.add(m);}
+ let plinthsShown=0;
+ const showPlinths=()=>{plinthsShown=0;plinths.forEach((pl,i)=>{const on=pl.owner&&!pl.owner.visible;if(on)plinthsShown++;plinthBody.setMatrixAt(i,on?pl.body:hidden);plinthCut.setMatrixAt(i,on?pl.cut:hidden);});plinthBody.instanceMatrix.needsUpdate=plinthCut.instanceMatrix.needsUpdate=true;};
  const hidden=new T.Matrix4().makeScale(0,0,0);
  function cutaway(camera){camera.getWorldDirection(look);const h=Math.hypot(look.x,look.z)||1;let changed=false;
-  for(const r of runs){const v=-(r.normal[0]*look.x+r.normal[1]*look.z)/h>-.1;if(v!==r.visible){r.visible=v;r.group.visible=v;changed=true;}}
-  if(changed)for(const b of batches){b.owners.forEach((o,i)=>b.mesh.setMatrixAt(i,o&&!o.visible?hidden:b.matrices[i]));b.mesh.instanceMatrix.needsUpdate=true;}}
- return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;for(const s of signs){if(!s.flicker)continue;const on=Math.sin(clock*1.3)<.82||Math.sin(clock*23)>-.2;s.face.color.setScalar(on?1:.35);s.glow.material.opacity=on?s.base[0]:.12;s.spill.material.opacity=on?s.base[1]:.06;}wisps.forEach((s,i)=>{s.position.x=wispX+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,signs:signs.length,aftermath:['tape','glass','stain'].filter(k=>group.getObjectByName('aftermath-'+k)||runs.some(r=>r.group.getObjectByName('aftermath-'+k))),runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length}),aftermath(){}};
+  for(const r of runs){if(r.low)continue;const v=-(r.normal[0]*look.x+r.normal[1]*look.z)/h>-.1;if(v!==r.visible){r.visible=v;r.group.visible=v;changed=true;}}
+  if(changed){for(const b of batches){b.owners.forEach((o,i)=>b.mesh.setMatrixAt(i,o&&!o.visible?hidden:b.matrices[i]));b.mesh.instanceMatrix.needsUpdate=true;}showPlinths();}}
+ showPlinths();
+ return {name:LOCATIONS[id],setStyle(){},update(camera,...rest){cutaway(camera);return lab.update?.(camera,...rest);},beforeRender:lab.beforeRender,recover:lab.recover,tick(dt){clock+=dt;for(const s of signs){if(!s.flicker)continue;const on=Math.sin(clock*1.3)<.82||Math.sin(clock*23)>-.2;s.face.color.setScalar(on?1:.35);s.glow.material.opacity=on?s.base[0]:.12;s.spill.material.opacity=on?s.base[1]:.06;}wisps.forEach((s,i)=>{s.position.x=wispX+(i-2)*.7+Math.sin(clock*.17+i)*.4;s.material.opacity=.035+.015*Math.sin(clock*.3+i);});},metrics:()=>({location:id,kitBytes:assets.bytes,textureSizes:[assets.texture,assets.pavingTexture].map(t=>[t.image.width,t.image.height]),motifs:assets.manifest.motifs,instancedBatches:bins.size,development:lab.metrics(),lights:'3 practical spots / 1 shadow map + sky + passage spill',campaignSiteBound:false,signs:signs.length,aftermath:['tape','glass','stain'].filter(k=>group.getObjectByName('aftermath-'+k)||runs.some(r=>r.group.getObjectByName('aftermath-'+k))),runs:runs.length,hiddenRuns:runs.filter(r=>!r.visible).length,plinths:plinths.length,plinthsShown}),aftermath(){}};
 }

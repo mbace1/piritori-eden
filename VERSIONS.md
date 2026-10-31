@@ -1,3 +1,42 @@
+## v4.92 — 2026-10-31
+
+**A way home (story, ROADMAP G2).** Until now, anyone left on the ground was missing for good, and anyone the police took was gone from the roster for good. Every Withdraw and every *Back off* cost a person permanently, and nothing in Act I could bring them back.
+
+- **Two new favour doors:**
+  - **"Still Out There"** (Törkkelinmäki backyards), while someone is missing. Go and get them, and they come home hurt. Or get them and leave the woman who hid them €15, which the stairwell remembers. Or not tonight.
+  - **"Bail Money"** (Piritori), while someone is arrested. Pay €120 in cash, the money meant for getting out to Pasila. Or ask Jaska to vouch for them, which costs him two. Or leave them inside.
+- **Always there while someone is lost:**
+  - both doors are *urgent*, so they are on every door board while someone is lost;
+  - they come **on top of** the day's two or three doors, never instead of them;
+  - they are *repeatable*, so the next one lost gets the door again.
+- **Each brings back the first one lost** and leaves a memory: `memory:found:<id>` or `memory:bailed:<id>`.
+- **Rules:** two counts (`missing-crew`, `arrested-crew`) and two effects (`rescue:missing`, `bail:arrested`) in `state.js`; an urgent pick in `doors.js`.
+- **Gates:**
+  - `doors`: 745 checks. Over 40 seeds × the three door blocks:
+    - with nobody lost, neither door ever shows;
+    - with someone lost, the way home is on every board, beside the fight door and two other doors;
+    - with one missing and one arrested, both ways home show.
+  - Without the urgent pick the rescue showed on 20 of 120 boards, so the check can fail.
+  - The Godot web reference still reads 90 door boards, because it is computed with nobody lost.
+- **Owner played: pending.** Godot paused.
+
+## v4.91 — 2026-10-31
+
+**Every place keeps its edges (the visuals pass, ROADMAP milestone 3).** Owner: *"Yes, visuals pass and story elements."* Rendered from all eight camera angles first: from half of them the yard, the tram street and the quay stood on a black void, because the cutaway lifts the near walls whole and nothing stood behind them.
+
+- **Plinths** (V1 of the 2026-10-30 pitch). A lifted wall now leaves its footprint: the wall and the building behind it, cut to a 0.9 m plinth in the building's plaster with a dark cut on top. Seen from behind, a place keeps its outline, like a cut-open model.
+  - It is one instanced box for every plinth in a place, switched by the same cutaway that lifts the walls, so it costs two draws.
+- **The yard and the quay get a brick yard wall** (the kit's `low_wall`, two courses, 1.5 m) on their open land sides. The front wall has a **gate over the way out**, so the exit row is the yard gate.
+  - A wall that low never needs lifting (`low`), so the cutaway leaves it standing.
+- **The tram street has two sides.** Across the tracks a row of six bays faces the board, with its building behind it. From the usual camera it faces away and shows only its plinth; turned round, the view no longer ends in black.
+  - It adds about 66k triangles, which keeps the street (~232k) near the courtyard (~209k).
+- **The picture:** `design/PLACES_PASS.jpg`, before and after at the same six camera angles.
+- **Not changed:** the park, which already read well from every side; how dark the yard is from the front; and the courtyard.
+- **Gates:**
+  - `level-layout`: 1693 checks, was 1144. Every new wall is continuous, stands on its own, is off the board, out of the props and out of the water.
+  - `night-places-browser`: a lifted wall leaves its plinth, in every place at every camera preset.
+- **Owner played: pending.** Godot paused.
+
 ## v4.90 — 2026-10-31
 
 **Blows can miss.** Owner, asked whether a fight should have chance in it: *"Blows can miss, of course."*

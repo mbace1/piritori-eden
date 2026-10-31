@@ -6,14 +6,15 @@
 // Measured off kallio-kit-v02.glb in the browser, 2026-10-24. A façade bay is
 // a 1.03 m slab: its face is 0.66 in front of its origin and its back 0.37
 // behind. Modules in a run overlap by 4 cm, which hides the seam.
-export const WIDTH={facade_bay:3.12,facade_bay_b:3.12,archway:3.28,service_bay:4};
+export const WIDTH={facade_bay:3.12,facade_bay_b:3.12,archway:3.28,service_bay:4,low_wall:1.2};
 export const FACE=.66,BACK=.37,OVERLAP=.04;
 // Ground footprints [x0,x1,z0,z1] in each motif's own frame: what stands
 // below 2 m, measured the same way (a shed's awning is overhead, not ground). A service bay is a whole shed, not a slab, so its run's ends
 // need no building behind them.
 export const FOOT={facade_bay:[-1.56,1.56,-.37,.66],facade_bay_b:[-1.56,1.56,-.37,.66],archway:[-1.64,1.64,-3.73,.9],service_bay:[-2,2,-.32,.58],
-  planter:[-1.02,1.19,-1.04,1],container:[-.5,.5,-.5,.53],pallets:[-.54,.54,-.45,.45],bicycle:[-.87,.87,-.18,.18],drain:[-.43,.43,-.25,.25]};
-export const VOLUME=new Set(['service_bay']);
+  planter:[-1.02,1.19,-1.04,1],low_wall:[-.6,.6,-.13,.13],container:[-.5,.5,-.5,.53],pallets:[-.54,.54,-.45,.45],bicycle:[-.87,.87,-.18,.18],drain:[-.43,.43,-.25,.25]};
+// A low wall stands on its own like a shed (v4.91: a yard's boundary wall).
+export const VOLUME=new Set(['service_bay','low_wall']);
 /** A motif's footprint on the ground, as an axis-aligned box in the world. */
 export function footprint(name,x,z,rotation=0){
   const [x0,x1,z0,z1]=FOOT[name],c=Math.cos(rotation),s=Math.sin(rotation),xs=[],zs=[];
@@ -105,13 +106,19 @@ export const LAYOUTS={
   // the board standing on the road with the tram track across it. A tram
   // waits beside the board; the near side is lifted away like every set.
   street:{
+    // v4.91: the street has two sides. Across the tracks, past the far
+    // pavement, a shorter row faces the board; from the usual camera it faces
+    // away, so the cutaway leaves its plinth, and turned round it closes the
+    // view that used to end in black.
     runs:[{id:'row',x:-21.64,z:-7.7,rotation:0,modules:[...bays(5),'archway',...bays(9)],
-      hangs:[['balcony',-13.92,3.7,-7.2,0],['balcony',1.64,3.7,-7.2,0],['balcony',10.88,3.7,-7.2,0],['bike_rack',-11.2,0,-6.5,0]]}],
+      hangs:[['balcony',-13.92,3.7,-7.2,0],['balcony',1.64,3.7,-7.2,0],['balcony',10.88,3.7,-7.2,0],['bike_rack',-11.2,0,-6.5,0]]},
+      {id:'across',x:9.24,z:9,rotation:Math.PI,modules:bays(6),tint:[.86,.96,1.08]}],
     joins:[],
     blocks:[
       {run:'row',box:[-21.64,-6.24,-16,-8.05,0,6.3],ridge:'x'},
       {run:'row',box:[-2.96,24.76,-16,-8.05,0,6.3],ridge:'x'},
       {run:'row',box:[-6.24,-2.96,-16,-8.05,3.5,6.3],ridge:null},
+      {run:'across',box:[-9.28,9.24,9.37,17,0,6.3],ridge:'x'},
     ],
     road:{z0:-5.2,z1:2.6},rails:[-1.9],tram:{x:12,z:-1.9},rear:[-4.6,2.5,-8],
     lamps:[[13.96,3.2,-7.1,0,'row'],[4.72,3.2,-7.1,0,'row'],[-7.76,3.2,-7.1,0,'row']],
@@ -123,12 +130,19 @@ export const LAYOUTS={
     planters:[[-4.7,4.3,Math.PI/2],[5.2,4.0,Math.PI/2]],
   },
   // The yard: sheds along the back, two down the left, and the tenement row
-  // behind the sheds with its building.
+  // behind the sheds with its building. v4.91: a brick yard wall, two courses
+  // high (`stack`), closes the open right and front, the front with a gate
+  // over the way out (the exit row is the board's +z edge). A wall that low
+  // never needs lifting (`low`), so the cutaway leaves it standing.
   yard:{
     runs:[
       {id:'sheds',x:-9,z:-8.4,rotation:0,modules:Array(6).fill('service_bay'),hangs:[['bike_rack',-5.4,0,-6.5,0]]},
       {id:'side',x:-7,z:1.2,rotation:Math.PI/2,modules:['service_bay','service_bay']},
       {id:'far',x:-11.6,z:-13,rotation:0,modules:bays(8)},
+      {id:'wall_right',x:8.2,z:-7.4,rotation:-Math.PI/2,modules:Array(14).fill('low_wall'),low:true,stack:2},
+      {id:'wall_gate_r',x:8.2,z:8.5,rotation:Math.PI,modules:Array(4).fill('low_wall'),low:true,stack:2},
+      {id:'wall_gate_l',x:-3.6,z:8.5,rotation:Math.PI,modules:Array(3).fill('low_wall'),low:true,stack:2},
+      {id:'wall_left',x:-7,z:8.5,rotation:Math.PI/2,modules:Array(6).fill('low_wall'),low:true,stack:2},
     ],
     joins:[],
     blocks:[{run:'far',box:[-11.6,13.08,-21.5,-13.35,0,6.3],ridge:'x'}],
@@ -147,6 +161,10 @@ export const LAYOUTS={
       {id:'sheds',x:-14.4,z:-8.4,rotation:0,modules:Array(5).fill('service_bay')},
       {id:'side',x:-7,z:1.2,rotation:Math.PI/2,modules:['service_bay','service_bay']},
       {id:'far',x:-16.2,z:-13,rotation:0,modules:bays(7)},
+      // v4.91: the yard's brick wall, on the land sides only, a gate over the way out.
+      {id:'wall_gate_r',x:5.4,z:8.5,rotation:Math.PI,modules:['low_wall'],low:true,stack:2},
+      {id:'wall_gate_l',x:-3.6,z:8.5,rotation:Math.PI,modules:Array(3).fill('low_wall'),low:true,stack:2},
+      {id:'wall_left',x:-7,z:8.5,rotation:Math.PI/2,modules:Array(6).fill('low_wall'),low:true,stack:2},
     ],
     joins:[],
     blocks:[{run:'far',box:[-16.2,5.4,-21.5,-13.35,0,6.3],ridge:'x'}],

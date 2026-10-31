@@ -17,7 +17,7 @@
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { board, INFO } from './board.js?v=3';
-import { addEquipment, buyOf, isPurchasable, CONDITION } from './state.js?v=11';
+import { addEquipment, buyOf, isPurchasable, CONDITION } from './state.js?v=12';
 
 export const BOWL_EUR = 6;
 export const TOKO_ANCHOR = 'vaasankatu';
