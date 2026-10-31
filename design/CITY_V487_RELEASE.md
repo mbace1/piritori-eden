@@ -1,0 +1,32 @@
+# Hub release: Act I city v4.87 (Kallio's own lights, and a place that remembers)
+
+- **Source:** `mbace1/piritori-eden` @ `22b64ba`, web only.
+  - **Gates were green:** run 1099, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `83080d9e`, under `piritori/`. **Pages run 1587 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 61 site files changed.
+- **What players get** (V3 and V4 of the 2026-10-30 pitch; owner: *"V3-6, others after"*, then *"Find a lane and work"*):
+  - **Every Night Shift place has its own neon:**
+    - the courtyard: BAARI and KAHVILA;
+    - the tram street: PANTTI, TOKON RAMEN, KEBAB PIZZA and PELIT;
+    - the yard and the quay: KORJAAMO and VARASTO 7.
+  - **A place remembers what happened in it,** always off the board:
+    - police tape (blue and white, POLIISI · POLIS) where the police ended a fight;
+    - a stain where someone was hurt;
+    - glass for every fight.
+  - Mock-ups: `design/V3_V5_MOCKS.jpg`.
+- **Catalogue:**
+  - The note moves to v4.87 in en, fi and ja. `versions.json` piritori goes 4.86 → 4.87 by hand.
+  - The token cascade ran from `hub/games.js`, and `sw.js` `VERSION` went 197 → 198. `sw-shell --check` agrees.
+- **Verified on the staged site tree, before the push:**
+  - the site check: 8 of 8;
+  - playtest links: 29;
+  - mission: 32;
+  - road: 42;
+  - outing: 66.
+  - **Doors: 52, with a 45 s navigation limit.** At its own 30 s limit it failed twice, both times at the same step: the return to Kallio from the stubbed Night Shift.
+    - The page loads in 0.6 s fresh. The time goes on the software renderer's WebGL teardown of the page being left (here Act I's relief map), which v4.78's receipt measured at 13–38 s.
+    - v4.87 changes nothing that test loads. The repo test gets the outing test's 120 s navigation limit in the next commit.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`08493424`, Toko Drop 2 v67).
