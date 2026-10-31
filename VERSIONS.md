@@ -18,6 +18,10 @@
     - with one missing and one arrested, both ways home show.
   - Without the urgent pick the rescue showed on 20 of 120 boards, so the check can fail.
   - The Godot web reference still reads 90 door boards, because it is computed with nobody lost.
+- **The paused Godot build learns the two words and nothing else.** Its playthrough fails on any door effect it cannot apply, and the first push of v4.92 went red there (gates run 1109, deploy run 234).
+  - `bail:arrested` works there: Godot already keeps the people the police took.
+  - Godot keeps nobody missing, so `missing-crew` reads 0 and the rescue door never opens there.
+  - Three new playthrough checks: no bail door before an arrest, one after, and bail puts them back on the roster.
 - **Owner played: pending.** Godot paused.
 
 ## v4.91 — 2026-10-31

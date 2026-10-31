@@ -1320,6 +1320,11 @@ func _read_value(token: String) -> int:
 		"fighters": return fighters().size()
 		"crew-critical": return open_critical_wounds()
 		"fights-today": return fights_today()
+		# v4.92's way home (web `requirementStatus`). Somebody the police took
+		# is on this list; nobody here is ever MISSING, because only the web's
+		# Night Shift getaways leave a body behind, so that door never opens.
+		"arrested-crew": return arrested_crew.size()
+		"missing-crew": return 0
 		_:
 			if token.begins_with("stock:"):
 				return int(stock.get(token.substr(6), 0))
@@ -1433,6 +1438,21 @@ func apply_effect(effect: String) -> void:
 		"crew-outcome":
 			if parts.size() >= 2:
 				crew_outcomes.append(parts[1])
+		"bail":
+			# v4.92 (web `bail:arrested`): the first one the police took walks
+			# out of the station and is back on the roster.
+			if not arrested_crew.is_empty():
+				var freed := arrested_crew[0]
+				arrested_crew.remove_at(0)
+				if not roster.has(freed):
+					roster.append(freed)
+				if not memories.has("bailed:" + freed):
+					memories.append("bailed:" + freed)
+		"rescue":
+			# v4.92 (web `rescue:missing`). This build keeps no missing crew
+			# (see `missing-crew` above), so there is nobody to bring home and
+			# the door that pays this is never offered here.
+			pass
 		"resolve-critical-wound":
 			var idx := crew_outcomes.find("critical-wound-possible")
 			if idx >= 0:

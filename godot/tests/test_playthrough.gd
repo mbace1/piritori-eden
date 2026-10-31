@@ -97,7 +97,7 @@ func _test_every_effect_is_understood() -> void:
 		"resolve-critical-wound", "start-battle", "start-negotiation",
 		"battle-on-failure", "battle", "opponent-nerve", "resolve",
 		"resolve-ending", "mccormick-family", "label",
-		"forecast-ending", "chapter-ending",
+		"forecast-ending", "chapter-ending", "rescue", "bail",
 	]
 	var unknown: Array = []
 	for v in verbs:
@@ -240,6 +240,19 @@ func _test_endings_are_reachable() -> void:
 	for i in range(GameState.total_blocks):
 		GameState.advance_block()
 	eq("a RESOLVED critical wound kills nobody", GameState.crew_deaths, 0)
+
+	# v4.92's way home: bail opens only on somebody the police took, and pays
+	# them back onto the roster.
+	GameState.new_campaign()
+	GameState.apply_effect("recruit:crew-slot-runner")
+	check("no bail door before an arrest",
+		not GameState.meets_all(["arrested-crew>=1"]))
+	GameState.arrest("crew-slot-runner")
+	check("an arrest opens the bail door", GameState.meets_all(["arrested-crew>=1"]))
+	GameState.apply_effect("bail:arrested")
+	check("bail puts them back on the roster",
+		GameState.roster.has("crew-slot-runner") and GameState.arrested_crew.is_empty()
+		and GameState.has_flag("memory:bailed:crew-slot-runner"))
 
 
 ## Bend the model to satisfy one requirement string, for reachability testing.
