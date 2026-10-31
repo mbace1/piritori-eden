@@ -9,7 +9,7 @@ const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
   read('../v3.css?v=13'),
-  read('../js/v3/app.js?v=56'),
+  read('../js/v3/app.js?v=57'),
   read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
@@ -20,7 +20,7 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=56'));
+assert(html.includes('js/v3/app.js?v=57'));
 for (const file of ['app.js','battle.js','doors.js','road.js','story.js','toko.js','visits.js']) {
   const source=await read(`../js/v3/${file}`);
   assert(source.includes('state.js?v=11') && !source.includes('state.js?v=10'), `${file} uses the same campaign rules version`);

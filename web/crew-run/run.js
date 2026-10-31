@@ -1,6 +1,6 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=20';
-import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=9';
+import {createSession} from '../fight-module/session.js?v=21';
+import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=10';
 import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=11';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
@@ -54,8 +54,13 @@ function tacticalPerson(p,base,extra={}){
 // of their weight that must be down before the rest run; `policeAt` the
 // pressure that brings the police; `rivalHarm` what each rival's blow adds,
 // `rivalHp` what each rival can take on top of the 4 (5 for a tough one).
-export const RULES={policeAt:6,rout:2/3,rivalHarm:1,rivalHp:0};
+// `carryReach` is how far the one carrying the take moves in a getaway, where
+// everyone else moves 4 (v4.89: 3, so the others have a reason to screen them).
+export const RULES={policeAt:6,rout:2/3,rivalHarm:1,rivalHp:0,carryReach:3};
 export const POLICE_AT=RULES.policeAt;
+/** Who carries the take in a getaway: the first fighter who is not the
+ *  protagonist. One rule, so the brief names the one the board slows. */
+export const carrierOf=(ids,protagonist)=>ids.find(id=>id!==protagonist)??null;
 export const POSTURES=['BACK_OFF','HELP_FRIENDS'];
 const POLICE_RESCUE_REACH=1;
 const OUTING_ROWS={fight:{crew:1,front:4,middle:5,back:6},getaway:{crew:5,front:3,middle:2,back:1}};
@@ -85,6 +90,10 @@ function makeOuting(content,config){
  const base=createSession(content,'mixed','lab-6'),b=base.battle,template=copy(b.players[0]),enemyTemplate=copy(b.enemies[0]),outing=config.outing;
  const goal=outing.goal==='getaway'?'getaway':'fight',crewRow=OUTING_ROWS[goal].crew,xs=OUTING_CREW_X[config.crew.length]||OUTING_CREW_X[3],taken=new Set();
  b.players=config.crew.map((p,i)=>tacticalPerson(p,template,{label:String(i+1),cell:`${xs[i]},${crewRow}`,alive:true,itemIds:p.kit==='light'?['training-bandage']:[],evacuated:false,helped:false}));
+ // A getaway is out WITH something: the first of the crew who is not the
+ // protagonist carries it, and moves RULES.carryReach tiles.
+ const carrierId=goal==='getaway'?carrierOf(b.players.map(p=>p.id),content.protagonist?.id):null,carrier=b.players.find(p=>p.id===carrierId);
+ if(carrier){carrier.carrying=true;if(RULES.carryReach!==4)carrier.reach=RULES.carryReach;}
  b.enemies=outing.rivals.slice(0,3).map((r,i)=>{const cell=outingCell(goal,r.cell,i,taken);taken.add(cell);
   return {...copy(enemyTemplate),id:r.id,name:r.name,label:'R'+(i+1),equipment:r.equipment,role:r.tough||['muscle','enforcer'].includes(r.role)?'muscle':'runner',tough:Boolean(r.tough),rival:true,hp:(r.tough?5:4)+RULES.rivalHp,maxHp:(r.tough?5:4)+RULES.rivalHp,guard:r.tough?2:1,harmBonus:RULES.rivalHarm,skills:[],aptitudes:[],perks:{},appearanceSeed:seedOf(r.id),itemIds:[],cell,alive:true,waiting:false};});
  b.selectedId=b.players[0].id;b.status='active';b.result=null;b.round=1;b.log=[];

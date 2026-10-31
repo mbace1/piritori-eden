@@ -1,3 +1,35 @@
+## v4.89 — 2026-10-31
+
+**A getaway is out *with* something (G1, roadmap milestone 2, lever 4).** Getaways were won by every crew walking straight to the exit, 100% of the time. The design's job for them is *"get out with what you came for"*, and nothing was being carried.
+
+- **One of the crew carries the take,** and carrying slows them: **3 tiles a move**, the others 4 (`RULES.carryReach`). It is always the first of the crew who is not the protagonist, so Aatami never carries it.
+  - It is one field on the unit (`reach`), read by `routes()`. The move tiles, the move preview and the rivals' plans all see the same number.
+- **The game says so:**
+  - the brief has a **Carrying** line, e.g. *"Reijo Virtanen carries it: 3 tiles a move, the others 4. Keep them off Reijo Virtanen."*;
+  - the status line reads *"0/3 OUT · REIJO CARRIES IT"*;
+  - the crew card adds *"CARRIES IT (3)"*.
+- **The measuring tool has a fourth way of playing: escort.** The carrier goes first, by the cells the plans hurt least, and the others go for whichever rival's plan still hits the carrier.
+- **Before and after**, the 4 getaways × 12 seeds:
+
+| | v4.88 | v4.89 |
+|---|---|---|
+| Walk straight out, heat 0–2 | 100% | 88% |
+| Walk straight out, all heats | 100% | **75%** (the yard van at heat 2–3 and the quay at heat 3 fall to the police) |
+| Escort the carrier, all heats | 100% | **100%**, nobody hurt |
+| The fight jobs | — | identical, the control |
+| Police arrive, heat 3 | 5 of 15 | 6 of 15 |
+
+- **Reading:**
+  - **Thinking pays in a getaway now.** Screening the carrier beats walking out by 25 points across the heats, at no cost in HP.
+  - **ROADMAP §5 row 6 (walking out under 50%) is still missed.** Two tried and measured variants did not ship:
+    - **The carrier at reach 2:** walking out falls to 63%, but escort falls with it and the yard van is lost at every heat.
+    - **Rival lanes moved over the crew's own columns:** walking out falls to 75% and costs the carrier 2 HP. But no way of playing wins the quay, and a getaway nobody can win is a bug.
+  - The fish stall and the back door are still a two-round walk: two rivals, and both stand on the side away from the carrier.
+- **Gates:**
+  - `c19-outing`: exactly one of the crew carries it in a getaway, the first who is not Aatami; the carrier moves `carryReach` tiles and the others 4; nobody carries anything in a fight job. The check fails with the rule set back to 4.
+  - The getaway brief and board were looked at on a phone through the `?play=g0-getaway` link.
+- **Owner played: pending.** Godot paused.
+
 ## v4.88 — 2026-10-31
 
 **Fights cost something (G1, roadmap milestone 2, levers 2 and 3).** The roadmap's headline (§2) was that a careless player won every fight in two rounds for a tenth of a point of HP.

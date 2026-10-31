@@ -1,8 +1,8 @@
 import {missionCue} from '../fight-module/readability.js?v=4';
 import {LOCATIONS,locationId} from './locations.js?v=9';
-import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=18';
+import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=19';
 import {icon} from './icons.js?v=2';
-import {coordinate} from '../fight-module/tactics.js?v=9';
+import {coordinate} from '../fight-module/tactics.js?v=10';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};
 const dist=(a,b)=>{const[x,y]=a.split(',').map(Number),[u,v]=b.split(',').map(Number);return Math.abs(x-u)+Math.abs(y-v);};
 export function mountCrew({content,button,replaceSession,getSession,refresh,run,tile}){
@@ -66,7 +66,9 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
     left.append(text('p',(o.place||LOCATIONS[locationId()]).toUpperCase(),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
      text('p',`${o.opening?o.opening+' ':''}${fight?`${them} want this to go their way. Put them down or make them run.`:`${them} are between you and the way out, ${o.wayOut||'the south edge'}. Get out with it.`}`,'lead'));
     const facts=document.createElement('dl');facts.className='brief-facts';
-    for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${o.heat||0}.`]])facts.append(text('dt',k),text('dd',v));
+    // v4.89: in a getaway one of them carries it, and carrying slows them.
+    const carrier=fight?null:state.crew.find(p=>p.id===carrierOf(available(state).filter(p=>state.selected.includes(p.id)).map(p=>p.id),content.protagonist?.id));
+    for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],...(carrier?[['Carrying',`${carrier.name} carries it: ${RULES.carryReach} tiles a move, the others 4. Keep them off ${carrier.name}.`]]:[]),['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${o.heat||0}.`]])facts.append(text('dt',k),text('dd',v));
     left.append(facts);
     ledger.append(pictButton('Fight','end',deploy,{class:'primary',id:'crew-deploy'}));
    }else{
@@ -83,7 +85,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
 
   const m=b.mission,u=b.players.find(p=>p.id===b.selectedId),target=b.players.find(p=>p.id===m.targetId),carrier=b.players.find(p=>p.id===m.carrierId),goal=missionCue(b,coordinate).goal;
   $('mission-goal').textContent=goal;const pol=m.police;$('mission-pressure').textContent=pol?(pol.arrived?'POLICE HERE':pol.afterRound!==null?`POLICE AFTER TURN ${pol.afterRound} · ${pol.cells.map(coordinate).join(' ')}`:`PRESSURE ${m.heat}/${pol.at} · POLICE AT ${pol.at}`):m.arrived?'RIVALS ENTERED':m.arrival?`ARRIVALS: AFTER TURN ${m.arrival.afterRound} · A8 / F8`:`PRESSURE ${m.heat}/5`; $('mission-pressure').dataset.hot=String(!!(m.arrival||pol?.afterRound!==null&&pol));
-  $('mission-count').textContent=`${m.goal==='fight'?`${b.enemies.filter(e=>e.alive).length} OF THEM STANDING`:`${b.players.filter(p=>p.evacuated).length}/${b.players.length} ${m.goal?'OUT':'HOME'}`}${storageOK?'':' · SAVING UNAVAILABLE'}`;
+  $('mission-count').textContent=`${m.goal==='fight'?`${b.enemies.filter(e=>e.alive).length} OF THEM STANDING`:`${b.players.filter(p=>p.evacuated).length}/${b.players.length} ${m.goal?'OUT':'HOME'}${(c=>c?` · ${c.name.split(' ')[0].toUpperCase()} CARRIES IT`:'')(b.players.find(p=>p.carrying&&p.alive&&!p.evacuated))}`}${storageOK?'':' · SAVING UNAVAILABLE'}`;
   for(let x=0;x<6;x++)tile(`${x},0`,0x38b8c8,.08);if(target&&!target.evacuated)tile(target.cell,0xffdb80,.5);if(!target&&!m.recovered&&m.targetCell)tile(m.targetCell,0xffdb80,.5);if(m.arrival&&!m.arrived)for(const c of m.arrival.cells)tile(c,0xee8f74,.48);if(pol&&pol.afterRound!==null)for(const c of pol.cells)tile(c,0x4f7fa0,.55);
   const commands=$('mission-actions');commands.replaceChildren();const asked=pol?.arrived&&!pol.resolved,can=!busy&&b.status==='active'&&!asked&&u?.alive&&!b.acted.includes(u.id);document.body.classList.toggle('police-asking',!!asked);
   function cmd(label,type,value,enabled=true){const el=button(label,()=>run(type,value),{'data-mission-action':type,'aria-label':label});el.prepend(icon(type==='sprint'?'boots':type==='aid'?'medical':type==='recover'?'kit':type));el.append(text('small','1 ACTION','command-cost'));el.disabled=!can||!enabled;el.hidden=!enabled;commands.append(el);}

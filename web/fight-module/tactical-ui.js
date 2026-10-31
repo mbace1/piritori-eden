@@ -1,5 +1,5 @@
 import {coverEdges,coverDescription} from './cover-edges.js?v=2';
-import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=9';
+import {routes,forecast,threats,coordinate,coverName,weapon} from './tactics.js?v=10';
 
 export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,refresh,aim,isAiming,cancelAim}){
   let preview=null;
@@ -11,7 +11,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     const moveReady=enabled&&!b.moved.includes(u.id),actReady=enabled&&!b.acted.includes(u.id);
     for(const el of document.querySelectorAll('[data-action]')){const a=el.dataset.action;el.disabled=a==='move'?!moveReady:!actReady||a==='reload'&&(!u.maxAmmo||u.ammo===u.maxAmmo)||a==='item'&&(!u.itemIds.length||u.hp===u.maxHp);}
     for(const el of document.querySelectorAll('#roster button')){const p=b.players.find(v=>v.id===el.dataset.unitid);el.disabled=busy||b.status!=='active'||!p.alive;
-      el.querySelector('small').textContent=`${weapon(p).name}${p.maxAmmo?` ${p.ammo}/${p.maxAmmo}`:''} · ${p.alive?`MOVE ${b.moved.includes(p.id)?'—':'✓'}  ACT ${b.acted.includes(p.id)?'—':'✓'}`:'DOWN'}`;
+      el.querySelector('small').textContent=`${weapon(p).name}${p.maxAmmo?` ${p.ammo}/${p.maxAmmo}`:''} · ${p.alive?`MOVE ${b.moved.includes(p.id)?'—':'✓'}  ACT ${b.acted.includes(p.id)?'—':'✓'}${p.carrying?` · CARRIES IT (${p.reach??4})`:''}`:'DOWN'}`;
     }
     const choices=$('choices');choices.replaceChildren();choices.hidden=!enabled||!['move','attack'].includes(action)||(document.body.dataset.scenario==='crew-run'&&!!preview);
     if(enabled&&action==='move'&&moveReady)for(const [cell,path] of routes(b,u)){if(!path.length)continue;tile(cell,0x77b9ba,.15);choices.append(button(coordinate(cell),()=>pick('move',cell),{'data-cell':cell,'aria-label':`Preview move to ${coordinate(cell)} · ${coverName(b,cell)}`}));}

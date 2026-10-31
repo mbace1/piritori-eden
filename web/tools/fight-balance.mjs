@@ -15,7 +15,9 @@
 // strikes the tough first, steps where no plan is aimed, and braces when a
 // plan will land. If the floor wins everything at no cost, the fight has no
 // decision in it; that was the 2026-10-25 reading. If careful does no better
-// than careless, thinking does not pay.
+// than careless, thinking does not pay. `focused` puts everyone on one rival,
+// the tough first; `escort` (getaways) moves the one carrying the take first
+// and sends the others at whoever plans to hit them.
 //
 //   RULES='{"rout":0.667,"policeAt":7}' node web/tools/fight-balance.mjs   # try a lever
 import fs from 'node:fs';
@@ -34,8 +36,8 @@ const { createState, SAVE_KEY, fighters } = await import('../js/v3/state.js?v=10
 const { stageFight, doorFightStage, roadFightStage, placeAt } = await import('../js/v3/places.js?v=1');
 const { templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=18');
-const { threats, routes, forecast } = await import('../fight-module/tactics.js?v=9');
+const R = await import('../crew-run/run.js?v=19');
+const { threats, routes, forecast } = await import('../fight-module/tactics.js?v=10');
 if (process.env.RULES) Object.assign(R.RULES, JSON.parse(process.env.RULES));
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 const crewData = { content, crew: new Map(content.crew.map(c => [c.id, { ...c, name: c.name ?? nameFrom(c.id) }])) };
@@ -104,6 +106,33 @@ function carefulPolicy(fight) {
     if (!getaway && order.some(e => fight.command('attack', e.id).ok)) continue;
     if (harm(p.id) > 0 && fight.command('brace').ok) continue;
     b.enemies.some(e => e.alive && fight.command('attack', e.id).ok);
+  }
+}
+// Policy: escort (a getaway). The one carrying the take moves first, south by
+// the cells the plans hurt least, and extracts; then each of the others goes
+// for whichever rival's plan still hits the carrier (into reach, then a
+// swing), and heads south carefully once nobody is after the carrier.
+function escortPolicy(fight) {
+  const b = fight.battle;
+  if (b.mission.goal !== 'getaway') return carefulPolicy(fight);
+  const harm = (id, cell) => { const t = threats(b, cell ? { id, cell } : null).totals[id]; return t ? t.hp * 2 + t.guard : 0; };
+  const south = p => {
+    const best = [...routes(b, p).keys()].sort((a, c) => (rowOf(a) * 2 + harm(p.id, a) * 1.5) - (rowOf(c) * 2 + harm(p.id, c) * 1.5))[0];
+    if (best && best !== p.cell) fight.command('move', best);
+    if (rowOf(p.cell) === 0) fight.command('extract');
+  };
+  const carrier = b.players.find(p => p.carrying && p.alive && !p.evacuated);
+  if (carrier) { fight.command('select', carrier.id); if (!(rowOf(carrier.cell) === 0 && fight.command('extract').ok)) south(carrier); }
+  for (const p of b.players.filter(u => u.alive && !u.evacuated && !u.carrying)) {
+    if (b.status !== 'active') return;
+    fight.command('select', p.id);
+    if (rowOf(p.cell) === 0 && !carrier?.alive) { fight.command('extract'); continue; }
+    const after = carrier?.alive && !carrier.evacuated ? threats(b).views.filter(v => v.valid && v.type === 'attack' && v.target === carrier.id).map(v => b.enemies.find(e => e.id === v.id)).filter(Boolean) : [];
+    if (!after.length) { south(p); continue; }
+    if (after.some(e => fight.command('attack', e.id).ok)) continue;
+    const reach = [...routes(b, p).keys()].filter(c => after.some(e => forecast(b, p, e, c).valid)).sort((a, c) => harm(p.id, a) - harm(p.id, c));
+    if (reach.length) { fight.command('move', reach[0]); after.some(e => fight.command('attack', e.id).ok); }
+    else south(p);
   }
 }
 // Policy: focused. Careless, except that everyone goes for the same rival,
@@ -176,7 +205,7 @@ if (process.env.TRACE) {
   const fight = nightShift(f.make(0, 'trace')), b = fight.battle;
   console.log('players', b.players.map(p => `${p.name} hp${p.hp} g${p.guard} ${p.cell}`).join(' | '));
   console.log('rivals ', b.enemies.map(e => `${e.name} hp${e.hp} g${e.guard} ${e.cell} ${e.tough ? 'tough' : ''}`).join(' | '));
-  const policy = { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy }[process.env.POLICY || 'fight'];
+  const policy = { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy }[process.env.POLICY || 'fight'];
   for (let guard = 0; b.status === 'active' && guard < 40; guard += 1) { policy(fight); if (b.status !== 'active') break; fight.command('end'); }
   console.log([...b.log].reverse().join('\n'));
   console.log('RESULT', b.result, 'round', b.round);
@@ -184,9 +213,9 @@ if (process.env.TRACE) {
 }
 const SEEDS = Number(process.env.SEEDS || 12);
 const rows = [];
-for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f.goal === 'getaway' ? ['run', 'fight', 'careful'] : ['fight', 'careful', 'focused']) {
+for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f.goal === 'getaway' ? ['run', 'fight', 'careful', 'escort'] : ['fight', 'careful', 'focused']) {
   const res = [];
-  for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy }[policyName]));
+  for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy }[policyName]));
   const n = res.length, pct = k => Math.round(100 * res.filter(k).length / n);
   const avg = k => (res.reduce((a, r) => a + r[k], 0) / n).toFixed(1);
   rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck) });

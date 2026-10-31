@@ -2,12 +2,12 @@
 
 ## Act I completion — check-in, 31 October 2026
 
-**Working estimate: 43%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
+**Working estimate: 44%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88, 44% with v4.89). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
 
 | Part | 27 Oct | 29 Oct | 31 Oct | Evidence for the change |
 |---|---|---|---|---|
 | Playable foundation | 15/20 | 15/20 | 15/20 | |
-| Combat | 4/20 | 5/20 | 6/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6. Measured, HP lost 1.1 → 2.9 and someone down in 27% of fights, both on target; still always won, and thinking does not pay yet (§5). |
+| Combat | 4/20 | 5/20 | 7/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6. Measured, HP lost 1.1 → 2.9 and someone down in 27% of fights, both on target. v4.89: the carrier is slower, so escorting wins every getaway while walking out loses a quarter. Fight jobs are still always won (§5). |
 | Story and consequences | 8/20 | 8/20 | 8/20 | |
 | City and economy | 8/15 | 9/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
 | Arenas and presentation | 3/15 | 4/15 | 4/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. Not yet played on a device. |
@@ -24,7 +24,7 @@ expensive asset production.
 | Order | Milestone | Done when | Status, 29 October |
 |---|---|---|---|
 | 1 | Baseline and fast playtest (G0) | The three G0 routes work and the owner's Pixel observations are recorded. The opening trade is verified. | **Waiting on the owner.** The three playtest links are live in v4.85. |
-| 2 | Crew and combat (G1) | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. | Aatami fights all of chapter 1 (v4.83). Levers 1–3 have shipped (v4.84, v4.88) and the careful policy exists: rows 3, 4 and 8 of §5 are on target. Next: lever 4 (getaways) and making thinking pay (§5). |
+| 2 | Crew and combat (G1) | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. | Aatami fights all of chapter 1 (v4.83). All four levers have shipped (v4.84, v4.88, v4.89). Rows 3, 4, 7 and 8 of §5 are on target. Open: fight jobs are always won and careful play does not pay there; that is the chance question (§8, item 6). |
 | 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. | **The courtyard is fixed in v4.86** (`design/COURTYARD_PASS.jpg`): its four audited faults, with the kit as it is. Open: from behind, every wall is lifted and the board stands on bare paving. Next: the yard, the street and the quay get the same look. |
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85). The map and the ledger are next. |
 | 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | Not started. |
@@ -137,7 +137,7 @@ G1 is a tuning pass on four levers, in this order:
 1. rivals that press when blocked. **Shipped in v4.84.** Measured with Aatami on the board, careless play goes from 100% to 95.5% won and from 0 to 1.1 HP lost. The 1.7 HP above was measured before the Aatami rule;
 2. a later rout. **Shipped in v4.88**, at two-thirds, with rivals hitting one harder;
 3. the police clock pushed out. **Shipped in v4.88**, at pressure 6;
-4. for getaways, rivals who start between the crew and the exit.
+4. for getaways, rivals who start between the crew and the exit. **Taken another way in v4.89:** whoever carries the take moves 3, not 4, so the others screen them. Moving the rivals over the crew's columns was measured and left out, because no way of playing could then win the quay.
 
 Each lever is measured on its own before they are combined.
 
@@ -156,22 +156,23 @@ Owner, 2026-10-26, on the first draft: *"What specifically."* These are the spec
 
 **For scale:** a crew of two has about 10 HP (5 each), and a rival has 4–5.
 
-| # | Measure | v4.85 | Today (v4.88) | Target |
+| # | Measure | v4.85 | Today (v4.89) | Target |
 |---|---|---|---|---|
 | 1 | Fight jobs, careless: won | 95.5% | 100% | **60–75%** |
 | 2 | Fight jobs, careless: rounds | 2.1 | 2.4 | **4–6** |
 | 3 | Fight jobs, careless: crew HP lost | 1.1 | **2.9** ✓ | **2–4** (a fifth to two fifths of the crew) |
 | 4 | Fight jobs, careless: someone goes down | 0% of fights | **27%** ✓ | **20–30%** (about 1 fight in 4) |
 | 5 | Fight jobs, careful over careless | (no careful policy yet) | +0 points | **15+ points** more won, and **1+ HP** less lost |
-| 6 | Getaways, straight out: won | 87.5% in 2.3 rounds | 100% | **under 50%** |
-| 7 | Getaways, careful: won | (no careful policy yet) | 100%, no cost | **70%+**, at a cost against straight out of a round or a point of HP |
+| 6 | Getaways, straight out: won | 87.5% in 2.3 rounds | 88% (75% across all heats) | **under 50%** |
+| 7 | Getaways, careful: won | (no careful policy yet) | **escort 100%** ✓ at every heat, nobody hurt | **70%+**, at a cost against straight out of a round or a point of HP |
 | 8 | Police arrive, heat 0 | 0 of 15 fights | 0 of 15 ✓ | **under 20%** of fights |
-| 9 | Police arrive, heat 3 | 3 of 15 fights | 5 of 15 | **over 50%** of fights |
+| 9 | Police arrive, heat 3 | 3 of 15 fights | 6 of 15 | **over 50%** of fights |
 
 **What v4.88 found** (VERSIONS.md has the table):
 - Every fight is deterministic. Melee always lands and the plans are fixed, so a fight is won by every seed or by none.
 - Careful play loses to careless play because bracing spends a round, and rounds bring the police.
-- So rows 1, 5 and 7 cannot move by tuning numbers alone; that needs a design answer (§8).
+- So rows 1 and 5 cannot move by tuning numbers alone; that needs a design answer (§8).
+- v4.89: in a getaway, thinking pays. Escorting the carrier wins every getaway at every heat, while walking out loses a quarter of them (VERSIONS.md).
 
 **Why these numbers:**
 - A fight should be won more often than lost when played without thought (rows 1–4), but not for free.

@@ -13,8 +13,10 @@ export const weapon=u=>WEAPONS[u.equipment];
 export const coordinate=c=>{const [x,y]=xy(c);return String.fromCharCode(65+x)+(y+1);};
 export const coverName=(b,c)=>b.cover.get(c)?.hardBlock?'Full cover':coverEdges(b,c).length?'Partial cover':'Exposed';
 export function routes(b,u,origin=u.cell){
-  const occupied=new Set(alive(b).filter(v=>v.id!==u.id).map(v=>v.cell)),found=new Map([[origin,[]]]),queue=[origin];
-  for(const cell of queue){const path=found.get(cell);if(path.length>=4)continue;const [x,y]=xy(cell);
+  // A unit moves four tiles unless it says otherwise: `reach` is set by the
+  // campaign (v4.89: whoever carries the take in a getaway moves fewer).
+  const occupied=new Set(alive(b).filter(v=>v.id!==u.id).map(v=>v.cell)),found=new Map([[origin,[]]]),queue=[origin],reach=u.reach??4;
+  for(const cell of queue){const path=found.get(cell);if(path.length>=reach)continue;const [x,y]=xy(cell);
     for(const [dx,dy] of [[0,1],[1,0],[-1,0],[0,-1]]){const nx=x+dx,ny=y+dy,n=key(nx,ny);
       if(nx<0||nx>=6||ny<0||ny>=8||found.has(n)||occupied.has(n)||b.cover.get(n)?.hardBlock||crossesCoverEdge(b,cell,n))continue;
       found.set(n,[...path,n]);queue.push(n);

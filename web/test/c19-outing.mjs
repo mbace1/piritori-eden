@@ -18,9 +18,9 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=18');
+const R = await import('../crew-run/run.js?v=19');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
-const { coordinate } = await import('../fight-module/tactics.js?v=9');
+const { coordinate, routes } = await import('../fight-module/tactics.js?v=10');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 
 // As content.js loads it: an authored slot is named by the generator.
@@ -92,6 +92,7 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.ok(b.players.every(p => rowOf(p.cell) === 1), 'a fight: the crew stand by their own way out');
   assert.ok(b.enemies.every(e => rowOf(e.cell) >= 4), 'and they stand across the yard in their own formation');
   assert.equal(b.enemies.filter(e => e.waiting).length, 0, 'no rival arrivals: the noise brings the police');
+  assert.ok(b.players.every(p => !p.carrying && p.reach === undefined), 'a fight job: nobody carries anything, everyone moves 4 (v4.89)');
   assert.equal(m.heat, 2, 'pressure starts at the place\'s heat');
   assert.match(missionCue(b, coordinate).goal, /^Make them back off · 3 still standing/);
   assert.equal(fight.command('auto').ok, false);
@@ -216,6 +217,15 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.ok(b.players.every(p => rowOf(p.cell) === 5), 'a getaway: the crew stand where it went bad');
   assert.ok(b.enemies.every(e => rowOf(e.cell) < 5), 'and they stand between them and the exit');
   assert.match(missionCue(b, coordinate).goal, /^Get everyone out/);
+  // v4.89: one of them carries the take, the first who is not the protagonist,
+  // and carrying slows them; everyone else, Aatami included, moves the usual 4.
+  const carrier = b.players.find(p => p.carrying), others = b.players.filter(p => !p.carrying);
+  assert.ok(carrier && b.players.filter(p => p.carrying).length === 1, 'exactly one of them carries it');
+  assert.equal(carrier.id, R.carrierOf(b.players.map(p => p.id), 'aatami'), 'the first who is not Aatami');
+  assert.notEqual(carrier.id, 'aatami', 'Aatami never carries it');
+  const far = u => Math.max(...[...routes(b, u).values()].map(path => path.length));
+  assert.equal(far(carrier), R.RULES.carryReach, 'the carrier moves carryReach tiles');
+  assert.ok(R.RULES.carryReach < 4 && others.every(p => far(p) === 4), 'fewer than the others, who move 4');
   b.players.forEach((p, i) => { p.cell = `${i + 1},0`; });
   for (const p of [...b.players]) {
     assert.ok(fight.command('select', p.id).ok);
