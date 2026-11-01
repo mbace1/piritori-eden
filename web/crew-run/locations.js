@@ -4,7 +4,7 @@ import {EDGES} from '../fight-module/cover-edges.js?v=2';
 import {developmentLook} from '../bear-path/development-look.js?v=6';
 import {limitTextures} from '../fight-module/render-profile.js?v=3';
 import {weatheredMaterial} from './weathered-material.js?v=2';
-import {LAYOUTS,lay,facing,footprint} from './layouts.js?v=6';
+import {LAYOUTS,lay,facing,footprint} from './layouts.js?v=7';
 
 export const LOCATIONS={courtyard:'Porttikongi · rain courtyard',yard:'Linjat · service yard',street:'Kallio · tram street',quay:'Sörnäinen · quay',park:'Karhupuisto · park'};
 export function locationId(){const id=new URLSearchParams(location.search).get('arena');return Object.hasOwn(LOCATIONS,id)?id:'courtyard';}

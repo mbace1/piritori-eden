@@ -1,5 +1,5 @@
 import {missionCue} from '../fight-module/readability.js?v=4';
-import {LOCATIONS,locationId} from './locations.js?v=10';
+import {LOCATIONS,locationId} from './locations.js?v=11';
 import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,startHeat,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=23';
 import {icon} from './icons.js?v=2';
 import {coordinate} from '../fight-module/tactics.js?v=11';

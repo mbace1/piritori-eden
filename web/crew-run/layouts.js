@@ -143,10 +143,17 @@ export const LAYOUTS={
       {id:'wall_gate_r',x:8.2,z:8.5,rotation:Math.PI,modules:Array(4).fill('low_wall'),low:true,stack:2},
       {id:'wall_gate_l',x:-3.6,z:8.5,rotation:Math.PI,modules:Array(3).fill('low_wall'),low:true,stack:2},
       {id:'wall_left',x:-7,z:8.5,rotation:Math.PI/2,modules:Array(6).fill('low_wall'),low:true,stack:2},
+      // v4.95: the yard is not the edge of the city. Across a lane on the left
+      // the next block faces it, so the usual camera, looking past the yard
+      // wall, finds lit windows rather than black ground. (A row across the
+      // street in front was tried and cut: from the usual camera the cutaway
+      // lifts it and its plinths fall below the frame, for 55k triangles.)
+      {id:'lane_left',x:-11.4,z:10,rotation:Math.PI/2,modules:bays(6),tint:[.92,.98,1.06]},
     ],
     joins:[],
-    blocks:[{run:'far',box:[-11.6,13.08,-21.5,-13.35,0,6.3],ridge:'x'}],
-    lamps:[[-4.5,3.2,-7.4,0,'sheds'],[4,3.2,-7.4,0,'sheds'],[-6.4,3.2,.4,Math.PI/2,'side']],
+    blocks:[{run:'far',box:[-11.6,13.08,-21.5,-13.35,0,6.3],ridge:'x'},
+      {run:'lane_left',box:[-19,-11.75,-8.53,10,0,6.3],ridge:'z'}],
+    lamps:[[-4.5,3.2,-7.4,0,'sheds'],[4,3.2,-7.4,0,'sheds'],[-6.4,3.2,.4,Math.PI/2,'side'],[-10.8,3.2,4.6,Math.PI/2,'lane_left']],
     props:[['pallets',-5.8,0,2.4,0],['pallets',-5.8,.5,2.4,0],['pallets',5.5,0,-5.6,0],['container',6.5,0,-3,0],['container',6.5,0,-1.8,0],['container',6.5,0,0,0]],
     signs:[['KORJAAMO','sheds',.92,2.45,-6.55,0,'#9fd8ff',1.7,false,false]],
     aftermath:{tape:['sheds',3.65,-7.45,6.1,-7.45,1],glass:[[4.4,-3.9],[-4.5,1.2]],stain:[4.3,2]},

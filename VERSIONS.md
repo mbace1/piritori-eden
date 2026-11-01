@@ -1,3 +1,18 @@
+## v4.95 — 2026-11-01
+
+**The yard is not the edge of the city (visuals, ROADMAP milestone 3).** The open item from v4.91 was "the yard is dark from the front". Measured first: the yard's board is as bright as the courtyard's (27.4 against 28.3 in the middle of the frame from the front). What reads as dark is outside it. Past the new yard wall, on the left and in front of the gate, there was nothing but unlit ground, where the courtyard has buildings on every side.
+
+- **Across a lane on the left,** the next block faces the yard: six bays, with the building behind them and a wall lamp lighting the lane. From the yard's opening camera, the left of the frame is lit windows where it was black.
+- **Cost:** 66k triangles (a façade bay is 10,966, counted from the kit) and three draw calls (152 to 155; the bays are instanced). The yard's buildings go from about 125k to about 191k (counted the same way), below the courtyard (~209k) and the street (~232k).
+- **Tried and cut:** a row across the street in front of the gate. From the usual camera the cutaway lifts it, and its plinths fall below the frame, so it bought one corner of the reversed view for another 55k triangles.
+- **Still dark:** the ground in front of the gate, from the usual camera. It is the near edge of the frame, and the courtyard and the street have the same edge.
+- **The picture:** `design/YARD_LANE.jpg`, before and after at the same camera angles.
+- **Gates:**
+  - `level-layout`: 1797 checks (was 1693). The row is continuous, stands on its own, and is off the board, out of the props and out of the yard.
+  - `night-places-browser`: a lifted wall leaves its plinth, in every place at every camera preset.
+- **Cache:** layouts v7, locations v11, ui v33, startup v29, fight main v55, app v62. The label is v4.95.
+- **Owner played: pending.** Godot paused.
+
 ## v4.94 — 2026-11-01
 
 **A place at its hottest is a round from the police (combat, ROADMAP G1 row 9).** Owner: *"Continue"*, on the pitch to make fights longer and reward careful play. Measured first: no existing number does that without breaking another row, so this version moves the one row that has a clean lever and leaves the others to a design change.
