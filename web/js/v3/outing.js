@@ -75,7 +75,9 @@ export function doorOuting(state, encounter, staged, fighterIds, { opening = '',
     by: place.by ?? null,
     opening,
     fighters: [...fighterIds],
-    rivals: staged.opponents.map(o => ({ id: o.id, name: o.name, role: o.role, cell: o.cell ?? null, equipment: cWeapon(o.equipment), tough: Boolean(o.tough) })),
+    // `carries` is the rival's own Act I weapon, kept beside C's stand-in so a
+    // win can take the real thing off them (v4.93).
+    rivals: staged.opponents.map(o => ({ id: o.id, name: o.name, role: o.role, cell: o.cell ?? null, equipment: cWeapon(o.equipment), carries: o.equipment ?? null, tough: Boolean(o.tough) })),
     status: 'open',
     result: null,
   };
@@ -106,6 +108,18 @@ export function missionStakes(mission, result) {
   return mission.failure_effects ?? [];
 }
 
+/** What a won fight takes off the fallen (v4.93, ROADMAP G2; COMBAT.md §8,
+ *  as the board's `droppedKit` does it): gear is carried by a person, so it
+ *  comes only off a rival who went DOWN, and only their weapon. Whoever broke
+ *  and ran took theirs with them, the police are never looted, and a fight
+ *  pulled out of or lost takes nothing. Night Shift's receipt names who went
+ *  down (`down`); `kindOf` is the equipment's kind from Act I's content. */
+export function outingSpoils(outing, kindOf) {
+  if (outing?.result !== 'win') return [];
+  const down = new Set(outing.down ?? []);
+  return (outing.rivals ?? []).filter(r => down.has(r.id) && r.carries && kindOf(r.carries) === 'weapon').map(r => r.carries);
+}
+
 /** Where Night Shift is, from the Act I page (the same relative path in the
  *  repo's web/ and in the hub cabinet). */
 export const outingUrl = outing => `crew-run/?campaign=1&outing=${encodeURIComponent(outing.id)}&arena=${encodeURIComponent(outing.kit)}`;
@@ -128,6 +142,7 @@ export function outingLines(outing) {
   if (outing.missing?.length) lines.push(`${and(outing.missing)} did not make it out. Missing.`);
   if (outing.carried?.length) lines.push(`${and(outing.carried)} went down and ${outing.carried.length > 1 ? 'were' : 'was'} carried out, hurt.`);
   if (outing.wounded?.length) lines.push(`${and(outing.wounded)} hurt.`);
+  if (outing.took?.length) lines.push(`Took ${and(outing.took.map(id => `${/^[aeiou]/.test(id) ? 'an' : 'a'} ${id.replace(/-/g, ' ')}`))} off them. The fence on Piritori buys.`);
   return lines;
 }
 

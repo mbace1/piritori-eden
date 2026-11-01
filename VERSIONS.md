@@ -1,3 +1,25 @@
+## v4.93 — 2026-11-01
+
+**A won fight takes the fallen's weapons (story, ROADMAP G2).** Owner: *"Continue"*, on the pitch that put this first. Since fights moved to Night Shift (v4.74), a fight paid its stakes and nothing else. The old board's rule (COMBAT.md §8) is back: gear is carried by a person, so it comes off a rival who went down.
+
+- **What you take:** the weapon of every rival you put down, in a fight you win.
+  - Whoever broke and ran keeps theirs, and a phone is not a weapon.
+  - Pulling out, the police or losing takes nothing.
+  - At the fence: the courtyard's three carry a tire iron (€18), a phone and a baton (€15); the park's two a pipe and a baton (€25 together); the boiler hall's a lifted handgun and a chain (€100) and a phone. A fight job won by making them break always puts the tough one down.
+- **Where it goes:** into the stash. The fence on Piritori buys it, and the strip after the fight says so ("Took a tire iron off them. The fence on Piritori buys.").
+- **Why it matters:** fence money is the only money the chapter's goal counts (€400 by day 10, or the boat sails without you).
+  - What the story hands you fences for €155 at most (a bat, a pipe and a handgun, if you sell your own weapons).
+  - So since v4.74 the shipment has been out of reach in ordinary play. A won fight now adds €25–100.
+  - Whether €400 is the right gate is part of the finale question (ROADMAP §10).
+- **How:** each rival on an outing keeps their own Act I weapon (`carries`) beside Night Shift's stand-in; Night Shift's receipt names who went down (`down`); Act I takes their weapons with the board's own `takeLoot` (`outingSpoils` in `outing.js`).
+  - An outing opened before v4.93 has nothing to take.
+- **Not done:** losing your own kit when someone goes down. Your crew's weapons are their own and not in the stash, so the board's version of that rule never removed anything either.
+- **Gates:**
+  - `c19-outing`: a win takes the tough one's tire iron but not the phone or the runner's baton; a withdrawal, a loss and an old outing take nothing.
+  - `outing-browser`: after a win the tire iron is in the stash and on the strip; after the police, nothing.
+- **Cache:** outing v7, Night Shift run v22, campaign-adapter v13, app v60, and everything that imports them. The label is v4.93.
+- **Owner played: pending.** Godot paused.
+
 ## v4.92 — 2026-10-31
 
 **A way home (story, ROADMAP G2).** Until now, anyone left on the ground was missing for good, and anyone the police took was gone from the roster for good. Every Withdraw and every *Back off* cost a person permanently, and nothing in Act I could bring them back.

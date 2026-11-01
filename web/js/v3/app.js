@@ -29,7 +29,7 @@ import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=6';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
-import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, settledFlag } from './outing.js?v=6';
+import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=8';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -2126,6 +2126,10 @@ function settleReturnedOuting() {
   const stakes = outing.kind === 'mission' ? missionStakes(data.missions.get(outing.mission), outing.result)
     : outing.kind === 'road' ? (roadFight ? (outing.result === 'win' ? roadFight.win : roadFight.lose) : []) : doorFightEffects(doors, outing.door, outing.result);
   applyEffects(state, stakes, data, outing.kind === 'mission' ? `battle:${outing.battle}:${outing.result}` : outing.kind === 'road' ? `road:${outing.road}:${result}` : `door:${outing.door}:${result}`);
+  // G2 (v4.93): a won fight takes the fallen's weapons, the board's rule. They
+  // go in the stash, the fence on Piritori buys them, and that is the money the
+  // chapter's goal counts.
+  outing.took = takeLoot(state, data, outingSpoils(outing, id => data.equipment.get(id)?.kind));
   // A road fight has no mission behind it and does not turn the block.
   if (outing.kind === 'road') { if (state.road) state.road.last = null; } else advanceAndSettle();
   // UX_SPEC §4: what changed is a strip in the place you come back to.
@@ -2648,7 +2652,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.92',
+      version: 'v4.93',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.

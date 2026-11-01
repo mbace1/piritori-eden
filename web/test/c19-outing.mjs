@@ -17,8 +17,8 @@ const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=12');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=6');
-const O = await import('../js/v3/outing.js?v=6');
-const R = await import('../crew-run/run.js?v=21');
+const O = await import('../js/v3/outing.js?v=7');
+const R = await import('../crew-run/run.js?v=22');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -123,6 +123,17 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.deepEqual(doorFightEffects(doors, after.outing.door, after.outing.result), template.fight.win, 'the door\'s winning stakes');
   assert.deepEqual(O.outingLines(after.outing), ['They ran. A Torkkelinmäki courtyard is yours.']);
   assert.equal(R.settle(run, fight), false, 'settled exactly once');
+
+  // G2 (v4.93): the receipt names who was put down, not who ran, and a win
+  // takes the fallen's own weapons, the board's rule (COMBAT.md §8).
+  assert.deepEqual(after.outing.rivals.map(r => r.carries), ['tire-iron', 'feature-phone', 'baton'], 'each rival keeps their own Act I weapon beside C\'s stand-in');
+  assert.deepEqual([...after.outing.down].sort(), [tough.id, other.id].sort(), 'the receipt names who went down, not who ran');
+  const kindOf = id => content.equipment.find(e => e.id === id)?.kind;
+  assert.deepEqual(O.outingSpoils(after.outing, kindOf), ['tire-iron'], 'a win takes the tough one\'s tire iron; a phone is no weapon, and the one who ran kept their baton');
+  assert.deepEqual(O.outingSpoils({ ...after.outing, result: 'withdraw' }, kindOf), [], 'pulling out takes nothing');
+  assert.deepEqual(O.outingSpoils({ ...after.outing, result: 'loss' }, kindOf), [], 'nor does losing');
+  assert.deepEqual(O.outingSpoils({ ...after.outing, rivals: after.outing.rivals.map(({ carries, ...r }) => r) }, kindOf), [], 'an outing opened before v4.93 has nothing to take');
+  assert.equal(O.outingLines({ ...after.outing, took: ['tire-iron', 'lifted-handgun'] }).at(-1), 'Took a tire iron and a lifted handgun off them. The fence on Piritori buys.');
   const record = after.battleHistory.at(-1);
   assert.equal(record.kit, 'courtyard', 'the history keeps the set the fight was in (v4.87)');
   assert.equal(record.end, 'win');

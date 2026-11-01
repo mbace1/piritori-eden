@@ -2,13 +2,13 @@
 
 ## Act I completion — check-in, 31 October 2026
 
-**Working estimate: 47%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88, 44% with v4.89, 45% with v4.90, 46% with v4.91, 47% with v4.92). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
+**Working estimate: 48%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88, 44% with v4.89, 45% with v4.90, 46% with v4.91, 47% with v4.92, 48% with v4.93). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
 
 | Part | 27 Oct | 29 Oct | 31 Oct | Evidence for the change |
 |---|---|---|---|---|
 | Playable foundation | 15/20 | 15/20 | 15/20 | |
 | Combat | 4/20 | 5/20 | 8/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6, so HP lost per fight reaches 2.9. v4.89: the carrier is slower, so escorting wins every getaway while walking out loses a quarter. v4.90: blows can miss, so careless play wins 75% and fights vary from seed to seed (§5). |
-| Story and consequences | 8/20 | 8/20 | 9/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. The finale is still one roll, and fights still pay nothing back to the city. |
+| Story and consequences | 8/20 | 8/20 | 10/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. v4.93: a won fight takes the fallen's weapons to the stash and the fence, which is the only money the chapter's goal counts. The finale is still one roll. |
 | City and economy | 8/15 | 9/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
 | Arenas and presentation | 3/15 | 4/15 | 5/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. v4.91: every place keeps its edges from all eight camera angles (plinths, yard walls, the street's other side; `design/PLACES_PASS.jpg`). Not yet played on a device. |
 | Device validation and release | 0/10 | 1/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
@@ -27,7 +27,7 @@ expensive asset production.
 | 2 | Crew and combat (G1) | Aatami fights all Chapter 1; blocked opponents act coherently; rout, police and getaway are measured separately. Players have meaningful choices; all 15 fights are measured before/after and the owner plays the result. | Aatami fights all of chapter 1 (v4.83). All four levers have shipped (v4.84, v4.88, v4.89), and blows can miss (v4.90). Rows 1, 3, 7 and 8 of §5 are on target. Open: in a fight job, careful play pays only about 5 points. Next is the owner playing three fights. |
 | 3 | Arenas and readability | Audit courtyard, yard, park, tram street and quay in actual 3D. Fix courtyard first, then one place at a time: joined architecture, coherent floor/material scale, clean transitions, cover and exit clarity. Check portrait, landscape and device performance. No new runtime models without approval. | **The courtyard is fixed in v4.86** (`design/COURTYARD_PASS.jpg`): its four audited faults, with the kit as it is. **v4.91: every place keeps its edges from all eight angles.** A lifted wall leaves a plinth, the yard and the quay have a yard wall with a gate over the way out, and the tram street has its other side (`design/PLACES_PASS.jpg`). Open: from the front, the yard's board is lit but the ground past its new wall is unlit black (left of the wall, and in front of the gate), and nothing has been checked on a device. |
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85). The map and the ledger are next. |
-| 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | **Missing crew have a way home (v4.92):** a rescue door, or bail. Next: the finale as a choice, then fight spoils. |
+| 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | **Missing crew have a way home (v4.92):** a rescue door, or bail. **A won fight takes the fallen's weapons (v4.93).** Next: the finale (owner's answer pending, §8 item 7). |
 | 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | Not started. |
 | 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.92 is live (`design/CITY_V492_RELEASE.md`); device checks are pending. |
 
@@ -236,6 +236,7 @@ GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), be
 5. Question 26: what makes Aatami step back. Three crew is provisional.
 6. ~~Should a fight have chance in it?~~ **Answered 2026-10-31: "Blows can miss, of course."** Shipped in v4.90 (§10).
 6. D002: what travel and trades cost in time. Today they are free on the web.
+7. **The finale: a crew-and-route choice with the risks shown, or a fight you play?** (Proposed: the choice.) And its gate: the shipment needs €400 of fence money by day 10. What the story hands you fences for €155 at most, and from v4.74 to v4.92 a fight paid nothing at the fence, so the shipment was out of reach in ordinary play. Since v4.93 a won fight adds €25–100. The gate should be set with the finale, not before it.
 
 ## 10. The owner's answer, 2026-10-31
 

@@ -1,7 +1,7 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=23';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=11';
-import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=12';
+import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=13';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -230,7 +230,9 @@ export function settle(state,session){
   changes=outingChanges(state,b,session.data.content.protagonist?.id);
   const end=m.end||b.result,title=OUTING_TITLES[end]||(m.goal==='getaway'?'Everyone got out':m.routed?'They ran':'They are down');
   const count=effect=>changes.filter(c=>c.campaignEffect===effect).length;
+  // `down` is who was put down, not who ran: Act I loots only them (v4.93).
   receipt={id:config.id,bridgeReceiptId:config.bridgeReceiptId,outingId:config.outing.id,goal:m.goal,result:b.result,end,routed:m.routed,deployedIds:config.crew.map(p=>p.id),title,success:b.result==='win',rounds:b.round,heat:m.heat,
+   down:b.enemies.filter(e=>e.rival&&!e.alive&&!e.fled).map(e=>e.id),
    police:{posture:m.police.posture,taken:m.police.taken.map(id=>b.players.find(p=>p.id===id)?.name||id)},changes,
    text:[`${changes.length-count('missing')-count('arrested')} home`,count('missing')&&`${count('missing')} missing`,count('arrested')&&`${count('arrested')} taken by the police`].filter(Boolean).join(' · ')+'.'};
  }else{

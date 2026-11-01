@@ -209,6 +209,15 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: the job's stakes, paid`, kind === 'win'
         ? s.intel === (before.intel ?? 0) + 1 && s.relationships.jade_lantern_network === before.relationships.jade_lantern_network + 1
         : s.relationships.jade_lantern_network === before.relationships.jade_lantern_network - 1, JSON.stringify({ intel: [before.intel, s.intel], jade: [before.relationships.jade_lantern_network, s.relationships.jade_lantern_network] }));
+      // G2 (v4.93): a win takes the fallen's weapons into the stash and says so
+      // on the strip. They break at two-thirds of their weight, so the tough
+      // one (the tire iron) is always among them; the phone is no weapon, and
+      // whoever ran kept theirs. The police ending takes nothing.
+      const count = (list, id) => (list ?? []).filter(item => item.id === id).length;
+      const took = kind === 'win' ? camp.outing.rivals.filter(r => (camp.outing.down ?? []).includes(r.id) && r.carries !== 'feature-phone').map(r => r.carries) : [];
+      ok(`${name}: the fallen's weapons go in the stash`, kind === 'win'
+        ? took.includes('tire-iron') && took.every(id => count(s.equipment, id) === count(before.equipment, id) + took.filter(t => t === id).length) && /Took a tire iron.* off them\. The fence on Piritori buys\./.test(strip)
+        : s.equipment.length === before.equipment.length && !/Took/.test(strip), JSON.stringify({ took, down: camp.outing.down, strip }));
       await shot(page, `${view}-${kind}-map`);
       const clear = await page.evaluate(() => {
         const last = document.querySelector('.fight-strip')?.lastElementChild;

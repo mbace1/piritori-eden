@@ -199,7 +199,7 @@ export function applyCampaignReceipt(state,content,receipt){
   const outing=receipt.outingId&&state.outing?.id===receipt.outingId?state.outing:null;
   if(outing){
     const named=effect=>(receipt.changes||[]).filter(c=>c.campaignEffect===effect).map(c=>c.name);
-    Object.assign(outing,{status:'settled',result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,
+    Object.assign(outing,{status:'settled',result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,down:[...(receipt.down||[])],
       carried:named('carried'),missing:named('missing'),arrested:named('arrested'),wounded:named('damage')});
     // `kit`, `end` and `hurt` are what the set remembers (outing.js `placeMarks`).
     state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift',
