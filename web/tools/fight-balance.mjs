@@ -35,8 +35,8 @@ const { createState, SAVE_KEY, fighters } = await import('../js/v3/state.js?v=10
 const { stageFight, doorFightStage, roadFightStage, placeAt } = await import('../js/v3/places.js?v=1');
 const { templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=5');
-const R = await import('../crew-run/run.js?v=16');
-const T = await import('../fight-module/tactics.js?v=9');
+const R = await import('../crew-run/run.js?v=17');
+const T = await import('../fight-module/tactics.js?v=10');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 const crewData = { content, crew: new Map(content.crew.map(c => [c.id, { ...c, name: c.name ?? nameFrom(c.id) }])) };
 const rowOf = cell => Number(cell.split(',')[1]);
@@ -45,12 +45,9 @@ function nightShift(outing) {
   search = `?campaign=1&outing=${outing.id}&arena=${outing.kit}`;
   localStorage.removeItem(R.OUTING_SAVE_KEY);
   const run = R.loadRun(localStorage.getItem(R.OUTING_SAVE_KEY), content);
-  const fight = R.makeMission(content, R.launch(run));
-  // Every Night Shift fight starts its dice at the same number (tactics.js,
-  // rng 104729), so without this the seeds would all roll alike and be one
-  // sample. Each seed rolls its own dice here; the game itself is unchanged.
-  fight.battle.rng = [...outing.id].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
-  return fight;
+  // Each fight rolls its own dice from its own id (run.js, v4.87), and the
+  // seed is in the id, so the seeds here are separate samples.
+  return R.makeMission(content, R.launch(run));
 }
 function baseState(heat, anchor) {
   const state = createState(content);
@@ -97,8 +94,11 @@ function runPolicy(fight) {
 // would take and anyone they would put down. It reads only what the player can
 // see (plans, HP, guard, the objective's rule for when they break), never the
 // dice. On a getaway it heads out and swings only when that costs nothing,
-// because the field notes say to leave them standing and a body is +2 on the
-// police clock. Answering the police, it takes whichever answer costs fewer people.
+// because the field notes say to leave them standing and a body adds to the
+// police clock. In a fight it watches the same clock (PRESSURE x/6 on screen):
+// with the police two pressure away or already announced, it stops nursing HP
+// and goes for the break, because COMBAT.md's fight is one you "end before the
+// city notices". Answering the police, it takes whichever answer costs fewer people.
 const ROUT_AT = R.ROUT_AT ?? 1 / 2;
 const weight = e => (e.tough ? 2 : 1);
 const dist = (a, c) => { const [x, y] = a.split(',').map(Number), [u, v] = c.split(',').map(Number); return Math.abs(x - u) + Math.abs(y - v); };
@@ -144,7 +144,8 @@ function carefulScore(b, p, to, c) {
   me.cell = to;
   if (c.type === 'extract') { me.alive = false; me.evacuated = true; gain += 8; }
   const o = outlook(sim);
-  let score = gain - 1.5 * o.hp - 4 * o.downs + (o.ends ? 6 : 0);
+  const pol = b.mission.police, late = goal === 'fight' && (pol.afterRound !== null || b.mission.heat >= pol.at - 2);
+  let score = gain - (late ? 0.5 : 1.5) * o.hp - (late ? 1 : 4) * o.downs + (o.ends ? (late ? 12 : 6) : 0);
   if (goal === 'getaway' && c.type !== 'extract') score -= 1.0 * rowOf(to);
   if (goal === 'fight') { const near = sim.enemies.filter(e => e.alive).map(e => dist(to, e.cell)); if (near.length) score -= 0.1 * Math.min(...near); }
   return score;
@@ -254,7 +255,7 @@ const won = mean(job('fight'), 'win'), rounds = mean(job('fight'), 'rounds'), hp
 const cWon = mean(job('careful'), 'win'), cHp = mean(job('careful'), 'hpLost');
 const run = mean(out('run'), 'win'), gWon = mean(out('careful'), 'win');
 const gRounds = mean(out('careful'), 'rounds') - mean(out('run'), 'rounds'), gHp = mean(out('careful'), 'hpLost') - mean(out('run'), 'hpLost');
-const sign = x => (x >= 0 ? '+' : '') + x;
+const sign = x => (Number(x) > 0 ? '+' : '') + (Number(x) === 0 ? String(x).replace('-', '') : x);
 const table = [
   [1, 'Fight jobs, careless: won', `${n0(won)}%`, '60-75%', within(won, 60, 75)],
   [2, 'Fight jobs, careless: rounds', n1(rounds), '4-6', within(rounds, 4, 6)],

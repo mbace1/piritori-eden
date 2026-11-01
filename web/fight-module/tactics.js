@@ -1,9 +1,11 @@
 import {coverEdges,coverProtection,crossesCoverEdge} from './cover-edges.js?v=2';
 // C laboratory rules. The C.17 campaign adapter supplies build fields, while
 // this resolver remains deterministic and separate from the authored resolver.
+// Close combat lands 85% (v4.87, ROADMAP G1; was 100%): with every swing
+// landing, the dice changed nothing and the crew always knew the outcome.
 export const WEAPONS={
-  'baseball-bat':{name:'Bat',range:1,damage:3,accuracy:100},
-  'folding-knife':{name:'Knife',range:1,damage:2,accuracy:100,pierce:1},
+  'baseball-bat':{name:'Bat',range:1,damage:3,accuracy:85},
+  'folding-knife':{name:'Knife',range:1,damage:2,accuracy:85,pierce:1},
   'first-handgun':{name:'Handgun',range:6,damage:3,accuracy:90,magazine:4}
 };
 const xy=c=>c.split(',').map(Number),key=(x,y)=>`${x},${y}`;

@@ -1,6 +1,6 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=20';
-import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=9';
+import {createSession} from '../fight-module/session.js?v=21';
+import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=10';
 import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=10';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
@@ -40,22 +40,40 @@ function tacticalPerson(p,base,extra={}){
 // 25%", and the police can arrive. The door gives the fight its job (`goal`):
 //   fight    make them back off. Won when none of them is still standing,
 //            downed or run off. They break and run once half their weight is
-//            down; a tough one weighs two. Proposed, a playtest gate.
+//            down and at least ROUT_MIN of them are (`routs`); a tough one
+//            weighs two. Proposed, a playtest gate.
 //   getaway  get out with it. Won when everyone is out by the south edge.
 // Withdraw is there in both: the standing leave, and the job is lost.
-// Pressure is C's own (a round +1, a gunshot +1, a body +2), starting from
+// Pressure is C's own (a round +1, a gunshot +1, a body +1), starting from
 // the place's heat. At POLICE_AT the police are announced at one end and walk
 // in after the next enemy turn; the fight then stops on Act I's question
 // (web/js/v3/battle.js): Back off, or Help your friends. Anyone they take is
 // arrested. Aatami is never taken or left behind: down, he is carried out.
-export const POLICE_AT=5;
+//
+// G1 tuning, v4.87 (ROADMAP §4-§5, measured with web/tools/fight-balance.mjs):
+// the police at 6 and a body +1 (were 5 and +2), so a longer fight is not cut
+// off at once and a hot place still brings them; ROUT_MIN 2, so the tough
+// going down no longer breaks a pair on its own; rivals RIVAL_HP (were 4 and
+// 5); a getaway starts at the far end with them across the middle. Close-
+// combat accuracy is in tactics.js. Each fight's dice start from its own id.
+export const POLICE_AT=6;
+export const ROUT_MIN=2;
+export const BODY_PRESSURE=1;
+export const RIVAL_HP={rival:6,tough:7};
 export const POSTURES=['BACK_OFF','HELP_FRIENDS'];
 const POLICE_RESCUE_REACH=1;
-const OUTING_ROWS={fight:{crew:1,front:4,middle:5,back:6},getaway:{crew:5,front:3,middle:2,back:1}};
+const OUTING_ROWS={fight:{crew:1,front:4,middle:5,back:6},getaway:{crew:7,front:4,middle:3,back:2}};
 const OUTING_LANE={1:1,2:2,3:4},OUTING_CREW_X={2:[2,3],3:[1,2,3]};
 const OUTING_SPARE={fight:['1,5','4,5','3,4'],getaway:['1,2','4,2','2,3']};
 const seedOf=t=>[...String(t)].reduce((h,c)=>Math.imul(h^c.charCodeAt(0),16777619)>>>0,2166136261);
 const weightOf=u=>u.tough?2:1,rowOf=c=>xy(c)[1];
+/** Whether their side breaks now: half their weight down, and at least
+ *  ROUT_MIN of them (all of them, if fewer). Pure, so a forecast can ask it. */
+export function routs(b){
+ const side=b.enemies.filter(e=>e.rival),downs=side.filter(e=>!e.alive&&!e.fled);
+ const total=side.reduce((n,e)=>n+weightOf(e),0),down=downs.reduce((n,e)=>n+weightOf(e),0);
+ return down*2>=total&&downs.length>=Math.min(side.length,ROUT_MIN);
+}
 function outingCell(goal,formation,i,taken){
  const rows=OUTING_ROWS[goal],spare=OUTING_SPARE[goal],m=/^(front|middle|back)-(\d)$/.exec(String(formation||''));
  const cell=m&&OUTING_LANE[m[2]]!==undefined?`${OUTING_LANE[m[2]]},${rows[m[1]]}`:null;
@@ -79,7 +97,7 @@ function makeOuting(content,config){
  const goal=outing.goal==='getaway'?'getaway':'fight',crewRow=OUTING_ROWS[goal].crew,xs=OUTING_CREW_X[config.crew.length]||OUTING_CREW_X[3],taken=new Set();
  b.players=config.crew.map((p,i)=>tacticalPerson(p,template,{label:String(i+1),cell:`${xs[i]},${crewRow}`,alive:true,itemIds:p.kit==='light'?['training-bandage']:[],evacuated:false,helped:false}));
  b.enemies=outing.rivals.slice(0,3).map((r,i)=>{const cell=outingCell(goal,r.cell,i,taken);taken.add(cell);
-  return {...copy(enemyTemplate),id:r.id,name:r.name,label:'R'+(i+1),equipment:r.equipment,role:r.tough||['muscle','enforcer'].includes(r.role)?'muscle':'runner',tough:Boolean(r.tough),rival:true,hp:r.tough?5:4,maxHp:r.tough?5:4,guard:r.tough?2:1,harmBonus:0,skills:[],aptitudes:[],perks:{},appearanceSeed:seedOf(r.id),itemIds:[],cell,alive:true,waiting:false};});
+  return {...copy(enemyTemplate),id:r.id,name:r.name,label:'R'+(i+1),equipment:r.equipment,role:r.tough||['muscle','enforcer'].includes(r.role)?'muscle':'runner',tough:Boolean(r.tough),rival:true,hp:r.tough?RIVAL_HP.tough:RIVAL_HP.rival,maxHp:r.tough?RIVAL_HP.tough:RIVAL_HP.rival,guard:r.tough?2:1,harmBonus:0,skills:[],aptitudes:[],perks:{},appearanceSeed:seedOf(r.id),itemIds:[],cell,alive:true,waiting:false};});
  b.selectedId=b.players[0].id;b.status='active';b.result=null;b.round=1;b.log=[];
  const place=outing.place||'The fight';
  b.objective=goal==='getaway'?`${place}. Get everyone out ${outing.wayOut||'by the south edge'}: the south edge is the way out.`:`${place}. Make them back off: put them down or make them run.`;
@@ -89,7 +107,9 @@ function makeOuting(content,config){
  withdrawText:'The crew pulls out. The job is lost.',
  prepare(b){b.mission={id:config.id,objective:config.objective,goal,protagonist:content.protagonist?.id||null,targetId:null,targetCell:null,recovered:false,carrierId:null,
   heat:Math.max(0,Math.min(3,Number(outing.heat)||0)),police:{at:POLICE_AT,afterRound:null,y:null,cells:[],arrived:false,resolved:false,posture:null,taken:[],saved:[]},routed:false,end:null,
-  place:outing.place||null,wayOut:outing.wayOut||null,side:outing.side||null};},
+  place:outing.place||null,wayOut:outing.wayOut||null,side:outing.side||null};
+  // Each fight rolls its own dice, from its own id, so a reload replays it exactly.
+  b.rng=seedOf(config.id)||104729;},
  finish(b){if(b.status!=='active')return;const m=b.mission;
   if(m.goal==='fight'&&!b.enemies.some(e=>e.rival&&e.alive)){b.status='complete';b.result='win';m.end='win';for(const p of b.players)if(!p.evacuated){p.home=true;p.wasDown=!p.alive;}b.log.unshift(m.routed?'They are gone. The place is yours.':'None of them is standing. The place is yours.');return;}
   if(!b.players.some(p=>p.alive)){b.status='complete';const out=b.players.filter(p=>p.evacuated);
@@ -118,16 +138,16 @@ function makeOuting(content,config){
  },
  after(b,type,events){
   const m=b.mission,pol=m.police;
-  m.heat+=events.reduce((n,e)=>n+(e.type==='attack'?(weapon(b.players.concat(b.enemies).find(p=>p.id===e.id)).magazine?1:0)+(e.down?2:0):0),0)+(type==='end'?1:0);
+  m.heat+=events.reduce((n,e)=>n+(e.type==='attack'?(weapon(b.players.concat(b.enemies).find(p=>p.id===e.id)).magazine?1:0)+(e.down?BODY_PRESSURE:0):0),0)+(type==='end'?1:0);
   if(type==='withdraw'){
    // Pulling out leaves the downed. With the police already on the way, they are found.
    for(const p of b.players.filter(p=>p.alive))evacuate(p,events);
    for(const p of b.players.filter(p=>!p.alive&&!p.evacuated))if(pol.afterRound!==null&&p.id!==m.protagonist)p.taken=true;
    m.end='withdraw';
   }
-  // They break: half their weight down, and the rest run.
-  const side=b.enemies.filter(e=>e.rival),total=side.reduce((n,e)=>n+weightOf(e),0),down=side.filter(e=>!e.alive&&!e.fled).reduce((n,e)=>n+weightOf(e),0);
-  if(b.status==='active'&&!m.routed&&side.some(e=>e.alive)&&down*2>=total){
+  // They break: half their weight down and at least two of them, and the rest run.
+  const side=b.enemies.filter(e=>e.rival);
+  if(b.status==='active'&&!m.routed&&side.some(e=>e.alive)&&routs(b)){
    for(const e of side.filter(e=>e.alive)){e.alive=false;e.fled=true;e.evacuated=true;events.push({type:'extract',id:e.id});}
    m.routed=true;b.log.unshift('The rest of them break and run.');
   }

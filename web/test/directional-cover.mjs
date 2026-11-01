@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {coverEdges,coverProtection,crossesCoverEdge,EDGES} from '../fight-module/cover-edges.js?v=2';
-import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=18';
-import {forecast,routes,planView} from '../fight-module/tactics.js?v=8';
+import {createSession,checkpoint,restoreSession} from '../fight-module/session.js?v=21';
+import {forecast,routes,planView,WEAPONS} from '../fight-module/tactics.js?v=10';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 const vectors=JSON.parse(fs.readFileSync(new URL('../../design/C11_PORT_VECTORS.json',import.meta.url)));
 for(const v of vectors.shots){const b={cover:new Map([[vectors.wall.cell,{softBlock:true,edge:vectors.wall.edge}]])},p=coverProtection(b,v.from,v.to);assert.equal(p?.edge??null,v.edge);assert.deepEqual(p?.point??null,v.point);}
@@ -17,7 +17,7 @@ for(const [edge,[dx,dy]] of Object.entries(EDGES)){
  u.cell=neighbor;const path=routes(s.battle,u).get(to);assert.equal(path,undefined,'occupied destination stays blocked');t.cell='5,7';
  const detour=routes(s.battle,u).get(to);assert.equal(detour.length,3,'walk around the low wall; do not phase through');
  const plan={id:u.id,type:'advance',path:[to],to};const blocked=planView(s.battle,plan);assert.equal(blocked.reason,'Route blocked; holds');assert.equal(blocked.to,u.cell);
- u.equipment='baseball-bat';t.cell=to;assert.equal(forecast(s.battle,u,t).chance,100,'low walls do not give melee evasion');
+ u.equipment='baseball-bat';t.cell=to;assert.equal(forecast(s.battle,u,t).chance,WEAPONS['baseball-bat'].accuracy,'low walls do not give melee evasion');
 }
 // A natural 90%-accuracy miss must not be presented as a wall block. Rolls in
 // the cover-only 65..90 band do hit the wall. Neither miss removes guard/HP.

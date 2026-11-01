@@ -18,9 +18,9 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=4');
 const O = await import('../js/v3/outing.js?v=5');
-const R = await import('../crew-run/run.js?v=16');
+const R = await import('../crew-run/run.js?v=17');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
-const { coordinate } = await import('../fight-module/tactics.js?v=9');
+const { coordinate } = await import('../fight-module/tactics.js?v=10');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 
 // As content.js loads it: an authored slot is named by the generator.
@@ -124,6 +124,26 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(R.settle(run, fight), false, 'settled exactly once');
 }
 
+// v4.87 (ROADMAP G1): a pair does not break when its tough one falls. Both go down.
+{
+  const { outing } = actOne('hit-bear-debt', 'karhupuisto', { nonce: 'pair' });
+  const { fight } = nightShift(outing), b = fight.battle, m = b.mission;
+  assert.notEqual(b.rng, 104729, 'each fight rolls its own dice, from its own id');
+  assert.equal(b.enemies.length, 2, 'the bear debt is a pair');
+  assert.ok(b.enemies.every(e => e.maxHp === (e.tough ? R.RIVAL_HP.tough : R.RIVAL_HP.rival)), 'rivals stand longer (v4.87)');
+  const tough = b.enemies.find(e => e.tough), other = b.enemies.find(e => !e.tough);
+  assert.ok(tough && other, 'one of them is the tough one');
+  down(b, tough.id);
+  assert.ok(fight.command('brace').ok);
+  assert.equal(R.routs(b), false, 'two of three weight down, but one of two people');
+  assert.equal(m.routed, false, 'so the other one holds');
+  assert.equal(b.status, 'active');
+  down(b, other.id);
+  assert.ok(fight.command('select', b.players[1].id).ok);
+  assert.ok(fight.command('brace').ok);
+  assert.equal(b.result, 'win', 'both down is the win');
+}
+
 // Withdraw is in every fight: the standing leave, the downed are missing, the job is lost.
 {
   const { outing, template } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'withdraw' });
@@ -141,7 +161,7 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(O.outingLines(camp.outing)[0], 'You pulled out of A Torkkelinmäki courtyard. The job is lost.');
 }
 
-// The police: announced at 5, in after the next enemy turn, and the fight stops on one question.
+// The police: announced at POLICE_AT (6 since v4.87), in after the next enemy turn, and the fight stops on one question.
 {
   const { outing, template } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'police', heat: 3 });
   const { run, fight } = nightShift(outing), b = fight.battle, m = b.mission;
@@ -149,9 +169,9 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   const lan = down(b, 'crew-slot-muscle');
   down(b, 'aatami');
   assert.ok(fight.command('select', 'crew-slot-runner').ok);
-  m.heat = 4;
+  m.heat = R.POLICE_AT - 1;
   assert.ok(fight.command('end').ok);
-  assert.ok(m.heat >= 5 && m.police.afterRound !== null, 'pressure reached 5: the police are announced');
+  assert.ok(m.heat >= R.POLICE_AT && m.police.afterRound !== null, 'pressure reached POLICE_AT: the police are announced');
   assert.ok(m.police.cells.length >= 2, 'their entry is marked on the board');
   assert.match(b.log.join(' '), /Sirens\. The police come in at the (south|north) end after enemy turn \d+\./);
   assert.equal(m.police.arrived, false, 'announced a round early, never a surprise');
@@ -189,7 +209,7 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   const { run, fight } = nightShift(outing), b = fight.battle, m = b.mission;
   down(b, 'crew-slot-muscle');
   fight.command('select', 'crew-slot-runner');
-  m.heat = 4;
+  m.heat = R.POLICE_AT - 1;
   fight.command('end');
   assert.ok(m.police.afterRound !== null && !m.police.arrived);
   assert.ok(fight.command('withdraw').ok, 'you can still pull out before they walk in');
@@ -203,8 +223,8 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.equal(outing.goal, 'getaway');
   assert.equal(outing.kit, 'yard');
   const { run, fight } = nightShift(outing), b = fight.battle;
-  assert.ok(b.players.every(p => rowOf(p.cell) === 5), 'a getaway: the crew stand where it went bad');
-  assert.ok(b.enemies.every(e => rowOf(e.cell) < 5), 'and they stand between them and the exit');
+  assert.ok(b.players.every(p => rowOf(p.cell) === 7), 'a getaway: the crew stand at the far end, where it went bad (v4.87)');
+  assert.ok(b.enemies.every(e => rowOf(e.cell) > 0 && rowOf(e.cell) < 7), 'and they stand across the middle, between them and the exit');
   assert.match(missionCue(b, coordinate).goal, /^Get everyone out/);
   b.players.forEach((p, i) => { p.cell = `${i + 1},0`; });
   for (const p of [...b.players]) {
