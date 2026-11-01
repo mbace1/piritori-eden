@@ -28,3 +28,18 @@ All nine images have a uniform grey background. The sources cannot be used as tr
 3. Seek explicit owner acceptance for each cut-in separately. Keep the extra older study excluded, and do not create the older cut-in until the Act I roadmap permits new character production.
 
 **Authority:** `DESIGN_AUTHORITY.md`, `ART_BIBLE.md`, `ROADMAP.md` §3, `art-library/APPROVALS.md`, `AATAMI_BRIEF.md`, `AATAMI_PRODUCTION_QC.md`. Original A/B/C outfit concepts were superseded, not completed as three separate final designs. No approval register, runtime manifest, playable build or other art was changed by this review.
+
+## 2026-11-01 — source framing of the two existing young cut-ins
+
+**Read-only production QC; no new artwork, extraction, approval or runtime edit.** Reopened the delivered corrected nine-image ZIP and constructed a side-by-side, locally generated review board showing each full-body source with the existing `main` rig crop overlaid, plus the actual cropped RGB pixels. This board is a review artifact supplied separately, not a committed source or evidence of an animated/phone pass.
+
+| Review view | Existing `main` source rig | Source and exact crop | Static source-framing finding |
+|---|---|---|---|
+| **Front (one-at-a-time dialogue)** | `art-src/cutins/aatami-front/rig.src.json` | `aatami-young-support-06.png`; source 1145×1374; crop `[310,15,760,700]` → 450×685 | Near-camera gaze is visible; hair, eyes, shoulders, cardigan and shoulder-bag strap remain in the waist-up framing. The bottom edge intentionally cuts at the hips. |
+| **Side (two-speaker layout)** | `art-src/cutins/aatami/rig.src.json` | `aatami-young-final-v01.png`; source 1144×1375; crop `[330,10,800,710]` → 470×700 | Profile looks to the right, and hair, face, shoulder, cardigan and bag strap remain in the waist-up framing. The bottom edge intentionally cuts at the hips. |
+
+**Observation:** both source crops preserve the correct character identity and intended gaze distinction. The crop pixels themselves **still carry the opaque grey source background**, as expected. Therefore the source board cannot certify transparent layer edges, head/torso seam concealment, blink cards, safe-area placement, mouth-to-bubble clearance or reduced motion in the assembled cut-in. Those must be checked on the already extracted `main` rigs at actual rendered phone/desktop sizes, not inferred from these crops.
+
+**Current review path:** `art-src/cutins/review.html?who=aatami` on `main` for the front; `?who=aatami-side` on draft PR #118 for the side (PR #118 remains separate and unmerged as inspected on 1 November). PR #108 remains an unmerged candidate-only source-art review. Do not change `art-library/APPROVALS.md`, any runtime manifest or `main` character art based on this source framing check.
+
+**Still missing:** owner and device/viewport evidence for both existing young rig assemblies; separately approved older-Aatami cut-in production; owner choices for Arvo's look and hooded woman's pose. New character production remains deferred by `ROADMAP.md` §3 until the Chapter 1 gate. The initial A/B/C concepts remain superseded, not delivered as independent finals.
