@@ -1,0 +1,42 @@
+# Hub release: Act I city v4.92 (v4.91 and v4.92: every place keeps its edges, and a way home for the lost)
+
+- **Source:** `mbace1/piritori-eden` @ `eb169a7`, web only.
+  - **Gates were green:** run 1111, all nine jobs.
+  - **The first push was red.** Gates run 1109 and deploy run 234, on `e19665c`, failed in the paused Godot build's playthrough. That playthrough refuses any door effect it cannot apply, and v4.92 added two (`rescue`, `bail`). `9f723b8` teaches Godot those two and nothing else (VERSIONS v4.92). The web cabinet built from it is byte-identical to the one built from `e19665c`.
+  - **Run 1110, on `9f723b8`, was cut off.** The door-fight job (`outing-browser`, three whole fights) was still passing checks at its 20-minute limit; on the same web code it had taken 16 minutes in run 1109. `eb169a7` gives that job 35 minutes and changes nothing else.
+  - v4.91 (`e19665c`) was never shipped on its own; it ships here inside v4.92.
+- **Site:** `mbace1/Suds-Jack` gh-pages `d23c152c`, under `piritori/`. **Pages run 1604 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 70 site files changed.
+- **What players get** (owner, 2026-10-31: *"Yes, visuals pass and story elements"*):
+  - **v4.91, every place keeps its edges** (ROADMAP milestone 3). Rendered from all eight camera angles, half of them showed the yard, the tram street and the quay standing on a black void.
+    - a lifted wall leaves a 0.9 m plinth in its building's plaster;
+    - the yard and the quay have a brick yard wall, with a gate over the way out;
+    - the tram street has its other side across the tracks.
+    - The picture is `design/PLACES_PASS.jpg`.
+  - **v4.92, a way home** (ROADMAP milestone 5, G2):
+    - while someone is missing, the door "Still Out There" brings them home hurt;
+    - while someone is arrested, the door "Bail Money" costs €120, or two of Jaska's goodwill.
+    - Both are on every door board while someone is lost, on top of the day's doors.
+- **Catalogue:**
+  - The note moves to v4.92 in en, fi and ja. `versions.json` piritori goes 4.90 → 4.92 by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=186), and `sw.js` `VERSION` went 214 → 215. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all bare-node suites, including `doors` (745) and `level-layout` (1693);
+    - `doors-browser`: 52;
+    - `outing-browser`: 66;
+    - `play-card`: 29;
+    - `night-places-browser`: plinths in every place at every camera preset;
+    - all seven Godot suites on `9f723b8`, including the playthrough (103).
+    - The yard was rendered again from all eight angles. Its board is as bright as the courtyard's (centre 27.4 against 28.3 from the front). What reads as dark is the unlit ground past its new wall, on the left and in front of the gate. That is the next visuals item.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 66.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`6bcc3aae`, Toko Drop 2 v81). It was restaged once on that same tip, from `9f723b8`, so the site's `VERSIONS.md` carries the Godot note; the rebuilt cabinet was byte-identical.
