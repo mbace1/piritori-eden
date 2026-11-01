@@ -86,9 +86,10 @@ const WIN = [
 // Stand and wait in a place that is already hot: pressure 3 reaches 6 after
 // turn 3, and the police come in after turn 4. Four rounds of standing still
 // cost someone (with the pinned dice, Lan Ho goes down), so the police ask.
-const WAIT = [].concat(...Array.from({ length: 4 }, () => [
-  ['select', 'aatami'], ['brace'], ['select', 'crew-slot-runner'], ['brace'], ['select', 'crew-slot-muscle'], ['brace'], ['end'],
-]));
+// The police scenario is a place at its hottest (Act I pressure 3), which
+// since v4.94 starts the fight at 5 of 6: standing there two rounds brings
+// them, with the muscle down by then (found in bare node on this very id).
+const WAIT = [['select', 'aatami'], ['end'], ['select', 'crew-slot-runner'], ['end']];
 
 server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -138,7 +139,7 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: in the courtyard`, (await page.evaluate(() => fightModule.metrics().environment?.location)) === 'courtyard');
       ok(`${name}: the brief says the job`, (await page.locator('#crew-content h2').first().innerText()) === 'Make them back off.');
       const facts = await page.locator('.brief-facts').innerText();
-      ok(`${name}: and who, the way out and when the police come`, /Aatami/.test(facts) && /Withdraw any time/.test(facts) && new RegExp(`starts at ${kind === 'police' ? 3 : 0}`).test(facts), facts);
+      ok(`${name}: and who, the way out and when the police come`, /Aatami/.test(facts) && /Withdraw any time/.test(facts) && new RegExp(`starts at ${kind === 'police' ? 5 : 0}`).test(facts), facts);
       ok(`${name}: no crew page`, !(await page.locator('.crew-card').count()) && !(await page.getByRole('button', { name: /Equip/ }).count()));
       ok(`${name}: the scene stays in view behind the brief`, await page.evaluate(() => document.getElementById('crew-screen').getBoundingClientRect().top > innerHeight * 0.3));
       ok(`${name}: on Act I's clock, with the way back to Kallio`, (await page.locator('#crew-night').innerText()) === 'KALLIO 2003 / DAY 8 · NIGHT'
@@ -146,7 +147,7 @@ server.listen(0, '127.0.0.1', async () => {
       await shot(page, `${view}-${kind}-brief`);
       await tap(page.locator('#crew-deploy')); await idle();
       ok(`${name}: one tap and it is on`, (await page.evaluate(() => crewRun.snapshot().phase)) === 'battle' && /^Make them back off/.test(await page.locator('#mission-goal').innerText()));
-      ok(`${name}: the police are forecast on the pressure line`, new RegExp(`PRESSURE ${kind === 'police' ? 3 : 0}/6 · POLICE AT 6`).test(await page.locator('#mission-pressure').innerText()));
+      ok(`${name}: the police are forecast on the pressure line`, new RegExp(`PRESSURE ${kind === 'police' ? 5 : 0}/6 · POLICE AT 6`).test(await page.locator('#mission-pressure').innerText()));
       await tap(page.locator('#help'));
       ok(`${name}: Withdraw is in the menu`, await page.locator('#outing-options .withdraw-command').isEnabled());
       await page.keyboard.press('Escape');

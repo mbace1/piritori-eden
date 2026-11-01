@@ -18,7 +18,7 @@ const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await impo
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=6');
 const O = await import('../js/v3/outing.js?v=7');
-const R = await import('../crew-run/run.js?v=22');
+const R = await import('../crew-run/run.js?v=23');
 const { missionCue } = await import('../fight-module/readability.js?v=4');
 const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -284,6 +284,16 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.deepEqual(R.restoreMission(content, config, R.missionCheckpoint(fight)).snapshot(), fight.snapshot(), 'a reload replays the whole fight, police answer included');
   assert.ok(R.settle(run, fight));
   console.log(`  a played opening: ${b.result} (${b.mission.end}) in ${b.round} rounds · pressure ${b.mission.heat} · ${b.mission.routed ? 'they ran' : 'no rout'} · police ${b.mission.police.arrived ? 'came' : 'did not come'}`);
+}
+
+// ── a place at its hottest starts a round from the police (v4.94) ──────────
+{
+  assert.deepEqual([0, 1, 2, 3].map(R.startHeat), [0, 1, 2, 5], 'heat 0-2 start where they are; heat 3 starts at 5 of 6');
+  const { outing } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { heat: 3, nonce: 'hot' });
+  assert.equal(outing.heat, 3, 'the outing keeps Act I\'s own heat');
+  const { fight } = nightShift(outing);
+  assert.equal(fight.battle.mission.heat, 5, 'and the fight starts at 5');
+  assert.equal(R.RULES.policeAt - fight.battle.mission.heat, 1, 'one step from the police');
 }
 
 // ── a road fight is an outing too (§6.4 step 2, v4.77) ────────────────────

@@ -1,3 +1,32 @@
+## v4.94 — 2026-11-01
+
+**A place at its hottest is a round from the police (combat, ROADMAP G1 row 9).** Owner: *"Continue"*, on the pitch to make fights longer and reward careful play. Measured first: no existing number does that without breaking another row, so this version moves the one row that has a clean lever and leaves the others to a design change.
+
+- **The rule:** a fight's pressure starts where Act I's place already is (0, 1 or 2). **A place at 3, its hottest, now starts the fight at 5 of 6** (`RULES.heatStart`), not 3. The police are one step away: standing still for a round brings them, and the brief says so ("Here it starts at 5").
+- **Measured,** `web/tools/fight-balance.mjs`, Act I's 15 fights × 12 seeds:
+  - the police come in **53%** of fights at a heat-3 place (was 32%; target over 50%);
+  - rows 1–8 are **identical**, because they are measured at heat 0 and 2, which do not move;
+  - starting a hot place at 4 instead moved the police to 35%, so 5 it is;
+  - the table `[0, 1, 2, 3]` reproduces the old numbers exactly, which is the control.
+- **Tried and not shipped:**
+
+  | Lever | Rounds | Careless wins | Careful vs careless | Police, heat 3 |
+  |---|---|---|---|---|
+  | today | 2.8 | 75% | +5 | 32% |
+  | they break at 3/4 | 3.5 | 54% | **−7** | 73% |
+  | rivals +1 HP | 2.8 | 75% | +5 | 32% |
+  | rivals +2 HP | 2.9 | 66% | 0 | 30% |
+  | rivals +2 HP, blows −1 | 3.0 | 74% | +1 | 30% |
+
+  - +1 HP changes nothing: a rival needs two hits at 4 HP and still two at 5.
+  - Longer fights hurt careful play more than careless play: careful play spends rounds, and rounds bring the police.
+  - So row 5 (careful play paying) needs something a careful player can do that a careless one cannot. A number will not do it.
+- **Gates:**
+  - `c19-outing`: heat 0–2 start where they are, and heat 3 starts at 5, one step from the police.
+  - `outing-browser`'s police scenario is the hot place. It now starts at 5, and two rounds of standing there bring the police with the muscle down, so the two-answer question still shows. The route was found in bare node on the browser's own outing id.
+- **Cache:** Night Shift run v23, ui v32, startup v28, fight main v54, app v61. The label is v4.94.
+- **Owner played: pending.** Godot paused.
+
 ## v4.93 — 2026-11-01
 
 **A won fight takes the fallen's weapons (story, ROADMAP G2).** Owner: *"Continue"*, on the pitch that put this first. Since fights moved to Night Shift (v4.74), a fight paid its stakes and nothing else. The old board's rule (COMBAT.md §8) is back: gear is carried by a person, so it comes off a rival who went down.

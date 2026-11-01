@@ -156,7 +156,7 @@ Owner, 2026-10-26, on the first draft: *"What specifically."* These are the spec
 
 **For scale:** a crew of two has about 10 HP (5 each), and a rival has 4–5.
 
-| # | Measure | v4.85 | Today (v4.90) | Target |
+| # | Measure | v4.85 | Today (v4.94) | Target |
 |---|---|---|---|---|
 | 1 | Fight jobs, careless: won | 95.5% | **75%** ✓ | **60–75%** |
 | 2 | Fight jobs, careless: rounds | 2.1 | 2.8 | **4–6** |
@@ -166,13 +166,14 @@ Owner, 2026-10-26, on the first draft: *"What specifically."* These are the spec
 | 6 | Getaways, straight out: won | 87.5% in 2.3 rounds | 76% | **under 50%** |
 | 7 | Getaways, careful: won | (no careful policy yet) | **escort 100%** ✓ at every heat, nobody hurt | **70%+**, at a cost against straight out of a round or a point of HP |
 | 8 | Police arrive, heat 0 | 0 of 15 fights | 9% ✓ | **under 20%** of fights |
-| 9 | Police arrive, heat 3 | 3 of 15 fights | 32% | **over 50%** of fights |
+| 9 | Police arrive, heat 3 | 3 of 15 fights | **53%** ✓ (32% before v4.94: a heat-3 place now starts at 5 of 6) | **over 50%** of fights |
 
 **What v4.88 found** (VERSIONS.md has the table):
 - Every fight is deterministic. Melee always lands and the plans are fixed, so a fight is won by every seed or by none.
 - Careful play loses to careless play because bracing spends a round, and rounds bring the police.
 - So rows 1 and 5 could not move by tuning numbers alone. The owner answered (§10): blows can miss. v4.90 moves row 1 onto target. Row 5, careful play paying, is still open: a careful bot still gains only about 5 points.
 - v4.89: in a getaway, thinking pays. Escorting the carrier wins every getaway at every heat, while walking out loses a quarter of them (VERSIONS.md).
+- v4.94: a place at its hottest starts the fight a step from the police, which puts row 9 on target and leaves rows 1–8 unchanged. The other levers were measured and not shipped (VERSIONS.md has the table). Longer fights hurt careful play more than careless play, because careful play spends rounds and rounds bring the police. Row 5 needs something only a careful player can do; no number will do it.
 
 **Why these numbers:**
 - A fight should be won more often than lost when played without thought (rows 1–4), but not for free.

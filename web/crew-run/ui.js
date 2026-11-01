@@ -1,6 +1,6 @@
 import {missionCue} from '../fight-module/readability.js?v=4';
 import {LOCATIONS,locationId} from './locations.js?v=10';
-import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=22';
+import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,startHeat,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=23';
 import {icon} from './icons.js?v=2';
 import {coordinate} from '../fight-module/tactics.js?v=11';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};
@@ -68,7 +68,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
     const facts=document.createElement('dl');facts.className='brief-facts';
     // v4.89: in a getaway one of them carries it, and carrying slows them.
     const carrier=fight?null:state.crew.find(p=>p.id===carrierOf(available(state).filter(p=>state.selected.includes(p.id)).map(p=>p.id),content.protagonist?.id));
-    for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],...(carrier?[['Carrying',`${carrier.name} carries it: ${RULES.carryReach} tiles a move, the others 4. Keep them off ${carrier.name}.`]]:[]),['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${o.heat||0}.`]])facts.append(text('dt',k),text('dd',v));
+    for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],...(carrier?[['Carrying',`${carrier.name} carries it: ${RULES.carryReach} tiles a move, the others 4. Keep them off ${carrier.name}.`]]:[]),['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${startHeat(o.heat)}.`]])facts.append(text('dt',k),text('dd',v));
     left.append(facts);
     ledger.append(pictButton('Fight','end',deploy,{class:'primary',id:'crew-deploy'}));
    }else{
