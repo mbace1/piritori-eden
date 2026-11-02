@@ -43,3 +43,19 @@ All nine images have a uniform grey background. The sources cannot be used as tr
 **Current review path:** `art-src/cutins/review.html?who=aatami` on `main` for the front; `?who=aatami-side` on draft PR #118 for the side (PR #118 remains separate and unmerged as inspected on 1 November). PR #108 remains an unmerged candidate-only source-art review. Do not change `art-library/APPROVALS.md`, any runtime manifest or `main` character art based on this source framing check.
 
 **Still missing:** owner and device/viewport evidence for both existing young rig assemblies; separately approved older-Aatami cut-in production; owner choices for Arvo's look and hooded woman's pose. New character production remains deferred by `ROADMAP.md` §3 until the Chapter 1 gate. The initial A/B/C concepts remain superseded, not delivered as independent finals.
+
+
+## 2026-11-02 — existing young rig binary/registration audit
+
+**Read-only inspection of assets already on `main`; no new extraction or runtime work.** Cross-checked the two `main` rig source configs, extracted `out/rig.json` records, `art/v3/manifest.json` entries, and each registered part's source PNG and runtime WebP via GitHub. Also compared the two rig input PNG Git blobs between `main` and PR #108.
+
+| Existing rig | Input Git blob identical on `main` and PR #108 | Crop/canvas and exported members | Manifest approval |
+|---|---|---|---|
+| Front, near-camera (`aatami-front`) | support 06: `20ed3517211356d0bc17e4a0f505b9c888fa045e` | `[310,15,760,700]`, 450×685; torso, head, lid_0, lid_1 | semi-approved |
+| Side, two-speaker (`aatami`) | young final: `1a2d028710a03cf26f8179bfd919e358cc14cf08` | `[330,10,800,710]`, 470×700; torso, head, lid_0 | semi-approved |
+
+**Static metadata results:** 2/2 rig sources agree with their extraction JSON and manifest canvas sizes; all 7/7 exported member names, rectangle coordinates and defined pivots agree with the manifest. All 7/7 extracted PNG piece files exist and advertise 8-bit RGBA (PNG colour type 6) with dimensions matching the recorded boxes. All 7/7 manifest WebP files exist and have valid `RIFF/WEBP` headers. The four head/torso WebPs advertise an alpha-capable `VP8X` container with alpha flag set; the three tiny, opaque eyelid cards use ordinary `VP8 ` frames, which is not itself a defect. Manifest status has **not** been upgraded from `semi-approved`.
+
+**What this does not prove:** This checked file presence, headers, Git blobs and JSON agreement; it did not recompute runtime WebP SHA-256 values, decode transparency pixels, composite frames, play animations or test on an actual phone/iPad/desktop viewport. RGBA headers alone do not certify clean edges or the absence of grey-source contamination. Those visual and owner gates remain open; `main` is the source of truth for these rigs, and draft [PR #118](https://github.com/mbace1/piritori-eden/pull/118) contains the separate side-preview selector. Do not promote, merge or approve this source-art PR on the basis of binary-header QC.
+
+**Still needed:** actual in-scene front/side playback at portrait and landscape sizes, blink/seam/text/tail/grey-fringe and reduced-motion checks, plus separate owner acceptance. The older final has no approved cut-in; the extra older study remains excluded. Arvo A–D look and the hooded woman's pose await owner choices. `ROADMAP.md` §3 still blocks a new character-art pipeline until G4.
