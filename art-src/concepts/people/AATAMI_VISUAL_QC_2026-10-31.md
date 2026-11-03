@@ -59,3 +59,48 @@ All nine images have a uniform grey background. The sources cannot be used as tr
 **What this does not prove:** This checked file presence, headers, Git blobs and JSON agreement; it did not recompute runtime WebP SHA-256 values, decode transparency pixels, composite frames, play animations or test on an actual phone/iPad/desktop viewport. RGBA headers alone do not certify clean edges or the absence of grey-source contamination. Those visual and owner gates remain open; `main` is the source of truth for these rigs, and draft [PR #118](https://github.com/mbace1/piritori-eden/pull/118) contains the separate side-preview selector. Do not promote, merge or approve this source-art PR on the basis of binary-header QC.
 
 **Still needed:** actual in-scene front/side playback at portrait and landscape sizes, blink/seam/text/tail/grey-fringe and reduced-motion checks, plus separate owner acceptance. The older final has no approved cut-in; the extra older study remains excluded. Arvo A–D look and the hooded woman's pose await owner choices. `ROADMAP.md` §3 still blocks a new character-art pipeline until G4.
+
+## 2026-11-03 — runtime WebP SHA-256 integrity check
+
+**Completed: read-only byte-integrity check of the two existing young rigs on `main`.**
+Fetched the seven registered `art/v3/cutins/*/*.webp` bytes from GitHub,
+decoded their base64 response bodies and computed SHA-256. Every digest matched
+the matching `members[].sha256` in `art/v3/manifest.json` (manifest Git blob
+`f46142b946ae918a5fcce427a196c7ad34f179bd`). The SHA-256 implementation
+was self-tested against the published SHA-256 digest for `abc` before use.
+
+| Existing rig (on `main`) | Piece | Bytes | Result |
+|---|---|---:|---|
+| `cutin-aatami-rig-v01` (side) | torso | 31,648 | SHA-256 matches manifest |
+| same | head | 14,572 | SHA-256 matches manifest |
+| same | lid_0 | 80 | SHA-256 matches manifest |
+| `cutin-aatami-front-rig-v01` (front) | torso | 33,684 | SHA-256 matches manifest |
+| same | head | 13,726 | SHA-256 matches manifest |
+| same | lid_0 | 76 | SHA-256 matches manifest |
+| same | lid_1 | 76 | SHA-256 matches manifest |
+
+**Result: 7/7 byte-for-byte registered WebPs match.** Combined with the
+2026-11-02 static extraction/registration audit, no missing or mismatched
+young-Aatami runtime derivative has been found. The full hash values and
+file paths remain in the manifest. This is evidence about **existing** rigs on
+`main`; PR #108 itself remains a source-art candidate branch and does not
+contain these extracted rigs.
+
+**What this does not prove:** the WebPs were not decoded into pixels or
+animated in a browser on a device in this check. Hashes cannot establish
+alpha-edge cleanliness, head/torso seam concealment, blink quality, dialogue
+bubble clearance, portrait/landscape readability or reduced-motion behavior.
+The current `art-src/cutins/render.cjs` also uses a fixed 1080 × 1920
+review canvas, not a responsive physical-device acceptance test. A separate
+draft [PR #118](https://github.com/mbace1/piritori-eden/pull/118) enables the
+side pose on the review page. Neither it nor PR #108 is approved to merge.
+
+**Next permissible step:** capture/play both assembled existing rigs in a
+real browser (phone portrait and desktop landscape), inspect motion, edges,
+bubble clearance and reduced motion, then ask for separate owner acceptance.
+`ROADMAP.md` §3 continues to defer a **new** older-Aatami cut-in or art
+pipeline until the Chapter 1/G4 gate. The unselected older study remains
+excluded; original A/B/C outfit explorations remain superseded.
+
+No artwork, existing extracted layers, manifest, approval register, gameplay
+or player-facing build was modified by this QC.
