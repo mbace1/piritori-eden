@@ -104,3 +104,42 @@ excluded; original A/B/C outfit explorations remain superseded.
 
 No artwork, existing extracted layers, manifest, approval register, gameplay
 or player-facing build was modified by this QC.
+
+## 2026-11-04 — individual cut-in layer preview and review-evidence tooling
+
+**Read-only inspection; existing rigs remain semi-approved.** Retrieved and viewed
+the seven registered `main` WebP parts of the two existing young-Aatami
+cut-ins (front: torso/head/two eyelids; side: torso/head/one eyelid). The
+inspected paths and SHA-256 expectations are recorded in
+`art/v3/manifest.json` and the November 3 audit above.
+
+- **Front rig:** the extracted torso retains the olive cardigan, striped
+  shirt and shoulder bag; its front-facing head retains the near-camera gaze.
+  Two small skin-tone eyelid cards are present.
+- **Side rig:** the torso preserves the same outfit and bag; the profile head
+  retains the sideways gaze. Its single small eyelid card is present.
+- **No replacement asset is needed solely because the two source poses are
+  different:** their use cases are intentionally distinct under
+  `DESIGN_AUTHORITY.md` (one-speaker versus opposite-side two-speaker).
+- **Unresolved visual issues:** individual transparent-layer previews do not
+  prove the assembled head/torso seam, alpha-fringe quality, eyelid-over-eye
+  placement during an actual blink, bubble-to-mouth clearance, text readability
+  or motion smoothness. The preview backgrounds and extracted edges must be
+  judged on the real composed frame, not from these thumbnails.
+
+The separate, **draft and unmerged** [PR #118](https://github.com/mbace1/piritori-eden/pull/118)
+now contains a review-only capture helper
+(`art-src/cutins/aatami-qc.cjs`) for both already-existing poses, fixed
+portrait/desktop simulated viewports and reduced-motion rest frames. Its
+review page supports the rest pose without changing runtime behavior.
+**The new helper was committed, not executed against a local repository
+checkout or on physical devices in this run; no screenshot, CI or acceptance
+claim is made.** Its images, when generated, will be review evidence only.
+
+**Outstanding:** run the helper in a repository-backed browser, inspect the
+composite screenshots/animation, then validate on an actual phone/iPad and
+desktop in the playable cut-in. Record owner approval separately. The older
+Aatami cut-in remains deferred under `ROADMAP.md` §3 until G4; Arvo's look
+and the hooded woman's pose still need owner choices. Original A/B/C outfit
+concepts remain superseded. No new art layers, manifests, approvals, runtime
+files or gameplay were changed by this source-art inspection.
