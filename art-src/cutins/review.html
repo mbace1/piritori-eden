@@ -9,8 +9,10 @@
  canvas{position:absolute;inset:0}
 </style></head><body><div id="s"><canvas id="c" width="1080" height="1920"></canvas></div>
 <script type="module">
-import { CUTINS, rigParts, pose, drawCutin, W, H } from '../../web/js/v3/cutin-stage.js';
+import { CUTINS, rigParts, pose, drawCutin, REST, W, H } from '../../web/js/v3/cutin-stage.js';
 const Q = new URLSearchParams(location.search), WHO = Q.get('who') || 'jaska', SCENE = Q.get('scene') || 'scene-club-v01';
+// The review's still pose matches loadCutin(..., { reducedMotion: true }); it does not test the game's CSS or device layout.
+const STILL = Q.get('still') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches;
 const load = (src) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
 const cast = CUTINS[WHO];
 const manifest = await (await fetch('../../art/v3/manifest.json')).json(), asset = manifest.assets.find(a => a.id === cast.rig);
@@ -45,9 +47,9 @@ function words(label, text) {      // the game lays these out in HTML (v3.css .c
 function frame(t) {
   t = ((t % TOTAL) + TOTAL) % TOTAL; let k = 0, t0 = 0; while (t >= t0 + T[k]) { t0 += T[k]; k++; }
   const [clip, label, text] = SEQ[k];
-  drawCutin(g, WHO, rig, pose(WHO, clip, t - t0), { t, plate }); words(label, text);
+  drawCutin(g, WHO, rig, STILL ? REST : pose(WHO, clip, t - t0), { t: STILL ? 0 : t, plate }); words(label, text);
   g.fillStyle = 'rgba(226,216,194,.7)'; g.font = '700 30px Arial'; g.fillText(`REVIEW · ${WHO.toUpperCase()} · ${clip}`, 30, 50);
 }
-window.__review = { TOTAL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
+window.__review = { TOTAL, still: STILL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
 frame(0); window.__ready = true;
 </script></body></html>
