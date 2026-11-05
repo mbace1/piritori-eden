@@ -1,0 +1,66 @@
+name: Aatami cut-in review evidence (no promotion)
+on:
+  push:
+    branches: [fix/aatami-side-review-only-20261030]
+    paths:
+      - 'art-src/cutins/aatami-qc.cjs'
+      - 'art-src/cutins/review.html'
+      - '.github/workflows/aatami-review-evidence.yml'
+      - 'web/js/v3/cutin-stage.js'
+      - 'art/v3/manifest.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install review-browser dependencies (not part of the game)
+        run: |
+          npm install --prefix /tmp/aatami-review-tools --no-save playwright
+          /tmp/aatami-review-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Capture existing semi-approved front and side rigs
+        env:
+          NODE_PATH: /tmp/aatami-review-tools/node_modules
+        run: node art-src/cutins/aatami-qc.cjs /tmp/aatami-review-evidence
+      - name: Verify capture set and identify the exact source
+        run: |
+          git rev-parse HEAD > /tmp/aatami-review-evidence/source-commit.txt
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = '/tmp/aatami-review-evidence/';
+          const manifest = JSON.parse(fs.readFileSync(path + 'capture-manifest.json', 'utf8'));
+          const required = new Set();
+          for (const who of ['aatami', 'aatami-side']) {
+            for (const viewport of ['phone', 'desktop']) {
+              for (const moment of ['idle', 'blink', 'talk', 'nod', 'shake', 'reduced-motion-rest'])
+                required.add(who + '-' + viewport + '-' + moment + '.png');
+            }
+          }
+          if (manifest.shots.length !== 24) throw Error('Expected 24 review frames, got ' + manifest.shots.length);
+          for (const s of manifest.shots) {
+            if (!required.delete(s.file)) throw Error('Unexpected or duplicate screenshot: ' + s.file);
+            const png = fs.readFileSync(path + s.file);
+            if (png.length < 1000 || png.toString('hex', 0, 8) !== '89504e470d0a1a0a')
+              throw Error('Missing/invalid screenshot: ' + s.file);
+            const w = png.readUInt32BE(16), h = png.readUInt32BE(20);
+            if (w !== s.viewportSize.width || h !== s.viewportSize.height)
+              throw Error('Wrong viewport size: ' + s.file + ' (' + w + 'x' + h + ')');
+          }
+          if (required.size) throw Error('Missing screenshots: ' + [...required].join(', '));
+          console.log('Verified 24 PNG evidence frames from two existing rigs and two simulated viewports.');
+          NODE
+      - name: Upload review-only evidence (no acceptance implied)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aatami-cutins-review-evidence
+          path: /tmp/aatami-review-evidence/
+          retention-days: 7
