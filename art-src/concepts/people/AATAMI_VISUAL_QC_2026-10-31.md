@@ -143,3 +143,22 @@ Aatami cut-in remains deferred under `ROADMAP.md` §3 until G4; Arvo's look
 and the hooded woman's pose still need owner choices. Original A/B/C outfit
 concepts remain superseded. No new art layers, manifests, approvals, runtime
 files or gameplay were changed by this source-art inspection.
+
+
+## 2026-11-06 — browser artifact visual inspection (review evidence only)
+
+**Scope:** Inspection of the actual PNG frames from the *successful* 2026-11-05 GitHub Actions run of [draft PR #118](https://github.com/mbace1/piritori-eden/pull/118), source commit [0870f86](https://github.com/mbace1/piritori-eden/commit/0870f86aef9db4eb47aac3b96058670e59d53111), [run 42003969215](https://github.com/mbace1/piritori-eden/actions/runs/42003969215), artifact **aatami-cutins-review-evidence** (artifact ID 13403946717, SHA-256 digest 7221e74ed78b3d484b58bd97c3a369257ab365b096658ede47d9dcc93db5d0b6). The artifact expires **2026-11-12**. It was downloaded and opened for this inspection; this is more than a successful workflow-status check.
+
+**Static review performed:** Opened both front and side 390 × 844 portrait frames for idle and blink, the front talk frame, and a 12-panel contact sheet of **all six sampled states × both rigs** (idle, blink, talk, nod, shake, reduced-motion rest). Also viewed the front 1440 × 900 desktop capture and a closer face/neck comparison for front/side idle, blink, nod and shake. Script-check of the *full artifact* confirmed **24/24 actual PNG dimensions** equal the capture manifest's viewport dimensions; **24/24 nontrivial PNG files**. Screenshots are stills from simulated browser viewports; no physical devices or motion-video acceptance.
+
+| Aspect | Observation from inspected frames | Gate |
+|---|---|---|
+| Front young cut-in | Full figure and dialogue panel visible at 390 × 844; no obvious missing part in sampled poses. Both eyes visibly closed in sampled blink. | **Candidate only**: inspect motion continuity, alpha fringe, head/neck seam and speech-bubble geometry in actual gameplay before acceptance. |
+| Side young cut-in | Clear profile and readable bubble in portrait; one eye visibly closed in sampled blink. Head position changes in nod/shake frames without an obvious detached head at this scale. | **Candidate only**: inspect seam and eyelid edge frame by frame, two-speaker placement and tail aim in live scene. |
+| Dialogue/bubble | Sampled text is legible and stays within the cards in phone captures. Bubble tails face the character regions but are not a substitute for testing two speakers or longer/localized text. | Need long-text, safe-area, landscape, smaller device and in-game overlap tests. |
+| Reduced-motion screenshot | One rest-pose screenshot exists per rig/viewport. | One still does not prove reduced-motion settings are obeyed throughout playback. |
+| Desktop viewport | The 1440 × 900 screenshot is a **centered vertical review composition with wide sidebars**. | **Not a true responsive landscape dialogue layout**, and not physical desktop QA. |
+
+**Disposition:** The previously outstanding **human review of the sampled browser screenshots is now provisionally recorded**. There is no conspicuous missing layer or collapsed dialogue card in those inspected samples, but this is **not** a pass for 60-fps animation, pixel-perfect cut edges, in-scene bubble clearance, reduced-motion compliance, or device acceptance. The source-art nine-selection remains one young final + seven supporting studies + one older final. The three initial A/B/C outfits were superseded, not finalized as three deliverables. The extra older study is unselected. The existing two young rigs remain **semi-approved**; older cut-in production, Arvo's look and hooded woman's pose remain deferred/pending.
+
+**Next permitted step:** Reuse the existing rigs to review actual motion and bubble/safe-area behavior in a *real gameplay landscape and portrait scene*, then physical Pixel/iPad, followed by separate owner decisions. No new source extraction, new character pipeline, runtime asset, manifest or approval change is authorized under [ROADMAP.md](../../../../ROADMAP.md) §3 before G4. No approval or merge implied by this report.
