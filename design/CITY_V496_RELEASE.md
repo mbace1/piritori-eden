@@ -1,0 +1,35 @@
+# Hub release: Act I city v4.96 (the UI diet, step 2: the brief and the fight)
+
+- **Source:** `mbace1/piritori-eden` @ `36e7870`, web only.
+  - **Gates were green:** run 1136, all nine jobs.
+  - **Run 1135, on `c088a83` (v4.96), failed one check.** `mission-browser`'s "desktop: no errors" counted three board-battle character images as failed requests. The test had navigated to the next mission while they were still loading. The files exist, and a missing one would be a 404, not a failed request. `36e7870` changes only tests: thirteen browser tests skip requests cancelled by navigation and print the browser's reason for any other. The cabinet is byte-identical to v4.96's.
+- **Site:** `mbace1/Suds-Jack` gh-pages `a8b1262f`, under `piritori/`. **Pages run 1645 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 59 site files changed.
+- **What players get** (owner, 2026-10-26: *"These aren't needed, so we need to optimize"*; `design/UI_DIET.md`, step 2). This applies only in Act I's fights.
+  - **The brief** keeps the job, the odds ("Sides 3 vs 3"), the way out, the police and Fight. Gone: the date and place header, the story paragraph, the six names and "Saved on this browser".
+  - **The fight** loses:
+    - the title and the second "3 standing";
+    - the grid codes;
+    - the selected fighter's name and face;
+    - the "1 action" labels.
+  - **The rivals' plans are on the board.** Each fighter a plan will hit carries a red badge with the odds and the damage ("70% −2"), and MAY FALL when it could put them down. The written list of names is gone.
+  - `design/UI_DIET_FIGHT.jpg` shows both screens on a phone, before and after.
+- **Catalogue:**
+  - The note moves to v4.96 in en, fi and ja. `versions.json` piritori goes 4.95 → 4.96 by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=213), and `sw.js` `VERSION` went 248 → 249. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 34 bare-node suites;
+    - `outing-browser`: 75. The brief and the fight carry none of the cut items, and every threatened fighter's tag carries the odds, on a phone, a desktop and in the police scenario.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 75.
+  - **Restaged once.** The full run above was on gh-pages `4815d41c` (Toko Drop 2 v119). Before the push, Toko Drop 2 v120 landed. Restaged on it, the site check (8 of 8) and the playtest links (29) passed again before the push.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`da3576aa`, Toko Drop 2 v120).
