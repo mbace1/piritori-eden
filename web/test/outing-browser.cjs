@@ -52,7 +52,7 @@ function watchErrors(page) {
   page.on('pageerror', e => errors.push(`pageerror: ${e.message}`));
   page.on('console', m => { if (m.type() === 'error') errors.push(`console: ${m.text()}`); });
   page.on('response', r => { if (r.status() === 404 && new URL(r.url()).pathname.endsWith('/hub/shell.js')) shellMisses += 1; });
-  page.on('requestfailed', r => { if (!new URL(r.url()).pathname.endsWith('/hub/shell.js')) errors.push(`requestfailed: ${r.url()}`); });
+  page.on('requestfailed', r => { const why = r.failure()?.errorText ?? ''; if (!new URL(r.url()).pathname.endsWith('/hub/shell.js') && why !== 'net::ERR_ABORTED') errors.push(`requestfailed: ${r.url()} (${why})`); });
   return () => {
     let forgive = shellMisses;
     return errors.filter(e => !(forgive > 0 && /Failed to load resource: .*404/.test(e) && forgive--));

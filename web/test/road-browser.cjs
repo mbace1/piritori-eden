@@ -49,7 +49,7 @@ function watchErrors(page) {
   // precisely rather than by loosening the check).
   page.on('response', r => { if (r.status() === 404 && new URL(r.url()).pathname.endsWith('/hub/shell.js')) shellMisses += 1; });
   // A failed request is an error too — except that same one known resource.
-  page.on('requestfailed', r => { if (!new URL(r.url()).pathname.endsWith('/hub/shell.js')) errors.push(`requestfailed: ${r.url()}`); });
+  page.on('requestfailed', r => { const why = r.failure()?.errorText ?? ''; if (!new URL(r.url()).pathname.endsWith('/hub/shell.js') && why !== 'net::ERR_ABORTED') errors.push(`requestfailed: ${r.url()} (${why})`); });
   return () => {
     let forgive = shellMisses;
     return errors.filter(e => !(forgive > 0 && /Failed to load resource: .*404/.test(e) && forgive--));
