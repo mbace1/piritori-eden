@@ -34,6 +34,6 @@ Earlier, in the same direction:
 
 Each step ships, then gets played.
 
-1. The meeting: the choices on the first screen. This is the biggest gameplay win.
-2. The brief and the fight: names out, intent on the board. This is Night Shift, next to G1's tuning, so one session does it.
+1. ~~The meeting: the choices on the first screen.~~ **Shipped in v4.85.**
+2. ~~The brief and the fight: names out, intent on the board.~~ **Shipped in v4.96** (`design/UI_DIET_FIGHT.jpg`), in Act I's fights. What a plan will do to a fighter is a badge on their own tag.
 3. The talk, the map and the header.

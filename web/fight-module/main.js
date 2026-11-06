@@ -1,7 +1,7 @@
-import {fighterLabel} from './readability.js?v=4';
+import {fighterLabel} from './readability.js?v=5';
 import {gunView,blendGunView} from './aim-camera.js?v=2';
 import {loadLocationAssets,buildLocation,locationId} from '../crew-run/locations.js?v=11';
-import {mountCrew} from '../crew-run/ui.js?v=33';
+import {mountCrew} from '../crew-run/ui.js?v=34';
 import {portraitStudio} from '../crew-run/portraits.js?v=2';
 import {EDGES,coverEdges} from './cover-edges.js?v=2';
 import * as T from 'three';
@@ -17,11 +17,13 @@ import {loadParkAssets} from '../bear-path/assets.js?v=2';
 import {createEncounter} from '../bear-path/encounter.js?v=2';
 import {mountBearPath} from '../bear-path/presentation.js?v=5';
 import {fitBattleCamera,placeLabels} from './framing.js?v=3';
-import {tacticalUI} from './tactical-ui.js?v=14';
-import {routes} from './tactics.js?v=11';
+import {tacticalUI} from './tactical-ui.js?v=15';
+import {routes,threats} from './tactics.js?v=11';
 import {createFrameClock,createPresentationClock} from './frame-clock.js?v=2';
 
 const isCrew=document.body.dataset.scenario==='crew-run';
+// v4.96: an Act I outing wears the UI diet (crew-run/ui.js sets body.outing).
+const isOuting=isCrew&&new URLSearchParams(location.search).has('outing');
 let crew=null;const arenaId=locationId();let locationAssets=null,cameraPreset='tactical';
 const isLab=isCrew||document.body.dataset.scenario==='arena-lab',isBear=document.body.dataset.scenario==='bear-path',isPark=isBear||isLab;
 const labCount=[2,6,12].includes(Number(new URLSearchParams(location.search).get('actors')))?Number(new URLSearchParams(location.search).get('actors')):6;
@@ -115,7 +117,7 @@ function layoutTags(){
 }
 function replaceCrewSession(next){sequence++;cancelFocus();auto=false;session=next;busy=false;action='';hint('');labUI?.cancel();if(ready){rebuildActors();fit();refresh();}}
 function rebuildActors(){tagsDirty=true;tagPositions.clear();for(const a of actors.values())disposeActor(a);actors.clear();$('labels').replaceChildren();labels.clear();leaders.clear();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('label-leaders');svg.setAttribute('aria-hidden','true');$('labels').append(svg);for(const u of all()){const a=makeActor({placeholder:true},u,world);a.group.position.copy(position(u.cell));a.group.visible=!u.waiting&&!u.evacuated;a.group.rotation.y=u.side==='player'?Math.PI:0;if(isLab)coverStance(a,u.cell);if(!u.alive){a.play('down');a.elapsed=1;updateActor(a,0);}actors.set(u.id,a);const el=document.createElement('div');el.className='actor-label '+(u.side==='enemy'?'enemy':'');el.dataset.unit=u.id;el.hidden=!!(u.waiting||u.evacuated);el.setAttribute('role','img');const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke',u.side==='enemy'?'#e3a18a':'#8fc5ae');line.setAttribute('stroke-width','1');svg.append(line);leaders.set(u.id,line);$('labels').append(el);labels.set(u.id,el);}
-  if(isCrew){const el=document.createElement('div');el.id='exit-marker';el.className='exit-marker';el.setAttribute('role','img');el.textContent='EXIT · A1–F1';const cost=document.createElement('small');cost.textContent='EXTRACT · 1 ACTION';el.append(cost);el.setAttribute('aria-label','South exit A1 to F1. Extract each fighter here for one Action.');$('labels').append(el);labels.set('@exit',el);const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke','#b6e1d9');line.setAttribute('stroke-width','1.5');svg.append(line);leaders.set('@exit',line);}
+  if(isCrew){const el=document.createElement('div');el.id='exit-marker';el.className='exit-marker';el.setAttribute('role','img');el.textContent=isOuting?'EXIT':'EXIT · A1–F1';const cost=document.createElement('small');cost.textContent=isOuting?'EXTRACT':'EXTRACT · 1 ACTION';el.append(cost);el.setAttribute('aria-label','South exit A1 to F1. Extract each fighter here for one Action.');$('labels').append(el);labels.set('@exit',el);const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('stroke','#b6e1d9');line.setAttribute('stroke-width','1.5');svg.append(line);leaders.set('@exit',line);}
   actorList=[...actors.values()];}
 function reset(mode=$('loadout').value){if(isCrew)return;if(isBear&&story){restartChapter();return;}if(graphicsLost||graphicsPreparing||!ready)return;sequence++;cancelFocus();fit();auto=false;clearRecovery();session=createSession(content,mode,scenario);rebuildActors();busy=false;action='';labUI?.cancel();$('result').hidden=true;hint(isLab?'Move + Act in either order. Inspect a destination or attack before confirming.':'Choose a fighter, then an action. One action each round.');refresh();}
 
@@ -144,12 +146,17 @@ function refresh(){
   if(!isLab&&canAct&&action==='move')for(const cell of validMoveCells(b,u)){tile(cell,0x8ecbaf);const p=parseSlotKey(cell);$('choices').append(button(`${String.fromCharCode(65+p.lane)}${p.depth+1}`,()=>run('move',cell),{'data-cell':cell,'aria-label':`Move to ${String.fromCharCode(65+p.lane)}${p.depth+1}`}));}
   if(!isLab&&canAct&&action==='attack'){const targets=attackTargets(b,u);for(const target of b.enemies.filter(v=>v.alive)){const valid=targets.some(v=>v.id===target.id),el=button(`${unitTag(target)} · ${target.name} · HP ${target.hp}/${target.maxHp} · G ${target.guard} · ${valid?(target.guard?'break guard':'hit condition'):'out of reach / blocked'}`,()=>run('attack',target.id),{'data-target':target.id});el.disabled=!valid;$('choices').append(el);if(valid)tile(target.cell,0xe9a38b,.30);}}
   if(isLab)labUI.render(action,busy);
+  const threatViews=isOuting&&b.plans?threats(b).views.filter(v=>v.valid&&v.type==='attack'):[];
   for(const p of all()){
     const el=labels.get(p.id),a=actors.get(p.id),view=fighterLabel(b,p,{targetId:labUI?.targetId(),full:!isLab||fullLabels});
     el.classList.toggle('active',view.selected);el.classList.toggle('targeted',view.targeted);el.classList.toggle('objective',isCrew&&view.objective);el.classList.toggle('down',!p.alive);el.dataset.detail=view.detail;
     el.setAttribute('aria-label',view.description);el.title=view.description;el.hidden=!!(p.waiting||p.evacuated);leaders.get(p.id).style.display=el.hidden?'none':'';a.group.visible=!p.waiting&&!p.evacuated;
     el.replaceChildren();const identity=document.createElement('b');identity.textContent=unitTag(p);el.append(identity);
     if(isCrew&&view.badge){const badge=document.createElement('em');badge.className='objective-badge';badge.textContent=view.badge;el.append(badge);}
+    // v4.96: in an outing the rivals' plans are not written out with names;
+    // what is coming at a fighter is on their own tag: the odds and the damage
+    // of one swing, or how many and how much, and whether it can put them down.
+    if(isOuting&&b.players.includes(p)&&p.alive&&!p.evacuated){const at=threatViews.filter(v=>v.target===p.id),hp=at.reduce((n,v)=>n+v.hpDamage,0);if(at.length){const badge=document.createElement('em');badge.className='threat-badge';badge.textContent=`${at.length===1?`${at[0].chance}%`:`${at.length}×`} −${hp}${hp>=p.hp?' · MAY FALL':''}`;el.append(badge);el.dataset.threat=badge.textContent;}else delete el.dataset.threat;}
     const stats=document.createElement('small');if(p.alive){for(const value of [`${p.hp}/${p.maxHp}`,`G${p.guard}`]){const span=document.createElement('span');span.textContent=value;stats.append(span);}}else stats.textContent='DOWN';el.append(stats);
     a.ring.material.opacity=p.alive?1:.25;a.ring.material.transparent=true;
     if(isLab){a.ring.scale.setScalar(view.selected||view.targeted?1.18:1);a.ring.material.color.setHex(view.targeted?0xffd28a:view.selected?0xe7f3d0:p.side==='enemy'?0xe3a18a:0x8fc5ae);}

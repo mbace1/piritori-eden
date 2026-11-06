@@ -19,17 +19,18 @@ export function missionCue(battle, coordinate) {
     // is no question, only the way out (crew-run/run.js policeOutcome).
     if (m.police?.arrived && !m.police.resolved) {
       const down = battle.players.some(p => !p.alive && !p.evacuated && !p.taken && p.id !== m.protagonist);
-      return {goal: down ? 'The police are here · Back off, or help your friends' : 'The police are here · Nobody is down: clear out', exit: 'EXIT · A1–F1', cost: 'ANSWER · NO ACTION'};
+      return {goal: down ? 'The police are here · Back off, or help your friends' : 'The police are here · Nobody is down: clear out', exit: 'EXIT', cost: 'ANSWER · NO ACTION'};
     }
     const fallen = battle.players.find(p => !p.alive && !p.evacuated && !p.helped);
     if (m.goal === 'fight') {
       const standing = battle.enemies.filter(e => e.alive).length;
-      return {goal: `Make them back off · ${standing} still standing${fallen ? ` · help ${fallen.name} at ${coordinate(fallen.cell)}` : ''}`, exit: 'EXIT · A1–F1', cost: 'WITHDRAW · THE JOB IS LOST'};
+      return {goal: `Make them back off · ${standing} still standing${fallen ? ` · help ${fallen.name}` : ''}`, exit: 'EXIT', cost: 'WITHDRAW · THE JOB IS LOST'};
     }
     const out = battle.players.filter(p => p.extracted).length, all = battle.players.length;
-    const goal = fallen ? `Help ${fallen.name} at ${coordinate(fallen.cell)}, then everyone out → EXIT A1–F1`
-      : out ? `${out}/${all} out · everyone out → EXIT A1–F1` : 'Get everyone out → EXIT A1–F1';
-    return {goal, exit: 'EXIT · A1–F1', cost: 'EXTRACT · 1 ACTION'};
+    // v4.96, the UI diet: no grid codes and no action costs in an outing.
+    const goal = fallen ? `Help ${fallen.name}, then everyone out → EXIT`
+      : out ? `${out}/${all} out · everyone out → EXIT` : 'Get everyone out → EXIT';
+    return {goal, exit: 'EXIT', cost: 'EXTRACT'};
   }
   const target = battle.players.find(p => p.id === m.targetId);
   const carrier = battle.players.find(p => p.id === m.carrierId);

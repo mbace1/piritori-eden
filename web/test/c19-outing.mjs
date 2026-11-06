@@ -19,7 +19,7 @@ const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/pl
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=6');
 const O = await import('../js/v3/outing.js?v=7');
 const R = await import('../crew-run/run.js?v=23');
-const { missionCue } = await import('../fight-module/readability.js?v=4');
+const { missionCue } = await import('../fight-module/readability.js?v=5');
 const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 

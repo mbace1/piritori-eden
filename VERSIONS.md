@@ -1,3 +1,20 @@
+## v4.96 — 2026-11-06
+
+**The UI diet, step 2: the brief and the fight (ROADMAP milestone 4).** Owner, 2026-10-26: *"Analyze current UI and elements like character names in general. These aren't needed, so we need to optimize."* `design/UI_DIET.md` set the order: the meeting (v4.85), then the brief and the fight. This is the second step, in Act I's fights only. Night Shift's own rescue nights and the arena lab keep their screens.
+
+- **The brief** keeps the job, the odds, the way out, the police and Fight.
+  - Cut: the date and place header, the story paragraph, and "Saved on this browser".
+  - The six names become one line: **Sides 3 vs 3**. In a getaway the carrier is still named, because who carries it decides where everyone stands.
+- **The fight:**
+  - Cut: the "Night Shift" title, the second "3 standing", the grid codes ("A1–F1", "help Reijo at D6"), the selected fighter's name and face, and the "1 action" / "1 move" labels. A spent action still says USED.
+  - **The rivals' plans are on the board, not in a list of names.** The board already drew who aims at whom. Now each fighter a plan will hit carries a red badge on their own tag: the odds and the damage of one swing ("70% −2"), or how many and how much ("2× −4"), and MAY FALL when it could put them down. The written list ("R1 → Reijo · 70% · 2 HP / 2 guard") is gone.
+  - The selected fighter's line keeps the risk where they stand, and after a previewed move, without the name: "Up to 2 HP / 2 guard at risk after this move".
+- **The picture:** `design/UI_DIET_FIGHT.jpg`, the brief and the fight on a phone, before and after.
+- **Gates:** `outing-browser` checks the brief has no names, date, place or story; the fight has no name, face, action cost, grid code or written plans; and every threatened fighter's tag carries the odds. The other suites are unchanged.
+- **Also measured, not shipped (G1 row 5):** Ready, where a braced fighter hits back when a telegraphed swing lands, and harder blows (rivals +2 and +3). Neither moved careful play past +6 points; ROADMAP §5 says why.
+- **Cache:** ui v34, style v9, startup v30, fight main v56, readability v5, tactical-ui v15, app v63. The label is v4.96.
+- **Owner played: pending.** Godot paused.
+
 ## v4.95 — 2026-11-01
 
 **The yard is not the edge of the city (visuals, ROADMAP milestone 3).** The open item from v4.91 was "the yard is dark from the front". Measured first: the yard's board is as bright as the courtyard's (27.4 against 28.3 in the middle of the frame from the front). What reads as dark is outside it. Past the new yard wall, on the left and in front of the gate, there was nothing but unlit ground, where the courtyard has buildings on every side.

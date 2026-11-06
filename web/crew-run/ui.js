@@ -1,4 +1,4 @@
-import {missionCue} from '../fight-module/readability.js?v=4';
+import {missionCue} from '../fight-module/readability.js?v=5';
 import {LOCATIONS,locationId} from './locations.js?v=11';
 import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,startHeat,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=23';
 import {icon} from './icons.js?v=2';
@@ -27,7 +27,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
  function paintBattle(b,u){
   const selected=$('selected-unit');selected.replaceChildren();if(!u)return;selected.append(face(u));const info=document.createElement('div');info.className='selected-info';info.append(text('h2',u.name));const vitality=text('p',`HP ${u.hp}/${u.maxHp} · GUARD ${u.guard}${u.maxAmmo?' · AMMO '+u.ammo+'/'+u.maxAmmo:''}`,'vitality');const segments=document.createElement('span');segments.className='condition-pips';segments.setAttribute('aria-hidden','true');for(let i=0;i<u.maxHp;i++)segments.append(text('i','',i<u.hp?'filled':''));vitality.append(segments);info.append(vitality);const budget=document.createElement('p');budget.className='action-budget';budget.append(stamp(u.evacuated?'HOME':!u.alive?'DOWN':b.moved.includes(u.id)?'MOVE USED':'MOVE READY',b.moved.includes(u.id)?'used':''),stamp(!u.alive?'':b.acted.includes(u.id)?'ACTION USED':'ACTION READY',b.acted.includes(u.id)?'used':''));info.append(budget);selected.append(info);
   for(const el of document.querySelectorAll('#roster button')){const p=b.players.find(p=>p.id===el.dataset.unitid);el.setAttribute('aria-label',`${p.label} · ${p.name} · HP ${p.hp}/${p.maxHp} · ${p.evacuated?'home':p.alive?'select crew':'down'}`);el.replaceChildren(face(p),text('span',p.name.split(' ')[0],'roster-name'),text('small',p.evacuated?'HOME':!p.alive?'DOWN':`${p.hp}/${p.maxHp}`));el.classList.toggle('home',!!p.evacuated);}
-  for(const el of document.querySelectorAll('#actions [data-action]')){const type=el.dataset.action;el.hidden=type==='reload'&&!u.maxAmmo||type==='item'&&!u.itemIds?.length;if(!el.querySelector('svg')){el.prepend(icon(type==='attack'?u.equipment:type==='item'?'medical':type));el.append(text('small','','command-cost'));}const spent=type==='move'?b.moved.includes(u.id):b.acted.includes(u.id);el.querySelector('.command-cost').textContent=spent?'USED':type==='move'?'1 MOVE':'1 ACTION';}
+  for(const el of document.querySelectorAll('#actions [data-action]')){const type=el.dataset.action;el.hidden=type==='reload'&&!u.maxAmmo||type==='item'&&!u.itemIds?.length;if(!el.querySelector('svg')){el.prepend(icon(type==='attack'?u.equipment:type==='item'?'medical':type));el.append(text('small','','command-cost'));}const spent=type==='move'?b.moved.includes(u.id):b.acted.includes(u.id);el.querySelector('.command-cost').textContent=spent?'USED':state.outing?'':type==='move'?'1 MOVE':'1 ACTION';}
   $('actions').querySelector('[data-action=attack] svg')?.replaceWith(icon(u.equipment));$('actions').style.setProperty('--command-count',document.querySelectorAll('#actions [data-action]:not([hidden])').length);
   $('phase').textContent=b.status!=='active'?'COMPLETE':document.body.classList.contains('resolving')?'RESOLVING':'YOUR TURN';
  }
@@ -43,7 +43,7 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
   for(const id of ['fixtures','secondary','result'])$(id).hidden=true;
   if(menu){
    $('outing-options').replaceChildren();
-   const screen=$('crew-content'),scroll=$('crew-screen').scrollTop;screen.replaceChildren();$('crew-message').textContent=loadError||(!storageOK?'Saving unavailable · keep this tab open':'Saved on this browser');
+   const screen=$('crew-content'),scroll=$('crew-screen').scrollTop;screen.replaceChildren();document.body.classList.toggle('outing',!!state.outing);$('crew-message').textContent=loadError||(!storageOK?'Saving unavailable · keep this tab open':state.outing?'':'Saved on this browser');
    $('crew-night').textContent=state.outing?.when?`KALLIO 2003 / ${state.outing.when}`:`KALLIO 2003 / NIGHT ${String(state.night).padStart(2,'0')}`;
    const left=document.createElement('section');left.className='mission-copy';const ledger=document.createElement('section');ledger.className='crew-ledger';
    if(gone){left.append(text('p','THE WAY HOME','eyebrow'),text('h2','No fight here.'),text('p',gone,'lead'));ledger.append(button('Back to Kallio',home,{class:'primary',id:'crew-home'}));screen.append(left,ledger);$('crew-message').textContent='';return;}
@@ -63,12 +63,14 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
     // is supplied, so there is nothing to choose here: who, where, the job, the
     // way out and the heat, over the scene, and one button.
     const o=state.outing,them=o.side?o.side[0].toUpperCase()+o.side.slice(1):'They',fight=o.goal!=='getaway';
-    left.append(text('p',(o.place||LOCATIONS[locationId()]).toUpperCase(),'eyebrow'),text('h2',fight?'Make them back off.':'Get everyone out.'),
-     text('p',`${o.opening?o.opening+' ':''}${fight?`${them} want this to go their way. Put them down or make them run.`:`${them} are between you and the way out, ${o.wayOut||'the south edge'}. Get out with it.`}`,'lead'));
+    // v4.96, the UI diet (owner, 2026-10-26: "These aren't needed"): the job,
+    // the odds, the way out and the police. No date, place or story paragraph,
+    // and no names: the scene shows who is there.
+    void them;left.append(text('h2',fight?'Make them back off.':'Get everyone out.'));
     const facts=document.createElement('dl');facts.className='brief-facts';
     // v4.89: in a getaway one of them carries it, and carrying slows them.
     const carrier=fight?null:state.crew.find(p=>p.id===carrierOf(available(state).filter(p=>state.selected.includes(p.id)).map(p=>p.id),content.protagonist?.id));
-    for(const [k,v] of [['Yours',state.crew.map(p=>p.name).join(', ')],['Theirs',o.rivals.map(r=>r.name).join(', ')],...(carrier?[['Carrying',`${carrier.name} carries it: ${RULES.carryReach} tiles a move, the others 4. Keep them off ${carrier.name}.`]]:[]),['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${startHeat(o.heat)}.`]])facts.append(text('dt',k),text('dd',v));
+    for(const [k,v] of [['Sides',`${state.crew.length} vs ${o.rivals.length}`],...(carrier?[['Carrying',`${carrier.name} carries it: ${RULES.carryReach} tiles a move, the others 4. Keep them off ${carrier.name}.`]]:[]),['Way out',fight?'South edge. Withdraw any time; the job is lost.':'South edge. Everyone out wins it.'],['Police',`They come when pressure reaches ${POLICE_AT}. Here it starts at ${startHeat(o.heat)}.`]])facts.append(text('dt',k),text('dd',v));
     left.append(facts);
     ledger.append(pictButton('Fight','end',deploy,{class:'primary',id:'crew-deploy'}));
    }else{
@@ -85,10 +87,10 @@ export function mountCrew({content,button,replaceSession,getSession,refresh,run,
 
   const m=b.mission,u=b.players.find(p=>p.id===b.selectedId),target=b.players.find(p=>p.id===m.targetId),carrier=b.players.find(p=>p.id===m.carrierId),goal=missionCue(b,coordinate).goal;
   $('mission-goal').textContent=goal;const pol=m.police;$('mission-pressure').textContent=pol?(pol.arrived?'POLICE HERE':pol.afterRound!==null?`POLICE AFTER TURN ${pol.afterRound} · ${pol.cells.map(coordinate).join(' ')}`:`PRESSURE ${m.heat}/${pol.at} · POLICE AT ${pol.at}`):m.arrived?'RIVALS ENTERED':m.arrival?`ARRIVALS: AFTER TURN ${m.arrival.afterRound} · A8 / F8`:`PRESSURE ${m.heat}/5`; $('mission-pressure').dataset.hot=String(!!(m.arrival||pol?.afterRound!==null&&pol));
-  $('mission-count').textContent=`${m.goal==='fight'?`${b.enemies.filter(e=>e.alive).length} OF THEM STANDING`:`${b.players.filter(p=>p.evacuated).length}/${b.players.length} ${m.goal?'OUT':'HOME'}${(c=>c?` · ${c.name.split(' ')[0].toUpperCase()} CARRIES IT`:'')(b.players.find(p=>p.carrying&&p.alive&&!p.evacuated))}`}${storageOK?'':' · SAVING UNAVAILABLE'}`;
+  $('mission-count').hidden=!!state.outing&&m.goal==='fight'&&storageOK;$('mission-count').textContent=`${m.goal==='fight'?`${b.enemies.filter(e=>e.alive).length} OF THEM STANDING`:`${b.players.filter(p=>p.evacuated).length}/${b.players.length} ${m.goal?'OUT':'HOME'}${(c=>c?` · ${c.name.split(' ')[0].toUpperCase()} CARRIES IT`:'')(b.players.find(p=>p.carrying&&p.alive&&!p.evacuated))}`}${storageOK?'':' · SAVING UNAVAILABLE'}`;
   for(let x=0;x<6;x++)tile(`${x},0`,0x38b8c8,.08);if(target&&!target.evacuated)tile(target.cell,0xffdb80,.5);if(!target&&!m.recovered&&m.targetCell)tile(m.targetCell,0xffdb80,.5);if(m.arrival&&!m.arrived)for(const c of m.arrival.cells)tile(c,0xee8f74,.48);if(pol&&pol.afterRound!==null)for(const c of pol.cells)tile(c,0x4f7fa0,.55);
   const commands=$('mission-actions');commands.replaceChildren();const asked=pol?.arrived&&!pol.resolved,can=!busy&&b.status==='active'&&!asked&&u?.alive&&!b.acted.includes(u.id);document.body.classList.toggle('police-asking',!!asked);
-  function cmd(label,type,value,enabled=true){const el=button(label,()=>run(type,value),{'data-mission-action':type,'aria-label':label});el.prepend(icon(type==='sprint'?'boots':type==='aid'?'medical':type==='recover'?'kit':type));el.append(text('small','1 ACTION','command-cost'));el.disabled=!can||!enabled;el.hidden=!enabled;commands.append(el);}
+  function cmd(label,type,value,enabled=true){const el=button(label,()=>run(type,value),{'data-mission-action':type,'aria-label':label});el.prepend(icon(type==='sprint'?'boots':type==='aid'?'medical':type==='recover'?'kit':type));if(!state.outing)el.append(text('small','1 ACTION','command-cost'));el.disabled=!can||!enabled;el.hidden=!enabled;commands.append(el);}
   cmd('Extract · south edge','extract',undefined,u?.cell.endsWith(',0'));
   if(u?.kit==='boots')cmd('Sprint · spend Action','sprint',undefined,b.moved.includes(u.id));
   if(!target&&!m.recovered&&m.targetCell)cmd('Recover kit','recover',undefined,u&&dist(u.cell,m.targetCell)<=1);

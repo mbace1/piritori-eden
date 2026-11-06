@@ -31,7 +31,7 @@ export function tacticalUI({getSession,button,tile,edgeMark,intentLine,run,hint,
     const danger=threats(b,destination),panel=$('enemy-plans');panel.replaceChildren();
     const summary=document.createElement('p'),total=danger.totals[u?.id];
     summary.textContent=`ENEMY PLANS · ${destination?'AFTER PREVIEWED MOVE':'CURRENT POSITIONS'} · ${u?.label}: ${total?`${total.attacks} attacks, up to ${total.hp} HP + ${total.guard} guard damage${total.hp>=u.hp?' · POTENTIALLY LETHAL':''}`:'no planned hits'}`;
-    if(intentLine)summary.textContent=total?`${u.name}: up to ${total.hp} HP / ${total.guard} guard at risk${total.hp>=u.hp?' · MAY FALL':''}`:'ENEMY PLANS · '+(destination?'AFTER THIS MOVE':'THIS ROUND');
+    if(intentLine)summary.textContent=total?`${document.body.classList.contains('outing')?'Up to':`${u.name}: up to`} ${total.hp} HP / ${total.guard} guard at risk${destination?' after this move':''}${total.hp>=u.hp?' · MAY FALL':''}`:'ENEMY PLANS · '+(destination?'AFTER THIS MOVE':'THIS ROUND');
     summary.hidden=!!intentLine&&!total&&!destination;panel.append(summary);
     for(const v of danger.views){const enemy=b.enemies.find(p=>p.id===v.id);if(!enemy.alive)continue;const t=b.players.find(p=>p.id===v.target);
       const text=`${enemy.label} · ${v.path.length?`→ ${coordinate(v.to)} · `:''}${v.type==='attack'?`tracks ${t?.label} · ${v.valid?`${v.chance}% · ${v.hpDamage} HP + ${v.guardDamage} guard${v.cover==='partial'?' · WALL':v.flanked?' · FLANKED':''}`:v.reason+' — CANCELLED'}`:v.reason}`;

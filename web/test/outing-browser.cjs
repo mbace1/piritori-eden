@@ -139,15 +139,26 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: in the courtyard`, (await page.evaluate(() => fightModule.metrics().environment?.location)) === 'courtyard');
       ok(`${name}: the brief says the job`, (await page.locator('#crew-content h2').first().innerText()) === 'Make them back off.');
       const facts = await page.locator('.brief-facts').innerText();
-      ok(`${name}: and who, the way out and when the police come`, /Aatami/.test(facts) && /Withdraw any time/.test(facts) && new RegExp(`starts at ${kind === 'police' ? 5 : 0}`).test(facts), facts);
+      // v4.96, the UI diet (design/UI_DIET.md step 2): the odds, not six names.
+      ok(`${name}: the odds, the way out and when the police come`, /sides\s*3 vs 3/i.test(facts) && !/Aatami|Reijo|Lan Ho|Thuy|Milena|Hodan/.test(facts) && /Withdraw any time/.test(facts) && new RegExp(`starts at ${kind === 'police' ? 5 : 0}`).test(facts), facts);
       ok(`${name}: no crew page`, !(await page.locator('.crew-card').count()) && !(await page.getByRole('button', { name: /Equip/ }).count()));
       ok(`${name}: the scene stays in view behind the brief`, await page.evaluate(() => document.getElementById('crew-screen').getBoundingClientRect().top > innerHeight * 0.3));
-      ok(`${name}: on Act I's clock, with the way back to Kallio`, (await page.locator('#crew-night').innerText()) === 'KALLIO 2003 / DAY 8 · NIGHT'
+      ok(`${name}: no title, date, place or story; the way back to Kallio`, await page.locator('header h1').isHidden() && await page.locator('#crew-night').isHidden()
+        && !(await page.locator('#crew-content .eyebrow, #crew-content .lead').count()) && (await page.locator('#crew-message').innerText()).trim() === ''
         && (await page.locator('.arcade-home').getAttribute('href')) === '../?outing=back');
       await shot(page, `${view}-${kind}-brief`);
       await tap(page.locator('#crew-deploy')); await idle();
       ok(`${name}: one tap and it is on`, (await page.evaluate(() => crewRun.snapshot().phase)) === 'battle' && /^Make them back off/.test(await page.locator('#mission-goal').innerText()));
       ok(`${name}: the police are forecast on the pressure line`, new RegExp(`PRESSURE ${kind === 'police' ? 5 : 0}/6 · POLICE AT 6`).test(await page.locator('#mission-pressure').innerText()));
+      // v4.96, the UI diet: no fighter name or face, no action costs, no grid
+      // code, "standing" said once, and the rivals' plans on the board: each
+      // threatened fighter's tag carries the odds and the damage coming at them.
+      const costs = await page.locator('#actions .command-cost').allInnerTexts();
+      const badges = await page.locator('.threat-badge').allInnerTexts();
+      ok(`${name}: the fight says only what changes a decision`, await page.locator('#selected-unit .unit-portrait').isHidden() && await page.locator('#selected-unit h2').isHidden()
+        && costs.every(t => t === '' || t === 'USED') && /^EXIT/.test(await page.locator('#exit-marker').innerText()) && !/A1/.test(await page.locator('#exit-marker').innerText())
+        && await page.locator('#mission-count').isHidden() && !(await page.locator('.enemy-plan:visible').count()), JSON.stringify({ costs }));
+      ok(`${name}: what is coming at a fighter is on their tag`, badges.length > 0 && badges.every(t => /^(\d+%|\d+×) −\d+( · MAY FALL)?$/.test(t)), JSON.stringify(badges));
       await tap(page.locator('#help'));
       ok(`${name}: Withdraw is in the menu`, await page.locator('#outing-options .withdraw-command').isEnabled());
       await page.keyboard.press('Escape');
