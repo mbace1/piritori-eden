@@ -35,3 +35,9 @@ The careful implementation attempts an available attack before evaluating safer 
 ## Visual evidence
 
 Before/after phone (390×844), after desktop (1280×800), and a real-time WebM of the existing Jaska/Aatami animations and choice loop. Existing semi-approved Aatami art remains semi-approved. Landscape 844×390 keeps a scroll fallback; physical Pixel/iPad checks remain pending. No new animation candidate was created or promoted.
+
+## Follow-up: keyboard access and verification
+
+Dialogue now declares a modal, cycles Tab/Shift+Tab through its enabled choices, keeps focus in the dialog during Aatami's response, updates the accessible speaker label, and restores the previous control when it still exists. Scene Club regression checks the keyboard cycle at all three viewports.
+
+Local results: 35/35 bare-node suites pass after updating the cache-token assertion; Scene Club browser passes phone, desktop and landscape, and Aatami browser passes 16/16. The first CI run on `72524a7` failed its old `app.js?v=63` assertion after the intended cache bump to 64; that assertion is corrected in the follow-up. Other CI/browser results must be checked on the final head before claiming full acceptance.
