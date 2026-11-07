@@ -1,0 +1,1027 @@
+{
+  "source": {
+    "repository": "mbace1/piritori-eden",
+    "source_commit": "07877b5840633583c2d18a3686faaedf27ccfada",
+    "date": "2026-11-07",
+    "content": "content/era1-slice-v1.json",
+    "content_sha256": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "manifest": "art/v3/manifest.json",
+    "manifest_sha256": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
+    "authority": [
+      "DESIGN_AUTHORITY.md",
+      "ROADMAP.md",
+      "ART_BIBLE.md",
+      "art-library/APPROVALS.md",
+      "design/SCENARIO_ATLAS.md",
+      "design/C19_CAMPAIGN_FIGHTS.md"
+    ],
+    "scope": "Review-only proposals for all 17 authored encounters; no runtime/content/manifest changes or new story."
+  },
+  "status_meanings": {
+    "direct": "Existing direct content binding, available in the register; this is not final-art/device approval.",
+    "proposed-existing": "Available registered asset proposed for review only; current content has no direct binding.",
+    "unbuilt": "No suitable staged plate selected; show a clearly labelled neutral placeholder."
+  },
+  "proposals": [
+    {
+      "encounter_id": "enc-first-purchase",
+      "site_id": "piritori_first_buy",
+      "schedule": [
+        {
+          "index": 0,
+          "day": 1,
+          "block": "day",
+          "anchor_id": "piritori"
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "proposed_scene_asset_id": "scene-piritori-square-v01",
+      "status": "direct",
+      "rationale": "Retain the existing Piritori square binding; stage the deal and watcher at its public edge, preserving the empty central meeting space.",
+      "uncertainty": "Plate is semi-approved prototype-only; seller/watcher source selections and foreground prop placement remain unapproved.",
+      "scene_source": {
+        "asset_id": "scene-piritori-square-v01",
+        "file": "art/v3/scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "seller-esa",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "seller esa · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: select an existing approved modular/source identity for seller Esa before extracting a named speaker; stage the pocket bag and wet cuff as review-only props."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-first-purchase",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-jaska-receipt",
+      "site_id": "jaska_studio",
+      "schedule": [
+        {
+          "index": 2,
+          "day": 2,
+          "block": "day",
+          "anchor_id": "makelansilta"
+        }
+      ],
+      "direct_scene_asset_id": "scene-scene-club-v01",
+      "proposed_scene_asset_id": "scene-scene-club-v01",
+      "status": "direct",
+      "rationale": "Retain the existing Scene Club interior and approved Jaska rig. Use Aatami front for one-at-a-time dialogue; the authored receipt/envelope facts govern props.",
+      "uncertainty": "Scene Club plate is semi-approved; Aatami front/side rigs and new entrance/transition staging still need owner review.",
+      "scene_source": {
+        "asset_id": "scene-scene-club-v01",
+        "file": "art/v3/scenes/scene-club-v01.webp",
+        "source": "art-src/scenes/scene-club-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        },
+        {
+          "participant_id": "jaska",
+          "asset_id": "cutin-jaska-rig-v01",
+          "approval_status": "approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P0: complete real-motion Aatami front/side seam, blink, head-gesture and phone-choice review; preserve Jaska source identity."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-jaska-receipt",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-first-sale",
+      "site_id": "staffed_bank",
+      "schedule": [
+        {
+          "index": 1,
+          "day": 1,
+          "block": "night",
+          "anchor_id": "siltasaari"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": null,
+      "status": "unbuilt",
+      "rationale": "An outside-queue approach is needed. The available bank-counter plate is an interior and is only a contextual reference; do not stage the sale at the teller window.",
+      "uncertainty": "No direct plate is bound. A bank exterior/queue composition is unbuilt; an interior crop would contradict the authored outside-queue staging.",
+      "scene_source": null,
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "buyer-leena",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "buyer leena · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: build a labelled bank-exterior/queue composition candidate using source-grounded Siltasaari approach; keep Leena identity a placeholder pending source selection."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-first-sale",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ],
+      "contextual_asset_ids": [
+        "scene-bank-counter-v01"
+      ]
+    },
+    {
+      "encounter_id": "enc-runner-at-tram-stop",
+      "site_id": "harju_pitch",
+      "schedule": [
+        {
+          "index": 3,
+          "day": 2,
+          "block": "night",
+          "anchor_id": "harju"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": "scene-harju-pitch-v01",
+      "status": "proposed-existing",
+      "rationale": "An existing Harju pitch plate establishes the authored Harju location. Use only as a review backdrop with an explicit unbuilt tram-stop approach marker; it does not draw the required stop.",
+      "uncertainty": "Sports pitch is not a finished tram-stop illustration. Exact approach/camera and local tram-stop dressing need review; no geography is inferred from this placeholder.",
+      "scene_source": {
+        "asset_id": "scene-harju-pitch-v01",
+        "file": "art/v3/scenes/harju-pitch-v01.webp",
+        "source": "art-src/scenes/harju-pitch-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "crew-slot-runner",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot runner · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: stage a stop/approach foreground candidate beside the existing Harju reference; verify timetable and messenger-bag focus at phone size."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-runner-at-tram-stop",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-bank-counter",
+      "site_id": "staffed_bank",
+      "schedule": [
+        {
+          "index": 4,
+          "day": 3,
+          "block": "day",
+          "anchor_id": "siltasaari"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": "scene-bank-counter-v01",
+      "status": "proposed-existing",
+      "rationale": "The registered staffed-bank interior matches this authored teller/queue scene and already preserves clear speaker space.",
+      "uncertainty": "No direct plate is bound today. Teller identity/source and speaking cut-in are unbuilt; conversion text must stay live and authored.",
+      "scene_source": {
+        "asset_id": "scene-bank-counter-v01",
+        "file": "art/v3/scenes/bank-counter-v01.webp",
+        "source": "art-src/scenes/bank-counter-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "teller-anne",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "teller anne · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: test a review-only binding of the existing bank plate, then select teller source and ticket/clock placement without baked conversion copy."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-bank-counter",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-toko-quiet-voice",
+      "site_id": "toko_slomo_noodles",
+      "schedule": [
+        {
+          "index": 5,
+          "day": 3,
+          "block": "night",
+          "anchor_id": "vaasankatu"
+        }
+      ],
+      "direct_scene_asset_id": "scene-toko-noodles-empty-v01",
+      "proposed_scene_asset_id": "scene-toko-noodles-empty-v01",
+      "status": "direct",
+      "rationale": "Retain the existing empty bar and approved Toko paper rig; bowl, radio and tally facts come from authored content.",
+      "uncertainty": "Toko paper rig is approved, while the empty-bar plate remains semi-approved prototype-only; preserve those separate states.",
+      "scene_source": {
+        "asset_id": "scene-toko-noodles-empty-v01",
+        "file": "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "source": "art-src/scenes/toko-noodles-empty-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        },
+        {
+          "participant_id": "toko",
+          "asset_id": "scene-toko-rig-v01",
+          "approval_status": "approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: reuse the approved Toko rig; review radio/bowl/tally framing and motion without altering the gold mask."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-toko-quiet-voice",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-karhupuisto-watch",
+      "site_id": "karhupuisto_bench",
+      "schedule": [
+        {
+          "index": 6,
+          "day": 4,
+          "block": "day",
+          "anchor_id": "karhupuisto"
+        }
+      ],
+      "direct_scene_asset_id": "scene-karhupuisto-v01",
+      "proposed_scene_asset_id": "scene-karhupuisto-v01",
+      "status": "direct",
+      "rationale": "Retain the approved park plate; keep the watcher, dog and changing direction as separate presentation placeholders/layers.",
+      "uncertainty": "The park baseline is approved; new cast/crowd staging and any dog/foliage extraction or motion need their own review.",
+      "scene_source": {
+        "asset_id": "scene-karhupuisto-v01",
+        "file": "art/v3/scenes/karhupuisto-v01.webp",
+        "source": "locations/era1/location-karhupuisto-v01.png",
+        "approval_status": "approved",
+        "production_status": "prototype-ready"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "crew-slot-watcher",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot watcher · presentation placeholder"
+        },
+        {
+          "participant_id": "dog-owner",
+          "kind": "ambient-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "dog owner · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: select watcher/dog-owner source presentation; test separate dog/wind layers and a readable dry-bench cue."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-karhupuisto-watch",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-mccormick-yard",
+      "site_id": "mccormick_yard",
+      "schedule": [
+        {
+          "index": 7,
+          "day": 4,
+          "block": "night",
+          "anchor_id": "linjat_yard"
+        }
+      ],
+      "direct_scene_asset_id": "scene-kallio-service-yard-v01",
+      "proposed_scene_asset_id": "scene-kallio-service-yard-v01",
+      "status": "direct",
+      "rationale": "Retain the registered service-yard plate and the authored family/invoice meeting; do not re-stage this as a new battle.",
+      "uncertainty": "Plate and new cast presentation remain prototype/candidate; the photograph and invoice should not invent family facts.",
+      "scene_source": {
+        "asset_id": "scene-kallio-service-yard-v01",
+        "file": "art/v3/scenes/kallio-service-yard-v01.webp",
+        "source": "locations/era1/location-kallio-service-yard-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "sean-mccormick",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "sean mccormick · presentation placeholder"
+        },
+        {
+          "participant_id": "crew-slot-muscle",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot muscle · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: source-select Sean/crew presentation and position invoice/photo/bat-handle placeholders without obscuring choices."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-mccormick-yard",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-bear-path",
+      "site_id": "karhupuisto_bench",
+      "schedule": [
+        {
+          "index": 8,
+          "day": 5,
+          "block": "day",
+          "anchor_id": "karhupuisto"
+        }
+      ],
+      "direct_scene_asset_id": "scene-karhupuisto-clearing-v01",
+      "proposed_scene_asset_id": "scene-karhupuisto-clearing-v01",
+      "status": "direct",
+      "rationale": "Retain the direct clearing plate for narrative review. Actual fighting must use the existing park C.19 mission outing, not the illustration or gallery buttons.",
+      "uncertainty": "Clearing plate is semi-approved and cannot replace the authored bear/plinth/withdrawal geometry. Full C.19 fight and receipt verification belong to the existing battle flow.",
+      "scene_source": {
+        "asset_id": "scene-karhupuisto-clearing-v01",
+        "file": "art/v3/scenes/karhupuisto-clearing-v01.webp",
+        "source": "locations/era1/location-karhupuisto-clearing-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [],
+      "cast_placeholders": [
+        {
+          "participant_id": "aatami-network-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "aatami network team · presentation placeholder"
+        },
+        {
+          "participant_id": "piritori-rival-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "piritori rival team · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P0: link review to the existing C.19 park mission; validate bear/plinth/exit continuity with actual arena captures before any environment changes."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-bear-path",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": {
+        "authored_battle_choices": [
+          {
+            "choice_id": "hold-path",
+            "battle_id": "battle-karhupuisto-2v2",
+            "mission_id": "mission-bear-path",
+            "battle_anchor_id": "karhupuisto",
+            "players_required": 2,
+            "engine": "C.19 Night Shift",
+            "arena": "park",
+            "handoff_route_template": "web/crew-run/?campaign=1&outing=<persisted-generated-outing-id>&arena=<outing-kit>",
+            "static_outing_id_allowed": false
+          }
+        ],
+        "settlement": "Existing missionOuting → C.19 → campaign receipt, applied once. Gallery has no combat resolver.",
+        "entry": {
+          "kind": "existing-saved-playtest",
+          "repo_relative_url": "web/?play=g0-bear",
+          "label": "Play actual C.19 Bear Path",
+          "setup": "Existing playtest fields two crew, sets the current campaign aside, and opens this encounter. Choose hold-path, then use the actual fight UI.",
+          "source": "web/js/v3/testlist.js#g0-bear",
+          "test": "web/test/play-card.cjs"
+        }
+      },
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-first-firearm",
+      "site_id": "piritori_first_buy",
+      "schedule": [
+        {
+          "index": 9,
+          "day": 5,
+          "block": "night",
+          "anchor_id": "piritori"
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "proposed_scene_asset_id": "scene-piritori-square-v01",
+      "status": "direct",
+      "rationale": "Reuse the authored Piritori square plate, allowing different close framing without inventing a firearm battle.",
+      "uncertainty": "Seller and crew reaction candidates need source approval. This encounter has no direct authored start-battle effect.",
+      "scene_source": {
+        "asset_id": "scene-piritori-square-v01",
+        "file": "art/v3/scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "seller-esa",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "seller esa · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: review an alternate crop of existing Piritori art and a separable wrapped-weight prop; select seller source rather than redesigning Esa."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-first-firearm",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-jade-window",
+      "site_id": "jade_lantern_front",
+      "schedule": [
+        {
+          "index": 10,
+          "day": 6,
+          "block": "day",
+          "anchor_id": "hakaniemi"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": "scene-jade-lantern-front-v01",
+      "status": "proposed-existing",
+      "rationale": "Use the available restaurant-front plate as a review proposal. Keep the ordinary workplace/lunch queue, with no faction stereotyping or invented back-room mission.",
+      "uncertainty": "No direct plate is bound. Current schedule places the scene at Hakaniemi, while older documents/asset context mention Linjat; keep the current authored anchor explicit and do not bake an address into the art.",
+      "scene_source": {
+        "asset_id": "scene-jade-lantern-front-v01",
+        "file": "art/v3/scenes/jade-lantern-front-v01.webp",
+        "source": "art-src/scenes/jade-lantern-front-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "mei-lan",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "mei lan · presentation placeholder"
+        },
+        {
+          "participant_id": "lunch-crowd",
+          "kind": "ambient-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "lunch crowd · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: review the available shopfront at the authored Hakaniemi anchor; select Mei-Lan source and build lunch-queue placeholders as ordinary workplace people."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-jade-window",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-courtyard-last-call",
+      "site_id": "jaska_studio",
+      "schedule": [
+        {
+          "index": 11,
+          "day": 6,
+          "block": "night",
+          "anchor_id": "torkkelinmaki"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": "scene-courtyard-prototype-v05",
+      "status": "proposed-existing",
+      "rationale": "The authored porttikongi and battle location support the available courtyard plate as a review proposal. This does not resolve the conflicting jaska_studio site binding.",
+      "uncertainty": "Current site_id is jaska_studio, but schedule and battle location are torkkelinmaki. Keep Scene Club and courtyard separate until the content/site binding is resolved.",
+      "scene_source": {
+        "asset_id": "scene-courtyard-prototype-v05",
+        "file": "art/v3/scenes/courtyard-prototype-v05.webp",
+        "source": "locations/era1/location-kallio-courtyard-v05.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [],
+      "cast_placeholders": [
+        {
+          "participant_id": "aatami-network-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "aatami network team · presentation placeholder"
+        },
+        {
+          "participant_id": "courtyard-rival-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "courtyard rival team · presentation placeholder"
+        },
+        {
+          "participant_id": "jaska-offscreen",
+          "kind": "offscreen-context",
+          "approved_cut_in_asset_id": null,
+          "label": "jaska offscreen · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P0: resolve/record the site-versus-anchor ambiguity before runtime binding; review the existing courtyard plate separately and preserve the C.19 courtyard mission route."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-courtyard-last-call",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": {
+        "authored_battle_choices": [
+          {
+            "choice_id": "take-positions",
+            "battle_id": "battle-courtyard-3v3",
+            "mission_id": "mission-courtyard-receipts",
+            "battle_anchor_id": "torkkelinmaki",
+            "players_required": 3,
+            "engine": "C.19 Night Shift",
+            "arena": "courtyard",
+            "handoff_route_template": "web/crew-run/?campaign=1&outing=<persisted-generated-outing-id>&arena=<outing-kit>",
+            "static_outing_id_allowed": false
+          }
+        ],
+        "settlement": "Existing missionOuting → C.19 → campaign receipt, applied once. Gallery has no combat resolver.",
+        "entry": {
+          "kind": "existing-campaign-progression-or-test-fixture",
+          "repo_relative_url": "web/",
+          "label": "Open campaign; courtyard mission fixture is documented",
+          "direct_mission_playtest_url": null,
+          "setup": "The existing mission-browser fixture stages scheduleIndex 11, selectedAnchor torkkelinmaki, and three recruited/deployed crew; real take-positions click creates the persisted C.19 mission outing. Ordinary campaign progression reaches the same choice.",
+          "source": "web/test/mission-browser.cjs",
+          "test": "web/test/c19-outing.mjs",
+          "related_door_playtest_url": "web/?play=g0-door",
+          "related_door_label": "Actual C.19 courtyard door fight; a different authored encounter, not Courtyard Receipts",
+          "forbidden_substitute": "web/?play=battle-3v3 is a legacy formation-board fixture, not this C.19 mission route."
+        }
+      },
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-pasila-ledger",
+      "site_id": "staffed_bank",
+      "schedule": [
+        {
+          "index": 12,
+          "day": 7,
+          "block": "day",
+          "anchor_id": "siltasaari"
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "proposed_scene_asset_id": "scene-bank-counter-v01",
+      "status": "proposed-existing",
+      "rationale": "The authored site remains staffed_bank at Siltasaari; the available bank interior can hold the brochure/ledger meeting. Pasila is the subject of the brochure, not the present location.",
+      "uncertainty": "No direct plate is bound; desk/ledger composition and bank-clerk source selection need review. Do not portray this as arrival in Pasila.",
+      "scene_source": {
+        "asset_id": "scene-bank-counter-v01",
+        "file": "art/v3/scenes/bank-counter-v01.webp",
+        "source": "art-src/scenes/bank-counter-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "bank-clerk",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "bank clerk · presentation placeholder"
+        },
+        {
+          "participant_id": "optional-surviving-crew",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "optional surviving crew · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: propose existing bank-interior binding with live ledger/brochure props; source-select clerk only after its identity relation to teller Anne is checked."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-pasila-ledger",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-jaska-last-light",
+      "site_id": "jaska_studio",
+      "schedule": [
+        {
+          "index": 13,
+          "day": 7,
+          "block": "night",
+          "anchor_id": "makelansilta"
+        }
+      ],
+      "direct_scene_asset_id": "scene-scene-club-v01",
+      "proposed_scene_asset_id": "scene-scene-club-v01",
+      "status": "direct",
+      "rationale": "Retain the Scene Club plate and approved Jaska rig; change receipt-city/blank-shape emphasis through authored props rather than a new room.",
+      "uncertainty": "Conditional survivors/death/portrait facts must be derived from actual campaign state; gallery placeholders are not a claim that a character died.",
+      "scene_source": {
+        "asset_id": "scene-scene-club-v01",
+        "file": "art/v3/scenes/scene-club-v01.webp",
+        "source": "art-src/scenes/scene-club-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        },
+        {
+          "participant_id": "jaska",
+          "asset_id": "cutin-jaska-rig-v01",
+          "approval_status": "approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: reuse Scene Club/Jaska; make receipt and portrait-space overlays depend on real survivor state when integrated."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-jaska-last-light",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-kello-reckoning",
+      "site_id": "piritori_first_buy",
+      "schedule": [
+        {
+          "index": 14,
+          "day": 8,
+          "block": "day",
+          "anchor_id": "piritori"
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "proposed_scene_asset_id": "scene-piritori-square-v01",
+      "status": "direct",
+      "rationale": "Retain the existing Piritori square; Kello bench, passing tram and watcher details need explicit separable review placeholders.",
+      "uncertainty": "Presentation depends on authored Thursday consequences. Placeholder bench/tram/watcher dressing must not fabricate a remembered result.",
+      "scene_source": {
+        "asset_id": "scene-piritori-square-v01",
+        "file": "art/v3/scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "kello",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "kello · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: source-select Kello and stage bench/tram placeholders; reserve conditional variants for authored consequence flags."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-kello-reckoning",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-family-calls",
+      "site_id": "mccormick_yard",
+      "schedule": [
+        {
+          "index": 17,
+          "day": 9,
+          "block": "night",
+          "anchor_id": "linjat_yard"
+        }
+      ],
+      "direct_scene_asset_id": "scene-kallio-service-yard-v01",
+      "proposed_scene_asset_id": "scene-kallio-service-yard-v01",
+      "status": "direct",
+      "rationale": "Retain the existing service-yard plate for the family/account-book meeting; the empty kettle and van are authored inspectable facts, not new rewards.",
+      "uncertainty": "Which family speaks and its standing are campaign facts; placeholder faces/group labels cannot manufacture that choice.",
+      "scene_source": {
+        "asset_id": "scene-kallio-service-yard-v01",
+        "file": "art/v3/scenes/kallio-service-yard-v01.webp",
+        "source": "locations/era1/location-kallio-service-yard-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "mccormick-brothers",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "mccormick brothers · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: review family-group placeholders with account book/kettle/van emphasis; use actual campaign standing when selecting a speaking family."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-family-calls",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    },
+    {
+      "encounter_id": "enc-shipment-night",
+      "site_id": "sornainen_quay",
+      "schedule": [
+        {
+          "index": 19,
+          "day": 10,
+          "block": "night",
+          "anchor_id": "sornainen_harbour"
+        }
+      ],
+      "direct_scene_asset_id": "scene-sornainen-docks-v02",
+      "proposed_scene_asset_id": "scene-sornainen-docks-v02",
+      "status": "direct",
+      "rationale": "Retain the direct docks plate for narrative review. Show container/clock/van facts without inventing a boss fight or replacing the existing chapter-operation resolution.",
+      "uncertainty": "The finale design remains an owner decision in ROADMAP section 8. Show current authored choice/commitment only; no new playable-combat claim.",
+      "scene_source": {
+        "asset_id": "scene-sornainen-docks-v02",
+        "file": "art/v3/scenes/sornainen-docks-v02.webp",
+        "source": "locations/era1/location-sornainen-docks-v02.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only"
+      },
+      "available_cast_rigs": [
+        {
+          "participant_id": "aatami",
+          "asset_id": "cutin-aatami-front-rig-v01",
+          "approval_status": "semi-approved",
+          "production_status": "animated-rig"
+        }
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: review the existing docks crop and separable container/clock/van placeholders while the finale decision stays open."
+      ],
+      "review_entry": {
+        "repo_relative_url": "web/?encounter=enc-shipment-night",
+        "kind": "unsaved-dialogue-preview",
+        "label": "Preview existing authored encounter (unsaved)",
+        "combat_handoff_validated": false,
+        "limitation": "This debug jump fields no crew and does not save; it is not a campaign/C.19 playtest."
+      },
+      "combat": null,
+      "required_approvals": [
+        "New composition, prop layers and motion remain review candidates; source/prototype registration does not promote them.",
+        "Physical Pixel/iPad readability and performance acceptance remains open."
+      ]
+    }
+  ]
+}
