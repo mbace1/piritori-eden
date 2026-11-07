@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><title>Cut-in review</title>
 <!-- Owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and talk options", the level behind;
      "the player character profile can be shown when he talks"; Arvo "always on the news tab".
-     A review page, not the game: ?who=jaska|aatami|arvo. render.cjs films it. The rigs, clips and drawing are the
+     A review page, not the game: ?who=jaska|aatami|aatami-side|arvo. render.cjs films it. The rigs, clips and drawing are the
      game's own (web/js/v3/cutin-stage.js and art/v3/manifest.json), so a review shows exactly what ships. -->
 <style>
  html,body{margin:0;background:#000}
@@ -9,8 +9,10 @@
  canvas{position:absolute;inset:0}
 </style></head><body><div id="s"><canvas id="c" width="1080" height="1920"></canvas></div>
 <script type="module">
-import { CUTINS, rigParts, pose, drawCutin, W, H } from '../../web/js/v3/cutin-stage.js';
+import { CUTINS, rigParts, pose, drawCutin, REST, W, H } from '../../web/js/v3/cutin-stage.js';
 const Q = new URLSearchParams(location.search), WHO = Q.get('who') || 'jaska', SCENE = Q.get('scene') || 'scene-club-v01';
+// The review's still pose matches loadCutin(..., { reducedMotion: true }); it does not test the game's CSS or device layout.
+const STILL = Q.get('still') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches;
 const load = (src) => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
 const cast = CUTINS[WHO];
 const manifest = await (await fetch('../../art/v3/manifest.json')).json(), asset = manifest.assets.find(a => a.id === cast.rig);
@@ -29,7 +31,7 @@ const SEQ = {
     ['glance', 'DOCUMENTED', 'The conversion rate is fixed: 5.94573 markka per euro.'],
     ['gesture', 'INFERENCE', 'Old cash can still appear in homes and informal payments.'],
     ['nod', 'ARVO LINDE', 'The markka is no longer money at the till.']],
-}[WHO];
+}[WHO === 'aatami-side' ? 'aatami' : WHO]; // Same dialogue clips, different approved-source candidate rig.
 const T = SEQ.map(s => cast.clips[s[0]].dur), TOTAL = T.reduce((a, b) => a + b, 0);
 const TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8' };
 function wrap(text, x, y, w, lh) { const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } g.fillText(line, x, yy); }
@@ -45,9 +47,9 @@ function words(label, text) {      // the game lays these out in HTML (v3.css .c
 function frame(t) {
   t = ((t % TOTAL) + TOTAL) % TOTAL; let k = 0, t0 = 0; while (t >= t0 + T[k]) { t0 += T[k]; k++; }
   const [clip, label, text] = SEQ[k];
-  drawCutin(g, WHO, rig, pose(WHO, clip, t - t0), { t, plate }); words(label, text);
+  drawCutin(g, WHO, rig, STILL ? REST : pose(WHO, clip, t - t0), { t: STILL ? 0 : t, plate }); words(label, text);
   g.fillStyle = 'rgba(226,216,194,.7)'; g.font = '700 30px Arial'; g.fillText(`REVIEW · ${WHO.toUpperCase()} · ${clip}`, 30, 50);
 }
-window.__review = { TOTAL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
+window.__review = { TOTAL, still: STILL, frame: (t) => { frame(t); return c.toDataURL('image/jpeg', 0.9); } };
 frame(0); window.__ready = true;
 </script></body></html>
