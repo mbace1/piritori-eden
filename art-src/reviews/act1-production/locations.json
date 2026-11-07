@@ -1,0 +1,1352 @@
+{
+  "schema": 1,
+  "source": {
+    "date": "2026-11-07",
+    "baseCommit": "933c83e350f6f9127ffbdd06258138719ac964d1",
+    "purpose": "Source-backed location production plans for current authored Act I only; not new content, asset approval, runtime completion or release.",
+    "completionEstimateUnchanged": 48,
+    "hashes": {
+      "ROADMAP.md": "2280c587d5900aaed2d7819ba2145c070de38e2e54795d2c71cb3c9e7d3fb5f9",
+      "DESIGN_AUTHORITY.md": "95c774f701456dc8b05e1ca6bd389161a632626400a0ed8fa4bc83893dcf6bd5",
+      "ART_BIBLE.md": "f07f64ec671f63003cef5b3ae3aae1347ef80907c190e93218f7a8c670e3ec46",
+      "design/SCENARIO_ATLAS.md": "6142c9b2b060d3000c8145bdf44f5f3c6c4052cec1e949a34ee43db25b8c38cd",
+      "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
+      "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+      "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
+      "content/places-v1.json": "464677f2ae25826012cca0b572b18bdc47a8e7a9dc87258c9b79811766071c0e",
+      "content/doors-v1.json": "857ed1bb2554ab42b5cdbcef341cf39f9fc1ab450b203c58c9c08f536e7eae64",
+      "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
+      "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+      "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
+      "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
+      "art-src/reviews/act1-encounters/BINDING_PLAN.md": "c41bda2be73217eb620b3023fe498c0ff56a8a974ff2cffdf862831b1b03620f",
+      "art-src/reviews/act1-encounters/encounter-manifest.json": "59680e3d63de1a488007b79e2123bb025a723cb260c5d6e6b0566379de42a10b",
+      "web/js/v3/doors.js": "0568da513ce9797cbdcde3edfefe1ebbfbacf36387b447d23673ee0455c3d530",
+      "web/js/v3/road.js": "71ba8f94edd0cccb8ae4e06c59197c7e728a0f0ee61024ec6456ef29a63af585",
+      "web/js/v3/places.js": "8fcdf9c4306070308174b7ee4e55a6557712fc1595bd7f1c793ea98dc293d4d2",
+      "web/js/v3/journey.js": "e6ecda68151ed4e5a301aa181a4a2c0f3eb535de1935b5197c8013c86086fad7",
+      "web/js/v3/outing.js": "754573f2264646f3aac0fbc3e6ea6abe6174c622661bdc60dc6d08a47937ac64",
+      "web/crew-run/locations.js": "bb627e305fd13ef7ddd6c6642f7bbbffdd1eeb3dafb401b5d7d60f6417d89bde",
+      "web/js/v3/app.js": "7094505fe83d6a2e87eb97221a0fea5183b72eb4ed31e7a0f04610c1547f2da3"
+    },
+    "coverage": {
+      "activeAnchors": 11,
+      "locationPackets": 12,
+      "deferredExistingAnchors": 4,
+      "encounters": 17,
+      "missions": 4,
+      "optionalVisits": 3,
+      "doorTemplates": 16,
+      "roadEvents": 29,
+      "actualReusedC19Kits": [
+        "courtyard",
+        "yard",
+        "park",
+        "street",
+        "quay"
+      ]
+    },
+    "notes": [
+      "Locations are existing map anchors with separate site/room/approach/tactical views; the shared road pool is explicitly not a new physical location.",
+      "places-v1.json rules.kits/kits_wanted metadata is older than actual web/js/v3/outing.js and web/crew-run/locations.js mappings. Street and quay are implemented reused C.19 sets, not unbuilt merely because that metadata says wanted.",
+      "Five C.19 sets serve eleven active anchors; this is not proof of eleven bespoke site-accurate environments or physical-device acceptance.",
+      "No additional locations, story or new art generation is proposed before the listed bank/first-sale, Harju, Jade, courtyard and return/docks gates."
+    ]
+  },
+  "locations": [
+    {
+      "id": "loc-scene-club-makelansilta",
+      "name": "Scene Club and Mäkelänsilta approach",
+      "priority": 1,
+      "status": "existing-motion-review / outdoor-view-unbuilt",
+      "summary": "Finish the existing Scene Club review first. Keep its intimate contact room distinct from the outdoor bridge-stair street kit used by fights at this anchor.",
+      "anchorIds": [
+        "makelansilta"
+      ],
+      "siteIds": [
+        "jaska_studio"
+      ],
+      "encounters": [
+        "enc-jaska-receipt",
+        "enc-jaska-last-light"
+      ],
+      "doors": [
+        "sale-club-backroom"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "jaska"
+      ],
+      "assets": [
+        {
+          "id": "scene-scene-club-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/scene-club-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use the existing Scene Club room as the arrival reference and the map bridge approach as geographic context. The separate Under Mäkelänsilta fight place wants bridge stairs/rail-yard approach scenery; there is no registered outdoor plate for it.",
+        "dialogue": "Jaska speaks waist-up over scene-scene-club-v01; Aatami front answers one at a time. Preserve the receipt city, envelope, family photo and authored returning conversation. New arrival timing and bounded blink repairs stay review candidates.",
+        "decision": "Show the three receipt choices or four last-light choices with exact forecasts. The club-backroom door is its own authored offer, not a new Jaska plot.",
+        "tactical": "An actual fight at this anchor uses the existing C.19 street kit at Under Mäkelänsilta, with the bridge-stair exit. Do not stage that outdoor fight inside Jaska’s room or treat a paper backdrop as the tactical arena.",
+        "return": "Return to the same map anchor and retain actual Jaska/markka/memory consequences. Later portrait/receipt variations must read the real crew/flag state, never fabricate a death or survivor."
+      },
+      "plan": {
+        "nextSteps": [
+          "Review the existing arrival, front-rig speech, blink repairs and phone/landscape captures before any runtime promotion.",
+          "Make a shot/crop list for receipt and last-light visits from the same room; mark conditional family/portrait overlays unbuilt.",
+          "Audit the existing street kit against the separately authored bridge-stair exit; keep the missing outdoor plate labelled until a source-backed review is commissioned."
+        ],
+        "acceptance": [
+          "Owner can distinguish the Scene Club room from the outdoor bridge arena in one review.",
+          "Jaska’s approved identity and Aatami’s semi-approved front source remain intact; full blinks have no rectangular tabs or wiped face detail.",
+          "Exact dialogue/choices fit 390×844, 1280×800 and relevant landscape; new motion has an unchanged reduced-motion rest."
+        ],
+        "mustPreserve": [
+          "Scene Club belongs near Mäkelänsilta; courtyard mission does not become Jaska’s interior.",
+          "Short bottom-tail speech bubble, one-at-a-time near-camera Aatami front pose, existing source approval states.",
+          "Existing choice persistence and exactly-once C.19 receipt settlement; no new story or battle rules."
+        ]
+      },
+      "placeholders": [
+        "Outdoor bridge-stair/rail-yard approach plate: not registered.",
+        "Conditional last-light portrait/receipt overlays: unbuilt until actual campaign state is connected."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [],
+      "optionalVisits": [
+        "visit-jaska-room-to-work"
+      ],
+      "runtimePlace": {
+        "anchor": "makelansilta",
+        "name": "Under Mäkelänsilta",
+        "kit": "street",
+        "plate": null,
+        "standIn": false,
+        "wayOut": "up the bridge stairs",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-siltasaari-bank-and-queue",
+      "name": "Siltasaari bank, outside queue and shore",
+      "priority": 2,
+      "status": "listed-plan / existing-bank-plate / exterior-unbuilt",
+      "summary": "Plan the bank pair and the outside first sale as separate views of the same existing service. The bank interior is available; the exterior deal/queue composition is still unbuilt.",
+      "anchorIds": [
+        "siltasaari"
+      ],
+      "siteIds": [
+        "staffed_bank"
+      ],
+      "encounters": [
+        "enc-first-sale",
+        "enc-bank-counter",
+        "enc-pasila-ledger"
+      ],
+      "doors": [
+        "gig-queue-sitter"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "bank-clerk",
+        "buyer-leena",
+        "optional-surviving-crew",
+        "teller-anne"
+      ],
+      "assets": [
+        {
+          "id": "scene-bank-counter-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/bank-counter-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "First sale and queue-sitting occur outside the legitimate staffed-bank queue/public approach in Siltasaari. Show a neutral exterior/queue placeholder until an appropriate existing source/crop is approved; an interior teller crop cannot stand in for that deal.",
+        "dialogue": "Propose scene-bank-counter-v01 only for enc-bank-counter and enc-pasila-ledger, with teller/clerical source-selection placeholders. Leena’s first-sale conversation remains outside; no illicit exchange is moved into the teller service.",
+        "decision": "Keep fixed markka conversion, partial conversion, leave-queue, first-sale/introduction and later debt/exit-fund/treatment choices exact. Pasila is a brochure/future subject; the present scene stays Siltasaari.",
+        "tactical": "The actual C.19 place is the Siltasaari shore, street kit, exit back over the bridge, with no registered fight plate. A door illustration using the bank room does not authorize combat inside that room.",
+        "return": "Show the real transaction/history/debt/crew-treatment change at the current Siltasaari map location. Keep first-sale proceeds and bank conversion distinct; repeat/reload must not pay either twice."
+      },
+      "plan": {
+        "nextSteps": [
+          "List separate exterior-first-sale, legitimate-counter and later-ledger camera/crop packets before creating any source art.",
+          "Review the existing bank plate for teller and ledger only; keep first-sale exterior neutral and explicitly unbuilt.",
+          "Source-select Leena, Anne and bank-clerk presentations; clarify whether clerk and teller share an identity before extra rig work.",
+          "Block live ticket, rate, mirror and brochure layers from authored inspectables without baking copy or inventing an extra bank room."
+        ],
+        "acceptance": [
+          "A reviewer can tell the outside first sale from the legal bank counter immediately.",
+          "All three Siltasaari encounters and gig-queue-sitter are traced to exact current source IDs and current anchor.",
+          "Fixed conversion copy remains live/readable; all decision forecasts and later treatment/financial stakes stay visible.",
+          "Actual C.19 shore/street transition, if used, preserves exit, police timing and receipt return; no fight is illustrated as a teller-room card."
+        ],
+        "mustPreserve": [
+          "First sale stays outside the legitimate bank queue.",
+          "Pasila ledger stays at staffed_bank in Siltasaari; no new Pasila location is inferred from its title or brochure.",
+          "Current gig-queue-sitter timing/stakes and bank/exterior distinction; bail is currently a Piritori duty-lawyer door, not silently relocated here."
+        ]
+      },
+      "placeholders": [
+        "First-sale exterior/queue stage: unbuilt, not an approved bank-interior substitution.",
+        "Leena / Anne / bank-clerk source-selection placeholders; no dedicated registered cut-ins.",
+        "Siltasaari shore fight plate: none registered; existing street kit remains generic."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-paper-bag"
+      ],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "siltasaari",
+        "name": "The Siltasaari shore",
+        "kit": "street",
+        "plate": null,
+        "standIn": false,
+        "wayOut": "back over the bridge",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-harju-brahenkentta",
+      "name": "Harju / Brahenkenttä and stop edge",
+      "priority": 3,
+      "status": "listed-plan / proposed-existing-pitch / stop-foreground-unbuilt",
+      "summary": "Reuse the registered pitch backdrop while planning the authored tram-stop foreground, recruitment, observation and cart beats. A pitch plate is not evidence that the stop composition is complete.",
+      "anchorIds": [
+        "harju"
+      ],
+      "siteIds": [
+        "harju_pitch"
+      ],
+      "encounters": [
+        "enc-runner-at-tram-stop"
+      ],
+      "doors": [
+        "gig-rauno-cart"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "crew-slot-runner"
+      ],
+      "assets": [
+        {
+          "id": "scene-harju-pitch-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/harju-pitch-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use the current Harju anchor and harju_pitch site. The existing scene-harju-pitch-v01 is a candidate background; timetable, messenger bag and stop-bench approach are separate unbuilt foreground views.",
+        "dialogue": "A neutral runner-slot placeholder carries only occupied space until an approved modular/source identity is selected. The Thursday visit and Rauno cart gig remain their existing authored interactions.",
+        "decision": "Keep the fair/cheap wage and paid observation choices, cart help alternatives, and Three Vans observation facts exact. Do not invent a new recruitment class, wage or tram mechanic.",
+        "tactical": "Existing placeAt(harju) uses the reused C.19 park kit at Brahenkenttä, leaving through the fence gate. Door/road shapes must not import the referenced battle’s default park location or named opponents.",
+        "return": "Return to the existing Harju map anchor with real recruitment/observation/cart memory. Three Vans information returns to Toko through its authored mission step, not an invented stop reward."
+      },
+      "plan": {
+        "nextSteps": [
+          "Make a source-backed pitch/stop foreground crop board and label the missing stop edge rather than repainting the location immediately.",
+          "Plan the timetable, repair-taped messenger bag and cart-wheel layers from exact inspectables/door premise.",
+          "Choose runner/Rauno source presentations before extracting named figures; crew-slot identity must follow actual hired roster data.",
+          "Review Thursday/Three Vans state variants against current flags and optional visit availability."
+        ],
+        "acceptance": [
+          "The preview labels a proposed pitch background and unbuilt stop foreground separately.",
+          "Exact recruitment forecasts, cart choices and Thursday visit prerequisites are preserved.",
+          "Park-kit exit/cover/intent are readable if a real C.19 event occurs here; no tram simulation is transplanted."
+        ],
+        "mustPreserve": [
+          "Harju / Brahenkenttä geography and current harju_pitch site.",
+          "Generated crew identity versus authored runner slot; no replacement name/face is silently locked.",
+          "Three Vans destination/return sequence, authored optional visit and deterministic road/door settlement."
+        ]
+      },
+      "placeholders": [
+        "Tram-stop/timetable/bench foreground: unbuilt composition.",
+        "Runner slot and Rauno source selection; no dedicated registered cut-ins."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-three-vans"
+      ],
+      "optionalVisits": [
+        "visit-harju-thursday"
+      ],
+      "runtimePlace": {
+        "anchor": "harju",
+        "name": "Brahenkenttä",
+        "kit": "park",
+        "plate": "scene-harju-pitch-v01",
+        "standIn": false,
+        "wayOut": "through the gate in the fence",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-hakaniemi-market-jade-front",
+      "name": "Hakaniemi market and Jade restaurant front",
+      "priority": 4,
+      "status": "listed-plan / proposed-existing-front / market-staging-needed",
+      "summary": "Plan the existing Jade-front plate and market-edge doors at Hakaniemi. The working restaurant and public market stay ordinary places; faction access is authored, not a new enemy venue.",
+      "anchorIds": [
+        "hakaniemi"
+      ],
+      "siteIds": [
+        "hakaniemi_market",
+        "jade_lantern_front"
+      ],
+      "encounters": [
+        "enc-jade-window"
+      ],
+      "doors": [
+        "pickup-fish-stall",
+        "watch-back-door"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "lunch-crowd",
+        "mei-lan"
+      ],
+      "assets": [
+        {
+          "id": "scene-hakaniemi-square-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/hakaniemi-square-v01.webp"
+        },
+        {
+          "id": "scene-jade-lantern-front-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/jade-lantern-front-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use current schedule/map Hakaniemi, hakaniemi_market and jade_lantern_front. Establish the ordinary lunch/public market approach; older Linjat references in art history do not move the current site.",
+        "dialogue": "Propose scene-jade-lantern-front-v01 for Mei-Lan’s invoice conversation. Lunch crowd and Mei-Lan remain labelled source-selection/ambient placeholders; the available plate does not certify a completed back room.",
+        "decision": "Keep duplicate-invoice, lunch/wait, push-door and leave choices exact, plus the fish-stall pickup and back-door watch offers. The closed door is a socially gated authored teaser, not a new enterable room.",
+        "tactical": "Actual place is Behind the market hall, C.19 street kit, exit by tram stop; scene-hakaniemi-square-v01 is the registered illustration reference. Door battle IDs describe shape; actual fighting remains here with generated side members.",
+        "return": "Return to Hakaniemi with actual Jade relationship/invoice/mission or door consequences. Link Courtyard Receipts to its existing Torkkelinmäki destination without relocating the restaurant."
+      },
+      "plan": {
+        "nextSteps": [
+          "Review current Hakaniemi placement and the available Jade-front crop together before binding it.",
+          "Plan ordinary lunch crowd, duplicate invoice and closed-door layers from existing inspectables.",
+          "Source-select Mei-Lan and neutral ambient crowd treatment before creating rigs; do not invent staff combat identities.",
+          "Keep market hall/tram exit views distinct from the illustrated front and audit the reused street kit only from actual captures."
+        ],
+        "acceptance": [
+          "Every review identifies Hakaniemi as the current anchor, with any older Linjat art metadata explained as historical.",
+          "Jade front is proposed-existing and semi-approved, not a newly approved runtime binding.",
+          "Lunch, invoice and faction choices remain readable; peaceful alternatives remain available.",
+          "Actual C.19 exit, police and full enemy intent survive any market-door handoff."
+        ],
+        "mustPreserve": [
+          "Current Jade-front location is Hakaniemi.",
+          "Restaurant staff retain civilian identities; faction relationship is not an enemy switch.",
+          "Existing courtyard signal and authored door/getaway/fight distinctions."
+        ]
+      },
+      "placeholders": [
+        "Mei-Lan source-selection placeholder; no dedicated registered cut-in.",
+        "Ordinary lunch/market crowd and invoice foreground: unbuilt layers, no extra shop/back-room content."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-courtyard-receipts"
+      ],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "hakaniemi",
+        "name": "Behind the market hall",
+        "kit": "street",
+        "plate": "scene-hakaniemi-square-v01",
+        "standIn": false,
+        "wayOut": "on a tram from the stop",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-torkkelinmaki-porttikongi",
+      "name": "Torkkelinmäki courtyard / porttikongi",
+      "priority": 5,
+      "status": "listed-plan / proposed-courtyard / site-conflict-open",
+      "summary": "Plan the existing courtyard mission and recovery doors at Torkkelinmäki while keeping the authored jaska_studio site conflict explicit. No new site is invented and Scene Club is not relocated.",
+      "anchorIds": [
+        "torkkelinmaki"
+      ],
+      "siteIds": [],
+      "encounters": [
+        "enc-courtyard-last-call"
+      ],
+      "doors": [
+        "favour-find-them",
+        "hit-courtyard-ledger"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami-network-team",
+        "courtyard-rival-team",
+        "jaska-offscreen"
+      ],
+      "assets": [
+        {
+          "id": "scene-courtyard-prototype-v05",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/courtyard-prototype-v05.webp"
+        },
+        {
+          "id": "scene-kallio-backyard-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/kallio-backyard-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use the current schedule/mission/battle anchor torkkelinmaki and the existing residential porttikongi facts. The encounter still references jaska_studio, whose map anchor is Mäkelänsilta; resolve that content binding before runtime visual promotion.",
+        "dialogue": "Propose scene-courtyard-prototype-v05 for the authored courtyard conversation. Jaska is explicitly offscreen; crew/rival groups are actual deployment/generated-source placeholders, not a new portrait lineup in his studio.",
+        "decision": "Keep Jade-introduction negotiation, take-positions and leave-receipts alternatives, critical-wound warning and retreat. Recovery favour-find-them and courtyard-ledger door retain their existing costs and missions.",
+        "tactical": "Actual C.19 courtyard kit keeps the porttikongi exit, residential windows, cover and crew positions. Door illustration currently uses scene-kallio-backyard-v01 while the fight place uses scene-courtyard-prototype-v05; both are prototype references, not interchangeable proof of built geometry.",
+        "return": "Return actual receipts/exit-fund/Jaska relationship, critical wounds/missing and rescue consequences once. Bear Path’s final MOVE step may return through this anchor; it does not move Bear Path’s fight here."
+      },
+      "plan": {
+        "nextSteps": [
+          "Record and resolve the jaska_studio versus Torkkelinmäki site conflict before any runtime binding edit or final set dressing.",
+          "Review current proposed courtyard plate, door backyard illustration and actual C.19 set at matching cameras.",
+          "Plan receipt envelope, lit windows and withdrawal-lane cues from exact inspectables; keep Jaska offscreen.",
+          "Audit existing courtyard joins/cutaways/exit from all eight cameras and required viewport shapes before changing arena construction."
+        ],
+        "acceptance": [
+          "Site conflict remains visible until a source/content decision is recorded; no false new site ID is created.",
+          "Jade negotiation, critical-wound warning, withdrawal and recovery remain source-backed and reachable.",
+          "Cover, porttikongi exit, fighter silhouettes and intentions remain readable in the actual C.19 arena.",
+          "Receipt/loot/recovery return and reload settle once, preserving family consequences."
+        ],
+        "mustPreserve": [
+          "Torkkelinmäki battle/schedule location and separate Scene Club home.",
+          "Jaska-offscreen and actual crew/rival group semantics.",
+          "Existing C.19 courtyard, authored mission alternatives and persistent injuries/recovery."
+        ]
+      },
+      "placeholders": [
+        "Courtyard site binding: unresolved content conflict, not a new location proposal.",
+        "Receipt/window/crew-group staging and recovery-return overlays: unbuilt review work."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-bear-path",
+        "mission-courtyard-receipts"
+      ],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "torkkelinmaki",
+        "name": "A Torkkelinmäki courtyard",
+        "kit": "courtyard",
+        "plate": "scene-courtyard-prototype-v05",
+        "standIn": false,
+        "wayOut": "through the porttikongi",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats",
+      "authoredSiteConflict": {
+        "encounter": "enc-courtyard-last-call",
+        "siteId": "jaska_studio",
+        "siteAnchor": "makelansilta",
+        "scheduleAndBattleAnchor": "torkkelinmaki",
+        "resolved": false
+      }
+    },
+    {
+      "id": "loc-karhupuisto-bear-path",
+      "name": "Karhupuisto bench, clearing and Bear Path",
+      "priority": 6,
+      "status": "existing-scenes / listed-readability-and-continuity-plan",
+      "summary": "Keep the approved park baseline and existing clearing/C.19 park separate but continuous. The authored granite bear/plinth, contact, cover and withdrawal path are the controlling facts.",
+      "anchorIds": [
+        "karhupuisto"
+      ],
+      "siteIds": [
+        "karhupuisto_bench"
+      ],
+      "encounters": [
+        "enc-karhupuisto-watch",
+        "enc-bear-path"
+      ],
+      "doors": [
+        "sale-park-bench",
+        "hit-bear-debt"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "aatami-network-team",
+        "crew-slot-watcher",
+        "dog-owner",
+        "piritori-rival-team"
+      ],
+      "assets": [
+        {
+          "id": "scene-karhupuisto-clearing-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/karhupuisto-clearing-v01.webp"
+        },
+        {
+          "id": "scene-karhupuisto-v01",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/scenes/karhupuisto-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use scene-karhupuisto-v01 for the watcher/bench baseline and scene-karhupuisto-clearing-v01 for Bear Path. Preserve the public park approach and bear landmark; the earlier gazebo mood view is not the tactical layout.",
+        "dialogue": "Watcher slot, dog owner and encounter team placeholders stay source-backed. Information/fixer/handover alternatives remain the existing authored conversation, not a new park quest.",
+        "decision": "Show watcher hiring/observation and Bear Path information, fixer, hold-path and withdrawal stakes exactly, plus park-bench/debt door offers. Contact safety and costs remain explicit.",
+        "tactical": "Actual C.19 park kit must retain bear/plinth cover, lit-path exit, fighter positions, weapons, full intentions and police pressure. Do not replace this fight with a painted clearing card.",
+        "return": "Keep actual handover/fight/withdrawal result, wounds/missing/recovery and park-contact availability in the campaign/map receipt. Repeat-visit visual changes read actual flags and crew state."
+      },
+      "plan": {
+        "nextSteps": [
+          "Create a continuity board from existing watcher plate, clearing plate and actual C.19 camera captures.",
+          "Mark watcher, dog-owner/dog, bench and wind layers as available-source review work rather than new park generation.",
+          "Audit bear/plinth, cover silhouettes and lit withdrawal path at portrait/landscape before changing scenery.",
+          "Review peaceful, hold-path, withdrawal and aftermath views using the existing Bear Path test entry."
+        ],
+        "acceptance": [
+          "Approved park baseline versus semi-approved clearing is stated accurately.",
+          "Every authored peaceful/fixer/fight/withdrawal choice remains reachable under its current prerequisites.",
+          "Bear/plinth, cover and exit are readable in real C.19; no intersecting geometry or blocked fighter tags in the reviewed cameras.",
+          "Actual return/reload settles the receipt once and retains injury/recovery semantics."
+        ],
+        "mustPreserve": [
+          "Toko remains a contact, not a fighter; no replacement park NPC storyline.",
+          "Current park mission anchor and distinct authored tactical objectives.",
+          "Existing C.19 rules, generated rivals and persistent campaign consequences."
+        ]
+      },
+      "placeholders": [
+        "Watcher/dog-owner source presentations and ambient dog layer: source selection/extraction before new identity work.",
+        "Conditional park-contact/return memory props: unbuilt until actual state is bound."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-bear-path"
+      ],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "karhupuisto",
+        "name": "The clearing in Karhupuisto",
+        "kit": "park",
+        "plate": "scene-karhupuisto-clearing-v01",
+        "standIn": false,
+        "wayOut": "up the lit path",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-linjat-mccormick-yard",
+      "name": "Linjat / Hämeentie service yard",
+      "priority": 6,
+      "status": "existing-plate-and-yard-kit / return-staging-plan",
+      "summary": "Use the current McCormick yard/service-yard set for recruitment, gear, family accounts and door jobs. Public contact approach and tactical yard are views of existing content, not a new family venue.",
+      "anchorIds": [
+        "linjat_yard"
+      ],
+      "siteIds": [
+        "mccormick_yard"
+      ],
+      "encounters": [
+        "enc-mccormick-yard",
+        "enc-family-calls"
+      ],
+      "doors": [
+        "pickup-yard-van",
+        "favour-mccormick-name"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "crew-slot-muscle",
+        "mccormick-brothers",
+        "sean-mccormick"
+      ],
+      "assets": [
+        {
+          "id": "scene-kallio-service-yard-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/kallio-service-yard-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Retain the mccormick_yard service site at Linjat / Hämeentie and its public-to-yard approach. The available plate is scene-kallio-service-yard-v01; an unbuilt public-room view is labelled, not invented as a new enterable room.",
+        "dialogue": "Sean, muscle slot and McCormick-brothers source/group placeholders retain existing family roles. Family photo, cracked bat, invoice, empty kettle, account book and van come from current inspectables.",
+        "decision": "Keep wage/gear/favour alternatives, family-alignment/pay-off/stall choices and current yard-van/name door stakes exact. Do not grant a new route or faction benefit by illustration.",
+        "tactical": "Actual C.19 yard kit uses the lit passage to Hämeentie exit. Preserve crew deployment, cover, police, fight/getaway goals and current weapons; the referenced battle template is not the location.",
+        "return": "Use actual family relationship/obligation/gear/pressure and crew condition in the aftermath strip. State drives the existing account/kettle/van accents; chapter-2 promises remain source text, not authored new scenes."
+      },
+      "plan": {
+        "nextSteps": [
+          "Make one existing-yard shot list for day-4 recruitment/gear and day-9 family accounts before any new source scene.",
+          "Source-select Sean/group and crew-slot presentation; keep family/group placeholders neutral until identities are chosen.",
+          "Plan photo, invoice, account-book, kettle and van layers only where source inspectables call for them.",
+          "Review yard geometry joins and lit exit from all existing camera angles before another scenery change."
+        ],
+        "acceptance": [
+          "Two authored encounters and both door templates remain bound to Linjat / Hämeentie.",
+          "Same-location visual variations are driven by exact source flags/obligations rather than invented outcomes.",
+          "Yard cover, gate/passage and fighter silhouettes read in real C.19 at required viewport sizes."
+        ],
+        "mustPreserve": [
+          "No extra McCormick storyline, room or faction mechanic.",
+          "Current wage/gear/favour and family-account stakes.",
+          "Existing yard-kit/readability improvements, full intents and persistent injuries/recovery."
+        ]
+      },
+      "placeholders": [
+        "Sean/McCormick-brothers and hired-muscle source/group presentations.",
+        "Conditional photo/account/kettle/van layers and public approach view: unbuilt review work."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "linjat_yard",
+        "name": "The Linjat service yard",
+        "kit": "yard",
+        "plate": "scene-kallio-service-yard-v01",
+        "standIn": false,
+        "wayOut": "by the lit passage to Hämeentie",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-piritori-kurvi",
+      "name": "Piritori / Kurvi square and metro edge",
+      "priority": 6,
+      "status": "existing-plate / listed-opening-and-return-plan",
+      "summary": "Reuse the existing square for first purchase, firearm offer, Kello reckoning and recovery/watch doors. Let exact authored props and state distinguish visits rather than inventing a new square or shop.",
+      "anchorIds": [
+        "piritori"
+      ],
+      "siteIds": [
+        "piritori_first_buy",
+        "sornainen_metro"
+      ],
+      "encounters": [
+        "enc-first-purchase",
+        "enc-first-firearm",
+        "enc-kello-reckoning"
+      ],
+      "doors": [
+        "favour-bail",
+        "watch-car-41"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "kello",
+        "seller-esa"
+      ],
+      "assets": [
+        {
+          "id": "scene-piritori-square-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/piritori-square-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Keep Piritori / Kurvi, piritori_first_buy and Sörnäinen metro as public anchor/site context. Stage the seller’s pocket, wet cuff, watcher and public tram flow from existing first-purchase facts.",
+        "dialogue": "Seller Esa and Kello remain source-selection placeholders. Use Aatami front as a separate protagonist study; do not turn generated rivals or crowd silhouettes into locked named identities.",
+        "decision": "Preserve first purchase/watcher/walk-away, first handgun alternatives, Kello’s day-8 variants, watch-car-41 and favour-bail. Bail is the currently authored duty-lawyer contact at this square; do not infer a bank venue.",
+        "tactical": "Existing Vaasanpuistikko place maps to C.19 street kit and metro-step exit. The square image is context, while tactical cover/weapon/exit feedback comes from the actual engine.",
+        "return": "Show current price history, gun/pressure, Kello/Thursday, rescue/bail and network memories only from actual campaign state. The same bench/watcher props can vary only according to authored flags."
+      },
+      "plan": {
+        "nextSteps": [
+          "Plan first-bag, wrapped-handgun and day-8 bench/watcher crop variants from the same registered square.",
+          "List seller Esa/Kello source selection and small prop-layer extractions before producing any new portraits.",
+          "Review current duty-lawyer bail/watch offers and case-Thursday-Tram access at the square; preserve their sources and costs.",
+          "Audit street-kit metro-step exit and pressure/intent readability from actual captures."
+        ],
+        "acceptance": [
+          "All three scheduled encounters, two doors and linked mission/case steps retain their source IDs and actual location.",
+          "First handgun stays optional; square readability does not imply gun ownership is required.",
+          "Kello variants follow actual Thursday flags and no invented branch outcome is shown as played.",
+          "Bail/return receipts remain once-only and lost/arrested crew behavior stays with the existing campaign."
+        ],
+        "mustPreserve": [
+          "Piritori square remains a composite public Kallio 2003 setting, not copied Toko art or a new tram mechanic.",
+          "Current seller/Kello identities are not invented by stand-ins.",
+          "Actual duty-lawyer bail location and authored case/mission lead sequence."
+        ]
+      },
+      "placeholders": [
+        "Seller Esa, Kello and duty-lawyer presentation source selection; no new named portrait implied.",
+        "State-driven bench, watcher, wrapped-object and tram/window accents: unbuilt overlay candidates."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-paper-bag",
+        "mission-courtyard-receipts"
+      ],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "piritori",
+        "name": "Vaasanpuistikko",
+        "kit": "street",
+        "plate": "scene-piritori-square-v01",
+        "standIn": false,
+        "wayOut": "down the metro steps",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats",
+      "cases": [
+        "case-thursday-tram"
+      ]
+    },
+    {
+      "id": "loc-vaasankatu-toko-and-bin-yard",
+      "name": "Vaasankatu: Tokon Ramen and bin yard",
+      "priority": 6,
+      "status": "approved-toko-rig / prototype-room / separate-courtyard-plan",
+      "summary": "Reuse approved paper Toko at the existing counter and keep the outdoor bin-yard fight place separate. This is the technique reference, not permission to copy another game’s style or make Toko a fighter.",
+      "anchorIds": [
+        "vaasankatu"
+      ],
+      "siteIds": [
+        "toko_slomo_noodles"
+      ],
+      "encounters": [
+        "enc-toko-quiet-voice"
+      ],
+      "doors": [
+        "favour-toko-broth"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami",
+        "toko"
+      ],
+      "assets": [
+        {
+          "id": "scene-kallio-backyard-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/kallio-backyard-v01.webp"
+        },
+        {
+          "id": "scene-toko-noodles-empty-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/toko-slomo-noodles-empty-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Retain Tokon Ramen at the Vaasankatu site and the existing empty-room plate. Public approach/doorway and the separate bin-yard gate are distinct views, not a newly authored shop district.",
+        "dialogue": "Approved scene-toko-rig-v01 acts over semi-approved scene-toko-noodles-empty-v01, with original gold mask and counter registration. Information, bowl/favour, return visit and Three Vans conversation remain exact source.",
+        "decision": "Keep buy-information, sabotage risk, favour/listen/leave and broth-door stakes readable. The current offer is an interaction loop, not a new kitchen/cooking system or tram job.",
+        "tactical": "An actual fight at Vaasankatu uses the separate bin-yard courtyard place, existing C.19 courtyard kit and gate exit. Do not imply combat inside the ramen room or put Toko on the fighter roster.",
+        "return": "Return to the counter or current map anchor with actual money/information/favour/memory effects. Preserve note handover, repeated visit and one-time outcomes from actual state."
+      },
+      "plan": {
+        "nextSteps": [
+          "Use the approved paper Toko as the extraction/pivot/hold/reduced-motion benchmark rather than repainting him.",
+          "Plan existing room/doorway and bin-yard continuity as separate crop/set references.",
+          "Review authored info/favour/after-service and broth-loop props without inventing shop content.",
+          "Audit the outdoor courtyard kit/exit only with actual C.19 captures; keep shop and fight contexts distinct."
+        ],
+        "acceptance": [
+          "Approved Toko rig versus semi-approved room are reported separately.",
+          "Gold mask, eye openings, counter alignment and quiet room motion remain coherent at phone/desktop sizes.",
+          "Exact information/risk/favour forecasts and actual state-driven note/memory effects remain visible."
+        ],
+        "mustPreserve": [
+          "Toko’s original identity/mask and approved source technique; no flat-vector Toko Move visual transplant.",
+          "Toko is a narrative contact, not a fighter.",
+          "Outdoor bin-yard arena versus indoor counter distinction and existing campaign consequences."
+        ]
+      },
+      "placeholders": [
+        "Public doorway/approach continuity and bin-yard scenery review: existing-source plan, not new shop content.",
+        "Conditional memory/info/prop overlays remain candidate until linked to actual state."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [
+        "mission-three-vans"
+      ],
+      "optionalVisits": [
+        "visit-toko-after-service"
+      ],
+      "runtimePlace": {
+        "anchor": "vaasankatu",
+        "name": "The bin yard behind Vaasankatu",
+        "kit": "courtyard",
+        "plate": "scene-kallio-backyard-v01",
+        "standIn": false,
+        "wayOut": "through the gate onto Vaasankatu",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-sornainen-quay",
+      "name": "Sörnäinen harbour and quay",
+      "priority": 7,
+      "status": "existing-plates-and-quay-kit / finale-contract-gated-plan",
+      "summary": "Plan existing harbour/quay views and the day-10 operation from current source only. Docks illustration, quay fight set and shipment decision are separate layers; the open finale design gate is not answered by new art.",
+      "anchorIds": [
+        "sornainen_harbour"
+      ],
+      "siteIds": [
+        "sornainen_quay"
+      ],
+      "encounters": [
+        "enc-shipment-night"
+      ],
+      "doors": [
+        "sale-quay-shift"
+      ],
+      "roadEvents": [],
+      "people": [
+        "aatami"
+      ],
+      "assets": [
+        {
+          "id": "scene-sornainen-docks-v02",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/sornainen-docks-v02.webp"
+        },
+        {
+          "id": "scene-sornainen-quay-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/sornainen-quay-v01.webp"
+        }
+      ],
+      "views": {
+        "approach": "Keep sornainen_quay at Sörnäinen harbour. Use the current docks illustration and quay plate as separately labelled reference cameras; container, clock and running van are authored day-10 facts.",
+        "dialogue": "Aatami is the only direct participant in enc-shipment-night. Do not invent a dock boss, crew portrait, boat interior or extra conversation from the title.",
+        "decision": "Keep current run-shipment, let-it-go and sell-the-slot choices, threshold/stake and forecasts exact while the roadmap’s finale choice-versus-fight gate remains open. The quay sale door retains its separate getaway stakes.",
+        "tactical": "Existing actual C.19 quay kit keeps the rail-line exit, bollards/flush rails, carrier/extraction and police. A docks plate is not the tactical board and does not certify bespoke harbour geometry.",
+        "return": "Actual shipment/door outcome, crew loss/recovery and chapter closure drive the return/ledger strip. No preview grants an upgrade, profit, clean/messy/lost result or release acceptance."
+      },
+      "plan": {
+        "nextSteps": [
+          "List existing docks, quay, container/clock/van and operation-decision views as a concrete shot/overlay packet.",
+          "Check current finale contract and owner decision gate before building a new played finale or replacement choice.",
+          "Review quay floor/edge/exit construction and carrier escort readability from actual C.19 captures.",
+          "Plan chapter-close and return receipts from the real current operation outcomes without depicting a new ending."
+        ],
+        "acceptance": [
+          "Current operation choices and €400/current gate remain source-backed, not silently tuned by art.",
+          "Container/clock/van appear only as authored props; no invented dock contact or ship interior.",
+          "Quay extraction/escort, police, injuries and exactly-once return remain readable and tested in actual combat."
+        ],
+        "mustPreserve": [
+          "Existing finale high-level decision remains explicitly open.",
+          "Docks scene versus actual quay kit/plate distinction.",
+          "Current chapter consequences and no fake win/loss or simulated battle card."
+        ]
+      },
+      "placeholders": [
+        "Authored container/clock/van overlay and chapter-return composition: candidate/unbuilt.",
+        "No additional dock cast source is commissioned without an actual authored need."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "sornainen_harbour",
+        "name": "The Sörnäinen quay",
+        "kit": "quay",
+        "plate": "scene-sornainen-quay-v01",
+        "standIn": false,
+        "wayOut": "along the rail line",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats",
+      "chapterOperationIds": [
+        "op-sornainen-shipment"
+      ]
+    },
+    {
+      "id": "loc-suvilahti-boiler-hall",
+      "name": "Suvilahti / boiler-hall loading context",
+      "priority": 8,
+      "status": "borrowed-plate-and-yard-stand-in / listed-plan",
+      "summary": "The existing boiler-hall pickup is real authored content, but its meeting and fight use borrowed plates. Plan source-backed loading/exterior dressing while retaining explicit stand-in labels and the reused yard kit.",
+      "anchorIds": [
+        "suvilahti"
+      ],
+      "siteIds": [
+        "suvilahti_yard",
+        "kattilahalli"
+      ],
+      "encounters": [],
+      "doors": [
+        "pickup-boiler-hall"
+      ],
+      "roadEvents": [],
+      "people": [],
+      "assets": [
+        {
+          "id": "scene-kallio-service-yard-v01",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/kallio-service-yard-v01.webp"
+        },
+        {
+          "id": "scene-sornainen-docks-v02",
+          "approval": "semi-approved",
+          "production": "prototype-only",
+          "file": "art/v3/scenes/sornainen-docks-v02.webp"
+        }
+      ],
+      "views": {
+        "approach": "Use existing suvilahti_yard and kattilahalli sites at Suvilahti. The door meeting currently borrows scene-sornainen-docks-v02; this is not proof that the meeting happens at the harbour or that a boiler-hall room has been built.",
+        "dialogue": "Door cast comes from its authored/generated side and actual deployed crew. No new named boiler-hall NPC or interior is inferred from the title.",
+        "decision": "Keep pickup-boiler-hall choices, job stakes and side exact. Its battle-kattilahalli template controls fight shape; source location remains the door’s Suvilahti anchor.",
+        "tactical": "placeAt(suvilahti) uses C.19 yard kit with scene-kallio-service-yard-v01 and stand_in:true, exit past the gas holders. Retain that label until a reviewed loading-bay dressing fits the real board and cameras.",
+        "return": "Return to Suvilahti with the actual door/C.19 receipt and place pressure, not a new harbour reward or separate mission ending."
+      },
+      "plan": {
+        "nextSteps": [
+          "Make a comparison listing current borrowed door illustration versus yard stand-in versus source-wanted boiler-hall loading bay.",
+          "Block only the authored loading/exterior cues around the existing yard board; no new room or unnamed mission expansion.",
+          "Audit joins, gas-holder exit cue and cover/intent readability in actual C.19 before dressing geometry.",
+          "Keep source/stand-in metadata visible until a candidate receives explicit visual/device review."
+        ],
+        "acceptance": [
+          "Both borrowed-image mappings and stand_in:true remain visible in plans and captures.",
+          "No harbour relocation is inferred from the borrowed docks image.",
+          "Door uses actual Suvilahti anchor, generated people, job and exit through the existing campaign bridge."
+        ],
+        "mustPreserve": [
+          "Existing 3D yard-kit combat; no card substitute or new rules.",
+          "Current pickup-boiler-hall source, side and stakes.",
+          "Borrowed scenery is not labelled approved bespoke Suvilahti art."
+        ]
+      },
+      "placeholders": [
+        "Boiler-hall loading-bay exterior dressing/plate: source-wanted, unbuilt.",
+        "Generated door cast remains neutral/generated; no invented named portrait."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "content/places-v1.json",
+        "content/doors-v1.json",
+        "design/SCENARIO_ATLAS.md",
+        "art/v3/manifest.json",
+        "art-src/reviews/act1-encounters/BINDING_PLAN.md",
+        "web/js/v3/places.js",
+        "web/js/v3/outing.js",
+        "web/crew-run/locations.js"
+      ],
+      "missions": [],
+      "optionalVisits": [],
+      "runtimePlace": {
+        "anchor": "suvilahti",
+        "name": "Behind the boiler hall",
+        "kit": "yard",
+        "plate": "scene-kallio-service-yard-v01",
+        "standIn": true,
+        "wayOut": "out past the gas holders",
+        "bespokeSiteGeometryAccepted": false
+      },
+      "sharedRoadPacket": "loc-shared-journey-beats"
+    },
+    {
+      "id": "loc-shared-journey-beats",
+      "name": "Existing travel and arrival beats — dynamic context",
+      "anchorIds": [],
+      "siteIds": [],
+      "encounters": [],
+      "doors": [],
+      "roadEvents": [
+        "road-corner-kid",
+        "road-first-gig",
+        "road-ticket-check",
+        "road-kiosk-tip",
+        "road-dealer-sampler",
+        "road-torn-pocket",
+        "road-old-classmate",
+        "road-bigger-gig",
+        "road-underpass",
+        "road-pram-radios",
+        "road-fur-hat",
+        "road-bottle-cart",
+        "road-sauna-vent",
+        "road-scratch-card",
+        "road-empty-van",
+        "road-accordion",
+        "road-someone-asking",
+        "road-deposit",
+        "road-night-bus",
+        "road-cut-found-out",
+        "road-network-bottles",
+        "road-kello-time",
+        "road-mccormick-cousin",
+        "road-accordion-sweep",
+        "road-table-two",
+        "road-restitution-mccormick",
+        "road-restitution-jade",
+        "road-retaliation-mccormick",
+        "road-retaliation-jade"
+      ],
+      "people": [
+        "aatami"
+      ],
+      "priority": 9,
+      "status": "shared-dynamic-staging-plan / no-fixed-location-binding",
+      "summary": "All 29 current road events lack fixed anchor/site declarations. This shared production packet follows the saved journey or current location; it is not a new room, district or a claim that every event occurred at every eligible anchor.",
+      "assets": [],
+      "views": {
+        "approach": "Use the actual saved origin/destination and selected public travel context. Eleven active anchors are eligible normal destinations; eligibility is not an occurrence log. Never pin an event to Hämeentie, a kiosk, sauna, stop or underpass solely because its prose title mentions one.",
+        "dialogue": "Keep exact current road text/detail/choices. Use neutral cast/prop placeholders until a source is selected; named references do not commission new locked identities or locations.",
+        "decision": "Preserve surprise travel events, tier/requirements, deterministic seed, gap/frequency and authored minutes/stakes. The 24 random-pool events and five trigger-only events remain separate; trigger-bearing events are never normal random candidates.",
+        "tactical": "roadFightAnchor chooses origin first for transit, destination first for arrival, preferring an endpoint with a places record. Any-phase events resolve to an actual phase; forced arrival events use current selectedAnchor. Four combat road IDs use the existing battle shape, then the actual endpoint’s C.19 kit, people, cover and exit.",
+        "return": "Return to actual arrival/current map location with the authored road minutes and one-time consequences, without an extra story block. Real fights use actual outing/receipt settlement; no road illustration invents a result."
+      },
+      "plan": {
+        "nextSteps": [
+          "Create a reusable public transit/arrival framing checklist against existing anchor references, not 29 new scene concepts.",
+          "List neutral road actor/prop placeholders directly from each current event and keep the 24 random versus five forced cases explicit.",
+          "Review one real transit, one arrival and one forced event with actual journey context before new environmental drawing.",
+          "Capture the four actual combat-road handoffs against their dynamic endpoint kits, including exit/police/receipt return."
+        ],
+        "acceptance": [
+          "All 29 road IDs are covered once in this shared pool; none receives an invented fixed anchor/site.",
+          "Actual origin/destination/current-location mapping agrees with roadFightAnchor and forceRoad sources.",
+          "No event preview hides authored minutes/stakes, moves trigger events into the random pool or simulates battle outcomes.",
+          "Required phone/desktop/landscape and actual reload checks preserve campaign state; physical-device acceptance stays open."
+        ],
+        "mustPreserve": [
+          "Road events are surprises until a later owner-approved indicator policy; no borrowed tram simulation.",
+          "Existing deterministic frequency, requirements, triggers, one-time seen events and authored minutes.",
+          "C.19 fights keep positioning/weapons/intents/police/getaway/injury/recovery and exactly-once receipt integration."
+        ]
+      },
+      "placeholders": [
+        "Dynamic transit/arrival composition and neutral source-selected actors/props: unbuilt, not 29 new locations.",
+        "No fixed anchor or room inferred from prose titles."
+      ],
+      "sources": [
+        "content/road-events-v1.json",
+        "content/places-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "web/js/v3/road.js",
+        "web/js/v3/places.js",
+        "web/js/v3/journey.js",
+        "web/js/v3/app.js",
+        "web/js/v3/outing.js"
+      ],
+      "eligibleAnchorIds": [
+        "siltasaari",
+        "hakaniemi",
+        "linjat_yard",
+        "karhupuisto",
+        "torkkelinmaki",
+        "harju",
+        "vaasankatu",
+        "piritori",
+        "sornainen_harbour",
+        "suvilahti",
+        "makelansilta"
+      ],
+      "randomPoolIds": [
+        "road-corner-kid",
+        "road-first-gig",
+        "road-ticket-check",
+        "road-kiosk-tip",
+        "road-dealer-sampler",
+        "road-torn-pocket",
+        "road-old-classmate",
+        "road-bigger-gig",
+        "road-underpass",
+        "road-pram-radios",
+        "road-fur-hat",
+        "road-bottle-cart",
+        "road-sauna-vent",
+        "road-scratch-card",
+        "road-empty-van",
+        "road-accordion",
+        "road-someone-asking",
+        "road-deposit",
+        "road-night-bus",
+        "road-network-bottles",
+        "road-kello-time",
+        "road-mccormick-cousin",
+        "road-accordion-sweep",
+        "road-table-two"
+      ],
+      "forcedOnlyIds": [
+        "road-cut-found-out",
+        "road-restitution-mccormick",
+        "road-restitution-jade",
+        "road-retaliation-mccormick",
+        "road-retaliation-jade"
+      ],
+      "phaseIds": {
+        "transit": [
+          "road-corner-kid",
+          "road-ticket-check",
+          "road-torn-pocket",
+          "road-underpass",
+          "road-fur-hat",
+          "road-sauna-vent",
+          "road-empty-van",
+          "road-night-bus",
+          "road-network-bottles",
+          "road-kello-time",
+          "road-accordion-sweep"
+        ],
+        "arrival": [
+          "road-kiosk-tip",
+          "road-dealer-sampler",
+          "road-bigger-gig",
+          "road-pram-radios",
+          "road-bottle-cart",
+          "road-scratch-card",
+          "road-accordion",
+          "road-someone-asking",
+          "road-deposit",
+          "road-cut-found-out",
+          "road-mccormick-cousin",
+          "road-restitution-mccormick",
+          "road-restitution-jade",
+          "road-retaliation-mccormick",
+          "road-retaliation-jade"
+        ],
+        "any": [
+          "road-first-gig",
+          "road-old-classmate",
+          "road-table-two"
+        ]
+      },
+      "combatRoadIds": [
+        "road-underpass",
+        "road-cut-found-out",
+        "road-retaliation-mccormick",
+        "road-retaliation-jade"
+      ]
+    }
+  ],
+  "deferredExisting": [
+    {
+      "id": "deferred-kallio_church",
+      "name": "KALLION KIRKKO",
+      "anchorId": "kallio_church",
+      "status": "landmark",
+      "reason": "Existing orientation landmark only; no authored encounter, door, mission or fight place.",
+      "existingContent": [],
+      "nextStep": "Keep existing map role only; defer new encounter/room/content design.",
+      "sources": [
+        "map/kallio-era1-2003-v1.json",
+        "content/era1-slice-v1.json"
+      ]
+    },
+    {
+      "id": "deferred-alppiharju",
+      "name": "ALPPIHARJU",
+      "anchorId": "alppiharju",
+      "status": "locked",
+      "reason": "Existing locked expansion anchor; no new content or art proposed before current listed work gates pass.",
+      "existingContent": [],
+      "nextStep": "Keep existing map role only; defer new encounter/room/content design.",
+      "sources": [
+        "map/kallio-era1-2003-v1.json",
+        "content/era1-slice-v1.json"
+      ]
+    },
+    {
+      "id": "deferred-vallila",
+      "name": "VALLILA",
+      "anchorId": "vallila",
+      "status": "locked",
+      "reason": "Existing locked expansion anchor; no new content or art proposed before current listed work gates pass.",
+      "existingContent": [],
+      "nextStep": "Keep existing map role only; defer new encounter/room/content design.",
+      "sources": [
+        "map/kallio-era1-2003-v1.json",
+        "content/era1-slice-v1.json"
+      ]
+    },
+    {
+      "id": "deferred-hermanni_skatepark",
+      "name": "HERMANNI SKATE PARK",
+      "anchorId": "hermanni_skatepark",
+      "status": "training",
+      "reason": "Existing isolated, cost-free training fixture; not an authored campaign business or C.19 location-production packet.",
+      "existingContent": [
+        "battle-hermanni-training"
+      ],
+      "nextStep": "Preserve current training functionality separately; no roster/arena expansion.",
+      "sources": [
+        "map/kallio-era1-2003-v1.json",
+        "content/era1-slice-v1.json"
+      ]
+    }
+  ],
+  "boundaryContext": [
+    {
+      "id": "centre",
+      "label": "KESKUSTA",
+      "status": "existing-boundary-portal-only / not-enterable-anchor",
+      "sources": [
+        "map/kallio-era1-2003-v1.json"
+      ]
+    },
+    {
+      "id": "northwest",
+      "label": "PASILA",
+      "status": "existing-boundary-portal-only / not-enterable-anchor",
+      "sources": [
+        "map/kallio-era1-2003-v1.json"
+      ]
+    },
+    {
+      "id": "arabia",
+      "label": "ARABIA",
+      "status": "existing-boundary-portal-only / not-enterable-anchor",
+      "sources": [
+        "map/kallio-era1-2003-v1.json"
+      ]
+    },
+    {
+      "id": "east",
+      "label": "ITÄ",
+      "status": "existing-boundary-portal-only / not-enterable-anchor",
+      "sources": [
+        "map/kallio-era1-2003-v1.json"
+      ]
+    }
+  ]
+}

@@ -20,7 +20,7 @@ No new art or dependency is introduced by this hub. Source art/animation approva
 
 ## Consolidated verification
 
-The assembled pack passes both 390×844 and 1280×800 checks: six actual sibling routes load and render, with no HTTP/console/page errors or horizontal overflow; review shortlist/notes/export/reset work across navigation; a byte-for-byte campaign sentinel remains unchanged. Individual tools add their detailed model/browser tests:
+The assembled pack passes both 390×844 and 1280×800 checks: seven actual sibling routes load and render, with no HTTP/console/page errors or horizontal overflow; review shortlist/notes/export/reset work across navigation; a byte-for-byte campaign sentinel remains unchanged. Individual tools add their detailed model/browser tests:
 
 - Encounter audit: 17 authored encounters, 60 exact choices/forecasts, 16 hash-verified plate references; both full viewport runs pass.
 - Consequences: 9 model fixtures, 18 browser flows; actual adapter receipts reject replay and JSON restore duplicates.
@@ -28,6 +28,11 @@ The assembled pack passes both 390×844 and 1280×800 checks: six actual sibling
 - Combat: four preserved 147-row evidence sets; phone/desktop data filters/proposal checks and actual C.19 courtyard captures pass. Missing telemetry stays unmeasured.
 - Hub: 36 source-backed work packets, fixed 48% estimate, existing roadmap milestones, filters and isolated review storage.
 
-The actual browser tour is [MP4](evidence/act1-workbench-tour.mp4) / [WebM](evidence/act1-workbench-tour.webm), 33.12 seconds. It shows the review tools, not a fabricated chapter run. Source art, new motion and proposed rules remain unpromoted; no public release is claimed. New combined-branch CI is pending.
+The earlier six-surface browser tour is [MP4](evidence/act1-workbench-tour.mp4) / [WebM](evidence/act1-workbench-tour.webm), 33.12 seconds. It shows the review tools, not a fabricated chapter run. Source art, new motion and proposed rules remain unpromoted; no public release is claimed. New combined-branch CI is pending.
 
 For a local review, serve the repository root (for example `python -m http.server 8785 --bind 127.0.0.1`) and open `/art-src/reviews/act1-workbench/`. The component drafts are #123 (combat), #124 (chapter), #125 (encounters) and #126 (consequences); the hub consolidates their tested commits and the already-tested map draft #121, on art-review #122.
+
+
+The listed location/cast extension is at `../act1-production/`: 12 location/context packets, 26 existing cast/role packets, and a 15-stage production order. Its own source/browser checks cover all records and staging views with campaign-storage access blocked. It is reachable as the seventh hub preview; new content is explicitly deferred.
+
+The listed-place/cast recording is [MP4](../act1-production/evidence/listed-production-tour.mp4) / [WebM](../act1-production/evidence/listed-production-tour.webm), 18.16 seconds of actual planning-tool output. The location/cast extension does not begin new-content expansion.

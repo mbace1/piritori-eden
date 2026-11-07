@@ -22,7 +22,16 @@
       "kind": "preview"
     },
     {
-      "label": "03 · THE CITY BETWEEN MOMENTS",
+      "label": "03 · LISTED PLACES AND CAST",
+      "title": "Locations and characters",
+      "description": "Detailed plans for 11 active places, shared travel staging and 26 existing cast/role packets. Follow the listed production sequence before new content.",
+      "action": "Open the production atlas →",
+      "href": "../act1-production/",
+      "status": "Source-backed plans · expansion deferred",
+      "kind": "plan"
+    },
+    {
+      "label": "04 · THE CITY BETWEEN MOMENTS",
       "title": "A quieter map",
       "description": "Compare captured phone and desktop screens from the tested map cleanup, keeping travel and route decisions intact.",
       "action": "Compare the map screens →",
@@ -31,7 +40,7 @@
       "kind": "preview"
     },
     {
-      "label": "04 · THE FIGHT STAYS C.19",
+      "label": "05 · THE FIGHT STAYS C.19",
       "title": "Combat evidence and UX",
       "description": "Inspect all 15 measured fights and compare strategies, damage and police pressure. Proposal overlays keep the 3D battlefield.",
       "action": "Inspect the combat evidence →",
@@ -40,7 +49,7 @@
       "kind": "preview"
     },
     {
-      "label": "05 · WHAT COMES HOME",
+      "label": "06 · WHAT COMES HOME",
       "title": "Consequences and recovery",
       "description": "Try trade, hiring, loot, injuries, missing crew, arrests and recovery through isolated, labelled fixture states.",
       "action": "Try the consequence previews →",
@@ -49,7 +58,7 @@
       "kind": "preview"
     },
     {
-      "label": "06 · THE TEN-DAY RUN",
+      "label": "07 · THE TEN-DAY RUN",
       "title": "Chapter and finale rehearsal",
       "description": "Follow the actual schedule and mission dependencies. Explore the proposed shipment choice and 30% time budget before committing rules.",
       "action": "Rehearse the chapter →",

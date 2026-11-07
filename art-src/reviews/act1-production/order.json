@@ -1,0 +1,131 @@
+{
+  "schemaVersion":1,
+  "scope":"Finite production sequence for the locations, cast, groups and crew already authored in Act I. ROADMAP.md remains the plan of record; its 48% estimate is unchanged. These are work and review gates, not approvals or implementation status.",
+  "stages":[
+    {
+      "id":"baseline-contract","title":"Preserve the campaign and C.19 baseline","milestone":"1 / G0; 2 / G1",
+      "encounters":["enc-first-purchase","enc-first-sale","enc-bear-path","enc-courtyard-last-call"],"characters":["aatami"],"anchors":["piritori","siltasaari","karhupuisto","torkkelinmaki"],"dependencies":[],
+      "deliverables":["Pin the main and review branch SHAs, actual hub version and current source/save/receipt fixtures before integrating visuals.","Keep real C.19 door, getaway and Bear Path entries, their campaign-aside behavior and exactly-once return boundary in the review pack.","Name current art source/rig/device status separately from CI and file-hash results."],
+      "checks":["Existing first purchase/sale, road, chapter, Aatami, mission and C.19 outing/recovery suites remain green on the integrated source.","All 15 Act I fights retain positioning, weapons, enemy plans, police and fight/getaway objectives; no combat-card replacement.","Aatami still fights every chapter 1 fight; no early shot-caller transition."],
+      "boundary":"Baseline evidence does not accept art, replace owner physical play, tune combat rules or increase the roadmap score.",
+      "reviewLinks":["../act1-workbench/","../act1-combat/","../act1-consequences/"]
+    },
+    {
+      "id":"scene-club-fidelity","title":"Finish the listed Scene Club source-fidelity slice","milestone":"4 / City and UI",
+      "encounters":["enc-jaska-receipt","enc-jaska-last-light"],"characters":["aatami","jaska"],"anchors":["makelansilta"],"dependencies":["baseline-contract"],
+      "deliverables":["Use the approved Jaska cut-in and semi-approved young Aatami front rig over the existing Scene Club room; retain the source/identity board.","Review the already built arrival, one-at-a-time speech, idle/blink/head gestures, authored choice, consequence and return timing.","Keep the bounded eyelid-mask/marker variants side-by-side with registered-rig baselines; prepare source-fidelity comparison at actual phone size.","Connect accepted presentation through the existing encounter and optional return-visit handlers, with the original scene as rollback."],
+      "checks":["Normal/reduced-motion real canvas frames, head/neck seams, glasses/brow continuity, short bottom-tail bubble and full first-screen choices at 390×844 and 1280×800.","Check the proposed landscape composition separately at 844×390; passing motion is not a 12px speech-readability acceptance.","Ask-envelope still applies +300 markka/+1 Jaska trust once, survives reload and returns to the map; last-light props read actual survivor/choice state."],
+      "boundary":"This is the first production batch. Jaska's approval does not approve new motion; Aatami front/room remain semi-approved. Side Aatami is for a separately reviewed opposite-sides composition and remains unassessed here. No new Jaska/Aatami design, two-speaker promotion or invented family fact.",
+      "reviewLinks":["../scene-club-2026-11-07/?repair=1","../scene-club-2026-11-07/blink-comparison.html","../act1-encounters/"]
+    },
+    {
+      "id":"courtyard-site-contract","title":"Resolve the listed courtyard/site conflict before dressing it","milestone":"3 / Arenas; 4 / City and UI",
+      "encounters":["enc-courtyard-last-call"],"characters":["aatami-network-team","courtyard-rival-team","jaska-offscreen"],"anchors":["torkkelinmaki"],"dependencies":["baseline-contract"],
+      "deliverables":["Record the discrepancy: encounter site_id is jaska_studio while schedule, mission destination and battle context point to Torkkelinmäki.","Propose the canonical site correction from existing authored records and keep Scene Club at Mäkelänsilta; bring any remaining semantic conflict for design review.","Align meeting, escalation, C.19 arena and return through one site/anchor contract before binding the available courtyard plate."],
+      "checks":["A source/site/mission/battle mapping check rejects silently presenting Jaska's room as the porttikongi.","The actual mission fixture is still schedule index 11, anchor torkkelinmaki and its authored three-person battle; do not label the courtyard door playtest as Courtyard Receipts.","Jaska remains offscreen in this encounter and is never inferred as a casualty or fighter from the group label."],
+      "boundary":"Resolve a current authored-content conflict; do not add another courtyard, relocate Scene Club, commission new art or silently choose new geography. No runtime correction is certified by this plan alone.",
+      "reviewLinks":["../act1-encounters/","../act1-combat/","../act1-consequences/"]
+    },
+    {
+      "id":"bank-and-queue","title":"Produce the bank pair with a separate first-sale exterior","milestone":"4 / City and UI",
+      "encounters":["enc-first-sale","enc-bank-counter","enc-pasila-ledger"],"characters":["aatami","buyer-leena","teller-anne","bank-clerk","optional-surviving-crew"],"anchors":["siltasaari"],"dependencies":["scene-club-fidelity"],
+      "deliverables":["Keep Leena's first sale outside the legitimate queue; build the listed neutral exterior/queue composition before treating any room as its stage.","Use the existing bank-counter plate as a proposed interior binding for teller and ledger beats, with live rate, ticket, amount and visibility text.","Audit existing approved modular source candidates for Leena, Anne and the clerk; explicitly decide whether Anne/clerk share an identity before extracting extra faces.","Present the Pasila brochure as an object discussed at the Siltasaari counter; bind optional crew from actual surviving roster state."],
+      "checks":["Opening purchase/sale price, stock and +€68 sale receipt survive reload exactly once; an exterior first sale is not silently moved indoors.","Arvo's scheduled bulletin still precedes the bank visit and retains documented/inference/fiction/source distinctions and the fixed 5.94573 conversion rate.","Source/identity candidates remain neutral and labelled until selected; phone dialogue, queue, counter and commitment controls do not overlap."],
+      "boundary":"Do not invent a Pasila destination for the current scene, assign one arbitrary face to two authored contacts, change banking services or bake financial text into art.",
+      "reviewLinks":["../act1-encounters/","../act1-chapter/","../act1-consequences/"]
+    },
+    {
+      "id":"harju-recruitment","title":"Stage Harju recruitment and its existing return visit","milestone":"4 / City and UI",
+      "encounters":["enc-runner-at-tram-stop"],"characters":["aatami","crew-slot-runner"],"anchors":["harju"],"dependencies":["scene-club-fidelity","bank-and-queue"],
+      "deliverables":["Use the registered Harju pitch as contextual background while explicitly keeping the tram-stop foreground/approach unbuilt until reviewed.","Source-select the authored runner record and show recruitment cost, availability and the first crew role without inventing a new named runner.","Plan the existing visit-harju-thursday observation as a return at the same anchor, using its actual prerequisites and Toko thread."],
+      "checks":["Recruitment refuses when conditions/cash fail and cannot charge/hire twice after reload; existing condition/nerve/competency values remain data.","The pitch is not presented as a completed stop illustration; tram/waiting context and character feet/proportions are checked in actual captures.","Return observation follows its actual availability and clue effects rather than adding a free new repeatable reward."],
+      "boundary":"No new Harju stop, tram mechanic, runner identity or quest. Named/role/appearance approval remain distinct; an asset-placeholder selection is not permission to promote it.",
+      "reviewLinks":["../act1-encounters/","../act1-consequences/","../act1-chapter/"]
+    },
+    {
+      "id":"toko-counter-chain","title":"Reuse the approved Toko counter through its authored chain","milestone":"4 / City and UI",
+      "encounters":["enc-toko-quiet-voice"],"characters":["aatami","toko"],"anchors":["vaasankatu"],"dependencies":["scene-club-fidelity","harju-recruitment"],
+      "deliverables":["Retain the approved paper Toko rig and existing empty-bar plate with their alignment, hidden pivots and fixed gold mask.","Review the Three Vans encounter, existing after-service visit, bowl/information/early-melee offers and return-to-map as one consistent place.","Use conditional props and concise choice stakes driven by actual bowl/encounter/visit state; keep information levels and obligations legible."],
+      "checks":["Existing Toko and visits tests cover purchase, information, refusal, cancellation, once-only memory and reload.","Room/rig registration, counter contact, eye/head gestures and reduced-motion rest are captured on phone and desktop.","Toko is a narrative contact and never becomes a fighter or enemy by presentation."],
+      "boundary":"Reuse Toko's approved identity/construction; do not redraw the mask, copy his identity to another contact, add a new shop economy or infer final approval of the semi-approved empty room.",
+      "reviewLinks":["../act1-encounters/","../act1-consequences/","../act1-chapter/"]
+    },
+    {
+      "id":"park-meeting-fight","title":"Keep the park meeting and Bear Path tactically continuous","milestone":"2 / G1; 3 / Arenas; 4 / City and UI",
+      "encounters":["enc-karhupuisto-watch","enc-bear-path"],"characters":["aatami","crew-slot-watcher","dog-owner","aatami-network-team","piritori-rival-team"],"anchors":["karhupuisto"],"dependencies":["baseline-contract","harju-recruitment","toko-counter-chain"],
+      "deliverables":["Use the approved park baseline and available clearing image as their own documented assets, with separate watcher/owner/dog/wind layers or neutral placeholders.","Source-select the watcher/contact/cast from existing records; group labels resolve to real campaign fighters only at the proper encounter boundary.","Keep bear/plinth cover, exit and cast identity continuous into the actual C.19 park mission and compact return strip."],
+      "checks":["Toko's information/fixer and withdrawal alternatives remain reachable; the illustration never replaces the actual fight.","Actual C.19 captures check cover, intentions, movement, targeting, police clock and exit; existing-kit geometry changes require before/after evidence.","Crew injuries/missing/arrests and the mission result settle once, survive reload and remain readable on return."],
+      "boundary":"Do not turn all bystanders hostile, invent an owner/dog identity, freeze a particular rival roster into art, or replace the park arena with a scene card. Source approval and arena/device acceptance stay separate.",
+      "reviewLinks":["../act1-encounters/","../act1-combat/","../act1-consequences/"]
+    },
+    {
+      "id":"hakaniemi-front","title":"Frame the ordinary Hakaniemi front and lunch queue","milestone":"4 / City and UI",
+      "encounters":["enc-jade-window"],"characters":["aatami","mei-lan","lunch-crowd"],"anchors":["hakaniemi"],"dependencies":["scene-club-fidelity","bank-and-queue"],
+      "deliverables":["Review the available Jade-front plate at the current authored Hakaniemi anchor; keep ordinary shop/queue activity readable around the contact.","Audit an approved source selection for Mei-Lan and keep the crowd an ambient/group placeholder, not a set of invented named people.","Make the invoice/receipt clue and available approaches readable without baking story clues into an unconditional background."],
+      "checks":["The current Hakaniemi schedule/site contract wins over older Linjat context; the art must not assert obsolete geography.","Choice requirements, cost, duplicate-invoice/clue state and peaceful alternatives match authored data after reload.","Phone composition leaves contact, ordinary queue and live choice text separate and readable."],
+      "boundary":"No new restaurant, district, faction fact, named crowd member or additional quest. Plate registration and a preferred source do not approve a new Mei-Lan rig.",
+      "reviewLinks":["../act1-encounters/","../act1-chapter/","../act1-consequences/"]
+    },
+    {
+      "id":"courtyard-presentation","title":"Build the authored courtyard confrontation after its site contract","milestone":"3 / Arenas; 4 / City and UI; 5 / G2",
+      "encounters":["enc-courtyard-last-call"],"characters":["aatami-network-team","courtyard-rival-team","jaska-offscreen"],"anchors":["torkkelinmaki"],"dependencies":["courtyard-site-contract","hakaniemi-front","park-meeting-fight"],
+      "deliverables":["Use the available courtyard plate only as a reviewed meeting/approach composition after the canonical site issue is resolved.","Carry the same actual squad, rival identities and receipt objective into C.19 courtyard geometry, with authored negotiation, favour and withdrawal options.","Prepare return/memory prop variants from real critical-wound, relationship and receipt flags; keep Jaska's contribution offscreen as authored."],
+      "checks":["Mission/C.19 tests verify the real three-person handoff and once-only success/partial/failure effects; no fabricated outing ID.","Actual courtyard cameras check joins, cover, exit and occlusion rather than inferring sound construction from code.","Critical wounds, gear/fence results and family cost are visible and recovery remains available; named casualties come only from state."],
+      "boundary":"A proposed plate is not a replacement arena. Do not move this mission into Scene Club, place Jaska on the battlefield, add a new casualty or certify a physical-device pass from browser captures.",
+      "reviewLinks":["../act1-encounters/","../act1-combat/","../act1-consequences/"]
+    },
+    {
+      "id":"square-returns","title":"Produce the existing square trade, firearm and watcher returns","milestone":"4 / City and UI; 5 / G2",
+      "encounters":["enc-first-purchase","enc-first-firearm","enc-kello-reckoning"],"characters":["aatami","seller-esa","kello"],"anchors":["piritori"],"dependencies":["bank-and-queue","scene-club-fidelity"],
+      "deliverables":["Reuse the existing square plate with source-selected Esa/Kello candidates and distinct authored prop/crop emphasis for the first buy, firearm and reckoning.","Keep the repeated watcher/bench/tram cues conditional on the actual Thursday Load and encounter flags.","Connect trade, hiring/fence access and case/reckoning return views to the same current presence and persistent result strip."],
+      "checks":["The first €45 purchase, demand lead and stock change remain clear and idempotent; no new price roll appears from a nearby view.","The first-firearm scene retains its existing requirements and has no fabricated direct fight branch.","Reckoning/receipt/family state and the current income-source mismatch are read from code/data; no fence-only rule is silently imposed."],
+      "boundary":"No new square service, tram simulation, repeatable reward, Esa/Kello identity or criminal-control overlay. These are current authored returns, not an expansion of the city.",
+      "reviewLinks":["../act1-encounters/","../act1-consequences/","../act1-chapter/"]
+    },
+    {
+      "id":"yard-family-returns","title":"Frame the service-yard recruitment and family return","milestone":"4 / City and UI; 5 / G2",
+      "encounters":["enc-mccormick-yard","enc-family-calls"],"characters":["aatami","sean-mccormick","crew-slot-muscle","mccormick-brothers"],"anchors":["linjat_yard"],"dependencies":["harju-recruitment","square-returns"],
+      "deliverables":["Reuse the existing service-yard plate for the Sean/muscle meeting and later family-account scene, with source-selected or explicitly neutral cast.","Review invoice/photo, account book/kettle/van and group spacing only where those props/facts are authored.","Keep faction standing, obligations, recruitment and the later return consequence readable without adding new family history."],
+      "checks":["Muscle recruitment, family demand/standing and available choices retain their data conditions and once-only outcomes.","Group placeholders remain group placeholders until actual present cast is known; no arbitrary named brother is invented.","A later fight/retaliation uses its own C.19 data and crew status rather than an assumed scene-only victory."],
+      "boundary":"Do not invent a family member, service, ledger reward, portrait assignment or fight. The family-group source is not a blank cheque to create new story content.",
+      "reviewLinks":["../act1-encounters/","../act1-consequences/","../act1-chapter/"]
+    },
+    {
+      "id":"broadcast-continuity","title":"Preserve Arvo's existing broadcast and source hierarchy","milestone":"4 / City and UI; later motion remains gated by ROADMAP",
+      "encounters":[],"characters":["arvo"],"anchors":[],"dependencies":["scene-club-fidelity","bank-and-queue"],
+      "deliverables":["Audit the existing approved presenter source and semi-approved registered Arvo rig against the current scheduled news-markka-afterlife bulletin.","Preserve news delivery before the bank scene, documented/inference/accusation/fiction labels and real source citations.","Write bounded later motion/pose requirements for the news role using the existing paper-rig reference; show candidates in review tooling before any integration."],
+      "checks":["The bank bulletin retains its exact documented rate/date claims and never presents a fictional staffed counter as a documented institution.","News remains separate from location dialogue: no invented Arvo personal door, map room, fight or reward.","Any future rig/motion candidate has actual animation, source-fidelity and reduced-motion evidence; the current plan is not a promotion."],
+      "boundary":"Arvo is a narrative broadcaster and never a fighter. Source painting approval is distinct from rig approval. Additional Arvo motion remains behind the existing roadmap/owner gate rather than becoming an unannounced Act I requirement.",
+      "reviewLinks":["../../cutins/review.html?who=arvo","../act1-encounters/","../act1-chapter/"]
+    },
+    {
+      "id":"crew-roster-continuity","title":"Use the six existing crew roles across roster and aftermath","milestone":"2 / G1; 4 / City and UI; 5 / G2",
+      "encounters":["enc-runner-at-tram-stop","enc-karhupuisto-watch","enc-mccormick-yard","enc-toko-quiet-voice","enc-bank-counter","enc-courtyard-last-call"],"characters":["aatami","crew-slot-runner","crew-slot-muscle","crew-slot-watcher","crew-slot-fixer","crew-slot-driver","crew-slot-local"],"anchors":["harju","karhupuisto","linjat_yard","vaasankatu","siltasaari","torkkelinmaki"],"dependencies":["harju-recruitment","toko-counter-chain","park-meeting-fight","yard-family-returns","courtyard-presentation"],
+      "deliverables":["Audit the existing authored role records, modular portrait/body assets, source selections and generated name pipeline before one bounded extraction at a time.","Keep roster/recruitment, deployment, battle stand-ins and aftermath identity linked by actual crew IDs, condition, equipment and availability.","Prepare separate injured, missing, arrested, recovered and retired UI states using existing data and neutral placeholders until art is accepted."],
+      "checks":["No ethnicity/appearance becomes a combat class or morality shortcut; role/competency data does not invent a new named character.","Aatami fights all chapter 1 battles; reserve/recruit/recovery rules and existing crew death/protection policies are unchanged.","C.19 receipt, rescue, bail, recovery and repeat reload tests verify real persistent status and once-only inventory/cost changes."],
+      "boundary":"Do not insert a recruit physically into a scene merely because an effect unlocks them, expand the roster, commission new 3D models, replace proven stand-ins or infer casualties from optional-surviving-crew. Missing/conditional art is not accepted by selecting it in review.",
+      "reviewLinks":["../act1-consequences/","../act1-combat/","../act1-encounters/"]
+    },
+    {
+      "id":"docks-finale-continuity","title":"Review the authored docks and complete the finale contract","milestone":"5 / G2; 6 / G4",
+      "encounters":["enc-shipment-night"],"characters":["aatami"],"anchors":["sornainen_harbour"],"dependencies":["square-returns","yard-family-returns","courtyard-presentation","crew-roster-continuity","bank-and-queue"],
+      "deliverables":["Reuse the existing docks plate and authored container, slow clock and van facts; review framing without inventing a new port or boss.","Use the existing real-engine shipment fixture and labelled container/van assignment sketch to prepare the owner choice between crew/route decision and played fight.","Reconcile the current €400 chapter-income goal with the separate €400 cash stake and eligible income-source mismatch before tuning.","Connect accepted finale behavior to actual crew/gear/upgrades, chapter carryover and the four existing Pasila forecasts, preserving watch/sell-slot alternatives."],
+      "checks":["Current operation remains seeded and single-settlement until a replacement design is explicitly accepted and tested; a review sketch has no invented odds or persistent reward.","The related quay getaway demo is not labelled the authored shipment finale or treated as its success result.","Chapter 2 remains unauthored; cash/stock/gear/people carryover follows the real data rather than an illustrated prediction."],
+      "boundary":"The source encounter currently names Aatami alone. Any crew/route staging is a proposal, not newly authored cast or mechanics. Do not infer new content, accept a finale design by placeholder or claim a full chapter run from fixtures.",
+      "reviewLinks":["../act1-chapter/","../act1-encounters/","../act1-consequences/"]
+    },
+    {
+      "id":"complete-run-device-release","title":"Validate the listed chapter before considering expansion","milestone":"6 / G4; 7 / Release",
+      "encounters":["enc-first-purchase","enc-first-sale","enc-jaska-receipt","enc-runner-at-tram-stop","enc-bank-counter","enc-toko-quiet-voice","enc-karhupuisto-watch","enc-mccormick-yard","enc-bear-path","enc-first-firearm","enc-jade-window","enc-courtyard-last-call","enc-pasila-ledger","enc-jaska-last-light","enc-kello-reckoning","enc-family-calls","enc-shipment-night"],"characters":[],"anchors":["piritori","siltasaari","makelansilta","harju","vaasankatu","karhupuisto","linjat_yard","hakaniemi","torkkelinmaki","sornainen_harbour"],"dependencies":["scene-club-fidelity","courtyard-site-contract","bank-and-queue","harju-recruitment","toko-counter-chain","park-meeting-fight","hakaniemi-front","courtyard-presentation","square-returns","yard-family-returns","broadcast-continuity","crew-roster-continuity","docks-finale-continuity"],
+      "deliverables":["Run the real 10-day/20-block campaign with all authored beats and existing endings, using actual release/save data and recorded failures.","Integrate D002's 30%-per-trip/trade-visit rule only with deadline, interest, wage, door-window, road-event and full-run reachability evidence; the calculator is not that evidence.","Record physical Pixel/iPad observations, visual/design acceptance, exact CI/source SHA and matching hub release receipt for accepted production bytes."],
+      "checks":["Regression covers trade, recruitment, optional visits, story branches, roads, doors, C.19 fight/getaway/police, receipts, recovery, finale and reload.","Measure all 15 fights with reproducible policy/seed evidence and retain remaining G1 decisions; no progress percentage rises just for new review pages.","Verify physical devices and actual public route separately from browser emulation and source push; record unresolved owner/device gates honestly."],
+      "boundary":"Completing this checklist is not automatic approval, release or permission to expand. ROADMAP's rubric and owner/design acceptance remain authoritative; Godot, Chapter 2 and new quests/locations/people stay outside this batch.",
+      "reviewLinks":["../act1-workbench/","../act1-chapter/","../act1-combat/","../act1-consequences/"]
+    }
+  ],
+  "expansion":{
+    "status":"deferred",
+    "conditions":["The currently listed location/cast batches have source-selected candidates, actual rendered evidence and recorded owner art/design acceptance where required.","Accepted pieces have been integrated through canonical sites, availability, authored choices and the existing C.19/save/receipt boundary, with peaceful alternatives preserved.","All 15 authored fights and the current tactical-policy gap have reproducible evidence; injuries, missing/arrested crew, rescue, bail, loot and fence/market/route income eligibility are verified rather than illustrated.","The finale design and eligible-income question are resolved, the 30% trip/trade rule is evaluated in actual full runs when integrated, and all current story beats/endings remain reachable.","A real complete chapter run, physical Pixel/iPad observations and matching tested-source/hub receipt have been reviewed; existing unresolved gates remain explicit.","After reviewing that evidence, the owner may commission a separate bounded proposal for additional content. These conditions describe what to review; satisfying them grants no automatic permission."],
+    "boundary":"No new people, places, quests, chapter or engine migration is in this production sequence. New-content expansion requires a separate explicit owner/design direction after the listed work; this JSON and its UI contain no approval toggle or self-authorization."
+  }
+}
