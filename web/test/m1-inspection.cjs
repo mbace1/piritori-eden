@@ -140,13 +140,16 @@ server.listen(0, '127.0.0.1', async () => {
     after = await S(page);
     ok('3 a journey moves presence', after.selectedAnchor === remoteActive, after.selectedAnchor);
     ok('3 a journey observes the area it arrives at', after.seen?.[remoteActive] === after.scheduleIndex);
-    ok('3 a journey spends no time and no money', after.scheduleIndex === before.scheduleIndex && after.cash === before.cash
+    ok('3 a journey turns no block and spends no money', after.scheduleIndex === before.scheduleIndex && after.cash === before.cash
       && JSON.stringify(after.stock) === JSON.stringify(before.stock));
+    // v4.98, D002 ("30%"): the walk uses 30% of the block, and nothing else of it.
+    ok('3 a journey uses 30% of the block', (after.time?.spent ?? 0) === (before.time?.block === before.scheduleIndex ? before.time.spent : 0) + 3
+      && after.time?.block === after.scheduleIndex && after.time?.visitAt === null, JSON.stringify(after.time));
     // v4.58: the road counts journeys (road.js); before the first story block
     // it counts and nothing else happens.
-    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; delete c.logs; delete c.road; return JSON.stringify(c); };
+    const strip = s => { const c = structuredClone(s); delete c.selectedAnchor; delete c.seen; delete c.logs; delete c.road; delete c.time; return JSON.stringify(c); };
     ok('3 the road counts the journey and nothing fires on day one', (after.road?.journeys ?? 0) === (before.road?.journeys ?? 0) + 1 && !after.road?.pending);
-    ok('3 a journey changes nothing but presence, that one observation and one log line', strip(after) === strip(before)
+    ok('3 a journey changes nothing but presence, its time, that one observation and one log line', strip(after) === strip(before)
       && JSON.stringify(after.logs.slice(1)) === JSON.stringify(before.logs.slice(0, after.logs.length - 1))
       && after.logs[0].startsWith('Aatami walks'), after.logs[0]);
     ok('3 the journey was persisted', await page.evaluate(k => JSON.parse(Object.values(localStorage).find(v => v.includes('"selectedAnchor"')) || '{}').selectedAnchor === k, remoteActive));

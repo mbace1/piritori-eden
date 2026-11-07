@@ -4,8 +4,8 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=13';
-import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=2';
+} from '../js/v3/state.js?v=14';
+import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=3';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
@@ -54,7 +54,7 @@ assert.equal(currentSchedule(state, content).anchor_id, 'siltasaari');
   assert.equal(plan.path[0], 'piritori');
   assert.equal(plan.path.at(-1), 'siltasaari');
   assert.equal(plan.extraBlocks, 0);
-  assert.equal(JOURNEY_EXTRA_BLOCKS, 0, 'D002 unresolved: no invented travel time');
+  assert.equal(JOURNEY_EXTRA_BLOCKS, 0, 'D002 (v4.98) costs a journey 30% of a block, never a whole extra block');
   assert.equal(JSON.stringify(j), snapshot, 'a preview changes nothing');
   for (const [dest, reason] of [['piritori', 'already-here'], ['nowhere', 'unknown']]) {
     assert.equal(previewJourney(j, data, dest).reason, reason);
@@ -173,7 +173,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=13');
+  } = await import('../js/v3/state.js?v=14');
 
   const CAREER = 10;
 
@@ -268,7 +268,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=13');
+    restoreState } = await import('../js/v3/state.js?v=14');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');
@@ -311,7 +311,7 @@ console.log('PASS chapter progress through sales and route deliveries');
 // Its cover is a Map and the round's hits a Set; plain JSON flattened both and
 // every load after a reload mid-battle failed on `cover.has`.
 {
-  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=13');
+  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=14');
   const storage = { _d: null, setItem(_k, v) { this._d = v; }, getItem() { return this._d; } };
   const g = freshState(content);
   g.mode = 'battle';
@@ -328,3 +328,63 @@ console.log('PASS chapter progress through sales and route deliveries');
 }
 console.log('PASS a board battle survives a reload');
 
+
+// D002, built in v4.98 (owner, 2026-10-26: "30%"): a trip, or a visit to a
+// seller however much changes hands, uses 30% of a block, so three fit. Trips
+// always go (the block's story may be at the far end); trades wait for the
+// block to turn. The shipment's €400 stopped being one block's work.
+{
+  const { TIME, timeSpent, actionsLeft, tradeBlocker, sellLoot, addEquipment, commitRoute, sendOnRoute, chapterProgress } = await import('../js/v3/state.js?v=14');
+  const t = createState(content);
+  const buy = data.offers.get('offer-piritori-buy');
+  const sell = content.market_offers.find(o => o.id === 'offer-siltasaari-sell');
+  t.revealedOffers.push(sell.id);
+  assert.deepEqual([TIME.block, TIME.trip, TIME.visit], [10, 3, 3], 'a trip and a visit are each 30% of a block');
+  assert.equal(actionsLeft(t), 3, 'three fit in a fresh block');
+  const look = previewJourney(t, data, 'siltasaari');
+  assert.equal(timeSpent(t), 0, 'planning a journey costs nothing');
+  assert.equal(transactOffer(t, buy).ok, true);
+  assert.equal(timeSpent(t), 3, 'the first trade at a place is a visit');
+  assert.equal(transactOffer(t, buy).ok, true);
+  assert.equal(timeSpent(t), 3, 'and every trade in the same visit is free');
+  assert.equal(commitJourney(t, data, look).ok, true);
+  assert.equal(timeSpent(t), 6, 'a trip is 30%');
+  assert.equal(transactOffer(t, sell).ok, true);
+  assert.equal(transactOffer(t, sell).ok, true);
+  assert.equal(timeSpent(t), 9, 'selling both is one visit');
+  assert.equal(actionsLeft(t), 0, 'three used: nothing more fits');
+  const back = previewJourney(t, data, 'piritori');
+  assert.equal(back.ok, true, 'a walk is never refused for time');
+  assert.equal(commitJourney(t, data, back).ok, true);
+  const before = JSON.stringify({ cash: t.cash, stock: t.stock, progress: chapterProgress(t) });
+  const refused = transactOffer(t, buy);
+  assert.equal(refused.ok, false, 'but the next trade waits for the block to turn');
+  assert.match(refused.message, /No time left to trade this block/);
+  assert.equal(JSON.stringify({ cash: t.cash, stock: t.stock, progress: chapterProgress(t) }), before, 'and a refused trade changes nothing');
+  addEquipment(t, 'pipe');
+  assert.equal(sellLoot(t, data, 'pipe'), 0, 'the fence waits too');
+  assert.match(tradeBlocker(t, 'piritori'), /No time left/);
+  t.scheduleIndex += 1;
+  assert.equal(timeSpent(t), 0, 'a new block has its own time');
+  assert.equal(actionsLeft(t), 3);
+  assert.ok(sellLoot(t, data, 'pipe') > 0, 'the fence is a seller visit');
+  assert.equal(transactOffer(t, buy).ok, true, 'and the market at the same place is the same visit');
+  assert.equal(timeSpent(t), 3);
+  commitRoute(t, ['piritori', sell.anchor_id]);
+  assert.equal(sendOnRoute(t, data).ok, true);
+  assert.equal(timeSpent(t), 3, 'a pack sent down a route is not Aatami\'s time');
+  // The loop that cleared the shipment's €400 in one block (ROADMAP §8 item 7):
+  // with time it is two packs a block, not three loops.
+  const u = createState(content);
+  u.revealedOffers.push(sell.id);
+  let blocks = 0;
+  while (chapterProgress(u) < u.chapterThreshold && blocks < 20) {
+    if (u.selectedAnchor === 'piritori') { while (transactOffer(u, buy).ok); commitJourney(u, data, previewJourney(u, data, 'siltasaari')); }
+    while (transactOffer(u, sell).ok);
+    commitJourney(u, data, previewJourney(u, data, 'piritori'));
+    u.scheduleIndex += 1; blocks += 1;
+  }
+  assert.ok(blocks >= 3, `the €400 takes ${blocks} blocks of trading, not one`);
+  console.log(`  the €400 by trading alone: ${blocks} blocks (one buy-walk-sell-walk loop a block)`);
+}
+console.log('PASS D002: a trip or a seller visit is 30% of a block');

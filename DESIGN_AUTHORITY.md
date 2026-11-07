@@ -60,7 +60,7 @@ Asked the six open decisions of ROADMAP §8. Owner: *"1. What specifically 2. Pl
   - After chapter 1 he steps back, at the first fight where three of his own can fight (`steps_back_at_crew`).
   - Chapter 1 is the "first phase of act1" of the 2026-10-24 ruling.
   - The shot caller is chapter 2 work.
-- **D002: a trip or a trade costs 30% of a block** ("30%").
+- **D002: a trip or a trade costs 30% of a block** ("30%"). **Built in v4.98:** trips always go; once three trips or seller visits are used, trading waits for the block to turn.
   - This replaces answer 21's "never a block".
   - The reading (a trade is one visit to a seller) is stated in ROADMAP §9 for the owner to correct.
 - **Still waiting for a yes:**

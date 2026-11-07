@@ -1,6 +1,6 @@
 import {missionCue} from '../fight-module/readability.js?v=5';
 import {LOCATIONS,locationId} from './locations.js?v=11';
-import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,startHeat,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=24';
+import {saveKey,OUTING_SAVE_KEY,policeOutcome,POLICE_AT,RULES,startHeat,carrierOf,newRun,available,rescueTarget,configure,toggleCrew,launch,launchConfig,waitNight,callReserve,makeMission,restoreMission,missionCheckpoint,settle,continueRun,loadRun} from './run.js?v=25';
 import {icon} from './icons.js?v=2';
 import {coordinate} from '../fight-module/tactics.js?v=11';
 const $=id=>document.getElementById(id),text=(tag,value,className)=>{const e=document.createElement(tag);e.textContent=value;if(className)e.className=className;return e;};

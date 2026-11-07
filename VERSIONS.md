@@ -1,3 +1,25 @@
+## v4.98 — 2026-11-07
+
+**A trip or a trade takes time (D002, ROADMAP G4 step 1).** Owner, 2026-10-26: *"30%."* Read as: a trip, or a visit to a seller however much changes hands, uses 30% of a block, so three fit. It was answered and never built. So far travel and trading cost no time, so three buy-walk-sell loops cleared the shipment's €400 inside one block (ROADMAP §8 item 7).
+
+- **The rule** (`state.js` `TIME`):
+  - **Trips always go.** Each arrival uses 30% of the block. A block's scene may be at the far end, and refusing a walk could strand Aatami away from the story.
+  - **A visit to a seller uses 30%:** every trade at one place between two trips, however much changes hands. That covers the market, the fence and the street seller on Piritori.
+  - **Once three are used, trading waits** until the block turns on its scene, a door or nightfall. The refusal says so and changes nothing.
+  - **Not charged:**
+    - a pack sent down a route, which has its own capacity per block;
+    - Toko's counter, which keeps its own rule (one bowl a block, and buying from him earns nothing);
+    - road events, which keep their own minutes on top.
+- **On screen:** the block label in the header ends in three pips, the trips or trades left ("DAY 3 · NIGHT · ●●○"). The label's spoken text says it in words.
+- **What it does to the €400:** trading alone, the goal now takes three blocks (one buy-walk-sell-walk loop a block, two packs each), not one. A real chapter spends some of those blocks walking to the story.
+- **One reading to check:** *"three fit, the fourth turns it"* is built as "the fourth waits for the block to turn", not "the fourth ends the block and skips its scene". Skipping would let a trade loop cost the story a scene.
+- **Gates:**
+  - `v3-state.mjs`: each step of the rule, a refused trade changing nothing, the reset at the next block, the route send not charged, and that the €400 takes at least three blocks.
+  - `m1-inspection` (72) changes one rule. Since M2, its contract said a journey changes nothing but presence; now it also spends exactly 30% of the block, and nothing else.
+  - The other browser suites that walk and trade pass unchanged: header fit 62, journeys 47, next step 57, road 42, opening 56.
+- **Cache:** state v14 and everything that imports it, journey v3, app v65. The label is v4.98.
+- **Owner played: pending.** Godot paused.
+
 ## v4.97 — 2026-11-07
 
 **The chapter's goal tells the truth.** The chapter panel told the player *"Earned by fencing loot at Piritori; market sales and mission payouts do not count."* The code has always counted market sales and packs sent down a route, and `v3-state.mjs` asserts it ("chapter income must include the main market loop, not only fenced weapons"). In a game that promises full information, the panel was stating the opposite of the rule.

@@ -566,6 +566,47 @@ export function resaleAt(state, data, index) {
   return Math.round(resaleOf(data, item.id) * (CONDITION_RESALE[item.cond] ?? 1.0));
 }
 
+// ── time: D002 (owner, 2026-10-26: "30%"; ROADMAP §9 item 6), built in v4.98 ──
+// A trip, or a visit to a seller however much changes hands, uses 30% of a
+// block, so three fit. A VISIT is every trade at one place between two trips.
+// Trips always go: the block's scene, door or nightfall turns the block, and
+// refusing a walk could strand Aatami away from the story. Trades do not: once
+// the block's time is spent, the next one waits for the block to turn. A route
+// send is not Aatami's time (the route has its own capacity), and road events
+// keep their own minutes on top (road.js). Units are tenths of a block.
+export const TIME = { block: 10, trip: 3, visit: 3 };
+function blockClock(state) {
+  if (state.time?.block !== state.scheduleIndex) state.time = { block: state.scheduleIndex, spent: 0, visitAt: null };
+  return state.time;
+}
+/** Tenths of the current block already used (0 once the block has turned). */
+export function timeSpent(state) {
+  return state.time?.block === state.scheduleIndex ? state.time.spent : 0;
+}
+/** How many more trips or seller visits fit in this block. */
+export function actionsLeft(state) {
+  return Math.max(0, Math.floor((TIME.block - timeSpent(state)) / TIME.trip));
+}
+/** What trading at `anchorId` would cost now: nothing more within a visit. */
+export function tradeCost(state, anchorId) {
+  return state.time?.block === state.scheduleIndex && state.time.visitAt === anchorId ? 0 : TIME.visit;
+}
+/** Why a trade at `anchorId` cannot happen now, or ''. */
+export function tradeBlocker(state, anchorId) {
+  const cost = tradeCost(state, anchorId);
+  return cost && timeSpent(state) + cost > TIME.block ? 'No time left to trade this block. It comes back when the block turns.' : '';
+}
+function chargeTrade(state, anchorId) {
+  const clock = blockClock(state);
+  if (clock.visitAt !== anchorId) { clock.spent += TIME.visit; clock.visitAt = anchorId; }
+}
+/** A trip: always allowed, and the end of any visit. */
+export function chargeTrip(state) {
+  const clock = blockClock(state);
+  clock.spent += TIME.trip;
+  clock.visitAt = null;
+}
+
 /** Piritori, and only Piritori for now (§9.7) — carrying loot across the
  *  city to sell it puts you where the hiring pool and the pressure both
  *  are; the better fence you have to earn later is not attempted. */
@@ -584,6 +625,8 @@ export function sellLoot(state, data, equipmentId) {
     if (best < 0 || state.equipment[i].cond < state.equipment[best].cond) best = i;
   }
   if (best < 0) return 0;
+  if (tradeBlocker(state, state.selectedAnchor)) return 0;
+  chargeTrade(state, state.selectedAnchor);
   const paid = resaleAt(state, data, best);
   state.equipment.splice(best, 1);
   state.cash += paid;
@@ -622,6 +665,8 @@ export function buyEquipment(state, data, equipmentId) {
   if (!isPurchasable(data, equipmentId)) return { ok: false, paid: 0 };
   const price = buyOf(data, equipmentId);
   if (price <= 0 || state.cash < price) return { ok: false, paid: 0 };
+  if (tradeBlocker(state, state.selectedAnchor)) return { ok: false, paid: 0, reason: 'no-time' };
+  chargeTrade(state, state.selectedAnchor);
   state.cash -= price;
   addEquipment(state, equipmentId, CONDITION.NEW);
   addLog(state, `Bought ${cap(equipmentId)} for €${price}.`);
@@ -1149,12 +1194,18 @@ export function transactOffer(state, offer, side = offer.side) {
   if (side === 'buy') {
     if (state.cash < price) return { ok: false, message: 'Not enough euro cash.' };
     if ((state.stock.piri ?? 0) >= state.capacity) return { ok: false, message: 'No free carrying capacity.' };
+    const late = tradeBlocker(state, offer.anchor_id);
+    if (late) return { ok: false, message: late };
+    chargeTrade(state, offer.anchor_id);
     state.cash -= price;
     state.stock.piri = (state.stock.piri ?? 0) + 1;
     addLog(state, `Ledger: bought one abstract pack at ${offer.anchor_id} for €${price}.`);
     return { ok: true, message: `One pack added for €${price}.` };
   }
   if ((state.stock.piri ?? 0) < 1) return { ok: false, message: 'No stock to sell.' };
+  const late = tradeBlocker(state, offer.anchor_id);
+  if (late) return { ok: false, message: late };
+  chargeTrade(state, offer.anchor_id);
   state.stock.piri -= 1;
   state.cash += price;
   recordChapterIncome(state, price);

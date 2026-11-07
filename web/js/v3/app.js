@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=9';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=10';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -12,32 +12,32 @@ import {
   levelOf, unspentPerkPoints, perkValue, skillsOf, skillOffer, spendPerk,
   learnSkill, spendPerkPointOnSkill, train,
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
-  canShopHere, buyOf, buyEquipment,
+  canShopHere, buyOf, buyEquipment, tradeBlocker, actionsLeft,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=13';
+} from './state.js?v=14';
 import { createPauseMenu } from './pause.js?v=5';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
-import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=8';
+import { previewJourney, commitJourney } from './journey.js?v=3';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=9';
 import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=8';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=9';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=7';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=8';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=9';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=10';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=17';
+} from './battle.js?v=18';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -477,7 +477,12 @@ function renderHud() {
   $('debtValue').textContent = Math.round(state.debt).toLocaleString('fi-FI');
   $('intelValue').textContent = state.intel;
   const clock = clockLabel(state, currentSchedule(state, data.content), roadEvents);
-  $('blockLabel').textContent = formatBlock(state, data.content) + (clock ? ` · ${clock}` : '');
+  // D002 (v4.98): three trips or seller visits fit in a block; the pips are
+  // what is left, and trading waits once they are gone.
+  const left = actionsLeft(state);
+  $('blockLabel').textContent = formatBlock(state, data.content) + (clock ? ` · ${clock}` : '') + ` · ${'●'.repeat(left)}${'○'.repeat(3 - left)}`;
+  $('blockLabel').title = `${left} of 3 trips or trades left this block`;
+  $('blockLabel').setAttribute('aria-label', `${formatBlock(state, data.content)}${clock ? `, ${clock}` : ''}, ${left} of 3 trips or trades left this block`);
   $('eraLabel').textContent = state.locale === 'fi'
     ? '2003 · AATAMI · ERA I · UI FI / TARINA EN (ALFA)'
     : '2003 · AATAMI · ERA I';
@@ -2388,7 +2393,7 @@ function handleRootClick(event) {
     logToast(result.message); persist(); render();
   } else if (action === 'sell-loot') {
     const paid = sellLoot(state, data, target.dataset.equipment);
-    logToast(paid > 0 ? `Fenced for ${money(paid)}.` : 'Nothing there to fence.');
+    logToast(paid > 0 ? `Fenced for ${money(paid)}.` : tradeBlocker(state, state.selectedAnchor) || 'Nothing there to fence.');
     persist(); render();
   } else if (action === 'open-shop') {
     if (!canShopHere(state)) { render(); return; }
@@ -2421,7 +2426,7 @@ function handleRootClick(event) {
     persist(); render();
   } else if (action === 'buy-equipment') {
     const result = buyEquipment(state, data, target.dataset.equipment);
-    logToast(result.ok ? `Bought for ${money(result.paid)}.` : 'Cannot buy — wrong place, taken-only, or short on cash.');
+    logToast(result.ok ? `Bought for ${money(result.paid)}.` : result.reason === 'no-time' ? tradeBlocker(state, state.selectedAnchor) : 'Cannot buy — wrong place, taken-only, or short on cash.');
     persist(); render();
   } else if (action === 'attempt-chapter-ending') {
     const reason = attemptChapterEnding(state, data);
@@ -2652,7 +2657,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.97',
+      version: 'v4.98',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.

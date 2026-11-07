@@ -12,14 +12,15 @@
 //     going on) and applies arrival ONCE. A stale or replayed preview is
 //     refused, so a double tap cannot move you twice.
 //   - arrival is an observation of the destination, and nothing else is.
-//   - TIME: D002 (scenario atlas) is unresolved, so a journey costs no extra
-//     block, fare or complication. The existing story clock still advances
-//     after a story beat exactly as before. The UI says this plainly; it is not
-//     a claim that free travel is the final design.
+//   - TIME: D002 ("30%", built in v4.98, state.js `TIME`): an arrival uses 30%
+//     of the block. A journey is never refused for time, because the block's
+//     story may be at the far end; what runs out is time to trade. No fare and
+//     no extra block. The story clock still advances after a story beat.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { shortestPath } from './content.js?v=2';
 import { markSeen } from './board.js?v=3';
+import { chargeTrip } from './state.js?v=14';
 
 export const JOURNEY_EXTRA_BLOCKS = 0;
 
@@ -60,6 +61,7 @@ export function commitJourney(state, data, preview) {
   if (!fresh.ok) return { ok: false, reason: fresh.reason };
   if (fresh.path.join('>') !== preview.path.join('>')) return { ok: false, reason: 'stale' };
   state.selectedAnchor = preview.destination;
+  chargeTrip(state);
   markSeen(state, preview.destination);
   const names = preview.path.map(id => data.anchors.get(id)?.label ?? id);
   // state.js's addLog, which is not exported: newest first, 24 kept.

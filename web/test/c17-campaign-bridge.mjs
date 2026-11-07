@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js?v=14';
-import {configure,launchConfig} from '../crew-run/run.js?v=24';
+import {campaignCrew,campaignRun,applyCampaignReceipt} from '../crew-run/campaign-adapter.js?v=15';
+import {configure,launchConfig} from '../crew-run/run.js?v=25';
 import {forecast} from '../fight-module/tactics.js?v=11';
 
 const content={

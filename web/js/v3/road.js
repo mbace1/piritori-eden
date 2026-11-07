@@ -15,15 +15,16 @@
 //     count): a reload replays the same road, so it cannot be farmed.
 //   - An event is seen once per campaign. Tier 1 opens when Aatami has
 //     recruited anyone or the story is at `schedule_index>=6`.
-//   - TIME: a choice costs minutes on the block's clock. D002 is still open,
-//     so minutes never turn a block; the clock just reads later. Minutes
-//     belong to the block they were spent in and read as zero in the next.
+//   - TIME: a choice costs minutes on the block's clock, on top of D002's
+//     30%-a-trip (state.js `TIME`, v4.98): minutes never turn a block or use
+//     up a trip; the clock just reads later. Minutes belong to the block they
+//     were spent in and read as zero in the next.
 //   - A choice with `requires` is shown and refused, never hidden.
 //   - A fight is the ordinary battle with no mission behind it, and it does
 //     not turn the block (the app marks it `road`).
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { applyEffects, requirementStatus, deterministicRoll } from './state.js?v=13';
+import { applyEffects, requirementStatus, deterministicRoll } from './state.js?v=14';
 
 const ROAD_URL = '../../../content/road-events-v1.json';
 
