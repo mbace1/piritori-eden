@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><link rel="icon" href="data:,"><title>Piritori · consequence review desk</title><link rel="stylesheet" href="review.css"></head>
+<body>
+<header class="topbar"><a href="../act1-workbench/">← Review workbench</a><span>REVIEW ONLY · NO CAMPAIGN SAVE</span><a href="../act1-encounters/">Encounter gallery →</a></header>
+<main>
+  <div class="heading"><p class="eyebrow">PIRITORI → EDEN · ACT I / G2</p><h1>What comes back to Kallio.</h1><p>Nine fixture previews. Existing rules. No campaign save.</p></div>
+  <label class="case-picker" for="case-select">REVIEW A MOMENT<select id="case-select" aria-label="Consequence scenario"></select></label>
+  <div id="loading" role="status">Loading the authored content and existing rules…</div>
+  <section id="workbench" hidden aria-label="Clickable consequence preview">
+    <article class="scene" id="scene"><div class="scene-shade"></div><div class="scene-copy"><p id="place" class="eyebrow"></p><h2 id="title"></h2><p id="premise"></p></div><small id="plate-note"></small></article>
+    <div class="receipt-strip"><span id="receipt-kind"></span><strong id="cost"></strong></div>
+    <div class="phase-tabs" aria-label="Compare fixture states"><button type="button" id="before-tab" aria-pressed="true">Before</button><button type="button" id="after-tab" aria-pressed="false">Preview after</button></div>
+    <div class="comparison" id="comparison" data-view="before"><section id="before" class="state-card" aria-label="Before state"></section><section id="after" class="state-card after-card" aria-label="After state"></section></div>
+    <div class="actions"><button id="apply" type="button" class="primary"></button><button id="repeat" type="button" hidden>Replay same receipt</button><button id="reload" type="button" disabled>Reload fixture</button><button id="reset" type="button">Reset this moment</button></div>
+    <p class="result" id="result" role="status" aria-live="polite">Preview only. Apply to the isolated fixture when ready.</p>
+    <div class="notes"><section><h3>Existing rules</h3><p id="provenance"></p><code id="source"></code></section><section><h3>Proposed UI</h3><p id="proposed"></p></section><section><h3>Boundary / still open</h3><p id="limit"></p><p id="roadmap"></p></section></div>
+    <details class="settlement-details"><summary>How this review stays separate from your campaign</summary><p>All state stays in this page's memory. Reload fixture round-trips JSON through the existing state restore API; it does not use browser storage. Terminal combat receipts are labelled fixtures, never bot results. Receipt and city-settlement markers are checked separately. C.19 still owns the actual 3D fight, police timing and tactical outcome.</p><pre id="proof"></pre></details>
+  </section>
+  <section class="road" aria-label="Bounded implementation plan"><p class="eyebrow">THE EXISTING ROADMAP STAYS THE PLAN</p><h2>Small steps after review</h2><ol><li><b>City/UI milestone 4:</b> put trade and hire costs beside the decision; preserve authored effects and saves.</li><li><b>G2 / milestone 5:</b> use one result strip for C.19 receipts, loot, missing and arrests; verify reload and duplicate settlement.</li><li><b>G2 recovery:</b> point to the existing rescue, bail and critical-treatment choices without adding free healing.</li><li><b>G4 / milestone 6:</b> test the approved 30%-of-a-block travel/trade rule over complete ten-day runs before activating it.</li><li><b>Release / milestone 7:</b> actual C.19 browser loops, Pixel/iPad acceptance, owner art review and matching release receipt.</li></ol><p class="muted">Act I remains 48% under ROADMAP.md. These fixtures add reviewable plans, not completed chapter content.</p></section>
+</main><script type="module" src="review.js"></script></body></html>
