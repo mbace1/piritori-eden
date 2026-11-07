@@ -1,0 +1,333 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+── Piritori Era I slice spine ──
+
+content registry
+  ok    canonical JSON loads with no errors
+  ok    fifteen anchors
+  ok    twenty-five edges
+  ok    fourteen sites
+  ok    one encounter per spine block
+  ok      and the rest are doors
+  ok    six crew
+
+starting state (from campaign.starting_state)
+  ok    cash
+  ok    markka
+  ok    debt
+  ok    capacity
+  ok    stock piri
+  ok    day
+  ok    block
+  ok    piritori pressure
+
+opening lead (handoff §2: Piritori the only live first lead)
+  ok    start anchor
+  ok    opening site revealed
+  ok    first purchase encounter revealed
+  ok    siltasaari sale NOT yet revealed
+  ok    no sale offer visible before it is earned
+
+schedule gates content by block
+  ok    day 1 purchase is available
+  ok    day 5 firearm is NOT available on day 1
+  ok    day 5 firearm is not even revealed on day 1
+  ok    exactly one live encounter at Piritori on day 1
+  ok      and it is the first purchase
+  ok    reached day 5
+  ok    reached night
+  ok    day 5 firearm is revealed once its block arrives
+  ok    day 5 firearm is available in its block
+
+requirements grammar
+  ok    cash>=45 met at 160
+  ok    cash>=999 not met
+  ok    buy refused when short of cash
+  ok    refused buy changed nothing
+
+authored first purchase (enc-first-purchase / buy)
+  ok    buy resolves
+  ok    cash 160 - 45
+  ok    one pack in stock
+  ok    flag recorded
+  ok    mission revealed
+  ok    encounter marked resolved
+  ok    a block was spent
+
+profitable first sale (§9 item 2)
+  ok    sale offer now visible
+  ok    still at Piritori after the purchase
+  ok    no sale from Piritori
+  ok    and a remote sale is refused
+  ok      so nothing moved
+
+journey: preview is pure, commit arrives once
+  ok    the story lead is Siltasaari
+  ok    a connected path is offered
+  ok      from Piritori
+  ok      to Siltasaari
+  ok      costing no extra block (D002 unresolved)
+  ok      refused: already-here
+ERROR: ContentRegistry: unknown anchor id 'nowhere'
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _require (res://autoload/content_registry.gd:416)
+       [1] anchor (res://autoload/content_registry.gd:250)
+       [2] journey_blocker (res://autoload/game_state.gd:1108)
+       [3] preview_journey (res://autoload/game_state.gd:1123)
+       [4] _test_journey_to_siltasaari (res://tests/test_spine.gd:219)
+       [5] _test_profitable_first_sale (res://tests/test_spine.gd:196)
+       [6] _ready (res://tests/test_spine.gd:27)
+  ok      refused: unknown
+  ok      refused: kallio_church is landmark
+  ok    previewing changed nothing
+  ok    no plan, no journey
+  ok    a plan from another block is stale
+  ok      and moved nobody
+  ok    commit arrives
+  ok      at Siltasaari
+  ok      no fare
+  ok      no block
+  ok    the same plan again is stale (a double press)
+  ok      and changes nothing
+  ok    the path the preview drew is the shortest public path
+  ok    can sell with stock in hand
+  ok    sale executes
+  ok      and a trade spends no block (answer 21: the web rule)
+  ok    cash + 68
+  ok    stock spent
+  ok    sale is profitable against the 45 buy
+  ok    market history records siltasaari
+
+block clock (integer, 20 blocks over 10 days)
+  ok    total blocks
+  ok      one per schedule entry
+  ok      a day and a night a day
+  ok    first block
+  ok    second block
+  ok    third block
+  ok    last block
+  ok    slice completes after 20 blocks
+  ok      and the day the schedule is on stays its last
+
+save / quit / reload (§9 item 6)
+  ok    save written
+  ok    model reset
+  ok    save loads
+  ok    cash restored
+  ok    stock restored
+  ok    block restored
+  ok    flag restored
+  ok    resolved encounter restored
+  ok    schema version stored
+  ok    content package id stored
+
+careers (COMBAT.md 7)
+  ok    the slice has a hired crew member to age
+  ok    a new hire has no fights behind them
+  ok    and a full career ahead
+  ok    their counter is hidden while they are new
+  ok    the counter appears once they are close
+  ok    reaching the ceiling ends the career
+  ok    they retired rather than died
+  ok    and the death count did not move
+  ok    they are out of the roster
+  ok    but the city remembers them
+  ok    a retired veteran cannot be spent again
+  ok    a veteran starts the next one ahead
+  ok    and the rookie has a shorter career for it
+  ok    but only once
+  ok    the slice exercises the named-character mechanic
+  ok    a named character has no career ceiling
+  ok    and cannot be aged out
+
+growing (COMBAT.md §9.11)
+  ok    the classes are authored
+  ok    and a class is a verb
+  ok    the perk axes are authored
+  ok    everyone starts at level one
+  ok    with nothing to spend
+  ok    fights buy a level
+  ok    and a level gives a point to spend
+  ok    a point buys a perk
+  ok    and the perk stuck
+  ok    spending a point costs it
+  ok    you cannot spend what you do not have
+  ok    an unknown perk is refused
+  ok    and the point was not eaten
+  ok    there is something to learn
+  ok    a skill is learned
+  ok    and not learned twice
+  ok    it is on the person
+  ok    and a stranger's trick is refused
+  ok    glory pays two points
+  ok    and the city hears about it
+  ok    somebody else has not learned it
+  ok    nor gained the perk
+  ok    a new campaign forgets
+  ok    the save reloads
+  ok    the perk came back
+  ok    and so did the skill
+
+aptitudes (COMBAT.md §9.12)
+  ok    twelve aptitudes in one pool
+  ok    the combat six are there
+  ok    and the older six were not thrown away
+  ok    every aptitude carries its own verb
+  ok    an authored crew member still answers
+  ok    hired
+  ok    a hire holds two or three
+  ok    with no repeats
+  ok    appearance follows the first
+  ok    and they bring more than one verb
+  ok    the save reloads
+  ok    the set came back
+
+skills
+  ok    skills are authored
+  ok    every aptitude has at least three
+  ok    no two skills share an id
+  ok    every skill belongs to a real aptitude
+  ok    and every tier is reachable
+  ok    every skill names what it hooks into
+  ok    an offer is made
+  ok    and it is no bigger than three
+  ok    everything offered is theirs to learn
+  ok    the same offer comes back
+  ok    a learned skill is not offered again
+  ok    a third aptitude widens the pool
+  ok    but the offer is still the same size
+
+loot (COMBAT.md §8)
+  ok    some gear can be bought
+  ok    and some gear cannot be bought at any price
+  ok    what they dropped is yours now
+  ok    and it is in the armoury
+  ok    taking a second one gives you two
+  ok    junk that does not exist is not taken
+  ok    loot converts down into money
+  ok    and the money arrives
+  ok    one of them is gone
+  ok    and selling the last one empties it
+  ok    selling what you do not have pays nothing
+  ok    and money cannot buy it back
+  ok    what a fallen crew carried is lost with them
+
+the fence (COMBAT.md §9.7)
+  ok    Piritori will take it
+  ok    nowhere else will
+  ok    and standing there, it will
+  ok    selling pays
+  ok    the money arrives
+  ok    and the weapon is gone
+  ok    selling it does not make it buyable
+
+equipment shop (COMBAT.md §8)
+  ok    shop refuses away from Piritori
+  ok    and buy_equipment refuses there
+  ok    shop is open at Piritori
+  ok    taken-only is not purchasable
+  ok    taken-only buy is refused
+  ok    tire-iron is taken-only too
+  ok    lifted-handgun is taken-only too
+  ok    pipe has a shop price
+  ok    short cash is refused
+  ok    pipe buys when rich enough
+  ok    cash is deducted
+  ok    and a NEW pipe is in the stash
+
+arrest (COMBAT.md §9.5.3)
+  ok    they are off the roster
+  ok    and recorded as arrested
+  ok    the city remembers it happened
+  ok    arrest is not retirement
+  ok    and does not leave a retirement memory
+  ok    arresting twice changes nothing
+  ok    a new campaign has nobody arrested
+  ok    the save reloads
+  ok    and they are still gone
+
+chapters (GDD: run structure)
+  ok    a campaign starts in chapter one
+  ok    on the first day of it
+  ok    with no progress
+  ok    and the goal unmet
+  ok    income counts toward a money chapter
+  ok    and 60 is not yet 100
+  ok    meeting the threshold opens the ending
+  ok    a fights chapter does not count the money
+  ok    but does count the fights
+  ok    no turn before the ending
+  ok    the operation runs
+  ok    the chapter turns
+  ok    the chapter advanced
+  ok    gear carries
+  ok    built upgrades carry
+  ok    contacts carry
+  ok    people carry
+  ok    money opens on the standard stake
+  ok    mission unlocks do not carry
+  ok    and chapter progress starts again
+  ok    a new campaign is back to chapter one
+  ok    the save reloads
+  ok    the chapter came back
+  ok    and so did the upgrade
+
+the chapter ends at the docks
+  ok    chapter one is authored
+  ok    and its goal came from content, not code
+  ok    it has an ending
+  ok    which is an operation, not a battle
+  ok    at the harbour, which is not the boiler hall
+  ok    the ending is shut until the goal is met
+  ok    and attempting it is refused
+  ok    meeting the goal opens it
+  ok    it cannot be run from the wrong place
+  ok    nor without the stake
+  ok    but it runs when both are true
+  ok    the stake was spent
+  ok    the chapter is cleared
+  ok    and the city remembers how it went
+  ok    the outcome is one the screen can render
+  ok    it cannot be cleared twice
+  ok    the next chapter is not already cleared
+
+gear wears out
+  ok    you can own many pipes
+  ok    and they are in different states
+  ok    the worn one is worth less
+  ok    losing one leaves the better one
+  ok    selling leaves the worn one
+  ok    everything got worse
+  ok    most of it stepped rather than broke
+  ok    and something can break outright
+  ok    broken does not get worse than broken
+  ok    the same run wears the same way
+  ok    the save reloads
+  ok    every condition came back
+
+hiring (COMBAT.md §7)
+  ok    the same seed is the same person
+  ok    a different seed is somebody else
+  ok    today's offer does not change while you look at it
+  ok    nobody hired off the street is ever named
+  ok    and every one of the six roles turns up
+  ok    rolled stats stay inside the role's band
+  ok    a hire you can afford goes through
+  ok    and the fee was taken
+  ok    they are in the roster
+  ok    the same person is not hired twice
+  ok    the registry can find them
+  ok    and they have a career like anyone else
+  ok    no money means no hire
+  ok    a new campaign starts with nobody hired
+  ok    the save reloads
+  ok    and the hire survived it
+  ok    the registry knows them again after a load
+
+reference integrity (§9 item 8: no fallback assets)
+  ok    no dangling site/anchor references
+  ok    registry reported no errors
+
+271 passed, 0 failed
+SPINE OK: map opens on Piritori, first purchase and profitable sale resolve, state survives reload.
