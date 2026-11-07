@@ -1,0 +1,50 @@
+{
+  "runtimeBaseCommit": "cd47d2a0f364f21cbe4a326f3a665221ba3c23d0",
+  "samplerStartCommit": "3d18d8adc3c0de1375c85a1ce826dc48523e589d",
+  "originalPolicyCommits": [
+    "5c6a2e991604261a319a0af83c322f345c5cc707",
+    "9454a6f64dc3826992242c4c9983610878bde924"
+  ],
+  "command": "SEEDS=30 DEFENSIVE_POLICY=1 node web/tools/fight-balance.mjs",
+  "rows": 192,
+  "seedsPerRow": 30,
+  "simulations": 5760,
+  "defaultRowsSource": "147 retained peer rows from the same opt-in sampler; not a separate default run",
+  "historicalBaseline": "design/evidence/scene-club-2026-11-07/baseline-30.json",
+  "historicalBaselineSha256": "6ab404624e5c3ffa8f23d43a91cb71dd2f65bc0810ba0f554fbf7003f429b075",
+  "historicalFieldsEqual": true,
+  "historicalColumns": [
+    "fight",
+    "goal",
+    "heat",
+    "policy",
+    "win",
+    "withdraw",
+    "loss",
+    "rounds",
+    "routed",
+    "police",
+    "hpLost",
+    "downs",
+    "downed",
+    "stuck"
+  ],
+  "newActionCounters": "Freshly measured in this run; absent from historical30 and not retrofilled.",
+  "selectedSourceSha256": {
+    "web/tools/fight-balance.mjs": "e076a8a6aef0c3d9c5a39022ca49d45695592275ad13c100672d2d4314a49eeb",
+    "web/tools/defensive-policy.mjs": "7f6123071cf25e56f5cb05945a9aa23847f314e5e6b3abc148d220feb31acfbd",
+    "web/crew-run/run.js": "a938d3fa0c10ede5a8e77dabd060474901e40749a25b7d856d8b4d9ea51690d9",
+    "web/fight-module/tactics.js": "7235759cb5a657aa74d59248df342d65020c2aab723e6464207fcf91ea6834ea",
+    "web/fight-module/resolver.js": "bc75e0b96143662409456ac94d3db0aae3281dff1262ea1bd1331279ef69114e",
+    "web/fight-module/session.js": "ead73ded7469c2c79052410c3a5069f7dc0f0cc59a938028b1e405adb2462593",
+    "web/fight-module/cover-edges.js": "4b7cfaec7fb76225565b57197cc1777814b3e3ea4be4254810b81b2a0273cddd",
+    "web/crew-run/campaign-adapter.js": "13cc3e68e630dd21ac5de4a85764fe26683bcf58c23f7bbb5c19d30274413210",
+    "web/js/v3/state.js": "b9e29fb7d8734c49f6b66ea47b9ce6604b2ce4c88c6dabec1e70a113b23dfddb",
+    "web/js/v3/equipment.js": "fb93d4401f186900975ef98f7dccf0f67061e142034dcaf9fb6f971394169d85",
+    "content/era1-slice-v1.json": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
+    "content/places-v1.json": "464677f2ae25826012cca0b572b18bdc47a8e7a9dc87258c9b79811766071c0e",
+    "content/doors-v1.json": "857ed1bb2554ab42b5cdbcef341cf39f9fc1ab450b203c58c9c08f536e7eae64",
+    "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda"
+  },
+  "stuckRows": 0
+}

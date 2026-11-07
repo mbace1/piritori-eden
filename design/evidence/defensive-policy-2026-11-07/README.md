@@ -98,3 +98,7 @@ TRACE=door:hit-courtyard-ledger POLICY=defensive node web/tools/fight-balance.mj
 ```
 
 The saved courtyard traces use the same `trace` nonce for both policies; that trace seed is separate from the `m0`…`m11` sample matrix. The defensive trace records actual selected decisions and commands, including legal guard preparation followed by attacks. Fixtures, analyzer validation and the existing tactics/C.19 outing tests pass; logs are preserved here. CI, a 30-seed defensive run and a no-Brace ablation remain follow-up checks, not completed results.
+
+## Later integrated 30-seed check
+
+The [integrated v4.97 run](integrated-v497/README.md) expands the corrected policy to 30 seeds across all 192 rows (5,760 simulations). It preserves every historical 30-seed peer field, measures action counters separately, and records current source hashes. The original 12-seed evidence and archived preliminary correction remain unchanged. Neither sample promotes the policy or changes combat rules.

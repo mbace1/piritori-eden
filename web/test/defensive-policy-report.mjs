@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { compareDefensive } from '../tools/defensive-policy-report.mjs';
 const baseline = [], optional = [];
 for (let fight = 0; fight < 15; fight++) for (const heat of [0, 2, 3]) {
@@ -28,3 +29,19 @@ assert.throws(() => compareDefensive(baseline, missing, 12), /Missing defensive 
 assert.throws(() => compareDefensive(baseline, optional, 0), /positive integer/);
 assert.throws(() => compareDefensive(baseline, optional.filter(row => row.policy !== 'defensive'), 12), /192 rows/);
 console.log('PASS defensive report: exact 147/192 matrix, matched 33/12 cohorts, fixture deltas, unchanged peers, duplicate/missing rows and sample validation');
+
+// Preserve the historical evidence exactly. The new integrated run measures
+// action counters too; absent historical counters must never be invented.
+const read = path => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
+const prefix = '../../design/evidence/defensive-policy-2026-11-07/integrated-v497/';
+const fresh = read(prefix + 'defensive-30.json'), peers = read(prefix + 'default-30.json');
+const historical = read('../../design/evidence/scene-club-2026-11-07/baseline-30.json');
+assert.equal(fresh.length, 192); assert.equal(peers.length, 147);
+assert.deepEqual(fresh.filter(r => r.policy !== 'defensive'), peers);
+const key = r => [r.fight, r.heat, r.policy].join('|');
+const byKey = new Map(peers.map(r => [key(r), r]));
+for (const old of historical) for (const [field, value] of Object.entries(old)) assert.deepEqual(byKey.get(key(old))?.[field], value, key(old) + ' / ' + field);
+assert(historical.every(r => !Object.hasOwn(r, 'braces')));
+assert(peers.every(r => Object.hasOwn(r, 'braces')));
+assert(fresh.every(r => Number(r.stuck) === 0));
+console.log('PASS integrated 30-seed evidence: 192 rows, 147 historical peers exact, new action counters separate, zero iteration guards');

@@ -266,6 +266,8 @@ jobs:
           node web/test/c19-outing.mjs
           node web/test/level-layout.mjs
           node web/test/tactics.mjs
+          node web/test/defensive-policy.mjs
+          node web/test/defensive-policy-report.mjs
           node web/test/directional-cover.mjs
           node web/test/arena-lab.mjs
           node web/test/fight-module.mjs
