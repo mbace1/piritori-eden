@@ -13,7 +13,7 @@ Open `/art-src/reviews/act1-encounters/` while serving the repository root. Grou
 - The available Jaska/Aatami front review rigs, including review-only bounded blink candidates, and the existing approved Toko paper stage. The Aatami side rig is not assessed or promoted by this gallery.
 - Exact authored openings, choice labels, forecasts, inspection facts, requirements and effects read from canonical content. The source/binding/placeholder snapshot is [encounter-manifest.json](encounter-manifest.json); [binding-proposals.json](binding-proposals.json) and [BINDING_PLAN.md](BINDING_PLAN.md) record concrete production tasks and uncertainties.
 
-The courtyard warning remains explicit: current `site_id` is `jaska_studio`, but its schedule/battle anchor is Torkkelinmäki. Showing a proposed courtyard plate does not repair that content conflict. Pasila is the ledger scene's subject, not its present location: the current site remains Siltasaari's staffed bank.
+This draft corrects the former courtyard/studio mismatch: `torkkelinmaki_courtyard` now matches the Torkkelinmäki schedule, mission and C.19 battle. Scene Club remains at Mäkelänsilta and Jaska remains offscreen. The independent source correction approves no proposed courtyard art. Pasila is the ledger scene's subject, not its present location: the current site remains Siltasaari's staffed bank.
 
 ## Review choices are not game outcomes
 

@@ -4,7 +4,7 @@
     "source_commit": "07877b5840633583c2d18a3686faaedf27ccfada",
     "date": "2026-11-07",
     "content": "content/era1-slice-v1.json",
-    "content_sha256": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "content_sha256": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
     "manifest": "art/v3/manifest.json",
     "manifest_sha256": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
     "authority": [
@@ -15,7 +15,14 @@
       "design/SCENARIO_ATLAS.md",
       "design/C19_CAMPAIGN_FIGHTS.md"
     ],
-    "scope": "Review-only proposals for all 17 authored encounters; no runtime/content/manifest changes or new story."
+    "scope": "Review-only proposals for all 17 authored encounters; no runtime/content/manifest changes or new story.",
+    "source_commit_scope": "Original gallery baseline; current content hash includes the scoped amendment below.",
+    "amendments": [
+      {
+        "commit": "e5954f49d860719da16f1347a367c518f621f4ec",
+        "scope": "Correct the already-authored courtyard site to torkkelinmaki_courtyard; preserve Scene Club and offscreen Jaska. No art binding or approval."
+      }
+    ]
   },
   "status_meanings": {
     "direct": "Existing direct content binding, available in the register; this is not final-art/device approval.",
@@ -708,7 +715,7 @@
         }
       ],
       "production_tasks": [
-        "P0: resolve/record the site-versus-anchor ambiguity before runtime binding; review the existing courtyard plate separately and preserve the C.19 courtyard mission route."
+        "P0 source alignment is implemented and tested in this draft. Preserve the corrected Torkkelinmäki site/mission/C.19 contract; review the proposed courtyard plate and visible staging independently before runtime art binding."
       ],
       "review_entry": {
         "repo_relative_url": "web/?encounter=enc-courtyard-last-call",

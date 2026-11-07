@@ -13,14 +13,14 @@ The only browser storage written here is `piritori:review:act1-workbench:v1`. It
 
 Run `node art-src/reviews/act1-workbench/tour.cjs` to record an actual browser tour; the generated MP4/WebM live under `evidence/`. It is a tour of review tools, not a complete campaign playthrough.
 
-The existing Act I scenes CI job runs all five source/model checks and the integrated browser check for this pack. New-branch CI still needs to finish before a full-green claim.
+The existing Act I scenes CI job runs the source/model checks and the integrated browser check for this pack. New-branch CI still needs to finish before a full-green claim.
 
 No new art or dependency is introduced by this hub. Source art/animation approval, meaningful combat decisions, the chapter's unfinished finale/time integration and physical device acceptance remain open under `ROADMAP.md`. Act I stays 48%.
 
 
 ## Consolidated verification
 
-The assembled pack passes both 390×844 and 1280×800 checks: seven actual sibling routes load and render, with no HTTP/console/page errors or horizontal overflow; review shortlist/notes/export/reset work across navigation; a byte-for-byte campaign sentinel remains unchanged. Individual tools add their detailed model/browser tests:
+The assembled pack passes both 390×844 and 1280×800 checks: eight actual sibling routes load and render, with no HTTP/console/page errors or horizontal overflow; review shortlist/notes/export/reset work across navigation; a byte-for-byte campaign sentinel remains unchanged. Individual tools add their detailed model/browser tests:
 
 - Encounter audit: 17 authored encounters, 60 exact choices/forecasts, 16 hash-verified plate references; both full viewport runs pass.
 - Consequences: 9 model fixtures, 18 browser flows; actual adapter receipts reject replay and JSON restore duplicates.
@@ -36,3 +36,7 @@ For a local review, serve the repository root (for example `python -m http.serve
 The listed location/cast extension is at `../act1-production/`: 12 location/context packets, 26 existing cast/role packets, and a 15-stage production order. Its own source/browser checks cover all records and staging views with campaign-storage access blocked. It is reachable as the seventh hub preview; new content is explicitly deferred.
 
 The listed-place/cast recording is [MP4](../act1-production/evidence/listed-production-tour.mp4) / [WebM](../act1-production/evidence/listed-production-tour.webm), 18.16 seconds of actual planning-tool output. The location/cast extension does not begin new-content expansion.
+
+The eighth preview is the [bank study](../bank-production/): separate exterior/counter/ledger compositions, 10 exact authored choices and nine existing-module source auditions for Esa, Leena and Anne. Its [11.28-second recording](../bank-production/bank-review-phone.mp4) shows the review tool. No face is assigned and the later clerk's identity remains unresolved. The source audit and both viewport checks pass after consolidation; browser preferences stay separate from the campaign.
+
+This draft also contains two actual game improvements: [exact bank conversion previews and phone choices](../../../design/evidence/bank-quotes-2026-11-07/README.md), and the [corrected Courtyard Receipts site contract](../../../design/COURTYARD_SITE_CONTRACT.md), with old-save/C.19 handoff coverage. The earlier recordings retain their original source baseline. These limited runtime fixes do not promote the proposed artwork or claim a release; the public build stays v4.96 and completion stays 48%.

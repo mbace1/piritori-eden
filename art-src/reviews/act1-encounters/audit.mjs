@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import crypto from 'node:crypto';
 const root=new URL('../../../',import.meta.url),read=p=>JSON.parse(fs.readFileSync(new URL(p,root),'utf8'));
 const manifest=JSON.parse(fs.readFileSync(new URL('./encounter-manifest.json',import.meta.url),'utf8')),content=read('content/era1-slice-v1.json'),art=read('art/v3/manifest.json');
+const proposals=read('art-src/reviews/act1-encounters/binding-proposals.json');
+for(const [file,sha] of [[proposals.source.content,proposals.source.content_sha256],[proposals.source.manifest,proposals.source.manifest_sha256]])assert.equal(crypto.createHash('sha256').update(fs.readFileSync(new URL(file,root))).digest('hex'),sha,'stale binding source '+file);
 assert.equal(manifest.encounters.length,17);assert.equal(new Set(manifest.encounters.map(e=>e.id)).size,17);
 for(const [p,hash]of Object.entries(manifest.source_sha256))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(new URL(p,root))).digest('hex'),hash,`stale source ${p}`);
 let checked=0;

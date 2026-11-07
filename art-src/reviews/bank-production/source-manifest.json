@@ -5,14 +5,14 @@
   "campaign_state_used": false,
   "review_storage_key": "piritori-review:bank-production:v1",
   "source_sha256": {
-    "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "content/era1-slice-v1.json": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
     "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
     "art-library/characters/manifest.json": "f244f108eaf6e6c5c206a8def43e2a272d25299ded774ce43b98bad607b699a1",
     "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
     "art-library/MODULAR_CHARACTER_SYSTEM.md": "e0b26a61aa9542263d3ee5dbd5c29d99f4446fa661561915b9e53cd6be9f9fc6",
-    "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
-    "art-src/reviews/act1-production/locations.json": "dbb7e6cd21d0cb7df3479610a4fe1ef1c5ccf94273e36c3826f475429b03ff79",
-    "art-src/reviews/act1-production/characters.json": "dc5f62933f15ba13c75da9fe693bb7f33e82dbde3e30f0d1c6a800f1b50e4fc6"
+    "design/scenario-atlas.json": "e2061be56598124ce1a006b5604bc4869761f75441564323c403d74c86f209b7",
+    "art-src/reviews/act1-production/locations.json": "3d970acb166edfbaa4e1da6fd3b7cc8189ca64eed32802c99bb42e1a0f89e06a",
+    "art-src/reviews/act1-production/characters.json": "0a5a5783bf76252f2d34c36d7ae2855121fa071305bb0d13263088e4793791a7"
   },
   "bank_plate": {
     "id": "scene-bank-counter-v01",

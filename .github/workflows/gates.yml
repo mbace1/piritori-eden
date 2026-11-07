@@ -179,6 +179,8 @@ jobs:
           WORKBENCH_CAPTURE_DIR: /tmp/act1-workbench-ci
         run: |
           node art-src/reviews/act1-workbench/test.mjs
+          node art-src/reviews/bank-production/audit.mjs
+          BANK_CAPTURE_DIR=/tmp/bank-production-ci node art-src/reviews/bank-production/capture.cjs --checks-only
           node art-src/reviews/act1-encounters/audit.mjs
           node art-src/reviews/act1-combat/model-test.mjs
           node art-src/reviews/act1-consequences/test.mjs

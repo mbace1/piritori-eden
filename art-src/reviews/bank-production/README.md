@@ -29,6 +29,8 @@ Requirements/effects are inspectable source metadata, never evaluated or applied
 The return view is a labelled schematic transition, not a fake game map or result.
 This review has no combat and does not simulate C.19.
 
+The consolidated draft reconciles source fingerprints after the independent courtyard site correction. Its bank openings, participants and 10 choices are still unchanged. `BANK_CAPTURE_DIR=/tmp/bank-review node capture.cjs --checks-only` verifies this tool without replacing the original recording; the workbench's integrated browser check also opens it as the eighth preview.
+
 ## Real source options
 
 | Person | A | B | C |
