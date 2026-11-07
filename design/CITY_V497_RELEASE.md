@@ -1,0 +1,33 @@
+# Hub release: Act I city v4.97 (the chapter's goal tells the truth)
+
+- **Source:** `mbace1/piritori-eden` @ `0587dae`, web only.
+  - **Gates were green:** run 1180, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `3cd4f361`, under `piritori/`. **Pages run 1651 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 67 site files changed.
+- **What players get:**
+  - The chapter panel used to say *"Earned by fencing loot at Piritori; market sales and mission payouts do not count."* The game has always counted market sales and packs sent down a route. The panel now says *"Earned by selling: packs at the market or down a route, and loot at the fence on Piritori. Mission payouts do not count."*
+  - This corrects v4.93's notes and the v4.95 receipt, which repeated the wrong rule. Codex's review (draft PR #124) found it.
+- **Measured** with the game's own rule functions (ROADMAP §8, item 7):
+  - nothing limits trades in a block, and a journey costs no block (D002 is unresolved);
+  - so once the first buyer is known, three buy-walk-sell loops count €408 against the €400 goal inside one block;
+  - the shipment's gate needs D002 before it means anything.
+- **Catalogue:**
+  - The note moves to v4.97 in en, fi and ja. `versions.json` piritori goes 4.96 → 4.97 by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=215), and `sw.js` `VERSION` went 256 → 257. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 34 bare-node suites;
+    - `chapter-browser`: 20;
+    - `play-card`: 29.
+    - `v3-state.mjs` now holds the panel's wording to the counted rule.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 75.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`ac54f7b8`, Toko Move v3.13).
