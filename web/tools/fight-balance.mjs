@@ -19,6 +19,8 @@
 // the tough first; `escort` (getaways) moves the one carrying the take first
 // and sends the others at whoever plans to hit them.
 //
+//   CAREFUL_DODGE_FIRST=1 node web/tools/fight-balance.mjs  # evaluate safe movement before an in-range attack
+//
 //   RULES='{"rout":0.667,"policeAt":7}' node web/tools/fight-balance.mjs   # try a lever
 import fs from 'node:fs';
 
@@ -96,7 +98,7 @@ function carefulPolicy(fight) {
     fight.command('select', p.id);
     if (getaway && rowOf(p.cell) === 0 && fight.command('extract').ok) continue;
     const order = b.enemies.filter(e => e.alive).sort((a, c) => (c.tough ? 1 : 0) - (a.tough ? 1 : 0) || a.hp - c.hp);
-    if (!getaway && order.some(e => fight.command('attack', e.id).ok)) continue;
+    if (!getaway && !process.env.CAREFUL_DODGE_FIRST && order.some(e => fight.command('attack', e.id).ok)) continue;
     const goal = order[0], score = cell => getaway
       ? rowOf(cell) * 2 + harm(p.id, cell) * 1.5
       : (goal && order.some(e => forecast(b, p, e, cell).valid) ? -10 : 0) + (goal ? Math.abs(goal.cell.split(',')[0] - cell.split(',')[0]) + Math.abs(rowOf(goal.cell) - rowOf(cell)) : 0) + harm(p.id, cell) * 1.5;
@@ -154,6 +156,14 @@ function focusedPolicy(fight) {
 }
 function play(outing, policy) {
   const fight = nightShift(outing), b = fight.battle;
+  const counts = { braces: 0, moves: 0, attacks: 0 };
+  const command = fight.command.bind(fight);
+  fight.command = (type, ...args) => {
+    const result = command(type, ...args);
+    const metric = { brace: 'braces', move: 'moves', attack: 'attacks' }[type];
+    if (result.ok && metric) counts[metric] += 1;
+    return result;
+  };
   const hp0 = b.players.reduce((n, p) => n + p.hp, 0);
   for (let guard = 0; b.status === 'active' && guard < 40; guard += 1) {
     policy(fight);
@@ -162,7 +172,7 @@ function play(outing, policy) {
     else fight.command('end');
   }
   const hp1 = b.players.reduce((n, p) => n + Math.max(0, p.alive || p.evacuated ? p.hp : 0), 0);
-  return { result: b.result, end: b.mission.end, rounds: b.round, routed: b.mission.routed, police: b.mission.police.arrived, hpLost: hp0 - hp1, downs: b.players.filter(p => p.wasDown || p.taken || (!p.alive && !p.evacuated)).length, stuck: b.status === 'active' };
+  return { ...counts, result: b.result, end: b.mission.end, rounds: b.round, routed: b.mission.routed, police: b.mission.police.arrived, hpLost: hp0 - hp1, downs: b.players.filter(p => p.wasDown || p.taken || (!p.alive && !p.evacuated)).length, stuck: b.status === 'active' };
 }
 
 const fights = [];
@@ -218,6 +228,6 @@ for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f
   for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy }[policyName]));
   const n = res.length, pct = k => Math.round(100 * res.filter(k).length / n);
   const avg = k => (res.reduce((a, r) => a + r[k], 0) / n).toFixed(1);
-  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck) });
+  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), braces: avg('braces'), moves: avg('moves'), attacks: avg('attacks'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck) });
 }
 console.log(JSON.stringify(rows));

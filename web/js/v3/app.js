@@ -176,13 +176,23 @@ const CUTIN_SCRIPT = {
 // The overlay both uses share: a 9:16 canvas, the words laid over the speaker's bubble or copy card, the buttons.
 function cutinShell(label, onClose) {
   const el = document.createElement('div');
-  el.className = 'cutin'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', label);
+  const previousFocus = document.activeElement;
+  el.className = 'cutin'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', label); el.tabIndex = -1;
   el.innerHTML = '<div class="cutin-frame"><canvas class="cutin-canvas" aria-hidden="true"></canvas><div class="cutin-words" aria-live="polite"></div><div class="cutin-options"></div></div>';
   document.body.append(el);
   const canvas = el.querySelector('canvas'), words = el.querySelector('.cutin-words'), options = el.querySelector('.cutin-options');
   const pct = (v, of) => `${(v / of * 100).toFixed(3)}%`;
   const box = b => `left:${pct(b.x, CUTIN_W)};top:${pct(b.y, CUTIN_H)};width:${pct(b.w, CUTIN_W)};height:${pct(b.h, CUTIN_H)}`;
-  const onKey = event => { if (event.key === 'Escape') onClose(); };
+  const onKey = event => {
+    if (event.key === 'Escape') { event.preventDefault(); onClose(); return; }
+    if (event.key !== 'Tab') return;
+    const buttons = [...options.querySelectorAll('button:not([disabled])')];
+    const first = buttons[0], last = buttons.at(-1);
+    if (!first) { event.preventDefault(); el.focus(); }
+    else if (!el.contains(document.activeElement) || (event.shiftKey ? document.activeElement === first : document.activeElement === last)) {
+      event.preventDefault(); (event.shiftKey ? last : first).focus();
+    }
+  };
   addEventListener('keydown', onKey);
   let current = null;
   return {
@@ -191,16 +201,17 @@ function cutinShell(label, onClose) {
     show(stage, line, buttons) {
       if (current !== stage) { current?.detach(); stage.attach(canvas); current = stage; }
       const cast = stage.cast, news = cast.layout === 'news';
+      el.setAttribute('aria-label', cast.name);
       words.className = `cutin-words cutin-${cast.layout}`; words.style.cssText = box(news ? cast.copy : cast.bubble);
       options.style.cssText = box(news ? { x: 600, y: 1784, w: 440, h: 110 } : { x: 470, y: 1500, w: 580, h: 394 });
       words.style.setProperty('--tag', CUTIN_TAGS[line.tag] ?? '#676B6B');
-      words.innerHTML = `<b>${esc(line.tag ?? cast.name)}</b><p>${esc(line.text)}</p>`;
+      words.innerHTML = `${news ? `<b>${esc(line.tag ?? cast.name)}</b>` : ''}<p>${esc(line.text)}</p>`;
       options.innerHTML = buttons.map(([text, , o = {}], i) => `<button type="button" data-i="${i}" style="--tab:${CUTIN_TABS[Math.min(i, 2)]}" ${o.disabled ? 'disabled' : ''}><i></i><span>${esc(text)}${o.note ? `<small>${esc(o.note)}</small>` : ''}</span></button>`).join('');
       options.querySelectorAll('button').forEach(b => { b.onclick = () => buttons[Number(b.dataset.i)][1](); });
       if (line.clip) stage.play(line.clip);
-      options.querySelector('button:not([disabled])')?.focus();
+      (options.querySelector('button:not([disabled])') ?? el).focus();
     },
-    close() { current?.detach(); current = null; el.remove(); removeEventListener('keydown', onKey); },
+    close() { current?.detach(); current = null; el.remove(); removeEventListener('keydown', onKey); if (previousFocus?.isConnected) previousFocus.focus(); },
   };
 }
 async function openCutin(who) {
@@ -250,7 +261,7 @@ async function openTalk(encounter, who) {
   function ask() {
     shell.show(speaker, { text: encounter.opening, clip: 'talk' }, [
       ...encounter.choices.map(choice => { const status = choiceStatus(choice, state, data);
-        return [choice.label, () => answer(choice), { disabled: !status.ok, note: status.ok ? '' : status.reasons.map(readableReason).join(' · ') }]; }),
+        return [choice.label, () => answer(choice), { disabled: !status.ok, note: status.ok ? choice.forecast : status.reasons.map(readableReason).join(' · ') }]; }),
       ['Look around', setAside]]);
   }
   function answer(choice) {

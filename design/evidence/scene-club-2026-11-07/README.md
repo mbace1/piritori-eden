@@ -1,0 +1,69 @@
+# Scene Club review candidate — 7 November 2026
+
+Act I completion remains **48%**, using ROADMAP.md's existing rubric. No release, merge, art approval or physical-device acceptance is claimed.
+
+Based on main `b114bf7` and unmerged PR #119 head `468e8fc`. Public `https://mbace1.github.io/Suds-Jack/piritori/` advertised v4.96 when fetched on 7 November. Its release receipt identifies hub `a8b1262f`; the source receipt does not establish physical-device acceptance.
+
+## Change
+
+The existing Jaska conversation showed labels without the forecasts carried by the ordinary choice cards. Now each enabled option shows its authored forecast; disabled options retain their requirements. The choices span the lower scene, use at least 12px text and 44px targets, and retain a bounded scroll fallback for landscape. The dialogue backdrop is opaque, and location dialogue omits redundant speaker names (UI_DIET step 3); news source labels remain. Existing artwork, rigs, animation clips, campaign choice application and C.19 are unchanged. Cache tokens advance, but the hub/release version stays v4.96 until a release.
+
+Reference read: Toko Move v3.12's ROADMAP, VERSIONS and `js/journey.js` (`stakesOf` and the scene/card flow). Transferred principle: show the stakes at the decision, with the scene behind. No Toko art or mechanics copied.
+
+## Reproduce
+
+Serve the repository root on port 8781, then run:
+
+```
+node web/test/scene-club-browser.cjs
+node web/tools/fight-balance.mjs > baseline-12.json
+SEEDS=30 node web/tools/fight-balance.mjs > baseline-30.json
+node web/tools/c19-policy-report.mjs baseline-12.json baseline-30.json
+TRACE=door:hit-courtyard-ledger POLICY=careful node web/tools/fight-balance.mjs
+```
+
+`BROWSER_PATH` may select installed Chromium. `PIRITORI_CAPTURE_DIR` preserves screenshots. The new regression is also wired into the existing Act I scenes CI job. Browser fixtures use a fresh campaign at schedule index 2, choose the authored ask-envelope option, verify +300 markka/+1 Jaska trust and the flag, return to the map, then reload without applying it twice. Manual review jump: `/web/?encounter=enc-jaska-receipt` (throwaway, unsaved).
+
+## Bot baseline
+
+All 15 fights, heats 0/2/3, 147 scenario/heat/policy rows. Twelve seeds = 1,764 simulations; thirty = 4,410. Same rules in both runs; this is a sample-size comparison, **not** a gameplay before/after claim.
+
+For fight jobs, careful over aggressive: +3.76 win percentage points / 0.01 HP saved (12 seeds); +2.30 points / −0.16 HP saved (30). No stuck pairs. JSON retains per-scenario win/withdraw/loss, rounds, HP lost, downs, police and rout. These simulations do not measure post-fight campaign recovery.
+
+The careful implementation attempts an available attack before evaluating safer routes or Brace. Its threat scoring uses announced plans, whereas rivals can press on after blocked movement. The saved courtyard trace ends in three rounds without Brace. This is evidence to improve policy instrumentation and compare defensive choices; it does not prove Brace is a bad mechanic. Combat rules are untouched.
+
+## Visual evidence
+
+Before/after phone (390×844), after desktop (1280×800), and a real-time WebM of the existing Jaska/Aatami animations and choice loop. Existing semi-approved Aatami art remains semi-approved. Landscape 844×390 keeps a scroll fallback; physical Pixel/iPad checks remain pending. No new animation candidate was created or promoted.
+
+## Follow-up: keyboard access and verification
+
+Dialogue now declares a modal, cycles Tab/Shift+Tab through its enabled choices, keeps focus in the dialog during Aatami's response, updates the accessible speaker label, and restores the previous control when it still exists. Scene Club regression checks the keyboard cycle at all three viewports.
+
+Local results: 35/35 bare-node suites pass after updating the cache-token assertion; Scene Club browser passes phone, desktop and landscape, and Aatami browser passes 16/16. The first CI run on `72524a7` failed its old `app.js?v=63` assertion after the intended cache bump to 64; that assertion is corrected in the follow-up. Other CI/browser results must be checked on the final head before claiming full acceptance.
+
+## Bot-policy experiment (no rule change)
+
+`CAREFUL_DODGE_FIRST=1` skips the careful policy's early in-range attack, so it evaluates safe movement first. It is opt-in; default decisions stay identical. The tool now reports average successful player `braces`, `moves` and `attacks` per simulation. Enemy actions are not included in those counters.
+
+At 12 seeds, the opt-in fight-job careful advantage is +0.76 points (default +3.76); HP saved is 0.59 (default 0.01), and rounds relative to aggressive are +0.12 (default −0.06). This is a tradeoff, not a balance fix. Default and opt-in bots both report zero Braces in these samples. No gameplay policy or rule is promoted from this experiment.
+
+Verification: all 147 default rows exactly match `baseline-12.json` after removing the three additive action metrics; all 147 instrumented opt-in rows likewise match the original experiment. The report JSON compares the default and opt-in samples. Both use the same twelve deterministic seeds, heats and scenarios. The 30-seed file remains a baseline only; the opt-in result is exploratory.
+
+## Extended experiment and regression limits
+
+At 30 seeds (4,410 simulations), dodge-first careful play gains −0.09 win percentage points over aggressive play, saving 0.48 HP and taking 0.10 extra rounds. Default careful gains +2.30 points and saves −0.16 HP. The alternate remains opt-in. The additional raw/report files preserve this comparison.
+
+Local system Chromium 156: Aatami 16/16, mission 32/32, readability 86/86 pass. Outing passes 72 gameplay assertions but fails three console-error checks; a separate URL trace observes an absent `/favicon.ico` requested by this browser, alongside the already-exempt local `/hub/shell.js`. Road, chapter and header likewise report resource-error checks, so these runs are **not** full passes.
+
+Matching Playwright Headless Shell 151: header 62/62 passes; Scene Club phone/desktop/landscape and keyboard checks passed earlier with system Chromium. The expanded matching-browser batch encountered a road click timeout and chapter/readability screenshot-stability timeouts. Clean main `b114bf7` also encounters a road timeout under this environment (at reload, not the same instruction). That does not certify the branch: the affected full suites remain unresolved locally. The raw session logs remain in `/workspace/evidence`.
+
+GitHub run 1159 (`42394523105`) on `2a3e9f3` was inspected: campaign-state, Godot, laboratory and wet-environment jobs passed; the scenes job passed its existing scenes/visits and new Scene Club checks and progressed to readability. Other jobs were still running at inspection. No full green CI or physical-device acceptance is claimed here.
+
+## QA follow-up after the art-agent split
+
+The strengthened Scene Club browser test passes all six viewport × motion cases (390×844, 1280×800, 844×390; reduce/no-preference). It compares actual figure-region canvas RGBA pixels for both Jaska and Aatami, checks strict HTTP/console/request/page errors with only the exact local hub-shell exemption, and retains choice stakes, keyboard, authored +300 markka/+1 trust, map return and reload assertions. The six-case log is `motion-regression.log`.
+
+The existing local matching-shell C.19 outing suite completed **75/75**. CI run 1161 (`42395070215`) on the prior docs head `fecb8d3` had 8/9 jobs green at inspection, including both C.19 outing and crew recovery; the scenes job was still running. The new strengthened test requires CI on its own head; this is not a full-green final-head claim. Run 1157 already passed the complete Act I scenes job for the unchanged dialogue runtime (road42, chapter20, mission32, M1 inspection71, next-step57, header62 and readability86).
+
+The 844×390 runtime speech bubble still scales below the 12px floor. Passing its choice/motion checks does not certify landscape speech readability. A separate review-only art candidate explores a readable landscape composition. Physical Pixel/iPad acceptance remains pending.
