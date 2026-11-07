@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scene Club — motion review candidate</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="review.css">
+</head>
+<body>
+<header class="review-label"><strong>SCENE CLUB · MOTION CANDIDATE</strong><span>Review only · no campaign save</span></header>
+<main id="frame" aria-label="Scene Club animation review">
+  <img id="map" src="map-reference.png" alt="Capture of the existing Kallio map, used only to review the transition">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="location"><b>SCENE CLUB</b><span>Mäkelänsilta · Day 2</span></div>
+  <div id="words" aria-live="polite"></div>
+  <section id="options" aria-label="Dialogue choices"></section>
+  <div id="arrival"><span>Aatami arrives.</span></div>
+  <div id="map-result" hidden><b>BACK IN KALLIO</b><p id="map-forecast"></p><small>Visual review of the return · no campaign effects applied</small></div>
+  <button id="replay" type="button" hidden>Replay candidate</button>
+</main>
+<script type="module" src="review.js"></script>
+</body></html>
