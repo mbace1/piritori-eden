@@ -1,0 +1,38 @@
+{
+  "previewOnly": true,
+  "sourceManifest": "encounter-manifest.json",
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "authoredEncounters": 17,
+      "exactChoicesAndForecasts": 60,
+      "noOverflow": true,
+      "campaignUntouched": true,
+      "reviewReload": true,
+      "groupByDayAndLocation": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "authoredEncounters": 17,
+      "exactChoicesAndForecasts": 60,
+      "noOverflow": true,
+      "campaignUntouched": true,
+      "reviewReload": true,
+      "groupByDayAndLocation": true,
+      "errors": []
+    }
+  ],
+  "physicalDeviceAcceptance": false,
+  "artApproval": false,
+  "runtimeOrCampaignChanges": false,
+  "video": "actual browser recording; combat is linked, not simulated"
+}
