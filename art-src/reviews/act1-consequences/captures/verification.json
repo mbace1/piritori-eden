@@ -1,0 +1,194 @@
+{
+  "reviewOnly": true,
+  "measuredBotOutcomes": false,
+  "cases": [
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "trade",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "hire",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "victory",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "withdraw",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "police",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "rescue",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "treatment",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "bail",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "phone",
+      "width": 390,
+      "height": 844,
+      "id": "pressure",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "trade",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "hire",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "victory",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "withdraw",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "police",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "rescue",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "treatment",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "bail",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    },
+    {
+      "view": "desktop",
+      "width": 1280,
+      "height": 800,
+      "id": "pressure",
+      "preview": true,
+      "applied": true,
+      "storageAccesses": 0,
+      "errors": []
+    }
+  ],
+  "storageAccesses": 0,
+  "errors": [],
+  "sourceHashes": {
+    "model.js": "4d32ba0ad622104f29a02aa3f01517b8a8a318289c6a14805e582fb2b644951b",
+    "review.js": "8deb8b6f25b8587c8216389a8379fd9a25f57bdcd5bf609ce9abec222b4c0739",
+    "review.css": "130e21a28401880d31a1bd918c690fcc4cbb72365ee2e962974c3a69e5818322",
+    "index.html": "c20255da50215eafcb80aa01709b35094dd8d02a46af08560fad032736d62f02"
+  }
+}
