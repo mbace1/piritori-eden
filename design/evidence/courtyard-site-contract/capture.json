@@ -1,0 +1,85 @@
+{
+  "source": "actual browser output from identical fixtures in base and fixed worktrees",
+  "newArt": false,
+  "physicalDeviceAcceptance": false,
+  "captures": [
+    {
+      "viewport": "phone",
+      "width": 390,
+      "height": 844,
+      "before": {
+        "siteId": "jaska_studio",
+        "siteAnchor": "makelansilta",
+        "siteLabel": "Scene Club",
+        "override": "torkkelinmaki",
+        "sceneSite": "jaska_studio",
+        "background": "linear-gradient(rgb(113, 106, 87) 0px, rgb(113, 106, 87) 56%, rgb(75, 64, 54) 56%)",
+        "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+        "choices": [
+          "Trade the Jade introduction\n      \n      \n      relationship jade_lantern_network >= 1",
+          "Take positions\n      Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
+          "Leave the receipts\n      Fail the recovery without combat; protect Jaska's home and reduce pressure."
+        ],
+        "jaskaVisible": false,
+        "contentSha": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+        "mapSha": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c"
+      },
+      "after": {
+        "siteId": "torkkelinmaki_courtyard",
+        "siteAnchor": "torkkelinmaki",
+        "siteLabel": "Torkkelinmäki courtyard",
+        "override": "torkkelinmaki",
+        "sceneSite": "torkkelinmaki_courtyard",
+        "background": "linear-gradient(rgb(16, 27, 40) 0px, rgb(16, 27, 40) 55%, rgb(34, 39, 43) 55%)",
+        "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+        "choices": [
+          "Trade the Jade introduction\n      \n      \n      relationship jade_lantern_network >= 1",
+          "Take positions\n      Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
+          "Leave the receipts\n      Fail the recovery without combat; protect Jaska's home and reduce pressure."
+        ],
+        "jaskaVisible": false,
+        "contentSha": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
+        "mapSha": "0e9308092b98e31e343996255333ff05934e239054b0205f5567db644cf22e39"
+      }
+    },
+    {
+      "viewport": "desktop",
+      "width": 1280,
+      "height": 800,
+      "before": {
+        "siteId": "jaska_studio",
+        "siteAnchor": "makelansilta",
+        "siteLabel": "Scene Club",
+        "override": "torkkelinmaki",
+        "sceneSite": "jaska_studio",
+        "background": "linear-gradient(rgb(113, 106, 87) 0px, rgb(113, 106, 87) 56%, rgb(75, 64, 54) 56%)",
+        "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+        "choices": [
+          "Trade the Jade introduction\n      \n      \n      relationship jade_lantern_network >= 1",
+          "Take positions\n      Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
+          "Leave the receipts\n      Fail the recovery without combat; protect Jaska's home and reduce pressure."
+        ],
+        "jaskaVisible": false,
+        "contentSha": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+        "mapSha": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c"
+      },
+      "after": {
+        "siteId": "torkkelinmaki_courtyard",
+        "siteAnchor": "torkkelinmaki",
+        "siteLabel": "Torkkelinmäki courtyard",
+        "override": "torkkelinmaki",
+        "sceneSite": "torkkelinmaki_courtyard",
+        "background": "linear-gradient(rgb(16, 27, 40) 0px, rgb(16, 27, 40) 55%, rgb(34, 39, 43) 55%)",
+        "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+        "choices": [
+          "Trade the Jade introduction\n      \n      \n      relationship jade_lantern_network >= 1",
+          "Take positions\n      Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
+          "Leave the receipts\n      Fail the recovery without combat; protect Jaska's home and reduce pressure."
+        ],
+        "jaskaVisible": false,
+        "contentSha": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
+        "mapSha": "0e9308092b98e31e343996255333ff05934e239054b0205f5567db644cf22e39"
+      }
+    }
+  ]
+}

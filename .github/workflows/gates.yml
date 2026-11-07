@@ -151,6 +151,7 @@ jobs:
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
+          node web/test/courtyard-site.mjs
 
   act1-scenes:
     name: Act I touch scenes and visits

@@ -82,6 +82,25 @@ server.listen(0, '127.0.0.1', async () => {
         await page.locator('[data-action="next-step"][data-step="enter"]').click();
         const button = page.locator(`[data-action="choose"][data-choice="${choice}"]`);
         await button.waitFor();
+        if (index === 11) {
+          ok(`${name}/${mission}: its neutral scene uses the courtyard site, not Scene Club`, await page.locator('.generic-scene').getAttribute('data-site') === 'torkkelinmaki_courtyard'
+            && await page.evaluate(() => __ptv3.data.sites.get('torkkelinmaki_courtyard').anchorId === 'torkkelinmaki'));
+          ok(`${name}/${mission}: Jaska remains offscreen`, await page.locator('[data-speaker="jaska"]').count() === 0
+            && await page.evaluate(() => __ptv3.data.encounters.get('enc-courtyard-last-call').participants.includes('jaska-offscreen')));
+          const before = await S(page);
+          await page.reload();
+          await page.waitForFunction(() => Boolean(window.__ptv3?.data && window.__ptv3.story?.case));
+          await page.locator('#resumeButton').click();
+          await button.waitFor();
+          const resumed = await S(page);
+          ok(`${name}/${mission}: reload keeps the unresolved mission at Torkkelinmäki`, resumed.scheduleIndex === before.scheduleIndex && resumed.selectedAnchor === before.selectedAnchor
+            && resumed.cash === before.cash && JSON.stringify(resumed.choices) === JSON.stringify(before.choices)
+            && await page.locator('.generic-scene').getAttribute('data-site') === 'torkkelinmaki_courtyard');
+          if (process.env.PIRITORI_CAPTURE_DIR) {
+            fs.mkdirSync(process.env.PIRITORI_CAPTURE_DIR, { recursive: true });
+            await page.screenshot({ path: path.join(process.env.PIRITORI_CAPTURE_DIR, `courtyard-site-${name}.png`) });
+          }
+        }
         ok(`${name}/${mission}: the choice that fights is offered`, await button.isEnabled());
         await button.click();
         await page.waitForURL(/\/web\/crew-run\/\?campaign=1&outing=/);

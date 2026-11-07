@@ -1,0 +1,24 @@
+// Actual same-fixture before/after. Pass an unchanged base worktree as argv[2].
+const {chromium}=require('playwright');
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const DIR=__dirname,ROOT=path.resolve(DIR,'../../..'),BASE=process.argv[2]&&path.resolve(process.argv[2]);
+if(!BASE||!fs.existsSync(path.join(BASE,'content/era1-slice-v1.json'))){console.error('Usage: node design/evidence/courtyard-site-contract/capture.cjs /path/to/unchanged-base-worktree');process.exit(2)}
+const roots={before:BASE,after:ROOT},mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.woff2':'font/woff2'};
+const server=http.createServer((req,res)=>{const match=/^\/(before|after)(\/.*)$/.exec(decodeURIComponent(req.url.split('?')[0]));if(!match){res.writeHead(404).end();return}const root=roots[match[1]];let file=path.resolve(root,'.'+match[2]);if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return}if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');fs.readFile(file,(e,b)=>{if(e){res.writeHead(404).end();return}res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'});res.end(b)});});
+const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']}),evidence=[];
+try{for(const [viewport,width,height] of [['phone',390,844],['desktop',1280,800]]){const pair={viewport,width,height};for(const variant of ['before','after']){
+ const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
+ const isShell=url=>new URL(url).pathname===`/${variant}/hub/shell.js`;
+ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!(m.location().url&&isShell(m.location().url)&&/404/.test(m.text())))errors.push(m.text())});page.on('response',r=>{if(r.status()>=400&&!(r.status()===404&&isShell(r.url())))errors.push(r.status()+': '+r.url())});
+ await page.goto(`http://127.0.0.1:${server.address().port}/${variant}/web/?skip`);await page.waitForFunction(()=>window.__ptv3?.data&&window.__ptv3.story?.case);
+ await page.evaluate(async()=>{const {createState,SAVE_KEY}=await import('./js/v3/state.js?v=12');const c=window.__ptv3.data.content,s=createState(c);s.scheduleIndex=11;s.mode='encounter';s.selectedAnchor='torkkelinmaki';s.recruited=c.crew.slice(0,3).map(c=>c.id);s.deployed=[...s.recruited];localStorage.setItem(SAVE_KEY,JSON.stringify(s));});
+ await page.reload();await page.waitForFunction(()=>window.__ptv3?.data&&window.__ptv3.story?.case);await page.locator('#resumeButton').click();await page.waitForSelector('.generic-scene');
+ pair[variant]=await page.evaluate(()=>{const e=__ptv3.data.encounters.get('enc-courtyard-last-call'),site=__ptv3.data.sites.get(e.site_id),scene=document.querySelector('.generic-scene');return {siteId:e.site_id,siteAnchor:site.anchorId,siteLabel:site.label,override:e.anchor_override_id,sceneSite:scene.dataset.site,background:getComputedStyle(scene).backgroundImage,opening:document.querySelector('.encounter-opening').textContent,choices:[...document.querySelectorAll('[data-action=choose]')].map(b=>b.textContent.trim()),jaskaVisible:Boolean(document.querySelector('[data-speaker=jaska]')),contentSha:null};});
+ pair[variant].contentSha=hash(path.join(roots[variant],'content/era1-slice-v1.json'));pair[variant].mapSha=hash(path.join(roots[variant],'map/kallio-era1-2003-v1.json'));
+ assert.equal(pair[variant].sceneSite,variant==='before'?'jaska_studio':'torkkelinmaki_courtyard');assert.equal(pair[variant].override,'torkkelinmaki');assert.equal(pair[variant].jaskaVisible,false);assert.deepEqual(errors,[]);
+ await page.screenshot({path:path.join(DIR,`${variant}-${viewport}.png`)});await context.close();
+ }assert.notEqual(pair.before.background,pair.after.background,'old Scene Club fallback palette must no longer be selected');assert.equal(pair.before.opening,pair.after.opening);assert.deepEqual(pair.before.choices,pair.after.choices);evidence.push(pair);console.log('PASS actual before/after',viewport,'site contract corrected; authored copy/choices unchanged; existing neutral fallback only');}
+}finally{await browser.close();server.close()}
+fs.writeFileSync(path.join(DIR,'capture.json'),JSON.stringify({source:'actual browser output from identical fixtures in base and fixed worktrees',newArt:false,physicalDeviceAcceptance:false,captures:evidence},null,2));
+})().catch(e=>{console.error(e);server.close();process.exitCode=1});

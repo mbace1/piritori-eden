@@ -63,7 +63,7 @@ physical-device / final-character acceptance remain open.
 | Paper Bag | Piritori collection -> Siltasaari buyer; personal delivery versus delegation, margin versus introduction | No battle in its record. Show the crowd/queue and the new lead; preserve single settlement of the first sale. |
 | Three Vans | Slomo counter -> Harju observation -> return; pay for clarity, investigate or accept uncertainty | No direct battle. Good information can open Bear Path's peaceful branch; incomplete information and obligations persist. |
 | Bear Path | Same park contact space becomes the confrontation; keep bear/plinth cover and withdrawal lane readable | Authored information/fixer alternatives, 2v2 if holding the path, or withdrawal and temporary contact closure. Slomo is not a fighter. |
-| Courtyard Receipts | Restaurant invoice leads to the residential porttikongi; obligation, confrontation or leaving receipts | Authored record is 3v3 with negotiated/retreat outcomes and family consequences. Do not silently replace it with the C training fixture. Fix its site binding before 3D integration. |
+| Courtyard Receipts | Restaurant invoice leads to the residential porttikongi; obligation, confrontation or leaving receipts | Authored record is 3v3 with negotiated/retreat outcomes and family consequences. Do not silently replace it with the C training fixture. Its separate Torkkelinmäki site binding is aligned by D005 (2026-11-07); this does not certify staging/art acceptance. |
 | The Shipment (chapter operation) | Sörnäinen harbour; explicit chapter-ending commitment after its threshold | Existing stake/result/upgrade govern. Model/dress only after the approach and outcome contract are checked. No new boss or mechanics assumed. |
 
 ## Scenario catalogue
@@ -272,11 +272,13 @@ These are declared content consequences. Integration must verify dispatch, singl
 
 ### Courtyard last call — `enc-courtyard-last-call`
 
-Authored slot: day 6 / night; anchor `torkkelinmaki`; site `jaska_studio`.
+Authored slot: day 6 / night; anchor `torkkelinmaki`; site `torkkelinmaki_courtyard`.
 
 People: aatami-network-team, courtyard-rival-team, jaska-offscreen.
 
-Staging proposal: Scene Club near Mäkelänsilta: entrance availability lamp, receipt city, envelope and family photo; intimate worktable framing. Courtyard event needs a separate site binding.
+Staging proposal: the already-authored residential porttikongi at Torkkelinmäki, keeping the withdrawal lane, lit residential windows and receipt envelope. Scene Club stays at Mäkelänsilta and Jaska remains offscreen.
+
+Source alignment, 2026-11-07 (D005): `torkkelinmaki_courtyard` is a neutral fictional anchor-only site for this existing encounter, not a new location/address or art binding. The authored schedule, mission, battle and consequence rules are unchanged. Other scenario records remain their historical snapshots.
 
 Inspectable facts: porttikongi withdrawal lane; lit residential windows; receipt envelope.
 
@@ -362,9 +364,9 @@ These are declared content consequences. Integration must verify dispatch, singl
 
 ## Decision ledger and next visual review
 
-Art direction D001 is answered, with D008 approving the wide-scene middle/right columns. On 2026-09-13 the owner delegated art/game direction and requested large leaps. Astra selected Bear Path (D003) and one battle-entry pullback followed by manual camera control (D006), with reduced-motion support. This is a documented director selection, not a claimed explicit owner choice or final runtime approval. C.07 implements the standalone encounter; see [the director packet](BEAR_PATH_DIRECTOR_PACKET.md). The existing campaign tutorial stays in order. D002, D004, D005 and D007 remain open.
+Art direction D001 is answered, with D008 approving the wide-scene middle/right columns. On 2026-09-13 the owner delegated art/game direction and requested large leaps. Astra selected Bear Path (D003) and one battle-entry pullback followed by manual camera control (D006), with reduced-motion support. This is a documented director selection, not a claimed explicit owner choice or final runtime approval. C.07 implements the standalone encounter; see [the director packet](BEAR_PATH_DIRECTOR_PACKET.md). The existing campaign tutorial stays in order. D002, D004 and D007 remain open. D005 was resolved as source alignment on 2026-11-07; its art/integration acceptance remains separate.
 
-Two specific gaps already found: Arvo has no authored enterable venue; `enc-courtyard-last-call` still uses `jaska_studio` despite its Torkkelinmäki schedule and mission anchor, while Jaska's studio visits now belong to Scene Club near Mäkelänsilta. Keep those physically separate until the binding is resolved. Karhupuisto's current concept gazebo cannot substitute for the authored bear/plinth and withdrawal path.
+Arvo still has no authored enterable venue. D005's courtyard/site conflict was aligned on 2026-11-07: `enc-courtyard-last-call` uses the neutral `torkkelinmaki_courtyard` site at Torkkelinmäki, while Jaska's studio visits remain at Scene Club near Mäkelänsilta. No source art or physical-door integration is accepted by that correction. Karhupuisto's current concept gazebo cannot substitute for the authored bear/plinth and withdrawal path.
 
 The Bear Path director packet now binds six beats to the playable scene: arrival, readable situation, information, commitment, resolution and remembered return. Automated browser checks cover these beats. Physical Pixel 10 Pro/iPad M2 playtesting, final rigs and campaign integration remain pending. Do not commission every mission's assets before this packet proves the process.
 

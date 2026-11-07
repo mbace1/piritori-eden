@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13",
+  "updated_at": "2026-11-07",
   "purpose": "Design index and proposal ledger, not campaign runtime data or production approval",
   "content_sha256": "1e9d0f997f9ffd900b6f29c7319037861e48c190d22fe94ac3b8ad74f993963b",
   "authority": [
@@ -788,7 +788,7 @@
       "kind": "scheduled_encounter",
       "status": "authored_content; 3D staging proposed",
       "source": "content/era1-slice-v1.json#encounters/enc-courtyard-last-call",
-      "site_id": "jaska_studio",
+      "site_id": "torkkelinmaki_courtyard",
       "anchor_id": "torkkelinmaki",
       "schedule": {
         "day": 6,
@@ -842,7 +842,7 @@
         }
       ],
       "scene_asset_id": null,
-      "spatial_proposal": "Scene Club near Mäkelänsilta: entrance availability lamp, receipt city, envelope and family photo; intimate worktable framing. Courtyard event needs a separate site binding.",
+      "spatial_proposal": "Existing fictional Torkkelinmäki porttikongi for the receipt confrontation, with withdrawal lane and residential windows. Scene Club remains a separate site at Mäkelänsilta. This site alignment binds or approves no scene art.",
       "owner_visual_approval": "pending"
     },
     {
@@ -1435,12 +1435,6 @@
       "question": "Author Arvo’s enterable nearby venue while retaining his broadcast role."
     },
     {
-      "id": "D005",
-      "topic": "courtyard_site",
-      "status": "data_binding_conflict",
-      "question": "enc-courtyard-last-call reuses jaska_studio while its schedule/mission point to Torkkelinmäki. Give the courtyard an appropriate own site before physical door integration; do not move Scene Club."
-    },
-    {
       "id": "D007",
       "topic": "next_scene_family",
       "status": "asked",
@@ -1448,6 +1442,17 @@
     }
   ],
   "resolved_decisions": [
+    {
+      "id": "D005",
+      "topic": "courtyard_site",
+      "status": "resolved-source-alignment",
+      "resolved_at": "2026-11-07",
+      "original_conflict": "enc-courtyard-last-call reused jaska_studio despite its authored Torkkelinmäki schedule, mission and battle.",
+      "resolution": "The existing authored porttikongi has a neutral fictional anchor-only site, torkkelinmaki_courtyard, at torkkelinmaki. Scene Club remains jaska_studio at makelansilta; Jaska stays offscreen in the courtyard encounter.",
+      "scope": "Site identity only. Participants, choices/effects, mission/battle anchors, C.19 bridge, saves and source-art status are unchanged. This is not new content, a real address, art approval or physical-door acceptance.",
+      "source_content_sha256": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
+      "atlas_snapshot_note": "This scoped alignment does not regenerate other historical scenario records or the atlas's original content_sha256 snapshot."
+    },
     {
       "id": "D001",
       "topic": "art",

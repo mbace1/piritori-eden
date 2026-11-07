@@ -1,0 +1,16 @@
+MAP OK: 15 anchors, 14 sites, 25 edges, 11 active slice anchors.
+TRANSIT LAYER OK: 9 services match map/kallio-rail-v1.json.
+SLICE OK: 10 days, 20 blocks, 17 encounters, 4 missions, 2v2 + 3v3 + 3v3 + 3v3, 6 crew, 132 registered art ids and 188 runtime files.
+Courtyard site contract: 23 checks passed (source identity, old saves, unchanged peaceful/C.19 handoff).
+V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.
+V3 STATE OK: 20 blocks, deferred purchase, fixed choices and Pasila forecast pasila-deferred.
+V3 STATE growth-loop OK
+PASS chapter progress through sales and route deliveries
+PASS a board battle survives a reload
+PASS visits: prerequisites, location, battle/finale exclusion, reload, cancellation, one-time memories, unchanged rewards and clock, Jaska location alignment
+PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker
+places: 183 checks passed
+  a played opening: win (win) in 3 rounds · pressure 8 · they ran · police did not come
+C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I's two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.
+story: 63 checks passed
+chapter: 41 checks passed

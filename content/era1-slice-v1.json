@@ -1791,7 +1791,7 @@
       "id": "enc-courtyard-last-call",
       "day": 6,
       "block": "night",
-      "site_id": "jaska_studio",
+      "site_id": "torkkelinmaki_courtyard",
       "anchor_override_id": "torkkelinmaki",
       "participants": [
         "aatami-network-team",

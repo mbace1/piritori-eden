@@ -84,6 +84,9 @@ for (const slot of content.schedule) {
   if (slot.news_before) check(news.has(slot.news_before), `schedule ${key}: missing news ${slot.news_before}`);
   const encounter = content.encounters.find((item) => item.id === slot.encounter_id);
   check(encounter?.day === slot.day && encounter?.block === slot.block, `schedule ${key}: encounter timing mismatch`);
+  const site = map.sites.find((item) => item.id === encounter?.site_id);
+  check(site?.anchorId === slot.anchor_id, `schedule ${key}: encounter site anchor must match its story lead`);
+  if (encounter?.anchor_override_id) check(encounter.anchor_override_id === site?.anchorId, `schedule ${key}: anchor override must not mask a different physical site`);
 }
 for (let day = 1; day <= content.campaign.days; day += 1) {
   for (const block of ["day", "night"]) check(scheduleKeys.has(`${day}:${block}`), `schedule: missing ${day}:${block}`);

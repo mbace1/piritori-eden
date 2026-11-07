@@ -422,6 +422,16 @@
       "note": "An art and LAN commune just north of Kurvi, past the Makelansilta bridge - couches and mattresses, bare walls, a few TVs and tables wired for LAN. Jaska has a corner of it. Fictional composite, MAP.md 42."
     },
     {
+      "id": "torkkelinmaki_courtyard",
+      "anchorId": "torkkelinmaki",
+      "label": "Torkkelinmäki courtyard",
+      "kind": "narrative-encounter",
+      "fictional": true,
+      "addressPrecision": "anchor-only",
+      "sliceState": "mission-unlock",
+      "note": "Fictional residential courtyard and porttikongi for the already-authored Courtyard Receipts encounter. Representative Torkkelinmäki anchor only; no private address. Separate from Scene Club at Mäkelänsilta."
+    },
+    {
       "id": "mccormick_yard",
       "anchorId": "linjat_yard",
       "label": "McCormick yard",

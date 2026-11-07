@@ -1,0 +1,54 @@
+aatami: 23 checks passed
+PASS: 2/6/12 people × 3 loadouts, unique slots/labels, separate campaign rules, deterministic replay, terminal outcomes, zero campaign effects
+{"result":"PASS","policeAtRound":9,"policeCount":2,"checks":["natural heat escalation","pending posture blocks ordinary actions","both authored postures","checkpoint replay","one aftermath settlement","autoplay reaches outcome"],"autoResult":"withdraw","autoRound":9}
+PASS: authored encounter choices/effects, free inspection, one commitment/settlement, return memory, tamper rejection, canonical battle/cover and replay
+C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
+C.19 build identity contract passed
+C.19 build identity contract passed
+C18 renderer and UI ownership contract passed
+C19 arena title/header/help agree; unchanged C11 resolver is labelled separately
+  a played opening: win (win) in 3 rounds · pressure 8 · they ran · police did not come
+C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I's two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.
+C19 policy report: fixture, grouping, comparison, duplicate rejection passed
+C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+PASS: canonical links, scene-only roles, timeline, outcome concealment, no mutation, reload, unknown chapter and HTML escaping
+chapter: 41 checks passed
+Courtyard site contract: 23 checks passed (source identity, old saves, unchanged peaceful/C.19 handoff).
+C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/rest, exact-once settlement, arrivals, C16 checkpoint migration and roster fallback passed.
+C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
+C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+PASS: four wall orientations, both sides, flanks, corner rule, detours, plan invalidation, melee, resolved wall/miss impacts and replay
+doors: 745 checks passed
+Baked motion transitions, gait phase, clamped down, grip hold and legacy fallback: PASS
+PASS: checkpoint preserves commands/items/results, rejects tampering; touch pixel and frame budgets
+PASS: mirrored fixture, action/item guards, move occupancy, cover, legal enemy fallback, training results and deterministic replay
+PASS: anchor covers the rank behind them
+FIGHTER ASSETS OK: F01/F02 v02 bodies and own-rig clip packs match the durable Art contract.
+FIGHTER TEST CONTRACT OK: two provisional bodies, own-rig clips, independent touch controls.
+frame clock: 30/60 FPS at 60/90/120/144 Hz, stalls, resume and quality changes pass
+presentation clock: real action durations at 1–60 FPS; hidden and orientation time excluded
+level-layout: 1797 checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (courtyard, street, yard, quay)
+places: 183 checks passed
+road: 360 checks passed
+PASS: unreviewed environment prototypes cannot silently become approved or production-ready
+PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker
+standing: 74 checks passed
+story: 63 checks passed
+PASS: action order, independent budgets, reload, pure previews, obstacle routes, LOS corners, partial cover, fixed intent, forecast/resolution, combined threats, remaining-budget Auto and replay
+toko: 25 checks passed
+V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, desync, attack reach, entry forecast, cover decision copy.
+V3 BATTLE growth hooks OK
+V3 BATTLE mid-fight save round trip OK
+V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.
+V3 NAMEPLATES OK: 2v2 stack, 3v3 lane, already-clear, and bottom clamp.
+V3 STATE OK: 20 blocks, deferred purchase, fixed choices and Pasila forecast pasila-deferred.
+V3 STATE growth-loop OK
+PASS chapter progress through sales and route deliveries
+PASS a board battle survives a reload
+PASS visits: prerequisites, location, battle/finale exclusion, reload, cancellation, one-time memories, unchanged rewards and clock, Jaska location alignment
