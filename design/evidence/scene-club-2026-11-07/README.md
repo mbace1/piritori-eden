@@ -41,3 +41,11 @@ Before/after phone (390×844), after desktop (1280×800), and a real-time WebM o
 Dialogue now declares a modal, cycles Tab/Shift+Tab through its enabled choices, keeps focus in the dialog during Aatami's response, updates the accessible speaker label, and restores the previous control when it still exists. Scene Club regression checks the keyboard cycle at all three viewports.
 
 Local results: 35/35 bare-node suites pass after updating the cache-token assertion; Scene Club browser passes phone, desktop and landscape, and Aatami browser passes 16/16. The first CI run on `72524a7` failed its old `app.js?v=63` assertion after the intended cache bump to 64; that assertion is corrected in the follow-up. Other CI/browser results must be checked on the final head before claiming full acceptance.
+
+## Bot-policy experiment (no rule change)
+
+`CAREFUL_DODGE_FIRST=1` skips the careful policy's early in-range attack, so it evaluates safe movement first. It is opt-in; default decisions stay identical. The tool now reports average successful player `braces`, `moves` and `attacks` per simulation. Enemy actions are not included in those counters.
+
+At 12 seeds, the opt-in fight-job careful advantage is +0.76 points (default +3.76); HP saved is 0.59 (default 0.01), and rounds relative to aggressive are +0.12 (default −0.06). This is a tradeoff, not a balance fix. Default and opt-in bots both report zero Braces in these samples. No gameplay policy or rule is promoted from this experiment.
+
+Verification: all 147 default rows exactly match `baseline-12.json` after removing the three additive action metrics; all 147 instrumented opt-in rows likewise match the original experiment. The report JSON compares the default and opt-in samples. Both use the same twelve deterministic seeds, heats and scenarios. The 30-seed file remains a baseline only; the opt-in result is exploratory.
