@@ -140,6 +140,7 @@ jobs:
         run: |
           node web/test/v3-contract.mjs
           node web/test/v3-state.mjs
+          node web/test/treatment.mjs
           node web/test/road.mjs
           node web/test/toko.mjs
           node web/test/story.mjs
@@ -173,6 +174,7 @@ jobs:
           node web/test/act1-scenes.cjs
           node web/test/scene-club-browser.cjs
           node web/test/bank-browser.cjs
+          node web/test/treatment-browser.cjs
       - name: Act I review tools stay source-backed and isolated from campaign saves
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

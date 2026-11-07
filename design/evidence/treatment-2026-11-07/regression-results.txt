@@ -1,0 +1,11 @@
+node web/test/v3-contract.mjs
+V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.
+
+node web/test/v3-state.mjs
+V3 STATE OK: 20 blocks, deferred purchase, fixed choices and Pasila forecast pasila-deferred.
+V3 STATE growth-loop OK
+PASS chapter progress through sales and route deliveries
+PASS a board battle survives a reload
+
+node web/test/scene-content.mjs
+PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker

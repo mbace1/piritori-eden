@@ -1,3 +1,4 @@
+import { isTreatmentChoice, previewTreatment, treatmentChange } from './treatment.js?v=1';
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=8';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
@@ -1027,7 +1028,7 @@ function renderEncounter() {
   const pendingBattle = state.battle?.status === 'active';
   if (state.mode === 'encounter' && !pendingBattle && !presentAtLead()) return renderAwayFromLead(slot);
   return `
-    <div class="encounter-layout${encounter.id === 'enc-bank-counter' ? ' bank-counter' : ''}">
+    <div class="encounter-layout${encounter.id === 'enc-bank-counter' ? ' bank-counter' : encounter.id === 'enc-pasila-ledger' ? ' bank-ledger' : ''}">
       <section class="paper-panel scene-card">
         <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
@@ -1107,10 +1108,12 @@ function renderChoices(encounter) {
   return `<div class="choice-list">${encounter.choices.map(choice => {
     const status = choiceStatus(choice, state, data);
     const quote = status.ok ? conversionQuote(choice) : '';
+    const treatment = status.ok ? previewTreatment(state, choice, data) : null;
     // The UI diet: a choice you cannot take yet is one line, its label and why, so it does not push the open ones off the screen.
     return `<button class="choice-card${status.ok ? '' : ' locked'}" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
       <strong>${esc(choice.label)}</strong>
       ${quote ? `<span class="conversion-quote">${esc(quote)}</span>` : ''}
+      ${treatment ? `<span class="treatment-quote">${esc(`${money(treatment.cost)} · ${treatment.name} · critical → ${treatment.status}`)}</span>` : ''}
       ${status.ok ? `<span>${esc(choice.forecast)}</span>` : ''}
       ${choice.escalates ? `<small class="road-time">CAN GO BAD · ${Math.round(choice.escalates * 100)}%</small>` : ''}
       ${status.ok ? '' : `<em>${esc(status.reasons.map(readableReason).join(' · '))}</em>`}
@@ -2345,7 +2348,12 @@ function handleRootClick(event) {
     const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
     const outingBefore = state.outing?.id ?? null;
+    const beforeTreatment = isTreatmentChoice(choice) ? structuredClone(state) : null;
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
+    if (result.ok && beforeTreatment) {
+      const treated = treatmentChange(beforeTreatment, state, data);
+      if (treated) state.lastOutcome = [...(state.lastOutcome ?? []), `${treated.name} treated for ${money(treated.cost)}. Critical risk cleared; still ${treated.status}.`];
+    }
     if (!result.ok) logToast(result.reason);
     else if (result.startBattle && encounter.door) {
       // A door fight has no mission behind it: its stakes are the door's own,

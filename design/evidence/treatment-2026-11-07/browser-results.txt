@@ -1,0 +1,4 @@
+PASS treatment phone: actual target order, immutable quote, named receipt, one person/€80, reload once and map return
+PASS treatment phone: exact affordability, minimum condition floor, still wounded, poor/no-critical blockers, no browser errors
+PASS treatment desktop: actual target order, immutable quote, named receipt, one person/€80, reload once and map return
+PASS treatment desktop: exact affordability, minimum condition floor, still wounded, poor/no-critical blockers, no browser errors

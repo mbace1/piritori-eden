@@ -1,0 +1,1 @@
+Treatment presentation: 57 checks passed; exact engine selection/cost/blockers, unchanged previews, remaining wounds, generated names and reload-once guard.
