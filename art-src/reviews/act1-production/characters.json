@@ -1,0 +1,2589 @@
+{
+  "schema": 1,
+  "purpose": "Source-backed production planning for current authored Act I cast; review only, no new identity assignment, art generation or approval promotion.",
+  "reviewOnly": true,
+  "runtimePromotion": false,
+  "completionPercent": 48,
+  "source": {
+    "baseCommit": "933c83e350f6f9127ffbdd06258138719ac964d1",
+    "sha256": {
+      "ART_BIBLE.md": "f07f64ec671f63003cef5b3ae3aae1347ef80907c190e93218f7a8c670e3ec46",
+      "DESIGN_AUTHORITY.md": "95c774f701456dc8b05e1ca6bd389161a632626400a0ed8fa4bc83893dcf6bd5",
+      "GAME_DESIGN_DOCUMENT.md": "1f46a3c8ed63407cdd24fd69c2a4b00d02f5b4ff70ffdbe4d8ccac225f0abbd3",
+      "NARRATIVE.md": "b78b38c703bbc7c88990d5c7221e139f5aa165f4f5ad853456ed0fd5a3fc69a0",
+      "ROADMAP.md": "2280c587d5900aaed2d7819ba2145c070de38e2e54795d2c71cb3c9e7d3fb5f9",
+      "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
+      "art-library/animation/characters/era1/runner-personality-sheet-v03.png": "5d086ab61cd300bf0e4bceafa02c2b030183c46b4af05b2aee329fecc49a1cae",
+      "art-library/animation/manifest.json": "2cfd46bde4cf374fb7cd4086f3f487f9658248d710dd2eb7104cf9b7e19d237a",
+      "art-library/cast3d/hooded-camera-woman-v02_thumb.png": "a0309d3ad215924c7650622ede516e86820f7b29131a6b6f72d6991720caf5c7",
+      "art-library/characters/manifest.json": "f244f108eaf6e6c5c206a8def43e2a272d25299ded774ce43b98bad607b699a1",
+      "art-library/characters/modules/era1/head-kallio-01-v03.png": "b4a30a9e885529d709e8926e8e49617e810c77f2657bce8fd05d1757c84fa590",
+      "art-library/characters/modules/era1/head-kallio-03-v03.png": "d113c74754902d63c2f80e046dff5d2a824b2c70dfb7aea2e8d466452743bb56",
+      "art-library/characters/modules/era1/head-kallio-05-v03.png": "4b75d2ce42c40464a7fb64408ec403a0f390c455158086497768e5f9e557d78f",
+      "art-library/characters/modules/era1/head-kallio-07-v03.png": "68b21bfdfc9de4ea96826c1bed42722daec5667c4a4cb95ea3bca7d0b17b7ba4",
+      "art-library/characters/modules/era1/head-kallio-09-v03.png": "5001f31acb1307f27f3adbbc70218e645056783c2f33fc4d8435ba029603b73d",
+      "art-library/characters/modules/era1/head-kallio-11-v03.png": "d4f28aeea18ffa0ee894b9120d3da6ecc04e64895ba730aa92ded736727dc98a",
+      "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png": "9a3b302f460232b329e48c667aaca26b5883c24270ab6eeffbfaeb47096068a6",
+      "art-library/characters/modules/era1/head-personality-sheet-v03.png": "04688dc9ba3b48248a397cf049562f737a06068c2075802716e28c5cb9444cd3",
+      "art-library/characters/modules/era1/legs-driver-medium-handink-v03.png": "07a6abf5d0ac92e8cda73c0b35c0d54299466bfe860be00bd028b933b4f9e862",
+      "art-library/characters/modules/era1/legs-fixer-medium-handink-v03.png": "ff562bc8e6fcf18dd52dd0b45bc4230f8671555616ad4fa7441e6b858ba526e1",
+      "art-library/characters/modules/era1/legs-local-medium-handink-v03.png": "aacb910fc721cb9cd5489f74233df5645778c23834c24578037fc4893c123c5f",
+      "art-library/characters/modules/era1/legs-muscle-medium-handink-v03.png": "c98dcf1c4251a67019868389594e2c3cf3d8381d926f37ee8c5de2143b81d9c8",
+      "art-library/characters/modules/era1/legs-runner-medium-handink-v03.png": "9d9015a3e5b4969746775d7b6635bd1f7d983c7dcff5acc29283c5a95ab374e6",
+      "art-library/characters/modules/era1/legs-watcher-medium-handink-v03.png": "b61543f762b888559ee7c7393afce6d3d56dda0fb91f743b1ebc02e10e04dbe6",
+      "art-library/characters/modules/era1/torso-driver-medium-handink-v03.png": "af6d8ac9c082caa89525fc4766f3edd42cc902df61535ee7d6f3f3421540f581",
+      "art-library/characters/modules/era1/torso-fixer-medium-handink-v03.png": "db9aa8c4d7082ba6acdce84d215b804f8eb029a975420c35a61dfc23dc7eb9c7",
+      "art-library/characters/modules/era1/torso-local-medium-handink-v03.png": "b9933a770cde1d847a2e52fb42271daefbb39e1a0b3e39b680f4b16256252191",
+      "art-library/characters/modules/era1/torso-muscle-medium-handink-v03.png": "556f17d71cbce8b6c9662cc9b3b2106fb838d9a0f20a25ca633d03034c308ee8",
+      "art-library/characters/modules/era1/torso-runner-medium-handink-v03.png": "144772a2cd9d87ab8feb6571e223697c8f28bef2c9ae50a09c31804a6fe0d343",
+      "art-library/characters/modules/era1/torso-watcher-medium-handink-v03.png": "033627a9681cfbf50e7b9754bb224dc322b642710d87ff31af2cdf53cb1d8402",
+      "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png": "438bf80f4290f30591daa75d4acbe9263c79f5a2718f8e975c1fbc24e4c83980",
+      "art-library/manifest.json": "1ba820d90471407228db9162ec34498892d0cbb5c73208cf3c1dad271cf25327",
+      "art-library/presenter/arvo-linde-concept-v05.png": "e061b09219e0dd00f835f20abe71194c6c8c55ad01c62e2ae6215d3b31b138de",
+      "art-library/rigs/toko-slomo-paper-v01/README.md": "086bca772b99108500f10f17d356f1d66823ccb66fc288a6ca30f2a6b009d31c",
+      "art-library/screens/instances/era1/toko-slomo-noodles-v02.png": "afb3b0898a4ca83bcb0c7e7f4066ab232d898392e93b6f722171c277c59ea4be",
+      "art-src/concepts/people/aatami-young-final-v01.png": "137114b5b4e33374bafcd49cc85f7d80627f5e899ea2662ee57397a7197d1521",
+      "art-src/concepts/people/aatami-young-support-06.png": "0ffbbe937e06e6a838a53da1bcbea4e3058c063664546ac76f90be6c9980aac7",
+      "art-src/concepts/people/arvo-look-a-navy-v01.png": "21b613a3eaa3fbfd34c3d877395cd0226aa92c72a7170af69637e73f979e037c",
+      "art-src/concepts/people/arvo-look-b-tweed-v01.png": "866f8e2737e4fd73ea0d169216326ef427492e41f8dd10207d0a120e8c2ddf7d",
+      "art-src/concepts/people/arvo-look-c-sombre-v01.png": "93068d096c2cb4d74cf828b26ccfafef4be6fcc66d3cda5aa1c1686925dbb7f4",
+      "art-src/concepts/people/arvo-look-d-shirtsleeves-v01.png": "2c0d6e4347f01403d6103337f4c1bb073ab2c752c252854922ccb9e34cb5504c",
+      "art-src/concepts/people/hooded-camera-woman-v01.png": "226400dc64f2b4a09da38559a862b373c9d7fa588ac850a039b0bb0a056fccfc",
+      "art-src/concepts/people/hooded-camera-woman-v02.png": "a5059dee8d1a6d7ad863eda0c4d0dd6af363ff9e71603fe312fc90253d560935",
+      "art-src/concepts/people/hooded-camera-woman-v03.png": "13ef1eb22e46dd39da0193d03db45bf89de1f3ad6ce1ebe64c206816c8445731",
+      "art-src/concepts/people/jaska-concept-v03.jpg": "646325179e6f5cf8c02db26adc44a9da5925277e9e6b3a1660139d42b5806a6c",
+      "art-src/cutins/aatami-front/rig.src.json": "a6be4051fc8b61708905e9600c8f1acb05e1a8f25f87f021990f9ecb05f395e9",
+      "art-src/cutins/aatami/rig.src.json": "8987be376479a870775dff6fe5434926d3fe6f834101c6d275d08c10f6d5caf0",
+      "art-src/cutins/arvo/rig.src.json": "ff447a7b04a2777e7173796d8dde8bfe900b8351178b8184c8f95733de389a2d",
+      "art-src/cutins/jaska/rig.src.json": "4bcfc6bc73532662489721f164c97a0a44ce6d2ec853c6e67bb1e8091908e4e5",
+      "art-src/reviews/scene-club-2026-11-07/README.md": "ef330d9dd823b615f11eed7c9c352fb10b1f4ae2e560a3cce4a80318b9e9720d",
+      "art-src/reviews/scene-club-2026-11-07/VISUAL_BACKLOG.md": "0ab83774ab0a61f98425ad508f65b94a19e2b5c6b3d36bdcd25d7d9cb157b26e",
+      "art-src/reviews/scene-club-2026-11-07/blink-repair-verification.json": "89928f8c04589f3399ffeb736ef05c94848c7e6df84734d06e8b58ba0dc48f1e",
+      "art-src/reviews/scene-club-2026-11-07/blink-repair.js": "41fade0866b582ca47712d0c320d9b55ef93f64e52ea2ad619bfacaa57e12a25",
+      "art/v3/characters/heads/head-kallio-01-v03.webp": "a77c2436ea41ff9b60cd95c933481acffc7dadc35cb79aa9216766f5e0f7458f",
+      "art/v3/characters/heads/head-kallio-03-v03.webp": "c2214f7575f9ce5aaf3e73f5c2558efd6245df174e82f07bc018dff1955fe28d",
+      "art/v3/characters/heads/head-kallio-05-v03.webp": "8869f9f199764d137e5e51821d5db3ba3472c3a06dbf2766083a1f50b8e4a2ea",
+      "art/v3/characters/heads/head-kallio-07-v03.webp": "59d7680b61cdf5b6ab3c5ceea48c8b242340299f97bea7f3abdfd3d079160a0d",
+      "art/v3/characters/heads/head-kallio-09-v03.webp": "2bbfcd34ee6ce74751efc6ac444062eed0abca5c1ee620d5a0016583a029f4df",
+      "art/v3/characters/heads/head-kallio-11-v03.webp": "9635adbb72fb86a07fff88f2c1e7bbfa7362d3ebe6d982dbce775f3ca969dcbd",
+      "art/v3/characters/legs/legs-driver-v03.webp": "532a0df2eb7c2ceec01a9c339b4d4a457afa3e2d6c3823c2b11d6094d36335a3",
+      "art/v3/characters/legs/legs-fixer-v03.webp": "1826dca2e4e771b4239c7d5aa55b1a8a3629758fbcdb6e88f0cc2f9f877aa639",
+      "art/v3/characters/legs/legs-local-v03.webp": "ebff1abeb0294b93ed36aa6ab091ff4b27bfce0abb40593a94a9038387cf223e",
+      "art/v3/characters/legs/legs-muscle-v03.webp": "2058c6be7e006cdc55343eea1852612e56c3b895d0a563f3f0e6f649f684ca53",
+      "art/v3/characters/legs/legs-runner-v03.webp": "0931c64d7c9bbc9a9410f6bb7c27c030272ee77ce94fb3115dbaaeb3fe596e10",
+      "art/v3/characters/legs/legs-watcher-v03.webp": "19b4595648668f19f4ca007bd7b7991f42b71fc8c9b7a22dad206e0668076b42",
+      "art/v3/characters/torsos/torso-driver-v03.webp": "99215557c2045d5fcaf55efcf1d29e915d6d77f864e56e0756b388279c730170",
+      "art/v3/characters/torsos/torso-fixer-v03.webp": "a6b92d8ef125e45defc023a42708c8825f4b0af624a09b3e1d2d53211eea0b8e",
+      "art/v3/characters/torsos/torso-local-v03.webp": "76f2e7a4b835c38eb4f77ccf4b0c457f1cd08e9d172624cbf657d66c320aadf2",
+      "art/v3/characters/torsos/torso-muscle-v03.webp": "19e423c84fcc7433ddee3397f0e201f07f918b625bd12c950f3d2748d3c8fbca",
+      "art/v3/characters/torsos/torso-runner-v03.webp": "0897f6a92a3d996ac69197cc99949cf61eac2977775faa11f1d4d5aa77bd0667",
+      "art/v3/characters/torsos/torso-watcher-v03.webp": "59aa3b1286646dc97b166a72278df5d1a9d760879961881c18018b4318c53fa3",
+      "art/v3/cutins/aatami-front-v01/head.webp": "253068ce0141ef40e1a9c937c7eae44516bf1386f7ee15635179fdd3a3a1f404",
+      "art/v3/cutins/aatami-front-v01/lid_0.webp": "d9899894d3ccca426b3ea93e1e0292a9def4385cb66b0148f3b4c0b52f473b75",
+      "art/v3/cutins/aatami-front-v01/lid_1.webp": "5130ae5888295d0bf10a10b724339d1e5526e60e92309a9ef4660e15a9218109",
+      "art/v3/cutins/aatami-front-v01/torso.webp": "e4b915f0939d4dec9052214dcbc48da7582bf6ce28d8299ffa20adbc61f09ef0",
+      "art/v3/cutins/aatami-v01/head.webp": "1eb4a49b016528132c4409ce56fdd05af6709ece4090e596edc18098ba1e374a",
+      "art/v3/cutins/aatami-v01/lid_0.webp": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78",
+      "art/v3/cutins/aatami-v01/torso.webp": "706042e3a0bf181fbeeb7e3b9306023b5f6b865efa1d05c3d102cac29e9fa023",
+      "art/v3/cutins/arvo-v01/hands.webp": "f77367b5d300ef16281cc952196761fb18fd6734d5213640ffb8566eae711f6a",
+      "art/v3/cutins/arvo-v01/head.webp": "8f0cceaf34820141c6a049a81d5d6503d031805b1af078ae9a0774c6db262511",
+      "art/v3/cutins/arvo-v01/jaw.webp": "aaeccea3cac838184460ffbe9a1dea2789d43627b3683bf49981f765aacaab3d",
+      "art/v3/cutins/arvo-v01/lid_0.webp": "39bb62d716f31721b8ed09cdef08841b8bc895f65fd940bf8f7d5c35c8d99bd7",
+      "art/v3/cutins/arvo-v01/lid_1.webp": "3a30e7e2146d6182cf86fd07b57e0d272c4b049063167df87817bf0955f791b0",
+      "art/v3/cutins/arvo-v01/torso.webp": "4d350c5fe895b6197a1ebff19ec4b6b1a0d89f183e9db97387d09ac75e9dc964",
+      "art/v3/cutins/jaska-v01/head.webp": "22b3bd4571aceea751fbf3af628fedadc5ab60b1b8c54b8b54b69ad1ad5513f5",
+      "art/v3/cutins/jaska-v01/lid_0.webp": "263c1121aa292a1a3e4460b88eef0377fd0e309c4bea704d64f39d1a5e6c4279",
+      "art/v3/cutins/jaska-v01/lid_1.webp": "a1720c1feb4400c24e4a96cbc7f3e7578bf024c83bd536a5444fede1851d8d10",
+      "art/v3/cutins/jaska-v01/torso.webp": "add940a51bb3f746c394f02427774696874aa50472bea8efbd943656d32e3176",
+      "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
+      "art/v3/presenter/arvo-linde-v05.glb": "3a5172c7c980a0461873bacd9cbad793b1243afd89dbe0f85d09694e9b88875e",
+      "art/v3/scenes/toko-rig-v01/brow_l.webp": "ce8716f2388d9a4de7b779c4a1cd18fa09adfc759f2c3082e77c763d25f410a6",
+      "art/v3/scenes/toko-rig-v01/brow_r.webp": "6c1320554b4b959b47ebc3f97bb5b041bae1f3f63ef8728ae1353190ebcb9bed",
+      "art/v3/scenes/toko-rig-v01/counter.webp": "5413a4e2f5654251b4e9243cc20293bc56fb6a64875094037493ccb374688059",
+      "art/v3/scenes/toko-rig-v01/eye_l.webp": "a0121a07542871ac005a8fdb5d78ce9556b51ddc8fd28196035e97651bfc72ad",
+      "art/v3/scenes/toko-rig-v01/eye_r.webp": "a0a67d85d3474288fc0a25e437374d2c93538f24408cdde8514d4b772b078e1b",
+      "art/v3/scenes/toko-rig-v01/fore_r.webp": "ebca48cc77154b9ca2d420c942d7f183e9aba4f5cd0e5e7b802d5013295e2d7e",
+      "art/v3/scenes/toko-rig-v01/hand_l.webp": "3335091cfdd7961ba6eb93d085d9e2453469604a2d97cbafcdf4a38c22851f01",
+      "art/v3/scenes/toko-rig-v01/head.webp": "d10dfeb2a9e35d7bfc2dfaf1a3c6050043386b400b6b98d5966cc0ecfebbdbcf",
+      "art/v3/scenes/toko-rig-v01/hood_bare.webp": "67644070d62ee7d6fa1f280188f0dd1de754c130946564dc1f805ca8321f9d6b",
+      "art/v3/scenes/toko-rig-v01/note.webp": "7c146853f6cdcc7457dc3cc90876253ec0d2bc70b06daafde211ec145a2d818f",
+      "art/v3/scenes/toko-rig-v01/torso.webp": "27f3da70fae978153a209cf10ade8a834c7798d349fbf4fb9e4f2d1a079ba5ba",
+      "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
+      "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+      "content/families-v1.json": "e82a7084e8e02060e555f8f54cf40cd551b23c9e0caa5c59243151b887ace331",
+      "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
+      "design/C19_CAMPAIGN_FIGHTS.md": "01654a098767fa9e6062112c6c97270e3655c6866cc2576a3701c81e0aa5795f",
+      "design/SCENARIO_ATLAS.md": "6142c9b2b060d3000c8145bdf44f5f3c6c4052cec1e949a34ee43db25b8c38cd",
+      "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
+      "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+      "people/hiring.mjs": "45f7388605cb0efcea379033896bd4a8fca06fcdefeca0444c95350f2763f997",
+      "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
+      "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
+      "web/js/v3/cutin-stage.js": "7719b1f882fae5f113bfe77e9dc4d26e560bfc351a0224780bd3a01e872f83fa",
+      "web/js/v3/state.js": "faaaf7c59cf3ae020e783ef0bed20d96902aa8af60e71b0f11a893ae890f73d7",
+      "web/js/v3/toko-stage.js": "ef621f3553dc28727542a698c252dede8fd2a5e526061d2a3945cdd2d5f6f16a"
+    }
+  },
+  "counts": {
+    "authoredEncounters": 17,
+    "uniqueEncounterParticipants": 21,
+    "activePackets": 26,
+    "crewSlots": 6,
+    "deferredExisting": 1,
+    "byKind": {
+      "individual": 12,
+      "crew-slot": 6,
+      "group": 7,
+      "offscreen": 1
+    }
+  },
+  "coverage": {
+    "encounterIds": [
+      "enc-first-purchase",
+      "enc-first-sale",
+      "enc-jaska-receipt",
+      "enc-runner-at-tram-stop",
+      "enc-bank-counter",
+      "enc-toko-quiet-voice",
+      "enc-karhupuisto-watch",
+      "enc-mccormick-yard",
+      "enc-bear-path",
+      "enc-first-firearm",
+      "enc-jade-window",
+      "enc-courtyard-last-call",
+      "enc-pasila-ledger",
+      "enc-jaska-last-light",
+      "enc-kello-reckoning",
+      "enc-family-calls",
+      "enc-shipment-night"
+    ],
+    "participantIds": [
+      "aatami",
+      "aatami-network-team",
+      "bank-clerk",
+      "buyer-leena",
+      "courtyard-rival-team",
+      "crew-slot-muscle",
+      "crew-slot-runner",
+      "crew-slot-watcher",
+      "dog-owner",
+      "jaska",
+      "jaska-offscreen",
+      "kello",
+      "lunch-crowd",
+      "mccormick-brothers",
+      "mei-lan",
+      "optional-surviving-crew",
+      "piritori-rival-team",
+      "sean-mccormick",
+      "seller-esa",
+      "teller-anne",
+      "toko"
+    ],
+    "sourceSelectionOrder": [
+      "seller-esa",
+      "buyer-leena",
+      "crew-slot-runner",
+      "teller-anne",
+      "bank-clerk",
+      "sean-mccormick",
+      "mei-lan",
+      "kello"
+    ],
+    "note": "Priorities combine the listed source-selection queue with actual chronology. Dates come from schedule, not encounter array order. Supplementary packets cover existing news/crew systems without adding authored participants."
+  },
+  "characters": [
+    {
+      "id": "aatami",
+      "name": "Aatami",
+      "kind": "individual",
+      "priority": 1,
+      "status": "rig-review-candidate",
+      "summary": "Existing young front and side sources and rigs are present. Both rigs remain semi-approved; the current blink/arrival repair study assesses the front only, not the side.",
+      "encounters": [
+        "enc-first-purchase",
+        "enc-first-sale",
+        "enc-jaska-receipt",
+        "enc-runner-at-tram-stop",
+        "enc-bank-counter",
+        "enc-toko-quiet-voice",
+        "enc-karhupuisto-watch",
+        "enc-mccormick-yard",
+        "enc-first-firearm",
+        "enc-jade-window",
+        "enc-pasila-ledger",
+        "enc-jaska-last-light",
+        "enc-kello-reckoning",
+        "enc-family-calls",
+        "enc-shipment-night"
+      ],
+      "locations": [
+        "piritori",
+        "piritori_first_buy",
+        "siltasaari",
+        "staffed_bank",
+        "makelansilta",
+        "jaska_studio",
+        "harju",
+        "harju_pitch",
+        "vaasankatu",
+        "toko_slomo_noodles",
+        "karhupuisto",
+        "karhupuisto_bench",
+        "linjat_yard",
+        "mccormick_yard",
+        "hakaniemi",
+        "jade_lantern_front",
+        "sornainen_harbour",
+        "sornainen_quay"
+      ],
+      "existingRigIds": [
+        "cutin-aatami-front-rig-v01",
+        "cutin-aatami-rig-v01"
+      ],
+      "assets": [
+        {
+          "id": "cutin-aatami-front-v01-torso",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-front-v01/torso.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-front-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-front-v01-head",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-front-v01/head.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-front-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-0",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-front-v01/lid_0.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-front-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-front-v01-lid-1",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-front-v01/lid_1.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-front-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-v01-torso",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-v01/torso.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-v01-head",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-v01/head.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-rig-v01"
+        },
+        {
+          "id": "cutin-aatami-v01-lid-0",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/aatami-v01/lid_0.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-aatami-rig-v01"
+        }
+      ],
+      "sourceCandidates": [
+        "art-src/concepts/people/aatami-young-support-06.png",
+        "art-src/concepts/people/aatami-young-final-v01.png",
+        "art-src/cutins/aatami-front/rig.src.json",
+        "art-src/cutins/aatami/rig.src.json",
+        "art-src/reviews/scene-club-2026-11-07/blink-repair.js"
+      ],
+      "animationNeeds": [
+        "Shared idle/breath, blink, talk/head beats, nod and shake with the selected young identity.",
+        "Front: bounded eye-mask repair, waist-up arrival cue and map-return staging are review-only candidates.",
+        "Side: inspect its original eyelid, neck seam and proportions before proposing two-speaker motion; this study has not assessed it."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Review the existing front loop and paired before/after blink frames; do not regenerate the selected head.",
+          "Approve or revise the bounded front repair separately from source selection, then frame the current authored responses and clear first-screen choices.",
+          "Audit the side rig in a separate labelled composition only when both speakers appear at opposite sides; retain the original until reviewed."
+        ],
+        "acceptance": [
+          "The front source remains study 06 looking near the camera; the side source remains the selected young final.",
+          "Front and side must still read as the same young Aatami. A passing front study does not certify the side.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Keep both Aatami rig approval values semi-approved. The review repair does not update art/v3/manifest.json.",
+          "Aatami fights all Chapter 1 through C.19. Do not turn the dialogue cut-in into a battle replacement.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Use the existing front rig for one-at-a-time review dialogue; side stays explicitly unassessed.",
+        "Older Aatami and the later-generation cast are outside this current authored Act I packet set."
+      ],
+      "sources": [
+        "art-src/reviews/scene-club-2026-11-07/README.md",
+        "NARRATIVE.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-first-purchase",
+          "day": 1,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-first-sale",
+          "day": 1,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-jaska-receipt",
+          "day": 2,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-runner-at-tram-stop",
+          "day": 2,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-bank-counter",
+          "day": 3,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-toko-quiet-voice",
+          "day": 3,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-karhupuisto-watch",
+          "day": 4,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-mccormick-yard",
+          "day": 4,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-first-firearm",
+          "day": 5,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-jade-window",
+          "day": 6,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-pasila-ledger",
+          "day": 7,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-jaska-last-light",
+          "day": 7,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-kello-reckoning",
+          "day": 8,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-family-calls",
+          "day": 9,
+          "block": "night"
+        },
+        {
+          "encounter": "enc-shipment-night",
+          "day": 10,
+          "block": "night"
+        }
+      ],
+      "rigAssessment": {
+        "front": "review-only blink/arrival candidate; owner approval pending",
+        "side": "existing semi-approved rig; unassessed by front repair study"
+      }
+    },
+    {
+      "id": "jaska",
+      "name": "Jaska",
+      "kind": "individual",
+      "priority": 2,
+      "status": "approved-rig-repair-candidate",
+      "summary": "Approved recurring Scene Club cut-in from the existing v03 source. The new blink-mask repair and entrance/return staging remain separate candidates.",
+      "encounters": [
+        "enc-jaska-receipt",
+        "enc-jaska-last-light"
+      ],
+      "locations": [
+        "makelansilta",
+        "jaska_studio"
+      ],
+      "existingRigIds": [
+        "cutin-jaska-rig-v01"
+      ],
+      "assets": [
+        {
+          "id": "cutin-jaska-v01-torso",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/torso.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-head",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/head.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-0",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/lid_0.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-1",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/lid_1.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        }
+      ],
+      "sourceCandidates": [
+        "art-src/concepts/people/jaska-concept-v03.jpg",
+        "art-src/cutins/jaska/rig.src.json",
+        "art-src/reviews/scene-club-2026-11-07/blink-repair.js"
+      ],
+      "animationNeeds": [
+        "Shared idle/blink, talk/head beats, nod/shake and a quiet listening hold.",
+        "The bounded blink repair must preserve glasses, face silhouette and rest pixels."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Review the existing approved cut-in beside the recorded rectangular-lid defect and bounded repair.",
+          "Keep the source and runtime rig immutable while the repair remains in the review tool.",
+          "Reuse the current two Scene Club encounters and optional return visit; vary delivery without inventing a new lecture or mission."
+        ],
+        "acceptance": [
+          "Closed lids stay within the eyes and behind the existing glasses; no rectangular skin tab beyond the face.",
+          "The empty courtyard mission is not re-staged as visible Jaska merely because a stale site id names his studio.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Jaska is Aatami's artist brother and moral counterweight, not just a tutorial or judgement machine.",
+          "Jaska source/rig approval stays approved; new repair/staging approval is still pending. Current Scene Club anchor is makelansilta.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Use the approved cut-in when Jaska is an on-screen authored participant. Keep jaska-offscreen as a separate offscreen staging label."
+      ],
+      "sources": [
+        "NARRATIVE.md",
+        "art-src/reviews/scene-club-2026-11-07/README.md",
+        "design/SCENARIO_ATLAS.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-jaska-receipt",
+          "day": 2,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-jaska-last-light",
+          "day": 7,
+          "block": "night"
+        }
+      ]
+    },
+    {
+      "id": "toko",
+      "name": "Toko Slomo",
+      "kind": "individual",
+      "priority": 3,
+      "status": "approved-paper-rig-reference",
+      "summary": "The approved eleven-piece counter rig and source painting already exist. Its approved status is not a blanket approval for new repairs, costumes or staging.",
+      "encounters": [
+        "enc-toko-quiet-voice"
+      ],
+      "locations": [
+        "vaasankatu",
+        "toko_slomo_noodles"
+      ],
+      "existingRigIds": [
+        "scene-toko-rig-v01"
+      ],
+      "assets": [
+        {
+          "id": "toko-rig-v01-torso",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/torso.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-head",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/head.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-hood-bare",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-brow-l",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/brow_l.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-brow-r",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/brow_r.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-eye-l",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/eye_l.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-eye-r",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/eye_r.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-counter",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/counter.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-fore-r",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/fore_r.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-note",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/note.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        },
+        {
+          "id": "toko-rig-v01-hand-l",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/scenes/toko-rig-v01/hand_l.webp",
+          "kind": "scene-rig",
+          "registeredGroupId": "scene-toko-rig-v01"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/screens/instances/era1/toko-slomo-noodles-v02.png",
+        "art-library/rigs/toko-slomo-paper-v01/README.md"
+      ],
+      "animationNeeds": [
+        "Existing idle, lean, buy/info, sabotage and leave clips, with brows/eyelids/hands acting around the fixed mask.",
+        "Counter steam/rain remain environment accents; reduced motion uses the registered rest frame."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Start from the approved counter loop and source provenance, then audit framing/choice clearance at the existing Vaasankatu shop.",
+          "Reuse current authored Three Vans and repeat-visit beats before producing another Toko design.",
+          "Propose any repair only from captured evidence and keep it separate from this source/rig approval."
+        ],
+        "acceptance": [
+          "Gold smiling mask shape and eye openings are preserved; do not turn the mask into an animated human mouth.",
+          "The waist/counter boundary matches the existing empty-bar plate; text and prices remain live controls.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Toko is an independent shop owner/contact on Vaasankatu, not a faction army or servant analogue.",
+          "The source/rig is approved. A new Toko repair has not been produced or approved by the Scene Club study.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "No replacement face, mask or chef model is needed for current listed work."
+      ],
+      "sources": [
+        "art-library/rigs/toko-slomo-paper-v01/README.md",
+        "NARRATIVE.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-toko-quiet-voice",
+          "day": 3,
+          "block": "night"
+        }
+      ]
+    },
+    {
+      "id": "seller-esa",
+      "name": "Esa · recurring street seller",
+      "kind": "individual",
+      "priority": 10,
+      "status": "source-selection-needed",
+      "summary": "The first seller and the later firearm seller share seller-esa. A dedicated source selection/waist-up rig is missing; shared modular art exists.",
+      "encounters": [
+        "enc-first-purchase",
+        "enc-first-firearm"
+      ],
+      "locations": [
+        "piritori",
+        "piritori_first_buy"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Idle watching the tram crowd, a restrained pocket/coat-hand gesture, talk/head beats, nod or refusal.",
+        "The firearm reveal needs its authored selected prop and hand clearance, not a newly invented weapon model or combat animation."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the actual pocket-bag and under-coat beats in the two Piritori encounters.",
+          "Select one approved-source identity and coat/hand construction for both appearances; do not assign a random modular face as canon.",
+          "Extract a small paper rig and stage buy/ask/walk and the later weapon choice with the existing forecasts."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Esa is not Kello. The seller names the man who stays after two trams; preserve that clue relationship.",
+          "Use the same selected seller identity across Day 1 and Day 5; do not invent a second arms dealer.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "content/act1-story-v1.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-first-purchase",
+          "day": 1,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-first-firearm",
+          "day": 5,
+          "block": "night"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face."
+    },
+    {
+      "id": "buyer-leena",
+      "name": "Leena · first buyer",
+      "kind": "individual",
+      "priority": 11,
+      "status": "source-selection-needed",
+      "summary": "An outside buyer at the staffed-bank queue in Day 1 night. No dedicated source/rig is selected; she is not the teller.",
+      "encounters": [
+        "enc-first-sale"
+      ],
+      "locations": [
+        "siltasaari",
+        "staffed_bank"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "A patient/annoyed idle and glance toward the queue, talk/head beat, brief acknowledgement or departure reaction."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Frame the existing first sale outside the legitimate queue, with the stock/cash stakes and no bank-counter costume assumption.",
+          "Select a particular existing approved-source identity before making a waist-up cut-in.",
+          "Check complete sale, introduction and walking-away outcomes with the same face and no extra dialogue."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Leena is buyer-leena, distinct from teller-anne and the unresolved bank-clerk identifier.",
+          "Keep the first sale at siltasaari / staffed_bank exterior; do not relocate her behind the counter.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-first-sale",
+          "day": 1,
+          "block": "night"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face."
+    },
+    {
+      "id": "crew-slot-runner",
+      "name": "The runner · authored crew slot",
+      "kind": "crew-slot",
+      "priority": 12,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "Timetable-reading confidence and a reliability question; the prose/name conflict must be resolved before dedicated identity selection.",
+      "encounters": [
+        "enc-runner-at-tram-stop"
+      ],
+      "locations": [
+        "harju",
+        "harju_pitch"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-01-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-01-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-runner-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-runner-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-runner-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-runner-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-01-v03.png",
+        "art-library/characters/modules/era1/torso-runner-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-runner-medium-handink-v03.png",
+        "art-library/animation/characters/era1/runner-personality-sheet-v03.png"
+      ],
+      "animationNeeds": [
+        "Shared idle/blink/talk; timetable glance, a small head gesture and the approved runner key-pose grammar as reference."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the already assigned modular portrait/body and the approved runner pose sheet.",
+          "Flag the narration “she”, legacy relationship:mira and generated display name before choosing a dedicated dialogue identity.",
+          "Create a small source-consistent cut-in only after that identity pass; retain the same person across recruitment, roster and later outcomes."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is true; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-runner-at-tram-stop",
+          "day": 2,
+          "block": "night"
+        }
+      ],
+      "authoredNamed": true,
+      "role": "runner",
+      "declaredRecruitEncounterId": "enc-runner-at-tram-stop",
+      "identityUncertainty": "The opening says “she”, a choice still uses relationship:mira, and runtime nameFrom yields Reijo Virtanen. No final identity/gender/name assignment is made by this packet."
+    },
+    {
+      "id": "teller-anne",
+      "name": "Anne · bank teller",
+      "kind": "individual",
+      "priority": 13,
+      "status": "source-selection-needed",
+      "summary": "The Day 3 teller has her own participant id and no dedicated selected face/rig. The later bank-clerk may or may not be the same person.",
+      "encounters": [
+        "enc-bank-counter"
+      ],
+      "locations": [
+        "siltasaari",
+        "staffed_bank"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Quiet counter idle, blink/talk, counting/explaining gesture and a restrained exchange acknowledgement."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Select a teller identity from existing approved sources after reviewing the Day 3 markka conversion scene.",
+          "Keep the paper clock, queue and conversion amount as scene/UI layers; do not bake currency copy into the face or clothes.",
+          "Clarify the bank-clerk alias before commissioning a second teller identity; a neutral later clerk placeholder remains acceptable."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Anne is teller-anne, not buyer-leena. Both bank-related roles do not imply one person.",
+          "The fixed markka/euro exchange and authored queue choice stay unchanged.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-bank-counter",
+          "day": 3,
+          "block": "day"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face.",
+      "identityUncertainty": "No explicit authored alias connects teller-anne to bank-clerk."
+    },
+    {
+      "id": "bank-clerk",
+      "name": "Bank clerk · identity unresolved",
+      "kind": "individual",
+      "priority": 14,
+      "status": "identity-clarification-needed",
+      "summary": "A separate Day 7 identifier at the same staffed-bank site. No authored alias establishes that this is Anne, and no new individual identity is commissioned.",
+      "encounters": [
+        "enc-pasila-ledger"
+      ],
+      "locations": [
+        "siltasaari",
+        "staffed_bank"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "If the identity is confirmed as Anne, reuse her selected idle/blink/talk grammar; otherwise remain a neutral counter presence pending source selection."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Compare the Day 3 teller and Day 7 ledger writing and ask only the high-level same-person question when source selection depends on it.",
+          "Retain separate participant ids in the plan until an authored alias is explicit.",
+          "Reuse a confirmed source where appropriate; do not generate a second face merely because the identifier changed."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Do not silently merge this identifier with Anne or introduce a named second clerk.",
+          "The financial/critical-treatment stakes and optional surviving crew stay the authored Day 7 choices.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Neutral staffed-counter figure labelled identity pending; no dedicated face assigned."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-pasila-ledger",
+          "day": 7,
+          "block": "day"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face."
+    },
+    {
+      "id": "sean-mccormick",
+      "name": "Sean McCormick",
+      "kind": "individual",
+      "priority": 15,
+      "status": "source-selection-needed",
+      "summary": "The named yard contact in Day 4 night has no dedicated selected source or cut-in rig in the inspected register.",
+      "encounters": [
+        "enc-mccormick-yard"
+      ],
+      "locations": [
+        "linjat_yard",
+        "mccormick_yard"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Grounded shared idle/blink/talk, invoice/hand gesture, a brief disagreement/listening reaction."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the actual closing-room/yard scene and the family invoice choices before choosing a source.",
+          "Select a particular identity from approved sources without defining the other relatives by Sean's face.",
+          "Stage Sean beside the existing muscle slot as separate people, then review the compact paper rig and authored reactions."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "The McCormicks feel like a compromised family around their venues, not a generic weapons shop.",
+          "sean-mccormick is an individual; mccormick-brothers in the later family call remains a group with no new individual names assigned.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "NARRATIVE.md",
+        "content/families-v1.json",
+        "content/act1-story-v1.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-mccormick-yard",
+          "day": 4,
+          "block": "night"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face."
+    },
+    {
+      "id": "mei-lan",
+      "name": "Mei Lan",
+      "kind": "individual",
+      "priority": 16,
+      "status": "source-selection-needed",
+      "summary": "An authored restaurant-front contact at Hakaniemi, distinct from any generated crew name. Dedicated source selection and a dialogue rig are still missing.",
+      "encounters": [
+        "enc-jade-window"
+      ],
+      "locations": [
+        "hakaniemi",
+        "jade_lantern_front"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Workplace idle, glance toward the lunch queue, receipt/invoice hand gesture, blink/talk and restrained acknowledgement/refusal."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Start with the actual Hakaniemi restaurant and duplicate-invoice beat; choose a source for this individual rather than a faction stereotype.",
+          "Keep serving/queue/invoice layers separate so the workplace reads before the faction door.",
+          "Extract and review one compact waist-up rig, with the existing question/leave choices and forecast clarity."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Mei Lan / mei-lan is not the muscle slot's generated Lan Ho.",
+          "The Jade Lantern front is currently Hakaniemi. Do not follow the stale Linjat venue table.",
+          "Keep her individual workplace role and authored agency; do not infer combat style, morality or visual silhouette from ethnicity.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "NARRATIVE.md",
+        "content/act1-story-v1.json",
+        "content/families-v1.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-jade-window",
+          "day": 6,
+          "block": "day"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face."
+    },
+    {
+      "id": "kello",
+      "name": "Kello · the man who stays",
+      "kind": "individual",
+      "priority": 17,
+      "status": "source-selection-needed",
+      "summary": "A named Piritori watcher introduced through clues before the conditional Day 8 reckoning. No dedicated source/rig is selected; one branch explicitly leaves an empty bench.",
+      "encounters": [
+        "enc-kello-reckoning"
+      ],
+      "locations": [
+        "piritori",
+        "piritori_first_buy"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Watch glance, a restrained time-check and blink/talk reaction grounded in road-kello-time and the authored cheap-watch clue.",
+        "Conditional absence: render the empty bench when kello-sold makes him unavailable; no universal idle actor."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the Day 1 clue, road time-check, Thursday case and Day 8 branches together before choosing a source.",
+          "Select one identity and source-consistent watch/bench silhouette for the authored appearances.",
+          "Review both the present-person loop and empty-bench branch with actual campaign flags; no new dialogue or culprit reveal timing."
+        ],
+        "acceptance": [
+          "Select the particular source identity before extracting a dedicated waist-up rig; shared approved sheets do not assign an identity to this person.",
+          "Review a restrained idle/blink/talk/reaction loop using the actual authored scene and props, rather than a generic concept sheet alone.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Kello is distinct from seller-esa and the recruitable watcher slot.",
+          "Do not draw him on the kello-sold empty-bench branch merely because kello remains in participants[].",
+          "Preserve the cheap watch, five-minutes-fast clue and existing Thursday Load choices; no new betrayal plot.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the neutral silhouette with the existing participant id. No approved face or dedicated rig is claimed."
+      ],
+      "sources": [
+        "content/act1-story-v1.json",
+        "content/road-events-v1.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-kello-reckoning",
+          "day": 8,
+          "block": "day"
+        }
+      ],
+      "sourceSelection": "No dedicated cut-in rig or selected person-specific source was found in the inspected register/concepts. Shared approved modular source exists; this packet does not choose a face.",
+      "visibilityCondition": "Participant list is not unconditional visibility; kello-sold supports the authored empty-bench choice."
+    },
+    {
+      "id": "crew-slot-watcher",
+      "name": "The watcher · authored crew slot",
+      "kind": "crew-slot",
+      "priority": 25,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "An authored crew-slot observer at Karhupuisto, with assigned modular parts but no dedicated waist-up rig.",
+      "encounters": [
+        "enc-karhupuisto-watch"
+      ],
+      "locations": [
+        "karhupuisto",
+        "karhupuisto_bench"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-05-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-05-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-watcher-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-watcher-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-watcher-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-watcher-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-05-v03.png",
+        "art-library/characters/modules/era1/torso-watcher-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-watcher-medium-handink-v03.png"
+      ],
+      "animationNeeds": [
+        "Idle watching, a small directional point/glance, blink/talk and a quiet acknowledgement; preserve dog-owner as a separate participant."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the current head/body assignment and the actual park encounter.",
+          "Select a dedicated view from that source baseline rather than commissioning a new tactical role.",
+          "Test the watch/decline branches and crew continuity through the existing roster."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is true; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-karhupuisto-watch",
+          "day": 4,
+          "block": "day"
+        }
+      ],
+      "authoredNamed": true,
+      "role": "watcher",
+      "declaredRecruitEncounterId": "enc-karhupuisto-watch"
+    },
+    {
+      "id": "crew-slot-muscle",
+      "name": "The muscle · authored crew slot",
+      "kind": "crew-slot",
+      "priority": 26,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "An authored crew-slot fighter met at the McCormick yard. Assigned modular art exists; a dedicated dialogue rig does not.",
+      "encounters": [
+        "enc-mccormick-yard"
+      ],
+      "locations": [
+        "linjat_yard",
+        "mccormick_yard"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-03-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-03-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-muscle-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-muscle-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-muscle-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-muscle-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-03-v03.png",
+        "art-library/characters/modules/era1/torso-muscle-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-muscle-medium-handink-v03.png"
+      ],
+      "animationNeeds": [
+        "Grounded idle, restrained talk/head beat and weight shift compatible with the authored old-knee liability; no new combat moves."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the existing head/body assignment and yard staging alongside Sean.",
+          "Keep role/name identity separate from Mei Lan; a runtime name example is not a new story relationship.",
+          "Make a waist-up source-selection/rig review only after the earlier listed contacts are established."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is true; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-mccormick-yard",
+          "day": 4,
+          "block": "night"
+        }
+      ],
+      "authoredNamed": true,
+      "role": "muscle",
+      "declaredRecruitEncounterId": "enc-mccormick-yard",
+      "identityUncertainty": "A runtime generated display name can be Lan Ho. This is not Mei Lan / mei-lan, the authored restaurant contact."
+    },
+    {
+      "id": "arvo",
+      "name": "Arvo Linde · news presenter",
+      "kind": "individual",
+      "priority": 40,
+      "status": "news-rig-review-pending",
+      "summary": "A news-specific presenter, not a participant in the seventeen enterable encounter scenes. Approved v05 source/model exists; the paper cut-in rig remains semi-approved.",
+      "encounters": [],
+      "locations": [
+        "news / broadcast-only; no enterable venue"
+      ],
+      "existingRigIds": [
+        "cutin-arvo-rig-v01"
+      ],
+      "assets": [
+        {
+          "id": "cutin-arvo-v01-torso",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/torso.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "cutin-arvo-v01-hands",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/hands.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "cutin-arvo-v01-head",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/head.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "cutin-arvo-v01-jaw",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/jaw.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "cutin-arvo-v01-lid-0",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/lid_0.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "cutin-arvo-v01-lid-1",
+          "approval": "semi-approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/arvo-v01/lid_1.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-arvo-rig-v01"
+        },
+        {
+          "id": "presenter-arvo-linde-v05",
+          "approval": "approved",
+          "production": "rigged-no-blendshapes",
+          "file": "art/v3/presenter/arvo-linde-v05.glb",
+          "kind": "presenter-3d"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/presenter/arvo-linde-concept-v05.png",
+        "art-src/cutins/arvo/rig.src.json",
+        "art-src/concepts/people/arvo-look-a-navy-v01.png",
+        "art-src/concepts/people/arvo-look-b-tweed-v01.png",
+        "art-src/concepts/people/arvo-look-c-sombre-v01.png",
+        "art-src/concepts/people/arvo-look-d-shirtsleeves-v01.png"
+      ],
+      "animationNeeds": [
+        "Existing read/jaw, blink, paper glance and small presenter gesture; varied delivery matters across repeated news.",
+        "Review the existing look candidates separately; they are not approved runtime wardrobe variants by being present."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Start from the approved presenter painting and current news cut-in review.",
+          "Review readable lip/jaw, paper/hand and blink behavior with actual news-markka-afterlife copy and source-status labels.",
+          "Select any wardrobe/animation variation as a new candidate; do not add a world venue or encounter just to show the presenter."
+        ],
+        "acceptance": [
+          "DOCUMENTED, INFERENCE, ACCUSATION and FICTION remain explicit and readable; character certainty does not erase source status.",
+          "A passing presenter model or source image does not promote the semi-approved paper rig.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Arvo is a fictional homage, not a literal likeness or mouthpiece of the real journalist.",
+          "Keep him on the news surface. No authored enterable Arvo venue exists in current Act I.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Use the existing news-specific review; no additional narrative encounter is added."
+      ],
+      "sources": [
+        "NARRATIVE.md",
+        "GAME_DESIGN_DOCUMENT.md",
+        "art-src/reviews/scene-club-2026-11-07/VISUAL_BACKLOG.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": []
+    },
+    {
+      "id": "crew-slot-fixer",
+      "name": "Fixer · authored recruitable slot",
+      "kind": "crew-slot",
+      "priority": 70,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "A non-named authored slot with assigned modular art. Its recruit_encounter_id is metadata, not proof of an on-screen actor in that encounter.",
+      "encounters": [],
+      "locations": [
+        "vaasankatu",
+        "conditional-roster"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-07-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-07-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-fixer-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-fixer-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-fixer-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-fixer-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-07-v03.png",
+        "art-library/characters/modules/era1/torso-fixer-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-fixer-medium-handink-v03.png"
+      ],
+      "animationNeeds": [
+        "Shared idle/blink/talk and restrained phone/introduction gesture only where the authored roster/choice actually uses them."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit the existing module assignment and actual recruitment/effect route.",
+          "Keep a neutral roster presentation while verifying whether an on-screen cut-in is needed.",
+          "Reuse an approved selected source for a dedicated view only after the visible role is confirmed."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is false; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [],
+      "authoredNamed": false,
+      "role": "fixer",
+      "declaredRecruitEncounterId": "enc-toko-quiet-voice"
+    },
+    {
+      "id": "crew-slot-driver",
+      "name": "Driver · authored recruitable slot",
+      "kind": "crew-slot",
+      "priority": 71,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "A non-named authored slot with assigned modular art; the bank recruitment metadata does not make this person a bank teller.",
+      "encounters": [],
+      "locations": [
+        "siltasaari",
+        "conditional-roster"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-09-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-09-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-driver-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-driver-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-driver-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-driver-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-09-v03.png",
+        "art-library/characters/modules/era1/torso-driver-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-driver-medium-handink-v03.png"
+      ],
+      "animationNeeds": [
+        "Shared idle/blink/talk and a small route/phone acknowledgement if staged; no new driving minigame or vehicle animation."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Trace the actual recruit/effect path rather than adding the driver to the bank participant list.",
+          "Audit the current modular source and transport liability for continuity.",
+          "Review a dedicated view only when the existing scene requires one."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is false; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [],
+      "authoredNamed": false,
+      "role": "driver",
+      "declaredRecruitEncounterId": "enc-bank-counter"
+    },
+    {
+      "id": "crew-slot-local",
+      "name": "Local · authored recruitable slot",
+      "kind": "crew-slot",
+      "priority": 72,
+      "status": "modular-source-present-dedicated-rig-missing",
+      "summary": "A non-named authored slot with modular art. Courtyard metadata does not author a new named resident or visible speaker.",
+      "encounters": [],
+      "locations": [
+        "torkkelinmaki",
+        "conditional-roster"
+      ],
+      "existingRigIds": [],
+      "assets": [
+        {
+          "id": "head-kallio-11-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/heads/head-kallio-11-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-heads-era1-v03"
+        },
+        {
+          "id": "torso-local-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/torsos/torso-local-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-torsos-era1-v03"
+        },
+        {
+          "id": "legs-local-v03",
+          "approval": "approved",
+          "production": "prototype-ready",
+          "file": "art/v3/characters/legs/legs-local-v03.webp",
+          "kind": "modular-character-collection",
+          "registeredGroupId": "crew-legs-era1-v03"
+        }
+      ],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-kallio-11-v03.png",
+        "art-library/characters/modules/era1/torso-local-medium-handink-v03.png",
+        "art-library/characters/modules/era1/legs-local-medium-handink-v03.png"
+      ],
+      "animationNeeds": [
+        "Shared idle/blink/talk and a restrained indication of a familiar door; no new corner-posting animation."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Trace the current roster/recruitment effects and courtyard source binding before staging a speaker.",
+          "Keep the approved module baseline; choose a source only if a dedicated cut-in is needed.",
+          "Validate local-access/crew continuity without inventing additional side-story beats."
+        ],
+        "acceptance": [
+          "Keep the content-assigned module IDs visible in the production record; they are not a new named-source approval.",
+          "Roster portrait, encounter cut-in and later wound/missing/arrest presentation must retain the selected person.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Authored named flag is false; do not silently convert the slot into a different career/persistence category.",
+          "Runtime names are generated separately from role/appearance. Do not turn a display-name example into new written canon.",
+          "Crew roles/aptitudes and equipment remain the existing rules. New portrait work does not redesign C.19 tactics.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Existing assigned modular portrait/body may be shown as an explicitly labelled source baseline; no dedicated cut-in is registered.",
+        "Recruitment metadata alone must not add this slot to an encounter participant list."
+      ],
+      "sources": [
+        "people/roster.mjs",
+        "people/hiring.mjs",
+        "web/js/v3/content.js",
+        "art-library/characters/manifest.json",
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [],
+      "authoredNamed": false,
+      "role": "local",
+      "declaredRecruitEncounterId": "enc-courtyard-last-call"
+    },
+    {
+      "id": "dog-owner",
+      "name": "Dog owner · park background participant",
+      "kind": "individual",
+      "priority": 80,
+      "status": "background-role-placeholder",
+      "summary": "An authored park participant identifier, without a named identity or dedicated human source. It does not justify a new portrait commission before the listed contacts.",
+      "encounters": [
+        "enc-karhupuisto-watch"
+      ],
+      "locations": [
+        "karhupuisto",
+        "karhupuisto_bench"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "A sparse human idle/glance and, only if the selected staging uses it, a minimal lead-hand gesture.",
+        "Existing approved dog key poses are an adjacent animal-source baseline, not the owner's identity."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Check the actual park choices and decide whether the owner needs to speak or simply establish everyday park life.",
+          "Keep a neutral labelled background figure until a visible source selection is needed.",
+          "Reuse existing approved animal reference only if the dog is staged; no unrelated pet storyline."
+        ],
+        "acceptance": [
+          "Do not confuse this person with the watcher, a rival, or a generated recruit.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Keep the current park encounter and authored civilian context. No new dog-owner subplot.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Neutral owner silhouette at the park edge; no facial identity assignment."
+      ],
+      "sources": [
+        "art-library/animation/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-karhupuisto-watch",
+          "day": 4,
+          "block": "day"
+        }
+      ]
+    },
+    {
+      "id": "aatami-network-team",
+      "name": "Aatami's deployed network team",
+      "kind": "group",
+      "priority": 81,
+      "status": "group-staging-placeholder",
+      "summary": "A variable campaign-team label used in the two mission encounters. It is not a new named character or a fixed three-person portrait.",
+      "encounters": [
+        "enc-bear-path",
+        "enc-courtyard-last-call"
+      ],
+      "locations": [
+        "karhupuisto",
+        "karhupuisto_bench",
+        "torkkelinmaki",
+        "jaska_studio"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Read the current deployed roster and Aatami Chapter 1 rule before choosing visible figures.",
+          "Reuse approved selected individual sources where they exist; keep other crew as labelled role placeholders.",
+          "Verify wounds, missing/arrested people and actual deployed membership after C.19 return before staging the next scene."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Aatami fights every Chapter 1 fight. Do not add a separate shot-caller portrait in Chapter 1.",
+          "C.19 retains the tactical arena, weapons, movement and full enemy intent.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Use a roster-aware group placeholder; do not canonize a sample generated team."
+      ],
+      "sources": [
+        "web/js/v3/state.js",
+        "design/C19_CAMPAIGN_FIGHTS.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-bear-path",
+          "day": 5,
+          "block": "day"
+        },
+        {
+          "encounter": "enc-courtyard-last-call",
+          "day": 6,
+          "block": "night"
+        }
+      ]
+    },
+    {
+      "id": "piritori-rival-team",
+      "name": "Bear Path opposition · authored rival team",
+      "kind": "group",
+      "priority": 82,
+      "status": "group-staging-placeholder",
+      "summary": "A group identifier for the authored Bear Path opposition; individual battle records/roles exist, but this label is not a selected new speaker identity.",
+      "encounters": [
+        "enc-bear-path"
+      ],
+      "locations": [
+        "karhupuisto",
+        "karhupuisto_bench"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit battle-karhupuisto-2v2 opponents and the authored peaceful alternatives before adding dialogue presentation.",
+          "Keep opposition counts, equipment and actual battle identities source-backed.",
+          "Use neutral current combat stand-ins until an individual visual candidate passes its own gates."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Do not turn protected Jaska, Toko or Arvo identities into enemies.",
+          "No new named rival, replacement battle engine or illustrated-card combat is introduced.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Label the authored rival team without assigning arbitrary modular faces as new canon."
+      ],
+      "sources": [
+        "design/C19_CAMPAIGN_FIGHTS.md",
+        "NARRATIVE.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-bear-path",
+          "day": 5,
+          "block": "day"
+        }
+      ]
+    },
+    {
+      "id": "courtyard-rival-team",
+      "name": "Courtyard opposition · authored rival team",
+      "kind": "group",
+      "priority": 83,
+      "status": "group-staging-placeholder",
+      "summary": "A group identifier for the courtyard-receipts confrontation, separate from Jaska's Scene Club and from a new recurring NPC.",
+      "encounters": [
+        "enc-courtyard-last-call"
+      ],
+      "locations": [
+        "torkkelinmaki",
+        "jaska_studio"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit battle-courtyard-3v3 people/roles, receipts and the current anchor/site conflict before staging faces.",
+          "Keep the rival group in the Torkkelinmäki courtyard and the exit/receipts readable.",
+          "Review current neutral battle presentation before commissioning individual cut-ins."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "The authored courtyard fight is not visibly at Scene Club, despite the stale jaska_studio site binding.",
+          "Keep Jaska offscreen and retain the authored critical-wound/withdrawal consequences.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Neutral group placeholders in the courtyard, with no newly named rivals."
+      ],
+      "sources": [
+        "design/SCENARIO_ATLAS.md",
+        "design/C19_CAMPAIGN_FIGHTS.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-courtyard-last-call",
+          "day": 6,
+          "block": "night"
+        }
+      ]
+    },
+    {
+      "id": "lunch-crowd",
+      "name": "Lunch crowd · restaurant background",
+      "kind": "group",
+      "priority": 84,
+      "status": "group-staging-placeholder",
+      "summary": "Background civilian context at Mei Lan's working restaurant. It is not a roster of new named customers.",
+      "encounters": [
+        "enc-jade-window"
+      ],
+      "locations": [
+        "hakaniemi",
+        "jade_lantern_front"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Keep the existing lunch queue as the scene's everyday working context.",
+          "Use sparse selected modular/shape references only if actual framing needs people behind Mei Lan.",
+          "Limit motion so it does not compete with invoice/choice readability."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "The restaurant is a workplace first. Do not recast the queue as combatants or faction stereotypes.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Quiet queue silhouettes with no invented names, dialogue or individual portrait assignments."
+      ],
+      "sources": [
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-jade-window",
+          "day": 6,
+          "block": "day"
+        }
+      ]
+    },
+    {
+      "id": "optional-surviving-crew",
+      "name": "Optional surviving crew · conditional group",
+      "kind": "group",
+      "priority": 85,
+      "status": "group-staging-placeholder",
+      "summary": "A conditional participant label in the Day 7 ledger scene; its members depend on campaign survival, not a newly authored fixed companion.",
+      "encounters": [
+        "enc-pasila-ledger"
+      ],
+      "locations": [
+        "siltasaari",
+        "staffed_bank"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Read the actual surviving roster when this scene opens.",
+          "Reuse approved selected people, if present, and preserve their visible condition.",
+          "Review zero-, one- and several-survivor compositions without adding extra story choices."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Never show someone missing, arrested or dead as an unconditionally present survivor.",
+          "No new companion is invented to fill an empty composition.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "A roster-aware conditional placeholder that can legitimately be empty."
+      ],
+      "sources": [
+        "web/js/v3/state.js",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-pasila-ledger",
+          "day": 7,
+          "block": "day"
+        }
+      ]
+    },
+    {
+      "id": "mccormick-brothers",
+      "name": "McCormick brothers · family-call group",
+      "kind": "group",
+      "priority": 86,
+      "status": "group-staging-placeholder",
+      "summary": "The later authored family-call group is not an instruction to invent individual brother names or duplicate Sean.",
+      "encounters": [
+        "enc-family-calls"
+      ],
+      "locations": [
+        "linjat_yard",
+        "mccormick_yard"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Review the Day 9 family-call choices and family obligations before selecting visible relatives.",
+          "Link Sean only if the written role is explicitly intended; keep the group label intact until that is authored.",
+          "Use a modest source-selection board after the earlier Sean packet, retaining varied individual presence without a generic gun-shop lineup."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Do not equate all relatives with sean-mccormick or give them unapproved new biographies.",
+          "Keep the existing family/faction choice and invoice/venue context.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Labelled family group with no new names or assigned modular identities."
+      ],
+      "sources": [
+        "NARRATIVE.md",
+        "content/families-v1.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-family-calls",
+          "day": 9,
+          "block": "night"
+        }
+      ]
+    },
+    {
+      "id": "generated-hiring-pool",
+      "name": "Generated hiring pool · reusable appearance plan",
+      "kind": "group",
+      "priority": 87,
+      "status": "group-staging-placeholder",
+      "summary": "A system-level plan for existing generated hires, not an additional story participant. The current pool reuses six portrait sources across seven art-backed roles.",
+      "encounters": [],
+      "locations": [
+        "conditional hiring pool / current campaign presence"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-library/characters/modules/era1/head-personality-sheet-v03.png",
+        "art-library/characters/modules/era1/head-kallio-diverse-sheet-v03.png",
+        "art-library/characters/turnarounds/era1/base-body-frames-tpose-cut-v02.png"
+      ],
+      "animationNeeds": [
+        "Sparse shared listening/idle motion for selected visible people, with a static reduced-motion arrangement. No independent full rig for a label."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Audit people/hiring.mjs and the currently repeated head IDs before expanding presentation.",
+          "Keep name, role and trait draws separate; assess readable source variation without naming a new authored person.",
+          "Start from existing approved module sources; review any new portrait/rig variant as a candidate only when the authored cast work is covered."
+        ],
+        "acceptance": [
+          "The visible people reflect the actual authored participants or current roster, not a fixed invented team.",
+          "If a face/rig is reused, preserve its identity and approval boundary; labelled neutral silhouettes are preferable to a false named assignment.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "No name, ethnicity or nationality determines aptitude, morality or silhouette.",
+          "Do not freeze a seeded example such as Aino Laine into a new recurring authored contact.",
+          "Keep career/trait/gear rules and actual generated identifiers unchanged.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "A labelled pool/role placeholder rather than seven newly authored characters."
+      ],
+      "sources": [
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "art-library/characters/manifest.json",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": []
+    },
+    {
+      "id": "jaska-offscreen",
+      "name": "Jaska · offscreen courtyard reference",
+      "kind": "offscreen",
+      "priority": 95,
+      "status": "offscreen-no-new-rig-needed",
+      "summary": "An authored offscreen label during the courtyard mission. The approved Jaska identity already exists, but this label must not automatically put him on screen.",
+      "encounters": [
+        "enc-courtyard-last-call"
+      ],
+      "locations": [
+        "torkkelinmaki",
+        "jaska_studio"
+      ],
+      "existingRigIds": [
+        "cutin-jaska-rig-v01"
+      ],
+      "assets": [
+        {
+          "id": "cutin-jaska-v01-torso",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/torso.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-head",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/head.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-0",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/lid_0.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        },
+        {
+          "id": "cutin-jaska-v01-lid-1",
+          "approval": "approved",
+          "production": "animated-rig",
+          "file": "art/v3/cutins/jaska-v01/lid_1.webp",
+          "kind": "cutin-rig",
+          "registeredGroupId": "cutin-jaska-rig-v01"
+        }
+      ],
+      "sourceCandidates": [
+        "art-src/concepts/people/jaska-concept-v03.jpg"
+      ],
+      "animationNeeds": [
+        "No new visible animation by default. If a later approved cue is needed, review an offscreen/source-backed cue without adding speech or a new appearance."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Keep the authored offscreen reference and resolve the courtyard/studio site conflict in the content plan.",
+          "Do not create a second Jaska or place his waist-up cut-in in the fight merely to fill the frame.",
+          "Only stage a visible presence after an explicit authored change and review."
+        ],
+        "acceptance": [
+          "The courtyard remains distinct from Scene Club; no new visible speaker is inferred from the label.",
+          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
+          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
+          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+        ],
+        "mustPreserve": [
+          "Jaska's approved identity stays the same person. Offscreen is a staging fact, not missing character art.",
+          "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
+          "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
+        ]
+      },
+      "placeholders": [
+        "Offscreen label/absence; no portrait commission is needed for this packet."
+      ],
+      "sources": [
+        "design/SCENARIO_ATLAS.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "ART_BIBLE.md",
+        "DESIGN_AUTHORITY.md",
+        "ROADMAP.md"
+      ],
+      "chronology": [
+        {
+          "encounter": "enc-courtyard-last-call",
+          "day": 6,
+          "block": "night"
+        }
+      ]
+    }
+  ],
+  "deferredExisting": [
+    {
+      "id": "hooded-camera-woman",
+      "name": "Hooded camera woman · deferred existing concept",
+      "kind": "individual",
+      "priority": 100,
+      "status": "deferred-existing-concept",
+      "summary": "Existing concepts v01–v03 and older 3D material are present, but no participant with this identity appears in the current seventeen authored encounters. No hooded-woman cut-in rig is registered.",
+      "encounters": [],
+      "locations": [
+        "deferred random-location NPC concept; no current authored placement"
+      ],
+      "existingRigIds": [],
+      "assets": [],
+      "sourceCandidates": [
+        "art-src/concepts/people/hooded-camera-woman-v01.png",
+        "art-src/concepts/people/hooded-camera-woman-v02.png",
+        "art-src/concepts/people/hooded-camera-woman-v03.png",
+        "art-library/cast3d/hooded-camera-woman-v02_thumb.png"
+      ],
+      "animationNeeds": [
+        "Deferred: select and approve a source, then shared idle/blink/talk and a source-backed information-giving gesture if an authored use is approved."
+      ],
+      "plan": {
+        "nextSteps": [
+          "Inventory the existing concepts instead of commissioning a replacement on the false premise that no source exists.",
+          "Keep this separate from the listed current Act I source-selection queue.",
+          "Do not add a scene, role or dialogue merely to use the concept; await an authored placement and selected-source gate."
+        ],
+        "acceptance": [
+          "A specific concept selection is recorded before any layer extraction or rig review.",
+          "Actual motion and phone/desktop evidence precede runtime promotion."
+        ],
+        "mustPreserve": [
+          "An existing concept is not an approved runtime character or a current authored participant.",
+          "Retain the owner's random-location information-NPC direction without inventing a new storyline."
+        ]
+      },
+      "placeholders": [
+        "Deferred existing-source card only; no current encounter is populated with this person."
+      ],
+      "sources": [
+        "DESIGN_AUTHORITY.md",
+        "art-src/reviews/scene-club-2026-11-07/VISUAL_BACKLOG.md",
+        "art/v3/manifest.json"
+      ]
+    }
+  ],
+  "uncertainties": [
+    {
+      "id": "anne-clerk-alias",
+      "participants": [
+        "teller-anne",
+        "bank-clerk"
+      ],
+      "finding": "Separate source identifiers share staffed_bank, but no authored alias establishes one person.",
+      "handling": "Keep separate packets and a neutral later-clerk placeholder; clarify before assigning or commissioning a second face.",
+      "sources": [
+        "content/era1-slice-v1.json"
+      ]
+    },
+    {
+      "id": "runner-identity",
+      "participants": [
+        "crew-slot-runner"
+      ],
+      "finding": "Narration says she; a legacy relationship:mira effect remains; runtime nameFrom yields Reijo Virtanen.",
+      "handling": "Retain the crew slot and content-assigned modules; do not canonize Mira or a final gender/name from contradictory sources.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "people/roster.mjs",
+        "web/js/v3/content.js"
+      ]
+    },
+    {
+      "id": "mei-lan-not-muscle",
+      "participants": [
+        "mei-lan",
+        "crew-slot-muscle"
+      ],
+      "finding": "Mei Lan is the authored Hakaniemi contact; the muscle slot may display generated Lan Ho.",
+      "handling": "Keep these identities distinct; no shared face or invented relationship.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "people/roster.mjs"
+      ]
+    },
+    {
+      "id": "kello-conditional-absence",
+      "participants": [
+        "kello"
+      ],
+      "finding": "The Day 8 participant list includes Kello even though kello-sold supports an empty-bench choice.",
+      "handling": "Plan conditional presence from authored flags; do not draw Kello unconditionally.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "content/act1-story-v1.json"
+      ]
+    },
+    {
+      "id": "courtyard-studio-binding",
+      "participants": [
+        "aatami-network-team",
+        "courtyard-rival-team",
+        "jaska-offscreen"
+      ],
+      "finding": "The courtyard encounter retains jaska_studio while schedule/override/mission anchor is torkkelinmaki; Scene Club is now makelansilta.",
+      "handling": "Do not make courtyard Jaska visible or move the mission to Scene Club to hide the source conflict.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "design/SCENARIO_ATLAS.md"
+      ]
+    },
+    {
+      "id": "recruit-metadata-not-participants",
+      "participants": [
+        "crew-slot-fixer",
+        "crew-slot-driver",
+        "crew-slot-local"
+      ],
+      "finding": "Crew records name recruit_encounter_id, but those slots are not listed as visible participants in the corresponding encounters.",
+      "handling": "Trace actual recruit/effect routes; do not add cut-ins or new story dialogue from metadata alone.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "web/js/v3/state.js"
+      ]
+    }
+  ]
+}

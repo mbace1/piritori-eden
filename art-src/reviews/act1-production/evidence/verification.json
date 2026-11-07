@@ -1,0 +1,35 @@
+{
+  "source": "actual browser checks",
+  "physicalDeviceAcceptance": false,
+  "newContent": false,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "recordChecks": 38,
+      "viewChecks": 60,
+      "offscreenPreserved": true,
+      "registeredRestReference": true,
+      "deepLinkReload": true,
+      "storageReadsOrWrites": 0,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "recordChecks": 38,
+      "viewChecks": 60,
+      "offscreenPreserved": true,
+      "registeredRestReference": true,
+      "deepLinkReload": true,
+      "storageReadsOrWrites": 0,
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}
