@@ -11,7 +11,7 @@
       "DESIGN_AUTHORITY.md": "95c774f701456dc8b05e1ca6bd389161a632626400a0ed8fa4bc83893dcf6bd5",
       "GAME_DESIGN_DOCUMENT.md": "1f46a3c8ed63407cdd24fd69c2a4b00d02f5b4ff70ffdbe4d8ccac225f0abbd3",
       "NARRATIVE.md": "b78b38c703bbc7c88990d5c7221e139f5aa165f4f5ad853456ed0fd5a3fc69a0",
-      "ROADMAP.md": "2280c587d5900aaed2d7819ba2145c070de38e2e54795d2c71cb3c9e7d3fb5f9",
+      "ROADMAP.md": "c8ec5991deb074138b016de34c3650bb279722479d001ded95dc7d1d1d3c540b",
       "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
       "art-library/animation/characters/era1/runner-personality-sheet-v03.png": "5d086ab61cd300bf0e4bceafa02c2b030183c46b4af05b2aee329fecc49a1cae",
       "art-library/animation/manifest.json": "2cfd46bde4cf374fb7cd4086f3f487f9658248d710dd2eb7104cf9b7e19d237a",
@@ -120,12 +120,13 @@
       "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
       "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
       "web/js/v3/cutin-stage.js": "7719b1f882fae5f113bfe77e9dc4d26e560bfc351a0224780bd3a01e872f83fa",
-      "web/js/v3/state.js": "faaaf7c59cf3ae020e783ef0bed20d96902aa8af60e71b0f11a893ae890f73d7",
+      "web/js/v3/state.js": "b9e29fb7d8734c49f6b66ea47b9ce6604b2ce4c88c6dabec1e70a113b23dfddb",
       "web/js/v3/toko-stage.js": "ef621f3553dc28727542a698c252dede8fd2a5e526061d2a3945cdd2d5f6f16a"
     },
     "amendments": [
       "Bank proceeds preview/phone layout: b48490e6e46bdadd92f85b156827cea33d6143fe",
-      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history."
+      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history.",
+      "Main 0587dae0609e246a6a59bb43cce9a169545d4fc5 v4.97: chapter-income wording/source alignment and state13 cache tokens. Public site separately verified still v4.96. No combat/economy rules changed."
     ]
   },
   "counts": {

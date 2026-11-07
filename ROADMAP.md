@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | Playable foundation | 15/20 | 15/20 | 15/20 | |
 | Combat | 4/20 | 5/20 | 8/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6, so HP lost per fight reaches 2.9. v4.89: the carrier is slower, so escorting wins every getaway while walking out loses a quarter. v4.90: blows can miss, so careless play wins 75% and fights vary from seed to seed (§5). |
-| Story and consequences | 8/20 | 8/20 | 10/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. v4.93: a won fight takes the fallen's weapons to the stash and the fence, which is the only money the chapter's goal counts. The finale is still one roll. |
+| Story and consequences | 8/20 | 8/20 | 10/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. v4.93: a won fight takes the fallen's weapons to the stash and the fence, one more way of earning the chapter's goal. The finale is still one roll. |
 | City and economy | 8/15 | 9/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
 | Arenas and presentation | 3/15 | 4/15 | 5/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. v4.91: every place keeps its edges from all eight camera angles (plinths, yard walls, the street's other side; `design/PLACES_PASS.jpg`). Not yet played on a device. |
 | Device validation and release | 0/10 | 1/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
@@ -237,7 +237,7 @@ GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), be
 5. Question 26: what makes Aatami step back. Three crew is provisional.
 6. ~~Should a fight have chance in it?~~ **Answered 2026-10-31: "Blows can miss, of course."** Shipped in v4.90 (§10).
 6. D002: what travel and trades cost in time. Today they are free on the web.
-7. **The finale: a crew-and-route choice with the risks shown, or a fight you play?** (Proposed: the choice.) And its gate: the shipment needs €400 of fence money by day 10. What the story hands you fences for €155 at most, and from v4.74 to v4.92 a fight paid nothing at the fence, so the shipment was out of reach in ordinary play. Since v4.93 a won fight adds €25–100. The gate should be set with the finale, not before it.
+7. **The finale: a crew-and-route choice with the risks shown, or a fight you play?** (Proposed: the choice.) Its gate is €400 earned by selling by day 10: market sales, packs sent down a route, and since v4.93 the fence for what a won fight takes. *(Until v4.97 this item said only fence money counted, which made the gate look unreachable. That was wrong; see VERSIONS v4.97.)*
 
 ## 10. The owner's answer, 2026-10-31
 

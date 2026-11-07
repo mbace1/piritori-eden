@@ -1,5 +1,5 @@
 // Review-only fixtures. Pure state APIs: no saveState, loadRun, R.settle or storage.
-import { createState, restoreState, transactOffer, offerPrice, hiringPoolFor, hireFromPool, fighters, applyEffects, takeLoot, advanceSchedule } from '../../../web/js/v3/state.js?v=12';
+import { createState, restoreState, transactOffer, offerPrice, hiringPoolFor, hireFromPool, fighters, applyEffects, takeLoot, advanceSchedule } from '../../../web/js/v3/state.js?v=13';
 import { applyCampaignReceipt } from '../../../web/crew-run/campaign-adapter.js?v=13';
 import { stageFight, doorFightStage } from '../../../web/js/v3/places.js?v=1';
 import { doorFightEffects } from '../../../web/js/v3/doors.js?v=6';

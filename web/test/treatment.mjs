@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw Error('Treatment preview accessed storage'); } });
-const S = await import('../js/v3/state.js?v=12');
-const { previewTreatment, treatmentChange, isTreatmentChoice } = await import('../js/v3/treatment.js?v=1');
+const S = await import('../js/v3/state.js?v=13');
+const { previewTreatment, treatmentChange, isTreatmentChoice } = await import('../js/v3/treatment.js?v=2');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
 const content = JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const data = { content, crew: new Map(content.crew.map(p => [p.id, { ...p, name: p.name || nameFrom(p.id) }])) };

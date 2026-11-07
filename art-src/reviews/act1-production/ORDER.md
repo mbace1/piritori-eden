@@ -51,7 +51,7 @@ Each JSON stage has concrete deliverables, tests, source IDs, milestone, depende
 
 C.19 retains the actual 3D fights, weapons, positioning, full intentions, police, withdrawal/getaway and persistent cost. No location illustration or crew sheet becomes a combat-card substitute. Every arena geometry change starts with actual matching-camera evidence of the existing kit; battle construction/device acceptance cannot be inferred from a plate or a loading pass.
 
-The production sequence requires existing once-only receipts, injuries, missing/arrested crew, rescue, bail and loot/fence integration. No proposal invents a new reward to make a pretty aftermath. Chapter planning preserves the separate income gate and cash stake; the mismatch between ROADMAP's fence-money description and web market/route income calls must be reconciled before eligibility/tuning changes. The 30% travel/trade calculator is arithmetic planning, not a deadline/wage/interest/fight-cap/full-run test.
+The production sequence requires existing once-only receipts, injuries, missing/arrested crew, rescue, bail and loot/fence integration. No proposal invents a new reward to make a pretty aftermath. Chapter planning preserves the separate income gate and cash stake; main v4.97 resolves the former fence-only wording and preserves market, route and fence income, excluding mission payouts. Full-run evidence remains necessary before eligibility/tuning changes. The 30% travel/trade calculator is arithmetic planning, not a deadline/wage/interest/fight-cap/full-run test.
 
 ## Expansion remains deferred
 

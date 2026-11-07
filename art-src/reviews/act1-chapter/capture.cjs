@@ -1,10 +1,10 @@
 // Actual review browser interactions and viewport captures; no campaign state.
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs'),path=require('node:path');
-const DIR=__dirname,ROOT=path.resolve(DIR,'../../..'),mime={'.html':'text/html','.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml'};
+const DIR=process.env.CHAPTER_CAPTURE_DIR||__dirname,ROOT=path.resolve(__dirname,'../../..'),mime={'.html':'text/html','.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{let file=path.resolve(ROOT,'.'+decodeURIComponent(req.url.split('?')[0]));if(!file.startsWith(ROOT+path.sep)){res.writeHead(403).end();return}if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');fs.readFile(file,(e,b)=>{if(e){res.writeHead(404).end();return}res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'});res.end(b)});});
 let checks=0;function ok(condition,label){assert(condition,label);checks++}
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({headless:true,...(process.env.BROWSER_PATH?{executablePath:process.env.BROWSER_PATH}:{}),args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});const evidence=[];
-try{for(const [name,width,height] of [['phone',390,844],['desktop',1280,800]]){
+try{fs.mkdirSync(DIR,{recursive:true});for(const [name,width,height] of [['phone',390,844],['desktop',1280,800]]){
  const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
  await page.addInitScript(()=>{localStorage.setItem('piritori-to-eden:v3','chapter-review-test-sentinel')});
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+': '+r.url())});page.on('requestfailed',r=>errors.push(r.failure()?.errorText+': '+r.url()));

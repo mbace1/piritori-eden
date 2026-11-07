@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createState,transactOffer,sendOnRoute} from '../../../web/js/v3/state.js?v=12';
+import {createState,transactOffer,sendOnRoute} from '../../../web/js/v3/state.js?v=13';
 import {chapterInventory,timeBudget,crewChoices,shipmentFixture,shipmentReadiness,settleFixture,carryPreview,endingExamples,proposalSummary} from './model.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../../../'+p,import.meta.url)));
 const content=read('content/era1-slice-v1.json'),story=read('content/act1-story-v1.json'),map=read('map/kallio-era1-2003-v1.json');

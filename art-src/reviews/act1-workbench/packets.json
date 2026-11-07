@@ -439,16 +439,16 @@
       "milestone": 5,
       "lane": "Loot and economy",
       "title": "Show the actual chapter-income ledger",
-      "change": "Compare fence, market-sale and route proceeds, then resolve the roadmap’s fence-only description against the current web model.",
+      "change": "Compare fence, market and route receipts in the existing income ledger; preserve main v4.97’s corrected source wording.",
       "acceptance": "Real API fixtures show which income paths increment chapterEarned; the intended eligible sources are recorded before any rule change.",
-      "boundary": "ROADMAP describes fence money, but web state.js also counts transactOffer and sendOnRoute receipts. Do not silently force one interpretation or auto-sell gear.",
+      "boundary": "Market, route and fence sales count; mission payouts do not. Do not silently force a fence-only rule or auto-sell gear.",
       "sources": [
         "ROADMAP.md",
         "web/js/v3/outing.js",
         "content/era1-slice-v1.json"
       ],
       "preview": "../act1-consequences/",
-      "status": "Source mismatch exposed by real model fixtures"
+      "status": "Wording/source alignment resolved on main v4.97; full-run economy verification remains open"
     },
     {
       "id": "D06",
@@ -501,9 +501,9 @@
       "milestone": 5,
       "lane": "Finale access",
       "title": "Measure the €400 chapter-income gate",
-      "change": "Rehearse the current shipment prerequisites and make the income-source mismatch visible.",
+      "change": "Rehearse current shipment prerequisites and measure full-run reachability against the source-aligned v4.97 income goal.",
       "acceptance": "The tool names each actual blocked prerequisite and compares the current income ledger with the roadmap description.",
-      "boundary": "The €400 income threshold and €400 cash stake are separate requirements. Do not lower either to make a fixture win; fence-only versus broader income needs source alignment.",
+      "boundary": "The €400 chapter-income threshold and €400 cash stake are separate. Preserve market/route/fence income and mission-payout exclusion; do not lower either requirement to make a fixture win.",
       "sources": [
         "ROADMAP.md",
         "content/era1-slice-v1.json"

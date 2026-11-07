@@ -10,6 +10,7 @@
     - A win takes the weapon of every rival you put down. Whoever ran keeps theirs, and a phone is not a weapon.
     - The weapons go in the stash, and the fence on Piritori buys them. The strip after the fight says so.
     - **Why it matters:** fence money is the only money the chapter's €400 goal counts. What the story hands you fences for €155 at most, so from v4.74 the shipment was out of reach in ordinary play. A won fight now adds €25–100. The gate is part of the finale question (ROADMAP §8, item 7).
+      - **Correction, 2026-11-07 (v4.97):** that is wrong. Market sales and packs sent down a route count too, so the shipment was never out of reach. The chapter panel said the same wrong thing to players; v4.97 fixes it.
   - **v4.94, a place at its hottest is a round from the police** (ROADMAP G1, row 9). A place at pressure 3 starts the fight at 5 of 6, and the brief says so.
   - **v4.95, the yard faces the next block across a lane** (ROADMAP milestone 3). From the yard's opening camera, the left of the frame is lit windows where it was black. `design/YARD_LANE.jpg` is the before and after.
 - **G1, measured** (`web/tools/fight-balance.mjs`, Act I's 15 fights × 12 seeds):

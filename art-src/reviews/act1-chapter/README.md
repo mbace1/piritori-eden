@@ -19,7 +19,7 @@ The D002 calculator uses the roadmap's 30% per trip/seller-visit direction and e
 ## Source findings to resolve before finale implementation
 
 1. `state.js`'s operation resolver reads recruited roster count, previous arrests and a deterministic seed. It does not read a shipment squad, route, competencies or current local pressure. The UI exposes this clearly rather than making the proposal secretly affect an old rule.
-2. ROADMAP §8 calls the €400 gate fence money. The current web code also calls `recordChapterIncome()` from `transactOffer()` and `sendOnRoute()`. Model checks verify both paths. The fixture therefore labels its field **chapter income**; eligible income sources must be reconciled with design authority before tuning. No runtime interpretation was changed here.
+2. The original review found ROADMAP’s fence-only wording disagreed with the existing market/route income calls. Main v4.97 (`0587dae`) corrects ROADMAP and the chapter panel to market, route and fence sales; mission payouts remain excluded. Model checks still verify those existing paths. The fixture labels its field **chapter income**, separate from cash stake; the correction changes no income rule or tuning. Historical captures retain their original baseline.
 3. Authored carryover rules retain what was built and set cash to €160. The real next-chapter lookup returns no authored chapter 2. Showing a carryover plan is not completing the next chapter.
 
 ## Reproduce and evidence

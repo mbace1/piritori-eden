@@ -4,7 +4,7 @@ These are implementation/source findings, not new canon or owner decisions. No r
 
 | Finding | Evidence | Next bounded action |
 |---|---|---|
-| The chapter gate is described as fence money in ROADMAP, but web state.js also counts market and route receipts. | `recordChapterIncome` call sites; chapter rehearsal real-API tests. | Record the intended eligible income sources before altering progression or thresholds. Keep income progress separate from the €400 cash stake. |
+| The former fence-only goal wording is corrected on main v4.97. | Claude commit0587dae, ROADMAP/VERSIONS and the existing market/route/fence model checks. | Preserve the three counted sale sources and mission-payout exclusion; keep income progress separate from the €400 cash stake. Full-run reachability still needs evidence. |
 | The current shipment roll does not read a chosen squad, route, competencies or local pressure. | Chapter rehearsal's actual `attemptChapterEnding` fixtures and resolver source. | Review the qualitative container/van crew assignment candidate and decide its intended contract before rules/odds. |
 | Six authored encounters lack direct scene image bindings; five can be reviewed against existing plates. | Encounter manifest and 16 direct/proposed plate-reference hash checks. | Bind/frame existing sources before commissioning new environments. The first-sale exterior stays explicitly unbuilt. |
 | The former Courtyard Receipts / Jaska-site mismatch is corrected in this draft. | Canonical torkkelinmaki_courtyard site plus source, old-save and C.19 handoff checks. | Preserve this alignment; illustrated framing and arena construction still need independent review. |

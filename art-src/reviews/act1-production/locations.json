@@ -6,7 +6,7 @@
     "purpose": "Source-backed location production plans for current authored Act I only; not new content, asset approval, runtime completion or release.",
     "completionEstimateUnchanged": 48,
     "hashes": {
-      "ROADMAP.md": "2280c587d5900aaed2d7819ba2145c070de38e2e54795d2c71cb3c9e7d3fb5f9",
+      "ROADMAP.md": "c8ec5991deb074138b016de34c3650bb279722479d001ded95dc7d1d1d3c540b",
       "DESIGN_AUTHORITY.md": "95c774f701456dc8b05e1ca6bd389161a632626400a0ed8fa4bc83893dcf6bd5",
       "ART_BIBLE.md": "f07f64ec671f63003cef5b3ae3aae1347ef80907c190e93218f7a8c670e3ec46",
       "design/SCENARIO_ATLAS.md": "c7398e4c3f98f9f80b6362dd7c90d11a359ea2c2b6b0a48acf8f2a8a957a27fc",
@@ -21,14 +21,14 @@
       "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
       "art-src/reviews/act1-encounters/BINDING_PLAN.md": "9f081c72abd8adb1fa3cb78af726fea920f39a33cdbca82b5378e66656ca0787",
       "art-src/reviews/act1-encounters/encounter-manifest.json": "0c238dc0e97785caab5dffcefa09e684a79d02240efc66420a572c87a5180d84",
-      "web/js/v3/doors.js": "0568da513ce9797cbdcde3edfefe1ebbfbacf36387b447d23673ee0455c3d530",
-      "web/js/v3/road.js": "71ba8f94edd0cccb8ae4e06c59197c7e728a0f0ee61024ec6456ef29a63af585",
+      "web/js/v3/doors.js": "84e2426c517706db553504dde3c910d27f0df811d788e5f6014a90e46dbf6f8f",
+      "web/js/v3/road.js": "349e0a025cc21f6e007b00f447b5bc6eb025eccec2da177001ec0e24af6cf66a",
       "web/js/v3/places.js": "8fcdf9c4306070308174b7ee4e55a6557712fc1595bd7f1c793ea98dc293d4d2",
       "web/js/v3/journey.js": "e6ecda68151ed4e5a301aa181a4a2c0f3eb535de1935b5197c8013c86086fad7",
       "web/js/v3/outing.js": "754573f2264646f3aac0fbc3e6ea6abe6174c622661bdc60dc6d08a47937ac64",
       "web/crew-run/locations.js": "bb627e305fd13ef7ddd6c6642f7bbbffdd1eeb3dafb401b5d7d60f6417d89bde",
-      "web/js/v3/app.js": "cf55242768116f826059b4737b191b5495841ddc047479664d1092d48eff213b",
-      "web/js/v3/treatment.js": "7e469b39cb7629aad829b5c7b9edbf7c3d34b865229975b88a7fe4cf9376d673"
+      "web/js/v3/app.js": "6e46d0d126e5884a5c634dc862d12e3b57f2e18b1ae98444e88f0783c5c80407",
+      "web/js/v3/treatment.js": "2bdf88efe7889d776c3a14a25d67cb2e6247e1893be650744943fce26061bff3"
     },
     "coverage": {
       "activeAnchors": 11,
@@ -56,7 +56,8 @@
     "amendments": [
       "Bank proceeds preview/phone layout: b48490e6e46bdadd92f85b156827cea33d6143fe",
       "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history.",
-      "Treatment choice/receipt presentation: original4a65639676ec2eb888e1b80cf9105c8a724a8a9f, integrated8a17ab5beeb361e37e304bea01f63222d9f0fa71; no engine or recovery-rule change."
+      "Treatment choice/receipt presentation: original 4a65639676ec2eb888e1b80cf9105c8a724a8a9f, integrated 8a17ab5beeb361e37e304bea01f63222d9f0fa71; no engine or recovery-rule change.",
+      "Main 0587dae0609e246a6a59bb43cce9a169545d4fc5 v4.97: chapter-income wording/source alignment and state13 cache tokens. Public site separately verified still v4.96. No combat/economy rules changed."
     ]
   },
   "locations": [

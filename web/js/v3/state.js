@@ -588,11 +588,11 @@ export function sellLoot(state, data, equipmentId) {
   state.equipment.splice(best, 1);
   state.cash += paid;
   // Counted centrally (GDD run structure): a chapter cleared by earning
-  // has to see every way of earning, and the fence is one of them —
-  // `sell_loot()`'s own `record_chapter_income(paid)` call, and in fact
-  // the ONLY place `record_chapter_income` is called from in the whole of
-  // `game_state.gd` — market sales and mission payouts do not count
-  // toward a chapter's money goal, however the comment there reads.
+  // has to see every way of earning, and the fence is one of them. Here
+  // that is three: a market sale (`transactOffer`), a pack sent down a route
+  // (`sendOnRoute`) and the fence. Mission payouts do not count. (Godot's
+  // `game_state.gd` counts only the fence; this build does not follow it,
+  // and v3-state.mjs holds the panel's wording to what is counted here.)
   recordChapterIncome(state, paid);
   addLog(state, `Fenced ${cap(equipmentId)} for €${paid}.`);
   return paid;

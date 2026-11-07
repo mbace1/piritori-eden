@@ -1,8 +1,8 @@
 // Canonical courtyard identity and old-save continuity: no art or rules changed.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createState,restoreState,currentEncounter,chooseEncounter} from '../js/v3/state.js?v=12';
-import {availableVisits} from '../js/v3/visits.js?v=8';
+import {createState,restoreState,currentEncounter,chooseEncounter} from '../js/v3/state.js?v=13';
+import {availableVisits} from '../js/v3/visits.js?v=9';
 import {missionOuting,outingUrl} from '../js/v3/outing.js?v=7';
 const read=p=>JSON.parse(fs.readFileSync(new URL(p,import.meta.url)));
 const content=read('../../content/era1-slice-v1.json'),map=read('../../map/kallio-era1-2003-v1.json'),atlas=read('../../design/scenario-atlas.json'),places=read('../../content/places-v1.json');

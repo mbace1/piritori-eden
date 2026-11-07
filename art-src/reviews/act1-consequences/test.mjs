@@ -3,7 +3,7 @@ import fs from 'node:fs';
 // Any accidental use of a real browser campaign storage API fails this test.
 Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw Error('Review fixture accessed browser campaign storage'); } });
 const { CASES, indexData, createFixture, projectFixture, applyFixture, reloadFixture, summarize } = await import('./model.js');
-const { transactOffer } = await import('../../../web/js/v3/state.js?v=12');
+const { transactOffer } = await import('../../../web/js/v3/state.js?v=13');
 const read = path => JSON.parse(fs.readFileSync(new URL(`../../../${path}`, import.meta.url)));
 const data = indexData(read('content/era1-slice-v1.json'), read('content/doors-v1.json'), read('content/places-v1.json'), read('art/v3/manifest.json'));
 assert.equal(CASES.length, 9);

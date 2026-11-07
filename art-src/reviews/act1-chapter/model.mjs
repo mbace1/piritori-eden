@@ -1,5 +1,5 @@
 // Review model: authored inventories + isolated real-engine fixtures. No storage APIs.
-import {createState,chapterEndingAvailable,attemptChapterEnding,forecastEnding} from '../../../web/js/v3/state.js?v=12';
+import {createState,chapterEndingAvailable,attemptChapterEnding,forecastEnding} from '../../../web/js/v3/state.js?v=13';
 import {turnPlan,nextChapter} from '../../../web/js/v3/chapter.js?v=1';
 import {nameFrom} from '../../../people/roster.mjs';
 

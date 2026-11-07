@@ -23,7 +23,7 @@ Every packet names a single bounded change, its existing roadmap milestone, exac
 - New entrance/composition and bounded blink masks/marker strokes require visual review before promotion. Aatami front and room status remain semi-approved; side rig is unassessed.
 - New contact source selection and any new source artwork remain candidates. Do not infer approval from a placeholder.
 - The shipment's crew/route choice versus a played fight remains the existing high-level design question. Any proposed risk/reward numbers are placeholders rather than new tuning.
-- The current €400 chapter-income threshold, separate €400 cash stake and the effect of 30% costs need full-run evidence before adjustment. ROADMAP describes fence-only progress, while web state.js also records market and route receipts; resolve that source mismatch before changing eligibility. A calculator alone does not establish chapter reachability.
+- The current €400 chapter-income threshold, separate €400 cash stake and the effect of 30% costs need full-run evidence before adjustment. Main v4.97 now aligns ROADMAP and the panel with market, route and fence income; mission payouts remain excluded. Preserve that correction before any eligibility change. A calculator alone does not establish chapter reachability.
 - Godot and Chapter 2 expansion remain outside this batch.
 
 ## Later integration checks

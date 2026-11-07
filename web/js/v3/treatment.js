@@ -1,6 +1,6 @@
 // Presentation-only observations of the existing treatment effect. The state
 // engine still selects the target, charges the choice and changes the wound.
-import { applyEffects, choiceStatus, crewRecord } from './state.js?v=12';
+import { applyEffects, choiceStatus, crewRecord } from './state.js?v=13';
 
 export const isTreatmentChoice = choice => choice?.effects?.includes('resolve-critical-wound:one') ?? false;
 
