@@ -13,7 +13,7 @@
       "reviewPersistence": true,
       "export": true,
       "campaignUnchanged": true,
-      "integrated": false,
+      "integrated": true,
       "errors": []
     },
     {
@@ -27,7 +27,7 @@
       "reviewPersistence": true,
       "export": true,
       "campaignUnchanged": true,
-      "integrated": false,
+      "integrated": true,
       "errors": []
     }
   ]
