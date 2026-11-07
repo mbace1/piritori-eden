@@ -1,13 +1,17 @@
 // Review data only. All measured values come from preserved fight-balance output.
 export const SOURCES = {
-  baseline12: { label: 'Baseline · 12 seeds', file: 'instrumented-default-12.json', seeds: 12, experiment: false, actions: true },
-  baseline30: { label: 'Baseline · 30 seeds', file: 'baseline-30.json', seeds: 30, experiment: false, actions: false },
-  dodge12: { label: 'Dodge first · 12 seeds', file: 'dodge-first-instrumented-12.json', seeds: 12, experiment: true, actions: true },
-  dodge30: { label: 'Dodge first · 30 seeds', file: 'dodge-first-30.json', seeds: 30, experiment: true, actions: true },
+  baseline12: { label: 'Baseline · 12 seeds · v4.96', file: 'instrumented-default-12.json', directory: 'design/evidence/scene-club-2026-11-07/', seeds: 12, experiment: false, actions: true, version: 'v4.96' },
+  baseline30: { label: 'Baseline · 30 seeds · v4.96', file: 'baseline-30.json', directory: 'design/evidence/scene-club-2026-11-07/', seeds: 30, experiment: false, actions: false, version: 'v4.96' },
+  dodge12: { label: 'Dodge first · 12 seeds · v4.96', file: 'dodge-first-instrumented-12.json', directory: 'design/evidence/scene-club-2026-11-07/', seeds: 12, experiment: true, actions: true, version: 'v4.96' },
+  dodge30: { label: 'Dodge first · 30 seeds · v4.96', file: 'dodge-first-30.json', directory: 'design/evidence/scene-club-2026-11-07/', seeds: 30, experiment: true, actions: true, version: 'v4.96' },
+  defensive30: { label: 'Defensive (opt-in) · 30 seeds · v4.97', file: 'defensive-30.json', directory: 'design/evidence/defensive-policy-2026-11-07/integrated-v497/', seeds: 30, experiment: true, actions: true, version: 'v4.97', provenanceFile: 'source.json' },
 };
-export const POLICY_NAMES = { fight: 'Aggressive', careful: 'Careful', focused: 'Focused', run: 'Straight out', escort: 'Escort' };
+export const sourcePath = source => source.directory + source.file;
+export const POLICY_NAMES = { fight: 'Aggressive', careful: 'Careful', focused: 'Focused', run: 'Straight out', escort: 'Escort', defensive: 'Defensive (opt-in)' };
 export const rowKey = row => [row.fight, row.heat, row.policy].join('|');
-export function validateRows(rows) {
+export function validateRows(rows, sourceId = 'baseline12') {
+  if (!Object.hasOwn(SOURCES, sourceId)) throw Error('Unknown evidence source');
+  const defensive = sourceId === 'defensive30', expectedRows = defensive ? 192 : 147;
   if (!Array.isArray(rows) || !rows.length) throw Error('Evidence must contain rows');
   const keys = new Set();
   for (const row of rows) {
@@ -16,18 +20,30 @@ export function validateRows(rows) {
     for (const key of ['win', 'withdraw', 'loss', 'police', 'downed', 'stuck']) {
       if (!Number.isFinite(Number(row[key])) || Number(row[key]) < 0 || Number(row[key]) > 100) throw Error('Invalid percentage: ' + key);
     }
-    for (const key of ['rounds', 'hpLost', 'downs']) if (!Number.isFinite(Number(row[key])) || Number(row[key]) < 0) throw Error('Invalid measurement: ' + key);
+    for (const key of ['rounds', 'hpLost', 'downs', ...['braces','moves','attacks','braceWithIncoming','bracePreparing','bracePredictedDownPrevented'].filter(key => row[key] !== undefined)]) if (!Number.isFinite(Number(row[key])) || Number(row[key]) < 0) throw Error('Invalid measurement: ' + key);
     if (!['fight', 'getaway'].includes(row.goal) || ![0, 2, 3].includes(row.heat)) throw Error('Unexpected goal/heat');
   }
-  if (new Set(rows.map(row => row.fight)).size !== 15 || rows.length !== 147) throw Error('Expected all 15 Act I fights / 147 rows');
+  if (new Set(rows.map(row => row.fight)).size !== 15 || rows.length !== expectedRows) throw Error(`Expected all 15 Act I fights / ${expectedRows} rows`);
+  const goals = new Map();
+  for (const row of rows) {
+    if (goals.has(row.fight) && goals.get(row.fight) !== row.goal) throw Error('Inconsistent scenario goal');
+    goals.set(row.fight, row.goal);
+  }
+  if ([...goals.values()].filter(goal => goal === 'fight').length !== 11) throw Error('Expected 11 fight jobs / 4 getaways');
+  for (const [fight, goal] of goals) for (const heat of [0,2,3]) {
+    const expected = [...(goal === 'fight' ? ['fight','careful','focused'] : ['run','fight','careful','escort']), ...(defensive ? ['defensive'] : [])].sort();
+    const actual = rows.filter(row => row.fight === fight && row.heat === heat).map(row => row.policy).sort();
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) throw Error('Unexpected policy matrix: ' + fight + ' / ' + heat);
+  }
+  if (defensive && rows.filter(row => row.policy === 'defensive').length !== 45) throw Error('Expected 45 defensive rows');
   return rows;
 }
 export function selectRow(rows, fight, heat, policy) { return rows.find(row => row.fight === fight && row.heat === Number(heat) && row.policy === policy) || null; }
 export function peers(rows, fight, heat) { return rows.filter(row => row.fight === fight && row.heat === Number(heat)); }
-export function comparison(rows, fight, heat) {
-  const aggressive = selectRow(rows, fight, heat, 'fight'), careful = selectRow(rows, fight, heat, 'careful');
-  if (!aggressive || !careful) return null;
-  return { winPoints: +(Number(careful.win) - Number(aggressive.win)).toFixed(2), hpSaved: +(Number(aggressive.hpLost) - Number(careful.hpLost)).toFixed(2), extraRounds: +(Number(careful.rounds) - Number(aggressive.rounds)).toFixed(2) };
+export function comparison(rows, fight, heat, policy = 'careful') {
+  const aggressive = selectRow(rows, fight, heat, 'fight'), selected = selectRow(rows, fight, heat, policy);
+  if (!aggressive || !selected) return null;
+  return { winPoints: +(Number(selected.win) - Number(aggressive.win)).toFixed(2), hpSaved: +(Number(aggressive.hpLost) - Number(selected.hpLost)).toFixed(2), extraRounds: +(Number(selected.rounds) - Number(aggressive.rounds)).toFixed(2), policePoints: +(Number(selected.police) - Number(aggressive.police)).toFixed(2), downedPoints: +(Number(selected.downed) - Number(aggressive.downed)).toFixed(2) };
 }
 export const metricText = (row, key, suffix = '') => row?.[key] === undefined ? 'Not measured' : `${row[key]}${suffix}`;
 export const PROPOSALS = [

@@ -1,0 +1,7 @@
+PASS preserved data instrumented-default-12.json 147 rows
+PASS preserved data baseline-30.json 147 rows
+PASS preserved data dodge-first-instrumented-12.json 147 rows
+PASS preserved data dodge-first-30.json 147 rows
+PASS preserved data defensive-30.json 192 rows
+PASS explicit 192-row source / 45 defensive rows; historical sources remain strict 147; matched peer equality and provenance hash
+PASS missing telemetry stays missing; exact per-scenario defensive deltas; five source-backed proposals; no rule execution

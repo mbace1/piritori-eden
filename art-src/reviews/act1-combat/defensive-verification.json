@@ -1,0 +1,59 @@
+{
+  "sourceCommit": "a70778e67df67d7a59a855badaf57a4245b83960",
+  "reviewChangesUncommittedAtCapture": true,
+  "capturedAt": "2026-11-07T20:07:47.120Z",
+  "reviewOnly": true,
+  "physicalDeviceAcceptance": false,
+  "realC19Frames": [],
+  "dashboard": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenarios": 15,
+      "sources": 5,
+      "selectedDatasetRows": 192,
+      "defensiveRows": 45,
+      "defensiveCohorts": 45,
+      "exactSourceRowsAndDeltas": true,
+      "deepLinkAndReload": true,
+      "invalidSourceFallsBackToBaseline": true,
+      "policiesFiltered": true,
+      "proposals": 5,
+      "minimumTargetHeight": 44,
+      "historicalMissingCountersPreserved": true,
+      "sourceProvenanceChecked": true,
+      "noHorizontalOverflow": true,
+      "storageUnchanged": true,
+      "campaignSentinel": "unchanged",
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "scenarios": 15,
+      "sources": 5,
+      "selectedDatasetRows": 192,
+      "defensiveRows": 45,
+      "defensiveCohorts": 45,
+      "exactSourceRowsAndDeltas": true,
+      "deepLinkAndReload": true,
+      "invalidSourceFallsBackToBaseline": true,
+      "policiesFiltered": true,
+      "proposals": 5,
+      "minimumTargetHeight": 44,
+      "historicalMissingCountersPreserved": true,
+      "sourceProvenanceChecked": true,
+      "noHorizontalOverflow": true,
+      "storageUnchanged": true,
+      "campaignSentinel": "unchanged",
+      "errors": []
+    }
+  ],
+  "note": "New defensive dashboard captures; original screenshots and verification.json remain historical. No simulation or arena recapture unless explicitly requested."
+}
