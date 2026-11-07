@@ -171,6 +171,7 @@ jobs:
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
           node web/test/scene-club-browser.cjs
+          node web/test/bank-browser.cjs
       - name: Act I review tools stay source-backed and isolated from campaign saves
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

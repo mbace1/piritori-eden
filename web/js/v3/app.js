@@ -1027,7 +1027,7 @@ function renderEncounter() {
   const pendingBattle = state.battle?.status === 'active';
   if (state.mode === 'encounter' && !pendingBattle && !presentAtLead()) return renderAwayFromLead(slot);
   return `
-    <div class="encounter-layout">
+    <div class="encounter-layout${encounter.id === 'enc-bank-counter' ? ' bank-counter' : ''}">
       <section class="paper-panel scene-card">
         <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
@@ -1093,12 +1093,24 @@ function encounterTitle(encounter) {
   return titles[encounter.id] ?? cap(encounter.id.replace('enc-', ''));
 }
 
+function conversionQuote(choice) {
+  const effects = (choice.effects ?? []).filter(effect => effect.startsWith('convert-markka:'));
+  if (!effects.length) return '';
+  // Use the settlement's exact rate and rounding on a disposable copy. A
+  // preview must never write a log, flag or payment into the campaign.
+  const preview = structuredClone(state);
+  applyEffects(preview, effects, data);
+  return `${state.markka - preview.markka} mk → ${money(preview.cash - state.cash)} · ${preview.markka} mk kept`;
+}
+
 function renderChoices(encounter) {
   return `<div class="choice-list">${encounter.choices.map(choice => {
     const status = choiceStatus(choice, state, data);
+    const quote = status.ok ? conversionQuote(choice) : '';
     // The UI diet: a choice you cannot take yet is one line, its label and why, so it does not push the open ones off the screen.
     return `<button class="choice-card${status.ok ? '' : ' locked'}" type="button" data-action="choose" data-choice="${esc(choice.id)}" ${status.ok ? '' : 'disabled'}>
       <strong>${esc(choice.label)}</strong>
+      ${quote ? `<span class="conversion-quote">${esc(quote)}</span>` : ''}
       ${status.ok ? `<span>${esc(choice.forecast)}</span>` : ''}
       ${choice.escalates ? `<small class="road-time">CAN GO BAD · ${Math.round(choice.escalates * 100)}%</small>` : ''}
       ${status.ok ? '' : `<em>${esc(status.reasons.map(readableReason).join(' · '))}</em>`}

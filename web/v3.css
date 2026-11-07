@@ -1128,6 +1128,15 @@ html body .arcade-home { display: none; }
 .choice-card.locked { min-height: 44px; padding: 2px 8px; border-width: 10px; }
 .choice-card.locked em { margin-top: 2px; }
 
+/* The fixed-rate counter has three financial choices, rather than a
+   character stage. Keep its setting and every decision in phone portrait. */
+@media (max-width: 760px) {
+  .bank-counter .scene-card .scene-viewport { height: min(12dvh, 100px); }
+  .bank-counter .encounter-opening { margin-top: 8px; font-size: 16px; line-height: 1.35; }
+  .bank-counter .choice-card { padding: 8px; border-width: 10px; }
+  .bank-counter .choice-card span { margin-top: 3px; font-size: 14px; line-height: 1.3; }
+}
+
 /* Scene Club: the authored stakes belong beside the decision, in the scene. */
 .cutin[data-talk] { background: #080a0b; }
 .cutin[data-talk] .cutin-location p { margin-top: 0; }
