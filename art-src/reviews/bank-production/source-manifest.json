@@ -1,0 +1,677 @@
+{
+  "schema": 1,
+  "purpose": "Review-only bank exterior/interior staging and named-cast source auditions",
+  "review_only": true,
+  "campaign_state_used": false,
+  "review_storage_key": "piritori-review:bank-production:v1",
+  "source_sha256": {
+    "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
+    "art-library/characters/manifest.json": "f244f108eaf6e6c5c206a8def43e2a272d25299ded774ce43b98bad607b699a1",
+    "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
+    "art-library/MODULAR_CHARACTER_SYSTEM.md": "e0b26a61aa9542263d3ee5dbd5c29d99f4446fa661561915b9e53cd6be9f9fc6",
+    "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
+    "art-src/reviews/act1-production/locations.json": "dbb7e6cd21d0cb7df3479610a4fe1ef1c5ccf94273e36c3826f475429b03ff79",
+    "art-src/reviews/act1-production/characters.json": "dc5f62933f15ba13c75da9fe693bb7f33e82dbde3e30f0d1c6a800f1b50e4fc6"
+  },
+  "bank_plate": {
+    "id": "scene-bank-counter-v01",
+    "kind": "scene",
+    "file": "art/v3/scenes/bank-counter-v01.webp",
+    "source": "art-src/scenes/bank-counter-v01.png",
+    "source_version": "v01",
+    "approval_status": "semi-approved",
+    "production_status": "prototype-only",
+    "dimensions": [
+      1536,
+      864
+    ],
+    "format": "webp-opaque",
+    "layer": "location-stage",
+    "era": "2003",
+    "location": "siltasaari",
+    "portrait_safe_bounds": [
+      0.24,
+      0,
+      0.76,
+      1
+    ],
+    "baked_text": false,
+    "baked_ui": false,
+    "sha256": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6",
+    "bytes": 137948,
+    "note": "Staffed bank counter on Siltasaari - the staffed_bank site, which had been playing over the labelled placeholder. Nobody in the picture and the space above the counter left clear, per STAGE_SPEC 6.3, so the teller is a 3D layer composited into the gap rather than baked into the plate - the same ruling as the empty Toko bar. No text anywhere: the clock, brochures, screen and slips carry abstract marks only."
+  },
+  "people": [
+    {
+      "id": "seller-esa",
+      "name": "Esa",
+      "role": "Recurring street seller",
+      "scene": "enc-first-purchase",
+      "gesture": "Proposed only: a short glance, price beat and restrained acknowledgement; no new dialogue.",
+      "options": [
+        {
+          "id": "seller-esa-a",
+          "letter": "A",
+          "note": "Short tousled hair and a wry expression; ordinary brown layers.",
+          "head": {
+            "module_name": "head-kallio-01-v03",
+            "runtime_asset_id": "head-kallio-01-v03",
+            "collection_id": "crew-heads-era1-v03",
+            "file": "art/v3/characters/heads/head-kallio-01-v03.webp",
+            "source": "art-library/characters/modules/era1/head-kallio-01-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              104,
+              49,
+              227,
+              313
+            ],
+            "sha256": "a77c2436ea41ff9b60cd95c933481acffc7dadc35cb79aa9216766f5e0f7458f",
+            "source_sha256": "b4a30a9e885529d709e8926e8e49617e810c77f2657bce8fd05d1757c84fa590"
+          },
+          "outfit": {
+            "module_name": "torso-fixer-v03",
+            "runtime_asset_id": "torso-fixer-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-fixer-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-fixer-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              34,
+              42,
+              478,
+              298
+            ],
+            "sha256": "a6b92d8ef125e45defc023a42708c8825f4b0af624a09b3e1d2d53211eea0b8e",
+            "source_sha256": "db9aa8c4d7082ba6acdce84d215b804f8eb029a975420c35a61dfc23dc7eb9c7"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "seller-esa-b",
+          "letter": "B",
+          "note": "Older lined face with a long dark layer and scarf.",
+          "head": {
+            "module_name": "head-kallio-04-v03",
+            "runtime_asset_id": null,
+            "collection_id": null,
+            "file": "art-library/characters/modules/era1/head-kallio-04-v03.png",
+            "source": "art-library/characters/modules/era1/head-kallio-04-v03.png",
+            "approval": "approved",
+            "production": "source-only; not runtime registered",
+            "library_production_ready": false,
+            "crop": [
+              19,
+              54,
+              224,
+              308
+            ],
+            "sha256": "ec114545deef3276ef3f5a9b1f5ef65f55405d4cee22b47b4708b7ee3099ca59",
+            "source_sha256": "ec114545deef3276ef3f5a9b1f5ef65f55405d4cee22b47b4708b7ee3099ca59"
+          },
+          "outfit": {
+            "module_name": "torso-watcher-v03",
+            "runtime_asset_id": "torso-watcher-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-watcher-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-watcher-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              155,
+              466,
+              303
+            ],
+            "sha256": "59aa3b1286646dc97b166a72278df5d1a9d760879961881c18018b4318c53fa3",
+            "source_sha256": "033627a9681cfbf50e7b9754bb224dc322b642710d87ff31af2cdf53cb1d8402"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "seller-esa-c",
+          "letter": "C",
+          "note": "Short curls with a compact navy outer layer.",
+          "head": {
+            "module_name": "head-kallio-10-v03",
+            "runtime_asset_id": null,
+            "collection_id": null,
+            "file": "art-library/characters/modules/era1/head-kallio-10-v03.png",
+            "source": "art-library/characters/modules/era1/head-kallio-10-v03.png",
+            "approval": "approved",
+            "production": "source-only; not runtime registered",
+            "library_production_ready": false,
+            "crop": [
+              67,
+              0,
+              225,
+              311
+            ],
+            "sha256": "bfe0161d111acbd5f4d8d38ec06484b0949cd11bbdbfd7746afd7600f7c26ec4",
+            "source_sha256": "bfe0161d111acbd5f4d8d38ec06484b0949cd11bbdbfd7746afd7600f7c26ec4"
+          },
+          "outfit": {
+            "module_name": "torso-runner-v03",
+            "runtime_asset_id": "torso-runner-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-runner-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-runner-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              34,
+              156,
+              478,
+              302
+            ],
+            "sha256": "0897f6a92a3d996ac69197cc99949cf61eac2977775faa11f1d4d5aa77bd0667",
+            "source_sha256": "144772a2cd9d87ab8feb6571e223697c8f28bef2c9ae50a09c31804a6fe0d343"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        }
+      ],
+      "canonical_assignment": null
+    },
+    {
+      "id": "buyer-leena",
+      "name": "Leena",
+      "role": "First buyer · outside the bank queue",
+      "scene": "enc-first-sale",
+      "gesture": "Proposed only: a patient/annoyed wait, glance toward the queue, brief response or departure.",
+      "options": [
+        {
+          "id": "buyer-leena-a",
+          "letter": "A",
+          "note": "Short brown hair with a plain travel jacket.",
+          "head": {
+            "module_name": "head-kallio-03-v03",
+            "runtime_asset_id": "head-kallio-03-v03",
+            "collection_id": "crew-heads-era1-v03",
+            "file": "art/v3/characters/heads/head-kallio-03-v03.webp",
+            "source": "art-library/characters/modules/era1/head-kallio-03-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              19,
+              52,
+              257,
+              310
+            ],
+            "sha256": "c2214f7575f9ce5aaf3e73f5c2558efd6245df174e82f07bc018dff1955fe28d",
+            "source_sha256": "d113c74754902d63c2f80e046dff5d2a824b2c70dfb7aea2e8d466452743bb56"
+          },
+          "outfit": {
+            "module_name": "torso-runner-v03",
+            "runtime_asset_id": "torso-runner-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-runner-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-runner-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              34,
+              156,
+              478,
+              302
+            ],
+            "sha256": "0897f6a92a3d996ac69197cc99949cf61eac2977775faa11f1d4d5aa77bd0667",
+            "source_sha256": "144772a2cd9d87ab8feb6571e223697c8f28bef2c9ae50a09c31804a6fe0d343"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "buyer-leena-b",
+          "letter": "B",
+          "note": "Bob and earring with everyday brown layers.",
+          "head": {
+            "module_name": "head-kallio-08-v03",
+            "runtime_asset_id": null,
+            "collection_id": null,
+            "file": "art-library/characters/modules/era1/head-kallio-08-v03.png",
+            "source": "art-library/characters/modules/era1/head-kallio-08-v03.png",
+            "approval": "approved",
+            "production": "source-only; not runtime registered",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              31,
+              268,
+              311
+            ],
+            "sha256": "a5d841de1d762ae74a1487dd3ed0f656b1391a98ccf81850e4cc3779e9d8e9e8",
+            "source_sha256": "a5d841de1d762ae74a1487dd3ed0f656b1391a98ccf81850e4cc3779e9d8e9e8"
+          },
+          "outfit": {
+            "module_name": "torso-fixer-v03",
+            "runtime_asset_id": "torso-fixer-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-fixer-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-fixer-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              34,
+              42,
+              478,
+              298
+            ],
+            "sha256": "a6b92d8ef125e45defc023a42708c8825f4b0af624a09b3e1d2d53211eea0b8e",
+            "source_sha256": "db9aa8c4d7082ba6acdce84d215b804f8eb029a975420c35a61dfc23dc7eb9c7"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "buyer-leena-c",
+          "letter": "C",
+          "note": "Curly hair and earring with a dark layer and scarf.",
+          "head": {
+            "module_name": "head-kallio-12-v03",
+            "runtime_asset_id": null,
+            "collection_id": null,
+            "file": "art-library/characters/modules/era1/head-kallio-12-v03.png",
+            "source": "art-library/characters/modules/era1/head-kallio-12-v03.png",
+            "approval": "approved",
+            "production": "source-only; not runtime registered",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              0,
+              268,
+              312
+            ],
+            "sha256": "dbd8ddc5dccf6f94549795320ef0afaee90538d00abf9c128d4994e8371ba8f4",
+            "source_sha256": "dbd8ddc5dccf6f94549795320ef0afaee90538d00abf9c128d4994e8371ba8f4"
+          },
+          "outfit": {
+            "module_name": "torso-watcher-v03",
+            "runtime_asset_id": "torso-watcher-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-watcher-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-watcher-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              155,
+              466,
+              303
+            ],
+            "sha256": "59aa3b1286646dc97b166a72278df5d1a9d760879961881c18018b4318c53fa3",
+            "source_sha256": "033627a9681cfbf50e7b9754bb224dc322b642710d87ff31af2cdf53cb1d8402"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        }
+      ],
+      "canonical_assignment": null
+    },
+    {
+      "id": "teller-anne",
+      "name": "Anne",
+      "role": "Day 3 teller · legitimate staffed counter",
+      "scene": "enc-bank-counter",
+      "gesture": "Proposed only: restrained workplace idle, glance toward the number ticket, explanation and acknowledgement.",
+      "options": [
+        {
+          "id": "teller-anne-a",
+          "letter": "A",
+          "note": "Short light hair with a plain vest and high collar.",
+          "head": {
+            "module_name": "head-kallio-05-v03",
+            "runtime_asset_id": "head-kallio-05-v03",
+            "collection_id": "crew-heads-era1-v03",
+            "file": "art/v3/characters/heads/head-kallio-05-v03.webp",
+            "source": "art-library/characters/modules/era1/head-kallio-05-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              90,
+              26,
+              245,
+              314
+            ],
+            "sha256": "8869f9f199764d137e5e51821d5db3ba3472c3a06dbf2766083a1f50b8e4a2ea",
+            "source_sha256": "4b75d2ce42c40464a7fb64408ec403a0f390c455158086497768e5f9e557d78f"
+          },
+          "outfit": {
+            "module_name": "torso-local-v03",
+            "runtime_asset_id": "torso-local-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-local-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-local-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              46,
+              467,
+              294
+            ],
+            "sha256": "76f2e7a4b835c38eb4f77ccf4b0c457f1cd08e9d172624cbf657d66c320aadf2",
+            "source_sha256": "b9933a770cde1d847a2e52fb42271daefbb39e1a0b3e39b680f4b16256252191"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "teller-anne-b",
+          "letter": "B",
+          "note": "Headscarf alternative with the same neutral staff layers.",
+          "head": {
+            "module_name": "head-kallio-06-v03",
+            "runtime_asset_id": null,
+            "collection_id": null,
+            "file": "art-library/characters/modules/era1/head-kallio-06-v03.png",
+            "source": "art-library/characters/modules/era1/head-kallio-06-v03.png",
+            "approval": "approved",
+            "production": "source-only; not runtime registered",
+            "library_production_ready": false,
+            "crop": [
+              60,
+              27,
+              225,
+              315
+            ],
+            "sha256": "05e74cf11ac104d15469f0332caea2b4ed871036bf24947e5813dfb16c38337b",
+            "source_sha256": "05e74cf11ac104d15469f0332caea2b4ed871036bf24947e5813dfb16c38337b"
+          },
+          "outfit": {
+            "module_name": "torso-local-v03",
+            "runtime_asset_id": "torso-local-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-local-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-local-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              0,
+              46,
+              467,
+              294
+            ],
+            "sha256": "76f2e7a4b835c38eb4f77ccf4b0c457f1cd08e9d172624cbf657d66c320aadf2",
+            "source_sha256": "b9933a770cde1d847a2e52fb42271daefbb39e1a0b3e39b680f4b16256252191"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        },
+        {
+          "id": "teller-anne-c",
+          "letter": "C",
+          "note": "Grey wavy hair with a practical brown layer.",
+          "head": {
+            "module_name": "head-kallio-11-v03",
+            "runtime_asset_id": "head-kallio-11-v03",
+            "collection_id": "crew-heads-era1-v03",
+            "file": "art/v3/characters/heads/head-kallio-11-v03.webp",
+            "source": "art-library/characters/modules/era1/head-kallio-11-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              3,
+              0,
+              270,
+              310
+            ],
+            "sha256": "9635adbb72fb86a07fff88f2c1e7bbfa7362d3ebe6d982dbce775f3ca969dcbd",
+            "source_sha256": "d4f28aeea18ffa0ee894b9120d3da6ecc04e64895ba730aa92ded736727dc98a"
+          },
+          "outfit": {
+            "module_name": "torso-fixer-v03",
+            "runtime_asset_id": "torso-fixer-v03",
+            "collection_id": "crew-torsos-era1-v03",
+            "file": "art/v3/characters/torsos/torso-fixer-v03.webp",
+            "source": "art-library/characters/modules/era1/torso-fixer-medium-handink-v03.png",
+            "approval": "approved",
+            "production": "prototype-ready",
+            "library_production_ready": false,
+            "crop": [
+              34,
+              42,
+              478,
+              298
+            ],
+            "sha256": "a6b92d8ef125e45defc023a42708c8825f4b0af624a09b3e1d2d53211eea0b8e",
+            "source_sha256": "db9aa8c4d7082ba6acdce84d215b804f8eb029a975420c35a61dfc23dc7eb9c7"
+          },
+          "assignment_status": "review-only source audition; not approved as this person"
+        }
+      ],
+      "canonical_assignment": null
+    }
+  ],
+  "encounters": [
+    {
+      "id": "enc-first-sale",
+      "day": 1,
+      "block": "night",
+      "site_id": "staffed_bank",
+      "anchor_override_id": "siltasaari",
+      "participants": [
+        "aatami",
+        "buyer-leena"
+      ],
+      "source_status": "fiction",
+      "opening": "The buyer waits outside the legitimate queue, annoyed that Aatami arrived before she invented a reason to be there.",
+      "inspectables": [
+        "bank queue",
+        "late SMS",
+        "southbound crowd"
+      ],
+      "choices": [
+        {
+          "id": "complete",
+          "label": "Complete the first sale",
+          "requirements": [
+            "stock:piri>=1"
+          ],
+          "forecast": "Gain €68 and price history; the route becomes visible.",
+          "effects": [
+            "cash:+68",
+            "stock:piri:-1",
+            "complete:mission-paper-bag",
+            "reveal:offer-siltasaari-sell"
+          ]
+        },
+        {
+          "id": "ask-introduction",
+          "label": "Trade margin for an introduction",
+          "requirements": [
+            "stock:piri>=1"
+          ],
+          "forecast": "Gain €55 and the first runner lead.",
+          "effects": [
+            "cash:+55",
+            "stock:piri:-1",
+            "reveal:enc-runner-at-tram-stop",
+            "flag:first-sale-introduction"
+          ]
+        },
+        {
+          "id": "abort",
+          "label": "Keep walking with the queue",
+          "requirements": [],
+          "forecast": "Preserve stock; lose the current quote.",
+          "effects": [
+            "pressure:siltasaari:-1",
+            "flag:first-sale-deferred"
+          ]
+        }
+      ],
+      "schedule": {
+        "day": 1,
+        "block": "night",
+        "encounter_id": "enc-first-sale",
+        "anchor_id": "siltasaari"
+      },
+      "staging": "neutral exterior blockout; no registered exterior plate"
+    },
+    {
+      "id": "enc-bank-counter",
+      "day": 3,
+      "block": "day",
+      "site_id": "staffed_bank",
+      "participants": [
+        "aatami",
+        "teller-anne"
+      ],
+      "source_status": "mixed",
+      "documented_fact": "Markka ceased to be legal tender after February 2002 and the fixed conversion rate is 5.94573 markka per euro.",
+      "fiction": "This particular staffed counter provides the slice's exchange service.",
+      "opening": "A paper clock marks the queue. The teller explains that nostalgia has no exchange-rate bonus.",
+      "inspectables": [
+        "number ticket",
+        "fixed conversion notice",
+        "security mirror"
+      ],
+      "choices": [
+        {
+          "id": "convert-all",
+          "label": "Convert all carried markka",
+          "requirements": [
+            "markka>0"
+          ],
+          "forecast": "Receive the fixed euro equivalent; the block and visible visit are the cost.",
+          "effects": [
+            "convert-markka:all",
+            "flag:bank-visit-visible"
+          ]
+        },
+        {
+          "id": "convert-part",
+          "label": "Convert 120 mk",
+          "requirements": [
+            "markka>=120"
+          ],
+          "forecast": "Keep some dead money for a later family choice.",
+          "effects": [
+            "convert-markka:120",
+            "flag:bank-visit-visible"
+          ]
+        },
+        {
+          "id": "leave-queue",
+          "label": "Leave before your number",
+          "requirements": [],
+          "forecast": "Keep the old cash and preserve the block's legitimacy cover only in memory.",
+          "effects": [
+            "flag:bank-visit-aborted"
+          ]
+        }
+      ],
+      "schedule": {
+        "day": 3,
+        "block": "day",
+        "encounter_id": "enc-bank-counter",
+        "anchor_id": "siltasaari",
+        "news_before": "news-markka-afterlife"
+      },
+      "staging": "existing interior plate; proposed binding, not runtime promotion"
+    },
+    {
+      "id": "enc-pasila-ledger",
+      "day": 7,
+      "block": "day",
+      "site_id": "staffed_bank",
+      "participants": [
+        "aatami",
+        "bank-clerk",
+        "optional-surviving-crew"
+      ],
+      "source_status": "fiction",
+      "opening": "A brochure shows a clean Pasila flat with no routes drawn on it. The ledger beside it refuses the same fantasy.",
+      "inspectables": [
+        "exit-fund total",
+        "debt demand",
+        "crew treatment needs",
+        "Pasila brochure"
+      ],
+      "choices": [
+        {
+          "id": "pay-debt",
+          "label": "Pay debt before the exit fund",
+          "requirements": [
+            "cash>=150"
+          ],
+          "forecast": "Reduce immediate threat; Pasila remains farther away in cash.",
+          "effects": [
+            "cash:-150",
+            "debt:-150",
+            "flag:debt-prioritised"
+          ]
+        },
+        {
+          "id": "fund-exit",
+          "label": "Ring-fence the exit fund",
+          "requirements": [
+            "cash>=120"
+          ],
+          "forecast": "Move €120 toward Pasila; debt pressure persists.",
+          "effects": [
+            "cash:-120",
+            "exit-fund:+120",
+            "flag:exit-prioritised"
+          ]
+        },
+        {
+          "id": "treat-crew",
+          "label": "Treat critical wounds first",
+          "requirements": [
+            "crew-critical>=1",
+            "cash>=80"
+          ],
+          "forecast": "Prevent a known death risk; accept a weaker financial ending.",
+          "effects": [
+            "cash:-80",
+            "resolve-critical-wound:one",
+            "flag:crew-prioritised"
+          ]
+        },
+        {
+          "id": "ask-jaska",
+          "label": "Ask Jaska what Eden costs",
+          "requirements": [
+            "relationship:jaska>=1"
+          ],
+          "forecast": "Gain no money; unlock the honest final conversation.",
+          "effects": [
+            "flag:honest-ending-open"
+          ]
+        }
+      ],
+      "schedule": {
+        "day": 7,
+        "block": "day",
+        "encounter_id": "enc-pasila-ledger",
+        "anchor_id": "siltasaari"
+      },
+      "staging": "existing interior plate; proposed binding, not runtime promotion"
+    }
+  ],
+  "identity_gate": {
+    "participant": "bank-clerk",
+    "anne_alias_confirmed": false,
+    "handling": "Separate neutral Day 7 clerk placeholder; do not assign Anne until the owner answers."
+  },
+  "limitations": [
+    "The first sale has no direct registered exterior plate. The schematic is a composition placeholder, not a new location or final background.",
+    "Modules are approved source direction, not approved named-character identities. Library production_ready remains false.",
+    "Source-board crops omit neighboring-sheet fragments; they are review crops, not registered sockets or finished extraction. Magenta fringes/edge defects remain visible and need production cleanup.",
+    "Heads include hair; outfits are medium-frame T-pose modules. No finished waist-up rig, eye states, hand acting or animation acceptance is implied.",
+    "Pasila is the brochure subject; every bank scene here remains at Siltasaari.",
+    "No campaign effects, currency conversion, mission settlement, C.19 fight or map state is simulated.",
+    "Browser emulation does not establish physical Pixel/iPad acceptance."
+  ]
+}
