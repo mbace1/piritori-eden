@@ -1,0 +1,137 @@
+{
+  "source": "actual browser capture",
+  "reviewOnly": true,
+  "newImageGeneration": false,
+  "sharedRigClips": true,
+  "checks": [
+    {
+      "label": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "font": 14.4444,
+      "dialogueFits": true,
+      "buttons": [
+        {
+          "left": 14.421875,
+          "right": 375.546875,
+          "top": 619.953125,
+          "bottom": 668.28125,
+          "height": 48.328125,
+          "font": 13
+        },
+        {
+          "left": 14.421875,
+          "right": 375.546875,
+          "top": 673.28125,
+          "bottom": 721.609375,
+          "height": 48.328125,
+          "font": 13
+        },
+        {
+          "left": 14.421875,
+          "right": 375.546875,
+          "top": 726.609375,
+          "bottom": 774.9375,
+          "height": 48.328125,
+          "font": 13
+        }
+      ],
+      "noOverflow": true,
+      "wordsChoicesClear": true,
+      "bubbleBottom": 359.4375,
+      "choicesTop": 619.953125,
+      "errors": [],
+      "storageUnchanged": true
+    },
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "font": 19,
+      "dialogueFits": true,
+      "buttons": [
+        {
+          "left": 857.59375,
+          "right": 1254.390625,
+          "top": 331.828125,
+          "bottom": 380.15625,
+          "height": 48.328125,
+          "font": 13
+        },
+        {
+          "left": 857.59375,
+          "right": 1254.390625,
+          "top": 385.15625,
+          "bottom": 433.484375,
+          "height": 48.328125,
+          "font": 13
+        },
+        {
+          "left": 857.59375,
+          "right": 1254.390625,
+          "top": 438.484375,
+          "bottom": 486.8125,
+          "height": 48.328125,
+          "font": 13
+        }
+      ],
+      "noOverflow": true,
+      "wordsChoicesClear": true,
+      "bubbleBottom": 280.328125,
+      "choicesTop": 331.828125,
+      "errors": [],
+      "storageUnchanged": true
+    },
+    {
+      "label": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "font": 13,
+      "dialogueFits": true,
+      "buttons": [
+        {
+          "left": 565.46875,
+          "right": 827.09375,
+          "top": 123.734375,
+          "bottom": 172.0625,
+          "height": 48.328125,
+          "font": 13
+        },
+        {
+          "left": 565.46875,
+          "right": 827.09375,
+          "top": 177.0625,
+          "bottom": 239.78125,
+          "height": 62.71875,
+          "font": 13
+        },
+        {
+          "left": 565.46875,
+          "right": 827.09375,
+          "top": 244.78125,
+          "bottom": 293.109375,
+          "height": 48.328125,
+          "font": 13
+        }
+      ],
+      "noOverflow": true,
+      "wordsChoicesClear": true,
+      "bubbleBottom": 135.625,
+      "choicesTop": 123.734375,
+      "errors": [],
+      "storageUnchanged": true
+    }
+  ],
+  "reducedMotion": true,
+  "physicalDeviceAcceptance": false,
+  "visualAcceptance": false,
+  "knownVisualIssues": [
+    "Existing Jaska eyelid patches extend rectangular skin-colored tabs at full blink; see idle-blink-phone.png. No source rig modified."
+  ]
+}
