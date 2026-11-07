@@ -182,6 +182,11 @@ jobs:
           node art-src/reviews/act1-consequences/test.mjs
           node art-src/reviews/act1-chapter/test.mjs
           node art-src/reviews/act1-workbench/capture.cjs --integrated
+          node art-src/reviews/act1-production/location-test.mjs
+          node art-src/reviews/act1-production/cast-test.mjs
+          node art-src/reviews/act1-production/order-test.mjs
+          node art-src/reviews/act1-production/test.mjs
+          PRODUCTION_CAPTURE_DIR=/tmp/act1-production-ci node art-src/reviews/act1-production/capture.cjs
       - name: the playtest links (ROADMAP G0) — each one tap from its fight, your campaign kept aside
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

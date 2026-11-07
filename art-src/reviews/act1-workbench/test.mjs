@@ -11,7 +11,7 @@ for(const t of p.tasks){
  assert(t.sources.length,`${t.id}: source-backed`);
  for(const source of t.sources)assert(fs.existsSync(new URL(source,root)),`${t.id}: missing source ${source}`);
 }
-assert.equal(p.previews.length,6);
+assert.equal(p.previews.length,7);
 assert(p.previews.every(x=>x.href&&x.status&&x.description));
 assert(fs.existsSync(new URL('../../../design/evidence/quiet-map-2026-11-07/map-after-phone.png',import.meta.url)));
-console.log(`PASS workbench data: ${p.tasks.length} bounded source-backed packets, six previews, existing milestones, fixed estimate`);
+console.log(`PASS workbench data: ${p.tasks.length} bounded source-backed packets, seven previews, existing milestones, fixed estimate`);

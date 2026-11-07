@@ -4,7 +4,7 @@ Owner direction, 7 November 2026: build many good plans and placeholders for lat
 
 ## What is concrete now
 
-The workbench links six review surfaces: the animated Scene Club candidate, all authored encounters, a captured map comparison, C.19 evidence and UX proposals, consequence fixtures, and the chapter/finale rehearsal. They exist to expose gaps and compare decisions before committing production code or art. The detailed work packets are in `packets.json` and can be filtered and shortlisted in the browser. A shortlist is a local review preference, never an art approval or a completed development milestone.
+The workbench links seven review surfaces: the listed location/cast production atlas, the animated Scene Club candidate, all authored encounters, a captured map comparison, C.19 evidence and UX proposals, consequence fixtures, and the chapter/finale rehearsal. They exist to expose gaps and compare decisions before committing production code or art. The detailed work packets are in `packets.json` and can be filtered and shortlisted in the browser. A shortlist is a local review preference, never an art approval or a completed development milestone.
 
 Every packet names a single bounded change, its existing roadmap milestone, exact source files, an observable acceptance condition, and what it must not silently change. Proposed mechanics and fixture values must stay labelled in their individual previews.
 
@@ -29,3 +29,8 @@ Every packet names a single bounded change, its existing roadmap milestone, exac
 ## Later integration checks
 
 Keep each implementation small and test the existing campaign behavior, not only the review UI: first purchase/sale, recruitment, scene choice/reload, road event, door and mission fights, C.19 victory/police/withdrawal, once-only receipts, missing/arrested recovery, fence money and chapter carryover. Browser emulation is not physical acceptance. Public release documentation advances only after an actual tested release.
+
+
+## Listed locations and characters first
+
+The production atlas adds 12 location/context packets, 26 existing cast/role packets and a finite 15-stage dependency sequence. It expands the detail of the already listed work; it adds no new story, person or location. New-content expansion remains deferred until those existing-scope gates and a later owner direction. Source selection never assigns a random modular face to a named person, and intentionally offscreen roles remain offscreen. See `../act1-production/ORDER.md`, `LOCATIONS.md` and `CHARACTERS.md`.
