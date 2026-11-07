@@ -29,7 +29,7 @@ expensive asset production.
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85), and step 2 (the brief and the fight: no names, the rivals' plans on each fighter's tag) in v4.96. The talk, the map and the header are next. |
 | 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | **Missing crew have a way home (v4.92):** a rescue door, or bail. **A won fight takes the fallen's weapons (v4.93).** Next: the finale (owner's answer pending, §8 item 7). |
 | 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | **The 30%-of-a-block rule is built (v4.98):** a trip or a seller visit uses 30% of a block; trips always go, trades wait once three are used. Next: the playthrough bot over the 10 days. |
-| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.97 is live (`design/CITY_V497_RELEASE.md`); device checks are pending. |
+| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.98 is live (`design/CITY_V498_RELEASE.md`); device checks are pending. |
 
 Arena pass must start with evidence: capture all five existing `crew-run`
 locations and identify actual gaps, intersections, floor seams, scale and

@@ -1,0 +1,39 @@
+# Hub release: Act I city v4.98 (a trip or a trade takes time)
+
+- **Source:** `mbace1/piritori-eden` @ `bb1a804`, web only.
+  - **Gates were green:** run 1196, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `5a04a8a5`, under `piritori/`. **Pages run 1653 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 68 site files changed.
+- **What players get** (D002, owner 2026-10-26: *"30%"*; ROADMAP G4 step 1):
+  - **A trip, or a visit to a seller, uses 30% of a block,** so three fit.
+    - A visit is every trade at one place between two trips: the market, the fence and the street seller.
+    - The header's block label ends in three pips for what is left.
+  - **Trips always go.** Once three are used, **trading waits** until the block turns on its scene, a door or nightfall. Walking to the story is never refused.
+  - **Not charged:** route sends, Toko's counter, and road events (which keep their own minutes on top).
+  - **What it does to the €400:** before, three buy-walk-sell loops cleared it inside one block. Now trading alone takes three blocks.
+- **One reading for the owner to check:** *"the fourth turns it"* is built as "the fourth waits for the block to turn", not "the fourth ends the block and skips its scene".
+- **Catalogue:**
+  - The note moves to v4.98 in en, fi and ja. `versions.json` piritori goes 4.97 → 4.98 by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=216), and `sw.js` `VERSION` went 257 → 258. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 34 bare-node suites, `v3-state.mjs` checking every step of the rule;
+    - `m1-inspection`: 72, its M2 contract now expecting exactly 30% per journey;
+    - `header-fit`: 62;
+    - `m2-journey`: 47;
+    - `next-step`: 57;
+    - `road-browser`: 42;
+    - `opening`: 56;
+    - the Godot web reference is unchanged.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 75.
+  - **Restaged once.** The full run above was on gh-pages `3cd4f361` (v4.97). Before the push, Toko Move v3.14 landed. Restaged on it, the site check (8 of 8) and the playtest links (29) passed again before the push.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`70ef0c78`, Toko Move v3.14).
