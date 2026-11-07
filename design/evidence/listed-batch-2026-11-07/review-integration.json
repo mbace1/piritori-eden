@@ -1,0 +1,34 @@
+{
+  "source": "actual browser verification",
+  "physicalDeviceAcceptance": false,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "cards": 8,
+      "tasks": 36,
+      "filters": true,
+      "reviewPersistence": true,
+      "export": true,
+      "campaignUnchanged": true,
+      "integrated": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "cards": 8,
+      "tasks": 36,
+      "filters": true,
+      "reviewPersistence": true,
+      "export": true,
+      "campaignUnchanged": true,
+      "integrated": true,
+      "errors": []
+    }
+  ]
+}

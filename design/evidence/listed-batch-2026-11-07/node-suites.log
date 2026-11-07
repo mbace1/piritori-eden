@@ -1,0 +1,129 @@
+
+web/test/aatami.mjs
+aatami: 23 checks passed
+
+web/test/arena-lab.mjs
+PASS: 2/6/12 people × 3 loadouts, unique slots/labels, separate campaign rules, deterministic replay, terminal outcomes, zero campaign effects
+
+web/test/bear-path-police.mjs
+{"result":"PASS","policeAtRound":9,"policeCount":2,"checks":["natural heat escalation","pending posture blocks ordinary actions","both authored postures","checkpoint replay","one aftermath settlement","autoplay reaches outcome"],"autoResult":"withdraw","autoRound":9}
+
+web/test/bear-path.mjs
+PASS: authored encounter choices/effects, free inspection, one commitment/settlement, return memory, tamper rejection, canonical battle/cover and replay
+
+web/test/c17-campaign-bridge.mjs
+C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
+
+web/test/c18-build-identity.mjs
+C.19 build identity contract passed
+
+web/test/c18-render-contract.mjs
+C.19 build identity contract passed
+C18 renderer and UI ownership contract passed
+C19 arena title/header/help agree; unchanged C11 resolver is labelled separately
+
+web/test/c19-outing.mjs
+  a played opening: win (win) in 3 rounds · pressure 8 · they ran · police did not come
+C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I's two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.
+
+web/test/c19-policy-report.mjs
+C19 policy report: fixture, grouping, comparison, duplicate rejection passed
+
+web/test/c19-readability.mjs
+C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+
+web/test/chapter-narrative.mjs
+PASS: canonical links, scene-only roles, timeline, outcome concealment, no mutation, reload, unknown chapter and HTML escaping
+
+web/test/chapter.mjs
+chapter: 41 checks passed
+
+web/test/courtyard-site.mjs
+Courtyard site contract: 23 checks passed (source identity, old saves, unchanged peaceful/C.19 handoff).
+
+web/test/crew-run.mjs
+C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/rest, exact-once settlement, arrivals, C16 checkpoint migration and roster fallback passed.
+C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
+C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
+C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+
+web/test/directional-cover.mjs
+PASS: four wall orientations, both sides, flanks, corner rule, detours, plan invalidation, melee, resolved wall/miss impacts and replay
+
+web/test/doors.mjs
+doors: 745 checks passed
+
+web/test/fight-module-motion.mjs
+Baked motion transitions, gait phase, clamped down, grip hold and legacy fallback: PASS
+
+web/test/fight-module-recovery.mjs
+PASS: checkpoint preserves commands/items/results, rejects tampering; touch pixel and frame budgets
+
+web/test/fight-module.mjs
+PASS: mirrored fixture, action/item guards, move occupancy, cover, legal enemy fallback, training results and deterministic replay
+PASS: anchor covers the rank behind them
+
+web/test/fighter-assets.mjs
+FIGHTER ASSETS OK: F01/F02 v02 bodies and own-rig clip packs match the durable Art contract.
+
+web/test/fighter-test.mjs
+FIGHTER TEST CONTRACT OK: two provisional bodies, own-rig clips, independent touch controls.
+
+web/test/frame-clock.mjs
+frame clock: 30/60 FPS at 60/90/120/144 Hz, stalls, resume and quality changes pass
+presentation clock: real action durations at 1–60 FPS; hidden and orientation time excluded
+
+web/test/level-layout.mjs
+level-layout: 1797 checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (courtyard, street, yard, quay)
+
+web/test/places.mjs
+places: 183 checks passed
+
+web/test/road.mjs
+road: 360 checks passed
+
+web/test/runtime-art-status.mjs
+PASS: unreviewed environment prototypes cannot silently become approved or production-ready
+
+web/test/scene-content.mjs
+PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker
+
+web/test/standing.mjs
+standing: 74 checks passed
+
+web/test/story.mjs
+story: 63 checks passed
+
+web/test/tactics.mjs
+PASS: action order, independent budgets, reload, pure previews, obstacle routes, LOS corners, partial cover, fixed intent, forecast/resolution, combined threats, remaining-budget Auto and replay
+
+web/test/toko.mjs
+toko: 25 checks passed
+
+web/test/treatment.mjs
+Treatment presentation: 57 checks passed; exact engine selection/cost/blockers, unchanged previews, remaining wounds, generated names and reload-once guard.
+
+web/test/v3-battle.mjs
+V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, desync, attack reach, entry forecast, cover decision copy.
+V3 BATTLE growth hooks OK
+V3 BATTLE mid-fight save round trip OK
+
+web/test/v3-contract.mjs
+V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.
+
+web/test/v3-nameplates.mjs
+V3 NAMEPLATES OK: 2v2 stack, 3v3 lane, already-clear, and bottom clamp.
+
+web/test/v3-state.mjs
+V3 STATE OK: 20 blocks, deferred purchase, fixed choices and Pasila forecast pasila-deferred.
+V3 STATE growth-loop OK
+PASS chapter progress through sales and route deliveries
+PASS a board battle survives a reload
+
+web/test/visits.mjs
+PASS visits: prerequisites, location, battle/finale exclusion, reload, cancellation, one-time memories, unchanged rewards and clock, Jaska location alignment

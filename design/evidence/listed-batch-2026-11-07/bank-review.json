@@ -1,0 +1,50 @@
+{
+  "previewOnly": true,
+  "sourceManifest": "source-manifest.json",
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "exactAuthoredScenes": 3,
+      "exactChoices": 10,
+      "sourceOptions": 9,
+      "minChoiceHeight": 66,
+      "openingFont": 15,
+      "firstChoiceBottom": 640.328125,
+      "firstChoiceOnInitialScreen": true,
+      "noHorizontalOverflow": true,
+      "campaignUntouched": true,
+      "separateReviewReload": true,
+      "reducedMotionAtRest": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "exactAuthoredScenes": 3,
+      "exactChoices": 10,
+      "sourceOptions": 9,
+      "minChoiceHeight": 67.296875,
+      "openingFont": 16,
+      "firstChoiceBottom": 471.375,
+      "firstChoiceOnInitialScreen": true,
+      "noHorizontalOverflow": true,
+      "campaignUntouched": true,
+      "separateReviewReload": true,
+      "reducedMotionAtRest": true,
+      "errors": []
+    }
+  ],
+  "actualBrowserVideo": null,
+  "physicalDeviceAcceptance": false,
+  "artApproval": false,
+  "runtimeOrCampaignChanges": false,
+  "identityGate": "Anne / bank-clerk unresolved",
+  "sourceImages": "Existing tracked approved individual module files referenced in place. No master sheets, rejected art or calibration renders added."
+}

@@ -27,7 +27,8 @@
       "web/js/v3/journey.js": "e6ecda68151ed4e5a301aa181a4a2c0f3eb535de1935b5197c8013c86086fad7",
       "web/js/v3/outing.js": "754573f2264646f3aac0fbc3e6ea6abe6174c622661bdc60dc6d08a47937ac64",
       "web/crew-run/locations.js": "bb627e305fd13ef7ddd6c6642f7bbbffdd1eeb3dafb401b5d7d60f6417d89bde",
-      "web/js/v3/app.js": "68382f4004bf1554b0171e6b3ab19dc3a0a280d18a2ae0bbe18278042a64be02"
+      "web/js/v3/app.js": "cf55242768116f826059b4737b191b5495841ddc047479664d1092d48eff213b",
+      "web/js/v3/treatment.js": "7e469b39cb7629aad829b5c7b9edbf7c3d34b865229975b88a7fe4cf9376d673"
     },
     "coverage": {
       "activeAnchors": 11,
@@ -54,7 +55,8 @@
     ],
     "amendments": [
       "Bank proceeds preview/phone layout: b48490e6e46bdadd92f85b156827cea33d6143fe",
-      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history."
+      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history.",
+      "Treatment choice/receipt presentation: original4a65639676ec2eb888e1b80cf9105c8a724a8a9f, integrated8a17ab5beeb361e37e304bea01f63222d9f0fa71; no engine or recovery-rule change."
     ]
   },
   "locations": [
@@ -184,7 +186,7 @@
       "views": {
         "approach": "First sale and queue-sitting occur outside the legitimate staffed-bank queue/public approach in Siltasaari. Show a neutral exterior/queue placeholder until an appropriate existing source/crop is approved; an interior teller crop cannot stand in for that deal.",
         "dialogue": "Propose scene-bank-counter-v01 only for enc-bank-counter and enc-pasila-ledger, with teller/clerical source-selection placeholders. Leena’s first-sale conversation remains outside; no illicit exchange is moved into the teller service.",
-        "decision": "Keep fixed markka conversion, partial conversion, leave-queue, first-sale/introduction and later debt/exit-fund/treatment choices exact. Pasila is a brochure/future subject; the present scene stays Siltasaari.",
+        "decision": "The real bank now previews exact euro proceeds/remaining markka through the existing settlement code. The Day 7 treatment choice names the actual selected crew member and €80 cost, with critical → wounded and a saved named receipt. Keep the other first-sale, withdrawal/ledger and financial-ending stakes intact; proposed art remains separate.",
         "tactical": "The actual C.19 place is the Siltasaari shore, street kit, exit back over the bridge, with no registered fight plate. A door illustration using the bank room does not authorize combat inside that room.",
         "return": "Show the real transaction/history/debt/crew-treatment change at the current Siltasaari map location. Keep first-sale proceeds and bank conversion distinct; repeat/reload must not pay either twice."
       },
@@ -222,7 +224,8 @@
         "art-src/reviews/act1-encounters/BINDING_PLAN.md",
         "web/js/v3/places.js",
         "web/js/v3/outing.js",
-        "web/crew-run/locations.js"
+        "web/crew-run/locations.js",
+        "web/js/v3/treatment.js"
       ],
       "missions": [
         "mission-paper-bag"
