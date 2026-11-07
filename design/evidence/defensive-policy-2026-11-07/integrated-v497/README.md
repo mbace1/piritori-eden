@@ -41,3 +41,5 @@ node web/test/defensive-policy-report.mjs
 ```
 
 Per-seed raw outcomes/confidence intervals, cumulative damage, permanent campaign casualties, missing crew/recovery settlement, device performance and wall-clock battle time are not measured by this table. Existing campaign receipt/recovery tests remain separate. No rules, squad tuning, artwork, save schema or default bot policy are changed. A no-Brace ablation remains unrun; the report makes no blanket causal claim about Brace or human tactics.
+
+Final integration validation: all **39 web node suites** pass ([output](node-suites.log)). The combat dashboard passes both viewports across all **45 defensive cohorts**, including exact source rows/deltas, deep-link reload, historical missing counters and untouched campaign storage. The eight-route workbench check also passes at both sizes ([report](workbench-verification.json)). These browser checks measure the review UI; they do not add device or combat-rule acceptance.
