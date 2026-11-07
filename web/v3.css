@@ -1127,3 +1127,14 @@ html body .arcade-home { display: none; }
 }
 .choice-card.locked { min-height: 44px; padding: 2px 8px; border-width: 10px; }
 .choice-card.locked em { margin-top: 2px; }
+
+/* Scene Club: the authored stakes belong beside the decision, in the scene. */
+.cutin[data-talk] { background: #080a0b; }
+.cutin[data-talk] .cutin-location p { margin-top: 0; }
+.cutin[data-talk] .cutin-options {
+  left: 3.7% !important; top: auto !important; bottom: 1.35%;
+  width: 92.6% !important; height: auto !important; max-height: 34%;
+  gap: 4px; overflow-y: auto; justify-content: flex-start;
+}
+.cutin[data-talk] .cutin-options button { flex-shrink: 0; font-size: max(12px, 3.3cqw); }
+.cutin[data-talk] .cutin-options button small { font-size: max(12px, 2.8cqw); }

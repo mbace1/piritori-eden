@@ -194,7 +194,7 @@ function cutinShell(label, onClose) {
       words.className = `cutin-words cutin-${cast.layout}`; words.style.cssText = box(news ? cast.copy : cast.bubble);
       options.style.cssText = box(news ? { x: 600, y: 1784, w: 440, h: 110 } : { x: 470, y: 1500, w: 580, h: 394 });
       words.style.setProperty('--tag', CUTIN_TAGS[line.tag] ?? '#676B6B');
-      words.innerHTML = `<b>${esc(line.tag ?? cast.name)}</b><p>${esc(line.text)}</p>`;
+      words.innerHTML = `${news ? `<b>${esc(line.tag ?? cast.name)}</b>` : ''}<p>${esc(line.text)}</p>`;
       options.innerHTML = buttons.map(([text, , o = {}], i) => `<button type="button" data-i="${i}" style="--tab:${CUTIN_TABS[Math.min(i, 2)]}" ${o.disabled ? 'disabled' : ''}><i></i><span>${esc(text)}${o.note ? `<small>${esc(o.note)}</small>` : ''}</span></button>`).join('');
       options.querySelectorAll('button').forEach(b => { b.onclick = () => buttons[Number(b.dataset.i)][1](); });
       if (line.clip) stage.play(line.clip);
@@ -250,7 +250,7 @@ async function openTalk(encounter, who) {
   function ask() {
     shell.show(speaker, { text: encounter.opening, clip: 'talk' }, [
       ...encounter.choices.map(choice => { const status = choiceStatus(choice, state, data);
-        return [choice.label, () => answer(choice), { disabled: !status.ok, note: status.ok ? '' : status.reasons.map(readableReason).join(' · ') }]; }),
+        return [choice.label, () => answer(choice), { disabled: !status.ok, note: status.ok ? choice.forecast : status.reasons.map(readableReason).join(' · ') }]; }),
       ['Look around', setAside]]);
   }
   function answer(choice) {
