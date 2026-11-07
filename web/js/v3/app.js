@@ -688,7 +688,7 @@ function progressionCard(slot) {
 
   let phase = 'STREET BUYER';
   let title = 'START AT PIRITORI';
-  let body = 'The whole Kallio board is visible. Piritori is highlighted because it is the only live lead Aatami has.';
+  let body = 'Piritori is Aatami’s first lead.';
   let ladder = '<span>€160 CASH</span><i>→</i><strong>BUY €45</strong>';
 
   if (firstPurchase && !firstSale) {
@@ -845,7 +845,7 @@ function renderRoute() {
     </div>
     <p class="dim">${state.route.ordinary} ordinary journeys · ${state.route.hidden} hidden · ${state.route.capacity} total</p>
     <button class="paper-button cyan" data-action="send-route">${tr('send')}</button>
-  ` : `<p class="dim">Pin a public path. Ordinary people use its capacity first; hidden traffic never gets a private lane.</p>`;
+  ` : '';
   const nextEncounter = data.encounters.get(slot.encounter_id);
   return `
     <div class="route-layout">
@@ -869,7 +869,7 @@ function renderRoute() {
         <section class="paper-panel inspect-panel" data-inspected="${esc(selected.id)}" data-present="${esc(present.id)}" data-lead="${esc(lead?.id ?? '')}">
           <p class="section-label">${here ? 'YOU ARE HERE' : 'INSPECTING'}${selected.sliceState === 'active' ? '' : ` · ${esc(selected.sliceState === 'landmark' ? 'LANDMARK' : 'SEALED')}`}</p>
           <h2>${esc(selected.label)}</h2>
-          <p class="presence-line"><span>AATAMI · <b>${esc(present.label)}</b></span><span>STORY LEAD · <b>${esc(lead?.label ?? '—')}</b></span></p>
+          ${here && present.id === lead?.id ? '' : `<p class="presence-line"><span>AATAMI · <b>${esc(present.label)}</b></span><span>STORY LEAD · <b>${esc(lead?.label ?? '—')}</b></span></p>`}
           <p>${esc(anchorDescription(selected))}</p>
           <div class="route-steps">${(selected.roles ?? []).map(role => `<span class="tag">${esc(cap(role))}</span>`).join('')}</div>
           <div class="node-actions">
@@ -884,10 +884,10 @@ function renderRoute() {
               ? `<button class="paper-button primary" data-action="start-training">${tr('start_training')}</button>`
               : `<button class="paper-button" data-action="plan-route">${routePlanning ? tr('clear') : tr('planning')}</button>`}
           </div>
-          ${journey ? renderJourneyPreview(journey) : here ? '' : `<p class="consequence-strip">${esc(inspectionNote(selected, slot))}</p>`}
+          ${journey ? renderJourneyPreview(journey) : here ? '' : `<p class="consequence-strip">${esc(inspectionNote(selected))}</p>`}
           ${routePlanning ? renderRoutePlanner(draftPath) : ''}
         </section>
-        <section class="paper-panel">${routeInfo}</section>
+        ${routeInfo ? `<section class="paper-panel">${routeInfo}</section>` : ''}
         <section class="paper-panel">
           <p class="section-label">CITY MEMORY</p>
           <ul class="log-list">${state.logs.slice(0, 5).map(item => `<li>${esc(item.replace(/^enc-[a-z0-9-]+:\s*/, ''))}</li>`).join('')}</ul>
@@ -954,12 +954,11 @@ function renderJourneyPreview(journey) {
 
 /** What looking at a place from elsewhere does and does not let you do —
  *  said in words, so the panel never implies an action it will refuse. */
-function inspectionNote(anchor, slot) {
+function inspectionNote(anchor) {
   if (['locked', 'teaser'].includes(anchor.sliceState)) return 'Sealed in this slice — you can look, not go.';
   if (anchor.sliceState === 'landmark') return 'A landmark to look at, not a place to work.';
   if (anchor.sliceState === 'training') return 'An isolated test area — its fight costs and pays nothing.';
-  const leadNote = anchor.id === slot.anchor_id ? ' The story lead is here.' : '';
-  return `You are only looking.${leadNote} TRAVEL HERE plans a journey you can still cancel.`;
+  return 'Looking is free. Plan a journey to travel here.';
 }
 
 function anchorDescription(anchor) {
@@ -988,6 +987,7 @@ function renderRoutePlanner(path) {
       ${names.length ? names.map(esc).join(' → ') : 'Choose a starting anchor, then a destination.'}
       ${path.length > 2 ? `<div class="route-steps">${path.map(id => `<span class="tag">${esc(data.anchors.get(id)?.label)}</span>`).join('')}</div>` : ''}
     </div>
+    <p class="dim">Ordinary journeys use capacity first. Hidden loads share the rest.</p>
     <div class="route-actions">
       <button class="paper-button cyan" data-action="commit-route" ${path.length < 2 ? 'disabled' : ''}>${tr('commit')}</button>
       <button class="paper-button" data-action="cancel-route">${tr('clear')}</button>
