@@ -1,0 +1,10 @@
+PASS trade: existing effects, deterministic before/after, isolated memory
+PASS hire: existing effects, deterministic before/after, isolated memory
+PASS victory: existing effects, deterministic before/after, isolated memory
+PASS withdraw: existing effects, deterministic before/after, isolated memory
+PASS police: existing effects, deterministic before/after, isolated memory
+PASS rescue: existing effects, deterministic before/after, isolated memory
+PASS treatment: existing effects, deterministic before/after, isolated memory
+PASS bail: existing effects, deterministic before/after, isolated memory
+PASS pressure: existing effects, deterministic before/after, isolated memory
+Consequence workbench: 9 fixtures passed; 3 real-adapter receipts reject replays before/after JSON restore; no storage access.
