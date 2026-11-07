@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "07877b5840633583c2d18a3686faaedf27ccfada",
+  "capturedAt": "2026-11-07T17:52:53.125Z",
+  "reviewOnly": true,
+  "physicalDeviceAcceptance": false,
+  "realC19Frames": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "location": "courtyard",
+      "goal": "Make them back off · 3 still standing",
+      "pressure": "PRESSURE 0/6 · POLICE AT 6",
+      "players": 3,
+      "enemies": 3,
+      "pageErrors": [],
+      "HTTPFailures": [],
+      "source": "Actual g0-door campaign → C.19 opening; fresh isolated browser context; no mock battle data"
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "location": "courtyard",
+      "goal": "Make them back off · 3 still standing",
+      "pressure": "PRESSURE 0/6 · POLICE AT 6",
+      "players": 3,
+      "enemies": 3,
+      "pageErrors": [],
+      "HTTPFailures": [],
+      "source": "Actual g0-door campaign → C.19 opening; fresh isolated browser context; no mock battle data"
+    }
+  ],
+  "dashboard": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scenarios": 15,
+      "sources": 4,
+      "policiesFiltered": true,
+      "proposals": 5,
+      "minimumTargetHeight": 44,
+      "noHorizontalOverflow": true,
+      "storageUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "scenarios": 15,
+      "sources": 4,
+      "policiesFiltered": true,
+      "proposals": 5,
+      "minimumTargetHeight": 44,
+      "noHorizontalOverflow": true,
+      "storageUnchanged": true,
+      "errors": []
+    }
+  ]
+}

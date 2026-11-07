@@ -1,0 +1,5 @@
+PASS preserved data instrumented-default-12.json 147 rows
+PASS preserved data baseline-30.json 147 rows
+PASS preserved data dodge-first-instrumented-12.json 147 rows
+PASS preserved data dodge-first-30.json 147 rows
+PASS missing telemetry stays missing; five source-backed proposals; no rule execution

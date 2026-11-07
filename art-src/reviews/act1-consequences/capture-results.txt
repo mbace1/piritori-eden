@@ -1,0 +1,19 @@
+PASS phone/trade: preview, real effects, isolated storage, visible action, responsive text
+PASS phone/hire: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS phone/victory: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS phone/withdraw: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS phone/police: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS phone/rescue: preview, real effects, isolated storage, visible action, responsive text
+PASS phone/treatment: preview, real effects, isolated storage, visible action, responsive text
+PASS phone/bail: preview, real effects, isolated storage, visible action, responsive text
+PASS phone/pressure: preview, real effects, isolated storage, visible action, responsive text
+PASS desktop/trade: preview, real effects, isolated storage, visible action, responsive text
+PASS desktop/hire: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS desktop/victory: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS desktop/withdraw: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS desktop/police: preview, real effects, isolated storage, visible action, responsive text, duplicate + JSON restore
+PASS desktop/rescue: preview, real effects, isolated storage, visible action, responsive text
+PASS desktop/treatment: preview, real effects, isolated storage, visible action, responsive text
+PASS desktop/bail: preview, real effects, isolated storage, visible action, responsive text
+PASS desktop/pressure: preview, real effects, isolated storage, visible action, responsive text
+Consequence browser: 18 fixture flows passed; 20 actual captures; zero campaign-storage access or browser errors.

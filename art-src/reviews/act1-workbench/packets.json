@@ -1,0 +1,620 @@
+{
+  "schemaVersion": 1,
+  "estimate": 48,
+  "authority": "ROADMAP.md; producer rubric unchanged",
+  "previews": [
+    {
+      "label": "01 · ARRIVAL AND DIALOGUE",
+      "title": "Scene Club motion",
+      "description": "Aatami arrives, Jaska speaks, the authored decision is made, and the scene returns to Kallio. Includes bounded blink repairs.",
+      "action": "Play the motion candidate →",
+      "href": "../scene-club-2026-11-07/?repair=1",
+      "status": "Review candidate · owner art approval pending",
+      "kind": "preview"
+    },
+    {
+      "label": "02 · AUTHORED CHAPTER",
+      "title": "Every encounter",
+      "description": "Browse all authored encounters with existing plates, choices and explicit placeholders for missing art or binding work.",
+      "action": "Explore the encounters →",
+      "href": "../act1-encounters/",
+      "status": "Playable review · authored text, proposed presentation",
+      "kind": "preview"
+    },
+    {
+      "label": "03 · THE CITY BETWEEN MOMENTS",
+      "title": "A quieter map",
+      "description": "Compare captured phone and desktop screens from the tested map cleanup, keeping travel and route decisions intact.",
+      "action": "Compare the map screens →",
+      "href": "./map-preview.html",
+      "status": "Captured draft UI · map branch CI passed",
+      "kind": "preview"
+    },
+    {
+      "label": "04 · THE FIGHT STAYS C.19",
+      "title": "Combat evidence and UX",
+      "description": "Inspect all 15 measured fights and compare strategies, damage and police pressure. Proposal overlays keep the 3D battlefield.",
+      "action": "Inspect the combat evidence →",
+      "href": "../act1-combat/",
+      "status": "Measured bot data · UX overlays are proposals",
+      "kind": "preview"
+    },
+    {
+      "label": "05 · WHAT COMES HOME",
+      "title": "Consequences and recovery",
+      "description": "Try trade, hiring, loot, injuries, missing crew, arrests and recovery through isolated, labelled fixture states.",
+      "action": "Try the consequence previews →",
+      "href": "../act1-consequences/",
+      "status": "Review fixtures · campaign save untouched",
+      "kind": "preview"
+    },
+    {
+      "label": "06 · THE TEN-DAY RUN",
+      "title": "Chapter and finale rehearsal",
+      "description": "Follow the actual schedule and mission dependencies. Explore the proposed shipment choice and 30% time budget before committing rules.",
+      "action": "Rehearse the chapter →",
+      "href": "../act1-chapter/",
+      "status": "Authored timeline · finale/time proposals not promoted",
+      "kind": "plan"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "G00",
+      "milestone": 1,
+      "lane": "Baseline playtest",
+      "title": "Record the three G0 routes on hardware",
+      "change": "Use the existing door, getaway and Bear Path playtest links for a short device session.",
+      "acceptance": "Record whether each fight made the player decide something, and any device failure, with actual device/browser details.",
+      "boundary": "This remains owner/device acceptance. The preview pack and browser bots cannot sign it off.",
+      "sources": [
+        "ROADMAP.md",
+        "design/G0_PLAYTEST.jpg"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Existing routes; owner/device verdict pending"
+    },
+    {
+      "id": "A01",
+      "milestone": 4,
+      "lane": "Dialogue",
+      "title": "Arrival into Scene Club",
+      "change": "Integrate the reviewed arrival and return timing into the existing encounter shell after approval.",
+      "acceptance": "Arrival, authored choice, saved result and return work in one loop at phone and desktop sizes.",
+      "boundary": "New staging is a candidate. Do not promote semi-approved rigs or room by changing manifest labels.",
+      "sources": [
+        "ROADMAP.md",
+        "DESIGN_AUTHORITY.md",
+        "design/UI_DIET.md"
+      ],
+      "preview": "../scene-club-2026-11-07/?repair=1",
+      "status": "Animated review ready; integration gated"
+    },
+    {
+      "id": "A02",
+      "milestone": 4,
+      "lane": "Animation",
+      "title": "Bounded eyelid repair",
+      "change": "Replace rectangular eye swatches with reviewed eye-opening masks for Jaska and young Aatami front.",
+      "acceptance": "Rest pixels remain unchanged; animated changes stay inside eye boxes and preserve glasses/brows.",
+      "boundary": "The side rig is unassessed. Keep original sources and a rollback; new marker strokes need approval.",
+      "sources": [
+        "ROADMAP.md",
+        "DESIGN_AUTHORITY.md",
+        "design/UI_DIET.md",
+        "web/js/v3/cutin-stage.js"
+      ],
+      "preview": "../scene-club-2026-11-07/?repair=1",
+      "status": "Review candidate and pixel checks ready"
+    },
+    {
+      "id": "A03",
+      "milestone": 4,
+      "lane": "Responsive UI",
+      "title": "Readable landscape dialogue",
+      "change": "Adapt the reviewed landscape composition while retaining the short bottom-tail bubble and source proportions.",
+      "acceptance": "Dialogue is at least 12px, choices at least 44px, faces clear, with no clipped text at 844×390.",
+      "boundary": "The current runtime landscape bubble is too small; passing choice tests alone is not readability acceptance.",
+      "sources": [
+        "ROADMAP.md",
+        "DESIGN_AUTHORITY.md",
+        "design/UI_DIET.md"
+      ],
+      "preview": "../scene-club-2026-11-07/?repair=1",
+      "status": "Landscape review ready"
+    },
+    {
+      "id": "A04",
+      "milestone": 4,
+      "lane": "Scene binding",
+      "title": "Bind the six unillustrated encounters",
+      "change": "Resolve their authored site/approach first, then preview existing bank, Harju and Jade-front plates where appropriate.",
+      "acceptance": "Each binding matches the actual people and location; compare all affected scenes on phone and desktop.",
+      "boundary": "First sale is outside the staffed bank. Courtyard Receipts is not Jaska’s room. Semi-approved plates remain candidates.",
+      "sources": [
+        "design/SCENARIO_ATLAS.md",
+        "content/era1-slice-v1.json",
+        "art/v3/manifest.json"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Binding placeholders ready for review"
+    },
+    {
+      "id": "A05",
+      "milestone": 4,
+      "lane": "Character production",
+      "title": "Source selection for missing contacts",
+      "change": "Choose and document source references for Esa, Leena, Anne and Mei-Lan before extracting dedicated cut-ins.",
+      "acceptance": "Each contact has a source identity, approval state, separable parts and real motion review.",
+      "boundary": "Neutral placeholders are labels, not approved character designs. Do not generate replacements for existing approved identities.",
+      "sources": [
+        "ART_BIBLE.md",
+        "art-library/APPROVALS.md",
+        "content/era1-slice-v1.json"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "A06",
+      "milestone": 4,
+      "lane": "Encounter UX",
+      "title": "Stakes before every consequential answer",
+      "change": "Carry authored forecasts and blocking reasons through each encounter composition.",
+      "acceptance": "All enabled choices show their stakes; unavailable choices explain why; reload cannot duplicate effects.",
+      "boundary": "No invented odds or story branches. A battle choice goes to actual C.19 rather than a simulated result card.",
+      "sources": [
+        "ROADMAP.md",
+        "DESIGN_AUTHORITY.md",
+        "design/UI_DIET.md",
+        "content/era1-slice-v1.json"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "B01",
+      "milestone": 4,
+      "lane": "City UX",
+      "title": "Trim idle map repetition",
+      "change": "Collapse identical location labels and show capacity guidance only while planning a route.",
+      "acceptance": "Whole-state inspection invariance, route preview/cancel/pin and opening trade regressions pass.",
+      "boundary": "Travel, route rules, current objective and pinned route controls remain intact.",
+      "sources": [
+        "design/UI_DIET.md",
+        "web/test/m1-inspection.cjs"
+      ],
+      "preview": "./map-preview.html",
+      "status": "Draft #121; nine CI jobs passed"
+    },
+    {
+      "id": "B02",
+      "milestone": 4,
+      "lane": "Objectives",
+      "title": "One clear next action",
+      "change": "Keep the persistent objective bar concise across travel, free blocks, encounters and unfinished fights.",
+      "acceptance": "Exactly one primary next action is in view through the opening trade and after every return.",
+      "boundary": "Do not hide optional exits, goals or actual costs merely to reduce text.",
+      "sources": [
+        "design/FIRST_TWO_MINUTES.md",
+        "web/test/next-step.cjs"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "B03",
+      "milestone": 6,
+      "lane": "Travel and time",
+      "title": "Explain a trip’s time commitment",
+      "change": "Prototype a readable journey cost and resulting block/time before implementing D002.",
+      "acceptance": "The chapter rehearsal exposes the effect of repeated travel; cancel/reload never charges a preview.",
+      "boundary": "30% of a block is an owner direction, but its chapter integration belongs at G4 and requires a complete-run test.",
+      "sources": [
+        "ROADMAP.md",
+        "web/js/v3/road.js"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planning calculator; runtime unchanged"
+    },
+    {
+      "id": "B04",
+      "milestone": 4,
+      "lane": "Pressure",
+      "title": "Local pressure where it matters",
+      "change": "Show the relevant location’s pressure beside travel/door choices and their aftermath.",
+      "acceptance": "The player can distinguish local pressure from the campaign clock and see a changed value after a result.",
+      "boundary": "Pressure is not territory ownership; do not invent a corner-control feature.",
+      "sources": [
+        "ROADMAP.md",
+        "content/places-v1.json"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "B05",
+      "milestone": 4,
+      "lane": "Door board",
+      "title": "Compact job commitment",
+      "change": "Prototype a short door header with job, risk, pay and required crew before taking the block.",
+      "acceptance": "All existing requirements and escalation forecasts remain available on a phone without duplicated exposition.",
+      "boundary": "Do not drop late closing, fight caps, loss stakes or the choice to let a block pass.",
+      "sources": [
+        "content/doors-v1.json",
+        "web/js/v3/doors.js"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "C01",
+      "milestone": 2,
+      "lane": "Combat readability",
+      "title": "Move, target and police forecasts together",
+      "change": "Review overlays that explain movement, target validity and pressure in the actual 3D arena.",
+      "acceptance": "A player can read the planned move/action and police timing before committing, at portrait and desktop sizes.",
+      "boundary": "No replacement formation/card battle. No rules or source models change in an overlay study.",
+      "sources": [
+        "COMBAT.md",
+        "design/C19_CAMPAIGN_FIGHTS.md"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Evidence dashboard and UX proposals"
+    },
+    {
+      "id": "C02",
+      "milestone": 2,
+      "lane": "Bot policy",
+      "title": "Measure defensive decisions",
+      "change": "Instrument successful Brace/move/attack commands and compare attack-first with dodge-first.",
+      "acceptance": "Saved deterministic samples show what each bot actually does; policy changes are separated from rule changes.",
+      "boundary": "A bot choosing zero Braces is not proof that Brace is a bad player mechanic.",
+      "sources": [
+        "web/tools/fight-balance.mjs",
+        "design/evidence/scene-club-2026-11-07/README.md"
+      ],
+      "preview": "../act1-combat/",
+      "status": "12/30-seed experiments preserved"
+    },
+    {
+      "id": "C03",
+      "milestone": 2,
+      "lane": "Threat analysis",
+      "title": "Reconcile planned and fallback enemy actions",
+      "change": "Trace where a careful policy avoids announced danger but gets hit after an enemy presses around a block.",
+      "acceptance": "One reproducible weak fight has per-command threats, fallback actions and resulting damage explained.",
+      "boundary": "Investigate policy/model limits before tuning enemy damage or changing intent promises.",
+      "sources": [
+        "web/fight-module/tactics.js",
+        "web/crew-run/run.js",
+        "ROADMAP.md"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "C04",
+      "milestone": 2,
+      "lane": "Escort UX",
+      "title": "Make the carrier’s slower move readable",
+      "change": "Expose the existing carrier restriction and the value of screening them near the exit.",
+      "acceptance": "Actual C.19 getaway traces distinguish straight-out and escort choices, including costs.",
+      "boundary": "Keep extraction, missing crew and loss prices intact; do not turn a getaway into a narrative dice card.",
+      "sources": [
+        "design/C19_CAMPAIGN_FIGHTS.md",
+        "web/tools/fight-balance.mjs"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "C05",
+      "milestone": 2,
+      "lane": "Balance evidence",
+      "title": "Track all 15 scenarios at 30 seeds",
+      "change": "Compare outcome, damage, casualties, police and duration by scenario, heat and policy.",
+      "acceptance": "Source JSON, seed count and policy identity are reproducible; unavailable metrics are shown as unmeasured.",
+      "boundary": "Targets remain ROADMAP §5 proposals. No pooled average hides a broken mission.",
+      "sources": [
+        "ROADMAP.md",
+        "web/tools/c19-policy-report.mjs"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Measured baselines available"
+    },
+    {
+      "id": "C06",
+      "milestone": 3,
+      "lane": "Arena construction",
+      "title": "Audit five arenas before geometry changes",
+      "change": "Capture courtyard, yard, park, tram street and quay at their real camera angles and mark actual seams/occlusion.",
+      "acceptance": "Before/after frames use matching cameras; cover, gates and floor transitions remain legible.",
+      "boundary": "Use the existing kit incrementally. No speculative rebuilding or new model promotion.",
+      "sources": [
+        "ROADMAP.md",
+        "design/COURTYARD_PASS.jpg",
+        "web/crew-run/layouts.js"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "C07",
+      "milestone": 3,
+      "lane": "Tactical framing",
+      "title": "Inspect gun targets without losing the board",
+      "change": "Review the optional temporary shooter/target camera and a reliable return to planning view.",
+      "acceptance": "The same target, costs, intent and return state are preserved through inspection and reduced motion.",
+      "boundary": "A camera study does not authorize new combat rules or conceal the full board by default.",
+      "sources": [
+        "DESIGN_AUTHORITY.md",
+        "design/C14_AFTER_THE_RAIN.md"
+      ],
+      "preview": "../act1-combat/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "D01",
+      "milestone": 5,
+      "lane": "Settlement UX",
+      "title": "One result strip, paid once",
+      "change": "Show money, loot, condition, missing/arrested crew and pressure at the place of return.",
+      "acceptance": "Applying the same receipt again leaves the entire campaign unchanged; reload shows the same settled outcome.",
+      "boundary": "Fixtures are review states, not measured victories. Preserve the existing campaign receipt path.",
+      "sources": [
+        "web/js/v3/outing.js",
+        "web/test/c19-outing.mjs",
+        "design/C19_CAMPAIGN_FIGHTS.md"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Real receipt fixture available"
+    },
+    {
+      "id": "D02",
+      "milestone": 5,
+      "lane": "Recruitment",
+      "title": "Show the promise with the hire",
+      "change": "Put pay, availability and loyalty implications together before recruiting or accepting a short job.",
+      "acceptance": "The selected authored hire changes the intended state once; the crew view explains what was promised.",
+      "boundary": "Generated hires and authored runner choices are different sources and must be labelled.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "web/js/v3/state.js"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "D03",
+      "milestone": 5,
+      "lane": "Crew recovery",
+      "title": "Explain who can work next",
+      "change": "Prototype distinct aftermath states for hurt, critical, missing and arrested crew.",
+      "acceptance": "Names and existing condition/availability are readable; treatment/rescue/bail options show their actual requirements.",
+      "boundary": "Do not invent recovery timers, resurrection rules or an unimplemented medical service.",
+      "sources": [
+        "web/js/v3/state.js",
+        "web/crew-run/campaign-adapter.js"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "D04",
+      "milestone": 5,
+      "lane": "Rescue and bail",
+      "title": "A visible route home",
+      "change": "Connect existing rescue doors and bail to the missing/arrested person and their cost.",
+      "acceptance": "A real-engine fixture brings the intended person back without replaying payment or recovering unrelated crew.",
+      "boundary": "Availability and time/cash costs come from the current model; a fixture is not a completed chapter run.",
+      "sources": [
+        "ROADMAP.md",
+        "web/js/v3/doors.js",
+        "web/js/v3/state.js"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "D05",
+      "milestone": 5,
+      "lane": "Loot and economy",
+      "title": "Show the actual chapter-income ledger",
+      "change": "Compare fence, market-sale and route proceeds, then resolve the roadmap’s fence-only description against the current web model.",
+      "acceptance": "Real API fixtures show which income paths increment chapterEarned; the intended eligible sources are recorded before any rule change.",
+      "boundary": "ROADMAP describes fence money, but web state.js also counts transactOffer and sendOnRoute receipts. Do not silently force one interpretation or auto-sell gear.",
+      "sources": [
+        "ROADMAP.md",
+        "web/js/v3/outing.js",
+        "content/era1-slice-v1.json"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Source mismatch exposed by real model fixtures"
+    },
+    {
+      "id": "D06",
+      "milestone": 5,
+      "lane": "Persistent consequences",
+      "title": "Remember the choice in the city",
+      "change": "Surface an authored relationship, lead or pressure change on a return visit without repeating the whole result screen.",
+      "acceptance": "The relevant memory survives reload and does not grant the reward again.",
+      "boundary": "No new culprit, mission or faction plot is invented to fill a presentation gap.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "web/test/visits.mjs"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "E01",
+      "milestone": 6,
+      "lane": "Chapter structure",
+      "title": "Make the twenty-block spine inspectable",
+      "change": "Lay out authored encounters, free blocks, missions and their dependencies in one rehearsal timeline.",
+      "acceptance": "Every source encounter and schedule block is represented; unknown or optional paths remain explicit.",
+      "boundary": "The atlas is a source index, not evidence that every declared effect executes.",
+      "sources": [
+        "content/era1-slice-v1.json",
+        "design/scenario-atlas.json"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Interactive rehearsal placeholder"
+    },
+    {
+      "id": "E02",
+      "milestone": 6,
+      "lane": "Progression testing",
+      "title": "Trace authored branches through ten days",
+      "change": "Build deterministic policy runs that log choices, blocks, economy and reachability.",
+      "acceptance": "All required story beats/endings stay reachable; each failed run identifies the exact blocked prerequisite.",
+      "boundary": "Do not claim a full-run pass from isolated mission tests or a hand-written timeline.",
+      "sources": [
+        "ROADMAP.md",
+        "web/test/chapter-narrative.mjs",
+        "web/test/story.mjs"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "E03",
+      "milestone": 5,
+      "lane": "Finale access",
+      "title": "Measure the €400 chapter-income gate",
+      "change": "Rehearse the current shipment prerequisites and make the income-source mismatch visible.",
+      "acceptance": "The tool names each actual blocked prerequisite and compares the current income ledger with the roadmap description.",
+      "boundary": "The €400 income threshold and €400 cash stake are separate requirements. Do not lower either to make a fixture win; fence-only versus broader income needs source alignment.",
+      "sources": [
+        "ROADMAP.md",
+        "content/era1-slice-v1.json"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "E04",
+      "milestone": 5,
+      "lane": "Finale design",
+      "title": "Crew and route decision candidate",
+      "change": "Prototype a shipment commitment with understandable tradeoffs using existing crew and authored destination.",
+      "acceptance": "The owner can compare the current roll with a concrete crew/route proposal and see what remains unspecified.",
+      "boundary": "New risk/reward numbers are placeholders; the choice-versus-played-fight question remains an owner decision.",
+      "sources": [
+        "ROADMAP.md",
+        "design/SCENARIO_ATLAS.md"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Playable proposal; no rule promotion"
+    },
+    {
+      "id": "E05",
+      "milestone": 6,
+      "lane": "Time integration",
+      "title": "Test 30%-of-block costs before G4",
+      "change": "Compare current travel/trade time with the proposed budget, then run the actual chapter when implemented.",
+      "acceptance": "Preview/cancel is free; one visit/trip charges once; ten-day runs verify content is still reachable.",
+      "boundary": "A planning calculator is not the runtime D002 implementation or a measured complete-run result.",
+      "sources": [
+        "ROADMAP.md",
+        "web/js/v3/road.js",
+        "web/test/m2-journey.cjs"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planning estimates only"
+    },
+    {
+      "id": "E06",
+      "milestone": 6,
+      "lane": "Chapter carryover",
+      "title": "Preview what crosses the chapter boundary",
+      "change": "Show current data-driven cash stake, stock reset, weapons and built network carryover.",
+      "acceptance": "Exact carryover fixtures match chapter.js and reload cannot apply a second transition.",
+      "boundary": "Chapter 2 content is not authored yet; do not fabricate its playable completion.",
+      "sources": [
+        "web/js/v3/chapter.js",
+        "web/test/chapter.mjs"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "Q01",
+      "milestone": 7,
+      "lane": "Visual QA",
+      "title": "Device acceptance on real hardware",
+      "change": "Collect physical Pixel/iPad observations for dialogue, touch targeting, motion and 3D arena performance.",
+      "acceptance": "Owner/device evidence records what was actually played, device/browser and observed failures.",
+      "boundary": "Browser emulation and SwiftShader are not physical-device acceptance.",
+      "sources": [
+        "ROADMAP.md",
+        "ART_BIBLE.md"
+      ],
+      "preview": "../scene-club-2026-11-07/?repair=1",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "Q02",
+      "milestone": 7,
+      "lane": "Recovery QA",
+      "title": "Reload, interrupted graphics and saves",
+      "change": "Reuse existing persistence/recovery suites for a run interrupted at every commitment/result boundary.",
+      "acceptance": "No lost receipt, double reward, charged cancellation or permanent blank arena after recovery.",
+      "boundary": "A schema or geometry check alone does not prove visual correctness.",
+      "sources": [
+        "web/test/c19-outing.mjs",
+        "web/test/fight-module-recovery.mjs",
+        "web/test/crew-run-browser.cjs"
+      ],
+      "preview": "../act1-consequences/",
+      "status": "Planned implementation"
+    },
+    {
+      "id": "Q03",
+      "milestone": 7,
+      "lane": "Release",
+      "title": "A reviewable release candidate",
+      "change": "Integrate approved slices, run relevant gates, then stage the hub with exact source/build receipts.",
+      "acceptance": "Source SHA, hub SHA, version, CI and actual public playable route agree; rollback remains available.",
+      "boundary": "No unapproved art promotion, silent deploy or completion percentage increase from code volume.",
+      "sources": [
+        "design/HUB_RELEASE.md",
+        "ROADMAP.md"
+      ],
+      "preview": null,
+      "status": "Planned implementation"
+    },
+    {
+      "id": "Q04",
+      "milestone": 4,
+      "lane": "Asset authority",
+      "title": "Keep source status visible",
+      "change": "Maintain a per-scene/character inventory that separates registered files, source approval and runtime readiness.",
+      "acceptance": "Every visible placeholder has a reason, source candidate and a defined next production gate.",
+      "boundary": "Do not manufacture acceptance by relabelling a manifest entry.",
+      "sources": [
+        "art/v3/manifest.json",
+        "art-library/APPROVALS.md",
+        "DESIGN_AUTHORITY.md"
+      ],
+      "preview": "../act1-encounters/",
+      "status": "Hash-checked Scene Club inventory ready"
+    },
+    {
+      "id": "Q05",
+      "milestone": 6,
+      "lane": "Playtest quality",
+      "title": "A complete chapter verdict",
+      "change": "Prepare a compact ten-day playtest with recorded decisions, rough edges and an owner verdict.",
+      "acceptance": "At least one actual complete run and the required strategy/ending coverage are saved with reproducible evidence.",
+      "boundary": "A checklist or preview gallery is preparation, not proof the chapter is fun or complete.",
+      "sources": [
+        "ROADMAP.md",
+        "DESIGN_LOCKS.md"
+      ],
+      "preview": "../act1-chapter/",
+      "status": "Planned implementation"
+    }
+  ]
+}

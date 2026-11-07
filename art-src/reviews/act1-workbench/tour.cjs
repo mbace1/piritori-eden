@@ -1,0 +1,18 @@
+// Record the actual assembled review tools. This is a review tour, not a campaign playthrough.
+const {chromium}=require('playwright');const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict'),{spawnSync}=require('node:child_process');
+const ROOT=path.resolve(__dirname,'../../..'),OUT=path.join(__dirname,'evidence');
+const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2'};
+const server=http.createServer((req,res)=>{let file=path.resolve(ROOT,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!file.startsWith(ROOT+path.sep)){res.writeHead(403).end();return;}if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');fs.readFile(file,(err,b)=>{if(err){res.writeHead(404).end();return;}res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'});res.end(b);});});
+(async()=>{await new Promise(ok=>server.listen(0,'127.0.0.1',ok));const base=`http://127.0.0.1:${server.address().port}/art-src/reviews/`,browser=await chromium.launch({headless:true});try{fs.mkdirSync(OUT,{recursive:true});const context=await browser.newContext({viewport:{width:1280,height:800},recordVideo:{dir:OUT,size:{width:1280,height:800}}}),p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});p.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url())});
+ const go=async(route,ready)=>{await p.goto(base+route);if(ready)await p.waitForFunction(ready);await p.waitForLoadState('networkidle');await p.waitForTimeout(1500);};
+ await go('act1-workbench/',()=>window.__act1Workbench?.ready);await p.locator('#preview-grid').scrollIntoViewIfNeeded();await p.waitForTimeout(1300);
+ await go('act1-encounters/',()=>window.__encounterGallery?.ready);await p.evaluate(()=>location.hash='enc-first-sale');await p.waitForTimeout(1800);await p.evaluate(()=>location.hash='enc-jaska-receipt');await p.waitForTimeout(2000);
+ await go('act1-consequences/');await p.waitForTimeout(1700);
+ await go('act1-chapter/',()=>window.__chapterReview?.ready);await p.locator('[data-tab="shipment"]').click();await p.waitForTimeout(2000);await p.locator('[data-tab="budget"]').click();await p.waitForTimeout(1800);
+ await go('act1-combat/',()=>window.__combatReview?.ready);await p.locator('.arena-study').scrollIntoViewIfNeeded();await p.waitForTimeout(2200);
+ await go('act1-workbench/map-preview.html');await p.waitForTimeout(1800);
+ await go('act1-workbench/',()=>window.__act1Workbench?.ready);await p.locator('#plan').scrollIntoViewIfNeeded();await p.locator('#milestone').selectOption('5');await p.waitForTimeout(2000);
+ assert.equal(await p.evaluate(()=>localStorage.getItem('piritori-to-eden:v3')),null,'tour must not create a campaign');assert.deepEqual(errors,[]);
+ const video=p.video();await context.close();const file=path.join(OUT,'act1-workbench-tour.webm');await video.saveAs(file);const temp=await video.path();if(temp!==file)fs.unlinkSync(temp);
+ const encode=spawnSync('ffmpeg',['-y','-i',file,'-an','-c:v','libx264','-preset','veryfast','-crf','24','-pix_fmt','yuv420p','-movflags','+faststart',path.join(OUT,'act1-workbench-tour.mp4')],{encoding:'utf8'});assert.equal(encode.status,0,encode.stderr);console.log('PASS actual review tour: all sections visited, no campaign write/errors, WebM and MP4 saved');
+ }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);server.close();process.exitCode=1});
