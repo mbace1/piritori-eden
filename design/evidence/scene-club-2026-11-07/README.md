@@ -49,3 +49,13 @@ Local results: 35/35 bare-node suites pass after updating the cache-token assert
 At 12 seeds, the opt-in fight-job careful advantage is +0.76 points (default +3.76); HP saved is 0.59 (default 0.01), and rounds relative to aggressive are +0.12 (default −0.06). This is a tradeoff, not a balance fix. Default and opt-in bots both report zero Braces in these samples. No gameplay policy or rule is promoted from this experiment.
 
 Verification: all 147 default rows exactly match `baseline-12.json` after removing the three additive action metrics; all 147 instrumented opt-in rows likewise match the original experiment. The report JSON compares the default and opt-in samples. Both use the same twelve deterministic seeds, heats and scenarios. The 30-seed file remains a baseline only; the opt-in result is exploratory.
+
+## Extended experiment and regression limits
+
+At 30 seeds (4,410 simulations), dodge-first careful play gains −0.09 win percentage points over aggressive play, saving 0.48 HP and taking 0.10 extra rounds. Default careful gains +2.30 points and saves −0.16 HP. The alternate remains opt-in. The additional raw/report files preserve this comparison.
+
+Local system Chromium 156: Aatami 16/16, mission 32/32, readability 86/86 pass. Outing passes 72 gameplay assertions but fails three console-error checks; a separate URL trace observes an absent `/favicon.ico` requested by this browser, alongside the already-exempt local `/hub/shell.js`. Road, chapter and header likewise report resource-error checks, so these runs are **not** full passes.
+
+Matching Playwright Headless Shell 151: header 62/62 passes; Scene Club phone/desktop/landscape and keyboard checks passed earlier with system Chromium. The expanded matching-browser batch encountered a road click timeout and chapter/readability screenshot-stability timeouts. Clean main `b114bf7` also encounters a road timeout under this environment (at reload, not the same instruction). That does not certify the branch: the affected full suites remain unresolved locally. The raw session logs remain in `/workspace/evidence`.
+
+GitHub run 1159 (`42394523105`) on `2a3e9f3` was inspected: campaign-state, Godot, laboratory and wet-environment jobs passed; the scenes job passed its existing scenes/visits and new Scene Club checks and progressed to readability. Other jobs were still running at inspection. No full green CI or physical-device acceptance is claimed here.
