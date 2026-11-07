@@ -236,8 +236,8 @@ GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), be
 4. Which stale PRs to close.
 5. Question 26: what makes Aatami step back. Three crew is provisional.
 6. ~~Should a fight have chance in it?~~ **Answered 2026-10-31: "Blows can miss, of course."** Shipped in v4.90 (§10).
-6. D002: what travel and trades cost in time. Today they are free on the web.
-7. **The finale: a crew-and-route choice with the risks shown, or a fight you play?** (Proposed: the choice.) Its gate is €400 earned by selling by day 10: market sales, packs sent down a route, and since v4.93 the fence for what a won fight takes. *(Until v4.97 this item said only fence money counted, which made the gate look unreachable. That was wrong; see VERSIONS v4.97.)*
+6. D002: what travel and trades cost in time. Today they are free on the web, which also makes the shipment's €400 gate reachable on day 1 (item 7).
+7. **The finale: a crew-and-route choice with the risks shown, or a fight you play?** (Proposed: the choice.) Its gate is €400 earned by selling by day 10: market sales, packs sent down a route, and since v4.93 the fence for what a won fight takes. *(Until v4.97 this item said only fence money counted, which made the gate look unreachable. That was wrong; see VERSIONS v4.97.)* **Measured 2026-11-07 with the game's own rule functions:** packs cost €45 at Piritori and sell for €68–90, and nothing limits trades in a block. A journey costs no block either, because D002 (item 6) is unresolved. So once the first buyer is known, three buy-walk-sell loops count €408 inside one block. The gate is not a gate until D002 gives travel and trading a cost in time. Set the two together.
 
 ## 10. The owner's answer, 2026-10-31
 
