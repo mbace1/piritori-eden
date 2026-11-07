@@ -59,3 +59,11 @@ Local system Chromium 156: Aatami 16/16, mission 32/32, readability 86/86 pass. 
 Matching Playwright Headless Shell 151: header 62/62 passes; Scene Club phone/desktop/landscape and keyboard checks passed earlier with system Chromium. The expanded matching-browser batch encountered a road click timeout and chapter/readability screenshot-stability timeouts. Clean main `b114bf7` also encounters a road timeout under this environment (at reload, not the same instruction). That does not certify the branch: the affected full suites remain unresolved locally. The raw session logs remain in `/workspace/evidence`.
 
 GitHub run 1159 (`42394523105`) on `2a3e9f3` was inspected: campaign-state, Godot, laboratory and wet-environment jobs passed; the scenes job passed its existing scenes/visits and new Scene Club checks and progressed to readability. Other jobs were still running at inspection. No full green CI or physical-device acceptance is claimed here.
+
+## QA follow-up after the art-agent split
+
+The strengthened Scene Club browser test passes all six viewport × motion cases (390×844, 1280×800, 844×390; reduce/no-preference). It compares actual figure-region canvas RGBA pixels for both Jaska and Aatami, checks strict HTTP/console/request/page errors with only the exact local hub-shell exemption, and retains choice stakes, keyboard, authored +300 markka/+1 trust, map return and reload assertions. The six-case log is `motion-regression.log`.
+
+The existing local matching-shell C.19 outing suite completed **75/75**. CI run 1161 (`42395070215`) on the prior docs head `fecb8d3` had 8/9 jobs green at inspection, including both C.19 outing and crew recovery; the scenes job was still running. The new strengthened test requires CI on its own head; this is not a full-green final-head claim. Run 1157 already passed the complete Act I scenes job for the unchanged dialogue runtime (road42, chapter20, mission32, M1 inspection71, next-step57, header62 and readability86).
+
+The 844×390 runtime speech bubble still scales below the 12px floor. Passing its choice/motion checks does not certify landscape speech readability. A separate review-only art candidate explores a readable landscape composition. Physical Pixel/iPad acceptance remains pending.

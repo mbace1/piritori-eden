@@ -1,0 +1,6 @@
+PASS Scene Club phone/reduce: Jaska/Aatami pixels stay still, strict errors, forecasts, keyboard, choice, map, reload
+PASS Scene Club desktop/reduce: Jaska/Aatami pixels stay still, strict errors, forecasts, keyboard, choice, map, reload
+PASS Scene Club landscape/reduce: Jaska/Aatami pixels stay still, strict errors, forecasts, keyboard, choice, map, reload
+PASS Scene Club phone/no-preference: Jaska/Aatami pixels animate, strict errors, forecasts, keyboard, choice, map, reload
+PASS Scene Club desktop/no-preference: Jaska/Aatami pixels animate, strict errors, forecasts, keyboard, choice, map, reload
+PASS Scene Club landscape/no-preference: Jaska/Aatami pixels animate, strict errors, forecasts, keyboard, choice, map, reload
