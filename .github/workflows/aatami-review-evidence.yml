@@ -57,6 +57,37 @@ jobs:
           if (required.size) throw Error('Missing screenshots: ' + [...required].join(', '));
           console.log('Verified 24 PNG evidence frames from two existing rigs and two simulated viewports.');
           NODE
+      - name: Encode actual dialogue motion (review GIFs; not runtime art)
+        run: |
+          set -euo pipefail
+          command -v ffmpeg
+          for who in aatami aatami-side; do
+            ffmpeg -hide_banner -nostdin -loglevel error -y -framerate 10 \
+              -i "/tmp/aatami-review-evidence/motion-frames/$who/frame-%04d.png" \
+              -filter_complex "[0:v]split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" \
+              -loop 0 "/tmp/aatami-review-evidence/$who-dialogue-motion.gif"
+          done
+          node <<'NODE'
+          const fs = require('node:fs');
+          const {createHash} = require('node:crypto');
+          const out = '/tmp/aatami-review-evidence/';
+          const m = JSON.parse(fs.readFileSync(out + 'motion-manifest.json', 'utf8')).motion;
+          if (m.length !== 2 || m.some(v => v.fps !== 10 || v.frameCount < 100 || v.frameCount > 130))
+            throw Error('Missing/invalid Aatami motion frames');
+          for (const clip of m) {
+            const gif = fs.readFileSync(out + clip.gif);
+            if (gif.length < 10000 || !['GIF87a', 'GIF89a'].includes(gif.toString('ascii', 0, 6)))
+              throw Error('Missing/invalid encoded GIF: ' + clip.gif);
+            const dir = out + clip.framesDir + '/';
+            const pick = i => fs.readFileSync(dir + 'frame-' + String(i).padStart(4, '0') + '.png');
+            const hash = b => createHash('sha256').update(b).digest('hex');
+            if (hash(pick(0)) === hash(pick(Math.floor(clip.frameCount / 2))))
+              throw Error('No visual motion in sampled frames: ' + clip.who);
+            console.log(clip.who + ' passed: ' + clip.frameCount + ' source frames, ' + gif.length + ' GIF bytes');
+          }
+          NODE
+          # Keep the GIFs and 24 still QC frames, not hundreds of intermediate PNGs.
+          rm -rf /tmp/aatami-review-evidence/motion-frames
       - name: Upload review-only evidence (no acceptance implied)
         uses: actions/upload-artifact@v4
         if: always()
