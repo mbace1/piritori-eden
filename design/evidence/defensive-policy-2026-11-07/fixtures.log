@@ -1,0 +1,6 @@
+PASS constrained fixture: prevents a down, legal Brace, partner attack, next-round attack and win
+PASS matched fixture control: unbraced announced hit downs the fighter
+PASS cover fixture: advances into directional cover and legally attacks with independent budgets
+PASS spare-action fixture: moves toward opposition and prepares persistent guard, without another round
+PASS budget/cap guards: no double Action and no full-guard Brace loop
+Defensive policy fixtures passed; constrained fixture rules are not Act I outcome evidence.

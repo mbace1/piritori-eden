@@ -1,0 +1,23 @@
+players Aatami hp5 g2 1,1 | Reijo Virtanen hp5 g2 2,1 | Lan Ho hp5 g2 3,1
+rivals  Thuy Bui hp5 g2 2,4 tough | Milena Savić hp4 g1 1,6  | Hodan Warsame hp4 g1 4,5 
+Move + Act in either order. Rust follows its announced route until blocked and never changes targets.
+1 moved to C4. Action ready.
+1 → R1: 1 HP, 2 guard (70%).
+2 moved to D5. Action ready.
+2 → R1: 3 HP, 0 guard (70%).
+3 moved to D4. Action ready.
+R1 → 2: miss (70%).
+Round 2: new enemy plans revealed.
+1 → R1: miss (70%).
+2 → R1: 1 HP, 0 guard (70%).
+3 moved to B4. Action ready.
+3 → R2: 2 HP, 1 guard (70%).
+R2 holds position.
+R3 → 2: 2 HP, 2 guard (70%).
+Round 3: new enemy plans revealed.
+1 moved to C5. Action ready.
+1 → R2: 2 HP, 0 guard (70%).
+The rest of them break and run.
+Sirens. The police come in at the south end after enemy turn 3.
+They are gone. The place is yours.
+RESULT win round 3

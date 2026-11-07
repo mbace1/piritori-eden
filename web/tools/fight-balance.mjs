@@ -21,8 +21,12 @@
 //
 //   CAREFUL_DODGE_FIRST=1 node web/tools/fight-balance.mjs  # evaluate safe movement before an in-range attack
 //
+//   DEFENSIVE_POLICY=1 node web/tools/fight-balance.mjs  # add opt-in defensive rows; defaults unchanged
+//   TRACE=door:hit-courtyard-ledger POLICY=defensive node web/tools/fight-balance.mjs
+//
 //   RULES='{"rout":0.667,"policeAt":7}' node web/tools/fight-balance.mjs   # try a lever
 import fs from 'node:fs';
+import { defensivePolicy } from './defensive-policy.mjs';
 
 const store = new Map();
 globalThis.localStorage = { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) };
@@ -156,7 +160,13 @@ function focusedPolicy(fight) {
 }
 function play(outing, policy) {
   const fight = nightShift(outing), b = fight.battle;
-  const counts = { braces: 0, moves: 0, attacks: 0 };
+  const counts = { braces: 0, moves: 0, attacks: 0, braceWithIncoming: 0, bracePreparing: 0, bracePredictedDownPrevented: 0 };
+  const audit = decision => {
+    if (decision.type !== 'brace' || !decision.actionOK) return;
+    if (decision.intent?.attacks) counts.braceWithIncoming += 1;
+    if (decision.spareActionPreparation) counts.bracePreparing += 1;
+    if (decision.worstDownPrevented) counts.bracePredictedDownPrevented += 1;
+  };
   const command = fight.command.bind(fight);
   fight.command = (type, ...args) => {
     const result = command(type, ...args);
@@ -166,7 +176,7 @@ function play(outing, policy) {
   };
   const hp0 = b.players.reduce((n, p) => n + p.hp, 0);
   for (let guard = 0; b.status === 'active' && guard < 40; guard += 1) {
-    policy(fight);
+    policy(fight, audit);
     if (b.status !== 'active') break;
     if (b.mission.police.arrived && !b.mission.police.resolved) fight.command('police', 'BACK_OFF');
     else fight.command('end');
@@ -210,24 +220,34 @@ for (const [encId, choice] of [['enc-bear-path', 'hold-path'], ['enc-courtyard-l
     state.outing = outing; localStorage.setItem(SAVE_KEY, JSON.stringify(state)); return outing; } });
 }
 
+const policies = { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy, defensive: defensivePolicy };
 if (process.env.TRACE) {
   const f = fights.find(x => x.name === process.env.TRACE);
+  if (!f) throw Error('Unknown TRACE scenario');
   const fight = nightShift(f.make(0, 'trace')), b = fight.battle;
   console.log('players', b.players.map(p => `${p.name} hp${p.hp} g${p.guard} ${p.cell}`).join(' | '));
   console.log('rivals ', b.enemies.map(e => `${e.name} hp${e.hp} g${e.guard} ${e.cell} ${e.tough ? 'tough' : ''}`).join(' | '));
-  const policy = { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy }[process.env.POLICY || 'fight'];
-  for (let guard = 0; b.status === 'active' && guard < 40; guard += 1) { policy(fight); if (b.status !== 'active') break; fight.command('end'); }
+  const policy = policies[process.env.POLICY || 'fight'];
+  if (!policy) throw Error('Unknown POLICY');
+  for (let guard = 0; b.status === 'active' && guard < 40; guard += 1) {
+    policy(fight, decision => { if (process.env.POLICY === 'defensive') console.log('DECISION', JSON.stringify(decision)); });
+    if (b.status !== 'active') break;
+    if (b.mission.police.arrived && !b.mission.police.resolved) fight.command('police', 'BACK_OFF');
+    else fight.command('end');
+  }
   console.log([...b.log].reverse().join('\n'));
   console.log('RESULT', b.result, 'round', b.round);
   process.exit(0);
 }
 const SEEDS = Number(process.env.SEEDS || 12);
+if (!Number.isInteger(SEEDS) || SEEDS < 1) throw Error('SEEDS must be a positive integer');
+const policyNames = goal => [...(goal === 'getaway' ? ['run', 'fight', 'careful', 'escort'] : ['fight', 'careful', 'focused']), ...(process.env.DEFENSIVE_POLICY === '1' ? ['defensive'] : [])];
 const rows = [];
-for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of f.goal === 'getaway' ? ['run', 'fight', 'careful', 'escort'] : ['fight', 'careful', 'focused']) {
+for (const f of fights) for (const heat of [0, 2, 3]) for (const policyName of policyNames(f.goal)) {
   const res = [];
-  for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), { run: runPolicy, fight: fightPolicy, careful: carefulPolicy, focused: focusedPolicy, escort: escortPolicy }[policyName]));
+  for (let s = 0; s < SEEDS; s += 1) res.push(play(f.make(heat, `m${s}h${heat}`), policies[policyName]));
   const n = res.length, pct = k => Math.round(100 * res.filter(k).length / n);
   const avg = k => (res.reduce((a, r) => a + r[k], 0) / n).toFixed(1);
-  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), braces: avg('braces'), moves: avg('moves'), attacks: avg('attacks'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck) });
+  rows.push({ fight: f.name, goal: f.goal, heat, policy: policyName, win: pct(r => r.result === 'win'), withdraw: pct(r => r.result === 'withdraw'), loss: pct(r => r.result === 'loss'), rounds: avg('rounds'), routed: pct(r => r.routed), police: pct(r => r.police), hpLost: avg('hpLost'), downs: avg('downs'), braces: avg('braces'), moves: avg('moves'), attacks: avg('attacks'), downed: pct(r => r.downs > 0), stuck: pct(r => r.stuck), ...(policyName === 'defensive' ? { braceWithIncoming: avg('braceWithIncoming'), bracePreparing: avg('bracePreparing'), bracePredictedDownPrevented: avg('bracePredictedDownPrevented') } : {}) });
 }
 console.log(JSON.stringify(rows));
