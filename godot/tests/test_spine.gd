@@ -88,7 +88,9 @@ func _test_content_loads() -> void:
 	# without somebody deciding it should.
 	# 12 -> 13 on 2026-09-29 (v4.65, H1): the Sörnäinen quay, where the
 	# shipment now happens on day 10's night.
-	eq("thirteen sites", ContentRegistry.map.get("sites", []).size(), 13)
+	# 13 -> 14 on 2026-11-07: the already-authored Torkkelinmäki porttikongi
+	# has its own neutral site record, separate from Mäkelänsilta's Scene Club.
+	eq("fourteen sites", ContentRegistry.map.get("sites", []).size(), 14)
 	# One encounter per spine block (v4.65: 17 of 20 blocks; the other three
 	# are doors), counted off the schedule rather than written down.
 	var spine := ContentRegistry.schedule().filter(func(e): return String(e.get("encounter_id", "")) != "")
