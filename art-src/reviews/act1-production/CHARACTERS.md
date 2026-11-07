@@ -61,7 +61,7 @@ C.19 remains the actual tactical battle. These presentation packets do not repla
 2. **Runner:** the prose says “she”, a legacy effect still uses `relationship:mira`, and the runtime name function yields Reijo Virtanen. This packet does not canonize Mira, that example name or a final gender from contradictory sources.
 3. **Mei Lan / muscle:** `mei-lan` is the authored Hakaniemi restaurant contact. The muscle slot's generated example Lan Ho is unrelated. No shared face or new family relationship is inferred.
 4. **Kello:** `participants[]` still lists him on Day 8 even when `kello-sold` supports an empty bench. His presence must follow the authored branch, not the list alone.
-5. **Courtyard / studio:** current `enc-courtyard-last-call` still names `jaska_studio`, while schedule/override/mission point to Torkkelinmäki. The current Scene Club is at Mäkelänsilta. Keep these places distinct and Jaska offscreen; do not dress the courtyard mission as his room to hide the binding gap.
+5. **Courtyard / studio:** this draft corrects `enc-courtyard-last-call` to `torkkelinmaki_courtyard`, aligned with schedule/override/mission/battle at Torkkelinmäki. Scene Club remains at Mäkelänsilta. Keep these places distinct and Jaska offscreen; art and figure staging remain unapproved.
 6. **Recruit metadata:** the fixer, driver and local `recruit_encounter_id` values do not make them visible participants or add recruitment dialogue to those encounters.
 
 The current map/site data and scenario atlas take precedence over the stale venue table in `MAP.md` for the Scene Club and Jade front. The JSON records chronology from `content.schedule`, so the first sale correctly precedes Jaska's Day 2 visit despite its position in the encounter array.

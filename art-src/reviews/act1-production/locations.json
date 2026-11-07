@@ -9,18 +9,18 @@
       "ROADMAP.md": "2280c587d5900aaed2d7819ba2145c070de38e2e54795d2c71cb3c9e7d3fb5f9",
       "DESIGN_AUTHORITY.md": "95c774f701456dc8b05e1ca6bd389161a632626400a0ed8fa4bc83893dcf6bd5",
       "ART_BIBLE.md": "f07f64ec671f63003cef5b3ae3aae1347ef80907c190e93218f7a8c670e3ec46",
-      "design/SCENARIO_ATLAS.md": "6142c9b2b060d3000c8145bdf44f5f3c6c4052cec1e949a34ee43db25b8c38cd",
-      "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
-      "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+      "design/SCENARIO_ATLAS.md": "c7398e4c3f98f9f80b6362dd7c90d11a359ea2c2b6b0a48acf8f2a8a957a27fc",
+      "design/scenario-atlas.json": "e2061be56598124ce1a006b5604bc4869761f75441564323c403d74c86f209b7",
+      "content/era1-slice-v1.json": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
       "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
       "content/places-v1.json": "464677f2ae25826012cca0b572b18bdc47a8e7a9dc87258c9b79811766071c0e",
       "content/doors-v1.json": "857ed1bb2554ab42b5cdbcef341cf39f9fc1ab450b203c58c9c08f536e7eae64",
       "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
-      "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+      "map/kallio-era1-2003-v1.json": "0e9308092b98e31e343996255333ff05934e239054b0205f5567db644cf22e39",
       "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
       "art-library/APPROVALS.md": "6bb112d27b30f1831822853ad1863d650f5aaffb76b67950d5f7519d6bf38852",
-      "art-src/reviews/act1-encounters/BINDING_PLAN.md": "c41bda2be73217eb620b3023fe498c0ff56a8a974ff2cffdf862831b1b03620f",
-      "art-src/reviews/act1-encounters/encounter-manifest.json": "59680e3d63de1a488007b79e2123bb025a723cb260c5d6e6b0566379de42a10b",
+      "art-src/reviews/act1-encounters/BINDING_PLAN.md": "9f081c72abd8adb1fa3cb78af726fea920f39a33cdbca82b5378e66656ca0787",
+      "art-src/reviews/act1-encounters/encounter-manifest.json": "2cf64e5f34f9aa7a48929ba35c9ec38c9f64b36c83613ff4e1dc2c6070d80335",
       "web/js/v3/doors.js": "0568da513ce9797cbdcde3edfefe1ebbfbacf36387b447d23673ee0455c3d530",
       "web/js/v3/road.js": "71ba8f94edd0cccb8ae4e06c59197c7e728a0f0ee61024ec6456ef29a63af585",
       "web/js/v3/places.js": "8fcdf9c4306070308174b7ee4e55a6557712fc1595bd7f1c793ea98dc293d4d2",
@@ -51,6 +51,10 @@
       "places-v1.json rules.kits/kits_wanted metadata is older than actual web/js/v3/outing.js and web/crew-run/locations.js mappings. Street and quay are implemented reused C.19 sets, not unbuilt merely because that metadata says wanted.",
       "Five C.19 sets serve eleven active anchors; this is not proof of eleven bespoke site-accurate environments or physical-device acceptance.",
       "No additional locations, story or new art generation is proposed before the listed bank/first-sale, Harju, Jade, courtyard and return/docks gates."
+    ],
+    "amendments": [
+      "Bank proceeds preview/phone layout: b48490e6e46bdadd92f85b156827cea33d6143fe",
+      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history."
     ]
   },
   "locations": [
@@ -425,12 +429,14 @@
       "id": "loc-torkkelinmaki-porttikongi",
       "name": "Torkkelinmäki courtyard / porttikongi",
       "priority": 5,
-      "status": "listed-plan / proposed-courtyard / site-conflict-open",
-      "summary": "Plan the existing courtyard mission and recovery doors at Torkkelinmäki while keeping the authored jaska_studio site conflict explicit. No new site is invented and Scene Club is not relocated.",
+      "status": "source-aligned / proposed-courtyard-art",
+      "summary": "The existing authored porttikongi now has its own neutral fictional site at Torkkelinmäki, aligned with schedule, mission and C.19. Scene Club remains at Mäkelänsilta; no art binding is promoted.",
       "anchorIds": [
         "torkkelinmaki"
       ],
-      "siteIds": [],
+      "siteIds": [
+        "torkkelinmaki_courtyard"
+      ],
       "encounters": [
         "enc-courtyard-last-call"
       ],
@@ -459,7 +465,7 @@
         }
       ],
       "views": {
-        "approach": "Use the current schedule/mission/battle anchor torkkelinmaki and the existing residential porttikongi facts. The encounter still references jaska_studio, whose map anchor is Mäkelänsilta; resolve that content binding before runtime visual promotion.",
+        "approach": "Use torkkelinmaki_courtyard at the existing torkkelinmaki schedule/mission/battle anchor. The former Scene Club site mismatch is corrected in this draft; the fictional site adds no private address or new encounter.",
         "dialogue": "Propose scene-courtyard-prototype-v05 for the authored courtyard conversation. Jaska is explicitly offscreen; crew/rival groups are actual deployment/generated-source placeholders, not a new portrait lineup in his studio.",
         "decision": "Keep Jade-introduction negotiation, take-positions and leave-receipts alternatives, critical-wound warning and retreat. Recovery favour-find-them and courtyard-ledger door retain their existing costs and missions.",
         "tactical": "Actual C.19 courtyard kit keeps the porttikongi exit, residential windows, cover and crew positions. Door illustration currently uses scene-kallio-backyard-v01 while the fight place uses scene-courtyard-prototype-v05; both are prototype references, not interchangeable proof of built geometry.",
@@ -467,13 +473,13 @@
       },
       "plan": {
         "nextSteps": [
-          "Record and resolve the jaska_studio versus Torkkelinmäki site conflict before any runtime binding edit or final set dressing.",
+          "Preserve the corrected site/schedule/mission/battle contract and old-save continuity before final courtyard dressing.",
           "Review current proposed courtyard plate, door backyard illustration and actual C.19 set at matching cameras.",
           "Plan receipt envelope, lit windows and withdrawal-lane cues from exact inspectables; keep Jaska offscreen.",
           "Audit existing courtyard joins/cutaways/exit from all eight cameras and required viewport shapes before changing arena construction."
         ],
         "acceptance": [
-          "Site conflict remains visible until a source/content decision is recorded; no false new site ID is created.",
+          "The corrected torkkelinmaki_courtyard site, schedule, mission and battle agree at Torkkelinmäki; Scene Club remains jaska_studio at Mäkelänsilta.",
           "Jade negotiation, critical-wound warning, withdrawal and recovery remain source-backed and reachable.",
           "Cover, porttikongi exit, fighter silhouettes and intentions remain readable in the actual C.19 arena.",
           "Receipt/loot/recovery return and reload settle once, preserving family consequences."
@@ -485,7 +491,7 @@
         ]
       },
       "placeholders": [
-        "Courtyard site binding: unresolved content conflict, not a new location proposal.",
+        "Courtyard site identity is corrected in this draft; illustrated framing and actual arena construction acceptance remain open.",
         "Receipt/window/crew-group staging and recovery-return overlays: unbuilt review work."
       ],
       "sources": [
@@ -517,10 +523,13 @@
       "sharedRoadPacket": "loc-shared-journey-beats",
       "authoredSiteConflict": {
         "encounter": "enc-courtyard-last-call",
-        "siteId": "jaska_studio",
-        "siteAnchor": "makelansilta",
+        "siteId": "torkkelinmaki_courtyard",
+        "siteAnchor": "torkkelinmaki",
         "scheduleAndBattleAnchor": "torkkelinmaki",
-        "resolved": false
+        "resolved": true,
+        "previousSiteId": "jaska_studio",
+        "previousSiteAnchor": "makelansilta",
+        "scope": "Source alignment in this draft; not a main-branch, art, device or release approval."
       }
     },
     {

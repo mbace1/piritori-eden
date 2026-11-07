@@ -10,7 +10,7 @@ Work the two listed P0 packets before the next source-production batch. Baseline
 
 1. **Pin the baseline contract.** Record exact source/review SHA and actual hub version, use the existing first trade/mission/C.19 receipt fixtures and preserve the three playtest routes. Keep each proposed art change, gameplay integration and release result distinct.
 2. **Finish Scene Club source fidelity.** Reuse the approved Jaska and semi-approved young Aatami front/room sources. Show source-relative head/body registration, rest/talk/full-blink, short bottom-tail bubble, normal/reduced motion and actual phone/desktop/landscape captures. The already built bounded eye repairs and arrival/return are review candidates; they cannot approve themselves. Side Aatami remains unassessed in this one-at-a-time composition. After acceptance, integrate through the existing handlers and rerun the real +300 markka/+1 Jaska trust choice/reload/return checks and optional visit.
-3. **Close the courtyard site-contract issue.** Present the current `jaska_studio` binding beside the authored Torkkelinmäki schedule, mission destination and actual battle anchor. Prepare the canonical correction from existing facts, keep Jaska offscreen and keep Scene Club at Mäkelänsilta. Only dress/integrate the courtyard once that contract is resolved; do not silently relocate the room or add a second courtyard.
+3. **Preserve the corrected courtyard site contract.** This draft aligns the existing porttikongi to `torkkelinmaki_courtyard`, matching the authored Torkkelinmäki schedule, mission and battle. Old-save and real browser handoff checks pass. Keep Jaska offscreen and Scene Club at Mäkelänsilta. Dressing, actual arena construction and art promotion still need separate review.
 
 The concrete outputs of this batch are a source-fidelity comparison, an accepted-or-explicitly-pending motion/room record, a courtyard site mapping decision, and existing-game regression evidence. A checked review box is none of those things.
 
@@ -22,7 +22,7 @@ The order is production priority, not a rewritten in-game chronology. The game's
 |---|---|---|
 | `baseline-contract` | Preserve first trade, mission, C.19 and save/receipt baseline | Existing build/source evidence, G0/G1 constraints |
 | `scene-club-fidelity` | Jaska/Aatami front, room, motion and authored returns | Source fidelity, identity/animation review, exact-once choice |
-| `courtyard-site-contract` | Resolve `jaska_studio` versus Torkkelinmäki | Site/anchor/mission/battle agreement before dressing |
+| `courtyard-site-contract` | Source alignment implemented and tested in this draft | Preserve site/anchor/mission/battle agreement before dressing |
 | `bank-and-queue` | Leena's exterior first sale; Anne/clerk interior and ledger | Source-select contacts; separate exterior/interior; live rates/text |
 | `harju-recruitment` | Runner at the stop plus existing Thursday observation return | Pitch reference does not imply a completed stop foreground |
 | `toko-counter-chain` | Existing approved Toko through encounter/service/return chain | Preserve mask, counter registration, information/obligation state |

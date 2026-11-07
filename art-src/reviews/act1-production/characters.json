@@ -109,20 +109,24 @@
       "art/v3/scenes/toko-rig-v01/note.webp": "7c146853f6cdcc7457dc3cc90876253ec0d2bc70b06daafde211ec145a2d818f",
       "art/v3/scenes/toko-rig-v01/torso.webp": "27f3da70fae978153a209cf10ade8a834c7798d349fbf4fb9e4f2d1a079ba5ba",
       "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
-      "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+      "content/era1-slice-v1.json": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
       "content/families-v1.json": "e82a7084e8e02060e555f8f54cf40cd551b23c9e0caa5c59243151b887ace331",
       "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
       "design/C19_CAMPAIGN_FIGHTS.md": "01654a098767fa9e6062112c6c97270e3655c6866cc2576a3701c81e0aa5795f",
-      "design/SCENARIO_ATLAS.md": "6142c9b2b060d3000c8145bdf44f5f3c6c4052cec1e949a34ee43db25b8c38cd",
-      "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb",
-      "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+      "design/SCENARIO_ATLAS.md": "c7398e4c3f98f9f80b6362dd7c90d11a359ea2c2b6b0a48acf8f2a8a957a27fc",
+      "design/scenario-atlas.json": "e2061be56598124ce1a006b5604bc4869761f75441564323c403d74c86f209b7",
+      "map/kallio-era1-2003-v1.json": "0e9308092b98e31e343996255333ff05934e239054b0205f5567db644cf22e39",
       "people/hiring.mjs": "45f7388605cb0efcea379033896bd4a8fca06fcdefeca0444c95350f2763f997",
       "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
       "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
       "web/js/v3/cutin-stage.js": "7719b1f882fae5f113bfe77e9dc4d26e560bfc351a0224780bd3a01e872f83fa",
       "web/js/v3/state.js": "faaaf7c59cf3ae020e783ef0bed20d96902aa8af60e71b0f11a893ae890f73d7",
       "web/js/v3/toko-stage.js": "ef621f3553dc28727542a698c252dede8fd2a5e526061d2a3945cdd2d5f6f16a"
-    }
+    },
+    "amendments": [
+      "Bank proceeds preview/phone layout: b48490e6e46bdadd92f85b156827cea33d6143fe",
+      "Courtyard site alignment: original e5954f49d860719da16f1347a367c518f621f4ec, integrated into this draft; former conflict remains recorded as history."
+    ]
   },
   "counts": {
     "authoredEncounters": 17,
@@ -1924,7 +1928,7 @@
         "karhupuisto",
         "karhupuisto_bench",
         "torkkelinmaki",
-        "jaska_studio"
+        "torkkelinmaki_courtyard"
       ],
       "existingRigIds": [],
       "assets": [],
@@ -2059,7 +2063,7 @@
       ],
       "locations": [
         "torkkelinmaki",
-        "jaska_studio"
+        "torkkelinmaki_courtyard"
       ],
       "existingRigIds": [],
       "assets": [],
@@ -2073,7 +2077,7 @@
       ],
       "plan": {
         "nextSteps": [
-          "Audit battle-courtyard-3v3 people/roles, receipts and the current anchor/site conflict before staging faces.",
+          "Audit battle-courtyard-3v3 people/roles, receipts and the corrected Torkkelinmäki site contract before staging faces.",
           "Keep the rival group in the Torkkelinmäki courtyard and the exit/receipts readable.",
           "Review current neutral battle presentation before commissioning individual cut-ins."
         ],
@@ -2085,7 +2089,7 @@
           "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
         ],
         "mustPreserve": [
-          "The authored courtyard fight is not visibly at Scene Club, despite the stale jaska_studio site binding.",
+          "The corrected torkkelinmaki_courtyard site keeps the authored fight separate from Scene Club.",
           "Keep Jaska offscreen and retain the authored critical-wound/withdrawal consequences.",
           "Retain the handmade cut-cardstock/marker identity and 2003 Kallio material culture; no Toko Move flat-vector transplant.",
           "Keep authored dialogue, choice stakes, mission links and persistent consequences. This packet adds no story, character or combat rule."
@@ -2373,7 +2377,7 @@
       ],
       "locations": [
         "torkkelinmaki",
-        "jaska_studio"
+        "torkkelinmaki_courtyard"
       ],
       "existingRigIds": [
         "cutin-jaska-rig-v01"
@@ -2420,15 +2424,14 @@
       ],
       "plan": {
         "nextSteps": [
-          "Keep the authored offscreen reference and resolve the courtyard/studio site conflict in the content plan.",
+          "Keep the authored offscreen reference and corrected courtyard/studio separation.",
           "Do not create a second Jaska or place his waist-up cut-in in the fight merely to fill the frame.",
           "Only stage a visible presence after an explicit authored change and review."
         ],
         "acceptance": [
-          "The courtyard remains distinct from Scene Club; no new visible speaker is inferred from the label.",
-          "Inspect actual rendered idle/blink/talk and a reaction at 390×844 and 1280×800; a loaded image or successful extraction is not visual acceptance.",
-          "Keep the mouth/eyes readable and the short bottom-tail speech bubble clear of the face and 44px dialogue choices; no clipped copy.",
-          "Reduced motion holds an intact rest pose. New art, staging and animation remain candidates until owner review; physical Pixel/iPad acceptance stays separate."
+          "The courtyard remains distinct from Scene Club; no visible speaker, portrait or animation is inferred from the offscreen label.",
+          "Verify the real phone/desktop view contains no Jaska face; source-rig references remain available only for provenance.",
+          "Preserve the authored offscreen context and actual once-only campaign consequences."
         ],
         "mustPreserve": [
           "Jaska's approved identity stays the same person. Offscreen is a staging fact, not missing character art.",
@@ -2563,13 +2566,14 @@
         "courtyard-rival-team",
         "jaska-offscreen"
       ],
-      "finding": "The courtyard encounter retains jaska_studio while schedule/override/mission anchor is torkkelinmaki; Scene Club is now makelansilta.",
-      "handling": "Do not make courtyard Jaska visible or move the mission to Scene Club to hide the source conflict.",
+      "finding": "The draft corrects the former jaska_studio mismatch to torkkelinmaki_courtyard, aligned with schedule/override/mission/battle at Torkkelinmäki. Scene Club stays at Mäkelänsilta.",
+      "handling": "Preserve the corrected contract and keep Jaska offscreen. This does not approve a courtyard image, visible cast or arena geometry.",
       "sources": [
         "content/era1-slice-v1.json",
         "map/kallio-era1-2003-v1.json",
         "design/SCENARIO_ATLAS.md"
-      ]
+      ],
+      "status": "resolved-source-alignment-in-draft"
     },
     {
       "id": "recruit-metadata-not-participants",

@@ -47,6 +47,10 @@ for (const id of ['seller-esa', 'buyer-leena', 'teller-anne', 'bank-clerk', 'sea
 }
 assert.equal(ids.get('bank-clerk').status, 'identity-clarification-needed');
 assert.equal(ids.get('jaska-offscreen').kind, 'offscreen');
+for (const id of content.encounters.find(e => e.id === 'enc-courtyard-last-call').participants) {
+  assert(ids.get(id).locations.includes('torkkelinmaki_courtyard'));
+  assert(!ids.get(id).locations.includes('jaska_studio'), 'courtyard groups/offscreen context are not in Scene Club');
+}
 assert.equal(ids.get('arvo').encounters.length, 0, 'news is not an invented enterable encounter');
 assert.equal(ids.has('hooded-camera-woman'), false);
 assert(cast.deferredExisting.some(packet => packet.id === 'hooded-camera-woman' && packet.encounters.length === 0));

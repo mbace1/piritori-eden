@@ -19,11 +19,11 @@
       "reviewLinks":["../scene-club-2026-11-07/?repair=1","../scene-club-2026-11-07/blink-comparison.html","../act1-encounters/"]
     },
     {
-      "id":"courtyard-site-contract","title":"Resolve the listed courtyard/site conflict before dressing it","milestone":"3 / Arenas; 4 / City and UI",
+      "id":"courtyard-site-contract","title":"Preserve the corrected courtyard/site contract before dressing it","milestone":"3 / Arenas; 4 / City and UI",
       "encounters":["enc-courtyard-last-call"],"characters":["aatami-network-team","courtyard-rival-team","jaska-offscreen"],"anchors":["torkkelinmaki"],"dependencies":["baseline-contract"],
-      "deliverables":["Record the discrepancy: encounter site_id is jaska_studio while schedule, mission destination and battle context point to Torkkelinmäki.","Propose the canonical site correction from existing authored records and keep Scene Club at Mäkelänsilta; bring any remaining semantic conflict for design review.","Align meeting, escalation, C.19 arena and return through one site/anchor contract before binding the available courtyard plate."],
+      "deliverables":["Source alignment is implemented in this draft: torkkelinmaki_courtyard, schedule, mission and battle agree at Torkkelinmäki.","Retain the neutral fictional porttikongi site for the already-authored confrontation and keep Scene Club at Mäkelänsilta; the old-save/C.19 contract checks must stay green.","Align meeting, escalation, C.19 arena and return through one site/anchor contract before binding the available courtyard plate."],
       "checks":["A source/site/mission/battle mapping check rejects silently presenting Jaska's room as the porttikongi.","The actual mission fixture is still schedule index 11, anchor torkkelinmaki and its authored three-person battle; do not label the courtyard door playtest as Courtyard Receipts.","Jaska remains offscreen in this encounter and is never inferred as a casualty or fighter from the group label."],
-      "boundary":"Resolve a current authored-content conflict; do not add another courtyard, relocate Scene Club, commission new art or silently choose new geography. No runtime correction is certified by this plan alone.",
+      "boundary":"The source conflict is corrected and independently tested in this draft. Add no encounter/address, relocate no Scene Club and promote no art; physical staging and release remain separate evidence gates.",
       "reviewLinks":["../act1-encounters/","../act1-combat/","../act1-consequences/"]
     },
     {

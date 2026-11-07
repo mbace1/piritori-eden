@@ -4,10 +4,10 @@
   "campaign_state_used": false,
   "review_storage_key": "piritori-review:act1-encounters:v1",
   "source_sha256": {
-    "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "content/era1-slice-v1.json": "7d8c74fe94fca73ca3077214634db31ea96a53191b436042f39a7756a066310d",
     "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
-    "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
-    "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb"
+    "map/kallio-era1-2003-v1.json": "0e9308092b98e31e343996255333ff05934e239054b0205f5567db644cf22e39",
+    "design/scenario-atlas.json": "e2061be56598124ce1a006b5604bc4869761f75441564323c403d74c86f209b7"
   },
   "counts": {
     "encounters": 17,
@@ -917,8 +917,8 @@
       "day": 6,
       "block": "night",
       "schedule_anchor": "torkkelinmaki",
-      "authored_site_id": "jaska_studio",
-      "site_anchor": "makelansilta",
+      "authored_site_id": "torkkelinmaki_courtyard",
+      "site_anchor": "torkkelinmaki",
       "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
       "choices": [
         {
@@ -995,7 +995,7 @@
       "production_tasks": [
         "P0: resolve/record the site-versus-anchor ambiguity before runtime binding; review the existing courtyard plate separately and preserve the C.19 courtyard mission route."
       ],
-      "uncertainty": "Current site_id is jaska_studio, but schedule and battle location are torkkelinmaki. Keep Scene Club and courtyard separate until the content/site binding is resolved.",
+      "uncertainty": "Source site alignment is implemented in this draft; courtyard framing, figure staging and art approval remain open. Scene Club stays at Mäkelänsilta and Jaska stays offscreen.",
       "combat": {
         "authored_battle_choices": [
           {

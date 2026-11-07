@@ -9,7 +9,7 @@ for(const e of manifest.encounters){const canonical=content.encounters.find(c=>c
  for(const p of e.cast_placeholders??[])assert(canonical.participants.includes(p.participant_id),'invented participant');
 }
 const sale=manifest.encounters.find(e=>e.id==='enc-first-sale');assert.equal(sale.binding_status,'unbuilt');assert.equal(sale.preview_scene_asset_id,null,'no illicit first sale staged inside bank');
-const court=manifest.encounters.find(e=>e.id==='enc-courtyard-last-call');assert.equal(court.authored_site_id,'jaska_studio');assert.equal(court.schedule_anchor,'torkkelinmaki');assert(court.uncertainty,'site conflict must remain explicit');
+const court=manifest.encounters.find(e=>e.id==='enc-courtyard-last-call');assert.equal(court.authored_site_id,'torkkelinmaki_courtyard');assert.equal(court.site_anchor,'torkkelinmaki');assert.equal(court.schedule_anchor,court.site_anchor);assert(court.participants.includes('jaska-offscreen'));assert(court.uncertainty,'unapproved art/staging must remain explicit');
 assert.equal(manifest.encounters.filter(e=>e.choices.some(c=>c.effects.some(x=>x.startsWith('start-battle:')))).length,2);
 const js=fs.readFileSync(new URL('./gallery.js',import.meta.url),'utf8');assert(!/import .*state\.js/.test(js));assert(js.includes(manifest.review_storage_key));assert(!js.includes('battle-3v3'));
 console.log(`PASS gallery source audit: 17 exact authored encounters, ${checked} hash-verified plate references, labelled placeholders, first-sale/courtyard constraints and 2 actual combat branches`);

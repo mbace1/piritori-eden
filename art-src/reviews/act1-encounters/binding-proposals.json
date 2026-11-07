@@ -665,7 +665,7 @@
     },
     {
       "encounter_id": "enc-courtyard-last-call",
-      "site_id": "jaska_studio",
+      "site_id": "torkkelinmaki_courtyard",
       "schedule": [
         {
           "index": 11,
@@ -677,8 +677,8 @@
       "direct_scene_asset_id": null,
       "proposed_scene_asset_id": "scene-courtyard-prototype-v05",
       "status": "proposed-existing",
-      "rationale": "The authored porttikongi and battle location support the available courtyard plate as a review proposal. This does not resolve the conflicting jaska_studio site binding.",
-      "uncertainty": "Current site_id is jaska_studio, but schedule and battle location are torkkelinmaki. Keep Scene Club and courtyard separate until the content/site binding is resolved.",
+      "rationale": "The corrected source site, schedule, mission and battle agree on the existing Torkkelinmäki porttikongi. The available courtyard plate remains a review proposal, without a new runtime art binding.",
+      "uncertainty": "Source site alignment is implemented in this draft; courtyard framing, figure staging and art approval remain open. Scene Club stays at Mäkelänsilta and Jaska stays offscreen.",
       "scene_source": {
         "asset_id": "scene-courtyard-prototype-v05",
         "file": "art/v3/scenes/courtyard-prototype-v05.webp",
