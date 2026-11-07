@@ -120,7 +120,7 @@
           "downed": 0,
           "police": 54.833,
           "braces": 1.567,
-          "moves": 5.825,
+          "moves": 5.842,
           "attacks": 3.15,
           "stuck": 0
         },
@@ -1126,7 +1126,7 @@
         "hpLost": "0.8",
         "downs": "0.0",
         "braces": "2.3",
-        "moves": "7.3",
+        "moves": "7.5",
         "attacks": "7.4",
         "downed": 0,
         "stuck": 0,
@@ -4333,7 +4333,7 @@
     },
     {
       "file": "design/evidence/defensive-policy-2026-11-07/defensive-12.json",
-      "sha256": "f7c20c9c3ae512a64d1d2df2f213c07570ce8110055a675fdc9bfffc15560a46"
+      "sha256": "bc340da65e5f8096bb9f1d167961ba49bd7fa39bdce05b5aecb8de1b28101d2f"
     },
     {
       "file": "design/evidence/scene-club-2026-11-07/instrumented-default-12.json",

@@ -40,9 +40,11 @@ export function chooseDefensiveDecision(battle, person) {
   if (!person?.alive || person.evacuated || battle.status !== 'active') return null;
   const enemies = battle.enemies.filter(enemy => enemy.alive)
     .sort((a, b) => Number(Boolean(b.tough)) - Number(Boolean(a.tough)) || a.hp - b.hp);
-  if (!enemies.length) return null;
   const getaway = battle.mission?.goal === 'getaway';
-  const target = enemies[0], oldDistance = distance(person.cell, target.cell);
+  // Clearing/routing rivals completes a fight job, but never a getaway:
+  // the surviving crew must still Move to row 0 and spend Action to Extract.
+  if (!enemies.length && !getaway) return null;
+  const target = enemies[0] ?? null, oldDistance = target ? distance(person.cell, target.cell) : 0;
   const cells = battle.moved.includes(person.id) ? new Map([[person.cell, []]]) : routes(battle, person);
   const actionUsed = battle.acted.includes(person.id);
   const pressure = Math.min(1, (battle.mission?.heat ?? 0) / (battle.mission?.police?.at || 6));
@@ -51,7 +53,7 @@ export function chooseDefensiveDecision(battle, person) {
     const sim = previewBattle(battle), actor = sim.players.find(p => p.id === person.id);
     actor.cell = cell;
     const before = defensiveExposure(sim), actorRisk = before.byPerson[actor.id];
-    const closing = oldDistance - distance(cell, target.cell);
+    const closing = target ? oldDistance - distance(cell, target.cell) : 0;
     const south = row(person.cell) - row(cell);
     const progress = getaway ? south * 1.6 : closing * 0.8;
     const baseScore = progress - path.length * 0.04;
@@ -89,7 +91,7 @@ export function chooseDefensiveDecision(battle, person) {
       // If Move closes distance and no attack wins the comparison, spending a
       // spare Action on persistent guard does not consume an extra round.
       // Holding still with no incoming threat earns no preparation bonus.
-      const preparation = !legalAttackSeen && (getaway ? south > 0 : closing > 0) ? gain * 0.3 : 0;
+      const preparation = enemies.length > 0 && !legalAttackSeen && (getaway ? south > 0 : closing > 0) ? gain * 0.3 : 0;
       if (after.cost < before.cost || preparation > 0) {
         offer('brace', null, preparation, after.cost, {
           guardGain: gain, riskSaved: before.cost - after.cost,

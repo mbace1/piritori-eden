@@ -1,6 +1,6 @@
 # Defensive bot-policy evidence — 7 November 2026
 
-Tool/test evidence only, based on source `a0a60e7`. No combat rule, authored scenario, save schema, live AI, artwork or runtime UI changes. The existing default measuring policies and their results remain unchanged. Act I completion stays at the existing ROADMAP estimate, 48%; no promotion, release or device acceptance is implied.
+Tool/test evidence only, based on source `a0a60e7`. This is the **corrected** opt-in run after fixing target-free getaway extraction; the preliminary buggy run is archived and invalid for tactical interpretation. No combat rule, authored scenario, save schema, live AI, artwork or runtime UI changes. The existing default measuring policies and their results remain unchanged. Act I completion stays at the existing ROADMAP estimate, 48%; no promotion, release or device acceptance is implied.
 
 ## What the new policy actually does
 
@@ -20,6 +20,8 @@ The earlier careful policy attacks immediately if possible; after moving, it aga
 2. A ranged fighter advances into real north-facing partial cover and attacks. The existing enemy forecast drops from exposed to covered accuracy; Move and Action are both exercised.
 3. A melee fighter without an available attack advances and uses its spare Action to prepare persistent guard in the same round.
 4. Planning leaves snapshots/RNG unchanged, spent Actions cannot be spent again, and full guard does not cause a pointless Brace loop.
+
+5. A real authored `pickup-fish-stall` campaign getaway is staged after most rivals are down. A legal attack clears the final rival, the getaway correctly remains active, the policy moves the attacker with its independent Move despite its spent Action, and all crew extract next round without enemy targets or police. Empty arenas do not earn guard-preparation actions. This guards against wrongly treating an empty battlefield as an extraction victory.
 
 The constrained low-health fixture uses `reach:0` to remove dodge alternatives; the cover/preparation fixtures use `reach:1`. These are deliberate fixtures of existing movement semantics, not claims that the 15 authored fights trap the crew the same way. No fixture result is mixed into the campaign balance table.
 
@@ -61,7 +63,15 @@ Defensive versus aggressive in fight jobs saves 2.973 HP and lowers downed-fight
 | Escort | 83.333% | 0.000 | 2.667 | 16.667% | 0.000 |
 | **Defensive (opt-in)** | **45.167%** | **0.233** | **3.567** | **54.833%** | **1.567** |
 
-The defensive policy is worse than escort for getaways, by 38.166 win points in these matched cases. It stays opt-in; no default promotion is recommended. All 45 scenario/heat cohorts show a nonzero average successful Brace count, and no policy/scenario row is stuck at the 40-iteration guard.
+The **corrected policy implementation** is worse than escort for getaways by 38.166 win points in these matched cases. This is a weakness of this bot heuristic, not evidence that defensive tactics or Brace are inherently bad for getaways. Its attack/kill score can still outweigh southward progress when extraction is not reachable in the same round; future goal-aware policy work should address that before attributing outcomes to combat balance. It stays opt-in; no default promotion is recommended. All 45 scenario/heat cohorts show a nonzero average successful Brace count, and no policy/scenario row is stuck at the 40-iteration guard.
+
+## Correction and preliminary evidence
+
+The first opt-in version returned no decision when no living enemies remained. C.19 correctly ends fight jobs when rivals are gone, but getaways remain active until the crew extracts. That early return suppressed legal movement/extraction after clearance or rout and could lead to a police answer instead of finishing the job. The corrected policy treats getaway progress independently of an enemy target and preserves the actual Move/Action budgets.
+
+`preliminary-no-enemy-bug/` preserves the old optional JSON/report with a prominent invalid-interpretation label. The current `defensive-12.json` and `comparison.json` were regenerated at the same 12 seeds after the fix. All 147 default rows and all 33 defensive fight-job rows are unchanged. One getaway row changes: `door:sale-quay-shift`, heat 0, average Moves 7.3 → 7.5. Win/HP/police aggregate values happen to stay unchanged in this sample; this does not excuse the policy bug or validate the old interpretation. The targeted fixture exercises the legal completion path directly. No score tuning or combat-rule change is mixed into the correction.
+
+The source engine remains pinned to `a0a60e7`; later main `0587dae` changed chapter-income comments/copy and cache tokens, not the measured combat rules. Parent integration will reconcile imports separately; no results here are claimed as a fresh run on that later source.
 
 ## Telemetry and limits
 

@@ -3,4 +3,6 @@ PASS matched fixture control: unbraced announced hit downs the fighter
 PASS cover fixture: advances into directional cover and legally attacks with independent budgets
 PASS spare-action fixture: moves toward opposition and prepares persistent guard, without another round
 PASS budget/cap guards: no double Action and no full-guard Brace loop
+PASS real campaign getaway: clear last rival, keep goal active, Move with spent Action, then Extract all crew without enemy targets or police
+EMPTY_ARENA_FIXTURE {"goal":"getaway","result":"win","round":2,"crew":2,"extracted":2,"police":false,"commands":["attack","move","extract","move","end","extract"]}
 Defensive policy fixtures passed; constrained fixture rules are not Act I outcome evidence.

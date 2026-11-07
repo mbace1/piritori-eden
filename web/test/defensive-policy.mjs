@@ -68,4 +68,43 @@ function trappedFixture() {
   actor.guard=4;b.acted=[];const next=chooseDefensiveDecision(b,actor);assert.notEqual(next.type,'brace','full guard is not pointlessly braced');
   console.log('PASS budget/cap guards: no double Action and no full-guard Brace loop');
 }
+{
+  // Real authored campaign getaway, staged late in the fight. Clearing the
+  // final rival must not be mistaken for completion of the extraction goal.
+  const store = new Map(); let search = '';
+  globalThis.localStorage = { getItem: key => store.get(key) ?? null, setItem: (key, value) => store.set(key, String(value)), removeItem: key => store.delete(key) };
+  globalThis.location = { get search() { return search; } };
+  const { createState, SAVE_KEY, fighters } = await import('../js/v3/state.js?v=12');
+  const { stageFight, doorFightStage } = await import('../js/v3/places.js?v=1');
+  const { templateOf } = await import('../js/v3/doors.js?v=6');
+  const { nameFrom } = await import('../../people/roster.mjs?v=1');
+  const O = await import('../js/v3/outing.js?v=7'), R = await import('../crew-run/run.js?v=23');
+  const doors = JSON.parse(fs.readFileSync(new URL('../../content/doors-v1.json', import.meta.url)));
+  const places = JSON.parse(fs.readFileSync(new URL('../../content/places-v1.json', import.meta.url)));
+  const state = createState(content), template = templateOf(doors, 'pickup-fish-stall');
+  state.scheduleIndex = 15; state.recruited = ['crew-slot-runner', 'crew-slot-muscle']; state.deployed = [...state.recruited];
+  const crewData = { content, crew: new Map(content.crew.map(person => [person.id, { ...person, name: person.name ?? nameFrom(person.id) }])) };
+  const anchor = template.anchors[0], encounter = { id: 'door-15-pickup-fish-stall', door: template.id, anchor_override_id: anchor };
+  const authored = content.battles.find(battle => battle.id === template.fight.battle), team = fighters(state, crewData);
+  const staged = stageFight(authored, doorFightStage(encounter, template), places, team.map(person => person.name));
+  state.outing = O.doorOuting(state, encounter, staged, team.slice(0, authored.player_deployed).map(person => person.id), { nonce: 'defensive-empty-arena', goal: 'getaway' });
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state)); search = `?campaign=1&outing=${state.outing.id}&arena=${state.outing.kit}`;
+  const run = R.loadRun(null, content), fight = R.makeMission(content, R.launch(run)), b = fight.battle;
+  b.cover.clear(); b.accuracy = { 'baseball-bat': 100, 'folding-knife': 100, 'first-handgun': 100 };
+  b.players.forEach((person, i) => { person.cell = `${i + 1},1`; });
+  const attacker = b.players[0], enemy = b.enemies[0];
+  Object.assign(enemy, { cell: '1,2', hp: 1, guard: 0 }); b.enemies.slice(1).forEach(person => { person.hp = 0; person.alive = false; });
+  assert(fight.command('select', attacker.id).ok); assert(fight.command('attack', enemy.id).ok);
+  assert(!b.enemies.some(person => person.alive)); assert.equal(b.status, 'active'); assert.equal(b.mission.goal, 'getaway');
+  const decision = chooseDefensiveDecision(b, attacker);
+  assert(decision); assert.equal(decision.cell.split(',')[1], '0'); assert.equal(decision.type, 'hold', 'spent Action may Move but cannot Extract yet');
+  const actions = []; defensivePolicy(fight, value => actions.push(value));
+  assert.equal(attacker.cell.split(',')[1], '0'); assert(actions.some(value => value.type === 'extract' && value.actionOK));
+  if (b.status === 'active') { fight.command('end'); defensivePolicy(fight, value => actions.push(value)); }
+  assert.equal(b.result, 'win'); assert(b.players.every(person => person.extracted)); assert.equal(b.mission.police.arrived, false);
+  assert(actions.some(value => value.actor === attacker.id && value.type === 'extract' && value.actionOK));
+  assert(!actions.some(value => value.type === 'brace'), 'empty getaway does not build guard against nonexistent enemies');
+  console.log('PASS real campaign getaway: clear last rival, keep goal active, Move with spent Action, then Extract all crew without enemy targets or police');
+  console.log('EMPTY_ARENA_FIXTURE', JSON.stringify({ goal: b.mission.goal, result: b.result, round: b.round, crew: b.players.length, extracted: b.players.filter(person => person.extracted).length, police: b.mission.police.arrived, commands: fight.history.map(record => record.type) }));
+}
 console.log('Defensive policy fixtures passed; constrained fixture rules are not Act I outcome evidence.');
