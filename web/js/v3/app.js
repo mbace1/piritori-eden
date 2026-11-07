@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=8';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=9';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -15,29 +15,29 @@ import {
   canShopHere, buyOf, buyEquipment,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=12';
+} from './state.js?v=13';
 import { createPauseMenu } from './pause.js?v=5';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=2';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=7';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=8';
 import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=7';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=8';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=6';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=7';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=8';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=9';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=16';
+} from './battle.js?v=17';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -1187,7 +1187,7 @@ function renderChapter() {
     <p>${esc(ending.brief ?? '')}</p>
     <p class="consequence-strip">${goalMet
       ? `Earned. ${esc((ending.label ?? 'The operation'))} runs on day ${def.days ?? 10}'s night at ${esc(anchor?.label ?? 'the harbour')}, for ${money(ending.stake_eur ?? 0)}.`
-      : 'Earned by fencing loot at Piritori; market sales and mission payouts do not count. Short of it on day 10, the boat sails without you.'}</p>
+      : 'Earned by selling: packs at the market or down a route, and loot at the fence on Piritori. Mission payouts do not count. Short of it on day 10, the boat sails without you.'}</p>
   </section>`;
 }
 
@@ -2652,7 +2652,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.96',
+      version: 'v4.97',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.

@@ -4,7 +4,7 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=12';
+} from '../js/v3/state.js?v=13';
 import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=2';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -173,7 +173,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=12');
+  } = await import('../js/v3/state.js?v=13');
 
   const CAREER = 10;
 
@@ -268,7 +268,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=12');
+    restoreState } = await import('../js/v3/state.js?v=13');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');
@@ -288,6 +288,11 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
   const beforeDelivery = chapterProgress(trader);
   assert.equal(sendOnRoute(trader, data).ok, true);
   assert.equal(chapterProgress(trader), beforeDelivery + price, 'delivery counts its actual receipt once');
+  // And the chapter panel says so. Until v4.97 it told the player that
+  // market sales did not count, the opposite of the rule just checked.
+  const panel = await readFile(new URL('../js/v3/app.js', import.meta.url), 'utf8');
+  assert(/Earned by selling: packs at the market or down a route, and loot at the fence/.test(panel)
+    && !/market sales and mission payouts do not count/.test(panel), 'the chapter panel names every way of earning that counts');
   const afterDelivery = JSON.stringify(trader);
   assert.equal(sendOnRoute(trader, data).ok, false);
   assert.equal(JSON.stringify(trader), afterDelivery, 'failed delivery changes nothing');
@@ -306,7 +311,7 @@ console.log('PASS chapter progress through sales and route deliveries');
 // Its cover is a Map and the round's hits a Set; plain JSON flattened both and
 // every load after a reload mid-battle failed on `cover.has`.
 {
-  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=12');
+  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=13');
   const storage = { _d: null, setItem(_k, v) { this._d = v; }, getItem() { return this._d; } };
   const g = freshState(content);
   g.mode = 'battle';

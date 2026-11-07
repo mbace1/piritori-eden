@@ -1,3 +1,14 @@
+## v4.97 — 2026-11-07
+
+**The chapter's goal tells the truth.** The chapter panel told the player *"Earned by fencing loot at Piritori; market sales and mission payouts do not count."* The code has always counted market sales and packs sent down a route, and `v3-state.mjs` asserts it ("chapter income must include the main market loop, not only fenced weapons"). In a game that promises full information, the panel was stating the opposite of the rule.
+
+- **The panel now says:** *"Earned by selling: packs at the market or down a route, and loot at the fence on Piritori. Mission payouts do not count."*
+- **The comment beside the fence** described Godot's build (which counts only the fence) as if it were this one. It now names the three ways that count.
+- **A correction to v4.93 and to the v4.95 receipt.** Both said fence money was the only money the goal counts, and that the shipment had been out of reach since v4.74. Neither is true. Codex's review (draft PR #124) found the mismatch. The ROADMAP's finale question no longer rests on it.
+- **Gate:** `v3-state.mjs` now also holds the panel's wording to the rule it checks, so the two cannot drift apart again.
+- **Cache:** state v13 and everything that imports it, app v64. The label is v4.97.
+- **Owner played: pending.** Godot paused.
+
 ## v4.96 — 2026-11-06
 
 **The UI diet, step 2: the brief and the fight (ROADMAP milestone 4).** Owner, 2026-10-26: *"Analyze current UI and elements like character names in general. These aren't needed, so we need to optimize."* `design/UI_DIET.md` set the order: the meeting (v4.85), then the brief and the fight. This is the second step, in Act I's fights only. Night Shift's own rescue nights and the arena lab keep their screens.
@@ -68,9 +79,8 @@
   - Pulling out, the police or losing takes nothing.
   - At the fence: the courtyard's three carry a tire iron (€18), a phone and a baton (€15); the park's two a pipe and a baton (€25 together); the boiler hall's a lifted handgun and a chain (€100) and a phone. A fight job won by making them break always puts the tough one down.
 - **Where it goes:** into the stash. The fence on Piritori buys it, and the strip after the fight says so ("Took a tire iron off them. The fence on Piritori buys.").
-- **Why it matters:** fence money is the only money the chapter's goal counts (€400 by day 10, or the boat sails without you).
-  - What the story hands you fences for €155 at most (a bat, a pipe and a handgun, if you sell your own weapons).
-  - So since v4.74 the shipment has been out of reach in ordinary play. A won fight now adds €25–100.
+- **Why it matters:** the chapter's goal is €400 earned by selling, by day 10, or the boat sails without you. A won fight now adds €25–100 of it.
+  - **Corrected in v4.97.** This entry first said fence money was the only money the goal counts, and so that the shipment had been out of reach since v4.74. That was wrong. Market sales and packs sent down a route count too, and `v3-state.mjs` has asserted it all along. The claim came from a stale comment and from the chapter panel, which told the player the same wrong rule. Codex's review (draft PR #124) found it.
   - Whether €400 is the right gate is part of the finale question (ROADMAP §10).
 - **How:** each rival on an outing keeps their own Act I weapon (`carries`) beside Night Shift's stand-in; Night Shift's receipt names who went down (`down`); Act I takes their weapons with the board's own `takeLoot` (`outingSpoils` in `outing.js`).
   - An outing opened before v4.93 has nothing to take.
