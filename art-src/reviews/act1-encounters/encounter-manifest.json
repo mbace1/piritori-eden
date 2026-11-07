@@ -1,0 +1,1455 @@
+{
+  "schema": 1,
+  "purpose": "Preview-only encounter source, binding and placeholder inventory; not runtime content or approval",
+  "campaign_state_used": false,
+  "review_storage_key": "piritori-review:act1-encounters:v1",
+  "source_sha256": {
+    "content/era1-slice-v1.json": "9a53e2aa685fb421a697c9adaac7908d790e05a7ccee9bd140cbe91bf502a37e",
+    "art/v3/manifest.json": "26d39de682eccb6afbdbf94c51b9478e0e798dcf928e6bceb26b1cc5223e5230",
+    "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+    "design/scenario-atlas.json": "594629e35e62802310fbdd2b141dda7978173e4a1b2ea6c05a3b0ea1df7da5eb"
+  },
+  "counts": {
+    "encounters": 17,
+    "direct": 11,
+    "proposed_existing": 5,
+    "unbuilt": 1
+  },
+  "encounters": [
+    {
+      "id": "enc-first-purchase",
+      "day": 1,
+      "block": "day",
+      "schedule_anchor": "piritori",
+      "authored_site_id": "piritori_first_buy",
+      "site_anchor": "piritori",
+      "opening": "A seller keeps the small bag in his pocket. The tram unloads twice while Aatami watches who stays.",
+      "choices": [
+        {
+          "id": "buy",
+          "label": "Buy one pack — €45",
+          "forecast": "Gain stock and the €68 Siltasaari demand lead; become a known customer.",
+          "requirements": [
+            "cash>=45"
+          ],
+          "effects": [
+            "cash:-45",
+            "stock:piri:+1",
+            "reveal:mission-paper-bag",
+            "reveal:enc-first-sale",
+            "flag:first-purchase-made"
+          ]
+        },
+        {
+          "id": "ask-control",
+          "label": "Ask who keeps watching",
+          "forecast": "Keep cash, gain a faction lead, spend the block. The seller names the man who stays after two trams: Kello.",
+          "requirements": [],
+          "effects": [
+            "intel:+1",
+            "flag:asked-before-buying",
+            "flag:kello-named",
+            "reveal:enc-jaska-receipt"
+          ]
+        },
+        {
+          "id": "walk",
+          "label": "Walk away",
+          "forecast": "Preserve cash. The offer returns at night with a colder reception.",
+          "requirements": [],
+          "effects": [
+            "flag:first-purchase-deferred",
+            "relationship:piritori_independents:-1"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "preview_scene_asset_id": "scene-piritori-square-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-piritori-square-v01",
+        "file": "scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71"
+      },
+      "participants": [
+        "aatami",
+        "seller-esa"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "seller-esa",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "seller esa · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: select an existing approved modular/source identity for seller Esa before extracting a named speaker; stage the pocket bag and wet cuff as review-only props."
+      ],
+      "uncertainty": "Plate is semi-approved prototype-only; seller/watcher source selections and foreground prop placement remain unapproved.",
+      "combat": null
+    },
+    {
+      "id": "enc-first-sale",
+      "day": 1,
+      "block": "night",
+      "schedule_anchor": "siltasaari",
+      "authored_site_id": "staffed_bank",
+      "site_anchor": "siltasaari",
+      "opening": "The buyer waits outside the legitimate queue, annoyed that Aatami arrived before she invented a reason to be there.",
+      "choices": [
+        {
+          "id": "complete",
+          "label": "Complete the first sale",
+          "forecast": "Gain €68 and price history; the route becomes visible.",
+          "requirements": [
+            "stock:piri>=1"
+          ],
+          "effects": [
+            "cash:+68",
+            "stock:piri:-1",
+            "complete:mission-paper-bag",
+            "reveal:offer-siltasaari-sell"
+          ]
+        },
+        {
+          "id": "ask-introduction",
+          "label": "Trade margin for an introduction",
+          "forecast": "Gain €55 and the first runner lead.",
+          "requirements": [
+            "stock:piri>=1"
+          ],
+          "effects": [
+            "cash:+55",
+            "stock:piri:-1",
+            "reveal:enc-runner-at-tram-stop",
+            "flag:first-sale-introduction"
+          ]
+        },
+        {
+          "id": "abort",
+          "label": "Keep walking with the queue",
+          "forecast": "Preserve stock; lose the current quote.",
+          "requirements": [],
+          "effects": [
+            "pressure:siltasaari:-1",
+            "flag:first-sale-deferred"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": null,
+      "binding_status": "unbuilt",
+      "preview_source": null,
+      "participants": [
+        "aatami",
+        "buyer-leena"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "buyer-leena",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "buyer leena · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: build a labelled bank-exterior/queue composition candidate using source-grounded Siltasaari approach; keep Leena identity a placeholder pending source selection."
+      ],
+      "uncertainty": "No direct plate is bound. A bank exterior/queue composition is unbuilt; an interior crop would contradict the authored outside-queue staging.",
+      "combat": null
+    },
+    {
+      "id": "enc-jaska-receipt",
+      "day": 2,
+      "block": "day",
+      "schedule_anchor": "makelansilta",
+      "authored_site_id": "jaska_studio",
+      "site_anchor": "makelansilta",
+      "opening": "Jaska cuts old receipts into a city that refuses to line up. A sealed envelope of markka props up one corner.",
+      "choices": [
+        {
+          "id": "ask-envelope",
+          "label": "Ask before taking the envelope",
+          "forecast": "Gain dead money and preserve trust.",
+          "requirements": [],
+          "effects": [
+            "markka:+300",
+            "relationship:jaska:+1",
+            "flag:markka-explained"
+          ]
+        },
+        {
+          "id": "take-envelope",
+          "label": "Call it family money",
+          "forecast": "Gain dead money; Jaska remembers the wording.",
+          "requirements": [],
+          "effects": [
+            "markka:+300",
+            "relationship:jaska:-1",
+            "flag:jaska-money-taken"
+          ]
+        },
+        {
+          "id": "leave-it",
+          "label": "Leave the old money under the map",
+          "forecast": "Lose a bank opportunity; deepen trust.",
+          "requirements": [],
+          "effects": [
+            "relationship:jaska:+2",
+            "flag:markka-left-with-jaska"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-scene-club-v01",
+      "preview_scene_asset_id": "scene-scene-club-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-scene-club-v01",
+        "file": "scenes/scene-club-v01.webp",
+        "source": "art-src/scenes/scene-club-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2"
+      },
+      "participants": [
+        "aatami",
+        "jaska"
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P0: complete real-motion Aatami front/side seam, blink, head-gesture and phone-choice review; preserve Jaska source identity."
+      ],
+      "uncertainty": "Scene Club plate is semi-approved; Aatami front/side rigs and new entrance/transition staging still need owner review.",
+      "combat": null
+    },
+    {
+      "id": "enc-runner-at-tram-stop",
+      "day": 2,
+      "block": "night",
+      "schedule_anchor": "harju",
+      "authored_site_id": "harju_pitch",
+      "site_anchor": "harju",
+      "opening": "The runner has already read the timetable, and read Aatami. She asks which one of them is more reliable.",
+      "choices": [
+        {
+          "id": "hire-fair",
+          "label": "Offer €18 per night and no waiting games",
+          "forecast": "Recruit her with a clear wage and a promise she will remember.",
+          "requirements": [
+            "cash>=18"
+          ],
+          "effects": [
+            "recruit:crew-slot-runner",
+            "flag:promise-no-waiting"
+          ]
+        },
+        {
+          "id": "hire-cheap",
+          "label": "Offer €10 and future work",
+          "forecast": "She joins for one job; loyalty starts low.",
+          "requirements": [
+            "cash>=10"
+          ],
+          "effects": [
+            "recruit-temporary:crew-slot-runner",
+            "relationship:mira:-1"
+          ]
+        },
+        {
+          "id": "ask-route",
+          "label": "Pay €8 for the route observation",
+          "forecast": "Gain intel without recruiting.",
+          "requirements": [
+            "cash>=8"
+          ],
+          "effects": [
+            "cash:-8",
+            "intel:+1",
+            "flag:ordinary-flow-taught"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": "scene-harju-pitch-v01",
+      "binding_status": "proposed-existing",
+      "preview_source": {
+        "id": "scene-harju-pitch-v01",
+        "file": "scenes/harju-pitch-v01.webp",
+        "source": "art-src/scenes/harju-pitch-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "901eae140701556051fbe84610560668dcf3a3cd34f4ab6a9898bac0652926e7"
+      },
+      "participants": [
+        "aatami",
+        "crew-slot-runner"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "crew-slot-runner",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot runner · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: stage a stop/approach foreground candidate beside the existing Harju reference; verify timetable and messenger-bag focus at phone size."
+      ],
+      "uncertainty": "Sports pitch is not a finished tram-stop illustration. Exact approach/camera and local tram-stop dressing need review; no geography is inferred from this placeholder.",
+      "combat": null
+    },
+    {
+      "id": "enc-bank-counter",
+      "day": 3,
+      "block": "day",
+      "schedule_anchor": "siltasaari",
+      "authored_site_id": "staffed_bank",
+      "site_anchor": "siltasaari",
+      "opening": "A paper clock marks the queue. The teller explains that nostalgia has no exchange-rate bonus.",
+      "choices": [
+        {
+          "id": "convert-all",
+          "label": "Convert all carried markka",
+          "forecast": "Receive the fixed euro equivalent; the block and visible visit are the cost.",
+          "requirements": [
+            "markka>0"
+          ],
+          "effects": [
+            "convert-markka:all",
+            "flag:bank-visit-visible"
+          ]
+        },
+        {
+          "id": "convert-part",
+          "label": "Convert 120 mk",
+          "forecast": "Keep some dead money for a later family choice.",
+          "requirements": [
+            "markka>=120"
+          ],
+          "effects": [
+            "convert-markka:120",
+            "flag:bank-visit-visible"
+          ]
+        },
+        {
+          "id": "leave-queue",
+          "label": "Leave before your number",
+          "forecast": "Keep the old cash and preserve the block's legitimacy cover only in memory.",
+          "requirements": [],
+          "effects": [
+            "flag:bank-visit-aborted"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": "scene-bank-counter-v01",
+      "binding_status": "proposed-existing",
+      "preview_source": {
+        "id": "scene-bank-counter-v01",
+        "file": "scenes/bank-counter-v01.webp",
+        "source": "art-src/scenes/bank-counter-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6"
+      },
+      "participants": [
+        "aatami",
+        "teller-anne"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "teller-anne",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "teller anne · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: test a review-only binding of the existing bank plate, then select teller source and ticket/clock placement without baked conversion copy."
+      ],
+      "uncertainty": "No direct plate is bound today. Teller identity/source and speaking cut-in are unbuilt; conversion text must stay live and authored.",
+      "combat": null
+    },
+    {
+      "id": "enc-toko-quiet-voice",
+      "day": 3,
+      "block": "night",
+      "schedule_anchor": "vaasankatu",
+      "authored_site_id": "toko_slomo_noodles",
+      "site_anchor": "vaasankatu",
+      "opening": "Toko dries a bowl and lowers his voice. Three delivery vans. Thursday. One of them is empty.",
+      "choices": [
+        {
+          "id": "buy-info",
+          "label": "Buy information — €120",
+          "forecast": "Confirm a safe description and unlock the Harju range.",
+          "requirements": [
+            "cash>=120"
+          ],
+          "effects": [
+            "cash:-120",
+            "intel:+2",
+            "flag:toko-van-pattern",
+            "reveal:offer-harju-sell"
+          ]
+        },
+        {
+          "id": "risk-sabotage",
+          "label": "Risk sabotage — €300",
+          "forecast": "45% success is visible. Failure costs trust and may close a route.",
+          "requirements": [
+            "cash>=300",
+            "relationship:toko>=1"
+          ],
+          "effects": [
+            "cash:-300",
+            "resolve:sabotage-wager-45",
+            "flag:toko-sabotage-wagered"
+          ]
+        },
+        {
+          "id": "eat-and-listen",
+          "label": "Eat, listen, owe a favour",
+          "forecast": "Gain a direction rather than a quote; Toko records the favour.",
+          "requirements": [],
+          "effects": [
+            "intel:+1",
+            "obligation:toko:+1",
+            "flag:van-pattern-incomplete"
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave",
+          "forecast": "Keep cash; the uncertain mission remains available.",
+          "requirements": [],
+          "effects": [
+            "flag:toko-info-declined"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-toko-noodles-empty-v01",
+      "preview_scene_asset_id": "scene-toko-noodles-empty-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-toko-noodles-empty-v01",
+        "file": "scenes/toko-slomo-noodles-empty-v01.webp",
+        "source": "art-src/scenes/toko-noodles-empty-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "fb86f9d3f5afe30a36e8b55516ceb89c41ea4c72e58b1e7bb32814321a24bea1"
+      },
+      "participants": [
+        "aatami",
+        "toko"
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: reuse the approved Toko rig; review radio/bowl/tally framing and motion without altering the gold mask."
+      ],
+      "uncertainty": "Toko paper rig is approved, while the empty-bar plate remains semi-approved prototype-only; preserve those separate states.",
+      "combat": null
+    },
+    {
+      "id": "enc-karhupuisto-watch",
+      "day": 4,
+      "block": "day",
+      "schedule_anchor": "karhupuisto",
+      "authored_site_id": "karhupuisto_bench",
+      "site_anchor": "karhupuisto",
+      "opening": "Wind turns the lime leaves. The watcher points out the same man crossing the park without ever arriving.",
+      "choices": [
+        {
+          "id": "hire-watcher",
+          "label": "Hire the watcher — €24 per night",
+          "forecast": "Recruit a watcher and reveal intent more clearly in the coming mission.",
+          "requirements": [
+            "cash>=24"
+          ],
+          "effects": [
+            "recruit:crew-slot-watcher",
+            "reveal:offer-karhupuisto-sell"
+          ]
+        },
+        {
+          "id": "pay-observation",
+          "label": "Pay €10 for the observation",
+          "forecast": "Gain one-use intent clarity without a wage.",
+          "requirements": [
+            "cash>=10"
+          ],
+          "effects": [
+            "cash:-10",
+            "intel:+1",
+            "flag:park-intent-read"
+          ]
+        },
+        {
+          "id": "ignore-pattern",
+          "label": "Watch the dog instead",
+          "forecast": "Lower immediate pressure; enter the mission with poorer information.",
+          "requirements": [],
+          "effects": [
+            "pressure:karhupuisto:-1",
+            "flag:park-pattern-missed"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-karhupuisto-v01",
+      "preview_scene_asset_id": "scene-karhupuisto-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-karhupuisto-v01",
+        "file": "scenes/karhupuisto-v01.webp",
+        "source": "locations/era1/location-karhupuisto-v01.png",
+        "approval_status": "approved",
+        "production_status": "prototype-ready",
+        "sha256": "fc98817002d1b3014f2709979d8d5c6be426b49d402248c25e90f87d0d104304"
+      },
+      "participants": [
+        "aatami",
+        "crew-slot-watcher",
+        "dog-owner"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "crew-slot-watcher",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot watcher · presentation placeholder"
+        },
+        {
+          "participant_id": "dog-owner",
+          "kind": "ambient-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "dog owner · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: select watcher/dog-owner source presentation; test separate dog/wind layers and a readable dry-bench cue."
+      ],
+      "uncertainty": "The park baseline is approved; new cast/crowd staging and any dog/foliage extraction or motion need their own review.",
+      "combat": null
+    },
+    {
+      "id": "enc-mccormick-yard",
+      "day": 4,
+      "block": "night",
+      "schedule_anchor": "linjat_yard",
+      "authored_site_id": "mccormick_yard",
+      "site_anchor": "linjat_yard",
+      "opening": "The public room closes. In the yard, three relatives disagree about the same invoice at full volume.",
+      "choices": [
+        {
+          "id": "hire-rauno",
+          "label": "Hire the muscle — €28 per night",
+          "forecast": "Recruit muscle; owe the family no extra favour.",
+          "requirements": [
+            "cash>=28"
+          ],
+          "effects": [
+            "recruit:crew-slot-muscle",
+            "relationship:mccormick_family:+1"
+          ]
+        },
+        {
+          "id": "buy-bat",
+          "label": "Buy the repaired bat — €35",
+          "forecast": "Unlock two-handed close pressure.",
+          "requirements": [
+            "cash>=35"
+          ],
+          "effects": [
+            "cash:-35",
+            "equipment:+baseball-bat"
+          ]
+        },
+        {
+          "id": "accept-favour",
+          "label": "Take gear against a future favour",
+          "forecast": "Gain a bat and pipe; the family chooses a later obligation.",
+          "requirements": [],
+          "effects": [
+            "equipment:+baseball-bat",
+            "equipment:+pipe",
+            "obligation:mccormick_family:+1"
+          ]
+        },
+        {
+          "id": "leave-public",
+          "label": "Keep the relationship in the public room",
+          "forecast": "No equipment; lower faction entanglement.",
+          "requirements": [],
+          "effects": [
+            "relationship:mccormick_family:0",
+            "flag:mccormick-distance"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-kallio-service-yard-v01",
+      "preview_scene_asset_id": "scene-kallio-service-yard-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-kallio-service-yard-v01",
+        "file": "scenes/kallio-service-yard-v01.webp",
+        "source": "locations/era1/location-kallio-service-yard-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b"
+      },
+      "participants": [
+        "aatami",
+        "sean-mccormick",
+        "crew-slot-muscle"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "sean-mccormick",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "sean mccormick · presentation placeholder"
+        },
+        {
+          "participant_id": "crew-slot-muscle",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "crew slot muscle · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: source-select Sean/crew presentation and position invoice/photo/bat-handle placeholders without obscuring choices."
+      ],
+      "uncertainty": "Plate and new cast presentation remain prototype/candidate; the photograph and invoice should not invent family facts.",
+      "combat": null
+    },
+    {
+      "id": "enc-bear-path",
+      "day": 5,
+      "block": "day",
+      "schedule_anchor": "karhupuisto",
+      "authored_site_id": "karhupuisto_bench",
+      "site_anchor": "karhupuisto",
+      "opening": "Two McCormick buyers wait on the wrong side of the granite bear. They paid for a Thursday load. One keeps glancing toward a van that is not coming.",
+      "choices": [
+        {
+          "id": "name-empty-van",
+          "label": "Name the empty van",
+          "forecast": "Avoid battle and complete a controlled handover. The McCormicks learn they were sold air.",
+          "requirements": [
+            "flag:toko-van-pattern"
+          ],
+          "effects": [
+            "complete:mission-bear-path",
+            "battle:avoided",
+            "flag:mccormicks-know-skim",
+            "relationship:toko:+1"
+          ]
+        },
+        {
+          "id": "send-fixer",
+          "label": "Let the fixer speak",
+          "forecast": "A readable negotiation check; failure starts the 2v2 with neutral formation.",
+          "requirements": [
+            "crew-role:fixer"
+          ],
+          "effects": [
+            "resolve:fixer-negotiation",
+            "battle-on-failure:battle-karhupuisto-2v2"
+          ]
+        },
+        {
+          "id": "hold-path",
+          "label": "Hold the path",
+          "forecast": "Begin the 2v2. No death outcome; wounds and missing status are possible.",
+          "requirements": [
+            "fighters>=2"
+          ],
+          "effects": [
+            "start-battle:battle-karhupuisto-2v2"
+          ]
+        },
+        {
+          "id": "withdraw",
+          "label": "Leave with the package",
+          "forecast": "Fail safely; lose the contact for one day.",
+          "requirements": [],
+          "effects": [
+            "partial:mission-bear-path",
+            "service:park-contact:closed-one-day"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-karhupuisto-clearing-v01",
+      "preview_scene_asset_id": "scene-karhupuisto-clearing-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-karhupuisto-clearing-v01",
+        "file": "scenes/karhupuisto-clearing-v01.webp",
+        "source": "locations/era1/location-karhupuisto-clearing-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "4264a39e78845be9aaf77cb51dcb82a33b1f09945b494676255858593e89fd17"
+      },
+      "participants": [
+        "aatami-network-team",
+        "piritori-rival-team"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "aatami-network-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "aatami network team · presentation placeholder"
+        },
+        {
+          "participant_id": "piritori-rival-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "piritori rival team · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P0: link review to the existing C.19 park mission; validate bear/plinth/exit continuity with actual arena captures before any environment changes."
+      ],
+      "uncertainty": "Clearing plate is semi-approved and cannot replace the authored bear/plinth/withdrawal geometry. Full C.19 fight and receipt verification belong to the existing battle flow.",
+      "combat": {
+        "authored_battle_choices": [
+          {
+            "choice_id": "hold-path",
+            "battle_id": "battle-karhupuisto-2v2",
+            "mission_id": "mission-bear-path",
+            "battle_anchor_id": "karhupuisto",
+            "players_required": 2,
+            "engine": "C.19 Night Shift",
+            "arena": "park",
+            "handoff_route_template": "web/crew-run/?campaign=1&outing=<persisted-generated-outing-id>&arena=<outing-kit>",
+            "static_outing_id_allowed": false
+          }
+        ],
+        "settlement": "Existing missionOuting → C.19 → campaign receipt, applied once. Gallery has no combat resolver.",
+        "entry": {
+          "kind": "existing-saved-playtest",
+          "repo_relative_url": "web/?play=g0-bear",
+          "label": "Play actual C.19 Bear Path",
+          "setup": "Existing playtest fields two crew, sets the current campaign aside, and opens this encounter. Choose hold-path, then use the actual fight UI.",
+          "source": "web/js/v3/testlist.js#g0-bear",
+          "test": "web/test/play-card.cjs"
+        }
+      }
+    },
+    {
+      "id": "enc-first-firearm",
+      "day": 5,
+      "block": "night",
+      "schedule_anchor": "piritori",
+      "authored_site_id": "piritori_first_buy",
+      "site_anchor": "piritori",
+      "opening": "The seller has remembered Aatami's questions. This time the object under the coat changes every answer in the square.",
+      "choices": [
+        {
+          "id": "buy-handgun",
+          "label": "Buy the first handgun — €180",
+          "forecast": "Unlock armed loadouts and raise Piritori pressure. It is not required to finish the slice.",
+          "requirements": [
+            "cash>=180",
+            "flag:first-purchase-made"
+          ],
+          "effects": [
+            "cash:-180",
+            "equipment:+first-handgun",
+            "flag:battle-capable",
+            "pressure:piritori:+2"
+          ]
+        },
+        {
+          "id": "trade-favour",
+          "label": "Trade a McCormick favour",
+          "forecast": "Gain the weapon; transfer the obligation into family leverage.",
+          "requirements": [
+            "obligation:mccormick_family>=1"
+          ],
+          "effects": [
+            "equipment:+first-handgun",
+            "flag:battle-capable",
+            "obligation:mccormick_family:+1"
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse the weapon",
+          "forecast": "Keep the money. Battle-capable means crew and preparation, not mandatory gun ownership.",
+          "requirements": [],
+          "effects": [
+            "flag:first-firearm-refused",
+            "relationship:jaska:+1"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "preview_scene_asset_id": "scene-piritori-square-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-piritori-square-v01",
+        "file": "scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71"
+      },
+      "participants": [
+        "aatami",
+        "seller-esa"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "seller-esa",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "seller esa · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: review an alternate crop of existing Piritori art and a separable wrapped-weight prop; select seller source rather than redesigning Esa."
+      ],
+      "uncertainty": "Seller and crew reaction candidates need source approval. This encounter has no direct authored start-battle effect.",
+      "combat": null
+    },
+    {
+      "id": "enc-jade-window",
+      "day": 6,
+      "block": "day",
+      "schedule_anchor": "hakaniemi",
+      "authored_site_id": "jade_lantern_front",
+      "site_anchor": "hakaniemi",
+      "opening": "Mei Lan serves the lunch queue before acknowledging Aatami. The restaurant is a workplace first and a faction door only if she opens it.",
+      "choices": [
+        {
+          "id": "ask-invoice",
+          "label": "Ask about the duplicate invoice",
+          "forecast": "Reveal the courtyard recovery mission without accusing the staff.",
+          "requirements": [
+            "intel>=2"
+          ],
+          "effects": [
+            "reveal:mission-courtyard-receipts",
+            "relationship:jade_lantern_network:+1",
+            "reveal:offer-hakaniemi-sell",
+            "flag:duplicate-invoice"
+          ]
+        },
+        {
+          "id": "buy-lunch",
+          "label": "Buy lunch and wait",
+          "forecast": "Spend €12; gain a rumour and preserve the relationship.",
+          "requirements": [
+            "cash>=12"
+          ],
+          "effects": [
+            "cash:-12",
+            "intel:+1",
+            "flag:jade-patient-introduction"
+          ]
+        },
+        {
+          "id": "push-door",
+          "label": "Push for the back room",
+          "forecast": "Open the mission faster; begin with faction distrust.",
+          "requirements": [],
+          "effects": [
+            "reveal:mission-courtyard-receipts",
+            "relationship:jade_lantern_network:-2",
+            "pressure:hakaniemi:+1",
+            "flag:duplicate-invoice"
+          ]
+        },
+        {
+          "id": "leave",
+          "label": "Leave with the lunch crowd",
+          "forecast": "Keep the teaser unresolved; the courtyard signal arrives by SMS.",
+          "requirements": [],
+          "effects": [
+            "flag:jade-front-respected"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": "scene-jade-lantern-front-v01",
+      "binding_status": "proposed-existing",
+      "preview_source": {
+        "id": "scene-jade-lantern-front-v01",
+        "file": "scenes/jade-lantern-front-v01.webp",
+        "source": "art-src/scenes/jade-lantern-front-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "32d181b2c07e8168222bb84f639609b443cf8371149fddb5530fb5739540f590"
+      },
+      "participants": [
+        "aatami",
+        "mei-lan",
+        "lunch-crowd"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "mei-lan",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "mei lan · presentation placeholder"
+        },
+        {
+          "participant_id": "lunch-crowd",
+          "kind": "ambient-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "lunch crowd · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P1: review the available shopfront at the authored Hakaniemi anchor; select Mei-Lan source and build lunch-queue placeholders as ordinary workplace people."
+      ],
+      "uncertainty": "No direct plate is bound. Current schedule places the scene at Hakaniemi, while older documents/asset context mention Linjat; keep the current authored anchor explicit and do not bake an address into the art.",
+      "combat": null
+    },
+    {
+      "id": "enc-courtyard-last-call",
+      "day": 6,
+      "block": "night",
+      "schedule_anchor": "torkkelinmaki",
+      "authored_site_id": "jaska_studio",
+      "site_anchor": "makelansilta",
+      "opening": "The envelope of receipts, in Kello's handwriting, lies inside the porttikongi. Warm windows turn off one by one as both teams decide who will make the courtyard remember them.",
+      "choices": [
+        {
+          "id": "trade-favour",
+          "label": "Trade the Jade introduction",
+          "forecast": "Start negotiation before the 3v3; a partial account is possible.",
+          "requirements": [
+            "relationship:jade_lantern_network>=1"
+          ],
+          "effects": [
+            "start-negotiation:battle-courtyard-3v3",
+            "opponent-nerve:-1"
+          ]
+        },
+        {
+          "id": "take-positions",
+          "label": "Take positions",
+          "forecast": "Start the 3v3. Critical wounds are possible and telegraphed; retreat remains available.",
+          "requirements": [
+            "fighters>=3"
+          ],
+          "effects": [
+            "start-battle:battle-courtyard-3v3"
+          ]
+        },
+        {
+          "id": "leave-receipts",
+          "label": "Leave the receipts",
+          "forecast": "Fail the recovery without combat; protect Jaska's home and reduce pressure.",
+          "requirements": [],
+          "effects": [
+            "fail:mission-courtyard-receipts",
+            "relationship:jaska:+1",
+            "pressure:torkkelinmaki:-1"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": "scene-courtyard-prototype-v05",
+      "binding_status": "proposed-existing",
+      "preview_source": {
+        "id": "scene-courtyard-prototype-v05",
+        "file": "scenes/courtyard-prototype-v05.webp",
+        "source": "locations/era1/location-kallio-courtyard-v05.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "dcaaa4308b1050a9e3599a521069085a5eca4b9d763e2d71e94e470e5faa6211"
+      },
+      "participants": [
+        "aatami-network-team",
+        "courtyard-rival-team",
+        "jaska-offscreen"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "aatami-network-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "aatami network team · presentation placeholder"
+        },
+        {
+          "participant_id": "courtyard-rival-team",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "courtyard rival team · presentation placeholder"
+        },
+        {
+          "participant_id": "jaska-offscreen",
+          "kind": "offscreen-context",
+          "approved_cut_in_asset_id": null,
+          "label": "jaska offscreen · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P0: resolve/record the site-versus-anchor ambiguity before runtime binding; review the existing courtyard plate separately and preserve the C.19 courtyard mission route."
+      ],
+      "uncertainty": "Current site_id is jaska_studio, but schedule and battle location are torkkelinmaki. Keep Scene Club and courtyard separate until the content/site binding is resolved.",
+      "combat": {
+        "authored_battle_choices": [
+          {
+            "choice_id": "take-positions",
+            "battle_id": "battle-courtyard-3v3",
+            "mission_id": "mission-courtyard-receipts",
+            "battle_anchor_id": "torkkelinmaki",
+            "players_required": 3,
+            "engine": "C.19 Night Shift",
+            "arena": "courtyard",
+            "handoff_route_template": "web/crew-run/?campaign=1&outing=<persisted-generated-outing-id>&arena=<outing-kit>",
+            "static_outing_id_allowed": false
+          }
+        ],
+        "settlement": "Existing missionOuting → C.19 → campaign receipt, applied once. Gallery has no combat resolver.",
+        "entry": {
+          "kind": "existing-campaign-progression-or-test-fixture",
+          "repo_relative_url": "web/",
+          "label": "Open campaign; courtyard mission fixture is documented",
+          "direct_mission_playtest_url": null,
+          "setup": "The existing mission-browser fixture stages scheduleIndex 11, selectedAnchor torkkelinmaki, and three recruited/deployed crew; real take-positions click creates the persisted C.19 mission outing. Ordinary campaign progression reaches the same choice.",
+          "source": "web/test/mission-browser.cjs",
+          "test": "web/test/c19-outing.mjs",
+          "related_door_playtest_url": "web/?play=g0-door",
+          "related_door_label": "Actual C.19 courtyard door fight; a different authored encounter, not Courtyard Receipts",
+          "forbidden_substitute": "web/?play=battle-3v3 is a legacy formation-board fixture, not this C.19 mission route."
+        }
+      }
+    },
+    {
+      "id": "enc-pasila-ledger",
+      "day": 7,
+      "block": "day",
+      "schedule_anchor": "siltasaari",
+      "authored_site_id": "staffed_bank",
+      "site_anchor": "siltasaari",
+      "opening": "A brochure shows a clean Pasila flat with no routes drawn on it. The ledger beside it refuses the same fantasy.",
+      "choices": [
+        {
+          "id": "pay-debt",
+          "label": "Pay debt before the exit fund",
+          "forecast": "Reduce immediate threat; Pasila remains farther away in cash.",
+          "requirements": [
+            "cash>=150"
+          ],
+          "effects": [
+            "cash:-150",
+            "debt:-150",
+            "flag:debt-prioritised"
+          ]
+        },
+        {
+          "id": "fund-exit",
+          "label": "Ring-fence the exit fund",
+          "forecast": "Move €120 toward Pasila; debt pressure persists.",
+          "requirements": [
+            "cash>=120"
+          ],
+          "effects": [
+            "cash:-120",
+            "exit-fund:+120",
+            "flag:exit-prioritised"
+          ]
+        },
+        {
+          "id": "treat-crew",
+          "label": "Treat critical wounds first",
+          "forecast": "Prevent a known death risk; accept a weaker financial ending.",
+          "requirements": [
+            "crew-critical>=1",
+            "cash>=80"
+          ],
+          "effects": [
+            "cash:-80",
+            "resolve-critical-wound:one",
+            "flag:crew-prioritised"
+          ]
+        },
+        {
+          "id": "ask-jaska",
+          "label": "Ask Jaska what Eden costs",
+          "forecast": "Gain no money; unlock the honest final conversation.",
+          "requirements": [
+            "relationship:jaska>=1"
+          ],
+          "effects": [
+            "flag:honest-ending-open"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": null,
+      "preview_scene_asset_id": "scene-bank-counter-v01",
+      "binding_status": "proposed-existing",
+      "preview_source": {
+        "id": "scene-bank-counter-v01",
+        "file": "scenes/bank-counter-v01.webp",
+        "source": "art-src/scenes/bank-counter-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6"
+      },
+      "participants": [
+        "aatami",
+        "bank-clerk",
+        "optional-surviving-crew"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "bank-clerk",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "bank clerk · presentation placeholder"
+        },
+        {
+          "participant_id": "optional-surviving-crew",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "optional surviving crew · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: propose existing bank-interior binding with live ledger/brochure props; source-select clerk only after its identity relation to teller Anne is checked."
+      ],
+      "uncertainty": "No direct plate is bound; desk/ledger composition and bank-clerk source selection need review. Do not portray this as arrival in Pasila.",
+      "combat": null
+    },
+    {
+      "id": "enc-jaska-last-light",
+      "day": 7,
+      "block": "night",
+      "schedule_anchor": "makelansilta",
+      "authored_site_id": "jaska_studio",
+      "site_anchor": "makelansilta",
+      "opening": "Jaska has pasted every route receipt into the cardboard city. Pasila is a blank shape cut from the edge.",
+      "choices": [
+        {
+          "id": "call-it-eden",
+          "label": "Call the move Eden",
+          "forecast": "Close the slice with Aatami defending the plan.",
+          "requirements": [],
+          "effects": [
+            "forecast-ending:best-match",
+            "memory:aatami-called-it-eden"
+          ]
+        },
+        {
+          "id": "name-the-cost",
+          "label": "Name what the routes cost",
+          "forecast": "Close with a harder family truth; no morality score is awarded.",
+          "requirements": [
+            "flag:honest-ending-open"
+          ],
+          "effects": [
+            "forecast-ending:best-match",
+            "relationship:jaska:+1",
+            "memory:aatami-named-cost"
+          ]
+        },
+        {
+          "id": "take-the-map",
+          "label": "Take Jaska's cardboard map",
+          "forecast": "Carry the Kallio network into the future literally and mechanically.",
+          "requirements": [
+            "relationship:jaska>=0"
+          ],
+          "effects": [
+            "forecast-ending:best-match",
+            "flag:network-inherited-as-map"
+          ]
+        },
+        {
+          "id": "leave-map",
+          "label": "Leave the map unfinished",
+          "forecast": "Pasila remains a possibility rather than a victory screen.",
+          "requirements": [],
+          "effects": [
+            "forecast-ending:best-match",
+            "flag:map-left-with-jaska"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-scene-club-v01",
+      "preview_scene_asset_id": "scene-scene-club-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-scene-club-v01",
+        "file": "scenes/scene-club-v01.webp",
+        "source": "art-src/scenes/scene-club-v04.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2"
+      },
+      "participants": [
+        "aatami",
+        "jaska"
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: reuse Scene Club/Jaska; make receipt and portrait-space overlays depend on real survivor state when integrated."
+      ],
+      "uncertainty": "Conditional survivors/death/portrait facts must be derived from actual campaign state; gallery placeholders are not a claim that a character died.",
+      "combat": null
+    },
+    {
+      "id": "enc-kello-reckoning",
+      "day": 8,
+      "block": "day",
+      "schedule_anchor": "piritori",
+      "authored_site_id": "piritori_first_buy",
+      "site_anchor": "piritori",
+      "opening": "Day 8. The square has had a week to decide what it thinks of Aatami. Kello's bench is where it always was. What is on it depends on what you did on Thursday.",
+      "choices": [
+        {
+          "id": "ask-kello",
+          "label": "Ask Kello what one more Thursday costs",
+          "forecast": "He names the man who buys car 41 next week, and it is not a family.",
+          "requirements": [
+            "flag:thursday-cut"
+          ],
+          "effects": [
+            "intel:+1",
+            "flag:heard-never-arrives",
+            "memory:kello-reckoning-cut"
+          ]
+        },
+        {
+          "id": "empty-bench",
+          "label": "Sit on Kello's empty bench",
+          "forecast": "The square is quieter without him. Quieter is not the same as safe.",
+          "requirements": [
+            "flag:kello-sold"
+          ],
+          "effects": [
+            "pressure:piritori:-1",
+            "memory:kello-reckoning-sold"
+          ]
+        },
+        {
+          "id": "ride-41",
+          "label": "Ride car 41 as its new owner",
+          "forecast": "A pack off the pram, and the square watching you instead of Kello.",
+          "requirements": [
+            "flag:thursday-route"
+          ],
+          "effects": [
+            "stock:piri:+1",
+            "pressure:piritori:+1",
+            "memory:kello-reckoning-route"
+          ]
+        },
+        {
+          "id": "ask-toko",
+          "label": "Ask Toko what he did with Thursday",
+          "forecast": "Toko says he sold it to nobody. He says it the way he says the soup is fresh.",
+          "requirements": [
+            "flag:kello-told-toko"
+          ],
+          "effects": [
+            "intel:+1",
+            "relationship:toko:+1",
+            "memory:kello-reckoning-toko"
+          ]
+        },
+        {
+          "id": "let-it-pass",
+          "label": "Let Thursday pass without you",
+          "forecast": "Nothing moves. The man counting trams writes your name down anyway.",
+          "requirements": [],
+          "effects": [
+            "memory:kello-reckoning-quiet"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-piritori-square-v01",
+      "preview_scene_asset_id": "scene-piritori-square-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-piritori-square-v01",
+        "file": "scenes/piritori-square-v01.webp",
+        "source": "art-src/scenes/piritori-square-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71"
+      },
+      "participants": [
+        "aatami",
+        "kello"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "kello",
+          "kind": "named-source-selection-needed",
+          "approved_cut_in_asset_id": null,
+          "label": "kello · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: source-select Kello and stage bench/tram placeholders; reserve conditional variants for authored consequence flags."
+      ],
+      "uncertainty": "Presentation depends on authored Thursday consequences. Placeholder bench/tram/watcher dressing must not fabricate a remembered result.",
+      "combat": null
+    },
+    {
+      "id": "enc-family-calls",
+      "day": 9,
+      "block": "night",
+      "schedule_anchor": "linjat_yard",
+      "authored_site_id": "mccormick_yard",
+      "site_anchor": "linjat_yard",
+      "opening": "Day 9. The families have been keeping books on Aatami too. Tonight one of them reads its page out loud, in the yard, with the kettle still empty.",
+      "choices": [
+        {
+          "id": "stand-with-mccormicks",
+          "label": "Stand with the McCormicks on the shipment night",
+          "forecast": "€30 now, and a favour owed that they will collect in chapter 2.",
+          "requirements": [
+            "relationship:mccormick_family>=1"
+          ],
+          "effects": [
+            "cash:+30",
+            "obligation:mccormick_family:+1",
+            "flag:mccormick-escort"
+          ]
+        },
+        {
+          "id": "take-jade-warehouse",
+          "label": "Take Mei Lan's warehouse instead",
+          "forecast": "A place to keep what you do not sell, and a favour owed to the Jade Lantern.",
+          "requirements": [
+            "relationship:jade_lantern_network>=1"
+          ],
+          "effects": [
+            "intel:+1",
+            "obligation:jade_lantern_network:+1",
+            "flag:jade-warehouse"
+          ]
+        },
+        {
+          "id": "pay-it-off",
+          "label": "Pay what they think you owe",
+          "forecast": "€60, and you owe nobody going into the shipment.",
+          "requirements": [
+            "cash>=60"
+          ],
+          "effects": [
+            "cash:-60",
+            "flag:owes-nobody"
+          ]
+        },
+        {
+          "id": "stall",
+          "label": "Tell them it can wait until after the boat",
+          "forecast": "Both families like you a little less.",
+          "requirements": [],
+          "effects": [
+            "relationship:mccormick_family:-1",
+            "relationship:jade_lantern_network:-1",
+            "flag:stalled-the-families"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-kallio-service-yard-v01",
+      "preview_scene_asset_id": "scene-kallio-service-yard-v01",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-kallio-service-yard-v01",
+        "file": "scenes/kallio-service-yard-v01.webp",
+        "source": "locations/era1/location-kallio-service-yard-v01.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b"
+      },
+      "participants": [
+        "aatami",
+        "mccormick-brothers"
+      ],
+      "cast_placeholders": [
+        {
+          "participant_id": "mccormick-brothers",
+          "kind": "team-placeholder",
+          "approved_cut_in_asset_id": null,
+          "label": "mccormick brothers · presentation placeholder"
+        }
+      ],
+      "production_tasks": [
+        "P2: review family-group placeholders with account book/kettle/van emphasis; use actual campaign standing when selecting a speaking family."
+      ],
+      "uncertainty": "Which family speaks and its standing are campaign facts; placeholder faces/group labels cannot manufacture that choice.",
+      "combat": null
+    },
+    {
+      "id": "enc-shipment-night",
+      "day": 10,
+      "block": "night",
+      "schedule_anchor": "sornainen_harbour",
+      "authored_site_id": "sornainen_quay",
+      "site_anchor": "sornainen_harbour",
+      "opening": "Day 10, night. A container comes off a ship at Sörnäinen. Pay for it, move it, and be somewhere else by morning. The quay lights go off one row at a time.",
+      "choices": [
+        {
+          "id": "run-shipment",
+          "label": "Run the shipment · €400",
+          "forecast": "The chapter's operation. It goes clean, messy or lost depending on the crew and the heat.",
+          "requirements": [
+            "chapter-goal-met",
+            "cash>=400"
+          ],
+          "effects": [
+            "chapter-ending:attempt"
+          ]
+        },
+        {
+          "id": "let-it-go",
+          "label": "Watch the boat leave without you",
+          "forecast": "No stake, no upgrade. The chapter still closes; the square will say you missed it.",
+          "requirements": [],
+          "effects": [
+            "chapter-ending:missed"
+          ]
+        },
+        {
+          "id": "sell-the-slot",
+          "label": "Sell your slot on the boat to the McCormicks",
+          "forecast": "€120 and nothing moved. The chapter closes on someone else's operation.",
+          "requirements": [
+            "relationship:mccormick_family>=1"
+          ],
+          "effects": [
+            "cash:+120",
+            "chapter-ending:missed",
+            "flag:sold-the-slot"
+          ]
+        }
+      ],
+      "direct_scene_asset_id": "scene-sornainen-docks-v02",
+      "preview_scene_asset_id": "scene-sornainen-docks-v02",
+      "binding_status": "direct",
+      "preview_source": {
+        "id": "scene-sornainen-docks-v02",
+        "file": "scenes/sornainen-docks-v02.webp",
+        "source": "locations/era1/location-sornainen-docks-v02.png",
+        "approval_status": "semi-approved",
+        "production_status": "prototype-only",
+        "sha256": "9ae47de05fcfd5d66789e0814ae19f22695431d824015fb5143cc00acf76c9e0"
+      },
+      "participants": [
+        "aatami"
+      ],
+      "cast_placeholders": [],
+      "production_tasks": [
+        "P1: review the existing docks crop and separable container/clock/van placeholders while the finale decision stays open."
+      ],
+      "uncertainty": "The finale design remains an owner decision in ROADMAP section 8. Show current authored choice/commitment only; no new playable-combat claim.",
+      "combat": null
+    }
+  ]
+}
