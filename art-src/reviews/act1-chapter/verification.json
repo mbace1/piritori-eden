@@ -1,0 +1,28 @@
+{
+  "source": "actual browser interaction/capture",
+  "checks": 42,
+  "viewports": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "errors": [],
+      "storageUnchanged": true,
+      "allTabsFit": true
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "errors": [],
+      "storageUnchanged": true,
+      "allTabsFit": true
+    }
+  ],
+  "fullPlaythroughClaim": false,
+  "physicalDeviceAcceptance": false
+}
