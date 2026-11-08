@@ -11,6 +11,11 @@ artwork. This does not upgrade Aatami's semi-approved rigs or approve new motion
 - Use a fixed **9:16 illustrated scene with HUD, dialogue and choices overlaid**.
   Keep that frame on desktop and landscape too. The scene continues behind
   overlays; no separate below-scene panel or wide page composition.
+- **Owner UI ceiling:** all combined UI uses at most **50% of the 9:16
+  screen**, leaving at least half for the scene. HUD, dialogue, choices,
+  results and temporary controls share the budget. Preserve readability,
+  touch targets, choices and tactical information through compact or
+  sequential presentation; do not clip or scale them away.
 - Delete the old UI and modular cast source/runtime libraries and their active
   approval entries. Do not reskin or restore them from branches/history for
   placeholders. Neutral labelled placeholders replace unapproved contacts.

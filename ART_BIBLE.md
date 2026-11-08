@@ -26,6 +26,23 @@ Do not copy its flat-vector style, tram mechanics, simplified combat or
 retired map/sheet layout. Piritori's fixed 9:16 requirement also applies on
 desktop and landscape.
 
+## UI coverage ceiling — owner, 8 November 2026
+
+All combined gameplay UI occupies **at most 50% of the 9:16 frame**. HUD,
+dialogue, choices, consequences and temporary controls share this one budget;
+it is not a separate allowance for each panel. Leave at least half the frame
+for the illustrated scene. Measure the actual covered rectangle union; for
+edge-anchored city overlays also cap the summed top/bottom bands including
+insets, panel padding and gaps.
+
+Preserve readable text and actual 44px targets. Compact duplicate text and
+show dialogue before a replacement choice panel when needed. Keep all
+meaningful choices and stakes accessible; do not meet the cap by clipping,
+shrinking text or silently discarding tactical information. Apply and test the
+same limit in arrival, choice, result, map, study and menu states. C.19's
+floating tactical labels need an actual area check, not a claim inferred only
+from its edge-panel allocation.
+
 ## Retained character sources
 
 | Character | Registered artwork | Source | Status |

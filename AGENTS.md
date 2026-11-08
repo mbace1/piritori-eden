@@ -15,6 +15,14 @@ older visual, modular-cast and UI instructions in historical documents.
   HUD, dialogue, choices and consequences overlay that frame. The scene
   continues behind them. Desktop and landscape center the portrait frame;
   they do not introduce another wide page or reserve a footer below the art.
+- **Combined gameplay UI must occupy at most 50% of the 9:16 frame.**
+  Count HUD, dialogue, choices, consequences and temporary controls together.
+  Leave at least half the frame for the scene. For edge-anchored city panels,
+  also cap the combined top/bottom height bands, including insets and gaps.
+  Keep actual 44px targets and 12px text; use dialogue then a replacement
+  choice panel when simultaneous presentation cannot fit. Preserve every
+  authored choice and its stakes. Measure actual rectangles; never meet the
+  limit by clipping text or hiding meaningful information.
 - Study the **active journey in current Toko Move** (`toko-move/js/play.js`
   in `mbace1/Suds-Jack`), not its retired map/sheet interface or older
   map-first briefs. Borrow scene-first presentation, compact overlays,
