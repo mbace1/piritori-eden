@@ -116,7 +116,12 @@ export function mountSceneClubView(world, {
       if (remaining > 0) armTimer = setTimeout(() => { if (!disposed && $('return')) $('return').disabled = continuing; }, remaining);
     } else if (arriving) {
       $('controls').innerHTML = '<button class="primary" type="button" id="scene-enter">Continue</button>';
-      $('scene-enter').addEventListener('click', () => { if (!disposed) { arriving = false; renderConversation(); fit(); } });
+      $('scene-enter').addEventListener('click', () => {
+        if (disposed) return;
+        arriving = false; choosing = true; renderConversation(); fit();
+        // A second tap at Continue's old position must not select a choice.
+        armTimer = setTimeout(() => { if (disposed || model.choiceId) return; choosing = false; armChoices(); }, 300);
+      });
     } else {
       $('controls').innerHTML = `<div class="choices">${model.choices.map(choice => `<button class="choice" type="button" data-choice="${esc(choice.id)}" aria-label="${esc(choice.label+'. '+choice.forecast)}" disabled><strong><span class="full-label">${esc(choice.label)}</span><span class="compact-label" aria-hidden="true">${esc(compactLabel(choice))}</span></strong><span class="forecast">${esc(choice.available === false ? choice.reason : choice.forecast)}</span><span class="compact-stake" aria-hidden="true">${esc(choice.available === false ? choice.reason : stake(choice))}</span></button>`).join('')}</div><button class="primary" id="respond" type="button" hidden>Respond</button>`;
       for (const button of world.querySelectorAll('[data-choice]')) button.addEventListener('click', () => {
