@@ -301,6 +301,23 @@ html body .arcade-home { display: none; }
   gap: 12px;
   padding: 12px;
 }
+/* Keep the existing authored next action inside the mode scrollport, above
+   navigation. Its normal flow space keeps the last route details reachable. */
+.next-step {
+  position: sticky;
+  bottom: 0;
+  grid-column: 1 / -1;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #182029;
+  border: 1px solid #53606c;
+}
+.next-step p { min-width: 0; margin: 0; color: var(--ink-dim); font: 12px/1.35 var(--body); }
+.next-step .paper-button { flex: 0 1 auto; max-width: 100%; white-space: normal; }
 /* No min-height. The panel is sized by the square board inside it now; a
    560px floor here is half of what pushed the southern half of Kallio off
    the bottom of the screen, and on a 412px-wide phone it wrapped a 362px
@@ -819,6 +836,8 @@ html body .arcade-home { display: none; }
   .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 12px; letter-spacing: .03em; }
   .nav-icon { font-size: 17px; }
   .route-layout, .encounter-layout, .ledger-layout, .news-layout { min-height: auto; display: block; padding: 7px; }
+  .next-step { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
+  .next-step .paper-button { width: 100%; }
   /* The stage sizes itself now — see .map-stage. A min-height here is what
      pushed the board off the bottom of the screen in the first place. */
   .map-side { margin-top: 7px; }
