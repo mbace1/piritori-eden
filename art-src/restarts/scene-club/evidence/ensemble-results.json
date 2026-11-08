@@ -6,10 +6,10 @@
   "staticMouths": true,
   "sourceHashes": {
     "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "1b33c324a8d540f1f1e884404cadd64e32badb2f6c3e13e41784f37f9d93c245",
+    "app.js": "97a3b02aaed1f5dc6c403231258bb73ec7eeb9f23da4233de3e8b3d3e8cfd13c",
     "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
-    "style.css": "ae244f02348a234b3af165dfeebb6713dc7664d52fb01482e3f24c2dd7d5af5d",
+    "style.css": "6f7e5796bd9d10387e110778707fd321cedde4b6331915d0c2c602374f840d41",
     "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
   },
   "cases": [
@@ -1058,7 +1058,7 @@
         "realTime": {
           "first": {
             "toko": {
-              "hash": "3c8251df",
+              "hash": "bd8a7ed4",
               "opaque": 270270
             },
             "aatami": {
@@ -2750,7 +2750,7 @@
         "realTime": {
           "first": {
             "toko": {
-              "hash": "6c9dc83e",
+              "hash": "bd8a7ed4",
               "opaque": 270270
             },
             "aatami": {
@@ -6134,7 +6134,7 @@
         "realTime": {
           "first": {
             "toko": {
-              "hash": "7a238ab3",
+              "hash": "5af3917e",
               "opaque": 85410
             },
             "aatami": {
@@ -7826,22 +7826,22 @@
         "realTime": {
           "first": {
             "toko": {
-              "hash": "28a463c4",
+              "hash": "e9962247",
               "opaque": 360000
             },
             "aatami": {
-              "hash": "aeb36fa7",
-              "opaque": 179965
+              "hash": "d6b61847",
+              "opaque": 179964
             }
           },
           "last": {
             "toko": {
-              "hash": "b022751a",
+              "hash": "cce97598",
               "opaque": 360000
             },
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             }
           }
         }
@@ -10175,6 +10175,7 @@
         "height": 482
       },
       "pose": "front",
+      "font": "system-ui",
       "reducedMotion": "reduce",
       "captures": [
         "toko-edge-271x482-front-viewport.png",
@@ -10620,6 +10621,7 @@
         "height": 482
       },
       "pose": "side",
+      "font": "system-ui",
       "reducedMotion": "reduce",
       "captures": [
         "toko-edge-271x482-side-viewport.png",
@@ -11055,57 +11057,3582 @@
         "web/js/v3/content.js",
         "web/js/v3/state.js"
       ]
-    }
-  ],
-  "videos": [
-    {
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "stage": {
-        "x": 0,
-        "y": 75.328125,
-        "width": 390,
-        "height": 693.328125
-      },
-      "mp4Size": {
-        "width": 720,
-        "height": 1280
-      },
-      "webm": "visual-restart-phone.webm",
-      "mp4": "visual-restart-phone.mp4",
-      "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
     },
     {
+      "id": "edge-844x390-front-DejaVu-Sans",
+      "edge": true,
       "viewport": {
         "width": 844,
         "height": 390
       },
-      "stage": {
-        "x": 312.3125,
-        "y": 0,
-        "width": 219.375,
+      "pose": "front",
+      "font": "DejaVu Sans",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-844x390-front-DejaVu-Sans-viewport.png",
+        "toko-edge-844x390-front-DejaVu-Sans-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 65.375
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 166.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 122.96875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 330.79826388888887,
+              "y": 57.08439781021898,
+              "width": 47.82118055555554,
+              "height": 63.3978102189781
+            },
+            "mouth": {
+              "x": 357.3048611111111,
+              "y": 100.26049270072993
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 215.625,
+              "width": 203.375,
+              "height": 166.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 49.1875
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 150.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 122.96875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 330.79826388888887,
+              "y": 57.08439781021898,
+              "width": 47.82118055555554,
+              "height": 63.3978102189781
+            },
+            "mouth": {
+              "x": 357.3048611111111,
+              "y": 100.26049270072993
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 231.8125,
+              "width": 203.375,
+              "height": 150.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-844x390-side-DejaVu-Sans",
+      "edge": true,
+      "viewport": {
+        "width": 844,
         "height": 390
       },
-      "mp4Size": {
-        "width": 720,
-        "height": 1280
+      "pose": "side",
+      "font": "DejaVu Sans",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-844x390-side-DejaVu-Sans-viewport.png",
+        "toko-edge-844x390-side-DejaVu-Sans-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 65.375
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 166.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 125.671875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 333.26346409574467,
+              "y": 59.973214285714285,
+              "width": 51.60568484042551,
+              "height": 62.306696428571435
+            },
+            "mouth": {
+              "x": 374.70844414893617,
+              "y": 100.35223214285713
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 215.625,
+              "width": 203.375,
+              "height": 166.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
       },
-      "webm": "visual-restart-landscape.webm",
-      "mp4": "visual-restart-landscape.mp4",
-      "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
+      "secondLine": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 49.1875
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 150.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 125.671875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 333.26346409574467,
+              "y": 59.973214285714285,
+              "width": 51.60568484042551,
+              "height": 62.306696428571435
+            },
+            "mouth": {
+              "x": 374.70844414893617,
+              "y": 100.35223214285713
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 231.8125,
+              "width": 203.375,
+              "height": 150.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-271x482-front-DejaVu-Sans",
+      "edge": true,
+      "viewport": {
+        "width": 271,
+        "height": 482
+      },
+      "pose": "front",
+      "font": "DejaVu Sans",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-271x482-front-DejaVu-Sans-viewport.png",
+        "toko-edge-271x482-front-DejaVu-Sans-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 74.375
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 180.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 177.21875,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 32.51819444444445,
+              "y": 71.1226961678832,
+              "width": 68.91840277777777,
+              "height": 91.3711678832117
+            },
+            "mouth": {
+              "x": 70.71868055555555,
+              "y": 133.34961222627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 289.5,
+              "width": 247,
+              "height": 180.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 58.1875
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 164.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 177.21875,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 32.51819444444445,
+              "y": 71.1226961678832,
+              "width": 68.91840277777777,
+              "height": 91.3711678832117
+            },
+            "mouth": {
+              "x": 70.71868055555555,
+              "y": 133.34961222627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 305.6875,
+              "width": 247,
+              "height": 164.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-271x482-side-DejaVu-Sans",
+      "edge": true,
+      "viewport": {
+        "width": 271,
+        "height": 482
+      },
+      "pose": "side",
+      "font": "DejaVu Sans",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-271x482-side-DejaVu-Sans-viewport.png",
+        "toko-edge-271x482-side-DejaVu-Sans-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 74.375
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 180.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 181.125,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 36.0751329787234,
+              "y": 75.28616071428571,
+              "width": 74.37686170212767,
+              "height": 89.79861607142858
+            },
+            "mouth": {
+              "x": 95.80784574468086,
+              "y": 133.48183035714285
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 289.5,
+              "width": 247,
+              "height": 180.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 58.1875
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 164.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 181.125,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 36.0751329787234,
+              "y": 75.28616071428571,
+              "width": 74.37686170212767,
+              "height": 89.79861607142858
+            },
+            "mouth": {
+              "x": 95.80784574468086,
+              "y": 133.48183035714285
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 305.6875,
+              "width": 247,
+              "height": 164.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-844x390-front-monospace",
+      "edge": true,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "front",
+      "font": "monospace",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-844x390-front-monospace-viewport.png",
+        "toko-edge-844x390-front-monospace-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 65.375
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 166.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 122.96875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 330.79826388888887,
+              "y": 57.08439781021898,
+              "width": 47.82118055555554,
+              "height": 63.3978102189781
+            },
+            "mouth": {
+              "x": 357.3048611111111,
+              "y": 100.26049270072993
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 215.625,
+              "width": 203.375,
+              "height": 166.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 49.1875
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 150.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 122.96875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 330.79826388888887,
+              "y": 57.08439781021898,
+              "width": 47.82118055555554,
+              "height": 63.3978102189781
+            },
+            "mouth": {
+              "x": 357.3048611111111,
+              "y": 100.26049270072993
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 231.8125,
+              "width": 203.375,
+              "height": 150.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-844x390-side-monospace",
+      "edge": true,
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "side",
+      "font": "monospace",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-844x390-side-monospace-viewport.png",
+        "toko-edge-844x390-side-monospace-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 65.375
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 215.625,
+          "width": 203.375,
+          "height": 166.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 125.671875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 333.26346409574467,
+              "y": 59.973214285714285,
+              "width": 51.60568484042551,
+              "height": 62.306696428571435
+            },
+            "mouth": {
+              "x": 374.70844414893617,
+              "y": 100.35223214285713
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 215.625,
+              "width": 203.375,
+              "height": 166.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 844,
+        "height": 390,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "wrapper": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "layer": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "background": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "speech": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 49.1875
+        },
+        "controls": {
+          "x": 320.3125,
+          "y": 286,
+          "width": 203.375,
+          "height": 96
+        },
+        "decisionOverlay": {
+          "x": 320.3125,
+          "y": 231.8125,
+          "width": 203.375,
+          "height": 150.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 283.796875,
+              "y": 54.625,
+              "width": 125.671875,
+              "height": 187.1875
+            },
+            "head": {
+              "x": 333.26346409574467,
+              "y": 59.973214285714285,
+              "width": 51.60568484042551,
+              "height": 62.306696428571435
+            },
+            "mouth": {
+              "x": 374.70844414893617,
+              "y": 100.35223214285713
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 312.3125,
+              "y": 0,
+              "width": 219.375,
+              "height": 390
+            },
+            "head": {
+              "x": 449.59995515113826,
+              "y": 47.84722292423248,
+              "width": 75.96318604603209,
+              "height": 98.85416811704636
+            },
+            "mouth": {
+              "x": 488.4858718175594,
+              "y": 118.71527951955795
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 219,
+              "height": 390,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.4513888888888889,
+              "x": -140.10000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 320.3125,
+              "y": 8,
+              "width": 120,
+              "height": 44
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 320.3125,
+              "y": 231.8125,
+              "width": 203.375,
+              "height": 150.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 320.3125,
+              "y": 286,
+              "width": 203.375,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 320.3125,
+              "y": 334,
+              "width": 203.375,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 479.6875,
+            "y": 0,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-271x482-front-monospace",
+      "edge": true,
+      "viewport": {
+        "width": 271,
+        "height": 482
+      },
+      "pose": "front",
+      "font": "monospace",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-271x482-front-monospace-viewport.png",
+        "toko-edge-271x482-front-monospace-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 74.375
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 180.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 177.21875,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 32.51819444444445,
+              "y": 71.1226961678832,
+              "width": 68.91840277777777,
+              "height": 91.3711678832117
+            },
+            "mouth": {
+              "x": 70.71868055555555,
+              "y": 133.34961222627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 289.5,
+              "width": 247,
+              "height": 180.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 58.1875
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 164.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 177.21875,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 32.51819444444445,
+              "y": 71.1226961678832,
+              "width": 68.91840277777777,
+              "height": 91.3711678832117
+            },
+            "mouth": {
+              "x": 70.71868055555555,
+              "y": 133.34961222627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 305.6875,
+              "width": 247,
+              "height": 164.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "edge-271x482-side-monospace",
+      "edge": true,
+      "viewport": {
+        "width": 271,
+        "height": 482
+      },
+      "pose": "side",
+      "font": "monospace",
+      "reducedMotion": "reduce",
+      "captures": [
+        "toko-edge-271x482-side-monospace-viewport.png",
+        "toko-edge-271x482-side-monospace-stage.png"
+      ],
+      "failures": [],
+      "browserErrors": [],
+      "native": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 74.375
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 289.5,
+          "width": 247,
+          "height": 180.375
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 181.125,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 36.0751329787234,
+              "y": 75.28616071428571,
+              "width": 74.37686170212767,
+              "height": 89.79861607142858
+            },
+            "mouth": {
+              "x": 95.80784574468086,
+              "y": 133.48183035714285
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 289.5,
+              "width": 247,
+              "height": 180.375
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "secondLine": {
+        "width": 271,
+        "height": 482,
+        "half": false,
+        "scale": 1,
+        "world": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "wrapper": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "layer": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "background": {
+          "x": 0,
+          "y": 0.109375,
+          "width": 271,
+          "height": 481.765625
+        },
+        "speech": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 58.1875
+        },
+        "controls": {
+          "x": 12,
+          "y": 371.875,
+          "width": 247,
+          "height": 98
+        },
+        "decisionOverlay": {
+          "x": 12,
+          "y": 305.6875,
+          "width": 247,
+          "height": 164.1875
+        },
+        "grouped": true,
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": -35.21875,
+              "y": 67.578125,
+              "width": 181.125,
+              "height": 269.78125
+            },
+            "head": {
+              "x": 36.0751329787234,
+              "y": 75.28616071428571,
+              "width": 74.37686170212767,
+              "height": 89.79861607142858
+            },
+            "mouth": {
+              "x": 95.80784574468086,
+              "y": 133.48183035714285
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "toko": {
+            "canvas": {
+              "x": 0,
+              "y": 0.109375,
+              "width": 271,
+              "height": 481.765625
+            },
+            "head": {
+              "x": 169.55242252349854,
+              "y": 59.21488179009856,
+              "width": 93.72222518920898,
+              "height": 122.11420742482628
+            },
+            "mouth": {
+              "x": 217.52927589416504,
+              "y": 146.75794373392378
+            },
+            "source": {
+              "id": "scene-toko-rig-v01",
+              "dimensions": [
+                1536,
+                864
+              ],
+              "crop": [
+                0,
+                0,
+                1536,
+                864
+              ],
+              "plate": "scene-toko-noodles-empty-v01"
+            },
+            "camera": {
+              "width": 271,
+              "height": 482,
+              "sourceWidth": 1536,
+              "sourceHeight": 864,
+              "scale": 0.5578703703703703,
+              "x": -172.98000000000002,
+              "y": 0,
+              "focus": [
+                0.36,
+                0.5
+              ],
+              "fit": "cover"
+            },
+            "ready": true
+          }
+        },
+        "overlays": [
+          {
+            "name": "scene-header",
+            "rect": {
+              "x": 12,
+              "y": 12.109375,
+              "width": 120,
+              "height": 45
+            },
+            "painted": true,
+            "floating": true
+          },
+          {
+            "name": "encounter-overlay",
+            "rect": {
+              "x": 12,
+              "y": 305.6875,
+              "width": 247,
+              "height": 164.1875
+            },
+            "painted": true,
+            "floating": true
+          }
+        ],
+        "targets": [
+          {
+            "id": "next-line",
+            "rect": {
+              "x": 12,
+              "y": 371.875,
+              "width": 247,
+              "height": 44
+            },
+            "font": 16
+          },
+          {
+            "id": "back-to-scene",
+            "rect": {
+              "x": 12,
+              "y": 421.875,
+              "width": 247,
+              "height": 48
+            },
+            "font": 12
+          }
+        ],
+        "review": {
+          "rect": {
+            "x": 215,
+            "y": 8.109375,
+            "width": 44,
+            "height": 44
+          },
+          "painted": true
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "painted": true
+          },
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/toko-rig-v01/brow_l.webp",
+        "art/v3/scenes/toko-rig-v01/brow_r.webp",
+        "art/v3/scenes/toko-rig-v01/counter.webp",
+        "art/v3/scenes/toko-rig-v01/eye_l.webp",
+        "art/v3/scenes/toko-rig-v01/eye_r.webp",
+        "art/v3/scenes/toko-rig-v01/fore_r.webp",
+        "art/v3/scenes/toko-rig-v01/hand_l.webp",
+        "art/v3/scenes/toko-rig-v01/head.webp",
+        "art/v3/scenes/toko-rig-v01/hood_bare.webp",
+        "art/v3/scenes/toko-rig-v01/note.webp",
+        "art/v3/scenes/toko-rig-v01/torso.webp",
+        "art/v3/scenes/toko-slomo-noodles-empty-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
     }
   ],
+  "videos": [],
   "checks": 3720,
-  "edgeChecks": 150,
+  "edgeChecks": 750,
   "failures": [],
   "finalSourceHashes": {
     "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "1b33c324a8d540f1f1e884404cadd64e32badb2f6c3e13e41784f37f9d93c245",
+    "app.js": "97a3b02aaed1f5dc6c403231258bb73ec7eeb9f23da4233de3e8b3d3e8cfd13c",
     "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
-    "style.css": "ae244f02348a234b3af165dfeebb6713dc7664d52fb01482e3f24c2dd7d5af5d",
+    "style.css": "6f7e5796bd9d10387e110778707fd321cedde4b6331915d0c2c602374f840d41",
     "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
   },
   "passed": true,
@@ -11114,7 +14641,60 @@
     "toko-side-phone-stage.png",
     "toko-front-desktop-viewport.png",
     "toko-front-landscape-viewport.png",
-    "toko-edge-271x482-front-stage.png"
+    "toko-edge-271x482-front-stage.png",
+    "toko-edge-271x482-front-DejaVu-Sans-stage.png"
   ],
-  "fullCaptureArchive": "/workspace/evidence/portrait-overlay-final/toko"
+  "fullCaptureArchive": "/workspace/evidence/narrow-ci-fix/final/toko",
+  "earlierRecordings": {
+    "sourceCommit": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
+    "sourceHashes": {
+      "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
+      "app.js": "1b33c324a8d540f1f1e884404cadd64e32badb2f6c3e13e41784f37f9d93c245",
+      "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+      "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
+      "style.css": "ae244f02348a234b3af165dfeebb6713dc7664d52fb01482e3f24c2dd7d5af5d",
+      "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+    },
+    "videos": [
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "stage": {
+          "x": 0,
+          "y": 75.328125,
+          "width": 390,
+          "height": 693.328125
+        },
+        "mp4Size": {
+          "width": 720,
+          "height": 1280
+        },
+        "webm": "visual-restart-phone.webm",
+        "mp4": "visual-restart-phone.mp4",
+        "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
+      },
+      {
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "stage": {
+          "x": 312.3125,
+          "y": 0,
+          "width": 219.375,
+          "height": 390
+        },
+        "mp4Size": {
+          "width": 720,
+          "height": 1280
+        },
+        "webm": "visual-restart-landscape.webm",
+        "mp4": "visual-restart-landscape.mp4",
+        "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
+      }
+    ],
+    "note": "Earlier native recordings remain evidence of the recorded source. The 40-second trailer uses a 450x800 view verified pixel-identical after the narrow-font fix."
+  }
 }

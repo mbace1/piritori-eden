@@ -107,13 +107,14 @@ specification. Tests reject restoration of the retired libraries and references.
 - **35 Node suites** pass: [actual campaign/combat output](evidence/baseline-node.log).
 - Adapter: 135 checks for three exact effects, engine settlement and clock,
   reload, duplicate refusal and isolated storage.
-- [Scene Club browser report](evidence/browser-results.json): **3,255 main +
-  248 edge checks**, zero failures. Both poses,
+- [Scene Club browser report](evidence/browser-results.json): **3,327 main +
+  888 edge checks**, zero failures. Both poses,
   three viewports, motion/reduced motion, fixed 9:16 geometry, full-scene
   layering, real target/text sizes, face clearance, half-size review and
-  nine actual choice/reload/map flows.
+  nine actual choice/reload/map flows. Additional DejaVu Sans and monospace
+  probes reproduce and prevent the CI font-metric overlap.
 - [Toko ensemble report](evidence/ensemble-results.json): **3,720 main +
-  150 edge checks**, zero failures. Both poses, three
+  750 edge checks**, zero failures. Both poses, three
   viewports, one room/counter camera, sampled actual canvas motion, clear
   heads, source text and unchanged saves.
 - [Compatibility browser report](evidence/cleanup-browser-results.json):
@@ -123,6 +124,8 @@ specification. Tests reject restoration of the retired libraries and references.
 - [Phone recording](evidence/visual-restart-phone.mp4) and
   [landscape recording](evidence/visual-restart-landscape.mp4). WebM originals
   and stage/viewport screenshots are included beside them.
+  The earlier short clips were filmed at `9cdfdc0`; the new trailer’s 450×800
+  view remains pixel-identical after the narrow-font correction.
   MP4s fit the actual scene to 720×1280; WebMs retain the native browser
   viewport and letterboxing. No artwork is reconstructed for the recordings.
 
