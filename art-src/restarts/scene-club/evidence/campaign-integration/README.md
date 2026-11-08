@@ -77,6 +77,17 @@ painted; those fixtures/visibility checks were corrected without changing the
 builder or relaxing target/text limits. Earlier failed runs remain private
 as-run evidence, not passing verification.
 
+The first integration CI at `94e25c8` passed 12/13 jobs, including the new
+campaign/cabinet gate. Its C.19 outcome test tapped VIEW → Labels → VIEW
+inside the same control's existing 260ms duplicate-input guard, then timed
+out on the hidden Crew button. [Trusted native input traces](c19-view-native-probe.json)
+reproduce this at both viewports (88.1/89.7ms repeated-VIEW intervals), with
+complete fight and crew snapshots unchanged. The test now waits at least
+280ms before intentionally reusing VIEW and asserts the actual expanded and
+visible states in both directions. Runtime, commands, round counts and test
+timeouts are unchanged; all 59 tactical package inputs match the earlier
+green source. The final CI run must still verify the canonical package.
+
 This is browser emulation, not physical Pixel/iPad acceptance. C.19 battle
 rules, assets and receipt settlement are unchanged; these three authored
 choices do not trigger combat. Act I remains **50%** under the ROADMAP rubric.
