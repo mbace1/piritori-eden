@@ -1,30 +1,5 @@
 {
   "schema_version": 2,
-  "approval_status": "approved",
-  "production_ready": false,
-  "active_style": "cut-cardstock-hand-ink-v03",
-  "rig_contract": "../MODULAR_CHARACTER_SYSTEM.md",
-  "body_frames": {
-    "approval_status": "approved",
-    "sheet": "turnarounds/era1/base-body-frames-tpose-cut-v02.png",
-    "individuals": [
-      "turnarounds/era1/base-light-m-tpose-cut-v02.png",
-      "turnarounds/era1/base-medium-m-tpose-cut-v02.png",
-      "turnarounds/era1/base-heavy-m-tpose-cut-v02.png",
-      "turnarounds/era1/base-light-f-tpose-cut-v02.png",
-      "turnarounds/era1/base-medium-f-tpose-cut-v02.png",
-      "turnarounds/era1/base-heavy-f-tpose-cut-v02.png"
-    ],
-    "anchor": "root_ground",
-    "note": "Structural cut-paper frames; m/f describe production silhouettes, not role locks."
-  },
-  "optional_3d": {
-    "approval_status": "approved",
-    "turnaround_sheet": "turnarounds/era1/base-medium-mf-turnaround-cut-v02.png",
-    "views": ["front", "left", "back", "right"],
-    "pose": "t-pose",
-    "note": "Modelling reference for an optional low-detail 3D source rig; not the final render style."
-  },
   "fighter_pilots": {
     "approval_status": "approved",
     "production_ready": false,
@@ -34,86 +9,24 @@
       {
         "id": "f01-heavy-bruiser",
         "file": "concepts-3d/pilots/f01-heavy-bruiser-tpose-v01.jpg",
-        "dimensions": [1280, 1067],
+        "dimensions": [
+          1280,
+          1067
+        ],
         "sha256": "75b02cb98746f19aa3acf664a54591d9cdaeadd9b4cd456dbe021117ea029d87"
       },
       {
         "id": "f02-wiry-skirmisher",
         "file": "concepts-3d/pilots/f02-wiry-skirmisher-tpose-v01.jpg",
-        "dimensions": [853, 1280],
+        "dimensions": [
+          853,
+          1280
+        ],
         "sha256": "e7fbf7c927faf4277757ab6be6458a8adffdbaaaadcc3805ac12cfac42329587"
       }
     ],
     "note": "Owner: these are the new poses; all other T-poses are older work. 2D concept approval does not approve generated geometry or runtime use."
   },
-  "heads": {
-    "approval_status": "approved",
-    "socket": "neck",
-    "active_sheets": [
-      "modules/era1/head-personality-sheet-v03.png",
-      "modules/era1/head-kallio-diverse-sheet-v03.png"
-    ],
-    "personality_set": [
-      "modules/era1/head-caricature-01-v03.png",
-      "modules/era1/head-caricature-02-v03.png",
-      "modules/era1/head-caricature-03-v03.png",
-      "modules/era1/head-caricature-04-v03.png",
-      "modules/era1/head-caricature-05-v03.png",
-      "modules/era1/head-caricature-06-v03.png",
-      "modules/era1/head-caricature-07-v03.png",
-      "modules/era1/head-caricature-08-v03.png"
-    ],
-    "kallio_cast_set": [
-      "modules/era1/head-kallio-01-v03.png",
-      "modules/era1/head-kallio-02-v03.png",
-      "modules/era1/head-kallio-03-v03.png",
-      "modules/era1/head-kallio-04-v03.png",
-      "modules/era1/head-kallio-05-v03.png",
-      "modules/era1/head-kallio-06-v03.png",
-      "modules/era1/head-kallio-07-v03.png",
-      "modules/era1/head-kallio-08-v03.png",
-      "modules/era1/head-kallio-09-v03.png",
-      "modules/era1/head-kallio-10-v03.png",
-      "modules/era1/head-kallio-11-v03.png",
-      "modules/era1/head-kallio-12-v03.png"
-    ],
-    "note": "Review heads currently combine face and hair. Production exports should separate hair and hats while preserving the same crooked marker character."
-  },
-  "upper_modules": {
-    "approval_status": "approved",
-    "sheet": "modules/era1/upper-clothing-handink-sheet-v03.png",
-    "frame": "medium",
-    "assets": {
-      "runner": "modules/era1/torso-runner-medium-handink-v03.png",
-      "muscle": "modules/era1/torso-muscle-medium-handink-v03.png",
-      "watcher": "modules/era1/torso-watcher-medium-handink-v03.png",
-      "fixer": "modules/era1/torso-fixer-medium-handink-v03.png",
-      "driver": "modules/era1/torso-driver-medium-handink-v03.png",
-      "local": "modules/era1/torso-local-medium-handink-v03.png"
-    }
-  },
-  "lower_modules": {
-    "approval_status": "approved",
-    "sheet": "modules/era1/lower-clothing-handink-sheet-v03.png",
-    "frame": "medium",
-    "assets": {
-      "runner": "modules/era1/legs-runner-medium-handink-v03.png",
-      "muscle": "modules/era1/legs-muscle-medium-handink-v03.png",
-      "watcher": "modules/era1/legs-watcher-medium-handink-v03.png",
-      "fixer": "modules/era1/legs-fixer-medium-handink-v03.png",
-      "driver": "modules/era1/legs-driver-medium-handink-v03.png",
-      "local": "modules/era1/legs-local-medium-handink-v03.png"
-    }
-  },
-  "grips": {
-    "approval_status": "approved",
-    "sheet": "system/grip-hold-personality-sheet-v03.png",
-    "animation_path": "../animation/characters/era1/grips-personality-v03"
-  },
-  "role_tabs": {
-    "approval_status": "approved",
-    "sheet": "system/role-tabs-handink-v01.svg",
-    "manifest": "system/role-tabs.json"
-  },
-  "approved_clean_variant": "../variants/approved-clean-cut-v02"
+  "status": "historical-3d-pilot-metadata-only",
+  "note": "The modular faces, clothes, body sheets and grips were deleted on 2026-11-08. This file does not authorize their recreation or runtime use."
 }

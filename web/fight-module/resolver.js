@@ -7,17 +7,7 @@ import {
 import { weaponsFrom, itemsFrom, UNARMED, ROW_FRONT } from '../js/v3/equipment.js?v=2';
 import {
   perkValue, skillsOf, hasAptitude,
-} from '../js/v3/state.js?v=15';
-
-const ROLE_PARTS = {
-  runner: ['torso-runner-v03', 'legs-runner-v03'],
-  watcher: ['torso-watcher-v03', 'legs-watcher-v03'],
-  fixer: ['torso-fixer-v03', 'legs-fixer-v03'],
-  muscle: ['torso-muscle-v03', 'legs-muscle-v03'],
-  driver: ['torso-driver-v03', 'legs-driver-v03'],
-  local: ['torso-local-v03', 'legs-local-v03'],
-};
-const ENEMY_HEADS = ['head-kallio-03-v03', 'head-kallio-09-v03', 'head-kallio-11-v03'];
+} from '../js/v3/state.js?v=16';
 
 /** A unit's `cell` field is a grid.js `slotKey` ("lane,depth") — not the
  *  authored "front-2" vocabulary, which only names a slot inside a SIDE's
@@ -40,7 +30,6 @@ const PERK_HARM_PER_POINT = 1; // strength → hit amount (FightManager)
 // speed → tempo is Godot-only here: this web battle has no tempo track.
 
 function makePlayer(member, state, index, count) {
-  const [torso, legs] = ROLE_PARTS[member.role] ?? ROLE_PARTS.local;
   // BattleBuilder._default_player_slot(): front rank first, each row read
   // from the centre outward; two fighters hold the centre lane in depth.
   const slot = defaultPlayerSlot(index, count);
@@ -63,9 +52,7 @@ function makePlayer(member, state, index, count) {
     harmBonus: muscle,
     maxNerve: baseNerve + steady,
     alive: status?.status !== 'missing',
-    head: member.portrait_asset_id,
-    torso,
-    legs,
+    head: '', torso: '', legs: '', // deprecated appearance fields; neutral identities only
     equipment: member.initial_equipment?.[0] ?? 'feature-phone',
     // BattleBuilder._crew_to_unit(): item_ids is initial_equipment filtered
     // to feature-phone specifically — a fighter's other carried equipment
@@ -77,7 +64,6 @@ function makePlayer(member, state, index, count) {
 }
 
 function makeEnemy(opponent, index, openingNerve = 0) {
-  const [torso, legs] = ROLE_PARTS[opponent.role] ?? ROLE_PARTS.local;
   // BattleBuilder._opponent_to_unit(): parse_cell() always answers for the
   // OPPOSITION band, centred onto the real board width.
   const slot = parseCell(opponent.cell);
@@ -93,9 +79,7 @@ function makeEnemy(opponent, index, openingNerve = 0) {
     nerve: Math.max(1, 3 + openingNerve),
     maxNerve: 3,
     alive: true,
-    head: ENEMY_HEADS[index % ENEMY_HEADS.length],
-    torso,
-    legs,
+    head: '', torso: '', legs: '', // no retired modular art
     equipment: opponent.equipment,
     intent: opponent.intent,
     // MST desync (COMBAT.md §9.13): immune to further SYNC hits after the
@@ -717,9 +701,7 @@ function spawnPolice(battle) {
       nerve: 10,
       maxNerve: 10,
       alive: true,
-      head: ENEMY_HEADS[0],
-      torso: ROLE_PARTS.muscle[0],
-      legs: ROLE_PARTS.muscle[1],
+      head: '', torso: '', legs: '',
       equipment: 'unarmed',
     });
     placed += 1;

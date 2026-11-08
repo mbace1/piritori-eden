@@ -1,3 +1,6 @@
+/* Compatibility layout for the playable campaign during the visual restart.
+   This is not the approved basis for new UI. The Lantern/chrome material and
+   modular portraits have been removed; the new scene presentation is reviewed separately. */
 *, *::before, *::after { box-sizing: border-box; }
 :root {
   color-scheme: dark;
@@ -20,7 +23,10 @@
   --shadow: rgba(1, 5, 9, .58);
   --display: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   --body: "Trebuchet MS", Arial, sans-serif;
-  --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  /* Neutral compatibility text: historical label/control declarations use
+     --mono, but only the ledger voice still needs a monospaced face. */
+  --mono: var(--body);
+  --ledger: ui-monospace, "SFMono-Regular", Consolas, monospace;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -36,10 +42,11 @@ body {
 }
 button, input, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
+small { font-size: max(12px, .833333em); }
 [hidden] { display: none !important; }
 .game-shell {
   height: 100dvh;
-  min-height: 540px;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   padding-top: var(--safe-top);
@@ -54,14 +61,12 @@ button { -webkit-tap-highlight-color: transparent; }
   align-items: stretch;
   gap: 9px;
   padding: 9px 12px;
-  /* Godot's own header: PiritoriChrome.bar(false) — torn on the bottom, the
-     edge the world (the mode content) shows through. Same texture, same
-     border-image discipline as every other chrome() consumer below. */
+
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-bar-top);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 0 5px 15px var(--shadow);
 }
 .brand-lockup { align-self: center; min-width: 0; }
@@ -79,7 +84,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .eyebrow {
   margin: 0 0 3px;
   color: var(--cyan);
-  font: 700 11px/1.1 var(--mono);
+  font: 700 12px/1.1 var(--mono);
   letter-spacing: .13em;
   text-transform: uppercase;
 }
@@ -97,7 +102,7 @@ button { -webkit-tap-highlight-color: transparent; }
   font: 700 15px/1.1 var(--mono);
   letter-spacing: .06em;
 }
-.time-card small { color: var(--ink-dim); font: 9px/1.1 var(--mono); letter-spacing: .08em; }
+.time-card small { color: var(--ink-dim); font: 12px/1.1 var(--mono); letter-spacing: .08em; }
 .resource-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(68px, 1fr));
@@ -115,7 +120,7 @@ button { -webkit-tap-highlight-color: transparent; }
   border: 1px solid #35414a;
   clip-path: polygon(3% 0, 98% 4%, 100% 92%, 93% 100%, 1% 96%, 0 8%);
 }
-.resource-strip dt { color: var(--ink-dim); font: 10px/1 var(--mono); letter-spacing: .06em; }
+.resource-strip dt { color: var(--ink-dim); font: 12px/1 var(--mono); letter-spacing: .06em; }
 .resource-strip dd { margin: 4px 0 0; color: var(--mustard); font: 700 16px/1 var(--mono); }
 .resource-strip div:nth-child(2) dd { color: var(--ink-dim); }
 .resource-strip div:nth-child(3) dd { color: var(--orange); }
@@ -137,11 +142,7 @@ html body .arcade-home { display: none; }
   min-width: 44px;
   min-height: 44px;
 }
-/* PiritoriChrome.button(accent) — same card, same broken rule, and the same
-   move Godot makes at the call site: the accent tints the RULE, and (per
-   `_chrome_button`/`_action_btn`) the label's `font_color` too, rather than
-   filling the whole face. That is why `.primary`/`.danger`/`.cyan` below
-   only change `color` and `border-image-source`, never `background`. */
+
 .paper-button {
   position: relative;
   padding: 10px 14px;
@@ -150,15 +151,15 @@ html body .arcade-home { display: none; }
   letter-spacing: .055em;
   cursor: pointer;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-btn);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
 .paper-button:hover:not(:disabled),
 .paper-button:focus-visible {
   color: #fff8e8;
-  border-image-source: var(--chrome-btn-hot);
+
   transform: translateY(-1px);
 }
 .paper-button:focus-visible,
@@ -168,24 +169,16 @@ html body .arcade-home { display: none; }
 .formation-cell:focus-visible,
 .unit-token:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .paper-button:disabled { cursor: not-allowed; opacity: .46; }
-.paper-button.primary { color: var(--mustard); border-image-source: var(--chrome-btn-primary); }
-.paper-button.primary:hover:not(:disabled),
-.paper-button.primary:focus-visible { border-image-source: var(--chrome-btn-primary-hot); }
-.paper-button.danger { color: var(--chrome-accent-leave, #4f7fa0); border-image-source: var(--chrome-btn-danger); }
-.paper-button.danger:hover:not(:disabled),
-.paper-button.danger:focus-visible { border-image-source: var(--chrome-btn-danger-hot); }
-.paper-button.cyan { color: var(--cyan); border-image-source: var(--chrome-btn-cyan); }
-.paper-button.cyan:hover:not(:disabled),
-.paper-button.cyan:focus-visible { border-image-source: var(--chrome-btn-cyan-hot); }
-.paper-button.inspect-button { color: var(--chrome-accent-look, #a62bff); border-image-source: var(--chrome-btn-look); }
-.paper-button.inspect-button:hover:not(:disabled),
-.paper-button.inspect-button:focus-visible { border-image-source: var(--chrome-btn-look-hot); }
+.paper-button.primary { color: var(--mustard);  }
+.paper-button.danger { color: #8bb9d3;  }
+.paper-button.cyan { color: var(--cyan);  }
+.paper-button.inspect-button { color: #d1b2ff;  }
 .paper-button.icon-button {
   width: 46px;
   padding: 0;
   font-size: 16px;
   border-width: 10px;
-  border-image-width: 10px;
+
 }
 .mode-root {
   min-height: 0;
@@ -202,18 +195,14 @@ html body .arcade-home { display: none; }
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 3px;
   padding: 5px 8px 7px;
-  /* PiritoriChrome.bar(true) — torn on the top, the mode content's edge. */
+
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-bar-bottom);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
-/* `border-image-slice: 18` still cuts the source at chrome.js's own MARGIN —
-   the baked pixels are untouched — but at 44px tall an 18px frame would eat
-   the whole button, so `border-image-width` renders that same slice smaller.
-   Godot's own texture_margin never scales down like this; a 44px mobile nav
-   button has no Godot-side equivalent to be faithful TO. */
+
 .mode-nav button {
   display: flex;
   align-items: center;
@@ -226,39 +215,35 @@ html body .arcade-home { display: none; }
   cursor: pointer;
   border-style: solid;
   border-width: 10px;
-  border-image-source: var(--chrome-btn);
-  border-image-slice: 18 fill;
-  border-image-width: 10px;
-  border-image-repeat: repeat;
+
+
+
+
 }
 .mode-nav button[aria-current="page"] {
   color: var(--ink);
-  border-image-source: var(--chrome-btn-hot);
+
 }
 .mode-nav button:disabled { opacity: .38; cursor: not-allowed; }
 .nav-icon { color: var(--cyan); font-size: 20px; line-height: 1; }
 .mode-nav button:nth-child(2) .nav-icon { color: var(--orange); }
 .mode-nav button:nth-child(3) .nav-icon { color: var(--mustard); }
 .mode-nav button:nth-child(4) .nav-icon { color: var(--danger); }
-.mode-nav button:nth-child(5) .nav-icon { color: var(--magenta); }
-/* PiritoriChrome.panel(RULE, true, true) — the same texture as the command
-   rail in app_shell.gd. The old clip-path corners cut a SECOND worn edge on
-   top of the material's own broken rule and torn top/bottom bite; the
-   texture already carries its own edge, so the polygon is gone rather than
-   layered under it. */
+.mode-nav button:nth-child(5) .nav-icon { color: #f19cc1; }
+
 .paper-panel {
   position: relative;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 0 10px 25px var(--shadow);
 }
 .section-label {
   margin: 0;
   color: var(--cyan);
-  font: 700 11px/1.2 var(--mono);
+  font: 700 12px/1.2 var(--mono);
   letter-spacing: .12em;
   text-transform: uppercase;
 }
@@ -282,7 +267,7 @@ html body .arcade-home { display: none; }
   border: 1px solid #615542;
   color: var(--ink-dim);
   background: #1d2428;
-  font: 700 10px/1 var(--mono);
+  font: 700 12px/1 var(--mono);
   letter-spacing: .05em;
   clip-path: polygon(3% 0, 100% 6%, 97% 100%, 0 94%);
 }
@@ -316,6 +301,49 @@ html body .arcade-home { display: none; }
   gap: 12px;
   padding: 12px;
 }
+/* Keep the existing authored next action inside the mode scrollport, above
+   navigation. Its normal flow space keeps the last route details reachable. */
+.next-step {
+  position: sticky;
+  bottom: 0;
+  grid-column: 1 / -1;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #182029;
+  border: 1px solid #53606c;
+}
+.next-step p { min-width: 0; margin: 0; color: var(--ink-dim); font: 12px/1.35 var(--body); }
+.next-step .paper-button { flex: 0 1 auto; max-width: 100%; white-space: normal; }
+/* Neutral arrival captions over the retained map, without retired CSS art. */
+.opening { position: fixed; inset: 0; z-index: 90; }
+.opening-scene { position: absolute; inset: 0; }
+.opening-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: max(8px, var(--safe-bottom));
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 16px));
+  max-height: calc(50dvh - max(8px, var(--safe-bottom)));
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #53606c;
+  background: #182029;
+}
+.opening-lines { display: grid; gap: 6px; }
+.opening-lines p { margin: 0; color: var(--ink); font: 12px/1.3 var(--body); }
+.opening-sheet .opening-skip { justify-self: end; min-width: 88px; }
+/* The caption sheet owns the UI budget while open. Preserve the map and
+   layout, then restore campaign controls automatically when it is removed. */
+body:has(> .opening) .game-shell :is(.topbar, .mode-nav, .map-side, .next-step) { visibility: hidden; }
+body:has(> .opening) .mode-root { overflow: hidden; }
+/* The approved scene has its own isolated 9:16 frame and shared UI budget. */
+body:has(> .scene-club-host) .game-shell { visibility: hidden; pointer-events: none; }
 /* No min-height. The panel is sized by the square board inside it now; a
    560px floor here is half of what pushed the southern half of Kallio off
    the bottom of the screen, and on a 412px-wide phone it wrapped a 362px
@@ -507,31 +535,26 @@ html body .arcade-home { display: none; }
 .encounter-copy h2 { margin-bottom: 8px; }
 .encounter-opening { margin: 12px 0 0; font: 17px/1.5 Georgia, serif; color: #f5ead5; }
 .inspectables { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.inspect-button { min-height: 44px; padding: 6px 9px; font: 11px var(--mono); }
+.inspect-button { min-height: 44px; padding: 6px 9px; font: 12px var(--mono); }
 .observation { min-height: 38px; margin: 9px 0 0; color: var(--cyan); font: 12px/1.4 var(--mono); }
 .choice-list { display: grid; gap: 8px; margin-top: 11px; }
-/* PiritoriChrome.plate_button(ACCENT_ACT) — location_stage.gd's own words:
-   "torn on the BOTTOM only... reads as something taken off a pad", which is
-   exactly what a stacked list of choices is. Cream carton, not dark card —
-   text flips to `plate_ink()` (the same luminance test Godot runs) rather
-   than the old light-on-dark palette. */
+
 .choice-card {
   width: 100%;
   padding: 11px 12px;
   text-align: left;
-  color: var(--chrome-plate-ink, #16191b);
+  color: #16191b;
   cursor: pointer;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-plate-btn);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
-.choice-card:hover:not(:disabled) { border-image-source: var(--chrome-plate-btn-hot); }
 .choice-card:disabled { opacity: .5; cursor: not-allowed; }
-.choice-card strong { display: block; color: var(--chrome-plate-ink, #16191b); font: 700 13px/1.25 var(--mono); }
+.choice-card strong { display: block; color: #16191b; font: 700 13px/1.25 var(--mono); }
 .choice-card span { display: block; margin-top: 5px; color: #4a4331; font-size: 12px; line-height: 1.35; }
-.choice-card em { display: block; margin-top: 5px; color: var(--chrome-accent-act, #9a4e34); font: normal 10px/1.3 var(--mono); }
+.choice-card em { display: block; margin-top: 5px; color: #9a4e34; font: normal 12px/1.3 var(--mono); }
 .outcome-card { padding: 14px; margin-top: 12px; border: 1px solid #755e43; background: #28241f; }
 .outcome-card h3 { margin: 0 0 6px; color: var(--mustard); font: 500 23px var(--display); letter-spacing: .04em; }
 .outcome-card p { margin: 5px 0; }
@@ -545,27 +568,22 @@ html body .arcade-home { display: none; }
 .ledger-summary b { display: block; margin-top: 4px; color: var(--mustard); font: 700 20px var(--mono); }
 .offer-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .offer-table th, .offer-table td { padding: 9px 7px; border-bottom: 1px dashed #555047; text-align: left; }
-.offer-table th { color: var(--ink-dim); font: 10px var(--mono); letter-spacing: .08em; }
+.offer-table th { color: var(--ink-dim); font: 12px var(--mono); letter-spacing: .08em; }
 .offer-table td { font-size: 13px; }
 .offer-table .quote { color: var(--mustard); font: 700 14px var(--mono); white-space: nowrap; }
 .offer-table .paper-button { padding: 7px 9px; min-height: 44px; }
 .crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 10px; }
 .crew-card { display: grid; grid-template-columns: 62px 1fr; gap: 9px; min-height: 108px; padding: 9px; background: #23282b; border: 1px solid #574f46; }
 .crew-card.not-hired { opacity: .58; }
-.crew-portrait { position: relative; overflow: hidden; min-height: 88px; background: #111820; border: 1px solid #4b4640; }
-.crew-portrait img { position: absolute; object-fit: contain; }
-.crew-portrait .legs { width: 80%; left: 10%; bottom: -12%; }
-.crew-portrait .torso { width: 100%; left: 0; bottom: 15%; }
-.crew-portrait .head { width: 63%; left: 20%; top: -2%; }
 .crew-card h3 { margin: 2px 0; font: 700 12px/1.2 var(--mono); color: var(--ink); }
-.crew-card p { margin: 3px 0; color: var(--ink-dim); font-size: 11px; }
+.crew-card p { margin: 3px 0; color: var(--ink-dim); font-size: 12px; }
 .status-dots { display: flex; gap: 3px; margin-top: 6px; }
 .status-dots i { width: 13px; height: 8px; background: #4d4740; }
 .status-dots i.on { background: var(--cyan); }
 .equipment-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
 .equipment-chip { display: grid; grid-template-columns: 42px 1fr; gap: 7px; align-items: center; min-width: 150px; padding: 7px; background: #242729; border: 1px solid #554d43; }
 .equipment-chip img { width: 42px; height: 42px; object-fit: contain; }
-.equipment-chip span { font: 11px/1.25 var(--mono); }
+.equipment-chip span { font: 12px/1.25 var(--mono); }
 
 /* Battle */
 .battle-layout { min-height: 100%; display: grid; grid-template-rows: minmax(440px, 1fr) auto; }
@@ -614,7 +632,7 @@ html body .arcade-home { display: none; }
   max-width: min(520px, calc(100% - 28px));
   pointer-events: none;
 }
-.row-label { position: absolute; z-index: 4; color: rgba(242,231,206,.63); font: 700 9px var(--mono); letter-spacing: .09em; }
+.row-label { position: absolute; z-index: 4; color: rgba(242,231,206,.63); font: 700 12px var(--mono); letter-spacing: .09em; }
 .formation-cell {
   position: absolute;
   z-index: 3;
@@ -661,10 +679,6 @@ html body .arcade-home { display: none; }
 .unit-token.police .unit-body { filter: drop-shadow(0 0 6px var(--police)) drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
 .unit-token.police .unit-label { border-color: var(--police); }
 .unit-body { position: absolute; inset: 0; filter: drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
-.unit-body img { position: absolute; object-fit: contain; pointer-events: none; }
-.unit-body .legs { width: 72%; left: 14%; bottom: 0; }
-.unit-body .torso { width: 100%; left: 0; bottom: 25%; }
-.unit-body .head { width: 54%; left: 24%; top: 1%; }
 .unit-token.down .unit-body { transform: rotate(78deg) translate(15%, 8%); opacity: .72; }
 .unit-label {
   position: absolute;
@@ -677,7 +691,7 @@ html body .arcade-home { display: none; }
   color: var(--ink);
   background: rgba(14,18,21,.9);
   border: 1px solid #615542;
-  font: 9px/1.15 var(--mono);
+  font: 12px/1.15 var(--mono);
   text-align: center;
   white-space: nowrap;
 }
@@ -693,20 +707,20 @@ html body .arcade-home { display: none; }
 }
 .active-unit, .battle-log, .battle-actions { padding: 10px; }
 .active-unit h3 { margin: 3px 0; font: 700 13px var(--mono); }
-.active-unit p { margin: 3px 0; color: var(--ink-dim); font-size: 11px; }
-.track-row { display: grid; grid-template-columns: 52px 1fr; gap: 7px; align-items: center; margin-top: 6px; color: var(--ink-dim); font: 9px var(--mono); }
+.active-unit p { margin: 3px 0; color: var(--ink-dim); font-size: 12px; }
+.track-row { display: grid; grid-template-columns: 52px 1fr; gap: 7px; align-items: center; margin-top: 6px; color: var(--ink-dim); font: 12px var(--mono); }
 .track { display: flex; gap: 3px; }
 .track i { flex: 1; height: 8px; background: #4b4540; }
 .track i.on { background: var(--cyan); }
 .track.danger i.on { background: var(--orange); }
 .stance-label { margin-top: 10px; }
 .stance-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 5px; }
-.stance-row .paper-button { min-width: 0; padding: 7px 4px; font-size: 8.5px; line-height: 1.2; letter-spacing: .02em; }
+.stance-row .paper-button { min-width: 0; padding: 7px 4px; font-size: 12px; line-height: 1.2; letter-spacing: .02em; }
 .battle-log { min-height: 115px; max-height: 145px; overflow: auto; }
-.battle-log p { margin: 0; color: var(--ink-dim); font: 11px/1.35 var(--mono); }
+.battle-log p { margin: 0; color: var(--ink-dim); font: 12px/1.35 var(--mono); }
 .battle-log p:first-child { color: var(--ink); }
 .battle-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-.battle-actions .paper-button { min-width: 0; padding: 8px 5px; font-size: 10px; }
+.battle-actions .paper-button { min-width: 0; padding: 8px 5px; font-size: 12px; }
 .battle-actions .wide { grid-column: span 3; }
 .battle-result { grid-column: 1 / -1; padding: 12px; text-align: center; }
 .battle-result h2 { margin: 0; font: 500 29px var(--display); color: var(--mustard); }
@@ -721,27 +735,13 @@ html body .arcade-home { display: none; }
 .tv-screen { position: relative; height: 100%; min-height: 420px; overflow: hidden; border: 12px solid #111618; border-radius: 42px / 28px; background: linear-gradient(#536a6e, #293d43); }
 .tv-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 4px); mix-blend-mode: screen; }
 .studio { position: absolute; inset: 0; background: linear-gradient(140deg, #4e6569 0 42%, #293b42 42% 65%, #754b3b 65%); }
-.arvo {
-  position: absolute;
-  left: 50%;
-  bottom: 14%;
-  width: 31%;
-  height: 67%;
-  transform: translateX(-50%);
-}
-.arvo .body { position: absolute; inset: 34% 0 0; background: #303942; clip-path: polygon(13% 3%, 50% 0, 87% 3%, 100% 100%, 0 100%); }
-.arvo .shirt { position: absolute; left: 35%; top: 37%; width: 30%; height: 44%; background: #d2c7ae; clip-path: polygon(0 0, 50% 17%, 100% 0, 78% 100%, 20% 100%); }
-.arvo .tie { position: absolute; left: 47%; top: 44%; width: 8%; height: 35%; background: #8d4237; clip-path: polygon(50% 0, 100% 15%, 65% 100%, 0 88%, 12% 15%); }
-.arvo .head { position: absolute; left: 28%; top: 2%; width: 44%; height: 38%; background: #c09b79; clip-path: polygon(19% 3%, 79% 0, 96% 27%, 82% 88%, 53% 100%, 18% 83%, 4% 32%); }
-.arvo .hair { position: absolute; left: 27%; top: 0; width: 46%; height: 17%; background: #72675a; clip-path: polygon(0 50%, 12% 12%, 82% 0, 100% 54%, 82% 43%, 51% 60%, 19% 45%); }
-.arvo .face-line { position: absolute; left: 39%; top: 18%; width: 23%; height: 9%; border-bottom: 3px solid #4a3a31; border-left: 2px solid #4a3a31; transform: rotate(-2deg); }
 .news-lower-third { position: absolute; left: 6%; right: 6%; bottom: 6%; z-index: 3; padding: 10px 13px; color: #10171c; background: var(--ink); border-left: 14px solid var(--magenta); font: 700 12px/1.25 var(--mono); }
 .tv-knobs { position: absolute; right: 12px; bottom: 10px; display: flex; gap: 8px; }
 .tv-knobs i { width: 23px; height: 23px; border-radius: 50%; background: #17191a; border: 3px solid #806a55; }
 .news-copy { padding: 18px; overflow: auto; }
 .news-copy blockquote { margin: 14px 0; padding: 12px 14px; border-left: 6px solid var(--magenta); background: #29282a; font: 17px/1.5 Georgia, serif; }
 .source-card { margin-top: 10px; padding: 10px; border: 1px solid #5b5147; background: #21262a; }
-.source-card h3 { margin: 0 0 5px; color: var(--cyan); font: 700 10px var(--mono); letter-spacing: .1em; }
+.source-card h3 { margin: 0 0 5px; color: var(--cyan); font: 700 12px var(--mono); letter-spacing: .1em; }
 .source-card p { margin: 0; color: var(--ink-dim); font-size: 12px; line-height: 1.4; }
 .source-links { margin: 10px 0 0; padding-left: 18px; }
 .source-links a { color: #85dbe4; overflow-wrap: anywhere; }
@@ -779,10 +779,10 @@ html body .arcade-home { display: none; }
   max-width: 610px;
   padding: clamp(25px, 5vw, 58px);
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 14px 17px 0 rgba(0,0,0,.42);
 }
 .splash-card h2 { margin: 7px 0 14px; font: 500 clamp(42px, 9vw, 80px)/.86 var(--display); letter-spacing: .045em; }
@@ -808,7 +808,7 @@ html body .arcade-home { display: none; }
 
 @media (max-width: 980px) {
   .topbar { grid-template-columns: minmax(220px, 1fr) auto minmax(300px, 1fr) auto; }
-  .brand-lockup h1 { font-size: 28px; }
+  .brand-lockup h1 { font-size: 28px; white-space: normal; }
   .route-layout { grid-template-columns: minmax(0, 1fr) 300px; }
   .encounter-layout { grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); }
   .battle-console { grid-template-columns: 210px 1fr; }
@@ -818,7 +818,7 @@ html body .arcade-home { display: none; }
 
 @media (max-width: 760px) {
   body { font-size: 14px; }
-  .game-shell { min-height: 500px; }
+  .game-shell { min-height: 0; }
   .topbar {
     min-height: 112px;
     grid-template-columns: 1fr auto;
@@ -855,13 +855,15 @@ html body .arcade-home { display: none; }
      label paints past the card: at 390px INTEL read as "INTE" and at 360px
      every label spilled. The eyebrow tracking goes too — it costs a letter. */
   .resource-strip div { padding: 5px 4px; min-width: 0; }
-  .resource-strip dt { font-size: 10px; letter-spacing: 0; }
+  .resource-strip dt { font-size: 12px; letter-spacing: 0; }
   .resource-strip dd { font-size: 13px; margin-top: 2px; }
   .top-actions { position: static; grid-column: 2; grid-row: 2; align-self: stretch; }
   .mode-nav { gap: 2px; padding: 4px 4px calc(5px + var(--safe-bottom)); }
-  .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 8px; letter-spacing: .03em; }
+  .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 12px; letter-spacing: .03em; }
   .nav-icon { font-size: 17px; }
   .route-layout, .encounter-layout, .ledger-layout, .news-layout { min-height: auto; display: block; padding: 7px; }
+  .next-step { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
+  .next-step .paper-button { width: 100%; }
   /* The stage sizes itself now — see .map-stage. A min-height here is what
      pushed the board off the bottom of the screen in the first place. */
   .map-side { margin-top: 7px; }
@@ -892,7 +894,7 @@ html body .arcade-home { display: none; }
      top card; hide the bottom strip — log still carries the full forecast. */
   .battle-objective {
     max-width: min(62%, calc(100% - 26px));
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.25;
     padding: 6px 8px;
     max-height: 4.6em;
@@ -901,7 +903,7 @@ html body .arcade-home { display: none; }
   .battle-entry-forecast { display: none; }
   .formation-cell { width: 48px; min-height: 44px; }
   .unit-token { width: clamp(59px, 18vw, 88px); height: clamp(94px, 29vw, 140px); }
-  .unit-label { min-width: 70px; max-width: 94px; white-space: normal; font-size: 7px; --label-rest-bottom: -17px; }
+  .unit-label { min-width: 70px; max-width: 94px; white-space: normal; font-size: 12px; --label-rest-bottom: -17px; }
   .battle-console { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; }
   .active-unit, .battle-log { padding: 8px; }
   .battle-log { min-height: 96px; max-height: 116px; }
@@ -991,10 +993,10 @@ html body .arcade-home { display: none; }
   overflow-y: auto;
   color: var(--ink);
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   padding: clamp(16px, 3vw, 26px);
   box-shadow: 0 18px 44px var(--shadow);
 }
@@ -1037,7 +1039,7 @@ html body .arcade-home { display: none; }
 .test-build {
   flex: none;
   font-family: var(--mono);
-  font-size: .66rem;
+  font-size: .75rem;
   letter-spacing: .09em;
   padding: 3px 7px;
   background: var(--panel-2);
@@ -1047,11 +1049,11 @@ html body .arcade-home { display: none; }
 .test-build.build-godot { background: var(--cyan); color: var(--charcoal); }
 .test-build.build-both { background: var(--mustard); color: var(--charcoal); }
 
-.test-where { margin: 5px 0 0; font-family: var(--mono); font-size: .74rem; color: var(--kraft); }
+.test-where { margin: 5px 0 0; font-family: var(--mono); font-size: .75rem; color: var(--kraft); }
 .test-changed { margin: 7px 0 0; font-size: .82rem; color: var(--orange); font-weight: 700; }
 .test-note { margin: 8px 0 0; font-size: .88rem; line-height: 1.5; color: var(--ink-dim); }
 .test-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
-.test-hint { font-family: var(--mono); font-size: .72rem; color: var(--ink-dim); }
+.test-hint { font-family: var(--mono); font-size: .75rem; color: var(--ink-dim); }
 .test-empty { padding: 18px; text-align: center; color: var(--ink-dim); }
 .test-empty p { margin: 0 0 .5em; }
 .test-empty b { color: var(--ink); }
@@ -1127,3 +1129,17 @@ html body .arcade-home { display: none; }
 }
 .choice-card.locked { min-height: 44px; padding: 2px 8px; border-width: 10px; }
 .choice-card.locked em { margin-top: 2px; }
+
+/* Flat, neutral compatibility controls. New composition lives in review tooling. */
+.paper-panel, .topbar, .mode-nav { background: #182029; border-color: #53606c; }
+.paper-button, .mode-nav button { background: #232d37; border: 1px solid #65717a; }
+.paper-button:hover:not(:disabled), .mode-nav button[aria-current="page"] { background: #35434f; }
+.choice-card { color: #17191a; background: #e2ddd0; border: 1px solid #a6a294; }
+.identity-badge { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 64px; height: 72px; border: 1px solid #72808b; background: #26313b; color: #e5e9ed; font: 600 22px/1 var(--mono); letter-spacing: .03em; }
+.crew-card { grid-template-columns: 62px minmax(0, 1fr); }
+.crew-card > .identity-badge { width: 60px; height: 72px; }
+.unit-body .identity-badge { width: 44px; height: 48px; font-size: 15px; }
+.news-identity { position: absolute; inset: 15% 12% 22%; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; color: #e5e9ed; }
+
+/* Preserve the existing 12px/readability contract without reinstating a skin. */
+.observation, .battle-log p, .sms, .ledger-voice { font-family: var(--ledger); }

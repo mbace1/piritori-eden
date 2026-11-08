@@ -156,21 +156,12 @@ board shape (one number, not four)")
 	FightBoard.reset()
 	check("reset returns to canon", FightBoard.is_canon())
 
-	# Every role a battle can field must have its own art. The cast sets existed
-	# for weeks but were never in the manifest, so sync-data did not carry them
-	# and every unit fell back to one figure — six identical people in a 3v3,
-	# which no gate could see because the fight resolved perfectly.
-	# Typed: an untyped array yields Variant elements and PoseArt.texture wants a
-	# String, which is a parse error rather than a runtime one.
+	# The owner deleted the old 2D role sprites. Even a stale synced copy may
+	# not revive them; the paused port uses its existing neutral fallback.
 	var roles: Array[String] = ["driver", "fixer", "local", "muscle", "runner", "watcher"]
 	for r in roles:
-		var tex := PoseArt.texture(r, "idle-smile")
-		check("%s has its own idle art" % r, tex != null)
-	var art_paths := {}
-	for r in roles:
-		var t := PoseArt.texture(r, "idle-smile")
-		if t != null:
-			art_paths[t.resource_path] = true
+		check("%s has no retired pose art" % r, PoseArt.texture(r, "idle-smile") == null)
+	check("retired modular figures stay unavailable", not CrewFigure.available())
 	# The 3D board must not repeat the 2D board's mistake from the other side:
 	# every unit drawn as one recoloured model is six copies of one person.
 	var seen3d := {}
@@ -181,9 +172,7 @@ board shape (one number, not four)")
 	check("the six roles are six different models",
 		seen3d.size() == roles.size(), "distinct models: %d" % seen3d.size())
 
-	check("the six roles are six different figures",
-		art_paths.size() == roles.size(),
-		"distinct textures: %d" % art_paths.size())
+
 
 	# allowed_rows names rows in a side's OWN formation; a slot carries a
 	# unified depth. Comparing them directly meant a front-only weapon refused

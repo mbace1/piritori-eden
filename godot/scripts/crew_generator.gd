@@ -83,13 +83,6 @@ const ROLE_COMPETENCIES := {
 	"hired":   ["cover", "control"],
 }
 
-## Only six heads have been drawn. A seventh generated person wears a face
-## somebody else is already wearing, and that is a known placeholder rather than
-## a claim that six is enough.
-const PORTRAITS := ["head-kallio-01-v03", "head-kallio-03-v03",
-	"head-kallio-05-v03", "head-kallio-07-v03", "head-kallio-09-v03",
-	"head-kallio-11-v03"]
-
 ## The band a rolled stat may land in, either side of the role's base. Kept
 ## narrow on purpose: churn is supposed to cost you continuity, not hand you a
 ## lottery ticket that beats every authored crew member.
@@ -166,12 +159,7 @@ static func generate(seed_value: int) -> Dictionary:
 		"tempo": maxi(1, int(base["tempo"]) + rng.randi_range(-SPREAD, SPREAD)),
 		"wage_eur": maxi(1, int(base["wage"]) + rng.randi_range(-4, 4)),
 		"competencies": (ROLE_COMPETENCIES[role] as Array).duplicate(),
-		"portrait_asset_id": PORTRAITS[rng.randi_range(0, PORTRAITS.size() - 1)],
-		# The 2D cast has no "hired" torso or legs. These ids are carried on the
-		# fighter and never resolved to art, so an empty string is honest where a
-		# made-up filename would be a dangling reference.
-		"torso_asset_id": "" if role == "hired" else "torso-%s-v03" % role,
-		"legs_asset_id": "" if role == "hired" else "legs-%s-v03" % role,
+		"portrait_kind": _neutral_portrait_kind(rng),
 		"initial_equipment": [],
 		# Never true. See the class comment: named is a fact about authored
 		# content, and no content can refer to somebody invented at runtime.
@@ -216,3 +204,8 @@ static func pool(campaign_seed: int, day: int, count: int = 3) -> Array[Dictiona
 	for i in count:
 		out.append(generate(campaign_seed * 1000 + day * 10 + i))
 	return out
+
+## Preserve the former appearance draw so gameplay RNG results remain unchanged.
+static func _neutral_portrait_kind(rng: RandomNumberGenerator) -> String:
+	var _discarded_appearance := rng.randi_range(0, 5)
+	return "initials"

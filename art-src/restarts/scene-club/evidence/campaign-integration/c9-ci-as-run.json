@@ -1,0 +1,271 @@
+{
+  "sourceHead": "c9f89858cd15b3abd680c22e10d1ddcc3fffc68e",
+  "pr": {
+    "number": 132,
+    "url": "https://github.com/mbace1/piritori-eden/pull/132",
+    "head": "c9f89858cd15b3abd680c22e10d1ddcc3fffc68e",
+    "state": "open",
+    "draft": true,
+    "merged": false
+  },
+  "result": "failure",
+  "allComplete": true,
+  "allGreen": false,
+  "sourceCheckCount": 13,
+  "passed": 12,
+  "failed": 1,
+  "workflows": [
+    {
+      "id": 42491149072,
+      "name": "C18 UI and renderer review",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mbace1/piritori-eden/actions/runs/42491149072"
+    },
+    {
+      "id": 42491149083,
+      "name": "C19 acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mbace1/piritori-eden/actions/runs/42491149083"
+    },
+    {
+      "id": 42491149174,
+      "name": "gates",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/mbace1/piritori-eden/actions/runs/42491149174"
+    }
+  ],
+  "finalChecks": [
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595322,
+      "name": "C art and camera / night-places-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595453,
+      "name": "the Godot build",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595459,
+      "name": "a door fight in Night Shift (Act I v4.74-v4.75)",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595486,
+      "name": "C crew outing and persistence",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595537,
+      "name": "C laboratory tactics and touch",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595547,
+      "name": "C art and camera / gun-aim-camera",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595590,
+      "name": "Scene Club campaign and flat cabinet",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595643,
+      "name": "browser campaign state",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 1,
+      "id": 128763595662,
+      "name": "C art and camera / wet-environment",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "workflowRun": 42491149083,
+      "attempt": 1,
+      "id": 128763595159,
+      "name": "portrait-ui-budget",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "workflowRun": 42491149083,
+      "attempt": 1,
+      "id": 128763595296,
+      "name": "acceptance",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "workflowRun": 42491149072,
+      "attempt": 1,
+      "id": 128763595072,
+      "name": "ui-rendering",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "workflowRun": 42491149174,
+      "attempt": 2,
+      "id": 128767844059,
+      "name": "Act I touch scenes and visits",
+      "status": "completed",
+      "conclusion": "failure"
+    }
+  ],
+  "originalGatesAttempt1": [
+    {
+      "id": 128763595322,
+      "name": "C art and camera / night-places-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595453,
+      "name": "the Godot build",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595459,
+      "name": "a door fight in Night Shift (Act I v4.74-v4.75)",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595486,
+      "name": "C crew outing and persistence",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595528,
+      "name": "Act I touch scenes and visits",
+      "status": "completed",
+      "conclusion": "failure",
+      "active": [
+        "the arrival and the city's sound (skippable, never changes the save, one mute)"
+      ]
+    },
+    {
+      "id": 128763595537,
+      "name": "C laboratory tactics and touch",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595547,
+      "name": "C art and camera / gun-aim-camera",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595590,
+      "name": "Scene Club campaign and flat cabinet",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595643,
+      "name": "browser campaign state",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128763595662,
+      "name": "C art and camera / wet-environment",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    }
+  ],
+  "openingRetry": {
+    "authorizedRetries": 1,
+    "performedRetries": 1,
+    "sourceChanges": false,
+    "durationOrTimeoutChanges": false,
+    "attempt1": {
+      "jobId": 128763595528,
+      "passed": 69,
+      "failed": 1,
+      "failures": [
+        "desktop: left alone, it ends by itself"
+      ],
+      "log": "c9-ci-retry/opening-attempt1.log"
+    },
+    "attempt2": {
+      "jobId": 128767844059,
+      "passed": 68,
+      "failed": 2,
+      "failures": [
+        "desktop: left alone, it ends by itself",
+        "phone: left alone, it ends by itself"
+      ],
+      "log": "c9-ci-retry/opening-attempt2.log"
+    },
+    "additionalRetries": 0
+  },
+  "sceneClubCounts": {
+    "campaignChecks": 1871,
+    "cabinetChecks": 297,
+    "cabinetFlows": 3,
+    "job": 128763595590
+  },
+  "portraitBudget": {
+    "jobId": 128763595159,
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-11-08T14:42:51Z",
+    "completedAt": "2026-11-08T15:01:11Z",
+    "elapsedSeconds": 1100,
+    "configuredLimitSeconds": 1200
+  },
+  "scope": "CI job/status receipt for exact source c9. Original successful job records are preserved; only the Act I result uses its actual isolated retry. Not a green receipt. No repository edits, runtime changes, timer changes or further retries were made by this agent."
+}

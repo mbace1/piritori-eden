@@ -1,79 +1,78 @@
-# Piritori agent startup
+# Piritori startup — current owner direction, 8 November 2026
 
-Read `ROADMAP.md` first (2026-10-25): the plan of record. Act I v4.79 is live;
-every fight but training is fought in Night Shift (`web/crew-run/`); the next
-step is G0/G1, play it and then make the fight a fight. The September pointers
-(`CLAUDE_TAKEOVER.md`, the M1/M2 brief at v4.51) are history: M1 and M2 shipped.
+Read `ROADMAP.md`, then the current rulings at the top of
+`DESIGN_AUTHORITY.md` and `ART_BIBLE.md`. The roadmap remains the plan of
+record. JS/web is the game; Godot is a paused port. Current source main is
+Act I v4.99. Read release receipts to distinguish source from a live build.
 
-Then read `ACTIVE_CONTEXT.md`, keeping historical release sections separate
-from current status, before asking the owner to repeat decisions. For Meshy
-work, read `MESHY_AGENT_HANDOFF.md` and its current-production notice,
-`3D_PIPELINE.md`, `MESHY_PILOT_RESULTS.md` and the manifest before inferring
-status. A partial local checkout is not evidence that a GitHub handoff is absent.
+## Visual restart: 9:16 scenes with overlays
 
-Before 3D work, read `DESIGN_AUTHORITY.md`, `3D_PIPELINE.md`,
-`assets/CHARACTER_SPEC.md` and `assets/asset_manifest.json`. Read the relevant
-Art Bible and character references before designing or altering an asset.
+The owner rejected the old UI, faces and clothes and explicitly requested
+that they be deleted so they cannot become the basis again. This overrides
+older visual, modular-cast and UI instructions in historical documents.
 
-The production manifest records current character state. Never infer completion
-from conversation history, an old PR description, or a successful Meshy job.
-`art/v3/manifest.json` remains the runtime ID register; the production manifest
-references its IDs and hashes rather than replacing the runtime loader.
+- The city/encounter presentation is **one fixed 9:16 illustrated frame**.
+  HUD, dialogue, choices and consequences overlay that frame. The scene
+  continues behind them. Desktop and landscape center the portrait frame;
+  they do not introduce another wide page or reserve a footer below the art.
+- **Combined gameplay UI must occupy at most 50% of the 9:16 frame.**
+  Count HUD, dialogue, choices, consequences and temporary controls together.
+  Leave at least half the frame for the scene. For edge-anchored city panels,
+  also cap the combined top/bottom height bands, including insets and gaps.
+  Keep actual 44px targets and 12px text; use dialogue then a replacement
+  choice panel when simultaneous presentation cannot fit. Preserve every
+  authored choice and its stakes. Measure actual rectangles; never meet the
+  limit by clipping text or hiding meaningful information.
+- Study the **active journey in current Toko Move** (`toko-move/js/play.js`
+  in `mbace1/Suds-Jack`), not its retired map/sheet interface or older
+  map-first briefs. Borrow scene-first presentation, compact overlays,
+  clear stakes, short transitions and remembered consequences. Keep
+  Piritori's own handmade art and gameplay.
+- Retain only these selected character families as the new visual basis:
+  approved Jaska cut-in; selected young Aatami front/side (rigs still
+  semi-approved); approved Toko paper artwork. Exact IDs and sources are in
+  `ART_BIBLE.md` and `art-src/restarts/scene-club/README.md`.
+- The owner subsequently approved the shown side-view Aatami/Jaska Scene Club
+  composition and motion for campaign integration (“Go”, 8 November). Use
+  its shared runtime view through the real campaign controller. Other new
+  compositions and the front/Toko studies still require their own review.
+- The old modular face/outfit/cast library, UI textures and rejected review
+  workbenches are deleted. Do not restore them from branches, Git history,
+  cached exports or historical approvals to fill a placeholder. Use a
+  neutral labelled placeholder until new character artwork is reviewed.
+- `web/v3.css` is structural compatibility for the existing campaign, not a
+  visual reference. The corrected presentation lives at
+  `art-src/restarts/scene-club/`; its tests enforce the frame and layering.
 
-Owner direction, 2026-09-12: Astra owns integration/gameplay/visual testing;
-the Turf chat is Sol and is the intended pipeline-engineering counterpart.
-Routine operations should become deterministic tools, not repeated agent
-handoffs. This describes responsibilities, not evidence that another agent is
-working. Do not launch tasks or message another chat without owner direction.
+## Preserve the game
 
-Current pilot: CHR_F01 and CHR_F02 only. Their concepts are approved; their v05
-models are playable test candidates. CHR_F03 was rejected and is disabled.
-Do not generate replacements or expand the roster to fix a pipeline defect.
+C.19 Night Shift is the authoritative 3D tactical battle. Preserve arena
+positioning, weapons, enemy intentions, police, fight/getaway objectives,
+injuries, missing crew, recovery and campaign save/receipt integration.
+Do not replace it with cards or the older formation board. Current C.19
+stand-ins, arena kits and environment assets are outside the 2D cast cleanup.
 
-Incoming assets are welcome beyond that pilot. Record received batches in
-`assets/asset_manifest.json` under `incoming_batches` using the intake contract
-in `3D_PIPELINE.md`. Inventory existing deliveries before commissioning more.
-Receipt, design approval and engine acceptance are different facts. Route props,
-scenery and motion to their own checks; do not force them through humanoid rig
-gates. Never overwrite a registered asset merely because a newer file arrived.
+Prefer authored scenes, decisions and consequences. Do not invent a new
+story to demonstrate a presentation. Before scenario/environment changes,
+read `design/SCENARIO_ATLAS.md` and its JSON and canonical references.
 
-Run `python tools/meshy/character.py status`, then `check`. Run `validate` before
-claiming production readiness. These commands are local and read-only. A
-prototype integration does not advance the production lifecycle to INTEGRATED.
-Matching joint counts do not establish shared animation compatibility.
+## Test and deliver
 
-Owner clarification, 2026-09-13: a preferred concept option is not automatically
-approved. D009's v04 middle/right choice records relative preference, not a
-locked direction. Keep exploration open and read the corrected design authority.
+Inspect the existing tests before adding tests. Run relevant campaign,
+outing/recovery, mission, progression, browser and responsive checks. Record
+actual browser output at 390×844 and 1280×800, with landscape where relevant.
+Measure actual stage/overlay bounds, text and touch targets; a scaled CSS
+size does not establish physical readability. Browser emulation never
+establishes physical Pixel/iPad acceptance.
 
-Keep raw masters, credentials, signed URLs, intermediate and rejected art
-private. Preserve versioned rollback files. Existing candidate/continuity
-gates still apply; the new manifest does not waive visual or device acceptance.
+Use feature branches and draft PRs; commit small reviewable slices. Verify
+SHAs and CI results. New art and motion require actual visual review before
+runtime promotion or deployment. Source approval, rig acceptance, a passed
+test, source pushed, merged and live are distinct facts. Keep the roadmap
+percentage unchanged without evidence. Keep raw/intermediate/rejected art
+and credentials private. Preserve approved source hashes.
 
-Batch related pipeline stages into one reviewable PR. Owner-approved,
-non-destructive processing may run automatically once the worker and its cost
-policy exist. The worker is not implemented by this startup contract.
-
-JS/web is the primary game build; Godot is a port. Do not migrate engines or
-change campaign rules as part of asset-pipeline work.
-
-Before scenario or environment design, read `design/SCENARIO_ATLAS.md` and
-`design/scenario-atlas.json`, then the canonical documents and content they
-reference. The atlas separates authored facts, proposed staging and pending
-owner decisions; it does not override the GDD or certify runtime integration.
-Record answers and source changes there so later work can follow the decisions.
-
-Owner continuation, 2026-09-13: temporary neutral characters are authorized
-for the Option C laboratory until the approved fighters fit and look good.
-They do not replace approved concepts or change production-manifest status.
-Push each reviewable slice batch and its tests/handoff to the Piritori GitHub
-repository so other PCs can continue. Distinguish source pushed, PR open,
-merged and live hub deployment; never claim one from another.
-
-Owner continuation, 2026-09-13: Astra is authorized to merge and publish tested
-slice batches. Delivery includes the Piritori source repository AND the Suds
-Jack hub. Do not stop at an open PR or source-only merge. Verify the public hub
-card and actual playable route; record source commit, release and any remaining
-hardware/art gates. Use a separate labelled cabinet for laboratories. A
-document-only update needs no invented playable version. See
-`design/HUB_RELEASE.md` for the allowlisted staging and publication procedure.
+For explicitly commissioned 3D production, also read `3D_PIPELINE.md`,
+`MESHY_AGENT_HANDOFF.md`, `assets/CHARACTER_SPEC.md` and the current production
+manifest. Inventory deliveries first; do not infer readiness or buy/generate
+replacements from historical PR descriptions. Do not modify unrelated games.

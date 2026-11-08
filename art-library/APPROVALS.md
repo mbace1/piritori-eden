@@ -1,62 +1,31 @@
-# Art Library approvals
+# Retained art approvals
 
-This register separates visual approval from production readiness. An approved
-concept establishes the direction but can still require cleanup, socket tuning,
-additional frames or true layer extraction before shipping.
+Approval and production readiness are separate. The owner visual restart of
+2026-11-08 retains three character source families; it does not approve new
+motion, a new interface, or the semi-approved Aatami rigs. Old modular cast and
+UI approvals were removed with those files.
 
-## Approved
-
-| Asset or group | Approval | Production note |
+| Selected character source | Status | Runtime / review boundary |
 |---|---|---|
-| Cut-cardstock body frames and optional 3D turnaround v02 | Structural baseline | Normalize rig sockets during implementation. |
-| Hand-ink personality and Kallio cast heads v03 | Character baseline | Split hair and hats for production while retaining crooked marker lines. |
-| Hand-ink torso and leg modules v03 | Clothing baseline | Build light/heavy bridges after the medium frame. |
-| Hand-ink grip and handheld sets v03 | Equipment baseline | Normalize grip markers and battle scale. |
-| Runner and dog key-pose sets v03 | Motion baseline | Add in-betweens, timing and root-motion data. |
-| Lime tree and grass wind poses v01 | Foliage baseline | Extract rear/front crown pieces and build loops. |
-| Clean-cardstock v02 variant set | Approved alternate | Retain as simplification and structural fallback. |
-| Karhupuisto location plate | Location baseline | Separate trees, vegetation and landmark before animation. |
-| Mirrored 3x3 formation geometry | System baseline | Keep the permanent grid invisible; reveal only actionable cells. |
-| Landscape and portrait command geometry | UX baseline | Final typography and icon language remain open. |
-| Arvo Linde presenter model v05 | Broadcast baseline | The ART_BIBLE 13.2 3D exception. Rigged, 24-bone humanoid, no blendshapes — lip sync needs them before recurring speech. Fictional composite, not a likeness. |
-| Battle detail ceiling | Detail target | Reduce environmental texture about 25 percent for production. |
-| Battle simplification floor | Lower bound | Final assets should retain more character detail. |
-| Toko Slomo's Noodles fullscreen screen v02 | Narrative-instance baseline | Corrected eye openings sit inside the white arches. True PNG and normalized hit regions are implementation-ready; separate copy and controls for later dynamic content. |
-| Toko Slomo paper rig v01 (`scene-toko-rig-v01`) | Owner-approved, 2026-10-21: "Approved, put it in the game" | Toko cut from the v02 screen into eleven pieces (hood, brows, eyelids, torso, both forearms, the note, a counter strip from the empty bar) and acted on hidden pivots: idle, lean (lowers his voice), buy, sabotage, leave. Drawn over `scene-toko-noodles-empty-v01` in place of `cast3d-toko-v01` at the counter; the owner chose this over the 3D layer. Provenance: `art-library/rigs/toko-slomo-paper-v01/README.md`. |
-| F01 heavy bruiser front T-pose concept | Owner-approved Meshy pilot source | The 2D identity and pose are approved. Generated 3D geometry, topology, texture, rig, animation and runtime readiness require separate review; see [Meshy pilot results](../MESHY_PILOT_RESULTS.md). |
-| F02 wiry skirmisher front T-pose concept | Owner-approved Meshy pilot source | The 2D identity and pose are approved. Generated 3D geometry, topology, texture, rig, animation and runtime readiness require separate review; see [Meshy pilot results](../MESHY_PILOT_RESULTS.md). |
-| Jaska cut-in rig v01 (`cutin-jaska-rig-v01`) | Owner-approved, 2026-10-24: "Jaska ... already approved" | Cut from Jaska concept v03; waist-up over the Scene Club with the speech bubble the owner steered. Preview: ?cutin=jaska. |
+| Jaska concept v03 and `cutin-jaska-rig-v01` | Owner-approved cut-in, 2026-10-24 | Preserve identity and proportions. New animation remains a candidate. |
+| Young Aatami support 06 (front) and young final v01 (side) | Owner-selected sources, PR #108 | `cutin-aatami-front-rig-v01` and `cutin-aatami-rig-v01` remain semi-approved pending owner review. |
+| Toko Slomo Noodles v02 artwork and `scene-toko-rig-v01` | Owner-approved paper rig, 2026-10-21 | Retain all eleven pieces over the empty bar. Approval does not apply to the source image's obsolete baked UI. |
 
-## Semi-approved
+## Other retained resources
 
-| Asset or group | Approval | Production note |
+| Resource | Existing status | Boundary |
 |---|---|---|
-| Sörnäinen dock plate | Location direction | Separate quay, water, crane and warehouse layers. |
-| Kallio courtyard v02 | Replacement candidate | Coherent block and tactical space; user review still required. |
-| Kallio street, park and dock props | Prop direction | Match the approved hand-ink foliage grammar and isometric pitch. |
-| Alley landscape battle assembly | Layout direction | Replace the archived courtyard plate. |
-| Alley portrait battle assembly | Mobile reflow direction | Replace its plate and retain the tighter crop. |
-| Back/mid/front/ground weather vectors | Layer direction | Tune density, masks and palette in engine. |
-| Arvo cut-in rig v01 (`cutin-arvo-rig-v01`) | Direction accepted, 2026-10-23: NPCs waist-up, "they don't need to be 3D" | Cut from the approved Arvo v05. Preview: ?cutin=arvo. The rig awaits owner review (PR #107). |
-| Aatami cut-in rigs v01 (`cutin-aatami-front-rig-v01`, `cutin-aatami-rig-v01`) | Sources owner-committed (PR #108), 2026-10-24 | Front: study 06, looking near the camera, used when he talks one at a time. Side: the young final, for both speakers on one screen. The rigs await owner review (PR #107). |
+| Hand-ink handheld set v03 | Equipment baseline | Preserved separately from deleted modular body/grip sheets. |
+| Dog key poses v03; lime tree and grass wind poses v01 | Animal / foliage baseline | No new animation approval implied. |
+| Karhupuisto location plate | Location baseline | Environment staging still requires its own checks. |
+| Sörnäinen dock plate; Kallio courtyard v02 | Semi-approved location directions | Preserve existing scenes; no automatic runtime promotion. |
+| Kallio street, park and dock props | Semi-approved | Existing cover and scenery remain separate from character reset. |
+| Back / mid / front / ground weather vectors | Semi-approved | Tune density and masks only within their own review. |
+| Arvo Linde presenter model v05 | Previously approved 3D source, retained as isolated history | Removed from the playable city presentation; neutral nameplate used pending new artwork. |
+| F01 / F02 front T-pose concepts | Owner-approved 3D pilot inputs | Existing models remain review candidates. Geometry, rig, motion and runtime acceptance are separate. |
 
-## Needs rework
-
-| Asset or group | Reason | Replacement brief |
-|---|---|---|
-| Kallio alley/courtyard v01 | Wings, windows and arches do not read as one Helsinki block. | One coherent perimeter block with repeated window bays, granite base and one integrated porttikongi. |
-| Fixed cast detail v00 | Too rendered and insufficiently modular. | Assemble units from approved v02/v03 body, head and clothing sets. |
-| Modular detail v01 | Too polished and generic beside the foliage. | Use larger paper planes with sparse, visibly crooked marker accents. |
-| Weapon detail v01 | Too rendered and mechanically fussy. | Use the approved broad v03 silhouettes and hand sockets. |
-| Character and dog animation detail v01 | Generic illustration treatment. | Use the approved v03 cut-paper personality poses. |
-
-Archived files live under `archive/needs-rework/` and are excluded from active
-manifests.
-
-## Runtime extraction status
-
-`../art/v3/manifest.json` registers the first optimized prototype derivatives.
-Registration does not change the approval table above. The active register contains
-42 stable ids and explicitly preserves the Toko baked-screen
-exception plus the courtyard/weather semi-approved status. The slice validator
-rejects empty files, bad references and any needs-rework archive dependency.
+The remaining rejected weapon, animal and alley resources are listed in
+[archive/README.md](archive/README.md), excluded from active runtime. Deleted
+character/UI material is recoverable through Git history, never a current library.
+The runtime validator checks every retained derivative; registration itself does
+not grant owner approval.

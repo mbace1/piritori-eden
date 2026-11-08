@@ -1,6 +1,50 @@
 # Piritori → Eden — design authority
 
-> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
+## Scene Club integration approved — 2026-11-08
+
+After the actual UI-cap Scene Club video was shown, the owner answered
+**“Go”** to whether its composition and character motion were right for
+campaign integration. Integrate that shown young side-view Aatami/Jaska pair
+and 9:16 overlay presentation through the existing campaign controller.
+The combined UI ceiling stays 50%. This is not authorization to merge or
+deploy, or approval of other character designs, the front-pose study or the
+Toko ensemble study. Source-register statuses remain distinct from this
+specific presentation acceptance. Other new art/motion still needs review.
+
+## Owner visual restart — 2026-11-08
+
+The owner rejected the previous visual proposal stack as based on obsolete UI,
+faces and clothing. Clarification: **“Keep those three; replace the old UI and
+modular cast library.”** The three retained sources are the approved Jaska
+cut-in, selected young Aatami front/side sources, and approved Toko Slomo paper
+artwork. This does not upgrade Aatami's semi-approved rigs or approve new motion.
+
+- Use a fixed **9:16 illustrated scene with HUD, dialogue and choices overlaid**.
+  Keep that frame on desktop and landscape too. The scene continues behind
+  overlays; no separate below-scene panel or wide page composition.
+- **Owner UI ceiling:** all combined UI uses at most **50% of the 9:16
+  screen**, leaving at least half for the scene. HUD, dialogue, choices,
+  results and temporary controls share the budget. Preserve readability,
+  touch targets, choices and tactical information through compact or
+  sequential presentation; do not clip or scale them away.
+- Delete the old UI and modular cast source/runtime libraries and their active
+  approval entries. Do not reskin or restore them from branches/history for
+  placeholders. Neutral labelled placeholders replace unapproved contacts.
+- Start again with Aatami and Jaska at Scene Club. Read the unmerged Aatami
+  motion/ensemble notes in PR #108 and test both Aatami poses in paired native
+  portrait/landscape compositions, including the paper Toko comparison.
+- Follow current Toko Move active-journey UX lessons (now v3.15), while retaining Piritori's
+  handmade identity, selected artwork and C.19 tactical combat.
+- Preserve current main's campaign rules, time costs, C.19 bridge, saves and
+  receipts. The roadmap remains the plan of record; its completion estimate
+  does not rise for an unaccepted visual candidate.
+
+Removed modular/UI approvals and files are not a production resource. Do not
+recover that visual basis from Git history without a new explicit owner request. Old proposal drafts #120–#131 are superseded; their
+commits and measurements remain historical evidence. New art and animation
+still require actual review before runtime promotion or deployment.
+
+> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The gameplay rulings below stand; conflicting older visual/UI directions are superseded by the 8 November restart above. The roadmap orders the work and names the decisions still open (its §8).
 
 ## Owner answer, 2026-10-31 — blows can miss
 
@@ -167,7 +211,8 @@ in-game readability check, then be promoted deliberately in both builds.
 
 Asked as numbered questions after the Lantern Noir interface (Act I v4.56):
 
-1. **The look:** "looks good for now." Lantern Noir stays as the city interface. This is a preference, not final art acceptance.
+1. **The look:** the provisional September preference was superseded by the
+   8 November 9:16 overlay restart above; its old UI files are deleted.
 2. **Travel time (D002, partly answered):** "Not sure but should feel natural, and random events can happen during transit and when arriving at a location." The exact cost model (per trip, per stop, by distance or by line) is still open. The direction is that it should feel natural, not arithmetic the player has to do.
 3. **Release:** "Yes and continue to polish the high level experience." v4.56 ships; polishing the overall experience continues.
 4. **Travel events:** "yes to all and every 3rd or 4th travel can have some." Police, a rival crew, a chance meeting, a lost pack and a tip-off are all in scope, and one can become a fight. The frequency target is roughly one journey in three or four, both in transit and on arrival.

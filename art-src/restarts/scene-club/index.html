@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eee7d8">
+  <title>Piritori — Scene Club, visual restart</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../../web/js/v3/scene-club-view.css?v=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="portrait-frame">
+  <main id="world" class="world" aria-label="Piritori — 9:16 scene candidate">
+    <div id="loading" class="loading" role="status">Opening Scene Club…</div>
+  </main>
+  <details class="review-tools" id="review-tools">
+    <summary aria-label="Open presentation review controls">Review</summary>
+    <div class="review-controls">
+      <span>Visual candidate · separate save</span>
+      <label>Aatami <select id="pose"><option value="side">Side</option><option value="front">Front</option></select></label>
+      <label>Pair <select id="pair"><option value="jaska">Jaska</option><option value="toko">Toko study</option></select></label>
+      <label>View <select id="scale"><option value="1">Native</option><option value="0.5">50% review</option></select></label>
+      <button id="restart" type="button">Restart candidate</button>
+      <a href="README.md">Sources and scope</a>
+    </div>
+  </details>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

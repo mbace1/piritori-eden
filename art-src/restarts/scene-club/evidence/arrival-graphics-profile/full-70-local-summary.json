@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "originalAssertions": 70,
+  "failures": 0,
+  "autoCases": [
+    {
+      "case": "desktop-auto",
+      "criterionPass": true,
+      "waitWallMs": 9861,
+      "nodesAtAssertion": 0,
+      "nativeLagMs": 0.30000000074505806,
+      "removeAfterFireMs": 0.29999999701976776,
+      "removalByDeadline": true,
+      "testedHead": "eeaf3851ced62c7b667731939d0c373784201905",
+      "sourceUnchanged": true
+    },
+    {
+      "case": "phone-auto",
+      "criterionPass": true,
+      "waitWallMs": 9838,
+      "nodesAtAssertion": 0,
+      "nativeLagMs": 0.30000000074505806,
+      "removeAfterFireMs": 0.19999999925494194,
+      "removalByDeadline": true,
+      "testedHead": "eeaf3851ced62c7b667731939d0c373784201905",
+      "sourceUnchanged": true
+    }
+  ],
+  "sourceHashesVerified": true
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "usage": "Compatibility role vocabulary for the paused Godot port; not an approved visual system.",
+  "roles": [
+    {
+      "id": "runner",
+      "color": "#38b8c8",
+      "symbol": "chevron"
+    },
+    {
+      "id": "muscle",
+      "color": "#c87539",
+      "symbol": "block"
+    },
+    {
+      "id": "watcher",
+      "color": "#b84d83",
+      "symbol": "eye"
+    },
+    {
+      "id": "fixer",
+      "color": "#c5a044",
+      "symbol": "knot"
+    },
+    {
+      "id": "driver",
+      "color": "#648f63",
+      "symbol": "wheel"
+    },
+    {
+      "id": "local",
+      "color": "#4f7fa0",
+      "symbol": "street-tab"
+    },
+    {
+      "id": "hired",
+      "color": "#a97842",
+      "symbol": "bars"
+    },
+    {
+      "id": "enforcer",
+      "color": "#a94b43",
+      "symbol": "wedge"
+    }
+  ]
+}

@@ -83,3 +83,70 @@ body.police-asking #mission-actions [data-police]{white-space:normal;line-height
    fighter card, no action costs, and the rivals' plans are on the board. */
 .outing header h1,.outing header small,.outing #crew-night,.outing #selected-unit .unit-portrait,.outing #selected-unit h2,.outing .enemy-plan{display:none}
 .threat-badge{display:block;margin-top:2px;padding:1px 5px;border-radius:3px;background:#b8483a;color:#fff4ee;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+
+/* Owner, 2026-11-08: portrait UI covers no more than half the frame.
+   Targeting and inspection reuse the dock; they never stack another sheet
+   over the arena. Back cancels presentation only, leaving Move/Action intact. */
+#target-back{display:none}
+@media(max-width:700px) and (orientation:portrait){
+ body:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #target-back{display:flex;position:absolute;top:6px;left:10px;width:96px;min-height:44px;align-items:center;justify-content:center;font:600 17px var(--display);padding:4px 7px;z-index:3}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) .command-console{display:block}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #selected-unit,
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #hint,
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #actions,
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #mission-actions{display:none}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #crew-picker{top:6px;z-index:3}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #utility-actions{position:absolute;top:6px;left:116px;right:74px;height:44px;z-index:3}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #end{min-height:44px;font-size:18px}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #enemy-plans{position:absolute;left:10px;right:10px;bottom:6px;height:40px;max-height:40px;margin:0;padding-top:3px}
+ #choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]){position:absolute;top:56px;bottom:54px;left:10px;right:10px;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;box-shadow:none;overflow:auto}
+ #choices:not([hidden]){bottom:auto;height:93px;max-height:93px;align-content:start}
+ #tactical-preview:not([hidden]){display:flex;flex-wrap:wrap;align-content:start;gap:4px 6px;font:12px/1.25 Arial,sans-serif;overflow:visible}
+ #tactical-preview p{flex:1 0 100%;margin:0;max-height:calc(100% - 48px);overflow:auto}
+ #tactical-preview button{min-height:44px;margin:0;padding:5px 8px;font-size:17px}
+ #roster:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-content:start}
+ #roster button{min-width:0;min-height:48px}
+ #panel:has(#roster:not([hidden])) .command-centre{visibility:hidden}
+ /* VIEW uses the same bottom area. Pending targeting stays intact behind it. */
+ body:has(#camera-panel:not([hidden])){grid-template-rows:44px 56px minmax(0,1fr) 0}
+ body:has(#camera-panel:not([hidden])) #panel{visibility:hidden}
+ #camera-panel{position:fixed;top:auto;left:10px;right:10px;bottom:10px;width:auto;max-height:calc(40dvh - 100px);overflow:auto}
+ /* Pause, loadout and retreat are bounded sheets over the retained arena. */
+ dialog{max-width:560px;width:calc(100vw - 20px);max-height:50dvh;padding:16px}
+ dialog::backdrop{background:#060c1059}
+ body:has(dialog[open]){grid-template-rows:0 0 minmax(0,1fr) 0}
+ body:has(dialog[open]) header,body:has(dialog[open]) #mission-bar,
+ body:has(dialog[open]) #panel,body:has(dialog[open]) #labels,
+ body:has(dialog[open]) #crew-screen{visibility:hidden}
+ body.crew-menu #crew-screen{inset:auto 0 0;max-height:calc(50dvh - 44px);padding:12px;overflow:auto}
+ body.crew-menu #crew-night{margin-bottom:8px}
+}
+@media(max-width:700px) and (orientation:portrait) and (max-height:700px){
+ body{grid-template-rows:44px 48px minmax(0,1fr) 166px}
+ #mission-bar{padding:2px 10px;font-size:13px;line-height:1.2}
+ #mission-goal{font-size:13px;grid-column:1;grid-row:1}.mission-meta{grid-column:1/-1;grid-row:2;gap:10px}#mission-count,#mission-pressure{font-size:12px}#roundbar{font-size:13px;grid-row:1}#phase{font-size:10px}
+ /* A short phone reserves badge space too. Identity and vitals already stay
+    on the selected battlefield badge; Crew shares the utility row here. */
+ #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #selected-unit,
+ #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #hint{display:none}
+ #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #crew-picker{top:68px;bottom:auto}
+ #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #utility-actions{position:absolute;top:68px;left:10px;right:74px;height:44px}
+ #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #enemy-plans{position:absolute;left:10px;right:10px;bottom:6px;height:32px;max-height:32px;margin:0;padding-top:3px}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #target-back,
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #crew-picker,
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #utility-actions{top:4px}
+ #choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]){top:52px;bottom:44px}
+ #choices:not([hidden]){height:44px;max-height:44px}
+ #panel:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden])) #enemy-plans{height:32px;max-height:32px}
+ /* Mission commands share a separate scroll slot beside End and Crew. */
+ body:not(.police-asking) #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))) #mission-actions{position:absolute;top:68px;left:10px;right:calc(50% + 6px);height:44px;display:flex;flex-wrap:nowrap;overflow:auto hidden}
+ body:not(.police-asking) #panel:not(:has(#choices:not([hidden]),#tactical-preview:not([hidden]),#roster:not([hidden]))):has(#mission-actions button:not([hidden])) #utility-actions{left:50%}
+ #mission-actions [data-mission-action]{flex:0 0 100%;min-height:44px;height:44px;padding:4px 6px;font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #mission-actions [data-mission-action] .paper-icon{display:none}
+ #mission-actions [data-mission-action] .command-cost{position:static;display:block;margin-top:2px;line-height:10px}
+ body.police-asking #crew-picker{display:none}
+ /* Outings already put intentions on fighter badges; the empty caption
+    yields its space to the complete movement/attack forecast here. */
+ body.outing #panel:has(#tactical-preview:not([hidden])) #enemy-plans{display:none}
+ body.outing #tactical-preview:not([hidden]){bottom:6px}
+}

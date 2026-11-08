@@ -1,14 +1,13 @@
-# Art archive
+# Remaining art archive
 
-Everything under `needs-rework/` is preserved for comparison and provenance,
-but is excluded from active production manifests.
+The obsolete fixed cast, modular heads/clothes, and character pose archive were
+deleted on 2026-11-08 at the owner's request. Do not reconstruct that visual basis.
+Git history retains the original work.
 
-- `fixed-cast-detail-v00/`: the first fixed character cutouts.
-- `modular-detail-v01/`: the over-detailed modular character and grip pass.
-- `weapons-detail-v01/`: the over-detailed equipment pass.
-- `character-animation-detail-v01/`: the old runner pose sheet.
-- `animal-animation-detail-v01/`: the old dog pose sheet.
-- `location-kallio-alley-v01.png`: the architecturally inconsistent alley.
+Remaining comparison material is excluded from active runtime:
 
-Do not add new work on these files. Promote an asset only by creating a new
-version in its active category and updating the relevant manifest.
+- `weapons-detail-v01/`: over-detailed equipment pass.
+- `animal-animation-detail-v01/`: old dog pose sheet.
+- `location-kallio-alley-v01.png`: rejected architectural inconsistency.
+
+Preserving those files does not promote them or authorize new runtime art.

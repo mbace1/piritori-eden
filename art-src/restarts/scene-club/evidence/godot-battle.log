@@ -1,0 +1,411 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+── formation battle ──
+
+cell grammar (front-2 etc.)
+  ok    front-2 is the centre lane, opposition front
+  ok    middle-1 is one to its left
+  ok    back-3 is one to its right
+  ok    round trip
+  ok    opposition front is nearer the middle than its back
+  ok    an authored formation stays symmetrical
+  ok    a three-lane board is unshifted
+
+stances (COMBAT.md 6.2)
+  ok    aggressive prefers attacking to bracing
+  ok    defensive prefers bracing to attacking
+  ok    holding the line suppresses repositioning
+  ok    and it braces more than it would unprompted
+  ok    the three stances are three different policies
+  ok    battle.stance_aggressive is a real locale key
+  ok    battle.stance_defensive is a real locale key
+  ok    battle.stance_hold is a real locale key
+  ok    stance weighting never reads a fighter at all
+
+skip to result (COMBAT.md 6.4)
+  ok    a fight opens for skipping
+  ok    and it starts unresolved
+  ok    skipping reaches a real result
+  ok    and the fight agrees with what it returned
+  ok    the same seed skips to the same result
+  ok    both stances resolve rather than hanging
+    aggressive -> 3, defensive -> 3  (see BattleResult)
+  ok    the two stances are not the same fight
+  ok    a one-round cap returns instead of looping
+
+weapons (COMBAT.md 5.2: an item changes what you can do)
+  ok    chain is built from canon
+  ok    sawn-off is built from canon
+  ok    folding-knife is built from canon
+  ok    signal-flare is built from canon
+  ok    the chain reaches through the front body
+  ok    and nothing else does
+  ok    the sawn-off is the widest thing on the board
+  ok    but it stops at the first body
+  ok    the knife is lethal
+  ok    the bat is not
+  ok    and the knife hits softer than the bat
+  ok    the flare does no harm at all
+  ok    but it costs nerve
+  ok    and it is not lethal
+  ok    it can be used from any row
+
+weapons come from the slice, not a hardcoded catalogue
+  ok    baton is present
+  ok    pipe is present
+  ok    baseball-bat is present
+  ok    first-handgun is present
+  ok    unarmed exists as a fallback
+  ok    baton reaches one lane
+  ok    bat reaches adjacent lanes
+  ok    baton must stand at the front
+  ok    handgun may act from any row
+  ok    handgun carries lethal exposure so it can be forecast
+  ok    blunt weapons are not lethal
+  ok    the firearm is locked on day 1
+  ok    the feature phone starts unlocked
+
+battle-karhupuisto-2v2 builds from canon
+  ok    definition built
+  ok    two opponents
+  ok    player_deployed honoured
+  ok    stage is the authored scene
+  ok    death is not eligible here
+  ok    Mikko sits at the centre of the opposition front rank
+  ok    Mikko carries the authored pipe
+  ok    bear plinth exists on both sides
+
+somebody hired off the street can be fielded
+  ok    hired
+  ok    the battle still builds
+  ok    both fighters are on the board
+  ok    the hire is one of them
+  ok    they fight under their own name
+  ok    with the stats they were rolled with
+
+Aatami takes the board (answer 24)
+  ok    the builder fields him first, then the hire
+  ok      with his own condition and nerve
+  ok      no portrait art, and nothing asks for one
+  ok      his phone, and his fists
+  ok      and the fight begins
+  ok      and runs to an end
+
+the fight can say what happened
+  ok    a fight opens
+  ok    there is a summary
+  ok    it agrees with the result
+  ok    it counted rounds
+  ok    both sides are accounted for
+  ok    nobody is standing who was not deployed
+  ok    the downed are not also standing
+  ok    everyone reported has a name
+
+every role has a body
+  ok    every generated role maps to a model that exists
+  ok    every mapped role has a model, hireable or not
+  ok    the enforcer is opposition-only
+  ok    and no role is silently wearing the fallback
+
+playable cast stays on procedural stand-ins
+  ok    imported candidates are disabled in every playable Godot battle
+
+BattleStage3D's hardcoded paths match the manifest
+  ok    every single-body role's hardcoded path is the manifest's own
+  ok    hired's variant set matches the manifest's hired-role bodies
+
+every arena exists
+  ok    every mapped arena is a file that exists
+  ok    parked arenas have no fallback diorama
+  ok    ordinary battles do not load a parked diorama
+  ok    ?stage= wins over what the battle asked for
+  ok    and clearing it gives the battle its own yard back
+
+hired bodies vary, and stay put
+  ok    there is more than one hired body
+  ok    every variant is a file that exists
+  ok    the same person always wears the same body
+  ok    both bodies actually turn up across a roster
+  ok    a specialist still has exactly one body
+  ok    Aatami's role has no model yet
+  ok      so he wears a hired hand's body
+  ok      a modelled role is untouched
+
+there is concrete under the holes
+  ok    the slab is larger than the arena, not equal to it
+  ok    and it matches STAGE_SPEC 1.1
+  ok    it sits below the measured ground, not on it
+  ok    but not so far down it shows a step
+
+the opposition telegraphs its round
+  ok    a fight opens
+  ok    the opposition declares before acting
+  ok    every read names a person and a risk band
+  ok    attack telegraphs carry a sane harm range
+  ok    battle.aim_unknown is a real locale key
+  ok    battle.intel_hint_bring is a real locale key
+  ok    battle.intel_hint_raise is a real locale key
+  ok    battle-karhupuisto-2v2 has an entry forecast
+  ok    battle-courtyard-3v3 has an entry forecast
+  ok    battle-kattilahalli-3v3 has an entry forecast
+  ok    battle-hermanni-training has an entry forecast
+  ok    battle.withdraw_cost is a real locale key
+  ok    battle.death_risk is a real locale key
+  ok    battle.death_ineligible is a real locale key
+  ok    a declared lane is either real or honestly unknown
+  ok    and the read changes as the fight does
+
+reading is a ladder with a floor
+  ok    a fight opens
+  ok    the warning is never taken away
+  ok    there is room above the middle
+  ok    standing behind something costs precision
+  ok    but never the warning itself
+  ok    the middle is where it starts
+  ok    a debuff takes precision away
+  ok    and cannot take the warning
+  ok    a shaken crew reads no better than a steady one
+  ok    the aim is shown exactly when it is known
+
+the spotter marks and the anchor shields
+  ok    somebody who is not a spotter cannot mark
+  ok    a spotter can
+  ok    and the mark took
+  ok    a marked target is read completely
+  ok    which means a dossier
+  ok    you cannot mark your own
+  ok    a bare spotter's mark is brief
+  ok    call-it makes it last longer
+  ok    they are experienced enough to have learned it
+  ok    and watch-the-hands lasts the whole fight
+  ok    the brief mark is on
+  ok    and lapses when it should
+  ok    somebody who is not an anchor shields nobody
+  ok    an anchor starts by covering one cell
+  ok    and upgrades to three
+  ok    which is a layer on the same idea
+  ok    a person counts as cover to the resolver
+  ok    and is soft until wall is learned
+  ok    wall makes them hard cover
+
+the new verbs can actually be reached
+  ok    a spotter is offered the mark
+  ok    and nobody else is
+  ok    standing on nothing is worth something
+  ok    and the city hears about it
+  ok    the near-death threshold is a real edge
+  ok    a double is two in one round
+
+perks change the fight
+  ok    toughness raises what they can take
+  ok    and they start at the new maximum
+  ok    nerve raises what they can stand
+  ok    speed moves them up the order
+  ok    strength is a real step
+  ok    but a small one
+  ok    an opponent with no record has no perks
+
+somebody called it in
+  ok    a fight opens
+  ok    it starts quiet
+  ok    and nobody is here yet
+  ok    noise accumulated
+  ok    the threshold is above a two-round rout
+  ok    and a body counts for more than a round
+  ok    a firearm is the loudest single thing
+  ok    only our own fallen are taken
+  ok    they came in at an end of the board
+
+what do we do about them
+  ok    engaging them is refused, not faked
+  ok    and nothing was resolved by asking
+  ok    backing off is accepted
+  ok    and the question is closed
+  ok    answering twice is refused
+  ok    three of ours are on the board
+  ok    going back for them saves somebody
+  ok    and far from the police it costs nobody
+  ok    pulled out from under them, but somebody is taken instead
+  ok    and the one taken was standing, not the one on the ground
+  ok    backing off loses the one on the ground
+  ok    and saves nobody
+  ok    pulling somebody out near the police costs the helper
+
+a third side is not the enemy by default
+  ok    the opposition has somebody to convert
+  ok    and they are carrying something
+  ok    a downed third party is not lootable
+  ok    and is not counted among the opposition
+  ok    police are nobody's enemy to begin with
+  ok    but become one once attacked
+  ok    and are then everyone's problem
+  ok    a rival crew does not wait to be provoked
+  ok    the opposition is still the enemy
+  ok    and is not its own enemy
+
+police arrive in numbers
+  ok    nobody is there to begin with
+  ok    a quiet arrival is the base number
+  ok    a loud one brings more
+  ok    and never more than the yard holds
+  ok    they are on the board
+  ok    reactive, at the end they came in at, and nobody's enemy yet
+  ok    no two of them share a cell
+  ok    and not on top of anyone
+  ok    they are not counted as opposition
+
+cover can be asked about, not just suffered
+  ok    a fight opens
+  ok    the yard supplies cover
+  ok    every prop answers when asked
+  ok    bare ground reports no cover
+  ok    attacking reports a verdict for every target
+  ok    and every verdict is one the screen can render
+  ok    all cover in the slice is still soft (see QUEUE)
+
+battle-courtyard-3v3 builds from canon
+  ok    three opponents
+  ok    three deployed
+  ok    no two crew share a cell
+  ok    deployment is unique
+
+the boiler hall has a fight in it
+  ok    it builds from canon
+  ok    three opponents
+  ok    three of ours
+  ok    the battle retains its authored boiler hall identity
+  ok    the registered boiler hall asset still exists
+  ok    the parked boiler hall does not load a diorama
+  ok    death is eligible in the hall
+  ok    the hall supplies cover
+  ok    somebody here carries gear you cannot buy
+
+forecast before commitment (handoff §5)
+  ok    battle initialises without errors
+  ok    waits for the player in COMMAND
+  ok    both intents are telegraphed
+  ok    intents are readable words
+
+a move prefers the enemy, not a random neighbour
+  ok    the yard opens
+  ok    somebody can step both toward an enemy and away
+  ok    the step that closes scores higher than the step that opens the gap
+
+attrition alone does not end the handover (§13.10)
+  ok    the player never wins this by elimination
+  ok    an opponent is still standing
+  ok    and while it is live the player still has an exit
+
+withdrawal ends it at a known cost (§13.10)
+  ok    a player unit is on the field
+  ok    withdraw is a legal command
+  ok    the battle ends
+  ok    and it ends as a withdrawal
+
+seeded replay (§8)
+  ok    same seed leaves the field in the same state
+
+withdrawal is always available (§13.10)
+  ok    withdrawal opens at round 1
+  ok    its cost is stated up front
+  ok    the objective does not require defeating everyone
+
+board shape (one number, not four)
+  ok    canon is 6 lanes x 3 rows per side
+  ok    eighteen cells a side
+  ok    six lanes straddle the centre
+  ok    the far corner is on the board
+  ok    one past it is not
+  ok    the neutral band is real ground
+  ok    the far end of the board exists
+  ok    one past the far end does not
+  ok    three blue, two grey, three red
+  ok    the player's home band is their own rows
+  ok    home depth 0 is player ground
+  ok    home depth 1 is player ground
+  ok    home depth 2 is player ground
+  ok    an override takes
+  ok    sixteen cells a side
+  ok    four lanes straddle the centre
+  ok    the narrower board still admits lane 3
+  ok    and now refuses lane 4
+  ok    deploy 0 is on the board
+  ok    deploy 1 is on the board
+  ok    deploy 2 is on the board
+  ok    deploy 3 is on the board
+  ok    deploy 4 is on the board
+  ok    deploy 5 is on the board
+  ok    six deployed take six distinct cells
+  ok    an absurd board is clamped, not accepted
+  ok    reset returns to canon
+  ok    driver has no retired pose art
+  ok    fixer has no retired pose art
+  ok    local has no retired pose art
+  ok    muscle has no retired pose art
+  ok    runner has no retired pose art
+  ok    watcher has no retired pose art
+  ok    retired modular figures stay unavailable
+  ok    driver has its own 3D model
+  ok    fixer has its own 3D model
+  ok    local has its own 3D model
+  ok    muscle has its own 3D model
+  ok    runner has its own 3D model
+  ok    watcher has its own 3D model
+  ok    the six roles are six different models
+  ok    the player's front rank reads as front
+  ok    the player's back rank reads as back
+  ok    the opposition's front rank reads as front
+  ok    a player depth is not an opposition row
+  ok    neutral ground belongs to no formation
+
+sync fire pulls the whole formation's guns in (COMBAT.md §9.13)
+  ok    scenario 1 sets up clean
+  ok    the forecast names the in-range ally
+  ok    and never the out-of-range one
+  ok    both the attacker's shot and the sync shot land (2x2 harm)
+  ok    the syncing ally never spent an action
+  ok    the out-of-range ally's condition is untouched either way
+  ok    exactly one sync shot fired, from the one ally in range
+  ok    scenario 2 sets up clean
+  ok    the second hit (a sync shot) is what actually downs the target
+  ok    condition clamps at zero rather than going negative
+  ok    only ONE sync shot lands — the second ally is skipped once the target is down
+
+tough desync — one sync hit per round, then empty (COMBAT.md §9.13)
+  ok    desync scenario sets up
+  ok    content tough flag lands on the fighter
+  ok    before any sync, forecast lists both allies
+  ok    primary plus one sync only (desync caps the chain)
+  ok    exactly one sync shot on a tough target
+  ok    after desync, forecast is empty
+  ok    second primary still lands, with no sync
+  ok    still only the one sync from the first chain
+
+an anchor shields the rank behind them
+  ok    the yard opens for the anchor
+  ok    a player anchor on the front rank covers one cell
+  ok    and it is one step toward the player's own back rank
+  ok    an opposition anchor on the front rank covers one cell
+  ok    and it is one step toward the opposition's own back rank
+
+free slots reach the shared board, not only depths 0-2
+  ok    the yard opens for free-slot scan
+  ok    free slots exist
+  ok    a free slot past the old range(3) exists
+  ok    a neutral cell is free to ask about
+  ok    free_slots_for includes that neutral cell
+
+a queued step can leave the old 3x3 half
+  ok    the yard opens for a queued step
+  ok    the fight offers a step outside the old 3x3
+  ok    and the player can queue that step
+  ok    a step off the board is still refused
+  ok    a jump of two is still refused
+
+a fall is witnessed once, not every round
+  ok    the yard opens for a witness
+  ok    the round they fall, a lane-mate loses one nerve
+  ok    later rounds do not take it again
+
+324 passed, 0 failed
+BATTLE OK: both authored formations build from canon and resolve.

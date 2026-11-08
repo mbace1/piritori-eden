@@ -1,0 +1,170 @@
+{
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "fast": {
+        "viewGapMs": 88.10000000149012,
+        "expanded": "true",
+        "events": [
+          {
+            "id": "camera-menu",
+            "time": 6708.199999999255,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 6737.5999999996275,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 6796.300000000745,
+            "trusted": true,
+            "expanded": "true"
+          }
+        ]
+      },
+      "safe": {
+        "expanded": "false",
+        "events": [
+          {
+            "id": "camera-menu",
+            "time": 6708.199999999255,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 6737.5999999996275,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 6796.300000000745,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 13059.300000000745,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 14535.800000000745,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 15854.199999999255,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 17997.699999999255,
+            "trusted": true,
+            "expanded": "true"
+          }
+        ]
+      },
+      "beforeSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f",
+      "fastSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f",
+      "safeSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f"
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "fast": {
+        "viewGapMs": 89.70000000111759,
+        "expanded": "true",
+        "events": [
+          {
+            "id": "camera-menu",
+            "time": 4963.199999999255,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 4997.5999999996275,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 5052.9000000003725,
+            "trusted": true,
+            "expanded": "true"
+          }
+        ]
+      },
+      "safe": {
+        "expanded": "false",
+        "events": [
+          {
+            "id": "camera-menu",
+            "time": 4963.199999999255,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 4997.5999999996275,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 5052.9000000003725,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 10218.900000000373,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 10764.699999999255,
+            "trusted": true,
+            "expanded": "false"
+          },
+          {
+            "id": "label-mode",
+            "time": 11090.400000000373,
+            "trusted": true,
+            "expanded": "true"
+          },
+          {
+            "id": "camera-menu",
+            "time": 11894.5,
+            "trusted": true,
+            "expanded": "true"
+          }
+        ]
+      },
+      "beforeSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f",
+      "fastSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f",
+      "safeSha256": "fd6d237ce5dfc69eb566878c6a06d47a5bb6abca219d157e32140ad78bb7e17f"
+    }
+  ],
+  "errors": [],
+  "scope": "Actual native touchscreen input on unchanged source C19 runtime; canonical scoped CI package unavailable locally.",
+  "url": "http://127.0.0.1:42997/web/crew-run/",
+  "passed": true
+}

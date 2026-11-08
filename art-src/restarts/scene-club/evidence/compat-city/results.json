@@ -1,0 +1,239 @@
+{
+  "startedAt": "2026-11-08T12:32:46.053959+00:00",
+  "sourceCommit": "980b7dad7c0e517b6573ae807de4537ee06debdf",
+  "scope": "Existing city/browser gates; C.19 navigation stubbed in road/doors/Aatami/mission. No live Night Shift outing or C.19 acceptance rerun. Tests unchanged.",
+  "sourceHashesBefore": {
+    "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+    "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+    "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+  },
+  "results": [
+    {
+      "suite": "opening.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/opening.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:32:46.057692+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/opening.cjs.log",
+      "exitCode": 1,
+      "passedLines": 54,
+      "failedLines": 2,
+      "elapsedSeconds": 128.125,
+      "finishedAt": "2026-11-08T12:34:54.183049+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [
+        "FAIL desktop: the tram is moving in \u2192 none",
+        "FAIL phone: the tram is moving in \u2192 none"
+      ],
+      "summaryLines": [
+        "54 passed, 2 failed"
+      ]
+    },
+    {
+      "suite": "story-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/story-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:34:54.184072+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/story-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 30,
+      "failedLines": 0,
+      "elapsedSeconds": 29.376,
+      "finishedAt": "2026-11-08T12:35:23.559730+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "30 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "chapter-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/chapter-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:35:23.561004+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/chapter-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 20,
+      "failedLines": 0,
+      "elapsedSeconds": 13.485,
+      "finishedAt": "2026-11-08T12:35:37.045671+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "chapter-browser: 20 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "standing-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/standing-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:35:37.046724+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/standing-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 22,
+      "failedLines": 0,
+      "elapsedSeconds": 30.25,
+      "finishedAt": "2026-11-08T12:36:07.296347+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "standing-browser: 22 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "road-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/road-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:36:07.297321+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/road-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 42,
+      "failedLines": 0,
+      "elapsedSeconds": 17.444,
+      "finishedAt": "2026-11-08T12:36:24.741100+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "42 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "doors-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/doors-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:36:24.742616+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/doors-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 52,
+      "failedLines": 0,
+      "elapsedSeconds": 39.712,
+      "finishedAt": "2026-11-08T12:37:04.454741+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "doors-browser: 52 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "aatami-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/aatami-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:37:04.455887+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/aatami-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 16,
+      "failedLines": 0,
+      "elapsedSeconds": 20.9,
+      "finishedAt": "2026-11-08T12:37:25.355765+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "aatami-browser: 16 passed, 0 failed"
+      ]
+    },
+    {
+      "suite": "mission-browser.cjs",
+      "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/mission-browser.cjs",
+      "cwd": "/workspace/piritori-visual-reset",
+      "startedAt": "2026-11-08T12:37:25.356881+00:00",
+      "sourceHashesBefore": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "log": "/workspace/evidence/compat-city-regression/mission-browser.cjs.log",
+      "exitCode": 0,
+      "passedLines": 32,
+      "failedLines": 0,
+      "elapsedSeconds": 16.038,
+      "finishedAt": "2026-11-08T12:37:41.394870+00:00",
+      "sourceHashesAfter": {
+        "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+        "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+        "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+      },
+      "sourceUnchanged": true,
+      "failureLines": [],
+      "summaryLines": [
+        "mission-browser: 32 passed, 0 failed"
+      ]
+    }
+  ],
+  "sourceHashesAfter": {
+    "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+    "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+    "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+  },
+  "finishedAt": "2026-11-08T12:37:41.395918+00:00",
+  "sourceUnchangedAcrossBatch": true,
+  "passed": false
+}

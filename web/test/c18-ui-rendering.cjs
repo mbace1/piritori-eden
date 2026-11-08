@@ -8,14 +8,16 @@ fs.mkdirSync(out,{recursive:true});
  const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader','--use-angle=swiftshader']});
  const results=[];
  try{
-  for(const spec of [
+  const specs=[
    {name:'phone',width:412,height:915,touch:true},
    {name:'compact',width:360,height:640,touch:true},
    {name:'landscape',width:844,height:390,touch:true},
    {name:'tablet',width:1194,height:834,touch:true},
    {name:'desktop',width:1366,height:768},
    {name:'phone-safe',width:412,height:915,touch:true,safe:true},
-  ]){
+  ];
+  if(process.env.C18_VIEW)assert(specs.some(spec=>spec.name===process.env.C18_VIEW),'C18_VIEW names an existing device case');
+  for(const spec of specs.filter(spec=>!process.env.C18_VIEW||spec.name===process.env.C18_VIEW)){
    const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:!!spec.touch,isMobile:!!spec.touch});
    const p=await ctx.newPage(),errors=[],externalModels=[];
    p.on('pageerror',e=>errors.push(e.message));

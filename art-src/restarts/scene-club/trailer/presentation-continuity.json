@@ -1,0 +1,10 @@
+{
+  "viewport": [
+    450,
+    800
+  ],
+  "baselineSource": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
+  "fixedSource": "0b52d6957cb3dd65a09b535b2e4b020b233d1e1e",
+  "baselinePngSha256": "39e54d2468c97bbdb2e9e3df1984b86ebf0d99591333012ed9b1eb767d4404ed",
+  "comparison": "Byte-identical PNG asserted by wide-compare.cjs during narrow-font fix verification; trailer view is unchanged."
+}

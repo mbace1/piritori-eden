@@ -1,0 +1,44 @@
+  ok   desktop: the journey preview says nothing about the road (a surprise)
+  ok   desktop: the fourth journey opens a road event
+  ok   desktop: Aatami still arrived
+  ok   desktop: the first road event is low-end hustle (tier 0)
+  ok   desktop: it says where it happens
+  ok   desktop: every choice says what it costs in time
+  ok   desktop: the first choice is in view without scrolling
+  ok   desktop: a reload comes back to the same event
+  ok   desktop: the road waits for an answer
+  ok   desktop: the answer pays what it said
+  ok   desktop: the event is seen once and gone
+  ok   desktop: time moved, the block did not (D002)
+  ok   desktop: the clock reads later
+  ok   desktop: CONTINUE is the one lit action, in view
+  ok   desktop: CONTINUE returns to the map with the next step lit
+  ok   desktop: without a crew the fight is shown and refused
+  ok   desktop: with a crew, standing goes straight to the fight
+  ok   desktop: fought on the road, by the locals
+  ok   desktop: on the board it is the same road fight
+  ok   desktop: the road fight reports to no mission
+  ok   desktop: no page errors
+  ok   phone: the journey preview says nothing about the road (a surprise)
+  ok   phone: the fourth journey opens a road event
+  ok   phone: Aatami still arrived
+  ok   phone: the first road event is low-end hustle (tier 0)
+  ok   phone: it says where it happens
+  ok   phone: every choice says what it costs in time
+  ok   phone: the first choice is in view without scrolling
+  ok   phone: a reload comes back to the same event
+  ok   phone: the road waits for an answer
+  ok   phone: the answer pays what it said
+  ok   phone: the event is seen once and gone
+  ok   phone: time moved, the block did not (D002)
+  ok   phone: the clock reads later
+  ok   phone: CONTINUE is the one lit action, in view
+  ok   phone: CONTINUE returns to the map with the next step lit
+  ok   phone: without a crew the fight is shown and refused
+  ok   phone: with a crew, standing goes straight to the fight
+  ok   phone: fought on the road, by the locals
+  ok   phone: on the board it is the same road fight
+  ok   phone: the road fight reports to no mission
+  ok   phone: no page errors
+
+  42 passed, 0 failed

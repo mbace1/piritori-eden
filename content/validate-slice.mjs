@@ -193,6 +193,7 @@ const addArtFile = (item, inherited, context) => {
   const file = item.file;
   check(Boolean(file), `${context}: missing file`);
   if (!file) return;
+  check(!/^(characters\/|cast\/|ui\/|animation\/runner\/)/.test(file), `${context}: retired modular cast/UI may not be registered`);
   const absolute = resolve(dirname(artManifestPath), file);
   artFiles.push({ absolute, item: { ...inherited, ...item }, context });
 };
@@ -209,7 +210,8 @@ for (const asset of art.assets) {
 }
 for (const ref of content.asset_refs) check(artIds.has(ref), `content asset ref missing from manifest: ${ref}`);
 for (const member of content.crew) {
-  for (const key of ["portrait_asset_id", "torso_asset_id", "legs_asset_id"]) check(artIds.has(member[key]), `${member.id}: missing art ${member[key]}`);
+  check(member.portrait_kind === "initials", `${member.id}: neutral compatibility identity required`);
+  for (const key of ["portrait_asset_id", "torso_asset_id", "legs_asset_id"]) check(!member[key], `${member.id}: retired modular art pointer ${key}`);
 }
 for (const item of content.equipment) check(artIds.has(item.asset_id), `${item.id}: missing art ${item.asset_id}`);
 for (const battle of content.battles) check(artIds.has(battle.scene_asset_id), `${battle.id}: missing scene art ${battle.scene_asset_id}`);

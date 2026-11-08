@@ -1,0 +1,53 @@
+  ok   desktop: a free block shows its doors
+  ok   desktop: two or three doors (2)
+  ok   desktop: one of them can become a fight
+  ok   desktop: every door is pinned on the map
+  ok   desktop: the next step says to choose a door
+  ok   desktop: the door is taken
+  ok   desktop: and Aatami can walk to it
+  ok   desktop: the door plays as a scene, choices first
+  ok   desktop: it cost the block
+  ok   desktop: the next free block has its own doors
+  ok   desktop: the fight is offered with a crew
+  ok   desktop: it is a door fight, fought in Night Shift
+  ok   desktop: straight there, in its place
+  ok   desktop: and it counts toward today's two
+  ok   desktop: fought at the door, by its side
+  ok   desktop: back unfinished, the fight is still on
+  ok   desktop: nothing else opens past it
+  ok   desktop: no 3D: the same fight on the board, counted once
+  ok   desktop: at the door, by its side
+  ok   desktop: the pause menu is above the fighters
+  ok   desktop: a bad deal says it can go bad
+  ok   desktop: it goes bad, and it is a fight
+  ok   desktop: a getaway, on the quay, not in the boiler hall
+  ok   desktop: alone, it goes bad without a fight and costs the door
+  ok   desktop: no overflow
+  ok   desktop: no errors
+  ok   phone: a free block shows its doors
+  ok   phone: two or three doors (2)
+  ok   phone: one of them can become a fight
+  ok   phone: every door is pinned on the map
+  ok   phone: the next step says to choose a door
+  ok   phone: the door is taken
+  ok   phone: and Aatami can walk to it
+  ok   phone: the door plays as a scene, choices first
+  ok   phone: it cost the block
+  ok   phone: the next free block has its own doors
+  ok   phone: the fight is offered with a crew
+  ok   phone: it is a door fight, fought in Night Shift
+  ok   phone: straight there, in its place
+  ok   phone: and it counts toward today's two
+  ok   phone: fought at the door, by its side
+  ok   phone: back unfinished, the fight is still on
+  ok   phone: nothing else opens past it
+  ok   phone: no 3D: the same fight on the board, counted once
+  ok   phone: at the door, by its side
+  ok   phone: the pause menu is above the fighters
+  ok   phone: a bad deal says it can go bad
+  ok   phone: it goes bad, and it is a fight
+  ok   phone: a getaway, on the quay, not in the boiler hall
+  ok   phone: alone, it goes bad without a fight and costs the door
+  ok   phone: no overflow
+  ok   phone: no errors
+doors-browser: 52 passed, 0 failed

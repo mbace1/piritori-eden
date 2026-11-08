@@ -1,0 +1,165 @@
+{
+  "sourceCommit": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
+  "durationSeconds": 40.0,
+  "size": [
+    720,
+    1280
+  ],
+  "fps": 25,
+  "pixelAspect": "1:1",
+  "shots": [
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/01-title.mp4",
+      "kind": "title",
+      "name": "01-title",
+      "duration": 2,
+      "lines": [
+        "PIRITORI → EDEN",
+        "Act I · progress preview",
+        "ACTUAL BROWSER FOOTAGE"
+      ],
+      "trailerStart": 0,
+      "trailerEnd": 2
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/02-scene-club.mp4",
+      "kind": "actual browser footage",
+      "name": "02-scene-club",
+      "source": "/workspace/evidence/progress-trailer/scenes/scene-club.webm",
+      "start": 0.16,
+      "duration": 12,
+      "caption": "Actual arrival, five seconds of paired choices, committed consequence and real map return",
+      "sourceSha256": "1cba990a37180218454710ac54bbdc658f4a0173166727a52a06aab5aa310c1a",
+      "trailerStart": 2,
+      "trailerEnd": 14
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/03-toko-title.mp4",
+      "kind": "title",
+      "name": "03-toko-title",
+      "duration": 1.6,
+      "lines": [
+        "TOKO SLOMO",
+        "Paper character study",
+        "NEW PRESENTATION · IN REVIEW"
+      ],
+      "trailerStart": 14,
+      "trailerEnd": 15.6
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/04-toko-study.mp4",
+      "kind": "actual browser footage",
+      "name": "04-toko-study",
+      "source": "/workspace/evidence/progress-trailer/scenes/toko-study.webm",
+      "start": 0.36,
+      "duration": 6.4,
+      "caption": "Actual approved-source character study; no new campaign event",
+      "sourceSha256": "ee282555d6bb2f489aa02c961a6c5061ed7fdefc1877a6aa02e891c4c8e13264",
+      "trailerStart": 15.6,
+      "trailerEnd": 22.0
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/05-combat-title.mp4",
+      "kind": "title",
+      "name": "05-combat-title",
+      "duration": 1.6,
+      "lines": [
+        "C.19 · NIGHT SHIFT",
+        "Existing 3D tactical combat",
+        "POSITION · READ INTENT · COMMIT"
+      ],
+      "trailerStart": 22.0,
+      "trailerEnd": 23.6
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-0.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-0",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 12.4,
+      "duration": 2,
+      "caption": "Courtyard and visible enemy intentions",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 23.6,
+      "trailerEnd": 25.6
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-1.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-1",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 29.6,
+      "duration": 3.2,
+      "caption": "Aatami previews and completes a real move",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 25.6,
+      "trailerEnd": 28.8
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-2.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-2",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 54.4,
+      "duration": 2.4,
+      "caption": "Actual attack and visible miss feedback",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 28.8,
+      "trailerEnd": 31.2
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-3.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-3",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 69.4,
+      "duration": 2.2,
+      "caption": "Actual runner movement",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 31.2,
+      "trailerEnd": 33.4
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-4.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-4",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 78.6,
+      "duration": 1.8,
+      "caption": "Runner attack and visible HP/guard damage",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 33.4,
+      "trailerEnd": 35.2
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/06-combat-5.mp4",
+      "kind": "actual browser footage",
+      "name": "06-combat-5",
+      "source": "/workspace/evidence/progress-trailer/combat/courtyard-native.webm",
+      "start": 94,
+      "duration": 2,
+      "caption": "Actual enemy resolution and visible next-round plans",
+      "sourceSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+      "trailerStart": 35.2,
+      "trailerEnd": 37.2
+    },
+    {
+      "file": "/workspace/evidence/progress-trailer/edit/07-outro.mp4",
+      "kind": "title",
+      "name": "07-outro",
+      "duration": 2.8,
+      "lines": [
+        "PIRITORI → EDEN",
+        "ACT I · WORK IN PROGRESS",
+        "New presentation in review",
+        "08 NOVEMBER 2026"
+      ],
+      "trailerStart": 37.2,
+      "trailerEnd": 40.0
+    }
+  ],
+  "audio": "Original synthesized trailer underscore; no game audio captured.",
+  "scope": "Visual/motion review candidate and separately labelled existing C.19 combat. No release or physical-device acceptance claim.",
+  "editing": "Titles and cuts only. No invented gameplay, speed changes, generated scenery, reconstructed UI or interpolated gameplay.",
+  "masterSha256": "5a63e9ca28d5f299649a62ca3c60bb6ab9cb9f50d48b1ed9beae6758491f0927"
+}

@@ -1,0 +1,9 @@
+{
+  "owner": "half_screen_tests",
+  "nextStepResult": "57 passed, 0 failed; header/readability verified separately by owner",
+  "hashes": {
+    "web/v3.css": "0cda72d4456a596fc022993f40622d01cf48c4f004667cafff53ed11ef5f7e6d",
+    "web/index.html": "6aa2f5642dadcc2090d0e5e87790bfb380ea7597be7a212fc0e263813f2fd76c",
+    "web/js/v3/app.js": "9cf398eb8496f366e479845db510e83a49e4f7a03bc56ec92a47d53db6714f74"
+  }
+}

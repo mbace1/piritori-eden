@@ -1,5 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=11';
-import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=12';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -15,34 +14,34 @@ import {
   canShopHere, buyOf, buyEquipment, tradeBlocker, actionsLeft,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=15';
+} from './state.js?v=16';
 import { createPauseMenu } from './pause.js?v=5';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
-import { previewJourney, commitJourney } from './journey.js?v=4';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=10';
+import { previewJourney, commitJourney } from './journey.js?v=5';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=11';
 import { loadTokoStage } from './toko-stage.js?v=1';
-import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=10';
+import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=5';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=11';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=9';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=10';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=11';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=12';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=19';
+} from './battle.js?v=20';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
-import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=12';
 import { positionBattleDOM } from './stage-camera.js?v=5';
+import { mountSceneClubView, SCENE_CLUB_ID, SCENE_CLUB_STYLES } from './scene-club-view.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -155,24 +154,9 @@ function mountTokoStage(root) {
     stage.attach(canvas, context);
   });
 }
-// Waist-up cut-ins (cutin-stage.js; owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and
-// talk options", the level behind). For now a PREVIEW reached by ?cutin=<who> (CLAUDE.md rule 6, the phone debug rule):
-// the words come from the authored slice, a choice makes the speaker react and says what it would do, and nothing is
-// applied or saved. The slice has no spoken lines for Jaska yet, so his bubble carries the encounter's opening.
+// Compatibility dialogue uses only the retained Jaska and young Aatami rigs.
 const CUTIN_TABS = ['#C5A044', '#38B8C8', '#676B6B'];
 const CUTIN_TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8', ACCUSATION: '#B5523B', FICTION: '#676B6B' };
-const CUTIN_SCRIPT = {
-  jaska: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
-    lines: [{ text: e.opening, clip: 'talk' }],
-    choices: e.choices.map(c => ({ label: c.label, reply: c.forecast, clip: c.effects.some(x => /^relationship:jaska:-/.test(x)) ? 'shake' : 'nod' })) }; },
-  // Aatami's side of the same conversation: the choices are what he says
-  aatami: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
-    lines: e.choices.map(c => ({ text: c.label, clip: 'talk' })) }; },
-  arvo: () => { const n = data.news.get('news-markka-afterlife'); return n && { lines: [
-    { tag: 'ARVO LINDE', text: n.arvo_copy, clip: 'read' }, { tag: 'DOCUMENTED', text: n.documented, clip: 'glance' },
-    { tag: 'INFERENCE', text: n.inference, clip: 'gesture' }, n.accusation && { tag: 'ACCUSATION', text: n.accusation, clip: 'read' },
-    { tag: 'FICTION', text: n.fiction, clip: 'nod' }].filter(Boolean) }; },
-};
 // The overlay both uses share: a 9:16 canvas, the words laid over the speaker's bubble or copy card, the buttons.
 function cutinShell(label, onClose) {
   const el = document.createElement('div');
@@ -203,22 +187,6 @@ function cutinShell(label, onClose) {
     close() { current?.detach(); current = null; el.remove(); removeEventListener('keydown', onKey); },
   };
 }
-async function openCutin(who) {
-  const script = CUTIN_SCRIPT[who]?.();
-  if (!script) { logToast(`unknown cut-in '${who}'`); return; }
-  const stage = await loadCutin(data, who, { reducedMotion, plateId: script.plateId });
-  if (!stage) { logToast(`cut-in '${who}' is not registered or failed to load`); return; }
-  const shell = cutinShell(stage.cast.name, () => shell.close()), close = () => shell.close();
-  shell.el.dataset.cutin = who;
-  const leave = ['Leave', close];
-  if (!script.choices) {
-    const next = i => shell.show(stage, script.lines[i], [i + 1 < script.lines.length ? ['Next', () => next(i + 1)] : ['Close', close]]);
-    next(0);
-  } else {
-    shell.show(stage, script.lines[0], [...script.choices.map(c => [c.label, () => shell.show(stage, { text: c.reply, clip: c.clip }, [leave])]), leave]);
-  }
-}
-
 // The conversation, for real (owner, 2026-10-23: "the player character profile can be shown when he talks"). An
 // encounter whose speaker has a cut-in opens as that cut-in over the scene, once, until answered or set aside:
 // the opening in the speaker's bubble, the choices as talk options. A choice goes through the very same handler as
@@ -226,13 +194,93 @@ async function openCutin(who) {
 // CONTINUE does what the outcome card's button does. LOOK AROUND sets it aside for the ordinary screen.
 let talk = null;
 const talkSetAside = new Set();
+let sceneClub = null;
+let campaignClickAfter = 0;
+function sceneClubEncounter() {
+  if (!data || !state || !$('splash').hidden || state.mode !== 'encounter' || state.endingId
+    || state.battle?.status === 'active' || openOuting(state) || state.road?.pending || !presentAtLead()) return null;
+  const encounter = currentEncounter(state, data);
+  return encounter?.id === SCENE_CLUB_ID ? encounter : null;
+}
+function sceneClubModel(encounter) {
+  return {
+    id: encounter.id, opening: encounter.opening,
+    backdrop: new URL(assetUrl(data, encounter.scene_asset_id), document.baseURI).href,
+    markka: state.markka, choiceId: state.choices[encounter.id] ?? null,
+    choices: encounter.choices.map(choice => {
+      const status = choiceStatus(choice, state, data);
+      return { ...choice, available: status.ok, reason: status.reasons.map(readableReason).join(' · ') };
+    }),
+    inspections: encounter.inspectables.map(label => ({ label, text: inspectionCopy(label) })),
+  };
+}
+function closeSceneClub() {
+  if (!sceneClub) return;
+  const old = sceneClub; sceneClub = null; old.disposed = true;
+  old.view?.destroy(); old.host.remove();
+}
+function mountCampaignSceneClub() {
+  const encounter = sceneClubEncounter();
+  if (!encounter) { closeSceneClub(); return false; }
+  closeTalk();
+  if (sceneClub?.owner === state && sceneClub.index === state.scheduleIndex && sceneClub.id === encounter.id) {
+    sceneClub.view?.update(sceneClubModel(encounter)); return true;
+  }
+  closeSceneClub();
+  // The arrival now has its own caption; retire the previous map travel toast.
+  clearTimeout(toastTimer); $('toast').hidden = true; $('toast').textContent = '';
+  const host = document.createElement('div');
+  host.id = 'sceneClubEncounter'; host.className = 'scene-club-host';
+  host.setAttribute('role','dialog'); host.setAttribute('aria-modal','true'); host.setAttribute('aria-label','Scene Club');
+  host.style.cssText = 'position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#20241f';
+  const shadow = host.attachShadow({mode:'open'});
+  shadow.innerHTML = `<link rel="stylesheet" href="${esc(SCENE_CLUB_STYLES)}"><div class="scene-club-frame"><main class="scene-club world scene-view" aria-label="Scene Club"><p role="status">Opening Scene Club…</p></main></div>`;
+  const mine = sceneClub = {host, owner:state, index:state.scheduleIndex, id:encounter.id, view:null, disposed:false, continued:false};
+  const current = () => sceneClub === mine && !mine.disposed && mine.owner === state && mine.index === state.scheduleIndex && sceneClubEncounter()?.id === mine.id;
+  const continueScene = () => {
+    if (!current() || mine.continued || !state.choices[mine.id]) return {ok:false};
+    mine.continued = true; campaignClickAfter = performance.now() + 350;
+    advanceAndSettle(); persist(); render(); $('modeRoot').focus({preventScroll:true});
+    return {ok:true};
+  };
+  const begin = () => {
+    if (!current() || mine.view) return;
+    mine.view = mountSceneClubView(shadow.querySelector('main'), {
+      model:sceneClubModel(encounter), arrival:true, pose:'side',
+      onChoose(id) { return current() ? chooseCurrentEncounter(id) : {ok:false}; },
+      onContinue:continueScene,
+      onBack() {
+        if (!current()) return;
+        if (state.choices[mine.id]) { continueScene(); return; }
+        campaignClickAfter = performance.now() + 350;
+        state.mode = 'route'; persist(); render(); $('modeRoot').focus({preventScroll:true});
+      },
+      sound:{get:soundOn,set:setSound},
+      onError(error) { if (current()) logToast('Scene Club could not load. Use Menu to return to Kallio.'); console.error(error); },
+    });
+    // The view reports a failed asset visibly and retains its map exit. Avoid
+    // an unhandled rejection; its ready/error signal remains testable.
+    mine.view.ready.catch(() => {});
+  };
+  const link = shadow.querySelector('link');
+  link.addEventListener('load',begin,{once:true});
+  link.addEventListener('error',() => {
+    if (!current()) return;
+    shadow.querySelector('main').innerHTML = '<p role="alert">Scene Club could not load.</p><button type="button">Back to Kallio</button>';
+    shadow.querySelector('button').addEventListener('click',() => { if (current()) { state.mode='route'; persist(); render(); } });
+  },{once:true});
+  document.body.append(host);
+  if (link.sheet) begin();
+  return true;
+}
 function talkSpeaker(encounter) { return encounter?.participants?.find(p => p !== 'aatami' && CUTINS[p]) ?? null; }
 function closeTalk() { talk?.shell?.close(); talk = null; }
 function mountTalk() {
+  if (mountCampaignSceneClub()) return;
   if (!['encounter', 'visit'].includes(state.mode)) { closeTalk(); return; }
   if (!$('splash').hidden) return;                       // the title screen first: RESUME re-renders and the talk opens then
   const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data), who = talkSpeaker(encounter);
-  if (talk) { if (talk.id !== encounter?.id) closeTalk(); else { disposeSceneSpeaker(); return; } }
+  if (talk) { if (talk.id !== encounter?.id) closeTalk(); else { return; } }
   if (!who || state.choices[encounter.id] || talkSetAside.has(encounter.id)) return;
   if (state.battle?.status === 'active' || (state.mode === 'encounter' && !presentAtLead())) return;
   openTalk(encounter, who);
@@ -242,7 +290,6 @@ async function openTalk(encounter, who) {
   const [speaker, aatami] = await Promise.all([loadCutin(data, who, { reducedMotion, plateId: encounter.scene_asset_id }), loadCutin(data, 'aatami', { reducedMotion, plateId: encounter.scene_asset_id })]);
   if (talk !== mine) return;
   if (!speaker || !aatami) { talk = null; return; }    // the ordinary screen stays, as before cut-ins
-  disposeSceneSpeaker();                                 // the 3D figure under the overlay would only cost frames
   const dispatch = (action, choice) => { const b = document.createElement('button'); b.dataset.action = action; if (choice) b.dataset.choice = choice; handleRootClick({ target: b }); };
   const shell = talk.shell = cutinShell(speaker.cast.name, () => setAside());
   shell.el.dataset.talk = encounter.id;
@@ -376,10 +423,10 @@ function presentAtLead() { const lead = storyLeadId(); return Boolean(lead) && s
 function canTravelTo(anchor) { return anchor?.sliceState === 'active'; }
 /**
  * The arrival (v4.59, owner answer 8: "sure, setting up"). A new run opens on
- * the number 3 pulling into Piritori in the rain and Aatami stepping off,
- * before the first tap on the map. Skippable from frame one by any tap or
- * key, and it goes when it is done either way. Under reduced motion it is
- * one still frame with the same lines. It never touches state.
+ * Aatami's arrival captions over the retained map, before its first tap.
+ * The retired CSS tram/figure illustration is deliberately absent. This
+ * neutral compatibility sheet is skippable by any tap or key and never
+ * touches state; the authored words and sound stay the same.
  */
 function playOpening() {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -397,17 +444,11 @@ function playOpening() {
   veil.id = 'opening';
   veil.setAttribute('role', 'dialog');
   veil.setAttribute('aria-label', 'Arrival');
-  veil.innerHTML = `<div class="opening-scene" aria-hidden="true">
-      <i class="op-sky"></i><i class="op-block a"></i><i class="op-block b"></i><i class="op-block c"></i>
-      <i class="op-rain"></i><i class="op-wire"></i>
-      <div class="op-sign"><b>TOKON</b><b>RAMEN</b></div>
-      <div class="op-stop"><b>PIRITORI</b><span>3</span></div>
-      <i class="op-npc"></i><i class="op-bag"></i><i class="op-puddle"></i>
-      <div class="op-tram"><i class="op-window"></i><i class="op-window"></i><i class="op-window"></i><i class="op-door"></i><b>3</b></div>
-      <i class="op-figure"></i><i class="op-street"></i>
-    </div>
-    <div class="opening-lines" aria-live="polite">${lines.map((l, i) => `<p style="--i:${i}">${esc(l)}</p>`).join('')}</div>
-    <button class="paper-button opening-skip" type="button">SKIP ›</button>`;
+  veil.innerHTML = `<div class="opening-scene" aria-hidden="true"></div>
+    <section class="opening-sheet" aria-label="Arrival captions">
+      <div class="opening-lines" aria-live="polite">${lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+      <button class="paper-button opening-skip" type="button">SKIP ›</button>
+    </section>`;
   document.body.append(veil);
   // Focus leaves the Begin button, or the Space that skips (keydown) would
   // press Begin again on its keyup and start a second arrival.
@@ -420,8 +461,10 @@ function playOpening() {
       event?.preventDefault?.();
       clearTimeout(timer);
       window.removeEventListener('keydown', finish, true);
-      veil.classList.add('leaving');
-      setTimeout(() => { veil.remove(); resolve(); }, reduce ? 0 : 450);
+      veil.removeEventListener('pointerup', finish);
+      // The neutral sheet has no exit animation: restore controls immediately.
+      veil.remove();
+      resolve();
     };
     const timer = setTimeout(finish, reduce ? 6000 : 9500);
     veil.addEventListener('pointerup', finish);
@@ -520,14 +563,12 @@ function render() {
     ramen: renderRamen,
     case: renderCase,
   };
-  disposeSceneSpeaker();
+
   root.innerHTML = (views[state.mode] ?? renderRoute)();
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
   // map scrolled away. Same-mode re-renders keep their place.
   if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
-  const speakerHost = root.querySelector('[data-speaker]');
-  if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
   mountTokoStage(root);
   mountTalk();
 
@@ -1020,13 +1061,14 @@ function renderEncounter() {
   const choice = encounter.choices.find(item => item.id === resolved);
   const pendingBattle = state.battle?.status === 'active';
   if (state.mode === 'encounter' && !pendingBattle && !presentAtLead()) return renderAwayFromLead(slot);
+  if (sceneClubEncounter()) return '<section data-scene-club-mount aria-hidden="true"></section>';
   return `
     <div class="encounter-layout">
       <section class="paper-panel scene-card">
         <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
           ${isToko ? TOKO_CANVAS : ''}
-          ${isJaska ? '<i class="jaska-contact" aria-hidden="true"></i><div class="scene-speaker jaska-standing" data-speaker="jaska" data-asset="cast3d-jaska-v01" aria-label="Jaska"></div>' : ''}
+
           ${ambientLayers(encounter)}
           <i class="scene-vignette"></i>
         </div>
@@ -1360,7 +1402,15 @@ function renderGrowth(member) {
   return html;
 }
 
+// Neutral compatibility identity while the replacement cast is reviewed. Saved
+// legacy portrait IDs are deliberately ignored; no approved NPC is cloned.
+function identityBadge(person) {
+  const initials = String(person.name ?? person.id ?? '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => Array.from(part)[0]).join('').toUpperCase();
+  return `<span class="identity-badge" aria-hidden="true">${esc(initials || '?')}</span>`;
+}
+
 function renderCrewCard(member) {
+  member = crewRecord(state, data, member.id) ?? member;
   const hired = state.recruited.includes(member.id) || state.temporaryCrew.includes(member.id);
   const status = state.crewStatus[member.id] ?? { condition: 0, maxCondition: 0, status: 'available' };
   // Authored crew carry a one-line `strength`; a generated hire
@@ -1368,11 +1418,7 @@ function renderCrewCard(member) {
   // rolled trait instead — both read as one line of flavour under the role.
   const flavor = member.strength ?? member.traits?.[0]?.text ?? '';
   return `<article class="crew-card ${hired ? '' : 'not-hired'}">
-    <div class="crew-portrait" aria-hidden="true">
-      <img class="legs" src="${assetUrl(data, member.legs_asset_id)}" alt="">
-      <img class="torso" src="${assetUrl(data, member.torso_asset_id)}" alt="">
-      <img class="head" src="${assetUrl(data, member.portrait_asset_id)}" alt="">
-    </div>
+    ${identityBadge(member)}
     <div>
       <h3>${esc(member.name)}${member.nick ? ` <span class="dim">"${esc(member.nick)}"</span>` : ''}</h3>
       <p>${esc(cap(member.role))} · ${hired ? esc(String(status.status ?? 'available').toUpperCase())
@@ -1405,11 +1451,7 @@ function renderHireCandidate(candidate) {
   const affordable = state.cash >= candidate.wage_eur;
   const flavor = candidate.traits?.[0]?.text ?? '';
   return `<article class="crew-card not-hired">
-    <div class="crew-portrait" aria-hidden="true">
-      <img class="legs" src="${assetUrl(data, candidate.legs_asset_id)}" alt="">
-      <img class="torso" src="${assetUrl(data, candidate.torso_asset_id)}" alt="">
-      <img class="head" src="${assetUrl(data, candidate.portrait_asset_id)}" alt="">
-    </div>
+    ${identityBadge(candidate)}
     <div>
       <h3>${esc(candidate.name)}${candidate.nick ? ` <span class="dim">"${esc(candidate.nick)}"</span>` : ''}</h3>
       <p>${esc(cap(candidate.role))} · AGE ${candidate.age}</p>
@@ -1797,11 +1839,7 @@ function renderUnit(unit, battle, preview = null) {
   return `<button type="button" class="${classes}"
     style="left:${pos.x}%;top:${pos.y}%" data-action="${unit.side === 'player' ? 'select-unit' : 'target-unit'}" data-unit="${esc(unit.id)}"
     aria-label="${esc(unit.name)}, ${unit.role}, condition ${unit.hp}, guard ${unit.guard}${syncHint}" ${disabled ? 'disabled' : ''}>
-    <span class="unit-body">
-      <img class="legs" src="${assetUrl(data, unit.legs)}" alt="">
-      <img class="torso" src="${assetUrl(data, unit.torso)}" alt="">
-      ${unit.head ? `<img class="head" src="${assetUrl(data, unit.head)}" alt="">` : ''}
-    </span>
+    <span class="unit-body">${identityBadge(unit)}</span>
     <span class="unit-label">${esc(unit.name.split(' ')[0])}<br><b>${unit.hp}♥ · ${unit.guard}◇ · ${unit.nerve}!</b></span>
   </button>`;
 }
@@ -1963,7 +2001,7 @@ function renderNews() {
       <section class="tv-shell" aria-label="Television bulletin presented by fictional newscaster Arvo Linde">
         <div class="tv-screen">
           <div class="studio"></div>
-          <div class="scene-speaker arvo-speaker" data-speaker="arvo" data-asset="presenter-arvo-linde-v05" aria-label="Arvo Linde"></div><div class="arvo arvo-fallback" aria-hidden="true"><i class="body"></i><i class="shirt"></i><i class="tie"></i><i class="head"></i><i class="hair"></i><i class="face-line"></i></div>
+          <div class="news-identity" data-news-identity="arvo">${identityBadge({ name: 'Arvo Linde' })}<strong>ARVO LINDE</strong></div>
           <div class="news-lower-third">ARVO LINDE · HELSINKI · DOCUMENTED FACT / FICTIONAL SERVICE</div>
         </div>
         <div class="tv-knobs" aria-hidden="true"><i></i><i></i></div>
@@ -2238,7 +2276,38 @@ function recordBattleConsequences() {
   state.mode = 'route';
 }
 
+function chooseCurrentEncounter(choiceId) {
+  if (!['encounter','visit'].includes(state.mode)) return {ok:false,reason:'not-in-encounter'};
+  if (state.mode === 'encounter' && !presentAtLead() && state.battle?.status !== 'active') {
+    logToast('Not from here — the choice is at the story lead.'); render(); return {ok:false,reason:'not-at-scene'};
+  }
+  const encounter = state.mode === 'visit' ? activeVisit(state,data) : currentEncounter(state,data);
+  const choice = encounter?.choices.find(item => item.id === choiceId);
+  if (!choice) return {ok:false,reason:'unknown-choice'};
+  const outingBefore = state.outing?.id ?? null;
+  const result = state.mode === 'visit' ? chooseVisit(state,data,choiceId) : chooseEncounter(state,encounter,choice,data);
+  if (!result.ok) logToast(result.reason);
+  else if (result.startBattle && encounter.door) startOuting(encounter,result.startBattle);
+  else if (result.startBattle) {
+    if (!startMissionOuting(encounter,result.startBattle)) startBattle(result.startBattle,doorStage(encounter));
+  } else if (encounter.door) {
+    const bad = escalation(state,data,doors,encounter.door,choice.id);
+    if (bad?.battle && startOuting(encounter,bad.battle,'The deal goes bad. It is a fight now.')) {
+      state.lastOutcome = [...(state.lastOutcome ?? []),'The deal goes bad. It is a fight now.'];
+    } else if (bad?.effects) {
+      applyEffects(state,bad.effects,data,`door:${encounter.door}:alone`);
+      state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.',...(state.lastOutcome ?? [])];
+    }
+  }
+  if (openOuting(state) && openOuting(state).id !== outingBefore) { persist(); location.assign(outingUrl(state.outing)); return result; }
+  if (result.ok && encounter.participants?.includes('toko')) {
+    const clip = TOKO_CLIP[choice.id] ?? 'nod'; tokoActs(clip,{then:clip === 'lean' ? 'lean' : 'idle',till:120});
+  }
+  persist(); render(); return result;
+}
+
 function handleRootClick(event) {
+  if (performance.now() < campaignClickAfter) return;
   const target = event.target.closest('[data-action]');
   if (!target || target.disabled) return;
   const action = target.dataset.action;
@@ -2321,38 +2390,7 @@ function handleRootClick(event) {
     observation = inspectionCopy(item);
     render();
   } else if (action === 'choose') {
-    if (state.mode === 'encounter' && !presentAtLead() && state.battle?.status !== 'active') {
-      logToast('Not from here — the choice is at the story lead.'); render(); return;
-    }
-    const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
-    const choice = encounter.choices.find(item => item.id === target.dataset.choice);
-    const outingBefore = state.outing?.id ?? null;
-    const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
-    if (!result.ok) logToast(result.reason);
-    else if (result.startBattle && encounter.door) {
-      // A door fight has no mission behind it: its stakes are the door's own,
-      // and it is fought in Night Shift (v4.74).
-      startOuting(encounter, result.startBattle);
-    } else if (result.startBattle) {
-      // §6.4 step 5: a mission battle is fought in Night Shift, like a door's.
-      if (!startMissionOuting(encounter, result.startBattle)) startBattle(result.startBattle, doorStage(encounter));
-    } else if (encounter.door) {
-      // Answer 25: a bad deal can turn into a fight.
-      const bad = escalation(state, data, doors, encounter.door, choice.id);
-      if (bad?.battle && startOuting(encounter, bad.battle, 'The deal goes bad. It is a fight now.')) {
-        state.lastOutcome = [...(state.lastOutcome ?? []), 'The deal goes bad. It is a fight now.'];
-      } else if (bad?.effects) {
-        applyEffects(state, bad.effects, data, `door:${encounter.door}:alone`);
-        state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.', ...(state.lastOutcome ?? [])];
-      }
-    }
-    // v4.75: a choice that became a fight goes straight to it.
-    if (openOuting(state) && openOuting(state).id !== outingBefore) { persist(); location.assign(outingUrl(state.outing)); return; }
-    if (result.ok && encounter.participants?.includes('toko')) {
-      const clip = TOKO_CLIP[choice?.id] ?? 'nod';
-      tokoActs(clip, { then: clip === 'lean' ? 'lean' : 'idle', till: 120 });
-    }
-    persist(); render();
+    chooseCurrentEncounter(target.dataset.choice);
   } else if (action === 'take-door') {
     const result = takeDoor(state, data, doors, target.dataset.door, roadEvents);
     if (!result.ok) { logToast(result.reason === 'closed' ? 'That door closed at 22:00.' : result.reason); render(); return; }
@@ -2523,7 +2561,6 @@ function resetCampaign() {
 
 async function boot() {
   try {
-    bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
     story = await loadStory().catch(() => story);
@@ -2559,6 +2596,7 @@ async function boot() {
       $('modeRoot').focus();
     });
     $('modeNav').addEventListener('click', event => {
+      if (performance.now() < campaignClickAfter || sceneClub) return;
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
       state.mode = button.dataset.modeTarget;
@@ -2671,6 +2709,7 @@ async function boot() {
       if (event.key !== 'Escape' || pause.isOpen) return;
       if ($('splash').hidden === false) return;
       event.preventDefault();
+      if (sceneClub?.view) { sceneClub.view.toggleMenu(); return; }
       pause.open();
     });
 
@@ -2749,10 +2788,6 @@ async function boot() {
         if (keptYours) logToast('Your campaign is kept. Restore it from the title screen.');
       }
     }
-    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)
-    const wantCutin = new URLSearchParams(location.search).get('cutin');
-    if (wantCutin) openCutin(wantCutin);
-
     window.__ptv3 = {
       get data() { return data; },
       get state() { return state; },

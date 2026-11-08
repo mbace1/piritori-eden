@@ -1,0 +1,1655 @@
+{
+  "startedAt": "2026-11-08T16:13:15.003Z",
+  "sourceHashesBefore": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "audioEvents": [
+    {
+      "event": "contextCreated",
+      "caseId": "software-1",
+      "wall": 1794154395528,
+      "generation": 1,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "7232c3fb-9fe9-4f5d-9f76-9a16dce46174",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-1",
+      "wall": 1794154395528,
+      "generation": 1,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "7232c3fb-9fe9-4f5d-9f76-9a16dce46174",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextCreated",
+      "caseId": "software-1",
+      "wall": 1794154406780,
+      "generation": 2,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "58794b49-de84-421e-a385-2c72d34bc989",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-1",
+      "wall": 1794154406780,
+      "generation": 2,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "58794b49-de84-421e-a385-2c72d34bc989",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextCreated",
+      "caseId": "software-1",
+      "wall": 1794154407183,
+      "generation": 3,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "cf4dfaa8-74cb-4040-8e82-bded64429711",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-1",
+      "wall": 1794154407183,
+      "generation": 3,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "cf4dfaa8-74cb-4040-8e82-bded64429711",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextCreated",
+      "caseId": "software-2",
+      "wall": 1794154423879,
+      "generation": 1,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "edac3fa7-9804-430f-b57b-aed976f0dfac",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-2",
+      "wall": 1794154423879,
+      "generation": 1,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "edac3fa7-9804-430f-b57b-aed976f0dfac",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextCreated",
+      "caseId": "software-2",
+      "wall": 1794154434977,
+      "generation": 2,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "44d0219c-b41a-4bca-acb8-484e1e3dd291",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-2",
+      "wall": 1794154434977,
+      "generation": 2,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "44d0219c-b41a-4bca-acb8-484e1e3dd291",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextCreated",
+      "caseId": "software-2",
+      "wall": 1794154435342,
+      "generation": 3,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "4db352bc-a8b8-478c-81e6-16671b034b8d",
+        "contextType": "realtime",
+        "contextState": "suspended",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    },
+    {
+      "event": "contextChanged",
+      "caseId": "software-2",
+      "wall": 1794154435342,
+      "generation": 3,
+      "url": "http://127.0.0.1:37395/web/",
+      "context": {
+        "contextId": "4db352bc-a8b8-478c-81e6-16671b034b8d",
+        "contextType": "realtime",
+        "contextState": "running",
+        "callbackBufferSize": 441,
+        "maxOutputChannelCount": 2,
+        "sampleRate": 44100
+      }
+    }
+  ],
+  "navigations": [
+    {
+      "generation": 1,
+      "wall": 1794154395121,
+      "url": "http://127.0.0.1:37395/web/"
+    },
+    {
+      "generation": 2,
+      "wall": 1794154406460,
+      "url": "http://127.0.0.1:37395/web/"
+    },
+    {
+      "generation": 3,
+      "wall": 1794154406861,
+      "url": "http://127.0.0.1:37395/web/"
+    },
+    {
+      "generation": 1,
+      "wall": 1794154423406,
+      "url": "http://127.0.0.1:37395/web/"
+    },
+    {
+      "generation": 2,
+      "wall": 1794154434701,
+      "url": "http://127.0.0.1:37395/web/"
+    },
+    {
+      "generation": 3,
+      "wall": 1794154435053,
+      "url": "http://127.0.0.1:37395/web/"
+    }
+  ],
+  "cases": [
+    {
+      "id": "software-1",
+      "policy": "quiet",
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "timer-created",
+              "at": 396.69999999925494,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "delay": 9000,
+              "due": 9396.10000000149,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+              "timerId": 1
+            },
+            {
+              "type": "modal-appended",
+              "at": 404.4000000022352,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 411.9000000022352,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "delay": 2300,
+              "due": 2711.5,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 2
+            },
+            {
+              "type": "timer-created",
+              "at": 412.1000000014901,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 9912.10000000149,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 2712.400000002235,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 2,
+              "delay": 2300,
+              "due": 2711.5,
+              "lag": 0.8000000007450581,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-returned",
+              "at": 2715.400000002235,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 2,
+              "duration": 2.900000002235174,
+              "openingAfter": true
+            },
+            {
+              "type": "timer-fired",
+              "at": 9396.900000002235,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 1,
+              "delay": 9000,
+              "due": 9396.10000000149,
+              "lag": 0.8000000007450581,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-returned",
+              "at": 9397.5,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 1,
+              "duration": 0.5999999977648258,
+              "openingAfter": true
+            },
+            {
+              "type": "timer-fired",
+              "at": 9912.199999999255,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 9912.10000000149,
+              "lag": 0.09999999776482582,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 9912.699999999255,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 9912.800000000745,
+              "origin": 1794154395107.9,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 9913.300000000745,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 9913.300000000745,
+              "origin": 1794154395107.9,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 1.1000000014901161,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 359.30000000074506,
+              "duration": 58,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 189.60000000149012,
+              "fired": 199.5,
+              "lag": 9.899999998509884,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 199.5,
+              "fired": 257.9000000022352,
+              "lag": 58.400000002235174,
+              "duration": 0,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "beginRequestedWall": 1794154407078,
+      "beginReturnedWall": 1794154407222,
+      "waitStartedWall": 1794154407222,
+      "waitEndedWall": 1794154419223,
+      "waitWallMs": 12001,
+      "primaryError": null,
+      "countReadStartedWall": 1794154419223,
+      "modalCountAtPrimary": 0,
+      "countReadReturnedWall": 1794154419227,
+      "primaryCondition": true,
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 233.10000000149012,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "timer-created",
+            "at": 324.1000000014901,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 9000,
+            "due": 9324.10000000149,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+            "timerId": 1
+          },
+          {
+            "type": "modal-appended",
+            "at": 330.1000000014901,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 337.80000000074506,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 2300,
+            "due": 2637.5,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 2
+          },
+          {
+            "type": "timer-created",
+            "at": 337.9000000022352,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9837.800000000745,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "timer-fired",
+            "at": 2638.300000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 2,
+            "delay": 2300,
+            "due": 2637.5,
+            "lag": 0.8000000007450581,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 2640.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 2,
+            "duration": 2.199999999254942,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9324.800000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 1,
+            "delay": 9000,
+            "due": 9324.10000000149,
+            "lag": 0.6000000014901161,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 9325.300000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 1,
+            "duration": 0.3999999985098839,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9838.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9837.800000000745,
+            "lag": 0.6999999992549419,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 9838.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 9838.60000000149,
+            "origin": 1794154406837.5,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 9839,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 9839,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.5,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 151.40000000223517,
+            "fired": 154.20000000298023,
+            "lag": 2.800000000745058,
+            "duration": 0.3999999985098839,
+            "name": "next"
+          },
+          {
+            "requested": 154.20000000298023,
+            "fired": 180.10000000149012,
+            "lag": 25.899999998509884,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "nodeDeadlineWall": 1794154419222,
+      "actualFireWall": 1794154416676,
+      "callbackWithinNodeDeadline": true,
+      "actualRemovalWall": 1794154416676.5,
+      "removalWithinNodeDeadline": true,
+      "durationFromRegistrationMs": 9501.099999997765,
+      "metricsAfterClickRequest": null,
+      "metricsBeforeBegin": {
+        "Timestamp": 22383.124777,
+        "AudioHandlers": 59,
+        "AudioWorkletProcessors": 0,
+        "Documents": 8,
+        "Frames": 10,
+        "JSEventListeners": 132,
+        "LayoutObjects": 4229,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 7381,
+        "Resources": 170,
+        "ContextLifecycleStateObservers": 25,
+        "V8PerContextDatas": 8,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 8,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 6,
+        "ArrayBufferContents": 29,
+        "LayoutCount": 7,
+        "RecalcStyleCount": 8,
+        "LayoutDuration": 0.01427,
+        "RecalcStyleDuration": 0.009809,
+        "DevToolsCommandDuration": 0.019037,
+        "ScriptDuration": 0.011774,
+        "V8CompileDuration": 0,
+        "TaskDuration": 0.16018,
+        "TaskOtherDuration": 0.10529,
+        "ThreadTime": 0.190433,
+        "ProcessTime": 11.13,
+        "JSHeapUsedSize": 13061872,
+        "JSHeapTotalSize": 19947520,
+        "FirstMeaningfulPaint": 0,
+        "DomContentLoaded": 22382.999645,
+        "NavigationStart": 22382.885874
+      },
+      "metricsAfterPrimary": {
+        "Timestamp": 22395.282837,
+        "AudioHandlers": 87,
+        "AudioWorkletProcessors": 0,
+        "Documents": 8,
+        "Frames": 10,
+        "JSEventListeners": 149,
+        "LayoutObjects": 4488,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 7875,
+        "Resources": 170,
+        "ContextLifecycleStateObservers": 27,
+        "V8PerContextDatas": 8,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 8,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 6,
+        "ArrayBufferContents": 32,
+        "LayoutCount": 738,
+        "RecalcStyleCount": 744,
+        "LayoutDuration": 0.125836,
+        "RecalcStyleDuration": 0.153768,
+        "DevToolsCommandDuration": 0.048719,
+        "ScriptDuration": 0.033398,
+        "V8CompileDuration": 0,
+        "TaskDuration": 1.671465,
+        "TaskOtherDuration": 1.309744,
+        "ThreadTime": 7.159843,
+        "ProcessTime": 21.81,
+        "JSHeapUsedSize": 15873204,
+        "JSHeapTotalSize": 20529152,
+        "FirstMeaningfulPaint": 0,
+        "DomContentLoaded": 22382.999645,
+        "NavigationStart": 22382.885874
+      },
+      "metrics": {
+        "Timestamp": 12.158059999997931,
+        "TaskDuration": 1.511285,
+        "TaskOtherDuration": 1.2044540000000001,
+        "ThreadTime": 6.969410000000001,
+        "ProcessTime": 10.679999999999998,
+        "ScriptDuration": 0.021623999999999997,
+        "LayoutDuration": 0.111566,
+        "RecalcStyleDuration": 0.14395899999999998,
+        "DevToolsCommandDuration": 0.029682,
+        "LayoutCount": 731,
+        "RecalcStyleCount": 736
+      },
+      "metricsAfterClick": {
+        "Timestamp": null,
+        "TaskDuration": null,
+        "TaskOtherDuration": null,
+        "ThreadTime": null,
+        "ProcessTime": null,
+        "ScriptDuration": null,
+        "LayoutDuration": null,
+        "RecalcStyleDuration": null,
+        "DevToolsCommandDuration": null,
+        "LayoutCount": null,
+        "RecalcStyleCount": null
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 233.10000000149012,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "timer-created",
+            "at": 324.1000000014901,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 9000,
+            "due": 9324.10000000149,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+            "timerId": 1
+          },
+          {
+            "type": "modal-appended",
+            "at": 330.1000000014901,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 337.80000000074506,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 2300,
+            "due": 2637.5,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 2
+          },
+          {
+            "type": "timer-created",
+            "at": 337.9000000022352,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9837.800000000745,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "timer-fired",
+            "at": 2638.300000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 2,
+            "delay": 2300,
+            "due": 2637.5,
+            "lag": 0.8000000007450581,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 2640.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 2,
+            "duration": 2.199999999254942,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9324.800000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 1,
+            "delay": 9000,
+            "due": 9324.10000000149,
+            "lag": 0.6000000014901161,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 9325.300000000745,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 1,
+            "duration": 0.3999999985098839,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9838.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9837.800000000745,
+            "lag": 0.6999999992549419,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 9838.5,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 9838.60000000149,
+            "origin": 1794154406837.5,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 9839,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 9839,
+            "origin": 1794154406837.5,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.5,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 151.40000000223517,
+            "fired": 154.20000000298023,
+            "lag": 2.800000000745058,
+            "duration": 0.3999999985098839,
+            "name": "next"
+          },
+          {
+            "requested": 154.20000000298023,
+            "fired": 180.10000000149012,
+            "lag": 25.899999998509884,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "audioRealtime": [
+        {
+          "sample": 0,
+          "contextId": "7232c3fb-9fe9-4f5d-9f76-9a16dce46174",
+          "wall": 1794154419244,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 0,
+          "contextId": "58794b49-de84-421e-a385-2c72d34bc989",
+          "wall": 1794154419245,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 0,
+          "contextId": "cf4dfaa8-74cb-4040-8e82-bded64429711",
+          "wall": 1794154419245,
+          "data": {
+            "realtimeData": {
+              "currentTime": 12.100498866213153,
+              "renderCapacity": 0.00761904761904762,
+              "callbackIntervalMean": 0.00999959161289898,
+              "callbackIntervalVariance": 6.600519358699416e-8
+            }
+          }
+        },
+        {
+          "sample": 1,
+          "contextId": "7232c3fb-9fe9-4f5d-9f76-9a16dce46174",
+          "wall": 1794154419497,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 1,
+          "contextId": "58794b49-de84-421e-a385-2c72d34bc989",
+          "wall": 1794154419498,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 1,
+          "contextId": "cf4dfaa8-74cb-4040-8e82-bded64429711",
+          "wall": 1794154419498,
+          "data": {
+            "realtimeData": {
+              "currentTime": 12.350113378684807,
+              "renderCapacity": 0.004014049172102359,
+              "callbackIntervalMean": 0.00999917639857241,
+              "callbackIntervalVariance": 8.052039974083639e-8
+            }
+          }
+        }
+      ],
+      "traceMarks": [
+        {
+          "name": "opening-probe-before-native-Begin",
+          "startTime": 233
+        },
+        {
+          "name": "opening-probe-after-primary-diagnostics",
+          "startTime": 12663.10000000149
+        }
+      ],
+      "contextCensus": [
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 188.5,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 206.40000000223517,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 338,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 355.4000000022352,
+          "success": true
+        }
+      ],
+      "trace": {
+        "file": "chrome-trace.json",
+        "bytes": 50301457
+      },
+      "errors": [],
+      "primaryPass": true
+    },
+    {
+      "id": "software-2",
+      "policy": "quiet",
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "timer-created",
+              "at": 458.5,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "delay": 9000,
+              "due": 9457.89999999851,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+              "timerId": 1
+            },
+            {
+              "type": "modal-appended",
+              "at": 465.8999999985099,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 476.19999999925494,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "delay": 2300,
+              "due": 2775.699999999255,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 2
+            },
+            {
+              "type": "timer-created",
+              "at": 476.30000000074506,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 9976.199999999255,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 2776.5,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 2,
+              "delay": 2300,
+              "due": 2775.699999999255,
+              "lag": 0.8000000007450581,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-returned",
+              "at": 2778.800000000745,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 2,
+              "duration": 2.300000000745058,
+              "openingAfter": true
+            },
+            {
+              "type": "timer-fired",
+              "at": 9459.10000000149,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 1,
+              "delay": 9000,
+              "due": 9457.89999999851,
+              "lag": 1.1000000014901161,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-returned",
+              "at": 9459.800000000745,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 1,
+              "duration": 0.6999999992549419,
+              "openingAfter": true
+            },
+            {
+              "type": "timer-fired",
+              "at": 9976.699999999255,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 9976.199999999255,
+              "lag": 0.4000000022351742,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 9977.10000000149,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 9977.10000000149,
+              "origin": 1794154423393.1,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 9977.699999999255,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 9977.699999999255,
+              "origin": 1794154423393.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 1,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 37.600000001490116,
+              "duration": 59,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 424.80000000074506,
+              "duration": 58,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 223.80000000074506,
+              "fired": 230.39999999850988,
+              "lag": 6.599999997764826,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 230.39999999850988,
+              "fired": 286.6000000014901,
+              "lag": 56.20000000298023,
+              "duration": 0.09999999776482582,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "beginRequestedWall": 1794154435228,
+      "beginReturnedWall": 1794154435390,
+      "waitStartedWall": 1794154435390,
+      "waitEndedWall": 1794154447391,
+      "waitWallMs": 12001,
+      "primaryError": null,
+      "countReadStartedWall": 1794154447391,
+      "modalCountAtPrimary": 0,
+      "countReadReturnedWall": 1794154447394,
+      "primaryCondition": true,
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 179.29999999701977,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "timer-created",
+            "at": 286,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 9000,
+            "due": 9285.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+            "timerId": 1
+          },
+          {
+            "type": "modal-appended",
+            "at": 291.3999999985099,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 298,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 2300,
+            "due": 2597.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 2
+          },
+          {
+            "type": "timer-created",
+            "at": 298,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9798,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "timer-fired",
+            "at": 2598.39999999851,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 2,
+            "delay": 2300,
+            "due": 2597.89999999851,
+            "lag": 0.5,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 2601,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 2,
+            "duration": 2.5,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9286.39999999851,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 1,
+            "delay": 9000,
+            "due": 9285.89999999851,
+            "lag": 0.3999999985098839,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 9287.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 1,
+            "duration": 1.2999999970197678,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9798.199999999255,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9798,
+            "lag": 0.19999999925494194,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 9798.29999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 9798.29999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 9798.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 9798.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.5,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 139.39999999850988,
+            "fired": 139.69999999925494,
+            "lag": 0.30000000074505806,
+            "duration": 0.09999999776482582,
+            "name": "next"
+          },
+          {
+            "requested": 139.69999999925494,
+            "fired": 151.09999999776483,
+            "lag": 11.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 151.09999999776483,
+            "fired": 175.29999999701977,
+            "lag": 24.199999999254942,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "nodeDeadlineWall": 1794154447390,
+      "actualFireWall": 1794154444836.5,
+      "callbackWithinNodeDeadline": true,
+      "actualRemovalWall": 1794154444837.1,
+      "removalWithinNodeDeadline": true,
+      "durationFromRegistrationMs": 9500.79999999702,
+      "metricsAfterClickRequest": null,
+      "metricsBeforeBegin": {
+        "Timestamp": 22411.270385,
+        "AudioHandlers": 59,
+        "AudioWorkletProcessors": 0,
+        "Documents": 8,
+        "Frames": 10,
+        "JSEventListeners": 132,
+        "LayoutObjects": 4123,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 7377,
+        "Resources": 170,
+        "ContextLifecycleStateObservers": 25,
+        "V8PerContextDatas": 8,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 8,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 6,
+        "ArrayBufferContents": 29,
+        "LayoutCount": 3,
+        "RecalcStyleCount": 4,
+        "LayoutDuration": 0.004501,
+        "RecalcStyleDuration": 0.008106,
+        "DevToolsCommandDuration": 0.015008,
+        "ScriptDuration": 0.008162,
+        "V8CompileDuration": 0,
+        "TaskDuration": 0.107522,
+        "TaskOtherDuration": 0.071745,
+        "ThreadTime": 0.141674,
+        "ProcessTime": 11.3,
+        "JSHeapUsedSize": 13866984,
+        "JSHeapTotalSize": 18898944,
+        "FirstMeaningfulPaint": 0,
+        "DomContentLoaded": 22411.186558,
+        "NavigationStart": 22411.086602
+      },
+      "metricsAfterPrimary": {
+        "Timestamp": 22423.446261,
+        "AudioHandlers": 87,
+        "AudioWorkletProcessors": 0,
+        "Documents": 8,
+        "Frames": 10,
+        "JSEventListeners": 149,
+        "LayoutObjects": 4382,
+        "MediaKeySessions": 0,
+        "MediaKeys": 0,
+        "Nodes": 7873,
+        "Resources": 170,
+        "ContextLifecycleStateObservers": 27,
+        "V8PerContextDatas": 8,
+        "WorkerGlobalScopes": 0,
+        "UACSSResources": 0,
+        "RTCPeerConnections": 0,
+        "ResourceFetchers": 8,
+        "AdSubframes": 0,
+        "DetachedScriptStates": 6,
+        "ArrayBufferContents": 32,
+        "LayoutCount": 736,
+        "RecalcStyleCount": 742,
+        "LayoutDuration": 0.078636,
+        "RecalcStyleDuration": 0.135675,
+        "DevToolsCommandDuration": 0.043724,
+        "ScriptDuration": 0.031248,
+        "V8CompileDuration": 0,
+        "TaskDuration": 1.481334,
+        "TaskOtherDuration": 1.192051,
+        "ThreadTime": 7.117959,
+        "ProcessTime": 21.86,
+        "JSHeapUsedSize": 15548952,
+        "JSHeapTotalSize": 21053440,
+        "FirstMeaningfulPaint": 0,
+        "DomContentLoaded": 22411.186558,
+        "NavigationStart": 22411.086602
+      },
+      "metrics": {
+        "Timestamp": 12.175876000001153,
+        "TaskDuration": 1.373812,
+        "TaskOtherDuration": 1.120306,
+        "ThreadTime": 6.976285,
+        "ProcessTime": 10.559999999999999,
+        "ScriptDuration": 0.023086000000000002,
+        "LayoutDuration": 0.07413499999999999,
+        "RecalcStyleDuration": 0.127569,
+        "DevToolsCommandDuration": 0.028716,
+        "LayoutCount": 733,
+        "RecalcStyleCount": 738
+      },
+      "metricsAfterClick": {
+        "Timestamp": null,
+        "TaskDuration": null,
+        "TaskOtherDuration": null,
+        "ThreadTime": null,
+        "ProcessTime": null,
+        "ScriptDuration": null,
+        "LayoutDuration": null,
+        "RecalcStyleDuration": null,
+        "DevToolsCommandDuration": null,
+        "LayoutCount": null,
+        "RecalcStyleCount": null
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 179.29999999701977,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "timer-created",
+            "at": 286,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 9000,
+            "due": 9285.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at startBed (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:68:15)\n    at wake (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:47:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2579:7)",
+            "timerId": 1
+          },
+          {
+            "type": "modal-appended",
+            "at": 291.3999999985099,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 298,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 2300,
+            "due": 2597.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at arrival (http://127.0.0.1:37395/web/js/v3/sound.js?v=1:116:3)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:456:3)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 2
+          },
+          {
+            "type": "timer-created",
+            "at": 298,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9798,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37395/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37395/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37395/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "timer-fired",
+            "at": 2598.39999999851,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 2,
+            "delay": 2300,
+            "due": 2597.89999999851,
+            "lag": 0.5,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 2601,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 2,
+            "duration": 2.5,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9286.39999999851,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 1,
+            "delay": 9000,
+            "due": 9285.89999999851,
+            "lag": 0.3999999985098839,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-returned",
+            "at": 9287.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 1,
+            "duration": 1.2999999970197678,
+            "openingAfter": true
+          },
+          {
+            "type": "timer-fired",
+            "at": 9798.199999999255,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9798,
+            "lag": 0.19999999925494194,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 9798.29999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 9798.29999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 9798.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 9798.79999999702,
+            "origin": 1794154435038.3,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.5,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 139.39999999850988,
+            "fired": 139.69999999925494,
+            "lag": 0.30000000074505806,
+            "duration": 0.09999999776482582,
+            "name": "next"
+          },
+          {
+            "requested": 139.69999999925494,
+            "fired": 151.09999999776483,
+            "lag": 11.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 151.09999999776483,
+            "fired": 175.29999999701977,
+            "lag": 24.199999999254942,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "audioRealtime": [
+        {
+          "sample": 0,
+          "contextId": "edac3fa7-9804-430f-b57b-aed976f0dfac",
+          "wall": 1794154447401,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 0,
+          "contextId": "44d0219c-b41a-4bca-acb8-484e1e3dd291",
+          "wall": 1794154447402,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 0,
+          "contextId": "4db352bc-a8b8-478c-81e6-16671b034b8d",
+          "wall": 1794154447402,
+          "data": {
+            "realtimeData": {
+              "currentTime": 12.091791383219954,
+              "renderCapacity": 0.007094324540367706,
+              "callbackIntervalMean": 0.009999448645693574,
+              "callbackIntervalVariance": 7.741944164194096e-8
+            }
+          }
+        },
+        {
+          "sample": 1,
+          "contextId": "edac3fa7-9804-430f-b57b-aed976f0dfac",
+          "wall": 1794154447654,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 1,
+          "contextId": "44d0219c-b41a-4bca-acb8-484e1e3dd291",
+          "wall": 1794154447659,
+          "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+        },
+        {
+          "sample": 1,
+          "contextId": "4db352bc-a8b8-478c-81e6-16671b034b8d",
+          "wall": 1794154447659,
+          "data": {
+            "realtimeData": {
+              "currentTime": 12.350113378684807,
+              "renderCapacity": 0.00442614513638703,
+              "callbackIntervalMean": 0.00999897523860831,
+              "callbackIntervalVariance": 6.775943745743971e-8
+            }
+          }
+        }
+      ],
+      "traceMarks": [
+        {
+          "name": "opening-probe-before-native-Begin",
+          "startTime": 179.19999999925494
+        },
+        {
+          "name": "opening-probe-after-primary-diagnostics",
+          "startTime": 12623.099999997765
+        }
+      ],
+      "contextCensus": [
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 184.39999999850988,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 201.29999999701977,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 298.19999999925494,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 313.29999999701977,
+          "success": true
+        }
+      ],
+      "errors": [],
+      "primaryPass": true
+    }
+  ],
+  "limits": [
+    "PRIVATE launcher-profile experiment only: --disable-gpu +autoplay; both forcedANGLE/unsafeSwiftShader flags removed. Two fresh warmCPU2x cases, source/runtime/clock unchanged.",
+    "Final quietNode12000 window has no browser/CDPpolling or pending metrics. Light nativeTrace firstcase only; secondcase untraced. Actualremoval checked against originalcutoff.",
+    "No runtime/animation/timer/deadline/testclock change; both primary waits stay12000ms.",
+    "Each arm uses a fresh browser and identical cold auto/history/key-skip/warm auto route.",
+    "Actualfire checks originalNodecutoff; later snapshots do not overwrite primary result. Old audioIDs are queried only after strictprimary observation;9000/2300callbacks are observed withoutdelaychange."
+  ],
+  "providedLaunchArgs": [
+    "--disable-gpu",
+    "--autoplay-policy=no-user-gesture-required"
+  ],
+  "commandLineIntrospectionError": "cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "sourceHashesAfter": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "sourceUnchanged": true,
+  "finishedAt": "2026-11-08T16:14:07.711Z"
+}

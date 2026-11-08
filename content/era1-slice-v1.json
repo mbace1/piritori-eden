@@ -196,9 +196,6 @@
       "age": 24,
       "origin_anchor_id": "harju",
       "role": "runner",
-      "portrait_asset_id": "head-kallio-01-v03",
-      "torso_asset_id": "torso-runner-v03",
-      "legs_asset_id": "legs-runner-v03",
       "condition": 8,
       "nerve": 6,
       "tempo": 8,
@@ -213,16 +210,14 @@
         "feature-phone"
       ],
       "recruit_encounter_id": "enc-runner-at-tram-stop",
-      "named": true
+      "named": true,
+      "portrait_kind": "initials"
     },
     {
       "id": "crew-slot-muscle",
       "age": 46,
       "origin_anchor_id": "linjat_yard",
       "role": "muscle",
-      "portrait_asset_id": "head-kallio-03-v03",
-      "torso_asset_id": "torso-muscle-v03",
-      "legs_asset_id": "legs-muscle-v03",
       "condition": 10,
       "nerve": 7,
       "tempo": 4,
@@ -237,16 +232,14 @@
         "baseball-bat"
       ],
       "recruit_encounter_id": "enc-mccormick-yard",
-      "named": true
+      "named": true,
+      "portrait_kind": "initials"
     },
     {
       "id": "crew-slot-watcher",
       "age": 31,
       "origin_anchor_id": "hakaniemi",
       "role": "watcher",
-      "portrait_asset_id": "head-kallio-05-v03",
-      "torso_asset_id": "torso-watcher-v03",
-      "legs_asset_id": "legs-watcher-v03",
       "condition": 7,
       "nerve": 8,
       "tempo": 7,
@@ -261,16 +254,14 @@
         "feature-phone"
       ],
       "recruit_encounter_id": "enc-karhupuisto-watch",
-      "named": true
+      "named": true,
+      "portrait_kind": "initials"
     },
     {
       "id": "crew-slot-fixer",
       "age": 29,
       "origin_anchor_id": "vaasankatu",
       "role": "fixer",
-      "portrait_asset_id": "head-kallio-07-v03",
-      "torso_asset_id": "torso-fixer-v03",
-      "legs_asset_id": "legs-fixer-v03",
       "condition": 7,
       "nerve": 7,
       "tempo": 6,
@@ -285,16 +276,14 @@
         "feature-phone"
       ],
       "recruit_encounter_id": "enc-toko-quiet-voice",
-      "named": false
+      "named": false,
+      "portrait_kind": "initials"
     },
     {
       "id": "crew-slot-driver",
       "age": 39,
       "origin_anchor_id": "siltasaari",
       "role": "driver",
-      "portrait_asset_id": "head-kallio-09-v03",
-      "torso_asset_id": "torso-driver-v03",
-      "legs_asset_id": "legs-driver-v03",
       "condition": 8,
       "nerve": 6,
       "tempo": 5,
@@ -309,16 +298,14 @@
         "feature-phone"
       ],
       "recruit_encounter_id": "enc-bank-counter",
-      "named": false
+      "named": false,
+      "portrait_kind": "initials"
     },
     {
       "id": "crew-slot-local",
       "age": 35,
       "origin_anchor_id": "torkkelinmaki",
       "role": "local",
-      "portrait_asset_id": "head-kallio-11-v03",
-      "torso_asset_id": "torso-local-v03",
-      "legs_asset_id": "legs-local-v03",
       "condition": 8,
       "nerve": 8,
       "tempo": 6,
@@ -333,7 +320,8 @@
         "baton"
       ],
       "recruit_encounter_id": "enc-courtyard-last-call",
-      "named": false
+      "named": false,
+      "portrait_kind": "initials"
     }
   ],
   "equipment": [
@@ -2363,10 +2351,8 @@
     }
   ],
   "asset_refs": [
-    "scene-toko-noodles-prototype-v02",
     "scene-karhupuisto-v01",
     "scene-courtyard-prototype-v05",
-    "formation-grid-3x3-v01",
     "weather-rain-fine-v01",
     "weather-wet-sheen-v01",
     "foliage-lime-tree-v01",

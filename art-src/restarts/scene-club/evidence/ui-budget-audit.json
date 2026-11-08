@@ -1,0 +1,2245 @@
+{
+  "cases": [
+    {
+      "name": "phone",
+      "states": [
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 189.109375,
+          "ratio": 0.3535257927117842,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "enter",
+              "rect": {
+                "x": 25,
+                "y": 699.65625,
+                "width": 340,
+                "height": 44
+              },
+              "font": 15.6
+            }
+          ],
+          "texts": [],
+          "choices": [],
+          "label": "arrival"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 248.015625,
+          "ratio": 0.438487368444775,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 269.65625,
+                "y": 101.828125,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 532.640625,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 15.6,
+              "rect": {
+                "x": 22,
+                "y": 528.640625,
+                "width": 327.546875,
+                "height": 44
+              }
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 592.640625,
+                "width": 243.15625,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 616.34375,
+                "width": 342,
+                "height": 14.96875
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 651.3125,
+                "width": 154.703125,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 675.015625,
+                "width": 342,
+                "height": 14.96875
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 709.984375,
+                "width": 280.84375,
+                "height": 22
+              }
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 733.6875,
+                "width": 342,
+                "height": 14.96875
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            }
+          ],
+          "label": "scene-initial"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 248.015625,
+          "ratio": 0.438487368444775,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 269.65625,
+                "y": 101.828125,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 532.640625,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 15.6,
+              "rect": {
+                "x": 22,
+                "y": 528.640625,
+                "width": 327.546875,
+                "height": 44
+              }
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 592.640625,
+                "width": 243.15625,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 616.34375,
+                "width": 342,
+                "height": 14.96875
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 651.3125,
+                "width": 154.703125,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 675.015625,
+                "width": 342,
+                "height": 14.96875
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 15.6,
+              "rect": {
+                "x": 25,
+                "y": 709.984375,
+                "width": 280.84375,
+                "height": 22
+              }
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 12.48,
+              "rect": {
+                "x": 25,
+                "y": 733.6875,
+                "width": 342,
+                "height": 14.96875
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "disabled": false
+            }
+          ],
+          "label": "choices"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 181.765625,
+          "ratio": 0.3429337660288914,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "return",
+              "rect": {
+                "x": 12,
+                "y": 712.65625,
+                "width": 366,
+                "height": 44
+              },
+              "font": 15.6
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 269.65625,
+                "y": 101.828125,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 598.890625,
+                "width": 52.890625,
+                "height": 17
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 15.6,
+              "rect": {
+                "x": 80.890625,
+                "y": 594.890625,
+                "width": 265.046875,
+                "height": 22
+              }
+            }
+          ],
+          "choices": [],
+          "label": "leave-result"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 118.953125,
+          "ratio": 0.2523381335496811,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "map-return"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 0,
+          "bottomH": 346.65625,
+          "ratio": 0.49998873188650755,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": true,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "review-open"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 150,
+          "ratio": 0.29711761656863406,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 12,
+                "y": 662.65625,
+                "width": 366,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 12,
+                "y": 712.65625,
+                "width": 366,
+                "height": 44
+              },
+              "font": 15.6
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 269.65625,
+                "y": 101.828125,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 630.65625,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Toko dries a bowl and lowers his voice.",
+              "font": 15.6,
+              "rect": {
+                "x": 67.375,
+                "y": 626.65625,
+                "width": 282.265625,
+                "height": 22
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-first"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "topH": 56,
+          "bottomH": 150,
+          "ratio": 0.29711761656863406,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 12,
+                "y": 662.65625,
+                "width": 366,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 12,
+                "y": 712.65625,
+                "width": 366,
+                "height": 44
+              },
+              "font": 15.6
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 269.65625,
+                "y": 101.828125,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 630.65625,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Three delivery vans.",
+              "font": 15.6,
+              "rect": {
+                "x": 67.375,
+                "y": 626.65625,
+                "width": 145.640625,
+                "height": 22
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-second"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "states": [
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 174.4375,
+          "ratio": 0.288046875,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "enter",
+              "rect": {
+                "x": 25,
+                "y": 731,
+                "width": 400,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [],
+          "choices": [],
+          "label": "arrival"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 251.53125,
+          "ratio": 0.3844140625,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 12,
+                "y": 614.65625,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 12,
+                "y": 674.4375,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 12,
+                "y": 734.21875,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 329.65625,
+                "y": 26.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 560.46875,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 17,
+              "rect": {
+                "x": 22,
+                "y": 555.46875,
+                "width": 387.59375,
+                "height": 45.09375
+              }
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 620.65625,
+                "width": 249.5,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 644.84375,
+                "width": 402,
+                "height": 15.59375
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 680.4375,
+                "width": 158.734375,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 704.625,
+                "width": 402,
+                "height": 15.59375
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 740.21875,
+                "width": 288.171875,
+                "height": 22
+              }
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 764.40625,
+                "width": 402,
+                "height": 15.59375
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 12,
+                "y": 614.65625,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 12,
+                "y": 674.4375,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 12,
+                "y": 734.21875,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            }
+          ],
+          "label": "scene-initial"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 251.53125,
+          "ratio": 0.3844140625,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 12,
+                "y": 614.65625,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 12,
+                "y": 674.4375,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 12,
+                "y": 734.21875,
+                "width": 426,
+                "height": 53.78125
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 329.65625,
+                "y": 26.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 560.46875,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 17,
+              "rect": {
+                "x": 22,
+                "y": 555.46875,
+                "width": 387.59375,
+                "height": 45.09375
+              }
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 620.65625,
+                "width": 249.5,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 644.84375,
+                "width": 402,
+                "height": 15.59375
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 680.4375,
+                "width": 158.734375,
+                "height": 22
+              }
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 704.625,
+                "width": 402,
+                "height": 15.59375
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 16,
+              "rect": {
+                "x": 25,
+                "y": 740.21875,
+                "width": 288.171875,
+                "height": 22
+              }
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 13,
+              "rect": {
+                "x": 25,
+                "y": 764.40625,
+                "width": 402,
+                "height": 15.59375
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 12,
+                "y": 614.65625,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 12,
+                "y": 674.4375,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 12,
+                "y": 734.21875,
+                "width": 426,
+                "height": 53.78125
+              },
+              "disabled": false
+            }
+          ],
+          "label": "choices"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 182.59375,
+          "ratio": 0.2982421875,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "return",
+              "rect": {
+                "x": 12,
+                "y": 744,
+                "width": 426,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 329.65625,
+                "y": 26.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 629.40625,
+                "width": 52.890625,
+                "height": 17
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 17,
+              "rect": {
+                "x": 80.890625,
+                "y": 624.40625,
+                "width": 288.9375,
+                "height": 23
+              }
+            }
+          ],
+          "choices": [],
+          "label": "leave-result"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 119.6875,
+          "ratio": 0.219609375,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "map-return"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 0,
+          "bottomH": 355,
+          "ratio": 0.44375,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": true,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "review-open"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 150.09375,
+          "ratio": 0.2576171875,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 12,
+                "y": 694,
+                "width": 426,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 12,
+                "y": 744,
+                "width": 426,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 329.65625,
+                "y": 26.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 661.90625,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Toko dries a bowl and lowers his voice.",
+              "font": 17,
+              "rect": {
+                "x": 67.375,
+                "y": 656.90625,
+                "width": 307.71875,
+                "height": 23
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-first"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 800
+          },
+          "topH": 56,
+          "bottomH": 150.09375,
+          "ratio": 0.2576171875,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 12,
+                "y": 694,
+                "width": 426,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 12,
+                "y": 744,
+                "width": 426,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 329.65625,
+                "y": 26.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 22,
+                "y": 661.90625,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Three delivery vans.",
+              "font": 17,
+              "rect": {
+                "x": 67.375,
+                "y": 656.90625,
+                "width": 158.765625,
+                "height": 23
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-second"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "states": [
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 116.78125,
+          "ratio": 0.41225961538461536,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "enter",
+              "rect": {
+                "x": 325.3125,
+                "y": 337,
+                "width": 193.375,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [],
+          "choices": [],
+          "label": "arrival"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 104,
+          "ratio": 0.37948717948717947,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "dialogue",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "respond",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 430.34375,
+                "y": 14.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 294,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 294,
+                "width": 163.890625,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "scene-initial"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 142,
+          "ratio": 0.47692307692307695,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "choices",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 316.3125,
+                "y": 248,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 316.3125,
+                "y": 295,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 430.34375,
+                "y": 14.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Ask before taking it",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 252.109375,
+                "width": 118.015625,
+                "height": 17
+              }
+            },
+            {
+              "text": "+300 mk · trust +1",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 271.5,
+                "width": 191.375,
+                "height": 14.390625
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 299.109375,
+                "width": 119.046875,
+                "height": 17
+              }
+            },
+            {
+              "text": "+300 mk · trust -1",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 318.5,
+                "width": 191.375,
+                "height": 14.390625
+              }
+            },
+            {
+              "text": "Leave it under the map",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 346.109375,
+                "width": 139.109375,
+                "height": 17
+              }
+            },
+            {
+              "text": "No bank offer · trust +2",
+              "font": 12,
+              "rect": {
+                "x": 327.3125,
+                "y": 365.5,
+                "width": 191.375,
+                "height": 14.390625
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 316.3125,
+                "y": 248,
+                "width": 211.375,
+                "height": 44
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 316.3125,
+                "y": 295,
+                "width": 211.375,
+                "height": 44
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 211.375,
+                "height": 44
+              },
+              "disabled": false
+            }
+          ],
+          "label": "choices"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 129.390625,
+          "ratio": 0.44459134615384616,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "return",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 430.34375,
+                "y": 14.5,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 268.609375,
+                "width": 52.890625,
+                "height": 17
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 268.609375,
+                "width": 175.703125,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "leave-result"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 129.78125,
+          "ratio": 0.44559294871794874,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "map-return"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 0,
+          "bottomH": 195,
+          "ratio": 0.5,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": true,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "review-open"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 104,
+          "ratio": 0.37948717948717947,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 103.6875,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 424,
+                "y": 342,
+                "width": 103.6875,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 23,
+                "width": 104,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 294,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Toko dries a bowl and lowers his voice.",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 294,
+                "width": 167.765625,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-first"
+        },
+        {
+          "stage": {
+            "x": 312.3125,
+            "y": 0,
+            "width": 219.375,
+            "height": 390
+          },
+          "topH": 44,
+          "bottomH": 142,
+          "ratio": 0.47692307692307695,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 316.3125,
+                "y": 292,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 316.3125,
+                "y": 342,
+                "width": 211.375,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 324.3125,
+                "y": 23,
+                "width": 104,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 326.3125,
+                "y": 260,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Three delivery vans.",
+              "font": 12,
+              "rect": {
+                "x": 371.6875,
+                "y": 260,
+                "width": 112.078125,
+                "height": 17
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-second"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "edge",
+      "states": [
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 174.859375,
+          "ratio": 0.4708915772062401,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "enter",
+              "rect": {
+                "x": 21,
+                "y": 416.875,
+                "width": 229,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [],
+          "choices": [],
+          "label": "arrival"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 108,
+          "ratio": 0.3321116985048487,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "dialogue",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "respond",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 158.65625,
+                "y": 22.609375,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "rect": {
+                "x": 16,
+                "y": 381.875,
+                "width": 41.421875,
+                "height": 17
+              }
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 12,
+              "rect": {
+                "x": 16,
+                "y": 381.875,
+                "width": 209.46875,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "scene-initial"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 146,
+          "ratio": 0.4109882268997503,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "choices",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 8,
+                "y": 335.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 8,
+                "y": 382.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 16
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 158.65625,
+                "y": 22.609375,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Ask before taking it",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 339.984375,
+                "width": 118.015625,
+                "height": 17
+              }
+            },
+            {
+              "text": "+300 mk · trust +1",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 359.375,
+                "width": 235,
+                "height": 14.390625
+              }
+            },
+            {
+              "text": "Call it family money",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 386.984375,
+                "width": 119.046875,
+                "height": 17
+              }
+            },
+            {
+              "text": "+300 mk · trust -1",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 406.375,
+                "width": 235,
+                "height": 14.390625
+              }
+            },
+            {
+              "text": "Leave it under the map",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 433.984375,
+                "width": 139.109375,
+                "height": 17
+              }
+            },
+            {
+              "text": "No bank offer · trust +2",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 453.375,
+                "width": 235,
+                "height": 14.390625
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "rect": {
+                "x": 8,
+                "y": 335.875,
+                "width": 255,
+                "height": 44
+              },
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "rect": {
+                "x": 8,
+                "y": 382.875,
+                "width": 255,
+                "height": 44
+              },
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "disabled": false
+            }
+          ],
+          "label": "choices"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 133.390625,
+          "ratio": 0.38481497097265915,
+          "budgetReady": "true",
+          "density": "compact",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "return",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 158.65625,
+                "y": 22.609375,
+                "width": 41.34375,
+                "height": 15
+              }
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "rect": {
+                "x": 16,
+                "y": 356.484375,
+                "width": 52.890625,
+                "height": 17
+              }
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 12,
+              "rect": {
+                "x": 16,
+                "y": 356.484375,
+                "width": 234.40625,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "leave-result"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 111.78125,
+          "ratio": 0.3399604320046703,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "map-return"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 0,
+          "bottomH": 240.875,
+          "ratio": 0.49998378360847145,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": true,
+          "targets": [],
+          "texts": [],
+          "choices": [],
+          "label": "review-open"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 168,
+          "ratio": 0.45665358544416695,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 8,
+                "y": 379.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 32.109375,
+                "width": 98,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 18,
+                "y": 325.875,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Toko dries a bowl and lowers his voice.",
+              "font": 12,
+              "rect": {
+                "x": 18,
+                "y": 325.875,
+                "width": 227.28125,
+                "height": 39
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-first"
+        },
+        {
+          "stage": {
+            "x": 0,
+            "y": 0.109375,
+            "width": 271,
+            "height": 481.765625
+          },
+          "topH": 52,
+          "bottomH": 146,
+          "ratio": 0.4109882268997503,
+          "budgetReady": "true",
+          "density": "full",
+          "uiStage": "both",
+          "reviewOpen": false,
+          "targets": [
+            {
+              "id": "next-line",
+              "rect": {
+                "x": 8,
+                "y": 379.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 16
+            },
+            {
+              "id": "back-to-scene",
+              "rect": {
+                "x": 8,
+                "y": 429.875,
+                "width": 255,
+                "height": 44
+              },
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "300 mk",
+              "font": 12,
+              "rect": {
+                "x": 19,
+                "y": 32.109375,
+                "width": 98,
+                "height": 15
+              }
+            },
+            {
+              "text": "Toko",
+              "font": 12,
+              "rect": {
+                "x": 18,
+                "y": 347.875,
+                "width": 39.375,
+                "height": 17
+              }
+            },
+            {
+              "text": "Three delivery vans.",
+              "font": 12,
+              "rect": {
+                "x": 63.375,
+                "y": 347.875,
+                "width": 112.078125,
+                "height": 17
+              }
+            }
+          ],
+          "choices": [],
+          "label": "toko-second"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "failures": []
+}

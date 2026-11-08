@@ -1,0 +1,23 @@
+  ok   desktop: the ledger shows both families
+  ok   desktop: both start neutral
+  ok   desktop: the night brings their bill
+  ok   desktop: and it reads as theirs
+  ok   desktop: paying buys them back to wary
+  ok   desktop: retaliating, first they warn you
+  ok   desktop: the card says retaliating, and when
+  ok   desktop: the next night they come
+  ok   desktop: alone, Aatami cannot stand against them
+  ok   desktop: no overflow
+  ok   desktop: no errors
+  ok   phone: the ledger shows both families
+  ok   phone: both start neutral
+  ok   phone: the night brings their bill
+  ok   phone: and it reads as theirs
+  ok   phone: paying buys them back to wary
+  ok   phone: retaliating, first they warn you
+  ok   phone: the card says retaliating, and when
+  ok   phone: the next night they come
+  ok   phone: alone, Aatami cannot stand against them
+  ok   phone: no overflow
+  ok   phone: no errors
+standing-browser: 22 passed, 0 failed

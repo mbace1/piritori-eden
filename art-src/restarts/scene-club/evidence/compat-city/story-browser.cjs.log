@@ -1,0 +1,32 @@
+  ok   desktop: four mission briefings
+  ok   desktop: the first is open, with its steps and stakes
+  ok   desktop: a mission not yet told is only a title
+  ok   desktop: the case board lists every clue, none found
+  ok   desktop: at Brahenkenttä the Thursday visit is offered
+  ok   desktop: watching the tram records the clue
+  ok   desktop: the board shows what was found
+  ok   desktop: at Piritori the case can be opened, unlit
+  ok   desktop: the Thursday Tram offers four endings
+  ok   desktop: the first choice is in view
+  ok   desktop: selling Kello pays €250 and is recorded once
+  ok   desktop: the block did not turn
+  ok   desktop: the case is not offered again
+  ok   desktop: the board records how it was settled
+  ok   desktop: no page errors
+  ok   phone: four mission briefings
+  ok   phone: the first is open, with its steps and stakes
+  ok   phone: a mission not yet told is only a title
+  ok   phone: the case board lists every clue, none found
+  ok   phone: at Brahenkenttä the Thursday visit is offered
+  ok   phone: watching the tram records the clue
+  ok   phone: the board shows what was found
+  ok   phone: at Piritori the case can be opened, unlit
+  ok   phone: the Thursday Tram offers four endings
+  ok   phone: the first choice is in view
+  ok   phone: selling Kello pays €250 and is recorded once
+  ok   phone: the block did not turn
+  ok   phone: the case is not offered again
+  ok   phone: the board records how it was settled
+  ok   phone: no page errors
+
+  30 passed, 0 failed

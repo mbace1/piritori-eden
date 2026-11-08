@@ -1,0 +1,10 @@
+PASS phone-ask-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS phone-take-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS phone-leave-it: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS desktop-ask-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS desktop-take-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS desktop-leave-it: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS landscape-ask-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS landscape-take-envelope: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS landscape-leave-it: full engine state, reload, native duplicate guards, real return/travel and bounded scene UI
+PASS Scene Club campaign: 1841 checks; real earned checkpoint, all3 choices at3 native viewports, exact saves/reloads and ≤50% UI.

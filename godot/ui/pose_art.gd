@@ -1,28 +1,7 @@
 class_name PoseArt
 extends RefCounted
-## Composite pose art for units in scene.
-##
-## The approved pack ships whole-figure poses per role under
-## data/art/animation/<role>/ — idle-smile, talk, guard, hit-light, strike,
-## walk-contact, walk-pass. These are drawn WITH hands, in three-quarter view,
-## with real weight, and they are what a unit looks like in a location or a
-## battle. The modular head/torso/legs parts are a roster paper doll only
-## (see ui/crew_figure.gd).
-##
-## DESIGN_AUTHORITY, "Active visual baseline":
-##   "The older claim that the map/interiors must be PAPER while fights become a
-##   separate polished INK style is superseded. Battles may be darker and more
-##   dramatic, but they retain the same cut-paper and hand-marker construction."
-##
-## So there is ONE set of pose art, and the battle darkens it at draw time via
-## night_modulate() rather than a second art style existing.
-
-## Registered, approved animation sets — canon, synced from art/v3.
-const DIR := "res://data/art/animation/"
-## Candidate cast, staged by art-src/install-poses.sh and NOT yet registered.
-## Preferred when present so the port shows the current work, while canon stays
-## untouched and sync-data.mjs --check keeps meaning something.
-const CAST_DIR := "res://data/art/cast/"
+## Compatibility API for the paused port. Old role sprite sets were deleted
+## on 2026-11-08. Never load old synced copies; callers use their neutral fallback.
 
 ## Pose names, mapped to what the fight model can actually be in.
 const IDLE := "idle-smile"
@@ -33,35 +12,11 @@ const STRIKE := "strike"
 const WALK_A := "walk-contact"
 const WALK_B := "walk-pass"
 
-## Roles with a pose set on disk. Anything else falls back to the runner, which
-## is the only complete set in the approved pack.
-const FALLBACK_ROLE := "runner"
+static func texture(_role: String, _pose: String) -> Texture2D:
+	return null
 
-static var _cache: Dictionary = {}
-
-
-static func texture(role: String, pose: String) -> Texture2D:
-	var key := "%s/%s" % [role, pose]
-	if _cache.has(key):
-		return _cache[key]
-	var tex: Texture2D = null
-	for dir in [CAST_DIR, DIR]:
-		for ext in [".webp", ".png"]:
-			var path: String = String(dir) + role + "/" + pose + "-frame00" + String(ext)
-			if ResourceLoader.exists(path):
-				tex = load(path)
-				break
-		if tex != null:
-			break
-	if tex == null and role != FALLBACK_ROLE:
-		tex = texture(FALLBACK_ROLE, pose)
-	_cache[key] = tex
-	return tex
-
-
-static func has_role(role: String) -> bool:
-	return ResourceLoader.exists(DIR + role + "/" + IDLE + "-frame00.webp") \
-		or ResourceLoader.exists(DIR + role + "/" + IDLE + "-frame00.png")
+static func has_role(_role: String) -> bool:
+	return false
 
 
 ## The pose a fighter should be drawn in, from its live state.

@@ -1,0 +1,65 @@
+{
+  "events": 254387,
+  "teardown": [
+    {
+      "name": "ThreadControllerImpl::RunTask",
+      "durationMs": 1.649,
+      "thread": "CrRendererMain",
+      "ts": 22383503575,
+      "args": {
+        "chrome_task_annotator": {
+          "delay_policy": "FLEXIBLE_NO_SOONER",
+          "task_delay_us": 1000000
+        },
+        "src_file": "third_party/blink/renderer/platform/widget/widget_base.cc",
+        "src_func": "Shutdown",
+        "src_line": 341
+      }
+    },
+    {
+      "name": "LayerTreeHost::~LayerTreeHost",
+      "durationMs": 1.61,
+      "thread": "CrRendererMain",
+      "ts": 22383503591,
+      "args": {}
+    },
+    {
+      "name": "ProxyMain::Stop",
+      "durationMs": 1.601,
+      "thread": "CrRendererMain",
+      "ts": 22383503596,
+      "args": {}
+    },
+    {
+      "name": "ThreadControllerImpl::RunTask",
+      "durationMs": 1.354,
+      "thread": "CrRendererMain",
+      "ts": 22383904132,
+      "args": {
+        "chrome_task_annotator": {
+          "delay_policy": "FLEXIBLE_NO_SOONER",
+          "task_delay_us": 1000000
+        },
+        "src_file": "third_party/blink/renderer/platform/widget/widget_base.cc",
+        "src_func": "Shutdown",
+        "src_line": 341
+      }
+    },
+    {
+      "name": "LayerTreeHost::~LayerTreeHost",
+      "durationMs": 1.292,
+      "thread": "CrRendererMain",
+      "ts": 22383904137,
+      "args": {}
+    },
+    {
+      "name": "ProxyMain::Stop",
+      "durationMs": 1.283,
+      "thread": "CrRendererMain",
+      "ts": 22383904142,
+      "args": {}
+    }
+  ],
+  "maxProxyStopMs": 1.601,
+  "gpuWaitCount": 0
+}

@@ -1,0 +1,88 @@
+  ok   desktop splash: no text under 12px
+  ok   desktop splash: monospace only in the ledger voice
+  ok   desktop splash: every enabled text meets AA against its real background
+  ok   desktop map: no text under 12px
+  ok   desktop map: monospace only in the ledger voice
+  ok   desktop map: every enabled text meets AA against its real background
+  ok   desktop journey preview: no text under 12px
+  ok   desktop journey preview: monospace only in the ledger voice
+  ok   desktop journey preview: every enabled text meets AA against its real background
+  ok   desktop encounter: no text under 12px
+  ok   desktop encounter: monospace only in the ledger voice
+  ok   desktop encounter: every enabled text meets AA against its real background
+  ok   desktop encounter choices: no text under 12px
+  ok   desktop encounter choices: monospace only in the ledger voice
+  ok   desktop encounter choices: every enabled text meets AA against its real background
+  ok   desktop ledger: no text under 12px
+  ok   desktop ledger: monospace only in the ledger voice
+  ok   desktop ledger: every enabled text meets AA against its real background
+  ok   desktop street seller: no text under 12px
+  ok   desktop street seller: monospace only in the ledger voice
+  ok   desktop street seller: every enabled text meets AA against its real background
+  ok   desktop tokon ramen: no text under 12px
+  ok   desktop tokon ramen: monospace only in the ledger voice
+  ok   desktop tokon ramen: every enabled text meets AA against its real background
+  ok   desktop tokon ramen, after a bowl: no text under 12px
+  ok   desktop tokon ramen, after a bowl: monospace only in the ledger voice
+  ok   desktop tokon ramen, after a bowl: every enabled text meets AA against its real background
+  ok   desktop the thursday tram: no text under 12px
+  ok   desktop the thursday tram: monospace only in the ledger voice
+  ok   desktop the thursday tram: every enabled text meets AA against its real background
+  ok   desktop the thursday tram choices: no text under 12px
+  ok   desktop the thursday tram choices: monospace only in the ledger voice
+  ok   desktop the thursday tram choices: every enabled text meets AA against its real background
+  ok   desktop road event: no text under 12px
+  ok   desktop road event: monospace only in the ledger voice
+  ok   desktop road event: every enabled text meets AA against its real background
+  ok   desktop news: no text under 12px
+  ok   desktop news: monospace only in the ledger voice
+  ok   desktop news: every enabled text meets AA against its real background
+  ok   desktop battle: no text under 12px
+  ok   desktop battle: monospace only in the ledger voice
+  ok   desktop battle: every enabled text meets AA against its real background
+  ok   desktop: no page errors
+  ok   phone splash: no text under 12px
+  ok   phone splash: monospace only in the ledger voice
+  ok   phone splash: every enabled text meets AA against its real background
+  ok   phone map: no text under 12px
+  ok   phone map: monospace only in the ledger voice
+  ok   phone map: every enabled text meets AA against its real background
+  ok   phone journey preview: no text under 12px
+  ok   phone journey preview: monospace only in the ledger voice
+  ok   phone journey preview: every enabled text meets AA against its real background
+  ok   phone encounter: no text under 12px
+  ok   phone encounter: monospace only in the ledger voice
+  ok   phone encounter: every enabled text meets AA against its real background
+  ok   phone encounter choices: no text under 12px
+  ok   phone encounter choices: monospace only in the ledger voice
+  ok   phone encounter choices: every enabled text meets AA against its real background
+  ok   phone ledger: no text under 12px
+  ok   phone ledger: monospace only in the ledger voice
+  ok   phone ledger: every enabled text meets AA against its real background
+  ok   phone street seller: no text under 12px
+  ok   phone street seller: monospace only in the ledger voice
+  ok   phone street seller: every enabled text meets AA against its real background
+  ok   phone tokon ramen: no text under 12px
+  ok   phone tokon ramen: monospace only in the ledger voice
+  ok   phone tokon ramen: every enabled text meets AA against its real background
+  ok   phone tokon ramen, after a bowl: no text under 12px
+  ok   phone tokon ramen, after a bowl: monospace only in the ledger voice
+  ok   phone tokon ramen, after a bowl: every enabled text meets AA against its real background
+  ok   phone the thursday tram: no text under 12px
+  ok   phone the thursday tram: monospace only in the ledger voice
+  ok   phone the thursday tram: every enabled text meets AA against its real background
+  ok   phone the thursday tram choices: no text under 12px
+  ok   phone the thursday tram choices: monospace only in the ledger voice
+  ok   phone the thursday tram choices: every enabled text meets AA against its real background
+  ok   phone road event: no text under 12px
+  ok   phone road event: monospace only in the ledger voice
+  ok   phone road event: every enabled text meets AA against its real background
+  ok   phone news: no text under 12px
+  ok   phone news: monospace only in the ledger voice
+  ok   phone news: every enabled text meets AA against its real background
+  ok   phone battle: no text under 12px
+  ok   phone battle: monospace only in the ledger voice
+  ok   phone battle: every enabled text meets AA against its real background
+  ok   phone: no page errors
+
+  86 passed, 0 failed

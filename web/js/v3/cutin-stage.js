@@ -6,7 +6,7 @@
 //
 // This module draws the picture: the backdrop, the figure, the bubble or the TV. The words and the buttons are HTML,
 // laid over the canvas by the caller at the boxes exported here, so they wrap, scale and stay readable.
-// art-src/cutins/review.html imports the same clips and drawing to film reviews: one implementation, two uses.
+// Legacy compatibility motion only; the replacement composition has a separate review gate.
 export const W = 1080, H = 1920;
 const D = Math.PI / 180;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -47,20 +47,7 @@ export const CUTINS = {
     bubble: { x: 350, y: 360, w: 690, h: 380, tail: [[740, 736], [630, 800], [630, 737]] },
     clips: PERSON,
   },
-  arvo: {
-    rig: 'cutin-arvo-rig-v01', name: 'ARVO LINDE', layout: 'news',
-    // ART_BIBLE §13.2, the Arvo section: "breathing, blink, paper glance, small hand gesture" — and a jaw, so he reads aloud
-    copy: { x: 40, y: 1130, w: 1000, h: 640 },
-    clips: {
-      idle: { dur: 3, loop: true, f: (t) => P({ sy: breath(t, 3), rot: 0.8 * D * Math.sin(t / 3 * 2 * Math.PI), blink: key([[0, 0], [1.9, 0], [2.0, 1], [2.1, 0]], t) }) },
-      read: { dur: 6, f: (t) => P({ sy: 1.004, rot: key([[0, 0], [1.2, -1.2 * D], [2.6, 0.8 * D], [4.2, -0.6 * D], [6, 0]], t), ty: key([[0, 0], [1.5, 2], [1.7, 0], [3.4, 3], [3.6, 0], [6, 0]], t),
-        jaw: t < 5.6 ? say('a.e.a..e.a.e..a.ea..e.a.a..e.a.e.a...', t) : 0, blink: key([[0, 0], [2.9, 0], [3.0, 1], [3.1, 0]], t) }) },
-      glance: { dur: 2.6, f: (t) => P({ rot: key([[0, 0], [0.4, 1.5 * D], [1.6, 1.5 * D], [2.0, 0]], t), ty: key([[0, 0], [0.4, 12], [1.6, 12], [2.0, 0]], t), blink: key([[0, 0], [0.3, 0], [0.4, 0.7], [1.6, 0.7], [1.7, 0]], t) }) },
-      gesture: { dur: 4, f: (t) => P({ sy: 1.004, rot: key([[0, 0], [1, -1 * D], [2.4, 1 * D], [4, 0]], t), hy: key([[0, 0], [0.5, -12], [1.0, -4], [1.5, -14], [2.2, -2], [2.8, 0]], t),
-        jaw: t < 3.6 ? say('.a.e.a..a.e.e.a..e.a.', t) : 0, blink: key([[0, 0], [3.2, 0], [3.3, 1], [3.4, 0]], t) }) },
-      nod: { dur: 1.8, f: (t) => P({ ty: key([[0, 0], [0.35, 9], [0.7, 9], [1.1, 0]], t), blink: key([[0, 0], [0.4, 0], [0.5, 1], [0.6, 0]], t) }) },
-    },
-  },
+
 };
 
 /** A clip's pose at local time t, held on the 10 fps rhythm; looped clips wrap, one-shots stop at their end. */

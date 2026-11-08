@@ -1,0 +1,154 @@
+{
+  "head": "eeaf3851ced62c7b667731939d0c373784201905",
+  "status": "failure",
+  "passed": 13,
+  "failed": 1,
+  "total": 14,
+  "jobs": [
+    {
+      "id": 128776103975,
+      "name": "the Godot build",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104123,
+      "name": "browser campaign state",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104130,
+      "name": "a door fight in Night Shift (Act I v4.74-v4.75)",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104131,
+      "name": "C crew outing and persistence",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104168,
+      "name": "Act I touch scenes and visits",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104189,
+      "name": "C laboratory tactics and touch",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104225,
+      "name": "C art and camera / wet-environment",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104269,
+      "name": "Scene Club campaign and flat cabinet",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104280,
+      "name": "City arrival and audio",
+      "status": "completed",
+      "conclusion": "failure",
+      "active": [
+        "full native arrival, timing, layout, sound and save contract"
+      ]
+    },
+    {
+      "id": 128776104294,
+      "name": "C art and camera / night-places-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104376,
+      "name": "C art and camera / gun-aim-camera",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776103955,
+      "name": "ui-rendering",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776104774,
+      "name": "portrait-ui-budget",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    },
+    {
+      "id": 128776105041,
+      "name": "acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "active": []
+    }
+  ],
+  "workflows": [
+    {
+      "id": 42495254183,
+      "name": "C18 UI and renderer review",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 42495254313,
+      "name": "C19 acceptance",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 42495254152,
+      "name": "gates",
+      "status": "completed",
+      "conclusion": "failure"
+    }
+  ],
+  "arrival": {
+    "jobId": 128776104280,
+    "passed": 69,
+    "failed": 1,
+    "assertion": "desktop: left alone, it ends by itself",
+    "trace": "eeaf-city-arrival-and-audio/timing/desktop-auto.json",
+    "artifactId": 13623535622,
+    "zipSha256": "e7196cb797b8a8864b4e792381be16a79b23eda4661f54bb6d3af6d06a58c56f",
+    "observed": {
+      "timerDelayMs": 9500,
+      "timerLagMs": 3387.3,
+      "waitMs": 12003,
+      "modalCountAtAssertion": 1,
+      "modalCountAtSnapshot": 0,
+      "timerCount": 1,
+      "timersFired": 1,
+      "removals": 1,
+      "removeDurationMs": 0.2,
+      "visible": true,
+      "focused": true
+    }
+  },
+  "retries": 0,
+  "sourceEditsByMonitor": 0,
+  "scope": "Actual CI outcomes and downloaded diagnostic artifact. Timer scheduling delay is established; its underlying cause is not established by this receipt. Not a green receipt."
+}

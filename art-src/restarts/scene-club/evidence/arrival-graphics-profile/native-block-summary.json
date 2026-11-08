@@ -1,0 +1,205 @@
+{
+  "sourceUnchanged": true,
+  "primaryCount": 1,
+  "primaryWaitWallMs": 12001,
+  "primaryResult": "FAIL",
+  "alignment": {
+    "traceTsUs": 21710507556,
+    "browserStartTimeMs": 260.3999999985099,
+    "offsetUs": 21710247156.0
+  },
+  "nativeTasks": [
+    {
+      "name": "ThreadControllerImpl::RunTask",
+      "thread": "CrRendererMain",
+      "pid": 35568,
+      "tid": 35568,
+      "traceTsUs": 21710869860,
+      "startBrowserMs": 622.704,
+      "endBrowserMs": 15460.126,
+      "durationMs": 14837.422,
+      "threadDurationMs": 6501.409,
+      "args": {
+        "chrome_task_annotator": {
+          "delay_policy": "FLEXIBLE_NO_SOONER",
+          "task_delay_us": 1000000
+        },
+        "src_file": "third_party/blink/renderer/platform/widget/widget_base.cc",
+        "src_func": "Shutdown",
+        "src_line": 341
+      }
+    },
+    {
+      "name": "ProxyMain::Stop",
+      "thread": "CrRendererMain",
+      "pid": 35568,
+      "tid": 35568,
+      "traceTsUs": 21710869876,
+      "startBrowserMs": 622.72,
+      "endBrowserMs": 15460.046,
+      "durationMs": 14837.326,
+      "threadDurationMs": 6501.369,
+      "args": {}
+    },
+    {
+      "name": "CommandBufferProxyImpl::WaitForGetOffset",
+      "thread": "Compositor",
+      "pid": 35568,
+      "tid": 35574,
+      "traceTsUs": 21710870449,
+      "startBrowserMs": 623.293,
+      "endBrowserMs": 15399.445,
+      "durationMs": 14776.152,
+      "threadDurationMs": 2.672,
+      "args": {
+        "end": 1,
+        "start": 1
+      }
+    },
+    {
+      "name": "CommandBufferService:PutChanged",
+      "thread": "CrGpuMain",
+      "pid": 35541,
+      "tid": 35541,
+      "traceTsUs": 21712864684,
+      "startBrowserMs": 2617.528,
+      "endBrowserMs": 15398.84,
+      "durationMs": 12781.312,
+      "threadDurationMs": 7.861,
+      "args": {
+        "handler": ".RendererCompositor-0x1eac0002c600",
+        "put_offset": 1
+      }
+    },
+    {
+      "name": "ThreadControllerImpl::RunTask",
+      "thread": "CrRendererMain",
+      "pid": 35568,
+      "tid": 35568,
+      "traceTsUs": 21725751105,
+      "startBrowserMs": 15503.949,
+      "endBrowserMs": 15718.379,
+      "durationMs": 214.43,
+      "threadDurationMs": 88.637,
+      "args": {
+        "chrome_task_annotator": {
+          "delay_policy": "FLEXIBLE_NO_SOONER",
+          "task_delay_us": 1000000
+        },
+        "src_file": "third_party/blink/renderer/platform/widget/widget_base.cc",
+        "src_func": "Shutdown",
+        "src_line": 341
+      }
+    },
+    {
+      "name": "ProxyMain::Stop",
+      "thread": "CrRendererMain",
+      "pid": 35568,
+      "tid": 35568,
+      "traceTsUs": 21725751119,
+      "startBrowserMs": 15503.963,
+      "endBrowserMs": 15718.35,
+      "durationMs": 214.387,
+      "threadDurationMs": 88.598,
+      "args": {}
+    },
+    {
+      "name": "CommandBufferProxyImpl::WaitForGetOffset",
+      "thread": "Compositor",
+      "pid": 35568,
+      "tid": 35574,
+      "traceTsUs": 21725751356,
+      "startBrowserMs": 15504.2,
+      "endBrowserMs": 15716.909,
+      "durationMs": 212.709,
+      "threadDurationMs": 0.023,
+      "args": {
+        "end": 1,
+        "start": 1
+      }
+    }
+  ],
+  "timers": [
+    {
+      "delay": 9000,
+      "id": 1,
+      "dueBrowserMs": 9389.699999999255,
+      "fireBrowserMs": 15723,
+      "lagMs": 6333.300000000745,
+      "callbackDurationMs": 0.29999999701976776
+    },
+    {
+      "delay": 2300,
+      "id": 2,
+      "dueBrowserMs": 2706,
+      "fireBrowserMs": 15720.29999999702,
+      "lagMs": 13014.29999999702,
+      "callbackDurationMs": 2.100000001490116
+    },
+    {
+      "delay": 9500,
+      "id": 3,
+      "dueBrowserMs": 9906.39999999851,
+      "fireBrowserMs": 15723.89999999851,
+      "lagMs": 5817.5,
+      "callbackDurationMs": 0.3999999985098839
+    }
+  ],
+  "audioRealtime": [
+    {
+      "sample": 0,
+      "contextId": "e2336ec8-1c46-4e55-9d0e-8dee43f05051",
+      "wall": 1794153749937,
+      "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+    },
+    {
+      "sample": 0,
+      "contextId": "e1de31cb-b3e8-4bb2-a9b4-fe0f98717a73",
+      "wall": 1794153749938,
+      "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+    },
+    {
+      "sample": 0,
+      "contextId": "f8bb1901-7ab1-4316-859a-bcc517b853a5",
+      "wall": 1794153749938,
+      "data": {
+        "realtimeData": {
+          "currentTime": 15.211972789115647,
+          "renderCapacity": 0.009700970097009702,
+          "callbackIntervalMean": 0.010146906386752036,
+          "callbackIntervalVariance": 1.305460243528919e-05
+        }
+      }
+    },
+    {
+      "sample": 1,
+      "contextId": "e2336ec8-1c46-4e55-9d0e-8dee43f05051",
+      "wall": 1794153750191,
+      "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+    },
+    {
+      "sample": 1,
+      "contextId": "e1de31cb-b3e8-4bb2-a9b4-fe0f98717a73",
+      "wall": 1794153750191,
+      "error": "cdpSession.send: Protocol error (WebAudio.getRealtimeData): Cannot find BaseAudioContext with such id."
+    },
+    {
+      "sample": 1,
+      "contextId": "f8bb1901-7ab1-4316-859a-bcc517b853a5",
+      "wall": 1794153750191,
+      "data": {
+        "realtimeData": {
+          "currentTime": 15.461587301587302,
+          "renderCapacity": 0.014100000000000001,
+          "callbackIntervalMean": 0.010114306254494923,
+          "callbackIntervalVariance": 1.017110361982723e-05
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Observed actualprivate warmCPU2x source symptom, not a full native trace of theCIworker.",
+    "Widget/compositor destruction waits forGPUcommandcompletion. Specific old document, driver function and source workload are not identified.",
+    "Raw generic first-fire helper fields refer to2300 after expanding timer observation; this summary correctly matches9500 bydelay andtimerID."
+  ]
+}

@@ -1,0 +1,958 @@
+{
+  "baselineCommit": "7c3843b1376824f8ea78671bf618c0f32bfc8cf6",
+  "measurement": "Conservative edge-anchored HUD+review and bottom overlay bands, including edge insets. World/map/actors are scene content.",
+  "results": [
+    {
+      "suite": "browser-results.json",
+      "id": "phone-side-reduce",
+      "state": "native",
+      "topPx": 67.0,
+      "bottomPx": 299.984375,
+      "heightRatio": 0.5293083631938341,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-side-reduce",
+      "state": "arrival",
+      "topPx": 58.59375,
+      "bottomPx": 197.109375,
+      "heightRatio": 0.3688053546075316,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-side-reduce",
+      "state": "resultGeometry",
+      "topPx": 67.0,
+      "bottomPx": 227.8125,
+      "heightRatio": 0.42521353075068175,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-side-reduce",
+      "state": "map",
+      "topPx": 58.59375,
+      "bottomPx": 122.953125,
+      "heightRatio": 0.2618484213372997,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-front-reduce",
+      "state": "native",
+      "topPx": 67.0,
+      "bottomPx": 299.984375,
+      "heightRatio": 0.5293083631938341,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-front-reduce",
+      "state": "arrival",
+      "topPx": 58.59375,
+      "bottomPx": 197.109375,
+      "heightRatio": 0.3688053546075316,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-front-reduce",
+      "state": "resultGeometry",
+      "topPx": 67.0,
+      "bottomPx": 227.8125,
+      "heightRatio": 0.42521353075068175,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "phone-front-reduce",
+      "state": "map",
+      "topPx": 58.59375,
+      "bottomPx": 122.953125,
+      "heightRatio": 0.2618484213372997,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-side-reduce",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 228.546875,
+      "heightRatio": 0.7193509615384616,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-side-reduce",
+      "state": "arrival",
+      "topPx": 44.59375,
+      "bottomPx": 174.859375,
+      "heightRatio": 0.5627003205128205,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-side-reduce",
+      "state": "resultGeometry",
+      "topPx": 52,
+      "bottomPx": 200.78125,
+      "heightRatio": 0.6481570512820513,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-side-reduce",
+      "state": "map",
+      "topPx": 44.59375,
+      "bottomPx": 145.96875,
+      "heightRatio": 0.48862179487179486,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-front-reduce",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 228.546875,
+      "heightRatio": 0.7193509615384616,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-front-reduce",
+      "state": "arrival",
+      "topPx": 44.59375,
+      "bottomPx": 174.859375,
+      "heightRatio": 0.5627003205128205,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-front-reduce",
+      "state": "resultGeometry",
+      "topPx": 52,
+      "bottomPx": 200.78125,
+      "heightRatio": 0.6481570512820513,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "landscape-front-reduce",
+      "state": "map",
+      "topPx": 44.59375,
+      "bottomPx": 145.96875,
+      "heightRatio": 0.48862179487179486,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-side-reduce",
+      "state": "native",
+      "topPx": 68,
+      "bottomPx": 307.1875,
+      "heightRatio": 0.468984375,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-side-reduce",
+      "state": "arrival",
+      "topPx": 64,
+      "bottomPx": 182.4375,
+      "heightRatio": 0.308046875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-side-reduce",
+      "state": "resultGeometry",
+      "topPx": 68,
+      "bottomPx": 230.4375,
+      "heightRatio": 0.373046875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-side-reduce",
+      "state": "map",
+      "topPx": 64,
+      "bottomPx": 123.6875,
+      "heightRatio": 0.234609375,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-front-reduce",
+      "state": "native",
+      "topPx": 68,
+      "bottomPx": 307.1875,
+      "heightRatio": 0.468984375,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-front-reduce",
+      "state": "arrival",
+      "topPx": 64,
+      "bottomPx": 182.4375,
+      "heightRatio": 0.308046875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-front-reduce",
+      "state": "resultGeometry",
+      "topPx": 68,
+      "bottomPx": 230.4375,
+      "heightRatio": 0.373046875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "desktop-front-reduce",
+      "state": "map",
+      "topPx": 64,
+      "bottomPx": 123.6875,
+      "heightRatio": 0.234609375,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-320x568-front",
+      "state": "native",
+      "topPx": 63,
+      "bottomPx": 277.484375,
+      "heightRatio": 0.5994443221830986,
+      "stage": {
+        "x": 0.25,
+        "y": 0,
+        "width": 319.5,
+        "height": 568
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-320x568-side",
+      "state": "native",
+      "topPx": 63,
+      "bottomPx": 277.484375,
+      "heightRatio": 0.5994443221830986,
+      "stage": {
+        "x": 0.25,
+        "y": 0,
+        "width": 319.5,
+        "height": 568
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-front",
+      "state": "native",
+      "topPx": 62.0,
+      "bottomPx": 272.546875,
+      "heightRatio": 0.6944183180358706,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-side",
+      "state": "native",
+      "topPx": 62.0,
+      "bottomPx": 272.546875,
+      "heightRatio": 0.6944183180358706,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-844x390-front-DejaVu-Sans",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 240.546875,
+      "heightRatio": 0.7501201923076923,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-844x390-side-DejaVu-Sans",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 240.546875,
+      "heightRatio": 0.7501201923076923,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-front-DejaVu-Sans",
+      "state": "native",
+      "topPx": 59.0,
+      "bottomPx": 269.546875,
+      "heightRatio": 0.6819641293419388,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-side-DejaVu-Sans",
+      "state": "native",
+      "topPx": 59.0,
+      "bottomPx": 269.546875,
+      "heightRatio": 0.6819641293419388,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-844x390-front-monospace",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 256.734375,
+      "heightRatio": 0.7916266025641026,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-844x390-side-monospace",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 256.734375,
+      "heightRatio": 0.7916266025641026,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-front-monospace",
+      "state": "native",
+      "topPx": 59.0,
+      "bottomPx": 284.546875,
+      "heightRatio": 0.7130996010767684,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "browser-results.json",
+      "id": "edge-271x482-side-monospace",
+      "state": "native",
+      "topPx": 59.0,
+      "bottomPx": 284.546875,
+      "heightRatio": 0.7130996010767684,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "phone-front-reduce",
+      "state": "native",
+      "topPx": 67.0,
+      "bottomPx": 184.046875,
+      "heightRatio": 0.3620895589660379,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "phone-front-reduce",
+      "state": "secondLine",
+      "topPx": 67.0,
+      "bottomPx": 184.046875,
+      "heightRatio": 0.3620895589660379,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "phone-side-reduce",
+      "state": "native",
+      "topPx": 67.0,
+      "bottomPx": 184.046875,
+      "heightRatio": 0.3620895589660379,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "phone-side-reduce",
+      "state": "secondLine",
+      "topPx": 67.0,
+      "bottomPx": 184.046875,
+      "heightRatio": 0.3620895589660379,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "landscape-front-reduce",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 177.375,
+      "heightRatio": 0.5881410256410257,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "landscape-front-reduce",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 161.1875,
+      "heightRatio": 0.5466346153846153,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "landscape-side-reduce",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 177.375,
+      "heightRatio": 0.5881410256410257,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "landscape-side-reduce",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 161.1875,
+      "heightRatio": 0.5466346153846153,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "desktop-front-reduce",
+      "state": "native",
+      "topPx": 68,
+      "bottomPx": 185.9375,
+      "heightRatio": 0.317421875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "desktop-front-reduce",
+      "state": "secondLine",
+      "topPx": 68,
+      "bottomPx": 185.9375,
+      "heightRatio": 0.317421875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "desktop-side-reduce",
+      "state": "native",
+      "topPx": 68,
+      "bottomPx": 185.9375,
+      "heightRatio": 0.317421875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "desktop-side-reduce",
+      "state": "secondLine",
+      "topPx": 68,
+      "bottomPx": 185.9375,
+      "heightRatio": 0.317421875,
+      "stage": {
+        "x": 415,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front",
+      "state": "native",
+      "topPx": 60.0,
+      "bottomPx": 179.1875,
+      "heightRatio": 0.4964810430383031,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front",
+      "state": "secondLine",
+      "topPx": 60.0,
+      "bottomPx": 179.1875,
+      "heightRatio": 0.4964810430383031,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side",
+      "state": "native",
+      "topPx": 60.0,
+      "bottomPx": 179.1875,
+      "heightRatio": 0.4964810430383031,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side",
+      "state": "secondLine",
+      "topPx": 60.0,
+      "bottomPx": 179.1875,
+      "heightRatio": 0.4964810430383031,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-front-DejaVu-Sans",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 174.375,
+      "heightRatio": 0.580448717948718,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-front-DejaVu-Sans",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 158.1875,
+      "heightRatio": 0.5389423076923077,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-side-DejaVu-Sans",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 174.375,
+      "heightRatio": 0.580448717948718,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-side-DejaVu-Sans",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 158.1875,
+      "heightRatio": 0.5389423076923077,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front-DejaVu-Sans",
+      "state": "native",
+      "topPx": 57.0,
+      "bottomPx": 192.375,
+      "heightRatio": 0.5176272175915415,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front-DejaVu-Sans",
+      "state": "secondLine",
+      "topPx": 57.0,
+      "bottomPx": 176.1875,
+      "heightRatio": 0.4840268543443713,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side-DejaVu-Sans",
+      "state": "native",
+      "topPx": 57.0,
+      "bottomPx": 192.375,
+      "heightRatio": 0.5176272175915415,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side-DejaVu-Sans",
+      "state": "secondLine",
+      "topPx": 57.0,
+      "bottomPx": 176.1875,
+      "heightRatio": 0.4840268543443713,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-front-monospace",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 174.375,
+      "heightRatio": 0.580448717948718,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-front-monospace",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 158.1875,
+      "heightRatio": 0.5389423076923077,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-side-monospace",
+      "state": "native",
+      "topPx": 52,
+      "bottomPx": 174.375,
+      "heightRatio": 0.580448717948718,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-844x390-side-monospace",
+      "state": "secondLine",
+      "topPx": 52,
+      "bottomPx": 158.1875,
+      "heightRatio": 0.5389423076923077,
+      "stage": {
+        "x": 312.3125,
+        "y": 0,
+        "width": 219.375,
+        "height": 390
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front-monospace",
+      "state": "native",
+      "topPx": 57.0,
+      "bottomPx": 192.375,
+      "heightRatio": 0.5176272175915415,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-front-monospace",
+      "state": "secondLine",
+      "topPx": 57.0,
+      "bottomPx": 176.1875,
+      "heightRatio": 0.4840268543443713,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side-monospace",
+      "state": "native",
+      "topPx": 57.0,
+      "bottomPx": 192.375,
+      "heightRatio": 0.5176272175915415,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    },
+    {
+      "suite": "ensemble-results.json",
+      "id": "edge-271x482-side-monospace",
+      "state": "secondLine",
+      "topPx": 57.0,
+      "bottomPx": 176.1875,
+      "heightRatio": 0.4840268543443713,
+      "stage": {
+        "x": 0,
+        "y": 0.109375,
+        "width": 271,
+        "height": 481.765625
+      }
+    }
+  ]
+}

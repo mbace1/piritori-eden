@@ -31,7 +31,7 @@ and the file name does not need it decided.
 | body | tris | texture | from |
 |---|---|---|---|
 | `heavy-dreads-v02` | 31k | 1024 | the owner's dreadlocks T-pose |
-| `hooded-camera-woman-v02` | 31k | 1024 | `art-src/concepts/people/hooded-camera-woman-v02.png` |
+| `hooded-camera-woman-v02` | 31k | 1024 | `git-history:d08ecf6c5bad5226e86763776cb06f343a9efcce:art-src/concepts/people/hooded-camera-woman-v02.png` |
 
 Each has a `-rigged.glb` (skeleton, one animation) and a `-clips.glb` (both
 animations, no texture — see below). `muscle-rigged-source-v01.glb` predates

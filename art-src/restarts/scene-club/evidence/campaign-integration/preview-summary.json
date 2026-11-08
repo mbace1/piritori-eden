@@ -1,0 +1,71 @@
+{
+  "sourceCommitAtCapture": "5e440ab6cca85e67fc2faff91ed95d9170cd8f58",
+  "sourceHashes": {
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/index.html": "e3dc313db248a67ce9fff6c0af160b406786cbb75d962369398140c4cf90e784",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/js/v3/state.js": "cdbe2f447d899155538c5d0222ede1b8fe0aac7e070ed0e4aea201c493ea5a40",
+    "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
+    "content/era1-slice-v1.json": "a5a88fa1a97cf9a4e4d211ded6d69da9ff78c7fd5388d7d55f8b9b6ff00cad30",
+    "art/v3/manifest.json": "338424e7340c1821abe94067bfbe063c6b7fc4cba920e7d0f95277e20909ebb5"
+  },
+  "runtimeMatchesCapturedHead": {
+    "web/js/v3/scene-club-actors.js": true,
+    "web/js/v3/scene-club-view.js": true,
+    "web/js/v3/scene-club-view.css": true,
+    "web/js/v3/app.js": true,
+    "web/index.html": true,
+    "web/v3.css": true,
+    "web/js/v3/state.js": true,
+    "web/js/v3/content.js": true,
+    "content/era1-slice-v1.json": true,
+    "art/v3/manifest.json": true
+  },
+  "actualNormalCampaign": true,
+  "fixtureStateUsed": false,
+  "travelToastClearedAtFirstMountAndAllScenePhases": true,
+  "raw": "normal-campaign-450-native.webm",
+  "short": "normal-campaign-scene-club-19s.mp4",
+  "shortRawRangeSeconds": [
+    7,
+    26
+  ],
+  "durationSeconds": 19,
+  "visualTimingBasis": "Decoded raw-video inspection at7s confirms clean arrival;22.5s confirms actual map return. Short is a contiguous crop of time only; native450x800fullviewport is scaled to720x1280without spatial crop or UI reconstruction.",
+  "normalStateFacts": {
+    "earnedBeforeTrip": {
+      "scheduleIndex": 2,
+      "selectedAnchor": "siltasaari",
+      "cash": 183,
+      "debt": 355,
+      "markka": 300
+    },
+    "paidTrip": {
+      "block": 2,
+      "spent": 3,
+      "visitAt": null
+    },
+    "beforeChoiceMarkka": 300,
+    "afterChoiceMarkka": 600,
+    "trustDelta": 1,
+    "returnedIndex": 3,
+    "returnedAnchor": "makelansilta"
+  },
+  "privateStoresOpened": false,
+  "oldPrototypeRequests": false,
+  "returnedMap": "Existing compatibility Kallio map; no PhaseBredesignclaim",
+  "shortSha256": "450d87634d5c2ef5f15990ff26d78b0dce99d33868468270eeafa29bef48dfd6",
+  "stills": [
+    "normal-450-arrival-stage.png",
+    "normal-450-choices-stage.png",
+    "normal-450-result-stage.png",
+    "normal-450-map-return.png",
+    "phone-390-choices-game.png",
+    "phone-390-choices-stage.png",
+    "desktop-1280-choices-game.png",
+    "desktop-1280-choices-stage.png"
+  ]
+}
