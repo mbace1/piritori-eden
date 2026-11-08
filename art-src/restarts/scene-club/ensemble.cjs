@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const fs = require('node:fs'), path = require('node:path'), http = require('node:http');
 const assert = require('node:assert/strict'), { spawnSync } = require('node:child_process');
-const { measureFrame, fixedFrameAssertions, inside, intersects, frames, storageGuard, watch, sourceHashes, SENTINELS } = require('./browser.cjs');
+const { measureFrame, fixedFrameAssertions, settleBudget, ensureChoices, inside, intersects, frames, storageGuard, watch, sourceHashes, SENTINELS } = require('./browser.cjs');
 const ROOT = path.resolve(__dirname, '../../..');
 const OUT = process.env.RESET_ENSEMBLE_DIR || path.join(__dirname, 'evidence');
 const KEY = 'piritori:restart:scene-club:v1';
@@ -20,9 +20,9 @@ const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'art/v3/manifest.jso
 const allowed = new Set(['scene-toko-noodles-empty-v01', 'scene-toko-rig-v01', 'cutin-aatami-front-rig-v01', 'cutin-aatami-rig-v01'].flatMap(id => {
   const asset = manifest.assets.find(item => item.id === id); return asset.file ? ['art/v3/' + asset.file] : asset.members.map(member => 'art/v3/' + member.file);
 }));
-const report = { schema: 2, base: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', stageContract: 'fixed maximum-fit 9:16; native 44px targets and 12px text even in landscape', physicalDeviceAcceptance: false, staticMouths: true, sourceHashes: sourceHashes(), cases: [], edgeCases: [], videos: [], checks: 0, edgeChecks: 0, failures: [] };
+const report = { schema: 3, base: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', stageContract: 'fixed maximum-fit 9:16; combined UI bands and union area at most 50%; native 44px targets and 12px text', physicalDeviceAcceptance: false, staticMouths: true, sourceHashes: sourceHashes(), cases: [], edgeCases: [], videos: [], checks: 0, edgeChecks: 0, failures: [] };
 function check(pass, label, result) { if (result.edge) report.edgeChecks += 1; else report.checks += 1; if (!pass) { result.failures.push(label); report.failures.push(result.id + ': ' + label); } }
-async function ready(page, view) { await page.waitForFunction(expected => window.__sceneReset?.ready && (!expected || window.__sceneReset.view === expected), view); }
+async function ready(page, view) { await page.waitForFunction(expected => window.__sceneReset?.ready && (!expected || window.__sceneReset.view === expected), view); await settleBudget(page); }
 async function auditStorage(page, result) {
   const value = await page.evaluate(() => ({ denied: window.__sceneStorageAudit.denied, sentinels: window.__sceneStorageAudit.sentinels() }));
   check(value.denied.length === 0, 'no non-candidate save access', result);
@@ -35,7 +35,7 @@ async function geometry(page, result, half = false) {
     const actor = value.bounds[who];
     check(actor?.ready && inside(actor.head, value.world), who + ' source head inside 9:16 stage', result);
     check(!intersects(actor?.head, value.decisionOverlay), who + ' clear of whole bottom encounter overlay', result);
-    for (const hud of value.overlays.filter(item => /header/.test(item.name))) check(!intersects(actor?.head, hud.rect), who + ' clear of top HUD', result);
+    for (const hud of value.overlays.filter(item => item.painted && /header/.test(item.name))) check(!intersects(actor?.head, hud.rect), who + ' clear of top HUD', result);
   }
   check(!intersects(value.bounds.aatami.head, value.bounds.toko.head), 'paired heads do not cover each other', result);
   check(value.rigs.length === 2 && value.rigs.every(actor => actor.painted), 'foreground Aatami and composed Toko room painted visibly', result);
@@ -128,6 +128,8 @@ async function capture(page, name, result) {
       await page.goto(base); await ready(page, 'arrival'); await page.waitForTimeout(900);
       const stage = await page.locator('#world').boundingBox();
       await page.locator('#enter').click(); await ready(page, 'scene'); await page.waitForTimeout(3300);
+      const respond = page.locator('#respond');
+      if (await respond.count() && await respond.isVisible()) { await respond.click(); await page.waitForFunction(() => [...document.querySelectorAll('[data-choice]')].every(button => !button.disabled)); await settleBudget(page); await page.waitForTimeout(1300); }
       await page.locator('[data-choice="ask-envelope"]').click(); await page.waitForTimeout(2200);
       await page.locator('#return').click(); await ready(page, 'map'); await page.waitForTimeout(1300);
       await page.goto(base + '?pair=toko&pose=front&start=scene'); await ready(page, 'study'); await page.waitForTimeout(2300);
