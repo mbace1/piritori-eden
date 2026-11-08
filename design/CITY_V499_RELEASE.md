@@ -1,0 +1,35 @@
+# Hub release: Act I city v4.99 (a route holds its count for the block)
+
+- **Source:** `mbace1/piritori-eden` @ `804613a`, web only.
+  - **Gates were green:** run 1200, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `1952d934`, under `piritori/`. **Pages run 1657 succeeded.**
+  - Nothing was deleted. `release.json` holds 308 files, and 68 site files changed.
+- **What players get** (ROADMAP G4 step 2):
+  - **A route holds its count for the block.** Re-pinning a route used to empty its count, so one Piritori visit could buy, send, re-pin and repeat: €3,400 counted toward the €400 inside one block. Now a route carries 1 to 3 packs a block, re-pinned or not. It frees when the block turns.
+  - The chapter bot (`web/tools/chapter-bot.mjs`) found it, playing all ten days on the web's own rules. Every block plays and none forces a fight. Its table is `design/G4_CHAPTER_BOT.md`.
+- **Catalogue:**
+  - The note moves to v4.99 in en, fi and ja. `versions.json` piritori goes 4.98 → 4.99 by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=219), and `sw.js` `VERSION` went 262 → 263. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 34 bare-node suites. `v3-state.mjs` holds the route rule, and fails on v4.98's rules (20 packs sent where 2 were free);
+    - `m1-inspection`: 72;
+    - `m2-journey`: 47;
+    - `header-fit`: 62;
+    - `next-step`: 57;
+    - `road-browser`: 42;
+    - `opening`: 56;
+    - `chapter-browser`: 20;
+    - `play-card`: 29.
+  - **On the staged site tree, before the push:**
+    - the site check: 8 of 8;
+    - playtest links: 29;
+    - mission: 32;
+    - doors: 52;
+    - road: 42;
+    - outing: 75.
+  - **Restaged once.** The full run above was on gh-pages `6176ce66` (Toko Drop 2 v122). Before the push, Toko Move v3.15 landed. Restaged on it, the site check (8 of 8) and the playtest links (29) passed again before the push.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`95f53751, Toko Move v3.15`).
