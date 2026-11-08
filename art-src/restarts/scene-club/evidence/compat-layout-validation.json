@@ -11,7 +11,7 @@
       "failed": 0,
       "log": "compat-header-fit.log"
     },
-    "node web/test/ui-readability.cjs": {
+    "node web/test/readability.cjs": {
       "passed": 86,
       "failed": 0,
       "log": "compat-readability.log"
