@@ -1,0 +1,7 @@
+{
+  "sourceBase": "d08ecf6c5bad5226e86763776cb06f343a9efcce",
+  "gameplayContentIdenticalAfterAppearanceRemoval": true,
+  "matchedHires": 2000,
+  "matchedFields": "all fields except retired portrait IDs/new portrait_kind",
+  "results": "pass"
+}

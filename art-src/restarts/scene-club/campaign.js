@@ -1,6 +1,6 @@
 // Scene Club presentation candidate. Only this wrapper is saved; the normal
 // campaign save and C.19 receipt stores are never opened by this module.
-import { createState, chooseEncounter, advanceSchedule } from '../../../web/js/v3/state.js?v=15';
+import { createState, chooseEncounter, advanceSchedule } from '../../../web/js/v3/state.js?v=16';
 
 export const CANDIDATE_SAVE_KEY = 'piritori:restart:scene-club:v1';
 export const SCENE_ENCOUNTER_ID = 'enc-jaska-receipt';

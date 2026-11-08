@@ -84,7 +84,7 @@ the private harness recording and measurements remain outside Git at
 `/workspace/evidence/visual-reset-actor-private/`. They are construction/QC
 evidence, not new source artwork or approval deliverables.
 
-These checks isolate the renderer. The root composition still needs native
-portrait/landscape paired-scene, source-relative scale, bubble/choices, long-text,
-motion continuity and physical Pixel/iPad acceptance. No ensemble/gameplay or
-owner approval is established by the isolated harness.
+These checks isolate the renderer. The current paired 9:16 scenes, overlays,
+source-relative scale, text, motion and gameplay have separate browser reports
+linked in the README. Physical Pixel/iPad and owner visual acceptance remain
+open; the isolated harness does not establish either.

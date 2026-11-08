@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, chooseEncounter, advanceSchedule, chargeTrip, actionsLeft, formatBlock } from '../../../web/js/v3/state.js?v=15';
+import { createState, chooseEncounter, advanceSchedule, chargeTrip, actionsLeft, formatBlock } from '../../../web/js/v3/state.js?v=16';
 import { CANDIDATE_SAVE_KEY, SCENE_ENCOUNTER_ID, loadCandidate, chooseCandidate, returnToMap, restartCandidate, persistCandidate } from './campaign.js';
 
 const read = path => readFile(new URL(path, import.meta.url), 'utf8').then(JSON.parse);

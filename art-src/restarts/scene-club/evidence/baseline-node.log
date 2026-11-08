@@ -1,147 +1,148 @@
-web/test/aatami.mjs
+
+$ node web/test/aatami.mjs
 aatami: 23 checks passed
+EXIT 0
 
-
-web/test/arena-lab.mjs
+$ node web/test/arena-lab.mjs
 PASS: 2/6/12 people × 3 loadouts, unique slots/labels, separate campaign rules, deterministic replay, terminal outcomes, zero campaign effects
+EXIT 0
 
-
-web/test/bear-path-police.mjs
+$ node web/test/bear-path-police.mjs
 {"result":"PASS","policeAtRound":9,"policeCount":2,"checks":["natural heat escalation","pending posture blocks ordinary actions","both authored postures","checkpoint replay","one aftermath settlement","autoplay reaches outcome"],"autoResult":"withdraw","autoRound":9}
+EXIT 0
 
-
-web/test/bear-path.mjs
+$ node web/test/bear-path.mjs
 PASS: authored encounter choices/effects, free inspection, one commitment/settlement, return memory, tamper rejection, canonical battle/cover and replay
+EXIT 0
 
-
-web/test/c17-campaign-bridge.mjs
+$ node web/test/c17-campaign-bridge.mjs
 C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
+EXIT 0
 
-
-web/test/c18-build-identity.mjs
+$ node web/test/c18-build-identity.mjs
 C.19 build identity contract passed
+EXIT 0
 
-
-web/test/c18-render-contract.mjs
+$ node web/test/c18-render-contract.mjs
 C.19 build identity contract passed
 C18 renderer and UI ownership contract passed
 C19 arena title/header/help agree; unchanged C11 resolver is labelled separately
+EXIT 0
 
-
-web/test/c19-outing.mjs
+$ node web/test/c19-outing.mjs
   a played opening: win (win) in 3 rounds · pressure 8 · they ran · police did not come
 C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I's two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.
+EXIT 0
 
-
-web/test/c19-readability.mjs
+$ node web/test/c19-readability.mjs
 C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+EXIT 0
 
-
-web/test/chapter-narrative.mjs
+$ node web/test/chapter-narrative.mjs
 PASS: canonical links, scene-only roles, timeline, outcome concealment, no mutation, reload, unknown chapter and HTML escaping
+EXIT 0
 
-
-web/test/chapter.mjs
+$ node web/test/chapter.mjs
 chapter: 41 checks passed
+EXIT 0
 
-
-web/test/crew-run.mjs
+$ node web/test/crew-run.mjs
 C.12 crew: replay, Move + Act skills, rescue, extraction, wounds/rest, exact-once settlement, arrivals, C16 checkpoint migration and roster fallback passed.
 C.17 campaign bridge: deployment, loadout, build math, wounds, recovery and exact-once aftermath passed
 C19 rescue/extraction: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 retreat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 defeat: every committed checkpoint, terminal reload, exact-once settlement and onward outing passed
 C19 focused/full/target labels: 2/6/12 fixtures and honest rescue/recovery guidance passed
+EXIT 0
 
-
-web/test/directional-cover.mjs
+$ node web/test/directional-cover.mjs
 PASS: four wall orientations, both sides, flanks, corner rule, detours, plan invalidation, melee, resolved wall/miss impacts and replay
+EXIT 0
 
-
-web/test/doors.mjs
+$ node web/test/doors.mjs
 doors: 745 checks passed
+EXIT 0
 
-
-web/test/fight-module-motion.mjs
+$ node web/test/fight-module-motion.mjs
 Baked motion transitions, gait phase, clamped down, grip hold and legacy fallback: PASS
+EXIT 0
 
-
-web/test/fight-module-recovery.mjs
+$ node web/test/fight-module-recovery.mjs
 PASS: checkpoint preserves commands/items/results, rejects tampering; touch pixel and frame budgets
+EXIT 0
 
-
-web/test/fight-module.mjs
+$ node web/test/fight-module.mjs
 PASS: mirrored fixture, action/item guards, move occupancy, cover, legal enemy fallback, training results and deterministic replay
 PASS: anchor covers the rank behind them
+EXIT 0
 
-
-web/test/fighter-assets.mjs
+$ node web/test/fighter-assets.mjs
 FIGHTER ASSETS OK: F01/F02 v02 bodies and own-rig clip packs match the durable Art contract.
+EXIT 0
 
-
-web/test/fighter-test.mjs
+$ node web/test/fighter-test.mjs
 FIGHTER TEST CONTRACT OK: two provisional bodies, own-rig clips, independent touch controls.
+EXIT 0
 
-
-web/test/frame-clock.mjs
+$ node web/test/frame-clock.mjs
 frame clock: 30/60 FPS at 60/90/120/144 Hz, stalls, resume and quality changes pass
 presentation clock: real action durations at 1–60 FPS; hidden and orientation time excluded
+EXIT 0
 
-
-web/test/level-layout.mjs
+$ node web/test/level-layout.mjs
 level-layout: 1797 checks passed — every join closed, no wall ends in the air, nothing in a wall or on the board (courtyard, street, yard, quay)
+EXIT 0
 
-
-web/test/places.mjs
+$ node web/test/places.mjs
 places: 183 checks passed
+EXIT 0
 
-
-web/test/road.mjs
+$ node web/test/road.mjs
 road: 360 checks passed
+EXIT 0
 
-
-web/test/runtime-art-status.mjs
+$ node web/test/runtime-art-status.mjs
 PASS: unreviewed environment prototypes cannot silently become approved or production-ready
+EXIT 0
 
-
-web/test/scene-content.mjs
+$ node web/test/scene-content.mjs
 PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker
+EXIT 0
 
-
-web/test/standing.mjs
+$ node web/test/standing.mjs
 standing: 74 checks passed
+EXIT 0
 
-
-web/test/story.mjs
+$ node web/test/story.mjs
 story: 63 checks passed
+EXIT 0
 
-
-web/test/tactics.mjs
+$ node web/test/tactics.mjs
 PASS: action order, independent budgets, reload, pure previews, obstacle routes, LOS corners, partial cover, fixed intent, forecast/resolution, combined threats, remaining-budget Auto and replay
+EXIT 0
 
-
-web/test/toko.mjs
+$ node web/test/toko.mjs
 toko: 25 checks passed
+EXIT 0
 
-
-web/test/v3-battle.mjs
+$ node web/test/v3-battle.mjs
 V3 BATTLE OK: mirrored 2v2/3v3 formations, reposition, auto command, withdrawal, sync fire, desync, attack reach, entry forecast, cover decision copy.
 V3 BATTLE growth hooks OK
 V3 BATTLE mid-fight save round trip OK
+EXIT 0
 
-
-web/test/v3-contract.mjs
+$ node web/test/v3-contract.mjs
 V3 CONTRACT OK: five modes, 44px floor, 15-anchor map, 20 blocks and registered scene art.
+EXIT 0
 
-
-web/test/v3-nameplates.mjs
+$ node web/test/v3-nameplates.mjs
 V3 NAMEPLATES OK: 2v2 stack, 3v3 lane, already-clear, and bottom clamp.
+EXIT 0
 
-
-web/test/v3-state.mjs
+$ node web/test/v3-state.mjs
 V3 STATE OK: 20 blocks, deferred purchase, fixed choices and Pasila forecast pasila-deferred.
 V3 STATE growth-loop OK
 PASS chapter progress through sales and route deliveries
@@ -149,7 +150,14 @@ PASS a board battle survives a reload
   the €400 by trading alone: 3 blocks (one buy-walk-sell-walk loop a block)
 PASS D002: a trip or a seller visit is 30% of a block
 PASS route capacity: hidden loads are counted per block, re-pinned or not
+EXIT 0
 
-
-web/test/visits.mjs
+$ node web/test/visits.mjs
 PASS visits: prerequisites, location, battle/finale exclusion, reload, cancellation, one-time memories, unchanged rewards and clock, Jaska location alignment
+EXIT 0
+
+$ node web/test/visual-reset.mjs
+PASS: deleted UI/cast stays absent; selected sources and C19 park assets retain hashes; 56 neutral identities; old appearance-only checkpoints reload and combat tampering fails.
+EXIT 0
+
+TOTAL 35 suites; failed=[]

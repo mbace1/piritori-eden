@@ -28,9 +28,9 @@ const retainedImages = new Set(retainedIds.flatMap(id => {
 const scriptPaths = new Set(['app.js', 'actors.js', 'campaign.js', 'toko-composition.js'].map(file => 'art-src/restarts/scene-club/' + file).concat(['web/js/v3/content.js', 'web/js/v3/state.js', 'people/roster.mjs', 'people/hiring.mjs', 'market/model.mjs']));
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const sourceHashes = () => Object.fromEntries(['index.html', 'app.js', 'actors.js', 'campaign.js', 'style.css', 'toko-composition.js'].filter(file => fs.existsSync(path.join(__dirname, file))).map(file => [file, sha(fs.readFileSync(path.join(__dirname, file)))]));
-const report = { schema: 1, sourceBase: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', sourceHashes: sourceHashes(), viewports: [[390, 844], [844, 390], [1280, 800]], cases: [], checks: 0, failures: [], limits: ['Browser emulation; no physical Pixel/iPad acceptance.', 'Retained Jaska and young Aatami sources; candidate motion has static mouths.', 'This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.', '50% review assesses composition, not native touch-target size.'] };
+const report = { schema: 2, stageContract: 'fixed maximum-fit 9:16; native 44px targets and 12px text in every viewport', sourceBase: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', sourceHashes: sourceHashes(), viewports: [[390, 844], [844, 390], [1280, 800]], cases: [], edgeCases: [], checks: 0, edgeChecks: 0, failures: [], limits: ['Browser emulation; no physical Pixel/iPad acceptance.', 'Retained Jaska and young Aatami sources; candidate motion has static mouths.', 'This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.', '50% review assesses composition, not native touch-target size.'] };
 function check(value, label, result) {
-  report.checks += 1;
+  if (result.edge) report.edgeChecks += 1; else report.checks += 1;
   if (!value) { const failure = `${result.id}: ${label}`; report.failures.push(failure); result.failures.push(label); }
 }
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.webp': 'image/webp', '.png': 'image/png', '.md': 'text/plain' };
@@ -59,7 +59,7 @@ async function storageGuard(context) {
     window.__sceneStorageAudit = { accesses, denied, sentinels: () => Object.fromEntries(Object.keys(sentinels).map(name => [name, get.call(localStorage, name)])) };
   }, { key: KEY, sentinels: SENTINELS });
 }
-function watch(page, target, result) {
+function watch(page, target, result, allowedImages = retainedImages) {
   const base = new URL('../../../', target), prefix = base.pathname;
   const relative = raw => { const url = new URL(raw); return { url, file: url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) : null }; };
   const errors = result.browserErrors = [], resources = new Set();
@@ -72,7 +72,7 @@ function watch(page, target, result) {
     if (!['http:', 'https:'].includes(url.protocol)) return;
     resources.add(file ?? request.url());
     if (url.origin !== base.origin) errors.push('external resource: ' + request.url());
-    if (request.resourceType() === 'image' && !retainedImages.has(file)) errors.push('unretained image: ' + request.url());
+    if (request.resourceType() === 'image' && !allowedImages.has(file)) errors.push('unretained image: ' + request.url());
     if ((request.resourceType() === 'stylesheet' || /\.css$/.test(url.pathname)) && file !== 'art-src/restarts/scene-club/style.css') errors.push('old/foreign CSS: ' + request.url());
     if (request.resourceType() === 'script' && !scriptPaths.has(file)) errors.push('old/foreign script: ' + request.url());
     if (/art-src\/(reviews|prototypes|cutins)\/|\/hub\/|\/chrome\.|scene-speaker|cutin-stage|paper-skin|lantern\.css|\/v3\.css/.test(url.pathname)) errors.push('old presentation dependency: ' + request.url());
@@ -91,37 +91,84 @@ async function auditStorage(page, result) {
 }
 async function capture(page, filename, result) {
   await page.screenshot({ path: path.join(EVIDENCE, filename) }); result.captures.push(filename);
+  const stageFile = filename.replace(/\.png$/, '-stage.png');
+  await page.locator('#world').screenshot({ path: path.join(EVIDENCE, stageFile) }); result.captures.push(stageFile);
 }
-async function geometry(page, result, half = false, choices = true) {
-  const value = await page.evaluate(() => {
-    const rect = element => { const r = element.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+const inside = (a, b, slack = 1) => !!a && !!b && a.x >= b.x - slack && a.y >= b.y - slack && a.x + a.width <= b.x + b.width + slack && a.y + a.height <= b.y + b.height + slack;
+const intersects = (a, b) => !!a && !!b && Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x) > .5 && Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y) > .5;
+let observedChoiceEffects = new Map();
+async function measureFrame(page) {
+  return page.evaluate(() => {
+    const rect = element => { if (!element) return null; const r = element.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+    const world = document.querySelector('#world'), box = rect(world), half = !!window.__sceneReset.half;
+    const scale = box.width / parseFloat(getComputedStyle(world).width);
     const painted = element => {
+      if (!element) return false;
       let opacity = 1;
       for (let node = element; node instanceof Element; node = node.parentElement) {
         const css = getComputedStyle(node);
         if (css.display === 'none' || css.visibility !== 'visible' || css.contentVisibility === 'hidden') return false;
         opacity *= Number(css.opacity);
       }
-      const box = rect(element);
-      return opacity > .1 && box.width > 0 && box.height > 0;
+      const r = rect(element);
+      return opacity > .1 && r.width > 0 && r.height > 0;
     };
-    const speech = document.querySelector('#speech'), box = rect(speech), pseudo = getComputedStyle(speech, '::after'), scale = window.__sceneReset.half ? .5 : 1;
-    const tail = { x: box.x + parseFloat(pseudo.left) * scale, y: box.y + box.height - (parseFloat(pseudo.bottom) + parseFloat(pseudo.height)) * scale, width: parseFloat(pseudo.width) * scale, height: parseFloat(pseudo.height) * scale };
-    return { width: innerWidth, height: innerHeight, world: rect(document.querySelector('#world')), layer: rect(document.querySelector('#actors')), speech: box, tail, controls: rect(document.querySelector('#controls')), bounds: window.__sceneReset.actors.bounds(), choices: [...document.querySelectorAll('[data-choice]')].map(button => ({ id: button.dataset.choice, label: button.querySelector('strong').textContent, forecast: button.querySelector('span').textContent, disabled: button.disabled, rect: rect(button), textRects: [rect(button.querySelector('strong')), rect(button.querySelector('span'))], font: parseFloat(getComputedStyle(button.querySelector('span')).fontSize) })), overflow: document.documentElement.scrollWidth > innerWidth, rigs: [...document.querySelectorAll('canvas.actor')].map(canvas => ({ who: canvas.dataset.actor, id: canvas.dataset.rig, variant: canvas.dataset.variant, painted: painted(canvas) })) };
+    const floating = element => {
+      for (let node = element; node && node !== world; node = node.parentElement) if (getComputedStyle(node).position === 'absolute') return true;
+      return false;
+    };
+    const text = element => ({ text: element.textContent.trim(), rect: rect(element), font: parseFloat(getComputedStyle(element).fontSize) * scale, painted: painted(element) });
+    const choices = [...world.querySelectorAll('[data-choice]')].map(button => {
+      const forecast = button.querySelector('.forecast') || button.querySelector('span'), compact = button.querySelector('.compact-stake');
+      const shown = compact && painted(compact) ? compact : forecast;
+      return { id: button.dataset.choice, label: button.querySelector('strong').textContent, forecast: forecast.textContent, labelPainted: painted(button.querySelector('strong')), labelFont: parseFloat(getComputedStyle(button.querySelector('strong')).fontSize) * scale, accessible: button.getAttribute('aria-label') || '', disabled: button.disabled, rect: rect(button), textRects: [rect(button.querySelector('strong')), rect(shown)], font: parseFloat(getComputedStyle(shown).fontSize) * scale, visibleStake: text(shown), compact: shown === compact };
+    });
+    const overlayNodes = [...world.querySelectorAll('.scene-header,.map-header,.map-footer,#encounter-overlay')];
+    const summary = document.querySelector('#review-tools > summary');
+    return { width: innerWidth, height: innerHeight, half, scale, world: box, wrapper: rect(document.querySelector('.portrait-frame')), layer: rect(world.querySelector('#actors')), background: rect(world.querySelector('.backdrop,.room-composite')), speech: rect(world.querySelector('#speech')), controls: rect(world.querySelector('#controls')), decisionOverlay: rect(world.querySelector('#encounter-overlay')), grouped: !!world.querySelector('#encounter-overlay #speech') && !!world.querySelector('#encounter-overlay #controls'), bounds: window.__sceneReset.actors?.bounds?.() || {}, overlays: overlayNodes.map(element => ({ name: element.id || element.className, rect: rect(element), painted: painted(element), floating: floating(element) })), targets: [...world.querySelectorAll('button')].filter(painted).map(element => ({ id: element.id || element.dataset.choice, rect: rect(element), font: parseFloat(getComputedStyle(element).fontSize) * scale })), review: summary ? { rect: rect(summary), painted: painted(summary) } : null, choices, overflow: document.documentElement.scrollWidth > innerWidth || document.documentElement.scrollHeight > innerHeight + 1, rigs: [...world.querySelectorAll('canvas.actor,.room-composite canvas')].map(canvas => ({ who: canvas.dataset.actor, id: canvas.dataset.rig, variant: canvas.dataset.variant, painted: painted(canvas) })) };
   });
-  const inside = (a, b, slack = 1) => a.x >= b.x - slack && a.y >= b.y - slack && a.x + a.width <= b.x + b.width + slack && a.y + a.height <= b.y + b.height + slack;
-  const intersects = (a, b) => Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x) > .5 && Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y) > .5;
-  const screen = { x: 0, y: 0, width: value.width, height: value.height };
-  check(!value.overflow, 'no horizontal page overflow', result);
-  check(inside(value.world, screen), `${half ? '50%' : 'native'} world inside viewport`, result);
-  check(inside(value.speech, value.world), 'speech remains in world', result);
-  check(!intersects(value.speech, value.controls), 'speech and decisions do not overlap', result);
+}
+function fixedFrameAssertions(value, half = value.half) {
+  const checks = [], add = (pass, label) => checks.push({ pass, label });
+  const screen = { x: 0, y: 0, width: value.width, height: value.height }, factor = half ? .5 : 1;
+  const expectedWidth = Math.min(value.width, value.height * 9 / 16) * factor;
+  const expectedHeight = Math.min(value.height, value.width * 16 / 9) * factor;
+  add(!value.overflow, 'no page overflow outside letterboxed frame');
+  add(inside(value.world, screen), 'fixed stage remains inside viewport');
+  add(Math.abs(value.world.width * 16 - value.world.height * 9) <= 8, 'rendered stage strictly 9:16');
+  add(Math.abs(value.world.width - expectedWidth) <= 1 && Math.abs(value.world.height - expectedHeight) <= 1, `${half ? 'half review' : 'native'} stage uses maximum 9:16 fit`);
+  add(Math.abs(value.world.x + value.world.width / 2 - value.width / 2) <= 1 && Math.abs(value.world.y + value.world.height / 2 - value.height / 2) <= 1, 'portrait frame centered within letterbox');
+  if (!half) add(Math.abs(value.scale - 1) <= .01, 'native controls use physical CSS pixels, not scaled-down design');
+  for (const overlay of value.overlays) {
+    add(overlay.painted && inside(overlay.rect, value.world), overlay.name + ' visible inside stage');
+    add(overlay.floating, overlay.name + ' overlays scene rather than reserving a separate page panel');
+  }
+  if (value.speech) {
+    add(value.grouped && !!value.decisionOverlay, 'speech and choices share floating encounter overlay');
+    add(inside(value.speech, value.decisionOverlay) && inside(value.controls, value.decisionOverlay), 'dialogue and decisions inside their shared overlay');
+    add(!intersects(value.speech, value.controls), 'dialogue and choices do not overlap each other');
+    add(inside(value.world, value.background) && inside(value.background, value.world), 'scene background covers complete stage behind controls');
+    add(inside(value.world, value.layer) && inside(value.layer, value.world), 'actors retain full-frame stage independent of overlay height');
+  }
+  for (const target of value.targets) {
+    add(inside(target.rect, value.world), target.id + ' visible within stage');
+    if (!half) { add(target.rect.height >= 44 && target.rect.width >= 44, target.id + ' actual native 44px target even in landscape'); add(target.font >= 11.95, target.id + ' actual native 12px text'); }
+  }
+  if (!half) {
+    add(value.review?.painted && inside(value.review.rect, value.world), 'review menu aligned inside portrait frame');
+    for (const hud of value.overlays.filter(item => /header/.test(item.name))) add(!intersects(hud.rect, value.review?.rect), 'top HUD clear of review control');
+    for (const [who, actor] of Object.entries(value.bounds)) add(!intersects(actor.head, value.review?.rect), who + ' head clear of review summary');
+  }
+  return checks;
+}
+async function geometry(page, result, half = false, choices = true) {
+  const value = await measureFrame(page);
+  for (const item of fixedFrameAssertions(value, half)) check(item.pass, item.label, result);
   for (const [who, actor] of Object.entries(value.bounds)) {
     check(actor.ready, who + ' actual retained source loaded', result);
-    check(inside(actor.head, value.world) && inside(actor.head, value.layer), who + ' face not clipped by world or actor layer', result);
-    check(!intersects(actor.head, value.speech), who + ' head clear of speech', result);
-    check(!intersects(actor.head, value.tail), who + ' head clear of speech tail', result);
-    check(!intersects(actor.head, value.controls), who + ' head clear of choices', result);
+    check(inside(actor.head, value.world) && inside(actor.head, value.layer), who + ' face not clipped by frame or actor layer', result);
+    check(!intersects(actor.head, value.decisionOverlay), who + ' head clear of complete bottom overlay', result);
+    for (const hud of value.overlays.filter(item => /header/.test(item.name))) check(!intersects(actor.head, hud.rect), who + ' head clear of top HUD', result);
   }
   check(value.rigs.some(actor => actor.id === 'cutin-jaska-rig-v01') && value.rigs.some(actor => actor.id === `cutin-aatami${result.pose === 'front' ? '-front' : ''}-rig-v01`), 'correct paired Jaska/young Aatami source identities', result);
   check(value.rigs.length === 2 && value.rigs.every(actor => actor.painted), 'both actor canvases painted visibly through all ancestors', result);
@@ -130,24 +177,34 @@ async function geometry(page, result, half = false, choices = true) {
     check(value.choices.length === 3, 'all three authored choices shown', result);
     for (const authored of encounter.choices) {
       const choice = value.choices.find(item => item.id === authored.id);
-      check(choice?.label === authored.label && choice?.forecast === authored.forecast, authored.id + ' exact label and forecast', result);
+      check(choice?.label === authored.label && choice?.forecast === authored.forecast, authored.id + ' exact label and full authored forecast retained', result);
       if (!choice) continue;
+      check(choice.labelPainted && (half || choice.labelFont >= 11.95), authored.id + ' label visibly painted at readable size', result);
       check(!choice.disabled && inside(choice.rect, value.world), authored.id + ' visible in initial composition', result);
-      check(choice.textRects.every(text => inside(text, choice.rect)), authored.id + ' full label and forecast stay inside choice', result);
-      if (!half) { check(choice.rect.height >= 44 && choice.rect.width >= 44, authored.id + ' native 44px touch target', result); check(choice.font >= 12, authored.id + ' native forecast text floor', result); }
+      check(choice.textRects.every(text => inside(text, choice.rect)), authored.id + ' complete label and visible stakes inside choice', result);
+      check(choice.visibleStake.painted && choice.visibleStake.rect.height > 3 && choice.visibleStake.rect.width > 3, authored.id + ' stakes actually painted', result);
+      if (!half) check(choice.font >= 11.95, authored.id + ' actual native stakes text at least 12px', result);
+      if (choice.compact) {
+        const effect = observedChoiceEffects.get(authored.id), signed = n => n > 0 ? '+' + n : String(n);
+        const expected = `${effect.markka ? signed(effect.markka) + ' mk' : 'Bank opportunity lost'} · trust ${signed(effect.trust)}`;
+        check(choice.visibleStake.text === expected, authored.id + ' compact numeric stakes match actual engine effect', result);
+        check(choice.accessible.includes(authored.label) && choice.accessible.includes(authored.forecast), authored.id + ' full forecast accessible when compact stakes shown', result);
+      }
     }
+    const line = await page.locator('#speech p:last-child').innerText();
+    check(line === encounter.opening.match(/[^.!?]+[.!?]+|[^.!?]+$/g).at(-1).trim(), 'scene card uses actual final opening sentence, without new story', result);
   }
   return value;
 }
 // Hash actual decoded canvas RGBA output; dataset labels/pose metadata are not
 // accepted as proof that anything moved or that reduced motion was obeyed.
-async function frames(page) {
-  return page.evaluate(() => Object.fromEntries([...document.querySelectorAll('canvas.actor')].map(canvas => {
+async function frames(page, selector = 'canvas.actor') {
+  return page.evaluate(selector => Object.fromEntries([...document.querySelectorAll(selector)].map(canvas => {
     const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
     let hash = 2166136261, opaque = 0;
     for (let i = 0; i < pixels.length; i += 1) { hash = Math.imul(hash ^ pixels[i], 16777619); if (i % 4 === 3 && pixels[i] > 24) opaque += 1; }
-    return [canvas.dataset.actor, { hash: (hash >>> 0).toString(16), opaque }];
-  })));
+    return [canvas.dataset.actor || (canvas.closest('.room-composite') ? 'toko' : 'unknown'), { hash: (hash >>> 0).toString(16), opaque }];
+  })), selector);
 }
 async function motion(page, result) {
   const reduce = result.motion === 'reduce', output = {};
@@ -174,7 +231,7 @@ async function motion(page, result) {
   return output;
 }
 
-(async () => {
+async function runBrowser() {
   fs.mkdirSync(EVIDENCE, { recursive: true });
   let server, browser, target;
   try {
@@ -183,7 +240,9 @@ async function motion(page, result) {
     if (target.pathname === '/') target.pathname = ROUTE;
     if (!target.pathname.endsWith('/')) target.pathname += '/';
     report.url = target.href;
-    const engine = await import(pathToFileURL(path.join(ROOT, 'web/js/v3/state.js')).href + '?v=15');
+    const engine = await import(pathToFileURL(path.join(ROOT, 'web/js/v3/state.js')).href + '?v=16');
+    const basis = engine.createState(content); basis.scheduleIndex = 2; basis.mode = 'encounter'; basis.selectedAnchor = 'makelansilta';
+    observedChoiceEffects = new Map(encounter.choices.map(choice => { const after = structuredClone(basis); engine.chooseEncounter(after, encounter, choice, { content }); return [choice.id, { markka: after.markka - basis.markka, trust: after.relationships.jaska - basis.relationships.jaska }]; }));
     browser = await chromium.launch({ headless: true, ...(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {}) });
     report.browser = browser.version();
     for (const [name, width, height] of [['phone', 390, 844], ['landscape', 844, 390], ['desktop', 1280, 800]]) {
@@ -196,6 +255,9 @@ async function motion(page, result) {
         try {
           const url = new URL(target); url.searchParams.set('pose', pose);
           await page.goto(url.href); await ready(page, 'arrival');
+          result.arrival = await measureFrame(page);
+          for (const item of fixedFrameAssertions(result.arrival)) check(item.pass, item.label, result);
+          check((await page.locator('.map-footer').innerText()).includes(encounter.opening.match(/[^.!?]+[.!?]+|[^.!?]+$/g)[0].trim()), 'arrival uses first actual opening sentence', result);
           const enter = page.locator('#enter'), entry = await enter.boundingBox();
           check(await enter.innerText() === 'Go inside' && entry && entry.y >= 0 && entry.y + entry.height <= height && entry.height >= 44, 'arrival map provides visible Go inside', result);
           if (pose === 'side' && preference === 'reduce') await capture(page, `${name}-arrival.png`, result);
@@ -226,6 +288,7 @@ async function motion(page, result) {
             check(paid.state.scheduleIndex === 2 && paid.state.selectedAnchor === 'makelansilta' && paid.state.choices[encounter.id] === choice.id, 'choice persists once without advancing or teleporting', result);
             check(await page.locator('#speech').innerText().then(text => text.includes(choice.label)), 'Aatami actually responds with selected choice', result);
             result.resultGeometry = await geometry(page, result, false, false);
+            for (const who of ['aatami', 'jaska']) { const a = result.native.bounds[who].canvas, b = result.resultGeometry.bounds[who].canvas; check(['x','y','width','height'].every(key => Math.abs(a[key]-b[key]) <= .5), who + ' canvas position stays fixed after decision', result); }
             const button = await page.locator('#return').boundingBox(); check(button && button.height >= 44 && button.y + button.height <= height, 'result Return button visible and touchable', result);
             const duplicate = await page.evaluate(async choiceId => {
               const api = await import('./campaign.js'), before = JSON.stringify(window.__sceneReset.candidate);
@@ -240,6 +303,7 @@ async function motion(page, result) {
             engine.advanceSchedule(expected, { content });
             await page.locator('#return').click(); await ready(page, 'map');
             const returned = await saved(page); assert.deepEqual(returned.state, expected);
+            result.map = await measureFrame(page); for (const item of fixedFrameAssertions(result.map)) check(item.pass, item.label, result);
             check(returned.state.scheduleIndex === 3 && returned.state.selectedAnchor === 'makelansilta' && returned.phase === 'map', 'actual day2 night advance, no teleport to next Harju lead', result);
             check(await page.locator('.map-receipt').isVisible() && await page.locator('.next-place').innerText().then(text => text.includes('Harju')), 'quiet map shows actual consequence and next lead', result);
             const duplicateReturn = await page.evaluate(async () => { const api = await import('./campaign.js'), before = JSON.stringify(window.__sceneReset.candidate); return { response: api.returnToMap(window.__sceneReset.candidate, {}), unchanged: JSON.stringify(window.__sceneReset.candidate) === before }; });
@@ -255,6 +319,21 @@ async function motion(page, result) {
         console.log(`${result.failures.length ? 'FAIL' : 'PASS'} ${result.id}${result.flow ? ' · ' + result.flow.choice + ' / reload / real map return' : ' · motion / composition'} (${result.failures.length} failures)`);
       }
     }
+    for (const [width, height] of [[320, 568], [271, 482]]) for (const pose of ['front', 'side']) {
+      const result = { id: `edge-${width}x${height}-${pose}`, edge: true, viewport: { width, height }, pose, motion: 'reduce', failures: [], captures: [] };
+      report.edgeCases.push(result);
+      const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' }); await storageGuard(context);
+      const page = await context.newPage(), finishResources = watch(page, target, result);
+      try {
+        const url = new URL(target); url.searchParams.set('start', 'scene'); url.searchParams.set('pose', pose);
+        await page.goto(url.href); await ready(page, 'scene'); await page.evaluate(() => window.__sceneReset.actors.debug.rest());
+        result.native = await geometry(page, result);
+        await auditStorage(page, result); await capture(page, result.id + '.png', result);
+        check(result.browserErrors.length === 0, 'zero edge-view resource/browser errors', result);
+      } catch (error) { check(false, error.stack || error.message, result); }
+      finally { finishResources(); await context.close(); }
+      console.log(`${result.failures.length ? 'FAIL' : 'PASS'} ${result.id} (${result.failures.length} failures)`);
+    }
   } catch (error) { report.failures.push(error.stack || error.message); }
   finally {
     if (browser) await browser.close();
@@ -263,7 +342,9 @@ async function motion(page, result) {
     if (JSON.stringify(report.finalSourceHashes) !== JSON.stringify(report.sourceHashes)) report.failures.push('Candidate source changed during this run; capture again after integration is stable.');
     report.passed = report.failures.length === 0;
     fs.writeFileSync(path.join(EVIDENCE, 'browser-results.json'), JSON.stringify(report, null, 2) + '\n');
-    console.log(`${report.passed ? 'PASS' : 'FAIL'} Scene Club browser: ${report.cases.length} independent contexts, ${report.checks} checks, ${report.failures.length} failures. Evidence: ${EVIDENCE}`);
+    console.log(`${report.passed ? 'PASS' : 'FAIL'} Scene Club browser: ${report.cases.length} main + ${report.edgeCases.length} edge contexts, ${report.checks} main + ${report.edgeChecks} edge checks, ${report.failures.length} failures. Evidence: ${EVIDENCE}`);
     if (!report.passed) { console.error(report.failures.slice(0, 14).join('\n')); process.exitCode = 1; }
   }
-})();
+}
+module.exports = { measureFrame, fixedFrameAssertions, inside, intersects, frames, storageGuard, watch, sourceHashes, SENTINELS };
+if (require.main === module) runBrowser();

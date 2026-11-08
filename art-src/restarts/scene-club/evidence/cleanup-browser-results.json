@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-08T00:55:18.177Z",
+  "limits": [
+    "Browser emulation and software rendering; no physical Pixel/iPad acceptance.",
+    "Compatibility campaign CSS; no new visual or animation approval."
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "crewIdentity": "neutral initials",
+      "newsIdentity": "Arvo Linde nameplate",
+      "approvedJaska": "actual retained rig",
+      "c19": {
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "renderedFrames": 3
+      },
+      "errors": [],
+      "deletedAssetRequests": 0,
+      "oldSavesUnchanged": true
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "crewIdentity": "neutral initials",
+      "newsIdentity": "Arvo Linde nameplate",
+      "approvedJaska": "actual retained rig",
+      "c19": {
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "renderedFrames": 3
+      },
+      "errors": [],
+      "deletedAssetRequests": 0,
+      "oldSavesUnchanged": true
+    }
+  ]
+}

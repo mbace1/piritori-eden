@@ -21,6 +21,12 @@ const image = id => {
   return new URL('art/v3/' + asset.file, root).href;
 };
 const scene = () => data.encounters.get(SCENE_ENCOUNTER_ID);
+const openingBeats = encounter => encounter.opening.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(line => line.trim()) ?? [encounter.opening];
+const compactStake = choice => {
+  const money = choice.effects.find(effect => effect.startsWith('markka:'))?.split(':')[1];
+  const trust = choice.effects.find(effect => effect.startsWith('relationship:jaska:'))?.split(':')[2];
+  return `${money ? `${money} mk` : 'Bank opportunity lost'} · trust ${trust}`;
+};
 const mapLabel = id => ({makelansilta:'Scene Club',harju:'Harju',piritori:'Piritori',hakaniemi:'Hakaniemi'}[id] ?? data.anchors.get(id)?.label ?? id);
 function deltas() {
   const receipt = candidate.lastReceipt;
@@ -51,26 +57,14 @@ function renderMap() {
   world.innerHTML = `<header class="map-header"><h1>Kallio</h1><span>${candidate.state.markka ? `${candidate.state.markka} mk` : 'Day 2'}</span></header>${mapMarkup()}
     <section class="map-footer">
       ${returned ? `<div class="map-receipt"><p class="eyebrow">Scene Club · remembered</p><div class="receipt">${deltas().map(d=>`<b>${esc(d)}</b>`).join('')}</div></div>
-        <div class="next-place"><span>Harju</span><small>Next authored encounter</small></div>` : `<p class="eyebrow">Mäkelänsilta</p><h2>Scene Club</h2><p>Jaska’s place.</p><button type="button" class="primary" id="enter">Go inside</button>`}
+        <div class="next-place"><span>Harju</span><small>Next authored encounter</small></div>` : `<p class="eyebrow">Mäkelänsilta</p><h2>Scene Club</h2><p>${esc(openingBeats(scene())[0])}</p><button type="button" class="primary" id="enter">Go inside</button>`}
     </section>`;
   $('enter')?.addEventListener('click', () => { arrived = true; render(); });
   expose(true, returned ? 'map' : 'arrival');
 }
 function fitControls() {
-  const controls = $('controls');
-  if (!controls) return;
-  world.style.setProperty('--control-h', `${Math.ceil(controls.getBoundingClientRect().height / (half ? .5 : 1))}px`);
-  const speech = $('speech'), speaker = speech?.dataset.speaker;
-  const bounds = actors?.bounds?.();
-  const mouth = bounds?.[speaker]?.mouth;
-  if (speech && mouth) {
-    const box = speech.getBoundingClientRect();
-    const x = typeof mouth.x === 'number' ? mouth.x : null;
-    if (x !== null) {
-      speech.dataset.tail = x < box.left + box.width / 2 ? 'left' : 'right';
-      speech.style.setProperty('--tail-x', `${Math.max(16,Math.min(box.width / (half ? .5 : 1) - 36,(x-box.left)/(half ? .5 : 1)-10))}px`);
-    }
-  }
+  // Overlays never reserve or resize part of the illustration.
+  world.dataset.format = '9:16';
 }
 function resultControls() {
   return `<p class="result-caption">${esc(candidate.lastReceipt.forecast)}</p><div class="receipt">${deltas().map(d=>`<b>${esc(d)}</b>`).join('')}</div><button type="button" class="primary" id="return">Back to Kallio</button>`;
@@ -90,17 +84,18 @@ async function renderScene() {
   const thisGeneration = ++generation, study = partner === 'toko';
   const resolved = candidate.phase !== 'scene';
   const source = study ? data.encounters.get('enc-toko-quiet-voice') : scene();
-  const studyLines = [source.opening.match(/^[^.]+\./)?.[0] ?? source.opening, source.opening.replace(/^[^.]+\.\s*/, '')];
+  const studyLines = openingBeats(source);
   world.className = `world scene-view${study ? ' toko-study' : ''}${half ? ' half' : ''}`;
   world.innerHTML = `${study ? '<div class="room-composite" id="room-composite"></div>' : `<img class="backdrop" alt="" src="${image(source.scene_asset_id)}">`}<div class="scene-shade"></div>
     <header class="scene-header"><div class="location"><strong>${study ? 'Toko Slomo’s' : 'Scene Club'}</strong><small>${study ? 'Vaasankatu · ensemble study' : 'Mäkelänsilta'}</small></div><span class="old-cash">${candidate.state.markka ? `${candidate.state.markka} mk` : ''}</span></header>
     <div class="actors" id="actors" aria-label="Aatami and ${study ? 'Toko' : 'Jaska'}"></div>
-    <section class="speech" id="speech" data-speaker="${resolved && !study ? 'aatami' : partner}" aria-live="polite"><p class="speaker">${study ? 'Toko' : resolved ? 'Aatami' : 'Jaska'}</p><p>${esc(study ? studyLines[tokoBeat] : resolved ? candidate.lastReceipt.label : source.opening)}</p></section>
+    <div class="encounter-overlay" id="encounter-overlay">
+    <section class="speech" id="speech" data-speaker="${resolved && !study ? 'aatami' : partner}" aria-live="polite"><p class="speaker">${study ? 'Toko' : resolved ? 'Aatami' : 'Jaska'}</p><p>${esc(study ? studyLines[tokoBeat] : resolved ? candidate.lastReceipt.label : openingBeats(source).at(-1))}</p></section>
     <section class="controls" id="controls" aria-label="${study ? 'Ensemble study' : 'Your response'}">
-      ${study ? `<p class="result-caption">Aatami + Toko · source composition study</p><div class="study-actions"><button class="choice" type="button" id="next-line">${tokoBeat ? 'First line' : 'Next line'}</button><button class="primary" type="button" id="back-to-scene">Return to Scene Club</button></div>` : resolved ? resultControls() : `<div class="choices">${source.choices.map(c => `<button class="choice" type="button" data-choice="${esc(c.id)}" disabled><strong>${esc(c.label)}</strong><span>${esc(c.forecast)}</span></button>`).join('')}</div>`}
-    </section>`;
+      ${study ? `<div class="study-actions"><button class="choice" type="button" id="next-line">${tokoBeat ? 'First line' : 'Next line'}</button><button class="primary" type="button" id="back-to-scene">Return to Scene Club</button></div>` : resolved ? resultControls() : `<div class="choices">${source.choices.map(c => `<button class="choice" type="button" data-choice="${esc(c.id)}" aria-label="${esc(c.label+'. '+c.forecast)}" disabled><strong>${esc(c.label)}</strong><span class="forecast">${esc(c.forecast)}</span><span class="compact-stake" aria-hidden="true">${esc(compactStake(c))}</span></button>`).join('')}</div>`}
+    </section></div>`;
   observer?.disconnect(); observer = new ResizeObserver(fitControls); observer.observe($('controls')); fitControls();
-  const stage = study ? createTokoComposition($('room-composite'),$('actors'),{aatami:pose,reducedMotion:motion.matches,focus:()=>innerWidth<600?[.36,.5]:innerHeight<600?[.5,0]:[.5,.5]}) : createActors($('actors'), { aatami: pose, partner, reducedMotion: motion.matches });
+  const stage = study ? createTokoComposition($('room-composite'),$('actors'),{aatami:pose,reducedMotion:motion.matches,focus:()=>[.36,.5]}) : createActors($('actors'), { aatami: pose, partner, reducedMotion: motion.matches });
   actors = stage;
   await stage.ready;
   if (generation !== thisGeneration) { stage.destroy(); return; }
