@@ -1,3 +1,22 @@
+## v4.99 — 2026-11-07
+
+**A route holds its count for the block (ROADMAP G4 step 2).** The chapter bot (`web/tools/chapter-bot.mjs`, `design/G4_CHAPTER_BOT.md`) found a hole in v4.98's time rule. A pack sent down a route costs Aatami no time, and the route's capacity is what ordinary traffic leaves free. But re-pinning a route emptied its count. So one Piritori visit could buy, send, re-pin and repeat: €3,400 counted toward the €400 inside one block, using 30% of it. v4.98's notes said a route "has its own capacity per block"; until now that was not true.
+
+- **The rule** (`state.js`):
+  - The hidden loads sent down a route are counted for the block.
+  - Re-pinning, or pinning another path, keeps the count.
+  - When the block turns, the route frees and its ordinary traffic is rolled for the new block.
+  - So a route carries 1 to 3 packs a block. A save from before v4.99 starts its next send with the route free.
+- **What the bot measured** (on v4.99; the note has the table):
+  - Every one of the 20 blocks plays on every policy, and none was forced into a fight.
+  - The story alone counts €0 toward the €400.
+  - A trader who uses routes meets the goal on day 3.
+  - For a trader, the shipment is decided by the crew, not the money.
+  - The €400's size is the owner's question (ROADMAP §8 item 7).
+- **Gate:** `v3-state.mjs` re-pins ten times in one block and sends only what is free, keeps the count across a new path, frees the route when the block turns, and reads an old save. It fails on v4.98's rules (20 packs sent where 2 were free).
+- **Cache:** state v15 and everything that imports it, app v66. The label is v4.99.
+- **Owner played: pending.** Godot paused.
+
 ## v4.98 — 2026-11-07
 
 **A trip or a trade takes time (D002, ROADMAP G4 step 1).** Owner, 2026-10-26: *"30%."* Read as: a trip, or a visit to a seller however much changes hands, uses 30% of a block, so three fit. It was answered and never built. So far travel and trading cost no time, so three buy-walk-sell loops cleared the shipment's €400 inside one block (ROADMAP §8 item 7).
