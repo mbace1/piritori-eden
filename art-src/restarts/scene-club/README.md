@@ -170,6 +170,10 @@ specification. Tests reject restoration of the retired libraries and references.
   phone/desktop neutral identities, byte-identical saved campaigns and actual
   C.19 procedural models. [2,000 matched hiring results](evidence/cleanup-gameplay.json)
   and [324 paused Godot battle checks](evidence/godot-battle.log) also pass.
+- [Neutral compatibility layout](evidence/compat-layout-validation.json):
+  header 62/0, full readability 86/0 and DejaVu Sans header 62/0. Viewport
+  floors and measured small/low-contrast labels are corrected without
+  restoring the retired visual skin.
 - [Phone recording](evidence/visual-restart-phone.mp4) and
   [landscape recording](evidence/visual-restart-landscape.mp4). WebM originals
   and stage/viewport screenshots are included beside them.

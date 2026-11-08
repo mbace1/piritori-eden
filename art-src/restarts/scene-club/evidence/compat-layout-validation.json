@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "38f1879bed0737d3b6689a3639fb1a3f20b872e4",
+  "scope": "Neutral campaign compatibility only; Scene Club presentation and C19 runtime unchanged.",
+  "sourceHashes": {
+    "web/v3.css": "04d4e5406784280fff119471c352ce1b3061f13690140fd643ba61ff8426f6d1",
+    "web/index.html": "df4b4c359b0232d466b722fbb9ef8c233ead9ac3f62a3047596c71624777c86d"
+  },
+  "tests": {
+    "node web/test/header-fit.cjs": {
+      "passed": 62,
+      "failed": 0,
+      "log": "compat-header-fit.log"
+    },
+    "node web/test/ui-readability.cjs": {
+      "passed": 86,
+      "failed": 0,
+      "log": "compat-readability.log"
+    },
+    "private DejaVu Sans header probe": {
+      "passed": 62,
+      "failed": 0,
+      "log": "compat-header-dejavu.log"
+    }
+  },
+  "limits": "Browser emulation; no physical-device acceptance."
+}

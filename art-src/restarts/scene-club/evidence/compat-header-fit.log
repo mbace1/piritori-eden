@@ -1,0 +1,64 @@
+  ok   320px: the shell's floating HUB button is hidden on this page
+  ok   320px: nothing in the header sits under it
+  ok   320px: the page's own ⌂ hub link is there at 44px+
+  ok   320px: every resource label and value fits its card
+  ok   320px: the wordmark clears the day card
+  ok   320px: no horizontal scroll
+  ok   320px: no browser errors
+  ok   360px: the shell's floating HUB button is hidden on this page
+  ok   360px: nothing in the header sits under it
+  ok   360px: the page's own ⌂ hub link is there at 44px+
+  ok   360px: every resource label and value fits its card
+  ok   360px: the wordmark clears the day card
+  ok   360px: no horizontal scroll
+  ok   360px: no browser errors
+  ok   390px: the shell's floating HUB button is hidden on this page
+  ok   390px: nothing in the header sits under it
+  ok   390px: the page's own ⌂ hub link is there at 44px+
+  ok   390px: every resource label and value fits its card
+  ok   390px: the wordmark clears the day card
+  ok   390px: no horizontal scroll
+  ok   390px: no browser errors
+  ok   430px: the shell's floating HUB button is hidden on this page
+  ok   430px: nothing in the header sits under it
+  ok   430px: the page's own ⌂ hub link is there at 44px+
+  ok   430px: every resource label and value fits its card
+  ok   430px: the wordmark clears the day card
+  ok   430px: no horizontal scroll
+  ok   430px: no browser errors
+  ok   760px: the shell's floating HUB button is hidden on this page
+  ok   760px: nothing in the header sits under it
+  ok   760px: the page's own ⌂ hub link is there at 44px+
+  ok   760px: every resource label and value fits its card
+  ok   760px: the wordmark clears the day card
+  ok   760px: no horizontal scroll
+  ok   760px: no browser errors
+  ok   844px: the shell's floating HUB button is hidden on this page
+  ok   844px: nothing in the header sits under it
+  ok   844px: the page's own ⌂ hub link is there at 44px+
+  ok   844px: every resource label and value fits its card
+  ok   844px: the wordmark clears the day card
+  ok   844px: no horizontal scroll
+  ok   844px: no browser errors
+  ok   915px: the shell's floating HUB button is hidden on this page
+  ok   915px: nothing in the header sits under it
+  ok   915px: the page's own ⌂ hub link is there at 44px+
+  ok   915px: every resource label and value fits its card
+  ok   915px: the wordmark clears the day card
+  ok   915px: no horizontal scroll
+  ok   915px: no browser errors
+  ok   1280px: the shell's floating HUB button is hidden on this page
+  ok   1280px: nothing in the header sits under it
+  ok   1280px: the page's own ⌂ hub link is there at 44px+
+  ok   1280px: every resource label and value fits its card
+  ok   1280px: the wordmark clears the day card
+  ok   1280px: no horizontal scroll
+  ok   1280px: no browser errors
+  ok   844x390: the page fits the screen
+  ok   844x390: the command bar is fully on screen
+  ok   844x390: and answers a tap
+  ok   915x412: the page fits the screen
+  ok   915x412: the command bar is fully on screen
+  ok   915x412: and answers a tap
+
+  62 passed, 0 failed
