@@ -380,8 +380,10 @@ function playOpening() {
       event?.preventDefault?.();
       clearTimeout(timer);
       window.removeEventListener('keydown', finish, true);
-      veil.classList.add('leaving');
-      setTimeout(() => { veil.remove(); resolve(); }, reduce ? 0 : 450);
+      veil.removeEventListener('pointerup', finish);
+      // The neutral sheet has no exit animation: restore controls immediately.
+      veil.remove();
+      resolve();
     };
     const timer = setTimeout(finish, reduce ? 6000 : 9500);
     veil.addEventListener('pointerup', finish);
