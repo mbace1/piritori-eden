@@ -1,0 +1,3518 @@
+{
+  "capturedAt": "2026-11-08T14:20:17.053Z",
+  "sourceRoot": "/workspace/piritori-visual-reset",
+  "sourceCommit": "5e440ab6cca85e67fc2faff91ed95d9170cd8f58",
+  "sourceHashes": {
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/index.html": "e3dc313db248a67ce9fff6c0af160b406786cbb75d962369398140c4cf90e784",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/js/v3/state.js": "cdbe2f447d899155538c5d0222ede1b8fe0aac7e070ed0e4aea201c493ea5a40",
+    "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
+    "content/era1-slice-v1.json": "a5a88fa1a97cf9a4e4d211ded6d69da9ff78c7fd5388d7d55f8b9b6ff00cad30",
+    "art/v3/manifest.json": "338424e7340c1821abe94067bfbe063c6b7fc4cba920e7d0f95277e20909ebb5"
+  },
+  "workingTree": [
+    "M .github/workflows/gates.yml",
+    " M AGENTS.md",
+    " M ART_BIBLE.md",
+    " M DESIGN_AUTHORITY.md",
+    " M art-src/restarts/scene-club/README.md",
+    " M web/test/scene-club-campaign.cjs",
+    "?? design/SCENE_CLUB_CAMPAIGN_INTEGRATION.md"
+  ],
+  "captureMethod": "Actual normal campaign controls from fresh Begin. No fixture state, debug state writes or seeded normal save. Raw WebM includes opening purchase, sale and explicit travel; preview will use a contiguous Scene Club/return segment.",
+  "cases": [
+    {
+      "name": "normal-450",
+      "width": 450,
+      "height": 800,
+      "touch": true,
+      "record": true,
+      "events": [
+        {
+          "time": 0.436,
+          "text": "Native Begin"
+        },
+        {
+          "time": 0.723,
+          "text": "Actual opening pack purchased"
+        },
+        {
+          "time": 4.939,
+          "text": "Actual opening sale completed"
+        },
+        {
+          "time": 5.276,
+          "text": "Real Scene Club trip preview"
+        },
+        {
+          "time": 5.522,
+          "text": "Real 30%-block travel completed"
+        },
+        {
+          "time": 6.973,
+          "text": "Actual campaign Scene Club arrival ready, travel toast cleared"
+        },
+        {
+          "time": 11.944,
+          "text": "All three normal campaign choices visible"
+        },
+        {
+          "time": 18.409,
+          "text": "Normal engine result +300 mk and +1 Jaska trust"
+        },
+        {
+          "time": 21.958,
+          "text": "Returned to actual existing Kallio map, index3/Mäkelänsilta"
+        },
+        {
+          "time": 26.14,
+          "text": "End normal campaign capture"
+        }
+      ],
+      "errors": [],
+      "unexpectedHttp": [],
+      "requests": [
+        "/web/",
+        "/web/v3.css",
+        "/web/js/v3/app.js",
+        "/web/js/v3/visits.js",
+        "/web/js/v3/chapter-narrative.js",
+        "/web/js/v3/content.js",
+        "/web/js/v3/map-relief.js",
+        "/web/js/v3/state.js",
+        "/web/js/v3/pause.js",
+        "/web/js/v3/testlist.js",
+        "/web/js/v3/sound.js",
+        "/web/js/v3/board.js",
+        "/web/js/v3/journey.js",
+        "/web/js/v3/toko.js",
+        "/web/js/v3/toko-stage.js",
+        "/web/js/v3/cutin-stage.js",
+        "/web/js/v3/story.js",
+        "/web/js/v3/chapter.js",
+        "/web/js/v3/doors.js",
+        "/web/js/v3/standing.js",
+        "/web/js/v3/places.js",
+        "/web/js/v3/outing.js",
+        "/web/js/v3/road.js",
+        "/web/js/v3/battle.js",
+        "/web/js/v3/grid.js",
+        "/web/js/v3/stance.js",
+        "/web/js/v3/render3d.js",
+        "/web/js/v3/stage-camera.js",
+        "/web/js/v3/scene-club-view.js",
+        "/people/roster.mjs",
+        "/people/hiring.mjs",
+        "/market/model.mjs",
+        "/web/js/v3/equipment.js",
+        "/web/vendor/three.module.min.js",
+        "/web/vendor/jsm/loaders/GLTFLoader.js",
+        "/web/js/v3/fight-motion.js",
+        "/web/fight-module/stand-in.js",
+        "/web/js/v3/scene-club-actors.js",
+        "/web/js/v3/nameplates.js",
+        "/web/vendor/jsm/utils/BufferGeometryUtils.js",
+        "/content/era1-slice-v1.json",
+        "/map/kallio-era1-2003-v1.json",
+        "/map/kallio-transit-layer-v1.json",
+        "/art/v3/manifest.json",
+        "/hub/shell.js",
+        "/content/road-events-v1.json",
+        "/content/act1-story-v1.json",
+        "/content/doors-v1.json",
+        "/content/places-v1.json",
+        "/content/families-v1.json",
+        "/web/data/map-geometry-web-v1.json",
+        "/art/v3/scenes/piritori-square-v01.webp",
+        "/web/js/v3/scene-club-view.css",
+        "/art/v3/manifest.json",
+        "/art/v3/scenes/scene-club-v01.webp",
+        "/art/v3/cutins/aatami-v01/torso.webp",
+        "/art/v3/cutins/aatami-v01/head.webp",
+        "/art/v3/cutins/aatami-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/torso.webp",
+        "/art/v3/cutins/jaska-v01/head.webp",
+        "/art/v3/cutins/jaska-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/lid_1.webp"
+      ],
+      "measurements": [
+        {
+          "label": "arrival",
+          "viewport": {
+            "width": 450,
+            "height": 800
+          },
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 450,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "panels": [
+            {
+              "left": 12,
+              "top": 12,
+              "right": 382,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 677.8125,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 110.1875,
+              "band": "bottom"
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.222734375,
+          "topBand": 56,
+          "bottomBand": 122.1875,
+          "controls": [
+            {
+              "left": 12,
+              "top": 744,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 16,
+              "disabled": false
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 67,
+              "right": 491.84375,
+              "bottom": 115,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 123,
+              "right": 491.84375,
+              "bottom": 190,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 190,
+              "right": 491.84375,
+              "bottom": 240,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 240,
+              "right": 491.84375,
+              "bottom": 307,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 315,
+              "right": 491.84375,
+              "bottom": 359,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 367,
+              "right": 491.84375,
+              "bottom": 415,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        },
+        {
+          "label": "all choices",
+          "viewport": {
+            "width": 450,
+            "height": 800
+          },
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 450,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "panels": [
+            {
+              "left": 12,
+              "top": 12,
+              "right": 382,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 548.46875,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 239.53125,
+              "band": "bottom"
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.3844140625,
+          "topBand": 56,
+          "bottomBand": 251.53125,
+          "controls": [
+            {
+              "left": 12,
+              "top": 614.65625,
+              "right": 438,
+              "bottom": 668.4375,
+              "width": 426,
+              "height": 53.78125,
+              "id": "ask-envelope",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 12,
+              "top": 674.4375,
+              "right": 438,
+              "bottom": 728.21875,
+              "width": 426,
+              "height": 53.78125,
+              "id": "take-envelope",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 12,
+              "top": 734.21875,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 53.78125,
+              "id": "leave-it",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 67,
+              "right": 491.84375,
+              "bottom": 115,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 123,
+              "right": 491.84375,
+              "bottom": 190,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 190,
+              "right": 491.84375,
+              "bottom": 240,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 240,
+              "right": 491.84375,
+              "bottom": 307,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 315,
+              "right": 491.84375,
+              "bottom": 359,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 367,
+              "right": 491.84375,
+              "bottom": 415,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "painted": true,
+              "text": "Ask before taking the envelope\nGain dead money and preserve trust.",
+              "label": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "painted": true,
+              "text": "Call it family money\nGain dead money; Jaska remembers the wording.",
+              "label": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "painted": true,
+              "text": "Leave the old money under the map\nLose a bank opportunity; deepen trust.",
+              "label": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "disabled": false
+            }
+          ],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        },
+        {
+          "label": "real result",
+          "viewport": {
+            "width": 450,
+            "height": 800
+          },
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 450,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "panels": [
+            {
+              "left": 12,
+              "top": 12,
+              "right": 382,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 617.40625,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 170.59375,
+              "band": "bottom"
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.2982421875,
+          "topBand": 56,
+          "bottomBand": 182.59375,
+          "controls": [
+            {
+              "left": 12,
+              "top": 744,
+              "right": 438,
+              "bottom": 788,
+              "width": 426,
+              "height": 44,
+              "id": "return",
+              "font": 16,
+              "disabled": false
+            },
+            {
+              "left": 394,
+              "top": 12,
+              "right": 438,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 67,
+              "right": 491.84375,
+              "bottom": 115,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 123,
+              "right": 491.84375,
+              "bottom": 190,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 190,
+              "right": 491.84375,
+              "bottom": 240,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 240,
+              "right": 491.84375,
+              "bottom": 307,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 315,
+              "right": 491.84375,
+              "bottom": 359,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 405,
+              "top": 367,
+              "right": 491.84375,
+              "bottom": 415,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        }
+      ],
+      "earnedBeforeTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "siltasaari",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1
+        },
+        "lastFight": null,
+        "time": {
+          "block": 1,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 1,
+          "since": 0,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "earnedAfterTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "sceneRequestTime": 6.222,
+      "sceneReadyTime": 6.973,
+      "beforeChoice": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "afterChoice": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 600,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 1,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made",
+          "markka-explained"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete",
+          "enc-jaska-receipt": "ask-envelope"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "enc-jaska-receipt: Ask before taking the envelope",
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": [],
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "returned": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 3,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 600,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 1,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made",
+          "markka-explained"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt",
+          "enc-runner-at-tram-stop"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete",
+          "enc-jaska-receipt": "ask-envelope"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "enc-jaska-receipt: Ask before taking the envelope",
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "storageAudit": {
+        "accesses": [],
+        "aux": {
+          "piritori:restart:scene-club:v1": "{\"sentinel\":\"not the campaign\"}",
+          "piritori-c12-crew-v1": "{\"sentinel\":\"separate roster\"}",
+          "piritori-c19-outing-v1": "{\"sentinel\":\"separate battle receipt\"}"
+        }
+      },
+      "noFixtureState": true,
+      "noReviewDependency": true,
+      "passed": true,
+      "nativeVideo": "/workspace/evidence/scene-club-integration-capture-guarded/normal-campaign-450-native.webm",
+      "fullVideo": "/workspace/evidence/scene-club-integration-capture-guarded/normal-campaign-full-native.mp4"
+    },
+    {
+      "name": "phone-390",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "events": [
+        {
+          "time": 0.557,
+          "text": "Native Begin"
+        },
+        {
+          "time": 0.851,
+          "text": "Actual opening pack purchased"
+        },
+        {
+          "time": 4.804,
+          "text": "Actual opening sale completed"
+        },
+        {
+          "time": 5.169,
+          "text": "Real Scene Club trip preview"
+        },
+        {
+          "time": 5.439,
+          "text": "Real 30%-block travel completed"
+        },
+        {
+          "time": 6.21,
+          "text": "Actual campaign Scene Club arrival ready, travel toast cleared"
+        },
+        {
+          "time": 7.066,
+          "text": "All three normal campaign choices visible"
+        }
+      ],
+      "errors": [],
+      "unexpectedHttp": [],
+      "requests": [
+        "/web/",
+        "/web/v3.css",
+        "/web/js/v3/app.js",
+        "/web/js/v3/visits.js",
+        "/web/js/v3/chapter-narrative.js",
+        "/web/js/v3/content.js",
+        "/web/js/v3/map-relief.js",
+        "/web/js/v3/state.js",
+        "/web/js/v3/pause.js",
+        "/web/js/v3/testlist.js",
+        "/web/js/v3/sound.js",
+        "/web/js/v3/board.js",
+        "/web/js/v3/journey.js",
+        "/web/js/v3/toko.js",
+        "/web/js/v3/toko-stage.js",
+        "/web/js/v3/cutin-stage.js",
+        "/web/js/v3/story.js",
+        "/web/js/v3/chapter.js",
+        "/web/js/v3/doors.js",
+        "/web/js/v3/standing.js",
+        "/web/js/v3/places.js",
+        "/web/js/v3/outing.js",
+        "/web/js/v3/road.js",
+        "/web/js/v3/battle.js",
+        "/web/js/v3/grid.js",
+        "/web/js/v3/stance.js",
+        "/web/js/v3/render3d.js",
+        "/web/js/v3/stage-camera.js",
+        "/web/js/v3/scene-club-view.js",
+        "/people/roster.mjs",
+        "/people/hiring.mjs",
+        "/market/model.mjs",
+        "/web/js/v3/scene-club-actors.js",
+        "/web/vendor/three.module.min.js",
+        "/web/js/v3/nameplates.js",
+        "/web/vendor/jsm/loaders/GLTFLoader.js",
+        "/web/js/v3/fight-motion.js",
+        "/web/fight-module/stand-in.js",
+        "/web/js/v3/equipment.js",
+        "/web/vendor/jsm/utils/BufferGeometryUtils.js",
+        "/content/era1-slice-v1.json",
+        "/map/kallio-era1-2003-v1.json",
+        "/map/kallio-transit-layer-v1.json",
+        "/art/v3/manifest.json",
+        "/hub/shell.js",
+        "/content/road-events-v1.json",
+        "/content/act1-story-v1.json",
+        "/content/doors-v1.json",
+        "/content/places-v1.json",
+        "/content/families-v1.json",
+        "/web/data/map-geometry-web-v1.json",
+        "/art/v3/scenes/piritori-square-v01.webp",
+        "/web/js/v3/scene-club-view.css",
+        "/art/v3/manifest.json",
+        "/art/v3/scenes/scene-club-v01.webp",
+        "/art/v3/cutins/aatami-v01/torso.webp",
+        "/art/v3/cutins/aatami-v01/head.webp",
+        "/art/v3/cutins/aatami-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/torso.webp",
+        "/art/v3/cutins/jaska-v01/head.webp",
+        "/art/v3/cutins/jaska-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/lid_1.webp"
+      ],
+      "measurements": [
+        {
+          "label": "arrival",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "stage": {
+            "left": 0,
+            "top": 75.328125,
+            "right": 390,
+            "bottom": 768.65625,
+            "width": 390,
+            "height": 693.328125
+          },
+          "panels": [
+            {
+              "left": 12,
+              "top": 87.328125,
+              "right": 322,
+              "bottom": 131.328125,
+              "width": 310,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 650.125,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 106.53125,
+              "band": "bottom"
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.2517296554210894,
+          "topBand": 56,
+          "bottomBand": 118.53125,
+          "controls": [
+            {
+              "left": 12,
+              "top": 712.65625,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 15.6,
+              "disabled": false
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 142.328125,
+              "right": 431.84375,
+              "bottom": 190.328125,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 198.328125,
+              "right": 431.84375,
+              "bottom": 265.328125,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 265.328125,
+              "right": 431.84375,
+              "bottom": 315.328125,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 315.328125,
+              "right": 431.84375,
+              "bottom": 382.328125,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 390.328125,
+              "right": 431.84375,
+              "bottom": 434.328125,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 442.328125,
+              "right": 431.84375,
+              "bottom": 490.328125,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        },
+        {
+          "label": "all choices",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "stage": {
+            "left": 0,
+            "top": 75.328125,
+            "right": 390,
+            "bottom": 768.65625,
+            "width": 390,
+            "height": 693.328125
+          },
+          "panels": [
+            {
+              "left": 12,
+              "top": 87.328125,
+              "right": 322,
+              "bottom": 131.328125,
+              "width": 310,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 524.109375,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 232.546875,
+              "band": "bottom"
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.433484326054132,
+          "topBand": 56,
+          "bottomBand": 244.546875,
+          "controls": [
+            {
+              "left": 12,
+              "top": 586.640625,
+              "right": 378,
+              "bottom": 639.3125,
+              "width": 366,
+              "height": 52.671875,
+              "id": "ask-envelope",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 12,
+              "top": 645.3125,
+              "right": 378,
+              "bottom": 697.984375,
+              "width": 366,
+              "height": 52.671875,
+              "id": "take-envelope",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 12,
+              "top": 703.984375,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 52.671875,
+              "id": "leave-it",
+              "font": 14,
+              "disabled": false
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 142.328125,
+              "right": 431.84375,
+              "bottom": 190.328125,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 198.328125,
+              "right": 431.84375,
+              "bottom": 265.328125,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 265.328125,
+              "right": 431.84375,
+              "bottom": 315.328125,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 315.328125,
+              "right": 431.84375,
+              "bottom": 382.328125,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 390.328125,
+              "right": 431.84375,
+              "bottom": 434.328125,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 345,
+              "top": 442.328125,
+              "right": 431.84375,
+              "bottom": 490.328125,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "painted": true,
+              "text": "Ask before taking the envelope\nGain dead money and preserve trust.",
+              "label": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "painted": true,
+              "text": "Call it family money\nGain dead money; Jaska remembers the wording.",
+              "label": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "painted": true,
+              "text": "Leave the old money under the map\nLose a bank opportunity; deepen trust.",
+              "label": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "disabled": false
+            }
+          ],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        }
+      ],
+      "earnedBeforeTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "siltasaari",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1
+        },
+        "lastFight": null,
+        "time": {
+          "block": 1,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 1,
+          "since": 0,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "earnedAfterTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "sceneRequestTime": 5.439,
+      "sceneReadyTime": 6.21,
+      "beforeChoice": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "storageAudit": {
+        "accesses": [],
+        "aux": {
+          "piritori:restart:scene-club:v1": "{\"sentinel\":\"not the campaign\"}",
+          "piritori-c12-crew-v1": "{\"sentinel\":\"separate roster\"}",
+          "piritori-c19-outing-v1": "{\"sentinel\":\"separate battle receipt\"}"
+        }
+      },
+      "noFixtureState": true,
+      "noReviewDependency": true,
+      "passed": true
+    },
+    {
+      "name": "desktop-1280",
+      "width": 1280,
+      "height": 800,
+      "touch": false,
+      "events": [
+        {
+          "time": 0.43,
+          "text": "Native Begin"
+        },
+        {
+          "time": 0.637,
+          "text": "Actual opening pack purchased"
+        },
+        {
+          "time": 1.369,
+          "text": "Actual opening sale completed"
+        },
+        {
+          "time": 1.727,
+          "text": "Real Scene Club trip preview"
+        },
+        {
+          "time": 1.914,
+          "text": "Real 30%-block travel completed"
+        },
+        {
+          "time": 2.597,
+          "text": "Actual campaign Scene Club arrival ready, travel toast cleared"
+        },
+        {
+          "time": 3.542,
+          "text": "All three normal campaign choices visible"
+        }
+      ],
+      "errors": [],
+      "unexpectedHttp": [],
+      "requests": [
+        "/web/",
+        "/web/v3.css",
+        "/web/js/v3/app.js",
+        "/web/js/v3/visits.js",
+        "/web/js/v3/chapter-narrative.js",
+        "/web/js/v3/content.js",
+        "/web/js/v3/map-relief.js",
+        "/web/js/v3/state.js",
+        "/web/js/v3/pause.js",
+        "/web/js/v3/testlist.js",
+        "/web/js/v3/sound.js",
+        "/web/js/v3/board.js",
+        "/web/js/v3/journey.js",
+        "/web/js/v3/toko.js",
+        "/web/js/v3/toko-stage.js",
+        "/web/js/v3/cutin-stage.js",
+        "/web/js/v3/story.js",
+        "/web/js/v3/chapter.js",
+        "/web/js/v3/doors.js",
+        "/web/js/v3/standing.js",
+        "/web/js/v3/places.js",
+        "/web/js/v3/outing.js",
+        "/web/js/v3/road.js",
+        "/web/js/v3/battle.js",
+        "/web/js/v3/grid.js",
+        "/web/js/v3/stance.js",
+        "/web/js/v3/render3d.js",
+        "/web/js/v3/stage-camera.js",
+        "/web/js/v3/scene-club-view.js",
+        "/people/hiring.mjs",
+        "/market/model.mjs",
+        "/people/roster.mjs",
+        "/web/vendor/three.module.min.js",
+        "/web/vendor/jsm/loaders/GLTFLoader.js",
+        "/web/js/v3/fight-motion.js",
+        "/web/fight-module/stand-in.js",
+        "/web/js/v3/nameplates.js",
+        "/web/js/v3/equipment.js",
+        "/web/js/v3/scene-club-actors.js",
+        "/web/vendor/jsm/utils/BufferGeometryUtils.js",
+        "/content/era1-slice-v1.json",
+        "/map/kallio-era1-2003-v1.json",
+        "/map/kallio-transit-layer-v1.json",
+        "/art/v3/manifest.json",
+        "/hub/shell.js",
+        "/content/road-events-v1.json",
+        "/content/act1-story-v1.json",
+        "/content/doors-v1.json",
+        "/content/places-v1.json",
+        "/content/families-v1.json",
+        "/web/data/map-geometry-web-v1.json",
+        "/art/v3/scenes/piritori-square-v01.webp",
+        "/web/js/v3/scene-club-view.css",
+        "/art/v3/manifest.json",
+        "/art/v3/scenes/scene-club-v01.webp",
+        "/art/v3/cutins/aatami-v01/torso.webp",
+        "/art/v3/cutins/aatami-v01/head.webp",
+        "/art/v3/cutins/aatami-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/torso.webp",
+        "/art/v3/cutins/jaska-v01/head.webp",
+        "/art/v3/cutins/jaska-v01/lid_0.webp",
+        "/art/v3/cutins/jaska-v01/lid_1.webp"
+      ],
+      "measurements": [
+        {
+          "label": "arrival",
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "stage": {
+            "left": 415,
+            "top": 0,
+            "right": 865,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "panels": [
+            {
+              "left": 427,
+              "top": 12,
+              "right": 797,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 427,
+              "top": 677.8125,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 110.1875,
+              "band": "bottom"
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.222734375,
+          "topBand": 56,
+          "bottomBand": 122.1875,
+          "controls": [
+            {
+              "left": 427,
+              "top": 744,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 16,
+              "disabled": false
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 67,
+              "right": 906.84375,
+              "bottom": 115,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 123,
+              "right": 906.84375,
+              "bottom": 190,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 190,
+              "right": 906.84375,
+              "bottom": 240,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 240,
+              "right": 906.84375,
+              "bottom": 307,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 315,
+              "right": 906.84375,
+              "bottom": 359,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 367,
+              "right": 906.84375,
+              "bottom": 415,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        },
+        {
+          "label": "all choices",
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "stage": {
+            "left": 415,
+            "top": 0,
+            "right": 865,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "panels": [
+            {
+              "left": 427,
+              "top": 12,
+              "right": 797,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 427,
+              "top": 548.46875,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 239.53125,
+              "band": "bottom"
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "heightRatio": 0.3844140625,
+          "topBand": 56,
+          "bottomBand": 251.53125,
+          "controls": [
+            {
+              "left": 427,
+              "top": 614.65625,
+              "right": 853,
+              "bottom": 668.4375,
+              "width": 426,
+              "height": 53.78125,
+              "id": "ask-envelope",
+              "font": 15,
+              "disabled": false
+            },
+            {
+              "left": 427,
+              "top": 674.4375,
+              "right": 853,
+              "bottom": 728.21875,
+              "width": 426,
+              "height": 53.78125,
+              "id": "take-envelope",
+              "font": 15,
+              "disabled": false
+            },
+            {
+              "left": 427,
+              "top": 734.21875,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 53.78125,
+              "id": "leave-it",
+              "font": 15,
+              "disabled": false
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 67,
+              "right": 906.84375,
+              "bottom": 115,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-resume",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 123,
+              "right": 906.84375,
+              "bottom": 190,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 190,
+              "right": 906.84375,
+              "bottom": 240,
+              "width": 86.84375,
+              "height": 50,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 240,
+              "right": 906.84375,
+              "bottom": 307,
+              "width": 86.84375,
+              "height": 67,
+              "id": "SUMMARY",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 315,
+              "right": 906.84375,
+              "bottom": 359,
+              "width": 86.84375,
+              "height": 44,
+              "id": "scene-sound",
+              "font": 12,
+              "disabled": false
+            },
+            {
+              "left": 820,
+              "top": 367,
+              "right": 906.84375,
+              "bottom": 415,
+              "width": 86.84375,
+              "height": 48,
+              "id": "scene-back",
+              "font": 12,
+              "disabled": false
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "painted": true,
+              "text": "Ask before taking the envelope\nGain dead money and preserve trust.",
+              "label": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "painted": true,
+              "text": "Call it family money\nGain dead money; Jaska remembers the wording.",
+              "label": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "painted": true,
+              "text": "Leave the old money under the map\nLose a bank opportunity; deepen trust.",
+              "label": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "disabled": false
+            }
+          ],
+          "external": [],
+          "uiStage": "both",
+          "density": "full",
+          "noPrototypeUi": true,
+          "legacyCutins": 0
+        }
+      ],
+      "earnedBeforeTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "siltasaari",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1
+        },
+        "lastFight": null,
+        "time": {
+          "block": 1,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 1,
+          "since": 0,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "earnedAfterTravel": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "route",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "sceneRequestTime": 1.915,
+      "sceneReadyTime": 2.597,
+      "beforeChoice": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 183,
+        "markka": 300,
+        "debt": 355,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [
+          "first-purchase-made"
+        ],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy",
+          "offer-siltasaari-sell"
+        ],
+        "revealedMissions": [
+          "mission-paper-bag"
+        ],
+        "revealedEncounters": [
+          "enc-first-purchase",
+          "enc-first-sale",
+          "enc-jaska-receipt"
+        ],
+        "missionStatus": {
+          "mission-paper-bag": "complete"
+        },
+        "choices": {
+          "enc-first-purchase": "buy",
+          "enc-first-sale": "complete"
+        },
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Aatami walks SILTASAARI → HAKANIEMI → PIRITORI / KURVI → MÄKELÄNSILTA.",
+          "enc-first-sale: Complete the first sale",
+          "Aatami walks PIRITORI / KURVI → HAKANIEMI → SILTASAARI.",
+          "enc-first-purchase: Buy one pack — €45",
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0,
+          "siltasaari": 1,
+          "makelansilta": 2
+        },
+        "lastFight": null,
+        "time": {
+          "block": 2,
+          "spent": 3,
+          "visitAt": null
+        },
+        "road": {
+          "journeys": 2,
+          "since": 1,
+          "seen": [],
+          "pending": null,
+          "minutes": 0,
+          "minutesBlock": -1,
+          "last": null
+        },
+        "standing": {
+          "warned": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          },
+          "demanded": {
+            "mccormick_family": false,
+            "jade_lantern_network": false
+          }
+        }
+      },
+      "storageAudit": {
+        "accesses": [],
+        "aux": {
+          "piritori:restart:scene-club:v1": "{\"sentinel\":\"not the campaign\"}",
+          "piritori-c12-crew-v1": "{\"sentinel\":\"separate roster\"}",
+          "piritori-c19-outing-v1": "{\"sentinel\":\"separate battle receipt\"}"
+        }
+      },
+      "noFixtureState": true,
+      "noReviewDependency": true,
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Browser emulation is not physical Pixel/iPad acceptance.",
+    "Returned Kallio map is the existing compatibility map; this footage does not claim Phase B map redesign.",
+    "Source mouths remain static.",
+    "Wall-clock event times are reference only; decoded video must determine edit points."
+  ],
+  "finalSourceHashes": {
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/index.html": "e3dc313db248a67ce9fff6c0af160b406786cbb75d962369398140c4cf90e784",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/js/v3/state.js": "cdbe2f447d899155538c5d0222ede1b8fe0aac7e070ed0e4aea201c493ea5a40",
+    "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
+    "content/era1-slice-v1.json": "a5a88fa1a97cf9a4e4d211ded6d69da9ff78c7fd5388d7d55f8b9b6ff00cad30",
+    "art/v3/manifest.json": "338424e7340c1821abe94067bfbe063c6b7fc4cba920e7d0f95277e20909ebb5"
+  },
+  "sourceCommitAtEnd": "5e440ab6cca85e67fc2faff91ed95d9170cd8f58",
+  "passed": true
+}

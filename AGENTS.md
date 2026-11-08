@@ -32,6 +32,10 @@ older visual, modular-cast and UI instructions in historical documents.
   approved Jaska cut-in; selected young Aatami front/side (rigs still
   semi-approved); approved Toko paper artwork. Exact IDs and sources are in
   `ART_BIBLE.md` and `art-src/restarts/scene-club/README.md`.
+- The owner subsequently approved the shown side-view Aatami/Jaska Scene Club
+  composition and motion for campaign integration (“Go”, 8 November). Use
+  its shared runtime view through the real campaign controller. Other new
+  compositions and the front/Toko studies still require their own review.
 - The old modular face/outfit/cast library, UI textures and rejected review
   workbenches are deleted. Do not restore them from branches, Git history,
   cached exports or historical approvals to fill a placeholder. Use a

@@ -1,5 +1,16 @@
 # Piritori → Eden — design authority
 
+## Scene Club integration approved — 2026-11-08
+
+After the actual UI-cap Scene Club video was shown, the owner answered
+**“Go”** to whether its composition and character motion were right for
+campaign integration. Integrate that shown young side-view Aatami/Jaska pair
+and 9:16 overlay presentation through the existing campaign controller.
+The combined UI ceiling stays 50%. This is not authorization to merge or
+deploy, or approval of other character designs, the front-pose study or the
+Toko ensemble study. Source-register statuses remain distinct from this
+specific presentation acceptance. Other new art/motion still needs review.
+
 ## Owner visual restart — 2026-11-08
 
 The owner rejected the previous visual proposal stack as based on obsolete UI,

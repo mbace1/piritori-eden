@@ -1,0 +1,4 @@
+hub cabinet built at /workspace/evidence/scene-club-built-cabinet/site/cabinet
+  rewrote 16 module(s): js/v3/battle.js, js/v3/board.js, js/v3/content.js, js/v3/doors.js, js/v3/places.js, js/v3/road.js, js/v3/scene-club-actors.js, js/v3/standing.js, js/v3/state.js, js/v3/story.js, crew-run/campaign-adapter.js, crew-run/run.js, fight-module/actors.js, fight-module/main.js, fight-module/resolver.js, bear-path/assets.js
+  flat layout, paths asserted, toolchain stripped.
+  copy to Suds-Jack gh-pages as piritori/ and run test/hub-smoke.cjs.

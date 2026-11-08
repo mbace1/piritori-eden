@@ -4,7 +4,9 @@ Owner correction, 8 November 2026: use Toko Move as the UX reference,
 **9:16 with overlays**, and delete the old UI and modular cast basis.
 The earlier wide/full-viewport candidate is replaced by this presentation.
 
-[Latest UI-cap preview](evidence/ui-cap-scene-club.mp4) ·
+[Actual campaign preview](evidence/campaign-integration/normal-campaign-scene-club-19s.mp4) ·
+[campaign integration and checks](../../../design/SCENE_CLUB_CAMPAIGN_INTEGRATION.md) ·
+[UI-cap composition preview](evidence/ui-cap-scene-club.mp4) ·
 [narrow dialogue → choices](evidence/ui-cap-narrow.mp4) ·
 [Toko study](evidence/ui-cap-toko.mp4).
 
@@ -12,11 +14,18 @@ The earlier wide/full-viewport candidate is replaced by this presentation.
 [shot list and capture provenance](trailer/README.md). The earlier cut predates
 this UI-budget pass; use the previews above to assess the current presentation.
 
-Serve the repository and open **`/art-src/restarts/scene-club/`**.
-The quiet Kallio map leads into the authored Aatami/Jaska encounter. Both
-characters stay in the illustrated room; dialogue and all three choices
-float over it. Real campaign effects persist across reload and the actual
-clock advances when returning to the map.
+The owner accepted the shown side-view Aatami/Jaska composition and motion
+for campaign integration (“Go”, 8 November). Serve the repository and open
+**`/web/`**: play the opening purchase/sale, travel to Mäkelänsilta and enter
+Scene Club. This now uses the accepted view with the actual campaign save,
+choices, clock and settlement. Both characters stay in the illustrated room
+under the dialogue/choice overlays. The returned map remains the existing
+campaign map; its visual redesign follows this integration.
+
+**`/art-src/restarts/scene-club/`** remains a separate composition workbench
+with its quiet-map prototype and private save. Its front-pose and Toko studies
+remain candidates. Both entry points now share the same view and actor code;
+the campaign has no dependency on the workbench or its private state adapter.
 
 [Actual 9:16 stage capture](evidence/phone-side-reduce-choices-stage.png) ·
 [phone animation](evidence/visual-restart-phone.mp4) ·
@@ -99,7 +108,7 @@ Source paintings and registered parts retain their hashes. Toko's room,
 body, counter and hands share one original camera; Aatami is foreground.
 Speaking uses head/body acting: **the source mouths remain static**.
 
-The small Review menu selects front/side Aatami, the Toko comparison, 50%
+The workbench's small Review menu selects front/side Aatami, the Toko comparison, 50%
 inspection scale and restart. Direct routes:
 
 - `?start=scene&pose=side`
@@ -112,7 +121,13 @@ inspection scale and restart. Direct routes:
 
 Main is incorporated through `187e52aff9fcedc7bfac0f316b07b5fd64e35675`;
 its v4.99 gameplay base is `804613a3d4eaa1e5180dfb0ef2cb88952d15bd97`.
-`campaign.js` calls state v16's real `chooseEncounter` and `advanceSchedule`.
+In the normal game, `web/js/v3/app.js` owns the real save and calls its existing
+choice and `advanceAndSettle` paths. The shared presentation imports no state
+engine or save adapter. Native duplicate-input guards and owner/location/
+schedule checks protect settlement; unresolved Menu → Back spends no block.
+The normal Menu includes the existing inspectables and master sound switch.
+
+In the workbench, `campaign.js` calls state v16's real `chooseEncounter` and `advanceSchedule`.
 Only `piritori:restart:scene-club:v1` is written. Normal campaign, Night Shift
 and outing receipts are never opened or replaced by this candidate.
 
@@ -122,7 +137,7 @@ the existing story. Returning reveals the next lead, Harju, while Aatami
 remains at Mäkelänsilta. No trip is invented or charged twice.
 
 These three choices do not start combat. C.19 and its campaign bridge stay
-in the existing game; this candidate does not invent another fight entry.
+in the existing game; neither entry point invents another fight.
 The Toko ensemble comparison uses two existing source sentences and applies
 no choice effects.
 
@@ -148,6 +163,12 @@ specification. Tests reject restoration of the retired libraries and references.
 
 ## Verification and actual output
 
+- The normal campaign and flattened nested hub cabinet have dedicated browser
+  gates: `web/test/scene-club-campaign.cjs` and
+  `web/test/scene-club-cabinet.cjs`. [Current reports, measured overlays and
+  actual campaign recording](evidence/campaign-integration/README.md) distinguish
+  earned play, enriched save fixtures and the built cabinet from private
+  workbench tests. The source-layout test alone cannot prove the packaged paths.
 - **35 Node suites** pass: [actual campaign/combat output](evidence/baseline-node.log).
 - [Fresh 12-seed balance baseline](evidence/balance-12/README.md): all 15
   scenarios, 147 rows / 1,764 simulations, unchanged measured outcomes.
@@ -192,6 +213,8 @@ specification. Tests reject restoration of the retired libraries and references.
 
 ```sh
 node web/test/visual-reset.mjs
+node web/test/scene-club-campaign.cjs
+node web/test/scene-club-cabinet.cjs
 node art-src/restarts/scene-club/campaign-test.mjs
 node art-src/restarts/scene-club/browser.cjs
 node art-src/restarts/scene-club/ensemble.cjs
@@ -202,12 +225,12 @@ installation. `RESET_CAPTURE_DIR` / `RESET_ENSEMBLE_DIR` choose private output.
 The ensemble script accepts `--record` for actual browser video. CI includes
 both the corrected presentation checks and obsolete-library guards.
 
-New animation and composition remain visual approval candidates. This is
-not a release or deployment. Browser testing does not establish physical
-Pixel/iPad acceptance. The latest main roadmap check-in is **50%**; this UI
-pass does not increase that score. Next: review this actual
-9:16 output, then integrate the accepted presentation through the campaign
-boundary and continue the existing listed locations and cast.
+The shown side-view Scene Club presentation is accepted for campaign
+integration. Other new animation and compositions remain approval candidates.
+This is not a release or deployment. Browser testing does not establish
+physical Pixel/iPad acceptance. Act I remains **50%** under the existing
+roadmap rubric. Next: simplify actual city navigation and continue the listed
+authored locations and cast.
 
 [Next six authored scene packets](../../../design/SCENE_OVERLAY_NEXT_PLANS.md)
 map the existing locations, decisions, source artwork, neutral character

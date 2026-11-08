@@ -1,0 +1,2973 @@
+{
+  "startedAt": "2026-11-08T14:20:07.226Z",
+  "checks": 297,
+  "cases": [
+    {
+      "id": "phone",
+      "choice": "ask-envelope",
+      "geometry": [
+        {
+          "stage": {
+            "left": 0,
+            "top": 75.328125,
+            "right": 390,
+            "bottom": 768.65625,
+            "width": 390,
+            "height": 693.328125
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 12,
+              "top": 87.328125,
+              "right": 322,
+              "bottom": 131.328125,
+              "width": 310,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 650.125,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 106.53125,
+              "band": "bottom"
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 12,
+              "top": 712.65625,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 15.6
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 23,
+                  "top": 98.328125,
+                  "right": 107.15625,
+                  "bottom": 120.328125
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 269.65625,
+                  "top": 100.828125,
+                  "right": 311,
+                  "bottom": 117.828125
+                }
+              ]
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 22,
+                  "top": 661.125,
+                  "right": 59.515625,
+                  "bottom": 678.125
+                }
+              ]
+            },
+            {
+              "text": "Jaska cuts old receipts into a city that refuses to line up.",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 69.421875,
+                  "top": 657.125,
+                  "right": 338.75,
+                  "bottom": 679.125
+                },
+                {
+                  "left": 22,
+                  "top": 677.390625,
+                  "right": 152.78125,
+                  "bottom": 699.390625
+                }
+              ]
+            },
+            {
+              "text": "Continue",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 159.46875,
+                  "top": 723.65625,
+                  "right": 230.53125,
+                  "bottom": 745.65625
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 339.75,
+                  "top": 100.828125,
+                  "right": 372.234375,
+                  "bottom": 117.828125
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184766,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": -50.6875,
+                "top": 214,
+                "right": 256.546875,
+                "bottom": 671.59375,
+                "width": 307.234375,
+                "height": 457.59375
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154684,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 108.578125,
+                "top": 214,
+                "right": 448.5,
+                "bottom": 671.59375,
+                "width": 339.921875,
+                "height": 457.59375
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.20180047118049957,
+            "heightRatio": 0.2517296554210894
+          }
+        },
+        {
+          "stage": {
+            "left": 0,
+            "top": 75.328125,
+            "right": 390,
+            "bottom": 768.65625,
+            "width": 390,
+            "height": 693.328125
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 12,
+              "top": 87.328125,
+              "right": 322,
+              "bottom": 131.328125,
+              "width": 310,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 524.109375,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 232.546875,
+              "band": "bottom"
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 12,
+              "top": 586.640625,
+              "right": 378,
+              "bottom": 639.3125,
+              "width": 366,
+              "height": 52.671875,
+              "id": "ask-envelope",
+              "font": 14
+            },
+            {
+              "left": 12,
+              "top": 645.3125,
+              "right": 378,
+              "bottom": 697.984375,
+              "width": 366,
+              "height": 52.671875,
+              "id": "take-envelope",
+              "font": 14
+            },
+            {
+              "left": 12,
+              "top": 703.984375,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 52.671875,
+              "id": "leave-it",
+              "font": 14
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 23,
+                  "top": 98.328125,
+                  "right": 107.15625,
+                  "bottom": 120.328125
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 269.65625,
+                  "top": 100.828125,
+                  "right": 311,
+                  "bottom": 117.828125
+                }
+              ]
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 22,
+                  "top": 535.109375,
+                  "right": 59.515625,
+                  "bottom": 552.109375
+                }
+              ]
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 69.421875,
+                  "top": 531.109375,
+                  "right": 349.546875,
+                  "bottom": 553.109375
+                },
+                {
+                  "left": 22,
+                  "top": 551.375,
+                  "right": 103.84375,
+                  "bottom": 573.375
+                }
+              ]
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 592.640625,
+                  "right": 268.15625,
+                  "bottom": 614.640625
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 12.48,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 614.34375,
+                  "right": 242.28125,
+                  "bottom": 631.34375
+                }
+              ]
+            },
+            {
+              "text": "Call it family money",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 651.3125,
+                  "right": 179.703125,
+                  "bottom": 673.3125
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 12.48,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 673.015625,
+                  "right": 313.421875,
+                  "bottom": 690.015625
+                }
+              ]
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 709.984375,
+                  "right": 305.84375,
+                  "bottom": 731.984375
+                }
+              ]
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 12.48,
+              "fragments": [
+                {
+                  "left": 25,
+                  "top": 731.6875,
+                  "right": 252.53125,
+                  "bottom": 748.6875
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 339.75,
+                  "top": 100.828125,
+                  "right": 372.234375,
+                  "bottom": 117.828125
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184228,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": -50.6875,
+                "top": 214,
+                "right": 256.546875,
+                "bottom": 671.59375,
+                "width": 307.234375,
+                "height": 457.59375
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 155579,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 108.578125,
+                "top": 214,
+                "right": 448.5,
+                "bottom": 671.59375,
+                "width": 339.921875,
+                "height": 457.59375
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "text": "Ask before taking the envelope\nGain dead money and preserve trust.",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "text": "Call it family money\nGain dead money; Jaska remembers the wording.",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "text": "Leave the old money under the map\nLose a bank opportunity; deepen trust.",
+              "disabled": false
+            }
+          ],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.37237023900535493,
+            "heightRatio": 0.433484326054132
+          }
+        },
+        {
+          "stage": {
+            "left": 0,
+            "top": 75.328125,
+            "right": 390,
+            "bottom": 768.65625,
+            "width": 390,
+            "height": 693.328125
+          },
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 12,
+              "top": 87.328125,
+              "right": 322,
+              "bottom": 131.328125,
+              "width": 310,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 12,
+              "top": 588.625,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 168.03125,
+              "band": "bottom"
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 12,
+              "top": 712.65625,
+              "right": 378,
+              "bottom": 756.65625,
+              "width": 366,
+              "height": 44,
+              "id": "return",
+              "font": 15.6
+            },
+            {
+              "left": 334,
+              "top": 87.328125,
+              "right": 378,
+              "bottom": 131.328125,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 23,
+                  "top": 98.328125,
+                  "right": 107.15625,
+                  "bottom": 120.328125
+                }
+              ]
+            },
+            {
+              "text": "817 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 269.65625,
+                  "top": 100.828125,
+                  "right": 311,
+                  "bottom": 117.828125
+                }
+              ]
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 22,
+                  "top": 599.625,
+                  "right": 70.984375,
+                  "bottom": 616.625
+                }
+              ]
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 80.890625,
+                  "top": 595.625,
+                  "right": 307.984375,
+                  "bottom": 617.625
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 13.65,
+              "fragments": [
+                {
+                  "left": 22,
+                  "top": 638.890625,
+                  "right": 259.703125,
+                  "bottom": 657.890625
+                }
+              ]
+            },
+            {
+              "text": "+300 mk",
+              "font": 14.43,
+              "fragments": [
+                {
+                  "left": 22,
+                  "top": 678.890625,
+                  "right": 81.859375,
+                  "bottom": 697.890625
+                }
+              ]
+            },
+            {
+              "text": "+1 trust",
+              "font": 14.43,
+              "fragments": [
+                {
+                  "left": 91.859375,
+                  "top": 678.890625,
+                  "right": 147.828125,
+                  "bottom": 697.890625
+                }
+              ]
+            },
+            {
+              "text": "Back to Kallio",
+              "font": 15.6,
+              "fragments": [
+                {
+                  "left": 142.09375,
+                  "top": 723.65625,
+                  "right": 247.90625,
+                  "bottom": 745.65625
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 339.75,
+                  "top": 100.828125,
+                  "right": 372.234375,
+                  "bottom": 117.828125
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184983,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": -50.6875,
+                "top": 214,
+                "right": 256.546875,
+                "bottom": 671.59375,
+                "width": 307.234375,
+                "height": 457.59375
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154592,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 108.578125,
+                "top": 214,
+                "right": 448.5,
+                "bottom": 671.59375,
+                "width": 339.921875,
+                "height": 457.59375
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.28504443970605825,
+            "heightRatio": 0.34043224483357
+          }
+        }
+      ],
+      "resources": {
+        "errors": [],
+        "requests": [
+          "/cabinet/",
+          "/cabinet/art/v3/cutins/aatami-v01/head.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/torso.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/head.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_1.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/torso.webp",
+          "/cabinet/art/v3/manifest.json",
+          "/cabinet/art/v3/scenes/scene-club-v01.webp",
+          "/cabinet/content/act1-story-v1.json",
+          "/cabinet/content/doors-v1.json",
+          "/cabinet/content/era1-slice-v1.json",
+          "/cabinet/content/families-v1.json",
+          "/cabinet/content/places-v1.json",
+          "/cabinet/content/road-events-v1.json",
+          "/cabinet/data/map-geometry-web-v1.json",
+          "/cabinet/fight-module/stand-in.js",
+          "/cabinet/js/v3/app.js",
+          "/cabinet/js/v3/battle.js",
+          "/cabinet/js/v3/board.js",
+          "/cabinet/js/v3/chapter-narrative.js",
+          "/cabinet/js/v3/chapter.js",
+          "/cabinet/js/v3/content.js",
+          "/cabinet/js/v3/cutin-stage.js",
+          "/cabinet/js/v3/doors.js",
+          "/cabinet/js/v3/equipment.js",
+          "/cabinet/js/v3/fight-motion.js",
+          "/cabinet/js/v3/grid.js",
+          "/cabinet/js/v3/journey.js",
+          "/cabinet/js/v3/map-relief.js",
+          "/cabinet/js/v3/nameplates.js",
+          "/cabinet/js/v3/outing.js",
+          "/cabinet/js/v3/pause.js",
+          "/cabinet/js/v3/places.js",
+          "/cabinet/js/v3/render3d.js",
+          "/cabinet/js/v3/road.js",
+          "/cabinet/js/v3/scene-club-actors.js",
+          "/cabinet/js/v3/scene-club-view.css",
+          "/cabinet/js/v3/scene-club-view.js",
+          "/cabinet/js/v3/sound.js",
+          "/cabinet/js/v3/stage-camera.js",
+          "/cabinet/js/v3/stance.js",
+          "/cabinet/js/v3/standing.js",
+          "/cabinet/js/v3/state.js",
+          "/cabinet/js/v3/story.js",
+          "/cabinet/js/v3/testlist.js",
+          "/cabinet/js/v3/toko-stage.js",
+          "/cabinet/js/v3/toko.js",
+          "/cabinet/js/v3/visits.js",
+          "/cabinet/map/kallio-era1-2003-v1.json",
+          "/cabinet/map/kallio-transit-layer-v1.json",
+          "/cabinet/market/model.mjs",
+          "/cabinet/people/hiring.mjs",
+          "/cabinet/people/roster.mjs",
+          "/cabinet/v3.css",
+          "/cabinet/vendor/jsm/loaders/GLTFLoader.js",
+          "/cabinet/vendor/jsm/utils/BufferGeometryUtils.js",
+          "/cabinet/vendor/three.module.min.js",
+          "/hub/shell.js"
+        ]
+      }
+    },
+    {
+      "id": "desktop",
+      "choice": "take-envelope",
+      "geometry": [
+        {
+          "stage": {
+            "left": 415,
+            "top": 0,
+            "right": 865,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 427,
+              "top": 12,
+              "right": 797,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 427,
+              "top": 677.8125,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 110.1875,
+              "band": "bottom"
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 427,
+              "top": 744,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 16
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 438,
+                  "top": 22.5,
+                  "right": 529.734375,
+                  "bottom": 45.5
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 744.65625,
+                  "top": 25.5,
+                  "right": 786,
+                  "bottom": 42.5
+                }
+              ]
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 437,
+                  "top": 689.8125,
+                  "right": 474.515625,
+                  "bottom": 706.8125
+                }
+              ]
+            },
+            {
+              "text": "Jaska cuts old receipts into a city that refuses to line up.",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 484.421875,
+                  "top": 684.8125,
+                  "right": 840.953125,
+                  "bottom": 707.8125
+                },
+                {
+                  "left": 437,
+                  "top": 706.90625,
+                  "right": 516.65625,
+                  "bottom": 729.90625
+                }
+              ]
+            },
+            {
+              "text": "Continue",
+              "font": 16,
+              "fragments": [
+                {
+                  "left": 603.53125,
+                  "top": 755,
+                  "right": 676.453125,
+                  "bottom": 777
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 814.75,
+                  "top": 25.5,
+                  "right": 847.234375,
+                  "bottom": 42.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184766,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 356.5,
+                "top": 160,
+                "right": 711,
+                "bottom": 688,
+                "width": 354.5,
+                "height": 528
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154683,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 540.28125,
+                "top": 160,
+                "right": 932.5,
+                "bottom": 688,
+                "width": 392.21875,
+                "height": 528
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.18098854166666667,
+            "heightRatio": 0.222734375
+          }
+        },
+        {
+          "stage": {
+            "left": 415,
+            "top": 0,
+            "right": 865,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 427,
+              "top": 12,
+              "right": 797,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 427,
+              "top": 548.46875,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 239.53125,
+              "band": "bottom"
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 427,
+              "top": 614.65625,
+              "right": 853,
+              "bottom": 668.4375,
+              "width": 426,
+              "height": 53.78125,
+              "id": "ask-envelope",
+              "font": 15
+            },
+            {
+              "left": 427,
+              "top": 674.4375,
+              "right": 853,
+              "bottom": 728.21875,
+              "width": 426,
+              "height": 53.78125,
+              "id": "take-envelope",
+              "font": 15
+            },
+            {
+              "left": 427,
+              "top": 734.21875,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 53.78125,
+              "id": "leave-it",
+              "font": 15
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 438,
+                  "top": 22.5,
+                  "right": 529.734375,
+                  "bottom": 45.5
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 744.65625,
+                  "top": 25.5,
+                  "right": 786,
+                  "bottom": 42.5
+                }
+              ]
+            },
+            {
+              "text": "Jaska",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 437,
+                  "top": 560.46875,
+                  "right": 474.515625,
+                  "bottom": 577.46875
+                }
+              ]
+            },
+            {
+              "text": "A sealed envelope of markka props up one corner.",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 484.421875,
+                  "top": 555.46875,
+                  "right": 824.59375,
+                  "bottom": 578.46875
+                },
+                {
+                  "left": 437,
+                  "top": 577.5625,
+                  "right": 491.421875,
+                  "bottom": 600.5625
+                }
+              ]
+            },
+            {
+              "text": "Ask before taking the envelope",
+              "font": 16,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 620.65625,
+                  "right": 689.5,
+                  "bottom": 642.65625
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money and preserve trust.",
+              "font": 13,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 642.84375,
+                  "right": 666.546875,
+                  "bottom": 660.84375
+                }
+              ]
+            },
+            {
+              "text": "Call it family money",
+              "font": 16,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 680.4375,
+                  "right": 598.734375,
+                  "bottom": 702.4375
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 13,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 702.625,
+                  "right": 740.71875,
+                  "bottom": 720.625
+                }
+              ]
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 16,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 740.21875,
+                  "right": 728.171875,
+                  "bottom": 762.21875
+                }
+              ]
+            },
+            {
+              "text": "Lose a bank opportunity; deepen trust.",
+              "font": 13,
+              "fragments": [
+                {
+                  "left": 440,
+                  "top": 762.40625,
+                  "right": 677.234375,
+                  "bottom": 780.40625
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 814.75,
+                  "top": 25.5,
+                  "right": 847.234375,
+                  "bottom": 42.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 185197,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 356.5,
+                "top": 160,
+                "right": 711,
+                "bottom": 688,
+                "width": 354.5,
+                "height": 528
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154521,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 540.28125,
+                "top": 160,
+                "right": 932.5,
+                "bottom": 688,
+                "width": 392.21875,
+                "height": 528
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "text": "Ask before taking the envelope\nGain dead money and preserve trust.",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "text": "Call it family money\nGain dead money; Jaska remembers the wording.",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "text": "Leave the old money under the map\nLose a bank opportunity; deepen trust.",
+              "disabled": false
+            }
+          ],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.3340453125,
+            "heightRatio": 0.3844140625
+          }
+        },
+        {
+          "stage": {
+            "left": 415,
+            "top": 0,
+            "right": 865,
+            "bottom": 800,
+            "width": 450,
+            "height": 800
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "scale": 1,
+          "panels": [
+            {
+              "left": 427,
+              "top": 12,
+              "right": 797,
+              "bottom": 56,
+              "width": 370,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 427,
+              "top": 617.40625,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 170.59375,
+              "band": "bottom"
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 427,
+              "top": 744,
+              "right": 853,
+              "bottom": 788,
+              "width": 426,
+              "height": 44,
+              "id": "return",
+              "font": 16
+            },
+            {
+              "left": 809,
+              "top": 12,
+              "right": 853,
+              "bottom": 56,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 438,
+                  "top": 22.5,
+                  "right": 529.734375,
+                  "bottom": 45.5
+                }
+              ]
+            },
+            {
+              "text": "817 mk",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 744.65625,
+                  "top": 25.5,
+                  "right": 786,
+                  "bottom": 42.5
+                }
+              ]
+            },
+            {
+              "text": "Aatami",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 437,
+                  "top": 629.40625,
+                  "right": 485.984375,
+                  "bottom": 646.40625
+                }
+              ]
+            },
+            {
+              "text": "Call it family money",
+              "font": 17,
+              "fragments": [
+                {
+                  "left": 495.890625,
+                  "top": 624.40625,
+                  "right": 652.0625,
+                  "bottom": 647.40625
+                }
+              ]
+            },
+            {
+              "text": "Gain dead money; Jaska remembers the wording.",
+              "font": 14,
+              "fragments": [
+                {
+                  "left": 437,
+                  "top": 669.5,
+                  "right": 760.84375,
+                  "bottom": 688.5
+                }
+              ]
+            },
+            {
+              "text": "+300 mk",
+              "font": 15,
+              "fragments": [
+                {
+                  "left": 437,
+                  "top": 709.5,
+                  "right": 499.265625,
+                  "bottom": 729.5
+                }
+              ]
+            },
+            {
+              "text": "-1 trust",
+              "font": 15,
+              "fragments": [
+                {
+                  "left": 509.265625,
+                  "top": 709.5,
+                  "right": 563.71875,
+                  "bottom": 729.5
+                }
+              ]
+            },
+            {
+              "text": "Back to Kallio",
+              "font": 16,
+              "fragments": [
+                {
+                  "left": 585.71875,
+                  "top": 755,
+                  "right": 694.28125,
+                  "bottom": 777
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12,
+              "fragments": [
+                {
+                  "left": 814.75,
+                  "top": 25.5,
+                  "right": 847.234375,
+                  "bottom": 42.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184496,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 356.5,
+                "top": 160,
+                "right": 711,
+                "bottom": 688,
+                "width": 354.5,
+                "height": 528
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154594,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 540.28125,
+                "top": 160,
+                "right": 932.5,
+                "bottom": 688,
+                "width": 392.21875,
+                "height": 528
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.2524692708333333,
+            "heightRatio": 0.2982421875
+          }
+        }
+      ],
+      "resources": {
+        "errors": [],
+        "requests": [
+          "/cabinet/",
+          "/cabinet/art/v3/cutins/aatami-v01/head.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/torso.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/head.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_1.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/torso.webp",
+          "/cabinet/art/v3/manifest.json",
+          "/cabinet/art/v3/scenes/scene-club-v01.webp",
+          "/cabinet/content/act1-story-v1.json",
+          "/cabinet/content/doors-v1.json",
+          "/cabinet/content/era1-slice-v1.json",
+          "/cabinet/content/families-v1.json",
+          "/cabinet/content/places-v1.json",
+          "/cabinet/content/road-events-v1.json",
+          "/cabinet/data/map-geometry-web-v1.json",
+          "/cabinet/fight-module/stand-in.js",
+          "/cabinet/js/v3/app.js",
+          "/cabinet/js/v3/battle.js",
+          "/cabinet/js/v3/board.js",
+          "/cabinet/js/v3/chapter-narrative.js",
+          "/cabinet/js/v3/chapter.js",
+          "/cabinet/js/v3/content.js",
+          "/cabinet/js/v3/cutin-stage.js",
+          "/cabinet/js/v3/doors.js",
+          "/cabinet/js/v3/equipment.js",
+          "/cabinet/js/v3/fight-motion.js",
+          "/cabinet/js/v3/grid.js",
+          "/cabinet/js/v3/journey.js",
+          "/cabinet/js/v3/map-relief.js",
+          "/cabinet/js/v3/nameplates.js",
+          "/cabinet/js/v3/outing.js",
+          "/cabinet/js/v3/pause.js",
+          "/cabinet/js/v3/places.js",
+          "/cabinet/js/v3/render3d.js",
+          "/cabinet/js/v3/road.js",
+          "/cabinet/js/v3/scene-club-actors.js",
+          "/cabinet/js/v3/scene-club-view.css",
+          "/cabinet/js/v3/scene-club-view.js",
+          "/cabinet/js/v3/sound.js",
+          "/cabinet/js/v3/stage-camera.js",
+          "/cabinet/js/v3/stance.js",
+          "/cabinet/js/v3/standing.js",
+          "/cabinet/js/v3/state.js",
+          "/cabinet/js/v3/story.js",
+          "/cabinet/js/v3/testlist.js",
+          "/cabinet/js/v3/toko-stage.js",
+          "/cabinet/js/v3/toko.js",
+          "/cabinet/js/v3/visits.js",
+          "/cabinet/map/kallio-era1-2003-v1.json",
+          "/cabinet/map/kallio-transit-layer-v1.json",
+          "/cabinet/market/model.mjs",
+          "/cabinet/people/hiring.mjs",
+          "/cabinet/people/roster.mjs",
+          "/cabinet/v3.css",
+          "/cabinet/vendor/jsm/loaders/GLTFLoader.js",
+          "/cabinet/vendor/jsm/utils/BufferGeometryUtils.js",
+          "/cabinet/vendor/three.module.min.js",
+          "/hub/shell.js"
+        ]
+      }
+    },
+    {
+      "id": "landscape",
+      "choice": "leave-it",
+      "geometry": [
+        {
+          "stage": {
+            "left": 312.3125,
+            "top": 0,
+            "right": 531.6875,
+            "bottom": 390,
+            "width": 219.375,
+            "height": 390
+          },
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "scale": 1.0017123287671232,
+          "panels": [
+            {
+              "left": 316.3125,
+              "top": 0,
+              "right": 479.6875,
+              "bottom": 44,
+              "width": 163.375,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 316.3125,
+              "top": 280,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 106,
+              "band": "bottom"
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 316.3125,
+              "top": 342,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 44,
+              "id": "scene-enter",
+              "font": 12.020547945205479
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12.020547945205479
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 324.3125,
+                  "top": 13.5,
+                  "right": 389.078125,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 430.34375,
+                  "top": 13.5,
+                  "right": 471.6875,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "Jaska",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 326.3125,
+                  "top": 291,
+                  "right": 363.828125,
+                  "bottom": 308
+                }
+              ]
+            },
+            {
+              "text": "Jaska cuts old receipts into a city that refuses to line up.",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 373.734375,
+                  "top": 291,
+                  "right": 497.5625,
+                  "bottom": 308
+                },
+                {
+                  "left": 326.3125,
+                  "top": 311,
+                  "right": 510.390625,
+                  "bottom": 328
+                }
+              ]
+            },
+            {
+              "text": "Continue",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 394.65625,
+                  "top": 355.5,
+                  "right": 449.34375,
+                  "bottom": 372.5
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 489.4375,
+                  "top": 13.5,
+                  "right": 521.921875,
+                  "bottom": 30.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184766,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 283.796875,
+                "top": 78.015625,
+                "right": 456.609375,
+                "bottom": 335.40625,
+                "width": 172.8125,
+                "height": 257.390625
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 154683,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 373.390625,
+                "top": 78.015625,
+                "right": 564.59375,
+                "bottom": 335.40625,
+                "width": 191.203125,
+                "height": 257.390625
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.368532398275988,
+            "heightRatio": 0.39487179487179486
+          }
+        },
+        {
+          "stage": {
+            "left": 312.3125,
+            "top": 0,
+            "right": 531.6875,
+            "bottom": 390,
+            "width": 219.375,
+            "height": 390
+          },
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "scale": 1.0017123287671232,
+          "panels": [
+            {
+              "left": 316.3125,
+              "top": 0,
+              "right": 479.6875,
+              "bottom": 44,
+              "width": 163.375,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 316.3125,
+              "top": 248,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 138,
+              "band": "bottom"
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 316.3125,
+              "top": 248,
+              "right": 527.6875,
+              "bottom": 292,
+              "width": 211.375,
+              "height": 44,
+              "id": "ask-envelope",
+              "font": 15.025684931506849
+            },
+            {
+              "left": 316.3125,
+              "top": 295,
+              "right": 527.6875,
+              "bottom": 339,
+              "width": 211.375,
+              "height": 44,
+              "id": "take-envelope",
+              "font": 15.025684931506849
+            },
+            {
+              "left": 316.3125,
+              "top": 342,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 44,
+              "id": "leave-it",
+              "font": 15.025684931506849
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12.020547945205479
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 324.3125,
+                  "top": 13.5,
+                  "right": 389.078125,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 430.34375,
+                  "top": 13.5,
+                  "right": 471.6875,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "Ask before taking it",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 252.109375,
+                  "right": 445.328125,
+                  "bottom": 269.109375
+                }
+              ]
+            },
+            {
+              "text": "+300 mk · trust +1",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 269.5,
+                  "right": 428.609375,
+                  "bottom": 286.5
+                }
+              ]
+            },
+            {
+              "text": "Call it family money",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 299.109375,
+                  "right": 446.359375,
+                  "bottom": 316.109375
+                }
+              ]
+            },
+            {
+              "text": "+300 mk · trust -1",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 316.5,
+                  "right": 425.609375,
+                  "bottom": 333.5
+                }
+              ]
+            },
+            {
+              "text": "Leave it under the map",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 346.109375,
+                  "right": 466.421875,
+                  "bottom": 363.109375
+                }
+              ]
+            },
+            {
+              "text": "No bank offer · trust +2",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 327.3125,
+                  "top": 363.5,
+                  "right": 458.203125,
+                  "bottom": 380.5
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 489.4375,
+                  "top": 13.5,
+                  "right": 521.921875,
+                  "bottom": 30.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184459,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 283.796875,
+                "top": 78.015625,
+                "right": 456.609375,
+                "bottom": 335.40625,
+                "width": 172.8125,
+                "height": 257.390625
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 155556,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 373.390625,
+                "top": 78.015625,
+                "right": 564.59375,
+                "bottom": 335.40625,
+                "width": 191.203125,
+                "height": 257.390625
+              }
+            }
+          ],
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "aria": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "text": "Ask before taking it\n+300 mk · trust +1",
+              "disabled": false
+            },
+            {
+              "id": "take-envelope",
+              "aria": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "text": "Call it family money\n+300 mk · trust -1",
+              "disabled": false
+            },
+            {
+              "id": "leave-it",
+              "aria": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "text": "Leave it under the map\nNo bank offer · trust +2",
+              "disabled": false
+            }
+          ],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.44759149682226607,
+            "heightRatio": 0.47692307692307695
+          }
+        },
+        {
+          "stage": {
+            "left": 312.3125,
+            "top": 0,
+            "right": 531.6875,
+            "bottom": 390,
+            "width": 219.375,
+            "height": 390
+          },
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "scale": 1.0017123287671232,
+          "panels": [
+            {
+              "left": 316.3125,
+              "top": 0,
+              "right": 479.6875,
+              "bottom": 44,
+              "width": 163.375,
+              "height": 44,
+              "band": "top"
+            },
+            {
+              "left": 316.3125,
+              "top": 264.609375,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 121.390625,
+              "band": "bottom"
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "band": "top"
+            }
+          ],
+          "buttons": [
+            {
+              "left": 316.3125,
+              "top": 342,
+              "right": 527.6875,
+              "bottom": 386,
+              "width": 211.375,
+              "height": 44,
+              "id": "return",
+              "font": 12.020547945205479
+            },
+            {
+              "left": 483.6875,
+              "top": 0,
+              "right": 527.6875,
+              "bottom": 44,
+              "width": 44,
+              "height": 44,
+              "id": "SUMMARY",
+              "font": 12.020547945205479
+            }
+          ],
+          "texts": [
+            {
+              "text": "Scene Club",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 324.3125,
+                  "top": 13.5,
+                  "right": 389.078125,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "517 mk",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 430.34375,
+                  "top": 13.5,
+                  "right": 471.6875,
+                  "bottom": 30.5
+                }
+              ]
+            },
+            {
+              "text": "Aatami",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 324.3125,
+                  "top": 271.609375,
+                  "right": 373.296875,
+                  "bottom": 288.609375
+                }
+              ]
+            },
+            {
+              "text": "Leave the old money under the map",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 383.203125,
+                  "top": 271.609375,
+                  "right": 500.015625,
+                  "bottom": 288.609375
+                },
+                {
+                  "left": 324.3125,
+                  "top": 291.609375,
+                  "right": 408.34375,
+                  "bottom": 308.609375
+                }
+              ]
+            },
+            {
+              "text": "Bank offer lost",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 324.3125,
+                  "top": 318.609375,
+                  "right": 412.71875,
+                  "bottom": 335.609375
+                }
+              ]
+            },
+            {
+              "text": "+2 trust",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 420.71875,
+                  "top": 318.609375,
+                  "right": 467.28125,
+                  "bottom": 335.609375
+                }
+              ]
+            },
+            {
+              "text": "Back to Kallio",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 381.28125,
+                  "top": 354.796875,
+                  "right": 462.703125,
+                  "bottom": 371.796875
+                }
+              ]
+            },
+            {
+              "text": "Menu",
+              "font": 12.020547945205479,
+              "fragments": [
+                {
+                  "left": 489.4375,
+                  "top": 13.5,
+                  "right": 521.921875,
+                  "bottom": 30.5
+                }
+              ]
+            }
+          ],
+          "actors": [
+            {
+              "id": "cutin-aatami-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 184844,
+              "width": 470,
+              "height": 700,
+              "rect": {
+                "left": 283.796875,
+                "top": 78.015625,
+                "right": 456.609375,
+                "bottom": 335.40625,
+                "width": 172.8125,
+                "height": 257.390625
+              }
+            },
+            {
+              "id": "cutin-jaska-rig-v01",
+              "status": "ready",
+              "painted": true,
+              "opaque": 155036,
+              "width": 520,
+              "height": 700,
+              "rect": {
+                "left": 373.390625,
+                "top": 78.015625,
+                "right": 564.59375,
+                "bottom": 335.40625,
+                "width": 191.203125,
+                "height": 257.390625
+              }
+            }
+          ],
+          "choices": [],
+          "stylesheet": [
+            {
+              "href": "http://127.0.0.1:41021/cabinet/js/v3/scene-club-view.css?v=1",
+              "loaded": true
+            }
+          ],
+          "privateControls": 0,
+          "budget": {
+            "areaRatio": 0.4065564276061071,
+            "heightRatio": 0.4343349358974359
+          }
+        }
+      ],
+      "resources": {
+        "errors": [],
+        "requests": [
+          "/cabinet/",
+          "/cabinet/art/v3/cutins/aatami-v01/head.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/aatami-v01/torso.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/head.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_0.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/lid_1.webp",
+          "/cabinet/art/v3/cutins/jaska-v01/torso.webp",
+          "/cabinet/art/v3/manifest.json",
+          "/cabinet/art/v3/scenes/scene-club-v01.webp",
+          "/cabinet/content/act1-story-v1.json",
+          "/cabinet/content/doors-v1.json",
+          "/cabinet/content/era1-slice-v1.json",
+          "/cabinet/content/families-v1.json",
+          "/cabinet/content/places-v1.json",
+          "/cabinet/content/road-events-v1.json",
+          "/cabinet/data/map-geometry-web-v1.json",
+          "/cabinet/fight-module/stand-in.js",
+          "/cabinet/js/v3/app.js",
+          "/cabinet/js/v3/battle.js",
+          "/cabinet/js/v3/board.js",
+          "/cabinet/js/v3/chapter-narrative.js",
+          "/cabinet/js/v3/chapter.js",
+          "/cabinet/js/v3/content.js",
+          "/cabinet/js/v3/cutin-stage.js",
+          "/cabinet/js/v3/doors.js",
+          "/cabinet/js/v3/equipment.js",
+          "/cabinet/js/v3/fight-motion.js",
+          "/cabinet/js/v3/grid.js",
+          "/cabinet/js/v3/journey.js",
+          "/cabinet/js/v3/map-relief.js",
+          "/cabinet/js/v3/nameplates.js",
+          "/cabinet/js/v3/outing.js",
+          "/cabinet/js/v3/pause.js",
+          "/cabinet/js/v3/places.js",
+          "/cabinet/js/v3/render3d.js",
+          "/cabinet/js/v3/road.js",
+          "/cabinet/js/v3/scene-club-actors.js",
+          "/cabinet/js/v3/scene-club-view.css",
+          "/cabinet/js/v3/scene-club-view.js",
+          "/cabinet/js/v3/sound.js",
+          "/cabinet/js/v3/stage-camera.js",
+          "/cabinet/js/v3/stance.js",
+          "/cabinet/js/v3/standing.js",
+          "/cabinet/js/v3/state.js",
+          "/cabinet/js/v3/story.js",
+          "/cabinet/js/v3/testlist.js",
+          "/cabinet/js/v3/toko-stage.js",
+          "/cabinet/js/v3/toko.js",
+          "/cabinet/js/v3/visits.js",
+          "/cabinet/map/kallio-era1-2003-v1.json",
+          "/cabinet/map/kallio-transit-layer-v1.json",
+          "/cabinet/market/model.mjs",
+          "/cabinet/people/hiring.mjs",
+          "/cabinet/people/roster.mjs",
+          "/cabinet/v3.css",
+          "/cabinet/vendor/jsm/loaders/GLTFLoader.js",
+          "/cabinet/vendor/jsm/utils/BufferGeometryUtils.js",
+          "/cabinet/vendor/three.module.min.js",
+          "/hub/shell.js"
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "limits": [
+    "Synthetic normal-save checkpoint; the campaign suite owns the earned opening journey.",
+    "Parent arcade shell is an explicitly inert local fixture, not a live hub/offline-shell acceptance test.",
+    "No new art, C.19 battle simulation, deployment or physical-device acceptance."
+  ],
+  "sourceHashes": {
+    "art/v3/QA.md": "57d3b33e4bb0a62e3f0e8a086945413b7e70a670e9f789507f42bdf738d730c6",
+    "art/v3/README.md": "edd09d94e23a57a59c181037fa3e56bca8dfb541e322ff2ff2bc890ca9ee649e",
+    "art/v3/animation/grass/calm-frame00.webp": "3cb7bd32135752dd35928cdfd6b9cbaa1f507b5d789611707264bc35faa27590",
+    "art/v3/animation/grass/gust-frame00.webp": "c96408e09f1a6cddc8292c9aa841a783581a76550fd1f222715cb92611f0346f",
+    "art/v3/animation/grass/lean-frame00.webp": "9d1871f0f05d5f3ceae4db37daba05ae389a83c6ee0f1fafc2c6d7678ebeffa6",
+    "art/v3/animation/grass/recover-frame00.webp": "aca5423702e37f13a8845437b2bcc905d82367a9cffe15965442f569de28003c",
+    "art/v3/animation/lime-tree/calm-frame00.webp": "b640262907aab2ba143e98ce6f8eb53153e6629c1764b6d77b3810ce96c6690c",
+    "art/v3/animation/lime-tree/gust-frame00.webp": "84a7b9a47c21ae39a12d16302372338263457ae03eed60e4031a9a1eebe74267",
+    "art/v3/animation/lime-tree/lean-frame00.webp": "c5b0e69502f39880977b37aa648f73e75fa8966ecd67628e658263194a4c71aa",
+    "art/v3/animation/lime-tree/recover-frame00.webp": "28c6dfbb748981da3eae193c3eb2d0bfd2e4c4c092a713fdbe2cc899ed68cfa3",
+    "art/v3/animation/spitz/idle-frame00.webp": "374d4a4249a13438fee202b7ce5dd28e04d647c32da2fb7ab3a1363f6d0dac8b",
+    "art/v3/animation/spitz/sniff-frame00.webp": "a688ccb53761d546862a769e73f0abccc766fa87b8443f94e339fb06bbb14ff8",
+    "art/v3/animation/spitz/walk-contact-frame00.webp": "901d533516631fecda9e01734ef43d09e242bfa48d035fbbb7dca869f3f1b367",
+    "art/v3/animation/spitz/walk-pass-frame00.webp": "cc8128be82ea10e8255540086334e50227db038e449e2869b5f5a3e5f0797b35",
+    "art/v3/cast3d/clips/enforcer-clips-v01.glb": "00e5930cacbbf32dfedec23138b9cf2e294532ee072120f23c15739910787e6d",
+    "art/v3/cast3d/clips/f01-heavy-bruiser-clips-v01.glb": "4a06f56fe3e21b86d3d90dd42a283244ef1ef73dca9f54194fdb3e6cb3b804d4",
+    "art/v3/cast3d/clips/f01-heavy-bruiser-clips-v02.glb": "b0f43f565d26beb2370fda081bb75ead90d4d0af3ffb050a346ab621934825b7",
+    "art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v01.glb": "cd64299fb5750dffff9a3c7fe30cd9d313a1b78a4c04e990c8d6a7beccfb91c4",
+    "art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v02.glb": "4221905bb230d2819f10839dfcc0ed590be02e749631390eca45e8eb3c458f29",
+    "art/v3/cast3d/clips/hired-b-clips-v01.glb": "a6de0c4c3fae0116ce2ceeee86965ee297ba9ff28bb2e66feb62e046a8b6cba7",
+    "art/v3/cast3d/clips/hired-clips-v01.glb": "daecd2ccd677b15f6db70f6b11a7b9184ec4a7714c7b041effc494210b5f9cf6",
+    "art/v3/cast3d/clips/muscle-attack-v01.glb": "301fc6efdf78bdb3e46b12bdb4f472f052b8123d6b3293f753fe5e95ea0e36fe",
+    "art/v3/cast3d/clips/muscle-behit-v01.glb": "d13fc0115e9cbcce1dce298709f22be578adaa39e12619758c82068decc11b14",
+    "art/v3/cast3d/clips/muscle-dead-v01.glb": "e178de976231d8c7dc52f174e4553da32986de02e273f834c95da71681286b45",
+    "art/v3/cast3d/clips/muscle-idle-v01.glb": "ee7197de76b009ce7ccdf98c13307741c542e305bc39c7e7beaf9ffb2530fe0b",
+    "art/v3/cast3d/clips/street-raver-clips-v01.glb": "2f02a7a8b44e741861d50759d5b6490af651bc8266037a220ebb18131e23311d",
+    "art/v3/cast3d/driver-v01.glb": "f215f9496c68e5fa314e0d91223b1e81c11d03dc23d9cbbd887665fe642b4c3d",
+    "art/v3/cast3d/enforcer-v01.glb": "2f4dd9934195ee5d55cb9c9fe55fbd8e569f0297073d1fbfd864a00252da6df6",
+    "art/v3/cast3d/f01-heavy-bruiser-v01.glb": "c4c4501ec551961bf16c3e073d475cbf73c66c30c6c4ac433263ae4bd66df27d",
+    "art/v3/cast3d/f01-heavy-bruiser-v02.glb": "282f1826a4c90d3516638dbcc11f4f426766301a2da5bc85ac35448414cea2ee",
+    "art/v3/cast3d/f01-heavy-bruiser-v05.glb": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc",
+    "art/v3/cast3d/f02-wiry-skirmisher-v01.glb": "7b4684d2f3ae07ab79231cbe91a1ebea0861925edfd57b286bd8a7312462a356",
+    "art/v3/cast3d/f02-wiry-skirmisher-v02.glb": "fd1121f26da7bd5454ff8f4d3a0a1d5479469ff46c803c6fb872cb43d5a6ff2e",
+    "art/v3/cast3d/f02-wiry-skirmisher-v05.glb": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc",
+    "art/v3/cast3d/fixer-v01.glb": "42188c04429cb7ff773dad43d9ce67b606c7c66072789d5f89916dce7b55543c",
+    "art/v3/cast3d/hired-b-v01.glb": "31d1afaa69f97db0e0f81eca732f9d8c3c2fe973cbc96ac6bfff412de6af03e4",
+    "art/v3/cast3d/hired-v01.glb": "19fc1dde478cdfa2002fba0a57f3c90168ff45b8a84fc9faf6d58a61f739b54f",
+    "art/v3/cast3d/jaska-v01.glb": "cf09b6fa6e8d11520ce811df8647016708382afcf9befd8602e1a42abdf7cf79",
+    "art/v3/cast3d/local-v01.glb": "4374be2f95db2c9e2ef2a44b796ca99a6e66f6a50574abfdba5e234617e80150",
+    "art/v3/cast3d/muscle-v01.glb": "d38fdfb8bfdb441a1463024541fda0e1f39e68e6df5a0fe4a20d70f6df8efa17",
+    "art/v3/cast3d/parka-man-v01.glb": "f6849b66f35b55ebf54170f7b0807d05f097ed9c63d58811423331d3df3a0725",
+    "art/v3/cast3d/runner-v01.glb": "6ae09acf9a73b0fa83e335036452946d04ab5a1b0218f0013668ab9b1fb9bf01",
+    "art/v3/cast3d/street-raver-v01.glb": "c015bcddab9143e5f593ead63202a82af05aa672c7c6569321686c486a5f38a7",
+    "art/v3/cast3d/suited-man-v01.glb": "9d2f7cce35c88ccf79747eb45e0ee18bf1b37a83ce47796ded22696953c0d74c",
+    "art/v3/cast3d/toko-v01.glb": "53f6a50e98f9190023ce3dee3c5f9a6e1dc8716c77c8bcaa5db4090e7a90646c",
+    "art/v3/cast3d/watcher-v01.glb": "77b7c67e293ca8889c7a378776d5139556212dbd0d0f9cb315e254a1044a6154",
+    "art/v3/cutins/aatami-front-v01/head.webp": "253068ce0141ef40e1a9c937c7eae44516bf1386f7ee15635179fdd3a3a1f404",
+    "art/v3/cutins/aatami-front-v01/lid_0.webp": "d9899894d3ccca426b3ea93e1e0292a9def4385cb66b0148f3b4c0b52f473b75",
+    "art/v3/cutins/aatami-front-v01/lid_1.webp": "5130ae5888295d0bf10a10b724339d1e5526e60e92309a9ef4660e15a9218109",
+    "art/v3/cutins/aatami-front-v01/torso.webp": "e4b915f0939d4dec9052214dcbc48da7582bf6ce28d8299ffa20adbc61f09ef0",
+    "art/v3/cutins/aatami-v01/head.webp": "1eb4a49b016528132c4409ce56fdd05af6709ece4090e596edc18098ba1e374a",
+    "art/v3/cutins/aatami-v01/lid_0.webp": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78",
+    "art/v3/cutins/aatami-v01/torso.webp": "706042e3a0bf181fbeeb7e3b9306023b5f6b865efa1d05c3d102cac29e9fa023",
+    "art/v3/cutins/jaska-v01/head.webp": "22b3bd4571aceea751fbf3af628fedadc5ab60b1b8c54b8b54b69ad1ad5513f5",
+    "art/v3/cutins/jaska-v01/lid_0.webp": "263c1121aa292a1a3e4460b88eef0377fd0e309c4bea704d64f39d1a5e6c4279",
+    "art/v3/cutins/jaska-v01/lid_1.webp": "a1720c1feb4400c24e4a96cbc7f3e7578bf024c83bd536a5444fede1851d8d10",
+    "art/v3/cutins/jaska-v01/torso.webp": "add940a51bb3f746c394f02427774696874aa50472bea8efbd943656d32e3176",
+    "art/v3/environment3d/bear-landmark-v01.glb": "fc3fc41681d5c7dbcec7a7471d75b248597412ffd8664cee2489db4a9b7240f1",
+    "art/v3/environment3d/park-ground-study-v01.png": "ee1dfc3c2794a18bf48c15be1eef36aed48be7f9c999720f91b3e8ba1239e0e3",
+    "art/v3/equipment/baseball-bat-v03.webp": "770c986f427b0294c3caec70508c6533aed0bac2cdb03f926a331f6445f1f841",
+    "art/v3/equipment/baton-v03.webp": "bf9109a17853c5bfdc0ae5334c20a9d84841b24ca628daaa14c4e646244c0e17",
+    "art/v3/equipment/chain-v03.webp": "9275c7e667edb58d74547dac87a723140dbb2be9d23a785dae2c4b88b55d5657",
+    "art/v3/equipment/feature-phone-v03.webp": "d59816ffec41c904b15ec746e3a829b33d593e9391349ed2171e528be72d786a",
+    "art/v3/equipment/folding-knife-v03.webp": "05437e3c7cbf32c6ffba6f9809b6e75c201e983d6e120d0b5137784dea0d5c22",
+    "art/v3/equipment/handgun-v03.webp": "1bf48f79d77f55574221332e5fe9c48c23e1c7e7ce9b310ef1b3ae507f489f63",
+    "art/v3/equipment/pipe-v03.webp": "3b0da0367763bed94d478249f912d1711b84f454f45840b22e71157c06972d89",
+    "art/v3/equipment/sawn-off-v03.webp": "030d2f838017300c1428e6f299ade13cca4389ba6ca51d1b55bd20ef7bc51569",
+    "art/v3/equipment/signal-flare-v03.webp": "01a4eec22e97c82573330a2d398366a5278154600087f930dab6495810d2db13",
+    "art/v3/manifest.json": "338424e7340c1821abe94067bfbe063c6b7fc4cba920e7d0f95277e20909ebb5",
+    "art/v3/presenter/arvo-linde-v05.glb": "3a5172c7c980a0461873bacd9cbad793b1243afd89dbe0f85d09694e9b88875e",
+    "art/v3/scenes/bank-counter-v01.webp": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6",
+    "art/v3/scenes/courtyard-prototype-v05.webp": "dcaaa4308b1050a9e3599a521069085a5eca4b9d763e2d71e94e470e5faa6211",
+    "art/v3/scenes/hakaniemi-square-v01.webp": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
+    "art/v3/scenes/harju-pitch-v01.webp": "901eae140701556051fbe84610560668dcf3a3cd34f4ab6a9898bac0652926e7",
+    "art/v3/scenes/jade-lantern-front-v01.webp": "32d181b2c07e8168222bb84f639609b443cf8371149fddb5530fb5739540f590",
+    "art/v3/scenes/kallio-backyard-v01.webp": "1a9f46a12e279b2adcb88aac4fc1db59fe4152aee4305f1c836a906415b40654",
+    "art/v3/scenes/kallio-service-yard-v01.webp": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b",
+    "art/v3/scenes/karhupuisto-clearing-v01.webp": "4264a39e78845be9aaf77cb51dcb82a33b1f09945b494676255858593e89fd17",
+    "art/v3/scenes/karhupuisto-v01.webp": "fc98817002d1b3014f2709979d8d5c6be426b49d402248c25e90f87d0d104304",
+    "art/v3/scenes/piritori-square-v01.webp": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71",
+    "art/v3/scenes/scene-club-v01.webp": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2",
+    "art/v3/scenes/sornainen-docks-v02.webp": "9ae47de05fcfd5d66789e0814ae19f22695431d824015fb5143cc00acf76c9e0",
+    "art/v3/scenes/sornainen-quay-v01.webp": "3655f71a41d6616f356b2b629c9c1c0637b2adeda3d7bd2c3a5949796b8d978f",
+    "art/v3/scenes/toko-rig-v01/brow_l.webp": "ce8716f2388d9a4de7b779c4a1cd18fa09adfc759f2c3082e77c763d25f410a6",
+    "art/v3/scenes/toko-rig-v01/brow_r.webp": "6c1320554b4b959b47ebc3f97bb5b041bae1f3f63ef8728ae1353190ebcb9bed",
+    "art/v3/scenes/toko-rig-v01/counter.webp": "5413a4e2f5654251b4e9243cc20293bc56fb6a64875094037493ccb374688059",
+    "art/v3/scenes/toko-rig-v01/eye_l.webp": "a0121a07542871ac005a8fdb5d78ce9556b51ddc8fd28196035e97651bfc72ad",
+    "art/v3/scenes/toko-rig-v01/eye_r.webp": "a0a67d85d3474288fc0a25e437374d2c93538f24408cdde8514d4b772b078e1b",
+    "art/v3/scenes/toko-rig-v01/fore_r.webp": "ebca48cc77154b9ca2d420c942d7f183e9aba4f5cd0e5e7b802d5013295e2d7e",
+    "art/v3/scenes/toko-rig-v01/hand_l.webp": "3335091cfdd7961ba6eb93d085d9e2453469604a2d97cbafcdf4a38c22851f01",
+    "art/v3/scenes/toko-rig-v01/head.webp": "d10dfeb2a9e35d7bfc2dfaf1a3c6050043386b400b6b98d5966cc0ecfebbdbcf",
+    "art/v3/scenes/toko-rig-v01/hood_bare.webp": "67644070d62ee7d6fa1f280188f0dd1de754c130946564dc1f805ca8321f9d6b",
+    "art/v3/scenes/toko-rig-v01/note.webp": "7c146853f6cdcc7457dc3cc90876253ec0d2bc70b06daafde211ec145a2d818f",
+    "art/v3/scenes/toko-rig-v01/torso.webp": "27f3da70fae978153a209cf10ade8a834c7798d349fbf4fb9e4f2d1a079ba5ba",
+    "art/v3/scenes/toko-slomo-noodles-empty-v01.webp": "fb86f9d3f5afe30a36e8b55516ceb89c41ea4c72e58b1e7bb32814321a24bea1",
+    "art/v3/stage3d/hermanni-skatepark-v01.glb": "2edef6ffe56acc09fb02efb915f6cd502a8f09d1e3a4703ff57253b19e137ea2",
+    "art/v3/stage3d/kallio-backyard-3d-v01.glb": "c31ff141a4c3a71d231c3208566bfa959ff5d371bbfd18627563cda5940013ce",
+    "art/v3/stage3d/suvilahti-kattilahalli-v01.glb": "e5e26dc097ba39683bd8d7eaad2ca80f7c68e2565bed310642993e2c6993c53d",
+    "art/v3/weather/back/cloud-band-v01.svg": "5a91833d9323372acb66f08c7832638623793baaab444ef85a1b70d04faef6c5",
+    "art/v3/weather/front/rain-near-v01.svg": "29e196d9a140eea015e6744dd3b09a3c30cdd3a39cc945294564bf380493d45f",
+    "art/v3/weather/front/wind-debris-v01.svg": "f714f37224e048ddc49c9732c9aa6c21c99e58fecfd1c16ac6d2545e9d34dcb3",
+    "art/v3/weather/ground/wet-sheen-v01.svg": "7f186de2feff129bb8316d162e5e6c0e08d6c62cd21aeeb1634f6fd8b85837d7",
+    "art/v3/weather/mid/rain-fine-v01.svg": "d520568c636d41094054a14d4b39186bdce22973fb2d6a223695e39b6a149a92",
+    "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
+    "content/doors-v1.json": "857ed1bb2554ab42b5cdbcef341cf39f9fc1ab450b203c58c9c08f536e7eae64",
+    "content/era1-slice-v1.json": "a5a88fa1a97cf9a4e4d211ded6d69da9ff78c7fd5388d7d55f8b9b6ff00cad30",
+    "content/families-v1.json": "e82a7084e8e02060e555f8f54cf40cd551b23c9e0caa5c59243151b887ace331",
+    "content/places-v1.json": "464677f2ae25826012cca0b572b18bdc47a8e7a9dc87258c9b79811766071c0e",
+    "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
+    "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef",
+    "market/model.mjs": "6d367dbefb38a8a5667ba0d57d557b2722b9ff6aaa198aabcebc0a2b274ba563",
+    "people/hiring.mjs": "3eb3b9cdafeedeea227f2c499358a05b33cf9d977e23265de1861bacf484c276",
+    "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
+    "web/arena-lab/index.html": "499cf574a16d5255f98a24e6651ab8c4e0b3b751cafb4795b09f12c52bb5ffb9",
+    "web/arena-lab/style.css": "481e6418fa8af4d769ce09b3f517c65088245adef84358f9fe38381b00a178f3",
+    "web/bear-path/README.md": "8d5241ab83df511e8a81b0afd4b8ecdb73359a37ae739982c61ff65b5ad5b47c",
+    "web/bear-path/art-verification.json": "3f64e4a7a4295ee24f87174c32aa35eaf1c5a307451219271e32a14a05663b14",
+    "web/bear-path/assets.js": "7d912bb194663fa8f621d5a32d576fd087782ce9cb2d4e6edb701c00169622e0",
+    "web/bear-path/development-look.js": "1687ef8804868ded38d3ef728e80c61b11518601d9c72efec7965f4976f16118",
+    "web/bear-path/encounter.js": "87df33f188cc47441bff0117c311dcb3ef0538767e0f539776b32f4e4c75b33f",
+    "web/bear-path/index.html": "5ed617c5947b14539d17328744074c82354b4b8c921f8930e5e228beaae217af",
+    "web/bear-path/park.js": "4bf9accd7df23a58ba4a9aa5931510a272828a84daa812196df4800a25a03960",
+    "web/bear-path/planar-reflection.js": "e162a097b6b04982b1d402d6b3f0a130379f4dbe0042744e21cc1a937f8db7ca",
+    "web/bear-path/presentation.js": "4f1ee731d393ba04a93675476e1cce990e471cced537b634be2c18225336df00",
+    "web/bear-path/rain-surface.js": "dd2f87bce3ae0ca28c8f44b41c3a2acd0d5f05fa82cbb1c3a99ce6ddc0b96318",
+    "web/bear-path/style.css": "c98d3b9bd5fcf93b975dd3bc0d9f00ba7292bfcc93824da442fb3efec0ad6940",
+    "web/bear-path/verification.json": "8ae69a8d8f097f4c13d9bbaa02c111f7ffb4b425f61e16fc18c0a67b2bbb4cc2",
+    "web/crew-run/assets/README.md": "27e26a740bd6b10eab96b245e385297ec4513b5ffaa3373d2835808c1995570e",
+    "web/crew-run/assets/kallio-kit-v01.glb": "0161788d6adfdd4af4267b6bf1499ee0643af932c9a768c2c1c553de8bcf1a6b",
+    "web/crew-run/assets/kallio-kit-v01.manifest.json": "753e974c7d6f9ea67f3a676f1f36447b5c1cb24a3916ccb27852f76c7e66fa6f",
+    "web/crew-run/assets/kallio-kit-v02.glb": "a807548d7941b1acdfd728dafc94d654236aacd9723fce5e7a1f7177e30b3e7f",
+    "web/crew-run/assets/kallio-kit-v02.json": "326a4d67eb481bcd59d13175ceb37047d6717004678414be5138604e5b0fbb21",
+    "web/crew-run/assets/kallio-kit-v02.manifest.json": "a89bcd97c64bf64bedfc62cd43ee939090f80cbb0ce4d3272a27463d32b8a47b",
+    "web/crew-run/assets/painted-plaster-v01.png": "ad8eebdd04e322912e35a9f6fe72e510ba81d6c6e38e6d7cc639d2004bd31282",
+    "web/crew-run/assets/painted-setts-v01.png": "ba37ce50317a95803a54423a468eb0ffa013fc960d6636f555210d14bd89a8be",
+    "web/crew-run/c17/index.html": "25878adb3d857452af3fbe0843e12d99315fba0b2c086caa1e5fae0e73c9f848",
+    "web/crew-run/campaign-adapter.js": "466b3534f4ca194a8ffe4aafb7c8c1ecb6a467b7c7d5521d1f7f29fc38b69d70",
+    "web/crew-run/compact.css": "4ec645295f59119da4ca7d22c15bc7343156e4fd0f2846a704a9f7c15c16ce9b",
+    "web/crew-run/fonts/BarlowCondensed-SemiBold.ttf": "7b619d14bc2327509a9ef32b0890f709626f7ecc9ff61191c2a4314c5499d2d9",
+    "web/crew-run/fonts/OFL.txt": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+    "web/crew-run/icons.js": "31c6dc63d30270117e7b573de0c50989770348475d5e3b2d37d569dde9bf70fc",
+    "web/crew-run/index.html": "c8f14e89ea014c00d27a98bf01b2865ac8354dcca884804e2ceb552e18f37471",
+    "web/crew-run/layouts.js": "8c831a2cdd4fba4a98e26ca0d7984f3b50a4b57f14db428f867dd9c43da12c39",
+    "web/crew-run/locations.js": "bb627e305fd13ef7ddd6c6642f7bbbffdd1eeb3dafb401b5d7d60f6417d89bde",
+    "web/crew-run/portraits.js": "d5e96df1cb31bdc4447f8f9fb1907a35146e723259b7607eab3accd202c210e5",
+    "web/crew-run/run.js": "d17b771a09d881bb5094e054118e95d76f92dd2c6ae56bd330eb007f0ef9ca5a",
+    "web/crew-run/startup.js": "f000d8fc67e14d97d039bf5f5a8f9e18081d9a9e59f210b135c4ba95e0631697",
+    "web/crew-run/style.css": "0d45cebda8acb1ab32e420d4926ca3cba3b1668a3412cd45e5c64594fa868dc6",
+    "web/crew-run/ui.js": "d8ce85d4481cc61f4b687a733615b53af757f1294c2d7f1721b362b137f261e6",
+    "web/crew-run/weathered-material.js": "cdde3a99ae08294a0b70ae30f81ded350c93fd83e1c11dc4b9ba35d9a23a9262",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "web/fight-module/CAMERA_FRAMING.md": "5ca207c026c2a95053df5b49d17de331bb08a874438d0ccaa07f1e021948126a",
+    "web/fight-module/EDGE_SMOOTHING.md": "8fd9c01f5349bbabdc4e32f029ea6b2c31c61874f1596ccd35ebe340a6a57e97",
+    "web/fight-module/ENVIRONMENT_REFERENCES.md": "6a90133b1ca7b796e2e84e19229674a2278335d68afa9dcf23255a50de1aaa0f",
+    "web/fight-module/GRAPHICS_RECOVERY.md": "badb6059859030491ef3b72b95eee471661b481815fa0562af783e8ca8d32d8f",
+    "web/fight-module/README.md": "52c398881d1471523e93d76c1c86cdc8044512f24d3ae56b57f3cf49cfa11c1c",
+    "web/fight-module/actors.js": "545f04ffbd61ef88b2d49cd9735d04051f56cd075813545b9c3a4012615d8818",
+    "web/fight-module/aim-camera.js": "1d81fb191b48266c9e796ff59bf3b9388f0c92d8019e313b62c5057ca3e4c473",
+    "web/fight-module/browser-report.json": "2a54b06d5a2a740c47004e63ac0d481b343238e50ed44cae0bf3a6f7a6a415b1",
+    "web/fight-module/c05-controls-report.json": "df0e556d802ac6dc2362c794cc8b54e40bd3ae7309fa9f8768cad934d3cd25f8",
+    "web/fight-module/c06-controls-report.json": "7afff0e4e16c2e92cab0f020defd0642a51b1218d1afaad915f1b8cc8ad82384",
+    "web/fight-module/c06-framing-report.json": "c12d12879201b71f88084188ebb0261bbb6a3b85f46e4eab28523caf1c8cc454",
+    "web/fight-module/c06-gpu-recovery-report.json": "1dd07c44d07a04f176a22acbe4fb5934f4685b4abb74cb25d7279af0bfb65198",
+    "web/fight-module/c06-orientation-report.json": "ab76850e11a2ef9a26123f187836d2846b939e6216224956da9a6d571f132009",
+    "web/fight-module/cover-edges.js": "4b7cfaec7fb76225565b57197cc1777814b3e3ea4be4254810b81b2a0273cddd",
+    "web/fight-module/edge-smoothing.js": "a8f39d7a5e49578ab85e4361d4d1faaa2299f899d36d3e75ccd7ed89405b2fa0",
+    "web/fight-module/environment.js": "4e5ca335c56dbc0ead128b132b91f3b737c80eea37778e168b461e843757b823",
+    "web/fight-module/frame-clock.js": "33f193c88417572d8a65c89926080e1fda960b3f14cfd9461bd1d523a08bae7b",
+    "web/fight-module/framing.js": "9a3341aa25fe911c55d12efb6248a3cd27bd4573f722345af623d04d5396e03d",
+    "web/fight-module/gpu-recovery-report.json": "51e2ec40d8ac41e6e68316ceb2ed06c370918efb0cab1375672ae03365d388f2",
+    "web/fight-module/index.html": "6adf71d373f2a9982bb93035a534a137de3976ffdfb554dcf50b01f1295380fd",
+    "web/fight-module/main.js": "a41772771f423f816f7715bbf5fd45370b32e828568847e0d65b7c4292d8b478",
+    "web/fight-module/motion-player.js": "9fce68032cfb4ffe710eba331131fe76adb849b408772f921743dca338d5959d",
+    "web/fight-module/night-browser-report.json": "8b2d6904a0f307a03d423cfb0f2ffad4701e3f360bfc3cb6a894114b59cba306",
+    "web/fight-module/readability.js": "2bb0781804ad4820fc459bee72e6ed907ca1ccdda10e7ac539f5645f48c5c9d0",
+    "web/fight-module/render-profile.js": "3a90ca6e0066d6566ba4e0eccbc18c0236f29b201586dc3ea76f45f9e7dd752d",
+    "web/fight-module/resolver.js": "16e9e629042a57db655c2b9bab1ec205bf1ae7c942b078d5850e4823671cea56",
+    "web/fight-module/review-desktop.png": "002d02ba24004aceb760cd932c26ac25b3be6bf1a4053ff2fbae6d3c94e19256",
+    "web/fight-module/review-phone.png": "ae628f273154f3c336f4c26f4392f782c07b99789d12f8bd74c109944795ca8d",
+    "web/fight-module/session.js": "bdc4a7d7458183180749914df13e46ac72de704edfc35dee0f970ce974db54de",
+    "web/fight-module/stand-in.js": "0b86b849440f2a2c23ea1cde165d4f43ae5cb4bfaf90e98f7fdd8c7ee3b2dc43",
+    "web/fight-module/style.css": "7794dcd2c9531dd8715e3144763c3a2eca5d2a5776053a0b4cf607a9d6656c1d",
+    "web/fight-module/tactical-ui.js": "b34ce6a83ac9d7288800108ccef23390334208da8cd0e1a41ef6239021192a05",
+    "web/fight-module/tactics.js": "7235759cb5a657aa74d59248df342d65020c2aab723e6464207fcf91ea6834ea",
+    "web/fight-module/victory-report.json": "a870616713efb4cfbb22be29e1c90a22bb05ef6d81c23301f4dcb4250769c9bd",
+    "web/fighter-test.css": "0b5728616ed2b42c95719b8eca5f63dc5c5c69cfaa9519b79e9d15bcfdf558ce",
+    "web/fighter-test.html": "cf08d4d72ef37428464f929ad71139ce441a482aa8b5832845e6d289cbe4f196",
+    "web/fonts/OFL-Barlow.txt": "4877e0c1b66f0b16cc3ebc4801c4def24c06252f618b9229428b20c7387aa0c0",
+    "web/fonts/OFL-BarlowCondensed.txt": "046ee27d8bddc6b6ee08eee53c96dbf3ec1f6df561644e018507dd8ffcb11d31",
+    "web/fonts/OFL-IBMPlexMono.txt": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
+    "web/fonts/barlow-condensed-latin-600-normal.woff2": "215a93c696f442034a46fbb382958f753fda60e30490683aeea6b235fcbb2b66",
+    "web/fonts/barlow-condensed-latin-700-normal.woff2": "3787a5a419171630e6890cfa47c4da067474d005cd0ff8dc11ec090fdc3ee2b8",
+    "web/fonts/barlow-condensed-latin-ext-600-normal.woff2": "aef7edf54f79a5329fbca9c065b56dcec3852c680d58cf89a9ef2db6940ca4b3",
+    "web/fonts/barlow-condensed-latin-ext-700-normal.woff2": "9d351bd9222bfab90f943850f8039aa73cdb40e0a6cfe4127308a48bef59d5f5",
+    "web/fonts/barlow-latin-400-normal.woff2": "b0a8ad37ac45f5fb22ced461576db72e44e295107aad7a9c8a7a4bad728fd03b",
+    "web/fonts/barlow-latin-500-normal.woff2": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+    "web/fonts/barlow-latin-600-normal.woff2": "4b52ddd4836b592df0e4832b8286956883cdc651b015126bdd18f184b7f90cc3",
+    "web/fonts/barlow-latin-700-normal.woff2": "2d797dd8b35dcb3413e1af9d7052b3f4f8c341a147cdcb01f4f06af80db53289",
+    "web/fonts/barlow-latin-ext-400-normal.woff2": "122b24bc2a90b0abe189f5229768bf2e9ba641324fe2459b48850079625934f1",
+    "web/fonts/barlow-latin-ext-500-normal.woff2": "3facdf66b60778c7e64693013be7799e6686b2488dad65525b4036e211ab03e0",
+    "web/fonts/barlow-latin-ext-600-normal.woff2": "b7f099c421968b583734bc631e6706bff8fc23908112a219f5f0e37f59b03b32",
+    "web/fonts/barlow-latin-ext-700-normal.woff2": "88c786d5fa8700a201615bc7b8ede09d209ec5d08cc3dd0a30ea1c4baff3476f",
+    "web/fonts/ibm-plex-mono-latin-400-normal.woff2": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+    "web/fonts/ibm-plex-mono-latin-500-normal.woff2": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22",
+    "web/fonts/ibm-plex-mono-latin-ext-400-normal.woff2": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb",
+    "web/fonts/ibm-plex-mono-latin-ext-500-normal.woff2": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea",
+    "web/index.html": "e3dc313db248a67ce9fff6c0af160b406786cbb75d962369398140c4cf90e784",
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/battle.js": "84537c5c2d494fcca3c9d4a27d933a0f22118f6f404ec615ba16478e8a782ab1",
+    "web/js/v3/board.js": "07ff2de79809fb77eec7fc28d686061c6f5a4d43832883976787eca1591b17b8",
+    "web/js/v3/chapter-narrative.js": "a740db2a2584dc3f4747e7e82fdc154165434e6258d56f10ad143516142420fc",
+    "web/js/v3/chapter.js": "b120f62635bbabc01f7d3b8491bbe081f68517590ac9da09653ae2c2c0a3de11",
+    "web/js/v3/content.js": "37bbcd484c366c926468a265f038f560d25fe8a3b19c70d9205c0bf4713712f7",
+    "web/js/v3/cutin-stage.js": "f7ee423fe56b7c3a61dc9947aa644b6861525b5e824e6c6d16b38ae855d454a2",
+    "web/js/v3/doors.js": "d101c566f7981f85857a73b11fe31ebdc34d47504a9b8b154c07ae6c69e2ccfb",
+    "web/js/v3/equipment.js": "fb93d4401f186900975ef98f7dccf0f67061e142034dcaf9fb6f971394169d85",
+    "web/js/v3/fight-motion.js": "c0f0192a06c4056a85a69ddbdfd12a15b486ddcd45ecf54ce697fc2c217245aa",
+    "web/js/v3/fighter-test.js": "8fc7552bfa251a89a7fcb632b1f7648f2d7ea14262764acf6034bd3a0614fef1",
+    "web/js/v3/grid.js": "6645840d1715f7bc6fa146b4a57ac10193f3a4e0324ca68c3b978c4d30f073f3",
+    "web/js/v3/journey.js": "09c0fb7628a488eae7a21ba03ce0af9ea82d9ee7edf8a5c98632358dce780f98",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/nameplates.js": "6070d838305ce773e73cc5a7e14d5bd100724c7d6215f3bd39240c377ba60419",
+    "web/js/v3/outing.js": "754573f2264646f3aac0fbc3e6ea6abe6174c622661bdc60dc6d08a47937ac64",
+    "web/js/v3/pause.js": "dd416219375cb649e3a29f6ae5a2ac2c253f54b21ed82b103e6bd260f5ef8091",
+    "web/js/v3/places.js": "8fcdf9c4306070308174b7ee4e55a6557712fc1595bd7f1c793ea98dc293d4d2",
+    "web/js/v3/render3d.js": "76dd79aa624e02c23adf1310e9daf6b30e66eacc40a1e4b50b8e3924fe81788c",
+    "web/js/v3/road.js": "02e314ee46083188aab613361538666baf63cd72354a3bad44de12706a0037a7",
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/js/v3/stage-camera.js": "0689426c3501ef47c725f700b3068149e8c08e9b3467ceb65e4b96d8adbb7397",
+    "web/js/v3/stance.js": "5e215ecc68d1eaeb47ac72acb79b365ccde4bbccdbc641919d1a325023dfd07d",
+    "web/js/v3/standing.js": "afab530ca97cb16f76eb18393ce5fcfd02dc9cd6b251b20d0d042cd81b4f8bd8",
+    "web/js/v3/state.js": "cdbe2f447d899155538c5d0222ede1b8fe0aac7e070ed0e4aea201c493ea5a40",
+    "web/js/v3/story.js": "f3ed724afdd743f2a85febcd675cd46ccde7b1aee612b5adba6c6d3826ba7cc5",
+    "web/js/v3/testlist.js": "2e2d71cc88bbbca7d1a93861ca6009daea044cd0ae98e2b425525f33fab05afd",
+    "web/js/v3/toko-stage.js": "ef621f3553dc28727542a698c252dede8fd2a5e526061d2a3945cdd2d5f6f16a",
+    "web/js/v3/toko.js": "c9f3a893809712db2ced3549caa7fe599a9aa17986c825528d0584f70e3b1085",
+    "web/js/v3/visits.js": "daf21dfc9cfaeb5656055027a657f395bf2cb5c76a6ec5e481728975684dc936",
+    "web/test/scene-club-cabinet.cjs": "81a8073b488007a9677c1dd31a91c6bf00ad67953b21e470cee5653241953f8e",
+    "web/tools/build-hub-cabinet.mjs": "770ecca67be61e7151104e622dfec4ddc8fe31ece8985882a9333f23e7ab104a",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/vendor/THREE-LICENSE.txt": "c149c691ccddabd529ef1b96f9142fe5af0da9064961fb62294521bf77c88eb6",
+    "web/vendor/jsm/loaders/GLTFLoader.js": "1050864a94eeac64651c3b11b6e41e3a610bdef172f360a9d5a73c4494798756",
+    "web/vendor/jsm/shaders/FXAAShader.js": "33dfba55320397897590f334ac85656c65c92368afba399d66d7272dce6cb88e",
+    "web/vendor/jsm/utils/BufferGeometryUtils.js": "c25b7930e570e9ec56173cd3b866ec8d2e10016630db3937efb439daf1cedbf6",
+    "web/vendor/three.module.min.js": "54a7a52ddce0ad06fbd1d021fd03b1e1812d946114a2111e1260bcd490c6b840"
+  },
+  "builtHashes": {
+    "arena-lab/index.html": "499cf574a16d5255f98a24e6651ab8c4e0b3b751cafb4795b09f12c52bb5ffb9",
+    "arena-lab/style.css": "481e6418fa8af4d769ce09b3f517c65088245adef84358f9fe38381b00a178f3",
+    "art/v3/QA.md": "57d3b33e4bb0a62e3f0e8a086945413b7e70a670e9f789507f42bdf738d730c6",
+    "art/v3/README.md": "edd09d94e23a57a59c181037fa3e56bca8dfb541e322ff2ff2bc890ca9ee649e",
+    "art/v3/animation/grass/calm-frame00.webp": "3cb7bd32135752dd35928cdfd6b9cbaa1f507b5d789611707264bc35faa27590",
+    "art/v3/animation/grass/gust-frame00.webp": "c96408e09f1a6cddc8292c9aa841a783581a76550fd1f222715cb92611f0346f",
+    "art/v3/animation/grass/lean-frame00.webp": "9d1871f0f05d5f3ceae4db37daba05ae389a83c6ee0f1fafc2c6d7678ebeffa6",
+    "art/v3/animation/grass/recover-frame00.webp": "aca5423702e37f13a8845437b2bcc905d82367a9cffe15965442f569de28003c",
+    "art/v3/animation/lime-tree/calm-frame00.webp": "b640262907aab2ba143e98ce6f8eb53153e6629c1764b6d77b3810ce96c6690c",
+    "art/v3/animation/lime-tree/gust-frame00.webp": "84a7b9a47c21ae39a12d16302372338263457ae03eed60e4031a9a1eebe74267",
+    "art/v3/animation/lime-tree/lean-frame00.webp": "c5b0e69502f39880977b37aa648f73e75fa8966ecd67628e658263194a4c71aa",
+    "art/v3/animation/lime-tree/recover-frame00.webp": "28c6dfbb748981da3eae193c3eb2d0bfd2e4c4c092a713fdbe2cc899ed68cfa3",
+    "art/v3/animation/spitz/idle-frame00.webp": "374d4a4249a13438fee202b7ce5dd28e04d647c32da2fb7ab3a1363f6d0dac8b",
+    "art/v3/animation/spitz/sniff-frame00.webp": "a688ccb53761d546862a769e73f0abccc766fa87b8443f94e339fb06bbb14ff8",
+    "art/v3/animation/spitz/walk-contact-frame00.webp": "901d533516631fecda9e01734ef43d09e242bfa48d035fbbb7dca869f3f1b367",
+    "art/v3/animation/spitz/walk-pass-frame00.webp": "cc8128be82ea10e8255540086334e50227db038e449e2869b5f5a3e5f0797b35",
+    "art/v3/cast3d/clips/enforcer-clips-v01.glb": "00e5930cacbbf32dfedec23138b9cf2e294532ee072120f23c15739910787e6d",
+    "art/v3/cast3d/clips/f01-heavy-bruiser-clips-v01.glb": "4a06f56fe3e21b86d3d90dd42a283244ef1ef73dca9f54194fdb3e6cb3b804d4",
+    "art/v3/cast3d/clips/f01-heavy-bruiser-clips-v02.glb": "b0f43f565d26beb2370fda081bb75ead90d4d0af3ffb050a346ab621934825b7",
+    "art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v01.glb": "cd64299fb5750dffff9a3c7fe30cd9d313a1b78a4c04e990c8d6a7beccfb91c4",
+    "art/v3/cast3d/clips/f02-wiry-skirmisher-clips-v02.glb": "4221905bb230d2819f10839dfcc0ed590be02e749631390eca45e8eb3c458f29",
+    "art/v3/cast3d/clips/hired-b-clips-v01.glb": "a6de0c4c3fae0116ce2ceeee86965ee297ba9ff28bb2e66feb62e046a8b6cba7",
+    "art/v3/cast3d/clips/hired-clips-v01.glb": "daecd2ccd677b15f6db70f6b11a7b9184ec4a7714c7b041effc494210b5f9cf6",
+    "art/v3/cast3d/clips/muscle-attack-v01.glb": "301fc6efdf78bdb3e46b12bdb4f472f052b8123d6b3293f753fe5e95ea0e36fe",
+    "art/v3/cast3d/clips/muscle-behit-v01.glb": "d13fc0115e9cbcce1dce298709f22be578adaa39e12619758c82068decc11b14",
+    "art/v3/cast3d/clips/muscle-dead-v01.glb": "e178de976231d8c7dc52f174e4553da32986de02e273f834c95da71681286b45",
+    "art/v3/cast3d/clips/muscle-idle-v01.glb": "ee7197de76b009ce7ccdf98c13307741c542e305bc39c7e7beaf9ffb2530fe0b",
+    "art/v3/cast3d/clips/street-raver-clips-v01.glb": "2f02a7a8b44e741861d50759d5b6490af651bc8266037a220ebb18131e23311d",
+    "art/v3/cast3d/driver-v01.glb": "f215f9496c68e5fa314e0d91223b1e81c11d03dc23d9cbbd887665fe642b4c3d",
+    "art/v3/cast3d/enforcer-v01.glb": "2f4dd9934195ee5d55cb9c9fe55fbd8e569f0297073d1fbfd864a00252da6df6",
+    "art/v3/cast3d/f01-heavy-bruiser-v01.glb": "c4c4501ec551961bf16c3e073d475cbf73c66c30c6c4ac433263ae4bd66df27d",
+    "art/v3/cast3d/f01-heavy-bruiser-v02.glb": "282f1826a4c90d3516638dbcc11f4f426766301a2da5bc85ac35448414cea2ee",
+    "art/v3/cast3d/f01-heavy-bruiser-v05.glb": "f05403888a137111738dd69c300c6bcd24d09a8a81f44205de3b43b52195e8bc",
+    "art/v3/cast3d/f02-wiry-skirmisher-v01.glb": "7b4684d2f3ae07ab79231cbe91a1ebea0861925edfd57b286bd8a7312462a356",
+    "art/v3/cast3d/f02-wiry-skirmisher-v02.glb": "fd1121f26da7bd5454ff8f4d3a0a1d5479469ff46c803c6fb872cb43d5a6ff2e",
+    "art/v3/cast3d/f02-wiry-skirmisher-v05.glb": "6eec1b8fdc7bfe8ef2c0230ba04953911bf02be5be6771d20002f0e18ba50fcc",
+    "art/v3/cast3d/fixer-v01.glb": "42188c04429cb7ff773dad43d9ce67b606c7c66072789d5f89916dce7b55543c",
+    "art/v3/cast3d/hired-b-v01.glb": "31d1afaa69f97db0e0f81eca732f9d8c3c2fe973cbc96ac6bfff412de6af03e4",
+    "art/v3/cast3d/hired-v01.glb": "19fc1dde478cdfa2002fba0a57f3c90168ff45b8a84fc9faf6d58a61f739b54f",
+    "art/v3/cast3d/jaska-v01.glb": "cf09b6fa6e8d11520ce811df8647016708382afcf9befd8602e1a42abdf7cf79",
+    "art/v3/cast3d/local-v01.glb": "4374be2f95db2c9e2ef2a44b796ca99a6e66f6a50574abfdba5e234617e80150",
+    "art/v3/cast3d/muscle-v01.glb": "d38fdfb8bfdb441a1463024541fda0e1f39e68e6df5a0fe4a20d70f6df8efa17",
+    "art/v3/cast3d/parka-man-v01.glb": "f6849b66f35b55ebf54170f7b0807d05f097ed9c63d58811423331d3df3a0725",
+    "art/v3/cast3d/runner-v01.glb": "6ae09acf9a73b0fa83e335036452946d04ab5a1b0218f0013668ab9b1fb9bf01",
+    "art/v3/cast3d/street-raver-v01.glb": "c015bcddab9143e5f593ead63202a82af05aa672c7c6569321686c486a5f38a7",
+    "art/v3/cast3d/suited-man-v01.glb": "9d2f7cce35c88ccf79747eb45e0ee18bf1b37a83ce47796ded22696953c0d74c",
+    "art/v3/cast3d/toko-v01.glb": "53f6a50e98f9190023ce3dee3c5f9a6e1dc8716c77c8bcaa5db4090e7a90646c",
+    "art/v3/cast3d/watcher-v01.glb": "77b7c67e293ca8889c7a378776d5139556212dbd0d0f9cb315e254a1044a6154",
+    "art/v3/cutins/aatami-front-v01/head.webp": "253068ce0141ef40e1a9c937c7eae44516bf1386f7ee15635179fdd3a3a1f404",
+    "art/v3/cutins/aatami-front-v01/lid_0.webp": "d9899894d3ccca426b3ea93e1e0292a9def4385cb66b0148f3b4c0b52f473b75",
+    "art/v3/cutins/aatami-front-v01/lid_1.webp": "5130ae5888295d0bf10a10b724339d1e5526e60e92309a9ef4660e15a9218109",
+    "art/v3/cutins/aatami-front-v01/torso.webp": "e4b915f0939d4dec9052214dcbc48da7582bf6ce28d8299ffa20adbc61f09ef0",
+    "art/v3/cutins/aatami-v01/head.webp": "1eb4a49b016528132c4409ce56fdd05af6709ece4090e596edc18098ba1e374a",
+    "art/v3/cutins/aatami-v01/lid_0.webp": "22ae3c01e2e1f7ace21fde07629f2db5d82414b9a3154231b8fb84fda44abb78",
+    "art/v3/cutins/aatami-v01/torso.webp": "706042e3a0bf181fbeeb7e3b9306023b5f6b865efa1d05c3d102cac29e9fa023",
+    "art/v3/cutins/jaska-v01/head.webp": "22b3bd4571aceea751fbf3af628fedadc5ab60b1b8c54b8b54b69ad1ad5513f5",
+    "art/v3/cutins/jaska-v01/lid_0.webp": "263c1121aa292a1a3e4460b88eef0377fd0e309c4bea704d64f39d1a5e6c4279",
+    "art/v3/cutins/jaska-v01/lid_1.webp": "a1720c1feb4400c24e4a96cbc7f3e7578bf024c83bd536a5444fede1851d8d10",
+    "art/v3/cutins/jaska-v01/torso.webp": "add940a51bb3f746c394f02427774696874aa50472bea8efbd943656d32e3176",
+    "art/v3/environment3d/bear-landmark-v01.glb": "fc3fc41681d5c7dbcec7a7471d75b248597412ffd8664cee2489db4a9b7240f1",
+    "art/v3/environment3d/park-ground-study-v01.png": "ee1dfc3c2794a18bf48c15be1eef36aed48be7f9c999720f91b3e8ba1239e0e3",
+    "art/v3/equipment/baseball-bat-v03.webp": "770c986f427b0294c3caec70508c6533aed0bac2cdb03f926a331f6445f1f841",
+    "art/v3/equipment/baton-v03.webp": "bf9109a17853c5bfdc0ae5334c20a9d84841b24ca628daaa14c4e646244c0e17",
+    "art/v3/equipment/chain-v03.webp": "9275c7e667edb58d74547dac87a723140dbb2be9d23a785dae2c4b88b55d5657",
+    "art/v3/equipment/feature-phone-v03.webp": "d59816ffec41c904b15ec746e3a829b33d593e9391349ed2171e528be72d786a",
+    "art/v3/equipment/folding-knife-v03.webp": "05437e3c7cbf32c6ffba6f9809b6e75c201e983d6e120d0b5137784dea0d5c22",
+    "art/v3/equipment/handgun-v03.webp": "1bf48f79d77f55574221332e5fe9c48c23e1c7e7ce9b310ef1b3ae507f489f63",
+    "art/v3/equipment/pipe-v03.webp": "3b0da0367763bed94d478249f912d1711b84f454f45840b22e71157c06972d89",
+    "art/v3/equipment/sawn-off-v03.webp": "030d2f838017300c1428e6f299ade13cca4389ba6ca51d1b55bd20ef7bc51569",
+    "art/v3/equipment/signal-flare-v03.webp": "01a4eec22e97c82573330a2d398366a5278154600087f930dab6495810d2db13",
+    "art/v3/manifest.json": "338424e7340c1821abe94067bfbe063c6b7fc4cba920e7d0f95277e20909ebb5",
+    "art/v3/presenter/arvo-linde-v05.glb": "3a5172c7c980a0461873bacd9cbad793b1243afd89dbe0f85d09694e9b88875e",
+    "art/v3/scenes/bank-counter-v01.webp": "bc18eadff6e2e8d80df09b3dd33358ca40b2358e244d0992d519cfaeb6ae6dd6",
+    "art/v3/scenes/courtyard-prototype-v05.webp": "dcaaa4308b1050a9e3599a521069085a5eca4b9d763e2d71e94e470e5faa6211",
+    "art/v3/scenes/hakaniemi-square-v01.webp": "e152ce4618a1732b3a603559f4716593b343bce7f9a43897442ebf23cf3a0b02",
+    "art/v3/scenes/harju-pitch-v01.webp": "901eae140701556051fbe84610560668dcf3a3cd34f4ab6a9898bac0652926e7",
+    "art/v3/scenes/jade-lantern-front-v01.webp": "32d181b2c07e8168222bb84f639609b443cf8371149fddb5530fb5739540f590",
+    "art/v3/scenes/kallio-backyard-v01.webp": "1a9f46a12e279b2adcb88aac4fc1db59fe4152aee4305f1c836a906415b40654",
+    "art/v3/scenes/kallio-service-yard-v01.webp": "e032f66ab6b894b1fdbaaf8c82f4a6104dba513e9a9e0f3cc5409f4a644deb2b",
+    "art/v3/scenes/karhupuisto-clearing-v01.webp": "4264a39e78845be9aaf77cb51dcb82a33b1f09945b494676255858593e89fd17",
+    "art/v3/scenes/karhupuisto-v01.webp": "fc98817002d1b3014f2709979d8d5c6be426b49d402248c25e90f87d0d104304",
+    "art/v3/scenes/piritori-square-v01.webp": "37a251bd3a6355cb5d99ef420b953da111b85256d7866604f20803e6dac3ba71",
+    "art/v3/scenes/scene-club-v01.webp": "14e949a9182d5559d143c264b072f29c6dfd74f64c8d9ca5d5bc3f8db5a2e7a2",
+    "art/v3/scenes/sornainen-docks-v02.webp": "9ae47de05fcfd5d66789e0814ae19f22695431d824015fb5143cc00acf76c9e0",
+    "art/v3/scenes/sornainen-quay-v01.webp": "3655f71a41d6616f356b2b629c9c1c0637b2adeda3d7bd2c3a5949796b8d978f",
+    "art/v3/scenes/toko-rig-v01/brow_l.webp": "ce8716f2388d9a4de7b779c4a1cd18fa09adfc759f2c3082e77c763d25f410a6",
+    "art/v3/scenes/toko-rig-v01/brow_r.webp": "6c1320554b4b959b47ebc3f97bb5b041bae1f3f63ef8728ae1353190ebcb9bed",
+    "art/v3/scenes/toko-rig-v01/counter.webp": "5413a4e2f5654251b4e9243cc20293bc56fb6a64875094037493ccb374688059",
+    "art/v3/scenes/toko-rig-v01/eye_l.webp": "a0121a07542871ac005a8fdb5d78ce9556b51ddc8fd28196035e97651bfc72ad",
+    "art/v3/scenes/toko-rig-v01/eye_r.webp": "a0a67d85d3474288fc0a25e437374d2c93538f24408cdde8514d4b772b078e1b",
+    "art/v3/scenes/toko-rig-v01/fore_r.webp": "ebca48cc77154b9ca2d420c942d7f183e9aba4f5cd0e5e7b802d5013295e2d7e",
+    "art/v3/scenes/toko-rig-v01/hand_l.webp": "3335091cfdd7961ba6eb93d085d9e2453469604a2d97cbafcdf4a38c22851f01",
+    "art/v3/scenes/toko-rig-v01/head.webp": "d10dfeb2a9e35d7bfc2dfaf1a3c6050043386b400b6b98d5966cc0ecfebbdbcf",
+    "art/v3/scenes/toko-rig-v01/hood_bare.webp": "67644070d62ee7d6fa1f280188f0dd1de754c130946564dc1f805ca8321f9d6b",
+    "art/v3/scenes/toko-rig-v01/note.webp": "7c146853f6cdcc7457dc3cc90876253ec0d2bc70b06daafde211ec145a2d818f",
+    "art/v3/scenes/toko-rig-v01/torso.webp": "27f3da70fae978153a209cf10ade8a834c7798d349fbf4fb9e4f2d1a079ba5ba",
+    "art/v3/scenes/toko-slomo-noodles-empty-v01.webp": "fb86f9d3f5afe30a36e8b55516ceb89c41ea4c72e58b1e7bb32814321a24bea1",
+    "art/v3/stage3d/hermanni-skatepark-v01.glb": "2edef6ffe56acc09fb02efb915f6cd502a8f09d1e3a4703ff57253b19e137ea2",
+    "art/v3/stage3d/kallio-backyard-3d-v01.glb": "c31ff141a4c3a71d231c3208566bfa959ff5d371bbfd18627563cda5940013ce",
+    "art/v3/stage3d/suvilahti-kattilahalli-v01.glb": "e5e26dc097ba39683bd8d7eaad2ca80f7c68e2565bed310642993e2c6993c53d",
+    "art/v3/weather/back/cloud-band-v01.svg": "5a91833d9323372acb66f08c7832638623793baaab444ef85a1b70d04faef6c5",
+    "art/v3/weather/front/rain-near-v01.svg": "29e196d9a140eea015e6744dd3b09a3c30cdd3a39cc945294564bf380493d45f",
+    "art/v3/weather/front/wind-debris-v01.svg": "f714f37224e048ddc49c9732c9aa6c21c99e58fecfd1c16ac6d2545e9d34dcb3",
+    "art/v3/weather/ground/wet-sheen-v01.svg": "7f186de2feff129bb8316d162e5e6c0e08d6c62cd21aeeb1634f6fd8b85837d7",
+    "art/v3/weather/mid/rain-fine-v01.svg": "d520568c636d41094054a14d4b39186bdce22973fb2d6a223695e39b6a149a92",
+    "bear-path/README.md": "8d5241ab83df511e8a81b0afd4b8ecdb73359a37ae739982c61ff65b5ad5b47c",
+    "bear-path/art-verification.json": "3f64e4a7a4295ee24f87174c32aa35eaf1c5a307451219271e32a14a05663b14",
+    "bear-path/assets.js": "694dcc1c3ad007a72391c11d9580636325137f0e7233d514098bc534087ded8c",
+    "bear-path/development-look.js": "1687ef8804868ded38d3ef728e80c61b11518601d9c72efec7965f4976f16118",
+    "bear-path/encounter.js": "87df33f188cc47441bff0117c311dcb3ef0538767e0f539776b32f4e4c75b33f",
+    "bear-path/index.html": "5ed617c5947b14539d17328744074c82354b4b8c921f8930e5e228beaae217af",
+    "bear-path/park.js": "4bf9accd7df23a58ba4a9aa5931510a272828a84daa812196df4800a25a03960",
+    "bear-path/planar-reflection.js": "e162a097b6b04982b1d402d6b3f0a130379f4dbe0042744e21cc1a937f8db7ca",
+    "bear-path/presentation.js": "4f1ee731d393ba04a93675476e1cce990e471cced537b634be2c18225336df00",
+    "bear-path/rain-surface.js": "dd2f87bce3ae0ca28c8f44b41c3a2acd0d5f05fa82cbb1c3a99ce6ddc0b96318",
+    "bear-path/style.css": "c98d3b9bd5fcf93b975dd3bc0d9f00ba7292bfcc93824da442fb3efec0ad6940",
+    "bear-path/verification.json": "8ae69a8d8f097f4c13d9bbaa02c111f7ffb4b425f61e16fc18c0a67b2bbb4cc2",
+    "content/act1-story-v1.json": "b1bb5bb86a7ce34c3065d117915f160a79bdc4687f0b1e7239ac219a6785ab85",
+    "content/doors-v1.json": "857ed1bb2554ab42b5cdbcef341cf39f9fc1ab450b203c58c9c08f536e7eae64",
+    "content/era1-slice-v1.json": "a5a88fa1a97cf9a4e4d211ded6d69da9ff78c7fd5388d7d55f8b9b6ff00cad30",
+    "content/families-v1.json": "e82a7084e8e02060e555f8f54cf40cd551b23c9e0caa5c59243151b887ace331",
+    "content/places-v1.json": "464677f2ae25826012cca0b572b18bdc47a8e7a9dc87258c9b79811766071c0e",
+    "content/road-events-v1.json": "148955a24c0c4290e5619e3783211e18d0b151ab480f0f37f1732c417cfbeeda",
+    "crew-run/assets/README.md": "27e26a740bd6b10eab96b245e385297ec4513b5ffaa3373d2835808c1995570e",
+    "crew-run/assets/kallio-kit-v01.glb": "0161788d6adfdd4af4267b6bf1499ee0643af932c9a768c2c1c553de8bcf1a6b",
+    "crew-run/assets/kallio-kit-v01.manifest.json": "753e974c7d6f9ea67f3a676f1f36447b5c1cb24a3916ccb27852f76c7e66fa6f",
+    "crew-run/assets/kallio-kit-v02.glb": "a807548d7941b1acdfd728dafc94d654236aacd9723fce5e7a1f7177e30b3e7f",
+    "crew-run/assets/kallio-kit-v02.json": "326a4d67eb481bcd59d13175ceb37047d6717004678414be5138604e5b0fbb21",
+    "crew-run/assets/kallio-kit-v02.manifest.json": "a89bcd97c64bf64bedfc62cd43ee939090f80cbb0ce4d3272a27463d32b8a47b",
+    "crew-run/assets/painted-plaster-v01.png": "ad8eebdd04e322912e35a9f6fe72e510ba81d6c6e38e6d7cc639d2004bd31282",
+    "crew-run/assets/painted-setts-v01.png": "ba37ce50317a95803a54423a468eb0ffa013fc960d6636f555210d14bd89a8be",
+    "crew-run/c17/index.html": "25878adb3d857452af3fbe0843e12d99315fba0b2c086caa1e5fae0e73c9f848",
+    "crew-run/campaign-adapter.js": "816710e27a92ec27534e19879140a8981631b16e8dca3a37e10974376bb419ce",
+    "crew-run/compact.css": "4ec645295f59119da4ca7d22c15bc7343156e4fd0f2846a704a9f7c15c16ce9b",
+    "crew-run/fonts/BarlowCondensed-SemiBold.ttf": "7b619d14bc2327509a9ef32b0890f709626f7ecc9ff61191c2a4314c5499d2d9",
+    "crew-run/fonts/OFL.txt": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+    "crew-run/icons.js": "31c6dc63d30270117e7b573de0c50989770348475d5e3b2d37d569dde9bf70fc",
+    "crew-run/index.html": "c8f14e89ea014c00d27a98bf01b2865ac8354dcca884804e2ceb552e18f37471",
+    "crew-run/layouts.js": "8c831a2cdd4fba4a98e26ca0d7984f3b50a4b57f14db428f867dd9c43da12c39",
+    "crew-run/locations.js": "bb627e305fd13ef7ddd6c6642f7bbbffdd1eeb3dafb401b5d7d60f6417d89bde",
+    "crew-run/portraits.js": "d5e96df1cb31bdc4447f8f9fb1907a35146e723259b7607eab3accd202c210e5",
+    "crew-run/run.js": "af27765ebbde1574ecb4c7a2853e740af9d80212ccc15ac4482f8cf25c6d67b6",
+    "crew-run/startup.js": "f000d8fc67e14d97d039bf5f5a8f9e18081d9a9e59f210b135c4ba95e0631697",
+    "crew-run/style.css": "0d45cebda8acb1ab32e420d4926ca3cba3b1668a3412cd45e5c64594fa868dc6",
+    "crew-run/ui.js": "d8ce85d4481cc61f4b687a733615b53af757f1294c2d7f1721b362b137f261e6",
+    "crew-run/weathered-material.js": "cdde3a99ae08294a0b70ae30f81ded350c93fd83e1c11dc4b9ba35d9a23a9262",
+    "data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "fight-module/CAMERA_FRAMING.md": "5ca207c026c2a95053df5b49d17de331bb08a874438d0ccaa07f1e021948126a",
+    "fight-module/EDGE_SMOOTHING.md": "8fd9c01f5349bbabdc4e32f029ea6b2c31c61874f1596ccd35ebe340a6a57e97",
+    "fight-module/ENVIRONMENT_REFERENCES.md": "6a90133b1ca7b796e2e84e19229674a2278335d68afa9dcf23255a50de1aaa0f",
+    "fight-module/GRAPHICS_RECOVERY.md": "badb6059859030491ef3b72b95eee471661b481815fa0562af783e8ca8d32d8f",
+    "fight-module/README.md": "52c398881d1471523e93d76c1c86cdc8044512f24d3ae56b57f3cf49cfa11c1c",
+    "fight-module/actors.js": "b759d27e9aa41ad8b3c702e910bdb4637e1762e068132d1adb0b4e8887566973",
+    "fight-module/aim-camera.js": "1d81fb191b48266c9e796ff59bf3b9388f0c92d8019e313b62c5057ca3e4c473",
+    "fight-module/browser-report.json": "2a54b06d5a2a740c47004e63ac0d481b343238e50ed44cae0bf3a6f7a6a415b1",
+    "fight-module/c05-controls-report.json": "df0e556d802ac6dc2362c794cc8b54e40bd3ae7309fa9f8768cad934d3cd25f8",
+    "fight-module/c06-controls-report.json": "7afff0e4e16c2e92cab0f020defd0642a51b1218d1afaad915f1b8cc8ad82384",
+    "fight-module/c06-framing-report.json": "c12d12879201b71f88084188ebb0261bbb6a3b85f46e4eab28523caf1c8cc454",
+    "fight-module/c06-gpu-recovery-report.json": "1dd07c44d07a04f176a22acbe4fb5934f4685b4abb74cb25d7279af0bfb65198",
+    "fight-module/c06-orientation-report.json": "ab76850e11a2ef9a26123f187836d2846b939e6216224956da9a6d571f132009",
+    "fight-module/cover-edges.js": "4b7cfaec7fb76225565b57197cc1777814b3e3ea4be4254810b81b2a0273cddd",
+    "fight-module/edge-smoothing.js": "a8f39d7a5e49578ab85e4361d4d1faaa2299f899d36d3e75ccd7ed89405b2fa0",
+    "fight-module/environment.js": "4e5ca335c56dbc0ead128b132b91f3b737c80eea37778e168b461e843757b823",
+    "fight-module/frame-clock.js": "33f193c88417572d8a65c89926080e1fda960b3f14cfd9461bd1d523a08bae7b",
+    "fight-module/framing.js": "9a3341aa25fe911c55d12efb6248a3cd27bd4573f722345af623d04d5396e03d",
+    "fight-module/gpu-recovery-report.json": "51e2ec40d8ac41e6e68316ceb2ed06c370918efb0cab1375672ae03365d388f2",
+    "fight-module/index.html": "6adf71d373f2a9982bb93035a534a137de3976ffdfb554dcf50b01f1295380fd",
+    "fight-module/main.js": "c8055a8041a906c2547bfc14d4adb58cd2c0bfd85be11c98be75c41332e2ee65",
+    "fight-module/motion-player.js": "9fce68032cfb4ffe710eba331131fe76adb849b408772f921743dca338d5959d",
+    "fight-module/night-browser-report.json": "8b2d6904a0f307a03d423cfb0f2ffad4701e3f360bfc3cb6a894114b59cba306",
+    "fight-module/readability.js": "2bb0781804ad4820fc459bee72e6ed907ca1ccdda10e7ac539f5645f48c5c9d0",
+    "fight-module/render-profile.js": "3a90ca6e0066d6566ba4e0eccbc18c0236f29b201586dc3ea76f45f9e7dd752d",
+    "fight-module/resolver.js": "a8cf74470b0ec6c4b0dc82a313a8845563ac72d716b69b215070412b2c7fcf52",
+    "fight-module/review-desktop.png": "002d02ba24004aceb760cd932c26ac25b3be6bf1a4053ff2fbae6d3c94e19256",
+    "fight-module/review-phone.png": "ae628f273154f3c336f4c26f4392f782c07b99789d12f8bd74c109944795ca8d",
+    "fight-module/session.js": "bdc4a7d7458183180749914df13e46ac72de704edfc35dee0f970ce974db54de",
+    "fight-module/stand-in.js": "0b86b849440f2a2c23ea1cde165d4f43ae5cb4bfaf90e98f7fdd8c7ee3b2dc43",
+    "fight-module/style.css": "7794dcd2c9531dd8715e3144763c3a2eca5d2a5776053a0b4cf607a9d6656c1d",
+    "fight-module/tactical-ui.js": "b34ce6a83ac9d7288800108ccef23390334208da8cd0e1a41ef6239021192a05",
+    "fight-module/tactics.js": "7235759cb5a657aa74d59248df342d65020c2aab723e6464207fcf91ea6834ea",
+    "fight-module/victory-report.json": "a870616713efb4cfbb22be29e1c90a22bb05ef6d81c23301f4dcb4250769c9bd",
+    "fighter-test.css": "0b5728616ed2b42c95719b8eca5f63dc5c5c69cfaa9519b79e9d15bcfdf558ce",
+    "fighter-test.html": "cf08d4d72ef37428464f929ad71139ce441a482aa8b5832845e6d289cbe4f196",
+    "fonts/OFL-Barlow.txt": "4877e0c1b66f0b16cc3ebc4801c4def24c06252f618b9229428b20c7387aa0c0",
+    "fonts/OFL-BarlowCondensed.txt": "046ee27d8bddc6b6ee08eee53c96dbf3ec1f6df561644e018507dd8ffcb11d31",
+    "fonts/OFL-IBMPlexMono.txt": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
+    "fonts/barlow-condensed-latin-600-normal.woff2": "215a93c696f442034a46fbb382958f753fda60e30490683aeea6b235fcbb2b66",
+    "fonts/barlow-condensed-latin-700-normal.woff2": "3787a5a419171630e6890cfa47c4da067474d005cd0ff8dc11ec090fdc3ee2b8",
+    "fonts/barlow-condensed-latin-ext-600-normal.woff2": "aef7edf54f79a5329fbca9c065b56dcec3852c680d58cf89a9ef2db6940ca4b3",
+    "fonts/barlow-condensed-latin-ext-700-normal.woff2": "9d351bd9222bfab90f943850f8039aa73cdb40e0a6cfe4127308a48bef59d5f5",
+    "fonts/barlow-latin-400-normal.woff2": "b0a8ad37ac45f5fb22ced461576db72e44e295107aad7a9c8a7a4bad728fd03b",
+    "fonts/barlow-latin-500-normal.woff2": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+    "fonts/barlow-latin-600-normal.woff2": "4b52ddd4836b592df0e4832b8286956883cdc651b015126bdd18f184b7f90cc3",
+    "fonts/barlow-latin-700-normal.woff2": "2d797dd8b35dcb3413e1af9d7052b3f4f8c341a147cdcb01f4f06af80db53289",
+    "fonts/barlow-latin-ext-400-normal.woff2": "122b24bc2a90b0abe189f5229768bf2e9ba641324fe2459b48850079625934f1",
+    "fonts/barlow-latin-ext-500-normal.woff2": "3facdf66b60778c7e64693013be7799e6686b2488dad65525b4036e211ab03e0",
+    "fonts/barlow-latin-ext-600-normal.woff2": "b7f099c421968b583734bc631e6706bff8fc23908112a219f5f0e37f59b03b32",
+    "fonts/barlow-latin-ext-700-normal.woff2": "88c786d5fa8700a201615bc7b8ede09d209ec5d08cc3dd0a30ea1c4baff3476f",
+    "fonts/ibm-plex-mono-latin-400-normal.woff2": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+    "fonts/ibm-plex-mono-latin-500-normal.woff2": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22",
+    "fonts/ibm-plex-mono-latin-ext-400-normal.woff2": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb",
+    "fonts/ibm-plex-mono-latin-ext-500-normal.woff2": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea",
+    "index.html": "e3dc313db248a67ce9fff6c0af160b406786cbb75d962369398140c4cf90e784",
+    "js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "js/v3/battle.js": "30f82a484f74f2e6f0324da14d6b2c67ec9c1821fa06c5ab40b5729b9eae438c",
+    "js/v3/board.js": "9f22d3737baab8ddf3aed8d32093c6dc3ae38bec5baeec426c2d833146ad2dee",
+    "js/v3/chapter-narrative.js": "a740db2a2584dc3f4747e7e82fdc154165434e6258d56f10ad143516142420fc",
+    "js/v3/chapter.js": "b120f62635bbabc01f7d3b8491bbe081f68517590ac9da09653ae2c2c0a3de11",
+    "js/v3/content.js": "e7af7ba26c9f15987b1a77258eff59e7ca227fcdb4422dc3f6ff52f4f58fdab1",
+    "js/v3/cutin-stage.js": "f7ee423fe56b7c3a61dc9947aa644b6861525b5e824e6c6d16b38ae855d454a2",
+    "js/v3/doors.js": "d68cc28b9187f71a6685e46c0aec1346a6fb05c4be23e5e9bcaa0ada54217769",
+    "js/v3/equipment.js": "fb93d4401f186900975ef98f7dccf0f67061e142034dcaf9fb6f971394169d85",
+    "js/v3/fight-motion.js": "c0f0192a06c4056a85a69ddbdfd12a15b486ddcd45ecf54ce697fc2c217245aa",
+    "js/v3/fighter-test.js": "8fc7552bfa251a89a7fcb632b1f7648f2d7ea14262764acf6034bd3a0614fef1",
+    "js/v3/grid.js": "6645840d1715f7bc6fa146b4a57ac10193f3a4e0324ca68c3b978c4d30f073f3",
+    "js/v3/journey.js": "09c0fb7628a488eae7a21ba03ce0af9ea82d9ee7edf8a5c98632358dce780f98",
+    "js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "js/v3/nameplates.js": "6070d838305ce773e73cc5a7e14d5bd100724c7d6215f3bd39240c377ba60419",
+    "js/v3/outing.js": "754573f2264646f3aac0fbc3e6ea6abe6174c622661bdc60dc6d08a47937ac64",
+    "js/v3/pause.js": "dd416219375cb649e3a29f6ae5a2ac2c253f54b21ed82b103e6bd260f5ef8091",
+    "js/v3/places.js": "2dfc0e7b5653abc8feb02d3b76dfa5c5b08f93d8c6e2fdf14db38ca13b93cdc4",
+    "js/v3/render3d.js": "76dd79aa624e02c23adf1310e9daf6b30e66eacc40a1e4b50b8e3924fe81788c",
+    "js/v3/road.js": "4415e811fb9cdc6e5a3b459af44732138dac71b5deb3634b2f85d219892fc153",
+    "js/v3/scene-club-actors.js": "f617f461af556dbaac2ed3fd722e37a12b487f8bb6d277191280b881acbf3364",
+    "js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+    "js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "js/v3/stage-camera.js": "0689426c3501ef47c725f700b3068149e8c08e9b3467ceb65e4b96d8adbb7397",
+    "js/v3/stance.js": "5e215ecc68d1eaeb47ac72acb79b365ccde4bbccdbc641919d1a325023dfd07d",
+    "js/v3/standing.js": "adbfb438e0a16103c05dfcde96d70744705829b05aa43dec31e002792a529ac3",
+    "js/v3/state.js": "cf9f054212add6345ee3fe8a1daa92c218cb56f6bb8f9e8d11928b12c639807c",
+    "js/v3/story.js": "fd47309cf8be9fe9a9e89a7377354f4a9b0a7eb3ac5318a5e98de3b2f7fb23f5",
+    "js/v3/testlist.js": "2e2d71cc88bbbca7d1a93861ca6009daea044cd0ae98e2b425525f33fab05afd",
+    "js/v3/toko-stage.js": "ef621f3553dc28727542a698c252dede8fd2a5e526061d2a3945cdd2d5f6f16a",
+    "js/v3/toko.js": "c9f3a893809712db2ced3549caa7fe599a9aa17986c825528d0584f70e3b1085",
+    "js/v3/visits.js": "daf21dfc9cfaeb5656055027a657f395bf2cb5c76a6ec5e481728975684dc936",
+    "map/kallio-era1-2003-v1.json": "508c1d7c02ca4e0c0b33dadd1b5c80fc0b3b7ed652f4ccd28ddc77066f94213c",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef",
+    "market/model.mjs": "6d367dbefb38a8a5667ba0d57d557b2722b9ff6aaa198aabcebc0a2b274ba563",
+    "people/hiring.mjs": "3eb3b9cdafeedeea227f2c499358a05b33cf9d977e23265de1861bacf484c276",
+    "people/roster.mjs": "62a0394348455a38c99806c11480e701cf3d5e0428706e0e87aa3d0d8f57aa2b",
+    "v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "vendor/THREE-LICENSE.txt": "c149c691ccddabd529ef1b96f9142fe5af0da9064961fb62294521bf77c88eb6",
+    "vendor/jsm/loaders/GLTFLoader.js": "1050864a94eeac64651c3b11b6e41e3a610bdef172f360a9d5a73c4494798756",
+    "vendor/jsm/shaders/FXAAShader.js": "33dfba55320397897590f334ac85656c65c92368afba399d66d7272dce6cb88e",
+    "vendor/jsm/utils/BufferGeometryUtils.js": "c25b7930e570e9ec56173cd3b866ec8d2e10016630db3937efb439daf1cedbf6",
+    "vendor/three.module.min.js": "54a7a52ddce0ad06fbd1d021fd03b1e1812d946114a2111e1260bcd490c6b840"
+  },
+  "fixture": {
+    "description": "Synthetic Day2 Scene Club checkpoint; no earlier authored choices invented.",
+    "state": {
+      "version": 3,
+      "contentId": "piritori-era1-seven-day-slice-v1",
+      "seed": 20030101,
+      "scheduleIndex": 2,
+      "mode": "route",
+      "locale": "en",
+      "selectedAnchor": "makelansilta",
+      "cash": 222.75,
+      "markka": 517,
+      "debt": 487,
+      "exitFund": 0,
+      "capacity": 2,
+      "intel": 0,
+      "stock": {
+        "piri": 0
+      },
+      "relationships": {
+        "jaska": 3,
+        "toko": 1,
+        "mccormick_family": 0,
+        "jade_lantern_network": 0
+      },
+      "pressure": {
+        "piritori": 1,
+        "karhupuisto": 0,
+        "linjat_yard": 0,
+        "makelansilta": 2
+      },
+      "cityHarm": "low",
+      "flags": [
+        "memory:c17-receipt:cabinet-fixture"
+      ],
+      "obligations": {},
+      "equipment": [
+        {
+          "id": "feature-phone",
+          "cond": 0
+        }
+      ],
+      "recruited": [
+        "crew-slot-runner",
+        "crew-slot-muscle"
+      ],
+      "temporaryCrew": [],
+      "deployed": [
+        "crew-slot-muscle"
+      ],
+      "crewStatus": {
+        "crew-slot-runner": {
+          "condition": 6,
+          "maxCondition": 8,
+          "nerve": 6,
+          "status": "wounded",
+          "critical": false
+        },
+        "crew-slot-muscle": {
+          "condition": 10,
+          "maxCondition": 10,
+          "nerve": 7,
+          "status": "available",
+          "critical": false
+        },
+        "crew-slot-watcher": {
+          "condition": 0,
+          "maxCondition": 7,
+          "nerve": 8,
+          "status": "missing",
+          "critical": false
+        },
+        "crew-slot-fixer": {
+          "condition": 7,
+          "maxCondition": 7,
+          "nerve": 7,
+          "status": "available",
+          "critical": false
+        },
+        "crew-slot-driver": {
+          "condition": 8,
+          "maxCondition": 8,
+          "nerve": 6,
+          "status": "available",
+          "critical": false
+        },
+        "crew-slot-local": {
+          "condition": 8,
+          "maxCondition": 8,
+          "nerve": 8,
+          "status": "available",
+          "critical": false
+        },
+        "aatami": {
+          "condition": 8,
+          "maxCondition": 8,
+          "nerve": 6,
+          "status": "available",
+          "critical": false
+        }
+      },
+      "hiredCrew": {},
+      "crewFights": {},
+      "retiredCrew": [],
+      "arrestedCrew": [],
+      "crewPerks": {},
+      "crewSkills": {},
+      "crewPerkPoints": {},
+      "crewAptitudes": {},
+      "trainedCrew": [],
+      "chapter": 1,
+      "chapterCleared": false,
+      "chapterGoal": "money",
+      "chapterThreshold": 400,
+      "chapterEarned": 0,
+      "chapterLootTaken": 0,
+      "chapterFightsWon": 0,
+      "lastEndingOutcome": "",
+      "upgrades": [],
+      "revealedOffers": [
+        "offer-piritori-buy"
+      ],
+      "revealedMissions": [],
+      "revealedEncounters": [
+        "enc-first-purchase",
+        "enc-jaska-receipt"
+      ],
+      "missionStatus": {},
+      "choices": {},
+      "newsSeen": [],
+      "route": null,
+      "battle": null,
+      "battleHistory": [],
+      "endingId": null,
+      "doors": {
+        "offers": {},
+        "taken": {}
+      },
+      "fightsByDay": {},
+      "logs": [
+        "Day 1. Piritori is the only corner that already knows Aatami."
+      ],
+      "lastOutcome": null,
+      "seen": {
+        "makelansilta": 2
+      },
+      "lastFight": {
+        "id": "cabinet-fixture",
+        "place": "Fixture yard",
+        "won": false,
+        "lines": [
+          "Fixture: a crew member returned wounded."
+        ],
+        "stakes": [
+          "Fixture: an earlier outing ended."
+        ]
+      },
+      "time": {
+        "block": 2,
+        "spent": 9,
+        "visitAt": null
+      }
+    }
+  },
+  "url": "http://127.0.0.1:41021/cabinet/",
+  "passed": true,
+  "builtUnchanged": true,
+  "sourceUnchanged": true,
+  "finishedAt": "2026-11-08T14:21:30.881Z"
+}

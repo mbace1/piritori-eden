@@ -1,0 +1,476 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "touch": true
+      },
+      "target": {
+        "x": 12,
+        "y": 712.65625,
+        "width": 366,
+        "height": 44
+      },
+      "beforeChoice": null,
+      "afterChoice": null,
+      "stateChanged": false,
+      "saveChanged": false,
+      "afterState": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 160,
+        "markka": 300,
+        "debt": 350,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy"
+        ],
+        "revealedMissions": [],
+        "revealedEncounters": [
+          "enc-first-purchase"
+        ],
+        "missionStatus": {},
+        "choices": {},
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "touch": false
+      },
+      "target": {
+        "x": 427,
+        "y": 744,
+        "width": 426,
+        "height": 44
+      },
+      "beforeChoice": null,
+      "afterChoice": null,
+      "stateChanged": false,
+      "saveChanged": false,
+      "afterState": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 160,
+        "markka": 300,
+        "debt": 350,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy"
+        ],
+        "revealedMissions": [],
+        "revealedEncounters": [
+          "enc-first-purchase"
+        ],
+        "missionStatus": {},
+        "choices": {},
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390,
+        "touch": true
+      },
+      "target": {
+        "x": 316.3125,
+        "y": 342,
+        "width": 211.375,
+        "height": 44
+      },
+      "beforeChoice": null,
+      "afterChoice": null,
+      "stateChanged": false,
+      "saveChanged": false,
+      "afterState": {
+        "version": 3,
+        "contentId": "piritori-era1-seven-day-slice-v1",
+        "seed": 20030101,
+        "scheduleIndex": 2,
+        "mode": "encounter",
+        "locale": "en",
+        "selectedAnchor": "makelansilta",
+        "cash": 160,
+        "markka": 300,
+        "debt": 350,
+        "exitFund": 0,
+        "capacity": 2,
+        "intel": 0,
+        "stock": {
+          "piri": 0
+        },
+        "relationships": {
+          "jaska": 0,
+          "toko": 1,
+          "mccormick_family": 0,
+          "jade_lantern_network": 0
+        },
+        "pressure": {
+          "piritori": 1,
+          "karhupuisto": 0,
+          "linjat_yard": 0
+        },
+        "cityHarm": "low",
+        "flags": [],
+        "obligations": {},
+        "equipment": [
+          {
+            "id": "feature-phone",
+            "cond": 0
+          }
+        ],
+        "recruited": [],
+        "temporaryCrew": [],
+        "deployed": [],
+        "crewStatus": {
+          "crew-slot-runner": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-muscle": {
+            "condition": 10,
+            "maxCondition": 10,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-watcher": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-fixer": {
+            "condition": 7,
+            "maxCondition": 7,
+            "nerve": 7,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-driver": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          },
+          "crew-slot-local": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 8,
+            "status": "available",
+            "critical": false
+          },
+          "aatami": {
+            "condition": 8,
+            "maxCondition": 8,
+            "nerve": 6,
+            "status": "available",
+            "critical": false
+          }
+        },
+        "hiredCrew": {},
+        "crewFights": {},
+        "retiredCrew": [],
+        "arrestedCrew": [],
+        "crewPerks": {},
+        "crewSkills": {},
+        "crewPerkPoints": {},
+        "crewAptitudes": {},
+        "trainedCrew": [],
+        "chapter": 1,
+        "chapterCleared": false,
+        "chapterGoal": "money",
+        "chapterThreshold": 400,
+        "chapterEarned": 0,
+        "chapterLootTaken": 0,
+        "chapterFightsWon": 0,
+        "lastEndingOutcome": "",
+        "upgrades": [],
+        "revealedOffers": [
+          "offer-piritori-buy"
+        ],
+        "revealedMissions": [],
+        "revealedEncounters": [
+          "enc-first-purchase"
+        ],
+        "missionStatus": {},
+        "choices": {},
+        "newsSeen": [],
+        "route": null,
+        "battle": null,
+        "battleHistory": [],
+        "endingId": null,
+        "doors": {
+          "offers": {},
+          "taken": {}
+        },
+        "fightsByDay": {},
+        "logs": [
+          "Day 1. Piritori is the only corner that already knows Aatami."
+        ],
+        "lastOutcome": null,
+        "seen": {
+          "piritori": 0
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "fixCommit": "5e440ab6cca85e67fc2faff91ed95d9170cd8f58",
+  "source": {
+    "commit": "5e440ab6cca85e67fc2faff91ed95d9170cd8f58",
+    "hashes": {
+      "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+      "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4",
+      "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+      "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1"
+    }
+  },
+  "sourceStillMatches": true,
+  "scope": "Exact repeat of before diagnostic: native phone/narrow double tap and desktop double click on arrival Continue. Normal state and serialized campaign save remain unchanged; no choice is committed."
+}

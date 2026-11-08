@@ -5,6 +5,13 @@ It replaces the old UI and modular face/clothing instructions. Their files
 and misleading active-library entries are removed; older versions survive
 only in Git history and are not a source for new work.
 
+**Scene Club acceptance, 8 November:** after reviewing the current animated
+preview, the owner said **“Go”** to campaign integration. The shown side-view
+young Aatami/Jaska composition and motion may now be shared with the runtime.
+This acceptance is scoped to that encounter; front-pose and Toko ensemble
+studies remain review candidates. Keep the original source-register statuses
+and source hashes; no new source painting or unrelated cast is approved.
+
 ## One 9:16 scene, with overlays
 
 The city and encounters use a fixed **9:16 illustrated stage**. At 390×844
