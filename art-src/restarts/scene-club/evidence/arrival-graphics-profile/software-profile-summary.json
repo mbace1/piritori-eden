@@ -1,0 +1,117 @@
+{
+  "providedLaunchArgs": [
+    "--disable-gpu",
+    "--autoplay-policy=no-user-gesture-required"
+  ],
+  "cases": [
+    {
+      "id": "software-1",
+      "cpuRate": 2,
+      "primaryPass": true,
+      "modalCountAtOriginalDeadline": 0,
+      "quietWaitWallMs": 12001,
+      "native9500TimerLagMs": 0.7,
+      "removalAfterTimerRegistrationMs": 9501.1,
+      "marginBeforeOriginal12000DeadlineMs": 2545.5,
+      "contextCensus": [
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 188.5,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 206.40000000223517,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 338,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 355.4000000022352,
+          "success": true
+        }
+      ],
+      "errors": [],
+      "traced": true
+    },
+    {
+      "id": "software-2",
+      "cpuRate": 2,
+      "primaryPass": true,
+      "modalCountAtOriginalDeadline": 0,
+      "quietWaitWallMs": 12001,
+      "native9500TimerLagMs": 0.2,
+      "removalAfterTimerRegistrationMs": 9500.8,
+      "marginBeforeOriginal12000DeadlineMs": 2552.9,
+      "contextCensus": [
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 184.39999999850988,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 201.29999999701977,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 298.19999999925494,
+          "success": true
+        },
+        {
+          "kind": "2d",
+          "id": "cityRelief",
+          "at": 313.29999999701977,
+          "success": true
+        }
+      ],
+      "errors": [],
+      "traced": false
+    }
+  ],
+  "sourceHashesBefore": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "sourceHashesAfter": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "sourceUnchanged": true,
+  "currentSourceMatches": true,
+  "trace": {
+    "events": 254387,
+    "maxWidgetShutdownMs": 1.649,
+    "maxLayerTreeDestructorMs": 1.61,
+    "maxProxyStopMs": 1.601,
+    "commandBufferWaitEventCount": 0
+  },
+  "metadataIntrospectionError": "cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "limits": [
+    "PRIVATE launcher-profile experiment only: --disable-gpu +autoplay; both forcedANGLE/unsafeSwiftShader flags removed. Two fresh warmCPU2x cases, source/runtime/clock unchanged.",
+    "Final quietNode12000 window has no browser/CDPpolling or pending metrics. Light nativeTrace firstcase only; secondcase untraced. Actualremoval checked against originalcutoff.",
+    "No runtime/animation/timer/deadline/testclock change; both primary waits stay12000ms.",
+    "Each arm uses a fresh browser and identical cold auto/history/key-skip/warm auto route.",
+    "Actualfire checks originalNodecutoff; later snapshots do not overwrite primary result. Old audioIDs are queried only after strictprimary observation;9000/2300callbacks are observed withoutdelaychange."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "native-block-trace.json.gz": {
+    "rawBytes": 13127670,
+    "gzipBytes": 1403768,
+    "rawSha256": "2f68dec42d67b2b943882178f670046b53a6775d74d8fe4330b2a98aa037b507",
+    "gzipSha256": "5abe4bbcc0fd0556f06a400671abd8e7ad42ce8d78e29b3d2df1f07fc4c5bf66"
+  },
+  "software-profile-trace.json.gz": {
+    "rawBytes": 50301457,
+    "gzipBytes": 7801106,
+    "rawSha256": "3cdf901c2d3e651b86ff9139ae8046ba199de63677cf092415cef1b0c563366b",
+    "gzipSha256": "e4aff9e96a7aa18a6744cc8c55b7f3d27b0c7cc5aa69015ad3a18bdde032a966"
+  }
+}

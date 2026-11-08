@@ -109,6 +109,12 @@ due/fire/removal and source hashes before the next navigation; failures keep
 their actual count and timing error. This is diagnostic isolation, not a
 claimed production fix. Current CI status belongs to the PR's exact head.
 
+The subsequent [native graphics diagnosis and test-profile correction](../arrival-graphics-profile/README.md)
+reproduced a compositor-teardown block, then measured timely delivery using
+software 2D for the entirely 2D arrival-test path. The complete local suite
+passes 70/0 with all deadlines unchanged. This corrects the test launcher;
+production and dedicated C.19 graphics remain untouched.
+
 This is browser emulation, not physical Pixel/iPad acceptance. C.19 battle
 rules, assets and receipt settlement are unchanged; these three authored
 choices do not trigger combat. Act I remains **50%** under the ROADMAP rubric.

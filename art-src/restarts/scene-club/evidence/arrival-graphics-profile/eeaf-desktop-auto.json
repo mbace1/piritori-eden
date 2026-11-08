@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "caseId": "desktop-auto",
+  "capturedWall": 1794151950917,
+  "testedHead": "eeaf3851ced62c7b667731939d0c373784201905",
+  "triggerRevision": "826b5e0e2992a7cfe85e78c04475de98bf8248ad",
+  "sourceHashes": {
+    "web/test/opening.cjs": "33c1929eb3158cf0162870e6c27aac56e74100889a8ad463c49541937b5fe4f7",
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c"
+  },
+  "metadata": {
+    "phase": "auto",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "beginRequestedWall": 1794151938085,
+    "deadlineMs": 12000,
+    "beginClickReturnedWall": 1794151938163,
+    "waitStartedWall": 1794151938163,
+    "waitError": "page.waitForSelector: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator('#opening') to be detached\n    5 × locator resolved to visible <div id=\"opening\" role=\"dialog\" class=\"opening\" aria-label=\"Arrival\">…</div>\n",
+    "waitEndedWall": 1794151950166,
+    "waitWallMs": 12003,
+    "modalCountAtAssertion": 1,
+    "assertionPassed": false,
+    "assertionReturnedWall": 1794151950917
+  },
+  "browser": {
+    "label": "desktop",
+    "origin": 1794151937926.8,
+    "observedAt": 13111.800000000003,
+    "url": "http://127.0.0.1:36913/web/",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "visibility": "visible",
+    "focused": true,
+    "readyState": "complete",
+    "modals": [],
+    "activeElement": {
+      "tag": "MAIN",
+      "id": "modeRoot",
+      "className": "mode-root"
+    },
+    "events": [
+      {
+        "type": "document-initial",
+        "at": 27.900000000001455,
+        "visibility": "visible",
+        "focused": true,
+        "label": "desktop",
+        "origin": 1794151937926.8,
+        "url": "http://127.0.0.1:36913/web/",
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      {
+        "type": "trusted-input",
+        "at": 213,
+        "visibility": "visible",
+        "focused": true,
+        "event": "pointerup",
+        "detail": 0,
+        "target": {
+          "tag": "BUTTON",
+          "id": "beginButton",
+          "className": "paper-button primary"
+        },
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "beginButton",
+          "className": "paper-button primary"
+        },
+        "modals": []
+      },
+      {
+        "type": "trusted-input",
+        "at": 213,
+        "visibility": "visible",
+        "focused": true,
+        "event": "click",
+        "detail": 1,
+        "target": {
+          "tag": "BUTTON",
+          "id": "beginButton",
+          "className": "paper-button primary"
+        },
+        "activeElement": {
+          "tag": "BUTTON",
+          "id": "beginButton",
+          "className": "paper-button primary"
+        },
+        "modals": []
+      },
+      {
+        "type": "modal-appended",
+        "at": 219,
+        "visibility": "visible",
+        "focused": true,
+        "generation": 1,
+        "modals": [
+          {
+            "generation": 1,
+            "tag": "DIV",
+            "id": "opening",
+            "className": "opening"
+          }
+        ]
+      },
+      {
+        "type": "timer-created",
+        "at": 222.3000000000029,
+        "visibility": "visible",
+        "focused": true,
+        "delay": 9500,
+        "due": 9722.200000000004,
+        "modals": [
+          {
+            "generation": 1,
+            "tag": "DIV",
+            "id": "opening",
+            "className": "opening"
+          }
+        ],
+        "stack": "Error\n    at window.setTimeout (<anonymous>:13:150)\n    at http://127.0.0.1:36913/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:36913/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:36913/web/js/v3/app.js?v=70:2589:12)",
+        "id": 3
+      },
+      {
+        "type": "modal-observed-added",
+        "at": 222.3000000000029,
+        "visibility": "visible",
+        "focused": true,
+        "generation": 1,
+        "connected": true
+      },
+      {
+        "type": "timer-fired",
+        "at": 13109.5,
+        "visibility": "visible",
+        "focused": true,
+        "id": 3,
+        "due": 9722.200000000004,
+        "lag": 3387.2999999999956,
+        "modals": [
+          {
+            "generation": 1,
+            "tag": "DIV",
+            "id": "opening",
+            "className": "opening"
+          }
+        ]
+      },
+      {
+        "type": "timer-cleared",
+        "at": 13109.5,
+        "visibility": "visible",
+        "focused": true,
+        "id": 3
+      },
+      {
+        "type": "modal-remove-before",
+        "at": 13109.5,
+        "visibility": "visible",
+        "focused": true,
+        "generation": 1
+      },
+      {
+        "type": "modal-remove-after",
+        "at": 13109.700000000004,
+        "visibility": "visible",
+        "focused": true,
+        "generation": 1,
+        "modals": []
+      },
+      {
+        "type": "timer-returned",
+        "at": 13109.700000000004,
+        "visibility": "visible",
+        "focused": true,
+        "id": 3,
+        "duration": 0.20000000000436557,
+        "modals": []
+      },
+      {
+        "type": "modal-observed-removed",
+        "at": 13111,
+        "visibility": "visible",
+        "focused": true,
+        "generation": 1,
+        "connected": false
+      }
+    ],
+    "longTasks": [],
+    "longTaskSupported": true,
+    "longTaskError": null,
+    "raf": {
+      "count": 1,
+      "maxRequestToCallbackMs": 12.799999999995634,
+      "maxCallbackDurationMs": 0,
+      "samples": [
+        {
+          "requested": 144.10000000000582,
+          "fired": 156.90000000000146,
+          "lag": 12.799999999995634,
+          "duration": 0,
+          "name": "next"
+        }
+      ]
+    },
+    "navigation": [
+      {
+        "name": "http://127.0.0.1:36913/web/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 112.90000000000146,
+        "navigationId": 8034,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.20000000000436557,
+        "domainLookupStart": 0.20000000000436557,
+        "domainLookupEnd": 0.20000000000436557,
+        "connectStart": 0.20000000000436557,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.20000000000436557,
+        "requestStart": 0.8000000000029104,
+        "responseStart": 2.1000000000058208,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 2.1000000000058208,
+        "responseEnd": 2.7000000000043656,
+        "transferSize": 5396,
+        "encodedBodySize": 5096,
+        "decodedBodySize": 5096,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 18,
+        "unloadEventEnd": 18,
+        "domInteractive": 33,
+        "domContentLoadedEventStart": 112.90000000000146,
+        "domContentLoadedEventEnd": 112.90000000000146,
+        "domComplete": 112.90000000000146,
+        "loadEventStart": 112.90000000000146,
+        "loadEventEnd": 112.90000000000146,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      }
+    ]
+  },
+  "snapshotReturnedWall": 1794151951042,
+  "rendererBefore": {
+    "receivedWall": 1794151938090,
+    "values": {
+      "Timestamp": 50.251272,
+      "AudioHandlers": 51,
+      "AudioWorkletProcessors": 0,
+      "Documents": 8,
+      "Frames": 10,
+      "JSEventListeners": 148,
+      "LayoutObjects": 4117,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": 7353,
+      "Resources": 170,
+      "ContextLifecycleStateObservers": 29,
+      "V8PerContextDatas": 8,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": 8,
+      "AdSubframes": 0,
+      "DetachedScriptStates": 6,
+      "ArrayBufferContents": 29,
+      "LayoutCount": 3,
+      "RecalcStyleCount": 4,
+      "LayoutDuration": 0.001851,
+      "RecalcStyleDuration": 0.00292,
+      "DevToolsCommandDuration": 0.007603,
+      "ScriptDuration": 0.009505,
+      "V8CompileDuration": 0,
+      "TaskDuration": 0.070487,
+      "TaskOtherDuration": 0.048608,
+      "ThreadTime": 0.045289,
+      "ProcessTime": 0.78,
+      "JSHeapUsedSize": 15172448,
+      "JSHeapTotalSize": 21319680,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 50.205032,
+      "NavigationStart": 50.09224
+    }
+  },
+  "rendererAfter": {
+    "receivedWall": 1794151951043,
+    "values": {
+      "Timestamp": 63.208089,
+      "AudioHandlers": 79,
+      "AudioWorkletProcessors": 0,
+      "Documents": 8,
+      "Frames": 10,
+      "JSEventListeners": 165,
+      "LayoutObjects": 4376,
+      "MediaKeySessions": 0,
+      "MediaKeys": 0,
+      "Nodes": 7851,
+      "Resources": 170,
+      "ContextLifecycleStateObservers": 31,
+      "V8PerContextDatas": 8,
+      "WorkerGlobalScopes": 0,
+      "UACSSResources": 0,
+      "RTCPeerConnections": 0,
+      "ResourceFetchers": 8,
+      "AdSubframes": 0,
+      "DetachedScriptStates": 6,
+      "ArrayBufferContents": 32,
+      "LayoutCount": 46,
+      "RecalcStyleCount": 52,
+      "LayoutDuration": 0.004216,
+      "RecalcStyleDuration": 0.006911,
+      "DevToolsCommandDuration": 0.026599,
+      "ScriptDuration": 0.023467,
+      "V8CompileDuration": 0,
+      "TaskDuration": 12.49044,
+      "TaskOtherDuration": 12.429247,
+      "ThreadTime": 0.103898,
+      "ProcessTime": 0.92,
+      "JSHeapUsedSize": 15562132,
+      "JSHeapTotalSize": 24272896,
+      "FirstMeaningfulPaint": 0,
+      "DomContentLoaded": 50.205032,
+      "NavigationStart": 50.09224
+    }
+  }
+}
