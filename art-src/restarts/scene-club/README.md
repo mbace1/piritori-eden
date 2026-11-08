@@ -4,8 +4,13 @@ Owner correction, 8 November 2026: use Toko Move as the UX reference,
 **9:16 with overlays**, and delete the old UI and modular cast basis.
 The earlier wide/full-viewport candidate is replaced by this presentation.
 
-[Watch the 40-second progress trailer](trailer/piritori-progress-trailer.mp4) ·
-[shot list and capture provenance](trailer/README.md).
+[Latest UI-cap preview](evidence/ui-cap-scene-club.mp4) ·
+[narrow dialogue → choices](evidence/ui-cap-narrow.mp4) ·
+[Toko study](evidence/ui-cap-toko.mp4).
+
+[Earlier full progress trailer](trailer/piritori-progress-trailer.mp4) ·
+[shot list and capture provenance](trailer/README.md). The earlier cut predates
+this UI-budget pass; use the previews above to assess the current presentation.
 
 Serve the repository and open **`/art-src/restarts/scene-club/`**.
 The quiet Kallio map leads into the authored Aatami/Jaska encounter. Both
@@ -41,6 +46,30 @@ overlays, transitions and remembered consequences. Its old map/sheet UI
 is explicitly removed by that runtime and is not the reference. Piritori
 keeps its own art, all authored choices and C.19 tactical combat. The fixed
 9:16 requirement applies even where Toko itself switches to landscape.
+
+## One shared UI ceiling
+
+All HUD, dialogue, choices, consequences and temporary controls share a hard
+**50% maximum**. It is a ceiling, not a target. The city checks both painted
+panel union area and the stricter combined top/bottom height bands, including
+insets and gaps; it does not count the scene/map artwork as a panel.
+
+[Independent 32-state measurements](evidence/ui-budget-audit.json) and
+[recorded settled layouts](evidence/ui-cap-steady-layouts.json) back these values.
+The new clips were captured at `f18c5a5`; subsequent entry-footprint accounting
+reserves the same steady layout throughout animation.
+
+Actual choice-state bands are **43.85%** on phone, **38.44%** on desktop and
+**47.69%** in fitted landscape. Across tested gameplay states the maximum is
+47.69%; the bounded Review sheet reaches 50.00%. Native text remains at least
+12px and targets at least 44px.
+
+Where simultaneous dialogue and three choices cannot fit, Respond changes
+presentation only and replaces the dialogue with all three options. A 300ms
+input guard prevents the same repeated tap from choosing. Compact results
+remove duplicate forecast cards but keep the selected response, actual
+consequence and map continuation. The complete authored labels remain
+accessible. The map retains its authored arrival text.
 
 ## Retained sources
 
@@ -107,14 +136,14 @@ specification. Tests reject restoration of the retired libraries and references.
 - **35 Node suites** pass: [actual campaign/combat output](evidence/baseline-node.log).
 - Adapter: 135 checks for three exact effects, engine settlement and clock,
   reload, duplicate refusal and isolated storage.
-- [Scene Club browser report](evidence/browser-results.json): **3,327 main +
-  888 edge checks**, zero failures. Both poses,
+- [Scene Club browser report](evidence/browser-results.json): **5,082 main +
+  1,308 edge checks**, zero failures. Both poses,
   three viewports, motion/reduced motion, fixed 9:16 geometry, full-scene
   layering, real target/text sizes, face clearance, half-size review and
   nine actual choice/reload/map flows. Additional DejaVu Sans and monospace
   probes reproduce and prevent the CI font-metric overlap.
-- [Toko ensemble report](evidence/ensemble-results.json): **3,720 main +
-  750 edge checks**, zero failures. Both poses, three
+- [Toko ensemble report](evidence/ensemble-results.json): **4,104 main +
+  830 edge checks**, zero failures. Both poses, three
   viewports, one room/counter camera, sampled actual canvas motion, clear
   heads, source text and unchanged saves.
 - [Compatibility browser report](evidence/cleanup-browser-results.json):
@@ -143,6 +172,7 @@ both the corrected presentation checks and obsolete-library guards.
 
 New animation and composition remain visual approval candidates. This is
 not a release or deployment. Browser testing does not establish physical
-Pixel/iPad acceptance. The roadmap remains **48%**. Next: review this actual
+Pixel/iPad acceptance. The latest main roadmap check-in is **50%**; this UI
+pass does not increase that score. Next: review this actual
 9:16 output, then integrate the accepted presentation through the campaign
 boundary and continue the existing listed locations and cast.

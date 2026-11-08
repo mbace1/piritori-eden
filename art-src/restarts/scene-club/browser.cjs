@@ -297,6 +297,20 @@ async function inspectReview(page, result) {
   await page.locator('#review-tools > summary').click(); await settleBudget(page);
   return value;
 }
+async function entrySamples(page, result) {
+  const samples = [];
+  for (let i = 0; i < 3; i++) {
+    const value = await measureFrame(page);
+    for (const item of fixedFrameAssertions(value)) check(item.pass, 'entry animation: ' + item.label, result);
+    const animation = await page.locator('#encounter-overlay').evaluate(element => ({
+      translate: getComputedStyle(element).translate,
+      times: element.getAnimations().map(animation => animation.currentTime),
+    }));
+    samples.push({ uiBudget: value.uiBudget, uiStage: value.uiStage, animation });
+    if (i < 2) await page.waitForTimeout(80);
+  }
+  return samples;
+}
 // Hash actual decoded canvas RGBA output; dataset labels/pose metadata are not
 // accepted as proof that anything moved or that reduced motion was obeyed.
 async function frames(page, selector = 'canvas.actor') {
@@ -363,6 +377,7 @@ async function runBrowser() {
           check(await enter.innerText() === 'Go inside' && entry && entry.y >= 0 && entry.y + entry.height <= height && entry.height >= 44, 'arrival map provides visible Go inside', result);
           if (pose === 'side' && preference === 'reduce') await capture(page, `${name}-arrival.png`, result);
           await enter.click(); await ready(page, 'scene');
+          if (preference === 'no-preference') result.entrySamples = await entrySamples(page, result);
           if (preference === 'no-preference') await page.waitForTimeout(600);
           result.responseView = await ensureChoices(page, result);
           if (result.responseView.stepped) {

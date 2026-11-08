@@ -26,6 +26,25 @@ The lower overlays contain a short authored narrative beat and the current
 decisions. Keep faces and important actions clear. Hide secondary map detail
 during conversation. Use the quiet Kallio map between encounters.
 
+## Combined UI budget
+
+The owner’s **50% limit is a ceiling for all UI together**, not an allowance
+for each panel. At least half of the 9:16 frame remains for the scene. Measure
+painted panel rectangle union; for edge-anchored city overlays also limit the
+combined top and bottom height bands, including edge insets and panel gaps.
+
+Compact repeated labels and padding before changing the interaction. When
+dialogue plus every choice cannot fit with readable text and 44px targets,
+show dialogue and a Respond action, then replace that panel with all authored
+choices and their stakes. Respond changes presentation only; a brief input
+guard prevents a repeated tap from accidentally choosing. Results and map
+receipts keep the actual consequences. Menus share the same budget.
+
+The candidate independently tests all these states, font metrics and motion
+peaks. A CSS max-height that clips text or hides choices does not meet the
+contract. Existing combat intentions and rules remain authoritative; temporary
+tactical panels must use the budget without discarding information.
+
 ## Characters and placeholders
 
 Retain the approved Jaska cut-in, selected young Aatami front/side sources

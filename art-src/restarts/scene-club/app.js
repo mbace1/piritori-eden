@@ -80,7 +80,10 @@ function uiBudget() {
   if (!half && !reviewing && visible(summary)) headers.push(summary);
   const bottom = reviewing && !half ? review : world.querySelector('.encounter-overlay,.map-footer');
   const topBand = Math.max(0, ...headers.map(element => (element.getBoundingClientRect().bottom - frame.top) / scale));
-  const bottomBand = visible(bottom) ? (frame.bottom - bottom.getBoundingClientRect().top) / scale : 0;
+  // Reserve the settled footprint even while the entry animation translates
+  // the panel. A transform changes its painted position, not ResizeObserver's
+  // measured size, so sizing to the animated rect could miss the final height.
+  const bottomBand = visible(bottom) ? bottom.getBoundingClientRect().height / scale + (parseFloat(getComputedStyle(bottom).bottom) || 0) : 0;
   return { topBand, bottomBand, height: world.clientHeight, ratio: (topBand + bottomBand) / world.clientHeight };
 }
 function scheduleFit() {
