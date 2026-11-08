@@ -28,7 +28,7 @@ const retainedImages = new Set(retainedIds.flatMap(id => {
 const scriptPaths = new Set(['app.js', 'actors.js', 'campaign.js', 'toko-composition.js'].map(file => 'art-src/restarts/scene-club/' + file).concat(['web/js/v3/content.js', 'web/js/v3/state.js', 'people/roster.mjs', 'people/hiring.mjs', 'market/model.mjs']));
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const sourceHashes = () => Object.fromEntries(['index.html', 'app.js', 'actors.js', 'campaign.js', 'style.css', 'toko-composition.js'].filter(file => fs.existsSync(path.join(__dirname, file))).map(file => [file, sha(fs.readFileSync(path.join(__dirname, file)))]));
-const report = { schema: 1, sourceBase: '12d5486efed24d9f66d21716f605d387bfbfe4e6', sourceHashes: sourceHashes(), viewports: [[390, 844], [844, 390], [1280, 800]], cases: [], checks: 0, failures: [], limits: ['Browser emulation; no physical Pixel/iPad acceptance.', 'Retained Jaska and young Aatami sources; candidate motion has static mouths.', 'No Toko composition is tested or approved.', '50% review assesses composition, not native touch-target size.'] };
+const report = { schema: 1, sourceBase: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', sourceHashes: sourceHashes(), viewports: [[390, 844], [844, 390], [1280, 800]], cases: [], checks: 0, failures: [], limits: ['Browser emulation; no physical Pixel/iPad acceptance.', 'Retained Jaska and young Aatami sources; candidate motion has static mouths.', 'This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.', '50% review assesses composition, not native touch-target size.'] };
 function check(value, label, result) {
   report.checks += 1;
   if (!value) { const failure = `${result.id}: ${label}`; report.failures.push(failure); result.failures.push(label); }
@@ -183,7 +183,7 @@ async function motion(page, result) {
     if (target.pathname === '/') target.pathname = ROUTE;
     if (!target.pathname.endsWith('/')) target.pathname += '/';
     report.url = target.href;
-    const engine = await import(pathToFileURL(path.join(ROOT, 'web/js/v3/state.js')).href + '?v=14');
+    const engine = await import(pathToFileURL(path.join(ROOT, 'web/js/v3/state.js')).href + '?v=15');
     browser = await chromium.launch({ headless: true, ...(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {}) });
     report.browser = browser.version();
     for (const [name, width, height] of [['phone', 390, 844], ['landscape', 844, 390], ['desktop', 1280, 800]]) {

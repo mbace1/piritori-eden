@@ -3,7 +3,7 @@
 Owner direction, 8 November 2026: keep Jaska, young Aatami and Toko paper
 artwork; replace the old UI and modular cast library. This is a fresh,
 playable presentation candidate based on main
-`12d5486efed24d9f66d21716f605d387bfbfe4e6` / **v4.98**.
+`804613a3d4eaa1e5180dfb0ef2cb88952d15bd97` / **v4.99**.
 
 Open `/art-src/restarts/scene-club/` with the repository served over HTTP.
 The initial map leads into Scene Club. Both characters remain in the room;
@@ -13,8 +13,8 @@ The next lead is Harju; Aatami remains physically at Mäkelänsilta.
 
 Actual browser recordings:
 
-- [Phone, 390×844](evidence/visual-restart-phone.mp4) — 13.36 seconds.
-- [Landscape, 844×390](evidence/visual-restart-landscape.mp4) — 13.44 seconds.
+- [Phone, 390×844](evidence/visual-restart-phone.mp4) — 13.28 seconds.
+- [Landscape, 844×390](evidence/visual-restart-landscape.mp4) — 13.36 seconds.
 
 Both show arrival, the paired Scene Club decision, Aatami's response, the
 remembered consequence on the map, and the source-aligned Toko comparison.
@@ -54,7 +54,7 @@ study, and 50% presentation scale. Useful direct routes:
 
 The candidate writes only `piritori:restart:scene-club:v1`. Normal campaign,
 Night Shift and outing receipt saves remain untouched. `campaign.js` calls
-state v14's actual `chooseEncounter` and `advanceSchedule`; it does not
+state v15's actual `chooseEncounter` and `advanceSchedule`; it does not
 replace their rules or invent previous choices. The Toko comparison displays
 two beats from its existing opening and applies no choice effects.
 

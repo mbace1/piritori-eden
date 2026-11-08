@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, chooseEncounter, advanceSchedule, chargeTrip, actionsLeft, formatBlock } from '../../../web/js/v3/state.js?v=14';
+import { createState, chooseEncounter, advanceSchedule, chargeTrip, actionsLeft, formatBlock } from '../../../web/js/v3/state.js?v=15';
 import { CANDIDATE_SAVE_KEY, SCENE_ENCOUNTER_ID, loadCandidate, chooseCandidate, returnToMap, restartCandidate, persistCandidate } from './campaign.js';
 
 const read = path => readFile(new URL(path, import.meta.url), 'utf8').then(JSON.parse);
@@ -72,7 +72,7 @@ for (const [id, money, trust, flag] of [['ask-envelope', 300, 1, 'markka-explain
   equal(candidate.state.outing, undefined, 'this encounter does not invent a C.19 outing');
 }
 
-// Current v4.98 clock: an existing paid trip is neither reset nor charged again.
+// Current v4.99 clock: an existing paid trip is neither reset nor charged again.
 {
   const candidate = restartCandidate(data, storage);
   chargeTrip(candidate.state); chargeTrip(candidate.state); chargeTrip(candidate.state);

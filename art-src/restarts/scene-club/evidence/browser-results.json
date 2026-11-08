@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "sourceBase": "12d5486efed24d9f66d21716f605d387bfbfe4e6",
+  "sourceBase": "804613a3d4eaa1e5180dfb0ef2cb88952d15bd97",
   "sourceHashes": {
     "index.html": "2a72feb53374cb49083cc4a948b9578fe424d42e0701091ab5a08a2ee37c5dd4",
-    "app.js": "c0c5db09594b0c94251623084b8f6e39045df6e2bce5a0a66070198678afeff4",
+    "app.js": "4b3414669918eb6362f2254a3d2aa29b9e8875d692f316556e6ca234c9260cf0",
     "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
-    "campaign.js": "e54f8bef58dcae58d189e404ddb1339d7a12f4291891169128693e46b94853e1",
+    "campaign.js": "364e50a23e23f4801cbcae3fe591d2ad04cb770eced12e2e0eaad9d3a50f7a33",
     "style.css": "2528589ed81ea71f6614aade6d28ecb54639558b09b820548b73102fa734e607",
     "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
   },
@@ -1631,12 +1631,12 @@
           },
           "last": {
             "aatami": {
-              "hash": "8d440131",
-              "opaque": 180514
+              "hash": "21227396",
+              "opaque": 180659
             },
             "jaska": {
-              "hash": "4e192621",
-              "opaque": 154956
+              "hash": "dcd20b57",
+              "opaque": 154988
             }
           }
         }
@@ -4290,14 +4290,14 @@
               "height": 262.078125
             },
             "head": {
-              "x": 74.17928775220938,
-              "y": 138.55698886327602,
-              "width": 67.01139918366349,
-              "height": 88.83997440086748
+              "x": 74.17939348504217,
+              "y": 138.55664161084138,
+              "width": 67.01129066964097,
+              "height": 88.83983961166996
             },
             "mouth": {
-              "x": 111.33057734946622,
-              "y": 199.0491071335532
+              "x": 111.33060917329087,
+              "y": 199.0486873714745
             },
             "source": {
               "id": "cutin-aatami-front-rig-v01",
@@ -4322,14 +4322,14 @@
               "height": 262.078125
             },
             "head": {
-              "x": 706.3115860031771,
-              "y": 154.68712162065657,
-              "width": 62.2429729361769,
-              "height": 79.8227694798345
+              "x": 706.311750966308,
+              "y": 154.68659282056115,
+              "width": 62.24280077182209,
+              "height": 79.82263537753306
             },
             "mouth": {
-              "x": 750.9427055753918,
-              "y": 220.97697239091528
+              "x": 750.9427274535938,
+              "y": 220.97640573775686
             },
             "source": {
               "id": "cutin-jaska-rig-v01",
@@ -6439,22 +6439,22 @@
         "realTime": {
           "first": {
             "aatami": {
-              "hash": "aeb36fa7",
+              "hash": "ca3f8f4a",
               "opaque": 179965
             },
             "jaska": {
-              "hash": "dca2abbe",
+              "hash": "32c31e93",
               "opaque": 154517
             }
           },
           "last": {
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             },
             "jaska": {
-              "hash": "dcd20b57",
-              "opaque": 154988
+              "hash": "4e192621",
+              "opaque": 154956
             }
           }
         }
@@ -6699,14 +6699,14 @@
               "height": 600
             },
             "head": {
-              "x": 169.69454937839106,
-              "y": 215.35572243507178,
-              "width": 153.43513024198,
-              "height": 203.40323090618134
+              "x": 169.68969652168613,
+              "y": 215.37119514363718,
+              "width": 153.4401106352745,
+              "height": 203.40950833330083
             },
             "mouth": {
-              "x": 254.76073967079165,
-              "y": 353.8533121924688
+              "x": 254.7592789963131,
+              "y": 353.8721748056985
             },
             "source": {
               "id": "cutin-aatami-front-rig-v01",
@@ -6731,14 +6731,14 @@
               "height": 600
             },
             "head": {
-              "x": 964.8748992604192,
-              "y": 252.30237537306107,
-              "width": 142.522992310649,
-              "height": 182.75906841233666
+              "x": 964.8672683196155,
+              "y": 252.3265581554896,
+              "width": 142.53095603136603,
+              "height": 182.76527083585708
             },
             "mouth": {
-              "x": 1067.0724946862906,
-              "y": 404.06970090768164
+              "x": 1067.071482436526,
+              "y": 404.09563393790216
             },
             "source": {
               "id": "cutin-jaska-rig-v01",
@@ -7257,16 +7257,16 @@
   "limits": [
     "Browser emulation; no physical Pixel/iPad acceptance.",
     "Retained Jaska and young Aatami sources; candidate motion has static mouths.",
-    "No Toko composition is tested or approved.",
+    "This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.",
     "50% review assesses composition, not native touch-target size."
   ],
-  "url": "http://127.0.0.1:45941/art-src/restarts/scene-club/",
+  "url": "http://127.0.0.1:44151/art-src/restarts/scene-club/",
   "browser": "151.0.7922.34",
   "finalSourceHashes": {
     "index.html": "2a72feb53374cb49083cc4a948b9578fe424d42e0701091ab5a08a2ee37c5dd4",
-    "app.js": "c0c5db09594b0c94251623084b8f6e39045df6e2bce5a0a66070198678afeff4",
+    "app.js": "4b3414669918eb6362f2254a3d2aa29b9e8875d692f316556e6ca234c9260cf0",
     "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
-    "campaign.js": "e54f8bef58dcae58d189e404ddb1339d7a12f4291891169128693e46b94853e1",
+    "campaign.js": "364e50a23e23f4801cbcae3fe591d2ad04cb770eced12e2e0eaad9d3a50f7a33",
     "style.css": "2528589ed81ea71f6614aade6d28ecb54639558b09b820548b73102fa734e607",
     "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
   },
@@ -7281,5 +7281,5 @@
     "phone-leave-it-map.png",
     "phone-side-reduce-choices.png"
   ],
-  "fullCaptureArchive": "/workspace/evidence/scene-reset-full-final"
+  "fullCaptureArchive": "/workspace/evidence/scene-reset-v499"
 }

@@ -122,7 +122,7 @@ async function renderScene() {
 }
 function expose(ready, view) {
   window.__sceneReset = { ready, view, pose, partner, half, candidate, actors,
-    sourceCommit:'12d5486efed24d9f66d21716f605d387bfbfe4e6',
+    sourceCommit:'804613a3d4eaa1e5180dfb0ef2cb88952d15bd97',
     refresh:render, enter(){arrived=true;return render();},
   };
 }
