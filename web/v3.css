@@ -342,6 +342,8 @@ html body .arcade-home { display: none; }
    layout, then restore campaign controls automatically when it is removed. */
 body:has(> .opening) .game-shell :is(.topbar, .mode-nav, .map-side, .next-step) { visibility: hidden; }
 body:has(> .opening) .mode-root { overflow: hidden; }
+/* The approved scene has its own isolated 9:16 frame and shared UI budget. */
+body:has(> .scene-club-host) .game-shell { visibility: hidden; pointer-events: none; }
 /* No min-height. The panel is sized by the square board inside it now; a
    560px floor here is half of what pushed the southern half of Kallio off
    the bottom of the screen, and on a 412px-wide phone it wrapped a 362px

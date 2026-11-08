@@ -2,6 +2,7 @@ import { loadGameData } from '../../../web/js/v3/content.js?v=2';
 import { createActors } from './actors.js';
 import { createTokoComposition } from './toko-composition.js';
 import { loadCandidate, restartCandidate, chooseCandidate, returnToMap, SCENE_ENCOUNTER_ID } from './campaign.js';
+import { mountSceneClubView } from '../../../web/js/v3/scene-club-view.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -12,6 +13,7 @@ const partner = params.get('pair') === 'toko' ? 'toko' : 'jaska';
 const half = params.get('scale') === '0.5';
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 let actors = null, candidate, data, arrived = params.get('start') === 'scene', generation = 0;
+let sceneView = null;
 let observer = null;
 let tokoBeat = 0;
 let dialogueDismissed = false, fitFrame = 0, fitting = false, armTimer = 0;
@@ -95,6 +97,7 @@ function observePresentation() {
   for (const element of [world, $('review-tools'), ...world.querySelectorAll('.scene-header,.map-header,.map-footer,.encounter-overlay')]) observer.observe(element);
 }
 function fitControls() {
+  if (sceneView) { sceneView.fit(); return; }
   if (fitting || !world.clientHeight) return;
   fitting = true; world.dataset.budgetReady = 'false';
   world.dataset.format = '9:16';
@@ -133,7 +136,22 @@ function showResult() {
   fitControls(); expose(true,'scene');
 }
 async function renderScene() {
-  const thisGeneration = ++generation, study = partner === 'toko';
+  const thisGeneration = generation, study = partner === 'toko';
+  if (!study) {
+    world.className = `world scene-view${half ? ' half' : ''}`;
+    const model = () => ({...scene(),markka:candidate.state.markka,backdrop:image(scene().scene_asset_id),choiceId:candidate.state.choices[SCENE_ENCOUNTER_ID] ?? null});
+    const mine = sceneView = mountSceneClubView(world, {
+      model:model(), pose, menu:false, reviewOnly:true,
+      externalUi:() => ({top:!half && !$('review-tools').open ? [$('review-tools').querySelector('summary')] : [],bottom:!half && $('review-tools').open ? $('review-tools') : null}),
+      onChoose(id) { const result=chooseCandidate(candidate,id,data);if(result.ok)mine.update(model());return result; },
+      onContinue() { const result=returnToMap(candidate,data);if(result.ok)render();return result; },
+      onChange() { if (sceneView && window.__sceneReset) window.__sceneReset.presentation=sceneView.presentation; },
+    });
+    actors = mine.actors;
+    await mine.ready;
+    if (generation === thisGeneration) expose(true,'scene');
+    return;
+  }
   const resolved = candidate.phase !== 'scene';
   const source = study ? data.encounters.get('enc-toko-quiet-voice') : scene();
   const studyLines = openingBeats(source);
@@ -188,8 +206,11 @@ function expose(ready, view) {
   };
 }
 async function render() {
+  generation++;
   clearTimeout(armTimer); dialogueDismissed = false;
-  actors?.destroy(); actors = null;
+  observer?.disconnect(); if (fitFrame) cancelAnimationFrame(fitFrame); fitFrame=0;
+  if (sceneView) {sceneView.destroy();sceneView=null;} else actors?.destroy();
+  actors = null;
   expose(false, 'loading');
   if (partner !== 'toko' && (!arrived && candidate.phase === 'scene' || candidate.phase === 'map')) renderMap();
   else await renderScene();

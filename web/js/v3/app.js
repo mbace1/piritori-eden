@@ -41,6 +41,7 @@ import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } 
 import { STANCE, STANCES } from './stance.js?v=2';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=12';
 import { positionBattleDOM } from './stage-camera.js?v=5';
+import { mountSceneClubView, SCENE_CLUB_ID, SCENE_CLUB_STYLES } from './scene-club-view.js?v=1';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -193,9 +194,87 @@ function cutinShell(label, onClose) {
 // CONTINUE does what the outcome card's button does. LOOK AROUND sets it aside for the ordinary screen.
 let talk = null;
 const talkSetAside = new Set();
+let sceneClub = null;
+let campaignClickAfter = 0;
+function sceneClubEncounter() {
+  if (!data || !state || !$('splash').hidden || state.mode !== 'encounter' || state.endingId
+    || state.battle?.status === 'active' || openOuting(state) || state.road?.pending || !presentAtLead()) return null;
+  const encounter = currentEncounter(state, data);
+  return encounter?.id === SCENE_CLUB_ID ? encounter : null;
+}
+function sceneClubModel(encounter) {
+  return {
+    id: encounter.id, opening: encounter.opening,
+    backdrop: new URL(assetUrl(data, encounter.scene_asset_id), document.baseURI).href,
+    markka: state.markka, choiceId: state.choices[encounter.id] ?? null,
+    choices: encounter.choices.map(choice => {
+      const status = choiceStatus(choice, state, data);
+      return { ...choice, available: status.ok, reason: status.reasons.map(readableReason).join(' · ') };
+    }),
+    inspections: encounter.inspectables.map(label => ({ label, text: inspectionCopy(label) })),
+  };
+}
+function closeSceneClub() {
+  if (!sceneClub) return;
+  const old = sceneClub; sceneClub = null; old.disposed = true;
+  old.view?.destroy(); old.host.remove();
+}
+function mountCampaignSceneClub() {
+  const encounter = sceneClubEncounter();
+  if (!encounter) { closeSceneClub(); return false; }
+  closeTalk();
+  if (sceneClub?.owner === state && sceneClub.index === state.scheduleIndex && sceneClub.id === encounter.id) {
+    sceneClub.view?.update(sceneClubModel(encounter)); return true;
+  }
+  closeSceneClub();
+  const host = document.createElement('div');
+  host.id = 'sceneClubEncounter'; host.className = 'scene-club-host';
+  host.setAttribute('role','dialog'); host.setAttribute('aria-modal','true'); host.setAttribute('aria-label','Scene Club');
+  host.style.cssText = 'position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#20241f';
+  const shadow = host.attachShadow({mode:'open'});
+  shadow.innerHTML = `<link rel="stylesheet" href="${esc(SCENE_CLUB_STYLES)}"><div class="scene-club-frame"><main class="scene-club world scene-view" aria-label="Scene Club"><p role="status">Opening Scene Club…</p></main></div>`;
+  const mine = sceneClub = {host, owner:state, index:state.scheduleIndex, id:encounter.id, view:null, disposed:false, continued:false};
+  const current = () => sceneClub === mine && !mine.disposed && mine.owner === state && mine.index === state.scheduleIndex && sceneClubEncounter()?.id === mine.id;
+  const continueScene = () => {
+    if (!current() || mine.continued || !state.choices[mine.id]) return {ok:false};
+    mine.continued = true; campaignClickAfter = performance.now() + 350;
+    advanceAndSettle(); persist(); render(); $('modeRoot').focus({preventScroll:true});
+    return {ok:true};
+  };
+  const begin = () => {
+    if (!current() || mine.view) return;
+    mine.view = mountSceneClubView(shadow.querySelector('main'), {
+      model:sceneClubModel(encounter), arrival:true, pose:'side',
+      onChoose(id) { return current() ? chooseCurrentEncounter(id) : {ok:false}; },
+      onContinue:continueScene,
+      onBack() {
+        if (!current()) return;
+        if (state.choices[mine.id]) { continueScene(); return; }
+        campaignClickAfter = performance.now() + 350;
+        state.mode = 'route'; persist(); render(); $('modeRoot').focus({preventScroll:true});
+      },
+      sound:{get:soundOn,set:setSound},
+      onError(error) { if (current()) logToast('Scene Club could not load. Use Menu to return to Kallio.'); console.error(error); },
+    });
+    // The view reports a failed asset visibly and retains its map exit. Avoid
+    // an unhandled rejection; its ready/error signal remains testable.
+    mine.view.ready.catch(() => {});
+  };
+  const link = shadow.querySelector('link');
+  link.addEventListener('load',begin,{once:true});
+  link.addEventListener('error',() => {
+    if (!current()) return;
+    shadow.querySelector('main').innerHTML = '<p role="alert">Scene Club could not load.</p><button type="button">Back to Kallio</button>';
+    shadow.querySelector('button').addEventListener('click',() => { if (current()) { state.mode='route'; persist(); render(); } });
+  },{once:true});
+  document.body.append(host);
+  if (link.sheet) begin();
+  return true;
+}
 function talkSpeaker(encounter) { return encounter?.participants?.find(p => p !== 'aatami' && CUTINS[p]) ?? null; }
 function closeTalk() { talk?.shell?.close(); talk = null; }
 function mountTalk() {
+  if (mountCampaignSceneClub()) return;
   if (!['encounter', 'visit'].includes(state.mode)) { closeTalk(); return; }
   if (!$('splash').hidden) return;                       // the title screen first: RESUME re-renders and the talk opens then
   const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data), who = talkSpeaker(encounter);
@@ -980,6 +1059,7 @@ function renderEncounter() {
   const choice = encounter.choices.find(item => item.id === resolved);
   const pendingBattle = state.battle?.status === 'active';
   if (state.mode === 'encounter' && !pendingBattle && !presentAtLead()) return renderAwayFromLead(slot);
+  if (sceneClubEncounter()) return '<section data-scene-club-mount aria-hidden="true"></section>';
   return `
     <div class="encounter-layout">
       <section class="paper-panel scene-card">
@@ -2194,7 +2274,38 @@ function recordBattleConsequences() {
   state.mode = 'route';
 }
 
+function chooseCurrentEncounter(choiceId) {
+  if (!['encounter','visit'].includes(state.mode)) return {ok:false,reason:'not-in-encounter'};
+  if (state.mode === 'encounter' && !presentAtLead() && state.battle?.status !== 'active') {
+    logToast('Not from here — the choice is at the story lead.'); render(); return {ok:false,reason:'not-at-scene'};
+  }
+  const encounter = state.mode === 'visit' ? activeVisit(state,data) : currentEncounter(state,data);
+  const choice = encounter?.choices.find(item => item.id === choiceId);
+  if (!choice) return {ok:false,reason:'unknown-choice'};
+  const outingBefore = state.outing?.id ?? null;
+  const result = state.mode === 'visit' ? chooseVisit(state,data,choiceId) : chooseEncounter(state,encounter,choice,data);
+  if (!result.ok) logToast(result.reason);
+  else if (result.startBattle && encounter.door) startOuting(encounter,result.startBattle);
+  else if (result.startBattle) {
+    if (!startMissionOuting(encounter,result.startBattle)) startBattle(result.startBattle,doorStage(encounter));
+  } else if (encounter.door) {
+    const bad = escalation(state,data,doors,encounter.door,choice.id);
+    if (bad?.battle && startOuting(encounter,bad.battle,'The deal goes bad. It is a fight now.')) {
+      state.lastOutcome = [...(state.lastOutcome ?? []),'The deal goes bad. It is a fight now.'];
+    } else if (bad?.effects) {
+      applyEffects(state,bad.effects,data,`door:${encounter.door}:alone`);
+      state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.',...(state.lastOutcome ?? [])];
+    }
+  }
+  if (openOuting(state) && openOuting(state).id !== outingBefore) { persist(); location.assign(outingUrl(state.outing)); return result; }
+  if (result.ok && encounter.participants?.includes('toko')) {
+    const clip = TOKO_CLIP[choice.id] ?? 'nod'; tokoActs(clip,{then:clip === 'lean' ? 'lean' : 'idle',till:120});
+  }
+  persist(); render(); return result;
+}
+
 function handleRootClick(event) {
+  if (performance.now() < campaignClickAfter) return;
   const target = event.target.closest('[data-action]');
   if (!target || target.disabled) return;
   const action = target.dataset.action;
@@ -2277,38 +2388,7 @@ function handleRootClick(event) {
     observation = inspectionCopy(item);
     render();
   } else if (action === 'choose') {
-    if (state.mode === 'encounter' && !presentAtLead() && state.battle?.status !== 'active') {
-      logToast('Not from here — the choice is at the story lead.'); render(); return;
-    }
-    const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
-    const choice = encounter.choices.find(item => item.id === target.dataset.choice);
-    const outingBefore = state.outing?.id ?? null;
-    const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
-    if (!result.ok) logToast(result.reason);
-    else if (result.startBattle && encounter.door) {
-      // A door fight has no mission behind it: its stakes are the door's own,
-      // and it is fought in Night Shift (v4.74).
-      startOuting(encounter, result.startBattle);
-    } else if (result.startBattle) {
-      // §6.4 step 5: a mission battle is fought in Night Shift, like a door's.
-      if (!startMissionOuting(encounter, result.startBattle)) startBattle(result.startBattle, doorStage(encounter));
-    } else if (encounter.door) {
-      // Answer 25: a bad deal can turn into a fight.
-      const bad = escalation(state, data, doors, encounter.door, choice.id);
-      if (bad?.battle && startOuting(encounter, bad.battle, 'The deal goes bad. It is a fight now.')) {
-        state.lastOutcome = [...(state.lastOutcome ?? []), 'The deal goes bad. It is a fight now.'];
-      } else if (bad?.effects) {
-        applyEffects(state, bad.effects, data, `door:${encounter.door}:alone`);
-        state.lastOutcome = ['The deal goes bad, and nobody was standing with Aatami.', ...(state.lastOutcome ?? [])];
-      }
-    }
-    // v4.75: a choice that became a fight goes straight to it.
-    if (openOuting(state) && openOuting(state).id !== outingBefore) { persist(); location.assign(outingUrl(state.outing)); return; }
-    if (result.ok && encounter.participants?.includes('toko')) {
-      const clip = TOKO_CLIP[choice?.id] ?? 'nod';
-      tokoActs(clip, { then: clip === 'lean' ? 'lean' : 'idle', till: 120 });
-    }
-    persist(); render();
+    chooseCurrentEncounter(target.dataset.choice);
   } else if (action === 'take-door') {
     const result = takeDoor(state, data, doors, target.dataset.door, roadEvents);
     if (!result.ok) { logToast(result.reason === 'closed' ? 'That door closed at 22:00.' : result.reason); render(); return; }
@@ -2514,6 +2594,7 @@ async function boot() {
       $('modeRoot').focus();
     });
     $('modeNav').addEventListener('click', event => {
+      if (performance.now() < campaignClickAfter || sceneClub) return;
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
       state.mode = button.dataset.modeTarget;
@@ -2626,6 +2707,7 @@ async function boot() {
       if (event.key !== 'Escape' || pause.isOpen) return;
       if ($('splash').hidden === false) return;
       event.preventDefault();
+      if (sceneClub?.view) { sceneClub.view.toggleMenu(); return; }
       pause.open();
     });
 

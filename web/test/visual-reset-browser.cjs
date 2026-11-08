@@ -48,7 +48,8 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>{const s=structuredClone(__ptv3.state);s.mode='news';s.scheduleIndex=4;__ptv3.debug.setState(s);});
   await page.locator('[data-news-identity="arvo"]').waitFor();assert.equal(await page.locator('.scene-speaker').count(),0);await fit();
   await page.screenshot({path:path.join(OUT,`news-${width}.png`)});
-  await page.goto(base+'?encounter=enc-jaska-receipt');await page.locator('.cutin canvas[data-status="ready"]').waitFor({timeout:30000});await fit();
+  await page.goto(base+'?encounter=enc-jaska-receipt');await page.locator('#sceneClubEncounter .scene-club[data-ready="true"][data-budget-ready="true"]').waitFor({timeout:30000});await fit();
+  assert.equal(await page.locator('#sceneClubEncounter canvas.actor').count(),2,'The approved Aatami/Jaska pair replaces the old Scene Club cut-in');
   await page.screenshot({path:path.join(OUT,`jaska-${width}.png`)});
   await page.goto(base+'?play=g0-door');await page.waitForFunction(()=>window.__ptv3?.state?.mode==='encounter');
   const first=await page.locator('.choice-card:not([disabled])').first().boundingBox();assert(first&&first.y+first.height<=height,'First playable choice is on screen');
