@@ -106,13 +106,14 @@ async function capture(page, name, result) {
       finally { finishResources(); await context.close(); }
       console.log(`${result.failures.length ? 'FAIL' : 'PASS'} Toko ${result.id} (${result.failures.length} failures)`);
     }
-    for (const pose of ['front', 'side']) {
-      const result = { id: `edge-271x482-${pose}`, edge: true, viewport: { width: 271, height: 482 }, pose, reducedMotion: 'reduce', captures: [], failures: [] };
+    for (const [width, height, font] of [[271, 482], [844, 390, 'DejaVu Sans'], [271, 482, 'DejaVu Sans'], [844, 390, 'monospace'], [271, 482, 'monospace']]) for (const pose of ['front', 'side']) {
+      const result = { id: `edge-${width}x${height}-${pose}${font ? '-'+font.replaceAll(' ','-') : ''}`, edge: true, viewport: { width, height }, pose, font: font || 'system-ui', reducedMotion: 'reduce', captures: [], failures: [] };
       report.edgeCases.push(result);
       const context = await browser.newContext({ viewport: result.viewport, reducedMotion: 'reduce' }); await storageGuard(context);
       const page = await context.newPage(), finishResources = watch(page, new URL(base), result, allowed);
       try {
         await page.goto(base + `?pair=toko&pose=${pose}&start=scene`); await ready(page, 'study');
+        if (font) await page.addStyleTag({ content: `:root { font-family: '${font}' }` });
         await page.evaluate(() => window.__sceneReset.actors.debug.rest()); result.native = await geometry(page, result);
         await page.locator('#next-line').click(); result.secondLine = await geometry(page, result);
         await auditStorage(page, result); await capture(page, 'toko-' + result.id, result);

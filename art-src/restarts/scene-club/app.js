@@ -22,6 +22,13 @@ const image = id => {
 };
 const scene = () => data.encounters.get(SCENE_ENCOUNTER_ID);
 const openingBeats = encounter => encounter.opening.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(line => line.trim()) ?? [encounter.opening];
+// The envelope is named in the scene beat. Short equivalent labels leave room
+// for both faces when a fitted portrait stage is narrow; aria keeps all wording.
+const compactChoiceLabel = choice => ({
+  'ask-envelope': 'Ask before taking it',
+  'take-envelope': 'Call it family money',
+  'leave-it': 'Leave it under the map',
+}[choice.id] ?? choice.label);
 const compactStake = choice => {
   const money = choice.effects.find(effect => effect.startsWith('markka:'))?.split(':')[1];
   const trust = choice.effects.find(effect => effect.startsWith('relationship:jaska:'))?.split(':')[2];
@@ -92,7 +99,7 @@ async function renderScene() {
     <div class="encounter-overlay" id="encounter-overlay">
     <section class="speech" id="speech" data-speaker="${resolved && !study ? 'aatami' : partner}" aria-live="polite"><p class="speaker">${study ? 'Toko' : resolved ? 'Aatami' : 'Jaska'}</p><p>${esc(study ? studyLines[tokoBeat] : resolved ? candidate.lastReceipt.label : openingBeats(source).at(-1))}</p></section>
     <section class="controls" id="controls" aria-label="${study ? 'Ensemble study' : 'Your response'}">
-      ${study ? `<div class="study-actions"><button class="choice" type="button" id="next-line">${tokoBeat ? 'First line' : 'Next line'}</button><button class="primary" type="button" id="back-to-scene">Return to Scene Club</button></div>` : resolved ? resultControls() : `<div class="choices">${source.choices.map(c => `<button class="choice" type="button" data-choice="${esc(c.id)}" aria-label="${esc(c.label+'. '+c.forecast)}" disabled><strong>${esc(c.label)}</strong><span class="forecast">${esc(c.forecast)}</span><span class="compact-stake" aria-hidden="true">${esc(compactStake(c))}</span></button>`).join('')}</div>`}
+      ${study ? `<div class="study-actions"><button class="choice" type="button" id="next-line">${tokoBeat ? 'First line' : 'Next line'}</button><button class="primary" type="button" id="back-to-scene">Return to Scene Club</button></div>` : resolved ? resultControls() : `<div class="choices">${source.choices.map(c => `<button class="choice" type="button" data-choice="${esc(c.id)}" aria-label="${esc(c.label+'. '+c.forecast)}" disabled><strong><span class="full-label">${esc(c.label)}</span><span class="compact-label" aria-hidden="true">${esc(compactChoiceLabel(c))}</span></strong><span class="forecast">${esc(c.forecast)}</span><span class="compact-stake" aria-hidden="true">${esc(compactStake(c))}</span></button>`).join('')}</div>`}
     </section></div>`;
   observer?.disconnect(); observer = new ResizeObserver(fitControls); observer.observe($('controls')); fitControls();
   const stage = study ? createTokoComposition($('room-composite'),$('actors'),{aatami:pose,reducedMotion:motion.matches,focus:()=>[.36,.5]}) : createActors($('actors'), { aatami: pose, partner, reducedMotion: motion.matches });

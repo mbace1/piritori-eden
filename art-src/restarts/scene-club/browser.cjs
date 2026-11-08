@@ -119,9 +119,11 @@ async function measureFrame(page) {
     };
     const text = element => ({ text: element.textContent.trim(), rect: rect(element), font: parseFloat(getComputedStyle(element).fontSize) * scale, painted: painted(element) });
     const choices = [...world.querySelectorAll('[data-choice]')].map(button => {
+      const fullLabel = button.querySelector('.full-label') || button.querySelector('strong'), compactLabel = button.querySelector('.compact-label');
+      const shownLabel = compactLabel && painted(compactLabel) ? compactLabel : fullLabel;
       const forecast = button.querySelector('.forecast') || button.querySelector('span'), compact = button.querySelector('.compact-stake');
       const shown = compact && painted(compact) ? compact : forecast;
-      return { id: button.dataset.choice, label: button.querySelector('strong').textContent, forecast: forecast.textContent, labelPainted: painted(button.querySelector('strong')), labelFont: parseFloat(getComputedStyle(button.querySelector('strong')).fontSize) * scale, accessible: button.getAttribute('aria-label') || '', disabled: button.disabled, rect: rect(button), textRects: [rect(button.querySelector('strong')), rect(shown)], font: parseFloat(getComputedStyle(shown).fontSize) * scale, visibleStake: text(shown), compact: shown === compact };
+      return { id: button.dataset.choice, label: fullLabel.textContent, forecast: forecast.textContent, labelPainted: painted(shownLabel), labelFont: parseFloat(getComputedStyle(shownLabel).fontSize) * scale, visibleLabel: text(shownLabel), compactLabel: shownLabel === compactLabel, accessible: button.getAttribute('aria-label') || '', disabled: button.disabled, rect: rect(button), textRects: [rect(shownLabel), rect(shown)], font: parseFloat(getComputedStyle(shown).fontSize) * scale, visibleStake: text(shown), compact: shown === compact };
     });
     const overlayNodes = [...world.querySelectorAll('.scene-header,.map-header,.map-footer,#encounter-overlay')];
     const summary = document.querySelector('#review-tools > summary');
@@ -180,6 +182,11 @@ async function geometry(page, result, half = false, choices = true) {
       check(choice?.label === authored.label && choice?.forecast === authored.forecast, authored.id + ' exact label and full authored forecast retained', result);
       if (!choice) continue;
       check(choice.labelPainted && (half || choice.labelFont >= 11.95), authored.id + ' label visibly painted at readable size', result);
+      if (choice.compactLabel) {
+        const labels = {'ask-envelope':'Ask before taking it','take-envelope':'Call it family money','leave-it':'Leave it under the map'};
+        check(choice.visibleLabel.text === labels[authored.id], authored.id + ' concise label keeps the authored decision', result);
+        check(choice.accessible.includes(authored.label) && choice.accessible.includes(authored.forecast), authored.id + ' complete authored wording stays accessible', result);
+      } else check(choice.visibleLabel.text === authored.label, authored.id + ' full authored label painted at normal widths', result);
       check(!choice.disabled && inside(choice.rect, value.world), authored.id + ' visible in initial composition', result);
       check(choice.textRects.every(text => inside(text, choice.rect)), authored.id + ' complete label and visible stakes inside choice', result);
       check(choice.visibleStake.painted && choice.visibleStake.rect.height > 3 && choice.visibleStake.rect.width > 3, authored.id + ' stakes actually painted', result);
@@ -319,14 +326,19 @@ async function runBrowser() {
         console.log(`${result.failures.length ? 'FAIL' : 'PASS'} ${result.id}${result.flow ? ' · ' + result.flow.choice + ' / reload / real map return' : ' · motion / composition'} (${result.failures.length} failures)`);
       }
     }
-    for (const [width, height] of [[320, 568], [271, 482]]) for (const pose of ['front', 'side']) {
-      const result = { id: `edge-${width}x${height}-${pose}`, edge: true, viewport: { width, height }, pose, motion: 'reduce', failures: [], captures: [] };
+    // CI and device system fonts can wrap quite differently. Exercise wider
+    // real metrics at the fitted landscape and compact-label breakpoint.
+    const edgeViews = [[320, 568], [271, 482], [844, 390, 'DejaVu Sans'], [271, 482, 'DejaVu Sans'], [844, 390, 'monospace'], [271, 482, 'monospace']];
+    for (const [width, height, font] of edgeViews) for (const pose of ['front', 'side']) {
+      const result = { id: `edge-${width}x${height}-${pose}${font ? '-'+font.replaceAll(' ','-') : ''}`, edge: true, viewport: { width, height }, pose, font: font || 'system-ui', motion: 'reduce', failures: [], captures: [] };
       report.edgeCases.push(result);
       const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' }); await storageGuard(context);
       const page = await context.newPage(), finishResources = watch(page, target, result);
       try {
         const url = new URL(target); url.searchParams.set('start', 'scene'); url.searchParams.set('pose', pose);
-        await page.goto(url.href); await ready(page, 'scene'); await page.evaluate(() => window.__sceneReset.actors.debug.rest());
+        await page.goto(url.href); await ready(page, 'scene');
+        if (font) await page.addStyleTag({ content: `:root { font-family: '${font}' }` });
+        await page.evaluate(() => window.__sceneReset.actors.debug.rest());
         result.native = await geometry(page, result);
         await auditStorage(page, result); await capture(page, result.id + '.png', result);
         check(result.browserErrors.length === 0, 'zero edge-view resource/browser errors', result);
