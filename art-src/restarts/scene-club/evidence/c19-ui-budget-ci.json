@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "5b2a73042e0e1bb6e76b8de64e69420dce770dd0",
+  "workflowRun": 42477400543,
+  "workflowJob": 128721753988,
+  "url": "https://github.com/mbace1/piritori-eden/actions/runs/42477400543/job/128721753988",
+  "status": "success",
+  "contexts": 6,
+  "measuredStates": 47,
+  "failures": 0,
+  "maxReportedUiPercent": 50,
+  "maxReportedActiveBattlePercent": 46.82,
+  "scope": "450x800, 390x844 and 360x640 authored courtyard; compact standalone downed/Aim; real authored getaway extraction; fallen-crew police choices.",
+  "log": "c19-ui-budget-ci.log",
+  "logScope": "Unmodified PASS C19 lines excerpted from the successful job log; full source and job log are linked above.",
+  "limits": [
+    "Browser emulation/software WebGL; no physical-device acceptance.",
+    "No claim that every possible combat state or mission action was enumerated."
+  ]
+}

@@ -80,6 +80,11 @@ postures: seven states, at most **45.53%** UI. Combat rules, authored objectives
 3D assets and campaign settlement remain unchanged. The dedicated browser
 regression is `web/test/c19-ui-budget.cjs`, also run by C.19 CI.
 
+The [full C.19 budget CI matrix](evidence/c19-ui-budget-ci.json) passes all
+47 measured states across six contexts at source `5b2a730`: maximum 50.00%,
+or 46.82% for active battle states. It includes native input, full-stat labels,
+Aim/Cancel, visible real arena pixels, exact action costs and save checks.
+
 ## Retained sources
 
 | Source | Register ID | Status |
@@ -191,3 +196,8 @@ Pixel/iPad acceptance. The latest main roadmap check-in is **50%**; this UI
 pass does not increase that score. Next: review this actual
 9:16 output, then integrate the accepted presentation through the campaign
 boundary and continue the existing listed locations and cast.
+
+[Next six authored scene packets](../../../design/SCENE_OVERLAY_NEXT_PLANS.md)
+map the existing locations, decisions, source artwork, neutral character
+placeholders and required checks. They are production plans, not new content
+or visual approvals.
