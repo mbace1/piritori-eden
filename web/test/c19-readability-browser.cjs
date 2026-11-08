@@ -10,6 +10,16 @@ const results=[];
    const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},hasTouch:true,isMobile:true}),p=await ctx.newPage(),errors=[];
    p.on('pageerror',e=>errors.push(e.stack));
    const tap=async e=>{await e.scrollIntoViewIfNeeded();await e.tap();};
+   // activate() ignores repeat native input on the same control for260ms.
+   // VIEW -> Labels -> VIEW can otherwise leave the menu open on fast hosts.
+   let viewTappedAt=-Infinity;
+   const view=async expanded=>{
+    const remaining=280-(performance.now()-viewTappedAt);
+    if(remaining>0)await p.waitForTimeout(remaining);
+    await tap(p.locator('#camera-menu'));viewTappedAt=performance.now();
+    assert.equal(await p.locator('#camera-menu').getAttribute('aria-expanded'),String(expanded),'native VIEW reaches the requested open/closed state');
+    assert.equal(await p.locator('#camera-panel').isVisible(),expanded,'camera panel visibility agrees with VIEW');
+   };
    const idle=()=>p.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy&&!fightModule.metrics().layoutPaused,null,{timeout:90000});
    const same=async before=>assert.deepEqual(await p.evaluate(()=>fightModule.snapshot()),before);
    // Storage is JSON: absent and undefined optional properties serialize identically.
@@ -26,11 +36,12 @@ const results=[];
     assert.match(await p.locator('.actor-label.objective').innerText(),/SOS.*HELP/s);
     const before=await p.evaluate(()=>fightModule.snapshot()),intents=await p.locator('#enemy-plans').innerText();
     await shot('focused');
-    await tap(p.locator('#camera-menu'));await tap(p.locator('#label-mode'));await tap(p.locator('#camera-menu'));
+    await view(true);await tap(p.locator('#label-mode'));await view(false);
     assert.equal(await p.locator('.actor-label[data-detail=compact]').count(),0);
     await same(before);assert.equal(await p.locator('#enemy-plans').innerText(),intents);await shot('all-stats');
     await p.reload();await idle();await same(before);assert.equal(await p.locator('#label-mode').getAttribute('aria-pressed'),'true','label preference survives independently');
-    await tap(p.locator('#camera-menu'));await tap(p.locator('#label-mode'));await tap(p.locator('#camera-menu'));await same(before);
+    await view(true);await tap(p.locator('#label-mode'));await view(false);await same(before);
+    assert.equal(await p.locator('#label-mode').getAttribute('aria-pressed'),'false','focused labels restored by actual input');
     await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));assert.equal(await p.locator('#roster').isVisible(),false,'selection clears the target area');assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');
     const previewBefore=await p.evaluate(()=>fightModule.snapshot());await tap(p.locator('[data-action="attack"]'));
     const target=p.locator('#choices [data-target]:not([disabled])').first();assert.ok(await target.count(),'opening handgun has a target');const id=await target.getAttribute('data-target');await tap(target);
