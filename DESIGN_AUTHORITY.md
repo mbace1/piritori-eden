@@ -8,23 +8,27 @@ modular cast library.”** The three retained sources are the approved Jaska
 cut-in, selected young Aatami front/side sources, and approved Toko Slomo paper
 artwork. This does not upgrade Aatami's semi-approved rigs or approve new motion.
 
-- Build a fresh scene-first interface; do not reskin Lantern Noir, reuse its UI
-  texture pack or cast new contacts from the old modular head/outfit library.
+- Use a fixed **9:16 illustrated scene with HUD, dialogue and choices overlaid**.
+  Keep that frame on desktop and landscape too. The scene continues behind
+  overlays; no separate below-scene panel or wide page composition.
+- Delete the old UI and modular cast source/runtime libraries and their active
+  approval entries. Do not reskin or restore them from branches/history for
+  placeholders. Neutral labelled placeholders replace unapproved contacts.
 - Start again with Aatami and Jaska at Scene Club. Read the unmerged Aatami
   motion/ensemble notes in PR #108 and test both Aatami poses in paired native
   portrait/landscape compositions, including the paper Toko comparison.
-- Follow current Toko Move UX lessons (now v3.14), while retaining Piritori's
+- Follow current Toko Move active-journey UX lessons (now v3.15), while retaining Piritori's
   handmade identity, selected artwork and C.19 tactical combat.
 - Preserve current main's campaign rules, time costs, C.19 bridge, saves and
   receipts. The roadmap remains the plan of record; its completion estimate
   does not rise for an unaccepted visual candidate.
 
-Earlier modular/UI approval notes remain production history, not permission to
-reuse that visual basis. Old proposal drafts #120–#131 are superseded; their
+Removed modular/UI approvals and files are not a production resource. Do not
+recover that visual basis from Git history without a new explicit owner request. Old proposal drafts #120–#131 are superseded; their
 commits and measurements remain historical evidence. New art and animation
 still require actual review before runtime promotion or deployment.
 
-> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
+> **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The gameplay rulings below stand; conflicting older visual/UI directions are superseded by the 8 November restart above. The roadmap orders the work and names the decisions still open (its §8).
 
 ## Owner answer, 2026-10-31 — blows can miss
 
@@ -191,7 +195,8 @@ in-game readability check, then be promoted deliberately in both builds.
 
 Asked as numbered questions after the Lantern Noir interface (Act I v4.56):
 
-1. **The look:** "looks good for now." Lantern Noir stays as the city interface. This is a preference, not final art acceptance.
+1. **The look:** the provisional September preference was superseded by the
+   8 November 9:16 overlay restart above; its old UI files are deleted.
 2. **Travel time (D002, partly answered):** "Not sure but should feel natural, and random events can happen during transit and when arriving at a location." The exact cost model (per trip, per stop, by distance or by line) is still open. The direction is that it should feel natural, not arithmetic the player has to do.
 3. **Release:** "Yes and continue to polish the high level experience." v4.56 ships; polishing the overall experience continues.
 4. **Travel events:** "yes to all and every 3rd or 4th travel can have some." Police, a rival crew, a chance meeting, a lost pack and a tip-off are all in scope, and one can become a fight. The frequency target is roughly one journey in three or four, both in transit and on arrival.
