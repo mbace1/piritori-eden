@@ -205,19 +205,24 @@ async function geometry(page, id, capture = true) {
   report.cases.push({ id, ...value });
   return value;
 }
-async function enterDialogue(page, id) {
+async function enterDialogue(page, id, touch) {
   await ready(page);
   const enter = page.locator(`${HOST} #scene-enter`);
   if (await enter.isVisible()) {
     const before = await snapshot(page);
     const arrival = await geometry(page, `${id}-arrival`);
     check(arrival.text.some(text => text.value === authored.opening.match(/[^.!?]+[.!?]+|[^.!?]+$/g)[0].trim()), `${id}: first authored arrival sentence is retained`);
-    await enter.click();
-    equal(await snapshot(page), before, `${id}: arriving changes presentation only`);
+    await doublePress(page, enter, touch);
+    equal(await snapshot(page), before, `${id}: a native double arrival changes presentation only`);
+    equal((await state(page)).choices[ENCOUNTER], undefined, `${id}: repeated arrival Continue cannot select an authored choice`);
+    await page.waitForFunction(() => {
+      const choices = [...(document.querySelector('#sceneClubEncounter')?.shadowRoot.querySelectorAll('[data-choice]') || [])];
+      return choices.length === 3 && choices.every(button => !button.disabled);
+    });
   }
 }
 async function choices(page, id, touch) {
-  await enterDialogue(page, id);
+  await enterDialogue(page, id, touch);
   const before = await snapshot(page);
   const dialogue = await geometry(page, `${id}-dialogue`);
   const respond = page.locator(`${HOST} #respond`);
@@ -280,6 +285,10 @@ async function earnedCheckpoint(browser, base) {
     const arrived = await state(page);
     check(arrived.scheduleIndex === 2 && arrived.selectedAnchor === 'makelansilta' && arrived.cash === away.cash && arrived.time.block === 2 && arrived.time.spent === 3, 'explicit travel arrives once and spends the real30% block cost');
     await page.locator('[data-action="open-encounter"]').tap();
+    await ready(page);
+    const travelToast = await page.locator('#toast').evaluate(toast => ({ hidden: toast.hidden, text: toast.textContent }));
+    equal(travelToast.hidden, true, 'entering Scene Club dismisses the parent campaign travel toast');
+    equal(travelToast.text, '', 'entering Scene Club clears stale travel copy from the parent toast');
     await choices(page, 'earned-phone', true);
     const earned = await state(page);
     await page.locator(`${HOST} .scene-menu > summary`).tap();
