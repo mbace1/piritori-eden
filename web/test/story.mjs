@@ -3,10 +3,10 @@
 //   node web/test/story.mjs
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, chooseEncounter, restoreState, applyEffects } from '../js/v3/state.js?v=14';
-import { chooseVisit, openVisit } from '../js/v3/visits.js?v=10';
-import { caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from '../js/v3/story.js?v=9';
-import { forceRoad, pendingRoad, resolveRoad, rollRoad } from '../js/v3/road.js?v=10';
+import { createState, chooseEncounter, restoreState, applyEffects } from '../js/v3/state.js?v=15';
+import { chooseVisit, openVisit } from '../js/v3/visits.js?v=11';
+import { caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from '../js/v3/story.js?v=10';
+import { forceRoad, pendingRoad, resolveRoad, rollRoad } from '../js/v3/road.js?v=11';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');

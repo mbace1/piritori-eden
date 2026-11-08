@@ -1174,6 +1174,7 @@ export function advanceSchedule(state, data) {
   const slot = currentSchedule(state, data.content);
   if (slot?.block === 'night') settleNight(state, data.content, slot.day);
   state.scheduleIndex += 1;
+  routeThisBlock(state);
   state.lastOutcome = null;
   state.mode = 'route';
   const next = currentSchedule(state, data.content);
@@ -1213,16 +1214,33 @@ export function transactOffer(state, offer, side = offer.side) {
   return { ok: true, message: `One pack moved for €${price}.` };
 }
 
+// A route's shared capacity is a block's: ordinary traffic is rolled for the
+// block, and the hidden loads sent in it stay counted until the block turns.
+// Until the chapter bot (G4) found it, re-pinning a route emptied the count,
+// so one Piritori visit could buy, send and re-pin without end: €3,400
+// counted toward the €400 inside a single block, D002's time never touched.
+const routeOrdinary = (state, path) => 1 + Math.floor(deterministicRoll(state, `route:${path.join('>')}`) * 3);
+function routeThisBlock(state) {
+  const route = state.route;
+  if (route && route.block !== state.scheduleIndex) {
+    route.block = state.scheduleIndex;
+    route.ordinary = routeOrdinary(state, route.path);
+    route.hidden = 0;
+  }
+  return route;
+}
+
 export function commitRoute(state, path) {
   if (!path || path.length < 2) return { ok: false, message: 'Choose two connected anchors.' };
-  const ordinary = 1 + Math.floor(deterministicRoll(state, `route:${path.join('>')}`) * 3);
-  state.route = { path, capacity: 4, ordinary, hidden: 0 };
+  const ordinary = routeOrdinary(state, path);
+  const hidden = routeThisBlock(state)?.hidden ?? 0;
+  state.route = { path, capacity: 4, ordinary, hidden, block: state.scheduleIndex };
   addLog(state, `A route is pinned through ${path.length} public anchors; ${ordinary}/4 places are already ordinary traffic.`);
   return { ok: true, message: 'Route pinned to the public graph.' };
 }
 
 export function sendOnRoute(state, data) {
-  const route = state.route;
+  const route = routeThisBlock(state);
   if (!route) return { ok: false, message: 'Pin a route first.' };
   if ((state.stock.piri ?? 0) < 1) return { ok: false, message: 'No stock to assign.' };
   if (route.ordinary + route.hidden >= route.capacity) return { ok: false, message: 'The ordinary service is full this block.' };
