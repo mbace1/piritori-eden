@@ -15,8 +15,14 @@ const { chromium } = require('playwright');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const TIMING_DIR = process.env.OPENING_TIMING_DIR || '/tmp/piritori-opening-timing';
+const testedHead = (() => { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { return null; } })();
+const timingSources = Object.fromEntries(['web/test/opening.cjs', 'web/js/v3/app.js', 'web/js/v3/sound.js', 'web/js/v3/map-relief.js']
+  .map(file => [file, crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -62,6 +68,97 @@ function watchErrors(page) {
 const ready = page => page.waitForFunction(() => Boolean(window.__ptv3?.data));
 const save = page => page.evaluate(() => JSON.stringify(window.__ptv3.state));
 
+// Observation only: preserve native delays, IDs, callback receiver/arguments,
+// input events and the existing assertions. No diagnostic animation is added.
+function installOpeningTiming({ label }) {
+  const events = [], timers = new Map(), modals = new WeakMap(), longTasks = [], raf = [];
+  let sequence = 0, rafCount = 0, maxRafLag = 0, maxRafDuration = 0;
+  const modalId = node => { if (!modals.has(node)) modals.set(node, ++sequence); return modals.get(node); };
+  const identity = node => node instanceof Element ? { tag: node.tagName, id: node.id, className: typeof node.className === 'string' ? node.className : node.className?.baseVal } : null;
+  const current = () => [...document.querySelectorAll('#opening')].map(node => ({ generation: modalId(node), ...identity(node) }));
+  const record = (type, detail = {}) => { const row = { type, at: performance.now(), visibility: document.visibilityState, focused: document.hasFocus(), ...detail }; events.push(row); return row; };
+  record('document-initial', { label, origin: performance.timeOrigin, url: location.href, viewport: { width: innerWidth, height: innerHeight } });
+  const timeout = window.setTimeout, clear = window.clearTimeout, requestFrame = window.requestAnimationFrame;
+  window.setTimeout = function (callback, delay, ...args) {
+    if ((delay !== 9500 && delay !== 6000) || typeof callback !== 'function') return Reflect.apply(timeout, this, [callback, delay, ...args]);
+    const created = performance.now(), row = record('timer-created', { delay: Number(delay), due: created + Number(delay), modals: current(), stack: new Error().stack });
+    let id;
+    id = Reflect.apply(timeout, this, [function (...actualArgs) {
+      record('timer-fired', { id, due: row.due, lag: performance.now() - row.due, modals: current() });
+      const started = performance.now();
+      try { return Reflect.apply(callback, this, actualArgs); }
+      finally { record('timer-returned', { id, duration: performance.now() - started, modals: current() }); }
+    }, delay, ...args]);
+    row.id = id; timers.set(id, row); return id;
+  };
+  window.clearTimeout = function (id) { if (timers.has(id)) record('timer-cleared', { id }); return Reflect.apply(clear, this, [id]); };
+  const append = Element.prototype.append, remove = Element.prototype.remove;
+  Element.prototype.append = function (...nodes) {
+    const result = Reflect.apply(append, this, nodes);
+    for (const node of nodes) if (node?.id === 'opening') record('modal-appended', { generation: modalId(node), modals: current() });
+    return result;
+  };
+  Element.prototype.remove = function () {
+    const opening = this.id === 'opening', generation = opening ? modalId(this) : null;
+    if (opening) record('modal-remove-before', { generation });
+    const result = Reflect.apply(remove, this, []);
+    if (opening) record('modal-remove-after', { generation, modals: current() });
+    return result;
+  };
+  const mutations = new MutationObserver(records => {
+    for (const row of records) for (const [kind, nodes] of [['added', row.addedNodes], ['removed', row.removedNodes]]) {
+      for (const node of nodes) if (node instanceof Element) for (const modal of [node, ...node.querySelectorAll('#opening')].filter(element => element.id === 'opening')) {
+        record(`modal-observed-${kind}`, { generation: modalId(modal), connected: modal.isConnected });
+      }
+    }
+  });
+  mutations.observe(document, { childList: true, subtree: true });
+  for (const type of ['click', 'pointerup', 'keydown', 'keyup']) document.addEventListener(type, event => {
+    if (event.isTrusted) record('trusted-input', { event: type, key: event.key, detail: event.detail, target: identity(event.target), activeElement: identity(document.activeElement), modals: current() });
+  }, true);
+  document.addEventListener('visibilitychange', () => record('visibility-change'));
+  window.requestAnimationFrame = function (callback) {
+    if (typeof callback !== 'function') return Reflect.apply(requestFrame, this, [callback]);
+    const requested = performance.now();
+    return Reflect.apply(requestFrame, this, [function (timestamp) {
+      const fired = performance.now();
+      try { return Reflect.apply(callback, this, [timestamp]); }
+      finally {
+        const row = { requested, fired, lag: fired - requested, duration: performance.now() - fired, name: callback.name || 'anonymous' };
+        rafCount++; maxRafLag = Math.max(maxRafLag, row.lag); maxRafDuration = Math.max(maxRafDuration, row.duration);
+        if (raf.length < 100 || row.lag > 100) raf.push(row);
+      }
+    }]);
+  };
+  let longTaskObserver, longTaskError = null;
+  try {
+    longTaskObserver = new PerformanceObserver(list => { for (const entry of list.getEntries()) longTasks.push({ at: entry.startTime, duration: entry.duration, name: entry.name }); });
+    longTaskObserver.observe({ type: 'longtask', buffered: true });
+  } catch (error) { longTaskError = error.message; }
+  window.__openingTiming = { snapshot: () => ({ label, origin: performance.timeOrigin, observedAt: performance.now(), url: location.href, viewport: { width: innerWidth, height: innerHeight }, visibility: document.visibilityState, focused: document.hasFocus(), readyState: document.readyState, modals: current(), activeElement: identity(document.activeElement), events: [...events], longTasks: [...longTasks], longTaskSupported: PerformanceObserver.supportedEntryTypes.includes('longtask'), longTaskError, raf: { count: rafCount, maxRequestToCallbackMs: maxRafLag, maxCallbackDurationMs: maxRafDuration, samples: [...raf] }, navigation: performance.getEntriesByType('navigation').map(entry => entry.toJSON()) }), observers: [mutations, longTaskObserver] };
+}
+const rendererMetrics = session => session.send('Performance.getMetrics').then(result => ({ receivedWall: Date.now(), values: Object.fromEntries(result.metrics.map(metric => [metric.name, metric.value])) })).catch(error => ({ error: error.message }));
+async function boundedObservation(promise) {
+  let timer;
+  try { return await Promise.race([promise, new Promise(resolve => { timer = setTimeout(() => resolve({ diagnosticError: 'Observation did not return within5000ms' }), 5000); })]); }
+  finally { clearTimeout(timer); }
+}
+async function captureTiming(page, id, metadata, session, beforeMetrics) {
+  // Runs after the existing assertion and before the following navigation.
+  // A late diagnostic snapshot never changes that assertion's recorded result.
+  const row = { schema: 1, caseId: id, capturedWall: Date.now(), testedHead, triggerRevision: process.env.GITHUB_SHA || null, sourceHashes: timingSources, metadata };
+  try { row.browser = await boundedObservation(page.evaluate(() => window.__openingTiming.snapshot())); }
+  catch (error) { row.browser = { diagnosticError: error.message }; }
+  row.snapshotReturnedWall = Date.now();
+  if (beforeMetrics) row.rendererBefore = await boundedObservation(beforeMetrics);
+  if (session) row.rendererAfter = await boundedObservation(rendererMetrics(session));
+  fs.mkdirSync(TIMING_DIR, { recursive: true });
+  fs.writeFileSync(path.join(TIMING_DIR, `${id}.json`), JSON.stringify(row, null, 2) + '\n');
+  const created = row.browser.events?.filter(event => event.type === 'timer-created') || [], fired = row.browser.events?.filter(event => event.type === 'timer-fired') || [];
+  const removed = row.browser.events?.filter(event => event.type === 'modal-remove-after') || [], viewport = row.browser.viewport || metadata.viewport;
+  console.log(`  TIMING ${id}: viewport=${viewport?.width}x${viewport?.height} assertion=${metadata.assertionPassed ?? 'n/a'} wait=${metadata.waitWallMs ?? 'n/a'}ms nodesAtAssertion=${metadata.modalCountAtAssertion ?? 'n/a'} nodesNow=${row.browser.modals?.length ?? 'unknown'} timers=${created.length}/${fired.length} removals=${removed.length} maxLag=${fired.length ? Math.max(...fired.map(event => event.lag)).toFixed(1) : 'n/a'}ms artifact=${path.join(TIMING_DIR, `${id}.json`)}`);
+}
+
 async function judgeArrivalSheet(page, name) {
   await page.evaluate(() => document.fonts.ready);
   const ui = await page.evaluate(() => {
@@ -103,16 +200,22 @@ async function judgeArrivalSheet(page, name) {
 server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
+  let timingPage = null, timingRenderer = null, timingLabel = 'startup', activeTiming = {};
   try {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
       const ctx = await browser.newContext({ viewport: vp, hasTouch: touch, isMobile: touch });
-      // Each goto leaves a page with the relief map's WebGL context, whose
-      // teardown under SwiftShader can pass 30 s (CI run 1101): give it room.
+      await ctx.addInitScript(installOpeningTiming, { label: name });
+      // Preserve the established navigation allowance. The map is Canvas2D;
+      // the diagnostic data below does not assume a WebGL teardown cause.
       ctx.setDefaultNavigationTimeout(120000);
       const page = await ctx.newPage();
+      const renderer = await ctx.newCDPSession(page); await renderer.send('Performance.enable');
+      timingPage = page; timingRenderer = renderer; timingLabel = name; activeTiming = { phase: 'initial-flow', viewport: vp };
       const errors = watchErrors(page);
       await page.goto(`${base}/web/`); await ready(page);
+      activeTiming.beginRequestedWall = Date.now();
       await page.locator('#beginButton').click();
+      activeTiming.beginClickReturnedWall = Date.now();
       ok(`${name}: Begin opens the arrival`, await page.locator('#opening').isVisible());
       const text = await page.locator('#opening .opening-lines').innerText();
       ok(`${name}: it names the place, the year and what Aatami carries`, /Kallio, 2003/.test(text) && /Piritori/.test(text) && /€160/.test(text), text);
@@ -161,15 +264,35 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: back on the map`, await page.locator('.city-map').count() === 1);
       // A key skips too, and it goes on its own.
       await page.goto(`${base}/web/`); await ready(page);
+      const keyTiming = { phase: 'space-skip', viewport: vp, beginRequestedWall: Date.now(), deadlineMs: 3000 }, keyMetricsBefore = rendererMetrics(renderer);
+      activeTiming = keyTiming;
       await page.locator('#beginButton').click();
+      keyTiming.beginClickReturnedWall = Date.now();
       await page.keyboard.press('Space');
-      await page.waitForSelector('#opening', { state: 'detached', timeout: 3000 }).catch(() => {});
-      ok(`${name}: a key skips it`, await page.locator('#opening').count() === 0);
+      keyTiming.spaceReturnedWall = Date.now();
+      keyTiming.waitStartedWall = Date.now();
+      await page.waitForSelector('#opening', { state: 'detached', timeout: 3000 }).catch(error => { keyTiming.waitError = error.message; });
+      keyTiming.waitEndedWall = Date.now(); keyTiming.waitWallMs = keyTiming.waitEndedWall - keyTiming.waitStartedWall;
+      const beforeKeyAssertion = failed;
+      keyTiming.modalCountAtAssertion = await page.locator('#opening').count();
+      ok(`${name}: a key skips it`, keyTiming.modalCountAtAssertion === 0);
+      keyTiming.assertionPassed = failed === beforeKeyAssertion; keyTiming.assertionReturnedWall = Date.now();
+      await captureTiming(page, `${name}-space-skip`, keyTiming, renderer, keyMetricsBefore);
       await page.goto(`${base}/web/`); await ready(page);
+      const autoTiming = { phase: 'auto', viewport: vp, beginRequestedWall: Date.now(), deadlineMs: 12000 }, autoMetricsBefore = rendererMetrics(renderer);
+      activeTiming = autoTiming;
       await page.locator('#beginButton').click();
-      await page.waitForSelector('#opening', { state: 'detached', timeout: 12000 }).catch(() => {});
-      ok(`${name}: left alone, it ends by itself`, await page.locator('#opening').count() === 0);
+      autoTiming.beginClickReturnedWall = Date.now();
+      autoTiming.waitStartedWall = Date.now();
+      await page.waitForSelector('#opening', { state: 'detached', timeout: 12000 }).catch(error => { autoTiming.waitError = error.message; });
+      autoTiming.waitEndedWall = Date.now(); autoTiming.waitWallMs = autoTiming.waitEndedWall - autoTiming.waitStartedWall;
+      const beforeAutoAssertion = failed;
+      autoTiming.modalCountAtAssertion = await page.locator('#opening').count();
+      ok(`${name}: left alone, it ends by itself`, autoTiming.modalCountAtAssertion === 0);
+      autoTiming.assertionPassed = failed === beforeAutoAssertion; autoTiming.assertionReturnedWall = Date.now();
+      await captureTiming(page, `${name}-auto`, autoTiming, renderer, autoMetricsBefore);
       // Resume and ?skip never replay it.
+      activeTiming = { phase: 'after-auto-flow', viewport: vp };
       await page.goto(`${base}/web/`); await ready(page);
       await page.locator('#resumeButton').click();
       ok(`${name}: Resume goes straight to the city`, await page.locator('#opening').count() === 0);
@@ -193,8 +316,10 @@ server.listen(0, '127.0.0.1', async () => {
     }
     // The shorter landscape screen must retain the full captions and Skip too.
     const landscape = await browser.newContext({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true });
+    await landscape.addInitScript(installOpeningTiming, { label: 'landscape phone' });
     landscape.setDefaultNavigationTimeout(120000);
     const landscapePage = await landscape.newPage();
+    timingPage = landscapePage; timingRenderer = null; timingLabel = 'landscape'; activeTiming = { phase: 'native-skip', viewport: { width: 844, height: 390 } };
     await landscapePage.goto(`${base}/web/`); await ready(landscapePage);
     await landscapePage.locator('#beginButton').click();
     const landscapeSave = await save(landscapePage);
@@ -203,19 +328,24 @@ server.listen(0, '127.0.0.1', async () => {
     await landscapePage.waitForSelector('#opening', { state: 'detached', timeout: 3000 });
     ok('landscape phone: a native map tap skips without changing the save', await save(landscapePage) === landscapeSave);
     ok('landscape phone: skipping restores campaign controls', await landscapePage.locator('.topbar').isVisible() && await landscapePage.locator('.mode-nav').isVisible() && await landscapePage.locator('.next-step').isVisible());
+    await captureTiming(landscapePage, 'landscape-native-skip', { observation: 'after unchanged native tap/save/restoration assertions' });
     await landscape.close();
     // Reduced motion: one still frame, the same lines, no movement.
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    await ctx.addInitScript(installOpeningTiming, { label: 'reduced motion' });
     ctx.setDefaultNavigationTimeout(120000);
     const page = await ctx.newPage();
+    timingPage = page; timingRenderer = null; timingLabel = 'reduced-motion'; activeTiming = { phase: 'still', viewport: { width: 390, height: 844 } };
     await page.goto(`${base}/web/`); await ready(page);
     await page.locator('#beginButton').click();
     const still = await page.evaluate(() => [...document.querySelectorAll('#opening *')].every(el => getComputedStyle(el).animationName === 'none'));
     ok('reduced motion: the arrival is a still frame', still && await page.locator('.opening.still').count() === 1);
     ok('reduced motion: the lines are all there at once', await page.locator('.opening-lines p').evaluateAll(ps => ps.every(p => getComputedStyle(p).opacity === '1')));
+    await captureTiming(page, 'reduced-motion-still', { observation: 'after unchanged still-frame assertions, before the6000ms deadline' });
     await ctx.close();
   } catch (error) {
     ok('unhandled opening gate error', false, error.stack || error.message);
+    if (timingPage && !timingPage.isClosed()) await captureTiming(timingPage, `${timingLabel}-unhandled`, { ...activeTiming, error: error.stack || error.message }, timingRenderer);
   } finally {
     await browser.close(); server.close();
     console.log(`\n  ${passed} passed, ${failed} failed`);
