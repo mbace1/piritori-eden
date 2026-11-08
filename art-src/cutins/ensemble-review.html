@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Aatami + Jaska ensemble — review candidate only</title>
+<style>
+html,body{margin:0;min-height:100%;background:#141414}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#s{width:1080px;height:1920px;flex:none;position:relative;overflow:hidden}
+#c{display:block;width:100%;height:100%}
+</style></head><body><div id="s"><canvas id="c" width="1080" height="1920"></canvas></div>
+<script type="module">
+import { CUTINS, pose, REST, rigParts, drawFigure } from '../../web/js/v3/cutin-stage.js';
+// This is a PROPOSED simultaneous two-speaker composition, not the shipped
+// one-at-a-time conversation UI. It reuses only existing source/manifest parts.
+const Q = new URLSearchParams(location.search);
+const AATAMI = Q.get('aatami') || 'aatami-side';
+if (!['aatami', 'aatami-side'].includes(AATAMI)) throw Error('Unknown Aatami review variant');
+const STILL = Q.get('still') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const loadImage = src => new Promise((ok, no) => {
+  const img = new Image(); img.onload = () => ok(img);
+  img.onerror = () => no(Error('Missing review asset: ' + src)); img.src = src;
+});
+const manifestResponse = await fetch('../../art/v3/manifest.json');
+if (!manifestResponse.ok) throw Error('Missing art manifest');
+const manifest = await manifestResponse.json();
+async function loadRig(who) {
+  const cast = CUTINS[who], asset = manifest.assets.find(a => a.id === cast?.rig);
+  if (!asset) throw Error('Missing cut-in manifest asset for ' + who);
+  const images = {};
+  await Promise.all(asset.members.map(async m => {
+    images[m.part] = await loadImage('../../art/v3/' + m.file);
+  }));
+  if (!asset.members.some(m => m.part === 'head') || !asset.members.some(m => m.part === 'torso'))
+    throw Error('Incomplete cut-in for ' + who);
+  return rigParts(asset, images);
+}
+const [aatami, jaska, room] = await Promise.all([
+  loadRig(AATAMI), loadRig('jaska'),
+  loadImage('../../art/v3/scenes/scene-club-v01.webp')
+]);
+const c = document.getElementById('c'), g = c.getContext('2d');
+const W = c.width, H = c.height, BOTTOM = 1835, S = 1.18;
+const FACE = { aatami: {x:345,y:1240}, jaska:{x:875,y:1240} };
+function background() {
+  g.clearRect(0,0,W,H);
+  const sh=H*.73, k=Math.max(W/room.width,sh/room.height);
+  const dw=room.width*k, dh=room.height*k;
+  g.drawImage(room,(W-dw)/2-35,0,dw,dh);
+  const grad=g.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'rgba(11,14,15,.32)');
+  grad.addColorStop(.4,'rgba(11,14,15,.55)');
+  grad.addColorStop(1,'rgba(11,14,15,.97)');
+  g.fillStyle=grad;g.fillRect(0,0,W,H);
+}
+function bubble(active) {
+  const x=90,y=605,w=900,h=410,b=y+h;
+  const tip=FACE[active];
+  const mid=active==='jaska'?830:350;
+  g.save();
+  g.shadowColor='rgba(0,0,0,.6)';
+  g.shadowBlur=22;g.shadowOffsetX=7;g.shadowOffsetY=12;
+  g.fillStyle='#C7AA79';
+  g.beginPath();
+  g.moveTo(x,y);g.lineTo(x+w-3,y+6);g.lineTo(x+w,b-5);
+  g.lineTo(mid+46,b-2);g.lineTo(tip.x,tip.y-76);
+  g.lineTo(mid-26,b-1);g.lineTo(x+4,b-4);
+  g.closePath();g.fill();g.restore();
+}
+function write(active) {
+  const msg=active==='aatami'
+    ? 'Jaska. I need to ask you something before I make another deal.'
+    : 'Then sit down. Tell me what happened at the square.';
+  g.fillStyle='#202222';
+  g.font='44px "Courier New",monospace';
+  const lines=[],max=770;let line='';
+  for (const word of msg.split(' ')) {
+    const next=line ? line+' '+word : word;
+    if (g.measureText(next).width>max && line) {lines.push(line);line=word;}
+    else line=next;
+  }
+  if(line)lines.push(line);
+  if (lines.length>4) throw Error('Bubble text overflows review layout');
+  lines.forEach((l,i)=>g.fillText(l,145,725+i*68));
+}
+const moments = ['idle','blink','aatami-talk','jaska-talk','aatami-nod','jaska-shake','reduced-motion-rest'];
+function render(moment='idle', local=0.1) {
+  if(!moments.includes(moment))throw Error('Unknown frame '+moment);
+  const still=STILL || moment==='reduced-motion-rest';
+  let ap=REST,jp=REST;
+  if(!still) {
+    let ac='idle',jc='idle',at=local,jt=local;
+    if(moment==='blink'){at=1.7;jt=1.7;}
+    if(moment==='aatami-talk'){ac='talk';at=local;}
+    if(moment==='jaska-talk'){jc='talk';jt=local;}
+    if(moment==='aatami-nod'){ac='nod';at=local;}
+    if(moment==='jaska-shake'){jc='shake';jt=local;}
+    ap=pose(AATAMI,ac,at);jp=pose('jaska',jc,jt);
+  }
+  background();
+  // Both figures are reposed from the registered layered art. Neither
+  // drawCutin call is reused because it clears the entire canvas.
+  drawFigure(g,aatami,ap,-45,BOTTOM-aatami.size[1]*S,S);
+  drawFigure(g,jaska,jp,570,BOTTOM-jaska.size[1]*S,S);
+  const active=moment==='jaska-talk'||moment==='jaska-shake'?'jaska':'aatami';
+  bubble(active);write(active);
+  g.fillStyle='rgba(232,222,202,.82)';g.font='700 26px Arial,sans-serif';
+  g.fillText('REVIEW COMPOSITE — NOT THE LIVE UI',42,70);
+  g.fillText('AATAMI '+(AATAMI==='aatami'?'FRONT':'SIDE')+' / JASKA  ·  '+moment.toUpperCase(),42,110);
+}
+function frame(t) {
+  const sec=Math.max(0,Math.min(6.999,t));
+  if(sec<2)render('idle',sec);
+  else if(sec<3.5)render('aatami-talk',sec-2);
+  else if(sec<5)render('jaska-talk',sec-3.5);
+  else if(sec<6)render('aatami-nod',sec-5);
+  else render('jaska-shake',sec-6);
+}
+frame(0);
+window.__ensemble={frame,render,moments,aatamiVariant:AATAMI,still:STILL,source:'existing CUTINS and scene-club-v01; candidate-only'};
+window.__ready=true;
+</script></body></html>
