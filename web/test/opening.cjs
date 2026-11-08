@@ -9,6 +9,8 @@
 // reduced motion it is one still frame; after it the next step is lit. Sound
 // wakes on Begin, goes through one master gain, and the pause menu's SOUND
 // switch really stops it and is remembered.
+// Owner visual restart, 2026-11-08: retired CSS tram/figure art stays absent.
+// The same captions use a neutral sheet over the map, within half the screen.
 const { chromium } = require('playwright');
 const http = require('http');
 const fs = require('fs');
@@ -60,6 +62,44 @@ function watchErrors(page) {
 const ready = page => page.waitForFunction(() => Boolean(window.__ptv3?.data));
 const save = page => page.evaluate(() => JSON.stringify(window.__ptv3.state));
 
+async function judgeArrivalSheet(page, name) {
+  await page.evaluate(() => document.fonts.ready);
+  const ui = await page.evaluate(() => {
+    const sheet = document.querySelector('.opening-sheet');
+    const skip = document.querySelector('.opening-skip');
+    const rect = el => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
+    const panel = rect(sheet), target = rect(skip);
+    const captions = [...sheet.querySelectorAll('.opening-lines p')].map(p => {
+      const range = document.createRange(); range.selectNodeContents(p);
+      return { font: parseFloat(getComputedStyle(p).fontSize), fragments: [...range.getClientRects()].map(r => ({ left: r.left, top: r.top, right: r.right, bottom: r.bottom })) };
+    });
+    return {
+      panel, target, captions, width: innerWidth, height: innerHeight,
+      retired: document.querySelectorAll('#opening [class^="op-"], #opening [class*=" op-"]').length,
+      map: Boolean(document.querySelector('.city-map')) && getComputedStyle(document.querySelector('.city-map')).visibility === 'visible',
+      chromeHidden: [...document.querySelectorAll('.game-shell .topbar, .game-shell .mode-nav, .game-shell .map-side, .game-shell .next-step')].every(el => getComputedStyle(el).visibility === 'hidden'),
+      scrolls: sheet.scrollHeight > sheet.clientHeight + 1 || sheet.scrollWidth > sheet.clientWidth + 1,
+      skipFont: parseFloat(getComputedStyle(skip).fontSize),
+      skipHit: skip.contains(document.elementFromPoint(target.left + target.width / 2, target.top + target.height / 2)),
+    };
+  });
+  const inside = r => r.left >= ui.panel.left && r.right <= ui.panel.right && r.top >= ui.panel.top && r.bottom <= ui.panel.bottom;
+  ok(`${name}: the retained map has no retired arrival illustration`, ui.map && ui.retired === 0);
+  ok(`${name}: only the arrival sheet uses UI space, within half the screen including its inset`,
+    ui.chromeHidden &&
+    ui.panel.left >= 0 && ui.panel.right <= ui.width && ui.panel.top >= 0 && ui.panel.bottom <= ui.height
+      && ui.panel.width * ui.panel.height <= ui.width * ui.height / 2
+      && ui.height - ui.panel.top <= ui.height / 2, JSON.stringify(ui.panel));
+  ok(`${name}: all three captions are visible without clipping or scrolling at 12px or more`,
+    ui.captions.length === 3 && !ui.scrolls && ui.captions.every(p => p.font >= 12 && p.fragments.length > 0 && p.fragments.every(inside)), JSON.stringify(ui.captions));
+  ok(`${name}: Skip is visible, hittable and at least 44px with readable text`,
+    ui.target.width >= 44 && ui.target.height >= 44 && ui.skipFont >= 12 && inside(ui.target) && ui.skipHit, JSON.stringify(ui.target));
+  if (process.env.OPENING_CAPTURE_DIR) {
+    fs.mkdirSync(process.env.OPENING_CAPTURE_DIR, { recursive: true });
+    await page.screenshot({ path: path.join(process.env.OPENING_CAPTURE_DIR, `arrival-${name.replace(/\W+/g, '-')}.png`) });
+  }
+}
+
 server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
@@ -80,14 +120,14 @@ server.listen(0, '127.0.0.1', async () => {
       const sound = await page.evaluate(() => window.__ptv3.sound);
       ok(`${name}: sound woke on Begin, through one master gain`, sound.on && sound.running && sound.gain > 0, JSON.stringify(sound));
       await page.waitForTimeout(1200);
-      const tram = await page.locator('.op-tram').evaluate(el => getComputedStyle(el).transform);
-      ok(`${name}: the tram is moving in`, tram !== 'none', tram);
+      await judgeArrivalSheet(page, name);
       // Skip by the button on desktop, by a tap anywhere on a phone.
       if (touch) await page.locator('.opening-scene').tap(); else await page.locator('.opening-skip').click();
       await page.waitForSelector('#opening', { state: 'detached', timeout: 3000 }).catch(() => {});
       ok(`${name}: skipping ends it at once`, await page.locator('#opening').count() === 0);
       ok(`${name}: the arrival never changed the save`, await save(page) === s0);
       ok(`${name}: after it, one lit next step`, await page.locator('.next-step .primary').count() === 1);
+      ok(`${name}: skipping restores campaign controls`, await page.locator('.topbar').isVisible() && await page.locator('.mode-nav').isVisible() && await page.locator('.next-step').isVisible());
       ok(`${name}: the arrival is noir: rain, the debt due, the ramen sign up Vaasankatu, the man in the fur hat`,
         /rained for a week/.test(text) && /due on day 4/.test(text) && /Tokon Ramen/.test(text) && /fur hat/.test(text), text);
       // The Piritori street seller keeps the gear (GDD §10.2); unlit.
@@ -151,6 +191,19 @@ server.listen(0, '127.0.0.1', async () => {
       ok(`${name}: no page errors`, errors().length === 0, errors().join(' | '));
       await ctx.close();
     }
+    // The shorter landscape screen must retain the full captions and Skip too.
+    const landscape = await browser.newContext({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true });
+    landscape.setDefaultNavigationTimeout(120000);
+    const landscapePage = await landscape.newPage();
+    await landscapePage.goto(`${base}/web/`); await ready(landscapePage);
+    await landscapePage.locator('#beginButton').click();
+    const landscapeSave = await save(landscapePage);
+    await judgeArrivalSheet(landscapePage, 'landscape phone');
+    await landscapePage.locator('.opening-scene').tap();
+    await landscapePage.waitForSelector('#opening', { state: 'detached', timeout: 3000 });
+    ok('landscape phone: a native map tap skips without changing the save', await save(landscapePage) === landscapeSave);
+    ok('landscape phone: skipping restores campaign controls', await landscapePage.locator('.topbar').isVisible() && await landscapePage.locator('.mode-nav').isVisible() && await landscapePage.locator('.next-step').isVisible());
+    await landscape.close();
     // Reduced motion: one still frame, the same lines, no movement.
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
     ctx.setDefaultNavigationTimeout(120000);

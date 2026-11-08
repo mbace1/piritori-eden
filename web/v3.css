@@ -318,6 +318,30 @@ html body .arcade-home { display: none; }
 }
 .next-step p { min-width: 0; margin: 0; color: var(--ink-dim); font: 12px/1.35 var(--body); }
 .next-step .paper-button { flex: 0 1 auto; max-width: 100%; white-space: normal; }
+/* Neutral arrival captions over the retained map, without retired CSS art. */
+.opening { position: fixed; inset: 0; z-index: 90; }
+.opening-scene { position: absolute; inset: 0; }
+.opening-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: max(8px, var(--safe-bottom));
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 16px));
+  max-height: calc(50dvh - max(8px, var(--safe-bottom)));
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #53606c;
+  background: #182029;
+}
+.opening-lines { display: grid; gap: 6px; }
+.opening-lines p { margin: 0; color: var(--ink); font: 12px/1.3 var(--body); }
+.opening-sheet .opening-skip { justify-self: end; min-width: 88px; }
+/* The caption sheet owns the UI budget while open. Preserve the map and
+   layout, then restore campaign controls automatically when it is removed. */
+body:has(> .opening) .game-shell :is(.topbar, .mode-nav, .map-side, .next-step) { visibility: hidden; }
+body:has(> .opening) .mode-root { overflow: hidden; }
 /* No min-height. The panel is sized by the square board inside it now; a
    560px floor here is half of what pushed the southern half of Kallio off
    the bottom of the screen, and on a 412px-wide phone it wrapped a 362px

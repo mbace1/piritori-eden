@@ -342,10 +342,10 @@ function presentAtLead() { const lead = storyLeadId(); return Boolean(lead) && s
 function canTravelTo(anchor) { return anchor?.sliceState === 'active'; }
 /**
  * The arrival (v4.59, owner answer 8: "sure, setting up"). A new run opens on
- * the number 3 pulling into Piritori in the rain and Aatami stepping off,
- * before the first tap on the map. Skippable from frame one by any tap or
- * key, and it goes when it is done either way. Under reduced motion it is
- * one still frame with the same lines. It never touches state.
+ * Aatami's arrival captions over the retained map, before its first tap.
+ * The retired CSS tram/figure illustration is deliberately absent. This
+ * neutral compatibility sheet is skippable by any tap or key and never
+ * touches state; the authored words and sound stay the same.
  */
 function playOpening() {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -363,17 +363,11 @@ function playOpening() {
   veil.id = 'opening';
   veil.setAttribute('role', 'dialog');
   veil.setAttribute('aria-label', 'Arrival');
-  veil.innerHTML = `<div class="opening-scene" aria-hidden="true">
-      <i class="op-sky"></i><i class="op-block a"></i><i class="op-block b"></i><i class="op-block c"></i>
-      <i class="op-rain"></i><i class="op-wire"></i>
-      <div class="op-sign"><b>TOKON</b><b>RAMEN</b></div>
-      <div class="op-stop"><b>PIRITORI</b><span>3</span></div>
-      <i class="op-npc"></i><i class="op-bag"></i><i class="op-puddle"></i>
-      <div class="op-tram"><i class="op-window"></i><i class="op-window"></i><i class="op-window"></i><i class="op-door"></i><b>3</b></div>
-      <i class="op-figure"></i><i class="op-street"></i>
-    </div>
-    <div class="opening-lines" aria-live="polite">${lines.map((l, i) => `<p style="--i:${i}">${esc(l)}</p>`).join('')}</div>
-    <button class="paper-button opening-skip" type="button">SKIP ›</button>`;
+  veil.innerHTML = `<div class="opening-scene" aria-hidden="true"></div>
+    <section class="opening-sheet" aria-label="Arrival captions">
+      <div class="opening-lines" aria-live="polite">${lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+      <button class="paper-button opening-skip" type="button">SKIP ›</button>
+    </section>`;
   document.body.append(veil);
   // Focus leaves the Begin button, or the Space that skips (keydown) would
   // press Begin again on its keyup and start a second arrival.
