@@ -3,12 +3,15 @@
   "stageContract": "fixed maximum-fit 9:16; combined UI bands and panel union at most 50%; native 44px targets and 12px text",
   "sourceBase": "804613a3d4eaa1e5180dfb0ef2cb88952d15bd97",
   "sourceHashes": {
-    "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "5bf55be6f279bfde5a5c22f28944570e7e4194d4eb45ea289a1f1c44c1ab0007",
-    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "index.html": "a4da3d7b913b324865a0a1aa0bcf51dc1a8063616efb923bc7cd87f425648cd5",
+    "app.js": "2bc09f5fc42b387270d13256bdc7f13a86e1222ff81b7a65849437d478678402",
+    "actors.js": "7f03144891794b25e2b4a1c4170b947690a8537b149408713fefc80796c62ad1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
     "style.css": "a761009eb97f1ec0bed775529c841b5c27d458ace79fc02f71698fd3d57a88ae",
-    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4"
   },
   "viewports": [
     [
@@ -3001,6 +3004,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -5979,6 +5985,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -6161,18 +6170,18 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px 0.336483px",
+            "translate": "0px 1.3229px",
             "times": [
-              183.39500000033516
+              116.5949999986013
             ]
           }
         },
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 248.015625,
-            "totalHeight": 304.015625,
-            "heightRatio": 0.438487368444775,
+            "bottomHeight": 248.0098876953125,
+            "totalHeight": 304.0098876953125,
+            "heightRatio": 0.438479093423929,
             "unionArea": 101957.71875,
             "areaRatio": 0.377065401864266,
             "panels": [
@@ -6190,7 +6199,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 12,
-                  "y": 520.640625,
+                  "y": 520.6463623046875,
                   "width": 366,
                   "height": 236.015625
                 },
@@ -6209,9 +6218,9 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px",
+            "translate": "0px 0.00572002px",
             "times": [
-              240
+              233.29499999860127
             ]
           }
         },
@@ -6267,6 +6276,590 @@
       "responseView": {
         "stepped": false,
         "initial": {
+          "width": 390,
+          "height": 844,
+          "half": false,
+          "scale": 1,
+          "world": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "uiStage": "both",
+          "budgetReady": true,
+          "wrapper": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "layer": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "background": {
+            "x": 0,
+            "y": 75.328125,
+            "width": 390,
+            "height": 693.328125
+          },
+          "speech": {
+            "x": 12,
+            "y": 520.640625,
+            "width": 366,
+            "height": 60
+          },
+          "speechText": {
+            "text": "JaskaA sealed envelope of markka props up one corner.",
+            "rect": {
+              "x": 12,
+              "y": 520.640625,
+              "width": 366,
+              "height": 60
+            },
+            "font": 16,
+            "painted": true,
+            "value": "JASKA\n\nA sealed envelope of markka props up one corner."
+          },
+          "controls": {
+            "x": 12,
+            "y": 586.640625,
+            "width": 366,
+            "height": 170.015625
+          },
+          "decisionOverlay": {
+            "x": 12,
+            "y": 520.640625,
+            "width": 366,
+            "height": 236.015625
+          },
+          "grouped": true,
+          "bounds": {
+            "aatami": {
+              "canvas": {
+                "x": -50.6875,
+                "y": 214,
+                "width": 300.59375,
+                "height": 457.59375
+              },
+              "head": {
+                "x": 64.16560205977184,
+                "y": 217.721956208752,
+                "width": 118.60354599552981,
+                "height": 156.82904310400292
+              },
+              "mouth": {
+                "x": 129.50272174529263,
+                "y": 324.36355357231776
+              },
+              "source": {
+                "id": "cutin-aatami-front-rig-v01",
+                "dimensions": [
+                  450,
+                  685
+                ],
+                "crop": [
+                  0,
+                  0,
+                  450,
+                  685
+                ]
+              },
+              "ready": true
+            },
+            "jaska": {
+              "canvas": {
+                "x": 108.578125,
+                "y": 214,
+                "width": 339.921875,
+                "height": 457.59375
+              },
+              "head": {
+                "x": 221.66116593406275,
+                "y": 248.43076194166684,
+                "width": 109.88276418101276,
+                "height": 140.57891998052156
+              },
+              "mouth": {
+                "x": 300.5894043247275,
+                "y": 364.66182771635056
+              },
+              "source": {
+                "id": "cutin-jaska-rig-v01",
+                "dimensions": [
+                  520,
+                  700
+                ],
+                "crop": [
+                  0,
+                  0,
+                  520,
+                  700
+                ]
+              },
+              "ready": true
+            }
+          },
+          "overlays": [
+            {
+              "name": "scene-header",
+              "rect": {
+                "x": 12,
+                "y": 87.328125,
+                "width": 310,
+                "height": 44
+              },
+              "painted": true,
+              "floating": true
+            },
+            {
+              "name": "encounter-overlay",
+              "rect": {
+                "x": 12,
+                "y": 520.640625,
+                "width": 366,
+                "height": 236.015625
+              },
+              "painted": true,
+              "floating": true
+            }
+          ],
+          "targets": [
+            {
+              "id": "ask-envelope",
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "take-envelope",
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            },
+            {
+              "id": "leave-it",
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "font": 16
+            }
+          ],
+          "review": {
+            "rect": {
+              "x": 334,
+              "y": 87.328125,
+              "width": 44,
+              "height": 44
+            },
+            "painted": true,
+            "open": false,
+            "panel": null
+          },
+          "choices": [
+            {
+              "id": "ask-envelope",
+              "painted": true,
+              "label": "Ask before taking the envelope",
+              "forecast": "Gain dead money and preserve trust.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Ask before taking the envelope",
+                "rect": {
+                  "x": 25,
+                  "y": 592.640625,
+                  "width": 243.15625,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 592.640625,
+                  "width": 243.15625,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 616.34375,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Gain dead money and preserve trust.",
+                "rect": {
+                  "x": 25,
+                  "y": 616.34375,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            },
+            {
+              "id": "take-envelope",
+              "painted": true,
+              "label": "Call it family money",
+              "forecast": "Gain dead money; Jaska remembers the wording.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Call it family money",
+                "rect": {
+                  "x": 25,
+                  "y": 651.3125,
+                  "width": 154.703125,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 651.3125,
+                  "width": 154.703125,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 675.015625,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Gain dead money; Jaska remembers the wording.",
+                "rect": {
+                  "x": 25,
+                  "y": 675.015625,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            },
+            {
+              "id": "leave-it",
+              "painted": true,
+              "label": "Leave the old money under the map",
+              "forecast": "Lose a bank opportunity; deepen trust.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Leave the old money under the map",
+                "rect": {
+                  "x": 25,
+                  "y": 709.984375,
+                  "width": 280.84375,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 709.984375,
+                  "width": 280.84375,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 733.6875,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Lose a bank opportunity; deepen trust.",
+                "rect": {
+                  "x": 25,
+                  "y": 733.6875,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            }
+          ],
+          "allChoices": [
+            {
+              "id": "ask-envelope",
+              "painted": true,
+              "label": "Ask before taking the envelope",
+              "forecast": "Gain dead money and preserve trust.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Ask before taking the envelope",
+                "rect": {
+                  "x": 25,
+                  "y": 592.640625,
+                  "width": 243.15625,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Ask before taking the envelope. Gain dead money and preserve trust.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 586.640625,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 592.640625,
+                  "width": 243.15625,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 616.34375,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Gain dead money and preserve trust.",
+                "rect": {
+                  "x": 25,
+                  "y": 616.34375,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            },
+            {
+              "id": "take-envelope",
+              "painted": true,
+              "label": "Call it family money",
+              "forecast": "Gain dead money; Jaska remembers the wording.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Call it family money",
+                "rect": {
+                  "x": 25,
+                  "y": 651.3125,
+                  "width": 154.703125,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Call it family money. Gain dead money; Jaska remembers the wording.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 645.3125,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 651.3125,
+                  "width": 154.703125,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 675.015625,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Gain dead money; Jaska remembers the wording.",
+                "rect": {
+                  "x": 25,
+                  "y": 675.015625,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            },
+            {
+              "id": "leave-it",
+              "painted": true,
+              "label": "Leave the old money under the map",
+              "forecast": "Lose a bank opportunity; deepen trust.",
+              "labelPainted": true,
+              "labelFont": 15.6,
+              "visibleLabel": {
+                "text": "Leave the old money under the map",
+                "rect": {
+                  "x": 25,
+                  "y": 709.984375,
+                  "width": 280.84375,
+                  "height": 22
+                },
+                "font": 15.6,
+                "painted": true
+              },
+              "compactLabel": false,
+              "accessible": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
+              "disabled": false,
+              "rect": {
+                "x": 12,
+                "y": 703.984375,
+                "width": 366,
+                "height": 52.671875
+              },
+              "textRects": [
+                {
+                  "x": 25,
+                  "y": 709.984375,
+                  "width": 280.84375,
+                  "height": 22
+                },
+                {
+                  "x": 25,
+                  "y": 733.6875,
+                  "width": 342,
+                  "height": 14.96875
+                }
+              ],
+              "font": 12.48,
+              "visibleStake": {
+                "text": "Lose a bank opportunity; deepen trust.",
+                "rect": {
+                  "x": 25,
+                  "y": 733.6875,
+                  "width": 342,
+                  "height": 14.96875
+                },
+                "font": 12.48,
+                "painted": true
+              },
+              "compact": false
+            }
+          ],
+          "overflow": false,
+          "rigs": [
+            {
+              "who": "aatami",
+              "id": "cutin-aatami-front-rig-v01",
+              "variant": "front",
+              "painted": true
+            },
+            {
+              "who": "jaska",
+              "id": "cutin-jaska-rig-v01",
+              "variant": "jaska",
+              "painted": true
+            }
+          ],
+          "uiBudget": {
+            "topHeight": 56,
+            "bottomHeight": 248.015625,
+            "totalHeight": 304.015625,
+            "heightRatio": 0.438487368444775,
+            "unionArea": 101957.71875,
+            "areaRatio": 0.377065401864266,
+            "panels": [
+              {
+                "name": "scene-header",
+                "rect": {
+                  "x": 12,
+                  "y": 87.328125,
+                  "width": 310,
+                  "height": 44
+                },
+                "band": "top"
+              },
+              {
+                "name": "encounter-overlay",
+                "rect": {
+                  "x": 12,
+                  "y": 520.640625,
+                  "width": 366,
+                  "height": 236.015625
+                },
+                "band": "bottom"
+              },
+              {
+                "name": "review-summary",
+                "rect": {
+                  "x": 334,
+                  "y": 87.328125,
+                  "width": 44,
+                  "height": 44
+                }
+              }
+            ]
+          }
+        },
+        "final": {
           "width": 390,
           "height": 844,
           "half": false,
@@ -6849,590 +7442,6 @@
               }
             ]
           }
-        },
-        "final": {
-          "width": 390,
-          "height": 844,
-          "half": false,
-          "scale": 1,
-          "world": {
-            "x": 0,
-            "y": 75.328125,
-            "width": 390,
-            "height": 693.328125
-          },
-          "uiStage": "both",
-          "budgetReady": true,
-          "wrapper": {
-            "x": 0,
-            "y": 75.328125,
-            "width": 390,
-            "height": 693.328125
-          },
-          "layer": {
-            "x": 0,
-            "y": 75.328125,
-            "width": 390,
-            "height": 693.328125
-          },
-          "background": {
-            "x": 0,
-            "y": 75.328125,
-            "width": 390,
-            "height": 693.328125
-          },
-          "speech": {
-            "x": 12,
-            "y": 520.640625,
-            "width": 366,
-            "height": 60
-          },
-          "speechText": {
-            "text": "JaskaA sealed envelope of markka props up one corner.",
-            "rect": {
-              "x": 12,
-              "y": 520.640625,
-              "width": 366,
-              "height": 60
-            },
-            "font": 16,
-            "painted": true,
-            "value": "JASKA\n\nA sealed envelope of markka props up one corner."
-          },
-          "controls": {
-            "x": 12,
-            "y": 586.640625,
-            "width": 366,
-            "height": 170.015625
-          },
-          "decisionOverlay": {
-            "x": 12,
-            "y": 520.640625,
-            "width": 366,
-            "height": 236.015625
-          },
-          "grouped": true,
-          "bounds": {
-            "aatami": {
-              "canvas": {
-                "x": -50.6875,
-                "y": 214,
-                "width": 300.59375,
-                "height": 457.59375
-              },
-              "head": {
-                "x": 64.16248710194456,
-                "y": 217.52653799470505,
-                "width": 118.74892024070705,
-                "height": 156.98681959959544
-              },
-              "mouth": {
-                "x": 129.54567606797292,
-                "y": 324.26145918790866
-              },
-              "source": {
-                "id": "cutin-aatami-front-rig-v01",
-                "dimensions": [
-                  450,
-                  685
-                ],
-                "crop": [
-                  0,
-                  0,
-                  450,
-                  685
-                ]
-              },
-              "ready": true
-            },
-            "jaska": {
-              "canvas": {
-                "x": 108.578125,
-                "y": 214,
-                "width": 339.921875,
-                "height": 457.59375
-              },
-              "head": {
-                "x": 222.85855773863275,
-                "y": 248.7188498042105,
-                "width": 108.63498770517484,
-                "height": 139.5655933348845
-              },
-              "mouth": {
-                "x": 300.74931274964774,
-                "y": 364.64392565894855
-              },
-              "source": {
-                "id": "cutin-jaska-rig-v01",
-                "dimensions": [
-                  520,
-                  700
-                ],
-                "crop": [
-                  0,
-                  0,
-                  520,
-                  700
-                ]
-              },
-              "ready": true
-            }
-          },
-          "overlays": [
-            {
-              "name": "scene-header",
-              "rect": {
-                "x": 12,
-                "y": 87.328125,
-                "width": 310,
-                "height": 44
-              },
-              "painted": true,
-              "floating": true
-            },
-            {
-              "name": "encounter-overlay",
-              "rect": {
-                "x": 12,
-                "y": 520.640625,
-                "width": 366,
-                "height": 236.015625
-              },
-              "painted": true,
-              "floating": true
-            }
-          ],
-          "targets": [
-            {
-              "id": "ask-envelope",
-              "rect": {
-                "x": 12,
-                "y": 586.640625,
-                "width": 366,
-                "height": 52.671875
-              },
-              "font": 16
-            },
-            {
-              "id": "take-envelope",
-              "rect": {
-                "x": 12,
-                "y": 645.3125,
-                "width": 366,
-                "height": 52.671875
-              },
-              "font": 16
-            },
-            {
-              "id": "leave-it",
-              "rect": {
-                "x": 12,
-                "y": 703.984375,
-                "width": 366,
-                "height": 52.671875
-              },
-              "font": 16
-            }
-          ],
-          "review": {
-            "rect": {
-              "x": 334,
-              "y": 87.328125,
-              "width": 44,
-              "height": 44
-            },
-            "painted": true,
-            "open": false,
-            "panel": null
-          },
-          "choices": [
-            {
-              "id": "ask-envelope",
-              "painted": true,
-              "label": "Ask before taking the envelope",
-              "forecast": "Gain dead money and preserve trust.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Ask before taking the envelope",
-                "rect": {
-                  "x": 25,
-                  "y": 592.640625,
-                  "width": 243.15625,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Ask before taking the envelope. Gain dead money and preserve trust.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 586.640625,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 592.640625,
-                  "width": 243.15625,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 616.34375,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Gain dead money and preserve trust.",
-                "rect": {
-                  "x": 25,
-                  "y": 616.34375,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            },
-            {
-              "id": "take-envelope",
-              "painted": true,
-              "label": "Call it family money",
-              "forecast": "Gain dead money; Jaska remembers the wording.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Call it family money",
-                "rect": {
-                  "x": 25,
-                  "y": 651.3125,
-                  "width": 154.703125,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Call it family money. Gain dead money; Jaska remembers the wording.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 645.3125,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 651.3125,
-                  "width": 154.703125,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 675.015625,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Gain dead money; Jaska remembers the wording.",
-                "rect": {
-                  "x": 25,
-                  "y": 675.015625,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            },
-            {
-              "id": "leave-it",
-              "painted": true,
-              "label": "Leave the old money under the map",
-              "forecast": "Lose a bank opportunity; deepen trust.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Leave the old money under the map",
-                "rect": {
-                  "x": 25,
-                  "y": 709.984375,
-                  "width": 280.84375,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 703.984375,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 709.984375,
-                  "width": 280.84375,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 733.6875,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Lose a bank opportunity; deepen trust.",
-                "rect": {
-                  "x": 25,
-                  "y": 733.6875,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            }
-          ],
-          "allChoices": [
-            {
-              "id": "ask-envelope",
-              "painted": true,
-              "label": "Ask before taking the envelope",
-              "forecast": "Gain dead money and preserve trust.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Ask before taking the envelope",
-                "rect": {
-                  "x": 25,
-                  "y": 592.640625,
-                  "width": 243.15625,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Ask before taking the envelope. Gain dead money and preserve trust.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 586.640625,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 592.640625,
-                  "width": 243.15625,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 616.34375,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Gain dead money and preserve trust.",
-                "rect": {
-                  "x": 25,
-                  "y": 616.34375,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            },
-            {
-              "id": "take-envelope",
-              "painted": true,
-              "label": "Call it family money",
-              "forecast": "Gain dead money; Jaska remembers the wording.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Call it family money",
-                "rect": {
-                  "x": 25,
-                  "y": 651.3125,
-                  "width": 154.703125,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Call it family money. Gain dead money; Jaska remembers the wording.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 645.3125,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 651.3125,
-                  "width": 154.703125,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 675.015625,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Gain dead money; Jaska remembers the wording.",
-                "rect": {
-                  "x": 25,
-                  "y": 675.015625,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            },
-            {
-              "id": "leave-it",
-              "painted": true,
-              "label": "Leave the old money under the map",
-              "forecast": "Lose a bank opportunity; deepen trust.",
-              "labelPainted": true,
-              "labelFont": 15.6,
-              "visibleLabel": {
-                "text": "Leave the old money under the map",
-                "rect": {
-                  "x": 25,
-                  "y": 709.984375,
-                  "width": 280.84375,
-                  "height": 22
-                },
-                "font": 15.6,
-                "painted": true
-              },
-              "compactLabel": false,
-              "accessible": "Leave the old money under the map. Lose a bank opportunity; deepen trust.",
-              "disabled": false,
-              "rect": {
-                "x": 12,
-                "y": 703.984375,
-                "width": 366,
-                "height": 52.671875
-              },
-              "textRects": [
-                {
-                  "x": 25,
-                  "y": 709.984375,
-                  "width": 280.84375,
-                  "height": 22
-                },
-                {
-                  "x": 25,
-                  "y": 733.6875,
-                  "width": 342,
-                  "height": 14.96875
-                }
-              ],
-              "font": 12.48,
-              "visibleStake": {
-                "text": "Lose a bank opportunity; deepen trust.",
-                "rect": {
-                  "x": 25,
-                  "y": 733.6875,
-                  "width": 342,
-                  "height": 14.96875
-                },
-                "font": 12.48,
-                "painted": true
-              },
-              "compact": false
-            }
-          ],
-          "overflow": false,
-          "rigs": [
-            {
-              "who": "aatami",
-              "id": "cutin-aatami-front-rig-v01",
-              "variant": "front",
-              "painted": true
-            },
-            {
-              "who": "jaska",
-              "id": "cutin-jaska-rig-v01",
-              "variant": "jaska",
-              "painted": true
-            }
-          ],
-          "uiBudget": {
-            "topHeight": 56,
-            "bottomHeight": 248.015625,
-            "totalHeight": 304.015625,
-            "heightRatio": 0.438487368444775,
-            "unionArea": 101957.71875,
-            "areaRatio": 0.377065401864266,
-            "panels": [
-              {
-                "name": "scene-header",
-                "rect": {
-                  "x": 12,
-                  "y": 87.328125,
-                  "width": 310,
-                  "height": 44
-                },
-                "band": "top"
-              },
-              {
-                "name": "encounter-overlay",
-                "rect": {
-                  "x": 12,
-                  "y": 520.640625,
-                  "width": 366,
-                  "height": 236.015625
-                },
-                "band": "bottom"
-              },
-              {
-                "name": "review-summary",
-                "rect": {
-                  "x": 334,
-                  "y": 87.328125,
-                  "width": 44,
-                  "height": 44
-                }
-              }
-            ]
-          }
         }
       },
       "motionPixels": {
@@ -7525,7 +7534,7 @@
               "opaque": 180222
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -7629,12 +7638,12 @@
           },
           "last": {
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             },
             "jaska": {
-              "hash": "dcd20b57",
-              "opaque": 154988
+              "hash": "4e192621",
+              "opaque": 154956
             }
           }
         }
@@ -8596,6 +8605,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -8735,9 +8747,9 @@
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 246.9852294921875,
-            "totalHeight": 302.9852294921875,
-            "heightRatio": 0.43700120991368624,
+            "bottomHeight": 246.6939697265625,
+            "totalHeight": 302.6939697265625,
+            "heightRatio": 0.4365811205575463,
             "unionArea": 101957.71875,
             "areaRatio": 0.377065401864266,
             "panels": [
@@ -8755,7 +8767,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 12,
-                  "y": 521.6710205078125,
+                  "y": 521.9622802734375,
                   "width": 366,
                   "height": 236.015625
                 },
@@ -8774,18 +8786,18 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px 0.535371px",
+            "translate": "0px 1.32165px",
             "times": [
-              166.67599999960075
+              116.66399999964632
             ]
           }
         },
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 248.015625,
-            "totalHeight": 304.015625,
-            "heightRatio": 0.438487368444775,
+            "bottomHeight": 248.010009765625,
+            "totalHeight": 304.010009765625,
+            "heightRatio": 0.43847926948820226,
             "unionArea": 101957.71875,
             "areaRatio": 0.377065401864266,
             "panels": [
@@ -8803,7 +8815,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 12,
-                  "y": 520.640625,
+                  "y": 520.646240234375,
                   "width": 366,
                   "height": 236.015625
                 },
@@ -8822,9 +8834,9 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px",
+            "translate": "0px 0.00560463px",
             "times": [
-              240
+              233.36399999964635
             ]
           }
         },
@@ -8950,14 +8962,14 @@
                 "height": 457.59375
               },
               "head": {
-                "x": 70.14719977081823,
-                "y": 224.7198612116425,
-                "width": 127.98092716437706,
-                "height": 154.42080533363927
+                "x": 70.15463518498726,
+                "y": 224.90493359319632,
+                "width": 127.83817393537234,
+                "height": 154.2549956208051
               },
               "mouth": {
-                "x": 172.105142376223,
-                "y": 325.03080933862344
+                "x": 172.0629594180635,
+                "y": 325.08977582339026
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -8982,14 +8994,14 @@
                 "height": 457.59375
               },
               "head": {
-                "x": 222.85855773863275,
-                "y": 248.7188498042105,
-                "width": 108.63498770517484,
-                "height": 139.5655933348845
+                "x": 221.66116593406275,
+                "y": 248.43076194166684,
+                "width": 109.88276418101276,
+                "height": 140.57891998052156
               },
               "mouth": {
-                "x": 300.74931274964774,
-                "y": 364.64392565894855
+                "x": 300.5894043247275,
+                "y": 364.66182771635056
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -9534,14 +9546,14 @@
                 "height": 457.59375
               },
               "head": {
-                "x": 70.1456950298662,
-                "y": 224.68227282160174,
-                "width": 128.0099198126961,
-                "height": 154.45448707663022
+                "x": 70.1501916157113,
+                "y": 224.7944740559781,
+                "width": 127.92338508911041,
+                "height": 154.3539590438165
               },
               "mouth": {
-                "x": 172.11370864947054,
-                "y": 325.01883994300096
+                "x": 172.0881398568711,
+                "y": 325.05458052497806
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -9566,14 +9578,14 @@
                 "height": 457.59375
               },
               "head": {
-                "x": 222.85855773863275,
-                "y": 248.7188498042105,
-                "width": 108.63498770517484,
-                "height": 139.5655933348845
+                "x": 222.21847442281012,
+                "y": 248.89975893570684,
+                "width": 109.30251487502551,
+                "height": 140.1116775204808
               },
               "mouth": {
-                "x": 300.74931274964774,
-                "y": 364.64392565894855
+                "x": 300.66413009276516,
+                "y": 364.9923407428181
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -10138,7 +10150,7 @@
               "opaque": 184535
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -11225,6 +11237,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -14005,6 +14020,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -16784,6 +16802,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -16929,9 +16950,9 @@
         {
           "uiBudget": {
             "topHeight": 44,
-            "bottomHeight": 102.36221313476562,
-            "totalHeight": 146.36221313476562,
-            "heightRatio": 0.3752877259865785,
+            "bottomHeight": 102.67819213867188,
+            "totalHeight": 146.67819213867188,
+            "heightRatio": 0.3760979285606971,
             "unionArea": 30262,
             "areaRatio": 0.3537088172985609,
             "panels": [
@@ -16949,7 +16970,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 316.3125,
-                  "y": 287.6377868652344,
+                  "y": 287.3218078613281,
                   "width": 211.375,
                   "height": 100
                 },
@@ -16968,18 +16989,18 @@
           },
           "uiStage": "dialogue",
           "animation": {
-            "translate": "0px 1.32152px",
+            "translate": "0px 1.32179px",
             "times": [
-              116.67099999976344
+              116.65599999853005
             ]
           }
         },
         {
           "uiBudget": {
             "topHeight": 44,
-            "bottomHeight": 104,
-            "totalHeight": 148,
-            "heightRatio": 0.37948717948717947,
+            "bottomHeight": 103.994384765625,
+            "totalHeight": 147.994384765625,
+            "heightRatio": 0.37947278145032054,
             "unionArea": 30262,
             "areaRatio": 0.3537088172985609,
             "panels": [
@@ -16997,7 +17018,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 316.3125,
-                  "y": 286,
+                  "y": 286.005615234375,
                   "width": 211.375,
                   "height": 100
                 },
@@ -17016,9 +17037,9 @@
           },
           "uiStage": "dialogue",
           "animation": {
-            "translate": "0px",
+            "translate": "0px 0.00561795px",
             "times": [
-              240
+              233.35599999853002
             ]
           }
         },
@@ -17144,14 +17165,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 348.3984566645892,
-                "y": 80.04357245464234,
-                "width": 66.76099164380122,
-                "height": 88.26729798960918
+                "x": 348.3995061149179,
+                "y": 80.10917770869261,
+                "width": 66.71218272261297,
+                "height": 88.21432858882199
               },
               "mouth": {
-                "x": 385.16478218299494,
-                "y": 140.05943743318159
+                "x": 385.1503623430612,
+                "y": 140.09371070637133
               },
               "source": {
                 "id": "cutin-aatami-front-rig-v01",
@@ -17176,14 +17197,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 437.31234211730305,
-                "y": 97.64629251853782,
-                "width": 61.48172257070496,
-                "height": 78.81102450982999
+                "x": 436.99886089566195,
+                "y": 97.38248771478106,
+                "width": 61.8081078043233,
+                "height": 79.07384241067854
               },
               "mouth": {
-                "x": 481.43734733142577,
-                "y": 162.94688324818833
+                "x": 481.39531473094416,
+                "y": 162.76097390293802
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -17537,14 +17558,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 348.3984566645892,
-                "y": 80.04357245464234,
-                "width": 66.76099164380122,
-                "height": 88.26729798960918
+                "x": 348.39740182244066,
+                "y": 79.97693228721819,
+                "width": 66.81056083336489,
+                "height": 88.3211026956444
               },
               "mouth": {
-                "x": 385.16478218299494,
-                "y": 140.05943743318159
+                "x": 385.1794324882759,
+                "y": 140.02462038302173
               },
               "source": {
                 "id": "cutin-aatami-front-rig-v01",
@@ -17569,14 +17590,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 437.69973351627226,
-                "y": 96.8154442912223,
-                "width": 61.99019774071087,
-                "height": 79.09099771731276
+                "x": 437.71196935625153,
+                "y": 96.6276930449583,
+                "width": 61.67237832046641,
+                "height": 78.90131203783127
               },
               "mouth": {
-                "x": 481.6142858866933,
-                "y": 162.45381747506303
+                "x": 481.5741971656525,
+                "y": 162.1369025081796
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -18141,7 +18162,7 @@
               "opaque": 180222
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -18245,12 +18266,12 @@
           },
           "last": {
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             },
             "jaska": {
-              "hash": "dcd20b57",
-              "opaque": 154988
+              "hash": "4e192621",
+              "opaque": 154956
             }
           }
         }
@@ -19207,6 +19228,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -19348,9 +19372,9 @@
         {
           "uiBudget": {
             "topHeight": 44,
-            "bottomHeight": 103.66201782226562,
-            "totalHeight": 147.66201782226562,
-            "heightRatio": 0.3786205585186298,
+            "bottomHeight": 102.6776123046875,
+            "totalHeight": 146.6776123046875,
+            "heightRatio": 0.376096441806891,
             "unionArea": 30262,
             "areaRatio": 0.3537088172985609,
             "panels": [
@@ -19368,7 +19392,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 316.3125,
-                  "y": 286.3379821777344,
+                  "y": 287.3223876953125,
                   "width": 211.375,
                   "height": 100
                 },
@@ -19387,18 +19411,18 @@
           },
           "uiStage": "dialogue",
           "animation": {
-            "translate": "0px 0.177539px",
+            "translate": "0px 1.32239px",
             "times": [
-              200.05500000002573
+              116.62300000059767
             ]
           }
         },
         {
           "uiBudget": {
             "topHeight": 44,
-            "bottomHeight": 104,
-            "totalHeight": 148,
-            "heightRatio": 0.37948717948717947,
+            "bottomHeight": 103.99432373046875,
+            "totalHeight": 147.99432373046875,
+            "heightRatio": 0.37947262494991985,
             "unionArea": 30262,
             "areaRatio": 0.3537088172985609,
             "panels": [
@@ -19416,7 +19440,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 316.3125,
-                  "y": 286,
+                  "y": 286.00567626953125,
                   "width": 211.375,
                   "height": 100
                 },
@@ -19435,9 +19459,9 @@
           },
           "uiStage": "dialogue",
           "animation": {
-            "translate": "0px",
+            "translate": "0px 0.00567306px",
             "times": [
-              240
+              233.3230000005977
             ]
           }
         },
@@ -19563,14 +19587,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 351.76370505976956,
-                "y": 84.04540966637255,
-                "width": 71.98642396572302,
-                "height": 86.85972567988257
+                "x": 351.76788731480235,
+                "y": 84.14951051119043,
+                "width": 71.90612845065448,
+                "height": 86.76645983956571
               },
               "mouth": {
-                "x": 409.11277922016103,
-                "y": 140.4690335308729
+                "x": 409.08905224476337,
+                "y": 140.50220142350298
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -19595,14 +19619,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 437.67238346576187,
-                "y": 97.5445334485679,
-                "width": 61.10624429088597,
-                "height": 78.50385914790522
+                "x": 436.99886089566195,
+                "y": 97.38248771478106,
+                "width": 61.8081078043233,
+                "height": 79.07384241067854
               },
               "mouth": {
-                "x": 481.48526184175773,
-                "y": 162.7509042248808
+                "x": 481.39531473094416,
+                "y": 162.76097390293802
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -19956,14 +19980,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 351.7653879059537,
-                "y": 84.08737843591229,
-                "width": 71.95405782869153,
-                "height": 86.82212549780746
+                "x": 351.76370505976956,
+                "y": 84.04540966637255,
+                "width": 71.98642396572302,
+                "height": 86.85972567988257
               },
               "mouth": {
-                "x": 409.10321568133014,
-                "y": 140.4824045188132
+                "x": 409.11277922016103,
+                "y": 140.4690335308729
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -19988,14 +20012,14 @@
                 "height": 257.390625
               },
               "head": {
-                "x": 437.69973351627226,
-                "y": 96.8154442912223,
-                "width": 61.99019774071087,
-                "height": 79.09099771731276
+                "x": 437.70304618240067,
+                "y": 96.65778265286922,
+                "width": 61.902900579881816,
+                "height": 79.05297377152671
               },
               "mouth": {
-                "x": 481.6142858866933,
-                "y": 162.45381747506303
+                "x": 481.6032825147468,
+                "y": 162.27236775133588
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -20560,7 +20584,7 @@
               "opaque": 184535
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -21642,6 +21666,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -24621,6 +24648,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -27599,6 +27629,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -27742,9 +27775,9 @@
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 251.19366455078125,
-            "totalHeight": 307.19366455078125,
-            "heightRatio": 0.38399208068847657,
+            "bottomHeight": 250.20928955078125,
+            "totalHeight": 306.20928955078125,
+            "heightRatio": 0.3827616119384766,
             "unionArea": 120256.3125,
             "areaRatio": 0.3340453125,
             "panels": [
@@ -27762,7 +27795,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 427,
-                  "y": 548.8063354492188,
+                  "y": 549.7907104492188,
                   "width": 426,
                   "height": 239.53125
                 },
@@ -27781,18 +27814,18 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px 0.337561px",
+            "translate": "0px 1.32196px",
             "times": [
-              183.2950000002449
+              116.64700000029698
             ]
           }
         },
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 251.53125,
-            "totalHeight": 307.53125,
-            "heightRatio": 0.3844140625,
+            "bottomHeight": 251.52545166015625,
+            "totalHeight": 307.52545166015625,
+            "heightRatio": 0.3844068145751953,
             "unionArea": 120256.3125,
             "areaRatio": 0.3340453125,
             "panels": [
@@ -27810,7 +27843,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 427,
-                  "y": 548.46875,
+                  "y": 548.4745483398438,
                   "width": 426,
                   "height": 239.53125
                 },
@@ -27957,14 +27990,14 @@
                 "height": 528
               },
               "head": {
-                "x": 489.0270227506013,
-                "y": 164.06913787875,
-                "width": 137.02605678466864,
-                "height": 181.14111206411016
+                "x": 489.0284642243985,
+                "y": 164.16004373139523,
+                "width": 136.95843762136064,
+                "height": 181.0677189136692
               },
               "mouth": {
-                "x": 564.4736082510101,
-                "y": 287.22649828852724
+                "x": 564.4536245777012,
+                "y": 287.2739943994459
               },
               "source": {
                 "id": "cutin-aatami-front-rig-v01",
@@ -27989,14 +28022,14 @@
                 "height": 528
               },
               "head": {
-                "x": 672.1436918572815,
-                "y": 200.06075847107428,
-                "width": 125.3484468570581,
-                "height": 161.0394225900573
+                "x": 671.4051319219204,
+                "y": 200.26950262771993,
+                "width": 126.11867287487428,
+                "height": 161.66952833340463
               },
               "mouth": {
-                "x": 762.017915359304,
-                "y": 333.8222883243594
+                "x": 761.9196273770899,
+                "y": 334.2243112197402
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -28541,14 +28574,14 @@
                 "height": 528
               },
               "head": {
-                "x": 489.0263002431717,
-                "y": 164.02334097308793,
-                "width": 137.06012752424613,
-                "height": 181.1780915614165
+                "x": 489.0284642243985,
+                "y": 164.16004373139523,
+                "width": 136.95843762136064,
+                "height": 181.0677189136692
               },
               "mouth": {
-                "x": 564.4836792978687,
-                "y": 287.20257220804166
+                "x": 564.4536245777012,
+                "y": 287.2739943994459
               },
               "source": {
                 "id": "cutin-aatami-front-rig-v01",
@@ -28573,14 +28606,14 @@
                 "height": 528
               },
               "head": {
-                "x": 672.2517365754496,
-                "y": 198.88908641505554,
-                "width": 125.83932393954626,
-                "height": 161.38207151348922
+                "x": 671.4051319219204,
+                "y": 200.26950262771993,
+                "width": 126.11867287487428,
+                "height": 161.66952833340463
               },
               "mouth": {
-                "x": 762.1156112962806,
-                "y": 332.939025581483
+                "x": 761.9196273770899,
+                "y": 334.2243112197402
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -29145,7 +29178,7 @@
               "opaque": 180222
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -30216,6 +30249,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -30355,9 +30391,9 @@
         {
           "uiBudget": {
             "topHeight": 56,
-            "bottomHeight": 250.20831298828125,
-            "totalHeight": 306.20831298828125,
-            "heightRatio": 0.38276039123535155,
+            "bottomHeight": 250.208740234375,
+            "totalHeight": 306.208740234375,
+            "heightRatio": 0.38276092529296873,
             "unionArea": 120256.3125,
             "areaRatio": 0.3340453125,
             "panels": [
@@ -30375,7 +30411,7 @@
                 "name": "encounter-overlay",
                 "rect": {
                   "x": 427,
-                  "y": 549.7916870117188,
+                  "y": 549.791259765625,
                   "width": 426,
                   "height": 239.53125
                 },
@@ -30394,9 +30430,9 @@
           },
           "uiStage": "both",
           "animation": {
-            "translate": "0px 1.03179px",
+            "translate": "0px 1.3225px",
             "times": [
-              133.29299999982396
+              116.61700000003621
             ]
           }
         },
@@ -30570,14 +30606,14 @@
                 "height": 528
               },
               "head": {
-                "x": 495.92763298465434,
-                "y": 172.45533248991367,
-                "width": 147.60340542652375,
-                "height": 178.103154545129
+                "x": 495.93276016258915,
+                "y": 172.58278754289728,
+                "width": 147.50508519787059,
+                "height": 177.98896442048232
               },
               "mouth": {
-                "x": 613.5479437050649,
-                "y": 288.1416507921894
+                "x": 613.5188894511023,
+                "y": 288.18226130656296
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -30602,14 +30638,14 @@
                 "height": 528
               },
               "head": {
-                "x": 671.4051319219204,
-                "y": 200.26950262771993,
-                "width": 126.11867287487428,
-                "height": 161.66952833340463
+                "x": 670.7620816950973,
+                "y": 199.72834485873136,
+                "width": 126.7881933565518,
+                "height": 162.20866161243544
               },
               "mouth": {
-                "x": 761.9196273770899,
-                "y": 334.2243112197402
+                "x": 761.8334050728251,
+                "y": 333.8429448265696
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -31154,14 +31190,14 @@
                 "height": 528
               },
               "head": {
-                "x": 495.92418086763587,
-                "y": 172.36923957057374,
-                "width": 147.66979990364575,
-                "height": 178.18028593301713
+                "x": 495.93276016258915,
+                "y": 172.58278754289728,
+                "width": 147.50508519787059,
+                "height": 177.98896442048232
               },
               "mouth": {
-                "x": 613.5675619301097,
-                "y": 288.1142221256151
+                "x": 613.5188894511023,
+                "y": 288.18226130656296
               },
               "source": {
                 "id": "cutin-aatami-rig-v01",
@@ -31186,14 +31222,14 @@
                 "height": 528
               },
               "head": {
-                "x": 672.1436918572815,
-                "y": 200.06075847107428,
-                "width": 125.3484468570581,
-                "height": 161.0394225900573
+                "x": 670.7620816950973,
+                "y": 199.72834485873136,
+                "width": 126.7881933565518,
+                "height": 162.20866161243544
               },
               "mouth": {
-                "x": 762.017915359304,
-                "y": 333.8222883243594
+                "x": 761.8334050728251,
+                "y": 333.8429448265696
               },
               "source": {
                 "id": "cutin-jaska-rig-v01",
@@ -31758,7 +31794,7 @@
               "opaque": 184535
             },
             "jaska": {
-              "hash": "80a697c",
+              "hash": "4cffe535",
               "opaque": 154824
             }
           },
@@ -32845,6 +32881,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     }
@@ -34645,6 +34684,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -36442,6 +36484,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -38044,6 +38089,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -39645,6 +39693,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -41247,6 +41298,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -42848,6 +42902,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -44450,6 +44507,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -46051,6 +46111,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -47653,6 +47716,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -49254,6 +49320,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -50856,6 +50925,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -52457,6 +52529,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     }
@@ -52470,32 +52545,18 @@
     "This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.",
     "Half-size review assesses composition, not native touch-target size."
   ],
-  "url": "http://127.0.0.1:41743/art-src/restarts/scene-club/",
-  "browser": "151.0.7922.34",
+  "url": "http://127.0.0.1:44655/art-src/restarts/scene-club/",
+  "browser": "156.0.8078.79",
   "finalSourceHashes": {
-    "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "5bf55be6f279bfde5a5c22f28944570e7e4194d4eb45ea289a1f1c44c1ab0007",
-    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "index.html": "a4da3d7b913b324865a0a1aa0bcf51dc1a8063616efb923bc7cd87f425648cd5",
+    "app.js": "2bc09f5fc42b387270d13256bdc7f13a86e1222ff81b7a65849437d478678402",
+    "actors.js": "7f03144891794b25e2b4a1c4170b947690a8537b149408713fefc80796c62ad1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
     "style.css": "a761009eb97f1ec0bed775529c841b5c27d458ace79fc02f71698fd3d57a88ae",
-    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4"
   },
-  "passed": true,
-  "representativeCaptures": [
-    "phone-side-reduce-choices-stage.png",
-    "phone-front-reduce-choices-stage.png",
-    "phone-side-reduce-choices.png",
-    "desktop-front-no-preference-choices.png",
-    "landscape-side-reduce-choices.png",
-    "landscape-side-reduce-choices-stage.png",
-    "phone-arrival-stage.png",
-    "phone-ask-envelope-result-stage.png",
-    "phone-leave-it-map-stage.png",
-    "phone-front-half.png",
-    "edge-271x482-front-stage.png",
-    "edge-320x568-front-stage.png",
-    "edge-271x482-front-DejaVu-Sans-stage.png",
-    "landscape-side-reduce-dialogue-stage.png"
-  ],
-  "fullCaptureArchive": "/workspace/evidence/half-screen-cap/scene"
+  "passed": true
 }

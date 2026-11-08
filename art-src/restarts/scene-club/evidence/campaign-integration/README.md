@@ -26,6 +26,7 @@ names here. All ten captured production/core/art hashes match runtime commit
 | [Flat nested cabinet](cabinet-report.json) | **297 / 0**, three native choice/device flows; 249 source and 247 built-file hashes stable |
 | [Existing browser regressions](regression-results.json) | Act I scenes: 10 checkpoints; cleanup: both phone/desktop with six real C.19 stand-ins each; zero browser errors |
 | [Campaign state suites](node-results.json) | All 12 requested existing Node suites exit 0; input hashes stable |
+| [Shared-renderer workbench](prototype-run.json) | Adapter **135/0**; [Scene](../browser-results.json) **6,390/0**; [Toko](../ensemble-results.json) **4,934/0**; all nine shared/workbench source hashes stable |
 
 The normal campaign's maximum measured union is **44.76%**; its stricter
 combined height bands peak at **49.9989%** in Menu. Targets and text retain

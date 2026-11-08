@@ -1,0 +1,31 @@
+{
+  "sourceCommitAtStart": "719868fa981f5d721587bd588d66c72448eaeee8",
+  "browserPath": "/usr/bin/chromium",
+  "commands": [
+    {
+      "name": "campaign",
+      "command": "node art-src/restarts/scene-club/campaign-test.mjs",
+      "exitCode": 0,
+      "seconds": 0.06,
+      "log": "campaign.log"
+    },
+    {
+      "name": "scene",
+      "command": "node art-src/restarts/scene-club/browser.cjs",
+      "exitCode": 0,
+      "seconds": 57.476,
+      "log": "scene.log"
+    },
+    {
+      "name": "toko",
+      "command": "node art-src/restarts/scene-club/ensemble.cjs",
+      "exitCode": 0,
+      "seconds": 31.345,
+      "log": "toko.log"
+    }
+  ],
+  "startedUTC": "2026-11-08T14:25:24Z",
+  "sourceCommitAtFinish": "8687b85a66f6e9e36298d566bf0547bf0cd9c276",
+  "finishedUTC": "2026-11-08T14:26:53Z",
+  "passed": true
+}

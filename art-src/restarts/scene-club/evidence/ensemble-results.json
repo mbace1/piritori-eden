@@ -5,12 +5,15 @@
   "physicalDeviceAcceptance": false,
   "staticMouths": true,
   "sourceHashes": {
-    "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "5bf55be6f279bfde5a5c22f28944570e7e4194d4eb45ea289a1f1c44c1ab0007",
-    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "index.html": "a4da3d7b913b324865a0a1aa0bcf51dc1a8063616efb923bc7cd87f425648cd5",
+    "app.js": "2bc09f5fc42b387270d13256bdc7f13a86e1222ff81b7a65849437d478678402",
+    "actors.js": "7f03144891794b25e2b4a1c4170b947690a8537b149408713fefc80796c62ad1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
     "style.css": "a761009eb97f1ec0bed775529c841b5c27d458ace79fc02f71698fd3d57a88ae",
-    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4"
   },
   "cases": [
     {
@@ -1018,6 +1021,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -1227,12 +1233,12 @@
           },
           "last": {
             "toko": {
-              "hash": "b97879f4",
+              "hash": "85e80f66",
               "opaque": 270270
             },
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             }
           }
         }
@@ -2021,6 +2027,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -3028,6 +3037,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -4030,6 +4042,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -5038,6 +5053,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -5139,7 +5157,7 @@
           },
           "last": {
             "toko": {
-              "hash": "d26e7cb0",
+              "hash": "7a4aa5fb",
               "opaque": 85410
             },
             "aatami": {
@@ -5247,12 +5265,12 @@
           },
           "last": {
             "toko": {
-              "hash": "5daa7a24",
+              "hash": "9064e26a",
               "opaque": 85410
             },
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             }
           }
         }
@@ -6041,6 +6059,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -7048,6 +7069,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -7149,7 +7173,7 @@
           },
           "last": {
             "toko": {
-              "hash": "d26e7cb0",
+              "hash": "7a4aa5fb",
               "opaque": 85410
             },
             "aatami": {
@@ -7257,12 +7281,12 @@
           },
           "last": {
             "toko": {
-              "hash": "9064e26a",
+              "hash": "5daa7a24",
               "opaque": 85410
             },
             "aatami": {
-              "hash": "143ca47e",
-              "opaque": 184822
+              "hash": "8ba40b04",
+              "opaque": 184981
             }
           }
         }
@@ -8050,6 +8074,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -9058,6 +9085,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -9267,12 +9297,12 @@
           },
           "last": {
             "toko": {
-              "hash": "b022751a",
+              "hash": "cce97598",
               "opaque": 360000
             },
             "aatami": {
-              "hash": "21227396",
-              "opaque": 180659
+              "hash": "8d440131",
+              "opaque": 180514
             }
           }
         }
@@ -10061,6 +10091,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -11068,6 +11101,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -11277,12 +11313,12 @@
           },
           "last": {
             "toko": {
-              "hash": "b022751a",
+              "hash": "cce97598",
               "opaque": 360000
             },
             "aatami": {
-              "hash": "8ba40b04",
-              "opaque": 184981
+              "hash": "143ca47e",
+              "opaque": 184822
             }
           }
         }
@@ -12070,6 +12106,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     }
@@ -12630,6 +12669,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -13187,6 +13229,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -13745,6 +13790,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -14302,6 +14350,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -14860,6 +14911,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -15417,6 +15471,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -15975,6 +16032,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -16532,6 +16592,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -17090,6 +17153,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     },
@@ -17647,6 +17713,9 @@
         "people/hiring.mjs",
         "people/roster.mjs",
         "web/js/v3/content.js",
+        "web/js/v3/scene-club-actors.js",
+        "web/js/v3/scene-club-view.css",
+        "web/js/v3/scene-club-view.js",
         "web/js/v3/state.js"
       ]
     }
@@ -17656,73 +17725,15 @@
   "edgeChecks": 830,
   "failures": [],
   "finalSourceHashes": {
-    "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-    "app.js": "5bf55be6f279bfde5a5c22f28944570e7e4194d4eb45ea289a1f1c44c1ab0007",
-    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "index.html": "a4da3d7b913b324865a0a1aa0bcf51dc1a8063616efb923bc7cd87f425648cd5",
+    "app.js": "2bc09f5fc42b387270d13256bdc7f13a86e1222ff81b7a65849437d478678402",
+    "actors.js": "7f03144891794b25e2b4a1c4170b947690a8537b149408713fefc80796c62ad1",
     "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
     "style.css": "a761009eb97f1ec0bed775529c841b5c27d458ace79fc02f71698fd3d57a88ae",
-    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a",
+    "web/js/v3/scene-club-view.js": "f8a78cf127222b84902f37a8a9f7a53cb7a091ddb5c4814d601c497f1ea37d88",
+    "web/js/v3/scene-club-actors.js": "9d6d96330e353e91b8de34ea5b917dbcf33ab160f96d27d4ef05ad7ad7b525cf",
+    "web/js/v3/scene-club-view.css": "a9143046510bc97bdb15a071b74bb10e54b270c2349f8f805cd35fab10d80ed4"
   },
-  "passed": true,
-  "representativeCaptures": [
-    "toko-front-phone-stage.png",
-    "toko-side-phone-stage.png",
-    "toko-front-desktop-viewport.png",
-    "toko-front-landscape-viewport.png",
-    "toko-edge-271x482-front-stage.png",
-    "toko-edge-271x482-front-DejaVu-Sans-stage.png"
-  ],
-  "fullCaptureArchive": "/workspace/evidence/half-screen-cap/toko",
-  "earlierRecordings": {
-    "sourceCommit": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
-    "sourceHashes": {
-      "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
-      "app.js": "1b33c324a8d540f1f1e884404cadd64e32badb2f6c3e13e41784f37f9d93c245",
-      "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
-      "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
-      "style.css": "ae244f02348a234b3af165dfeebb6713dc7664d52fb01482e3f24c2dd7d5af5d",
-      "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
-    },
-    "videos": [
-      {
-        "viewport": {
-          "width": 390,
-          "height": 844
-        },
-        "stage": {
-          "x": 0,
-          "y": 75.328125,
-          "width": 390,
-          "height": 693.328125
-        },
-        "mp4Size": {
-          "width": 720,
-          "height": 1280
-        },
-        "webm": "visual-restart-phone.webm",
-        "mp4": "visual-restart-phone.mp4",
-        "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
-      },
-      {
-        "viewport": {
-          "width": 844,
-          "height": 390
-        },
-        "stage": {
-          "x": 312.3125,
-          "y": 0,
-          "width": 219.375,
-          "height": 390
-        },
-        "mp4Size": {
-          "width": 720,
-          "height": 1280
-        },
-        "webm": "visual-restart-landscape.webm",
-        "mp4": "visual-restart-landscape.mp4",
-        "source": "Actual browser recording; WebM retains viewport letterbox, MP4 fits 9:16 stage; static source mouths"
-      }
-    ],
-    "note": "Earlier native recordings remain evidence of the recorded source. The 40-second trailer uses a 450x800 view verified pixel-identical after the narrow-font fix."
-  }
+  "passed": true
 }
