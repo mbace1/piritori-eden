@@ -81,7 +81,7 @@ function rectangle(points) { const xs=points.map(p=>p.x),ys=points.map(p=>p.y);r
  * await actors.ready; actors.setSpeaker('aatami'); actors.play('aatami','talk');
  * Only transparent actor canvases are appended. CSS placement belongs to caller.
  */
-export function createActors(container, { aatami='front', partner='jaska', reducedMotion } = {}) {
+export function createActors(container, { aatami='front', partner='jaska', reducedMotion, tokoSurface='actor' } = {}) {
   if (!(container instanceof Element)) throw TypeError('An actor container is required');
   if (!['front','side'].includes(aatami) || !['jaska','toko'].includes(partner)) throw Error('Unknown retained actor variant');
   const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -91,7 +91,7 @@ export function createActors(container, { aatami='front', partner='jaska', reduc
     const variant = who === 'aatami' ? aatami : who, canvas = document.createElement('canvas');
     canvas.className = `actor actor-${who}`; canvas.dataset.actor = who; canvas.dataset.variant = variant; canvas.dataset.status = 'loading';
     canvas.setAttribute('role','img'); canvas.setAttribute('aria-label',`${who === 'aatami' ? 'Young Aatami' : who === 'jaska' ? 'Jaska' : 'Toko Slomo'} · retained source artwork; candidate motion; static mouth`);
-    container.append(canvas);
+    if (who !== 'toko' || tokoSurface !== 'composition') container.append(canvas);
     actors.set(who,{who,variant,canvas,g:canvas.getContext('2d'),clip:'idle',start:performance.now()/1000,from:null,held:null,pose:{...REST}});
   }
   function current(actor, now) {
@@ -124,19 +124,24 @@ export function createActors(container, { aatami='front', partner='jaska', reduc
     g.save();around(g,asset.rig.pivots.torso,0,p.sy);put(actor,'torso');
     g.save();around(g,asset.rig.pivots.head,p.rotation,1,p.headX,p.headY);actor.headMatrix=g.getTransform();put(actor,'head');closeHumanEyes(actor,p.blink);g.restore();g.restore();
   }
-  function chef(actor,p) {
+  function chef(actor,p,includeCounter=false) {
     const {g,asset,parts}=actor,PV=asset.rig.pivots;
-    g.save();around(g,PV.torso,0,p.sy);put(actor,'torso');
-    g.save();around(g,PV.head,p.rotation,1,p.headX,p.headY);actor.headMatrix=g.getTransform();put(actor,'head');
+    // Skip identity pivot operations: fractional source pivots would otherwise
+    // introduce tiny resampling differences in an exactly still room composite.
+    const body=()=>{if(p.sy!==1)around(g,PV.torso,0,p.sy)};
+    g.save();body();put(actor,'torso');
+    g.save();if(p.rotation||p.headX||p.headY)around(g,PV.head,p.rotation,1,p.headX,p.headY);actor.headMatrix=g.getTransform();put(actor,'head');
     if(p.brow){put(actor,'hood_bare');for(const name of ['brow_l','brow_r']){g.save();around(g,PV[name],0,1,0,p.brow);put(actor,name);g.restore();}}
     if(p.blink>0)for(const name of ['eye_l','eye_r']){
       const eye=parts[name],height=Math.ceil(eye.h*clamp(p.blink));g.drawImage(actor.tokoLids[name],0,0,eye.w,height,eye.x,eye.y,eye.w,height);
     }
     g.restore();g.restore();
-    g.save();around(g,PV.torso,0,p.sy);around(g,PV.fore_r,p.hand);put(actor,'fore_r');g.restore();
+    if(includeCounter)put(actor,'counter');
+    g.save();body();if(p.hand)around(g,PV.fore_r,p.hand);put(actor,'fore_r');g.restore();
     put(actor,'note');
-    g.save();around(g,PV.torso,0,p.sy);put(actor,'hand_l');g.restore();
-    // Counter strip, room, till and ambient painting are deliberately not actors.
+    g.save();body();put(actor,'hand_l');g.restore();
+    // The separate room composition can retain the source counter as an
+    // occluder before the forearms/note. The ordinary transparent actor omits it.
   }
   function draw(actor,now) {
     if(!actor.parts || destroyed)return;
@@ -158,7 +163,17 @@ export function createActors(container, { aatami='front', partner='jaska', reduc
   }));}
   const mediaChange=e=>{if(reducedMotion===undefined)setReducedMotion(e.matches)};
   media.addEventListener('change',mediaChange);
-  const api={ready:null,setSpeaker,play,setReducedMotion,bounds,destroy(){destroyed=true;if(raf)cancelAnimationFrame(raf);raf=0;media.removeEventListener('change',mediaChange);for(const actor of actors.values())actor.canvas.remove();},debug:{
+  const api={ready:null,setSpeaker,play,setReducedMotion,bounds,
+    // Source-coordinate paint hook for the aligned room helper. It deliberately
+    // does not apply the actor crop or alter Aatami/Jaska drawing and bounds.
+    drawTokoTo(context,{counter=true}={}){
+      const actor=actors.get('toko');if(!actor?.parts||destroyed)return null;
+      if(counter&&!actor.parts.counter)throw Error('Toko counter requires composition surface');
+      const previousContext=actor.g,previousHead=actor.headMatrix,p=current(actor,performance.now()/1000);
+      try{actor.g=context;chef(actor,p,counter);return{headMatrix:actor.headMatrix,head:{x:actor.parts.head.x,y:actor.parts.head.y,w:actor.parts.head.w,h:actor.parts.head.h},mouth:[...MOUTHS.toko],pose:{...p}};}
+      finally{actor.g=previousContext;actor.headMatrix=previousHead;}
+    },
+    destroy(){destroyed=true;if(raf)cancelAnimationFrame(raf);raf=0;media.removeEventListener('change',mediaChange);for(const actor of actors.values())actor.canvas.remove();},debug:{
     hold(who,clip,seconds=0){const actor=actors.get(who);if(!actor||destroyed)return false;if(clip!=='rest'&&!Object.hasOwn(CLIP_LENGTH,clip))throw Error('Unknown actor clip');actor.held={clip,seconds:Math.max(0,Number(seconds)||0)};draw(actor,performance.now()/1000);return true;},
     rest(who){for(const actor of actors.values())if(!who||actor.who===who)actor.held={clip:'rest',seconds:0};drawAll();},
     resume(who){for(const actor of actors.values())if(!who||actor.who===who)play(actor.who,'idle');},
@@ -169,7 +184,7 @@ export function createActors(container, { aatami='front', partner='jaska', reduc
     await Promise.all([...actors.values()].map(async actor=>{
       const asset=register.assets.find(a=>a.id===RIGS[actor.variant]);if(!asset)throw Error('Retained rig not registered: '+actor.variant);
       actor.asset=asset;actor.crop=actor.who==='toko'?[...TOKO_CROP]:[0,0,...asset.dimensions];
-      const entries=await Promise.all(asset.members.filter(m=>m.part!=='counter').map(async m=>[m.part,{...m,img:await image(m.file)}]));actor.parts=Object.fromEntries(entries);
+      const entries=await Promise.all(asset.members.filter(m=>m.part!=='counter'||tokoSurface==='composition').map(async m=>[m.part,{...m,img:await image(m.file)}]));actor.parts=Object.fromEntries(entries);
       actor.canvas.width=actor.crop[2];actor.canvas.height=actor.crop[3];actor.canvas.style.aspectRatio=`${actor.crop[2]} / ${actor.crop[3]}`;
       if(actor.who==='toko')actor.tokoLids=Object.fromEntries(['eye_l','eye_r'].map(name=>{const p=actor.parts[name],c=document.createElement('canvas');c.width=p.w;c.height=p.h;const g=c.getContext('2d');g.drawImage(p.img,0,0);g.globalCompositeOperation='source-in';g.fillStyle=`rgb(${asset.rig.lid_rgb.join(',')})`;g.fillRect(0,0,c.width,c.height);return[name,c];}));
       actor.canvas.dataset.rig=asset.id;actor.canvas.dataset.status='ready';actor.canvas.dataset.approval=asset.approval_status;actor.start=performance.now()/1000;
