@@ -1,7 +1,7 @@
 const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('node:assert/strict');
 const base=process.env.CREW_RUN_URL||'http://127.0.0.1:8796/work/piritori-fight-module/web/crew-run/';
 const out=process.env.AIM_OUTPUT||'.private/c14-aim-qa';fs.mkdirSync(out,{recursive:true});
-(async()=>{const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':'chromium',headless:true,args:['--enable-unsafe-swiftshader',...(process.env.PIRITORI_SOFTWARE_RENDERER==='1'?['--use-angle=swiftshader']:[])]});try{
+(async()=>{const browser=await chromium.launch({...(process.env.BROWSER_PATH?{executablePath:process.env.BROWSER_PATH}:{channel:process.platform==='win32'?'msedge':'chromium'}),headless:true,args:['--enable-unsafe-swiftshader',...(process.env.PIRITORI_SOFTWARE_RENDERER==='1'?['--use-angle=swiftshader']:[])]});try{
  for(const spec of [{name:'desktop',width:1440,height:1000},{name:'phone',width:412,height:915,touch:true},{name:'landscape',width:915,height:412,touch:true},{name:'tablet',width:1194,height:834,touch:true}]){
   const ctx=await browser.newContext({viewport:{width:spec.width,height:spec.height},deviceScaleFactor:Number(process.env.ARENA_LAB_DPR||1),hasTouch:!!spec.touch,isMobile:!!spec.touch}),p=await ctx.newPage(),errors=[];
   p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
@@ -13,7 +13,7 @@ const out=process.env.AIM_OUTPUT||'.private/c14-aim-qa';fs.mkdirSync(out,{recurs
   const snap=()=>p.evaluate(()=>fightModule.snapshot()),view=()=>p.evaluate(()=>fightModule.view().points);
   const readyAim=()=>p.waitForFunction(()=>fightModule.metrics().camera.mode==='gun'&&fightModule.metrics().camera.strength===1);
   async function preview(){if(await p.locator('[data-action=attack]').getAttribute('aria-pressed')!=='true')await tap(p.locator('[data-action=attack]'));await tap(p.locator('[data-target]:enabled').first());}
-  await p.goto(base);await idle();await tap(p.locator('#crew-deploy'));await idle();if(await p.locator('#crew-picker').count())await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));if(await p.locator('#crew-picker').count())await tap(p.locator('#crew-picker'));
+  await p.goto(base);await idle();await tap(p.locator('#crew-deploy'));await idle();if(await p.locator('#crew-picker').count())await tap(p.locator('#crew-picker'));await tap(p.locator('[data-unitid="crew-1"]'));assert.equal(await p.locator('#roster').isHidden(),true,'Selecting the shooter closes Crew and returns to actions');if(await p.locator('#crew-picker').count())assert.equal(await p.locator('#crew-picker').getAttribute('aria-expanded'),'false');assert.equal(await p.evaluate(()=>fightModule.snapshot().selectedId),'crew-1');
   const before=await snap(),overview=await view();await preview();const forecast=await p.locator('#tactical-preview p').innerText();
   await tap(p.locator('#aim-preview'));await readyAim();assert.notDeepEqual(await view(),overview,'Aim view changes real framing');assert.deepEqual(await snap(),before,'aim spends no resources/RNG');
   assert.equal(await p.locator('#tactical-preview p').innerText(),forecast,'camera preserves true forecast');
