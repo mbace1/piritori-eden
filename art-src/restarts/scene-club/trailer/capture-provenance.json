@@ -1,0 +1,89 @@
+{
+  "sourceCommit": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
+  "sceneSourceHashes": {
+    "index.html": "b18813cba9463458421ac6aabeaa99662c2954751d34a43e808f15a718a1be09",
+    "style.css": "ae244f02348a234b3af165dfeebb6713dc7664d52fb01482e3f24c2dd7d5af5d",
+    "app.js": "1b33c324a8d540f1f1e884404cadd64e32badb2f6c3e13e41784f37f9d93c245",
+    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "campaign.js": "0990513c563919eeff08664a11d89098f92e409f8607454e858c9ae4495a4a0e",
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+  },
+  "sceneCaptureViewport": {
+    "width": 450,
+    "height": 800
+  },
+  "sceneCaptures": [
+    {
+      "name": "scene-club",
+      "events": [
+        {
+          "time": 0.175,
+          "text": "Kallio arrival ready"
+        },
+        {
+          "time": 1.785,
+          "text": "Paired Scene Club ready"
+        },
+        {
+          "time": 7.015,
+          "text": "Actual ask-envelope settled"
+        },
+        {
+          "time": 10.076,
+          "text": "Real Kallio return"
+        },
+        {
+          "time": 12.283,
+          "text": "End capture"
+        }
+      ],
+      "errors": [],
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      },
+      "normalSavesUnchanged": true
+    },
+    {
+      "name": "toko-study",
+      "events": [
+        {
+          "time": 0.175,
+          "text": "Toko source study ready"
+        },
+        {
+          "time": 3.898,
+          "text": "Second authored Toko sentence"
+        },
+        {
+          "time": 7.4,
+          "text": "End capture"
+        }
+      ],
+      "errors": [],
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 450,
+        "height": 800
+      },
+      "normalSavesUnchanged": true
+    }
+  ],
+  "combatSourceCommit": "9cdfdc00d47e19a2748f1d8d46f516e898828b88",
+  "combatSourceDescription": "Actual current C.19 campaign courtyard outing. Initial campaign checkpoint follows existing outing-browser.cjs fixture; every fight action is genuine UI input. Seed/date pinned as existing regression scenario.",
+  "combatViewport": {
+    "width": 450,
+    "height": 800
+  },
+  "combatBrowserErrors": [],
+  "combatHttpErrors": [],
+  "rawCombatSha256": "3c80da048669d0be60185798a3df6c834e2e8b230848779d4e8d8ef2bef2c617",
+  "privateOriginals": "/workspace/evidence/progress-trailer",
+  "editedByVisibleVideoFrames": true,
+  "gameplaySpeedChanged": false,
+  "gameAudioCaptured": false,
+  "soundtrack": "Original synthesized underscore created for this preview."
+}

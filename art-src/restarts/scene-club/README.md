@@ -4,6 +4,9 @@ Owner correction, 8 November 2026: use Toko Move as the UX reference,
 **9:16 with overlays**, and delete the old UI and modular cast basis.
 The earlier wide/full-viewport candidate is replaced by this presentation.
 
+[Watch the 40-second progress trailer](trailer/piritori-progress-trailer.mp4) ·
+[shot list and capture provenance](trailer/README.md).
+
 Serve the repository and open **`/art-src/restarts/scene-club/`**.
 The quiet Kallio map leads into the authored Aatami/Jaska encounter. Both
 characters stay in the illustrated room; dialogue and all three choices
