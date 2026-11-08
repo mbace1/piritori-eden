@@ -41,7 +41,10 @@ function scenePixels(bytes,value){
   const entry={viewport:{width,height},fixture,states:[],errors:[]};report.cases.push(entry);
   const context=await browser.newContext({viewport:entry.viewport,hasTouch:true,isMobile:true});context.setDefaultNavigationTimeout(120000);context.setDefaultTimeout(90000);
   const page=await context.newPage();page.on('pageerror',error=>entry.errors.push(error.message));page.on('response',response=>{if(response.status()>=400&&!/\/hub\/shell\.js|favicon/.test(response.url()))entry.errors.push(response.status()+' '+response.url());});
-  const tap=async selector=>{const target=page.locator(selector);await target.scrollIntoViewIfNeeded();await target.tap();};
+  // Existing controls debounce duplicate native events for260ms. Respect the
+  // same interval before deliberately activating any control a second time.
+  const tappedAt=new Map();
+  const tap=async selector=>{const remaining=280-(performance.now()-(tappedAt.get(selector)??-Infinity));if(remaining>0)await page.waitForTimeout(remaining);const target=page.locator(selector);await target.scrollIntoViewIfNeeded();await target.tap();tappedAt.set(selector,performance.now());};
   const idle=()=>page.waitForFunction(()=>window.fightModule&&!fightModule.metrics().busy&&!fightModule.metrics().layoutPaused,null,{timeout:180000});
   const snapshot=()=>page.evaluate(()=>fightModule.snapshot());
   const saves=()=>page.evaluate(()=>['piritori-to-eden:v3','piritori-c19-outing-v1'].map(key=>localStorage.getItem(key)));
@@ -59,7 +62,7 @@ function scenePixels(bytes,value){
    assert(pixels.samples>100&&pixels.litFraction>.1&&pixels.colors>32,`${width}/${name}: actual 3D arena pixels remain visible outside UI: ${JSON.stringify(pixels)}`);
    console.log(`PASS C19 ${width}×${height} ${name}: ${(value.coverage*100).toFixed(2)}% UI`);
   };
-  const fullStats=async()=>{await tap('#camera-menu');await tap('#label-mode');assert.equal(await page.locator('#label-mode').getAttribute('aria-pressed'),'true');await tap('#camera-menu');};
+  const fullStats=async()=>{await tap('#camera-menu');await tap('#label-mode');assert.equal(await page.locator('#label-mode').getAttribute('aria-pressed'),'true');await tap('#camera-menu');assert(await page.locator('#camera-panel').isHidden(),'VIEW closes after the deliberate second tap');};
   try{
    if(['getaway','police'].includes(fixture)){
     await page.goto(`http://127.0.0.1:${server.address().port}/web/?skip`);await page.waitForFunction(()=>window.__ptv3?.data);
