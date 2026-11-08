@@ -88,6 +88,27 @@ visible states in both directions. Runtime, commands, round counts and test
 timeouts are unchanged; all 59 tactical package inputs match the earlier
 green source. The final CI run must still verify the canonical package.
 
+At `c9f8985`, canonical C.19 acceptance and all other checks passed, but the
+city arrival's automatic-dismissal check failed on both attempts:
+[as-run CI receipt](c9-ci-as-run.json), **12/13**, not green. Attempt 1 was
+69/1; the single isolated unchanged-source retry was 68/2. No further retry
+was attempted. Timers, deadlines and production code stayed unchanged.
+
+Private CPU2× probes reproduced late delivery of the 9500ms callback; it
+removed its own modal immediately once delivered. The
+[controlled SVG-pause experiment](opening-svg-ab.json) passed once and
+failed once in each arm, so pausing decorative map motion is not a supported
+fix. Aggregate renderer metrics also include pre-click actionability work;
+they are not countdown-only costs or proof of a GPU cause.
+
+The complete arrival/audio suite now has its own pinned-head CI job and
+timing artifacts. Its **70 original checks** and 12s auto-dismissal wait are
+unchanged. [Clean local validation](opening-diagnostic-local.log) passes
+70/0. Observation records modal generations, native input, timer creation,
+due/fire/removal and source hashes before the next navigation; failures keep
+their actual count and timing error. This is diagnostic isolation, not a
+claimed production fix. Current CI status belongs to the PR's exact head.
+
 This is browser emulation, not physical Pixel/iPad acceptance. C.19 battle
 rules, assets and receipt settlement are unchanged; these three authored
 choices do not trigger combat. Act I remains **50%** under the ROADMAP rubric.

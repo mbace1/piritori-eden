@@ -1,0 +1,1426 @@
+{
+  "startedAt": "2026-11-08T15:23:01.584Z",
+  "sourceHashesBefore": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "cases": [
+    {
+      "id": "A1-baseline",
+      "pause": false,
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "modal-appended",
+              "at": 739.0999999977648,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 750,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 10249.5,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 10250.699999999255,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 10249.5,
+              "lag": 1.199999999254942,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 10251,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 10251.099999997765,
+              "origin": 1794151381735.3,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 10251.29999999702,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 10251.5,
+              "origin": 1794151381735.3,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 0.8000000007450581,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 48.19999999925494,
+              "duration": 74,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 304.8999999985099,
+              "duration": 71,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 679,
+              "duration": 77,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 276.69999999925494,
+              "fired": 301.8999999985099,
+              "lag": 25.199999999254942,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 301.8999999985099,
+              "fired": 378.5999999977648,
+              "lag": 76.69999999925494,
+              "duration": 0,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "waitWallMs": 9900,
+      "primaryError": null,
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 450.0999999977648,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 22401,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 22408.099999997765,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 31907.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 22444.599999997765,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 31908.199999999255,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 31907.89999999851,
+            "lag": 0.30000000074505806,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 31908.300000000745,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 31908.300000000745,
+            "origin": 1794151404784,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 31908.39999999851,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 31908.39999999851,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.09999999776482582,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 363.80000000074506,
+            "fired": 366.19999999925494,
+            "lag": 2.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 366.19999999925494,
+            "fired": 377.5999999977648,
+            "lag": 11.399999998509884,
+            "duration": 0.10000000149011612,
+            "name": "next"
+          },
+          {
+            "requested": 377.69999999925494,
+            "fired": 398.5999999977648,
+            "lag": 20.899999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 398.5999999977648,
+            "fired": 415.8999999985099,
+            "lag": 17.300000000745058,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 415.8999999985099,
+            "fired": 427.0999999977648,
+            "lag": 11.199999999254942,
+            "duration": 0.10000000149011612,
+            "name": "next"
+          },
+          {
+            "requested": 427.0999999977648,
+            "fired": 446.8999999985099,
+            "lag": 19.800000000745058,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "svg": {
+        "enabled": false,
+        "events": []
+      },
+      "metrics": {
+        "TaskDuration": 22.283897,
+        "ScriptDuration": 0.033852,
+        "LayoutDuration": 0.017046000000000002,
+        "RecalcStyleDuration": 0.032075,
+        "LayoutCount": 166,
+        "RecalcStyleCount": 171
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 450.0999999977648,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 22401,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 22408.099999997765,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 31907.89999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 22444.599999997765,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 31908.199999999255,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 31907.89999999851,
+            "lag": 0.30000000074505806,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 31908.300000000745,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 31908.300000000745,
+            "origin": 1794151404784,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 31908.39999999851,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 31908.39999999851,
+            "origin": 1794151404784,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.09999999776482582,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 363.80000000074506,
+            "fired": 366.19999999925494,
+            "lag": 2.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 366.19999999925494,
+            "fired": 377.5999999977648,
+            "lag": 11.399999998509884,
+            "duration": 0.10000000149011612,
+            "name": "next"
+          },
+          {
+            "requested": 377.69999999925494,
+            "fired": 398.5999999977648,
+            "lag": 20.899999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 398.5999999977648,
+            "fired": 415.8999999985099,
+            "lag": 17.300000000745058,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 415.8999999985099,
+            "fired": 427.0999999977648,
+            "lag": 11.199999999254942,
+            "duration": 0.10000000149011612,
+            "name": "next"
+          },
+          {
+            "requested": 427.0999999977648,
+            "fired": 446.8999999985099,
+            "lag": 19.800000000745058,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "errors": [],
+      "primaryPass": true
+    },
+    {
+      "id": "B1-paused",
+      "pause": true,
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "modal-appended",
+              "at": 848.6000000014901,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 882.8000000007451,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 10382.20000000298,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 10383.400000002235,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 10382.20000000298,
+              "lag": 1.199999999254942,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 10383.800000000745,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 10383.900000002235,
+              "origin": 1794151451737.1,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 10384.300000000745,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 10384.300000000745,
+              "origin": 1794151451737.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 0.8999999985098839,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 265.9000000022352,
+              "duration": 62,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 392.9000000022352,
+              "duration": 162,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 795.7000000029802,
+              "duration": 109,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 219.30000000074506,
+              "fired": 257.1000000014901,
+              "lag": 37.80000000074506,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 257.1000000014901,
+              "fired": 258.80000000074506,
+              "lag": 1.699999999254942,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 258.80000000074506,
+              "fired": 343.6000000014901,
+              "lag": 84.80000000074506,
+              "duration": 0.19999999925494194,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "waitWallMs": 9878,
+      "primaryError": null,
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 226.59999999776483,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 13083.599999997765,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 13091.199999999255,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 22591.199999999255,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 13105.099999997765,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 22591.199999999255,
+            "lag": 0.5,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 22592.39999999851,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 22592.39999999851,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.6000000014901161,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 185.19999999925494,
+            "fired": 191.59999999776483,
+            "lag": 6.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 191.59999999776483,
+            "fired": 220.09999999776483,
+            "lag": 28.5,
+            "duration": 1.199999999254942,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "svg": {
+        "enabled": true,
+        "events": [
+          {
+            "kind": "paused",
+            "at": 13084.199999999255,
+            "animations": 22,
+            "paused": true
+          },
+          {
+            "kind": "resumed",
+            "at": 22592.39999999851,
+            "paused": false
+          }
+        ]
+      },
+      "metrics": {
+        "TaskDuration": 12.62423,
+        "ScriptDuration": 0.024701,
+        "LayoutDuration": 0.005237,
+        "RecalcStyleDuration": 0.010273999999999998,
+        "LayoutCount": 35,
+        "RecalcStyleCount": 41
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 226.59999999776483,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 13083.599999997765,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 13091.199999999255,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 22591.199999999255,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 13105.099999997765,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 22591.199999999255,
+            "lag": 0.5,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 22591.79999999702,
+            "origin": 1794151470332.8,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 22592.39999999851,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 22592.39999999851,
+            "origin": 1794151470332.8,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.6000000014901161,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 185.19999999925494,
+            "fired": 191.59999999776483,
+            "lag": 6.399999998509884,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 191.59999999776483,
+            "fired": 220.09999999776483,
+            "lag": 28.5,
+            "duration": 1.199999999254942,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "errors": [],
+      "primaryPass": true
+    },
+    {
+      "id": "A2-baseline",
+      "pause": false,
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "modal-appended",
+              "at": 618.7999999970198,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 626.6999999992549,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 10126.29999999702,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 10126.89999999851,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 10126.29999999702,
+              "lag": 0.6000000014901161,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 10127,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 10127.099999997765,
+              "origin": 1794151495432.3,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 10127.199999999255,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 10128.099999997765,
+              "origin": 1794151495432.3,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 0.30000000074505806,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 27.399999998509884,
+              "duration": 60,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 294.8999999985099,
+              "duration": 111,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 192.39999999850988,
+              "fired": 193.09999999776483,
+              "lag": 0.6999999992549419,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 193.09999999776483,
+              "fired": 207.69999999925494,
+              "lag": 14.600000001490116,
+              "duration": 0.09999999776482582,
+              "name": "next"
+            },
+            {
+              "requested": 207.79999999701977,
+              "fired": 250.79999999701977,
+              "lag": 43,
+              "duration": 0,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "waitWallMs": 12006,
+      "primaryError": "page.waitForSelector: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#opening') to be detached\u001b[22m\n\u001b[2m    4 × locator resolved to visible <div id=\"opening\" role=\"dialog\" class=\"opening\" aria-label=\"Arrival\">…</div>\u001b[22m\n",
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 204.39999999850988,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 301.69999999925494,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 309.5,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9809.39999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 328.5,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 166.19999999925494,
+            "fired": 171.80000000074506,
+            "lag": 5.600000001490116,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 171.80000000074506,
+            "fired": 201.5,
+            "lag": 29.699999999254942,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": true,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "svg": {
+        "enabled": false,
+        "events": []
+      },
+      "metrics": {
+        "TaskDuration": 15.727428,
+        "ScriptDuration": 0.022344,
+        "LayoutDuration": 0.006398,
+        "RecalcStyleDuration": 0.009064,
+        "LayoutCount": 30,
+        "RecalcStyleCount": 35
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 204.39999999850988,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 301.69999999925494,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 309.5,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9809.39999999851,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 328.5,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 16229.800000000745,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9809.39999999851,
+            "lag": 6420.400000002235,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 16229.800000000745,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 16229.89999999851,
+            "origin": 1794151513817.1,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 16230,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 16230.300000000745,
+            "origin": 1794151513817.1,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.19999999925494194,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 166.19999999925494,
+            "fired": 171.80000000074506,
+            "lag": 5.600000001490116,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 171.80000000074506,
+            "fired": 201.5,
+            "lag": 29.699999999254942,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "errors": [],
+      "primaryPass": false
+    },
+    {
+      "id": "B2-paused",
+      "pause": true,
+      "cpuRate": 2,
+      "cold": {
+        "error": null,
+        "timing": {
+          "events": [
+            {
+              "type": "modal-appended",
+              "at": 620.8999999985099,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "className": "opening"
+            },
+            {
+              "type": "timer-created",
+              "at": 629.6999999992549,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "delay": 9500,
+              "due": 10129.10000000149,
+              "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+              "timerId": 3
+            },
+            {
+              "type": "timer-fired",
+              "at": 10130.300000000745,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "delay": 9500,
+              "due": 10129.10000000149,
+              "lag": 1.0999999977648258,
+              "openingBefore": true
+            },
+            {
+              "type": "timer-cleared",
+              "at": 10130.39999999851,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "timerId": 3
+            },
+            {
+              "type": "modal-remove-before",
+              "at": 10130.699999999255,
+              "origin": 1794151530414.1,
+              "visibility": "visible"
+            },
+            {
+              "type": "modal-remove-after",
+              "at": 10131.10000000149,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "stillPresent": false
+            },
+            {
+              "type": "timer-returned",
+              "at": 10131.10000000149,
+              "origin": 1794151530414.1,
+              "visibility": "visible",
+              "timerId": 3,
+              "duration": 0.8000000007450581,
+              "openingAfter": false
+            }
+          ],
+          "longTasks": [
+            {
+              "at": 287.69999999925494,
+              "duration": 136,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            },
+            {
+              "at": 584.1000000014901,
+              "duration": 54,
+              "name": "self",
+              "attribution": [
+                {
+                  "name": "unknown",
+                  "containerType": "window",
+                  "containerName": ""
+                }
+              ]
+            }
+          ],
+          "rafCalls": [
+            {
+              "requested": 208.69999999925494,
+              "fired": 209.5,
+              "lag": 0.8000000007450581,
+              "duration": 0,
+              "name": "next"
+            },
+            {
+              "requested": 209.5,
+              "fired": 268.3999999985099,
+              "lag": 58.899999998509884,
+              "duration": 0,
+              "name": "next"
+            }
+          ],
+          "opening": false,
+          "sound": {
+            "on": true,
+            "running": true,
+            "context": "running",
+            "gain": 0.8999999761581421
+          },
+          "ready": true,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "waitWallMs": 12001,
+      "primaryError": "page.waitForSelector: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#opening') to be detached\u001b[22m\n\u001b[2m    4 × locator resolved to visible <div id=\"opening\" role=\"dialog\" class=\"opening\" aria-label=\"Arrival\">…</div>\u001b[22m\n",
+      "primary": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 189.5,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 307.6000000014901,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 318,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9817.699999999255,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 352.69999999925494,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 155.80000000074506,
+            "fired": 156.39999999850988,
+            "lag": 0.5999999977648258,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 156.39999999850988,
+            "fired": 183.89999999850988,
+            "lag": 27.5,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": true,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "svg": {
+        "enabled": true,
+        "events": [
+          {
+            "kind": "paused",
+            "at": 307.80000000074506,
+            "animations": 22,
+            "paused": true
+          }
+        ]
+      },
+      "metrics": {
+        "TaskDuration": 12.255465,
+        "ScriptDuration": 0.026737000000000004,
+        "LayoutDuration": 0.0046040000000000005,
+        "RecalcStyleDuration": 0.007001,
+        "LayoutCount": 8,
+        "RecalcStyleCount": 12
+      },
+      "followup": {
+        "events": [
+          {
+            "type": "probe-mark",
+            "at": 189.5,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "label": "before-native-Begin"
+          },
+          {
+            "type": "modal-appended",
+            "at": 307.6000000014901,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "className": "opening"
+          },
+          {
+            "type": "timer-created",
+            "at": 318,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "delay": 9500,
+            "due": 9817.699999999255,
+            "stack": "Error\n    at window.setTimeout (<anonymous>:9:110)\n    at http://127.0.0.1:37333/web/js/v3/app.js?v=70:469:19\n    at new Promise (<anonymous>)\n    at playOpening (http://127.0.0.1:37333/web/js/v3/app.js?v=70:457:10)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:37333/web/js/v3/app.js?v=70:2589:12)",
+            "timerId": 3
+          },
+          {
+            "type": "probe-mark",
+            "at": 352.69999999925494,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "label": "Begin-click-returned"
+          },
+          {
+            "type": "timer-fired",
+            "at": 12799.89999999851,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "timerId": 3,
+            "delay": 9500,
+            "due": 9817.699999999255,
+            "lag": 2982.199999999255,
+            "openingBefore": true
+          },
+          {
+            "type": "timer-cleared",
+            "at": 12799.89999999851,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "timerId": 3
+          },
+          {
+            "type": "modal-remove-before",
+            "at": 12799.89999999851,
+            "origin": 1794151549031.1,
+            "visibility": "visible"
+          },
+          {
+            "type": "modal-remove-after",
+            "at": 12800.39999999851,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "stillPresent": false
+          },
+          {
+            "type": "timer-returned",
+            "at": 12800.39999999851,
+            "origin": 1794151549031.1,
+            "visibility": "visible",
+            "timerId": 3,
+            "duration": 0.5,
+            "openingAfter": false
+          }
+        ],
+        "longTasks": [],
+        "rafCalls": [
+          {
+            "requested": 155.80000000074506,
+            "fired": 156.39999999850988,
+            "lag": 0.5999999977648258,
+            "duration": 0,
+            "name": "next"
+          },
+          {
+            "requested": 156.39999999850988,
+            "fired": 183.89999999850988,
+            "lag": 27.5,
+            "duration": 0,
+            "name": "next"
+          }
+        ],
+        "opening": false,
+        "sound": {
+          "on": true,
+          "running": true,
+          "context": "running",
+          "gain": 0.8999999761581421
+        },
+        "ready": true,
+        "width": 1280,
+        "height": 800
+      },
+      "errors": [],
+      "primaryPass": false
+    }
+  ],
+  "limits": [
+    "Private CPU2x controlledA/B, not CI hardware acceptance.",
+    "Only B final warm opening pauses native SVG SMIL under .city-map; no timer/deadline/testclock change.",
+    "Each arm uses a fresh browser and identical cold auto/history/key-skip/warm auto route.",
+    "Primary disappearance budget stays12000ms; later snapshots are diagnostic only."
+  ],
+  "sourceHashesAfter": {
+    "web/js/v3/app.js": "96bb7200891a8d1b7ec80c63264999e8e36cc1a6a3d3e45466b7247da93876f1",
+    "web/js/v3/map-relief.js": "1cd45979a1e58d4511ad4035cce4c2c81fc23d4e8e186df5e27fb3efded5a91c",
+    "web/js/v3/sound.js": "8353aa0840b609604e99a31501e8064b514f9b64afd476956528ae4e32ab9fc3",
+    "web/v3.css": "0ff248bc99536b6de7b8b3bd4b55794c0f5e7400bf8e91442735d4d06b18e824",
+    "web/data/map-geometry-web-v1.json": "7d4a8c76075c257d4c4a1765710f667c435f8b6a90f34ae49c3c9328b9254374",
+    "map/kallio-transit-layer-v1.json": "7534911b692bcdc2f8fae71dcfab2762c6a7e79189436070b44b33dfcc97e9ef"
+  },
+  "sourceUnchanged": true,
+  "finishedAt": "2026-11-08T15:26:01.993Z"
+}

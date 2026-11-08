@@ -1,0 +1,78 @@
+  ok   desktop: Begin opens the arrival
+  ok   desktop: it names the place, the year and what Aatami carries
+  ok   desktop: sound woke on Begin, through one master gain
+  ok   desktop: the retained map has no retired arrival illustration
+  ok   desktop: only the arrival sheet uses UI space, within half the screen including its inset
+  ok   desktop: all three captions are visible without clipping or scrolling at 12px or more
+  ok   desktop: Skip is visible, hittable and at least 44px with readable text
+  ok   desktop: skipping ends it at once
+  ok   desktop: the arrival never changed the save
+  ok   desktop: after it, one lit next step
+  ok   desktop: skipping restores campaign controls
+  ok   desktop: the arrival is noir: rain, the debt due, the ramen sign up Vaasankatu, the man in the fur hat
+  ok   desktop: the street seller is at Piritori on day one, unlit
+  ok   desktop: Tokon Ramen is not at Piritori
+  ok   desktop: the street seller sells gear
+  ok   desktop: at Vaasankatu, Tokon Ramen is open on day one, unlit
+  ok   desktop: inside, Toko Slomo speaks; the counter sells a bowl and early weapons, no gun
+  ok   desktop: a bowl costs €6 and he names a place
+  ok   desktop: what he heard is said aloud, with a range
+  ok   desktop: one bowl a block
+  ok   desktop: the board marks it as heard from Toko
+  ok   desktop: back on the map
+  ok   desktop: a key skips it
+  TIMING desktop-space-skip: viewport=1280x800 assertion=true wait=2ms nodesAtAssertion=0 nodesNow=0 timers=1/0 removals=1 maxLag=n/ams artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/desktop-space-skip.json
+  ok   desktop: left alone, it ends by itself
+  TIMING desktop-auto: viewport=1280x800 assertion=true wait=12002ms nodesAtAssertion=0 nodesNow=0 timers=1/1 removals=1 maxLag=2364.9ms artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/desktop-auto.json
+  ok   desktop: Resume goes straight to the city
+  ok   desktop: ?skip goes straight to the city
+  ok   desktop: the pause menu has a SOUND switch, ON
+  ok   desktop: SOUND OFF stops every voice
+  ok   desktop: and says so
+  ok   desktop: the switch is remembered
+  ok   desktop: no page errors
+  ok   phone: Begin opens the arrival
+  ok   phone: it names the place, the year and what Aatami carries
+  ok   phone: sound woke on Begin, through one master gain
+  ok   phone: the retained map has no retired arrival illustration
+  ok   phone: only the arrival sheet uses UI space, within half the screen including its inset
+  ok   phone: all three captions are visible without clipping or scrolling at 12px or more
+  ok   phone: Skip is visible, hittable and at least 44px with readable text
+  ok   phone: skipping ends it at once
+  ok   phone: the arrival never changed the save
+  ok   phone: after it, one lit next step
+  ok   phone: skipping restores campaign controls
+  ok   phone: the arrival is noir: rain, the debt due, the ramen sign up Vaasankatu, the man in the fur hat
+  ok   phone: the street seller is at Piritori on day one, unlit
+  ok   phone: Tokon Ramen is not at Piritori
+  ok   phone: the street seller sells gear
+  ok   phone: at Vaasankatu, Tokon Ramen is open on day one, unlit
+  ok   phone: inside, Toko Slomo speaks; the counter sells a bowl and early weapons, no gun
+  ok   phone: a bowl costs €6 and he names a place
+  ok   phone: what he heard is said aloud, with a range
+  ok   phone: one bowl a block
+  ok   phone: the board marks it as heard from Toko
+  ok   phone: back on the map
+  ok   phone: a key skips it
+  TIMING phone-space-skip: viewport=390x844 assertion=true wait=2ms nodesAtAssertion=0 nodesNow=0 timers=1/0 removals=1 maxLag=n/ams artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/phone-space-skip.json
+  ok   phone: left alone, it ends by itself
+  TIMING phone-auto: viewport=390x844 assertion=true wait=9609ms nodesAtAssertion=0 nodesNow=0 timers=1/1 removals=1 maxLag=0.4ms artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/phone-auto.json
+  ok   phone: Resume goes straight to the city
+  ok   phone: ?skip goes straight to the city
+  ok   phone: the pause menu has a SOUND switch, ON
+  ok   phone: SOUND OFF stops every voice
+  ok   phone: and says so
+  ok   phone: the switch is remembered
+  ok   phone: no page errors
+  ok   landscape phone: the retained map has no retired arrival illustration
+  ok   landscape phone: only the arrival sheet uses UI space, within half the screen including its inset
+  ok   landscape phone: all three captions are visible without clipping or scrolling at 12px or more
+  ok   landscape phone: Skip is visible, hittable and at least 44px with readable text
+  ok   landscape phone: a native map tap skips without changing the save
+  ok   landscape phone: skipping restores campaign controls
+  TIMING landscape-native-skip: viewport=844x390 assertion=n/a wait=n/ams nodesAtAssertion=n/a nodesNow=0 timers=1/0 removals=1 maxLag=n/ams artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/landscape-native-skip.json
+  ok   reduced motion: the arrival is a still frame
+  ok   reduced motion: the lines are all there at once
+  TIMING reduced-motion-still: viewport=390x844 assertion=n/a wait=n/ams nodesAtAssertion=n/a nodesNow=1 timers=1/0 removals=0 maxLag=n/ams artifact=/workspace/evidence/opening-timing-c9/full-70-clean/timing/reduced-motion-still.json
+
+  70 passed, 0 failed
