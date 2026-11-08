@@ -39,7 +39,7 @@ const [aatami, jaska, room] = await Promise.all([
 ]);
 const c = document.getElementById('c'), g = c.getContext('2d');
 const W = c.width, H = c.height, BOTTOM = 1835, S = 1.18;
-const FACE = { aatami: {x:AATAMI==='aatami'?410:470,y:1300}, jaska:{x:990,y:1300} };
+const FACE = { aatami: {x:AATAMI==='aatami'?350:450,y:1336}, jaska:{x:960,y:1376} };
 function background() {
   g.clearRect(0,0,W,H);
   const sh=H*.73, k=Math.max(W/room.width,sh/room.height);
@@ -52,9 +52,9 @@ function background() {
   g.fillStyle=grad;g.fillRect(0,0,W,H);
 }
 function bubble(active) {
-  const x=90,y=605,w=900,h=410,b=y+h;
+  const x=90,y=650,w=900,h=450,b=y+h;
   const tip=FACE[active];
-  const mid=active==='jaska'?950:(AATAMI==='aatami'?370:430);
+  const mid=active==='jaska'?970:(AATAMI==='aatami'?380:460);
   g.save();
   g.shadowColor='rgba(0,0,0,.6)';
   g.shadowBlur=22;g.shadowOffsetX=7;g.shadowOffsetY=12;
