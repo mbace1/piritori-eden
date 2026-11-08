@@ -179,6 +179,9 @@ specification. Tests reject restoration of the retired libraries and references.
   Retired procedural intro art is deleted; exact captions, sound, skip and
   saves remain. Separate source snapshots and the initial obsolete-art
   assertion failures are preserved explicitly.
+  [Immediate dismissal follow-up](evidence/compat-city/skip-immediate/validation.json)
+  keeps automatic timers and strict tests while removing the retired fade's
+  deferred teardown; opening 70/0 and next-step 57/0 pass.
 - [Phone recording](evidence/visual-restart-phone.mp4) and
   [landscape recording](evidence/visual-restart-landscape.mp4). WebM originals
   and stage/viewport screenshots are included beside them.

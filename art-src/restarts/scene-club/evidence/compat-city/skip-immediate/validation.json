@@ -1,0 +1,32 @@
+{
+  "sourceCommit": "d1e39c85edc46709c50906d8202a75c0325f04aa",
+  "sourceHashes": {
+    "web/js/v3/app.js": "76499123cc6905d199ecc76a3de87f0c3525d9a3c0d957cf7a7bf0199da2bbe0",
+    "web/index.html": "fed322455dc18df21e0e27a63d75eb16706ff412a2b367ce1301c4184c4a8f29",
+    "web/v3.css": "102785ea60de8b8bb1be94a1be4ef212b2800a06cb320dbef849f24ea430a613",
+    "web/test/opening.cjs": "b61f7817c86f6f2d883f0eebd4d4ccf3517c2f4881c640139d5b4b9ca1bf5aa9",
+    "web/test/v3-contract.mjs": "7a5a533d8bffcab4e25bfea7f7d1c0ff6307a67f36739de7ef9794161441af8b"
+  },
+  "change": "Remove the obsolete deferred teardown from the static neutral arrival. Skip restores controls synchronously; auto timers remain 9500/6000ms.",
+  "results": {
+    "node web/test/opening.cjs": {
+      "passed": 70,
+      "failed": 0,
+      "log": "opening.log"
+    },
+    "node web/test/next-step.cjs": {
+      "passed": 57,
+      "failed": 0,
+      "log": "next-step.log"
+    },
+    "node web/test/v3-contract.mjs": {
+      "status": "pass",
+      "log": "contract.log"
+    },
+    "node web/test/visual-reset.mjs": {
+      "status": "pass",
+      "log": "visual-reset.log"
+    }
+  },
+  "limits": "Browser emulation. Three-second dismissal assertions unchanged; no art/CSS changes or physical-device acceptance."
+}
