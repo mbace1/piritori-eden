@@ -1,5 +1,29 @@
 # Piritori → Eden — design authority
 
+## Owner visual restart — 2026-11-08
+
+The owner rejected the previous visual proposal stack as based on obsolete UI,
+faces and clothing. Clarification: **“Keep those three; replace the old UI and
+modular cast library.”** The three retained sources are the approved Jaska
+cut-in, selected young Aatami front/side sources, and approved Toko Slomo paper
+artwork. This does not upgrade Aatami's semi-approved rigs or approve new motion.
+
+- Build a fresh scene-first interface; do not reskin Lantern Noir, reuse its UI
+  texture pack or cast new contacts from the old modular head/outfit library.
+- Start again with Aatami and Jaska at Scene Club. Read the unmerged Aatami
+  motion/ensemble notes in PR #108 and test both Aatami poses in paired native
+  portrait/landscape compositions, including the paper Toko comparison.
+- Follow current Toko Move UX lessons (now v3.14), while retaining Piritori's
+  handmade identity, selected artwork and C.19 tactical combat.
+- Preserve current main's campaign rules, time costs, C.19 bridge, saves and
+  receipts. The roadmap remains the plan of record; its completion estimate
+  does not rise for an unaccepted visual candidate.
+
+Earlier modular/UI approval notes remain production history, not permission to
+reuse that visual basis. Old proposal drafts #120–#131 are superseded; their
+commits and measurements remain historical evidence. New art and animation
+still require actual review before runtime promotion or deployment.
+
 > **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
 
 ## Owner answer, 2026-10-31 — blows can miss

@@ -170,6 +170,15 @@ jobs:
         run: |
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
+      - name: fresh Scene Club presentation stays source-correct and save-isolated
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+          RESET_CAPTURE_DIR: /tmp/scene-club-reset/scene
+          RESET_ENSEMBLE_DIR: /tmp/scene-club-reset/toko
+        run: |
+          node art-src/restarts/scene-club/campaign-test.mjs
+          node art-src/restarts/scene-club/browser.cjs
+          node art-src/restarts/scene-club/ensemble.cjs
       - name: the playtest links (ROADMAP G0) — each one tap from its fight, your campaign kept aside
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

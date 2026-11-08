@@ -31,6 +31,11 @@ its opaque room strip overlaps the actor and cannot be removed by a rectangle.
 Torso/head/brows/eye masks/forearm/hand/note retain original source coordinates.
 No room, counter, till or ambient layer is loaded or drawn.
 
+That cropped Toko is an isolated renderer study. The actual paired bar view
+uses `toko-composition.js`: room, Toko, counter and hands share the original
+1536×864 camera, while Aatami stays in the foreground. See the README and
+ensemble report for the native paired-scene checks.
+
 The registered human eyelids are fully opaque skin swatches, including Jaska's
 misregistered right rectangle extending beyond his head. New narrow masks are
 head-local, repositioned over the actual apertures and transformed with the

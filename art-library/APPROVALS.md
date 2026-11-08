@@ -1,5 +1,11 @@
 # Art Library approvals
 
+**Owner correction, 2026-11-08:** old UI and modular face/clothing approvals
+below are historical baselines, superseded for new visual work. The owner
+retains the selected Jaska, young Aatami and Toko paper artwork and requests
+a fresh interface. Do not use this table to resume modular cast auditions.
+Existing Aatami rig and new-animation review gates remain unchanged.
+
 This register separates visual approval from production readiness. An approved
 concept establishes the direction but can still require cleanup, socket tuning,
 additional frames or true layer extraction before shipping.

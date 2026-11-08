@@ -5,6 +5,13 @@ Date: 2026-08-20
 Status: **ACTIVE — Era I production authority**  
 Visual system id: `cut-cardstock-hand-ink-v03`  
 
+**Owner restart, 2026-11-08:** the old UI and modular head/outfit library are
+retired as the basis for new visual work. Retain the selected Jaska, young
+Aatami and Toko paper artwork; rebuild the presentation around them. Older
+modular/UI references below describe production history and do not override
+this correction. See `DESIGN_AUTHORITY.md` → Owner visual restart. Per-source
+approval and new-animation acceptance remain distinct.
+
 This Art Bible replaces the rejected visual rules previously stored at this
 path. The earlier document remains recoverable in Git history but is no longer
 an active source.

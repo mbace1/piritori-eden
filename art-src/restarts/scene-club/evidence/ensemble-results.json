@@ -1,0 +1,207 @@
+{
+  "base": "12d5486efed24d9f66d21716f605d387bfbfe4e6",
+  "physicalDeviceAcceptance": false,
+  "staticMouths": true,
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "front",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "front",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "side",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "side",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "front",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "front",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "side",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "side",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "front",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "front",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "side",
+      "reducedMotion": "reduce",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "side",
+      "reducedMotion": "no-preference",
+      "nativeAndHalf": true,
+      "singleRoomCounterCamera": true,
+      "sourceHeadsClear": true,
+      "studyDoesNotApplyEffects": true,
+      "normalSavesUnchanged": true,
+      "errors": []
+    }
+  ],
+  "videos": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "webm": "visual-restart-phone.webm",
+      "mp4": "visual-restart-phone.mp4",
+      "source": "actual browser recording, source mouth stays static"
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "webm": "visual-restart-landscape.webm",
+      "mp4": "visual-restart-landscape.mp4",
+      "source": "actual browser recording, source mouth stays static"
+    }
+  ]
+}

@@ -1,0 +1,7285 @@
+{
+  "schema": 1,
+  "sourceBase": "12d5486efed24d9f66d21716f605d387bfbfe4e6",
+  "sourceHashes": {
+    "index.html": "2a72feb53374cb49083cc4a948b9578fe424d42e0701091ab5a08a2ee37c5dd4",
+    "app.js": "c0c5db09594b0c94251623084b8f6e39045df6e2bce5a0a66070198678afeff4",
+    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "campaign.js": "e54f8bef58dcae58d189e404ddb1339d7a12f4291891169128693e46b94853e1",
+    "style.css": "2528589ed81ea71f6614aade6d28ecb54639558b09b820548b73102fa734e607",
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+  },
+  "viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      1280,
+      800
+    ]
+  ],
+  "cases": [
+    {
+      "id": "phone-side-reduce",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "side",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "phone-arrival.png",
+        "phone-side-reduce-choices.png",
+        "phone-side-half.png",
+        "phone-ask-envelope-result.png",
+        "phone-ask-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 122.5625
+        },
+        "tail": {
+          "x": 263.774,
+          "y": 198.5625,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 241.703125,
+              "height": 360
+            },
+            "head": {
+              "x": 95.13846409574468,
+              "y": 250.28571428571428,
+              "width": 99.25255984042552,
+              "height": 119.82857142857142
+            },
+            "mouth": {
+              "x": 174.84906914893617,
+              "y": 327.9428571428571
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 608.484375,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 620.484375,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 645.28125,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 682.828125,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 694.828125,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 719.625,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 757.171875,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 769.171875,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 793.96875,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 97.5,
+          "y": 0,
+          "width": 195,
+          "height": 422
+        },
+        "layer": {
+          "x": 97.5,
+          "y": 29,
+          "width": 195,
+          "height": 267.5
+        },
+        "speech": {
+          "x": 106.5,
+          "y": 38.5,
+          "width": 177,
+          "height": 61.28125
+        },
+        "tail": {
+          "x": 229.387,
+          "y": 99.28125,
+          "width": 10,
+          "height": 8.5
+        },
+        "controls": {
+          "x": 97.5,
+          "y": 296.5,
+          "width": 195,
+          "height": 125.5
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 97.5,
+              "y": 120,
+              "width": 120.8515625,
+              "height": 180
+            },
+            "head": {
+              "x": 145.06923204787233,
+              "y": 125.14285714285714,
+              "width": 49.62627992021277,
+              "height": 59.91428571428571
+            },
+            "mouth": {
+              "x": 184.92453457446808,
+              "y": 163.97142857142856
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 158.7890625,
+              "y": 120,
+              "width": 133.7109375,
+              "height": 180
+            },
+            "head": {
+              "x": 203.7879356971154,
+              "y": 133.37142857142857,
+              "width": 42.68464543269229,
+              "height": 54.77142857142857
+            },
+            "mouth": {
+              "x": 234.38716947115387,
+              "y": 178.88571428571427
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 304.2421875,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 310.2421875,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 322.640625,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 341.4140625,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 347.4140625,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 359.8125,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 378.5859375,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 384.5859375,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 396.984375,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 76.1875
+        },
+        "tail": {
+          "x": 164.849,
+          "y": 152.1875,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 241.703125,
+              "height": 360
+            },
+            "head": {
+              "x": 95.13846409574468,
+              "y": 250.28571428571428,
+              "width": 99.25255984042552,
+              "height": 119.82857142857142
+            },
+            "mouth": {
+              "x": 174.84906914893617,
+              "y": 327.9428571428571
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "ask-envelope",
+        "markkaDelta": 300,
+        "trustDelta": 1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "9b4c03ae5b0505602e602bc3f09f1224e10173b40d32aa7a3c3398ed184fc646",
+        "returnedSha256": "b2eb10e0a3c15941dcd52f4f2c33acaa77b388da778548772bda584b7bfc1f7e",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "phone-front-reduce",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "front",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "phone-front-reduce-choices.png",
+        "phone-front-half.png",
+        "phone-take-envelope-result.png",
+        "phone-take-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 122.5625
+        },
+        "tail": {
+          "x": 263.774,
+          "y": 198.5625,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 236.484375,
+              "height": 360
+            },
+            "head": {
+              "x": 90.38958333333333,
+              "y": 244.72992700729927,
+              "width": 91.96614583333333,
+              "height": 121.92700729927012
+            },
+            "mouth": {
+              "x": 141.36510416666667,
+              "y": 327.7664233576642
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 608.484375,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 620.484375,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 645.28125,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 682.828125,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 694.828125,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 719.625,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 757.171875,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 769.171875,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 793.96875,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 97.5,
+          "y": 0,
+          "width": 195,
+          "height": 422
+        },
+        "layer": {
+          "x": 97.5,
+          "y": 29,
+          "width": 195,
+          "height": 267.5
+        },
+        "speech": {
+          "x": 106.5,
+          "y": 38.5,
+          "width": 177,
+          "height": 61.28125
+        },
+        "tail": {
+          "x": 229.387,
+          "y": 99.28125,
+          "width": 10,
+          "height": 8.5
+        },
+        "controls": {
+          "x": 97.5,
+          "y": 296.5,
+          "width": 195,
+          "height": 125.5
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 97.5,
+              "y": 120,
+              "width": 118.2421875,
+              "height": 180
+            },
+            "head": {
+              "x": 142.69479166666667,
+              "y": 122.36496350364963,
+              "width": 45.98307291666666,
+              "height": 60.96350364963506
+            },
+            "mouth": {
+              "x": 168.18255208333335,
+              "y": 163.8832116788321
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 158.7890625,
+              "y": 120,
+              "width": 133.7109375,
+              "height": 180
+            },
+            "head": {
+              "x": 203.7879356971154,
+              "y": 133.37142857142857,
+              "width": 42.68464543269229,
+              "height": 54.77142857142857
+            },
+            "mouth": {
+              "x": 234.38716947115387,
+              "y": 178.88571428571427
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 304.2421875,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 310.2421875,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 322.640625,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 341.4140625,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 347.4140625,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 359.8125,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 106.5,
+              "y": 378.5859375,
+              "width": 177,
+              "height": 33.171875
+            },
+            "textRects": [
+              {
+                "x": 115,
+                "y": 384.5859375,
+                "width": 161,
+                "height": 10.3984375
+              },
+              {
+                "x": 115,
+                "y": 396.984375,
+                "width": 161,
+                "height": 8.7734375
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 76.1875
+        },
+        "tail": {
+          "x": 131.365,
+          "y": 152.1875,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 236.484375,
+              "height": 360
+            },
+            "head": {
+              "x": 90.38958333333333,
+              "y": 244.72992700729927,
+              "width": 91.96614583333333,
+              "height": 121.92700729927012
+            },
+            "mouth": {
+              "x": 141.36510416666667,
+              "y": 327.7664233576642
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "take-envelope",
+        "markkaDelta": 300,
+        "trustDelta": -1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "bd68009582a961bac5d7a6b23762dc9f22bf64916583221cd787b6a5216bf43b",
+        "returnedSha256": "a32953bec3902bd2921ac21e6b89d431dff1dfb6372aa00bc9ab8e0b44188ad1",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "phone-front-no-preference",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "front",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "phone-front-no-preference-choices.png",
+        "phone-leave-it-result.png",
+        "phone-leave-it-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "cca6d2d7",
+              "opaque": 180870
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 90.35624604875312,
+              "y": 242.83639345322402,
+              "width": 93.37654639394987,
+              "height": 123.4552628956836
+            },
+            "jaska": {
+              "x": 212.52504378103822,
+              "y": 265.0114638115244,
+              "width": 86.6362841003828,
+              "height": 110.94786962979168
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4f73801a",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 90.38958333333333,
+              "y": 244.72992700729927,
+              "width": 91.96614583333333,
+              "height": 121.92700729927012
+            },
+            "jaska": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b19306cd",
+              "opaque": 180222
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 89.38572484825505,
+              "y": 244.33694338612068,
+              "width": 92.99515723901271,
+              "height": 122.87487853819746
+            },
+            "jaska": {
+              "x": 211.68914759943357,
+              "y": 266.3898862012303,
+              "width": 86.29371075338531,
+              "height": 110.417703359499
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "c33a458e",
+              "opaque": 179350
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 89.39939024224867,
+              "y": 247.00189621230362,
+              "width": 92.98116962872359,
+              "height": 122.69085625112825
+            },
+            "jaska": {
+              "x": 211.70121819265646,
+              "y": 268.97004180380594,
+              "width": 86.28114620818641,
+              "height": 110.25202281518017
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 90.32379184958998,
+              "y": 243.49120556297967,
+              "width": 95.12614668388147,
+              "height": 124.29274091292635
+            },
+            "jaska": {
+              "x": 212.46969197193755,
+              "y": 265.63450205082023,
+              "width": 88.20746284814948,
+              "height": 111.74008301429177
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "8d440131",
+              "opaque": 180514
+            },
+            "jaska": {
+              "hash": "4e192621",
+              "opaque": 154956
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 122.5625
+        },
+        "tail": {
+          "x": 263.774,
+          "y": 198.5625,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 236.484375,
+              "height": 360
+            },
+            "head": {
+              "x": 90.38958333333333,
+              "y": 244.72992700729927,
+              "width": 91.96614583333333,
+              "height": 121.92700729927012
+            },
+            "mouth": {
+              "x": 141.36510416666667,
+              "y": 327.7664233576642
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 608.484375,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 620.484375,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 645.28125,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 682.828125,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 694.828125,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 719.625,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 757.171875,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 769.171875,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 793.96875,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 76.1875
+        },
+        "tail": {
+          "x": 131.365,
+          "y": 152.1875,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 236.484375,
+              "height": 360
+            },
+            "head": {
+              "x": 90.06100982177283,
+              "y": 245.52125586757532,
+              "width": 92.30328241005533,
+              "height": 122.27463254860945
+            },
+            "mouth": {
+              "x": 141.26617694792006,
+              "y": 328.73454232902156
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.118525498022,
+              "y": 268.1214451828363,
+              "width": 85.8464356085297,
+              "height": 109.91431632074625
+            },
+            "mouth": {
+              "x": 273.7135863461291,
+              "y": 359.2546175037265
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "leave-it",
+        "markkaDelta": 0,
+        "trustDelta": 2,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "3ccba1618cae4d5a98a5f9f3765064b922390ebdbe674e7a0a5580e55772c5ed",
+        "returnedSha256": "1cd977089dce634b8a905ae6e9f34f93734f7e9792dbd3ef2dedcb0bc96e9b68",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "phone-side-no-preference",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pose": "side",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "phone-side-no-preference-choices.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4fbba229",
+              "opaque": 185121
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 95.06373654088583,
+              "y": 248.49227215221387,
+              "width": 100.63809408246195,
+              "height": 121.43396900804251
+            },
+            "jaska": {
+              "x": 212.52504378103822,
+              "y": 265.0114638115244,
+              "width": 86.6362841003828,
+              "height": 110.94786962979168
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "bd2a0deb",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 95.13846409574468,
+              "y": 250.28571428571428,
+              "width": 99.25255984042552,
+              "height": 119.82857142857142
+            },
+            "jaska": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "47327824",
+              "opaque": 184535
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 94.18209065127111,
+              "y": 249.79202826147426,
+              "width": 100.2635479546323,
+              "height": 120.83533137359254
+            },
+            "jaska": {
+              "x": 211.68914759943357,
+              "y": 266.3898862012303,
+              "width": 86.29371075338531,
+              "height": 110.417703359499
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5d442d4",
+              "opaque": 183637
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 94.19511101146354,
+              "y": 252.39721831883273,
+              "width": 100.24980962934482,
+              "height": 120.65334598582709
+            },
+            "jaska": {
+              "x": 211.70121819265646,
+              "y": 268.97004180380594,
+              "width": 86.28114620818641,
+              "height": 110.25202281518017
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 94.97843968158729,
+              "y": 249.18017891959278,
+              "width": 102.35514995363387,
+              "height": 122.38575826768681
+            },
+            "jaska": {
+              "x": 212.46969197193755,
+              "y": 265.63450205082023,
+              "width": 88.20746284814948,
+              "height": 111.74008301429177
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "8ba40b04",
+              "opaque": 184981
+            },
+            "jaska": {
+              "hash": "dcd20b57",
+              "opaque": 154988
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 390,
+          "height": 535
+        },
+        "speech": {
+          "x": 18,
+          "y": 77,
+          "width": 354,
+          "height": 122.5625
+        },
+        "tail": {
+          "x": 263.774,
+          "y": 198.5625,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 0,
+          "y": 593,
+          "width": 390,
+          "height": 251
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 0,
+              "y": 240,
+              "width": 241.703125,
+              "height": 360
+            },
+            "head": {
+              "x": 95.13846409574468,
+              "y": 250.28571428571428,
+              "width": 99.25255984042552,
+              "height": 119.82857142857142
+            },
+            "mouth": {
+              "x": 174.84906914893617,
+              "y": 327.9428571428571
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 122.578125,
+              "y": 240,
+              "width": 267.421875,
+              "height": 360
+            },
+            "head": {
+              "x": 212.57587139423077,
+              "y": 266.74285714285713,
+              "width": 85.36929086538458,
+              "height": 109.54285714285714
+            },
+            "mouth": {
+              "x": 273.77433894230774,
+              "y": 357.77142857142854
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 608.484375,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 620.484375,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 645.28125,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 682.828125,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 694.828125,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 719.625,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 18,
+              "y": 757.171875,
+              "width": 354,
+              "height": 66.34375
+            },
+            "textRects": [
+              {
+                "x": 35,
+                "y": 769.171875,
+                "width": 322,
+                "height": 20.796875
+              },
+              {
+                "x": 35,
+                "y": 793.96875,
+                "width": 322,
+                "height": 17.546875
+              }
+            ],
+            "font": 13
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "landscape-side-reduce",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "side",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "landscape-arrival.png",
+        "landscape-side-reduce-choices.png",
+        "landscape-side-half.png",
+        "landscape-ask-envelope-result.png",
+        "landscape-ask-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 96.5625
+        },
+        "tail": {
+          "x": 554.7815,
+          "y": 140.5625,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 208.4375,
+          "width": 337.59375,
+          "height": 173.5625
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 175.953125,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 77.6956449468085,
+              "y": 142.40982142857143,
+              "width": 72.25309175531916,
+              "height": 87.23457589285715
+            },
+            "mouth": {
+              "x": 135.7227393617021,
+              "y": 198.9438169642857
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 216.4375,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 224.4375,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 243.234375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 270.625,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 278.625,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 297.421875,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 324.8125,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 332.8125,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 351.609375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 211,
+          "y": 0,
+          "width": 422,
+          "height": 195
+        },
+        "layer": {
+          "x": 211,
+          "y": 19,
+          "width": 422,
+          "height": 176
+        },
+        "speech": {
+          "x": 337.59375,
+          "y": 22.5,
+          "width": 168.796875,
+          "height": 48.28125
+        },
+        "tail": {
+          "x": 488.39075,
+          "y": 70.28125,
+          "width": 7.5,
+          "height": 6
+        },
+        "controls": {
+          "x": 337.59375,
+          "y": 104.21875,
+          "width": 168.796875,
+          "height": 86.78125
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 215.21875,
+              "y": 67.4609375,
+              "width": 87.9765625,
+              "height": 131.0390625
+            },
+            "head": {
+              "x": 249.84782247340425,
+              "y": 71.20491071428572,
+              "width": 36.126545877659595,
+              "height": 43.617287946428576
+            },
+            "mouth": {
+              "x": 278.86136968085106,
+              "y": 99.47190848214285
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 531.4453125,
+              "y": 67.4609375,
+              "width": 97.3359375,
+              "height": 131.0390625
+            },
+            "head": {
+              "x": 564.2025991586538,
+              "y": 77.19526785714285,
+              "width": 31.07262620192307,
+              "height": 39.87331473214286
+            },
+            "mouth": {
+              "x": 586.4775540865385,
+              "y": 110.32943080357143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 108.21875,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 112.21875,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 121.6171875,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 135.3125,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 139.3125,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 148.7109375,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 162.40625,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 166.40625,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 175.8046875,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 60.1875
+        },
+        "tail": {
+          "x": 269.1875,
+          "y": 104.1875,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 212,
+          "width": 337.59375,
+          "height": 170
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 175.953125,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 77.6956449468085,
+              "y": 142.40982142857143,
+              "width": 72.25309175531916,
+              "height": 87.23457589285715
+            },
+            "mouth": {
+              "x": 135.7227393617021,
+              "y": 198.9438169642857
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "ask-envelope",
+        "markkaDelta": 300,
+        "trustDelta": 1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "9b4c03ae5b0505602e602bc3f09f1224e10173b40d32aa7a3c3398ed184fc646",
+        "returnedSha256": "b2eb10e0a3c15941dcd52f4f2c33acaa77b388da778548772bda584b7bfc1f7e",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "landscape-front-reduce",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "front",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "landscape-front-reduce-choices.png",
+        "landscape-front-half.png",
+        "landscape-take-envelope-result.png",
+        "landscape-take-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 96.5625
+        },
+        "tail": {
+          "x": 554.7815,
+          "y": 140.5625,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 208.4375,
+          "width": 337.59375,
+          "height": 173.5625
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 172.15625,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 74.23944444444444,
+              "y": 138.36523722627737,
+              "width": 66.94965277777777,
+              "height": 88.76222627737226
+            },
+            "mouth": {
+              "x": 111.34868055555556,
+              "y": 198.81537408759124
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 216.4375,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 224.4375,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 243.234375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 270.625,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 278.625,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 297.421875,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 324.8125,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 332.8125,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 351.609375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 211,
+          "y": 0,
+          "width": 422,
+          "height": 195
+        },
+        "layer": {
+          "x": 211,
+          "y": 19,
+          "width": 422,
+          "height": 176
+        },
+        "speech": {
+          "x": 337.59375,
+          "y": 22.5,
+          "width": 168.796875,
+          "height": 48.28125
+        },
+        "tail": {
+          "x": 488.39075,
+          "y": 70.28125,
+          "width": 7.5,
+          "height": 6
+        },
+        "controls": {
+          "x": 337.59375,
+          "y": 104.21875,
+          "width": 168.796875,
+          "height": 86.78125
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 215.21875,
+              "y": 67.4609375,
+              "width": 86.078125,
+              "height": 131.0390625
+            },
+            "head": {
+              "x": 248.1197222222222,
+              "y": 69.18261861313869,
+              "width": 33.474826388888914,
+              "height": 44.38111313868613
+            },
+            "mouth": {
+              "x": 266.6743402777778,
+              "y": 99.40768704379562
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 531.4453125,
+              "y": 67.4609375,
+              "width": 97.3359375,
+              "height": 131.0390625
+            },
+            "head": {
+              "x": 564.2025991586538,
+              "y": 77.19526785714285,
+              "width": 31.07262620192307,
+              "height": 39.87331473214286
+            },
+            "mouth": {
+              "x": 586.4775540865385,
+              "y": 110.32943080357143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 108.21875,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 112.21875,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 121.6171875,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 135.3125,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 139.3125,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 148.7109375,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 341.59375,
+              "y": 162.40625,
+              "width": 160.796875,
+              "height": 24.59375
+            },
+            "textRects": [
+              {
+                "x": 348.09375,
+                "y": 166.40625,
+                "width": 148.796875,
+                "height": 8.3984375
+              },
+              {
+                "x": 348.09375,
+                "y": 175.8046875,
+                "width": 148.796875,
+                "height": 7.1953125
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 60.1875
+        },
+        "tail": {
+          "x": 269.1875,
+          "y": 104.1875,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 212,
+          "width": 337.59375,
+          "height": 170
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 172.15625,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 74.23944444444444,
+              "y": 138.36523722627737,
+              "width": 66.94965277777777,
+              "height": 88.76222627737226
+            },
+            "mouth": {
+              "x": 111.34868055555556,
+              "y": 198.81537408759124
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "take-envelope",
+        "markkaDelta": 300,
+        "trustDelta": -1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "bd68009582a961bac5d7a6b23762dc9f22bf64916583221cd787b6a5216bf43b",
+        "returnedSha256": "a32953bec3902bd2921ac21e6b89d431dff1dfb6372aa00bc9ab8e0b44188ad1",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "landscape-front-no-preference",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "front",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "landscape-front-no-preference-choices.png",
+        "landscape-leave-it-result.png",
+        "landscape-leave-it-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "cca6d2d7",
+              "opaque": 180870
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 74.21517551801533,
+              "y": 136.98675466106454,
+              "width": 67.97639829326327,
+              "height": 89.87478839189671
+            },
+            "jaska": {
+              "x": 706.368197953138,
+              "y": 153.13009038674906,
+              "width": 63.067570178595815,
+              "height": 80.76947123700072
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4f73801a",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 74.23944444444444,
+              "y": 138.36523722627737,
+              "width": 66.94965277777777,
+              "height": 88.76222627737226
+            },
+            "jaska": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b19306cd",
+              "opaque": 180222
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 73.50865403885525,
+              "y": 138.07914719684905,
+              "width": 67.69875404423139,
+              "height": 89.45227160248203
+            },
+            "jaska": {
+              "x": 705.7597006977121,
+              "y": 154.1335747071717,
+              "width": 62.818191193481084,
+              "height": 80.38351295351029
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "c33a458e",
+              "opaque": 179350
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 73.51860219287056,
+              "y": 140.0192189743476,
+              "width": 67.68857132271401,
+              "height": 89.31830433594504
+            },
+            "jaska": {
+              "x": 705.7684875817883,
+              "y": 156.01191454753632,
+              "width": 62.80904473314604,
+              "height": 80.26289838016567
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 74.1915494614326,
+              "y": 137.4634544664869,
+              "width": 69.25007493643912,
+              "height": 90.4844680265848
+            },
+            "jaska": {
+              "x": 706.3279041646725,
+              "y": 153.5836589799656,
+              "width": 64.21132221005519,
+              "height": 81.34619845480537
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "21227396",
+              "opaque": 180659
+            },
+            "jaska": {
+              "hash": "dcd20b57",
+              "opaque": 154988
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 96.5625
+        },
+        "tail": {
+          "x": 554.7815,
+          "y": 140.5625,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 208.4375,
+          "width": 337.59375,
+          "height": 173.5625
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 172.15625,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 74.23944444444444,
+              "y": 138.36523722627737,
+              "width": 66.94965277777777,
+              "height": 88.76222627737226
+            },
+            "mouth": {
+              "x": 111.34868055555556,
+              "y": 198.81537408759124
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 216.4375,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 224.4375,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 243.234375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 270.625,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 278.625,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 297.421875,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 324.8125,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 332.8125,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 351.609375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 60.1875
+        },
+        "tail": {
+          "x": 269.1875,
+          "y": 104.1875,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 212,
+          "width": 337.59375,
+          "height": 170
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 172.15625,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 74.17928775220938,
+              "y": 138.55698886327602,
+              "width": 67.01139918366349,
+              "height": 88.83997440086748
+            },
+            "mouth": {
+              "x": 111.33057734946622,
+              "y": 199.0491071335532
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.3115860031771,
+              "y": 154.68712162065657,
+              "width": 62.2429729361769,
+              "height": 79.8227694798345
+            },
+            "mouth": {
+              "x": 750.9427055753918,
+              "y": 220.97697239091528
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "leave-it",
+        "markkaDelta": 0,
+        "trustDelta": 2,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "3ccba1618cae4d5a98a5f9f3765064b922390ebdbe674e7a0a5580e55772c5ed",
+        "returnedSha256": "1cd977089dce634b8a905ae6e9f34f93734f7e9792dbd3ef2dedcb0bc96e9b68",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "landscape-side-no-preference",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "pose": "side",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "landscape-side-no-preference-choices.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4fbba229",
+              "opaque": 185121
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 77.64124537377434,
+              "y": 141.10420489622757,
+              "width": 73.26172198995435,
+              "height": 88.40329696926634
+            },
+            "jaska": {
+              "x": 706.368197953138,
+              "y": 153.13009038674906,
+              "width": 63.067570178595815,
+              "height": 80.76947123700072
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "bd2a0deb",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 77.6956449468085,
+              "y": 142.40982142857143,
+              "width": 72.25309175531916,
+              "height": 87.23457589285715
+            },
+            "jaska": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "47327824",
+              "opaque": 184535
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 76.99943178770211,
+              "y": 142.05042057420607,
+              "width": 72.9890628687772,
+              "height": 87.96749188929115
+            },
+            "jaska": {
+              "x": 705.7597006977121,
+              "y": 154.1335747071717,
+              "width": 62.818191193481084,
+              "height": 80.38351295351029
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5d442d4",
+              "opaque": 183637
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 77.00891024630492,
+              "y": 143.9469853672648,
+              "width": 72.97906175163565,
+              "height": 87.83500747483848
+            },
+            "jaska": {
+              "x": 705.7684875817883,
+              "y": 156.01191454753632,
+              "width": 62.80904473314604,
+              "height": 80.26289838016567
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 77.57915164227515,
+              "y": 141.60499744003167,
+              "width": 74.5116907122549,
+              "height": 89.09619459305168
+            },
+            "jaska": {
+              "x": 706.3279041646725,
+              "y": 153.5836589799656,
+              "width": 64.21132221005519,
+              "height": 81.34619845480537
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "8ba40b04",
+              "opaque": 184981
+            },
+            "jaska": {
+              "hash": "dcd20b57",
+              "opaque": 154988
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 844,
+        "height": 390,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 844,
+          "height": 390
+        },
+        "layer": {
+          "x": 0,
+          "y": 38,
+          "width": 844,
+          "height": 352
+        },
+        "speech": {
+          "x": 253.1875,
+          "y": 45,
+          "width": 337.59375,
+          "height": 96.5625
+        },
+        "tail": {
+          "x": 554.7815,
+          "y": 140.5625,
+          "width": 15,
+          "height": 12
+        },
+        "controls": {
+          "x": 253.1875,
+          "y": 208.4375,
+          "width": 337.59375,
+          "height": 173.5625
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 8.4375,
+              "y": 134.921875,
+              "width": 175.953125,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 77.6956449468085,
+              "y": 142.40982142857143,
+              "width": 72.25309175531916,
+              "height": 87.23457589285715
+            },
+            "mouth": {
+              "x": 135.7227393617021,
+              "y": 198.9438169642857
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 640.890625,
+              "y": 134.921875,
+              "width": 194.671875,
+              "height": 262.078125
+            },
+            "head": {
+              "x": 706.4051983173077,
+              "y": 154.3905357142857,
+              "width": 62.14525240384614,
+              "height": 79.74662946428572
+            },
+            "mouth": {
+              "x": 750.955108173077,
+              "y": 220.65886160714285
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 216.4375,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 224.4375,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 243.234375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 270.625,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 278.625,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 297.421875,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 261.1875,
+              "y": 324.8125,
+              "width": 321.59375,
+              "height": 49.1875
+            },
+            "textRects": [
+              {
+                "x": 274.1875,
+                "y": 332.8125,
+                "width": 297.59375,
+                "height": 16.796875
+              },
+              {
+                "x": 274.1875,
+                "y": 351.609375,
+                "width": 297.59375,
+                "height": 14.390625
+              }
+            ],
+            "font": 12
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "desktop-side-reduce",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "side",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "desktop-arrival.png",
+        "desktop-side-reduce-choices.png",
+        "desktop-side-half.png",
+        "desktop-ask-envelope-result.png",
+        "desktop-ask-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 148.5
+        },
+        "tail": {
+          "x": 821.578625,
+          "y": 237.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 402.84375,
+              "height": 600
+            },
+            "head": {
+              "x": 177.7536569148936,
+              "y": 224.14285714285714,
+              "width": 165.42307180851066,
+              "height": 199.7142857142857
+            },
+            "mouth": {
+              "x": 310.6063829787234,
+              "y": 353.57142857142856
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 522.015625,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 536.015625,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 562.109375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 603,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 617,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 643.09375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 683.984375,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 697.984375,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 724.078125,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 320,
+          "y": 0,
+          "width": 640,
+          "height": 400
+        },
+        "layer": {
+          "x": 320,
+          "y": 29,
+          "width": 640,
+          "height": 371
+        },
+        "speech": {
+          "x": 531.1953125,
+          "y": 45,
+          "width": 217.59375,
+          "height": 74.25
+        },
+        "tail": {
+          "x": 730.7893125,
+          "y": 118.75,
+          "width": 10,
+          "height": 8.5
+        },
+        "controls": {
+          "x": 531.1953125,
+          "y": 253.5,
+          "width": 217.59375,
+          "height": 132.5
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 329.59375,
+              "y": 103.5,
+              "width": 201.421875,
+              "height": 300
+            },
+            "head": {
+              "x": 408.8768284574468,
+              "y": 112.07142857142857,
+              "width": 82.71153590425536,
+              "height": 99.85714285714285
+            },
+            "mouth": {
+              "x": 475.30319148936167,
+              "y": 176.78571428571428
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 727.5546875,
+              "y": 103.5,
+              "width": 222.8515625,
+              "height": 300
+            },
+            "head": {
+              "x": 802.5528094951923,
+              "y": 125.78571428571428,
+              "width": 71.14107572115392,
+              "height": 91.28571428571428
+            },
+            "mouth": {
+              "x": 853.5515324519231,
+              "y": 201.64285714285714
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 261.0078125,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 268.0078125,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 281.0546875,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 301.5,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 308.5,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 321.546875,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 341.9921875,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 348.9921875,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 362.0390625,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 91.5
+        },
+        "tail": {
+          "x": 438.390625,
+          "y": 180.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 402.84375,
+              "height": 600
+            },
+            "head": {
+              "x": 177.7536569148936,
+              "y": 224.14285714285714,
+              "width": 165.42307180851066,
+              "height": 199.7142857142857
+            },
+            "mouth": {
+              "x": 310.6063829787234,
+              "y": 353.57142857142856
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "ask-envelope",
+        "markkaDelta": 300,
+        "trustDelta": 1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "9b4c03ae5b0505602e602bc3f09f1224e10173b40d32aa7a3c3398ed184fc646",
+        "returnedSha256": "b2eb10e0a3c15941dcd52f4f2c33acaa77b388da778548772bda584b7bfc1f7e",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "desktop-front-reduce",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "front",
+      "motion": "reduce",
+      "failures": [],
+      "captures": [
+        "desktop-front-reduce-choices.png",
+        "desktop-front-half.png",
+        "desktop-take-envelope-result.png",
+        "desktop-take-envelope-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 148.5
+        },
+        "tail": {
+          "x": 821.578625,
+          "y": 237.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 394.15625,
+              "height": 600
+            },
+            "head": {
+              "x": 169.84277777777777,
+              "y": 214.8832116788321,
+              "width": 153.28298611111114,
+              "height": 203.2116788321168
+            },
+            "mouth": {
+              "x": 254.80534722222222,
+              "y": 353.2773722627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 522.015625,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 536.015625,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 562.109375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 603,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 617,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 643.09375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 683.984375,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 697.984375,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 724.078125,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "half": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 320,
+          "y": 0,
+          "width": 640,
+          "height": 400
+        },
+        "layer": {
+          "x": 320,
+          "y": 29,
+          "width": 640,
+          "height": 371
+        },
+        "speech": {
+          "x": 531.1953125,
+          "y": 45,
+          "width": 217.59375,
+          "height": 74.25
+        },
+        "tail": {
+          "x": 730.7893125,
+          "y": 118.75,
+          "width": 10,
+          "height": 8.5
+        },
+        "controls": {
+          "x": 531.1953125,
+          "y": 253.5,
+          "width": 217.59375,
+          "height": 132.5
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 329.59375,
+              "y": 103.5,
+              "width": 197.078125,
+              "height": 300
+            },
+            "head": {
+              "x": 404.9213888888889,
+              "y": 107.44160583941606,
+              "width": 76.6414930555556,
+              "height": 101.6058394160584
+            },
+            "mouth": {
+              "x": 447.40267361111114,
+              "y": 176.63868613138686
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 727.5546875,
+              "y": 103.5,
+              "width": 222.8515625,
+              "height": 300
+            },
+            "head": {
+              "x": 802.5528094951923,
+              "y": 125.78571428571428,
+              "width": 71.14107572115392,
+              "height": 91.28571428571428
+            },
+            "mouth": {
+              "x": 853.5515324519231,
+              "y": 201.64285714285714
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 261.0078125,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 268.0078125,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 281.0546875,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 301.5,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 308.5,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 321.546875,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 538.6953125,
+              "y": 341.9921875,
+              "width": 202.59375,
+              "height": 36.4921875
+            },
+            "textRects": [
+              {
+                "x": 547.6953125,
+                "y": 348.9921875,
+                "width": 185.59375,
+                "height": 11.046875
+              },
+              {
+                "x": 547.6953125,
+                "y": 362.0390625,
+                "width": 185.59375,
+                "height": 9.4453125
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 91.5
+        },
+        "tail": {
+          "x": 438.390625,
+          "y": 180.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 394.15625,
+              "height": 600
+            },
+            "head": {
+              "x": 169.84277777777777,
+              "y": 214.8832116788321,
+              "width": 153.28298611111114,
+              "height": 203.2116788321168
+            },
+            "mouth": {
+              "x": 254.80534722222222,
+              "y": 353.2773722627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "take-envelope",
+        "markkaDelta": 300,
+        "trustDelta": -1,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "bd68009582a961bac5d7a6b23762dc9f22bf64916583221cd787b6a5216bf43b",
+        "returnedSha256": "a32953bec3902bd2921ac21e6b89d431dff1dfb6372aa00bc9ab8e0b44188ad1",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "desktop-front-no-preference",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "front",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "desktop-front-no-preference-choices.png",
+        "desktop-leave-it-result.png",
+        "desktop-leave-it-map.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "cca6d2d7",
+              "opaque": 180870
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 169.78721343414907,
+              "y": 211.72732242204006,
+              "width": 155.63374690015058,
+              "height": 205.75877149280598
+            },
+            "jaska": {
+              "x": 965.0209063017304,
+              "y": 248.6857730192073,
+              "width": 144.39380683397133,
+              "height": 184.9131160496528
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4f73801a",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 169.84277777777777,
+              "y": 214.8832116788321,
+              "width": 153.28298611111114,
+              "height": 203.2116788321168
+            },
+            "jaska": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "b19306cd",
+              "opaque": 180222
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 168.1696139756909,
+              "y": 214.2282389768678,
+              "width": 154.9980731094374,
+              "height": 204.79146423032913
+            },
+            "jaska": {
+              "x": 963.627745999056,
+              "y": 250.98314366871716,
+              "width": 143.82285125564215,
+              "height": 184.02950559916508
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "c33a458e",
+              "opaque": 179350
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 168.1923905352471,
+              "y": 218.66982702050606,
+              "width": 154.97475950143252,
+              "height": 204.48476041854704
+            },
+            "jaska": {
+              "x": 963.6478636544274,
+              "y": 255.2834030063432,
+              "width": 143.80191034697748,
+              "height": 183.75337135863364
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "b6ce2971",
+              "opaque": 179584
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 169.73312095789606,
+              "y": 212.81867593829946,
+              "width": 158.5498629829927,
+              "height": 207.1545681882106
+            },
+            "jaska": {
+              "x": 964.9286532865625,
+              "y": 249.7241700847004,
+              "width": 147.01243808024935,
+              "height": 186.23347169048623
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "aeb36fa7",
+              "opaque": 179965
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "21227396",
+              "opaque": 180659
+            },
+            "jaska": {
+              "hash": "dcd20b57",
+              "opaque": 154988
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 148.5
+        },
+        "tail": {
+          "x": 821.578625,
+          "y": 237.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 394.15625,
+              "height": 600
+            },
+            "head": {
+              "x": 169.84277777777777,
+              "y": 214.8832116788321,
+              "width": 153.28298611111114,
+              "height": 203.2116788321168
+            },
+            "mouth": {
+              "x": 254.80534722222222,
+              "y": 353.2773722627737
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 522.015625,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 536.015625,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 562.109375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 603,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 617,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 643.09375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 683.984375,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 697.984375,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 724.078125,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resultGeometry": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 91.5
+        },
+        "tail": {
+          "x": 438.390625,
+          "y": 180.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 394.15625,
+              "height": 600
+            },
+            "head": {
+              "x": 169.69454937839106,
+              "y": 215.35572243507178,
+              "width": 153.43513024198,
+              "height": 203.40323090618134
+            },
+            "mouth": {
+              "x": 254.76073967079165,
+              "y": 353.8533121924688
+            },
+            "source": {
+              "id": "cutin-aatami-front-rig-v01",
+              "dimensions": [
+                450,
+                685
+              ],
+              "crop": [
+                0,
+                0,
+                450,
+                685
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 964.8748992604192,
+              "y": 252.30237537306107,
+              "width": 142.522992310649,
+              "height": 182.75906841233666
+            },
+            "mouth": {
+              "x": 1067.0724946862906,
+              "y": 404.06970090768164
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-front-rig-v01",
+            "variant": "front",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "flow": {
+        "choice": "leave-it",
+        "markkaDelta": 0,
+        "trustDelta": 2,
+        "beforeSha256": "91bf1afa1d4c3587f2402b3c3b15f9ecc0f18e2100123814db5d234e22316740",
+        "afterSha256": "3ccba1618cae4d5a98a5f9f3765064b922390ebdbe674e7a0a5580e55772c5ed",
+        "returnedSha256": "1cd977089dce634b8a905ae6e9f34f93734f7e9792dbd3ef2dedcb0bc96e9b68",
+        "index": 3,
+        "anchor": "makelansilta"
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-front-v01/head.webp",
+        "art/v3/cutins/aatami-front-v01/lid_0.webp",
+        "art/v3/cutins/aatami-front-v01/lid_1.webp",
+        "art/v3/cutins/aatami-front-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    },
+    {
+      "id": "desktop-side-no-preference",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pose": "side",
+      "motion": "no-preference",
+      "failures": [],
+      "captures": [
+        "desktop-side-no-preference-choices.png"
+      ],
+      "browserErrors": [],
+      "motionPixels": {
+        "idle": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "4fbba229",
+              "opaque": 185121
+            },
+            "jaska": {
+              "hash": "934c9908",
+              "opaque": 155259
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 177.62910937986413,
+              "y": 221.15378692035642,
+              "width": 167.7323254013856,
+              "height": 202.38994834673747
+            },
+            "jaska": {
+              "x": 965.0209063017304,
+              "y": 248.6857730192073,
+              "width": 144.39380683397133,
+              "height": 184.9131160496528
+            }
+          }
+        },
+        "blink": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "bd2a0deb",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "6bd80cf7",
+              "opaque": 154290
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 177.7536569148936,
+              "y": 224.14285714285714,
+              "width": 165.42307180851066,
+              "height": 199.7142857142857
+            },
+            "jaska": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            }
+          }
+        },
+        "talk": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "47327824",
+              "opaque": 184535
+            },
+            "jaska": {
+              "hash": "80a697c",
+              "opaque": 154824
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 176.15968056571668,
+              "y": 223.3200471024571,
+              "width": 167.10807378410564,
+              "height": 201.3922189559876
+            },
+            "jaska": {
+              "x": 963.627745999056,
+              "y": 250.98314366871716,
+              "width": 143.82285125564215,
+              "height": 184.02950559916508
+            }
+          }
+        },
+        "nod": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "f5d442d4",
+              "opaque": 183637
+            },
+            "jaska": {
+              "hash": "ee256eba",
+              "opaque": 154013
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 176.1813814466063,
+              "y": 227.66203053138787,
+              "width": 167.0851762792532,
+              "height": 201.0889099763785
+            },
+            "jaska": {
+              "x": 963.6478636544274,
+              "y": 255.2834030063432,
+              "width": 143.80191034697748,
+              "height": 183.75337135863364
+            }
+          }
+        },
+        "shake": {
+          "first": {
+            "aatami": {
+              "hash": "f5429a9b",
+              "opaque": 183862
+            },
+            "jaska": {
+              "hash": "1d9981cf",
+              "opaque": 154290
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "heads": {
+            "aatami": {
+              "x": 177.4869461096828,
+              "y": 222.3002981993213,
+              "width": 170.59412218660472,
+              "height": 203.976263779478
+            },
+            "jaska": {
+              "x": 964.9286532865625,
+              "y": 249.7241700847004,
+              "width": 147.01243808024935,
+              "height": 186.23347169048623
+            }
+          }
+        },
+        "realTime": {
+          "first": {
+            "aatami": {
+              "hash": "975a0f86",
+              "opaque": 184245
+            },
+            "jaska": {
+              "hash": "dca2abbe",
+              "opaque": 154517
+            }
+          },
+          "last": {
+            "aatami": {
+              "hash": "143ca47e",
+              "opaque": 184822
+            },
+            "jaska": {
+              "hash": "4e192621",
+              "opaque": 154956
+            }
+          }
+        }
+      },
+      "native": {
+        "width": 1280,
+        "height": 800,
+        "world": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "layer": {
+          "x": 0,
+          "y": 58,
+          "width": 1280,
+          "height": 742
+        },
+        "speech": {
+          "x": 422.390625,
+          "y": 90,
+          "width": 435.1875,
+          "height": 148.5
+        },
+        "tail": {
+          "x": 821.578625,
+          "y": 237.5,
+          "width": 20,
+          "height": 17
+        },
+        "controls": {
+          "x": 422.390625,
+          "y": 507,
+          "width": 435.1875,
+          "height": 265
+        },
+        "bounds": {
+          "aatami": {
+            "canvas": {
+              "x": 19.1875,
+              "y": 207,
+              "width": 402.84375,
+              "height": 600
+            },
+            "head": {
+              "x": 177.7536569148936,
+              "y": 224.14285714285714,
+              "width": 165.42307180851066,
+              "height": 199.7142857142857
+            },
+            "mouth": {
+              "x": 310.6063829787234,
+              "y": 353.57142857142856
+            },
+            "source": {
+              "id": "cutin-aatami-rig-v01",
+              "dimensions": [
+                470,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                470,
+                700
+              ]
+            },
+            "ready": true
+          },
+          "jaska": {
+            "canvas": {
+              "x": 815.109375,
+              "y": 207,
+              "width": 445.703125,
+              "height": 600
+            },
+            "head": {
+              "x": 965.1056189903846,
+              "y": 251.57142857142856,
+              "width": 142.28215144230774,
+              "height": 182.57142857142856
+            },
+            "mouth": {
+              "x": 1067.1030649038462,
+              "y": 403.2857142857143
+            },
+            "source": {
+              "id": "cutin-jaska-rig-v01",
+              "dimensions": [
+                520,
+                700
+              ],
+              "crop": [
+                0,
+                0,
+                520,
+                700
+              ]
+            },
+            "ready": true
+          }
+        },
+        "choices": [
+          {
+            "id": "ask-envelope",
+            "label": "Ask before taking the envelope",
+            "forecast": "Gain dead money and preserve trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 522.015625,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 536.015625,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 562.109375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "take-envelope",
+            "label": "Call it family money",
+            "forecast": "Gain dead money; Jaska remembers the wording.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 603,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 617,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 643.09375,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          },
+          {
+            "id": "leave-it",
+            "label": "Leave the old money under the map",
+            "forecast": "Lose a bank opportunity; deepen trust.",
+            "disabled": false,
+            "rect": {
+              "x": 437.390625,
+              "y": 683.984375,
+              "width": 405.1875,
+              "height": 72.984375
+            },
+            "textRects": [
+              {
+                "x": 455.390625,
+                "y": 697.984375,
+                "width": 371.1875,
+                "height": 22.09375
+              },
+              {
+                "x": 455.390625,
+                "y": 724.078125,
+                "width": 371.1875,
+                "height": 18.890625
+              }
+            ],
+            "font": 14
+          }
+        ],
+        "overflow": false,
+        "rigs": [
+          {
+            "who": "aatami",
+            "id": "cutin-aatami-rig-v01",
+            "variant": "side",
+            "painted": true
+          },
+          {
+            "who": "jaska",
+            "id": "cutin-jaska-rig-v01",
+            "variant": "jaska",
+            "painted": true
+          }
+        ]
+      },
+      "resources": [
+        "art-src/restarts/scene-club/",
+        "art-src/restarts/scene-club/actors.js",
+        "art-src/restarts/scene-club/app.js",
+        "art-src/restarts/scene-club/campaign.js",
+        "art-src/restarts/scene-club/style.css",
+        "art-src/restarts/scene-club/toko-composition.js",
+        "art/v3/cutins/aatami-v01/head.webp",
+        "art/v3/cutins/aatami-v01/lid_0.webp",
+        "art/v3/cutins/aatami-v01/torso.webp",
+        "art/v3/cutins/jaska-v01/head.webp",
+        "art/v3/cutins/jaska-v01/lid_0.webp",
+        "art/v3/cutins/jaska-v01/lid_1.webp",
+        "art/v3/cutins/jaska-v01/torso.webp",
+        "art/v3/manifest.json",
+        "art/v3/scenes/scene-club-v01.webp",
+        "content/era1-slice-v1.json",
+        "map/kallio-era1-2003-v1.json",
+        "map/kallio-transit-layer-v1.json",
+        "market/model.mjs",
+        "people/hiring.mjs",
+        "people/roster.mjs",
+        "web/js/v3/content.js",
+        "web/js/v3/state.js"
+      ]
+    }
+  ],
+  "checks": 1677,
+  "failures": [],
+  "limits": [
+    "Browser emulation; no physical Pixel/iPad acceptance.",
+    "Retained Jaska and young Aatami sources; candidate motion has static mouths.",
+    "No Toko composition is tested or approved.",
+    "50% review assesses composition, not native touch-target size."
+  ],
+  "url": "http://127.0.0.1:45941/art-src/restarts/scene-club/",
+  "browser": "151.0.7922.34",
+  "finalSourceHashes": {
+    "index.html": "2a72feb53374cb49083cc4a948b9578fe424d42e0701091ab5a08a2ee37c5dd4",
+    "app.js": "c0c5db09594b0c94251623084b8f6e39045df6e2bce5a0a66070198678afeff4",
+    "actors.js": "8bc4f4cbc4c3be262d71394013002616d13583140b1944ef7da80a54c39c52b1",
+    "campaign.js": "e54f8bef58dcae58d189e404ddb1339d7a12f4291891169128693e46b94853e1",
+    "style.css": "2528589ed81ea71f6614aade6d28ecb54639558b09b820548b73102fa734e607",
+    "toko-composition.js": "bca341f307ddca2543795d87f4baa2309a28820c6e98795cd937a1356fc3f54a"
+  },
+  "passed": true,
+  "representativeCaptures": [
+    "desktop-front-no-preference-choices.png",
+    "landscape-side-reduce-choices.png",
+    "phone-arrival.png",
+    "phone-ask-envelope-result.png",
+    "phone-front-half.png",
+    "phone-front-reduce-choices.png",
+    "phone-leave-it-map.png",
+    "phone-side-reduce-choices.png"
+  ],
+  "fullCaptureArchive": "/workspace/evidence/scene-reset-full-final"
+}
