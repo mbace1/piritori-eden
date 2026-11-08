@@ -87,3 +87,29 @@ jobs:
             /tmp/c19-delivery
           include-hidden-files: true
           retention-days: 3
+  portrait-ui-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Browser dependencies
+        run: |
+          npm install --prefix /tmp/c19-test playwright pngjs
+          /tmp/c19-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: Actual portrait UI, input and retained scene budget
+        env:
+          NODE_PATH: /tmp/c19-test/node_modules
+          C19_BUDGET_OUTPUT: /tmp/c19-ui-budget
+        run: node web/test/c19-ui-budget.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c19-portrait-ui-budget
+          path: /tmp/c19-ui-budget
+          retention-days: 3
