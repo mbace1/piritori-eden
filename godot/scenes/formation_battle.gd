@@ -165,7 +165,7 @@ func _ready() -> void:
 	_build()
 
 
-## Role tab colours are canon: art-library/characters/system/role-tabs.json.
+## Role tab colours are canon: content/role-tabs-v1.json.
 ## "Small engine-tinted subclass marker behind or beneath the unit silhouette;
 ## never the sole class indicator." So the tab is a colour AND the unit keeps
 ## its name and status words.

@@ -2,26 +2,6 @@
   "schema_version": 2,
   "approval_status": "approved",
   "production_ready": false,
-  "character_sets": [
-    {
-      "id": "runner-personality-v03",
-      "approval_status": "approved",
-      "sheet": "characters/era1/runner-personality-sheet-v03.png",
-      "path": "characters/era1/runner-personality-v03",
-      "anchor": "root_ground",
-      "status": "key-poses",
-      "poses": ["idle-smile", "idle-bag", "talk", "walk-forward", "walk-contact", "walk-pass", "guard", "hit-light"]
-    },
-    {
-      "id": "grips-personality-v03",
-      "approval_status": "approved",
-      "sheet": "../characters/system/grip-hold-personality-sheet-v03.png",
-      "path": "characters/era1/grips-personality-v03",
-      "anchor": "root_ground",
-      "status": "pose-reference",
-      "poses": ["phone-use", "baton-low", "baton-ready", "handgun-low", "handgun-aim", "bat-shoulder", "bat-anticipation", "longgun-ready"]
-    }
-  ],
   "animal_sets": [
     {
       "id": "spitz-handink-v03",
@@ -30,7 +10,12 @@
       "path": "animals/era1/spitz-handink-v03",
       "anchor": "ground_center",
       "status": "key-poses",
-      "poses": ["idle", "sniff", "walk-contact", "walk-pass"]
+      "poses": [
+        "idle",
+        "sniff",
+        "walk-contact",
+        "walk-pass"
+      ]
     },
     {
       "id": "mixed-urban-handink-v03",
@@ -39,7 +24,12 @@
       "path": "animals/era1/mixed-urban-handink-v03",
       "anchor": "ground_center",
       "status": "key-poses",
-      "poses": ["idle", "look", "walk-contact", "walk-pass"]
+      "poses": [
+        "idle",
+        "look",
+        "walk-contact",
+        "walk-pass"
+      ]
     }
   ],
   "vegetation_sets": [
@@ -50,7 +40,12 @@
       "path": "vegetation/era1/lime-tree-v01",
       "anchor": "root_center",
       "status": "four-pose-loop",
-      "poses": ["calm", "lean", "gust", "recover"]
+      "poses": [
+        "calm",
+        "lean",
+        "gust",
+        "recover"
+      ]
     },
     {
       "id": "grass-cluster-v01",
@@ -59,12 +54,15 @@
       "path": "vegetation/era1/grass-cluster-v01",
       "anchor": "root_center",
       "status": "four-pose-loop",
-      "poses": ["calm", "lean", "gust", "recover"]
+      "poses": [
+        "calm",
+        "lean",
+        "gust",
+        "recover"
+      ]
     }
   ],
   "approved_clean_variants": {
-    "runner": "../variants/approved-clean-cut-v02/runner-pose-sheet-v02.png",
-    "dogs": "../variants/approved-clean-cut-v02/dog-motion-sheet-v02.png",
-    "grips": "../variants/approved-clean-cut-v02/grip-hold-sheet-v02.png"
+    "dogs": "../variants/approved-clean-cut-v02/dog-motion-sheet-v02.png"
   }
 }

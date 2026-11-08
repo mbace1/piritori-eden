@@ -62,8 +62,10 @@ not scenery or enemy types.
 
 ## Art activation
 
-`../art/v3/manifest.json` registers the exact prototype assets. Approved Toko,
-Karhupuisto, modular characters, equipment, formation UI, dog and foliage are
-active baselines. Courtyard and weather layers remain visibly marked
-semi-approved prototype material. Nothing in this package is labelled final
-art, and nothing under the needs-rework archive is loadable.
+`../art/v3/manifest.json` registers retained scenes, equipment, environments and
+3D assets. The owner removed the former modular cast and formation UI library
+on 2026-11-08. Generic crew use neutral initials in the compatibility campaign.
+Only the selected Jaska, young Aatami front/side and Toko paper source families
+form the character reference basis; new presentation and motion still require
+review. C.19 remains the authoritative campaign battle experience. See
+`../DESIGN_AUTHORITY.md` and `../ART_BIBLE.md` for current visual scope.

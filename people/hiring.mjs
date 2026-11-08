@@ -55,14 +55,6 @@ const ROLE_COMPETENCIES = {
   hired: ['cover', 'control'],
 };
 
-/** CrewGenerator.PORTRAITS — only six heads are drawn; a generated person
- *  wears a face somebody else is already wearing. A known placeholder,
- *  not a claim that six is enough (`QUEUE.md`). */
-const PORTRAITS = [
-  'head-kallio-01-v03', 'head-kallio-03-v03', 'head-kallio-05-v03',
-  'head-kallio-07-v03', 'head-kallio-09-v03', 'head-kallio-11-v03',
-];
-
 /** CrewGenerator.SPREAD — kept narrow on purpose: churn is supposed to
  *  cost you continuity, not hand you a lottery ticket that beats every
  *  authored crew member. */
@@ -120,11 +112,7 @@ export function hireCandidate(seed, i) {
     tempo: spread(base.tempo, seed, 'hire-tempo', i),
     wage_eur: Math.max(1, base.wage + Math.floor(rand01(seed, 'hire-wage', i) * 9) - 4),
     competencies: [...ROLE_COMPETENCIES[role]],
-    portrait_asset_id: pick(PORTRAITS, seed, 'hire-portrait', i),
-    // The 2D cast has no "hired" torso or legs — an empty id is honest
-    // where a made-up filename would be a dangling reference.
-    torso_asset_id: role === 'hired' ? '' : `torso-${role}-v03`,
-    legs_asset_id: role === 'hired' ? '' : `legs-${role}-v03`,
+    portrait_kind: 'initials',
     initial_equipment: [],
     aptitudes: rollAptitudes(role, seed, i),
     named: false,

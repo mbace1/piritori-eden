@@ -9,7 +9,9 @@
 # (RGBA, each piece cropped to its own box) and <id>/out/rig.json (boxes, pivots) for the player.
 # Offline tool: OpenCV runs in a throwaway uv environment, it is not a dependency of the game.
 import cv2, numpy as np, json, sys, os
-ID = sys.argv[1]; HERE = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(HERE, ID)
+ID = sys.argv[1]
+if ID not in {'jaska', 'aatami-front', 'aatami'}: raise ValueError('Only the retained source rigs are supported; new character art requires approval.')
+HERE = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(HERE, ID)
 cfg = json.load(open(os.path.join(D, 'rig.src.json'))); OUT = os.path.join(D, 'out'); os.makedirs(OUT, exist_ok=True)
 REPO = os.path.abspath(os.path.join(HERE, '..', '..'))
 im = cv2.imread(os.path.join(REPO, cfg['source'])); x0, y0, x1, y1 = cfg['crop']; im = im[y0:y1, x0:x1].copy(); H, W = im.shape[:2]

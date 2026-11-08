@@ -1,6 +1,6 @@
 import {createTacticalSession} from './tactics.js?v=11';
-import { createState } from '../js/v3/state.js?v=15';
-import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=13';
+import { createState } from '../js/v3/state.js?v=16';
+import { createBattleState, endPlayerPhase, autoCommand, selectAction, selectUnit, playerAttack, moveUnit, brace, useItem, withdrawBattle, negotiateBattle, resultEffects, choosePolicePosture } from './resolver.js?v=14';
 
 // Same-tab emergency recovery only, never a campaign save. Replay committed
 // commands once; a partially shown animation is not a partially applied action.
@@ -19,7 +19,10 @@ export function restoreSession(content,saved) {
     if(!session.command(type,value).ok)throw Error('Invalid checkpoint command');
   }
   if(saved.snapshot?.selectedId!==session.battle.selectedId)session.command('select',saved.snapshot?.selectedId);
-  if(JSON.stringify(session.snapshot())!==JSON.stringify(saved.snapshot))throw Error('Checkpoint does not match the current rules');
+  // Retired modular appearance IDs are irrelevant to a command replay. Preserve
+  // old checkpoints while still comparing every combat field and logged result.
+  const gameplaySnapshot=value=>{const clean=structuredClone(value);for(const u of clean?.units??[])for(const key of ['head','torso','legs'])delete u[key];return clean;};
+  if(JSON.stringify(gameplaySnapshot(session.snapshot()))!==JSON.stringify(gameplaySnapshot(saved.snapshot)))throw Error('Checkpoint does not match the current rules');
   return session;
 }
 

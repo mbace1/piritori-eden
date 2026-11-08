@@ -1,8 +1,8 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),path=require('node:path');
 // Toko is the cut-card stage over the empty bar (owner, 2026-10-21). Jaska is the waist-up cut-in over the scene, his
-// conversation in its bubble and talk options (owner, 2026-10-23; cutin-stage.js). Arvo is still the 3D speaker.
-const ready=p=>p==='toko'?'[data-toko-stage][data-status="ready"]':p==='jaska'?'.cutin[data-talk] canvas[data-status="ready"]':`[data-speaker="${p}"][data-status="ready"]`;
-const drawn=p=>p==='toko'?'canvas.toko-stage':p==='jaska'?'.cutin-canvas':'.scene-speaker canvas';
+// conversation in its bubble and talk options (owner, 2026-10-23; cutin-stage.js). Arvo keeps a neutral nameplate while replacement art is reviewed.
+const ready=p=>p==='toko'?'[data-toko-stage][data-status="ready"]':p==='jaska'?'.cutin[data-talk] canvas[data-status="ready"]':'[data-news-identity="arvo"]';
+const drawn=p=>p==='toko'?'canvas.toko-stage':p==='jaska'?'.cutin-canvas':'[data-news-identity="arvo"]';
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.BROWSER_PATH?{executablePath:process.env.BROWSER_PATH}:process.platform==='win32'?{executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'}:{}),args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  try{for(const width of [412,1180]){

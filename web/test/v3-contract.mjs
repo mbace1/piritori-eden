@@ -8,8 +8,8 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 const [html, css, app, render3d, content, map, art] = await Promise.all([
   read('../index.html'),
-  read('../v3.css?v=13'),
-  read('../js/v3/app.js?v=66'),
+  read('../v3.css?v=14'),
+  read('../js/v3/app.js?v=67'),
   read('../js/v3/render3d.js'),
   read('../../content/era1-slice-v1.json').then(JSON.parse),
   read('../../map/kallio-era1-2003-v1.json').then(JSON.parse),
@@ -20,10 +20,10 @@ assert.equal([...html.matchAll(/data-mode-target="/g)].length, 5, 'five mode con
 for (const mode of ['route', 'encounter', 'ledger', 'battle', 'news']) {
   assert(html.includes(`data-mode-target="${mode}"`), `${mode} is reachable`);
 }
-assert(html.includes('js/v3/app.js?v=66'));
+assert(html.includes('js/v3/app.js?v=67'));
 for (const file of ['app.js','battle.js','doors.js','road.js','story.js','toko.js','visits.js']) {
   const source=await read(`../js/v3/${file}`);
-  assert(source.includes('state.js?v=15') && !source.includes('state.js?v=14'), `${file} uses the same campaign rules version`);
+  assert(source.includes('state.js?v=16') && !source.includes('state.js?v=15'), `${file} uses the same campaign rules version`);
 }
 assert.equal([...html.matchAll(/js\/v3\/app\.js\?v=/g)].length, 1, 'one app module token');
 // v12: the stand-in-only runtime changes render3d bytes and advances the token.
@@ -71,8 +71,8 @@ for (const group of art.assets) {
   ids.add(group.id);
   for (const member of group.members ?? []) ids.add(member.id);
 }
-for (const id of ['scene-toko-noodles-prototype-v02', 'scene-karhupuisto-v01',
-  'scene-courtyard-prototype-v05', 'formation-grid-3x3-v01']) {
+for (const id of ['scene-toko-rig-v01', 'scene-toko-noodles-empty-v01', 'scene-karhupuisto-v01',
+  'scene-courtyard-prototype-v05']) {
   assert(ids.has(id), `${id} remains registered`);
 }
 

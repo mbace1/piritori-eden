@@ -1,3 +1,7 @@
+> 2026-11-08 scope: this contract now applies only to retained environment,
+> weather, animal and selected paper-rig work. The modular character/UI assets
+> were deleted and are not a fallback or a source for new characters.
+
 # Animation and environmental layer contract
 
 Ambient motion must make Kallio feel inhabited without competing with tactical

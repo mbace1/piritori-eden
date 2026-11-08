@@ -1,4 +1,4 @@
-import { hiringPool } from '../../../people/hiring.mjs?v=1';
+import { hiringPool } from '../../../people/hiring.mjs?v=2';
 import { rand01 } from '../../../market/model.mjs?v=1';
 
 export const SAVE_KEY = 'piritori-to-eden:v3';

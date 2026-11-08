@@ -1,7 +1,7 @@
 # Publish a cut-in rig to the runtime: art-src/cutins/<id>/out (cut.py's PNGs and rig.json) becomes
 # art/v3/cutins/<id>-v01/*.webp plus one `cutin-<id>-rig-v01` entry in art/v3/manifest.json.
 #
-#   uv run --no-project --with pillow python art-src/cutins/publish.py jaska arvo
+#   uv run --no-project --with pillow python art-src/cutins/publish.py jaska aatami-front aatami
 #
 # The manifest is partly hand-formatted, so the entry is spliced in as text (replacing an earlier one with the
 # same id) rather than re-dumping the whole file. Offline tool, like cut.py: Pillow never ships with the game.
@@ -17,11 +17,11 @@ META = {
              'review': 'Owner review pending (PR #107). The player profile, shown when he talks (owner, 2026-10-23).'},
   'aatami-front': {'source': 'art-src/concepts/people/aatami-young-support-06.png (owner-committed study, PR #108)', 'location': 'any',
                    'review': 'Owner review pending (PR #107). Looks near the camera: the conversation pose (owner, 2026-10-24).'},
-  'arvo': {'source': 'art-library/presenter/arvo-linde-concept-v05.png (the approved v05 presenter painting)', 'location': 'news',
-           'review': 'Owner review pending (PR #107). Fictional homage, not a likeness (NARRATIVE.md).'},
+
 }
 
 def entry(cid):
+    if cid not in META: raise ValueError('Only retained Jaska and young Aatami source rigs may be republished; new characters require a new approval path.')
     out = os.path.join(HERE, cid, 'out'); rig = json.load(open(os.path.join(out, 'rig.json')))
     dst_rel = f'cutins/{cid}-v01'; dst = os.path.join(REPO, 'art', 'v3', *dst_rel.split('/')); os.makedirs(dst, exist_ok=True)
     members, pivots, lids = [], {}, {}

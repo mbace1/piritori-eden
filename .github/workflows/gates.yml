@@ -151,6 +151,7 @@ jobs:
           node web/test/chapter-narrative.mjs
           node web/test/visits.mjs
           node web/test/scene-content.mjs
+          node web/test/visual-reset.mjs
 
   act1-scenes:
     name: Act I touch scenes and visits
@@ -170,6 +171,7 @@ jobs:
         run: |
           python3 -m http.server 8781 --bind 127.0.0.1 > /tmp/piritori-server.log 2>&1 &
           node web/test/act1-scenes.cjs
+          node web/test/visual-reset-browser.cjs
       - name: fresh Scene Club presentation stays source-correct and save-isolated
         env:
           NODE_PATH: /tmp/piritori-test/node_modules

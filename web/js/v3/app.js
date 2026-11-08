@@ -1,5 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=11';
-import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=12';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
 import { mountMapRelief } from './map-relief.js?v=1';
@@ -15,31 +14,30 @@ import {
   canShopHere, buyOf, buyEquipment, tradeBlocker, actionsLeft,
   arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=15';
+} from './state.js?v=16';
 import { createPauseMenu } from './pause.js?v=5';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
-import { previewJourney, commitJourney } from './journey.js?v=4';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=10';
+import { previewJourney, commitJourney } from './journey.js?v=5';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=11';
 import { loadTokoStage } from './toko-stage.js?v=1';
-import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=10';
+import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=5';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=11';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=9';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=10';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=11';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=12';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=19';
+} from './battle.js?v=20';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
-import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=12';
 import { positionBattleDOM } from './stage-camera.js?v=5';
@@ -155,24 +153,9 @@ function mountTokoStage(root) {
     stage.attach(canvas, context);
   });
 }
-// Waist-up cut-ins (cutin-stage.js; owner, 2026-10-23: NPCs "zoomed from waist up layered over with a text bubble and
-// talk options", the level behind). For now a PREVIEW reached by ?cutin=<who> (CLAUDE.md rule 6, the phone debug rule):
-// the words come from the authored slice, a choice makes the speaker react and says what it would do, and nothing is
-// applied or saved. The slice has no spoken lines for Jaska yet, so his bubble carries the encounter's opening.
+// Compatibility dialogue uses only the retained Jaska and young Aatami rigs.
 const CUTIN_TABS = ['#C5A044', '#38B8C8', '#676B6B'];
 const CUTIN_TAGS = { DOCUMENTED: '#C5A044', INFERENCE: '#38B8C8', ACCUSATION: '#B5523B', FICTION: '#676B6B' };
-const CUTIN_SCRIPT = {
-  jaska: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
-    lines: [{ text: e.opening, clip: 'talk' }],
-    choices: e.choices.map(c => ({ label: c.label, reply: c.forecast, clip: c.effects.some(x => /^relationship:jaska:-/.test(x)) ? 'shake' : 'nod' })) }; },
-  // Aatami's side of the same conversation: the choices are what he says
-  aatami: () => { const e = data.encounters.get('enc-jaska-receipt'); return e && { plateId: e.scene_asset_id,
-    lines: e.choices.map(c => ({ text: c.label, clip: 'talk' })) }; },
-  arvo: () => { const n = data.news.get('news-markka-afterlife'); return n && { lines: [
-    { tag: 'ARVO LINDE', text: n.arvo_copy, clip: 'read' }, { tag: 'DOCUMENTED', text: n.documented, clip: 'glance' },
-    { tag: 'INFERENCE', text: n.inference, clip: 'gesture' }, n.accusation && { tag: 'ACCUSATION', text: n.accusation, clip: 'read' },
-    { tag: 'FICTION', text: n.fiction, clip: 'nod' }].filter(Boolean) }; },
-};
 // The overlay both uses share: a 9:16 canvas, the words laid over the speaker's bubble or copy card, the buttons.
 function cutinShell(label, onClose) {
   const el = document.createElement('div');
@@ -203,22 +186,6 @@ function cutinShell(label, onClose) {
     close() { current?.detach(); current = null; el.remove(); removeEventListener('keydown', onKey); },
   };
 }
-async function openCutin(who) {
-  const script = CUTIN_SCRIPT[who]?.();
-  if (!script) { logToast(`unknown cut-in '${who}'`); return; }
-  const stage = await loadCutin(data, who, { reducedMotion, plateId: script.plateId });
-  if (!stage) { logToast(`cut-in '${who}' is not registered or failed to load`); return; }
-  const shell = cutinShell(stage.cast.name, () => shell.close()), close = () => shell.close();
-  shell.el.dataset.cutin = who;
-  const leave = ['Leave', close];
-  if (!script.choices) {
-    const next = i => shell.show(stage, script.lines[i], [i + 1 < script.lines.length ? ['Next', () => next(i + 1)] : ['Close', close]]);
-    next(0);
-  } else {
-    shell.show(stage, script.lines[0], [...script.choices.map(c => [c.label, () => shell.show(stage, { text: c.reply, clip: c.clip }, [leave])]), leave]);
-  }
-}
-
 // The conversation, for real (owner, 2026-10-23: "the player character profile can be shown when he talks"). An
 // encounter whose speaker has a cut-in opens as that cut-in over the scene, once, until answered or set aside:
 // the opening in the speaker's bubble, the choices as talk options. A choice goes through the very same handler as
@@ -232,7 +199,7 @@ function mountTalk() {
   if (!['encounter', 'visit'].includes(state.mode)) { closeTalk(); return; }
   if (!$('splash').hidden) return;                       // the title screen first: RESUME re-renders and the talk opens then
   const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data), who = talkSpeaker(encounter);
-  if (talk) { if (talk.id !== encounter?.id) closeTalk(); else { disposeSceneSpeaker(); return; } }
+  if (talk) { if (talk.id !== encounter?.id) closeTalk(); else { return; } }
   if (!who || state.choices[encounter.id] || talkSetAside.has(encounter.id)) return;
   if (state.battle?.status === 'active' || (state.mode === 'encounter' && !presentAtLead())) return;
   openTalk(encounter, who);
@@ -242,7 +209,6 @@ async function openTalk(encounter, who) {
   const [speaker, aatami] = await Promise.all([loadCutin(data, who, { reducedMotion, plateId: encounter.scene_asset_id }), loadCutin(data, 'aatami', { reducedMotion, plateId: encounter.scene_asset_id })]);
   if (talk !== mine) return;
   if (!speaker || !aatami) { talk = null; return; }    // the ordinary screen stays, as before cut-ins
-  disposeSceneSpeaker();                                 // the 3D figure under the overlay would only cost frames
   const dispatch = (action, choice) => { const b = document.createElement('button'); b.dataset.action = action; if (choice) b.dataset.choice = choice; handleRootClick({ target: b }); };
   const shell = talk.shell = cutinShell(speaker.cast.name, () => setAside());
   shell.el.dataset.talk = encounter.id;
@@ -520,14 +486,12 @@ function render() {
     ramen: renderRamen,
     case: renderCase,
   };
-  disposeSceneSpeaker();
+
   root.innerHTML = (views[state.mode] ?? renderRoute)();
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
   // map scrolled away. Same-mode re-renders keep their place.
   if (root.dataset.shown !== state.mode) { root.scrollTop = 0; root.dataset.shown = state.mode; }
-  const speakerHost = root.querySelector('[data-speaker]');
-  if (speakerHost) mountSceneSpeaker(speakerHost, assetUrl(data, speakerHost.dataset.asset), speakerHost.dataset.speaker);
   mountTokoStage(root);
   mountTalk();
 
@@ -1026,7 +990,7 @@ function renderEncounter() {
         <div class="scene-viewport ${isToko ? 'speaker-stage' : ''}">
           ${art ? `<img class="scene-image" src="${esc(art)}" alt="${esc(site?.label ?? anchor?.label)}">` : genericScene(encounter.site_id)}
           ${isToko ? TOKO_CANVAS : ''}
-          ${isJaska ? '<i class="jaska-contact" aria-hidden="true"></i><div class="scene-speaker jaska-standing" data-speaker="jaska" data-asset="cast3d-jaska-v01" aria-label="Jaska"></div>' : ''}
+
           ${ambientLayers(encounter)}
           <i class="scene-vignette"></i>
         </div>
@@ -1360,7 +1324,15 @@ function renderGrowth(member) {
   return html;
 }
 
+// Neutral compatibility identity while the replacement cast is reviewed. Saved
+// legacy portrait IDs are deliberately ignored; no approved NPC is cloned.
+function identityBadge(person) {
+  const initials = String(person.name ?? person.id ?? '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => Array.from(part)[0]).join('').toUpperCase();
+  return `<span class="identity-badge" aria-hidden="true">${esc(initials || '?')}</span>`;
+}
+
 function renderCrewCard(member) {
+  member = crewRecord(state, data, member.id) ?? member;
   const hired = state.recruited.includes(member.id) || state.temporaryCrew.includes(member.id);
   const status = state.crewStatus[member.id] ?? { condition: 0, maxCondition: 0, status: 'available' };
   // Authored crew carry a one-line `strength`; a generated hire
@@ -1368,11 +1340,7 @@ function renderCrewCard(member) {
   // rolled trait instead — both read as one line of flavour under the role.
   const flavor = member.strength ?? member.traits?.[0]?.text ?? '';
   return `<article class="crew-card ${hired ? '' : 'not-hired'}">
-    <div class="crew-portrait" aria-hidden="true">
-      <img class="legs" src="${assetUrl(data, member.legs_asset_id)}" alt="">
-      <img class="torso" src="${assetUrl(data, member.torso_asset_id)}" alt="">
-      <img class="head" src="${assetUrl(data, member.portrait_asset_id)}" alt="">
-    </div>
+    ${identityBadge(member)}
     <div>
       <h3>${esc(member.name)}${member.nick ? ` <span class="dim">"${esc(member.nick)}"</span>` : ''}</h3>
       <p>${esc(cap(member.role))} · ${hired ? esc(String(status.status ?? 'available').toUpperCase())
@@ -1405,11 +1373,7 @@ function renderHireCandidate(candidate) {
   const affordable = state.cash >= candidate.wage_eur;
   const flavor = candidate.traits?.[0]?.text ?? '';
   return `<article class="crew-card not-hired">
-    <div class="crew-portrait" aria-hidden="true">
-      <img class="legs" src="${assetUrl(data, candidate.legs_asset_id)}" alt="">
-      <img class="torso" src="${assetUrl(data, candidate.torso_asset_id)}" alt="">
-      <img class="head" src="${assetUrl(data, candidate.portrait_asset_id)}" alt="">
-    </div>
+    ${identityBadge(candidate)}
     <div>
       <h3>${esc(candidate.name)}${candidate.nick ? ` <span class="dim">"${esc(candidate.nick)}"</span>` : ''}</h3>
       <p>${esc(cap(candidate.role))} · AGE ${candidate.age}</p>
@@ -1797,11 +1761,7 @@ function renderUnit(unit, battle, preview = null) {
   return `<button type="button" class="${classes}"
     style="left:${pos.x}%;top:${pos.y}%" data-action="${unit.side === 'player' ? 'select-unit' : 'target-unit'}" data-unit="${esc(unit.id)}"
     aria-label="${esc(unit.name)}, ${unit.role}, condition ${unit.hp}, guard ${unit.guard}${syncHint}" ${disabled ? 'disabled' : ''}>
-    <span class="unit-body">
-      <img class="legs" src="${assetUrl(data, unit.legs)}" alt="">
-      <img class="torso" src="${assetUrl(data, unit.torso)}" alt="">
-      ${unit.head ? `<img class="head" src="${assetUrl(data, unit.head)}" alt="">` : ''}
-    </span>
+    <span class="unit-body">${identityBadge(unit)}</span>
     <span class="unit-label">${esc(unit.name.split(' ')[0])}<br><b>${unit.hp}♥ · ${unit.guard}◇ · ${unit.nerve}!</b></span>
   </button>`;
 }
@@ -1963,7 +1923,7 @@ function renderNews() {
       <section class="tv-shell" aria-label="Television bulletin presented by fictional newscaster Arvo Linde">
         <div class="tv-screen">
           <div class="studio"></div>
-          <div class="scene-speaker arvo-speaker" data-speaker="arvo" data-asset="presenter-arvo-linde-v05" aria-label="Arvo Linde"></div><div class="arvo arvo-fallback" aria-hidden="true"><i class="body"></i><i class="shirt"></i><i class="tie"></i><i class="head"></i><i class="hair"></i><i class="face-line"></i></div>
+          <div class="news-identity" data-news-identity="arvo">${identityBadge({ name: 'Arvo Linde' })}<strong>ARVO LINDE</strong></div>
           <div class="news-lower-third">ARVO LINDE · HELSINKI · DOCUMENTED FACT / FICTIONAL SERVICE</div>
         </div>
         <div class="tv-knobs" aria-hidden="true"><i></i><i></i></div>
@@ -2523,7 +2483,6 @@ function resetCampaign() {
 
 async function boot() {
   try {
-    bootChrome(); // the same torn-carton material as godot/ui/chrome.gd — before first render, or the flat CSS fallback flashes
     data = await loadGameData();
     roadEvents = await loadRoadEvents().catch(() => roadEvents);
     story = await loadStory().catch(() => story);
@@ -2749,10 +2708,6 @@ async function boot() {
         if (keptYours) logToast('Your campaign is kept. Restore it from the title screen.');
       }
     }
-    // ?cutin=<who> — a waist-up cut-in preview over whatever is on screen (jaska and aatami at the Scene Club, arvo on the news)
-    const wantCutin = new URLSearchParams(location.search).get('cutin');
-    if (wantCutin) openCutin(wantCutin);
-
     window.__ptv3 = {
       get data() { return data; },
       get state() { return state; },

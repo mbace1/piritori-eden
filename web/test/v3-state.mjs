@@ -4,8 +4,8 @@ import {
   createState, currentSchedule, currentEncounter, choiceStatus, chooseEncounter,
   advanceSchedule, transactOffer, requirementStatus,
   canShopHere, buyOf, buyEquipment, isPurchasable, countOf,
-} from '../js/v3/state.js?v=15';
-import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=4';
+} from '../js/v3/state.js?v=16';
+import { previewJourney, commitJourney, JOURNEY_EXTRA_BLOCKS } from '../js/v3/journey.js?v=5';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
@@ -173,7 +173,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
     FIGHTS_PER_LEVEL, GLORY_PERK_POINTS, SKILL_OFFER_SIZE,
     fightsOf, careerLeft, saveState, loadState, hasAptitude, aptitudesOf,
     createState: freshState,
-  } = await import('../js/v3/state.js?v=15');
+  } = await import('../js/v3/state.js?v=16');
 
   const CAREER = 10;
 
@@ -268,7 +268,7 @@ console.log(`V3 STATE OK: ${content.schedule.length} blocks, deferred purchase, 
 // Chapter income must include the main market loop, not only fenced weapons.
 {
   const { chapterProgress, chapterEndingAvailable, commitRoute, sendOnRoute,
-    restoreState } = await import('../js/v3/state.js?v=15');
+    restoreState } = await import('../js/v3/state.js?v=16');
   const trader = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(offer => offer.side === 'sell');
@@ -311,7 +311,7 @@ console.log('PASS chapter progress through sales and route deliveries');
 // Its cover is a Map and the round's hits a Set; plain JSON flattened both and
 // every load after a reload mid-battle failed on `cover.has`.
 {
-  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=15');
+  const { saveState, loadState, createState: freshState } = await import('../js/v3/state.js?v=16');
   const storage = { _d: null, setItem(_k, v) { this._d = v; }, getItem() { return this._d; } };
   const g = freshState(content);
   g.mode = 'battle';
@@ -334,7 +334,7 @@ console.log('PASS a board battle survives a reload');
 // always go (the block's story may be at the far end); trades wait for the
 // block to turn. The shipment's €400 stopped being one block's work.
 {
-  const { TIME, timeSpent, actionsLeft, tradeBlocker, sellLoot, addEquipment, commitRoute, sendOnRoute, chapterProgress } = await import('../js/v3/state.js?v=15');
+  const { TIME, timeSpent, actionsLeft, tradeBlocker, sellLoot, addEquipment, commitRoute, sendOnRoute, chapterProgress } = await import('../js/v3/state.js?v=16');
   const t = createState(content);
   const buy = data.offers.get('offer-piritori-buy');
   const sell = content.market_offers.find(o => o.id === 'offer-siltasaari-sell');
@@ -392,7 +392,7 @@ console.log('PASS D002: a trip or a seller visit is 30% of a block');
 // A route's capacity is a block's. Re-pinning used to empty its count, so one
 // Piritori visit could buy, send and re-pin without end (the chapter bot, G4).
 {
-  const { commitRoute, sendOnRoute, advanceSchedule, chapterProgress } = await import('../js/v3/state.js?v=15');
+  const { commitRoute, sendOnRoute, advanceSchedule, chapterProgress } = await import('../js/v3/state.js?v=16');
   const sell = data.offers.get('offer-hakaniemi-sell');
   const buy = data.offers.get('offer-piritori-buy');
   const r = createState(content);

@@ -15,10 +15,9 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=66');
-for(const id of ['cast3d-jaska-v01','presenter-arvo-linde-v05']){
- assert(app.includes(id));assert(a.assets.some(x=>x.id===id),'Registered speaker');
-}
+const app=await read('../js/v3/app.js?v=67');
+assert(app.includes('data-news-identity="arvo"'),'Arvo keeps his name without the retired face');
+assert(!app.includes('scene-speaker')&&!app.includes('cast3d-jaska-v01'),'No retired 3D dialogue faces are mounted');
 // Toko is the paper rig over the empty bar (owner, 2026-10-21), not the 3D speaker: the app mounts it, the stage names
 // the registered rig, and the rig's plate is the empty bar every Toko scene points at.
 const stage=await read('../js/v3/toko-stage.js');
@@ -47,7 +46,7 @@ for(const [who,cast] of Object.entries(CUTINS)){
  for(const part of ['torso','head'])assert(rig.members.some(x=>x.part===part)&&rig.rig.pivots[part],`${who}: ${part} piece and pivot`);
  assert(Object.keys(rig.rig.lids).every(l=>rig.members.some(x=>x.part===l)),`${who}: eyelids are pieces`);
 }
-assert(app.includes("get('cutin')"),'?cutin= debug entry');
+assert(!app.includes("get('cutin')")&&!app.includes('openCutin'),'obsolete cut-in rehearsal cannot reopen');
 assert((await read('../crew-run/startup.js')).includes(`main.js?v=${runtimeToken}`),'Night Shift uses the shared stand-in runtime');
 console.log('PASS: optional visit content, chapter/site/art links, memory-only effects, registered speakers, cut-in rigs and release marker');
 

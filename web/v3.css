@@ -1,3 +1,6 @@
+/* Compatibility layout for the playable campaign during the visual restart.
+   This is not the approved basis for new UI. The Lantern/chrome material and
+   modular portraits have been removed; the new scene presentation is reviewed separately. */
 *, *::before, *::after { box-sizing: border-box; }
 :root {
   color-scheme: dark;
@@ -54,14 +57,12 @@ button { -webkit-tap-highlight-color: transparent; }
   align-items: stretch;
   gap: 9px;
   padding: 9px 12px;
-  /* Godot's own header: PiritoriChrome.bar(false) — torn on the bottom, the
-     edge the world (the mode content) shows through. Same texture, same
-     border-image discipline as every other chrome() consumer below. */
+
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-bar-top);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 0 5px 15px var(--shadow);
 }
 .brand-lockup { align-self: center; min-width: 0; }
@@ -137,11 +138,7 @@ html body .arcade-home { display: none; }
   min-width: 44px;
   min-height: 44px;
 }
-/* PiritoriChrome.button(accent) — same card, same broken rule, and the same
-   move Godot makes at the call site: the accent tints the RULE, and (per
-   `_chrome_button`/`_action_btn`) the label's `font_color` too, rather than
-   filling the whole face. That is why `.primary`/`.danger`/`.cyan` below
-   only change `color` and `border-image-source`, never `background`. */
+
 .paper-button {
   position: relative;
   padding: 10px 14px;
@@ -150,15 +147,15 @@ html body .arcade-home { display: none; }
   letter-spacing: .055em;
   cursor: pointer;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-btn);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
 .paper-button:hover:not(:disabled),
 .paper-button:focus-visible {
   color: #fff8e8;
-  border-image-source: var(--chrome-btn-hot);
+
   transform: translateY(-1px);
 }
 .paper-button:focus-visible,
@@ -168,24 +165,16 @@ html body .arcade-home { display: none; }
 .formation-cell:focus-visible,
 .unit-token:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .paper-button:disabled { cursor: not-allowed; opacity: .46; }
-.paper-button.primary { color: var(--mustard); border-image-source: var(--chrome-btn-primary); }
-.paper-button.primary:hover:not(:disabled),
-.paper-button.primary:focus-visible { border-image-source: var(--chrome-btn-primary-hot); }
-.paper-button.danger { color: var(--chrome-accent-leave, #4f7fa0); border-image-source: var(--chrome-btn-danger); }
-.paper-button.danger:hover:not(:disabled),
-.paper-button.danger:focus-visible { border-image-source: var(--chrome-btn-danger-hot); }
-.paper-button.cyan { color: var(--cyan); border-image-source: var(--chrome-btn-cyan); }
-.paper-button.cyan:hover:not(:disabled),
-.paper-button.cyan:focus-visible { border-image-source: var(--chrome-btn-cyan-hot); }
-.paper-button.inspect-button { color: var(--chrome-accent-look, #a62bff); border-image-source: var(--chrome-btn-look); }
-.paper-button.inspect-button:hover:not(:disabled),
-.paper-button.inspect-button:focus-visible { border-image-source: var(--chrome-btn-look-hot); }
+.paper-button.primary { color: var(--mustard);  }
+.paper-button.danger { color: #4f7fa0;  }
+.paper-button.cyan { color: var(--cyan);  }
+.paper-button.inspect-button { color: #a62bff;  }
 .paper-button.icon-button {
   width: 46px;
   padding: 0;
   font-size: 16px;
   border-width: 10px;
-  border-image-width: 10px;
+
 }
 .mode-root {
   min-height: 0;
@@ -202,18 +191,14 @@ html body .arcade-home { display: none; }
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 3px;
   padding: 5px 8px 7px;
-  /* PiritoriChrome.bar(true) — torn on the top, the mode content's edge. */
+
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-bar-bottom);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
-/* `border-image-slice: 18` still cuts the source at chrome.js's own MARGIN —
-   the baked pixels are untouched — but at 44px tall an 18px frame would eat
-   the whole button, so `border-image-width` renders that same slice smaller.
-   Godot's own texture_margin never scales down like this; a 44px mobile nav
-   button has no Godot-side equivalent to be faithful TO. */
+
 .mode-nav button {
   display: flex;
   align-items: center;
@@ -226,14 +211,14 @@ html body .arcade-home { display: none; }
   cursor: pointer;
   border-style: solid;
   border-width: 10px;
-  border-image-source: var(--chrome-btn);
-  border-image-slice: 18 fill;
-  border-image-width: 10px;
-  border-image-repeat: repeat;
+
+
+
+
 }
 .mode-nav button[aria-current="page"] {
   color: var(--ink);
-  border-image-source: var(--chrome-btn-hot);
+
 }
 .mode-nav button:disabled { opacity: .38; cursor: not-allowed; }
 .nav-icon { color: var(--cyan); font-size: 20px; line-height: 1; }
@@ -241,18 +226,14 @@ html body .arcade-home { display: none; }
 .mode-nav button:nth-child(3) .nav-icon { color: var(--mustard); }
 .mode-nav button:nth-child(4) .nav-icon { color: var(--danger); }
 .mode-nav button:nth-child(5) .nav-icon { color: var(--magenta); }
-/* PiritoriChrome.panel(RULE, true, true) — the same texture as the command
-   rail in app_shell.gd. The old clip-path corners cut a SECOND worn edge on
-   top of the material's own broken rule and torn top/bottom bite; the
-   texture already carries its own edge, so the polygon is gone rather than
-   layered under it. */
+
 .paper-panel {
   position: relative;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 0 10px 25px var(--shadow);
 }
 .section-label {
@@ -510,28 +491,23 @@ html body .arcade-home { display: none; }
 .inspect-button { min-height: 44px; padding: 6px 9px; font: 11px var(--mono); }
 .observation { min-height: 38px; margin: 9px 0 0; color: var(--cyan); font: 12px/1.4 var(--mono); }
 .choice-list { display: grid; gap: 8px; margin-top: 11px; }
-/* PiritoriChrome.plate_button(ACCENT_ACT) — location_stage.gd's own words:
-   "torn on the BOTTOM only... reads as something taken off a pad", which is
-   exactly what a stacked list of choices is. Cream carton, not dark card —
-   text flips to `plate_ink()` (the same luminance test Godot runs) rather
-   than the old light-on-dark palette. */
+
 .choice-card {
   width: 100%;
   padding: 11px 12px;
   text-align: left;
-  color: var(--chrome-plate-ink, #16191b);
+  color: #16191b;
   cursor: pointer;
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-plate-btn);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
 }
-.choice-card:hover:not(:disabled) { border-image-source: var(--chrome-plate-btn-hot); }
 .choice-card:disabled { opacity: .5; cursor: not-allowed; }
-.choice-card strong { display: block; color: var(--chrome-plate-ink, #16191b); font: 700 13px/1.25 var(--mono); }
+.choice-card strong { display: block; color: #16191b; font: 700 13px/1.25 var(--mono); }
 .choice-card span { display: block; margin-top: 5px; color: #4a4331; font-size: 12px; line-height: 1.35; }
-.choice-card em { display: block; margin-top: 5px; color: var(--chrome-accent-act, #9a4e34); font: normal 10px/1.3 var(--mono); }
+.choice-card em { display: block; margin-top: 5px; color: #9a4e34; font: normal 10px/1.3 var(--mono); }
 .outcome-card { padding: 14px; margin-top: 12px; border: 1px solid #755e43; background: #28241f; }
 .outcome-card h3 { margin: 0 0 6px; color: var(--mustard); font: 500 23px var(--display); letter-spacing: .04em; }
 .outcome-card p { margin: 5px 0; }
@@ -552,11 +528,6 @@ html body .arcade-home { display: none; }
 .crew-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 10px; }
 .crew-card { display: grid; grid-template-columns: 62px 1fr; gap: 9px; min-height: 108px; padding: 9px; background: #23282b; border: 1px solid #574f46; }
 .crew-card.not-hired { opacity: .58; }
-.crew-portrait { position: relative; overflow: hidden; min-height: 88px; background: #111820; border: 1px solid #4b4640; }
-.crew-portrait img { position: absolute; object-fit: contain; }
-.crew-portrait .legs { width: 80%; left: 10%; bottom: -12%; }
-.crew-portrait .torso { width: 100%; left: 0; bottom: 15%; }
-.crew-portrait .head { width: 63%; left: 20%; top: -2%; }
 .crew-card h3 { margin: 2px 0; font: 700 12px/1.2 var(--mono); color: var(--ink); }
 .crew-card p { margin: 3px 0; color: var(--ink-dim); font-size: 11px; }
 .status-dots { display: flex; gap: 3px; margin-top: 6px; }
@@ -661,10 +632,6 @@ html body .arcade-home { display: none; }
 .unit-token.police .unit-body { filter: drop-shadow(0 0 6px var(--police)) drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
 .unit-token.police .unit-label { border-color: var(--police); }
 .unit-body { position: absolute; inset: 0; filter: drop-shadow(3px 5px 2px rgba(0,0,0,.6)); }
-.unit-body img { position: absolute; object-fit: contain; pointer-events: none; }
-.unit-body .legs { width: 72%; left: 14%; bottom: 0; }
-.unit-body .torso { width: 100%; left: 0; bottom: 25%; }
-.unit-body .head { width: 54%; left: 24%; top: 1%; }
 .unit-token.down .unit-body { transform: rotate(78deg) translate(15%, 8%); opacity: .72; }
 .unit-label {
   position: absolute;
@@ -721,20 +688,6 @@ html body .arcade-home { display: none; }
 .tv-screen { position: relative; height: 100%; min-height: 420px; overflow: hidden; border: 12px solid #111618; border-radius: 42px / 28px; background: linear-gradient(#536a6e, #293d43); }
 .tv-screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 4px); mix-blend-mode: screen; }
 .studio { position: absolute; inset: 0; background: linear-gradient(140deg, #4e6569 0 42%, #293b42 42% 65%, #754b3b 65%); }
-.arvo {
-  position: absolute;
-  left: 50%;
-  bottom: 14%;
-  width: 31%;
-  height: 67%;
-  transform: translateX(-50%);
-}
-.arvo .body { position: absolute; inset: 34% 0 0; background: #303942; clip-path: polygon(13% 3%, 50% 0, 87% 3%, 100% 100%, 0 100%); }
-.arvo .shirt { position: absolute; left: 35%; top: 37%; width: 30%; height: 44%; background: #d2c7ae; clip-path: polygon(0 0, 50% 17%, 100% 0, 78% 100%, 20% 100%); }
-.arvo .tie { position: absolute; left: 47%; top: 44%; width: 8%; height: 35%; background: #8d4237; clip-path: polygon(50% 0, 100% 15%, 65% 100%, 0 88%, 12% 15%); }
-.arvo .head { position: absolute; left: 28%; top: 2%; width: 44%; height: 38%; background: #c09b79; clip-path: polygon(19% 3%, 79% 0, 96% 27%, 82% 88%, 53% 100%, 18% 83%, 4% 32%); }
-.arvo .hair { position: absolute; left: 27%; top: 0; width: 46%; height: 17%; background: #72675a; clip-path: polygon(0 50%, 12% 12%, 82% 0, 100% 54%, 82% 43%, 51% 60%, 19% 45%); }
-.arvo .face-line { position: absolute; left: 39%; top: 18%; width: 23%; height: 9%; border-bottom: 3px solid #4a3a31; border-left: 2px solid #4a3a31; transform: rotate(-2deg); }
 .news-lower-third { position: absolute; left: 6%; right: 6%; bottom: 6%; z-index: 3; padding: 10px 13px; color: #10171c; background: var(--ink); border-left: 14px solid var(--magenta); font: 700 12px/1.25 var(--mono); }
 .tv-knobs { position: absolute; right: 12px; bottom: 10px; display: flex; gap: 8px; }
 .tv-knobs i { width: 23px; height: 23px; border-radius: 50%; background: #17191a; border: 3px solid #806a55; }
@@ -779,10 +732,10 @@ html body .arcade-home { display: none; }
   max-width: 610px;
   padding: clamp(25px, 5vw, 58px);
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   box-shadow: 14px 17px 0 rgba(0,0,0,.42);
 }
 .splash-card h2 { margin: 7px 0 14px; font: 500 clamp(42px, 9vw, 80px)/.86 var(--display); letter-spacing: .045em; }
@@ -991,10 +944,10 @@ html body .arcade-home { display: none; }
   overflow-y: auto;
   color: var(--ink);
   border-style: solid;
-  border-width: var(--chrome-margin, 18px);
-  border-image-source: var(--chrome-panel);
-  border-image-slice: 18 fill;
-  border-image-repeat: repeat;
+  border-width: 1px;
+
+
+
   padding: clamp(16px, 3vw, 26px);
   box-shadow: 0 18px 44px var(--shadow);
 }
@@ -1127,3 +1080,14 @@ html body .arcade-home { display: none; }
 }
 .choice-card.locked { min-height: 44px; padding: 2px 8px; border-width: 10px; }
 .choice-card.locked em { margin-top: 2px; }
+
+/* Flat, neutral compatibility controls. New composition lives in review tooling. */
+.paper-panel, .topbar, .mode-nav { background: #182029; border-color: #53606c; }
+.paper-button, .mode-nav button { background: #232d37; border: 1px solid #65717a; }
+.paper-button:hover:not(:disabled), .mode-nav button[aria-current="page"] { background: #35434f; }
+.choice-card { color: #17191a; background: #e2ddd0; border: 1px solid #a6a294; }
+.identity-badge { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 64px; height: 72px; border: 1px solid #72808b; background: #26313b; color: #e5e9ed; font: 600 22px/1 var(--mono); letter-spacing: .03em; }
+.crew-card { grid-template-columns: 62px minmax(0, 1fr); }
+.crew-card > .identity-badge { width: 60px; height: 72px; }
+.unit-body .identity-badge { width: 44px; height: 48px; font-size: 15px; }
+.news-identity { position: absolute; inset: 15% 12% 22%; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; color: #e5e9ed; }
