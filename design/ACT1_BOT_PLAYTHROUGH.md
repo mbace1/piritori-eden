@@ -45,7 +45,7 @@ counter and training. The bots never pressed those, so they are not rated.
 
 ## Findings, by what a player would feel
 
-1. **The market has no limit.** A farmer bot sold 30 packs in one block for
+1. **The market had no limit (closed in v4.98, below).** A farmer bot sold 30 packs in one block for
    €2,220, through the real LEDGER tab and real journeys. The sale price is the
    quote every time: `transactOffer` in `web/js/v3/state.js` (the city's rules)
    uses `offerPrice`, and the footprint the app records on a sale is never read
@@ -74,7 +74,7 @@ counter and training. The bots never pressed those, so they are not rated.
    it pass".
 5. **The first firearm (day 5 night) is decided by money.** At €180, 30 of 32
    refused it.
-6. **A document says something the code does not.** ROADMAP's 31 October
+6. **A document said something the code did not (fixed in v4.97, found independently by Codex's review).** ROADMAP's 31 October
    check-in says v4.93's fence is "the only money the chapter's goal counts".
    Market sales still count: `transactOffer` calls `recordChapterIncome`.
 
@@ -95,3 +95,35 @@ Put D002 in (a trip or a trade costs 30% of a block), then run the same 32
 bots again: the market finding should close and the finale should become a
 question of how the ten days were spent. Findings 3 and 4 are content and
 design questions for the owner, not tuning.
+
+## Re-run on v4.99: D002 is in (a trip or a trade takes 30% of a block)
+
+Same 32 bots, same seeds, `main` at `34f82bc`. All 32 closed, no page errors.
+Picture: `design/ACT1_D002_BOTS.jpg`.
+
+| Measure | v4.95 | v4.99 |
+|---|---|---|
+| Most buy-and-sell loops in one block | 15 | 1 |
+| A trader's earnings toward the €400 goal | €4,244 | €1,036 |
+| Day the goal is met by trading | day 4 | day 7 |
+| Bots that never trade: earned | €0 | €0 |
+| Shipment, for the 6 who can run it | messy 6/6 | lost 6/6 |
+| "A clean address, an unpaid city" seen | 0 runs | 2 runs |
+
+**Finding 1 is closed:** "No time left to trade this block" refused 78 trades.
+
+**New: the shipment is a headcount, not a roll.** `resolveOperation`
+(state.js) scores crew ÷ 3, minus 0.15 per arrest, plus
+`rand01(state.seed, 'operation', chapter)`. Every campaign starts from
+`DEFAULT_SEED` 20030101, so that roll is always −0.294:
+
+| Crew on the roster | Result |
+|---|---|
+| 2 or fewer | lost (someone is arrested) |
+| 3 | messy (the last stash item is left) |
+| 4, nobody arrested | clean |
+
+Under D002 the traders reached day 10 with 2 crew, not 3, so all six lost
+after paying the €400 stake. ROADMAP calls the finale "one roll"; it is a
+fixed rule, which matters for the finale question waiting on the owner
+(ROADMAP §8 item 7).

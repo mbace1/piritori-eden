@@ -76,14 +76,18 @@ async function tradeRoutine(page, maxLoops, rec) {
     if (st.stock > 0 && sell) {
       await clickSel(page, '[data-mode-target="ledger"]'); await page.waitForTimeout(100);
       for (let k = 0; k < st.stock; k += 1) { await clickSel(page, `[data-action="trade"][data-offer="${sell.id}"]`); await page.waitForTimeout(60); }
-      loops += 1; const after = await page.evaluate(() => ({ cash: __ptv3.state.cash, earned: __ptv3.state.chapterEarned, stock: __ptv3.state.stock.piri })).catch(() => ({}));
-      rec({ ev: 'trade', side: 'sell', at: st.at, n: st.stock, price: sell.price, after }); continue;
+      const after = await page.evaluate(() => ({ cash: __ptv3.state.cash, earned: __ptv3.state.chapterEarned, stock: __ptv3.state.stock.piri })).catch(() => ({}));
+      // A refused sale (D002, v4.98: a fourth visit to a seller waits for the block to turn) changes nothing: stop for this block.
+      if (after.stock === st.stock) { rec({ ev: 'trade-refused', side: 'sell', at: st.at, toast: await page.evaluate(() => [...document.querySelectorAll('.toast, [role=status]')].map(t => t.innerText.trim()).filter(Boolean).slice(-1)[0] || '').catch(() => '') }); return loops; }
+      loops += 1; rec({ ev: 'trade', side: 'sell', at: st.at, n: st.stock - after.stock, price: sell.price, after }); continue;
     }
     if (st.stock < st.cap && buy && st.cash >= buy.price) {
       await clickSel(page, '[data-mode-target="ledger"]'); await page.waitForTimeout(100);
       const n = Math.min(st.cap - st.stock, Math.floor(st.cash / buy.price));
       for (let k = 0; k < n; k += 1) { await clickSel(page, `[data-action="trade"][data-offer="${buy.id}"]`); await page.waitForTimeout(60); }
-      rec({ ev: 'trade', side: 'buy', at: st.at, n, price: buy.price }); continue;
+      const got = await page.evaluate(() => __ptv3.state.stock.piri || 0).catch(() => st.stock);
+      if (got === st.stock) { rec({ ev: 'trade-refused', side: 'buy', at: st.at }); return loops; }
+      rec({ ev: 'trade', side: 'buy', at: st.at, n: got - st.stock, price: buy.price }); continue;
     }
     const dest = st.stock > 0 ? sells[0].at : (st.cash >= buySpot.price ? buySpot.at : null);
     if (!dest || dest === st.at) return loops;
