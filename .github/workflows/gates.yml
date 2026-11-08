@@ -345,3 +345,39 @@ jobs:
         run: |
           python3 -m http.server 8783 --bind 127.0.0.1 > /tmp/c16-server.log 2>&1 &
           node web/test/${{ matrix.script }}.cjs
+
+  scene-club-campaign:
+    name: Scene Club campaign and flat cabinet
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --prefix /tmp/scene-club-test playwright
+      - run: /tmp/scene-club-test/node_modules/.bin/playwright install --with-deps chromium
+      - name: native campaign choices, reloads and the shared overlay budget
+        env:
+          NODE_PATH: /tmp/scene-club-test/node_modules
+          SCENE_CLUB_CAPTURE_DIR: /tmp/scene-club-campaign
+        run: node web/test/scene-club-campaign.cjs
+      - name: real Scene Club in the nested, flattened hub cabinet
+        env:
+          NODE_PATH: /tmp/scene-club-test/node_modules
+          SCENE_CLUB_CABINET_DIR: /tmp/scene-club-cabinet
+        run: node web/test/scene-club-cabinet.cjs
+      - name: Scene Club reports and actual browser output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scene-club-campaign-and-cabinet
+          retention-days: 3
+          path: |
+            /tmp/scene-club-campaign/*.json
+            /tmp/scene-club-campaign/*.png
+            /tmp/scene-club-cabinet/*.json
+            /tmp/scene-club-cabinet/*.png
+            /tmp/scene-club-cabinet/build.log
