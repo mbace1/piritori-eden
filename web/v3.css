@@ -23,7 +23,10 @@
   --shadow: rgba(1, 5, 9, .58);
   --display: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   --body: "Trebuchet MS", Arial, sans-serif;
-  --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  /* Neutral compatibility text: historical label/control declarations use
+     --mono, but only the ledger voice still needs a monospaced face. */
+  --mono: var(--body);
+  --ledger: ui-monospace, "SFMono-Regular", Consolas, monospace;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -39,10 +42,11 @@ body {
 }
 button, input, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
+small { font-size: max(12px, .833333em); }
 [hidden] { display: none !important; }
 .game-shell {
   height: 100dvh;
-  min-height: 540px;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   padding-top: var(--safe-top);
@@ -80,7 +84,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .eyebrow {
   margin: 0 0 3px;
   color: var(--cyan);
-  font: 700 11px/1.1 var(--mono);
+  font: 700 12px/1.1 var(--mono);
   letter-spacing: .13em;
   text-transform: uppercase;
 }
@@ -98,7 +102,7 @@ button { -webkit-tap-highlight-color: transparent; }
   font: 700 15px/1.1 var(--mono);
   letter-spacing: .06em;
 }
-.time-card small { color: var(--ink-dim); font: 9px/1.1 var(--mono); letter-spacing: .08em; }
+.time-card small { color: var(--ink-dim); font: 12px/1.1 var(--mono); letter-spacing: .08em; }
 .resource-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(68px, 1fr));
@@ -116,7 +120,7 @@ button { -webkit-tap-highlight-color: transparent; }
   border: 1px solid #35414a;
   clip-path: polygon(3% 0, 98% 4%, 100% 92%, 93% 100%, 1% 96%, 0 8%);
 }
-.resource-strip dt { color: var(--ink-dim); font: 10px/1 var(--mono); letter-spacing: .06em; }
+.resource-strip dt { color: var(--ink-dim); font: 12px/1 var(--mono); letter-spacing: .06em; }
 .resource-strip dd { margin: 4px 0 0; color: var(--mustard); font: 700 16px/1 var(--mono); }
 .resource-strip div:nth-child(2) dd { color: var(--ink-dim); }
 .resource-strip div:nth-child(3) dd { color: var(--orange); }
@@ -166,9 +170,9 @@ html body .arcade-home { display: none; }
 .unit-token:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .paper-button:disabled { cursor: not-allowed; opacity: .46; }
 .paper-button.primary { color: var(--mustard);  }
-.paper-button.danger { color: #4f7fa0;  }
+.paper-button.danger { color: #8bb9d3;  }
 .paper-button.cyan { color: var(--cyan);  }
-.paper-button.inspect-button { color: #a62bff;  }
+.paper-button.inspect-button { color: #d1b2ff;  }
 .paper-button.icon-button {
   width: 46px;
   padding: 0;
@@ -225,7 +229,7 @@ html body .arcade-home { display: none; }
 .mode-nav button:nth-child(2) .nav-icon { color: var(--orange); }
 .mode-nav button:nth-child(3) .nav-icon { color: var(--mustard); }
 .mode-nav button:nth-child(4) .nav-icon { color: var(--danger); }
-.mode-nav button:nth-child(5) .nav-icon { color: var(--magenta); }
+.mode-nav button:nth-child(5) .nav-icon { color: #f19cc1; }
 
 .paper-panel {
   position: relative;
@@ -239,7 +243,7 @@ html body .arcade-home { display: none; }
 .section-label {
   margin: 0;
   color: var(--cyan);
-  font: 700 11px/1.2 var(--mono);
+  font: 700 12px/1.2 var(--mono);
   letter-spacing: .12em;
   text-transform: uppercase;
 }
@@ -263,7 +267,7 @@ html body .arcade-home { display: none; }
   border: 1px solid #615542;
   color: var(--ink-dim);
   background: #1d2428;
-  font: 700 10px/1 var(--mono);
+  font: 700 12px/1 var(--mono);
   letter-spacing: .05em;
   clip-path: polygon(3% 0, 100% 6%, 97% 100%, 0 94%);
 }
@@ -488,7 +492,7 @@ html body .arcade-home { display: none; }
 .encounter-copy h2 { margin-bottom: 8px; }
 .encounter-opening { margin: 12px 0 0; font: 17px/1.5 Georgia, serif; color: #f5ead5; }
 .inspectables { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.inspect-button { min-height: 44px; padding: 6px 9px; font: 11px var(--mono); }
+.inspect-button { min-height: 44px; padding: 6px 9px; font: 12px var(--mono); }
 .observation { min-height: 38px; margin: 9px 0 0; color: var(--cyan); font: 12px/1.4 var(--mono); }
 .choice-list { display: grid; gap: 8px; margin-top: 11px; }
 
@@ -507,7 +511,7 @@ html body .arcade-home { display: none; }
 .choice-card:disabled { opacity: .5; cursor: not-allowed; }
 .choice-card strong { display: block; color: #16191b; font: 700 13px/1.25 var(--mono); }
 .choice-card span { display: block; margin-top: 5px; color: #4a4331; font-size: 12px; line-height: 1.35; }
-.choice-card em { display: block; margin-top: 5px; color: #9a4e34; font: normal 10px/1.3 var(--mono); }
+.choice-card em { display: block; margin-top: 5px; color: #9a4e34; font: normal 12px/1.3 var(--mono); }
 .outcome-card { padding: 14px; margin-top: 12px; border: 1px solid #755e43; background: #28241f; }
 .outcome-card h3 { margin: 0 0 6px; color: var(--mustard); font: 500 23px var(--display); letter-spacing: .04em; }
 .outcome-card p { margin: 5px 0; }
@@ -521,7 +525,7 @@ html body .arcade-home { display: none; }
 .ledger-summary b { display: block; margin-top: 4px; color: var(--mustard); font: 700 20px var(--mono); }
 .offer-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .offer-table th, .offer-table td { padding: 9px 7px; border-bottom: 1px dashed #555047; text-align: left; }
-.offer-table th { color: var(--ink-dim); font: 10px var(--mono); letter-spacing: .08em; }
+.offer-table th { color: var(--ink-dim); font: 12px var(--mono); letter-spacing: .08em; }
 .offer-table td { font-size: 13px; }
 .offer-table .quote { color: var(--mustard); font: 700 14px var(--mono); white-space: nowrap; }
 .offer-table .paper-button { padding: 7px 9px; min-height: 44px; }
@@ -529,14 +533,14 @@ html body .arcade-home { display: none; }
 .crew-card { display: grid; grid-template-columns: 62px 1fr; gap: 9px; min-height: 108px; padding: 9px; background: #23282b; border: 1px solid #574f46; }
 .crew-card.not-hired { opacity: .58; }
 .crew-card h3 { margin: 2px 0; font: 700 12px/1.2 var(--mono); color: var(--ink); }
-.crew-card p { margin: 3px 0; color: var(--ink-dim); font-size: 11px; }
+.crew-card p { margin: 3px 0; color: var(--ink-dim); font-size: 12px; }
 .status-dots { display: flex; gap: 3px; margin-top: 6px; }
 .status-dots i { width: 13px; height: 8px; background: #4d4740; }
 .status-dots i.on { background: var(--cyan); }
 .equipment-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
 .equipment-chip { display: grid; grid-template-columns: 42px 1fr; gap: 7px; align-items: center; min-width: 150px; padding: 7px; background: #242729; border: 1px solid #554d43; }
 .equipment-chip img { width: 42px; height: 42px; object-fit: contain; }
-.equipment-chip span { font: 11px/1.25 var(--mono); }
+.equipment-chip span { font: 12px/1.25 var(--mono); }
 
 /* Battle */
 .battle-layout { min-height: 100%; display: grid; grid-template-rows: minmax(440px, 1fr) auto; }
@@ -585,7 +589,7 @@ html body .arcade-home { display: none; }
   max-width: min(520px, calc(100% - 28px));
   pointer-events: none;
 }
-.row-label { position: absolute; z-index: 4; color: rgba(242,231,206,.63); font: 700 9px var(--mono); letter-spacing: .09em; }
+.row-label { position: absolute; z-index: 4; color: rgba(242,231,206,.63); font: 700 12px var(--mono); letter-spacing: .09em; }
 .formation-cell {
   position: absolute;
   z-index: 3;
@@ -644,7 +648,7 @@ html body .arcade-home { display: none; }
   color: var(--ink);
   background: rgba(14,18,21,.9);
   border: 1px solid #615542;
-  font: 9px/1.15 var(--mono);
+  font: 12px/1.15 var(--mono);
   text-align: center;
   white-space: nowrap;
 }
@@ -660,20 +664,20 @@ html body .arcade-home { display: none; }
 }
 .active-unit, .battle-log, .battle-actions { padding: 10px; }
 .active-unit h3 { margin: 3px 0; font: 700 13px var(--mono); }
-.active-unit p { margin: 3px 0; color: var(--ink-dim); font-size: 11px; }
-.track-row { display: grid; grid-template-columns: 52px 1fr; gap: 7px; align-items: center; margin-top: 6px; color: var(--ink-dim); font: 9px var(--mono); }
+.active-unit p { margin: 3px 0; color: var(--ink-dim); font-size: 12px; }
+.track-row { display: grid; grid-template-columns: 52px 1fr; gap: 7px; align-items: center; margin-top: 6px; color: var(--ink-dim); font: 12px var(--mono); }
 .track { display: flex; gap: 3px; }
 .track i { flex: 1; height: 8px; background: #4b4540; }
 .track i.on { background: var(--cyan); }
 .track.danger i.on { background: var(--orange); }
 .stance-label { margin-top: 10px; }
 .stance-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 5px; }
-.stance-row .paper-button { min-width: 0; padding: 7px 4px; font-size: 8.5px; line-height: 1.2; letter-spacing: .02em; }
+.stance-row .paper-button { min-width: 0; padding: 7px 4px; font-size: 12px; line-height: 1.2; letter-spacing: .02em; }
 .battle-log { min-height: 115px; max-height: 145px; overflow: auto; }
-.battle-log p { margin: 0; color: var(--ink-dim); font: 11px/1.35 var(--mono); }
+.battle-log p { margin: 0; color: var(--ink-dim); font: 12px/1.35 var(--mono); }
 .battle-log p:first-child { color: var(--ink); }
 .battle-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-.battle-actions .paper-button { min-width: 0; padding: 8px 5px; font-size: 10px; }
+.battle-actions .paper-button { min-width: 0; padding: 8px 5px; font-size: 12px; }
 .battle-actions .wide { grid-column: span 3; }
 .battle-result { grid-column: 1 / -1; padding: 12px; text-align: center; }
 .battle-result h2 { margin: 0; font: 500 29px var(--display); color: var(--mustard); }
@@ -694,7 +698,7 @@ html body .arcade-home { display: none; }
 .news-copy { padding: 18px; overflow: auto; }
 .news-copy blockquote { margin: 14px 0; padding: 12px 14px; border-left: 6px solid var(--magenta); background: #29282a; font: 17px/1.5 Georgia, serif; }
 .source-card { margin-top: 10px; padding: 10px; border: 1px solid #5b5147; background: #21262a; }
-.source-card h3 { margin: 0 0 5px; color: var(--cyan); font: 700 10px var(--mono); letter-spacing: .1em; }
+.source-card h3 { margin: 0 0 5px; color: var(--cyan); font: 700 12px var(--mono); letter-spacing: .1em; }
 .source-card p { margin: 0; color: var(--ink-dim); font-size: 12px; line-height: 1.4; }
 .source-links { margin: 10px 0 0; padding-left: 18px; }
 .source-links a { color: #85dbe4; overflow-wrap: anywhere; }
@@ -761,7 +765,7 @@ html body .arcade-home { display: none; }
 
 @media (max-width: 980px) {
   .topbar { grid-template-columns: minmax(220px, 1fr) auto minmax(300px, 1fr) auto; }
-  .brand-lockup h1 { font-size: 28px; }
+  .brand-lockup h1 { font-size: 28px; white-space: normal; }
   .route-layout { grid-template-columns: minmax(0, 1fr) 300px; }
   .encounter-layout { grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); }
   .battle-console { grid-template-columns: 210px 1fr; }
@@ -771,7 +775,7 @@ html body .arcade-home { display: none; }
 
 @media (max-width: 760px) {
   body { font-size: 14px; }
-  .game-shell { min-height: 500px; }
+  .game-shell { min-height: 0; }
   .topbar {
     min-height: 112px;
     grid-template-columns: 1fr auto;
@@ -808,11 +812,11 @@ html body .arcade-home { display: none; }
      label paints past the card: at 390px INTEL read as "INTE" and at 360px
      every label spilled. The eyebrow tracking goes too — it costs a letter. */
   .resource-strip div { padding: 5px 4px; min-width: 0; }
-  .resource-strip dt { font-size: 10px; letter-spacing: 0; }
+  .resource-strip dt { font-size: 12px; letter-spacing: 0; }
   .resource-strip dd { font-size: 13px; margin-top: 2px; }
   .top-actions { position: static; grid-column: 2; grid-row: 2; align-self: stretch; }
   .mode-nav { gap: 2px; padding: 4px 4px calc(5px + var(--safe-bottom)); }
-  .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 8px; letter-spacing: .03em; }
+  .mode-nav button { flex-direction: column; gap: 2px; padding: 4px 2px; font-size: 12px; letter-spacing: .03em; }
   .nav-icon { font-size: 17px; }
   .route-layout, .encounter-layout, .ledger-layout, .news-layout { min-height: auto; display: block; padding: 7px; }
   /* The stage sizes itself now — see .map-stage. A min-height here is what
@@ -845,7 +849,7 @@ html body .arcade-home { display: none; }
      top card; hide the bottom strip — log still carries the full forecast. */
   .battle-objective {
     max-width: min(62%, calc(100% - 26px));
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.25;
     padding: 6px 8px;
     max-height: 4.6em;
@@ -854,7 +858,7 @@ html body .arcade-home { display: none; }
   .battle-entry-forecast { display: none; }
   .formation-cell { width: 48px; min-height: 44px; }
   .unit-token { width: clamp(59px, 18vw, 88px); height: clamp(94px, 29vw, 140px); }
-  .unit-label { min-width: 70px; max-width: 94px; white-space: normal; font-size: 7px; --label-rest-bottom: -17px; }
+  .unit-label { min-width: 70px; max-width: 94px; white-space: normal; font-size: 12px; --label-rest-bottom: -17px; }
   .battle-console { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; }
   .active-unit, .battle-log { padding: 8px; }
   .battle-log { min-height: 96px; max-height: 116px; }
@@ -990,7 +994,7 @@ html body .arcade-home { display: none; }
 .test-build {
   flex: none;
   font-family: var(--mono);
-  font-size: .66rem;
+  font-size: .75rem;
   letter-spacing: .09em;
   padding: 3px 7px;
   background: var(--panel-2);
@@ -1000,11 +1004,11 @@ html body .arcade-home { display: none; }
 .test-build.build-godot { background: var(--cyan); color: var(--charcoal); }
 .test-build.build-both { background: var(--mustard); color: var(--charcoal); }
 
-.test-where { margin: 5px 0 0; font-family: var(--mono); font-size: .74rem; color: var(--kraft); }
+.test-where { margin: 5px 0 0; font-family: var(--mono); font-size: .75rem; color: var(--kraft); }
 .test-changed { margin: 7px 0 0; font-size: .82rem; color: var(--orange); font-weight: 700; }
 .test-note { margin: 8px 0 0; font-size: .88rem; line-height: 1.5; color: var(--ink-dim); }
 .test-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
-.test-hint { font-family: var(--mono); font-size: .72rem; color: var(--ink-dim); }
+.test-hint { font-family: var(--mono); font-size: .75rem; color: var(--ink-dim); }
 .test-empty { padding: 18px; text-align: center; color: var(--ink-dim); }
 .test-empty p { margin: 0 0 .5em; }
 .test-empty b { color: var(--ink); }
@@ -1091,3 +1095,6 @@ html body .arcade-home { display: none; }
 .crew-card > .identity-badge { width: 60px; height: 72px; }
 .unit-body .identity-badge { width: 44px; height: 48px; font-size: 15px; }
 .news-identity { position: absolute; inset: 15% 12% 22%; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; color: #e5e9ed; }
+
+/* Preserve the existing 12px/readability contract without reinstating a skin. */
+.observation, .battle-log p, .sms, .ledger-voice { font-family: var(--ledger); }
