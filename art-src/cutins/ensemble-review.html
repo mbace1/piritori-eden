@@ -39,7 +39,7 @@ const [aatami, jaska, room] = await Promise.all([
 ]);
 const c = document.getElementById('c'), g = c.getContext('2d');
 const W = c.width, H = c.height, BOTTOM = 1835, S = 1.18;
-const FACE = { aatami: {x:345,y:1240}, jaska:{x:875,y:1240} };
+const FACE = { aatami: {x:AATAMI==='aatami'?410:470,y:1300}, jaska:{x:990,y:1300} };
 function background() {
   g.clearRect(0,0,W,H);
   const sh=H*.73, k=Math.max(W/room.width,sh/room.height);
@@ -54,7 +54,7 @@ function background() {
 function bubble(active) {
   const x=90,y=605,w=900,h=410,b=y+h;
   const tip=FACE[active];
-  const mid=active==='jaska'?830:350;
+  const mid=active==='jaska'?950:(AATAMI==='aatami'?370:430);
   g.save();
   g.shadowColor='rgba(0,0,0,.6)';
   g.shadowBlur=22;g.shadowOffsetX=7;g.shadowOffsetY=12;
@@ -96,12 +96,14 @@ function render(moment='idle', local=0.1) {
     ap=pose(AATAMI,ac,at);jp=pose('jaska',jc,jt);
   }
   background();
+  const active=moment==='jaska-talk'||moment==='jaska-shake'?'jaska':'aatami';
+  // Draw the tail behind the layered faces; it must not paint across a brow.
+  bubble(active);
   // Both figures are reposed from the registered layered art. Neither
   // drawCutin call is reused because it clears the entire canvas.
   drawFigure(g,aatami,ap,-45,BOTTOM-aatami.size[1]*S,S);
   drawFigure(g,jaska,jp,570,BOTTOM-jaska.size[1]*S,S);
-  const active=moment==='jaska-talk'||moment==='jaska-shake'?'jaska':'aatami';
-  bubble(active);write(active);
+  write(active);
   g.fillStyle='rgba(232,222,202,.82)';g.font='700 26px Arial,sans-serif';
   g.fillText('REVIEW COMPOSITE — NOT THE LIVE UI',42,70);
   g.fillText('AATAMI '+(AATAMI==='aatami'?'FRONT':'SIDE')+' / JASKA  ·  '+moment.toUpperCase(),42,110);
