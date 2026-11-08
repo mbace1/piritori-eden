@@ -199,7 +199,8 @@ async function judgeArrivalSheet(page, name) {
 
 server.listen(0, '127.0.0.1', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--autoplay-policy=no-user-gesture-required'] });
+  // This Canvas2D/DOM gate uses software 2D; dedicated C19 suites retain their WebGL profile.
+  const browser = await chromium.launch({ args: ['--disable-gpu', '--autoplay-policy=no-user-gesture-required'] });
   let timingPage = null, timingRenderer = null, timingLabel = 'startup', activeTiming = {};
   try {
     for (const [name, vp, touch] of [['desktop', { width: 1280, height: 800 }, false], ['phone', { width: 390, height: 844 }, true]]) {
