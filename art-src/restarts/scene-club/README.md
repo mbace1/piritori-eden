@@ -174,6 +174,11 @@ specification. Tests reject restoration of the retired libraries and references.
   header 62/0, full readability 86/0 and DejaVu Sans header 62/0. Viewport
   floors and measured small/low-contrast labels are corrected without
   restoring the retired visual skin.
+- [Later city-flow audit](evidence/compat-city/README.md): seven suites
+  214/0; the final arrival sheet 70/0; next-step cue 57/0 and header 62/0.
+  Retired procedural intro art is deleted; exact captions, sound, skip and
+  saves remain. Separate source snapshots and the initial obsolete-art
+  assertion failures are preserved explicitly.
 - [Phone recording](evidence/visual-restart-phone.mp4) and
   [landscape recording](evidence/visual-restart-landscape.mp4). WebM originals
   and stage/viewport screenshots are included beside them.

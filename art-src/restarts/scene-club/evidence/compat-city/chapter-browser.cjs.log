@@ -1,0 +1,21 @@
+  ok   desktop: the shipment can be run
+  ok   desktop: the chapter closes, to be continued
+  ok   desktop: it says what goes into chapter 2
+  ok   desktop: and where the road points
+  ok   desktop: cash goes to the stake
+  ok   desktop: stock resets and weapons carry
+  ok   desktop: shown, not applied
+  ok   desktop: chapter 2 is not authored yet, and it says so
+  ok   desktop: no overflow
+  ok   desktop: no errors
+  ok   phone: the shipment can be run
+  ok   phone: the chapter closes, to be continued
+  ok   phone: it says what goes into chapter 2
+  ok   phone: and where the road points
+  ok   phone: cash goes to the stake
+  ok   phone: stock resets and weapons carry
+  ok   phone: shown, not applied
+  ok   phone: chapter 2 is not authored yet, and it says so
+  ok   phone: no overflow
+  ok   phone: no errors
+chapter-browser: 20 passed, 0 failed

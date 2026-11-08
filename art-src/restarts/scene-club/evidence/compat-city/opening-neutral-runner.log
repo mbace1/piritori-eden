@@ -1,0 +1,32 @@
+{
+  "suite": "opening.cjs",
+  "sourceCommit": "50f6161b777cb4ed9f330ab5cb95e8888fd6e639",
+  "scope": "Fresh bounded neutral arrival sheet after owner visual reset; existing authored captions/audio/skip/timer/save semantics, plus visible geometry/combined UI budget checks. This run does not refresh the seven initial gates after opening-only source changes.",
+  "cwd": "/workspace/piritori-visual-reset",
+  "command": "NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node web/test/opening.cjs",
+  "startedAt": "2026-11-08T12:41:00.352710+00:00",
+  "sourceHashesBefore": {
+    "web/v3.css": "102785ea60de8b8bb1be94a1be4ef212b2800a06cb320dbef849f24ea430a613",
+    "web/index.html": "8a42072303bda9ac033934c961e0ae7d5d75e0f796dfb70a5ee5b089152bcb30",
+    "web/js/v3/app.js": "91e698bfe015c59d810c76ec07b4bbc47468ce7df9337dbc4ba90c6f6ad69c2a",
+    "web/test/opening.cjs": "b61f7817c86f6f2d883f0eebd4d4ccf3517c2f4881c640139d5b4b9ca1bf5aa9"
+  },
+  "finishedAt": "2026-11-08T12:42:36.348446+00:00",
+  "elapsedSeconds": 95.995,
+  "exitCode": 0,
+  "passedLines": 70,
+  "failedLines": 0,
+  "failureLines": [],
+  "summaryLines": [
+    "70 passed, 0 failed"
+  ],
+  "sourceHashesAfter": {
+    "web/v3.css": "102785ea60de8b8bb1be94a1be4ef212b2800a06cb320dbef849f24ea430a613",
+    "web/index.html": "8a42072303bda9ac033934c961e0ae7d5d75e0f796dfb70a5ee5b089152bcb30",
+    "web/js/v3/app.js": "91e698bfe015c59d810c76ec07b4bbc47468ce7df9337dbc4ba90c6f6ad69c2a",
+    "web/test/opening.cjs": "b61f7817c86f6f2d883f0eebd4d4ccf3517c2f4881c640139d5b4b9ca1bf5aa9"
+  },
+  "sourceUnchanged": true,
+  "log": "/workspace/evidence/compat-city-regression/opening-neutral.cjs.log",
+  "passed": true
+}

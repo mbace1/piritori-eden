@@ -1,0 +1,17 @@
+  ok   desktop: with one hire the fight is open (Aatami fights)
+  ok   desktop: Aatami is in the fight, in front
+  ok   desktop: and not stepped back
+  ok   desktop: alone he cannot take a two-a-side fight, and the card says so
+  ok   desktop: with three hired Aatami still fights in chapter 1
+  ok   desktop: no premature step-back beat
+  ok   desktop: no overflow
+  ok   desktop: no errors
+  ok   phone: with one hire the fight is open (Aatami fights)
+  ok   phone: Aatami is in the fight, in front
+  ok   phone: and not stepped back
+  ok   phone: alone he cannot take a two-a-side fight, and the card says so
+  ok   phone: with three hired Aatami still fights in chapter 1
+  ok   phone: no premature step-back beat
+  ok   phone: no overflow
+  ok   phone: no errors
+aatami-browser: 16 passed, 0 failed

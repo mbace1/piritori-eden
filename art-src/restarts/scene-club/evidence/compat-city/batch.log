@@ -1,0 +1,19 @@
+START opening.cjs
+END opening.cjs exit=1 pass-lines=54 fail-lines=2 source-unchanged=True
+opening.cjs: FAIL desktop: the tram is moving in → none
+opening.cjs: FAIL phone: the tram is moving in → none
+START story-browser.cjs
+END story-browser.cjs exit=0 pass-lines=30 fail-lines=0 source-unchanged=True
+START chapter-browser.cjs
+END chapter-browser.cjs exit=0 pass-lines=20 fail-lines=0 source-unchanged=True
+START standing-browser.cjs
+END standing-browser.cjs exit=0 pass-lines=22 fail-lines=0 source-unchanged=True
+START road-browser.cjs
+END road-browser.cjs exit=0 pass-lines=42 fail-lines=0 source-unchanged=True
+START doors-browser.cjs
+END doors-browser.cjs exit=0 pass-lines=52 fail-lines=0 source-unchanged=True
+START aatami-browser.cjs
+END aatami-browser.cjs exit=0 pass-lines=16 fail-lines=0 source-unchanged=True
+START mission-browser.cjs
+END mission-browser.cjs exit=0 pass-lines=32 fail-lines=0 source-unchanged=True
+BATCH COMPLETE False

@@ -1,0 +1,33 @@
+  ok   desktop/mission-bear-path: the choice that fights is offered
+  ok   desktop/mission-bear-path: it goes straight to Night Shift, as a mission battle
+  ok   desktop/mission-bear-path: at its own place
+  ok   desktop/mission-bear-path: against its own people
+  ok   desktop/mission-bear-path: and it counts as the day's fight
+  ok   desktop/mission-bear-path: on the board it is the same battle, for the same mission
+  ok   desktop/mission-bear-path: the save with a board battle in it loads
+  ok   desktop/mission-courtyard-receipts: the choice that fights is offered
+  ok   desktop/mission-courtyard-receipts: it goes straight to Night Shift, as a mission battle
+  ok   desktop/mission-courtyard-receipts: at its own place
+  ok   desktop/mission-courtyard-receipts: against its own people
+  ok   desktop/mission-courtyard-receipts: and it counts as the day's fight
+  ok   desktop/mission-courtyard-receipts: on the board it is the same battle, for the same mission
+  ok   desktop/mission-courtyard-receipts: the save with a board battle in it loads
+  ok   desktop: no overflow
+  ok   desktop: no errors
+  ok   phone/mission-bear-path: the choice that fights is offered
+  ok   phone/mission-bear-path: it goes straight to Night Shift, as a mission battle
+  ok   phone/mission-bear-path: at its own place
+  ok   phone/mission-bear-path: against its own people
+  ok   phone/mission-bear-path: and it counts as the day's fight
+  ok   phone/mission-bear-path: on the board it is the same battle, for the same mission
+  ok   phone/mission-bear-path: the save with a board battle in it loads
+  ok   phone/mission-courtyard-receipts: the choice that fights is offered
+  ok   phone/mission-courtyard-receipts: it goes straight to Night Shift, as a mission battle
+  ok   phone/mission-courtyard-receipts: at its own place
+  ok   phone/mission-courtyard-receipts: against its own people
+  ok   phone/mission-courtyard-receipts: and it counts as the day's fight
+  ok   phone/mission-courtyard-receipts: on the board it is the same battle, for the same mission
+  ok   phone/mission-courtyard-receipts: the save with a board battle in it loads
+  ok   phone: no overflow
+  ok   phone: no errors
+mission-browser: 32 passed, 0 failed

@@ -1,0 +1,59 @@
+  ok   phone day 1, at the lead: exactly one lit action in view
+  ok   phone day 1, at the lead: and it is the next step
+  ok   phone: the step says ENTER
+  ok   phone: it opens the story encounter
+  ok   phone after the purchase, away from the lead: exactly one lit action in view
+  ok   phone after the purchase, away from the lead: and it is the next step
+  ok   phone: the map is at the top again
+  ok   phone: the step says TRAVEL TO SILTASAARI
+  ok   phone: planning through the bar changes nothing
+  ok   phone journey planned: exactly one lit action in view
+  ok   phone journey planned: and it is the next step
+  ok   phone: TRAVEL arrives once, free (D002)
+  ok   phone arrived: exactly one lit action in view
+  ok   phone arrived: and it is the next step
+  ok   phone: the sale lands at €183
+  ok   phone: the cash card names the change
+  ok   phone day 2: exactly one lit action in view
+  ok   phone day 2: and it is the next step
+  ok   phone: no browser errors
+  ok   landscape phone day 1, at the lead: exactly one lit action in view
+  ok   landscape phone day 1, at the lead: and it is the next step
+  ok   landscape phone: the step says ENTER
+  ok   landscape phone: it opens the story encounter
+  ok   landscape phone after the purchase, away from the lead: exactly one lit action in view
+  ok   landscape phone after the purchase, away from the lead: and it is the next step
+  ok   landscape phone: the map is at the top again
+  ok   landscape phone: the step says TRAVEL TO SILTASAARI
+  ok   landscape phone: planning through the bar changes nothing
+  ok   landscape phone journey planned: exactly one lit action in view
+  ok   landscape phone journey planned: and it is the next step
+  ok   landscape phone: TRAVEL arrives once, free (D002)
+  ok   landscape phone arrived: exactly one lit action in view
+  ok   landscape phone arrived: and it is the next step
+  ok   landscape phone: the sale lands at €183
+  ok   landscape phone: the cash card names the change
+  ok   landscape phone day 2: exactly one lit action in view
+  ok   landscape phone day 2: and it is the next step
+  ok   landscape phone: no browser errors
+  ok   desktop day 1, at the lead: exactly one lit action in view
+  ok   desktop day 1, at the lead: and it is the next step
+  ok   desktop: the step says ENTER
+  ok   desktop: it opens the story encounter
+  ok   desktop after the purchase, away from the lead: exactly one lit action in view
+  ok   desktop after the purchase, away from the lead: and it is the next step
+  ok   desktop: the map is at the top again
+  ok   desktop: the step says TRAVEL TO SILTASAARI
+  ok   desktop: planning through the bar changes nothing
+  ok   desktop journey planned: exactly one lit action in view
+  ok   desktop journey planned: and it is the next step
+  ok   desktop: TRAVEL arrives once, free (D002)
+  ok   desktop arrived: exactly one lit action in view
+  ok   desktop arrived: and it is the next step
+  ok   desktop: the sale lands at €183
+  ok   desktop: the cash card names the change
+  ok   desktop day 2: exactly one lit action in view
+  ok   desktop day 2: and it is the next step
+  ok   desktop: no browser errors
+
+  57 passed, 0 failed
