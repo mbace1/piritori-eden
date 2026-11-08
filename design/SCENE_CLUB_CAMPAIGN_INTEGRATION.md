@@ -21,6 +21,8 @@ it does not repay the effects. Back to Kallio calls the existing clock and
 settlement path once, preserving Aatami's location and revealing Harju.
 The returned map remains the normal campaign map; its visual redesign is
 the next city-navigation iteration.
+The [Scene Club → Harju navigation pilot plan](SCENE_CLUB_HARJU_NAV_PLAN.md)
+maps that next leg to existing actions, 30% trip cost and native-device checks.
 
 Menu preserves the existing read-only inspectables, master sound switch and
 an exit to the actual map. Leaving without choosing does not spend a block
