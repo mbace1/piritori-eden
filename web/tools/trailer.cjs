@@ -16,77 +16,16 @@
 // the Toko sting (only with --toko). FFmpeg joins them with short dissolves
 // over a rain-and-drone bed it synthesises; there is no recorded audio.
 const { chromium } = require('playwright');
-const http = require('node:http'), fs = require('node:fs'), path = require('node:path');
-const { execFileSync } = require('node:child_process');
+const fs = require('node:fs'), path = require('node:path');
+const { ROOT, FPS, W, H, DPR, FONT, CLOCK, serve, frames, ff, enc } = require('./trailer-kit.cjs');
 
 const argv = process.argv.slice(2);
 const OUT = path.resolve(argv[0] || 'trailer-out');
 const TOKO = argv.includes('--toko') ? path.resolve(argv[argv.indexOf('--toko') + 1]) : null;
-const ROOT = path.resolve(__dirname, '..', '..');
-const FPS = 30, W = 1280, H = 720, DPR = 1.5;
 // TRAILER_QUICK=1 records eight frames a scene: a check that every scene loads.
 const QUICK = Boolean(process.env.TRAILER_QUICK), n = count => QUICK ? 8 : count;
 // TRAILER_SCENES=2,4 records only those scenes and keeps the others' frames.
 const ONLY = process.env.TRAILER_SCENES ? new Set(process.env.TRAILER_SCENES.split(',')) : null, want = k => !ONLY || ONLY.has(k);
-const FONT = path.join(ROOT, 'web/crew-run/fonts/BarlowCondensed-SemiBold.ttf');
-
-// Freeze-and-step clock. Until `__freeze()` everything runs on real time, so a
-// page loads and settles as it always does; after it, time only moves in
-// `__step(ms)`, which fires due timers in order and then one animation frame.
-const CLOCK = `(() => {
-  const R = { now: performance.now.bind(performance), dnow: Date.now, raf: requestAnimationFrame.bind(window), caf: cancelAnimationFrame.bind(window),
-    st: setTimeout.bind(window), ct: clearTimeout.bind(window), si: setInterval.bind(window), ci: clearInterval.bind(window) };
-  let frozen = false, t = 0, offset = 0, ids = 1e7; const rafs = new Map(), timers = new Map();
-  performance.now = () => frozen ? t : R.now();
-  Date.now = () => frozen ? Math.round(offset + t) : R.dnow();
-  window.requestAnimationFrame = cb => { if (!frozen) return R.raf(cb); const id = ++ids; rafs.set(id, cb); return id; };
-  window.cancelAnimationFrame = id => { if (!rafs.delete(id)) R.caf(id); };
-  window.setTimeout = (fn, ms = 0, ...a) => { if (!frozen) return R.st(fn, ms, ...a); const id = ++ids; timers.set(id, { at: t + Math.max(0, +ms || 0), fn, a }); return id; };
-  window.clearTimeout = id => { if (!timers.delete(id)) R.ct(id); };
-  window.setInterval = (fn, ms = 0, ...a) => { if (!frozen) return R.si(fn, ms, ...a); const every = Math.max(1, +ms || 1), id = ++ids; timers.set(id, { at: t + every, fn, a, every }); return id; };
-  window.clearInterval = id => { if (!timers.delete(id)) R.ci(id); };
-  window.__freeze = () => { if (frozen) return; t = R.now(); offset = R.dnow() - t; frozen = true; };
-  window.__step = ms => {
-    const end = t + ms;
-    for (;;) {
-      let id = null, due = null;
-      for (const [k, v] of timers) if (v.at <= end && (!due || v.at < due.at)) { id = k; due = v; }
-      if (!due) break;
-      t = Math.max(t, due.at);
-      if (due.every) due.at += due.every; else timers.delete(id);
-      try { if (typeof due.fn === 'function') due.fn(...due.a); } catch (e) { console.error(e); }
-    }
-    t = end;
-    const cbs = [...rafs.values()]; rafs.clear();
-    for (const cb of cbs) try { cb(t); } catch (e) { console.error(e); }
-  };
-})();`;
-
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.glb': 'model/gltf-binary', '.ttf': 'font/ttf', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
-function serve(root) {
-  return new Promise(done => {
-    const server = http.createServer((req, res) => {
-      const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-      let file = path.join(root, url);
-      if (!file.startsWith(root)) { res.writeHead(403); return res.end(); }
-      if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
-      if (!fs.existsSync(file)) { res.writeHead(404); return res.end(); }
-      res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'application/octet-stream', 'access-control-allow-origin': '*' });
-      fs.createReadStream(file).pipe(res);
-    }).listen(0, '127.0.0.1', () => done({ server, base: `http://127.0.0.1:${server.address().port}` }));
-  });
-}
-
-async function frames(page, dir, count, cues = {}) {
-  fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
-  await page.evaluate(() => window.__freeze());
-  for (let f = 0; f < count; f++) {
-    if (cues[f]) await cues[f](page);
-    await page.evaluate(ms => window.__step(ms), 1000 / FPS);
-    await page.screenshot({ path: path.join(dir, `${String(f).padStart(4, '0')}.png`), timeout: 180000 });
-  }
-  console.log(`  ${path.basename(dir)}: ${count} frames`);
-}
 
 // Night Shift in a place, the crew deployed and the scene settled.
 async function nightShift(browser, base, query) {
@@ -182,8 +121,6 @@ async function nightShift(browser, base, query) {
   }
 
   // Encode: each scene to a clip, then dissolves between them over the bed.
-  const ff = args => { try { execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...args], { stdio: ['ignore', 'ignore', 'pipe'] }); } catch (e) { throw Error(`ffmpeg failed: ${e.stderr}\n${args.join(' ')}`); } };
-  const enc = ['-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-r', String(FPS)];
   const scenes = fs.readdirSync(OUT).filter(d => /^\d-/.test(d) && fs.statSync(path.join(OUT, d)).isDirectory()).sort();
   const clips = [];
   for (const s of scenes) {

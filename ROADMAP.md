@@ -1,17 +1,27 @@
 # ROADMAP: the one plan for Act I (producer's cut)
 
-## Act I completion — check-in, 31 October 2026
+## Act I completion — check-in, 8 November 2026
 
-**Working estimate: 48%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88, 44% with v4.89, 45% with v4.90, 46% with v4.91, 47% with v4.92, 48% with v4.93). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
+**Working estimate: 50%** (38% on 27 October; 41% with v4.85, 42% with v4.86, 43% with v4.88, 44% with v4.89, 45% with v4.90, 46% with v4.91, 47% with v4.92, 48% with v4.93, 49% with v4.94, 50% with v4.99). This is a producer's judgment, not a count of code or a claim of player acceptance. The same 100-point rubric is used at each check-in, and a score is raised only with evidence.
 
-| Part | 27 Oct | 29 Oct | 31 Oct | Evidence for the change |
-|---|---|---|---|---|
-| Playable foundation | 15/20 | 15/20 | 15/20 | |
-| Combat | 4/20 | 5/20 | 8/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6, so HP lost per fight reaches 2.9. v4.89: the carrier is slower, so escorting wins every getaway while walking out loses a quarter. v4.90: blows can miss, so careless play wins 75% and fights vary from seed to seed (§5). |
-| Story and consequences | 8/20 | 8/20 | 10/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. v4.93: a won fight takes the fallen's weapons to the stash and the fence, one more way of earning the chapter's goal. The finale is still one roll. |
-| City and economy | 8/15 | 9/15 | 9/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. |
-| Arenas and presentation | 3/15 | 4/15 | 5/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. v4.91: every place keeps its edges from all eight camera angles (plinths, yard walls, the street's other side; `design/PLACES_PASS.jpg`). Not yet played on a device. |
-| Device validation and release | 0/10 | 1/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
+| Part | 27 Oct | 29 Oct | 31 Oct | 8 Nov | Evidence for the change |
+|---|---|---|---|---|---|
+| Playable foundation | 15/20 | 15/20 | 15/20 | 15/20 | |
+| Combat | 4/20 | 5/20 | 8/20 | 9/20 | v4.84: blocked rivals press on (crew HP lost per fight 0.1 → 1.1). v4.88: a later rout, harder blows, police at 6, so HP lost per fight reaches 2.9. v4.89: the carrier is slower, so escorting wins every getaway while walking out loses a quarter. v4.90: blows can miss, so careless play wins 75% and fights vary from seed to seed (§5). v4.94: a place at its hottest starts a fight a round from the police, so row 9 reaches 53% (target over 50%). |
+| Story and consequences | 8/20 | 8/20 | 10/20 | 10/20 | v4.92: the missing and the arrested have a way home (a rescue door and bail), on every door board while someone is lost. v4.93: a won fight takes the fallen's weapons to the stash and the fence, one more way of earning the chapter's goal. The finale is still one roll. |
+| City and economy | 8/15 | 9/15 | 9/15 | 10/15 | v4.85: a meeting's first open choice is on the first phone screen, measured in five meetings. v4.98: a trip or a seller visit takes 30% of a block (D002). v4.99: a bot played the ten days on six policies and every block plays; the route hole it found is closed (`design/G4_CHAPTER_BOT.md`). |
+| Arenas and presentation | 3/15 | 4/15 | 5/15 | 5/15 | v4.86: the courtyard's four audited faults are fixed, with before/after renders at the same cameras. v4.91: every place keeps its edges from all eight camera angles (plinths, yard walls, the street's other side; `design/PLACES_PASS.jpg`). Not yet played on a device. |
+| Device validation and release | 0/10 | 1/10 | 1/10 | 1/10 | v4.85 is live on the hub with a receipt. Nobody has played it on a device. |
+
+**Next, in order (8 November).** The progress trailer (`web/tools/progress-trailer.cjs`, §7) shows where this stands.
+1. **Two answers from the owner, nothing to build first** (§8 item 7):
+   - **How big is the €400?** The bot shows it now only asks whether you traded at all.
+   - **What is the finale?** A crew-and-route choice with the risks shown (proposed), or a fight you play.
+   - The bot also found that a chapter can be finished without a single fight. A played finale would be the one fight nobody skips.
+2. **Build the shipment night** (milestone 5). Replace the single roll with a decision the player can read: the crew, the route and the heat, with the odds shown the way the fight brief shows them. Run the chapter bot on it.
+3. **Careful fighting pays** (milestone 2, §5 row 5). Numbers did not move it, so this needs a design change. One pitch with measured options; the owner picks.
+4. **The owner plays the ten days on a phone** (milestones 1, 6 and 7): the verdict, the Pixel checks and the bugs it turns up.
+- **Codex's lane, coordinated rather than built here:** the UI diet's next steps (the talk, the map, the header) and the art.
 
 **Owner, 27 October:** finish Act I in small playable steps; ask only high-level
 design questions; report the percentage at check-ins. Arenas need polish:
@@ -225,6 +235,17 @@ The Suds-Jack goal *"export cool MP4s that work as marketing for Toko and the ga
 - FFmpeg joins the scenes over a synthesised rain-and-drone bed.
 - The first cut is 19 s at 1080p: the courtyard, Jaska's cut-in, a fight turn, the title card and the Toko sting.
 - Run it again after any visual change; it touches no game code.
+
+**Built 2026-11-08: `web/tools/progress-trailer.cjs`, a cut of where Act I stands.**
+- It shares the clock, the server and the encoder with the teaser (`web/tools/trailer-kit.cjs`).
+- About 30 s, one caption per shipped feature:
+  - a trip spending a pip;
+  - the brief;
+  - the threat badges and a miss;
+  - the yard's lane;
+  - the strip that brings a won fight's weapons home.
+- Then the chapter bot's findings and what is next.
+- The fight is outing-browser's door fight, at its pinned dice and winning line, so the cut is the same every run.
 
 GSAP is the candidate for the non-fight motion graphics (cut-ins, map, Toko), because it is one file with no build step. Adding it needs the owner's yes (`CLAUDE.md` §2: no new dependencies).
 
