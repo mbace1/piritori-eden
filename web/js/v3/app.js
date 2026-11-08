@@ -227,6 +227,8 @@ function mountCampaignSceneClub() {
     sceneClub.view?.update(sceneClubModel(encounter)); return true;
   }
   closeSceneClub();
+  // The arrival now has its own caption; retire the previous map travel toast.
+  clearTimeout(toastTimer); $('toast').hidden = true; $('toast').textContent = '';
   const host = document.createElement('div');
   host.id = 'sceneClubEncounter'; host.className = 'scene-club-host';
   host.setAttribute('role','dialog'); host.setAttribute('aria-modal','true'); host.setAttribute('aria-label','Scene Club');
