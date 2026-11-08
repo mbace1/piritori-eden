@@ -25,9 +25,14 @@ const retainedImages = new Set(retainedIds.flatMap(id => {
   assert(asset, `retained source ${id} exists`);
   return asset.file ? ['art/v3/' + asset.file] : asset.members.map(member => 'art/v3/' + member.file);
 }));
-const scriptPaths = new Set(['app.js', 'actors.js', 'campaign.js', 'toko-composition.js'].map(file => 'art-src/restarts/scene-club/' + file).concat(['web/js/v3/content.js', 'web/js/v3/state.js', 'people/roster.mjs', 'people/hiring.mjs', 'market/model.mjs']));
+const sharedSources = ['web/js/v3/scene-club-view.js', 'web/js/v3/scene-club-actors.js', 'web/js/v3/scene-club-view.css'];
+const scriptPaths = new Set(['app.js', 'actors.js', 'campaign.js', 'toko-composition.js'].map(file => 'art-src/restarts/scene-club/' + file).concat(['web/js/v3/content.js', 'web/js/v3/state.js', 'people/roster.mjs', 'people/hiring.mjs', 'market/model.mjs'], sharedSources.filter(file => file.endsWith('.js'))));
+const stylePaths = new Set(['art-src/restarts/scene-club/style.css', 'web/js/v3/scene-club-view.css']);
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
-const sourceHashes = () => Object.fromEntries(['index.html', 'app.js', 'actors.js', 'campaign.js', 'style.css', 'toko-composition.js'].filter(file => fs.existsSync(path.join(__dirname, file))).map(file => [file, sha(fs.readFileSync(path.join(__dirname, file)))]));
+const sourceHashes = () => Object.fromEntries([
+  ...['index.html', 'app.js', 'actors.js', 'campaign.js', 'style.css', 'toko-composition.js'].map(file => [file, sha(fs.readFileSync(path.join(__dirname, file)))]),
+  ...sharedSources.map(file => [file, sha(fs.readFileSync(path.join(ROOT, file)))]),
+]);
 const report = { schema: 3, stageContract: 'fixed maximum-fit 9:16; combined UI bands and panel union at most 50%; native 44px targets and 12px text', sourceBase: '804613a3d4eaa1e5180dfb0ef2cb88952d15bd97', sourceHashes: sourceHashes(), viewports: [[390, 844], [844, 390], [1280, 800]], cases: [], edgeCases: [], checks: 0, edgeChecks: 0, failures: [], limits: ['Browser emulation; no physical Pixel/iPad acceptance.', 'Retained Jaska and young Aatami sources; candidate motion has static mouths.', 'This Scene Club suite does not exercise Toko; see the separate ensemble report. No owner approval is implied.', 'Half-size review assesses composition, not native touch-target size.'] };
 function check(value, label, result) {
   if (result.edge) report.edgeChecks += 1; else report.checks += 1;
@@ -73,7 +78,7 @@ function watch(page, target, result, allowedImages = retainedImages) {
     resources.add(file ?? request.url());
     if (url.origin !== base.origin) errors.push('external resource: ' + request.url());
     if (request.resourceType() === 'image' && !allowedImages.has(file)) errors.push('unretained image: ' + request.url());
-    if ((request.resourceType() === 'stylesheet' || /\.css$/.test(url.pathname)) && file !== 'art-src/restarts/scene-club/style.css') errors.push('old/foreign CSS: ' + request.url());
+    if ((request.resourceType() === 'stylesheet' || /\.css$/.test(url.pathname)) && !stylePaths.has(file)) errors.push('old/foreign CSS: ' + request.url());
     if (request.resourceType() === 'script' && !scriptPaths.has(file)) errors.push('old/foreign script: ' + request.url());
     if (/art-src\/(reviews|prototypes|cutins)\/|\/hub\/|\/chrome\.|scene-speaker|cutin-stage|paper-skin|lantern\.css|\/v3\.css/.test(url.pathname)) errors.push('old presentation dependency: ' + request.url());
   });
@@ -456,7 +461,7 @@ async function runBrowser() {
       try {
         const url = new URL(target); url.searchParams.set('start', 'scene'); url.searchParams.set('pose', pose);
         await page.goto(url.href); await ready(page, 'scene');
-        if (font) await page.addStyleTag({ content: `:root { font-family: '${font}' }` });
+        if (font) await page.addStyleTag({ content: `:root, .scene-club { font-family: '${font}' }` });
         result.responseView = await ensureChoices(page, result);
         await page.evaluate(() => window.__sceneReset.actors.debug.rest());
         result.native = await geometry(page, result);
