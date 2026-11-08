@@ -1,0 +1,4756 @@
+{
+  "sourceHashes": {
+    "web/crew-run/index.html": "c8f14e89ea014c00d27a98bf01b2865ac8354dcca884804e2ceb552e18f37471",
+    "web/crew-run/style.css": "0d45cebda8acb1ab32e420d4926ca3cba3b1668a3412cd45e5c64594fa868dc6",
+    "web/crew-run/startup.js": "f000d8fc67e14d97d039bf5f5a8f9e18081d9a9e59f210b135c4ba95e0631697",
+    "web/fight-module/main.js": "a41772771f423f816f7715bbf5fd45370b32e828568847e0d65b7c4292d8b478",
+    "web/test/c19-ui-budget.cjs": "42cb1908658c5d5a0bab8830a132317823d9443a044a01cc02f9abb45d196d6a"
+  },
+  "cases": [
+    {
+      "fixture": "getaway-extract",
+      "heat": 0,
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "states": [
+        {
+          "name": "opening",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 49.453125,
+                "width": 223.828125,
+                "height": 15.59375
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 71.75,
+                "width": 126.4375,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 146.4375,
+                "y": 71.75,
+                "width": 130.1875,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 241.828125,
+                "y": 49.25,
+                "width": 108.171875,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 151.7189178466797,
+                "y": 203.89947509765625,
+                "width": 39.359375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 198.13160705566406,
+                "y": 223.8116912841797,
+                "width": 70.17185974121094,
+                "height": 25.390625
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 286,
+                "y": 234.7239227294922,
+                "width": 70.1875,
+                "height": 25.390640258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 132.01434326171875,
+                "y": 254.52037048339844,
+                "width": 24,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 84.4843978881836,
+                "y": 272.3168029785156,
+                "width": 25.0625,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 116.28108215332031,
+                "y": 290.69915771484375,
+                "width": 25.09375,
+                "height": 23
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 84.54479217529297,
+                "y": 354.5768737792969,
+                "width": 60.90625762939453,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 101553.86874222755,
+          "coverage": 0.4407719997492515,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Attack A",
+              "rect": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Move M",
+              "rect": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Brace B",
+              "rect": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Bandage I",
+              "rect": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "clipped": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-getaway-extract-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 0,
+              "police": {
+                "at": 6,
+                "afterRound": null,
+                "y": null,
+                "cells": [],
+                "arrived": false,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 1,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "crew-slot-runner",
+                "aim": "2,5",
+                "path": [
+                  "2,4"
+                ],
+                "to": "2,4",
+                "score": 111.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "advance",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "1,2",
+                  "1,3"
+                ],
+                "to": "1,3",
+                "score": -4.2
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "attack",
+                "target": "crew-slot-muscle",
+                "aim": "3,5",
+                "path": [
+                  "4,3",
+                  "3,3",
+                  "3,4"
+                ],
+                "to": "3,4",
+                "score": 110
+              }
+            ],
+            "rng": 3991972166,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "1,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,3",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,1",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "4,2",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 49.453125,
+                  "width": 223.828125,
+                  "height": 15.59375
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 71.75,
+                  "width": 126.4375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 146.4375,
+                  "y": 71.75,
+                  "width": 130.1875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 241.828125,
+                  "y": 49.25,
+                  "width": 108.171875,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "#crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Crew ▴"
+            },
+            {
+              "selector": "#end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "End round ↵"
+            }
+          ],
+          "scenePixels": {
+            "samples": 8061,
+            "litFraction": 0.6599677459372286,
+            "colors": 196
+          }
+        },
+        {
+          "name": "extract-ready",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 49.453125,
+                "width": 221.859375,
+                "height": 15.59375
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 71.75,
+                "width": 126.4375,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 146.4375,
+                "y": 71.75,
+                "width": 128.078125,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 239.859375,
+                "y": 49.25,
+                "width": 110.140625,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 63.751136779785156,
+                "y": 297.49560546875,
+                "width": 39.359375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 160.63160705566406,
+                "y": 223.8116912841797,
+                "width": 70.171875,
+                "height": 25.390625
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 237.04428100585938,
+                "y": 236.7239227294922,
+                "width": 24,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 121.5729751586914,
+                "y": 240.16603088378906,
+                "width": 23.99999237060547,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 76.6016616821289,
+                "y": 243.60813903808594,
+                "width": 25.0625,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 239.83970642089844,
+                "y": 276.3448181152344,
+                "width": 25.093765258789062,
+                "height": 23
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 51.544795989990234,
+                "y": 354.5768737792969,
+                "width": 60.906253814697266,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 100323.76362776768,
+          "coverage": 0.43543300185663053,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Attack A",
+              "rect": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Move MUSED",
+              "rect": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Brace B",
+              "rect": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Bandage I",
+              "rect": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Extract · south edge",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 164,
+                "height": 44
+              },
+              "clipped": {
+                "x": 10,
+                "y": 543,
+                "width": 164,
+                "height": 44
+              }
+            },
+            {
+              "name": "end",
+              "rect": {
+                "x": 180,
+                "y": 543,
+                "width": 106,
+                "height": 44
+              },
+              "clipped": {
+                "x": 180,
+                "y": 543,
+                "width": 106,
+                "height": 44
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-getaway-extract-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 1,
+              "police": {
+                "at": 6,
+                "afterRound": null,
+                "y": null,
+                "cells": [],
+                "arrived": false,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 2,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [
+              "aatami"
+            ],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "crew-slot-runner",
+                "aim": "2,5",
+                "path": [],
+                "to": "2,4",
+                "score": 112.4
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "3,3",
+                "path": [
+                  "2,3"
+                ],
+                "to": "2,3",
+                "score": 108.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "3,3",
+                "path": [],
+                "to": "4,3",
+                "score": 112.4
+              }
+            ],
+            "rng": 3169808365,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,0",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,4",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "4,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "1 moved to D1. Action ready.",
+              "Round 2: new enemy plans revealed.",
+              "R1 → 2: miss (70%).",
+              "1 moved to D4. Action ready.",
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 49.453125,
+                  "width": 221.859375,
+                  "height": 15.59375
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 71.75,
+                  "width": 126.4375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 146.4375,
+                  "y": 71.75,
+                  "width": 128.078125,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 239.859375,
+                  "y": 49.25,
+                  "width": 110.140625,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "[data-mission-action=\"extract\"]",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 164,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Extract · south edge"
+            },
+            {
+              "selector": "#end",
+              "rect": {
+                "x": 180,
+                "y": 543,
+                "width": 106,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "End round ↵"
+            },
+            {
+              "selector": "#crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Crew ▴"
+            }
+          ],
+          "scenePixels": {
+            "samples": 8166,
+            "litFraction": 0.6633602743081067,
+            "colors": 192
+          }
+        },
+        {
+          "name": "crew-open-at-exit",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 49.453125,
+                "width": 221.859375,
+                "height": 15.59375
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 71.75,
+                "width": 126.4375,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 146.4375,
+                "y": 71.75,
+                "width": 128.078125,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 239.859375,
+                "y": 49.25,
+                "width": 110.140625,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "roster",
+              "rect": {
+                "x": 10,
+                "y": 527,
+                "width": 340,
+                "height": 69
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 63.751136779785156,
+                "y": 297.49560546875,
+                "width": 39.359375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 160.63160705566406,
+                "y": 223.8116912841797,
+                "width": 70.171875,
+                "height": 25.390625
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 237.04428100585938,
+                "y": 236.7239227294922,
+                "width": 24,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 121.5729751586914,
+                "y": 240.16603088378906,
+                "width": 23.99999237060547,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 76.6016616821289,
+                "y": 243.60813903808594,
+                "width": 25.0625,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 239.83970642089844,
+                "y": 276.3448181152344,
+                "width": 25.093765258789062,
+                "height": 23
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 51.544795989990234,
+                "y": 354.5768737792969,
+                "width": 60.906253814697266,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 100323.76362776768,
+          "coverage": 0.43543300185663053,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "target-back",
+              "rect": {
+                "x": 10,
+                "y": 479,
+                "width": 96,
+                "height": 44
+              },
+              "clipped": {
+                "x": 10,
+                "y": 479,
+                "width": 96,
+                "height": 44
+              }
+            },
+            {
+              "name": "crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 479,
+                "width": 56.046875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 293.953125,
+                "y": 479,
+                "width": 56.046875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Aatami5/5",
+              "rect": {
+                "x": 10,
+                "y": 527,
+                "width": 167,
+                "height": 48
+              },
+              "clipped": {
+                "x": 10,
+                "y": 527,
+                "width": 167,
+                "height": 48
+              }
+            },
+            {
+              "name": "Reijo5/5",
+              "rect": {
+                "x": 183,
+                "y": 527,
+                "width": 167,
+                "height": 48
+              },
+              "clipped": {
+                "x": 183,
+                "y": 527,
+                "width": 167,
+                "height": 48
+              }
+            },
+            {
+              "name": "Lan5/5",
+              "rect": {
+                "x": 10,
+                "y": 581,
+                "width": 167,
+                "height": 48
+              },
+              "clipped": {
+                "x": 10,
+                "y": 581,
+                "width": 167,
+                "height": 15
+              }
+            },
+            {
+              "name": "end",
+              "rect": {
+                "x": 116,
+                "y": 479,
+                "width": 170,
+                "height": 44
+              },
+              "clipped": {
+                "x": 116,
+                "y": 479,
+                "width": 170,
+                "height": 44
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-getaway-extract-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 1,
+              "police": {
+                "at": 6,
+                "afterRound": null,
+                "y": null,
+                "cells": [],
+                "arrived": false,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 2,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [
+              "aatami"
+            ],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "crew-slot-runner",
+                "aim": "2,5",
+                "path": [],
+                "to": "2,4",
+                "score": 112.4
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "3,3",
+                "path": [
+                  "2,3"
+                ],
+                "to": "2,3",
+                "score": 108.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "3,3",
+                "path": [],
+                "to": "4,3",
+                "score": 112.4
+              }
+            ],
+            "rng": 3169808365,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,0",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,4",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "4,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "1 moved to D1. Action ready.",
+              "Round 2: new enemy plans revealed.",
+              "R1 → 2: miss (70%).",
+              "1 moved to D4. Action ready.",
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 49.453125,
+                  "width": 221.859375,
+                  "height": 15.59375
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 71.75,
+                  "width": 126.4375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 146.4375,
+                  "y": 71.75,
+                  "width": 128.078125,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 239.859375,
+                  "y": 49.25,
+                  "width": 110.140625,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "#target-back",
+              "rect": {
+                "x": 10,
+                "y": 479,
+                "width": 96,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "← Back"
+            },
+            {
+              "selector": "#crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 479,
+                "width": 56.046875,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Crew ▴"
+            }
+          ],
+          "scenePixels": {
+            "samples": 8166,
+            "litFraction": 0.6634827332843497,
+            "colors": 190
+          }
+        }
+      ],
+      "errors": [],
+      "commands": [
+        "#crew-deploy",
+        "[data-action=\"move\"]",
+        "[data-cell=\"3,3\"]",
+        "#commit-preview",
+        "#end",
+        "[data-action=\"move\"]",
+        "[data-cell=\"3,0\"]",
+        "#commit-preview",
+        "#crew-picker",
+        "#target-back",
+        "[data-mission-action=\"extract\"]"
+      ],
+      "setup": {
+        "url": "crew-run/?campaign=1&outing=outing-mission-budget-getaway-extract-15-door-15-pickup-yard-van&arena=yard",
+        "outing": {
+          "id": "outing-mission-budget-getaway-extract-15-door-15-pickup-yard-van",
+          "kind": "door",
+          "door": "pickup-yard-van",
+          "encounter": "door-15-pickup-yard-van",
+          "scheduleIndex": 15,
+          "when": null,
+          "battle": "battle-courtyard-3v3",
+          "anchor": "linjat_yard",
+          "goal": "getaway",
+          "heat": 0,
+          "kit": "yard",
+          "marks": {
+            "fights": 0,
+            "police": false,
+            "hurt": false
+          },
+          "place": "The Linjat service yard",
+          "wayOut": "by the lit passage to Hämeentie",
+          "side": "the McCormicks' people",
+          "by": "mccormick_family",
+          "opening": "",
+          "fighters": [
+            "aatami",
+            "crew-slot-runner",
+            "crew-slot-muscle"
+          ],
+          "rivals": [
+            {
+              "id": "opp-door-15-pickup-yard-van-1",
+              "name": "Igor Smirnov",
+              "role": "muscle",
+              "cell": "front-2",
+              "equipment": "baseball-bat",
+              "carries": "tire-iron",
+              "tough": true
+            },
+            {
+              "id": "opp-door-15-pickup-yard-van-2",
+              "name": "Kirsti Toivonen",
+              "role": "watcher",
+              "cell": "back-1",
+              "equipment": "folding-knife",
+              "carries": "feature-phone",
+              "tough": false
+            },
+            {
+              "id": "opp-door-15-pickup-yard-van-3",
+              "name": "Ludmila Petrov",
+              "role": "fixer",
+              "cell": "middle-3",
+              "equipment": "baseball-bat",
+              "carries": "baton",
+              "tough": false
+            }
+          ],
+          "status": "open",
+          "result": null
+        }
+      },
+      "metrics": {
+        "scenario": "lab-6",
+        "graphicsMode": "direct",
+        "renderError": "",
+        "environment": {
+          "location": "yard",
+          "kitBytes": 9130365,
+          "textureSizes": [
+            [
+              1024,
+              1024
+            ],
+            [
+              1024,
+              1024
+            ]
+          ],
+          "motifs": [
+            "archway",
+            "balcony",
+            "bicycle",
+            "bike_rack",
+            "container",
+            "drain",
+            "facade_bay",
+            "facade_bay_b",
+            "ground_litter",
+            "lamp",
+            "low_wall",
+            "pallets",
+            "planter",
+            "service_bay",
+            "vent"
+          ],
+          "instancedBatches": 49,
+          "development": {
+            "lightProbe": "static scenery 128px cubemap / once at load and context recovery",
+            "liveReflections": false,
+            "planarReflection": {
+              "method": "static-scenery planar",
+              "size": 128,
+              "captures": 2,
+              "actorsReflected": false,
+              "update": "camera change, at most 10 Hz"
+            },
+            "pavement": "painted setts / joint-aware puddles + static-scene planar reflection",
+            "cutawayActors": 6,
+            "cutawayMaterials": 22
+          },
+          "lights": "3 practical spots / 1 shadow map + sky + passage spill",
+          "campaignSiteBound": false,
+          "signs": 1,
+          "aftermath": [],
+          "runs": 8,
+          "hiddenRuns": 0,
+          "plinths": 51,
+          "plinthsShown": 0
+        },
+        "camera": {
+          "preset": "tactical",
+          "mode": "overview",
+          "strength": 0,
+          "ids": [],
+          "enabled": false
+        },
+        "layoutPaused": false,
+        "fps": 0,
+        "fpsSamples": 0,
+        "graphicsPreparing": false,
+        "preparationMs": 0,
+        "renderedFrames": 6,
+        "labelLayouts": 2,
+        "edgeSmoothing": {
+          "method": "none",
+          "pixels": 0,
+          "bytes": 0
+        },
+        "draws": 162,
+        "geometries": 128,
+        "textures": 7,
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          360,
+          382
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "extractCommitted": true,
+      "passed": true
+    },
+    {
+      "fixture": "police-high-pressure",
+      "heat": 3,
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "states": [
+        {
+          "name": "opening",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 49.453125,
+                "width": 223.828125,
+                "height": 15.59375
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 71.75,
+                "width": 126.4375,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 146.4375,
+                "y": 71.75,
+                "width": 129.921875,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 241.828125,
+                "y": 49.25,
+                "width": 108.171875,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 151.7189178466797,
+                "y": 203.89947509765625,
+                "width": 39.359375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 198.13160705566406,
+                "y": 223.8116912841797,
+                "width": 70.17185974121094,
+                "height": 25.390625
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 286,
+                "y": 234.7239227294922,
+                "width": 70.1875,
+                "height": 25.390640258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 132.01434326171875,
+                "y": 254.52037048339844,
+                "width": 24,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 84.4843978881836,
+                "y": 272.3168029785156,
+                "width": 25.0625,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 116.28108215332031,
+                "y": 290.69915771484375,
+                "width": 25.09375,
+                "height": 23
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 84.54479217529297,
+                "y": 354.5768737792969,
+                "width": 60.90625762939453,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 101553.86874222755,
+          "coverage": 0.4407719997492515,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Attack A",
+              "rect": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Move M",
+              "rect": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Brace B",
+              "rect": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Bandage I",
+              "rect": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "clipped": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 5,
+              "police": {
+                "at": 6,
+                "afterRound": null,
+                "y": null,
+                "cells": [],
+                "arrived": false,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 1,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "crew-slot-runner",
+                "aim": "2,5",
+                "path": [
+                  "2,4"
+                ],
+                "to": "2,4",
+                "score": 111.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "advance",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "1,2",
+                  "1,3"
+                ],
+                "to": "1,3",
+                "score": -4.2
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "attack",
+                "target": "crew-slot-muscle",
+                "aim": "3,5",
+                "path": [
+                  "4,3",
+                  "3,3",
+                  "3,4"
+                ],
+                "to": "3,4",
+                "score": 110
+              }
+            ],
+            "rng": 2508270859,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "1,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,3",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,1",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "4,2",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 49.453125,
+                  "width": 223.828125,
+                  "height": 15.59375
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 71.75,
+                  "width": 126.4375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 146.4375,
+                  "y": 71.75,
+                  "width": 129.921875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 241.828125,
+                  "y": 49.25,
+                  "width": 108.171875,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "#crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Crew ▴"
+            },
+            {
+              "selector": "#end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "End round ↵"
+            }
+          ],
+          "scenePixels": {
+            "samples": 8061,
+            "litFraction": 0.6599677459372286,
+            "colors": 195
+          }
+        },
+        {
+          "name": "turn-1",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 49.453125,
+                "width": 221.859375,
+                "height": 15.59375
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 71.75,
+                "width": 126.4375,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 146.4375,
+                "y": 71.75,
+                "width": 135.484375,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 239.859375,
+                "y": 49.25,
+                "width": 110.140625,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 151.7189178466797,
+                "y": 203.89947509765625,
+                "width": 39.359375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 198.13160705566406,
+                "y": 223.8116912841797,
+                "width": 136.15623474121094,
+                "height": 25.390625
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 4,
+                "y": 234.7239227294922,
+                "width": 136.171875,
+                "height": 25.390640258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 165.07296752929688,
+                "y": 170.16603088378906,
+                "width": 24,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 121.6016616821289,
+                "y": 201.60813903808594,
+                "width": 25.06249237060547,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 233.98565673828125,
+                "y": 265.0782470703125,
+                "width": 25.09375,
+                "height": 23
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 84.54479217529297,
+                "y": 335.0768737792969,
+                "width": 60.90625762939453,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 104904.63825035095,
+          "coverage": 0.4553152701838149,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "crew-picker",
+              "rect": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 293.953125,
+                "y": 543,
+                "width": 56.046875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Attack A",
+              "rect": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 10,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Move M",
+              "rect": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 95,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Brace B",
+              "rect": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 180,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "Bandage I",
+              "rect": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              },
+              "clipped": {
+                "x": 265,
+                "y": 482,
+                "width": 85,
+                "height": 54
+              }
+            },
+            {
+              "name": "end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "clipped": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 6,
+              "police": {
+                "at": 6,
+                "afterRound": 2,
+                "y": 7,
+                "cells": [
+                  "2,7",
+                  "3,7"
+                ],
+                "arrived": false,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 2,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "crew-slot-runner",
+                "aim": "2,5",
+                "path": [],
+                "to": "2,4",
+                "score": 115.4
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "hold",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [],
+                "to": "1,3",
+                "score": -2.6
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "attack",
+                "target": "crew-slot-muscle",
+                "aim": "3,5",
+                "path": [],
+                "to": "3,4",
+                "score": 115.4
+              }
+            ],
+            "rng": 1026480501,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "1,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 3,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 3,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,4",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "3,4",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "Sirens. The police come in at the north end after enemy turn 2.",
+              "Round 2: new enemy plans revealed.",
+              "R3 → 3: 2 HP, 2 guard (70%).",
+              "R1 → 2: 2 HP, 2 guard (70%).",
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 49.453125,
+                  "width": 221.859375,
+                  "height": 15.59375
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 71.75,
+                  "width": 126.4375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 146.4375,
+                  "y": 71.75,
+                  "width": 135.484375,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 239.859375,
+                  "y": 49.25,
+                  "width": 110.140625,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "#end",
+              "rect": {
+                "x": 10,
+                "y": 543,
+                "width": 276,
+                "height": 44
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "End round ↵"
+            }
+          ],
+          "scenePixels": {
+            "samples": 7824,
+            "litFraction": 0.6721625766871165,
+            "colors": 190
+          }
+        },
+        {
+          "name": "turn-2",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 46,
+                "width": 221.84375,
+                "height": 31.1875
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 77.1875,
+                "width": 37.671875,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 57.671875,
+                "y": 77.1875,
+                "width": 58.796875,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 239.84375,
+                "y": 53.59375,
+                "width": 110.15625,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 95.71891784667969,
+                "y": 203.89947509765625,
+                "width": 150.59375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 266.131591796875,
+                "y": 261.85284423828125,
+                "width": 63.234375,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 256.5442810058594,
+                "y": 300.76507568359375,
+                "width": 63.25,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 194.07296752929688,
+                "y": 254.16603088378906,
+                "width": 24,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 121.6016616821289,
+                "y": 243.60813903808594,
+                "width": 25.06249237060547,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 233.98565673828125,
+                "y": 251.07826232910156,
+                "width": 25.09375,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 84.54479217529297,
+                "y": 335.0768737792969,
+                "width": 60.90625762939453,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 104635.97530460346,
+          "coverage": 0.45414919837067474,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Back off · taken: Reijo Virtanen, Lan Ho",
+              "rect": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "clipped": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              }
+            },
+            {
+              "name": "Help your friends · taken: Lan Ho",
+              "rect": {
+                "x": 184,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "clipped": {
+                "x": 184,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 11,
+              "police": {
+                "at": 6,
+                "afterRound": 2,
+                "y": 7,
+                "cells": [
+                  "2,7",
+                  "3,7"
+                ],
+                "arrived": true,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 3,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "2,5"
+                ],
+                "to": "2,5",
+                "score": 111.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "2,3",
+                  "2,4",
+                  "1,4"
+                ],
+                "to": "1,4",
+                "score": 107
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "advance",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "3,5"
+                ],
+                "to": "3,5",
+                "score": -3.4000000000000004
+              }
+            ],
+            "rng": 2516304751,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "1,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 0,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": false,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 0,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": false,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,4",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "3,4",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "The police are here. Back off, or help your friends.",
+              "Round 3: new enemy plans revealed.",
+              "R3 → 3: 3 HP, 0 guard (70%).",
+              "R2 holds position.",
+              "R1 → 2: 3 HP, 0 guard (70%).",
+              "Sirens. The police come in at the north end after enemy turn 2.",
+              "Round 2: new enemy plans revealed.",
+              "R3 → 3: 2 HP, 2 guard (70%).",
+              "R1 → 2: 2 HP, 2 guard (70%).",
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 46,
+                  "width": 221.84375,
+                  "height": 31.1875
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 77.1875,
+                  "width": 37.671875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 57.671875,
+                  "y": 77.1875,
+                  "width": 58.796875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 239.84375,
+                  "y": 53.59375,
+                  "width": 110.15625,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "[data-police=\"BACK_OFF\"]",
+              "rect": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Back off · taken: Reijo Virtanen, Lan Ho"
+            }
+          ],
+          "scenePixels": {
+            "samples": 7884,
+            "litFraction": 0.671740233384069,
+            "colors": 187
+          }
+        },
+        {
+          "name": "police-prompt",
+          "viewport": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 640
+          },
+          "panels": [
+            {
+              "name": "HEADER",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 360,
+                "height": 44
+              }
+            },
+            {
+              "name": "mission-bar",
+              "rect": {
+                "x": 0,
+                "y": 44,
+                "width": 360,
+                "height": 48
+              }
+            },
+            {
+              "name": "mission-goal",
+              "rect": {
+                "x": 10,
+                "y": 46,
+                "width": 221.84375,
+                "height": 31.1875
+              }
+            },
+            {
+              "name": "mission-count",
+              "rect": {
+                "x": 10,
+                "y": 77.1875,
+                "width": 37.671875,
+                "height": 14
+              }
+            },
+            {
+              "name": "mission-pressure",
+              "rect": {
+                "x": 57.671875,
+                "y": 77.1875,
+                "width": 58.796875,
+                "height": 14
+              }
+            },
+            {
+              "name": "roundbar",
+              "rect": {
+                "x": 239.84375,
+                "y": 53.59375,
+                "width": 110.15625,
+                "height": 16
+              }
+            },
+            {
+              "name": "panel",
+              "rect": {
+                "x": 0,
+                "y": 474,
+                "width": 360,
+                "height": 166
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 95.71891784667969,
+                "y": 203.89947509765625,
+                "width": 150.59375,
+                "height": 33.59375
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 266.131591796875,
+                "y": 261.85284423828125,
+                "width": 63.234375,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 256.5442810058594,
+                "y": 300.76507568359375,
+                "width": 63.25,
+                "height": 23
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 194.07296752929688,
+                "y": 254.16603088378906,
+                "width": 24,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 121.6016616821289,
+                "y": 243.60813903808594,
+                "width": 25.06249237060547,
+                "height": 23.000015258789062
+              }
+            },
+            {
+              "name": "DIV",
+              "rect": {
+                "x": 233.98565673828125,
+                "y": 251.07826232910156,
+                "width": 25.09375,
+                "height": 22.999984741210938
+              }
+            },
+            {
+              "name": "exit-marker",
+              "rect": {
+                "x": 84.54479217529297,
+                "y": 335.0768737792969,
+                "width": 60.90625762939453,
+                "height": 34.1875
+              }
+            }
+          ],
+          "area": 104635.97530460346,
+          "coverage": 0.45414919837067474,
+          "arena": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "targets": [
+            {
+              "name": "camera-menu",
+              "rect": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              },
+              "clipped": {
+                "x": 248.53125,
+                "y": 0,
+                "width": 52,
+                "height": 44
+              }
+            },
+            {
+              "name": "help",
+              "rect": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              },
+              "clipped": {
+                "x": 304.53125,
+                "y": 0,
+                "width": 45.46875,
+                "height": 44
+              }
+            },
+            {
+              "name": "Back off · taken: Reijo Virtanen, Lan Ho",
+              "rect": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "clipped": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              }
+            },
+            {
+              "name": "Help your friends · taken: Lan Ho",
+              "rect": {
+                "x": 184,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "clipped": {
+                "x": 184,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              }
+            }
+          ],
+          "previewText": "",
+          "canvas": {
+            "x": 0,
+            "y": 92,
+            "width": 360,
+            "height": 382
+          },
+          "battle": {
+            "rules": "c19-outing-v2",
+            "mission": {
+              "id": "outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van",
+              "objective": "getaway",
+              "goal": "getaway",
+              "protagonist": "aatami",
+              "targetId": null,
+              "targetCell": null,
+              "recovered": false,
+              "carrierId": null,
+              "heat": 11,
+              "police": {
+                "at": 6,
+                "afterRound": 2,
+                "y": 7,
+                "cells": [
+                  "2,7",
+                  "3,7"
+                ],
+                "arrived": true,
+                "resolved": false,
+                "posture": null,
+                "taken": [],
+                "saved": []
+              },
+              "routed": false,
+              "end": null,
+              "place": "The Linjat service yard",
+              "wayOut": "by the lit passage to Hämeentie",
+              "side": "the McCormicks' people"
+            },
+            "round": 3,
+            "status": "active",
+            "result": null,
+            "selectedId": "aatami",
+            "moved": [],
+            "acted": [],
+            "plans": [
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "2,5"
+                ],
+                "to": "2,5",
+                "score": 111.60000000000001
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "type": "attack",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "2,3",
+                  "2,4",
+                  "1,4"
+                ],
+                "to": "1,4",
+                "score": 107
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "type": "advance",
+                "target": "aatami",
+                "aim": "1,5",
+                "path": [
+                  "3,5"
+                ],
+                "to": "3,5",
+                "score": -3.4000000000000004
+              }
+            ],
+            "rng": 2516304751,
+            "units": [
+              {
+                "id": "aatami",
+                "name": "Aatami",
+                "side": "player",
+                "role": "muscle",
+                "cell": "1,5",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "1",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 11112804,
+                "skills": [],
+                "aptitudes": [
+                  "aatami"
+                ],
+                "perks": {},
+                "appearanceSeed": 3079393395,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "crew-slot-runner",
+                "name": "Reijo Virtanen",
+                "side": "player",
+                "role": "runner",
+                "cell": "2,5",
+                "hp": 0,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": false,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "2",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7771757,
+                "skills": [],
+                "aptitudes": [
+                  "runner"
+                ],
+                "perks": {},
+                "appearanceSeed": 2113843077,
+                "evacuated": false,
+                "helped": false,
+                "carrying": true,
+                "reach": 3
+              },
+              {
+                "id": "crew-slot-muscle",
+                "name": "Lan Ho",
+                "side": "player",
+                "role": "muscle",
+                "cell": "3,5",
+                "hp": 0,
+                "maxHp": 5,
+                "guard": 0,
+                "nerve": 3,
+                "harmBonus": 0,
+                "maxNerve": 3,
+                "alive": false,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "itemIds": [
+                  "training-bandage"
+                ],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "3",
+                "ammo": null,
+                "maxAmmo": null,
+                "kit": "light",
+                "color": 7834537,
+                "skills": [],
+                "aptitudes": [
+                  "muscle"
+                ],
+                "perks": {},
+                "appearanceSeed": 2333257068,
+                "evacuated": false,
+                "helped": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-1",
+                "name": "Igor Smirnov",
+                "side": "enemy",
+                "role": "muscle",
+                "cell": "2,4",
+                "hp": 5,
+                "maxHp": 5,
+                "guard": 2,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": true,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R1",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 861578338,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-2",
+                "name": "Kirsti Toivonen",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "1,3",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "folding-knife",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R2",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 844800719,
+                "waiting": false
+              },
+              {
+                "id": "opp-door-15-pickup-yard-van-3",
+                "name": "Ludmila Petrov",
+                "side": "enemy",
+                "role": "runner",
+                "cell": "3,4",
+                "hp": 4,
+                "maxHp": 4,
+                "guard": 1,
+                "nerve": 3,
+                "maxNerve": 3,
+                "alive": true,
+                "head": "",
+                "torso": "",
+                "legs": "",
+                "equipment": "baseball-bat",
+                "intent": "attack-in-reach",
+                "tough": false,
+                "itemIds": [],
+                "modelId": "cast3d-f01-heavy-bruiser-v05",
+                "label": "R3",
+                "ammo": null,
+                "maxAmmo": null,
+                "rival": true,
+                "harmBonus": 1,
+                "skills": [],
+                "aptitudes": [],
+                "perks": {},
+                "appearanceSeed": 828023100,
+                "waiting": false
+              }
+            ],
+            "log": [
+              "The police are here. Back off, or help your friends.",
+              "Round 3: new enemy plans revealed.",
+              "R3 → 3: 3 HP, 0 guard (70%).",
+              "R2 holds position.",
+              "R1 → 2: 3 HP, 0 guard (70%).",
+              "Sirens. The police come in at the north end after enemy turn 2.",
+              "Round 2: new enemy plans revealed.",
+              "R3 → 3: 2 HP, 2 guard (70%).",
+              "R1 → 2: 2 HP, 2 guard (70%).",
+              "Move + Act in either order. Rust follows its announced route until blocked and never changes targets."
+            ]
+          },
+          "mission": {
+            "bar": {
+              "x": 0,
+              "y": 44,
+              "width": 360,
+              "height": 48
+            },
+            "children": [
+              {
+                "id": "mission-goal",
+                "rect": {
+                  "x": 10,
+                  "y": 46,
+                  "width": 221.84375,
+                  "height": 31.1875
+                }
+              },
+              {
+                "id": "mission-count",
+                "rect": {
+                  "x": 10,
+                  "y": 77.1875,
+                  "width": 37.671875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "mission-pressure",
+                "rect": {
+                  "x": 57.671875,
+                  "y": 77.1875,
+                  "width": 58.796875,
+                  "height": 14
+                }
+              },
+              {
+                "id": "roundbar",
+                "rect": {
+                  "x": 239.84375,
+                  "y": 53.59375,
+                  "width": 110.15625,
+                  "height": 16
+                }
+              }
+            ]
+          },
+          "critical": [
+            {
+              "selector": "[data-police=\"BACK_OFF\"]",
+              "rect": {
+                "x": 10,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Back off · taken: Reijo Virtanen, Lan Ho"
+            },
+            {
+              "selector": "[data-police=\"HELP_FRIENDS\"]",
+              "rect": {
+                "x": 184,
+                "y": 532,
+                "width": 166,
+                "height": 60.5
+              },
+              "unclipped": true,
+              "hit": true,
+              "disabled": false,
+              "text": "Help your friends · taken: Lan Ho"
+            }
+          ],
+          "scenePixels": {
+            "samples": 7884,
+            "litFraction": 0.6722475900558093,
+            "colors": 186
+          }
+        }
+      ],
+      "errors": [],
+      "commands": [
+        "#crew-deploy",
+        "#end",
+        "#end",
+        "[data-police=\"HELP_FRIENDS\"]"
+      ],
+      "setup": {
+        "url": "crew-run/?campaign=1&outing=outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van&arena=yard",
+        "outing": {
+          "id": "outing-mission-budget-police-high-pressure-15-door-15-pickup-yard-van",
+          "kind": "door",
+          "door": "pickup-yard-van",
+          "encounter": "door-15-pickup-yard-van",
+          "scheduleIndex": 15,
+          "when": null,
+          "battle": "battle-courtyard-3v3",
+          "anchor": "linjat_yard",
+          "goal": "getaway",
+          "heat": 3,
+          "kit": "yard",
+          "marks": {
+            "fights": 0,
+            "police": false,
+            "hurt": false
+          },
+          "place": "The Linjat service yard",
+          "wayOut": "by the lit passage to Hämeentie",
+          "side": "the McCormicks' people",
+          "by": "mccormick_family",
+          "opening": "",
+          "fighters": [
+            "aatami",
+            "crew-slot-runner",
+            "crew-slot-muscle"
+          ],
+          "rivals": [
+            {
+              "id": "opp-door-15-pickup-yard-van-1",
+              "name": "Igor Smirnov",
+              "role": "muscle",
+              "cell": "front-2",
+              "equipment": "baseball-bat",
+              "carries": "tire-iron",
+              "tough": true
+            },
+            {
+              "id": "opp-door-15-pickup-yard-van-2",
+              "name": "Kirsti Toivonen",
+              "role": "watcher",
+              "cell": "back-1",
+              "equipment": "folding-knife",
+              "carries": "feature-phone",
+              "tough": false
+            },
+            {
+              "id": "opp-door-15-pickup-yard-van-3",
+              "name": "Ludmila Petrov",
+              "role": "fixer",
+              "cell": "middle-3",
+              "equipment": "baseball-bat",
+              "carries": "baton",
+              "tough": false
+            }
+          ],
+          "status": "open",
+          "result": null
+        }
+      },
+      "metrics": {
+        "scenario": "lab-6",
+        "graphicsMode": "direct",
+        "renderError": "",
+        "environment": {
+          "location": "yard",
+          "kitBytes": 9130365,
+          "textureSizes": [
+            [
+              1024,
+              1024
+            ],
+            [
+              1024,
+              1024
+            ]
+          ],
+          "motifs": [
+            "archway",
+            "balcony",
+            "bicycle",
+            "bike_rack",
+            "container",
+            "drain",
+            "facade_bay",
+            "facade_bay_b",
+            "ground_litter",
+            "lamp",
+            "low_wall",
+            "pallets",
+            "planter",
+            "service_bay",
+            "vent"
+          ],
+          "instancedBatches": 49,
+          "development": {
+            "lightProbe": "static scenery 128px cubemap / once at load and context recovery",
+            "liveReflections": false,
+            "planarReflection": {
+              "method": "static-scenery planar",
+              "size": 128,
+              "captures": 2,
+              "actorsReflected": false,
+              "update": "camera change, at most 10 Hz"
+            },
+            "pavement": "painted setts / joint-aware puddles + static-scene planar reflection",
+            "cutawayActors": 6,
+            "cutawayMaterials": 22
+          },
+          "lights": "3 practical spots / 1 shadow map + sky + passage spill",
+          "campaignSiteBound": false,
+          "signs": 1,
+          "aftermath": [],
+          "runs": 8,
+          "hiddenRuns": 0,
+          "plinths": 51,
+          "plinthsShown": 0
+        },
+        "camera": {
+          "preset": "tactical",
+          "mode": "overview",
+          "strength": 0,
+          "ids": [],
+          "enabled": false
+        },
+        "layoutPaused": false,
+        "fps": 0,
+        "fpsSamples": 0,
+        "graphicsPreparing": false,
+        "preparationMs": 0,
+        "renderedFrames": 6,
+        "labelLayouts": 2,
+        "edgeSmoothing": {
+          "method": "none",
+          "pixels": 0,
+          "bytes": 0
+        },
+        "draws": 162,
+        "geometries": 128,
+        "textures": 7,
+        "models": 6,
+        "characterProvider": "development stand-ins",
+        "bones": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "busy": false,
+        "graphicsLost": false,
+        "losses": 0,
+        "recoveries": 0,
+        "profile": "mobile",
+        "pixelRatio": 1,
+        "drawingBuffer": [
+          360,
+          382
+        ],
+        "shadows": false,
+        "antialias": false,
+        "textureSizes": [],
+        "mode": "mixed",
+        "history": [],
+        "finite": true
+      },
+      "postures": [
+        "BACK_OFF",
+        "HELP_FRIENDS"
+      ],
+      "naturallyFallen": [
+        "crew-slot-runner",
+        "crew-slot-muscle"
+      ],
+      "answered": "HELP_FRIENDS",
+      "aftermath": "THE LINJAT SERVICE YARD\n\nThe police came.\n\nReijo Virtanen: carried out, hurt.\n\nLan Ho: taken by the police.\n\nBack to Kallio",
+      "passed": true
+    }
+  ],
+  "failures": [
+    "Source changed during diagnostic."
+  ],
+  "scope": "Visible panel and badge rectangle union; excludes 3D terrain and thin projected leader/selection lines. Actual authored campaign outings created by existing state/places/outing helpers, entered through campaign save and C19 URL; gameplay proceeds only through native UI taps. Browser emulation, not physical-device acceptance.",
+  "finalSourceHashes": {
+    "web/crew-run/index.html": "c8f14e89ea014c00d27a98bf01b2865ac8354dcca884804e2ceb552e18f37471",
+    "web/crew-run/style.css": "0d45cebda8acb1ab32e420d4926ca3cba3b1668a3412cd45e5c64594fa868dc6",
+    "web/crew-run/startup.js": "f000d8fc67e14d97d039bf5f5a8f9e18081d9a9e59f210b135c4ba95e0631697",
+    "web/fight-module/main.js": "a41772771f423f816f7715bbf5fd45370b32e828568847e0d65b7c4292d8b478",
+    "web/test/c19-ui-budget.cjs": "1a046bd4895f93c6f993aa67a01e2c5a007c1ad122a9ec37b878557d552d1978"
+  },
+  "sourceStable": false,
+  "passed": false
+}

@@ -1,0 +1,199 @@
+{
+  "rows": 147,
+  "seedsPerRow": 12,
+  "simulations": 1764,
+  "fightScenarios": 11,
+  "getawayScenarios": 4,
+  "heatBands": [
+    0,
+    2,
+    3
+  ],
+  "groups": {
+    "fight": {
+      "fight": {
+        "matchedCases": 33,
+        "simulations": 396,
+        "win": 64.454545,
+        "withdraw": 30.787879,
+        "loss": 4.727273,
+        "rounds": 2.745455,
+        "hpLost": 3.5,
+        "downs": 0.412121,
+        "downed": 33.575758,
+        "routed": 64.454545,
+        "police": 30.787879,
+        "stuck": 0.0
+      },
+      "careful": {
+        "matchedCases": 33,
+        "simulations": 396,
+        "win": 68.212121,
+        "withdraw": 28.0,
+        "loss": 3.757576,
+        "rounds": 2.684848,
+        "hpLost": 3.487879,
+        "downs": 0.484848,
+        "downed": 40.424242,
+        "routed": 68.212121,
+        "police": 28.0,
+        "stuck": 0.0
+      },
+      "focused": {
+        "matchedCases": 33,
+        "simulations": 396,
+        "win": 64.212121,
+        "withdraw": 30.787879,
+        "loss": 5.0,
+        "rounds": 2.727273,
+        "hpLost": 3.8,
+        "downs": 0.451515,
+        "downed": 36.121212,
+        "routed": 64.212121,
+        "police": 30.787879,
+        "stuck": 0.0
+      }
+    },
+    "getaway": {
+      "run": {
+        "matchedCases": 12,
+        "simulations": 144,
+        "win": 67.333333,
+        "withdraw": 32.666667,
+        "loss": 0.0,
+        "rounds": 2.583333,
+        "hpLost": 1.275,
+        "downs": 0.158333,
+        "downed": 15.916667,
+        "routed": 0.0,
+        "police": 19.416667,
+        "stuck": 0.0
+      },
+      "fight": {
+        "matchedCases": 12,
+        "simulations": 144,
+        "win": 0.0,
+        "withdraw": 96.583333,
+        "loss": 3.416667,
+        "rounds": 3.775,
+        "hpLost": 4.3,
+        "downs": 0.608333,
+        "downed": 43.0,
+        "routed": 61.916667,
+        "police": 96.583333,
+        "stuck": 0.0
+      },
+      "careful": {
+        "matchedCases": 12,
+        "simulations": 144,
+        "win": 63.916667,
+        "withdraw": 36.083333,
+        "loss": 0.0,
+        "rounds": 3.475,
+        "hpLost": 0.0,
+        "downs": 0.0,
+        "downed": 0.0,
+        "routed": 0.0,
+        "police": 36.083333,
+        "stuck": 0.0
+      },
+      "escort": {
+        "matchedCases": 12,
+        "simulations": 144,
+        "win": 83.333333,
+        "withdraw": 16.666667,
+        "loss": 0.0,
+        "rounds": 2.666667,
+        "hpLost": 0.0,
+        "downs": 0.0,
+        "downed": 0.0,
+        "routed": 0.0,
+        "police": 16.666667,
+        "stuck": 0.0
+      }
+    }
+  },
+  "fightCarefulMinusAggressive": {
+    "win": 3.757576,
+    "withdraw": -2.787879,
+    "loss": -0.969697,
+    "rounds": -0.060607,
+    "hpLost": -0.012121,
+    "downs": 0.072727,
+    "downed": 6.848484,
+    "routed": 3.757576,
+    "police": -2.787879,
+    "stuck": 0.0
+  },
+  "stuckRows": 0,
+  "priorEvidenceComparison": {
+    "baseline-12.json": {
+      "path": "/workspace/evidence/baseline-12.json",
+      "sha256": "dfd55604d76ad6ee34b16228b4aa0d02a525a0e29e1f2271d85a5a5041a4b964",
+      "allCurrent14FieldsIdentical": true
+    },
+    "instrumented-default-12.json": {
+      "path": "/workspace/evidence/instrumented-default-12.json",
+      "sha256": "e1a173046a63d35da9c28401eddd681403a3d20f864d67ce8d908e0cc6c5d3b8",
+      "allCurrent14FieldsIdentical": true
+    }
+  },
+  "carefulCaseWinDeltaCounts": {
+    "worse": 7,
+    "better": 10,
+    "same": 16
+  },
+  "largestCarefulGains": [
+    {
+      "fight": "door:hit-courtyard-ledger",
+      "heat": 0,
+      "winPoints": 33,
+      "hpSaved": 1.8,
+      "policePoints": -25
+    },
+    {
+      "fight": "door:pickup-boiler-hall",
+      "heat": 2,
+      "winPoints": 25,
+      "hpSaved": -1.6,
+      "policePoints": -25
+    },
+    {
+      "fight": "door:pickup-boiler-hall",
+      "heat": 3,
+      "winPoints": 25,
+      "hpSaved": -2.6,
+      "policePoints": -25
+    }
+  ],
+  "largestCarefulLosses": [
+    {
+      "fight": "mission:enc-bear-path",
+      "heat": 2,
+      "winPoints": -17,
+      "hpSaved": -0.6,
+      "policePoints": 8
+    },
+    {
+      "fight": "door:hit-bear-debt",
+      "heat": 0,
+      "winPoints": -9,
+      "hpSaved": 0.0,
+      "policePoints": 0
+    },
+    {
+      "fight": "mission:enc-bear-path",
+      "heat": 0,
+      "winPoints": -9,
+      "hpSaved": -0.5,
+      "policePoints": 0
+    }
+  ],
+  "limits": [
+    "Means are equal-weight means of the sampler rounded per-case rows, not per-seed raw observations.",
+    "HP loss is net initial-to-terminal crew HP; downs include wasDown, taken or terminal down/dead, not permanent campaign casualties.",
+    "Policies answer police with BACK_OFF; this does not compare rescue postures.",
+    "No Brace command counts, crew recovery settlement, physical-device performance or wall-clock battle duration are measured.",
+    "The careful policy is limited; no causal claim about player skill or Brace follows from its outcomes."
+  ]
+}

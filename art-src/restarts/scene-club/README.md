@@ -71,6 +71,15 @@ remove duplicate forecast cards but keep the selected response, actual
 consequence and map continuation. The complete authored labels remain
 accessible. The map retains its authored arrival text.
 
+C.19 portrait targeting, Crew and VIEW now reuse the dock instead of stacking
+panels over the arena. Back spends no Move or Action. Help, loadout and retreat
+share bounded sheets. The short-phone HUD and mission controls preserve native
+44px targets. The [independent mission probe](evidence/c19-mission-budget/README.md)
+checks actual extraction, free crew inspection and both fallen-crew police
+postures: seven states, at most **45.53%** UI. Combat rules, authored objectives,
+3D assets and campaign settlement remain unchanged. The dedicated browser
+regression is `web/test/c19-ui-budget.cjs`, also run by C.19 CI.
+
 ## Retained sources
 
 | Source | Register ID | Status |
@@ -96,7 +105,8 @@ inspection scale and restart. Direct routes:
 
 ## Gameplay boundary
 
-Based on current main `804613a3d4eaa1e5180dfb0ef2cb88952d15bd97` / v4.99.
+Main is incorporated through `187e52aff9fcedc7bfac0f316b07b5fd64e35675`;
+its v4.99 gameplay base is `804613a3d4eaa1e5180dfb0ef2cb88952d15bd97`.
 `campaign.js` calls state v16's real `chooseEncounter` and `advanceSchedule`.
 Only `piritori:restart:scene-club:v1` is written. Normal campaign, Night Shift
 and outing receipts are never opened or replaced by this candidate.
@@ -134,6 +144,11 @@ specification. Tests reject restoration of the retired libraries and references.
 ## Verification and actual output
 
 - **35 Node suites** pass: [actual campaign/combat output](evidence/baseline-node.log).
+- [Fresh 12-seed balance baseline](evidence/balance-12/README.md): all 15
+  scenarios, 147 rows / 1,764 simulations, unchanged measured outcomes.
+  Careful fighting gains 3.76 win points but barely saves HP; escort improves
+  getaway wins. These command-policy results do not measure UI usability or
+  establish that Brace needs a rule change.
 - Adapter: 135 checks for three exact effects, engine settlement and clock,
   reload, duplicate refusal and isolated storage.
 - [Scene Club browser report](evidence/browser-results.json): **5,082 main +
@@ -153,8 +168,8 @@ specification. Tests reject restoration of the retired libraries and references.
 - [Phone recording](evidence/visual-restart-phone.mp4) and
   [landscape recording](evidence/visual-restart-landscape.mp4). WebM originals
   and stage/viewport screenshots are included beside them.
-  The earlier short clips were filmed at `9cdfdc0`; the new trailer’s 450×800
-  view remains pixel-identical after the narrow-font correction.
+  These earlier short clips and the full progress trailer were filmed before
+  the UI-budget pass. Use the UI-cap previews linked above for current layouts.
   MP4s fit the actual scene to 720×1280; WebMs retain the native browser
   viewport and letterboxing. No artwork is reconstructed for the recordings.
 

@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "kind": "Analysis of completed browser assertions; not a new browser run",
+  "rawReport": "after/report.json",
+  "rawReportPassed": false,
+  "auxiliaryFileChanged": [
+    "web/test/c19-ui-budget.cjs"
+  ],
+  "auxiliaryFileScope": "web/test/c19-ui-budget.cjs was neither served nor imported by the private probe. Its helper code was copied before launch. Raw report and its source-guard failure remain unchanged.",
+  "runtimeSourceStable": true,
+  "currentRuntimeHashesMatch": true,
+  "checkedAt": "2026-11-08T11:42:51.935Z",
+  "runtimeHashes": {
+    "web/crew-run/index.html": "c8f14e89ea014c00d27a98bf01b2865ac8354dcca884804e2ceb552e18f37471",
+    "web/crew-run/style.css": "0d45cebda8acb1ab32e420d4926ca3cba3b1668a3412cd45e5c64594fa868dc6",
+    "web/crew-run/startup.js": "f000d8fc67e14d97d039bf5f5a8f9e18081d9a9e59f210b135c4ba95e0631697",
+    "web/fight-module/main.js": "a41772771f423f816f7715bbf5fd45370b32e828568847e0d65b7c4292d8b478"
+  },
+  "contexts": 2,
+  "measuredStates": 7,
+  "maxUiCoverage": 0.4553152701838149,
+  "assertions": [
+    "Every measured combined UI rectangle union <=50%; includes mission-strip child overflow.",
+    "Mission goal/count/pressure/roundbar fully inside the mission strip.",
+    "Critical mission controls native44px, unclipped and center-hit-tested.",
+    "Native Crew open and Back preserve the exact combat snapshot.",
+    "Native Extract commits extraction.",
+    "Two crew fall through actual enemy turns; both police postures fully visible and tappable; native Help Friends settles real aftermath.",
+    "Separate standalone roster remains byte-identical; zero page/asset errors excluding unavailable shared hub shell/favicon."
+  ],
+  "limits": [
+    "360x640 browser emulation/software WebGL, not physical-device acceptance.",
+    "Checks authored pickup-yard-van getaway/Extract and its high-pressure police interruption; does not claim every other mission command was sampled.",
+    "No combat rules, runtime files, art, saves outside private browser contexts, or repository tests were edited by this diagnostic."
+  ]
+}
