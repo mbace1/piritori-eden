@@ -60,10 +60,10 @@ function wordWrap(msg,x,y,maxWidth,font,lineHeight) {
 }
 function drawBubble(speaker) {
   const portrait=LAYOUT==='portrait';
-  const r=portrait?{x:90,y:353,w:900,h:245}:speaker==='toko'?{x:820,y:35,w:740,h:265}:{x:25,y:35,w:585,h:265};
+  const r=portrait?{x:90,y:255,w:900,h:255}:speaker==='toko'?{x:820,y:35,w:740,h:265}:{x:25,y:35,w:585,h:265};
   const base=r.y+r.h;
-  const tip=portrait?(speaker==='toko'?{x:775,y:720}:{x:325,y:740})
-    :(speaker==='toko'?{x:775,y:415}:{x:310,y:430});
+  const tip=portrait?(speaker==='toko'?{x:775,y:550}:{x:325,y:680})
+    :(speaker==='toko'?{x:775,y:320}:{x:310,y:340});
   const rootX=portrait?(speaker==='toko'?760:355):(speaker==='toko'?900:300);
   g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=16;g.shadowOffsetY=10;
   g.fillStyle='#C7AA79';g.beginPath();
