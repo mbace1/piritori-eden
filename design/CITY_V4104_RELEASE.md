@@ -2,7 +2,7 @@
 
 - **Source:** `mbace1/piritori-eden` @ `50b7d34`, web only.
   - **Gates were green:** run 1265, all nine jobs. It ran `playlog.mjs`, `playtest-browser.cjs` and `outing-browser.cjs` with the new checks.
-  - The repo's own `deploy` workflow (run 258) did not publish. It deploys the Godot web export to piritori-eden's Pages site, not the hub. Its publish step timed out inside GitHub Pages ("syncing_files"), and the re-run failed at once because it reused the deployment the timeout had cancelled. The next push to main deploys afresh; Godot is paused.
+  - The repo's own `deploy` workflow (run 258) did not publish. It deploys the Godot web export to piritori-eden's Pages site, not the hub. Its publish step timed out inside GitHub Pages ("syncing_files"), and the re-run failed at once because it reused the deployment the timeout had cancelled. The receipt's own push (run 259) timed out the same way, so this is GitHub Pages being slow to sync that artifact, twice, after 256 and 257 succeeded earlier the same day. Not retried further: it is the paused Godot site, and the hub is unaffected.
 - **Site:** `mbace1/Suds-Jack` gh-pages `b3ec97d9`, under `piritori/`. **Pages run 1678 succeeded.**
   - Nothing was deleted. `release.json` holds 312 files: one added (`crew-run/fight-log.js`) and 55 changed.
   - Restaged once, because gh-pages moved while this was staged (Toko Move v3.23, nothing under `piritori/`).
