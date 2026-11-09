@@ -2,6 +2,9 @@ const canvas=document.getElementById('scene');
 const message=document.getElementById('loading-message');
 const detail=document.getElementById('loading-detail');
 const retry=document.getElementById('reload-graphics');
+// v4.104: a campaign fight writes into Act I's play log (fight-log.js). It
+// only reads the fight; if it cannot load, nothing else notices.
+import('./fight-log.js?v=2').then(m=>m.watchFight()).catch(()=>{});
 
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const attrs={

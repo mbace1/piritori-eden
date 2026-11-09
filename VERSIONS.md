@@ -1,3 +1,24 @@
+## v4.104 — 2026-11-09
+
+**Playtest notes now cover the fights** (owner, 2026-11-09: *"Continue"*). v4.103's notes went blind at the door of every fight: Night Shift is its own page, so the core of the game showed up only as a gap between leaving Kallio and coming back.
+
+- **Night Shift writes into the same play log** (`web/crew-run/fight-log.js`), on the same device, and only for a campaign outing (one Act I sent). The standalone Night Shift cabinet is a test bench, not a playthrough, and writes nothing.
+  - It works from the outside: it reads the snapshots the fight already publishes (`crewRun`, `fightModule`), the turn line, and the taps. Nothing in the fight's own files changed; `startup.js` loads it, and if it cannot load, nothing else notices.
+  - **Screens:** the brief, each round once it is the player's turn (so a round's first tap is a measured wait, not the enemy's moves), the police question, and the result.
+  - **Taps**, named by the control and never by a person: `fight:brace`, `fight:help` (not "Help Aatami"), `fight:end`, `fight:police-back-off`… One tap is one entry, though the fight's buttons answer three events.
+  - **Fight verbs reach "Offered, never used":** Brace, the bandage, Reload, helping a fallen friend up, the field kit, Sprint, Extract, Withdraw, the fight camera.
+  - **One fight entry per outing** once its receipt is written: how it ended (won, the police, withdrew, lost) and after how many rounds. A reload of the result page does not count it twice.
+- **The notes gain a line:** *"Fights: 3 (2 won, 1 ended by the police), 4.3 rounds on average."*
+- **A session is a sitting now, not a page load.** Every fight is two page loads, so v4.103 would have said "7 sessions" about one evening. A sitting starts with the first event and after each gap over five minutes. A page loading or a hidden tab is not play time.
+- **Two pages share one log, so each reads it again before writing** when it comes back into view (`reload`). A page restored by Back from the browser's memory still held the log as it was left, and its next write would have dropped the fight.
+- **Gates:**
+  - `playlog.mjs`: a fight driven through the watcher with fake snapshots (the brief, a resolving round that is not yet the player's, two rounds, the result, a second watcher on a reload, the cabinet that writes nothing), and sittings across page loads.
+  - `outing-browser.cjs`: after each real door fight (phone and desktop win, phone police), the notes say *Fights: 1* and how it ended, a round's first tap is among the slowest moments, and every tap is named by its control, once.
+  - `playtest-browser.cjs`: a reload a moment later is the same sitting.
+- **Cache:** playlog v2, app v71, startup v36, fight-log v2 (new, and bumped once by the cascade as its import moved). The label is v4.104.
+- **How to playtest:** unchanged. Play on the Pixel; pause → PLAYTEST NOTES → SEND or COPY. Fights are in it now.
+- **Owner played: pending.** Godot paused.
+
 ## v4.103 — 2026-11-09
 
 **Playtest notes: what a real playthrough did, kept on the device** (owner, 2026-11-09: *"Go ahead"*, on reading a real playthrough before choosing the next UX step). Every UX number this game has came from a bot, and a bot never hesitates, never misses a button and never closes the tab.

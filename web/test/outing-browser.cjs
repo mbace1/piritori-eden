@@ -214,6 +214,21 @@ server.listen(0, '127.0.0.1', async () => {
       await page.waitForFunction(() => Boolean(window.__ptv3?.state));
       let s = await S(page);
       ok(`${name}: straight back to the map`, await page.locator('#splash').isHidden() && !s.outing && s.mode === 'route' && s.scheduleIndex === before.scheduleIndex + 1);
+      // v4.104: the fight is in the play log, read where the player reads it.
+      // (Not the session count: this test pins Act I's clock a year back for
+      // the dice, so its log is not one sitting. playlog.mjs holds that.)
+      {
+        const logged = await page.evaluate(() => window.__ptv3.playlog.entries());
+        const acts = logged.filter(e => e.type === 'act' && /^fight:/.test(e.action)).map(e => e.action);
+        const fights = logged.filter(e => e.type === 'fight');
+        await tap(page.locator('#pauseButton')); await tap(page.locator('[data-pause="playtest"]'));
+        const notes = await page.locator('.playtest-notes').innerText();
+        ok(`${name}: the fight is in the playtest notes`, new RegExp(`Fights: 1 \\(1 ${kind === 'win' ? 'won' : 'ended by the police'}\\)`).test(notes), notes);
+        ok(`${name}: with the rounds' first taps among the slowest moments`, /on fight(-brief)? · .*→ fight:/.test(notes), notes);
+        ok(`${name}: every tap named by its control, once`, fights.length === 1 && fights[0].outing === camp.outing.id && acts.includes('fight:crew-deploy') && acts.includes('fight:end')
+          && acts.includes(kind === 'win' ? 'fight:commit-preview' : 'fight:police-back-off') && !acts.some(a => /aatami|lan|reijo/i.test(a)), JSON.stringify({ acts, fights }));
+        await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
+      }
       const strip = await page.locator('.fight-strip').innerText().catch(() => '');
       ok(`${name}: what changed is a strip on the map`, kind === 'win'
         ? /They ran\. A Torkkelinmäki courtyard is yours\./i.test(strip) && /intel \+1/i.test(strip)

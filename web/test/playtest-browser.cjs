@@ -1,4 +1,4 @@
-// The play log, as the player meets it (v4.103): play a little, open the
+// The play log, as the player meets it (v4.103, v4.104): play a little, open the
 // pause menu's PLAYTEST NOTES, read what this device saw, then SEND, COPY and
 // CLEAR. The arcade's feedback module is stubbed at its own URL, so SEND is
 // checked end to end without posting anywhere.
@@ -104,7 +104,9 @@ server.listen(0, '127.0.0.1', async () => {
     await page.waitForFunction(() => document.getElementById('splash').hidden);
     await openNotes(page);
     text = await notes(page);
-    ok('a reload keeps them, as a second session', /Played: 2 sessions/.test(text), text.split('\n')[1]);
+    // A reload a moment later is the same sitting (v4.104: a session is a
+    // sitting, not a page load; every fight is two page loads).
+    ok('a reload keeps them, and is the same sitting', /Played: 1 session,/.test(text) && /→ (select-anchor|plan-journey|commit-journey)/.test(text), text.split('\n')[1]);
 
     await page.locator('[data-pause="pt-clear"]').click();
     ok('CLEAR empties them', /Nothing played on this device yet/.test(await notes(page)) && /Cleared/.test(await said(page)));

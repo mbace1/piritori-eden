@@ -18,7 +18,7 @@ import {
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=16';
 import { createPauseMenu } from './pause.js?v=6';
-import { createPlaylog, summarise, report as playReport } from './playlog.js?v=1';
+import { createPlaylog, summarise, report as playReport } from './playlog.js?v=2';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
@@ -132,7 +132,7 @@ let state;
 // until they press SEND in the pause menu's PLAYTEST NOTES.
 let playlog = null, playlogEnded = false;
 // The build's label, said in the pause menu and on every playtest note.
-const APP_VERSION = 'v4.103';
+const APP_VERSION = 'v4.104';
 // The road (road.js): events in transit and on arrival. Empty until loaded,
 // and a failed load leaves the city exactly as it was, with no events.
 // Toko in cut card behind his counter (owner, 2026-10-21: "Approved, put it in the game"; placed in the empty bar in
@@ -2533,6 +2533,8 @@ async function boot() {
     // copy over it (design/STATE_MACHINES.md, M1).
     addEventListener('pageshow', event => {
       if (!event.persisted) return;
+      // The play log too: Night Shift has written the fight into it (v4.104).
+      playlog?.reload();
       state = loadState(data.content);
       settleRoad(state, roadEvents);
       registerTaken(state, data, doors);
@@ -2667,7 +2669,11 @@ async function boot() {
     playlogEnded = state.chapterCleared;
     addEventListener('error', event => playlog.add('error', { message: String(event.message ?? event.error ?? 'error').slice(0, 200) }));
     addEventListener('unhandledrejection', event => playlog.add('error', { message: String(event.reason?.message ?? event.reason ?? 'rejection').slice(0, 200) }));
-    document.addEventListener('visibilitychange', () => playlog.add(document.hidden ? 'hidden' : 'visible'));
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { playlog.add('hidden'); return; }
+      playlog.reload(); // another page (a fight) may have written meanwhile
+      playlog.add('visible');
+    });
     const playtest = {
       text: () => playReport(summarise(playlog.entries()), { version: APP_VERSION }),
       async send() {
