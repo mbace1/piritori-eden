@@ -1,6 +1,6 @@
 // Shared Scene Club presentation. Campaign and review callers own all rules,
 // saves and clock changes; this view owns only its current conversation beat.
-import { createActors } from './scene-club-actors.js?v=1';
+import { createActors } from './scene-club-actors.js?v=2';
 
 export const SCENE_CLUB_ID = 'enc-jaska-receipt';
 export const SCENE_CLUB_STYLES = new URL('./scene-club-view.css?v=1', import.meta.url).href;

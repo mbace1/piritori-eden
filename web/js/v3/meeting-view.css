@@ -58,6 +58,15 @@
 .meeting .receipt { margin: 0 4px; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .meeting .primary { min-height: 48px; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font-size: 16px; font-weight: 700; }
 
+/* The menu takes the card's place, scrolling within half the frame. */
+.meeting .menu-card[hidden], .meeting .card[hidden] { display: none; }
+.meeting .menu-card { max-height: calc(50cqh - 56px - var(--inset)); overflow: auto; }
+.meeting .menu-card details { border-bottom: 1px solid #d6cdb8; }
+.meeting .menu-card summary { min-height: 44px; display: flex; align-items: center; padding: 0 6px; font-size: 15px; cursor: pointer; }
+.meeting .menu-card details p { margin: 0 6px 10px; font-size: 14px; line-height: 1.35; color: var(--quiet); }
+.meeting .menu-item { min-height: 44px; border: 1.5px solid var(--line); border-radius: 14px; background: #fffaf0; font-size: 15px; text-align: left; padding: 0 14px; }
+.meeting .primary:disabled { opacity: .6; }
+
 /* Over half the frame: drop the lines under each choice (they stay in the accessible label). */
 .meeting[data-density="compact"] .choice .sub { display: none; }
 .meeting[data-density="compact"] .choice { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }

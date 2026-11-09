@@ -15,7 +15,7 @@
 <script type="module">
 import { loadGameData } from '../../../web/js/v3/content.js?v=2';
 import { createState, choiceStatus } from '../../../web/js/v3/state.js';
-import { mountMeetingView, MEETING_STYLES } from '../../../web/js/v3/meeting-view.js?v=1';
+import { mountMeetingView, MEETING_STYLES } from '../../../web/js/v3/meeting-view.js?v=2';
 const q = new URLSearchParams(location.search), id = q.get('id') || 'enc-first-purchase';
 const [data, places] = await Promise.all([loadGameData(), fetch('../../../content/places-v1.json').then(r => r.json())]);
 const c = data.content, index = c.schedule.findIndex(s => s.encounter_id === id), slot = c.schedule[index];

@@ -2,7 +2,7 @@ import { loadGameData } from '../../../web/js/v3/content.js?v=2';
 import { createActors } from './actors.js';
 import { createTokoComposition } from './toko-composition.js';
 import { loadCandidate, restartCandidate, chooseCandidate, returnToMap, SCENE_ENCOUNTER_ID } from './campaign.js';
-import { mountSceneClubView } from '../../../web/js/v3/scene-club-view.js?v=1';
+import { mountSceneClubView } from '../../../web/js/v3/scene-club-view.js?v=2';
 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

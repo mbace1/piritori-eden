@@ -15,7 +15,7 @@ for(const v of c.optional_visits??[]){
  assert.equal(new Set(v.choices.map(x=>x.id)).size,v.choices.length);
  for(const ch of v.choices)assert(ch.effects.every(e=>e.startsWith('memory:')),'Short visits only record memories');
 }
-const app=await read('../js/v3/app.js?v=67');
+const app=await read('../js/v3/app.js?v=71');
 assert(app.includes('data-news-identity="arvo"'),'Arvo keeps his name without the retired face');
 assert(!app.includes('scene-speaker')&&!app.includes('cast3d-jaska-v01'),'No retired 3D dialogue faces are mounted');
 // Toko is the paper rig over the empty bar (owner, 2026-10-21), not the 3D speaker: the app mounts it, the stage names

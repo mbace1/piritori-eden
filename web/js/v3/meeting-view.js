@@ -9,7 +9,7 @@
 // the model it is given and reports a tap. People without approved artwork are
 // drawn as a labelled stand-in (owner, 8 November: "Neutral labelled
 // placeholders replace unapproved contacts").
-import { createActors } from './scene-club-actors.js?v=1';
+import { createActors } from './scene-club-actors.js?v=2';
 
 export const MEETING_STYLES = new URL('./meeting-view.css?v=1', import.meta.url).href;
 const APPROVED = new Set(['jaska', 'toko']);
@@ -86,7 +86,7 @@ export function isSpecial(choice) {
   });
 }
 
-export function mountMeetingView(world, { model, onChoose, onContinue, onBack } = {}) {
+export function mountMeetingView(world, { model, onChoose, onContinue, onBack, sound } = {}) {
   if (!(world instanceof Element) || !model?.id) throw Error('A meeting needs its encounter and a view root.');
   const $ = sel => world.querySelector(sel);
   let disposed = false, loaded = false, choosing = false, armTimer = 0, actors = null, frame = 0;
@@ -99,7 +99,8 @@ export function mountMeetingView(world, { model, onChoose, onContinue, onBack } 
     <header class="pill"><span class="when">${esc(model.when)}</span><strong class="where">${esc(model.place)}</strong><span class="cash">${esc(model.cash)}</span></header>
     <button class="menu-button" type="button" aria-label="Menu">☰</button>
     <div class="actors" aria-hidden="true"></div>
-    <section class="card" aria-live="polite"></section>`;
+    <section class="card" aria-live="polite"></section>
+    <section class="card menu-card" hidden aria-label="Menu"></section>`;
   if (model.people.includes('aatami')) actors = createActors($('.actors'), { aatami: 'side', partner, reviewOnly: true });
   for (const id of standIns) {
     const { name, role } = personLabel(id, model.names);
@@ -111,7 +112,7 @@ export function mountMeetingView(world, { model, onChoose, onContinue, onBack } 
     return id ? personLabel(id, model.names).name : '';
   }
   function budget() {
-    const h = world.clientHeight, top = $('.pill').getBoundingClientRect(), card = $('.card').getBoundingClientRect(), box = world.getBoundingClientRect();
+    const h = world.clientHeight, top = $('.pill').getBoundingClientRect(), card = world.querySelector('.card:not([hidden])').getBoundingClientRect(), box = world.getBoundingClientRect();
     const scale = box.height / h;
     return ((top.bottom - box.top) + (box.bottom - card.top)) / scale / h;
   }
@@ -126,16 +127,20 @@ export function mountMeetingView(world, { model, onChoose, onContinue, onBack } 
     clearTimeout(armTimer);
     const chosen = model.choices.find(c => c.id === model.choiceId);
     world.dataset.resolved = String(Boolean(chosen));
+    $('.cash').textContent = model.cash; $('.when').textContent = model.when; $('.where').textContent = model.place;
     if (chosen) {
       const s = stakeOf(chosen);
-      $('.card').innerHTML = `<div class="line"><span class="who">Aatami</span><p>${esc(chosen.label)}</p></div>
-        <p class="result">${esc(chosen.forecast ?? '')}</p>
+      $('.card:not(.menu-card)').innerHTML = `<div class="line"><span class="who">Aatami</span><p>${esc(chosen.label)}</p></div>
+        ${(model.outcome?.length ? model.outcome : [chosen.forecast ?? '']).filter(Boolean).slice(0, 3).map(line => `<p class="result">${esc(line)}</p>`).join('')}
         ${s.cost || s.notes ? `<p class="receipt">${[s.cost, s.notes].filter(Boolean).map(esc).join(' · ')}</p>` : ''}
         <button class="primary" type="button" id="continue">Back to Kallio</button>`;
-      $('#continue').addEventListener('click', () => onContinue?.());
+      // As Scene Club: Back to Kallio arms 300ms after the result appears.
+      const button = $('#continue'); button.disabled = true;
+      armTimer = setTimeout(() => { if (!disposed) button.disabled = false; }, 300);
+      button.addEventListener('click', () => { if (!disposed && !button.disabled) { button.disabled = true; const r = onContinue?.(); if (r?.ok === false) button.disabled = false; } });
     } else {
       const who = speakerName();
-      $('.card').innerHTML = `<div class="line">${who ? `<span class="who">${esc(who)}</span>` : ''}<p>${esc(firstLine(model.opening))}</p></div>
+      $('.card:not(.menu-card)').innerHTML = `<div class="line">${who ? `<span class="who">${esc(who)}</span>` : ''}<p>${esc(firstLine(model.opening))}</p></div>
         <div class="choices">${model.choices.map(choice => {
           const s = stakeOf(choice), special = choice.available !== false && isSpecial(choice);
           return `<button class="choice${special ? ' special' : ''}" type="button" data-choice="${esc(choice.id)}" ${choice.available === false ? 'disabled' : ''}
@@ -165,9 +170,20 @@ export function mountMeetingView(world, { model, onChoose, onContinue, onBack } 
     actors?.ready?.then(() => { if (!disposed) { actors.setSpeaker(chosen || !partner ? 'aatami' : partner); actors.play(chosen ? 'aatami' : (partner ?? 'aatami'), 'talk'); } }).catch(() => {});
     if (!frame) frame = requestAnimationFrame(() => { frame = 0; fit(); });
   }
+  function openMenu(open) {
+    $('.menu-card').hidden = !open; $('.card:not(.menu-card)').hidden = open; world.dataset.menu = String(open);
+    if (!open) { fit(); return; }
+    $('.menu-card').innerHTML = `${(model.inspections ?? []).map(item => `<details><summary>${esc(item.label)}</summary><p>${esc(item.text)}</p></details>`).join('')}
+      ${sound ? `<button class="menu-item" type="button" data-menu="sound">Sound · ${sound.get() ? 'on' : 'off'}</button>` : ''}
+      <button class="menu-item" type="button" data-menu="back">Back to Kallio</button>
+      <button class="primary" type="button" data-menu="resume">Back to the conversation</button>`;
+    $('.menu-card').querySelector('[data-menu="resume"]').addEventListener('click', () => openMenu(false));
+    $('.menu-card').querySelector('[data-menu="back"]').addEventListener('click', () => { openMenu(false); model.choiceId ? onContinue?.() : onBack?.(); });
+    $('.menu-card').querySelector('[data-menu="sound"]')?.addEventListener('click', e => { sound.set(!sound.get()); e.target.textContent = `Sound · ${sound.get() ? 'on' : 'off'}`; });
+  }
   const resize = () => fit();
   window.addEventListener('resize', resize);
-  $('.menu-button').addEventListener('click', () => onBack?.());
+  $('.menu-button').addEventListener('click', () => openMenu($('.menu-card').hidden));
   render();
   const api = {
     update(next) { if (disposed) return; model = next; render(); },

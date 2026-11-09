@@ -41,7 +41,8 @@ import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } 
 import { STANCE, STANCES } from './stance.js?v=2';
 import { mountBattleStage3D, disposeBattleStage3D, setBattleLights } from './render3d.js?v=12';
 import { positionBattleDOM } from './stage-camera.js?v=5';
-import { mountSceneClubView, SCENE_CLUB_ID, SCENE_CLUB_STYLES } from './scene-club-view.js?v=1';
+import { mountSceneClubView, SCENE_CLUB_ID, SCENE_CLUB_STYLES } from './scene-club-view.js?v=2';
+import { mountMeetingView, MEETING_STYLES } from './meeting-view.js?v=2';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -273,10 +274,98 @@ function mountCampaignSceneClub() {
   if (link.sheet) begin();
   return true;
 }
+// Every other scheduled meeting in the same 9:16 scene, with a Toko Move lower
+// third (owner, 9 November: "Go, all 16"). Scene Club keeps its own approved
+// view; door meetings and optional visits keep theirs for now. The view only
+// presents: choices go through chooseCurrentEncounter, Back to Kallio through
+// advanceAndSettle, exactly as Scene Club and the old meeting screen do.
+let meeting = null;
+function meetingEncounter() {
+  if (!data || !state || !$('splash').hidden || state.mode !== 'encounter' || state.endingId
+    || state.battle?.status === 'active' || openOuting(state) || state.road?.pending || !presentAtLead()) return null;
+  const encounter = currentEncounter(state, data);
+  if (!encounter || encounter.id === SCENE_CLUB_ID || encounter.door) return null;
+  return data.content.schedule.some(slot => slot.encounter_id === encounter.id) ? encounter : null;
+}
+function meetingModel(encounter) {
+  const slot = currentSchedule(state, data.content), anchor = slot?.anchor_id ?? encounter.anchor_id;
+  const plateId = encounter.scene_asset_id || (placeAt(places, anchor)?.plate !== 'street' ? placeAt(places, anchor)?.plate : null);
+  const plate = plateId ? assetUrl(data, plateId) : '';
+  const names = Object.fromEntries((encounter.participants ?? []).map(id => [id, crewRecord(state, data, id)?.name]).filter(([, name]) => name));
+  return {
+    id: encounter.id, people: encounter.participants ?? ['aatami'], names,
+    backdrop: plate ? new URL(plate, document.baseURI).href : '',
+    when: slot ? `Day ${slot.day} · ${slot.block}` : '', place: data.anchors.get(anchor)?.label ?? anchor,
+    cash: money(Math.round(state.cash)), opening: encounter.opening,
+    choiceId: state.choices[encounter.id] ?? null, outcome: state.choices[encounter.id] ? (state.lastOutcome ?? []) : [],
+    choices: encounter.choices.map(choice => {
+      const status = choiceStatus(choice, state, data);
+      const failed = (choice.requirements ?? []).filter(r => !choiceStatus({ requirements: [r] }, state, data).ok);
+      return { ...choice, available: status.ok, reason: status.reasons.map(readableReason).join(' · '), failed };
+    }),
+    inspections: (encounter.inspectables ?? []).map(label => ({ label, text: inspectionCopy(label) })),
+  };
+}
+function closeMeeting() {
+  if (!meeting) return;
+  const old = meeting; meeting = null; old.disposed = true;
+  old.view?.destroy(); old.host.remove();
+}
+function mountCampaignMeeting() {
+  const encounter = meetingEncounter();
+  if (!encounter) { closeMeeting(); return false; }
+  closeTalk();
+  if (meeting?.owner === state && meeting.index === state.scheduleIndex && meeting.id === encounter.id) {
+    meeting.view?.update(meetingModel(encounter)); return true;
+  }
+  closeMeeting();
+  clearTimeout(toastTimer); $('toast').hidden = true; $('toast').textContent = '';
+  const host = document.createElement('div');
+  host.id = 'meetingEncounter'; host.className = 'meeting-host';
+  host.setAttribute('role', 'dialog'); host.setAttribute('aria-modal', 'true'); host.setAttribute('aria-label', encounterTitle(encounter));
+  host.style.cssText = 'position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#171a17';
+  const shadow = host.attachShadow({ mode: 'open' });
+  shadow.innerHTML = `<link rel="stylesheet" href="${esc(MEETING_STYLES)}"><div class="meeting-frame"><main aria-label="${esc(encounterTitle(encounter))}"><p role="status">Opening…</p></main></div>`;
+  const mine = meeting = { host, owner: state, index: state.scheduleIndex, id: encounter.id, view: null, disposed: false, continued: false };
+  const current = () => meeting === mine && !mine.disposed && mine.owner === state && mine.index === state.scheduleIndex && meetingEncounter()?.id === mine.id;
+  const continueMeeting = () => {
+    if (!current() || mine.continued || !state.choices[mine.id]) return { ok: false };
+    mine.continued = true; campaignClickAfter = performance.now() + 350;
+    advanceAndSettle(); persist(); render(); $('modeRoot').focus({ preventScroll: true });
+    return { ok: true };
+  };
+  const begin = () => {
+    if (!current() || mine.view) return;
+    mine.view = mountMeetingView(shadow.querySelector('main'), {
+      model: meetingModel(encounter),
+      onChoose(id) { return current() ? chooseCurrentEncounter(id) : { ok: false }; },
+      onContinue: continueMeeting,
+      onBack() {
+        if (!current()) return;
+        if (state.choices[mine.id]) { continueMeeting(); return; }
+        campaignClickAfter = performance.now() + 350;
+        state.mode = 'route'; persist(); render(); $('modeRoot').focus({ preventScroll: true });
+      },
+      sound: { get: soundOn, set: setSound },
+    });
+    mine.view.ready.catch(error => { if (current()) logToast('This meeting could not load. Use the menu to return to Kallio.'); console.error(error); });
+  };
+  const link = shadow.querySelector('link');
+  link.addEventListener('load', begin, { once: true });
+  link.addEventListener('error', () => {
+    if (!current()) return;
+    shadow.querySelector('main').innerHTML = '<p role="alert">This meeting could not load.</p><button type="button">Back to Kallio</button>';
+    shadow.querySelector('button').addEventListener('click', () => { if (current()) { state.mode = 'route'; persist(); render(); } });
+  }, { once: true });
+  document.body.append(host);
+  if (link.sheet) begin();
+  return true;
+}
 function talkSpeaker(encounter) { return encounter?.participants?.find(p => p !== 'aatami' && CUTINS[p]) ?? null; }
 function closeTalk() { talk?.shell?.close(); talk = null; }
 function mountTalk() {
-  if (mountCampaignSceneClub()) return;
+  if (mountCampaignSceneClub()) { closeMeeting(); return; }
+  if (mountCampaignMeeting()) return;
   if (!['encounter', 'visit'].includes(state.mode)) { closeTalk(); return; }
   if (!$('splash').hidden) return;                       // the title screen first: RESUME re-renders and the talk opens then
   const encounter = state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data), who = talkSpeaker(encounter);
