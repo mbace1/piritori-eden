@@ -1,0 +1,28 @@
+# Hub release: Act I city v4.101 (crew status is one explicit state machine)
+
+- **Source:** `mbace1/piritori-eden` @ `6b85f94`, web only.
+  - **Gates were green:** run 1257, all nine jobs.
+- **Site:** `mbace1/Suds-Jack` gh-pages `649dd3dd`, under `piritori/`. **Pages run 1670 succeeded.**
+  - Nothing was deleted. `release.json` holds 310 files, and 68 site files changed.
+- **What players get** (owner, 2026-11-09: *"Go ahead"*, on the plan to take crew status next; `design/STATE_MACHINES.md` M3):
+  - **A critically hurt crew member who is hurt again stays critical.** Before, the card said WOUNDED while the ending counted them dead.
+  - **The arrested are not counted among the dead** at the ending.
+  - **Nobody is arrested and retired at once.** Someone the police take in what would have been their last fight stays arrested. Bail brings them back as an ordinary member of the crew.
+  - **Retiring waits while someone is critical or missing.** The fight counts, and they retire after their next one, so a critical wound stays treatable and the missing stay findable.
+  - Saves holding any of these mixed states are put right as they load.
+- **Catalogue:**
+  - The note moves to v4.101 in en, fi and ja. `versions.json` piritori goes 4.100 → 4.101 (n 4101) by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=226), and `sw.js` `VERSION` went 274 → 275. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 35 bare-node suites; `machines.mjs` adds crew status, which fails on v4.100;
+    - browser: screens 11, outing 75, doors 52, mission 32, aatami 16, standing 22, act1-scenes, story 30, chapter 20, m1-inspection 72, play-card 29;
+    - the chapter bot reads the same on every policy.
+  - **`v3-playthrough` (not a CI gate) fails 2 of 30 on Toko's art viewport.** It fails identically on v4.100, so it predates this change; the test itself points at known content drift in QUEUE.md.
+  - **On the staged site tree, before the push:**
+    - the site check (8 of 8), playtest links (29), mission (32), doors (52), road (42), outing (75);
+    - **restaged once:** the full run was on gh-pages `04180c5a`. Before the push, Toko Move v3.21 landed; restaged on it, the site check (8 of 8) and the playtest links (29) passed again.
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`46507ac4`, Toko Move v3.21).

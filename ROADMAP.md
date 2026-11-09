@@ -39,7 +39,7 @@ expensive asset production.
 | 4 | City and UI | Simplify meetings, map and ledger for a phone; keep decisions and consequences visible. Test trade, travel, hiring and saving. | UI diet step 1 (the meeting) has shipped (v4.85), and step 2 (the brief and the fight: no names, the rivals' plans on each fighter's tag) in v4.96. The talk, the map and the header are next. |
 | 5 | Consequences and finale (G2) | Fight loot, kit loss and recovery reconnect to the city; missing crew have a route home. The shipment ending gives a meaningful crew/route choice. | **Missing crew have a way home (v4.92):** a rescue door, or bail. **A won fight takes the fallen's weapons (v4.93).** Next: the finale (owner's answer pending, §8 item 7). |
 | 6 | Complete chapter (G4) | Integrate the 30%-of-a-block rule at G4, verify all story beats and endings remain reachable, then play 10 days start to finish. Record bugs, balance and an owner verdict. | **The 30%-of-a-block rule is built (v4.98):** a trip or a seller visit uses 30% of a block; trips always go, trades wait once three are used. **The playthrough bot ran (v4.99, `design/G4_CHAPTER_BOT.md`).** Every one of the 20 blocks plays on six policies, and none is forced into a fight. It found a route hole in the time rule, now closed. Next: the €400's size (§8 item 7), then the owner plays the 10 days. |
-| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.100 is live (`design/CITY_V4100_RELEASE.md`); device checks are pending. |
+| 7 | Release | Regression, reload/recovery and physical Pixel/iPad checks; publish tested source and hub with matching version and receipt. | Each step ships. v4.101 is live (`design/CITY_V4101_RELEASE.md`); device checks are pending. |
 
 Arena pass must start with evidence: capture all five existing `crew-run`
 locations and identify actual gaps, intersections, floor seams, scale and
@@ -220,7 +220,7 @@ Today rows 8–9 look "fine" only because every fight ends before the police are
   - Their bodies are kept as history.
 - **QUEUE.md** is about half obsolete (board, Godot stage and cast items overtaken by Night Shift). Its triage is at its top; the full item-by-item reading is in this commit's message.
 
-**State machines (v4.100, `design/STATE_MACHINES.md`).** The app has 30 implicit state machines. Two are explicit now: the outing across both apps (M1) and the city's screen (M2). The rest are queued by what a fault costs the player, one per release. The rules for converting one are in the doc, starting with "write the failing test first". Crew status (M3) is next.
+**State machines (v4.100, `design/STATE_MACHINES.md`).** The app has 30 implicit state machines. Three are explicit now: the outing across both apps (M1), the city's screen (M2) and crew status (M3, v4.101). The rest are queued by what a fault costs the player, one per release. The rules for converting one are in the doc, starting with "write the failing test first". The block turn (M4) is next.
 
 ## 7. Outside the game: the marketing MP4s
 
