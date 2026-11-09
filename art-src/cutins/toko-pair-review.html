@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aatami + Toko — paired art review only</title>
+<style>
+html,body{margin:0;min-height:100%;background:#121719}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;flex:none;overflow:hidden}
+#image{display:block;width:100%;height:100%}
+#toko-base{display:none}
+</style></head>
+<body><div id="stage"><canvas id="image" width="1080" height="1920"></canvas></div>
+<canvas id="toko-base" width="1536" height="864" aria-hidden="true"></canvas>
+<script type="module">
+import { CUTINS, pose as cutPose, REST as CUT_REST, rigParts, drawFigure } from '../../web/js/v3/cutin-stage.js';
+import { loadTokoStage, RIG_ID as TOKO_ID } from '../../web/js/v3/toko-stage.js';
+
+// Proposed composition ONLY. Do not copy it into the game without owner approval.
+// Toko: existing owner-approved counter rig; Aatami: existing semi-approved cut-in.
+const params = new URLSearchParams(location.search);
+const WHO = params.get('aatami') || 'aatami';
+const LAYOUT = params.get('layout') || 'portrait';
+if (!['aatami','aatami-side'].includes(WHO)) throw Error('Unknown Aatami variant');
+if (!['portrait','landscape'].includes(LAYOUT)) throw Error('Unknown layout');
+const STILL = params.get('still') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage=document.getElementById('stage'), c=document.getElementById('image'),g=c.getContext('2d');
+const W=LAYOUT==='portrait'?1080:1600,H=LAYOUT==='portrait'?1920:900;
+stage.style.width=W+'px';stage.style.height=H+'px';c.width=W;c.height=H;
+const manifestRes=await fetch('../../art/v3/manifest.json');
+if (!manifestRes.ok) throw Error('Art manifest could not load');
+const manifest=await manifestRes.json();
+const toko=manifest.assets.find(a=>a.id===TOKO_ID);
+const plate=manifest.assets.find(a=>a.id===toko?.plate_asset_id);
+if (!toko || !plate) throw Error('Toko approved stage/plate absent from manifest');
+if (toko.approval_status!=='approved') throw Error('Unexpected unapproved Toko source');
+const art=new Map([[plate.id,{url:'../../art/v3/'+plate.file}]]);
+for (const m of toko.members) art.set(m.id,{url:'../../art/v3/'+m.file});
+const tokoStage=await loadTokoStage({artManifest:manifest,art},{reducedMotion:true});
+if (!tokoStage) throw Error('Existing Toko rig could not load');
+const tc=document.getElementById('toko-base');
+tokoStage.attach(tc); // approved rest pose, exact existing renderer and registered plate
+const char=CUTINS[WHO], asset=manifest.assets.find(a=>a.id===char.rig);
+if (!asset || asset.approval_status!=='semi-approved') throw Error('Aatami review rig unavailable or approval changed');
+const images={};
+await Promise.all(asset.members.map(async m=>{
+  const img=new Image(); img.src='../../art/v3/'+m.file;
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('Missing '+m.file));});
+  images[m.part]=img;
+}));
+const rig=rigParts(asset,images);
+const MOMENTS=['idle','blink','aatami-talk','toko-answer','aatami-nod','aatami-shake','rest'];
+function wordWrap(msg,x,y,maxWidth,font,lineHeight) {
+  g.font=font;g.fillStyle='#202222';const out=[];let line='';
+  for(const word of msg.split(' ')){
+    const trial=line?line+' '+word:word;
+    if(g.measureText(trial).width>maxWidth && line){out.push(line);line=word;}else line=trial;
+  }
+  if(line)out.push(line);
+  if(out.length>(LAYOUT==='portrait'?4:3))throw Error('Review bubble overflow');
+  for(const [i,text] of out.entries())g.fillText(text,x,y+i*lineHeight);
+}
+function drawBubble(speaker) {
+  const portrait=LAYOUT==='portrait';
+  const r=portrait?{x:90,y:515,w:900,h:285}:speaker==='toko'?{x:880,y:38,w:670,h:230}:{x:45,y:38,w:650,h:230};
+  const base=r.y+r.h;
+  const tip=portrait?(speaker==='toko'?{x:775,y:850}:{x:325,y:925})
+    :(speaker==='toko'?{x:780,y:348}:{x:320,y:360});
+  const rootX=portrait?(speaker==='toko'?760:355):(speaker==='toko'?925:340);
+  g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=16;g.shadowOffsetY=10;
+  g.fillStyle='#C7AA79';g.beginPath();
+  g.moveTo(r.x+5,r.y);g.lineTo(r.x+r.w-5,r.y+2);g.lineTo(r.x+r.w,base-4);
+  g.lineTo(rootX+35,base-2);g.lineTo(tip.x,tip.y);
+  g.lineTo(rootX-30,base);g.lineTo(r.x+3,base-3);g.closePath();g.fill();g.restore();
+  const msg=speaker==='toko'?'This is a review line. The actual game dialogue is unchanged.':
+    'Aatami and Toko in one scene. Candidate composition only.';
+  wordWrap(msg,r.x+37,r.y+(portrait?75:61),r.w-75,
+    (portrait?'43px':'33px')+' "Courier New", monospace',portrait?60:44);
+}
+function render(moment='idle', t=0.1) {
+  if(!MOMENTS.includes(moment))throw Error('Unknown review moment '+moment);
+  const staticFrame=STILL||moment==='rest';
+  const clip=moment==='aatami-talk'?'talk':moment==='aatami-nod'?'nod':
+    moment==='aatami-shake'?'shake':'idle';
+  const phase=moment==='blink'?1.7:t;
+  const p=staticFrame?CUT_REST:cutPose(WHO,clip,phase);
+  g.fillStyle='#121719';g.fillRect(0,0,W,H);
+  // Existing approved Toko stage and plate form the location. Aatami overlays
+  // as separate paper art; no new rig extraction or asset generation occurs.
+  if(LAYOUT==='portrait'){
+    const k=1.63;g.drawImage(tc,-320,405,1536*k,864*k);
+    const fade=g.createLinearGradient(0,300,0,H);
+    fade.addColorStop(0,'rgba(18,23,25,.55)');fade.addColorStop(.5,'rgba(18,23,25,0)');
+    fade.addColorStop(1,'rgba(18,23,25,.60)');
+    g.fillStyle=fade;g.fillRect(0,0,W,H);
+    drawFigure(g,rig,p,-35,730,1.35);
+  } else {
+    const k=900/864;g.drawImage(tc,0,0,1536*k,900);
+    g.fillStyle='rgba(18,23,25,.14)';g.fillRect(0,0,W,H);
+    drawFigure(g,rig,p,45,195,0.96);
+  }
+  const speaker=moment==='toko-answer'?'toko':'aatami';
+  drawBubble(speaker);
+  g.fillStyle='#E2D8C2';g.font=(LAYOUT==='portrait'?'28':'23')+'px Arial,sans-serif';
+  g.fillText('ART REVIEW / NOT GAMEPLAY / NOT AN APPROVAL',22,LAYOUT==='portrait'?55:855);
+  g.fillText('AATAMI '+(WHO==='aatami'?'FRONT':'SIDE')+' + TOKO · '+moment.toUpperCase(),
+    22,LAYOUT==='portrait'?92:884);
+}
+function frame(t) {
+  const sec=Math.max(0,Math.min(6.999,t));
+  if(sec<2)render('idle',sec);
+  else if(sec<3.8)render('aatami-talk',sec-2);
+  else if(sec<5)render('toko-answer',sec-3.8);
+  else if(sec<6)render('aatami-nod',sec-5);
+  else render('aatami-shake',sec-6);
+}
+frame(0);
+window.__pair={frame,render,moments:MOMENTS,still:STILL,aatami:WHO,layout:LAYOUT,
+  toko: TOKO_ID,source:'registered approved Toko stage + semi-approved Aatami cut-in',
+  caveat:'Toko is deliberately a fixed rest pose; the GIF tests Aatami motion only'};
+window.__ready=true;
+</script></body></html>
