@@ -1,4 +1,5 @@
 import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=11';
+import { settleScreen, enterScreen } from './screens.js?v=2';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
 import { loadGameData, shortestPath, assetUrl } from './content.js?v=2';
@@ -29,7 +30,7 @@ import { turnPlan, nextChapter } from './chapter.js?v=1';
 import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=9';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
-import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag } from './outing.js?v=7';
+import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag, moveOuting } from './outing.js?v=8';
 import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=11';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
@@ -502,11 +503,9 @@ function render() {
   renderHud();
   renderNav();
   const root = $('modeRoot');
-  // A pending road event waits for an answer; nothing else opens past it.
-  if (state.road?.pending && state.mode !== 'battle') state.mode = 'road';
-  // An open outing (v4.74) is the same: the fight is still on in Night Shift.
-  if (openOuting(state)) state.mode = 'outing';
-  else if (state.mode === 'outing') state.mode = 'route';
+  // Which screen holds is screens.js's rule (a pending road event, an open
+  // outing, a closed visit, an empty road screen), not this function's.
+  settleScreen(state);
   const views = {
     outing: renderOuting,
     route: renderRoute,
@@ -2081,7 +2080,7 @@ function startOuting(encounter, battleId, opening = '') {
   const staged = stageFight(authored, doorStage(encounter), places, crew.map(member => member.name));
   const ids = crew.slice(0, authored.player_deployed).map(member => member.id);
   const goal = templateOf(doors, encounter.door)?.fight?.goal;
-  state.outing = doorOuting(state, encounter, staged, ids, { opening: [beat, opening].filter(Boolean).join(' '), nonce: Date.now().toString(36), when: formatBlock(state, data.content), goal });
+  if (!moveOuting(state, 'open', { outing: doorOuting(state, encounter, staged, ids, { opening: [beat, opening].filter(Boolean).join(' '), nonce: Date.now().toString(36), when: formatBlock(state, data.content), goal }) }).ok) return false;
   recordFight(state, data.content);
   return true;
 }
@@ -2095,7 +2094,7 @@ function startRoadOuting(event, battleId) {
   if (crew.length < authored.player_deployed) { logToast(`${battleId} requires ${authored.player_deployed} who can fight`); return false; }
   const staged = stageFight(authored, roadStage(event), places, crew.map(member => member.name));
   const ids = crew.slice(0, authored.player_deployed).map(member => member.id);
-  state.outing = roadOuting(state, event, staged, ids, { opening: beat, nonce: Date.now().toString(36), when: formatBlock(state, data.content) });
+  if (!moveOuting(state, 'open', { outing: roadOuting(state, event, staged, ids, { opening: beat, nonce: Date.now().toString(36), when: formatBlock(state, data.content) }) }).ok) return false;
   recordFight(state, data.content);
   return true;
 }
@@ -2111,7 +2110,7 @@ function startMissionOuting(encounter, battleId) {
   if (crew.length < authored.player_deployed) { logToast(`${battleId} requires ${authored.player_deployed} who can fight`); return false; }
   const staged = { ...authored, place: { anchor: authored.location_anchor_id, name: place.name, way_out: place.way_out, kit: place.kit, by: null, side: 'them' } };
   const ids = crew.slice(0, authored.player_deployed).map(member => member.id);
-  state.outing = missionOuting(state, encounter, encounter.mission_id, staged, ids, { opening: beat, nonce: Date.now().toString(36), when: formatBlock(state, data.content) });
+  if (!moveOuting(state, 'open', { outing: missionOuting(state, encounter, encounter.mission_id, staged, ids, { opening: beat, nonce: Date.now().toString(36), when: formatBlock(state, data.content) }) }).ok) return false;
   recordFight(state, data.content);
   return true;
 }
@@ -2123,7 +2122,7 @@ function settleReturnedOuting() {
   const outing = settledOuting(state);
   if (!outing) return false;
   const flag = settledFlag(outing);
-  state.outing = null;
+  moveOuting(state, 'pay');
   if (state.flags.includes(flag)) return false;
   state.flags.push(flag);
   const result = outing.result === 'win' ? 'win' : 'lose';
@@ -2161,7 +2160,8 @@ function fightOutingOnBoard() {
   const road = outing?.kind === 'road' ? roadEvents.events.find(e => e.id === outing.road) : null;
   const encounter = outing && !road && data.encounters.get(outing.encounter);
   if (!road && !encounter) return false;
-  state.outing = null;
+  moveOuting(state, 'board');
+  // The board refused to start: undo the move, the outing is as it was.
   if (!startBattle(outing.battle, road ? roadStage(road) : doorStage(encounter), { counted: true })) { state.outing = outing; return false; }
   // A mission battle keeps its mission: the board pays it as it always has.
   if (outing.kind === 'mission') return true;
@@ -2535,6 +2535,18 @@ async function boot() {
     registerTaken(state, data, doors); // a taken door is the block's encounter; put it back
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     if (settleReturnedOuting()) persist(); // a fight that came back from Night Shift (v4.74)
+    // Back or Forward can restore this page from the browser's memory, holding
+    // the campaign as it was when the page was left, while Night Shift has
+    // written its result since. Read the save again rather than write the old
+    // copy over it (design/STATE_MACHINES.md, M1).
+    addEventListener('pageshow', event => {
+      if (!event.persisted) return;
+      state = loadState(data.content);
+      registerTaken(state, data, doors);
+      attachGrowth(state.battle, state, data);
+      if (settleReturnedOuting()) persist();
+      render();
+    });
     $('resumeButton').hidden = !hasSave;
     $('restoreButton').hidden = !localStorage.getItem(SET_ASIDE_KEY);
     $('restoreButton').addEventListener('click', restoreCampaign);
@@ -2561,7 +2573,8 @@ async function boot() {
     $('modeNav').addEventListener('click', event => {
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
-      state.mode = button.dataset.modeTarget;
+      const moved = enterScreen(state, button.dataset.modeTarget);
+      if (!moved.ok) { logToast(moved.reason); render(); return; }
       observation = '';
       persist(); render();
     });
@@ -2657,7 +2670,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.99',
+      version: 'v4.100',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.

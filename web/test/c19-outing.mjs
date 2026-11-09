@@ -17,8 +17,8 @@ const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=15');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
 const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=9');
-const O = await import('../js/v3/outing.js?v=7');
-const R = await import('../crew-run/run.js?v=26');
+const O = await import('../js/v3/outing.js?v=8');
+const R = await import('../crew-run/run.js?v=27');
 const { missionCue } = await import('../fight-module/readability.js?v=5');
 const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');
@@ -404,6 +404,45 @@ const down = (b, id) => { const u = [...b.players, ...b.enemies].find(x => x.id 
   assert.deepEqual(O.placeMarks(s, 'yard'), { fights: 0, police: false, hurt: false }, 'a fight elsewhere, or one recorded before sets were, leaves this set clean');
   const { outing } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { nonce: 'marks' });
   assert.deepEqual(outing.marks, { fights: 0, police: false, hurt: false }, 'every outing carries its set\'s marks');
+}
+
+// ── one outing, one result (v4.100, design/STATE_MACHINES.md M1) ─────────
+// The outing's life is a declared table: open → settled → paid, or open →
+// fought on the board. Before v4.100 a fight could be both: begun in Night
+// Shift, fought on the board after Back, then finished in Night Shift after
+// Forward. Its receipt fell through to the C.17 branch and hurt and aged the
+// crew a second time.
+{
+  assert.deepEqual(O.OUTING.states, ['none', 'open', 'settled']);
+  const s = {};
+  assert.equal(O.moveOuting(s, 'settle', { id: 'x' }).ok, false, 'nothing to settle');
+  assert.ok(O.moveOuting(s, 'open', { outing: { id: 'a', status: 'open' } }).ok);
+  assert.equal(O.moveOuting(s, 'open', { outing: { id: 'b', status: 'open' } }).ok, false, 'one outing at a time');
+  assert.equal(O.moveOuting(s, 'settle', { id: 'b' }).ok, false, 'a receipt for another outing is refused');
+  assert.equal(O.moveOuting(s, 'pay').ok, false, 'an open fight is not paid');
+  assert.ok(O.moveOuting(s, 'settle', { id: 'a' }).ok);
+  assert.equal(s.outing.status, 'settled');
+  assert.equal(O.moveOuting(s, 'board').ok, false, 'a settled fight is not fought again on the board');
+  assert.ok(O.moveOuting(s, 'pay').ok);
+  assert.equal(s.outing, null, 'paid, and gone');
+
+  // Begun in Night Shift and saved mid-fight, as ui.js deploy() saves it.
+  const { outing } = actOne('hit-courtyard-ledger', 'torkkelinmaki', { crew: ['crew-slot-runner', 'crew-slot-muscle', 'crew-slot-watcher'], nonce: 'twice' });
+  const { run, fight } = nightShift(outing);
+  run.active.checkpoint = R.missionCheckpoint(fight);
+  localStorage.setItem(R.OUTING_SAVE_KEY, JSON.stringify(run));
+  // Back to Kallio: the device fights it on the board instead (app.js fightOutingOnBoard).
+  const kallio = campaign();
+  assert.ok(O.moveOuting(kallio, 'board').ok, 'the board takes an open fight');
+  localStorage.setItem(SAVE_KEY, JSON.stringify(kallio));
+  const before = JSON.stringify(campaign());
+  // Forward to Night Shift: the saved fight is not resumed.
+  assert.throws(() => R.loadRun(localStorage.getItem(R.OUTING_SAVE_KEY), content), /already settled/, 'a fight fought on the board is not resumed');
+  // A Night Shift tab still holding it finishes it anyway: the campaign takes nothing.
+  assert.ok(fight.command('withdraw').ok);
+  assert.ok(R.settle(run, fight), 'Night Shift closes its own run');
+  assert.equal(run.last.campaignApplied, false, 'and says Kallio will not see it');
+  assert.equal(JSON.stringify(campaign()), before, 'no wound, arrest, age or history written twice');
 }
 
 console.log('C.19 outing v4.78: a job per fight (5 doors fight, 4 get away), road fights and both mission battles as outings, they break and run, Withdraw in every fight, the police announced and answered with Act I\'s two postures, arrests through Act I, Aatami never taken, and the receipt once — passed.');

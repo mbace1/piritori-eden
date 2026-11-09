@@ -1,7 +1,8 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
 import {createSession} from '../fight-module/session.js?v=26';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=11';
-import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=16';
+import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=17';
+import {outingPhase} from '../js/v3/outing.js?v=8';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the
 // narrow receipt adapter; the ordinary Night Shift save remains independent.
@@ -274,7 +275,14 @@ export function loadRun(raw,content){
   // The same outing resumes (prep, mid-fight, or its aftermath); any other is
   // built fresh from the campaign save, where Act I wrote it.
   let parsed=null;try{parsed=raw?JSON.parse(raw):null;}catch{}
-  if(parsed?.bridge?.outingId===outingId)return checkRun(parsed,content);
+  // A fight still being fought must still be open in the campaign (outing.js
+  // OUTING): one fought on the board after Back, or settled in another tab,
+  // is not resumed. Its finished result can still be shown.
+  if(parsed?.bridge?.outingId===outingId){
+   const run=checkRun(parsed,content);
+   if(run.phase!=='aftermath'&&outingPhase(readCampaignSave(globalThis.localStorage,content),outingId)!=='open')throw Error('That fight is already settled.');
+   return run;
+  }
   const outing=campaignOuting(readCampaignSave(globalThis.localStorage,content),outingId);
   if(!outing)throw Error('That fight is not in this campaign.');
   return outingRun(readCampaignSave(globalThis.localStorage,content),content,outing);

@@ -23,6 +23,43 @@
 //
 // Pure: no DOM, no clock.
 
+import { machine, step } from './machine.js?v=1';
+
+/** The outing's life, across both apps (design/STATE_MACHINES.md, M1). It is
+ *  stored as `state.outing.status` ('open' or 'settled'), or no outing at all:
+ *   - `open`: Act I raises the fight (a door, the road or a mission);
+ *   - `settle`: Night Shift writes its receipt into the campaign;
+ *   - `pay`: Act I pays the stakes and turns the block, then the outing is gone;
+ *   - `board`: Act I fights it on its own board instead, and it is gone.
+ *  Nothing else moves it. Before v4.100 a fight could be both: begun in Night
+ *  Shift, fought on the board after Back, then finished in Night Shift after
+ *  Forward, whose receipt hurt and aged the crew a second time. */
+export const OUTING = machine('outing', {
+  none: { open: 'open' },
+  open: { settle: 'settled', board: 'none' },
+  settled: { pay: 'none' },
+});
+
+/** Where the outing `id` stands in a campaign (any outing when `id` is not
+ *  given). Another outing, or none, is `none` for this id. */
+export function outingPhase(state, id) {
+  const outing = state?.outing;
+  if (!outing || (id !== undefined && outing.id !== id)) return 'none';
+  return String(outing.status);
+}
+
+/** The one way an outing moves. `open` takes the new outing; the others move
+ *  the outing `id` (the current one when not given). Returns `step`'s answer;
+ *  a refusal changes nothing. */
+export function moveOuting(state, event, { id, outing } = {}) {
+  const moved = step(OUTING, outingPhase(state, event === 'open' ? undefined : id), event);
+  if (!moved.ok) return moved;
+  if (event === 'open') state.outing = outing;
+  else if (event === 'settle') state.outing.status = 'settled';
+  else state.outing = null;
+  return moved;
+}
+
 /** The C places that exist in web/crew-run/locations.js. */
 export const C_PLACES = new Set(['courtyard', 'yard', 'park', 'street', 'quay']);
 
@@ -124,8 +161,8 @@ export function outingSpoils(outing, kindOf) {
  *  repo's web/ and in the hub cabinet). */
 export const outingUrl = outing => `crew-run/?campaign=1&outing=${encodeURIComponent(outing.id)}&arena=${encodeURIComponent(outing.kit)}`;
 
-export const openOuting = state => (state.outing?.status === 'open' ? state.outing : null);
-export const settledOuting = state => (state.outing?.status === 'settled' ? state.outing : null);
+export const openOuting = state => (outingPhase(state) === 'open' ? state.outing : null);
+export const settledOuting = state => (outingPhase(state) === 'settled' ? state.outing : null);
 
 /** What Act I says when the result comes back. `home`/`missing`/`carried`
  *  are the names Night Shift's receipt wrote onto the outing. */

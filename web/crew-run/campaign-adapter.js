@@ -3,6 +3,7 @@ import {
   crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, arrestCrew,
 } from '../js/v3/state.js?v=15';
 import {nameFrom} from '../../people/roster.mjs?v=1';
+import {outingPhase, moveOuting} from '../js/v3/outing.js?v=8';
 
 // C.17 bridge: the authored campaign remains the source of truth. Night Shift
 // receives a small, serialisable projection and returns a receipt. The bridge
@@ -100,7 +101,7 @@ export function campaignOuting(state,id){
 }
 
 export function outingRun(state,content,outing){
-  if(outing?.status!=='open')throw Error('That fight is already settled.');
+  if(outingPhase(state,outing?.id)!=='open')throw Error('That fight is already settled.');
   const crew=outing.fighters.map(id=>projectPerson(state,content,id)).filter(Boolean);
   if(crew.length<2)throw Error('An outing needs at least two people who can fight.');
   return {
@@ -149,6 +150,11 @@ export function applyCampaignReceipt(state,content,receipt){
   state.flags=Array.isArray(state.flags)?state.flags:[];
   const marker=`memory:c17-receipt:${receipt.bridgeReceiptId}`;
   if(state.flags.includes(marker))return false;
+  // An outing's receipt lands only on that outing, still open (outing.js
+  // OUTING). One fought on the board meanwhile, or already settled, takes
+  // nothing: before v4.100 it fell through to the C.17 branch below and hurt
+  // and aged the crew a second time.
+  if(receipt.outingId&&outingPhase(state,receipt.outingId)!=='open')return false;
   const data=dataFor(content);
   pushUnique(state.flags,marker);
 
@@ -196,10 +202,11 @@ export function applyCampaignReceipt(state,content,receipt){
   ageCrew(state,data,receipt.deployedIds);
   state.battleHistory=Array.isArray(state.battleHistory)?state.battleHistory:[];
   // An outing goes back to Act I settled; Act I pays the door's stakes once.
-  const outing=receipt.outingId&&state.outing?.id===receipt.outingId?state.outing:null;
+  const outing=receipt.outingId?state.outing:null;
   if(outing){
     const named=effect=>(receipt.changes||[]).filter(c=>c.campaignEffect===effect).map(c=>c.name);
-    Object.assign(outing,{status:'settled',result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,down:[...(receipt.down||[])],
+    moveOuting(state,'settle',{id:receipt.outingId});
+    Object.assign(outing,{result:receipt.result,end:receipt.end||receipt.result,routed:Boolean(receipt.routed),title:receipt.title||null,rounds:receipt.rounds,down:[...(receipt.down||[])],
       carried:named('carried'),missing:named('missing'),arrested:named('arrested'),wounded:named('damage')});
     // `kit`, `end` and `hurt` are what the set remembers (outing.js `placeMarks`).
     state.battleHistory.push({id:outing.battle,result:receipt.result,round:receipt.rounds,at:outing.anchor,outing:outing.id,source:'c19-night-shift',

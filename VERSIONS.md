@@ -1,3 +1,28 @@
+## v4.100 — 2026-11-09
+
+**The app's state machines, found and two of them made explicit.** Owner, 2026-11-09: *"Find all of the implicit state machines in my app. Make the best decision that will elevate all three: the user experience (UX), developer experience (DX), and agent experience (AX) always, without breaking anything."*
+
+Three read-only audits (the city, Night Shift and the outing, the fight engine) found 30. `design/STATE_MACHINES.md` is the map: every machine, where it lives, what can go wrong, and a ranked queue. **The decision is to convert one machine at a time, starting where a bug costs the player their campaign.** A rewrite would break things, and it would collide with Codex's open PR #132 in `app.js`, the fight module and Night Shift's UI. The fight engine's police and outcome logic (M5 to M7) wait for that PR, because changing them moves balance.
+
+- **One primitive, `web/js/v3/machine.js`.** `machine(name, table)` declares the states and moves (a table naming an undeclared state fails when it loads). `step()` answers with a reason and never mutates. `describe()` prints the moves. Every explicit machine is found with `grep machine(`.
+- **M1, the outing, across both apps** (`outing.js` `OUTING`, `moveOuting`). The moves are open → settled → paid, or open → fought on the board, and nothing else. All five writers in Act I and Night Shift now go through it.
+  - **Fixed: a fight paid twice.** Begin it in Night Shift, press Back, fight it on the board, press Forward. Night Shift resumed its saved fight without asking the campaign, and its receipt hurt and aged the crew a second time.
+  - Now Night Shift resumes a fight only while the campaign still has it open; "No fight here. That fight is already settled."
+  - A receipt lands only on its own open outing.
+  - When Back or Forward restores the city page from memory, it reads the save again instead of writing its old copy over Night Shift's.
+- **M2, the city's screen** (`screens.js`). The screens are declared, and the rules that hold whatever screen was asked for move out of `render()` into `settleScreen`. The nav bar goes through `enterScreen`.
+  - **Fixed: travel locked for good.** Leaving a visit by the nav bar kept it open, and every journey was refused for the rest of the campaign. A save already locked is repaired when it loads.
+  - **Fixed: a blank map after a road fight.** The screen stayed on the road with nothing on it.
+  - **Guarded:** a finished fight's result stays until it is finished. The audit reported that leaving it turned a block twice. A player could not reach that: the nav bar is hidden over a fight. But the rule lived only in a stylesheet, and now it lives in the state too.
+- **Gates:**
+  - `c19-outing.mjs` plays the double payment end to end and fails on v4.99 at each guard separately.
+  - New `machines.mjs` (bare node) holds the primitive and the screen rules, and fails if a table and the doc disagree.
+  - New `screens-browser.cjs` (11) taps through the visit, the repaired save, the fight screen and a restored page, and fails on v4.99 at the visit.
+  - Both are added to `gates.yml`.
+- **Behaviour otherwise unchanged:** the storage shape is the same, so old saves load; only illegal moves are refused.
+- **Cache:** outing v8, app v67, run v27, campaign-adapter v17, screens v2, machine v1, and what imports them. The label is v4.100.
+- **Owner played: pending.** Godot paused.
+
 ## v4.99 — 2026-11-07
 
 **A route holds its count for the block (ROADMAP G4 step 2).** The chapter bot (`web/tools/chapter-bot.mjs`, `design/G4_CHAPTER_BOT.md`) found a hole in v4.98's time rule. A pack sent down a route costs Aatami no time, and the route's capacity is what ordinary traffic leaves free. But re-pinning a route emptied its count. So one Piritori visit could buy, send, re-pin and repeat: €3,400 counted toward the €400 inside one block, using 30% of it. v4.98's notes said a route "has its own capacity per block"; until now that was not true.

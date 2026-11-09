@@ -220,6 +220,8 @@ Today rows 8–9 look "fine" only because every fight ends before the police are
   - Their bodies are kept as history.
 - **QUEUE.md** is about half obsolete (board, Godot stage and cast items overtaken by Night Shift). Its triage is at its top; the full item-by-item reading is in this commit's message.
 
+**State machines (v4.100, `design/STATE_MACHINES.md`).** The app has 30 implicit state machines. Two are explicit now: the outing across both apps (M1) and the city's screen (M2). The rest are queued by what a fault costs the player, one per release. The rules for converting one are in the doc, starting with "write the failing test first". Crew status (M3) is next.
+
 ## 7. Outside the game: the marketing MP4s
 
 The Suds-Jack goal *"export cool MP4s that work as marketing for Toko and the games"* gets a trailer kit that touches no game code:
