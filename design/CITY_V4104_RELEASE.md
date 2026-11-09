@@ -1,0 +1,31 @@
+# Hub release: Act I city v4.104 (playtest notes cover the fights)
+
+- **Source:** `mbace1/piritori-eden` @ `50b7d34`, web only.
+  - **Gates were green:** run 1265, all nine jobs. It ran `playlog.mjs`, `playtest-browser.cjs` and `outing-browser.cjs` with the new checks.
+  - The repo's own `deploy` workflow (run 258) did not publish. It deploys the Godot web export to piritori-eden's Pages site, not the hub. Its publish step timed out inside GitHub Pages ("syncing_files"), and the re-run failed at once because it reused the deployment the timeout had cancelled. The next push to main deploys afresh; Godot is paused.
+- **Site:** `mbace1/Suds-Jack` gh-pages `b3ec97d9`, under `piritori/`. **Pages run 1678 succeeded.**
+  - Nothing was deleted. `release.json` holds 312 files: one added (`crew-run/fight-log.js`) and 55 changed.
+  - Restaged once, because gh-pages moved while this was staged (Toko Move v3.23, nothing under `piritori/`).
+- **What players get** (owner, 2026-11-09: *"Continue"*):
+  - **PLAYTEST NOTES now include the fights.** Night Shift writes into the same device-local log, but only for a fight Act I sent; the standalone Night Shift cabinet writes nothing. It records:
+    - each round's first tap, measured from when the round becomes the player's;
+    - every tap, named by its control;
+    - the fight verbs left unused (Brace, the bandage, Reload, helping a friend up, the field kit, Sprint, Extract, Withdraw, the camera);
+    - one line per fight: how it ended and after how many rounds.
+  - A new line in the notes: *"Fights: N (how they ended), R rounds on average."*
+  - "Played: N sessions" now counts sittings, not page loads. Every fight is two page loads.
+  - Nothing leaves the device unless SEND is pressed. The fight's own files did not change; `startup.js` loads the hook, and if it fails to load, the fight carries on.
+- **Catalogue:**
+  - The note moves to v4.104 in en, fi and ja. `versions.json` piritori goes 4.103 → 4.104 (n 4104) by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=231), and `sw.js` `VERSION` went 283 → 284. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 36 bare-node suites. `playlog.mjs` drives the Night Shift watcher with fake snapshots: the brief, a resolving round not yet the player's, two rounds, the result, a reload of the result page that counts nothing twice, and the cabinet that writes nothing.
+    - browser: playtest 10, outing 84 (75 + 9 new: after each real door fight, the notes say *Fights: 1* and how it ended, a round's first tap is among the slowest moments, and every tap is named once), mission 32, m1-inspection 72, m2-journey 47, crew-run (four layouts, standalone Night Shift unaffected).
+  - **On the staged site tree, before the push:**
+    - the site check (10 of 10, two new: Night Shift ships and loads `fight-log.js`, and the play log it writes to resolves on the cabinet);
+    - play card 29, mission 32, doors 52, road 42, outing 84 (the three door fights on the built cabinet, notes included).
+- **Not verified:**
+  - the public github.io URL;
+  - **owner played: pending.** Play on the Pixel, including a fight or two, then pause → PLAYTEST NOTES → SEND or COPY.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`3ac30a45`, Toko Move v3.23).
