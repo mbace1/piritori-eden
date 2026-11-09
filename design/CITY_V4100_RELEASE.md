@@ -1,0 +1,28 @@
+# Hub release: Act I city v4.100 (one outing, one result; leaving a visit no longer locks travel)
+
+- **Source:** `mbace1/piritori-eden` @ `975d408`, web only.
+  - **Gates were green:** run 1255, all nine jobs, including the new `machines.mjs` and `screens-browser.cjs`.
+- **Site:** `mbace1/Suds-Jack` gh-pages `ee19f850`, under `piritori/`. **Pages run 1665 succeeded.**
+  - Nothing was deleted. `release.json` holds 310 files: two added (`machine.js`, `screens.js`) and 59 changed.
+- **What players get** (owner, 2026-11-09: *"Find all of the implicit state machines in my app… without breaking anything"*; `design/STATE_MACHINES.md`):
+  - **A fight is paid once.** Before this, a fight begun in Night Shift, fought on the board after Back, and finished after Forward hurt and aged the crew a second time. Now Night Shift says "That fight is already settled".
+  - **Leaving a visit by the menu no longer locks travel.** A save already locked comes back usable.
+  - **The map is no longer blank after a road fight.**
+  - **Coming back to the city with Back or Forward** shows what Night Shift wrote, instead of an old copy that could overwrite it.
+- **For the next person or agent:**
+  - `design/STATE_MACHINES.md` maps all 30 state machines, with a ranked queue and the rules for converting the next one.
+  - `grep machine(` finds the explicit ones.
+- **Catalogue:**
+  - The note moves to v4.100 in en, fi and ja. `versions.json` piritori goes 4.99 → 4.100 (n 4100) by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=222), and `sw.js` `VERSION` went 270 → 271. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 35 bare-node suites (new: `machines.mjs`);
+    - 16 browser suites: screens 11 (new), outing 75, doors 52, road 42, mission 32, m1-inspection 72, m2-journey 47, next-step 57, opening 56, act1-scenes, story 30, standing 22, aatami 16, chapter 20, header-fit 62, play-card 29.
+    - **Controls on v4.99:** `c19-outing.mjs` fails at each of its two guards separately, and `screens-browser.cjs` fails at the visit.
+  - **On the staged site tree, before the push:** the site check (8 of 8), playtest links (29), mission (32), doors (52), road (42), outing (75).
+- **Not verified:**
+  - the public github.io URL;
+  - a real Back/Forward restore from the browser's memory (the test dispatches the same event);
+  - **owner played: pending.**
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`5cac510f`, Toko Move v3.20).
