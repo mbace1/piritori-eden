@@ -60,11 +60,11 @@ function wordWrap(msg,x,y,maxWidth,font,lineHeight) {
 }
 function drawBubble(speaker) {
   const portrait=LAYOUT==='portrait';
-  const r=portrait?{x:90,y:515,w:900,h:285}:speaker==='toko'?{x:880,y:38,w:670,h:230}:{x:45,y:38,w:650,h:230};
+  const r=portrait?{x:90,y:353,w:900,h:245}:speaker==='toko'?{x:820,y:35,w:740,h:265}:{x:25,y:35,w:585,h:265};
   const base=r.y+r.h;
-  const tip=portrait?(speaker==='toko'?{x:775,y:850}:{x:325,y:925})
-    :(speaker==='toko'?{x:780,y:348}:{x:320,y:360});
-  const rootX=portrait?(speaker==='toko'?760:355):(speaker==='toko'?925:340);
+  const tip=portrait?(speaker==='toko'?{x:775,y:720}:{x:325,y:740})
+    :(speaker==='toko'?{x:775,y:415}:{x:310,y:430});
+  const rootX=portrait?(speaker==='toko'?760:355):(speaker==='toko'?900:300);
   g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=16;g.shadowOffsetY=10;
   g.fillStyle='#C7AA79';g.beginPath();
   g.moveTo(r.x+5,r.y);g.lineTo(r.x+r.w-5,r.y+2);g.lineTo(r.x+r.w,base-4);
@@ -93,9 +93,11 @@ function render(moment='idle', t=0.1) {
     g.fillStyle=fade;g.fillRect(0,0,W,H);
     drawFigure(g,rig,p,-35,730,1.35);
   } else {
-    const k=900/864;g.drawImage(tc,0,0,1536*k,900);
-    g.fillStyle='rgba(18,23,25,.14)';g.fillRect(0,0,W,H);
-    drawFigure(g,rig,p,45,195,0.96);
+    // Move the approved counter plate down so faces share a level below the
+    // bubbles; the top dark band is negative space, not a newly painted asset.
+    const k=900/864;g.drawImage(tc,0,230,1536*k,900);
+    g.fillStyle='rgba(18,23,25,.08)';g.fillRect(0,230,W,H-230);
+    drawFigure(g,rig,p,45,365,0.84);
   }
   const speaker=moment==='toko-answer'?'toko':'aatami';
   drawBubble(speaker);
