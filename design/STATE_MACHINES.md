@@ -100,13 +100,13 @@ The faults below were found by reading the code in the 9 November audit. Each wi
 
 | # | Machine | Where | What can go wrong |
 |---|---|---|---|
-| M4 | The block turn (`advanceAndSettle`) and the night's road-event slot | app.js, standing.js, story.js | No preconditions. One road slot a night: when the cut is found out, the same night's family demand is silently lost. |
+| M4 | The block turn (`advanceAndSettle`) and the night's road-event slot | app.js, standing.js, story.js | No preconditions. **Fixed in v4.102:** a family's demand on the night the cut is found out waits for the next free night instead of being lost. |
 | M5 | The police in a fight | resolver.js, battle.js, run.js, session.js | Three implementations. After the answer the fight module ends the fight while Act I continues it. A helper can be "taken" but still alive. The posture is not validated. A Withdraw while the police are announced leaves `police.taken` empty. |
 | M6 | Fight outcome and phase | resolver.js, battle.js, tactics.js, run.js | `resolved` vs `complete`. The win/loss rule is written three times and the talk gate three ways. The phase stays `enemy` after a loss. The battle.js fork has drifted: an enemy with no legal target still hits. |
 | M7 | Unit life | run.js, tactics.js | About ten booleans (`alive`, `home`, `evacuated`, `taken`, `fled`, …), each reader decoding them differently. |
 | M8 | Night Shift run (`phase`, `active`, `last`, and the mode) | run.js, ui.js | `?campaign=1` without an outing takes over the ordinary save. A rules change strands a mid-fight outing ('gone'). The phase is not tied to `active`/`last`. |
 | M9 | How a fight ended (`m.end`, `withdraw`) | run.js, tactics.js, outing.js | `withdraw` means "you pulled out", "some got out" and "the police ended it". |
-| M10 | The road event (`state.road`) | road.js | A pending event renamed in content locks the road screen forever. |
+| M10 | The road event (`state.road`) | road.js | **Fixed in v4.102:** a pending event no longer in content is dropped as the save loads (`settleRoad`); it locked the road screen for good. |
 | M11 | The chapter ending | state.js, chapter.js | `turnChapter` and `endingId` cannot be reached in the shipped game. `doors.taken` is not reset. |
 | M12 | D002 time (`state.time`) | state.js, toko.js | Toko's counter is never charged. The road clock and the pips are two clocks. |
 | M13 | A battle from the city (`state.battle`) | app.js | `startBattle` overwrites an unfinished battle. Training can start over a mission battle. A mission's stakes are skipped if its fight cannot start. |
@@ -120,7 +120,7 @@ The faults below were found by reading the code in the 9 November audit. Each wi
 | M21 | Kello's cut | story.js | The found-out event cannot repeat, which leaves an undeclared "defended" state. |
 | M22 | Family standing rungs | standing.js | The rung order is copied into code. |
 | M23 | Flags used as states | state.js | `battle-negotiation-open` is set and never read. |
-| M24 | City UI locals (`tokoTold`, `talkSetAside`) | app.js | Never reset: after one empty bowl, Ramen always says "Nothing new". |
+| M24 | City UI locals (`talkSetAside`) | app.js | Never reset. **Fixed in v4.102:** Toko's line (`tokoTold`) is now the save's, per block (`toko.js` `tokoSaid`). |
 | M25 | The save itself | state.js | `STATE_VERSION` has stayed 3 while fields were added. A mismatch silently starts a new campaign. |
 | M26 | Journey preview → commit | journey.js | Sound: local, cleared before commit, revalidated. |
 | M27 | Crew lock, objective, carrier | run.js, ui.js | The carrier has two representations, and the brief's "Sides" counts a different crew from the fight's. |

@@ -30,11 +30,11 @@ const root = new URL('../../', import.meta.url);
 const json = async p => JSON.parse(await readFile(new URL(p, root), 'utf8'));
 const S = await import('../js/v3/state.js?v=16');
 const J = await import('../js/v3/journey.js?v=5');
-const D = await import('../js/v3/doors.js?v=10');
-const R = await import('../js/v3/road.js?v=12');
+const D = await import('../js/v3/doors.js?v=11');
+const R = await import('../js/v3/road.js?v=13');
 const { shortestPath } = await import('../js/v3/content.js?v=2');
 const { settleCut } = await import('../js/v3/story.js?v=11');
-const { settleStanding } = await import('../js/v3/standing.js?v=1');
+const { settleStanding } = await import('../js/v3/standing.js?v=2');
 
 const content = await json('content/era1-slice-v1.json');
 const map = await json('map/kallio-era1-2003-v1.json');
@@ -145,7 +145,7 @@ function play(policy, seed) {
     if (ended?.block !== 'night') return;
     const cut = settleCut(s, story);
     if (cut.foundOut) R.forceRoad(s, roadEvents, story.case.cut.found_out_event, s.selectedAnchor);
-    const settled = settleStanding(s, families);
+    const settled = settleStanding(s, families, { slotFree: !s.road?.pending });
     if (settled.raise) R.forceRoad(s, roadEvents, settled.raise, s.selectedAnchor);
     answerRoad();
   }

@@ -9,9 +9,9 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, restoreState, requirementStatus } from '../js/v3/state.js?v=16';
-import { rungOf, standingOf, standings, doorAllowed, doorFavoured, settleStanding } from '../js/v3/standing.js?v=1';
-import { offerDoors } from '../js/v3/doors.js?v=10';
-import { forceRoad, resolveRoad, pendingRoad } from '../js/v3/road.js?v=12';
+import { rungOf, standingOf, standings, doorAllowed, doorFavoured, settleStanding } from '../js/v3/standing.js?v=2';
+import { offerDoors } from '../js/v3/doors.js?v=11';
+import { forceRoad, resolveRoad, pendingRoad } from '../js/v3/road.js?v=13';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');
@@ -122,6 +122,23 @@ for (const [v, id] of at) ok(rungOf(v, families).id === id, `${v} reads ${id}`);
   ok(!forceRoad(u, roadEvents, 'road-cut-found-out', 'piritori'), 'an ordinary triggered event is still seen once');
   const f = createState(content);
   ok(!requirementStatus('fighters>=2', f, data).ok, 'alone, Aatami cannot stand against a retaliation');
+}
+
+// ── one road event a night (v4.102) ─────────────────────────────────
+// The night has one road-event slot. When Kello's cut is found out the
+// same night, it takes the slot; the family's demand used to be booked as
+// made all the same, so it never came while the family stayed Insulted.
+{
+  const s = createState(content); s.relationships.mccormick_family = -2;
+  const full = settleStanding(s, families, { slotFree: false });
+  ok(full.raise === null, 'with the night\'s slot taken, nothing is raised');
+  ok(!s.standing.demanded.mccormick_family, 'and the demand is not booked as made');
+  const next = settleStanding(s, families);
+  ok(next.raise === 'road-restitution-mccormick', 'the next night it comes');
+  ok(s.standing.demanded.mccormick_family === true, 'and only then is it booked');
+  const r = createState(content); r.relationships.mccormick_family = -3; r.standing = { warned: { mccormick_family: true }, demanded: {} };
+  const held = settleStanding(r, families, { slotFree: false });
+  ok(held.raise === null && r.standing.warned.mccormick_family === true, 'a due retaliation waits for a free night, not back to a warning');
 }
 
 console.log(`standing: ${checks} checks passed`);

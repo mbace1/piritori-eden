@@ -1,3 +1,19 @@
+## v4.102 — 2026-11-09
+
+**Three rough edges a player could hit** (owner, 2026-11-09: *"Go ahead"*, on the plan to fix what a player can see and then read a real playthrough). Each was found by the state-machine audit (`design/STATE_MACHINES.md`). Each now has a test that fails on v4.101.
+
+- **Toko's line goes with its own block** (M24).
+  - What he said over a bowl lived in a page variable, never reset. After one empty bowl he said *"Nothing new tonight. Eat."* on every later visit, in any block, until the next bowl, and a reload forgot whatever he had just told you.
+  - It is now the save's, per block (`toko.js` `tokoSaid`).
+- **A family's demand is no longer lost on a busy night** (M4, part).
+  - A night has one road-event slot. When Kello's cut was found out the same night, it took the slot, but the family's restitution demand was booked as made all the same. It never came while the family stayed Insulted, and a due retaliation dropped back to a warning.
+  - Now the demand or retaliation waits for the next free night (`standing.js` `settleStanding`, `slotFree`).
+- **A road event the content no longer has cannot lock the road** (M10).
+  - A save waiting on an event that was renamed or cut held the road screen for good, because nothing can answer it. It is dropped as the save loads; if the events fail to load, nothing is dropped (`road.js` `settleRoad`).
+- **Gates:** `toko.mjs` (31), `standing.mjs` (79), `road.mjs` (365). The chapter bot reads the same on every policy.
+- **Cache:** standing v2, toko v12, road v13, doors v11, app v69. The label is v4.102.
+- **Owner played: pending.** Godot paused.
+
 ## v4.101 — 2026-11-09
 
 **Crew status is one explicit state machine** (M3, `design/STATE_MACHINES.md`; owner, 2026-11-09: *"Go ahead"*).

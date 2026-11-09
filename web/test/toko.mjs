@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, restoreState } from '../js/v3/state.js?v=16';
 import { board, INFO, markSeen } from '../js/v3/board.js?v=3';
-import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from '../js/v3/toko.js?v=11';
+import { buyBowl, bowlBlocker, tokoTip, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko, tokoSaid } from '../js/v3/toko.js?v=12';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const map = JSON.parse(await readFile(new URL('../../map/kallio-era1-2003-v1.json', import.meta.url)));
@@ -61,4 +61,23 @@ const got = buyFromToko(buyer, data, w[0]);
 ok(got.ok && buyer.cash === c0 - got.paid && buyer.equipment.length === e0 + 1, 'at Vaasankatu, a weapon costs its price and is carried');
 ok(buyFromToko(buyer, data, 'first-handgun').reason === 'not-sold-here', 'he will not sell the handgun');
 buyer.cash = 1; ok(buyFromToko(buyer, data, w[0]).reason === 'cash', 'no money, no weapon');
+// What Toko said belongs to the block it was said in (v4.102). It lived in a
+// page variable: after one empty bowl he said "Nothing new tonight" on every
+// later visit, in any block, until the next bowl; and a reload forgot it.
+{
+  const t = createState(content); t.selectedAnchor = TOKO_ANCHOR; t.cash = 100;
+  ok(tokoSaid(t).bowl === false, 'no bowl yet: he says nothing');
+  const got = buyBowl(t, data);
+  ok(tokoSaid(t).bowl === true && tokoSaid(t).anchorId === got.anchorId, 'the bowl\'s line, this block');
+  const kept = restoreState(JSON.parse(JSON.stringify(t)), content);
+  ok(tokoSaid(kept).anchorId === got.anchorId, 'and after a reload');
+  t.scheduleIndex += 1;
+  ok(tokoSaid(t).bowl === false && tokoSaid(t).anchorId === null, 'the next block he has said nothing yet');
+  const e = createState(content); e.selectedAnchor = TOKO_ANCHOR; e.cash = 100;
+  e.heard = Object.fromEntries(board(e, data).rows.map(r => [r.id, 99]));
+  e.scheduleIndex = 99; buyBowl(e, data);
+  ok(tokoSaid(e).bowl && tokoSaid(e).anchorId === null, 'an empty bowl: nothing new, this block');
+  e.scheduleIndex = 100;
+  ok(!tokoSaid(e).bowl, 'and not the block after');
+}
 console.log(`toko: ${n} checks passed`);

@@ -34,7 +34,7 @@ const doors = read('../../content/doors-v1.json');
 const roadEvents = read('../../content/road-events-v1.json');
 const { createState, SAVE_KEY, fighters } = await import('../js/v3/state.js?v=16');
 const { stageFight, doorFightStage, roadFightStage, placeAt } = await import('../js/v3/places.js?v=1');
-const { templateOf } = await import('../js/v3/doors.js?v=10');
+const { templateOf } = await import('../js/v3/doors.js?v=11');
 const O = await import('../js/v3/outing.js?v=8');
 const R = await import('../crew-run/run.js?v=28');
 const { threats, routes, forecast } = await import('../fight-module/tactics.js?v=11');
