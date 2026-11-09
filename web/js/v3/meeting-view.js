@@ -127,6 +127,8 @@ export function mountMeetingView(world, { model, onChoose, onContinue, onBack, s
     clearTimeout(armTimer);
     const chosen = model.choices.find(c => c.id === model.choiceId);
     world.dataset.resolved = String(Boolean(chosen));
+    // 9:16: one person on screen at a time, the one speaking (owner, 9 November).
+    world.dataset.speaker = chosen || (!partner && !standIns.length) ? 'aatami' : 'other';
     $('.cash').textContent = model.cash; $('.when').textContent = model.when; $('.where').textContent = model.place;
     if (chosen) {
       const s = stakeOf(chosen);

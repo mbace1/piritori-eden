@@ -82,3 +82,9 @@
 @keyframes meeting-person { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
 @keyframes meeting-card { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
 @media (prefers-reduced-motion: reduce) { .meeting *, .meeting { animation: none !important; transition: none !important; } }
+
+/* One person at a time in 9:16: the speaker, centred (owner, 9 November). */
+.meeting[data-speaker="aatami"] .actor:not(.actor-aatami), .meeting[data-speaker="aatami"] .stand-in { display: none; }
+.meeting[data-speaker="other"] .actor-aatami { display: none; }
+.meeting .actor-aatami, .meeting .actor-jaska, .meeting .actor-toko { left: 50%; right: auto; translate: -50% 0; }
+.meeting .stand-in { right: auto; left: 50%; translate: -50% 0; }
