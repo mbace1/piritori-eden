@@ -1,7 +1,7 @@
 import {
   SAVE_KEY as CAMPAIGN_SAVE_KEY,
   crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, moveCrew,
-} from '../js/v3/state.js?v=16';
+} from '../js/v3/state.js?v=17';
 import {nameFrom} from '../../people/roster.mjs?v=1';
 import {outingPhase, moveOuting} from '../js/v3/outing.js?v=8';
 

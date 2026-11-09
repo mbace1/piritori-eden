@@ -24,7 +24,7 @@
 //     not turn the block (the app marks it `road`).
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { applyEffects, requirementStatus, deterministicRoll } from './state.js?v=16';
+import { applyEffects, requirementStatus, deterministicRoll } from './state.js?v=17';
 
 const ROAD_URL = '../../../content/road-events-v1.json';
 

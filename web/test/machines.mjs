@@ -12,7 +12,7 @@ import fs from 'node:fs';
 const { machine, step, describe } = await import('../js/v3/machine.js?v=1');
 const O = await import('../js/v3/outing.js?v=8');
 const { SCREENS, settleScreen, enterScreen } = await import('../js/v3/screens.js?v=2');
-const { journeyBlocker } = await import('../js/v3/journey.js?v=5');
+const { journeyBlocker } = await import('../js/v3/journey.js?v=6');
 const doc = fs.readFileSync(new URL('../../design/STATE_MACHINES.md', import.meta.url), 'utf8');
 
 // ── the primitive ──────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ const city = (extra = {}) => ({ mode: 'route', activeVisit: null, road: null, ou
 // below is a fault v4.100 had.
 {
   const content = JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json', import.meta.url)));
-  const St = await import('../js/v3/state.js?v=16');
+  const St = await import('../js/v3/state.js?v=17');
   const data = { content, crew: new Map(content.crew.map(c => [c.id, c])) };
   const fresh = () => { const s = St.createState(content); s.recruited = ['crew-slot-runner', 'crew-slot-muscle', 'crew-slot-fixer']; return s; };
   const hurt = (s, id) => Object.assign(s.crewStatus[id], { status: 'critical', critical: true, condition: 1 });

@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=12';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=13';
 import { settleScreen, enterScreen } from './screens.js?v=2';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
@@ -9,6 +9,7 @@ import {
   formatBlock, choiceStatus, chooseEncounter, advanceSchedule, deployedCrew,
   transactOffer, applyEffects, commitRoute, sendOnRoute,
   crewRecord, hiringPoolFor, hireFromPool,
+  shipmentCrew, shipmentRoutes, shipmentOdds, defaultShipmentPlan, crewState,
   isNamed, careerLeft, careerIsVisible, ageCrew,
   levelOf, unspentPerkPoints, perkValue, skillsOf, skillOffer, spendPerk,
   learnSkill, spendPerkPointOnSkill, train,
@@ -16,30 +17,30 @@ import {
   canShopHere, buyOf, buyEquipment, tradeBlocker, actionsLeft,
   battleCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=16';
+} from './state.js?v=17';
 import { createPauseMenu } from './pause.js?v=6';
 import { createPlaylog, summarise, report as playReport } from './playlog.js?v=1';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
-import { previewJourney, commitJourney } from './journey.js?v=5';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko, tokoSaid } from './toko.js?v=12';
+import { previewJourney, commitJourney } from './journey.js?v=6';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko, tokoSaid } from './toko.js?v=13';
 import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=11';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=12';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=11';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=12';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=2';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag, moveOuting } from './outing.js?v=8';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad, settleRoad } from './road.js?v=13';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad, settleRoad } from './road.js?v=14';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=20';
+} from './battle.js?v=21';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -353,6 +354,9 @@ function resetInspection() { inspectionFocus = null; inspectionOwner = null; jou
 // M2: a journey PREVIEW is local like the cursor — Cancel, a reload or any
 // change of ground throws it away, and a thrown-away preview was never saved.
 let journeyDraft = null;
+// The shipment plan being drawn up (owner, 2026-11-09: "a choice, odds shown").
+// Local like journeyDraft: a reload goes back to the night's choices.
+let shipmentDraft = null;
 function currentJourney() {
   if (!journeyDraft) return null;
   if (journeyDraft.owner !== state || journeyDraft.preview.scheduleIndex !== state.scheduleIndex
@@ -1024,6 +1028,7 @@ function renderEncounter() {
   const isToko = encounter.participants?.includes('toko');
   const isJaska = encounter.participants?.includes('jaska');
   const resolved = state.choices[encounter.id];
+  if (shipmentDraft?.owner === state && !resolved && encounter.choices.some(c => c.effects?.includes('chapter-ending:attempt'))) return renderShipmentPlan(encounter);
   const choice = encounter.choices.find(item => item.id === resolved);
   const pendingBattle = state.battle?.status === 'active';
   if (state.mode === 'encounter' && !pendingBattle && !presentAtLead()) return renderAwayFromLead(slot);
@@ -1143,6 +1148,59 @@ function renderAwayFromLead(slot) {
   </section>`;
 }
 
+/** The shipment night: who goes, which route, and the odds before the stake. */
+function renderShipmentPlan(encounter) {
+  const ending = data.content.chapters?.find(c => c.index === state.chapter)?.ending ?? {};
+  const plan = { crew: [...shipmentDraft.crew], route: shipmentDraft.route };
+  const odds = shipmentOdds(state, data, plan);
+  const able = new Set(shipmentCrew(state));
+  const crew = state.recruited.map(id => ({ id, name: crewRecord(state, data, id)?.name ?? id, able: able.has(id), state: crewState(state, id) }));
+  const routes = shipmentRoutes(state, data);
+  const unlockedBy = { 'flag:mccormick-escort': 'stand with the McCormicks on day 9', 'flag:jade-warehouse': "take Mei Lan's warehouse on day 9" };
+  const route = routes.find(r => r.id === plan.route);
+  const tilt = part => (part.edge > 0 ? 'safer' : 'riskier');
+  const picked = id => shipmentDraft.crew.has(id);
+  return `<section class="paper-panel encounter-copy shipment-plan" data-shipment-plan>
+    <p class="section-label">${esc(formatBlock(state, data.content))} · ${esc((ending.label ?? 'The shipment').toUpperCase())}</p>
+    <h2 class="section-title">WHO GOES, AND WHICH WAY</h2>
+    <p class="encounter-opening">${esc(ending.brief ?? '')}</p>
+    <h3 class="section-label">WHO GOES</h3>
+    <div class="choice-list">${crew.length ? crew.map(c => `<button class="choice-card${picked(c.id) ? ' selected' : ''}" type="button" data-action="ship-crew" data-crew="${esc(c.id)}" aria-pressed="${picked(c.id)}" ${c.able ? '' : 'disabled'}>
+        <strong>${picked(c.id) ? '✓ ' : ''}${esc(c.name)}</strong><span>${c.able ? (c.state === 'wounded' ? 'wounded, can still carry' : 'ready') : esc(c.state)}</span></button>`).join('') : '<p>Nobody but Aatami. One pair of hands for a whole container.</p>'}</div>
+    <h3 class="section-label">WHICH WAY</h3>
+    <div class="choice-list">${routes.map(r => `<button class="choice-card${r.id === plan.route ? ' selected' : ''}" type="button" data-action="ship-route" data-route="${esc(r.id)}" aria-pressed="${r.id === plan.route}" ${r.open ? '' : 'disabled'}>
+        <strong>${r.id === plan.route ? '✓ ' : ''}${esc(r.label)}</strong><span>${esc(r.detail ?? '')}</span>${r.open ? '' : `<em>only if you ${esc((r.requirements ?? []).map(q => unlockedBy[q] ?? q).join(' and '))}</em>`}</button>`).join('')}</div>
+    <h3 class="section-label">THE ODDS</h3>
+    <div class="shipment-odds" role="img" aria-label="Clean ${odds.clean} percent, messy ${odds.messy} percent, lost ${odds.lost} percent" style="display:flex;gap:2px;min-height:44px;font-weight:700;font-size:13px">
+      ${[['clean', odds.clean, '#3f6d3a'], ['messy', odds.messy, '#9a6f0c'], ['lost', odds.lost, '#a24431']].filter(([, n]) => n > 0).map(([name, n, colour]) => `<span style="flex:${n};display:grid;place-items:center;background:${colour};color:#fff9eb;padding:0 4px;white-space:nowrap;overflow:hidden">${name.toUpperCase()} ${n}%</span>`).join('')}
+    </div>
+    ${odds.parts.length ? `<p class="consequence-strip">${odds.parts.map(part => `${esc(part.label)} (${tilt(part)})`).join(' · ')}</p>` : ''}
+    <ul class="shipment-stakes">
+      <li><b>Clean:</b> ${ending.grants_upgrade ? `${esc(cap(ending.grants_upgrade))} is yours.` : 'it gets away.'}</li>
+      <li><b>Messy:</b> ${route?.keeps_stash ? 'it gets away, and the warehouse keeps what cannot move: nothing is left behind.' : 'it gets away, but the last thing in the stash is left on the quay.'}</li>
+      <li><b>Lost:</b> ${plan.crew.length ? 'one of those who went does not come back.' : 'the container is gone.'}</li>
+    </ul>
+    <div class="choice-list">
+      <button class="paper-button primary" type="button" data-action="ship-run" ${route?.open ? '' : 'disabled'}>RUN IT · ${money(ending.stake_eur ?? 0)}</button>
+      <button class="paper-button" type="button" data-action="ship-cancel">NOT YET</button>
+    </div>
+  </section>`;
+}
+
+/** What the night leaves for chapter 2 (owner, 2026-11-09: a chapter's ending sets up the next). */
+function shipmentLeaves() {
+  const last = state.lastShipment;
+  if (!last) return [];
+  const route = shipmentRoutes(state, data).find(r => r.id === last.route);
+  const lines = [];
+  if (route) lines.push(`${route.label}.`);
+  if (route?.effects?.some(e => e.startsWith('obligation:mccormick_family'))) lines.push('The McCormicks will want their favour for the van.');
+  if (last.taken) lines.push(`${crewRecord(state, data, last.taken)?.name ?? 'Someone'} was taken at the quay. There is a way home: bail, or a rescue door.`);
+  if (last.left) lines.push(`${cap(last.left.id ?? String(last.left))} was left on the quay.`);
+  if (last.outcome === 'messy' && route?.keeps_stash) lines.push("Nothing was left behind: it is all at Mei Lan's.");
+  return lines;
+}
+
 function renderEncounterOutcome(choice, pendingBattle) {
   if (state.mode === 'visit') return `<div class="outcome-card"><h3>${esc(choice?.label)}</h3><p>${esc(choice?.forecast)}</p><button class="paper-button primary" data-action="leave-visit">RETURN TO MAP</button></div>`;
   const messages = state.lastOutcome?.length ? state.lastOutcome : ['The choice is now part of the city’s memory.'];
@@ -1185,6 +1243,7 @@ function renderChapter() {
       <p class="section-label">CHAPTER ${state.chapter}${def.label ? ` / ${esc(def.label.toUpperCase())}` : ''}</p>
       <h2 class="section-title">${esc((ending.label ?? 'THE OPERATION').toUpperCase())} — ${esc(state.lastEndingOutcome.toUpperCase())}</h2>
       <p>${esc(outcomeCopy[state.lastEndingOutcome] ?? '')}</p>
+      ${shipmentLeaves().map(line => `<p class="consequence-strip">${esc(line)}</p>`).join('')}
       ${renderChapterTurn()}
     </section>`;
   }
@@ -2318,6 +2377,11 @@ function handleRootClick(event) {
     }
     const encounter = (state.mode === 'visit' ? activeVisit(state, data) : currentEncounter(state, data));
     const choice = encounter.choices.find(item => item.id === target.dataset.choice);
+    if (state.mode === 'encounter' && choice?.effects?.includes('chapter-ending:attempt') && !state.shipmentPlan) {
+      const plan = defaultShipmentPlan(state, data);
+      shipmentDraft = { owner: state, choice: choice.id, crew: new Set(plan.crew), route: plan.route };
+      render(); return;
+    }
     const outingBefore = state.outing?.id ?? null;
     const result = state.mode === 'visit' ? chooseVisit(state, data, target.dataset.choice) : chooseEncounter(state, encounter, choice, data);
     if (!result.ok) logToast(result.reason);
@@ -2419,6 +2483,21 @@ function handleRootClick(event) {
     const result = buyEquipment(state, data, target.dataset.equipment);
     logToast(result.ok ? `Bought for ${money(result.paid)}.` : result.reason === 'no-time' ? tradeBlocker(state, state.selectedAnchor) : 'Cannot buy — wrong place, taken-only, or short on cash.');
     persist(); render();
+  } else if (action === 'ship-crew' && shipmentDraft?.owner === state) {
+    const id = target.dataset.crew;
+    if (shipmentDraft.crew.has(id)) shipmentDraft.crew.delete(id); else shipmentDraft.crew.add(id);
+    render();
+  } else if (action === 'ship-route' && shipmentDraft?.owner === state) {
+    shipmentDraft.route = target.dataset.route; render();
+  } else if (action === 'ship-cancel') {
+    shipmentDraft = null; render();
+  } else if (action === 'ship-run' && shipmentDraft?.owner === state) {
+    // The plan rides on the save for the one choice that reads it; the
+    // ordinary choose path then pays the stake and resolves the night.
+    state.shipmentPlan = { crew: [...shipmentDraft.crew], route: shipmentDraft.route };
+    const choiceId = shipmentDraft.choice; shipmentDraft = null;
+    const button = document.createElement('button'); button.dataset.action = 'choose'; button.dataset.choice = choiceId;
+    handleRootClick({ target: { closest: () => button } });
   } else if (action === 'attempt-chapter-ending') {
     const reason = attemptChapterEnding(state, data);
     if (reason) logToast({ 'not-available': 'Not ready yet.', 'cannot-afford': 'Not enough cash for the stake.', 'wrong-place': 'Wrong place for this.' }[reason] ?? reason);

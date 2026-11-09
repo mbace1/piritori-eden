@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createSession} from '../fight-module/session.js?v=27';
-import {endPlayerPhase,attackTargets,selectAction,playerAttack,validMoveCells} from '../fight-module/resolver.js?v=14';
-import {anchorCoverCells} from '../fight-module/resolver.js?v=14';
-import {createState,setAptitudes} from '../js/v3/state.js?v=16';
+import {createSession} from '../fight-module/session.js?v=28';
+import {endPlayerPhase,attackTargets,selectAction,playerAttack,validMoveCells} from '../fight-module/resolver.js?v=15';
+import {anchorCoverCells} from '../fight-module/resolver.js?v=15';
+import {createState,setAptitudes} from '../js/v3/state.js?v=17';
 const content=JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json',import.meta.url)));
 for(const mode of ['mixed','melee','ranged']){
   const s=createSession(content,mode);assert.equal(s.snapshot().units.length,4);assert.equal(s.battle.players[0].equipment,s.battle.enemies[0].equipment);assert.equal(s.battle.players[1].equipment,s.battle.enemies[1].equipment);

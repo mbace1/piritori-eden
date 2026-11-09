@@ -28,12 +28,12 @@ import { readFile } from 'node:fs/promises';
 
 const root = new URL('../../', import.meta.url);
 const json = async p => JSON.parse(await readFile(new URL(p, root), 'utf8'));
-const S = await import('../js/v3/state.js?v=16');
-const J = await import('../js/v3/journey.js?v=5');
-const D = await import('../js/v3/doors.js?v=11');
-const R = await import('../js/v3/road.js?v=13');
+const S = await import('../js/v3/state.js?v=17');
+const J = await import('../js/v3/journey.js?v=6');
+const D = await import('../js/v3/doors.js?v=12');
+const R = await import('../js/v3/road.js?v=14');
 const { shortestPath } = await import('../js/v3/content.js?v=2');
-const { settleCut } = await import('../js/v3/story.js?v=11');
+const { settleCut } = await import('../js/v3/story.js?v=12');
 const { settleStanding } = await import('../js/v3/standing.js?v=2');
 
 const content = await json('content/era1-slice-v1.json');

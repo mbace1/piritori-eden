@@ -21,8 +21,8 @@
 //     and if not the door's `fight.lose` is paid. Never past two fights a day.
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
-import { deterministicRoll, requirementStatus, fightsToday, fighters } from './state.js?v=16';
-import { minutesThisBlock } from './road.js?v=13';
+import { deterministicRoll, requirementStatus, fightsToday, fighters } from './state.js?v=17';
+import { minutesThisBlock } from './road.js?v=14';
 import { doorAllowed, doorFavoured } from './standing.js?v=2';
 
 const DOORS_URL = '../../../content/doors-v1.json';
