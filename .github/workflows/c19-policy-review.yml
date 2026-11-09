@@ -1,0 +1,33 @@
+name: C19 policy review evidence
+on:
+  pull_request:
+    paths:
+      - 'web/tools/c19-policy-report.mjs'
+      - 'web/test/c19-policy-report.mjs'
+      - '.github/workflows/c19-policy-review.yml'
+  workflow_dispatch:
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test analyzer fixture
+        run: node web/test/c19-policy-report.mjs
+      - name: Simulate existing C19 campaign fights (12 seeds)
+        run: node web/tools/fight-balance.mjs > c19-bot-baseline.json
+      - name: Analyze bot outcomes
+        run: node web/tools/c19-policy-report.mjs c19-bot-baseline.json > c19-policy-report.json
+      - name: Preserve review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c19-policy-review
+          path: |
+            c19-bot-baseline.json
+            c19-policy-report.json
+          if-no-files-found: warn
+          retention-days: 14
