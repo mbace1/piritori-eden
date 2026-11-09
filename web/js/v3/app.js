@@ -17,7 +17,8 @@ import {
   battleCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=16';
-import { createPauseMenu } from './pause.js?v=5';
+import { createPauseMenu } from './pause.js?v=6';
+import { createPlaylog, summarise, report as playReport } from './playlog.js?v=1';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
@@ -127,6 +128,11 @@ const UI = {
 
 let data;
 let state;
+// The play log (v4.103, playlog.js): what this device's player did. Local
+// until they press SEND in the pause menu's PLAYTEST NOTES.
+let playlog = null, playlogEnded = false;
+// The build's label, said in the pause menu and on every playtest note.
+const APP_VERSION = 'v4.103';
 // The road (road.js): events in transit and on arrival. Empty until loaded,
 // and a failed load leaves the city exactly as it was, with no events.
 // Toko in cut card behind his counter (owner, 2026-10-21: "Approved, put it in the game"; placed in the empty bar in
@@ -429,6 +435,7 @@ function playOpening() {
 }
 
 function logToast(message) {
+  playlog?.add('toast', { message: String(message).slice(0, 160) });
   const toast = $('toast');
   clearTimeout(toastTimer);
   toast.textContent = message;
@@ -519,6 +526,9 @@ function render() {
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
+  playlog?.seen({ screen: state.mode, block: state.scheduleIndex, label: formatBlock(state, data.content),
+    actions: [...root.querySelectorAll('[data-action]:not([disabled])')].map(el => el.dataset.action) });
+  if (state.chapterCleared && !playlogEnded) { playlogEnded = true; playlog?.add('ending', { outcome: state.lastEndingOutcome ?? '' }); }
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
   // map scrolled away. Same-mode re-renders keep their place.
@@ -2223,6 +2233,7 @@ function handleRootClick(event) {
   const target = event.target.closest('[data-action]');
   if (!target || target.disabled) return;
   const action = target.dataset.action;
+  playlog?.add('act', { action, screen: state.mode, block: state.scheduleIndex });
   if (action === 'open-visit') {
     if (openVisit(state, data, target.dataset.visit)) { observation = ''; persist(); render(); }
   } else if (action === 'leave-visit') {
@@ -2555,6 +2566,7 @@ async function boot() {
     $('modeNav').addEventListener('click', event => {
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
+      playlog?.add('act', { action: `nav:${button.dataset.modeTarget}`, screen: state.mode, block: state.scheduleIndex });
       const moved = enterScreen(state, button.dataset.modeTarget);
       if (!moved.ok) { logToast(moved.reason); render(); return; }
       observation = '';
@@ -2650,14 +2662,39 @@ async function boot() {
     // Old saves keep every observation they stored (restoreState spreads raw).
     if (state.seen?.[state.selectedAnchor] == null) markSeen(state, state.selectedAnchor);
 
+    playlog = createPlaylog();
+    playlog.add('session', { version: APP_VERSION });
+    playlogEnded = state.chapterCleared;
+    addEventListener('error', event => playlog.add('error', { message: String(event.message ?? event.error ?? 'error').slice(0, 200) }));
+    addEventListener('unhandledrejection', event => playlog.add('error', { message: String(event.reason?.message ?? event.reason ?? 'rejection').slice(0, 200) }));
+    document.addEventListener('visibilitychange', () => playlog.add(document.hidden ? 'hidden' : 'visible'));
+    const playtest = {
+      text: () => playReport(summarise(playlog.entries()), { version: APP_VERSION }),
+      async send() {
+        try {
+          const feedback = await import('../../../hub/feedback.js');
+          const how = await feedback.send({ game: 'piritori', kind: 'playtest', rating: null, text: playtest.text(), ts: Date.now() });
+          return { sent: 'Sent to the arcade.', 'sent-blind': 'Sent to the arcade.', queued: 'No connection: it goes the next time the arcade is open.', off: 'Kept on this device; the arcade has no inbox set. Use COPY.' }[how] ?? 'Kept on this device. Use COPY.';
+        } catch { return 'Sending needs the arcade. Use COPY instead.'; }
+      },
+      async copy(pre) {
+        try { await navigator.clipboard.writeText(playtest.text()); return 'Copied. Paste it anywhere.'; }
+        catch {
+          if (pre) { const range = document.createRange(); range.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range); }
+          return 'Selected: copy it with your device\'s copy.';
+        }
+      },
+      clear: () => playlog.clear(),
+    };
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.102',
+      version: APP_VERSION,
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.
       language: { get: () => state.locale, toggle: () => { state.locale = state.locale === 'en' ? 'fi' : 'en'; persist(); render(); } },
       reset: resetCampaign,
+      playtest,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
     // Esc pauses from anywhere. The menu handles Esc itself once it is open,
@@ -2754,6 +2791,7 @@ async function boot() {
       get road() { return roadEvents; },
       get story() { return story; },
       get sound() { return soundState(); },
+      get playlog() { return playlog; },
       debug: {
         setState(next) { state = next; registerTaken(state, data, doors); attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id, stage) { startBattle(id, stage ?? null); persist(); render(); },

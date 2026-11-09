@@ -56,7 +56,9 @@ function watchErrors(page) {
 }
 const snap = page => page.evaluate(() => ({
   state: JSON.stringify(window.__ptv3.state),
-  save: JSON.stringify(Object.entries(localStorage).sort()),
+  // What the game keeps, not the play log (v4.103), which records every tap
+  // and look by design, so it changes when nothing in the game does.
+  save: JSON.stringify(Object.entries(localStorage).filter(([key]) => key !== 'piritori-playlog:v1').sort()),
 }));
 const S = page => page.evaluate(() => structuredClone(window.__ptv3.state));
 const panel = page => page.locator('.inspect-panel');
