@@ -2420,7 +2420,50 @@
         "label": "The shipment",
         "brief": "A container comes off a ship at Sörnäinen. Pay for it, move it, and be somewhere else by morning.",
         "stake_eur": 400,
-        "grants_upgrade": "stash-house-sornainen"
+        "grants_upgrade": "stash-house-sornainen",
+        "authority": "Owner, 2026-11-09: the finale is a crew-and-route choice with the odds shown; the EUR 400 stays; a chapter's ending sets up the next chapter. The routes are the ones the day-9 families meeting already promised.",
+        "routes": [
+          {
+            "id": "quay-road",
+            "label": "Alone, by the quay road",
+            "detail": "Short and lit. Anyone watching the harbour sees the van leave.",
+            "edge": 0
+          },
+          {
+            "id": "mccormick-van",
+            "label": "In the McCormicks' van",
+            "detail": "Their van, their road, their men. You will owe them for it.",
+            "requirements": [
+              "flag:mccormick-escort"
+            ],
+            "edge": 0.25,
+            "effects": [
+              "obligation:mccormick_family:+1"
+            ]
+          },
+          {
+            "id": "jade-warehouse",
+            "label": "Into Mei Lan's warehouse",
+            "detail": "Close and quiet. What cannot move tonight waits there, so nothing is left on the quay.",
+            "requirements": [
+              "flag:jade-warehouse"
+            ],
+            "edge": 0.15,
+            "keeps_stash": true
+          }
+        ],
+        "modifiers": [
+          {
+            "flag": "owes-nobody",
+            "edge": 0.1,
+            "label": "Nobody comes to collect"
+          },
+          {
+            "flag": "stalled-the-families",
+            "edge": -0.15,
+            "label": "Both families are watching"
+          }
+        ]
       },
       "act_id": "act-1-kallio-2003",
       "narrative": {
