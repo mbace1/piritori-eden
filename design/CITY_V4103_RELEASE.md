@@ -1,0 +1,35 @@
+# Hub release: Act I city v4.103 (playtest notes; v4.102's three fixes)
+
+- **Source:** `mbace1/piritori-eden` @ `95dcca6`, web only.
+  - **Gates were green:** run 1261, all nine jobs, including the new `playlog.mjs` and `playtest-browser.cjs`.
+  - Run 1260 (v4.102 alone) failed before any job started: no checks were ever created, on a workflow file that passed before and after. It was a start-up failure, not a test failure; run 1261 covers both commits.
+  - v4.102 (`ec7ecd7`) ships here, inside v4.103; it never shipped on its own.
+- **Site:** `mbace1/Suds-Jack` gh-pages `1dcb43de`, under `piritori/`. **Pages run 1673 succeeded.**
+  - Nothing was deleted. `release.json` holds 311 files: one added (`playlog.js`) and 57 changed.
+- **What players get** (owner, 2026-11-09: *"Go ahead"*, on reading a real playthrough before the next UX step):
+  - **Pause menu → PLAYTEST NOTES.** It shows what this device saw:
+    - where you hesitated, as the time before your first tap on a screen;
+    - what was on screen and never used;
+    - what the game told you most;
+    - where you stopped.
+  - **SEND** passes it through the arcade's own feedback. **COPY** puts it on the clipboard, and **CLEAR** starts over.
+  - Nothing leaves the device unless SEND is pressed.
+  - **v4.102:**
+    - Toko's line now goes with its block; it no longer repeats "Nothing new tonight" forever.
+    - A family's demand on the night Kello's cut is found out now waits for the next night instead of vanishing.
+    - A road event that has been renamed or removed from the content no longer locks the road screen.
+- **Catalogue:**
+  - The note moves to v4.103 in en, fi and ja. `versions.json` piritori goes 4.101 → 4.103 (n 4103) by hand.
+  - The token cascade ran from `hub/games.js` (`hub/shell.js` v=228), and `sw.js` `VERSION` went 278 → 279. `sw-shell --check` agrees.
+- **Verified locally:**
+  - **On the repo tree:**
+    - all 36 bare-node suites. The new `playlog.mjs` caught a real gap, fixed: a second session on the same screen did not measure its first wait.
+    - browser: playtest 10 (new), opening 56, doors 52, screens 11, outing 75, header-fit 62, next-step 57, m1-inspection 72, m2-journey 47, play-card 29, act1-scenes; and for v4.102, story 30, standing 22, road 42.
+    - `m1-inspection` and `m2-journey` now compare everything a save keeps except the play log, which changes on every tap by design.
+  - **On the staged site tree, before the push:**
+    - the site check (8 of 8), playtest links (29), mission (32), doors (52), road (42), outing (75).
+- **Not verified:**
+  - SEND against the arcade's live sheet. The test stubs the feedback module at its URL, so it never posts.
+  - the public github.io URL;
+  - **owner played: pending.** This release exists for that playthrough.
+- **Deploys never merge.** The cabinet was staged on a fresh gh-pages tip (`f78783fb, toko-drop-2 v128`).
