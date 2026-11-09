@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="data:,">
+<title>Act I meetings in the 9:16 view (workbench)</title>
+<style>html,body{margin:0;height:100%;background:#171a17}</style>
+<body>
+<!--
+  Workbench, not the game: any Act I meeting in the new view with real content,
+  the place's real plate and the game's own choice check, on a fresh day-one
+  save placed at that meeting's block. Nothing is saved.
+    ?id=enc-first-purchase            the meeting
+    &cash=400&flags=a,b&rel=toko:1    set up a state, to see locked or special choices open
+-->
+<script type="module">
+import { loadGameData } from '../../../web/js/v3/content.js?v=2';
+import { createState, choiceStatus } from '../../../web/js/v3/state.js';
+import { mountMeetingView, MEETING_STYLES } from '../../../web/js/v3/meeting-view.js?v=1';
+const q = new URLSearchParams(location.search), id = q.get('id') || 'enc-first-purchase';
+const [data, places] = await Promise.all([loadGameData(), fetch('../../../content/places-v1.json').then(r => r.json())]);
+const c = data.content, index = c.schedule.findIndex(s => s.encounter_id === id), slot = c.schedule[index];
+const encounter = c.encounters.find(e => e.id === id);
+if (!encounter || index < 0) throw Error(`No scheduled meeting ${id}`);
+const state = createState(c);
+state.scheduleIndex = index;
+if (q.has('cash')) state.cash = Number(q.get('cash'));
+for (const f of (q.get('flags') || '').split(',').filter(Boolean)) state.flags.push(f);
+for (const pair of (q.get('rel') || '').split(',').filter(Boolean)) { const [who, n] = pair.split(':'); state.relationships[who] = Number(n); }
+const anchorId = slot.anchor_id ?? encounter.anchor_id;
+const place = (places.places ?? places).find(p => p.anchor === anchorId);
+const plateId = encounter.scene_asset_id || (place?.plate && place.plate !== 'street' ? place.plate : null);
+const plate = plateId ? data.art.get(plateId)?.url : '';
+const backdrop = plate ? new URL(plate, new URL('/web/', location.origin)).href : '';
+const model = () => ({
+  id, people: encounter.participants ?? ['aatami'], backdrop, names: {},
+  when: `Day ${slot.day} · ${slot.block}`, place: data.anchors.get(anchorId)?.label ?? place?.name ?? anchorId,
+  cash: `€${Math.round(state.cash)}`, opening: encounter.opening, choiceId: state.choices[id] ?? null,
+  choices: encounter.choices.map(ch => {
+    const s = choiceStatus(ch, state, data);
+    const failed = (ch.requirements ?? []).filter(r => !choiceStatus({ requirements: [r] }, state, data).ok);
+    return { ...ch, available: s.ok, reason: s.reasons.join(' · '), failed };
+  }),
+});
+const host = document.createElement('div'); document.body.append(host);
+const shadow = host.attachShadow({ mode: 'open' });
+shadow.innerHTML = `<link rel="stylesheet" href="${MEETING_STYLES}"><div class="meeting-frame"><main></main></div>`;
+await new Promise(resolve => { const link = shadow.querySelector('link'); if (link.sheet) resolve(); else link.addEventListener('load', resolve, { once: true }); });
+const view = mountMeetingView(shadow.querySelector('main'), {
+  model: model(),
+  onChoose(choiceId) { state.choices[id] = choiceId; view.update(model()); return { ok: true }; },
+  onContinue() { delete state.choices[id]; view.update(model()); },
+});
+window.meeting = view;
+await view.ready.catch(e => console.error(e));
+document.body.dataset.ready = 'true';
+</script>

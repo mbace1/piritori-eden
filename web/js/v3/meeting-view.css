@@ -1,0 +1,75 @@
+/* Any Act I meeting: one fixed 9:16 scene, a slim pill on top, one card at the
+   bottom (Toko Move's lower third), in Piritori's paper and ink. All UI at most
+   half the frame (owner, 8 November). */
+:host { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; overflow: hidden; background: #171a17; }
+.meeting-frame { position: relative; width: min(100vw, 56.25svh); height: min(100svh, 177.777778vw); container-type: size; box-shadow: 0 0 70px #0006; }
+.meeting {
+  --inset: 12px; --paper: #f3ecdd; --ink: #262521; --quiet: #6d6858; --line: #2f2d28; --gold: #c9971e; --gold-wash: #fbf0d0; --red: #a24431;
+  position: relative; width: 100%; height: 100%; overflow: hidden; isolation: isolate; container-type: size;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); color-scheme: light; background: #1d201c;
+}
+.meeting, .meeting * { box-sizing: border-box; }
+.meeting button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.meeting button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.meeting .backdrop, .meeting .shade, .meeting .actors { position: absolute; inset: 0; width: 100%; height: 100%; }
+.meeting .backdrop { object-fit: cover; object-position: center; z-index: -3; animation: meeting-in .3s ease-out both; }
+.meeting .shade { z-index: -2; pointer-events: none; background: linear-gradient(#0b0d0b66, transparent 22%, transparent 55%, #0b0d0b88); }
+
+/* The slim status pill (Toko Move: time, pips, money). */
+.meeting .pill { position: absolute; z-index: 5; top: var(--inset); left: var(--inset); right: calc(var(--inset) * 2 + 44px); height: 44px;
+  display: flex; align-items: center; gap: 10px; padding: 0 16px; border-radius: 22px; background: #f3ecddf2; box-shadow: 0 2px 10px #0004; }
+.meeting .when { font-size: 13px; color: var(--quiet); white-space: nowrap; }
+.meeting .where { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meeting .cash { font-size: 16px; font-weight: 700; color: #3f6d3a; font-variant-numeric: tabular-nums; }
+.meeting .menu-button { position: absolute; z-index: 5; top: var(--inset); right: var(--inset); width: 44px; height: 44px; border: 0; border-radius: 22px; background: #f3ecddf2; box-shadow: 0 2px 10px #0004; font-size: 18px; }
+
+/* People: Aatami left, whoever he meets right. */
+.meeting .actors { z-index: 1; pointer-events: none; }
+.meeting .actor { position: absolute; height: 62cqh; width: auto; bottom: 18cqh; filter: drop-shadow(0 6px 6px #0006); animation: meeting-person .35s ease-out both; }
+.meeting .actor-aatami { left: -12%; }
+.meeting .actor-jaska, .meeting .actor-toko { right: -14%; }
+.meeting .stand-in { position: absolute; right: -4%; bottom: 18cqh; height: 58cqh; aspect-ratio: 100 / 160; margin: 0; animation: meeting-person .35s ease-out both; }
+.meeting .stand-in svg { display: block; width: 100%; height: 100%; fill: #262521d9; stroke: #f3ecdd99; stroke-width: 1.2; stroke-dasharray: 4 3; }
+.meeting .stand-in figcaption { position: absolute; left: 50%; top: 46%; translate: -50% 0; display: grid; justify-items: center; gap: 1px; padding: 6px 10px;
+  border-radius: 10px; background: #f3ecdde6; text-align: center; white-space: nowrap; }
+.meeting .stand-in b { font-size: 14px; }
+.meeting .stand-in span { font-size: 12px; color: var(--quiet); }
+.meeting .stand-in small { font-size: 11px; color: var(--red); letter-spacing: .06em; text-transform: uppercase; }
+
+/* The lower third. */
+.meeting .card { position: absolute; z-index: 4; left: var(--inset); right: var(--inset); bottom: var(--inset); display: grid; gap: 8px; padding: 12px;
+  border-radius: 18px; background: var(--paper); box-shadow: 0 6px 24px #0007; animation: meeting-card .28s ease-out both; }
+.meeting .line { display: grid; gap: 2px; padding: 2px 4px 4px; }
+.meeting .who { font-size: 12px; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; color: var(--red); }
+.meeting .line p { margin: 0; font-size: 16px; line-height: 1.3; }
+.meeting .choices { display: grid; gap: 7px; }
+.meeting .choice { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; width: 100%; min-height: 48px;
+  padding: 8px 16px; text-align: left; border: 1.5px solid var(--line); border-radius: 14px; background: #fffaf0; }
+.meeting .choice .label { font-size: 16px; font-weight: 650; line-height: 1.2; }
+.meeting .choice .cost { grid-row: 1 / span 2; grid-column: 2; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.meeting .choice .sub { grid-column: 1; font-size: 12px; line-height: 1.25; color: var(--quiet); }
+.meeting .choice .sub:empty { display: none; }
+.meeting .choice:hover:not(:disabled), .meeting .choice:active:not(:disabled) { background: var(--ink); color: var(--paper); }
+.meeting .choice:hover:not(:disabled) .sub { color: #d8d0bd; }
+.meeting .choice:disabled { cursor: default; border-style: dashed; border-color: #a8a08c; background: #f3ecdd; color: #8a8471; }
+.meeting .choice.special { border: 2px solid var(--gold); background: var(--gold-wash); padding-top: 18px; }
+.meeting .choice .tag { position: absolute; top: 4px; left: 16px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #9a6f0c; }
+.meeting .result { margin: 0 4px; font-size: 14px; line-height: 1.3; color: var(--quiet); }
+.meeting .receipt { margin: 0 4px; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.meeting .primary { min-height: 48px; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font-size: 16px; font-weight: 700; }
+
+/* Over half the frame: drop the lines under each choice (they stay in the accessible label). */
+.meeting[data-density="compact"] .choice .sub { display: none; }
+.meeting[data-density="compact"] .choice { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+.meeting[data-density="compact"] .choice.special { padding-top: 16px; }
+/* Two steps when even compact is over half: the line with Respond, then the choices. */
+.meeting .respond[hidden] { display: none; }
+.meeting[data-stage="line"] .choices { display: none; }
+.meeting[data-stage="line"] .respond { display: block; }
+.meeting[data-stage="choices"] .line { display: none; }
+.meeting .choice .cost.why { font-size: 12px; font-weight: 600; color: #8a6a4a; max-width: 11em; text-align: right; }
+@container (max-width: 340px) { .meeting { --inset: 8px; } .meeting .when { display: none; } }
+@keyframes meeting-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes meeting-person { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+@keyframes meeting-card { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .meeting *, .meeting { animation: none !important; transition: none !important; } }

@@ -83,11 +83,12 @@ function rectangle(points) { const xs=points.map(p=>p.x),ys=points.map(p=>p.y);r
  */
 export function createActors(container, { aatami='front', partner='jaska', reducedMotion, tokoSurface='actor', reviewOnly=true } = {}) {
   if (!(container instanceof Element)) throw TypeError('An actor container is required');
-  if (!['front','side'].includes(aatami) || !['jaska','toko'].includes(partner)) throw Error('Unknown retained actor variant');
+  // partner null: Aatami alone, or beside a stand-in the caller draws (meeting-view.js).
+  if (!['front','side'].includes(aatami) || (partner !== null && !['jaska','toko'].includes(partner))) throw Error('Unknown retained actor variant');
   const media = matchMedia('(prefers-reduced-motion: reduce)');
-  let still = reducedMotion ?? media.matches, destroyed = false, loaded = false, raf = 0, tick = -1, speaker = partner;
+  let still = reducedMotion ?? media.matches, destroyed = false, loaded = false, raf = 0, tick = -1, speaker = partner ?? 'aatami';
   const actors = new Map();
-  for (const who of ['aatami',partner]) {
+  for (const who of ['aatami',partner].filter(Boolean)) {
     const variant = who === 'aatami' ? aatami : who, canvas = document.createElement('canvas');
     canvas.className = `actor actor-${who}`; canvas.dataset.actor = who; canvas.dataset.variant = variant; canvas.dataset.status = 'loading';
     canvas.setAttribute('role','img'); canvas.setAttribute('aria-label',`${who === 'aatami' ? 'Young Aatami' : who === 'jaska' ? 'Jaska' : 'Toko Slomo'} · retained source artwork; ${reviewOnly ? 'candidate motion; ' : ''}static mouth`);
