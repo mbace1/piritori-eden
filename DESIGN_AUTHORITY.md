@@ -2,6 +2,13 @@
 
 > **Plan of record, 2026-10-25: [ROADMAP.md](ROADMAP.md).** Owner: *"Check all documentation to see if we are going with the plans, adjust pipeline roadmap and plan accordingly. Act as a super producer focused on gameplay."* The rulings below stand; the roadmap orders the work and names the decisions still open (its §8).
 
+## Owner answers, 2026-11-09 — the shipment is a choice; chapters set up chapters
+
+- **The finale is "a choice, odds shown"**: who goes and which route, with clean / messy / lost shown before the €400 is paid. Not a played fight.
+- **The €400 stays.**
+- **Act I has 4 chapters, and Act II another 4** (read from "4 chapters in Act1 and another 4 in Act1"; to confirm). A chapter's ending is judged by what it sets up for the next chapter; the Pasila endings are the act's, not chapter 1's.
+- Details and what was built: ROADMAP §11.
+
 ## Owner answer, 2026-10-31 — blows can miss
 
 - **"Blows can miss, of course."** Asked after v4.88 measured every Act I fight as
