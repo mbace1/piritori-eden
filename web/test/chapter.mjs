@@ -7,7 +7,7 @@
 // flips them and checks the code follows the data rather than a habit.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createState, restoreState, attemptChapterEnding } from '../js/v3/state.js?v=16';
+import { createState, restoreState, attemptChapterEnding, shipmentOdds, shipmentRoutes } from '../js/v3/state.js?v=16';
 import { turnPlan, turnChapter, nextChapter } from '../js/v3/chapter.js?v=1';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
@@ -85,6 +85,42 @@ function played() {
   ok(s.cash === cash, 'cash:carry keeps the cash');
   ok(s.equipment.length === 0, 'gear:reset empties the stash');
   ok(s.stock.piri === 3, 'stock:carry keeps the stock');
+}
+
+// The shipment night (owner, 2026-11-09: "a choice, odds shown"): who goes and
+// which route, with the odds before the stake; the routes are day 9's promises.
+{
+  const s = played();
+  s.recruited = content.crew.slice(0, 3).map(c => c.id);
+  const all = { crew: [...s.recruited], route: 'quay-road' };
+  const odds = shipmentOdds(s, data, all);
+  ok(odds.clean + odds.messy + odds.lost === 100, `the odds add to 100 (${odds.clean}/${odds.messy}/${odds.lost})`);
+  ok(shipmentOdds(s, data, { crew: s.recruited.slice(0, 1), route: 'quay-road' }).lost > odds.lost, 'fewer hands, likelier lost');
+  const van = () => shipmentRoutes(s, data).find(r => r.id === 'mccormick-van');
+  ok(van() && !van().open, "the McCormicks' van needs day 9's promise");
+  s.flags.push('mccormick-escort');
+  ok(van().open, 'standing with them opens it');
+  const byVan = shipmentOdds(s, data, { crew: [...s.recruited], route: 'mccormick-van' });
+  ok(byVan.clean > odds.clean, `their van is safer (${byVan.clean}% clean against ${odds.clean}%)`);
+  s.flags.push('stalled-the-families');
+  ok(shipmentOdds(s, data, { crew: [...s.recruited], route: 'mccormick-van' }).clean < byVan.clean, 'telling the families to wait makes it riskier');
+  const before = JSON.stringify(s);
+  ok(attemptChapterEnding(s, data, { crew: ['nobody'], route: 'quay-road' }) === 'crew-not-able', 'only able crew can go');
+  ok(attemptChapterEnding(s, data, { crew: [], route: 'jade-warehouse' }) === 'route-closed', 'a route day 9 did not open stays closed');
+  ok(JSON.stringify(s) === before, 'a refused plan changes nothing');
+  const owed = s.obligations?.mccormick_family ?? 0;
+  ok(attemptChapterEnding(s, data, { crew: [...s.recruited], route: 'mccormick-van' }) === '', 'the planned shipment runs');
+  ok(['clean', 'messy', 'lost'].includes(s.lastEndingOutcome) && s.lastShipment.outcome === s.lastEndingOutcome, `it resolves (${s.lastEndingOutcome})`);
+  ok(s.flags.includes('memory:shipment-route:mccormick-van'), 'chapter 2 can read the route taken');
+  ok((s.obligations?.mccormick_family ?? 0) === owed + 1, 'and you owe the McCormicks for the van');
+}
+// One roll per playthrough: the same week gives the same night; it does not depend on the plan's crew.
+{
+  const a = played(), b = played();
+  a.recruited = b.recruited = content.crew.slice(0, 3).map(c => c.id);
+  a.choices['enc-first-purchase'] = b.choices['enc-first-purchase'] = 'buy';
+  attemptChapterEnding(a, data); attemptChapterEnding(b, data);
+  ok(a.lastEndingOutcome === b.lastEndingOutcome, 'the same week, the same night');
 }
 
 console.log(`chapter: ${checks} checks passed`);

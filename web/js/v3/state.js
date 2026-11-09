@@ -865,37 +865,97 @@ export function settleCrew(state) {
 /** How many hands it takes for a container to move quietly. */
 const OPERATION_IDEAL_CREW = 3;
 
-/** Resolved from the seed and the chapter, like gear decay — a player who
- *  reloads to reroll a shipment is playing a different game from the one
- *  being built. THE PENALTY CANNOT BE MONEY (cash resets at a chapter
- *  boundary elsewhere in Godot; this build has no boundary to reset it at
- *  yet either, so the rule is carried forward on principle): what can be
- *  lost is what carries — gear and people. Likewise the reward: a payout
- *  would mean nothing here, so a clean run buys a built upgrade. */
-function resolveOperation(state, data, ending) {
-  const hands = state.recruited.length;
-  const margin = hands / OPERATION_IDEAL_CREW;
-  // Heat carried into the night makes it worse — connects §9.5 (police)
-  // to the meta rather than leaving it a battle-only idea.
-  const seen = state.arrestedCrew.length * 0.15;
-  const roll = rand01(state.seed, 'operation', state.chapter) * 0.7 - 0.35;
-  const score = margin - seen + roll;
+/** The shipment night (owner, 2026-11-09: "a choice, odds shown"). The
+ *  player picks who goes and which route; the screen shows the odds before
+ *  the stake is paid. The score is the old one, now visible: hands against an
+ *  ideal three, less for each arrest, plus the route, the families' mood and
+ *  the heat at the harbour, plus one roll of ±0.35. 1.0 or more is clean, 0.5
+ *  or more messy, less is lost. THE PENALTY CANNOT BE MONEY: what can be lost
+ *  is what carries, gear and people; a clean run buys a built upgrade. */
+const OPERATION_ROLL = 0.35;
+const OPERATION_HEAT = 0.1;
+const OPERATION_ARREST = 0.15;
 
+/** Who can go: on the roster and able (a wounded hand can carry; a critical,
+ *  missing or arrested one cannot). */
+export function shipmentCrew(state) {
+  return state.recruited.filter(id => ['available', 'wounded'].includes(crewState(state, id)));
+}
+
+/** The chapter's routes, each with whether it is open to this campaign. */
+export function shipmentRoutes(state, data) {
+  return (chapterEnding(state, data.content).routes ?? []).map(route => ({
+    ...route, open: choiceStatus({ requirements: route.requirements ?? [] }, state, data).ok,
+  }));
+}
+
+/** Everyone able, and the safest open route: the plan when none is given. */
+export function defaultShipmentPlan(state, data) {
+  const open = shipmentRoutes(state, data).filter(r => r.open).sort((a, b) => (b.edge ?? 0) - (a.edge ?? 0));
+  return { crew: shipmentCrew(state), route: open[0]?.id ?? null };
+}
+
+function shipmentBase(state, data, plan) {
+  const ending = chapterEnding(state, data.content);
+  const route = shipmentRoutes(state, data).find(r => r.id === plan.route);
+  const hands = plan.crew.length;
+  const heat = state.pressure?.[ending.anchor_id] ?? 0;
+  const parts = [{ label: `${hands} of ${OPERATION_IDEAL_CREW} hands`, edge: hands / OPERATION_IDEAL_CREW - 1 }];
+  if (route) parts.push({ label: route.label, edge: route.edge ?? 0 });
+  for (const m of ending.modifiers ?? []) if (state.flags.includes(m.flag)) parts.push({ label: m.label, edge: m.edge });
+  if (heat) parts.push({ label: `Heat at the harbour: ${heat}`, edge: -OPERATION_HEAT * heat });
+  if (state.arrestedCrew.length) parts.push({ label: `${state.arrestedCrew.length} taken by the police this chapter`, edge: -OPERATION_ARREST * state.arrestedCrew.length });
+  return { base: 1 + parts.reduce((n, part) => n + part.edge, 0), parts, route };
+}
+
+/** Clean, messy and lost as whole percentages that add to 100, and what tipped them. */
+export function shipmentOdds(state, data, plan = defaultShipmentPlan(state, data)) {
+  const { base, parts } = shipmentBase(state, data, plan);
+  const above = threshold => Math.max(0, Math.min(1, (base + OPERATION_ROLL - threshold) / (2 * OPERATION_ROLL)));
+  const clean = Math.round(100 * above(1)), messy = Math.round(100 * above(0.5)) - clean;
+  return { clean, messy, lost: 100 - clean - messy, parts: parts.filter(part => part.edge) };
+}
+
+/** Is this plan one the player could make: able crew only, an open route. */
+export function shipmentPlanReason(state, data, plan) {
+  if (!plan || !Array.isArray(plan.crew)) return 'no-plan';
+  const able = new Set(shipmentCrew(state));
+  if (plan.crew.some(id => !able.has(id)) || new Set(plan.crew).size !== plan.crew.length) return 'crew-not-able';
+  const route = shipmentRoutes(state, data).find(r => r.id === plan.route);
+  if (!route?.open) return 'route-closed';
+  return '';
+}
+
+/** One roll per playthrough: drawn from the choices that made it, so walking
+ *  away and coming back cannot reroll it, and two different weeks do not share
+ *  it (every campaign starts from the same seed). */
+function shipmentRoll(state) {
+  const path = Object.keys(state.choices ?? {}).sort().map(id => `${id}=${state.choices[id]}`).join(',');
+  return rand01(state.seed, 'operation', state.chapter, path) * 2 * OPERATION_ROLL - OPERATION_ROLL;
+}
+
+function resolveOperation(state, data, ending, plan) {
+  const { base, route } = shipmentBase(state, data, plan);
+  const score = base + shipmentRoll(state);
+  if (route?.effects?.length) applyEffects(state, route.effects, data, `shipment:${route.id}`);
+  if (route) addUnique(state.flags, `memory:shipment-route:${route.id}`);
+  let outcome, taken = null, left = null;
   if (score >= 1.0) {
     if (ending.grants_upgrade) addUnique(state.upgrades, ending.grants_upgrade);
-    return 'clean';
+    outcome = 'clean';
+  } else if (score >= 0.5) {
+    // Something had to be left behind: the LAST thing in the stash, unless
+    // the warehouse took it in.
+    if (!route?.keeps_stash && state.equipment.length) left = state.equipment.pop();
+    outcome = 'messy';
+  } else {
+    // Somebody who went did not come back.
+    taken = plan.crew.find(id => !isNamed(state, data, id)) ?? null;
+    if (taken) arrestCrew(state, data, taken);
+    outcome = 'lost';
   }
-  if (score >= 0.5) {
-    // Something had to be left behind — the LAST thing in the stash, not
-    // the worst; `equipment.remove_at(equipment.size() - 1)` in Godot.
-    if (state.equipment.length) state.equipment.pop();
-    return 'messy';
-  }
-  // Somebody did not come back. Costs a person — the only currency that
-  // still means anything at a chapter boundary.
-  const target = state.recruited.find(id => !isNamed(state, data, id));
-  if (target) arrestCrew(state, data, target);
-  return 'lost';
+  state.lastShipment = { route: route?.id ?? null, crew: [...plan.crew], outcome, taken, left, odds: shipmentOdds(state, data, plan) };
+  return outcome;
 }
 
 /** Run the ending, and turn the chapter over. An OPERATION rather than a
@@ -903,16 +963,19 @@ function resolveOperation(state, data, ending) {
  *  allowed to be the climax (the GDD ruling `attempt_chapter_ending()`'s
  *  own comment cites). Returns '' on success, or a reason it could not be
  *  attempted. */
-export function attemptChapterEnding(state, data) {
+export function attemptChapterEnding(state, data, plan = state.shipmentPlan ?? defaultShipmentPlan(state, data)) {
   if (!chapterEndingAvailable(state, data)) return 'not-available';
   const ending = chapterEnding(state, data.content);
   const stake = ending.stake_eur ?? 0;
   if (state.cash < stake) return 'cannot-afford';
   if (ending.anchor_id && state.selectedAnchor !== ending.anchor_id) return 'wrong-place';
+  // A chapter with routes needs a plan the player could have made.
+  if ((ending.routes ?? []).length) { const bad = shipmentPlanReason(state, data, plan); if (bad) return bad; }
 
   state.cash -= stake;
   state.chapterCleared = true;
-  state.lastEndingOutcome = resolveOperation(state, data, ending);
+  state.lastEndingOutcome = resolveOperation(state, data, ending, plan);
+  delete state.shipmentPlan;
   // A chapter you finished is a thing the city remembers (§9.8: memories
   // are the seam every later system reads) — the same `memory:` convention
   // `applyEffects()` and `retireCrew()` already write into `state.flags`.
