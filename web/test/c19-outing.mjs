@@ -14,11 +14,11 @@ const read = path => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)))
 const content = read('../../content/era1-slice-v1.json');
 const places = read('../../content/places-v1.json');
 const doors = read('../../content/doors-v1.json');
-const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=15');
+const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=16');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
-const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=9');
+const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=10');
 const O = await import('../js/v3/outing.js?v=8');
-const R = await import('../crew-run/run.js?v=27');
+const R = await import('../crew-run/run.js?v=28');
 const { missionCue } = await import('../fight-module/readability.js?v=5');
 const { coordinate, routes, forecast, WEAPONS } = await import('../fight-module/tactics.js?v=11');
 const { nameFrom } = await import('../../people/roster.mjs?v=1');

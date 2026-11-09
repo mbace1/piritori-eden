@@ -12,7 +12,7 @@ import fs from 'node:fs';
 const { machine, step, describe } = await import('../js/v3/machine.js?v=1');
 const O = await import('../js/v3/outing.js?v=8');
 const { SCREENS, settleScreen, enterScreen } = await import('../js/v3/screens.js?v=2');
-const { journeyBlocker } = await import('../js/v3/journey.js?v=4');
+const { journeyBlocker } = await import('../js/v3/journey.js?v=5');
 const doc = fs.readFileSync(new URL('../../design/STATE_MACHINES.md', import.meta.url), 'utf8');
 
 // ── the primitive ──────────────────────────────────────────────────────────
@@ -73,4 +73,92 @@ const city = (extra = {}) => ({ mode: 'route', activeVisit: null, road: null, ou
   assert.equal(enterScreen(city(), 'nowhere').ok, false, 'the nav bar names only real screens');
 }
 
-console.log(`PASS machines: the primitive, ${O.OUTING.name} (${describe(O.OUTING).length} moves) and the city's ${SCREENS.length} screens, each as the doc says`);
+// ── crew status (M3) ───────────────────────────────────────────────────────
+// Where a person stands and how hurt they are were one `status` string plus a
+// `critical` flag and three lists, kept three different ways (the board's
+// recordBattleConsequences, Night Shift's receipt, the effects). Each test
+// below is a fault v4.100 had.
+{
+  const content = JSON.parse(fs.readFileSync(new URL('../../content/era1-slice-v1.json', import.meta.url)));
+  const St = await import('../js/v3/state.js?v=16');
+  const data = { content, crew: new Map(content.crew.map(c => [c.id, c])) };
+  const fresh = () => { const s = St.createState(content); s.recruited = ['crew-slot-runner', 'crew-slot-muscle', 'crew-slot-fixer']; return s; };
+  const hurt = (s, id) => Object.assign(s.crewStatus[id], { status: 'critical', critical: true, condition: 1 });
+
+  assert.deepEqual(St.CREW.states, ['available', 'wounded', 'critical', 'missing', 'arrested', 'retired', 'dead']);
+  for (const line of describe(St.CREW)) assert.ok(doc.includes(`\`${line}\``), `design/STATE_MACHINES.md lists crew's move ${line}`);
+
+  // The board: someone already critical, hurt again, stays critical. v4.100
+  // relabelled them 'wounded' and left the flag, so the card said WOUNDED
+  // while the ending counted them dead.
+  let s = fresh(); hurt(s, 'crew-slot-runner');
+  St.battleCrew(s, data, { injured: ['crew-slot-runner', 'crew-slot-muscle'], taken: [], maim: false });
+  assert.equal(St.crewState(s, 'crew-slot-runner'), 'critical');
+  assert.equal(s.crewStatus['crew-slot-runner'].status, 'critical', 'the card says what the ending reads');
+  assert.equal(St.crewState(s, 'crew-slot-muscle'), 'wounded');
+  assert.equal(s.crewStatus['crew-slot-muscle'].condition, Math.max(1, content.crew.find(c => c.id === 'crew-slot-muscle').condition - 4), 'a board wound costs 4, never below 1');
+
+  // The courtyard receipts leave the downed critical, Aatami excepted.
+  s = fresh();
+  St.battleCrew(s, data, { injured: ['crew-slot-muscle', content.protagonist.id], taken: [], maim: true });
+  assert.equal(St.crewState(s, 'crew-slot-muscle'), 'critical');
+  assert.notEqual(St.crewState(s, content.protagonist.id), 'critical', 'Aatami is hurt, never critical');
+
+  // The police take someone critical: arrested, not dying. v4.100 left the
+  // flag on, so an arrested person made the ending 'haunted'.
+  s = fresh(); hurt(s, 'crew-slot-runner');
+  St.battleCrew(s, data, { injured: ['crew-slot-runner'], taken: ['crew-slot-runner', 'crew-slot-muscle'], maim: false });
+  for (const id of ['crew-slot-runner', 'crew-slot-muscle']) {
+    assert.equal(St.crewState(s, id), 'arrested');
+    assert.ok(!s.recruited.includes(id) && s.arrestedCrew.includes(id), 'off the roster, on the arrested list');
+    assert.equal(s.crewStatus[id].critical, false);
+  }
+  assert.notEqual(St.forecastEnding(s, data)?.id, 'pasila-haunted', 'the arrested do not count as the dead');
+
+  // Taken by the police in the fight that would have been their last: they
+  // do not also retire (v4.100 did both, and bail brought back a person the
+  // game still counted as retired, who then never aged again).
+  s = fresh(); s.crewFights['crew-slot-fixer'] = 9;
+  St.battleCrew(s, data, { injured: [], taken: ['crew-slot-fixer'], maim: false });
+  St.ageCrew(s, data, ['crew-slot-fixer', 'crew-slot-runner']);
+  assert.equal(St.crewState(s, 'crew-slot-fixer'), 'arrested');
+  assert.ok(!s.retiredCrew.includes('crew-slot-fixer'), 'arrested, not also retired');
+  assert.equal(s.crewFights['crew-slot-fixer'], 9, 'and not one fight older for a fight they were taken from');
+  St.applyEffects(s, ['bail:arrested'], data, 'test');
+  assert.equal(St.crewState(s, 'crew-slot-fixer'), 'available', 'bailed back onto the roster');
+  assert.ok(s.recruited.includes('crew-slot-fixer'));
+
+  // Retiring waits while someone is critical or missing: a critical wound is
+  // still the player's to treat, and the missing are still to be found.
+  s = fresh(); s.crewFights['crew-slot-fixer'] = 9; hurt(s, 'crew-slot-fixer');
+  assert.deepEqual(St.ageCrew(s, data, ['crew-slot-fixer']), [], 'not while critical');
+  assert.equal(s.crewFights['crew-slot-fixer'], 10, 'the fight still counts');
+  assert.ok(s.recruited.includes('crew-slot-fixer'));
+  St.applyEffects(s, ['resolve-critical-wound:one'], data, 'test');
+  assert.equal(St.crewState(s, 'crew-slot-fixer'), 'wounded', 'treated');
+  assert.deepEqual(St.ageCrew(s, data, ['crew-slot-fixer']), ['crew-slot-fixer'], 'then they retire after their next fight');
+  assert.equal(St.crewState(s, 'crew-slot-fixer'), 'retired');
+
+  // The one function refuses what the table does not allow, and changes nothing.
+  s = fresh();
+  St.moveCrew(s, data, 'crew-slot-runner', 'arrest');
+  const before = JSON.stringify(s);
+  assert.equal(St.moveCrew(s, data, 'crew-slot-runner', 'wound', { loss: 1 }).ok, false, 'the arrested are not hurt in a fight they are not in');
+  assert.equal(St.moveCrew(s, data, 'crew-slot-runner', 'rescue').ok, false, 'bail, not rescue, brings the arrested back');
+  assert.equal(JSON.stringify(s), before);
+
+  // A save written before v4.101 comes back consistent.
+  const raw = fresh();
+  Object.assign(raw.crewStatus['crew-slot-runner'], { status: 'wounded', critical: true });
+  raw.recruited = raw.recruited.filter(id => id !== 'crew-slot-muscle');
+  raw.arrestedCrew = ['crew-slot-muscle'];
+  Object.assign(raw.crewStatus['crew-slot-muscle'], { status: 'missing', critical: true });
+  raw.retiredCrew = ['crew-slot-muscle', 'crew-slot-fixer'];
+  const loaded = St.restoreState(JSON.parse(JSON.stringify(raw)), content);
+  assert.equal(loaded.crewStatus['crew-slot-runner'].status, 'critical', 'wounded-but-critical shows as critical');
+  assert.equal(loaded.crewStatus['crew-slot-muscle'].critical, false, 'arrested is not critical');
+  assert.ok(!loaded.retiredCrew.includes('crew-slot-muscle'), 'arrested is not also retired');
+  assert.ok(!loaded.retiredCrew.includes('crew-slot-fixer') && loaded.recruited.includes('crew-slot-fixer'), 'on the roster is not retired (the bail bug): they retire after their next fight');
+}
+
+console.log(`PASS machines: the primitive, ${O.OUTING.name} (${describe(O.OUTING).length} moves), the city's ${SCREENS.length} screens and crew status, each as the doc says`);

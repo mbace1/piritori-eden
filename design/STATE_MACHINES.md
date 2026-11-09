@@ -70,13 +70,36 @@ An **implicit state machine** is a value that moves through states, where neithe
   - Pinned by `machines.mjs` and, as a player meets it, `screens-browser.cjs`. The browser test fails on v4.99 at the visit.
 - **Still open:** about 45 places write `state.mode` directly. Converting them to a full table, with each screen's exit, is the next step for M2.
 
+### M3. Crew status (`web/js/v3/state.js`: `CREW`, `crewState`, `moveCrew`, `battleCrew`, `settleCrew`), v4.101
+- **Stored as before**, so every save loads: `crewStatus[id].status` and `.critical`, plus the `recruited`, `arrestedCrew` and `retiredCrew` lists.
+- `crewState` reads them as one state; the lists win over the status string. `missing` in `status` means arrested on `arrestedCrew` and lost (still on the roster) otherwise.
+- **States:** `available`, `wounded`, `critical`, `missing`, `arrested`, `retired`, `dead`.
+- **The only moves:**
+  - from `available`: `available --wound--> wounded`, `available --maim--> critical`, `available --lose--> missing`, `available --arrest--> arrested`, `available --retire--> retired`;
+  - from `wounded`: `wounded --wound--> wounded`, `wounded --maim--> critical`, `wounded --lose--> missing`, `wounded --arrest--> arrested`, `wounded --retire--> retired`;
+  - from `critical`: `critical --wound--> critical`, `critical --maim--> critical`, `critical --treat--> wounded`, `critical --lose--> missing`, `critical --arrest--> arrested`;
+  - `missing --rescue--> wounded` and `arrested --bail--> available`.
+  - `dead` is written only by the chapter's ending (M11), which the shipped game cannot reach yet.
+- **Who moves it:**
+  - the board's consequences (app.js `recordBattleConsequences` → `battleCrew`);
+  - Night Shift's receipt (campaign-adapter.js `applyCampaignReceipt`);
+  - the effects `rescue:missing`, `bail:arrested` and `resolve-critical-wound:one`;
+  - `ageCrew` (`retire`).
+- **Fixed in v4.101:**
+  - **A critical person hurt again read "wounded".** The card said WOUNDED while the ending counted them dead. The board now keeps them critical, as Night Shift already did.
+  - **An arrested person stayed critical**, so the ending counted them among the dead. An arrest clears it, as Night Shift's receipt already did.
+  - **Arrested and retired at once.** `ageCrew` aged and retired someone the police had just taken. Bail then brought back a person still counted as retired, who never aged again. The arrested now neither age for that fight nor retire.
+  - **Retirement waits while someone is critical or missing.** The fight still counts, and they retire after their next one, so a critical wound stays treatable and the missing stay findable. Before, someone could retire while critical, missing or arrested.
+  - A save written before v4.101 is put back on a row of the table as it loads.
+  - These depart from Godot's `age_crew` on purpose; Godot is paused, and the port takes them when it resumes.
+  - Pinned by `machines.mjs`, which fails on v4.100.
+
 ## The queue (implicit; ranked by what a fault costs the player)
 
 The faults below were found by reading the code in the 9 November audit. Each will be reproduced by a failing test before it is fixed.
 
 | # | Machine | Where | What can go wrong |
 |---|---|---|---|
-| M3 | Crew status: `crewStatus[id].status` with `.critical`, plus the recruited, arrested and retired lists | state.js, app.js `recordBattleConsequences`, campaign-adapter.js | Three writers with three sets of rules. "Wounded but critical" is counted as dead at the ending. An arrested crew member can stay critical, or be retired too. `missing` means both lost and arrested. |
 | M4 | The block turn (`advanceAndSettle`) and the night's road-event slot | app.js, standing.js, story.js | No preconditions. One road slot a night: when the cut is found out, the same night's family demand is silently lost. |
 | M5 | The police in a fight | resolver.js, battle.js, run.js, session.js | Three implementations. After the answer the fight module ends the fight while Act I continues it. A helper can be "taken" but still alive. The posture is not validated. A Withdraw while the police are announced leaves `police.taken` empty. |
 | M6 | Fight outcome and phase | resolver.js, battle.js, tactics.js, run.js | `resolved` vs `complete`. The win/loss rule is written three times and the talk gate three ways. The phase stays `enemy` after a loss. The battle.js fork has drifted: an enemy with no legal target still hits. |
@@ -106,6 +129,5 @@ The faults below were found by reading the code in the 9 November audit. Each wi
 | M30 | Mid-fight reload | session.js, run.js | Sound by replay. The snapshot omits four police fields, so the drift check cannot see them. |
 
 **Next to convert:**
-1. **M3, crew status.** It is the ending's input and is written in three modules, none of which is in Codex's PR.
-2. **M4, the block turn.**
-3. **M5 to M7, the fight**, after Codex's PR #132 lands, since it rewrites the fight module's UI.
+1. **M4, the block turn.**
+2. **M5 to M7, the fight**, after Codex's PR #132 lands, since it rewrites the fight module's UI.

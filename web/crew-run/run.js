@@ -1,7 +1,7 @@
 import {hireling,nameFrom} from '../../people/roster.mjs?v=1';
-import {createSession} from '../fight-module/session.js?v=26';
+import {createSession} from '../fight-module/session.js?v=27';
 import {createTacticalSession,weapon} from '../fight-module/tactics.js?v=11';
-import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=17';
+import {readCampaignSave,campaignRun,campaignOuting,outingRun,applyCampaignReceipt,CAMPAIGN_SAVE_KEY} from './campaign-adapter.js?v=18';
 import {outingPhase} from '../js/v3/outing.js?v=8';
 
 // Connected C pilot. C.17 can opt into the authored campaign through the

@@ -1,3 +1,25 @@
+## v4.101 — 2026-11-09
+
+**Crew status is one explicit state machine** (M3, `design/STATE_MACHINES.md`; owner, 2026-11-09: *"Go ahead"*).
+
+A person's standing (on the roster, missing, arrested, retired) and how hurt they are (wounded, critical) were one `status` string, a `critical` flag and three lists. Three writers kept them three different ways: the board's consequences, Night Shift's receipt and the effects. They disagreed, and the chapter's ending reads them.
+
+- **The table** (`state.js` `CREW`): `available`, `wounded`, `critical`, `missing`, `arrested`, `retired`, `dead`, and 17 allowed moves.
+  - `crewState` reads the stored fields as one state; the lists win, so `missing` means arrested only on the arrested list.
+  - `moveCrew` is the one way to move it and writes every field it touches. `battleCrew` is the board's fight consequences.
+  - The storage is unchanged, so every save loads.
+- **Fixed:**
+  - **A critical person hurt again read "wounded"** (on the board). The card said WOUNDED while the ending counted them dead. They stay critical, as Night Shift already had it.
+  - **An arrested person stayed critical** (on the board), so the ending counted them among the dead. An arrest clears it, as Night Shift's receipt already did.
+  - **Arrested and retired at once.** Someone the police took in what would have been their last fight was also retired. Bail then brought back a person still counted as retired, who never aged again. Now the arrested neither age for that fight nor retire.
+  - **Retirement waits while someone is critical or missing.** The fight counts, and they retire after their next one, so a critical wound stays treatable and the missing stay findable. Before, someone could retire while critical, missing or arrested.
+- **Old saves:** a save holding any of these mixed states is put back on a row of the table as it loads.
+- **Godot:** this parts from Godot's `age_crew` on purpose. Godot is paused, and the port takes it when it resumes.
+- **Gate:** `machines.mjs` adds crew status: each fault above as a case, the table checked against the doc, refusals that change nothing, and an old save repaired. It fails on v4.100.
+- **Unchanged:** the chapter bot's ten days read the same on every policy.
+- **Cache:** state v16 and everything that imports it, app v68, campaign-adapter v18. The label is v4.101.
+- **Owner played: pending.** Godot paused.
+
 ## v4.100 — 2026-11-09
 
 **The app's state machines, found and two of them made explicit.** Owner, 2026-11-09: *"Find all of the implicit state machines in my app. Make the best decision that will elevate all three: the user experience (UX), developer experience (DX), and agent experience (AX) always, without breaking anything."*

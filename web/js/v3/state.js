@@ -1,5 +1,6 @@
 import { hiringPool } from '../../../people/hiring.mjs?v=1';
 import { rand01 } from '../../../market/model.mjs?v=1';
+import { machine, step } from './machine.js?v=1';
 
 export const SAVE_KEY = 'piritori-to-eden:v3';
 export const STATE_VERSION = 3;
@@ -132,7 +133,7 @@ export function createState(content) {
 export function restoreState(raw, content) {
   if (!raw || raw.version !== STATE_VERSION || raw.contentId !== content.id) return createState(content);
   const fresh = createState(content);
-  return {
+  return settleCrew({
     ...fresh,
     ...raw,
     // Older builds could record an early withdrawal in Chapter 1. It was
@@ -153,7 +154,7 @@ export function restoreState(raw, content) {
     trainedCrew: Array.isArray(raw.trainedCrew) ? [...raw.trainedCrew] : [],
     doors: { offers: { ...(raw.doors?.offers ?? {}) }, taken: { ...(raw.doors?.taken ?? {}) } },
     fightsByDay: { ...(raw.fightsByDay ?? {}) },
-  };
+  });
 }
 
 // A board battle keeps its cover in a Map and the round's hits in a Set
@@ -315,25 +316,26 @@ function retireCrew(state, data, id) {
 
 /** Everyone who was deployed comes out one fight older — called once when a
  *  battle settles (`age_crew()`), never per round. Returns the ids who
- *  reached the ceiling and left this call: RETIRED, not dead. Godot's own
- *  loop does not special-case a crew member the police already took this
- *  same fight (`state.crewStatus[id].status === 'missing'`) — they still
- *  age, and can still be pushed into `retiredCrew` on top of already being
- *  gone. Kept exactly that way rather than added a check Godot doesn't have.
+ *  reached the ceiling and left this call: RETIRED, not dead.
+ *
+ *  v4.101 (M3, design/STATE_MACHINES.md) parts from Godot's `age_crew` on
+ *  purpose. Someone the police took in this fight is not one fight older
+ *  for it, and is never also retired: Godot did both, and bail then brought
+ *  back a person still counted as retired, who never aged again. Retiring
+ *  waits while someone is critical or missing (`CREW`): the fight counts,
+ *  and they retire after their next one. Godot is paused; the port takes
+ *  this when it resumes.
  *
  *  Growth is bought with the same currency the ceiling spends: crossing a
  *  level boundary here calls `grantLevel` (GameState.gd `age_crew`). */
 export function ageCrew(state, data, deployedIds) {
   const left = [];
   for (const id of deployedIds) {
-    if (isNamed(state, data, id) || state.retiredCrew.includes(id)) continue;
+    if (isNamed(state, data, id) || state.retiredCrew.includes(id) || state.arrestedCrew.includes(id)) continue;
     const beforeLevel = levelOf(state, id);
     state.crewFights[id] = fightsOf(state, id) + 1;
     if (levelOf(state, id) > beforeLevel) grantLevel(state, id);
-    if (fightsOf(state, id) >= CAREER_FIGHTS) {
-      retireCrew(state, data, id);
-      left.push(id);
-    }
+    if (fightsOf(state, id) >= CAREER_FIGHTS && moveCrew(state, data, id, 'retire').ok) left.push(id);
   }
   return left;
 }
@@ -765,6 +767,101 @@ export function arrestCrew(state, data, id) {
   addLog(state, `${crewRecord(state, data, id)?.name ?? id} is taken. Gone from the roster.`);
 }
 
+// ── crew status, an explicit machine (v4.101; design/STATE_MACHINES.md, M3) ──
+// Stored as before, so every save loads: `crewStatus[id].status` and
+// `.critical`, plus the `recruited`, `arrestedCrew` and `retiredCrew` lists.
+// Before v4.101 three writers (the board's consequences, Night Shift's
+// receipt, the effects below) kept those fields three ways, and they
+// disagreed: a critical person hurt again read 'wounded' while the ending
+// counted them dead; an arrested person stayed critical; the police's
+// arrest and a last fight's retirement could both happen. Now each move is
+// one row here and `moveCrew` writes every field it touches.
+export const CREW = machine('crew', {
+  available: { wound: 'wounded', maim: 'critical', lose: 'missing', arrest: 'arrested', retire: 'retired' },
+  wounded: { wound: 'wounded', maim: 'critical', lose: 'missing', arrest: 'arrested', retire: 'retired' },
+  // Hurt again, a critical person stays critical. Retiring waits for
+  // treatment: the wound is still the player's to deal with.
+  critical: { wound: 'critical', maim: 'critical', treat: 'wounded', lose: 'missing', arrest: 'arrested' },
+  // Left behind: found again hurt. Retiring waits until they are home.
+  missing: { rescue: 'wounded' },
+  arrested: { bail: 'available' },
+  retired: {},
+  // Written only by the chapter's ending (`chooseEnding`, M11), which the
+  // shipped game cannot reach yet.
+  dead: {},
+});
+
+/** Where a person stands, read from the stored fields. The lists win over
+ *  the status string: 'missing' in `status` means arrested when they are on
+ *  `arrestedCrew`, and lost (still on the roster) when they are not. */
+export function crewState(state, id) {
+  if (state.arrestedCrew?.includes(id)) return 'arrested';
+  if (state.retiredCrew?.includes(id)) return 'retired';
+  const s = state.crewStatus?.[id];
+  if (!s) return 'none';
+  if (s.status === 'dead') return 'dead';
+  if (s.status === 'missing') return 'missing';
+  if (s.critical || s.status === 'critical') return 'critical';
+  if (s.status === 'wounded') return 'wounded';
+  return 'available';
+}
+
+/** The one way a person's standing moves. `loss` is what a wound costs in
+ *  condition (the board's 4, Night Shift's 1) and `floor` the least it
+ *  leaves. A refusal changes nothing and says why. */
+export function moveCrew(state, data, id, event, { loss = 0, floor = 1 } = {}) {
+  const moved = step(CREW, crewState(state, id), event);
+  if (!moved.ok) return moved;
+  const s = event === 'bail' ? (state.crewStatus[id] ??= {}) : state.crewStatus[id];
+  if (event === 'wound' || event === 'maim') {
+    s.condition = Math.max(floor, Math.min(s.maxCondition ?? s.condition ?? 1, (s.condition ?? 1) - loss));
+    if (event === 'maim') s.critical = true;
+    s.status = s.critical ? 'critical' : 'wounded';
+  } else if (event === 'treat' || event === 'rescue') {
+    Object.assign(s, { status: 'wounded', critical: false, condition: Math.max(1, s.condition ?? 0) });
+  } else if (event === 'lose' || event === 'arrest') {
+    Object.assign(s, { status: 'missing', critical: false, condition: 0 });
+    if (event === 'arrest') arrestCrew(state, data, id);
+  } else if (event === 'bail') {
+    state.arrestedCrew.splice(state.arrestedCrew.indexOf(id), 1);
+    addUnique(state.recruited, id);
+    Object.assign(s, { status: 'available', critical: false, condition: Math.max(1, s.maxCondition ?? s.condition ?? 1) });
+  } else if (event === 'retire') {
+    retireCrew(state, data, id);
+  }
+  return moved;
+}
+
+/** What a board fight does to the crew (COMBAT.md §9.5.3): whoever the
+ *  police took is arrested; the rest who went down are hurt, and in the
+ *  courtyard receipts' fight (`maim`) left critical, Aatami excepted. */
+export function battleCrew(state, data, { injured = [], taken = [], maim = false }) {
+  const takenSet = new Set(taken);
+  for (const id of injured) {
+    if (takenSet.has(id)) continue;
+    if (maim && id !== data.content.protagonist?.id) moveCrew(state, data, id, 'maim', { loss: 4, floor: 0 });
+    else moveCrew(state, data, id, 'wound', { loss: 4 });
+  }
+  for (const id of takenSet) {
+    if (!moveCrew(state, data, id, 'arrest').ok && !state.crewStatus[id]) arrestCrew(state, data, id);
+  }
+}
+
+/** A save written before v4.101 can hold the states the machine no longer
+ *  makes; this puts each back on a row of `CREW` as it loads. */
+export function settleCrew(state) {
+  for (const [id, s] of Object.entries(state.crewStatus ?? {})) {
+    const arrested = state.arrestedCrew?.includes(id);
+    if (arrested) { s.critical = false; s.status = 'missing'; }
+    else if (s.critical && s.status !== 'missing' && s.status !== 'dead') s.status = 'critical';
+    else if (s.status === 'critical') s.critical = true;
+    // Arrested in the fight that would have been their last, or bailed back
+    // onto the roster after it: they are not also retired.
+    if ((arrested || state.recruited?.includes(id)) && state.retiredCrew?.includes(id)) state.retiredCrew.splice(state.retiredCrew.indexOf(id), 1);
+  }
+  return state;
+}
+
 /** How many hands it takes for a container to move quietly. */
 const OPERATION_IDEAL_CREW = 3;
 
@@ -1019,20 +1116,15 @@ export function applyEffects(state, effects, data, label = 'choice') {
     // v4.92, a way home. A missing crew member comes home hurt; an arrested one
     // is bailed back onto the roster. Each brings back the first who was lost.
     if (effect === 'rescue:missing') {
-      const id = state.recruited.find(x => state.crewStatus[x]?.status === 'missing');
-      if (!id) continue;
-      Object.assign(state.crewStatus[id], { status: 'wounded', condition: Math.max(1, state.crewStatus[id].condition ?? 0), critical: false });
+      const id = state.recruited.find(x => crewState(state, x) === 'missing');
+      if (!id || !moveCrew(state, data, id, 'rescue').ok) continue;
       addUnique(state.flags, `memory:found:${id}`);
       message(`${crewRecord(state, data, id)?.name ?? id} is home. Hurt, but home.`);
       continue;
     }
     if (effect === 'bail:arrested') {
       const id = state.arrestedCrew[0];
-      if (!id) continue;
-      state.arrestedCrew.splice(0, 1);
-      addUnique(state.recruited, id);
-      const status = state.crewStatus[id] ??= {};
-      Object.assign(status, { status: 'available', condition: Math.max(1, status.maxCondition ?? status.condition ?? 1), critical: false });
+      if (!id || !moveCrew(state, data, id, 'bail').ok) continue;
       addUnique(state.flags, `memory:bailed:${id}`);
       message(`${crewRecord(state, data, id)?.name ?? id} walks out of the station in Pasila. Back on the roster.`);
       continue;
@@ -1093,12 +1185,8 @@ export function applyEffects(state, effects, data, label = 'choice') {
     }
     if (effect === 'resolve:fixer-negotiation') continue;
     if (effect === 'resolve-critical-wound:one') {
-      const target = Object.keys(state.crewStatus).find(id => state.crewStatus[id].critical);
-      if (target) {
-        state.crewStatus[target].critical = false;
-        state.crewStatus[target].status = 'wounded';
-        state.crewStatus[target].condition = Math.max(1, state.crewStatus[target].condition);
-      }
+      const target = Object.keys(state.crewStatus).find(id => crewState(state, id) === 'critical');
+      if (target) moveCrew(state, data, target, 'treat');
       continue;
     }
     if (effect === 'resolve-ending:best-match') {

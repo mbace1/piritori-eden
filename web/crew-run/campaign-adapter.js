@@ -1,7 +1,7 @@
 import {
   SAVE_KEY as CAMPAIGN_SAVE_KEY,
-  crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, arrestCrew,
-} from '../js/v3/state.js?v=15';
+  crewRecord, aptitudesOf, perksOf, skillsOf, fightsOf, ageCrew, moveCrew,
+} from '../js/v3/state.js?v=16';
 import {nameFrom} from '../../people/roster.mjs?v=1';
 import {outingPhase, moveOuting} from '../js/v3/outing.js?v=8';
 
@@ -172,25 +172,23 @@ export function applyCampaignReceipt(state,content,receipt){
     // owner 2026-10-24). An outing marks him `carried`; nothing makes him missing.
     const aatami=change.id===content.protagonist?.id;
     if(effect==='carried'||(['missing','arrested'].includes(effect)&&aatami))effect='damage';
+    // Each change is a move of crew status (state.js CREW, M3), the same
+    // table the board's consequences use.
     if(effect==='arrested'){
       // COMBAT §9.5.3, as Act I's board does it: taken, and gone from the roster.
-      status.status='missing';status.condition=0;status.critical=false;
-      arrestCrew(state,data,change.id);
+      moveCrew(state,data,change.id,'arrest');
       continue;
     }
     if(effect==='missing'){
-      status.status='missing';status.condition=0;status.critical=false;
+      moveCrew(state,data,change.id,'lose');
       pushUnique(state.flags,`memory:missing:${change.id}`);
       log(state,`${crewRecord(state,data,change.id)?.name||change.name||change.id} did not make it home from the outing.`);
     }else if(effect==='recovered'){
-      status.status='wounded';status.condition=Math.max(1,status.condition||0);status.critical=false;
+      moveCrew(state,data,change.id,'rescue');
       pushUnique(state.flags,`memory:recovered:${change.id}`);
       log(state,`${crewRecord(state,data,change.id)?.name||change.name||change.id} came home from a recovery outing and still needs treatment.`);
     }else if(effect==='damage'){
-      status.condition=Math.max(1,Math.min(status.maxCondition??status.condition??1,(status.condition??1)-1));
-      if(critical&&!aatami){status.critical=true;}
-      if(status.critical){status.status='critical';}
-      else {status.status='wounded';status.critical=false;}
+      moveCrew(state,data,change.id,critical&&!aatami?'maim':'wound',{loss:1});
       pushUnique(state.flags,`memory:wounded:${change.id}`);
     }
     // `unchanged` deliberately does nothing: a person who entered C.17 already

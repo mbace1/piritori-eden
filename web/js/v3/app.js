@@ -1,4 +1,4 @@
-import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=11';
+import { availableVisits, openVisit, activeVisit, chooseVisit, leaveVisit } from './visits.js?v=12';
 import { settleScreen, enterScreen } from './screens.js?v=2';
 import { mountSceneSpeaker, disposeSceneSpeaker } from './scene-speaker.js?v=2';
 import { renderChapterPeople } from './chapter-narrative.js?v=1';
@@ -14,31 +14,31 @@ import {
   learnSkill, spendPerkPointOnSkill, train,
   droppedKit, takeLoot, loseKitOf, canFenceHere, sellLoot, resaleAt, conditionWord, isPurchasable,
   canShopHere, buyOf, buyEquipment, tradeBlocker, actionsLeft,
-  arrestCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
+  battleCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
-} from './state.js?v=15';
+} from './state.js?v=16';
 import { createPauseMenu } from './pause.js?v=5';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
-import { previewJourney, commitJourney } from './journey.js?v=4';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=10';
+import { previewJourney, commitJourney } from './journey.js?v=5';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=11';
 import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
-import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=10';
+import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=11';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=9';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=10';
 import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag, moveOuting } from './outing.js?v=8';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=11';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=12';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
   negotiateBattle, resultEffects, injuredPlayers, selectStance,
   policeAwaitingPosture, choosePolicePosture, takenByPolice, savedFromPolice, POLICE_POSTURE,
   attackTargets, syncAlliesFor, coverStandingLine, coverAttackLine,
-} from './battle.js?v=19';
+} from './battle.js?v=20';
 import { LANES, ROWS, totalRows, depthOf, parseSlotKey, slotKey, describeSlot } from './grid.js?v=2';
 import { boot as bootChrome } from './chrome.js?v=2';
 import { STANCE, STANCES } from './stance.js?v=2';
@@ -2200,30 +2200,10 @@ function recordBattleConsequences() {
     // merely hurt, they are gone. `taken` can also name a STANDING crew
     // member who went back for a fallen ally and paid for it (§9.5.2's
     // rescue trade) — arrested without ever being wounded in the fight.
-    const taken = new Set(takenByPolice(battle));
-    const injured = new Set(injuredPlayers(battle));
-    for (const id of injured) {
-      const status = state.crewStatus[id];
-      if (taken.has(id)) { status.status = 'missing'; continue; }
-      status.condition = Math.max(0, status.condition - 4);
-      // Aatami is hurt, never left critical: the story is about who he sends.
-      if (battle.id === 'battle-courtyard-3v3' && id !== data.content.protagonist?.id) {
-        status.status = 'critical';
-        status.critical = true;
-      } else {
-        status.status = 'wounded';
-        status.condition = Math.max(1, status.condition);
-      }
-    }
-    for (const id of taken) {
-      if (injured.has(id) || !state.crewStatus[id]) continue;
-      state.crewStatus[id].status = 'missing';
-    }
-    // §9.5.3: they are gone — `arrest()`'s real consequence, not just a
-    // status label. Off the active roster (`crewRecord()` still resolves
-    // them for logs and history; `state.crewStatus` keeps 'missing' for
-    // what a card would show if one still pointed at them).
-    for (const id of taken) arrestCrew(state, data, id);
+    // Who is hurt, critically in the courtyard receipts' fight (Aatami is
+    // hurt, never left critical: the story is about who he sends), and who
+    // is taken: crew status's own rule (state.js `battleCrew`, M3).
+    battleCrew(state, data, { injured: injuredPlayers(battle), taken: takenByPolice(battle), maim: battle.id === 'battle-courtyard-3v3' });
     // A fight is where a career is spent (COMBAT.md §7.2) — after the
     // police have taken whoever they took, so an already-gone crew member
     // does not also come out of it one fight older for nothing.
@@ -2670,7 +2650,7 @@ async function boot() {
 
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.100',
+      version: 'v4.101',
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.
