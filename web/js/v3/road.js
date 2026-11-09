@@ -137,6 +137,18 @@ export function resolveRoad(state, data, roadEvents, choiceId) {
 }
 
 /** Raise a story-triggered event now (story.js), unless one is already waiting. */
+/** A save can hold a road event the content no longer has (renamed or
+ *  cut). Nothing can answer it, and before v4.102 it locked the road screen
+ *  for good. Drop it, and an unknown result, as the save loads; if the events
+ *  did not load at all, drop nothing. */
+export function settleRoad(state, roadEvents) {
+  const ids = new Set((roadEvents?.events ?? []).map(e => e.id));
+  if (!ids.size || !state.road) return state;
+  if (state.road.pending && !ids.has(state.road.pending.id)) state.road.pending = null;
+  if (state.road.last && !ids.has(state.road.last.id)) state.road.last = null;
+  return state;
+}
+
 export function forceRoad(state, roadEvents, eventId, anchorId) {
   const r = road(state);
   if (r.pending) return false;

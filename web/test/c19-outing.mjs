@@ -16,7 +16,7 @@ const places = read('../../content/places-v1.json');
 const doors = read('../../content/doors-v1.json');
 const { createState, SAVE_KEY, fighters, recordFight, fightsToday } = await import('../js/v3/state.js?v=16');
 const { stageFight, doorFightStage, roadFightStage } = await import('../js/v3/places.js?v=1');
-const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=10');
+const { doorFightEffects, templateOf } = await import('../js/v3/doors.js?v=11');
 const O = await import('../js/v3/outing.js?v=8');
 const R = await import('../crew-run/run.js?v=28');
 const { missionCue } = await import('../fight-module/readability.js?v=5');

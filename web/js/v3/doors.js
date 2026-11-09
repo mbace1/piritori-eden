@@ -22,8 +22,8 @@
 //
 // Pure: no DOM, no clock. The browser and bare node share this file.
 import { deterministicRoll, requirementStatus, fightsToday, fighters } from './state.js?v=16';
-import { minutesThisBlock } from './road.js?v=12';
-import { doorAllowed, doorFavoured } from './standing.js?v=1';
+import { minutesThisBlock } from './road.js?v=13';
+import { doorAllowed, doorFavoured } from './standing.js?v=2';
 
 const DOORS_URL = '../../../content/doors-v1.json';
 

@@ -63,29 +63,34 @@ export function doorFavoured(state, families, template) {
  * event id to raise (the caller raises it with forceRoad), and the warnings
  * to show. Only the family whose event is raised has its bookkeeping moved,
  * so a family that could not be raised tonight tries again tomorrow.
+ *
+ * `slotFree` is whether the night's one road-event slot is still open. When
+ * Kello's cut is found out the same night it takes the slot, and before
+ * v4.102 the demand was booked as made all the same, so it never came.
  */
-export function settleStanding(state, families) {
+export function settleStanding(state, families, { slotFree = true } = {}) {
   state.standing ??= { warned: {}, demanded: {} };
   state.standing.warned ??= {};
   state.standing.demanded ??= {};
   const warnings = [];
   let raise = null;
+  const canRaise = () => slotFree && !raise;
   for (const family of families.families) {
     const { rung } = standingOf(state, families, family.id);
     if (!worse(rung, 'insulted')) state.standing.demanded[family.id] = false;
     if (!worse(rung, 'retaliating')) state.standing.warned[family.id] = false;
-    if (rung.id === 'insulted' && !state.standing.demanded[family.id] && !raise) {
+    if (rung.id === 'insulted' && !state.standing.demanded[family.id] && canRaise()) {
       raise = family.restitution_event;
       state.standing.demanded[family.id] = true;
     } else if (rung.id === 'retaliating') {
       if (!state.standing.warned[family.id]) {
         state.standing.warned[family.id] = true;
         warnings.push(family.warning);
-      } else if (!raise) {
+      } else if (canRaise()) {
         raise = family.retaliation_event;
         state.standing.warned[family.id] = false;
       }
-    } else if (rung.id === 'vendetta' && !raise) {
+    } else if (rung.id === 'vendetta' && canRaise()) {
       raise = family.retaliation_event;
     }
   }

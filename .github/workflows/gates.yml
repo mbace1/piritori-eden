@@ -141,6 +141,7 @@ jobs:
           node web/test/v3-contract.mjs
           node web/test/v3-state.mjs
           node web/test/machines.mjs
+          node web/test/playlog.mjs
           node web/test/road.mjs
           node web/test/toko.mjs
           node web/test/story.mjs
@@ -233,6 +234,10 @@ jobs:
         env:
           NODE_PATH: /tmp/piritori-test/node_modules
         run: node web/test/screens-browser.cjs
+      - name: the playtest notes, as a player sends them (v4.103)
+        env:
+          NODE_PATH: /tmp/piritori-test/node_modules
+        run: node web/test/playtest-browser.cjs
 
   c-laboratory:
     name: C laboratory tactics and touch

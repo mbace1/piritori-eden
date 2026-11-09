@@ -17,21 +17,22 @@ import {
   battleCrew, chapterProgress, chapterGoalMet, chapterEndingAvailable, attemptChapterEnding,
   forecastEnding, recordFight, fightsToday, fighters, stepBackIfReady,
 } from './state.js?v=16';
-import { createPauseMenu } from './pause.js?v=5';
+import { createPauseMenu } from './pause.js?v=6';
+import { createPlaylog, summarise, report as playReport } from './playlog.js?v=1';
 import { TESTS } from './testlist.js?v=4';
 import { wake as wakeSound, bell, till, steps, sting, arrival, soundOn, setSound, soundState } from './sound.js?v=1';
 import { board, exposureHere, markSeen, addFootprint, INFO } from './board.js?v=3';
 import { previewJourney, commitJourney } from './journey.js?v=5';
-import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko } from './toko.js?v=11';
+import { buyBowl, bowlBlocker, BOWL_EUR, TOKO_ANCHOR, tokoWeapons, buyFromToko, tokoSaid } from './toko.js?v=12';
 import { loadTokoStage } from './toko-stage.js?v=1';
 import { loadCutin, CUTINS, W as CUTIN_W, H as CUTIN_H } from './cutin-stage.js?v=4';
 import { loadStory, caseBoard, keyCluesFound, caseBlocker, caseKnown, resolveCase, briefing, settleCut } from './story.js?v=11';
 import { turnPlan, nextChapter } from './chapter.js?v=1';
-import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=10';
-import { loadFamilies, standings, settleStanding } from './standing.js?v=1';
+import { loadDoors, offerDoors, takeDoor, doorBlocker, templateOf, registerTaken, doorFightEffects, canFight, isDoorBlock, escalation } from './doors.js?v=11';
+import { loadFamilies, standings, settleStanding } from './standing.js?v=2';
 import { loadPlaces, stageFight, doorFightStage, roadFightStage, placeAt } from './places.js?v=1';
 import { doorOuting, roadOuting, missionOuting, missionStakes, outingUrl, openOuting, settledOuting, outingLines, outingSpoils, settledFlag, moveOuting } from './outing.js?v=8';
-import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad } from './road.js?v=12';
+import { loadRoadEvents, rollRoad, resolveRoad, pendingRoad, choiceOpen, clockLabel, forceRoad, settleRoad } from './road.js?v=13';
 import {
   createBattleState, attachGrowth, selectedUnit, selectUnit, selectAction, playerAttack, brace, useItem,
   validMoveCells, moveUnit, endPlayerPhase, autoCommand, withdrawBattle,
@@ -127,10 +128,13 @@ const UI = {
 
 let data;
 let state;
+// The play log (v4.103, playlog.js): what this device's player did. Local
+// until they press SEND in the pause menu's PLAYTEST NOTES.
+let playlog = null, playlogEnded = false;
+// The build's label, said in the pause menu and on every playtest note.
+const APP_VERSION = 'v4.103';
 // The road (road.js): events in transit and on arrival. Empty until loaded,
 // and a failed load leaves the city exactly as it was, with no events.
-// What Toko said at the last bowl ('' = nothing new, null = no bowl yet).
-let tokoTold = null;
 // Toko in cut card behind his counter (owner, 2026-10-21: "Approved, put it in the game"; placed in the empty bar in
 // place of the 3D speaker). One stage outlives every re-render; each render hands it the new canvas.
 let tokoStage = null, tokoStageLoad = null;
@@ -431,6 +435,7 @@ function playOpening() {
 }
 
 function logToast(message) {
+  playlog?.add('toast', { message: String(message).slice(0, 160) });
   const toast = $('toast');
   clearTimeout(toastTimer);
   toast.textContent = message;
@@ -521,6 +526,9 @@ function render() {
   };
   disposeSceneSpeaker();
   root.innerHTML = (views[state.mode] ?? renderRoute)();
+  playlog?.seen({ screen: state.mode, block: state.scheduleIndex, label: formatBlock(state, data.content),
+    actions: [...root.querySelectorAll('[data-action]:not([disabled])')].map(el => el.dataset.action) });
+  if (state.chapterCleared && !playlogEnded) { playlogEnded = true; playlog?.add('ending', { outcome: state.lastEndingOutcome ?? '' }); }
   // A new screen starts at its top. The scroller is shared by every mode, so
   // coming back to the map after an encounter used to land mid-panel with the
   // map scrolled away. Same-mode re-renders keep their place.
@@ -1445,7 +1453,9 @@ function renderRamen() {
   const art = assetUrl(data, 'scene-toko-noodles-empty-v01');
   const line = TOKO_LINES[state.scheduleIndex % TOKO_LINES.length];
   const blocked = bowlBlocker(state);
-  const told = tokoTold ? data.anchors.get(tokoTold) : null;
+  // What he said over this block's bowl (toko.js `tokoSaid`): the save's, per block.
+  const said = tokoSaid(state);
+  const told = said.anchorId ? data.anchors.get(said.anchorId) : null;
   const row = told ? board(state, data).rows.find(r => r.id === told.id) : null;
   const band = row?.shown.level === INFO.RANGE
     ? `${money(row.shown.lowSell)}–${money(row.shown.highSell)}` : '';
@@ -1466,7 +1476,7 @@ function renderRamen() {
       <blockquote class="toko-line">“${esc(line)}”</blockquote>
       ${told && band
         ? `<blockquote class="toko-line toko-told">“${esc(told.label)}. They are paying ${esc(band)} for a pack, if you get there soon. That is all I heard.”</blockquote>`
-        : told === null && tokoTold === '' ? '<blockquote class="toko-line toko-told">“Nothing new tonight. Eat.”</blockquote>' : ''}
+        : told === null && said.bowl ? '<blockquote class="toko-line toko-told">“Nothing new tonight. Eat.”</blockquote>' : ''}
       <p class="section-label">A BOWL AND WHAT HE HEARD · ${money(BOWL_EUR)}</p>
       <p>He tells you a price range for the best place to sell that you do not already know. A range, never a quote, and it ages like anything you saw yourself. One bowl a block: he has other customers.</p>
       <button class="paper-button" data-action="buy-bowl" ${blocked ? 'disabled' : ''}>${blocked === 'already-this-block' ? 'YOU HAVE EATEN THIS BLOCK' : blocked === 'cash' ? `A BOWL IS ${money(BOWL_EUR)}` : `BUY A BOWL · ${money(BOWL_EUR)}`}</button>
@@ -1651,7 +1661,8 @@ function advanceAndSettle() {
   if (cut.foundOut && forceRoad(state, roadEvents, story.case.cut.found_out_event, state.selectedAnchor)) state.mode = 'road';
   // H5: the families settle their books at night too.
   if (data.families) {
-    const settled = settleStanding(state, data.families);
+    // One road event a night: if Kello's cut took the slot, the family waits.
+    const settled = settleStanding(state, data.families, { slotFree: !state.road?.pending });
     for (const w of settled.warnings) logToast(w);
     if (settled.raise && forceRoad(state, roadEvents, settled.raise, state.selectedAnchor)) state.mode = 'road';
   }
@@ -2222,6 +2233,7 @@ function handleRootClick(event) {
   const target = event.target.closest('[data-action]');
   if (!target || target.disabled) return;
   const action = target.dataset.action;
+  playlog?.add('act', { action, screen: state.mode, block: state.scheduleIndex });
   if (action === 'open-visit') {
     if (openVisit(state, data, target.dataset.visit)) { observation = ''; persist(); render(); }
   } else if (action === 'leave-visit') {
@@ -2401,7 +2413,6 @@ function handleRootClick(event) {
     const result = buyBowl(state, data);
     if (!result.ok) logToast({ 'already-this-block': 'One bowl a block. He has other customers.', cash: `A bowl is ${money(BOWL_EUR)}.`, 'not-here': 'Toko is on Vaasankatu.' }[result.reason] ?? result.reason);
     else logToast(result.anchorId ? `Toko on ${data.anchors.get(result.anchorId)?.label}: a price range, on the board.` : 'Toko has nothing new tonight. The broth is good.');
-    tokoTold = result.ok ? (result.anchorId ?? '') : tokoTold;
     if (result.ok) tokoActs('buy_info', { till: BOWL_EUR, then: 'lean' });   // what he heard, passed across the counter
     persist(); render();
   } else if (action === 'buy-equipment') {
@@ -2512,6 +2523,7 @@ async function boot() {
     data.families = await loadFamilies().catch(() => null);
     const hasSave = Boolean(localStorage.getItem(SAVE_KEY));
     state = loadState(data.content);
+    settleRoad(state, roadEvents); // a waiting road event the content no longer has (v4.102)
     registerTaken(state, data, doors); // a taken door is the block's encounter; put it back
     attachGrowth(state.battle, state, data); // a saved fight comes back without its live campaign link
     if (settleReturnedOuting()) persist(); // a fight that came back from Night Shift (v4.74)
@@ -2522,6 +2534,7 @@ async function boot() {
     addEventListener('pageshow', event => {
       if (!event.persisted) return;
       state = loadState(data.content);
+      settleRoad(state, roadEvents);
       registerTaken(state, data, doors);
       attachGrowth(state.battle, state, data);
       if (settleReturnedOuting()) persist();
@@ -2553,6 +2566,7 @@ async function boot() {
     $('modeNav').addEventListener('click', event => {
       const button = event.target.closest('[data-mode-target]');
       if (!button) return;
+      playlog?.add('act', { action: `nav:${button.dataset.modeTarget}`, screen: state.mode, block: state.scheduleIndex });
       const moved = enterScreen(state, button.dataset.modeTarget);
       if (!moved.ok) { logToast(moved.reason); render(); return; }
       observation = '';
@@ -2648,14 +2662,39 @@ async function boot() {
     // Old saves keep every observation they stored (restoreState spreads raw).
     if (state.seen?.[state.selectedAnchor] == null) markSeen(state, state.selectedAnchor);
 
+    playlog = createPlaylog();
+    playlog.add('session', { version: APP_VERSION });
+    playlogEnded = state.chapterCleared;
+    addEventListener('error', event => playlog.add('error', { message: String(event.message ?? event.error ?? 'error').slice(0, 200) }));
+    addEventListener('unhandledrejection', event => playlog.add('error', { message: String(event.reason?.message ?? event.reason ?? 'rejection').slice(0, 200) }));
+    document.addEventListener('visibilitychange', () => playlog.add(document.hidden ? 'hidden' : 'visible'));
+    const playtest = {
+      text: () => playReport(summarise(playlog.entries()), { version: APP_VERSION }),
+      async send() {
+        try {
+          const feedback = await import('../../../hub/feedback.js');
+          const how = await feedback.send({ game: 'piritori', kind: 'playtest', rating: null, text: playtest.text(), ts: Date.now() });
+          return { sent: 'Sent to the arcade.', 'sent-blind': 'Sent to the arcade.', queued: 'No connection: it goes the next time the arcade is open.', off: 'Kept on this device; the arcade has no inbox set. Use COPY.' }[how] ?? 'Kept on this device. Use COPY.';
+        } catch { return 'Sending needs the arcade. Use COPY instead.'; }
+      },
+      async copy(pre) {
+        try { await navigator.clipboard.writeText(playtest.text()); return 'Copied. Paste it anywhere.'; }
+        catch {
+          if (pre) { const range = document.createRange(); range.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range); }
+          return 'Selected: copy it with your device\'s copy.';
+        }
+      },
+      clear: () => playlog.clear(),
+    };
     const pause = createPauseMenu({
       root: $('pause'),
-      version: 'v4.101',
+      version: APP_VERSION,
       jump: jumpTo,
       sound: { get: soundOn, set: setSound },
       // The UI diet: language and starting over live here, not on every screen's header.
       language: { get: () => state.locale, toggle: () => { state.locale = state.locale === 'en' ? 'fi' : 'en'; persist(); render(); } },
       reset: resetCampaign,
+      playtest,
     });
     $('pauseButton').addEventListener('click', () => pause.toggle());
     // Esc pauses from anywhere. The menu handles Esc itself once it is open,
@@ -2752,6 +2791,7 @@ async function boot() {
       get road() { return roadEvents; },
       get story() { return story; },
       get sound() { return soundState(); },
+      get playlog() { return playlog; },
       debug: {
         setState(next) { state = next; registerTaken(state, data, doors); attachGrowth(state.battle, state, data); persist(); render(); },
         startBattle(id, stage) { startBattle(id, stage ?? null); persist(); render(); },

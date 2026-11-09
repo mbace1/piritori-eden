@@ -21,8 +21,9 @@ const BUILD_LABEL = {
   both: { tag: 'BOTH', hint: 'jump here, then check the same screen in the port' },
 };
 
-export function createPauseMenu({ root, version, jump, onClose, sound, language, reset }) {
-  let view = 'menu';        // 'menu' | 'tests'
+export function createPauseMenu({ root, version, jump, onClose, sound, language, reset, playtest }) {
+  let view = 'menu';        // 'menu' | 'tests' | 'playtest'
+  let playtestSaid = '';    // what SEND or COPY last did, said in the panel
   let showDone = false;
   let lastFocus = null;
 
@@ -39,7 +40,7 @@ export function createPauseMenu({ root, version, jump, onClose, sound, language,
 
   function render() {
     const { open, done } = counts();
-    root.innerHTML = view === 'menu' ? menuMarkup(open, done) : testsMarkup(open, done);
+    root.innerHTML = view === 'menu' ? menuMarkup(open, done) : view === 'playtest' ? playtestMarkup() : testsMarkup(open, done);
     const first = root.querySelector('button:not([disabled])');
     if (first) first.focus();
   }
@@ -55,11 +56,30 @@ export function createPauseMenu({ root, version, jump, onClose, sound, language,
         <button class="paper-button" data-pause="tests" type="button">
           THINGS TO TEST <span class="pause-count">${open.length}</span>
         </button>
+        ${playtest ? '<button class="paper-button" data-pause="playtest" type="button">PLAYTEST NOTES</button>' : ''}
       </div>
       ${reset ? '<button class="paper-button ghost" data-pause="reset" type="button">START OVER</button>' : ''}
       <p class="pause-foot">${done.length
         ? `${done.length} approved. An item comes back if the screen it points at moves.`
         : 'Nothing approved yet.'}</p>
+    </section>`;
+  }
+
+  // v4.103: what this device saw (playlog.js), to read, send or copy. Kept on
+  // the phone until the player presses SEND.
+  function playtestMarkup() {
+    return `<section class="pause-card wide">
+      <p class="eyebrow">PLAYTEST NOTES · ${esc(version)}</p>
+      <h2 class="section-title">WHAT THIS DEVICE SAW</h2>
+      <p class="pause-lede">Kept on this device only. SEND passes it to the arcade's feedback; COPY puts it on the clipboard to paste anywhere.</p>
+      <pre class="playtest-notes" tabindex="0" style="white-space:pre-wrap;max-height:46vh;overflow:auto;font-size:13px;line-height:1.45;margin:0 0 12px">${esc(playtest.text())}</pre>
+      <p class="playtest-said" aria-live="polite">${esc(playtestSaid)}</p>
+      <div class="pause-actions">
+        <button class="paper-button primary" data-pause="pt-send" type="button">SEND</button>
+        <button class="paper-button" data-pause="pt-copy" type="button">COPY</button>
+        <button class="paper-button" data-pause="menu" type="button">BACK</button>
+      </div>
+      <button class="paper-button ghost" data-pause="pt-clear" type="button">CLEAR THE NOTES</button>
     </section>`;
   }
 
@@ -145,6 +165,15 @@ export function createPauseMenu({ root, version, jump, onClose, sound, language,
     const id = button.dataset.test;
     if (what === 'resume') close();
     else if (what === 'tests') { view = 'tests'; render(); }
+    else if (what === 'playtest') { view = 'playtest'; playtestSaid = ''; render(); }
+    else if (what === 'pt-send') {
+      playtestSaid = 'Sending…'; render();
+      playtest.send().then(said => { playtestSaid = said; if (view === 'playtest' && !root.hidden) render(); });
+    }
+    else if (what === 'pt-copy') {
+      playtest.copy(root.querySelector('.playtest-notes')).then(said => { playtestSaid = said; if (view === 'playtest' && !root.hidden) render(); });
+    }
+    else if (what === 'pt-clear') { playtest.clear(); playtestSaid = 'Cleared. The next play starts a fresh log.'; render(); }
     else if (what === 'sound') { sound?.set(!sound.get()); render(); }
     else if (what === 'language') { language?.toggle(); render(); }
     else if (what === 'reset') { close(); reset?.(); }
@@ -172,7 +201,7 @@ export function createPauseMenu({ root, version, jump, onClose, sound, language,
     if (event.key !== 'Escape') return;
     event.preventDefault();
     event.stopPropagation();
-    if (view === 'tests') { view = 'menu'; render(); } else close();
+    if (view === 'tests' || view === 'playtest') { view = 'menu'; render(); } else close();
   });
 
   return {

@@ -47,10 +47,21 @@ export function buyBowl(state, data) {
   const tip = tokoTip(state, data);
   state.cash = Math.round((state.cash - BOWL_EUR) * 100) / 100;
   state.tokoBowlAt = state.scheduleIndex;
+  state.tokoLine = { at: state.scheduleIndex, anchorId: tip?.id ?? null };
   if (!tip) return { ok: true, anchorId: null };
   state.heard = state.heard ?? {};
   state.heard[tip.id] = state.scheduleIndex;
   return { ok: true, anchorId: tip.id };
+}
+
+/** What Toko said over this block's bowl: `bowl` whether there was one, and
+ *  `anchorId` the place he talked about (null: nothing new). It is the
+ *  save's, per block (v4.102). Before, a page variable kept the last bowl's
+ *  line for good, so after one empty bowl he said "Nothing new tonight" in
+ *  every later block, and a reload forgot what he had just said. */
+export function tokoSaid(state) {
+  const line = state.tokoLine;
+  return line?.at === state.scheduleIndex ? { bowl: true, anchorId: line.anchorId ?? null } : { bowl: false, anchorId: null };
 }
 
 /** The early weapons under Toko's counter: purchasable, a weapon, not a gun. */

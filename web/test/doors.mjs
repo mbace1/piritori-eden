@@ -12,7 +12,7 @@ import {
   createState, restoreState, currentSchedule, currentEncounter, chooseEncounter, choiceStatus,
   advanceSchedule, requirementStatus, recordFight, fightsToday, forecastEnding,
 } from '../js/v3/state.js?v=16';
-import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock, escalation } from '../js/v3/doors.js?v=10';
+import { offerDoors, takeDoor, doorBlocker, registerTaken, templateOf, canFight, doorFightEffects, isDoorBlock, escalation } from '../js/v3/doors.js?v=11';
 
 const read = async p => JSON.parse(await readFile(new URL(p, import.meta.url)));
 const content = await read('../../content/era1-slice-v1.json');

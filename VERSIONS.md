@@ -1,3 +1,50 @@
+## v4.103 — 2026-11-09
+
+**Playtest notes: what a real playthrough did, kept on the device** (owner, 2026-11-09: *"Go ahead"*, on reading a real playthrough before choosing the next UX step). Every UX number this game has came from a bot, and a bot never hesitates, never misses a button and never closes the tab.
+
+- **The play log** (`web/js/v3/playlog.js`) records on this device only:
+  - each screen as it appears;
+  - each tap and each nav-bar move;
+  - each message the game shows;
+  - the controls on screen in each block;
+  - the tab hidden and shown, and any error.
+- **The summary** is pure and reads four things a bot cannot:
+  - **where the player hesitated:** time on a screen before the first tap, the five longest with where they were;
+  - **what was offered and never used:** Toko's bowl, a route, the fence, a visit…, kept apart from what never came up at all;
+  - **what the game said most**, refusals included;
+  - **where they stopped.**
+- **Pause menu → PLAYTEST NOTES** shows it as plain text, with three buttons:
+  - **SEND** goes through the arcade's own feedback, as kind `playtest`, kept on the device first as every arcade note is;
+  - **COPY** puts it on the clipboard to paste anywhere, or selects it if the clipboard is refused;
+  - **CLEAR** starts a fresh log.
+- **Nothing leaves the browser unless SEND is pressed.**
+- **Not covered yet:** a fight in Night Shift is another page. Its time shows as the gap between leaving Kallio and coming back.
+- **Also in this release:** v4.102 (three rough edges: Toko's line, a family's demand on a busy night, a renamed road event). It was not shipped to the hub on its own.
+- **Gates:**
+  - `playlog.mjs` (bare node): a log made by hand, as a phone would make it. It found that a new session on the same screen did not measure its first wait; fixed.
+  - `playtest-browser.cjs` (10): play a little, read the notes, SEND (the arcade's feedback stubbed at its own URL), COPY, reload (a second session), CLEAR.
+  - Both are in `gates.yml`.
+  - `m1-inspection` and `m2-journey` promise that looking changes nothing a save keeps. They compared every key in the browser's storage, and the play log is a key that changes on every tap by design. They now compare everything but the play log (72 and 47 again).
+- **Cache:** pause v6, playlog v1, app v70. The label is v4.103 (now `APP_VERSION` in app.js, which the pause menu and every note read).
+- **How to playtest:** play on the Pixel as you would. Then pause → PLAYTEST NOTES → SEND, or COPY and paste it into our chat.
+- **Owner played: pending.** Godot paused.
+
+## v4.102 — 2026-11-09
+
+**Three rough edges a player could hit** (owner, 2026-11-09: *"Go ahead"*, on the plan to fix what a player can see and then read a real playthrough). Each was found by the state-machine audit (`design/STATE_MACHINES.md`). Each now has a test that fails on v4.101.
+
+- **Toko's line goes with its own block** (M24).
+  - What he said over a bowl lived in a page variable, never reset. After one empty bowl he said *"Nothing new tonight. Eat."* on every later visit, in any block, until the next bowl, and a reload forgot whatever he had just told you.
+  - It is now the save's, per block (`toko.js` `tokoSaid`).
+- **A family's demand is no longer lost on a busy night** (M4, part).
+  - A night has one road-event slot. When Kello's cut was found out the same night, it took the slot, but the family's restitution demand was booked as made all the same. It never came while the family stayed Insulted, and a due retaliation dropped back to a warning.
+  - Now the demand or retaliation waits for the next free night (`standing.js` `settleStanding`, `slotFree`).
+- **A road event the content no longer has cannot lock the road** (M10).
+  - A save waiting on an event that was renamed or cut held the road screen for good, because nothing can answer it. It is dropped as the save loads; if the events fail to load, nothing is dropped (`road.js` `settleRoad`).
+- **Gates:** `toko.mjs` (31), `standing.mjs` (79), `road.mjs` (365). The chapter bot reads the same on every policy.
+- **Cache:** standing v2, toko v12, road v13, doors v11, app v69. The label is v4.102.
+- **Owner played: pending.** Godot paused.
+
 ## v4.101 — 2026-11-09
 
 **Crew status is one explicit state machine** (M3, `design/STATE_MACHINES.md`; owner, 2026-11-09: *"Go ahead"*).

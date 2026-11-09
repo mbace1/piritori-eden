@@ -7,7 +7,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createState, restoreState, advanceSchedule, requirementStatus } from '../js/v3/state.js?v=16';
-import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen } from '../js/v3/road.js?v=12';
+import { rollRoad, resolveRoad, pendingRoad, minutesThisBlock, clockLabel, choiceOpen, settleRoad } from '../js/v3/road.js?v=13';
 
 const content = JSON.parse(await readFile(new URL('../../content/era1-slice-v1.json', import.meta.url)));
 const roadEvents = JSON.parse(await readFile(new URL('../../content/road-events-v1.json', import.meta.url)));
@@ -134,6 +134,25 @@ function walk(state, journeys) {
   s.recruited = [...two]; s.deployed = [...two];
   const r = resolveRoad(s, data, roadEvents, 'stand');
   ok(r.ok && r.startBattle === 'battle-karhupuisto-2v2', 'with a crew it becomes a fight');
+}
+
+// A save whose waiting event is no longer in the content (v4.102): it locked
+// the road screen for good, since nothing could answer an event that does
+// not exist. It is dropped as the save loads; a known one is kept.
+{
+  const s = createState(content);
+  s.road = { journeys: 3, since: 0, seen: ['road-renamed'], pending: { id: 'road-renamed', phase: 'transit' }, minutes: 0, minutesBlock: -1, last: { id: 'road-gone-too' } };
+  ok(pendingRoad(s, roadEvents) === null, 'an unknown event cannot be answered');
+  settleRoad(s, roadEvents);
+  ok(s.road.pending === null && s.road.last === null, 'so it is dropped, and so is an unknown result');
+  ok(s.road.journeys === 3 && s.road.seen.includes('road-renamed'), 'the rest of the road is kept');
+  const k = createState(content);
+  const known = roadEvents.events[0].id;
+  k.road = { journeys: 1, since: 0, seen: [], pending: { id: known, phase: 'arrival' }, minutes: 0, minutesBlock: -1, last: null };
+  settleRoad(k, roadEvents);
+  ok(k.road.pending?.id === known, 'a known event still waits');
+  settleRoad(k, { events: [] });
+  ok(k.road.pending?.id === known, 'and if the events failed to load, nothing is dropped');
 }
 
 console.log(`road: ${checks} checks passed`);
