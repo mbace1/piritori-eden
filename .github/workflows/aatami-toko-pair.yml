@@ -92,6 +92,7 @@ jobs:
               /tmp/aatami-toko-evidence/aatami-toko-pair.gif \
               /tmp/aatami-toko-evidence/aatami-side-toko-pair.gif
           test -s /tmp/aatami-toko-evidence/aatami-source-motion-contact.png
+          test -s /tmp/aatami-toko-evidence/aatami-source-face-detail.png
           test -s /tmp/aatami-toko-evidence/aatami-source-motion-QC.json
       - name: Upload candidate evidence only
         if: always()
