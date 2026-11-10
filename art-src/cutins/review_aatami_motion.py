@@ -111,6 +111,29 @@ def main():
             fill='#efbd85',font=font(13,True))
     dr.text((MARGIN,footer+28),'Frame variation ≠ speaking-mouth animation. Human visual + physical-device approval remain open.',
             fill='#c0c7cd',font=font(13))
+    # Face-only inspection strips expose eyelids and the missing talking-mouth layers.
+    # Crop rectangles refer to previously rendered review pages; never alter source art.
+    face_w, face_h = TILE_W, 238
+    face = Image.new('RGB', (width, 93 + len(rows)*(face_h+ROW_GAP+34) + 73), CANVAS_BG)
+    fd = ImageDraw.Draw(face)
+    fd.text((MARGIN, 11), 'AATAMI | FACE MOTION DETAIL', fill='#f0e4cf', font=font(24, True))
+    fd.text((MARGIN, 49), 'Original rendered frame crops • enlarged for visual inspection • not new art',
+            fill='#b4b9c0', font=font(12))
+    for j, frame in enumerate(TIMES):
+        x=MARGIN+LABEL_W+j*(TILE_W+GAP)
+        fd.text((x, 73), f'{frame/10:0.1f} s', fill='#e4c48b', font=font(14, True))
+    for idx,(partner, pose_name, shots) in enumerate(rows):
+        yy=94+idx*(face_h+ROW_GAP+34)
+        fd.text((MARGIN, yy+10), partner.upper(), fill='#f0e4cf', font=font(17, True))
+        fd.text((MARGIN, yy+34), pose_name, fill='#e4c48b', font=font(14, True))
+        crop=(35,450,175,605) if partner.lower()=='jaska' else (25,355,175,550)
+        for j,frame in enumerate(TIMES):
+            x=MARGIN+LABEL_W+j*(TILE_W+GAP)
+            detail=shots[frame].crop(crop).resize((face_w,face_h),Image.Resampling.LANCZOS)
+            face.paste(detail,(x,yy))
+            fd.rectangle((x,yy,x+face_w-1,yy+face_h-1),outline='#58626b')
+    face_path=args.out/'aatami-source-face-detail.png'
+    face.save(face_path,optimize=True)
     args.out.mkdir(parents=True,exist_ok=True)
     img_path=args.out/'aatami-source-motion-contact.png'
     img.save(img_path,optimize=True)
@@ -119,7 +142,7 @@ def main():
             'notes':['GIF integrity and frame variation verified; no visual approval claimed.',
                      'Registered Aatami front/side rigs have torso, head and eyelids only; no mouth/jaw/viseme layer.',
                      'No editing, rig extraction, source change, approval update, runtime promotion or deployment.'],
-            'contact_sheet':img_path.name}
+            'contact_sheet':img_path.name,'face_sheet':face_path.name}
     result_path=args.out/'aatami-source-motion-QC.json'
     result_path.write_text(json.dumps(result,indent=2)+'\n')
     print(f'Wrote {img_path} and {result_path}; {len(source_records)} candidate GIFs checked.')
