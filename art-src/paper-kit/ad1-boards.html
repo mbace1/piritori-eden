@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>AD1 — paper, edge, marker (Piritori paper kit)</title>
+<!--
+  design/ART_DIRECTION_NON_BATTLE.md, step AD1: the material test sheet.
+  Four boards, phone-first (1000 px wide, labels >= 28 px). Board 4 is the
+  owner's pick: the cut-paper conversation band in three treatments, in front
+  of the registered painted plate (scene-toko-noodles-empty-v01, semi-approved,
+  prototype-only). Toko is a 3D layer (owner, 2026-08-24) and a stand-in until
+  proven (2026-10-02), so he is absent here, as the plate intends.
+  Open from the repo root through any static server; `capture.cjs` renders the
+  boards to design/art-direction/.
+-->
+<style>
+  @font-face { font-family: 'Barlow Condensed'; font-weight: 700; src: url(../../web/fonts/barlow-condensed-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Barlow Condensed'; font-weight: 600; src: url(../../web/fonts/barlow-condensed-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Barlow'; font-weight: 600; src: url(../../web/fonts/barlow-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Barlow'; font-weight: 400; src: url(../../web/fonts/barlow-latin-400-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'IBM Plex Mono'; font-weight: 400; src: url(../../web/fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2'); }
+  body { margin: 0; background: #0b0e0f; display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 24px 0; }
+  canvas { width: min(1000px, 100vw); height: auto; }
+</style>
+<body>
+<script type="module">
+import { PAL, PAPER, LIGHT, card, place, pool, marker, markerBox, markerRing, shade, TREATMENTS } from './paper-kit.js';
+
+const W = 1000;
+const mk = (h) => { const c = document.createElement('canvas'); c.width = W; c.height = h; document.body.appendChild(c); return [c, c.getContext('2d')]; };
+const ground = (g, h, col = PAL.night) => { g.fillStyle = col; g.fillRect(0, 0, W, h); };
+const title = (g, t, sub) => {
+  g.fillStyle = PAL.offwhite; g.font = '700 58px "Barlow Condensed"'; g.fillText(t, 40, 78);
+  if (sub) { g.fillStyle = PAL.kraft; g.font = '400 28px "Barlow"'; g.fillText(sub, 40, 122); }
+};
+const label = (g, t, x, y, col = PAL.offwhite, size = 32) => { g.fillStyle = col; g.font = `700 ${size}px "Barlow Condensed"`; g.fillText(t, x, y); };
+const note = (g, t, x, y, col = PAL.kraft) => { g.fillStyle = col; g.font = '400 28px "Barlow"'; g.fillText(t, x, y); };
+
+// ── board 1: the six paper families (§3.1) ─────────────────────────────────
+function board1() {
+  const H = 1560, [c, g] = mk(H); ground(g, H); LIGHT.x = -120; LIGHT.y = -80; pool(g, W, H, 0.25);
+  title(g, 'AD1 · 1  PAPER FAMILIES', 'Art Bible §3.1 — each paper has one job');
+  const rows = [
+    ['heavy', 'HEAVY DARK CARD', 'knife', null],
+    ['construction', 'CONSTRUCTION PAPER', 'scissor', null],
+    ['kraft', 'KRAFT CARD', 'torn', null],
+    ['packaging', 'PACKAGING FRAGMENT', 'scissor', null],
+    ['newsprint', 'NEWSPRINT / RECEIPT', 'torn', null],
+    ['vellum', 'VELLUM GLOW', 'torn', null],
+  ];
+  rows.forEach(([p, name, edge], i) => {
+    const col = i % 2, row = Math.floor(i / 2), x = 40 + col * 480, y = 170 + row * 460;
+    if (p === 'vellum') { const gr = g.createRadialGradient(x + 210, y + 150, 10, x + 210, y + 150, 220); gr.addColorStop(0, 'rgba(255,214,140,.75)'); gr.addColorStop(1, 'rgba(255,214,140,0)'); g.fillStyle = gr; g.fillRect(x - 20, y - 20, 460, 340); }
+    const cd = card({ w: 420, h: 300, paper: p, edges: { top: edge, right: edge === 'torn' ? 'scissor' : edge, bottom: edge, left: edge === 'torn' ? 'scissor' : edge }, seed: 11 + i * 17 });
+    place(g, cd, x, y, { lift: 1.2 });
+    label(g, name, x, y + 350); note(g, PAPER[p].job, x, y + 388);
+  });
+  return c;
+}
+
+// ── board 2: the edge vocabulary (§3.2) ────────────────────────────────────
+function board2() {
+  const H = 1480, [c, g] = mk(H); ground(g, H); LIGHT.x = -120; LIGHT.y = -80; pool(g, W, H, 0.25);
+  title(g, 'AD1 · 2  EDGES', 'Art Bible §3.2 — one dominant edge per piece, one secondary at most');
+  const rows = [
+    ['scissor', 'SCISSOR CUT', 'signs, buttons, route strips', 0],
+    ['knife', 'BLUNT KNIFE', 'counters, cornices, rails', 0],
+    ['torn', 'TORN FIBRE', 'labels, notices, dialogue slabs', 0],
+    ['corrugated', 'CORRUGATED BREAK', 'carton chrome, crates', 0],
+    ['scissor', 'FOLDED CORNER', 'a ticket, a note, a name plate', 46],
+  ];
+  rows.forEach(([e, name, use, fold], i) => {
+    const y = 175 + i * 255;
+    const back = card({ w: 920, h: 150, paper: 'construction', col: [PAL.tram, PAL.rust, PAL.moss, PAL.wetBlue, PAL.tram][i], edges: { top: 'knife', right: 'knife', bottom: 'knife', left: 'knife' }, seed: 300 + i });
+    place(g, back, 40, y + 46, { lift: 0.6 });
+    const edges = e === 'corrugated' ? { top: 'knife', right: 'corrugated', bottom: 'knife', left: 'knife' } : { top: e, right: e === 'torn' ? 'scissor' : e, bottom: e, left: e === 'torn' ? 'scissor' : e };
+    const front = card({ w: 600, h: 120, paper: 'kraft', col: e === 'corrugated' ? '#a8865a' : null, edges, fold, seed: 400 + i * 9 });
+    place(g, front, 340, y + 64, { lift: 1.4 });
+    label(g, name, 56, y + 30); const tw = g.measureText(name).width; note(g, '— ' + use, 56 + tw + 14, y + 30, PAL.kraft);
+  });
+  return c;
+}
+
+// ── board 3: marker (§3.4) ─────────────────────────────────────────────────
+function board3() {
+  const H = 1380, [c, g] = mk(H); ground(g, H); LIGHT.x = -120; LIGHT.y = -80; pool(g, W, H, 0.25);
+  title(g, 'AD1 · 3  MARKER', 'Art Bible §3.4 — an accent, never the volume; never the same twice');
+  const sheet = card({ w: 920, h: 1180, paper: 'kraft', edges: { top: 'torn', right: 'scissor', bottom: 'torn', left: 'scissor' }, seed: 77 });
+  place(g, sheet, 40, 160, { lift: 1 });
+  const rows = [['WOBBLE', { wobble: 1.6, taper: 0, overshoot: 0 }], ['TAPER', { wobble: 0.6, taper: 1, overshoot: 0 }], ['SKIP', { wobble: 0.6, skip: 1.4, taper: 1 }], ['DRY OUT', { wobble: 0.6, dry: 1, taper: 0 }], ['OVERSHOOT', { wobble: 0.5, overshoot: 1.6, taper: 1 }]];
+  rows.forEach(([name, o], i) => {
+    const y = 250 + i * 160; label(g, name, 80, y, PAL.ink, 34);
+    marker(g, [[330, y - 12], [560, y - 22], [900, y - 8]], { width: 9, seed: 50 + i, ...o });
+  });
+  label(g, 'NEVER TWICE — THE SAME BOX, THREE HANDS', 80, 1080, PAL.ink, 32);
+  [0, 1, 2].forEach((k) => markerBox(g, 100 + k * 290, 1120, 220, 140, { width: 7, seed: 900 + k * 31, jitter: 14, taper: 1, overshoot: 1 }));
+  [0, 1, 2].forEach((k) => markerRing(g, 205 + k * 290, 1190, 70, 40, { width: 5, seed: 600 + k * 7, col: PAL.red, taper: 1 }));
+  return c;
+}
+
+// ── board 4: the pick — the conversation band in three treatments ─────────
+const T = TREATMENTS;
+function panel(g, y0, t, plate) {
+  const PH = 380;
+  // the painted register: the empty bar, cropped through the counter
+  g.save(); g.beginPath(); g.rect(0, y0, W, PH); g.clip(); g.drawImage(plate, 0, 150, 1536, 584, 0, y0, W, 380); g.restore();
+  const by = y0 + 300;                                                   // the band rises over the plate's bottom edge
+  g.fillStyle = 'rgba(12,15,16,.92)'; g.fillRect(0, by + 40, W, 360);
+  LIGHT.x = 160; LIGHT.y = y0 + 40; LIGHT.col = PAL.ochre;
+  const e = t.edge, sides = (x) => ({ top: x, right: x === 'torn' ? 'scissor' : x, bottom: x, left: x === 'torn' ? 'scissor' : x });
+  // a found newsprint fragment behind the slab (B: one; C: two)
+  if (t.extras >= 1) place(g, card({ w: 250, h: 150, paper: 'newsprint', edges: { top: 'torn', right: 'torn', bottom: 'torn', left: 'scissor' }, seed: 61, tooth: t.tooth }), 720, by - 18, { lift: 0.8, rot: 0.06 });
+  if (t.extras >= 2) place(g, card({ w: 220, h: 120, paper: 'packaging', edges: sides('torn'), seed: 62, tooth: t.tooth }), 600, by + 4, { lift: 0.8, rot: -0.08 });
+  // portrait medallion + name plate (Toko is a 3D stand-in; the medallion holds a neutral head)
+  const med = card({ w: 128, h: 128, paper: 'heavy', edges: sides(t.edge === 'torn' ? 'torn' : 'knife'), seed: 70, tooth: t.tooth });
+  place(g, med, 40, by + 10, { lift: 1.4 });
+  g.fillStyle = PAL.plaster; g.beginPath(); g.arc(104, by + 66, 34, 0, 7); g.fill(); g.beginPath(); g.ellipse(104, by + 128, 46, 30, 0, Math.PI, 0); g.fill();
+  const plate2 = card({ w: 128, h: 40, paper: 'kraft', edges: sides(e === 'torn' ? 'torn' : 'scissor'), fold: t.fold ? 14 : 0, seed: 71, tooth: t.tooth });
+  place(g, plate2, 40, by + 148, { lift: 1.6 }); g.fillStyle = PAL.ink; g.font = '700 28px "Barlow Condensed"'; g.fillText('TOKO', 74, by + 178);
+  // the transcript slab: ledger mono on kraft
+  const slab = card({ w: 760, h: 150, paper: 'kraft', edges: { top: t.slab.top, right: 'scissor', bottom: t.slab.bottom, left: 'scissor' }, fold: t.fold, seed: 72, tooth: t.tooth });
+  place(g, slab, 196, by + 6, { lift: 1.8, rot: t.extras ? -0.008 : 0 });
+  g.fillStyle = PAL.ink; g.font = '400 28px "IBM Plex Mono"';
+  g.fillText('Toko dries a bowl and lowers his voice.', 222, by + 58);
+  g.fillText('"Three delivery vans. Thursday.', 222, by + 98); g.fillText(' One of them is empty."', 222, by + 136);
+  // the choices: heavy card buttons with a construction-paper tab; price and odds inline
+  const btn = [['BUY INFO · €120', PAL.mustard, 196, 300], ['RISK · €300 · 45%', PAL.orange, 512, 300], ['LEAVE', PAL.grey, 828, 132]];
+  btn.forEach(([txt, tab, x, w], i) => {
+    const bc = card({ w, h: 84, paper: 'heavy', edges: i === 2 && t.extras ? { ...sides(e), right: 'corrugated' } : sides(e), seed: 80 + i, tooth: t.tooth });
+    place(g, bc, x, by + 184, { lift: 1.2 });
+    const tc = card({ w: 12, h: 64, paper: 'construction', col: tab, edges: sides('scissor'), seed: 90 + i });
+    place(g, tc, x + 10, by + 194, { lift: 0.6 });
+    g.fillStyle = PAL.offwhite; g.font = '700 32px "Barlow Condensed"'; g.fillText(txt, x + 34, by + 238);
+  });
+  // marker accents (§3.4): B circles the odds and ticks the info; C outlines everything
+  if (t.mark >= 1) { markerRing(g, 728, by + 226, 52, 30, { width: 5, seed: 13, col: PAL.red, taper: 1 }); marker(g, [[206, by + 256], [300, by + 260]], { width: 5, seed: 14, col: PAL.mustard, taper: 1 }); }
+  if (t.mark >= 2) { btn.forEach(([, , x, w], i) => markerBox(g, x - 4, by + 180, w + 8, 92, { width: 5, seed: 200 + i, jitter: 8, col: PAL.offwhite, taper: 1, alpha: 0.85 })); marker(g, [[222, by + 146], [700, by + 150]], { width: 6, seed: 15, col: PAL.ink, taper: 1 }); markerRing(g, 104, by + 74, 74, 74, { width: 5, seed: 16, col: PAL.offwhite, alpha: 0.85 }); marker(g, [[860, by + 60], [930, by + 40], [905, by + 30]], { width: 5, seed: 17, col: PAL.red, taper: 1 }); }
+  LIGHT.col = PAL.ochre;
+}
+function board4(plate) {
+  const PANEL = 700, H = 200 + 3 * (PANEL + 40), [c, g] = mk(H); ground(g, H, '#0b0e0f');
+  title(g, 'AD1 · 4  THE PICK: A', 'The cut-paper band in front of the painted plate (two registers)');
+  ['A', 'B', 'C'].forEach((k, i) => {
+    const y = 150 + i * (PANEL + 40), t = T[k];
+    label(g, k === 'A' ? t.name + '   ✓ CHOSEN 17.10.2026' : t.name, 40, y + 40, k === 'A' ? PAL.ochre : PAL.offwhite, 40); note(g, t.sub, 40, y + 80);
+    panel(g, y + 100, t, plate);
+  });
+  note(g, 'Plate: scene-toko-noodles-empty-v01 (semi-approved, prototype).', 40, H - 58, '#8d8165'); note(g, 'Toko is a 3D stand-in layer, so he is absent here.', 40, H - 20, '#8d8165');
+  return c;
+}
+
+const plate = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = '../../art/v3/scenes/toko-slomo-noodles-empty-v01.webp'; });
+await document.fonts.load('700 40px "Barlow Condensed"'); await document.fonts.load('400 28px "Barlow"'); await document.fonts.load('400 28px "IBM Plex Mono"'); await document.fonts.ready;
+board1(); board2(); board3(); board4(plate);
+window.AD1_READY = true;
+</script>
+</body>
+</html>
