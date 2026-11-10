@@ -5,11 +5,13 @@ on:
     paths:
       - 'art-src/cutins/toko-pair-review.html'
       - 'art-src/cutins/toko-pair-qc.cjs'
+      - 'art-src/cutins/review_aatami_motion.py'
       - '.github/workflows/aatami-toko-pair.yml'
   pull_request:
     paths:
       - 'art-src/cutins/toko-pair-review.html'
       - 'art-src/cutins/toko-pair-qc.cjs'
+      - 'art-src/cutins/review_aatami_motion.py'
       - '.github/workflows/aatami-toko-pair.yml'
   workflow_dispatch:
 permissions:
@@ -79,6 +81,18 @@ jobs:
           }
           NODE
           rm -rf /tmp/aatami-toko-evidence/motion-frames
+      - name: Audit source motion and package approval contact sheet
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/aatami-motion-qc
+          /tmp/aatami-motion-qc/bin/pip install --disable-pip-version-check -q Pillow
+          /tmp/aatami-motion-qc/bin/python art-src/cutins/review_aatami_motion.py \
+            --out /tmp/aatami-toko-evidence \
+            --pair Toko \
+              /tmp/aatami-toko-evidence/aatami-toko-pair.gif \
+              /tmp/aatami-toko-evidence/aatami-side-toko-pair.gif
+          test -s /tmp/aatami-toko-evidence/aatami-source-motion-contact.png
+          test -s /tmp/aatami-toko-evidence/aatami-source-motion-QC.json
       - name: Upload candidate evidence only
         if: always()
         uses: actions/upload-artifact@v4
