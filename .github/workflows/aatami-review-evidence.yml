@@ -1,0 +1,101 @@
+name: Aatami cut-in review evidence (no promotion)
+on:
+  push:
+    branches: [fix/aatami-side-review-only-20261030]
+    paths:
+      - 'art-src/cutins/aatami-qc.cjs'
+      - 'art-src/cutins/review.html'
+      - '.github/workflows/aatami-review-evidence.yml'
+      - 'web/js/v3/cutin-stage.js'
+      - 'art/v3/manifest.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install review-browser dependencies (not part of the game)
+        run: |
+          npm install --prefix /tmp/aatami-review-tools --no-save playwright
+          /tmp/aatami-review-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Capture existing semi-approved front and side rigs
+        env:
+          NODE_PATH: /tmp/aatami-review-tools/node_modules
+        run: node art-src/cutins/aatami-qc.cjs /tmp/aatami-review-evidence
+      - name: Verify capture set and identify the exact source
+        run: |
+          git rev-parse HEAD > /tmp/aatami-review-evidence/source-commit.txt
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = '/tmp/aatami-review-evidence/';
+          const manifest = JSON.parse(fs.readFileSync(path + 'capture-manifest.json', 'utf8'));
+          const required = new Set();
+          for (const who of ['aatami', 'aatami-side']) {
+            for (const viewport of ['phone', 'desktop']) {
+              for (const moment of ['idle', 'blink', 'talk', 'nod', 'shake', 'reduced-motion-rest'])
+                required.add(who + '-' + viewport + '-' + moment + '.png');
+            }
+          }
+          if (manifest.shots.length !== 24) throw Error('Expected 24 review frames, got ' + manifest.shots.length);
+          for (const s of manifest.shots) {
+            if (!required.delete(s.file)) throw Error('Unexpected or duplicate screenshot: ' + s.file);
+            const png = fs.readFileSync(path + s.file);
+            if (png.length < 1000 || png.toString('hex', 0, 8) !== '89504e470d0a1a0a')
+              throw Error('Missing/invalid screenshot: ' + s.file);
+            const w = png.readUInt32BE(16), h = png.readUInt32BE(20);
+            if (w !== s.viewportSize.width || h !== s.viewportSize.height)
+              throw Error('Wrong viewport size: ' + s.file + ' (' + w + 'x' + h + ')');
+          }
+          if (required.size) throw Error('Missing screenshots: ' + [...required].join(', '));
+          console.log('Verified 24 PNG evidence frames from two existing rigs and two simulated viewports.');
+          NODE
+      - name: Encode actual dialogue motion (review GIFs; not runtime art)
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          command -v ffmpeg
+          for who in aatami aatami-side; do
+            ffmpeg -hide_banner -nostdin -loglevel error -y -framerate 10 \
+              -i "/tmp/aatami-review-evidence/motion-frames/$who/frame-%04d.png" \
+              -filter_complex "[0:v]split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" \
+              -loop 0 "/tmp/aatami-review-evidence/$who-dialogue-motion.gif"
+          done
+          node <<'NODE'
+          const fs = require('node:fs');
+          const {createHash} = require('node:crypto');
+          const out = '/tmp/aatami-review-evidence/';
+          const m = JSON.parse(fs.readFileSync(out + 'motion-manifest.json', 'utf8')).motion;
+          if (m.length !== 2 || m.some(v => v.fps !== 10 || v.frameCount < 100 || v.frameCount > 130))
+            throw Error('Missing/invalid Aatami motion frames');
+          for (const clip of m) {
+            const gif = fs.readFileSync(out + clip.gif);
+            if (gif.length < 10000 || !['GIF87a', 'GIF89a'].includes(gif.toString('ascii', 0, 6)))
+              throw Error('Missing/invalid encoded GIF: ' + clip.gif);
+            const dir = out + clip.framesDir + '/';
+            const pick = i => fs.readFileSync(dir + 'frame-' + String(i).padStart(4, '0') + '.png');
+            const hash = b => createHash('sha256').update(b).digest('hex');
+            if (hash(pick(0)) === hash(pick(Math.floor(clip.frameCount / 2))))
+              throw Error('No visual motion in sampled frames: ' + clip.who);
+            console.log(clip.who + ' passed: ' + clip.frameCount + ' source frames, ' + gif.length + ' GIF bytes');
+          }
+          NODE
+          # Keep the GIFs and 24 still QC frames, not hundreds of intermediate PNGs.
+          rm -rf /tmp/aatami-review-evidence/motion-frames
+      - name: Upload review-only evidence (no acceptance implied)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aatami-cutins-review-evidence
+          path: /tmp/aatami-review-evidence/
+          retention-days: 7
