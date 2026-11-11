@@ -6,12 +6,14 @@ on:
       - 'art-src/cutins/toko-pair-review.html'
       - 'art-src/cutins/toko-pair-qc.cjs'
       - 'art-src/cutins/review_aatami_motion.py'
+      - 'art-src/cutins/test_review_aatami_motion.py'
       - '.github/workflows/aatami-toko-pair.yml'
   pull_request:
     paths:
       - 'art-src/cutins/toko-pair-review.html'
       - 'art-src/cutins/toko-pair-qc.cjs'
       - 'art-src/cutins/review_aatami_motion.py'
+      - 'art-src/cutins/test_review_aatami_motion.py'
       - '.github/workflows/aatami-toko-pair.yml'
   workflow_dispatch:
 permissions:
@@ -27,6 +29,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Regression check of source-only QC on synthetic review frames
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/aatami-motion-qc
+          /tmp/aatami-motion-qc/bin/pip install --disable-pip-version-check -q Pillow
+          /tmp/aatami-motion-qc/bin/python art-src/cutins/test_review_aatami_motion.py
       - name: Install Chromium for review-only capture
         run: |
           npm install --prefix /tmp/aatami-review-tools --no-save playwright
@@ -84,8 +92,6 @@ jobs:
       - name: Audit source motion and package approval contact sheet
         run: |
           set -euo pipefail
-          python3 -m venv /tmp/aatami-motion-qc
-          /tmp/aatami-motion-qc/bin/pip install --disable-pip-version-check -q Pillow
           /tmp/aatami-motion-qc/bin/python art-src/cutins/review_aatami_motion.py \
             --out /tmp/aatami-toko-evidence \
             --pair Toko \
