@@ -132,9 +132,10 @@ def main():
             detail=shots[frame].crop(crop).resize((face_w,face_h),Image.Resampling.LANCZOS)
             face.paste(detail,(x,yy))
             fd.rectangle((x,yy,x+face_w-1,yy+face_h-1),outline='#58626b')
+    # A fresh --out path is valid; validate source GIFs before creating review files.
+    args.out.mkdir(parents=True, exist_ok=True)
     face_path=args.out/'aatami-source-face-detail.png'
     face.save(face_path,optimize=True)
-    args.out.mkdir(parents=True,exist_ok=True)
     img_path=args.out/'aatami-source-motion-contact.png'
     img.save(img_path,optimize=True)
     result={'status':'review-candidate-not-production','sample_frames':list(TIMES),
