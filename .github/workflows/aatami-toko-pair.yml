@@ -1,0 +1,110 @@
+name: Aatami + Toko candidate pair review
+on:
+  push:
+    branches: [review/aatami-toko-pair-candidate-20261109]
+    paths:
+      - 'art-src/cutins/toko-pair-review.html'
+      - 'art-src/cutins/toko-pair-qc.cjs'
+      - 'art-src/cutins/review_aatami_motion.py'
+      - 'art-src/cutins/test_review_aatami_motion.py'
+      - '.github/workflows/aatami-toko-pair.yml'
+  pull_request:
+    paths:
+      - 'art-src/cutins/toko-pair-review.html'
+      - 'art-src/cutins/toko-pair-qc.cjs'
+      - 'art-src/cutins/review_aatami_motion.py'
+      - 'art-src/cutins/test_review_aatami_motion.py'
+      - '.github/workflows/aatami-toko-pair.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regression check of source-only QC on synthetic review frames
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/aatami-motion-qc
+          /tmp/aatami-motion-qc/bin/pip install --disable-pip-version-check -q Pillow
+          /tmp/aatami-motion-qc/bin/python art-src/cutins/test_review_aatami_motion.py
+      - name: Install Chromium for review-only capture
+        run: |
+          npm install --prefix /tmp/aatami-review-tools --no-save playwright
+          /tmp/aatami-review-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Capture Aatami and Toko in phone portrait and landscape
+        env:
+          NODE_PATH: /tmp/aatami-review-tools/node_modules
+        run: node art-src/cutins/toko-pair-qc.cjs /tmp/aatami-toko-evidence
+      - name: Validate captures and record exact source commit
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > /tmp/aatami-toko-evidence/source-commit.txt
+          node <<'NODE'
+          const fs=require('node:fs'),root='/tmp/aatami-toko-evidence/';
+          const m=JSON.parse(fs.readFileSync(root+'pair-manifest.json','utf8'));
+          const variants=['aatami','aatami-side'],vps=['phone','landscape'];
+          const moments=['idle','blink','aatami-talk','toko-answer','aatami-nod','rest'];
+          const required=new Set(variants.flatMap(v=>vps.flatMap(p=>moments.map(x=>v+'-'+p+'-'+x+'.png'))));
+          if(m.registeredToko!=='scene-toko-rig-v01')throw Error('Wrong Toko asset');
+          if(m.shots.length!==24)throw Error('Expected 24 screenshots, got '+m.shots.length);
+          for(const s of m.shots){
+            if(!required.delete(s.file))throw Error('Unexpected/repeated '+s.file);
+            const png=fs.readFileSync(root+s.file);
+            if(png.toString('hex',0,8)!=='89504e470d0a1a0a')throw Error('Bad PNG '+s.file);
+            if(png.readUInt32BE(16)!==s.size.width || png.readUInt32BE(20)!==s.size.height)throw Error('Incorrect viewport '+s.file);
+          }
+          if(required.size)throw Error('Missing screenshots '+[...required].join(', '));
+          if(m.motion.length!==2||m.motion.some(x=>x.fps!==10||x.frameCount!==70))throw Error('Expected 2 x 70 source-motion frames');
+          console.log('Verified 24 screenshots, 2 x 70 frames; portrait and native landscape compositions');
+          NODE
+      - name: Encode actual Aatami-motion GIFs with static approved Toko
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          for who in aatami aatami-side; do
+            ffmpeg -hide_banner -nostdin -loglevel error -y -framerate 10 \
+              -i "/tmp/aatami-toko-evidence/motion-frames/$who/frame-%04d.png" \
+              -filter_complex "[0:v]split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" \
+              -loop 0 "/tmp/aatami-toko-evidence/$who-toko-pair.gif"
+          done
+          node <<'NODE'
+          const fs=require('node:fs'),crypto=require('node:crypto'),base='/tmp/aatami-toko-evidence/';
+          const hash=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+          for(const who of ['aatami','aatami-side']){
+            const file=base+who+'-toko-pair.gif',gif=fs.readFileSync(file);
+            if(gif.length<8000||!['GIF89a','GIF87a'].includes(gif.toString('ascii',0,6)))throw Error('Bad GIF '+who);
+            if(hash(base+'motion-frames/'+who+'/frame-0000.png')===hash(base+'motion-frames/'+who+'/frame-0030.png'))throw Error('No motion '+who);
+            console.log('Verified candidate GIF '+who+', bytes '+gif.length);
+          }
+          NODE
+          rm -rf /tmp/aatami-toko-evidence/motion-frames
+      - name: Audit source motion and package approval contact sheet
+        run: |
+          set -euo pipefail
+          /tmp/aatami-motion-qc/bin/python art-src/cutins/review_aatami_motion.py \
+            --out /tmp/aatami-toko-evidence \
+            --pair Toko \
+              /tmp/aatami-toko-evidence/aatami-toko-pair.gif \
+              /tmp/aatami-toko-evidence/aatami-side-toko-pair.gif
+          test -s /tmp/aatami-toko-evidence/aatami-source-motion-contact.png
+          test -s /tmp/aatami-toko-evidence/aatami-source-face-detail.png
+          test -s /tmp/aatami-toko-evidence/aatami-source-motion-QC.json
+      - name: Upload candidate evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aatami-toko-pair-candidate
+          path: /tmp/aatami-toko-evidence/
+          if-no-files-found: warn
+          retention-days: 7
