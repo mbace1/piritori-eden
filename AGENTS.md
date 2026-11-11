@@ -5,6 +5,9 @@ every fight but training is fought in Night Shift (`web/crew-run/`); the next
 step is G0/G1, play it and then make the fight a fight. The September pointers
 (`CLAUDE_TAKEOVER.md`, the M1/M2 brief at v4.51) are history: M1 and M2 shipped.
 
+
+Producer design docs: read `design/PRODUCER_DESIGN.md` before design-affecting work, and `design/ACTIVEPRODUCER.md` for how decisions are recorded. `DESIGN_AUTHORITY.md` still wins contradictions. Dated Decision log entries in the producer doc override the specific older lines they name. Items are tagged SHIPPED / LOCKED-NOT-BUILT / PROPOSAL. Do not decide open design questions silently — list them in the PR description or ask the producer (D-sign) / Mikael. Do not implement LOCKED-NOT-BUILT systems without a producer brief.
+
 Then read `ACTIVE_CONTEXT.md`, keeping historical release sections separate
 from current status, before asking the owner to repeat decisions. For Meshy
 work, read `MESHY_AGENT_HANDOFF.md` and its current-production notice,

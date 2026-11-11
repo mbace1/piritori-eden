@@ -4,6 +4,15 @@
 
 **Read [ROADMAP.md](ROADMAP.md) first.** It is the plan of record: Act I v4.79 is live on the hub, every fight but the training fight is fought in Night Shift (`web/crew-run/`), and the next step is G0/G1 (play it, then make the fight a fight). The September pointers that used to stand here (v4.40 pickup, the M1/M2 takeover at v4.51) are history; M1 and M2 shipped as v4.52–v4.54. The working rules below still apply.
 
+## Producer design docs
+
+Read [`design/PRODUCER_DESIGN.md`](design/PRODUCER_DESIGN.md) before design-affecting work. Also read [`design/ACTIVEPRODUCER.md`](design/ACTIVEPRODUCER.md).
+
+**`DESIGN_AUTHORITY.md` still wins contradictions** with the rest of the canon stack. Dated Decision log entries in the producer doc override the specific older lines they name (including: the web build leads and Godot follows; Act I is all four chapters, with chapter 4 about 12 days).
+
+Items are tagged **SHIPPED** / **LOCKED-NOT-BUILT** / **PROPOSAL**. Do not decide open design questions silently — list them in the PR description or ask the producer (D-sign) / Mikael. Do not implement LOCKED-NOT-BUILT systems without a producer brief.
+
+
 Read this before every session. These rules outrank convenience, speed,
 and your own judgment about what would be tidier. If a rule blocks you,
 stop and ask — do not route around it.
