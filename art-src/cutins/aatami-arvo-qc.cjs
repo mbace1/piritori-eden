@@ -76,7 +76,7 @@ async function main(){
             const file=path.join(OUT,name);
             await page.screenshot({path:file,animations:'disabled'});
             checkPng(file,size);
-            shots.push({variant,layout,tone,moment,file,size});
+            shots.push({variant,layout,tone,moment,file:name,size});
           }
           if(errors.length)throw Error(errors.join('\n'));
         }finally{await page.close();}
@@ -96,7 +96,7 @@ async function main(){
           const file=path.join(OUT,name);
           await reduced.screenshot({path:file,animations:'disabled'});
           checkPng(file,size);
-          shots.push({variant,layout,tone,moment:'reduced-motion-rest',file,size});
+          shots.push({variant,layout,tone,moment:'reduced-motion-rest',file:name,size});
           if(errors.length)throw Error(errors.join('\n'));
         }finally{await reduced.close();}
       }
