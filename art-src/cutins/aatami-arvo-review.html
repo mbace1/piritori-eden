@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aatami / Arvo source-rig comparison — candidate only</title>
+<style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17191a}
+canvas{display:block;width:100vw;height:100vh}</style></head>
+<body><canvas id="stage"></canvas>
+<script type="module">
+// NONCANONICAL review: two existing registered cut-in rigs on neutral inspection
+// cards, not a story scene, not the news UI, not an art/runtime promotion.
+import {CUTINS,pose,REST,rigParts,drawFigure} from '../../web/js/v3/cutin-stage.js';
+const q=new URLSearchParams(location.search), who=q.get('aatami')||'aatami';
+if(!['aatami','aatami-side'].includes(who))throw Error('Unknown Aatami source');
+const tone=q.get('tone')==='kraft'?'kraft':'dark';
+const c=document.querySelector('#stage');
+const dpr=1; // Deterministic review pixels, not a device-resolution claim
+c.width=window.innerWidth*dpr; c.height=window.innerHeight*dpr;
+const g=c.getContext('2d');
+const manifestResponse=await fetch('../../art/v3/manifest.json');
+if(!manifestResponse.ok)throw Error('Missing art manifest');
+const manifest=await manifestResponse.json();
+async function rig(person){
+  const id=CUTINS[person]?.rig,asset=manifest.assets.find(x=>x.id===id);
+  if(!asset)throw Error('Missing registered rig '+person);
+  if(!asset.members.some(m=>m.part==='torso')||!asset.members.some(m=>m.part==='head'))
+    throw Error('Incomplete rig '+person);
+  const images={};
+  await Promise.all(asset.members.map(async m=>{
+    images[m.part]=await new Promise((yes,no)=>{
+      const img=new Image();
+      img.onload=()=>yes(img);
+      img.onerror=()=>no(Error('Missing part '+m.file));
+      img.src='../../art/v3/'+m.file;
+    });
+  }));
+  return {rig:rigParts(asset,images),id};
+}
+const [aatami,arvo]=await Promise.all([rig(who),rig('arvo')]);
+const moments=['idle','blink','aatami-talk','arvo-read','arvo-glance','arvo-gesture','reduced-motion-rest'];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ink=tone==='kraft'?'#22272a':'#ebdfc9';
+function text(s,x,y,size,bold=false){g.font=(bold?'700 ':'400 ')+size+'px system-ui,sans-serif';g.fillStyle=ink;g.fillText(s,x,y);}
+function panel(person,asset,p,x,y,w,h,name){
+  const light=tone==='kraft';
+  g.fillStyle=light?'#c5b18b':'#27343c';g.fillRect(x,y,w,h);
+  g.strokeStyle=light?'#5c5144':'#71808b';g.lineWidth=2;g.strokeRect(x+1,y+1,w-2,h-2);
+  const S=Math.min((w-18)/asset.rig.size[0],(h-55)/asset.rig.size[1]);
+  const FX=x+(w-asset.rig.size[0]*S)/2;
+  const FY=y+h-asset.rig.size[1]*S-18;
+  drawFigure(g,asset.rig,p,FX,FY,S);
+  g.fillStyle=light?'#e6d2aa':'#1a242a';g.fillRect(x+2,y+h-38,w-4,36);
+  g.fillStyle=light?'#20252b':'#e7ddc5';
+  g.font='700 '+Math.max(12,Math.min(20,w/15))+'px system-ui,sans-serif';
+  g.fillText(name,x+9,y+h-15);
+}
+function render(moment='idle',time=0.1){
+  if(!moments.includes(moment))throw Error('Unknown review state '+moment);
+  const still=reduced||moment==='reduced-motion-rest';
+  let ap={...REST},rp={...REST};
+  if(!still){
+    ap=moment==='aatami-talk'?pose(who,'talk',time):
+      moment==='blink'?pose(who,'idle',1.7):pose(who,'idle',time);
+    rp=moment==='arvo-read'?pose('arvo','read',time):
+      moment==='arvo-glance'?pose('arvo','glance',time):
+      moment==='arvo-gesture'?pose('arvo','gesture',time):
+      moment==='blink'?pose('arvo','idle',2.0):pose('arvo','idle',time);
+  }
+  window.__poses={aatami:ap,arvo:rp,still};
+  const W=c.width,H=c.height,portrait=W<H;
+  g.fillStyle=tone==='kraft'?'#dac9a7':'#14191d';g.fillRect(0,0,W,H);
+  text('CUT-IN RIG COMPARISON  •  NOT CANON',portrait?12:30,portrait?26:48,portrait?13:23,true);
+  text('Source only  /  Arvo remains semi-approved',portrait?12:30,portrait?45:80,portrait?11:17);
+  const top=portrait?66:112,bottom=portrait?56:64,gap=portrait?8:28,outer=portrait?8:30;
+  const panelW=(W-2*outer-gap)/2,panelH=H-top-bottom;
+  panel(who,aatami,ap,outer,top,panelW,panelH,who==='aatami'?'AATAMI FRONT':'AATAMI SIDE');
+  panel('arvo',arvo,rp,outer+panelW+gap,top,panelW,panelH,'ARVO / NEWS');
+  text(moment+' / '+tone+' / '+(still?'rest':'animated'),portrait?12:30,H-(portrait?29:30),portrait?12:18);
+  text('No owner/device approval; no Aatami mouth layer',portrait?12:30,H-11,portrait?10:15);
+}
+function frame(t){
+  const s=Math.max(0,Math.min(6.999,t));
+  if(s<2)render('idle',s);
+  else if(s<3.4)render('aatami-talk',s-2);
+  else if(s<5)render('arvo-read',s-3.4);
+  else if(s<6)render('arvo-glance',s-5);
+  else render('arvo-gesture',s-6);
+}
+frame(0);
+window.__comparison={render,frame,moments,who,tone,reduced,sourceIds:[aatami.id,arvo.id]};
+window.__ready=true;
+</script></body></html>
