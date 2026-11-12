@@ -70,10 +70,18 @@ function render(moment='idle',time=0.1){
   g.fillStyle=tone==='kraft'?'#dac9a7':'#14191d';g.fillRect(0,0,W,H);
   text('CUT-IN RIG COMPARISON  •  NOT CANON',portrait?12:30,portrait?26:48,portrait?13:23,true);
   text('Source only  /  Arvo remains semi-approved',portrait?12:30,portrait?45:80,portrait?11:17);
-  const top=portrait?66:112,bottom=portrait?56:64,gap=portrait?8:28,outer=portrait?8:30;
-  const panelW=(W-2*outer-gap)/2,panelH=H-top-bottom;
-  panel(who,aatami,ap,outer,top,panelW,panelH,who==='aatami'?'AATAMI FRONT':'AATAMI SIDE');
-  panel('arvo',arvo,rp,outer+panelW+gap,top,panelW,panelH,'ARVO / NEWS');
+  const top=portrait?66:112,bottom=portrait?48:64,gap=portrait?12:28,outer=portrait?8:30;
+  if(portrait){
+    // Mobile comparison reflows into two full-width, waist-up cards rather than
+    // tiny figures stranded at the foot of tall side-by-side inspection panels.
+    const panelW=W-2*outer,panelH=(H-top-bottom-gap)/2;
+    panel(who,aatami,ap,outer,top,panelW,panelH,who==='aatami'?'AATAMI FRONT':'AATAMI SIDE');
+    panel('arvo',arvo,rp,outer,top+panelH+gap,panelW,panelH,'ARVO / NEWS');
+  }else{
+    const panelW=(W-2*outer-gap)/2,panelH=H-top-bottom;
+    panel(who,aatami,ap,outer,top,panelW,panelH,who==='aatami'?'AATAMI FRONT':'AATAMI SIDE');
+    panel('arvo',arvo,rp,outer+panelW+gap,top,panelW,panelH,'ARVO / NEWS');
+  }
   text(moment+' / '+tone+' / '+(still?'rest':'animated'),portrait?12:30,H-(portrait?29:30),portrait?12:18);
   text('No owner/device approval; no Aatami mouth layer',portrait?12:30,H-11,portrait?10:15);
 }
