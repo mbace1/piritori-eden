@@ -1,0 +1,93 @@
+name: Aatami + Arvo source rig comparison (candidate only)
+on:
+  push:
+    branches: [review/aatami-arvo-comparison-20261112]
+    paths:
+      - 'art-src/cutins/aatami-arvo-review.html'
+      - 'art-src/cutins/aatami-arvo-qc.cjs'
+      - '.github/workflows/aatami-arvo-review.yml'
+  pull_request:
+    paths:
+      - 'art-src/cutins/aatami-arvo-review.html'
+      - 'art-src/cutins/aatami-arvo-qc.cjs'
+      - '.github/workflows/aatami-arvo-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright browser for isolated source-rig review
+        run: |
+          npm install --prefix /tmp/piritori-arvo-tools --no-save playwright
+          /tmp/piritori-arvo-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Render source-only neutral comparison
+        env:
+          NODE_PATH: /tmp/piritori-arvo-tools/node_modules
+        run: node art-src/cutins/aatami-arvo-qc.cjs /tmp/piritori-arvo-evidence
+      - name: Validate exact evidence manifest and source SHA
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > /tmp/piritori-arvo-evidence/source-commit.txt
+          node <<'NODE'
+          const fs=require('node:fs'),base='/tmp/piritori-arvo-evidence/';
+          const report=JSON.parse(fs.readFileSync(base+'arvo-compare-manifest.json','utf8'));
+          if(report.status!=='review-candidate-not-production')throw Error('Not a candidate review');
+          const variants=['aatami','aatami-side'],layouts=['phone','landscape'],tones=['dark','kraft'];
+          const states=['idle','blink','aatami-talk','arvo-read','arvo-glance',
+            'arvo-gesture','reduced-motion-rest'];
+          const names=new Set(variants.flatMap(a=>layouts.flatMap(l=>tones.flatMap(t=>
+            states.map(s=>a+'-'+l+'-'+t+'-'+s+'.png')))));
+          if(report.shots.length!==56)throw Error('Expected 56 comparison stills');
+          for(const shot of report.shots){
+            if(!names.delete(shot.file))throw Error('Duplicate or invalid still '+shot.file);
+            const b=fs.readFileSync(base+shot.file);
+            if(b.toString('hex',0,8)!=='89504e470d0a1a0a')throw Error('Not PNG '+shot.file);
+            if(b.readUInt32BE(16)!==shot.size.width||b.readUInt32BE(20)!==shot.size.height)
+              throw Error('Wrong viewport '+shot.file);
+          }
+          if(names.size)throw Error('Missing stills '+[...names]);
+          if(report.motion.length!==2||report.motion.some(x=>x.frames!==70||x.fps!==10))
+            throw Error('Missing 70-frame source sequences');
+          console.log('Validated 56 native-viewport stills, two 70-frame candidate sequences');
+          NODE
+      - name: Encode candidate motion clips (not lip-sync approval)
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -qq -y ffmpeg
+          fi
+          for who in aatami aatami-side; do
+            ffmpeg -hide_banner -nostdin -loglevel error -y -framerate 10 \
+              -i "/tmp/piritori-arvo-evidence/frames/$who/frame-%04d.png" \
+              -filter_complex "[0:v]split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" \
+              -loop 0 "/tmp/piritori-arvo-evidence/$who-arvo-review.gif"
+          done
+          python3 - <<'PY'
+          import os
+          p='/tmp/piritori-arvo-evidence/'
+          for name in ('aatami-arvo-review.gif','aatami-side-arvo-review.gif'):
+              with open(p+name,'rb') as f:
+                  header=f.read(6)
+              assert header in (b'GIF87a',b'GIF89a'), name
+              assert os.path.getsize(p+name)>8000, name
+          print('Two candidate-only GIFs have valid headers')
+          PY
+          rm -rf /tmp/piritori-arvo-evidence/frames
+      - name: Upload review evidence (not production art)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aatami-arvo-review-candidate
+          path: /tmp/piritori-arvo-evidence/
+          if-no-files-found: warn
+          retention-days: 7
