@@ -1,0 +1,64 @@
+name: Aatami nine-source concept QC (review only)
+on:
+  push:
+    branches: [art/aatami-concept-brief]
+    paths:
+      - '.github/workflows/aatami-source-art-qc.yml'
+      - 'tools/art/audit_aatami_candidates.py'
+      - 'art-src/concepts/people/aatami-*.png'
+  pull_request:
+    paths:
+      - '.github/workflows/aatami-source-art-qc.yml'
+      - 'tools/art/audit_aatami_candidates.py'
+      - 'art-src/concepts/people/aatami-*.png'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-review:
+    name: Verify selected concept sources (not production approval)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit nine selected original PNGs
+        run: |
+          mkdir -p "$RUNNER_TEMP/aatami-evidence"
+          python3 tools/art/audit_aatami_candidates.py --json > "$RUNNER_TEMP/aatami-evidence/source-audit.json"
+      - name: Assert selection, excluded studies and source-only status
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root=Path.cwd()
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'aatami-evidence/source-audit.json').read_text())
+          assert r['selected_count']==r['verified_count']==9, 'Selection incomplete or changed'
+          assert r['transparent_count']==0, 'Selected concepts are opaque source illustrations, not cutout rigs'
+          assert not r['errors'], r['errors']
+          selected={p['name'] for p in r['files']}
+          assert selected==({'aatami-young-final-v01.png','aatami-older-final-v01.png'}|
+                            {f'aatami-young-support-{i:02d}.png' for i in range(1,8)})
+          assert {'aatami-older-support-01.png','aatami-young-pose-sheet-v01.png'}==set(r['excluded'])
+          source=root/'art-src/concepts/people/aatami-young-pose-sheet-v01.png'
+          data=source.read_bytes()
+          source_blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+          assert source_blob=='31fa3213699dc2bee57ebf53511ef2a7da031578', 'Original two-pose provenance changed'
+          assert r['production_status']=='review/source only; no runtime promotion'
+          print('Nine owner-selected concept/source PNGs verified; source sheet unchanged; unselected study excluded.')
+          print('This check does not approve animation, extracted rigs, or live gameplay assets.')
+          PY
+      - name: Record source commit
+        run: git rev-parse HEAD > "$RUNNER_TEMP/aatami-evidence/source-commit.txt"
+      - name: Preserve read-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aatami-nine-source-qc
+          path: ${{ runner.temp }}/aatami-evidence/
+          if-no-files-found: warn
+          retention-days: 14
