@@ -1,0 +1,1 @@
+Unmodified original two-pose study; split into individual supporting studies 05 and 07. Not a runtime asset.
