@@ -5,11 +5,13 @@ on:
     paths:
       - '.github/workflows/aatami-source-art-qc.yml'
       - 'tools/art/audit_aatami_candidates.py'
+      - 'tools/art/test_audit_aatami_candidates.py'
       - 'art-src/concepts/people/aatami-*.png'
   pull_request:
     paths:
       - '.github/workflows/aatami-source-art-qc.yml'
       - 'tools/art/audit_aatami_candidates.py'
+      - 'tools/art/test_audit_aatami_candidates.py'
       - 'art-src/concepts/people/aatami-*.png'
   workflow_dispatch:
 permissions:
@@ -26,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Regression-test source integrity and exclusion handling
+        run: python3 -m unittest discover -s tools/art -p 'test_audit_aatami_candidates.py' -v
       - name: Audit nine selected original PNGs
         run: |
           mkdir -p "$RUNNER_TEMP/aatami-evidence"
