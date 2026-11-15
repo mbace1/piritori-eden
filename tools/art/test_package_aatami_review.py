@@ -51,7 +51,7 @@ class CandidatePackageTests(unittest.TestCase):
                 {"REVIEW_ONLY.md", "review_manifest.json"}
                 | {pack.audit.PREFIX + n for n in self.selected}
             )
-            self.assertIn("not an approved cutout", z.read("REVIEW_ONLY.md").decode())
+            self.assertIn("none is an approved cutout", z.read("REVIEW_ONLY.md").decode())
             saved = json.loads(z.read("review_manifest.json"))
             self.assertFalse(saved["production_ready"])
             self.assertEqual(len(saved["files"]), 9)
