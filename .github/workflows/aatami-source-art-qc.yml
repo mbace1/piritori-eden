@@ -6,12 +6,16 @@ on:
       - '.github/workflows/aatami-source-art-qc.yml'
       - 'tools/art/audit_aatami_candidates.py'
       - 'tools/art/test_audit_aatami_candidates.py'
+      - 'tools/art/package_aatami_review.py'
+      - 'tools/art/test_package_aatami_review.py'
       - 'art-src/concepts/people/aatami-*.png'
   pull_request:
     paths:
       - '.github/workflows/aatami-source-art-qc.yml'
       - 'tools/art/audit_aatami_candidates.py'
       - 'tools/art/test_audit_aatami_candidates.py'
+      - 'tools/art/package_aatami_review.py'
+      - 'tools/art/test_package_aatami_review.py'
       - 'art-src/concepts/people/aatami-*.png'
   workflow_dispatch:
 permissions:
@@ -30,6 +34,8 @@ jobs:
           python-version: '3.12'
       - name: Regression-test source integrity and exclusion handling
         run: python3 -m unittest discover -s tools/art -p 'test_audit_aatami_candidates.py' -v
+      - name: Regression-test review-only archive selection and safety
+        run: python3 -m unittest discover -s tools/art -p 'test_package_aatami_review.py' -v
       - name: Audit nine selected original PNGs
         run: |
           mkdir -p "$RUNNER_TEMP/aatami-evidence"
@@ -56,6 +62,10 @@ jobs:
           print('Nine owner-selected concept/source PNGs verified; source sheet unchanged; unselected study excluded.')
           print('This check does not approve animation, extracted rigs, or live gameplay assets.')
           PY
+      - name: Build verified nine-image review archive (not production art)
+        run: |
+          python3 tools/art/package_aatami_review.py --out "$RUNNER_TEMP/aatami-evidence/aatami-nine-selected-review-only.zip"
+          python3 tools/art/audit_aatami_candidates.py --zip "$RUNNER_TEMP/aatami-evidence/aatami-nine-selected-review-only.zip" --json > "$RUNNER_TEMP/aatami-evidence/archive-audit.json"
       - name: Record source commit
         run: git rev-parse HEAD > "$RUNNER_TEMP/aatami-evidence/source-commit.txt"
       - name: Preserve read-only evidence
