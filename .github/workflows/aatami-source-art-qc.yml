@@ -8,6 +8,8 @@ on:
       - 'tools/art/test_audit_aatami_candidates.py'
       - 'tools/art/package_aatami_review.py'
       - 'tools/art/test_package_aatami_review.py'
+      - 'tools/art/render_aatami_review_sheet.py'
+      - 'tools/art/test_render_aatami_review_sheet.py'
       - 'art-src/concepts/people/aatami-*.png'
   pull_request:
     paths:
@@ -16,6 +18,8 @@ on:
       - 'tools/art/test_audit_aatami_candidates.py'
       - 'tools/art/package_aatami_review.py'
       - 'tools/art/test_package_aatami_review.py'
+      - 'tools/art/render_aatami_review_sheet.py'
+      - 'tools/art/test_render_aatami_review_sheet.py'
       - 'art-src/concepts/people/aatami-*.png'
   workflow_dispatch:
 permissions:
@@ -32,10 +36,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install pinned contact-sheet dependency
+        run: python3 -m pip install Pillow==11.3.0
       - name: Regression-test source integrity and exclusion handling
         run: python3 -m unittest discover -s tools/art -p 'test_audit_aatami_candidates.py' -v
       - name: Regression-test review-only archive selection and safety
         run: python3 -m unittest discover -s tools/art -p 'test_package_aatami_review.py' -v
+      - name: Regression-test contact-sheet integrity and no-write rules
+        run: python3 -m unittest discover -s tools/art -p 'test_render_aatami_review_sheet.py' -v
       - name: Audit nine selected original PNGs
         run: |
           mkdir -p "$RUNNER_TEMP/aatami-evidence"
@@ -66,6 +74,8 @@ jobs:
         run: |
           python3 tools/art/package_aatami_review.py --out "$RUNNER_TEMP/aatami-evidence/aatami-nine-selected-review-only.zip"
           python3 tools/art/audit_aatami_candidates.py --zip "$RUNNER_TEMP/aatami-evidence/aatami-nine-selected-review-only.zip" --json > "$RUNNER_TEMP/aatami-evidence/archive-audit.json"
+      - name: Render verified review-only contact sheet
+        run: python3 tools/art/render_aatami_review_sheet.py --out-dir "$RUNNER_TEMP/aatami-evidence"
       - name: Record source commit
         run: git rev-parse HEAD > "$RUNNER_TEMP/aatami-evidence/source-commit.txt"
       - name: Preserve read-only evidence
