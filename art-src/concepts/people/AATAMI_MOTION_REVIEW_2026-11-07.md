@@ -34,3 +34,42 @@ Review the two existing GIFs with the owner, then capture **Aatami plus Jaska**,
 Older Aatami cut-in; Arvo's A–D look and hooded woman's pose; genuine device and owner approval of the two existing young rigs. Old A/B/C outfit finals remain superseded, not missing work to restart.
 
 **No merge, runtime manifest change, approval-status upgrade, new source art, mesh generation, or public build change occurred.** Authority: `ROADMAP.md`, `DESIGN_AUTHORITY.md`, `ART_BIBLE.md`, `art-library/APPROVALS.md`.
+
+
+## 2026-11-17 — ensemble review status and current production boundary
+
+This update records the later review-only pairing work. It does not convert any candidate capture into visual approval or a production asset.
+
+### Verified source branch and CI
+
+- PR #108 head: `447d8d97df615b61d5314452fe79492b6bb7135a`; open, not merged. Its dedicated [nine-source QC run](https://github.com/mbace1/piritori-eden/actions/runs/43844667372) and repository [gates run](https://github.com/mbace1/piritori-eden/actions/runs/43844667360) both completed successfully on 2026-11-16. The nine-source artifact is [available until 2026-11-30](https://github.com/mbace1/piritori-eden/actions/runs/43844667372/artifacts/14214218743).
+- PR #118 remains draft/unmerged. Its existing-rig browser review route is tooling only; the earlier motion evidence artifact expired 2026-11-14.
+- PR #133 (Aatami + Jaska) remains draft/unmerged. Its candidate-evidence workflow [run 42468302616 succeeded](https://github.com/mbace1/piritori-eden/actions/runs/42468302616); the artifact is no longer listed. Its separate gates run failed: the Godot download was not a valid ZIP, and mission-browser reported a failed request for an existing character WebP. These are not failures of the candidate-render job.
+- PR #134 (Aatami + Toko) remains draft/unmerged. Candidate workflow [run 42994073470 succeeded](https://github.com/mbace1/piritori-eden/actions/runs/42994073470), with [candidate artifact 13843146760 available until 2026-11-18](https://github.com/mbace1/piritori-eden/actions/runs/42994073470/artifacts/13843146760). Its separate repository gates run 42994073220 also succeeded. Toko is held in its approved rest pose; this is not a Toko-motion test.
+- PR #136 (Aatami + Arvo) remains draft/unmerged. Candidate workflow [run 43187485770 succeeded](https://github.com/mbace1/piritori-eden/actions/runs/43187485770), with [candidate artifact 13928578847 available until 2026-11-19](https://github.com/mbace1/piritori-eden/actions/runs/43187485770/artifacts/13928578847). Its separate repository gates run 43187485753 failed in mission-browser on requests for existing character WebPs. The candidate-render job itself passed. Arvo remains a comparison source, not an approved news-tab composition.
+
+### Pairing coverage now available
+
+| Pair | Candidate evidence | Limits still open |
+|---|---|---|
+| Aatami + Jaska | Draft #133: 28 viewport stills and two 70-frame GIFs were produced by a successful candidate workflow | Artifact no longer listed; desktop capture is letterboxed portrait, not native responsive landscape; no physical device or owner acceptance |
+| Aatami + Toko | Draft #134: 24 stills and two 70-frame Aatami-motion GIFs; portrait and native-landscape review captures | Toko is static; placeholder dialogue/bubble; no Aatami mouth motion, physical device or owner acceptance |
+| Aatami + Arvo | Draft #136: 56 native-resolution still candidates and two 70-frame Aatami-motion GIFs | Neutral comparison cards, not the real news-tab UI; Arvo's final look remains unselected; no Aatami mouth motion, physical device or owner acceptance |
+
+Workflow success means the capture jobs completed and their scripted checks passed. It is not a human visual verdict. No claim is made here that every captured frame has been independently inspected or that the pairings are approved.
+
+### Current art inventory and decisions
+
+- **Original A/B/C outfit concepts (cardigan / parka / corduroy): superseded.** They are not three unfinished final designs and should not be restarted. The current selected source set remains one young final, seven young supporting studies and one older final.
+- **Young Aatami:** the two existing front/side rigs are already on `main` from merged PR #107 and remain semi-approved. Their torso/head/eyelid layers support idle, blink and body/head gesture clips; there is no separate jaw, mouth or viseme layer, so the mouth stays static during the talk clip.
+- **Older Aatami:** selected source concept only; no cut-in or rig. The extra older support image remains excluded.
+- **Arvo:** presenter model v05 is the broadcast baseline; the cut-in rig is semi-approved. The A–D look choice and final expressive news-tab presentation/animation remain open.
+- **Hooded woman:** the owner-selected standing pose and cut-in remain open.
+
+### Next permitted step
+
+The existing-rig pairing comparisons are now present as draft review candidates. The next action is **owner visual review of the actual candidate artifacts**, followed by physical Pixel/iPad checks for the existing young Aatami rigs and any pairing the owner wants to keep exploring. The #134 and #136 artifacts are time-limited (see links above).
+
+The current ROADMAP (8 November) still has G4 awaiting the owner's €400/finale decisions and a full ten-day owner playthrough; its Codex lane says art is coordinated rather than built here, and new character production remains deferred until G4. Therefore this update does **not** authorize mouth-layer extraction, older-Aatami cut-in production, new Arvo art, hooded-woman extraction, runtime registration or any promotion. A separate explicit owner authorization or the roadmap gate is required first.
+
+**No source image, rig, manifest, approval register, gameplay file or public build was changed by this update. All pairings and images remain approval candidates.**
