@@ -73,3 +73,50 @@ The existing-rig pairing comparisons are now present as draft review candidates.
 The current ROADMAP (8 November) still has G4 awaiting the owner's €400/finale decisions and a full ten-day owner playthrough; its Codex lane says art is coordinated rather than built here, and new character production remains deferred until G4. Therefore this update does **not** authorize mouth-layer extraction, older-Aatami cut-in production, new Arvo art, hooded-woman extraction, runtime registration or any promotion. A separate explicit owner authorization or the roadmap gate is required first.
 
 **No source image, rig, manifest, approval register, gameplay file or public build was changed by this update. All pairings and images remain approval candidates.**
+
+
+## 2026-11-18 — independent visual inspection of the Aatami + Arvo candidate artifact
+
+This is a source-only reviewer observation of the existing PR #136 artifact, not an owner verdict, approval, or device test.
+
+### Current PR #108 status correction
+
+The current PR #108 head is `44b2a87f091dd435aa09521b6f1d6622b4edd598` (open, not merged). Its dedicated nine-source QC run **44055157077** and repository gates run **44055159812** both completed successfully at that head. This supersedes the older `447d8d9` head reference above. The nine-image source selection and exclusion rules are unchanged.
+
+### Artifact inspected
+
+- PR #136 head: `d08025e32c6f1e3e07a16b148e30ea0e9c6d7246` (draft, unmerged).
+- Candidate artifact: [aatami-arvo-review-candidate, ID 13928578847](https://github.com/mbace1/piritori-eden/actions/runs/43187485770/artifacts/13928578847), available through 2026-11-19.
+- Artifact source commit recorded by its manifest: GitHub's synthetic PR merge ref `d13cf13f1ddee998f6acfa2f17cbf23ac3e63bb8`; the PR head remains `d08025e`.
+- Manifest: 56 PNG stills (28 at 390×844 portrait, 28 at 1440×900 landscape), using dark and kraft backing, plus two 390×844 GIFs.
+- Both GIFs were checked locally: 70 frames, 100 ms per frame, 7 seconds, 70 distinct frame images each. All 56 manifest paths exist and match their declared dimensions.
+
+### Visual observations from the actual captures
+
+- Portrait places Aatami above Arvo in separate waist-up cards. At 390×844 both identities and wardrobe read; the cards remain separated. Landscape uses a genuinely side-by-side comparison at 1440×900 and gives both figures more room.
+- Dark and kraft backing make the ink and paper-edge contrast easier to compare. No obvious missing head/torso piece or gross crop loss was visible in the inspected stills.
+- The sampled front and side GIF frames show Aatami's existing head/torso gesture and blink motion. **His mouth remains static** through the Aatami-talk segment; this is not lip-sync.
+- Arvo's existing read/gesture clips visibly include jaw movement. That does not settle Arvo's final look or the news-tab composition.
+- Aatami's denser, sketchier marker line and Arvo's cleaner, more graphic rendering are visibly different. Treat that as an owner art-direction choice, not an automatic defect.
+- The comparison uses labelled neutral cards, not dialogue bubbles, a real encounter, or Arvo's news UI. It cannot prove bubble-tail aim, story readability, actual game-flow behaviour, or physical-device performance.
+- This was a visual inspection of representative stills and sampled motion frames, not a frame-by-frame alpha/seam certification. No Pixel or iPad was available for physical testing.
+
+### Current missing-art and approval gates
+
+| Item | Verified state | Still needed |
+|---|---|---|
+| Original A/B/C outfits | Superseded; not three unfinished finals | Do not restart without a new owner request |
+| Young Aatami source selection | Nine selected opaque concept PNGs on PR #108; 0/9 have alpha | Keep as source concepts; extraction is a separate gate |
+| Young Aatami front/side cut-ins | Existing on main from PR #107; semi-approved | Owner visual sign-off, edge/seam/bubble review and physical device check |
+| Aatami speech | Existing head/torso/eyelids only; no jaw/mouth/viseme layer | Explicit authorization and a separately reviewed prototype; no extraction or promotion yet |
+| Older Aatami | One owner-selected older concept final; no cut-in/rig | Deferred until G4 or explicit owner authorization |
+| Arvo | Presenter v05 is approved broadcast baseline; cut-in v01 is semi-approved | Owner A–D look choice and actual news-tab layout/expressive presentation |
+| Hooded woman | No owner-selected standing pose/cut-in | Owner pose selection before production |
+
+### Disposition and next permitted step
+
+The existing Aatami + Jaska, + Toko and + Arvo comparisons constitute the authorized review-only ensemble test lane. The next action is the owner's visual decision on those actual candidates, then physical Pixel/iPad checks for the existing young Aatami rigs and any pairing selected to continue. The #133 artifact is no longer listed; #134's artifact is no longer listed; #136's artifact above is time-limited.
+
+The current ROADMAP still defers new character production until G4. Therefore this review does **not** authorize mouth-layer extraction, older-Aatami production, new Arvo artwork, hooded-woman extraction, manifest registration, approval-register changes, merge or runtime promotion.
+
+**No source artwork, rig, manifest, approval status, gameplay file or public build was changed. All reviewed imagery remains an approval candidate.**
